@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:14:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ Menu MENU_TABLETREE_POPUP
             Text[ hebrew ] = "‮מיון בסדר עולה‬";
             Text[ hindi ] = "आरोहण क्रम में सोर्ट करो";
             Text[ slovak ] = "Radiť vzostupne";
+            Text[ hungarian ] = "Rendezés növekvő sorrendben";
+            Text[ slovenian ] = "Razvrsti naraščajoče";
         };
         MenuItem
         {
@@ -169,6 +171,8 @@ Menu MENU_TABLETREE_POPUP
             Text[ hebrew ] = "‮מיון בסדר יורד‬";
             Text[ hindi ] = "अवरोहण क्रम में सोर्ट करो";
             Text[ slovak ] = "Radiť zostupne";
+            Text[ hungarian ] = "Rendezés csökkenő sorrendben";
+            Text[ slovenian ] = "Razvrsti padajoče";
         };
     };
 };
@@ -185,7 +189,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ french ] = "Impossible d'�tablir une connexion au gestionnaire de pilotes SDBC (#servicename#) !";
     Text[ spanish ] = "No se pudo establecer ninguna conexi�n al administrador de controladores SDBC (#servicename#).";
     Text[ italian ] = "Non � possibile stabilire il collegamento al driver SDBC Manager (#servicename#).";
-    Text[ danish ] = "Det var ikke muligt at oprette en forbindelse til SDBC driver manageren (#servicename#).";
+    Text[ danish ] = "Det var ikke muligt at oprette en forbindelse til SDBC driver h�ndteringen (#servicename#).";
     Text[ swedish ] = "Det gick inte att ansluta till SDBC-drivrutinshanteraren (#servicename#).";
     Text[ polish ] = "Nie mo�na nawi�za� po��czenia z mened�erem sterownika SDCB (#servicename#).";
     Text[ portuguese_brazilian ] = "N�o � poss�vel estabelecer uma conex�o com o gerenciador do driver SDBC (#servicename#).";
@@ -202,6 +206,8 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ hebrew ] = "Es konnte keine Verbindung zum SDBC-Treiber-Manager (#servicename#) hergestellt werden.";
     Text[ hindi ] = "SDBC ड्रइवर प्रबन्धक (#servicename#) को कनेक्ट नहीं कर सकता है ।";
     Text[ slovak ] = "Nemôžem sa spojiť s SDBC driver manager (#servicename#).";
+    Text[ hungarian ] = "Nem sikerült csatlakozni az SDBC illesztőprogram-kezelőjéhez (#servicename#).";
+    Text[ slovenian ] = "Ni se mogoče povezati z upraviteljem SDBC gonilnikov (#servicename#).";
 };
 
 String STR_NOREGISTEREDDRIVER
@@ -233,6 +239,8 @@ String STR_NOREGISTEREDDRIVER
     Text[ hebrew ] = "Es ist kein Treiber für die URL #connurl# registriert";
     Text[ hindi ] = "URL #connurl# केलिए ड्रइवर को रजिस्टर नहीं किया है ।";
     Text[ slovak ] = "Pre URL #connurl# nieje zaregistrovaný driver.";
+    Text[ hungarian ] = "A következő URL-hez nincs regisztrálva illesztőprogram: #connurl#.";
+    Text[ slovenian ] = "Za URL #connurl# ni registriranega gonilnika.";
 };
 
 String STR_COULDNOTCONNECT
@@ -264,6 +272,8 @@ String STR_COULDNOTCONNECT
     Text[ hebrew ] = "Es konnte keine Verbindung für den URL #connurl# aufgebaut werden.";
     Text[ hindi ] = "URL #connurl# केलिए कनेक्शन स्थापित नहीं कर सकते है ।";
     Text[ slovak ] = "S URL #connurl# nemohlo byť vytvorené spojenie.";
+    Text[ hungarian ] = "Nem sikerült kapcsolódni ezzel az URL-lel: #connurl#";
+    Text[ slovenian ] = "Ni mogoče vzpostaviti povezave za URL #connurl#.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
@@ -277,7 +287,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ french ] = "V�rifiez les param�tres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
     Text[ spanish ] = "Compruebe la configuraci�n actual, como el nombre de usuario y la contrase�a.";
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
-    Text[ danish ] = "Kontroller de aktuelle indstillinger, f.eks. vedr�rende brugernavn og adgangskode.";
+    Text[ danish ] = "Kontroller venligst de aktuelle indstillinger f.eks. brugernavn og adgangskode.";
     Text[ swedish ] = "Kontrollera de aktuella inst�llningarna, till exempel anv�ndarnamn och l�senord.";
     Text[ polish ] = "Sprawd� bie��ce ustawienia, np. nazw� u�ytkownika i has�o.";
     Text[ portuguese_brazilian ] = "Por favor, verifique as defini��es atuais, como por exemplo, nome de usu�rio e senha.";
@@ -294,6 +304,8 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ hebrew ] = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Kennwort.";
     Text[ hindi ] = "कृपया वर्तमान निर्धारणों का जाँच कीजिए, उदाहरण केलिए उपभोक्ता नाम और कूटशब्द ।";
     Text[ slovak ] = "Prosím overte aktuálne nastavenia (užívateľské meno a heslo).";
+    Text[ hungarian ] = "Ellenőrizze a beállításokat (pl. felhasználónév, jelszó).";
+    Text[ slovenian ] = "Preverite trenutne nastavitve, npr. uporabniško ime in geslo.";
 };
 String STR_NOTABLEINFO
 {
@@ -324,6 +336,8 @@ String STR_NOTABLEINFO
     Text[ hebrew ] = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen über Tabellen in der Datenbank ermittelt werden.";
     Text[ hindi ] = "सफलता से कनेक्ट किया है, लेकिन लेखासंचय सारणियों के बारे में सूचना उपलब्ध नहीं है ।";
     Text[ slovak ] = "Spojenie bolo nadviazané, ale informácie o tabuľkách v databáze nie sú dostupné.";
+    Text[ hungarian ] = "Sikerült csatlakozni, de nincs elérhető információ az adatbázis-táblákról.";
+    Text[ slovenian ] = "Povezava je vzpostavljena, vendar informacije o tabelah zbirke podatkov niso na voljo.";
 };
 String STR_ALL_TABLES
 {
@@ -354,6 +368,8 @@ String STR_ALL_TABLES
     Text[ hebrew ] = "Alle Tabellen";
     Text[ hindi ] = "सब सारणी";
     Text[ slovak ] = "Všetky tabuľky";
+    Text[ hungarian ] = "Minden tábla";
+    Text[ slovenian ] = "Vse tabele";
 };
 String STR_ALL_VIEWS
 {
@@ -384,6 +400,8 @@ String STR_ALL_VIEWS
     Text[ hebrew ] = "Alle Tabellensichten";
     Text[ hindi ] = "सब दृश्य";
     Text[ slovak ] = "Všetky pohľady";
+    Text[ hungarian ] = "Minden nézet";
+    Text[ slovenian ] = "Vsi pogledi";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
@@ -414,11 +432,23 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ hebrew ] = "Alle Tabellen und Tabellensichten";
     Text[ hindi ] = "सब सारणी और दृश्य";
     Text[ slovak ] = "Všetko tabuľky a pohľady";
+    Text[ hungarian ] = "Minden tábla és nézet";
+    Text[ slovenian ] = "Vse tabele in pogledi";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37.70.1  2003/12/16 11:05:02  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.37.32.1  2003/11/24 13:09:59  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.37  2003/07/17 12:14:17  hr
+ *  INTEGRATION: CWS mergerc3 (1.36.6); FILE MERGED
+ *  2003/07/16 17:11:04 ihi 1.36.6.1: rc-3 merge all languages
+ *
  *  Revision 1.36.6.1  2003/07/16 17:11:04  ihi
  *  rc-3 merge all languages
  *
@@ -566,6 +596,8 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
+
 
 
 
