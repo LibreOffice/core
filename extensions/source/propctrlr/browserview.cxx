@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-#include "propcontroller.hxx"
-#endif
+//#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
+//#include "propcontroller.hxx"
+//#endif
 #include <memory>
 
 //............................................................................
@@ -93,7 +93,6 @@ namespace pcr
     OPropertyBrowserView::OPropertyBrowserView( const Reference< XMultiServiceFactory >& _rxORB,
                                  Window* _pParent, WinBits nBits)
                   :Window(_pParent, nBits | WB_3DLOOK)
-                  ,m_pActiveController(NULL)
                   ,m_xORB(_rxORB)
                   ,m_nActivePage(0)
     {
@@ -110,7 +109,6 @@ namespace pcr
     OPropertyBrowserView::OPropertyBrowserView( const Reference< XMultiServiceFactory >& _rxORB,
                                  Window* _pParent, const ResId& rId)
                   :Window(_pParent, rId)
-                  ,m_pActiveController(NULL)
                   ,m_xORB(_rxORB)
                   ,m_nActivePage(0)
     {
@@ -145,10 +143,6 @@ namespace pcr
             ::std::auto_ptr<Window> aTemp(m_pPropBox);
             m_pPropBox = NULL;
         }
-        if (m_pActiveController)
-            m_pActiveController->release();
-        m_pActiveController = NULL;
-
         m_xORB = NULL;
 
         DBG_DTOR(OPropertyBrowserView, NULL);
@@ -159,17 +153,6 @@ namespace pcr
     {
         m_nActivePage = _nPage;
         getPropertyBox()->SetPage(m_nActivePage);
-    }
-
-    //------------------------------------------------------------------------
-    void OPropertyBrowserView::setActiveController(OPropertyBrowserController* _pController)
-    {
-        if (_pController != m_pActiveController)
-        {
-            if (m_pActiveController) m_pActiveController->release();
-            m_pActiveController = _pController;
-            if (m_pActiveController) m_pActiveController->acquire();
-        }
     }
 
     //------------------------------------------------------------------------
