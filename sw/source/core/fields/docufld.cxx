@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:06:16 $
+ *  last change: $Author: os $ $Date: 2001-04-23 13:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#include <comphelper/types.hxx>
 
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -231,6 +232,7 @@
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 /*--------------------------------------------------------------------
     Beschreibung: SwPageNumberFieldType
@@ -408,6 +410,7 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, const String& rProperty ) co
 --------------------------------------------------*/
 BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
+    BOOL bRet = TRUE;
     if(rProperty.EqualsAscii(UNO_NAME_NUMBERING_TYPE))
     {
         sal_Int16 nSet;
@@ -426,11 +429,16 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
         rAny >>= nSet;
         nOffset = nSet;
     }
-    else if( rProperty.EqualsAscii(UNO_NAME_SUB_TYPE) &&
-            rAny.getValueType() == ::getCppuType((text::PageNumberType*)0))
+    else if( rProperty.EqualsAscii(UNO_NAME_SUB_TYPE) )
     {
-         text::PageNumberType* pType = (text::PageNumberType*)rAny.getValue();
-        switch( *pType )
+        sal_Int32 eVal = - 1;
+        try
+        {
+            eVal = ::comphelper::getEnumAsINT32(rAny);
+        }
+        catch(Exception &) {}
+
+        switch( eVal )
         {
             case text::PageNumberType_CURRENT:
                 nSubType = PG_RANDOM;
@@ -438,8 +446,11 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
             case text::PageNumberType_PREV:
                 nSubType = PG_PREV;
             break;
-            default:
+            case text::PageNumberType_NEXT:
                 nSubType = PG_NEXT;
+            break;
+            default:
+                bRet = FALSE;
         }
     }
     else if(rProperty.EqualsAscii(UNO_NAME_USERTEXT) )
@@ -452,7 +463,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
     else
         DBG_ERROR("Welches Property?")
 #endif
-    return sal_True;
+    return bRet;
 }
 /*--------------------------------------------------------------------
     Beschreibung: SwAuthorFieldType
