@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:17:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,6 @@
 #ifndef _MySVXACORR_HXX
 #include <svx/svxacorr.hxx>
 #endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
-#endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
@@ -233,6 +230,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#include <svx/acorrcfg.hxx>
+#include <vcl/svapp.hxx>
 
 #ifndef _FMTHBSH_HXX
 #include <fmthbsh.hxx>
@@ -983,7 +982,7 @@ void _InitCore()
 
     pGlobalOLEExcludeList = new SvPtrarr;
 
-    const SvxSwAutoFmtFlags& rAFlags = OFF_APP()->GetAutoCorrect()->GetSwFlags();
+    const SvxSwAutoFmtFlags& rAFlags = SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
     SwDoc::pACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
 }
