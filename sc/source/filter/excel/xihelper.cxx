@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:17:06 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
 #endif
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
+#endif
 
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
@@ -168,8 +171,8 @@ void XclImpString::ReadFormats( XclImpStream& rStrm )
 void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
 {
     maFormats.resize( nRunCount );
-    for( sal_uInt16 nIndex = 0; nIndex < nRunCount; ++nIndex )
-        rStrm >> maFormats[ nIndex ];
+    for( XclFormatRunVec::iterator aIt = maFormats.begin(), aEnd = maFormats.end(); aIt != aEnd; ++aIt )
+        rStrm >> aIt->mnChar >> aIt->mnFontIx;
 }
 
 
@@ -271,6 +274,10 @@ ScBaseCell* XclImpStringHelper::CreateCell(
 
 // Header/footer conversion ===================================================
 
+const sal_uInt16 EXC_HF_LEFT        = 0;
+const sal_uInt16 EXC_HF_CENTER      = 1;
+const sal_uInt16 EXC_HF_RIGHT       = 2;
+
 XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mrEE( rRoot.GetHFEditEngine() ),
@@ -278,33 +285,29 @@ XclImpHFConverter::XclImpHFConverter( const XclImpRoot& rRoot ) :
 {
 }
 
+XclImpHFConverter::~XclImpHFConverter()
+{
+    // EditTextObject is incomplete in header
+}
+
 void XclImpHFConverter::ParseString( const String& rHFString )
 {
     // edit engine objects
     mrEE.SetText( EMPTY_STRING );
-    mppObjs[ xlHFLeft ].reset( mrEE.CreateTextObject() );
-    mppObjs[ xlHFCenter ].reset( mrEE.CreateTextObject() );
-    mppObjs[ xlHFRight ].reset( mrEE.CreateTextObject() );
-    mpSels[ xlHFLeft ].nStartPara = mpSels[ xlHFLeft ].nEndPara = 0;
-    mpSels[ xlHFLeft ].nStartPos = mpSels[ xlHFLeft ].nEndPos = 0;
-    mpSels[ xlHFRight ] = mpSels[ xlHFCenter ] = mpSels[ xlHFLeft ];
-    meCurrObj = xlHFCenter;
+    mppObjs[ EXC_HF_LEFT ].reset( mrEE.CreateTextObject() );
+    mppObjs[ EXC_HF_CENTER ].reset( mrEE.CreateTextObject() );
+    mppObjs[ EXC_HF_RIGHT ].reset( mrEE.CreateTextObject() );
+    mpSels[ EXC_HF_LEFT ].nStartPara = mpSels[ EXC_HF_LEFT ].nEndPara = 0;
+    mpSels[ EXC_HF_LEFT ].nStartPos = mpSels[ EXC_HF_LEFT ].nEndPos = 0;
+    mpSels[ EXC_HF_RIGHT ] = mpSels[ EXC_HF_CENTER ] = mpSels[ EXC_HF_LEFT ];
+    mnCurrObj = EXC_HF_CENTER;
 
     // parser temporaries
     maCurrText.Erase();
     String aReadFont;           // current font name
     String aReadStyle;          // current font style
     sal_uInt16 nReadHeight;     // current font height
-
-    // font information
-    const XclImpFont* pFirstFont = GetFontBuffer().GetFont( 0 );
-    if( pFirstFont )
-        *mpFontData = pFirstFont->GetFontData();
-    else
-    {
-        mpFontData->Clear();
-        mpFontData->mnHeight = 200;
-    }
+    ResetFontData();
 
     /** State of the parser. */
     enum XclHFParserState
@@ -352,9 +355,9 @@ void XclImpHFConverter::ParseString( const String& rHFString )
                 {
                     case '&':   maCurrText += '&';  break;  // the '&' character
 
-                    case 'L':   SetNewPortion( xlHFLeft );      break;  // Left portion
-                    case 'C':   SetNewPortion( xlHFCenter );    break;  // Center portion
-                    case 'R':   SetNewPortion( xlHFRight );     break;  // Right portion
+                    case 'L':   SetNewPortion( EXC_HF_LEFT );   break;  // Left portion
+                    case 'C':   SetNewPortion( EXC_HF_CENTER ); break;  // Center portion
+                    case 'R':   SetNewPortion( EXC_HF_RIGHT );  break;  // Right portion
 
                     case 'P':   InsertField( SvxFieldItem( SvxPageField() ) );      break;  // page
                     case 'N':   InsertField( SvxFieldItem( SvxPagesField() ) );     break;  // page count
@@ -483,6 +486,18 @@ void XclImpHFConverter::ParseString( const String& rHFString )
     CreateCurrObject();
 }
 
+void XclImpHFConverter::FillToItemSet( SfxItemSet& rItemSet, sal_uInt16 nWhichId )
+{
+    ScPageHFItem aHFItem( nWhichId );
+    if( mppObjs[ 0 ].get() )
+        aHFItem.SetLeftArea( *mppObjs[ 0 ] );
+    if( mppObjs[ 1 ].get() )
+        aHFItem.SetCenterArea( *mppObjs[ 1 ] );
+    if( mppObjs[ 2 ].get() )
+        aHFItem.SetRightArea( *mppObjs[ 2 ] );
+    rItemSet.Put( aHFItem );
+}
+
 void XclImpHFConverter::SetAttribs()
 {
     ESelection& rSel = GetCurrSel();
@@ -494,6 +509,17 @@ void XclImpHFConverter::SetAttribs()
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
         rSel.nStartPos = rSel.nEndPos;
+    }
+}
+
+void XclImpHFConverter::ResetFontData()
+{
+    if( const XclImpFont* pFirstFont = GetFontBuffer().GetFont( EXC_FONT_APP ) )
+        *mpFontData = pFirstFont->GetFontData();
+    else
+    {
+        mpFontData->Clear();
+        mpFontData->mnHeight = 200;
     }
 }
 
@@ -530,16 +556,17 @@ void XclImpHFConverter::CreateCurrObject()
     GetCurrObj().reset( mrEE.CreateTextObject() );
 }
 
-void XclImpHFConverter::SetNewPortion( XclHFPortion eNew )
+void XclImpHFConverter::SetNewPortion( sal_uInt16 nNew )
 {
-    if( eNew != meCurrObj )
+    if( nNew != mnCurrObj )
     {
         CreateCurrObject();
-        meCurrObj = eNew;
+        mnCurrObj = nNew;
         if( GetCurrObj().get() )
             mrEE.SetText( *GetCurrObj() );
         else
             mrEE.SetText( EMPTY_STRING );
+        ResetFontData();
     }
 }
 
@@ -547,7 +574,7 @@ void XclImpHFConverter::SetNewPortion( XclHFPortion eNew )
 // URL conversion =============================================================
 
 void XclImpUrlHelper::DecodeUrl(
-        String& rUrl, String& rTable, bool& rbSameWb,
+        String& rUrl, String& rTabName, bool& rbSameWb,
         const XclImpRoot& rRoot, const String& rEncodedUrl )
 {
     enum
@@ -668,7 +695,7 @@ void XclImpUrlHelper::DecodeUrl(
 // --- sheet name ---
 
             case xlUrlSheetName:
-                rTable.Append( *pChar );
+                rTabName.Append( *pChar );
             break;
 
 // --- raw read mode ---
@@ -680,6 +707,26 @@ void XclImpUrlHelper::DecodeUrl(
 
         ++pChar;
     }
+}
+
+void XclImpUrlHelper::DecodeUrl(
+        String& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const String& rEncodedUrl )
+{
+    String aTabName;
+    DecodeUrl( rUrl, aTabName, rbSameWb, rRoot, rEncodedUrl );
+    DBG_ASSERT( !aTabName.Len(), "XclImpUrlHelper::DecodeUrl - sheet name ignored" );
+}
+
+bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String rEncUrl )
+{
+    xub_StrLen nPos = rEncUrl.Search( EXC_DDE_DELIM );
+    if( (nPos != STRING_NOTFOUND) && (0 < nPos) && (nPos + 1 < rEncUrl.Len()) )
+    {
+        rApplic = rEncUrl.Copy( 0, nPos );
+        rTopic = rEncUrl.Copy( nPos + 1 );
+        return true;
+    }
+    return false;
 }
 
 
