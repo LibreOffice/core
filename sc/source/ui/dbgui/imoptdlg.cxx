@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-31 12:58:23 $
+ *  last change: $Author: er $ $Date: 2001-08-14 10:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,8 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
                                         BOOL                    bAsciiImport,
                                         const ScImportOptions*  pOptions,
                                         const String*           pStrTitle,
-                                        BOOL                    bMultiByte )
+                                        BOOL                    bMultiByte,
+                                        BOOL                    bOnlyDbtoolsEncodings )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
@@ -194,23 +195,22 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
     aEdFieldSep.SetText( aEdFieldSep.GetEntry(0) );
     aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
 
-    if ( !bAsciiImport )
-    {
-        //!TODO: Unicode and MultiByte would need work in each filter
-        // (e.g. think of MultiByte and dBase export field lengths)
+    if ( bOnlyDbtoolsEncodings )
+    {   //!TODO: Unicode and MultiByte would need work in each filter
+        // Think of field lengths in dBase export
         if ( bMultiByte )
-            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE,
-                RTL_TEXTENCODING_INFO_MIME );
+            aLbFont.FillFromDbTextEncodingMap( RTL_TEXTENCODING_INFO_UNICODE );
+        else
+            aLbFont.FillFromDbTextEncodingMap( RTL_TEXTENCODING_INFO_UNICODE |
+                RTL_TEXTENCODING_INFO_MULTIBYTE );
+    }
+    else if ( !bAsciiImport )
+    {   //!TODO: Unicode would need work in each filter
+        if ( bMultiByte )
+            aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE );
         else
             aLbFont.FillFromTextEncodingTable( RTL_TEXTENCODING_INFO_UNICODE |
-                RTL_TEXTENCODING_INFO_MULTIBYTE | RTL_TEXTENCODING_INFO_MIME );
-        aFlFieldOpt.SetText( aFtFont.GetText() );
-        aFtFieldSep.Hide();
-        aFtTextSep .Hide();
-        aFtFont    .Hide();
-        aEdFieldSep.Hide();
-        aEdTextSep .Hide();
-        aLbFont.GrabFocus();
+                RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else
     {
@@ -234,6 +234,16 @@ ScImportOptionsDlg::ScImportOptionsDlg( Window*                 pParent,
         }
         // all encodings allowed, even Unicode
         aLbFont.FillFromTextEncodingTable();
+    }
+    if ( !bAsciiImport )
+    {
+        aFlFieldOpt.SetText( aFtFont.GetText() );
+        aFtFieldSep.Hide();
+        aFtTextSep .Hide();
+        aFtFont    .Hide();
+        aEdFieldSep.Hide();
+        aEdTextSep .Hide();
+        aLbFont.GrabFocus();
     }
 
     aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :

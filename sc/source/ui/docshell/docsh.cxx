@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-01 07:32:36 $
+ *  last change: $Author: er $ $Date: 2001-08-14 10:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     String aTitle = ScGlobal::GetRscString( STR_IMPORT_LOTUS );
                     ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_IBM_437);
                     ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                        FALSE, &aOptions, &aTitle, TRUE );
+                        FALSE, &aOptions, &aTitle, TRUE, FALSE );
                     int nDlgRet;
                     {   // WarteCursor aus und wieder einschalten
                         ScWaitCursorOff aWait( GetDialogParent() );
@@ -1030,7 +1030,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 ScImportOptions aOptions;
                 aOptions.SetTextEncoding( RTL_TEXTENCODING_IBM_850 );
                 ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    FALSE, &aOptions, &aTitle, TRUE );
+                    FALSE, &aOptions, &aTitle, FALSE, TRUE );
                 int nDlgRet;
                 {   // WarteCursor aus und wieder einschalten
                     ScWaitCursorOff aWait( GetDialogParent() );
@@ -1109,7 +1109,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     String aTitle = ScGlobal::GetRscString( STR_IMPORT_DIF );
                     ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_MS_1252);
                     ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                        FALSE, &aOptions, &aTitle, TRUE );
+                        FALSE, &aOptions, &aTitle, TRUE, FALSE );
                     int nDlgRet;
                     {   // WarteCursor aus und wieder einschalten
                         ScWaitCursorOff aWait( GetDialogParent() );
@@ -1763,7 +1763,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 ScImportOptions aOptions((USHORT)cAsciiDel, (USHORT)cStrDel, RTL_TEXTENCODING_DONTKNOW);
                 String aTitle = ScGlobal::GetRscString( STR_EXPORT_ASCII );
                 ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    TRUE, &aOptions, &aTitle, TRUE );
+                    TRUE, &aOptions, &aTitle, TRUE, FALSE );
                 if ( pDlg->Execute() == RET_OK )
                 {
                     WaitObject aWait( GetDialogParent() );
@@ -1816,7 +1816,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_IBM_850);
             String aTitle = ScGlobal::GetRscString( STR_EXPORT_DBF );
             ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                FALSE, &aOptions, &aTitle, FALSE );
+                FALSE, &aOptions, &aTitle, FALSE, TRUE );
             if ( pDlg->Execute() == RET_OK )
             {
                 pDlg->GetImportOptions( aOptions );
@@ -1909,7 +1909,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_MS_1252);
                 String aTitle = ScGlobal::GetRscString( STR_EXPORT_DIF );
                 ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    FALSE, &aOptions, &aTitle, TRUE );
+                    FALSE, &aOptions, &aTitle, TRUE, FALSE );
                 if ( pDlg->Execute() == RET_OK )
                 {
                     WaitObject aWait( GetDialogParent() );
