@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:30:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,11 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
 
     SwRect aBoundRect;
 
-    pOwnSh->CalcBoundRect(aBoundRect, rVal.eArea, rVal.eHRel, rVal.bMirror, NULL, &rVal.aPercentSize);
+    // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
+    //      aligned to page for fly frame anchored to paragraph or to character.
+    pOwnSh->CalcBoundRect( aBoundRect, rVal.eArea, rVal.eHRel,
+                           rVal.eVRel, rVal.bFollowTextFlow,
+                           rVal.bMirror, NULL, &rVal.aPercentSize);
 
     if (bOnlyPercentRefValue)
         return;
@@ -403,44 +407,62 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SwFrmValid& rVal, BOOL bOnlyPercentRefVal
     }
     else if ( rVal.eArea == FLY_AT_CNTNT || rVal.eArea == FLY_AUTO_CNTNT )
     {
-        SwTwips nH = rVal.nHPos;
-        SwTwips nV = rVal.nVPos;
-
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {
             if (rVal.eHori == HORI_NONE)
             {
                 rVal.nHPos -= ((rVal.nHPos + rVal.nWidth) - aBoundRect.Right());
-                nH = rVal.nHPos;
             }
             else
                 rVal.nWidth = aBoundRect.Right() - rVal.nHPos;
         }
 
-        if (rVal.nVPos + rVal.nHeight > aBoundRect.Bottom())
+        // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
+        // and alignment at page areas.
+        const bool bMaxVPosAtBottom = !rVal.bFollowTextFlow ||
+                                      rVal.eVRel == REL_PG_FRAME ||
+                                      rVal.eVRel == REL_PG_PRTAREA;
         {
-            if (rVal.eVert == SVX_VERT_NONE)
+            SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
+                                    ? aBoundRect.Bottom()
+                                    : aBoundRect.Height() ) -
+                                  rVal.nHeight;
+            if ( rVal.nVPos > nTmpMaxVPos )
             {
-                rVal.nVPos -= ((rVal.nVPos + rVal.nHeight) - aBoundRect.Bottom());
-                nV = rVal.nVPos;
+                if (rVal.eVert == SVX_VERT_NONE)
+                {
+                    rVal.nVPos = nTmpMaxVPos;
+                }
+                else
+                {
+                    rVal.nHeight = ( bMaxVPosAtBottom
+                                     ? aBoundRect.Bottom()
+                                     : aBoundRect.Height() ) - rVal.nVPos;
+                }
             }
-            else
-                rVal.nHeight = aBoundRect.Bottom() - rVal.nVPos;
         }
-
-        if ( rVal.eVert != SVX_VERT_NONE )
-            nV = aBoundRect.Top();
-
-        if ( rVal.eHori != HORI_NONE )
-            nH = aBoundRect.Left();
-
-        rVal.nMinVPos  = aBoundRect.Top();
-        rVal.nMaxVPos  = aBoundRect.Height() - rVal.nHeight;
 
         rVal.nMinHPos  = aBoundRect.Left();
         rVal.nMaxHPos  = aBoundRect.Right() - rVal.nWidth;
 
+        rVal.nMinVPos  = aBoundRect.Top();
+        // OD 26.09.2003 #i17567#, #i18732# - determine maximum vertical position
+        if ( bMaxVPosAtBottom )
+        {
+            rVal.nMaxVPos  = aBoundRect.Bottom() - rVal.nHeight;
+        }
+        else
+        {
+            rVal.nMaxVPos  = aBoundRect.Height() - rVal.nHeight;
+        }
+
         // Maximale Breite Hoehe
+        const SwTwips nH = ( rVal.eHori != HORI_NONE )
+                           ? aBoundRect.Left()
+                           : rVal.nHPos;
+        const SwTwips nV = ( rVal.eVert != SVX_VERT_NONE )
+                           ? aBoundRect.Top()
+                           : rVal.nVPos;
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
         rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
     }
@@ -647,6 +669,8 @@ void SwFlyFrmAttrMgr::SetAttrSet(const SfxItemSet& rSet)
 SwFrmValid::SwFrmValid() :
     bAuto(0),
     bMirror(0),
+    // OD 18.09.2003 #i18732#
+    bFollowTextFlow( false ),
     nHPos(0),
     nMaxHPos(LONG_MAX),
     nMinHPos(0),
