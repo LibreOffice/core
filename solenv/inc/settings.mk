@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-05 16:03:04 $
+#   last change: $Author: hjs $ $Date: 2001-10-11 11:21:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -713,7 +713,9 @@ SOLARIDLDIR=$(SOLARVERSION)$/$(INPATH)$/idl$(EXT_UPDMINOR)
 L=$(SOLARLIBDIR)
 
 #.EXPORT : SLB LB L LIB
-.EXPORT : PRJ
+ENVPRJ:=$(PRJ)
+#todo: check PRJ is still expected to exist in environment
+.EXPORT : PRJ ENVPRJ
 
 # Class-Path for java-classes
 # obwohl der generierte Bytecode plattformunabhg. sein sollte
