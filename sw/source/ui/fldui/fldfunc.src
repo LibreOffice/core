@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:06:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,8 +425,8 @@ TabPage TP_FLD_FUNC
         Text[ spanish ] = "~Elemento";
         Text[ finnish ] = "Ite~m";
         Text[ italian ] = "Elemento";
-        Text[ czech ] = "Ite~m";
-        Text[ slovak ] = "Ite~m";
+        Text[ czech ] = "PoloÅ¾ka";
+        Text[ slovak ] = "PoloÅ¾~ka";
         Text[ danish ] = "Ite~m";
         Text[ swedish ] = "~Post";
         Text[ polish ] = "Ite~m";
@@ -440,6 +440,7 @@ TabPage TP_FLD_FUNC
         Text[ hebrew ] = "Ite~m";
         Text[ catalan ] = "Ite~m";
         Text[ thai ] = "Ite~m";
+        Text[ hindi ] = "Ite~m";
     };
     Edit ED_LISTITEM
     {
@@ -457,29 +458,30 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Hi~nzufügen" ;
         Text [ english_us ] = "~Add" ;
-        Text[ portuguese ] = "~Add";
-        Text[ russian ] = "~Add";
-        Text[ greek ] = "~Add";
-        Text[ dutch ] = "~Add";
+        Text[ portuguese ] = "~Adicionar";
+        Text[ russian ] = "Äîáàâèòü";
+        Text[ greek ] = "ĞñïóèŞê~ç";
+        Text[ dutch ] = "Toe~voegen";
         Text[ french ] = "Ajouter";
         Text[ spanish ] = "~Añadir";
-        Text[ finnish ] = "~Add";
+        Text[ finnish ] = "~Lisää";
         Text[ italian ] = "Aggiungi";
-        Text[ czech ] = "~Add";
-        Text[ slovak ] = "~Add";
-        Text[ danish ] = "~Add";
+        Text[ czech ] = "PÅ™idat";
+        Text[ slovak ] = "Prid~aÅ¥";
+        Text[ danish ] = "Tilføj";
         Text[ swedish ] = "Lägg ~till";
-        Text[ polish ] = "~Add";
-        Text[ portuguese_brazilian ] = "~Add";
+        Text[ polish ] = "Dodaj";
+        Text[ portuguese_brazilian ] = "~Adicionar";
         Text[ japanese ] = "è¿½åŠ (~A)";
         Text[ korean ] = "ì¶”ê°€(~A)";
         Text[ chinese_simplified ] = "å¢åŠ (~A)";
         Text[ chinese_traditional ] = "å¢åŠ (~A)";
-        Text[ turkish ] = "~Add";
-        Text[ arabic ] = "~Add";
-        Text[ hebrew ] = "~Add";
-        Text[ catalan ] = "~Add";
-        Text[ thai ] = "~Add";
+        Text[ turkish ] = "E~kle";
+        Text[ arabic ] = "ÅÖÇİÉ";
+        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+        Text[ catalan ] = "~Afegeix";
+        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
+        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
     };
     FixedText FT_LISTITEMS
     {
@@ -495,9 +497,9 @@ TabPage TP_FLD_FUNC
         Text[ french ] = "Éléments de la liste";
         Text[ spanish ] = "Elementos de la ~lista";
         Text[ finnish ] = "Items on ~list";
-        Text[ italian ] = "Elemento nell'elenco";
-        Text[ czech ] = "Items on ~list";
-        Text[ slovak ] = "Items on ~list";
+        Text[ italian ] = "Elementi dell'elenco";
+        Text[ czech ] = "PoloÅ¾ky v seznamu";
+        Text[ slovak ] = "Po~loÅ¾ky na zozname";
         Text[ danish ] = "Items on ~list";
         Text[ swedish ] = "Poster i ~lista";
         Text[ polish ] = "Items on ~list";
@@ -511,6 +513,7 @@ TabPage TP_FLD_FUNC
         Text[ hebrew ] = "Items on ~list";
         Text[ catalan ] = "Items on ~list";
         Text[ thai ] = "Items on ~list";
+        Text[ hindi ] = "Items on ~list";
     };
     ListBox LB_LISTITEMS
     {
@@ -528,29 +531,30 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Entfernen" ;
         Text [ english_us ] = "~Remove" ;
-        Text[ portuguese ] = "~Remove";
-        Text[ russian ] = "~Remove";
-        Text[ greek ] = "~Remove";
-        Text[ dutch ] = "~Remove";
+        Text[ portuguese ] = "~Limpar";
+        Text[ russian ] = "Îòìåíèòü";
+        Text[ greek ] = "ÊáôÜñãçóç";
+        Text[ dutch ] = "~Opheffen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Borrar";
-        Text[ finnish ] = "~Remove";
+        Text[ finnish ] = "~Poista";
         Text[ italian ] = "~Elimina";
-        Text[ czech ] = "~Remove";
-        Text[ slovak ] = "~Remove";
-        Text[ danish ] = "~Remove";
+        Text[ czech ] = "Odstranit";
+        Text[ slovak ] = "Odst~rÃ¡niÅ¥";
+        Text[ danish ] = "Oph~æv";
         Text[ swedish ] = "Ta ~bort";
-        Text[ polish ] = "~Remove";
-        Text[ portuguese_brazilian ] = "~Remove";
+        Text[ polish ] = "Usuñ";
+        Text[ portuguese_brazilian ] = "~Dividir células";
         Text[ japanese ] = "å‰Šé™¤(~R)";
         Text[ korean ] = "ì œê±°(~R)";
         Text[ chinese_simplified ] = "åˆ é™¤(~R)";
         Text[ chinese_traditional ] = "åˆªé™¤(~R)";
-        Text[ turkish ] = "~Remove";
-        Text[ arabic ] = "~Remove";
-        Text[ hebrew ] = "~Remove";
-        Text[ catalan ] = "~Remove";
-        Text[ thai ] = "~Remove";
+        Text[ turkish ] = "~Kaldır";
+        Text[ arabic ] = "ÅÒÇáÉ";
+        Text[ hebrew ] = "â€®×”×¡×¨×”â€¬";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
+        Text[ hindi ] = "~à¤¹à¤Ÿà¤¾à¤“";
     };
     PushButton PB_LISTUP
     {
@@ -566,9 +570,9 @@ TabPage TP_FLD_FUNC
         Text[ french ] = "Vers le haut";
         Text[ spanish ] = "Desplazar hacia ~arriba";
         Text[ finnish ] = "Move ~Up";
-        Text[ italian ] = "In alto";
-        Text[ czech ] = "Move ~Up";
-        Text[ slovak ] = "Move ~Up";
+        Text[ italian ] = "Verso l'alto";
+        Text[ czech ] = "PÅ™esunout nahoru";
+        Text[ slovak ] = "PresunÃºÅ¥ ~vyÅ¡Å¡ie";
         Text[ danish ] = "Move ~Up";
         Text[ swedish ] = "Flytta ~uppåt";
         Text[ polish ] = "Move ~Up";
@@ -577,11 +581,12 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "ìœ„ë¡œ(~U)";
         Text[ chinese_simplified ] = "å‘ä¸Š(~U)";
         Text[ chinese_traditional ] = "å‘ä¸Š(~U)";
-        Text[ turkish ] = "Move ~Up";
+        Text[ turkish ] = "~Yukarı Taşı";
         Text[ arabic ] = "Move ~Up";
-        Text[ hebrew ] = "Move ~Up";
+        Text[ hebrew ] = "â€®×”×–×–×” ×œ××¢×œ×”â€¬";
         Text[ catalan ] = "Move ~Up";
         Text[ thai ] = "Move ~Up";
+        Text[ hindi ] = "Move ~Up";
     };
     PushButton PB_LISTDOWN
     {
@@ -598,8 +603,8 @@ TabPage TP_FLD_FUNC
         Text[ spanish ] = "Desplazar hacia ~abajo";
         Text[ finnish ] = "Move Do~wn";
         Text[ italian ] = "In basso";
-        Text[ czech ] = "Move Do~wn";
-        Text[ slovak ] = "Move Do~wn";
+        Text[ czech ] = "PÅ™esunout dolÅ¯";
+        Text[ slovak ] = "PresunÃºÅ¥ niÅ¾Å¡i~e";
         Text[ danish ] = "Move Do~wn";
         Text[ swedish ] = "Fl~ytta nedåt";
         Text[ polish ] = "Move Do~wn";
@@ -608,11 +613,12 @@ TabPage TP_FLD_FUNC
         Text[ korean ] = "ì•„ë˜ë¡œ(~W)";
         Text[ chinese_simplified ] = "å‘ä¸‹(~W)";
         Text[ chinese_traditional ] = "å‘ä¸‹(~W)";
-        Text[ turkish ] = "Move Do~wn";
+        Text[ turkish ] = "~Aşağı Taşı";
         Text[ arabic ] = "Move Do~wn";
-        Text[ hebrew ] = "Move Do~wn";
+        Text[ hebrew ] = "â€®×”×–×–×” ×œ××˜×”â€¬";
         Text[ catalan ] = "Move Do~wn";
         Text[ thai ] = "Move Do~wn";
+        Text[ hindi ] = "Move Do~wn";
     };
     FixedText FT_LISTNAME
     {
@@ -621,29 +627,30 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
         Text = "Name" ;
         Text [ english_us ] = "Na~me" ;
-        Text[ portuguese ] = "Na~me";
-        Text[ russian ] = "Na~me";
-        Text[ greek ] = "Na~me";
-        Text[ dutch ] = "Na~me";
+        Text[ portuguese ] = "No~me";
+        Text[ russian ] = "Èìÿ";
+        Text[ greek ] = "¼íïìá";
+        Text[ dutch ] = "Naa~m";
         Text[ french ] = "Nom";
         Text[ spanish ] = "~Nombre";
-        Text[ finnish ] = "Na~me";
+        Text[ finnish ] = "Ni~mi";
         Text[ italian ] = "Nome";
-        Text[ czech ] = "Na~me";
-        Text[ slovak ] = "Na~me";
-        Text[ danish ] = "Na~me";
+        Text[ czech ] = "NÃ¡zev";
+        Text[ slovak ] = "NÃ¡~zov";
+        Text[ danish ] = "Navn";
         Text[ swedish ] = "Namn";
-        Text[ polish ] = "Na~me";
-        Text[ portuguese_brazilian ] = "Na~me";
+        Text[ polish ] = "Nazwa";
+        Text[ portuguese_brazilian ] = "~Nome";
         Text[ japanese ] = "åå‰(~M)";
         Text[ korean ] = "ì´ë¦„(~M)";
         Text[ chinese_simplified ] = "åç§°(~M)";
         Text[ chinese_traditional ] = "åç¨±(~M)";
-        Text[ turkish ] = "Na~me";
-        Text[ arabic ] = "Na~me";
-        Text[ hebrew ] = "Na~me";
-        Text[ catalan ] = "Na~me";
-        Text[ thai ] = "Na~me";
+        Text[ turkish ] = "~Ad";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ hebrew ] = "â€®×©×â€¬";
+        Text[ catalan ] = "N~om";
+        Text[ thai ] = "à¸Šà¸·à¹ˆ~à¸­";
+        Text[ hindi ] = "à¤¨à¤¾~à¤®";
     };
     Edit ED_LISTNAME
     {
@@ -681,6 +688,12 @@ TabPage TP_FLD_FUNC
     Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥à¤¸";
     Text[ slovak ] = "Funkcie";
 };
+
+
+
+
+
+
 
 
 
