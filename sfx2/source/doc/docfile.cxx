@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 12:53:30 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,13 @@ sal_Bool SfxMedium::Commit()
 //------------------------------------------------------------------
 sal_Bool SfxMedium::IsStorage()
 {
-    return aStorage.Is() || SotStorage::IsStorageFile( GetInStream() );
+    if ( aStorage.Is() )
+        return sal_True;
+
+    if ( pImp->pTempFile )
+        return SotStorage::IsStorageFile( pImp->pTempFile->GetName() );
+    else
+        return SotStorage::IsStorageFile( GetInStream() );
 }
 
 //------------------------------------------------------------------
