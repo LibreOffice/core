@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:25:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                             {
                                 aDocInfo.Title = GetProperty( xPropSet, "Title" );
                                 aDocInfo.Author = GetProperty( xPropSet, "Author" );
-                                aDocInfo.Subject = GetProperty( xPropSet, "Theme" );
+                                aDocInfo.Subject = GetProperty( xPropSet, "Subject" );
                                 aDocInfo.Keywords = GetProperty( xPropSet, "Keywords" );
                             }
                         }
