@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:43:21 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 15:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,15 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _XMLOFF_XMLKYWD_HXX
+#include <xmloff/xmlkywd.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1177,54 +1186,55 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
     }
 }
 
-void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     sal_Int32 nLength = rSequence.getLength();
     if (nLength)
     {
-        com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
+        const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
         long nX = 0, nY = 0, nLeft = 0, nTop = 0, nRight = 0, nBottom = 0;
         sal_Int16 nZoomType = 0, nZoomFactor = 0;
         sal_Bool bSelectedFrame = sal_False;
 
         for (sal_Int16 i = 0 ; i < nLength; i++)
         {
-            if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLeft" ) ) )
+            if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLeft" ) ) )
             {
-               pValue[i].Value >>= nX;
+               pValue->Value >>= nX;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
             {
-               pValue[i].Value >>= nY;
+               pValue->Value >>= nY;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
             {
-               pValue[i].Value >>= nLeft;
+               pValue->Value >>= nLeft;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleTop" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleTop" ) ) )
             {
-               pValue[i].Value >>= nTop;
+               pValue->Value >>= nTop;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleRight" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleRight" ) ) )
             {
-               pValue[i].Value >>= nRight;
+               pValue->Value >>= nRight;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleBottom" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleBottom" ) ) )
             {
-               pValue[i].Value >>= nBottom;
+               pValue->Value >>= nBottom;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomType" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomType" ) ) )
             {
-               pValue[i].Value >>= nZoomType;
+               pValue->Value >>= nZoomType;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomFactor" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomFactor" ) ) )
             {
-               pValue[i].Value >>= nZoomFactor;
+               pValue->Value >>= nZoomFactor;
             }
-            else if (pValue[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
+            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
             {
-               pValue[i].Value >>= bSelectedFrame;
+               pValue->Value >>= bSelectedFrame;
             }
+            pValue++;
         }
         Point aCrsrPos( nX, nY );
         const long nAdd = pWrtShell->IsBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
@@ -1271,8 +1281,8 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
         }
     }
 }
-#define NUM_VIEW_SETTINGS 9
-void SwView::ReadUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+#define NUM_VIEW_SETTINGS 10
+void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     const SwRect& rRect = pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
@@ -1282,42 +1292,49 @@ void SwView::ReadUserDataSequence ( com::sun::star::uno::Sequence < com::sun::st
     sal_Int16 nIndex = 0;
     com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
 
-    aAny <<= TWIP_TO_MM100 ( rRect.Left() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLeft" ) );
-    pValue[nIndex++].Value = aAny;
+    sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
+    pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( sXML_view_id ) );
+    OUStringBuffer sBuffer ( OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_view ) ) );
+    SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
+    pValue->Value <<= sBuffer.makeStringAndClear();
+    pValue++;nIndex++;
 
-    aAny <<= TWIP_TO_MM100 ( rRect.Top() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewTop" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewLeft" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( rRect.Left() );
+    pValue++;nIndex++;
 
-    aAny <<= TWIP_TO_MM100 ( rVis.Left() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleLeft" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ViewTop" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( rRect.Top() );
+    pValue++;nIndex++;
 
-    aAny <<= TWIP_TO_MM100 ( rVis.Top() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleTop" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleLeft" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( rVis.Left() );
+    pValue++;nIndex++;
 
-    aAny <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Right() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleRight" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleTop" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( rVis.Top() );
+    pValue++;nIndex++;
 
-    aAny <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleBottom" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleRight" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Right() );
+    pValue++;nIndex++;
+
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "VisibleBottom" ) );
+    pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
+    pValue++;nIndex++;
 
     sal_Int16 nInt16 = pWrtShell->GetViewOptions()->GetZoomType();
-    aAny <<= nInt16;
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomType" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomType" ) );
+    pValue->Value <<= nInt16;
+    pValue++;nIndex++;
 
-    aAny <<= static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomFactor" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomFactor" ) );
+    pValue->Value <<= static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
+    pValue++;nIndex++;
 
-    aAny <<= FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
-    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsSelectedFrame" ) );
-    pValue[nIndex++].Value = aAny;
+    pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "IsSelectedFrame" ) );
+    pValue->Value <<= FRMTYPE_NONE == pWrtShell->GetSelFrmType() ? sal_False : sal_True;
+    nIndex++;
 
     if ( nIndex < NUM_VIEW_SETTINGS )
         rSequence.realloc ( nIndex );

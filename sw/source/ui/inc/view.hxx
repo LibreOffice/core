@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:31:07 $
+ *  last change: $Author: mtg $ $Date: 2001-03-23 15:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ public:
 
     virtual void    WriteUserData(String &, BOOL bBrowse = FALSE );
     virtual void    ReadUserData(const String &, BOOL bBrowse = FALSE );
-    virtual void    ReadUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
+    virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
     virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
 
     void SetCrsrAtTop( BOOL bFlag, BOOL bCenter = FALSE )
