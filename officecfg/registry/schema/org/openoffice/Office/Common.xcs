@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:57:50 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -28391,7 +28391,7 @@
 					<label xml:lang="hu">Use system default user interface font</label>
 					<label xml:lang="sl">Use system default user interface font</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="IsSelectionInReadonly" oor:type="xs:boolean">
 				<info>
