@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $ $Date: 2001-07-10 11:02:30 $
+ *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 
 using std::cerr;
 using std::ofstream;
+using std::ios;
+using std::ostream;
 
 extern unsigned C_nSupportedServicesIndex;
 
@@ -203,7 +205,7 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
 void
 Index::WriteTableFromHeap( ostream &    o_rOut,
                            Heap &       i_rHeap,
-                           const char * i_sIndexValue,
+                            const char *    i_sIndexValue,
                            const char * i_sIndexReference,
                            E_LinkType       i_eLinkType )
 {

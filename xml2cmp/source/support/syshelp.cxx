@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-09-28 14:37:55 $
+ *  last change: $Author: np $ $Date: 2001-10-02 08:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 
 
 using namespace std;
+using std::ostream;
+
 
 char C_sSpaceInName[] = "&nbsp;&nbsp;&nbsp;";
 

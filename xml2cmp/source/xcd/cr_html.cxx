@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2001-03-23 13:39:36 $
+ *  last change: $Author: np $ $Date: 2001-10-02 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 using std::cerr;
 using std::ofstream;
-
+using std::ios;
 
 
 
