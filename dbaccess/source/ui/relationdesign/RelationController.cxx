@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:39:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +181,6 @@
 #ifndef DBAUI_RELATIONDESIGNVIEW_HXX
 #include "RelationDesignView.hxx"
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -299,22 +296,12 @@ void ORelationController::Execute(sal_uInt16 _nId)
                     //  create the output stream
                     try
                     {
-                        Sequence< sal_Int8 > aOutputSeq;
-                        if(haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
+                        if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
                         {
-                            Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                            Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                            Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                            Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                            Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                            OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                            xOutDataSource->setOutputStream(xMarkOutStream);
-                            Save(xOutStream);
-
-                            getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
-                            Reference<XFlushable> xFlush(getDataSource(),UNO_QUERY);
-                            if(xFlush.is())
-                                xFlush->flush();
+                            Sequence<PropertyValue> aWindows;
+                            getDataSource()->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aWindows;
+                            saveTableWindows(aWindows);
+                            getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
                             setModified(sal_False);
                         }
                     }
@@ -335,13 +322,8 @@ void ORelationController::Execute(sal_uInt16 _nId)
     InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    OJoinController::initialize(aArguments);
-
-    //  m_pWindow->initialize(m_xCurrentFrame);
-
     PropertyValue aValue;
     const Any* pBegin   = aArguments.getConstArray();
     const Any* pEnd     = pBegin + aArguments.getLength();
@@ -353,12 +335,7 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             Reference< XConnection > xConn;
             aValue.Value >>= xConn;
             initializeConnection( xConn );
-        }
-        else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-        {
-            ::rtl::OUString sDataSource;
-            aValue.Value >>= sDataSource;
-            initializeDataSourceName( sDataSource );
+            break;
         }
     }
 
@@ -386,6 +363,9 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         }
         throw SQLException();
     }
+
+    OJoinController::impl_initialize(aArguments);
+
     if(!m_bRelationsPossible)
         InvalidateAll();
 
@@ -405,24 +385,24 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         getView()->Invalidate(INVALIDATE_NOERASE);
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
-        // set the title of the beamer
-        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
-        {
-            ::rtl::OUString sName;
-            if (getDataSourceName().getLength())
-                sName = getDataSourceName() + ::rtl::OUString::createFromAscii(": ") ;
-            sName += String(ModuleRes(STR_RELATIONDESIGN));
-            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
-        }
+
         if(m_vTableData.empty())
             Execute(ID_BROWSER_ADDTABLE);
     }
-    catch(SQLException&)
+    catch(Exception&)
     {
         OSL_ENSURE(sal_False, "ORelationController::initialize: caught an exception!");
     }
 
+}
+// -----------------------------------------------------------------------------
+void ORelationController::updateTitle()
+{
+    ::rtl::OUString sName;
+    sName = String(ModuleRes(STR_RELATIONDESIGN));
+    ::rtl::OUString sDataSourceName = getDataSourceName();
+    sName += ::dbaui::getStrippedDatabaseName(getDataSource(),sDataSourceName) ;
+    OGenericUnoController::setTitle(sName);
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
@@ -521,7 +501,7 @@ void ORelationController::loadTableData(const Any& _aTable)
                     ::rtl::OUString sSourceName,sReferencedTable;
                     Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
 
-                    ::dbaui::composeTableName(getConnection()->getMetaData(),xTableProp,sSourceName,sal_False,::dbtools::eInTableDefinitions);
+                    sSourceName = ::dbtools::composeTableName(getConnection()->getMetaData(),xTableProp,sal_False,::dbtools::eInTableDefinitions);
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
                     // insert windows
@@ -601,32 +581,18 @@ OTableWindowData* ORelationController::createTableWindowData()
     return new OTableWindowData();
 }
 // -----------------------------------------------------------------------------
-String ORelationController::getMenu() const
-{
-    return String::CreateFromInt32(RID_RELATION_DESIGN_MAIN_MENU);
-}
-// -----------------------------------------------------------------------------
 void ORelationController::loadLayoutInformation()
 {
     try
     {
         OSL_ENSURE(haveDataSource(),"We need a datasource from our connection!");
-        if(haveDataSource())
+        if ( haveDataSource() )
         {
-            Sequence< sal_Int8 > aInputSequence;
-            if(getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION))
+            if ( getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
             {
-                getDataSource()->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aInputSequence;
-                {
-                    Reference< XInputStream>       xInStreamHelper = new SequenceInputStream(aInputSequence);;  // used for wrapping sequence to xinput
-                    Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                    Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                    Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                    Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                    OSL_ENSURE(xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!");
-                    xInDataSource->setInputStream(xMarkInStream);
-                    Load(xInStream);
-                }
+                Sequence<PropertyValue> aWindows;
+                getDataSource()->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aWindows;
+                loadTableWindows(aWindows);
             }
         }
     }
