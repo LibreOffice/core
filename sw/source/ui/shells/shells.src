@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:13:52 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <svx/svxids.hrc>
 #include <svx/globlmn.hrc>
 #include "toolbox.hrc"
@@ -1966,14 +1965,14 @@ String RID_DRAW_TEXT_TOOLBOX
     Text [ dutch ] = "Tekstobjectbalk" ;
     Text [ spanish ] = "Barra de objetos de texto/imαgenes" ;
     Text [ english_us ] = "Text Object Bar/Graphics" ;
-    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ /ε›Ύε½Ά";
+    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ ";
     Text[ russian ] = "Κξνςεκρςνΰÿ οΰνελό ςεκρςΰ";
     Text[ polish ] = "Pasek obiektσw tekstowych";
     Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ‚ªγƒ–γ‚Έγ‚§γ‚―γƒγƒγƒΌ/ε›³";
     Text[ chinese_traditional ] = "ζ–‡ε­—η‰©δ»¶ε—/ε–ε½Ά";
     Text[ arabic ] = "ΤΡνΨ ίΗΖδΗΚ ΗαδΥ";
     Text[ dutch ] = "Tekstobjectbalk";
-    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ /ε›Ύε½Ά";
+    Text[ chinese_simplified ] = "ζ–‡ε­—ε―Ήθ±΅ζ ";
     Text[ greek ] = "Γραμμή αντικειμένων κειμένου";
     Text[ korean ] = "ν…μ¤νΈ κ°μ²΄ λª¨μ/κ·Έλ¦Ό";
     Text[ turkish ] = "Metin Nesne Ηubuπu/Grafikleri";
