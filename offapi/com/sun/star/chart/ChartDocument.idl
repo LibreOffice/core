@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocument.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:01:54 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
 
+#ifndef com_sun_star_chart2_XDataReceiver_idl
+#include <com/sun/star/chart2/XDataReceiver.idl>
+#endif
+
 //=============================================================================
 
  module com {  module sun {  module star {  module chart {
@@ -98,10 +102,16 @@ service ChartDocument
 
     @since #107627#
      */
-    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+    [optional] service ::com::sun::star::xml::UserDefinedAttributeSupplier;
 
-    interface com::sun::star::chart::XChartDocument;
-    interface com::sun::star::beans::XPropertySet;
+    interface ::com::sun::star::chart::XChartDocument;
+    interface ::com::sun::star::beans::XPropertySet;
+
+    /** If this interface is implemented, it is possible to connect
+        data to a chart via the improved data connection method using
+        an <type scope="com::sun::star::chart2">XDataProvider</type>.
+     */
+    [optional] interface ::com::sun::star::chart2::XDataReceiver;
 
     //-------------------------------------------------------------------------
 
