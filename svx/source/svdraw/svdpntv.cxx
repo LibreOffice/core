@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:50:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,6 +703,14 @@ void SdrPaintView::ImpAddAsyncObj( const SdrObject* pObj, const OutputDevice* pO
     aAsyncPaintList.Insert( new ImpAsyncStruct( pObj, pOut ), LIST_APPEND );
 }
 
+void SdrPaintView::ImpAsyncPaintDone( const SdrObject* pObj )
+{
+    // #110290# Remove the given object from the
+    // maSwappedInGraphicsStack list, as the object
+    // itself caters for swapout again.
+    maSwappedInGraphicsStack.remove( (SdrGrafObj*)pObj );
+}
+
 IMPL_LINK(SdrPaintView,ImpAfterPaintHdl,Timer*,pTimer)
 {
     while( aAsyncPaintList.Count() )
@@ -716,7 +724,13 @@ IMPL_LINK(SdrPaintView,ImpAfterPaintHdl,Timer*,pTimer)
             BOOL            bMatch = TRUE;
 
             if( pAsync->mpObj && pAsync->mpObj->ISA( SdrGrafObj) )
+            {
+                // #110290# Store swapped-in graphic, such that we can later
+                // force-swap it out, when this view is cleared.
+                maSwappedInGraphicsStack.push_front( (SdrGrafObj*) pAsync->mpObj );
+
                 ( (SdrGrafObj*) pAsync->mpObj )->ForceSwapIn();
+            }
 
             if( !pOut )
                 pOut = pAsync->mpOut;
@@ -1043,6 +1057,7 @@ void SdrPaintView::ClearAll()
     aAsyncPaintList.Clear();
     ClearPageViews();
     ClearHideViews();
+    ImpForceSwapOut();
 }
 
 SdrPageView* SdrPaintView::ShowPage(SdrPage* pPage, const Point& rOffs)
@@ -1063,6 +1078,9 @@ SdrPageView* SdrPaintView::ShowPage(SdrPage* pPage, const Point& rOffs)
             if (pPV!=NULL) {
                 aPagV.Insert(pPV,CONTAINER_APPEND);
                 pPV->Show();
+
+                // #110290# Swap out graphics when switching pages
+                ImpForceSwapOut();
             }
         }
     }
@@ -2296,6 +2314,18 @@ Color SdrPaintView::CalcBackgroundColor( const Rectangle& rArea,
     }
 
     return aBackground;
+}
+
+void SdrPaintView::ImpForceSwapOut()
+{
+    // #110290# Force swap out all graphics on this page. There might be
+    // some left, since every graphic that has not received a Draw yet,
+    // but is swapped in, has its swapout handler disabled.
+    while( !maSwappedInGraphicsStack.empty() )
+    {
+        maSwappedInGraphicsStack.front()->ForceSwapOut();
+        maSwappedInGraphicsStack.pop_front();
+    }
 }
 
 // eof
