@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:36:30 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2388,7 +2388,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ russian ] = "~Ãîòîâî";
         Text[ greek ] = "ÏëïêëÞñ~ùóç";
         Text[ dutch ] = "~Voltooien";
-        Text[ french ] = "~Créer";
+        Text[ french ] = "Créer";
         Text[ spanish ] = "~Crear";
         Text[ italian ] = "~Crea";
         Text[ danish ] = "~Finish";
@@ -2420,7 +2420,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ russian ] = "~Äàëåå >>";
         Text[ greek ] = "Åðüìåí~ï >>";
         Text[ dutch ] = "~Next >>";
-        Text[ french ] = "~Suivant >>";
+        Text[ french ] = "Suivant >>";
         Text[ spanish ] = "~Avanzar >>";
         Text[ italian ] = "~Avanti >>";
         Text[ danish ] = "~Next >>";
@@ -2447,7 +2447,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ russian ] = "<< ~Íàçàä";
         Text[ greek ] = "<< ~Ðßóù";
         Text[ dutch ] = "<< ~Vorige";
-        Text[ french ] = "<< ~Précédent";
+        Text[ french ] = "<< Précédent";
         Text[ spanish ] = "<< ~Regresar";
         Text[ italian ] = "<<~ Indietro";
         Text[ danish ] = "<< ~Back";
@@ -2587,7 +2587,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ russian ] = "~Óäàëèòü";
         Text[ greek ] = "Äéáãñá~öÞ";
         Text[ dutch ] = "~Wissen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "Elimina";
         Text[ danish ] = "~Delete";
