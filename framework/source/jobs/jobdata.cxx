@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:16:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+
 //________________________________
 //  includes of other projects
 
@@ -146,6 +150,7 @@ const sal_Char* JobData::PROP_ALIAS               = "Alias"                     
 const sal_Char* JobData::PROP_EVENTNAME           = "EventName"                           ;
 const sal_Char* JobData::PROP_ENVTYPE             = "EnvType"                             ;
 const sal_Char* JobData::PROP_FRAME               = "Frame"                               ;
+const sal_Char* JobData::PROP_MODEL               = "Model"                               ;
 const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
 
 //________________________________
@@ -495,6 +500,10 @@ JobData::EEnvironment JobData::getEnvironment() const
         case E_DISPATCH :
             sDescriptor = ::rtl::OUString::createFromAscii("DISPATCH");
             break;
+
+        case E_DOCUMENTEVENT :
+            sDescriptor = ::rtl::OUString::createFromAscii("DOCUMENTEVENT");
+            break;
     }
     /* } SAFE */
     return sDescriptor;
@@ -679,22 +688,30 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
     // these static values may perform following loop for reading time stamp values ...
     static ::rtl::OUString ADMINTIME = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
     static ::rtl::OUString USERTIME  = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_USERTIME );
+    static ::rtl::OUString ROOT      = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT          );
+    static ::rtl::OUString JOBLIST   = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PATH_JOBLIST  );
 
-    // generate the full qualified path to the job list, which is registered for the given event.
-    // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
-    ::rtl::OUStringBuffer sCfgEntry(256);
-    sCfgEntry.appendAscii(JobData::EVENTCFG_ROOT                     );
-    sCfgEntry.append     (::utl::wrapConfigurationElementName(sEvent));
-    sCfgEntry.appendAscii(JobData::EVENTCFG_PATH_JOBLIST             );
-
-    // create a config access
-    ConfigAccess aConfig(xSMGR,sCfgEntry.makeStringAndClear());
+    // create a config access to "/org.openoffice.Office.Jobs/Events"
+    ConfigAccess aConfig(xSMGR,ROOT);
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return css::uno::Sequence< ::rtl::OUString >();
 
-    css::uno::Reference< css::container::XNameAccess > xEventRegistry(aConfig.cfg(), css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xEventRegistry(aConfig.cfg(), css::uno::UNO_QUERY);
     if (!xEventRegistry.is())
+        return css::uno::Sequence< ::rtl::OUString >();
+
+    // check if the given event exist inside list of registered ones
+    ::rtl::OUString sPath(sEvent);
+    sPath += JOBLIST;
+    if (!xEventRegistry->hasByHierarchicalName(sPath))
+        return css::uno::Sequence< ::rtl::OUString >();
+
+    // step to the job list, which is a child of the event node inside cfg
+    // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
+    css::uno::Any aJobList = xEventRegistry->getByHierarchicalName(sPath);
+    css::uno::Reference< css::container::XNameAccess > xJobList;
+    if (!(aJobList >>= xJobList) || !xJobList.is())
         return css::uno::Sequence< ::rtl::OUString >();
 
     // get all alias names of jobs, which are part of this job list
@@ -702,13 +719,17 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
     // We create an additional job name list iwth the same size, then the original list ...
     // step over all job entries ... check her time stamps ... and put only job names to the
     // destination list, which represent an enabled job.
-    css::uno::Sequence< ::rtl::OUString > lAllJobs = xEventRegistry->getElementNames();
+    css::uno::Sequence< ::rtl::OUString > lAllJobs = xJobList->getElementNames();
+    ::rtl::OUString* pAllJobs = lAllJobs.getArray();
     sal_Int32 c = lAllJobs.getLength();
+
     css::uno::Sequence< ::rtl::OUString > lEnabledJobs(c);
+    ::rtl::OUString* pEnabledJobs = lEnabledJobs.getArray();
     sal_Int32 d = 0;
+
     for (sal_Int32 s=0; s<c; ++s)
     {
-        css::uno::Any aNode = xEventRegistry->getByName(lAllJobs[s]);
+        css::uno::Any aNode = xJobList->getByName(pAllJobs[s]);
         css::uno::Reference< css::beans::XPropertySet > xJob;
         if (
             !(aNode >>= xJob) ||
@@ -729,7 +750,7 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
         if (!isEnabled(sAdminTime, sUserTime))
             continue;
 
-        lEnabledJobs[d] = lAllJobs[s];
+        pEnabledJobs[d] = pAllJobs[s];
         ++d;
     }
     lEnabledJobs.realloc(d);

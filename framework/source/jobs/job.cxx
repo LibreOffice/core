@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:16:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+
 //________________________________
 //  includes of other projects
 
@@ -145,11 +149,11 @@ DEFINE_XTYPEPROVIDER_4( Job                           ,
                 later using the method setJobData().
 
     @param      xSMGR
-                    reference to the uno service manager
+                reference to the uno service manager
 
     @param      xFrame
-                    reference to the frame, in which environment we run
-                    (May be null!)
+                reference to the frame, in which environment we run
+                (May be null!)
 */
 Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
@@ -157,9 +161,42 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
     , ::cppu::OWeakObject  (                             )
     , m_xSMGR              (xSMGR                        )
     , m_xFrame             (xFrame                       )
-    , m_bCloseListening    (sal_False                    )
+    , m_bListenOnDesktop   (sal_False                    )
+    , m_bListenOnFrame     (sal_False                    )
+    , m_bListenOnModel     (sal_False                    )
     , m_bPendingCloseFrame (sal_False                    )
-    , m_bRuns              (sal_False                    )
+    , m_bPendingCloseModel (sal_False                    )
+    , m_eRunState          (E_NEW                        )
+    , m_aJobCfg            (xSMGR                        )
+{
+}
+
+//________________________________
+/**
+    @short      standard ctor
+    @descr      It initialize this new instance. But it set some generic parameters here only.
+                Specialized informations (e.g. the alias or service name ofthis job) will be set
+                later using the method setJobData().
+
+    @param      xSMGR
+                reference to the uno service manager
+
+    @param      xModel
+                reference to the model, in which environment we run
+                (May be null!)
+*/
+Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+          /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
+    : ThreadHelpBase       (&Application::GetSolarMutex())
+    , ::cppu::OWeakObject  (                             )
+    , m_xSMGR              (xSMGR                        )
+    , m_xModel             (xModel                       )
+    , m_bListenOnDesktop   (sal_False                    )
+    , m_bListenOnFrame     (sal_False                    )
+    , m_bListenOnModel     (sal_False                    )
+    , m_bPendingCloseFrame (sal_False                    )
+    , m_bPendingCloseModel (sal_False                    )
+    , m_eRunState          (E_NEW                        )
     , m_aJobCfg            (xSMGR                        )
 {
 }
@@ -193,6 +230,14 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
+
+    // reject dangerous calls
+    if (m_eRunState != E_NEW)
+    {
+        LOG_WARNING("Job::setJobData()", "job may still running or already finished")
+        return;
+    }
+
     m_xResultListener   = xListener  ;
     m_xResultSourceFake = xSourceFake;
     aWriteLock.unlock();
@@ -205,9 +250,9 @@ void Job::setJobData( const JobData& aData )
     WriteGuard aWriteLock(m_aLock);
 
     // reject dangerous calls
-    if (m_bRuns)
+    if (m_eRunState != E_NEW)
     {
-        LOG_WARNING("Job::setJobData()", "job still running")
+        LOG_WARNING("Job::setJobData()", "job may still running or already finished")
         return;
     }
 
@@ -250,15 +295,19 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     WriteGuard aWriteLock(m_aLock);
 
     // reject dangerous calls
-    if (m_bRuns)
+    if (m_eRunState != E_NEW)
     {
-        LOG_WARNING("Job::execute()", "job still running")
+        LOG_WARNING("Job::execute()", "job may still running or already finished")
         return;
     }
-    m_bRuns = sal_True;
+
+    // create the environment and mark this job as running ...
+    m_eRunState = E_RUNNING;
+    impl_startListening();
 
     css::uno::Reference< css::task::XAsyncJob >  xAJob;
     css::uno::Reference< css::task::XJob >       xSJob;
+    css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
     // create the job
     // We must check for the supported interface on demand!
@@ -268,45 +317,85 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     if (!xSJob.is())
         xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
 
-    // execute it asynchron (and wait for finishing it!)
-    if (xAJob.is())
+    // It's neccessary to hold us self alive!
+    // Otherwhise we might die by ref count ...
+    css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    try
     {
-        // wait for finishing this job - so this method
-        // does the same for synchronous and asynchronous jobs!
-        m_aAsyncWait.reset();
-
-        css::uno::Reference< css::task::XJobListener > xJobListener(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-        xAJob->executeAsync(impl_generateJobArgs(lDynamicArgs), xJobListener);
-
-        aWriteLock.unlock();
-        /* } SAFE */
-
-        m_aAsyncWait.wait();
-
-        aWriteLock.lock();
-        /* SAFE { */
-        // Note: Result handling was already done inside the callback!
+        // execute it asynchron
+        if (xAJob.is())
+        {
+            m_aAsyncWait.reset();
+            aWriteLock.unlock();
+            /* } SAFE */
+            xAJob->executeAsync(lJobArgs, xThis);
+            // wait for finishing this job - so this method
+            // does the same for synchronous and asynchronous jobs!
+            m_aAsyncWait.wait();
+            aWriteLock.lock();
+            /* SAFE { */
+            // Note: Result handling was already done inside the callback!
+        }
+        // execute it synchron
+        else if (xSJob.is())
+        {
+            aWriteLock.unlock();
+            /* } SAFE */
+            css::uno::Any aResult = xSJob->execute(lJobArgs);
+            aWriteLock.lock();
+            /* SAFE { */
+            impl_reactForJobResult(aResult);
+        }
     }
-    // execute it synchron
-    else if (xSJob.is())
+    catch(const css::uno::Exception&)
     {
-        css::uno::Any aResult = xSJob->execute(impl_generateJobArgs(lDynamicArgs));
-        impl_reactForJobResult(aResult);
+        LOG_WARNING("Job::execute()", "exception on job execute!")
     }
 
-    // If we got a close request from our frame ...
-    // but we disagreed wit that ...
-    // but got the ownership ...
-    // we have to disable further working with this frame ...
+    // deinitialize the environment and mark this job as finished ...
+    // but don't overwrite any informations about STOPPED or might DISPOSED jobs!
+    impl_stopListening();
+    if (m_eRunState == E_RUNNING)
+        m_eRunState = E_STOPPED_OR_FINISHED;
+
+    // If we got a close request from our frame or model ...
+    // but we disagreed wit that by throwing a veto exception...
+    // and got the ownership ...
+    // we have to close the resource frame or model now -
     // and to disable ourself!
     if (m_bPendingCloseFrame)
-        die();
-    else
-        // Don't forget that! Otherwhise nobody can use us any longer.
-        m_bRuns = sal_False;
+    {
+        m_bPendingCloseFrame = sal_False;
+        css::uno::Reference< css::util::XCloseable > xClose(m_xFrame, css::uno::UNO_QUERY);
+        if (xClose.is())
+        {
+            try
+            {
+                xClose->close(sal_True);
+            }
+            catch(const css::util::CloseVetoException&) {}
+        }
+    }
+
+    if (m_bPendingCloseModel)
+    {
+        m_bPendingCloseModel = sal_False;
+        css::uno::Reference< css::util::XCloseable > xClose(m_xModel, css::uno::UNO_QUERY);
+        if (xClose.is())
+        {
+            try
+            {
+                xClose->close(sal_True);
+            }
+            catch(const css::util::CloseVetoException&) {}
+        }
+    }
 
     aWriteLock.unlock();
     /* SAFE { */
+
+    // release this instance ...
+    die();
 }
 
 //________________________________
@@ -325,16 +414,31 @@ void Job::die()
 
     impl_stopListening();
 
+    if (m_eRunState != E_DISPOSED)
+    {
+        try
+        {
+            css::uno::Reference< css::lang::XComponent > xDispose(m_xJob, css::uno::UNO_QUERY);
+            if (xDispose.is())
+            {
+                xDispose->dispose();
+                m_eRunState = E_DISPOSED;
+            }
+        }
+        catch(const css::lang::DisposedException&)
+        {
+            m_eRunState = E_DISPOSED;
+        }
+    }
+
     m_xJob               = css::uno::Reference< css::uno::XInterface >();
     m_xFrame             = css::uno::Reference< css::frame::XFrame >();
+    m_xModel             = css::uno::Reference< css::frame::XModel >();
     m_xDesktop           = css::uno::Reference< css::frame::XDesktop >();
     m_xResultListener    = css::uno::Reference< css::frame::XDispatchResultListener >();
     m_xResultSourceFake  = css::uno::Reference< css::uno::XInterface >();
     m_bPendingCloseFrame = sal_False;
-    m_bRuns              = sal_False;
-
-    // neccessary to finish all blocked operations, which wait for that!
-    m_aAsyncWait.set();
+    m_bPendingCloseModel = sal_False;
 
     aWriteLock.unlock();
     /* SAFE { */
@@ -378,6 +482,13 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         lEnvArgs.realloc(c+1);
         lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_FRAME);
         lEnvArgs[c].Value <<= m_xFrame;
+    }
+    if (m_xModel.is())
+    {
+        sal_Int32 c = lEnvArgs.getLength();
+        lEnvArgs.realloc(c+1);
+        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_MODEL);
+        lEnvArgs[c].Value <<= m_xModel;
     }
     if (eMode==JobData::E_EVENT)
     {
@@ -523,14 +634,17 @@ void Job::impl_startListening()
     WriteGuard aWriteLock(m_aLock);
 
     // listening for office shutdown
-    if (!m_xDesktop.is())
+    if (!m_xDesktop.is() && !m_bListenOnDesktop)
     {
         try
         {
             m_xDesktop = css::uno::Reference< css::frame::XDesktop >(m_xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
             if (m_xDesktop.is())
+            {
                 m_xDesktop->addTerminateListener(xThis);
+                m_bListenOnDesktop = sal_True;
+            }
         }
         catch(css::uno::Exception&)
         {
@@ -539,7 +653,7 @@ void Job::impl_startListening()
     }
 
     // listening for frame closing
-    if (m_xFrame.is() && m_bCloseListening)
+    if (m_xFrame.is() && !m_bListenOnFrame)
     {
         try
         {
@@ -548,12 +662,31 @@ void Job::impl_startListening()
             if (xCloseable.is())
             {
                 xCloseable->addCloseListener(xThis);
-                m_bCloseListening = sal_True;
+                m_bListenOnFrame = sal_True;
             }
         }
         catch(css::uno::Exception&)
         {
-            m_bCloseListening = sal_False;
+            m_bListenOnFrame = sal_False;
+        }
+    }
+
+    // listening for model closing
+    if (m_xModel.is() && !m_bListenOnModel)
+    {
+        try
+        {
+            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+            if (xCloseable.is())
+            {
+                xCloseable->addCloseListener(xThis);
+                m_bListenOnModel = sal_True;
+            }
+        }
+        catch(css::uno::Exception&)
+        {
+            m_bListenOnModel = sal_False;
         }
     }
 
@@ -571,22 +704,23 @@ void Job::impl_stopListening()
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // listening for office shutdown
-    if (m_xDesktop.is())
+    // stop listening for office shutdown
+    if (m_xDesktop.is() && m_bListenOnDesktop)
     {
         try
         {
             css::uno::Reference< css::frame::XTerminateListener > xThis(static_cast< ::cppu::OWeakObject* >(this)   , css::uno::UNO_QUERY);
             m_xDesktop->removeTerminateListener(xThis);
             m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
+            m_bListenOnDesktop = sal_False;
         }
         catch(css::uno::Exception&)
         {
         }
     }
 
-    // listening for frame closing
-    if (m_xFrame.is() && !m_bCloseListening)
+    // stop listening for frame closing
+    if (m_xFrame.is() && m_bListenOnFrame)
     {
         try
         {
@@ -595,12 +729,29 @@ void Job::impl_stopListening()
             if (xCloseable.is())
             {
                 xCloseable->removeCloseListener(xThis);
-                m_bCloseListening = sal_False;
+                m_bListenOnFrame = sal_False;
             }
         }
         catch(css::uno::Exception&)
         {
-            m_bCloseListening = sal_True;
+        }
+    }
+
+    // stop listening for model closing
+    if (m_xModel.is() && m_bListenOnModel)
+    {
+        try
+        {
+            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
+            css::uno::Reference< css::util::XCloseListener >    xThis     (static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+            if (xCloseable.is())
+            {
+                xCloseable->removeCloseListener(xThis);
+                m_bListenOnModel = sal_False;
+            }
+        }
+        catch(css::uno::Exception&)
+        {
         }
     }
 
@@ -673,9 +824,23 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    // if internal job is still running ...
-    // throw the suitable veto exception to supress office termination
-    if (m_bRuns)
+    // don't disagree with this request if job was already stopped or finished it's work
+    if (m_eRunState != E_RUNNING)
+        return;
+
+    // Otherwhise try to close() it
+    css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
+    if (xClose.is())
+    {
+        try
+        {
+            xClose->close(sal_False);
+            m_eRunState = E_STOPPED_OR_FINISHED;
+        }
+        catch(const css::util::CloseVetoException&) {}
+    }
+
+    if (m_eRunState != E_STOPPED_OR_FINISHED)
     {
         css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::frame::TerminationVetoException(DECLARE_ASCII("job still in progress"), xThis);
@@ -684,6 +849,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent
     aReadLock.unlock();
     /* } SAFE */
 }
+
 
 //________________________________
 /**
@@ -701,8 +867,6 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent
  */
 void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
-    // Kill the (may still running) job
-    // and stop listening for any events.
     die();
     // Do nothing else here. Our internal ressources was released ...
 }
@@ -733,18 +897,60 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // if internal job is still running ...
-    // throw the suitable veto exception to supress frame closing
-    if (m_bRuns)
-    {
-        // save the information about the owner ship of this frame!
-        // That means - we have try to close it again if our reason for this veto
-        // will finish its work too.
-        m_bPendingCloseFrame = bGetsOwnership;
+    // do nothing, if no internal job is still running ...
+    // The frame or model can be closed then successfully.
+    if (m_eRunState != E_RUNNING)
+        return;
 
+    // try close() first at the job.
+    // The job can agree or disagree with this request.
+    css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
+    if (xClose.is())
+    {
+        xClose->close(bGetsOwnership);
+        // Here we can say: "this job was stopped successfully". Because
+        // no veto exception was thrown!
+        m_eRunState = E_STOPPED_OR_FINISHED;
+        return;
+    }
+
+    // try dispose() then
+    // Here the job has no chance for a veto.
+    // But we must be aware of an "already disposed exception"...
+    try
+    {
+        css::uno::Reference< css::lang::XComponent > xDispose(m_xJob, css::uno::UNO_QUERY);
+        if (xDispose.is())
+        {
+            xDispose->dispose();
+            m_eRunState = E_DISPOSED;
+        }
+    }
+    catch(const css::lang::DisposedException&)
+    {
+        // the job was already disposed by any other mechanism !?
+        // But it's not interesting for us. For us this job is stopped now.
+        m_eRunState = E_DISPOSED;
+    }
+
+    if (m_eRunState != E_DISPOSED)
+    {
+        // analyze event source - to find out, which resource called queryClosing() at this
+        // job wrapper. We must bind a "pending close" request to this resource.
+        // Closing of the corresponding resource will be done if our internal job finish it's work.
+        m_bPendingCloseFrame = (m_xFrame.is() && aEvent.Source == m_xFrame);
+        m_bPendingCloseModel = (m_xModel.is() && aEvent.Source == m_xModel);
+
+        // throw suitable veto exception - because the internal job could not be cancelled.
         css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::util::CloseVetoException(DECLARE_ASCII("job still in progress"), xThis);
     }
+
+    // No veto ...
+    // But don't call die() here or free our internal member.
+    // This must be done inside notifyClosing() only. Otherwhise the
+    // might stopped job has no chance to return it's results or
+    // call us back. We must give him the chance to finish it's work successfully.
 
     aWriteLock.unlock();
     /* } SAFE */
@@ -757,12 +963,10 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
             We have to accept it and cancel all current processes inside.
 
     @param  aEvent
-                describes the broadcaster and must be the frame instance
+            describes the broadcaster and must be the frame or model instance we know
  */
 void SAL_CALL Job::notifyClosing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
-    // Kill the (may still running) job
-    // and stop listening for any events.
     die();
     // Do nothing else here. Our internal ressources was released ...
 }
@@ -774,12 +978,34 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& aEvent ) throw(c
                 running processes hardly.
 
     @param      aEvent
-                    describe the broadcaster
+                describe the broadcaster
 */
-void SAL_CALL Job::disposing( /*IN*/ const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
-    // Kill the (may still running) job
-    // and stop listening for any events.
+    /* SAFE { */
+    WriteGuard aWriteLock(m_aLock);
+
+    if (m_xDesktop.is() && aEvent.Source == m_xDesktop)
+    {
+        m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
+        m_bListenOnDesktop = sal_False;
+    }
+    else
+    if (m_xFrame.is() && aEvent.Source == m_xFrame)
+    {
+        m_xFrame = css::uno::Reference< css::frame::XFrame >();
+        m_bListenOnFrame = sal_False;
+    }
+    else
+    if (m_xModel.is() && aEvent.Source == m_xModel)
+    {
+        m_xModel = css::uno::Reference< css::frame::XModel >();
+        m_bListenOnModel = sal_False;
+    }
+
+    aWriteLock.unlock();
+    /* } SAFE */
+
     die();
     // Do nothing else here. Our internal ressources was released ...
 }
