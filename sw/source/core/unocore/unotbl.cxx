@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2001-11-28 12:50:47 $
+ *  last change: $Author: mtg $ $Date: 2001-11-28 20:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,8 +1336,11 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), rPropertyName);
             SwDoc* pDoc = pFmt->GetDoc();
-            if(!pMap)
-                throw beans::UnknownPropertyException();
+            if (!pMap)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+
             switch(pMap->nWID)
             {
                 case FN_UNO_ROW_HEIGHT:
@@ -1393,8 +1396,9 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
         {
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), rPropertyName);
-            if(!pMap)
-                throw beans::UnknownPropertyException();
+            if (!pMap)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
             switch(pMap->nWID)
             {
                 case FN_UNO_ROW_HEIGHT:
@@ -1775,6 +1779,8 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                                                     aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
             pTblCrsr->MakeBoxSels();
             SwDoc* pDoc = pUnoCrsr->GetDoc();
             switch(pMap->nWID )
@@ -1811,7 +1817,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
             }
         }
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 /*-- 11.12.98 12:16:17---------------------------------------------------
@@ -1870,7 +1876,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
@@ -3039,8 +3045,11 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     {
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     _pMap, rPropertyName);
-        if(!pMap)
-            throw beans::UnknownPropertyException();
+        if (!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+        if ( pMap->nFlags & PropertyAttribute::READONLY)
+            throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+
         if(0xFF == pMap->nMemberId)
         {
             lcl_SetSpecialProperty(pFmt, pMap, aValue);
@@ -3190,8 +3199,9 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     {
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     _pMap, rPropertyName);
-        if(!pMap)
-            throw beans::UnknownPropertyException();
+        if (!pMap)
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
         if(0xFF == pMap->nMemberId)
         {
             aRet = lcl_GetSpecialProperty(pFmt, pMap );
@@ -3770,6 +3780,9 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                                                     _pMap, rPropertyName);
         if(pMap)
         {
+            if ( pMap->nFlags & PropertyAttribute::READONLY)
+                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+
             SwDoc* pDoc = pTblCrsr->GetDoc();
             switch(pMap->nWID )
             {
@@ -3826,7 +3839,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
             }
         }
         else
-            throw UnknownPropertyException();
+            throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
 }
 /*-- 11.12.98 14:27:35---------------------------------------------------
@@ -3892,7 +3905,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
             }
         }
         else
-            throw UnknownPropertyException();
+           throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     }
     return aRet;
 }
