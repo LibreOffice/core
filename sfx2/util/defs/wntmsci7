@@ -7279,3 +7279,11 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?release@?$WeakComponentImplHelper3@VXInitialization@lang@star@sun@com@@VXTerminateListener@frame@345@VXServiceInfo@2345@@cppu@@WCI@AAXXZ
 ?release@?$WeakComponentImplHelper3@VXInitialization@lang@star@sun@com@@VXTerminateListener@frame@345@VXServiceInfo@2345@@cppu@@WCM@AAXXZ
 ?release@?$WeakComponentImplHelper3@VXInitialization@lang@star@sun@com@@VXTerminateListener@frame@345@VXServiceInfo@2345@@cppu@@WDA@AAXXZ
+?$S19@?1??impl_getStaticIdentifier@SfxOfficeDispatch@@SAABV?$Sequence@C@uno@star@sun@com@@XZ@4EA
+??1?$_STL_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@J@_STL@@@2@@_STL@@QAE@XZ
+?deallocate@?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@@_STL@@QBEXPAU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@J@_STL@@@2@I@Z
+??R?$_Select1st@U?$pair@$$CBVOUString@rtl@@J@_STL@@@_STL@@QBEABVOUString@rtl@@ABU?$pair@$$CBVOUString@rtl@@J@1@@Z
+?$S10@?1??impl_getStaticIdentifier@SfxOfficeDispatch@@SAABV?$Sequence@C@uno@star@sun@com@@XZ@4EA
+??1?$_STL_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@_STL@@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@2@@_STL@@QAE@XZ
+?deallocate@?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@_STL@@@_STL@@QBEXPAU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@PAX@_STL@@@2@I@Z
+?$S20@?1??impl_getStaticIdentifier@SfxOfficeDispatch@@SAABV?$Sequence@C@uno@star@sun@com@@XZ@4EA
