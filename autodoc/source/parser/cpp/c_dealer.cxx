@@ -2,9 +2,9 @@
  *
  *  $RCSfile: c_dealer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-07 18:32:24 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include "c_rcode.hxx"
 
 
-
 namespace ary
 {
     namespace cpp
@@ -131,6 +130,8 @@ Distributor::StartNewProject( const udmstri &           i_sProjectName,
             = pGate->Groups().CheckIn_ProjectGroup( i_sProjectName, rRoot.Id() );
     pFileEventHandler->SetCurProject(rProject);
 }
+
+
 
 void
 Distributor::StartNewFile( const udmstri &                      i_sFileName,
