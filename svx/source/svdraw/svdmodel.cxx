@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 16:42:29 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     mbModelLocked = FALSE;
     mpOutlinerCache = NULL;
     mbKernAsianPunctuation = sal_False;
+    mbAddExtLeading = sal_False;
 
 #ifndef SVX_LIGHT
     SvxAsianConfig aAsian;
@@ -1033,6 +1034,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit )
     pOutliner->SetForbiddenCharsTable(GetForbiddenCharsTable());
     pOutliner->SetAsianCompressionMode( mnCharCompressType );
     pOutliner->SetKernAsianPunctuation( IsKernAsianPunctuation() );
+    pOutliner->SetAddExtLeading( IsAddExtLeading() );
 
     if ( !GetRefDevice() )
     {
@@ -2850,6 +2852,16 @@ void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
     if( mbKernAsianPunctuation != bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
+        ImpSetOutlinerDefaults( pDrawOutliner );
+        ImpSetOutlinerDefaults( pHitTestOutliner );
+    }
+}
+
+void SdrModel::SetAddExtLeading( sal_Bool bEnabled )
+{
+    if( mbAddExtLeading != bEnabled )
+    {
+        mbAddExtLeading = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
     }
