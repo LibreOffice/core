@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:55:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,21 @@
  *
  *
  ************************************************************************/
-#include <stdio.h>
 
-#ifdef UNX
+/* POSIX defines that a program is undefined after a SIG_SEGV.  The
+ * code stopped working on Linux Kernel 2.6 so I have moved this back to
+ * use FORK.
+ * If at a later time the signals work correctly with the Linux Kernel 2.6
+ * then this change may be reverted although not strictly posix safe. */
+#define USE_FORK_TO_CHECK 1
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 
 #include <unistd.h>
 #include <sys/types.h>
-
-#ifdef HPUX
-#include <stdlib.h>
-#endif
 
 #define I_STDARG
 #ifdef I_STDARG
@@ -82,9 +87,6 @@
 #else
 #include <signal.h>
 #include <setjmp.h>
-#endif
-
-#else
 #endif
 
 #define printTypeSize(Type,Name)    printf( "sizeof(%s)\t= %d\n", Name, sizeof (Type) )
@@ -133,7 +135,7 @@ int IsStackGrowingDown()
 
 /*************************************************************************
 |*
-|*  IsStackGrowingDown()
+|*  GetStackAlignment()
 |*
 |*  Beschreibung        Alignment von char Parametern, die (hoffentlich)
 |*                      ueber den Stack uebergeben werden
@@ -175,8 +177,6 @@ int GetStackAlignment()
 typedef enum { t_char, t_short, t_int, t_long, t_double } Type;
 typedef int (*TestFunc)( Type, void* );
 
-
-#ifdef UNX
 
 /*************************************************************************
 |*
@@ -230,11 +230,11 @@ static int bSignal;
 void SignalHdl( int sig )
 {
   bSignal = 1;
-  /*
+
   fprintf( stderr, "Signal %d caught\n", sig );
-  signal( sig,  SignalHdl );
-  /**/
-  longjmp( check_env, sig );
+  signal( SIGSEGV,  SIG_DFL );
+  signal( SIGBUS,   SIG_DFL );
+  siglongjmp( check_env, sig );
 }
 #endif
 
@@ -270,7 +270,7 @@ int check( TestFunc func, Type eT, void* p )
 
   bSignal = 0;
 
-  if ( !setjmp( check_env ) )
+  if ( !sigsetjmp( check_env, 0 ) )
   {
     signal( SIGSEGV,    SignalHdl );
     signal( SIGBUS,     SignalHdl );
@@ -285,9 +285,6 @@ int check( TestFunc func, Type eT, void* p )
     return 0;
 #endif
 }
-
-#endif
-
 
 /*************************************************************************
 |*
@@ -373,6 +370,7 @@ int CheckGetAccess( Type eT, void* p )
 int CheckSetAccess( Type eT, void* p )
 {
   int b;
+
   b = -1 != check( (TestFunc)SetAtAddress, eT, p );
 #if OSL_DEBUG_LEVEL > 1
   fprintf( stderr,
@@ -437,7 +435,7 @@ struct Description
 |*  Letzte Aenderung
 |*
 *************************************************************************/
-Description_Ctor( struct Description* pThis )
+void Description_Ctor( struct Description* pThis )
 {
   pThis->bBigEndian         = IsBigEndian();
   pThis->bStackGrowsDown    = IsStackGrowingDown();
@@ -468,16 +466,21 @@ Description_Ctor( struct Description* pThis )
 |*  Letzte Aenderung
 |*
 *************************************************************************/
-Description_Print( struct Description* pThis, char* name )
+void Description_Print( struct Description* pThis, char* name )
 {
   int i;
   FILE* f = fopen( name, "w" );
+  if( ! f ) {
+      fprintf( stderr, "Unable to open file %s: %s\n", name, strerror( errno ) );
+      exit( 99 );
+  }
   fprintf( f, "#define __%s\n",
            pThis->bBigEndian ? "BIGENDIAN" : "LITTLEENDIAN" );
   for ( i = 0; i < 3; i++ )
     fprintf( f, "#define __ALIGNMENT%d\t%d\n",
-             1 << i+1, pThis->nAlignment[i] );
-  fprintf( f, "#define __STACKALIGNMENT wird nicht benutzt\t%d\n", pThis->nStackAlignment );
+             1 << (i+1), pThis->nAlignment[i] );
+  fprintf( f, "/* Stack alignment is not used... */\n" );
+  fprintf( f, "#define __STACKALIGNMENT\t%d\n", pThis->nStackAlignment );
   fprintf( f, "#define __STACKDIRECTION\t%d\n",
            pThis->bStackGrowsDown ? -1 : 1 );
   fprintf( f, "#define __SIZEOFCHAR\t%d\n", sizeof( char ) );
@@ -538,8 +541,12 @@ void InfoMemoryTypeAccess( Type eT )
     printf( ( CheckGetAccess( eT, (long*)&a[i] ) ? "OK\n" : "ERROR\n" ) );
   }
 }
-
-main( int argc, char* argv[] )
+/************************************************************************
+ *
+ *  Use C code to determine the characteristics of the building platform.
+ *
+ ************************************************************************/
+int main( int argc, char* argv[] )
 {
   printTypeSign( char, "char" );
   printTypeSign( short, "short" );
@@ -574,7 +581,6 @@ main( int argc, char* argv[] )
     Description_Ctor( &description );
     Description_Print( &description, argv[1] );
   }
-
   {
     char* p = NULL;
     InfoMemoryAccess( p );
