@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:06:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ namespace dbaui
 
     protected:
         // all the features which should be handled by this class
-        virtual void            AddSupportedFeatures();
+        virtual void            describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
