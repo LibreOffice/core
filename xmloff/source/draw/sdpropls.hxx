@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:14:22 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 #define XML_SD_TYPE_MEASURE_UNIT                    (XML_SD_TYPES_START + 30 )
 #define XML_SD_TYPE_MEASURE_PLACING                 (XML_SD_TYPES_START + 31 )
 #define XML_SD_TYPE_CONTROL_BORDER                  (XML_SD_TYPES_START + 32 )
+#define XML_SD_TYPE_CONTROL_BORDER_COLOR            (XML_SD_TYPES_START + 33 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
