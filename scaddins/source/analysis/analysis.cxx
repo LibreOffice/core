@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-10 15:27:43 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 08:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,7 +773,7 @@ STRING SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const STRING& aDispla
 STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammaticName ) THROWDEF_RTE
 {
     //! allow different languages
-    sal_Bool        bGerman = ( aFuncLoc.Language.equalsIgnoreCase( STRFROMASCII( "DE" ) ) );
+    sal_Bool        bGerman = ( aFuncLoc.Language.equalsIgnoreAsciiCase( STRFROMASCII( "DE" ) ) );
 
     STRING          aRet;
 

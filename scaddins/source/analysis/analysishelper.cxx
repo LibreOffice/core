@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-11 11:55:58 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 08:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,9 @@
  ************************************************************************/
 
 
-#include "analysishelper.hxx"
-
 #include <string.h>
 #include <stdio.h>
+#include "analysishelper.hxx"
 
 
 
@@ -839,9 +838,9 @@ STRING ConvertFromDec( sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt1
     if( bNeg )
         nNum = sal_Int64( pow( double( nBase ), double( nMaxPlaces ) ) ) + nNum;
 
-    STRING          aRet( STRING::valueOf( nNum, nBase ).toUpperCase() );
+    STRING          aRet( STRING::valueOf( nNum, nBase ).toAsciiUpperCase() );
 
-    sal_Int32       nLen = aRet.len();
+    sal_Int32       nLen = aRet.getLength();
     if( !bNeg && nLen > nPlaces )
         THROW_IAE;
     else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
@@ -1761,7 +1760,7 @@ inline void DoubleList::AppendDouble( double f ) THROWDEF_RTE_IAE
 
 void DoubleList::AppendString( const ANY& r, sal_Bool bEmptyAs0 ) THROWDEF_RTE_IAE
 {
-    if( bEmptyAs0 || ( ( const STRING* ) r.getValue() )->len() )
+    if( bEmptyAs0 || ( ( const STRING* ) r.getValue() )->getLength() )
         AppendDouble( 0.0 );
     else
         THROW_IAE;
@@ -1918,7 +1917,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
     const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
 
 
-    if( IsImagUnit( *pStr ) && rStr.len() == 1 )
+    if( IsImagUnit( *pStr ) && rStr.getLength() == 1 )
     {
         rCompl.r = 0.0;
         rCompl.i = 1.0;
@@ -2136,7 +2135,7 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, sal_Bool bEmpty0 ) THROWDEF
         {
             const STRING&   rStr = rList[ n2 ];
 
-            if( rStr.len() )
+            if( rStr.getLength() )
                 Append( new Complex( rStr ) );
             else if( bEmpty0 )
                 Append( new Complex( 0.0 ) );
@@ -2161,7 +2160,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, sal_Bool bEmpty0 ) THROWD
                 {
                 const STRING*       pStr = ( const STRING* ) r.getValue();
 
-                if( pStr->len() )
+                if( pStr->getLength() )
                     Append( new Complex( *( STRING* ) r.getValue() ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );

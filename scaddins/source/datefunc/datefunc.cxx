@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:31:06 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 08:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ OUString SAL_CALL DateFunctionAddIn::getDisplayFunctionName( const OUString& aPr
                                                 throw(uno::RuntimeException)
 {
     //! allow different languages
-    sal_Bool bGerman = ( aFuncLoc.Language.equalsIgnoreCase( OUString::createFromAscii("DE") ) );
+    sal_Bool bGerman = ( aFuncLoc.Language.equalsIgnoreAsciiCase( OUString::createFromAscii("DE") ) );
 
     OUString aRet;
     switch ( GetFunction(aProgrammaticName) )
