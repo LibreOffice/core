@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,6 +774,12 @@ void SdrTextObj::TakeTextAnchorRect(Rectangle& rAnchorRect) const
     aAnkRect.Top()+=nUpperDist;
     aAnkRect.Right()-=nRightDist;
     aAnkRect.Bottom()-=nLowerDist;
+
+    // #108816#
+    // Since sizes may be bigger than the object bounds it is necessary to
+    // justify the rect now.
+    ImpJustifyRect(aAnkRect);
+
     if (bFrame) {
         // !!! hier noch etwas verfeinern !!!
         if (aAnkRect.GetWidth()<2) aAnkRect.Right()=aAnkRect.Left()+1;   // Mindestgroesse 2
