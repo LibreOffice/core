@@ -206,6 +206,8 @@ sub copy_one_file
 
     my ($returnvalue, $infoline);
 
+    my $mode = -x $source ? 0775 : 0664;
+
     my $copyreturn = copy($source, $dest);
 
     if ($copyreturn)
@@ -216,6 +218,19 @@ sub copy_one_file
     else
     {
         $infoline = "ERROR: Could not copy $source to $dest\n";
+        $returnvalue = 0;
+    }
+
+    # taking care of file attributes
+    my $chmodreturn = chmod($mode, $dest);
+    if ($chmodreturn)
+    {
+        $infoline = "chmod $mode, $dest\n";
+        $returnvalue = 1;
+    }
+    else
+    {
+        $infoline = "ERROR: Could not chmod $dest: $!\n";
         $returnvalue = 0;
     }
 
