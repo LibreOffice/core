@@ -5,23 +5,30 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheet;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
 addEntry(date, total, free) {
 
-    // The context variable is of type XScriptContext and is available to
+    // The XSCRIPTCONTEXT variable is of type XScriptContext and is available to
     // all BeanShell scripts executed by the Script Framework
-    comp = context.getDocument();
+    comp = XSCRIPTCONTEXT.getDocument();
 
+    // get the XSpreadsheetDocument interface which allows us to work on the 
+    // document
     doc = (XSpreadsheetDocument)
         UnoRuntime.queryInterface(XSpreadsheetDocument.class, comp);
 
+    // get the XIndexAccess interface from the document, so that we can 
+    // get the first sheet
     index = (XIndexAccess)
         UnoRuntime.queryInterface(XIndexAccess.class, doc.getSheets());
 
+    // get the XSpreadsheet interface corresponding to the first (zero-th)
+    // sheet in the document
     sheet = (XSpreadsheet) AnyConverter.toObject(
         new Type(com.sun.star.sheet.XSpreadsheet.class), index.getByIndex(0));
 
+    // set the value in the cells
     sheet.getCellByPosition(0, 1).setValue(total - free);
     sheet.getCellByPosition(1, 1).setValue(free);
     sheet.getCellByPosition(2, 1).setValue(total);
@@ -32,8 +39,10 @@ runtime = Runtime.getRuntime();
 generator = new Random();
 date = new Date();
 
+// allocate a random number of bytes so that the data changes
 len = (int)(generator.nextFloat() * runtime.freeMemory() / 5);
 bytes = new byte[len];
+//update the entry in the spreadsheet
 addEntry(date.toString(), runtime.totalMemory(), runtime.freeMemory());
 
 return 0;
