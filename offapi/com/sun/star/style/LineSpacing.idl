@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineSpacing.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 // DocMerge from xml: struct com::sun::star::style::LineSpacing
 /** This structure is used to specify the height of a text line.@see LineSpacingMode
  */
-struct LineSpacing
+published struct LineSpacing
 {
     // DocMerge from xml: field com::sun::star::style::LineSpacing::Mode
     /** This value specifies the way the height is specified.

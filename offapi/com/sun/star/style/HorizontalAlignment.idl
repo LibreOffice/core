@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HorizontalAlignment.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** values specify the horizontal alignment of
     an object within a container object.
  */
-enum HorizontalAlignment
+published enum HorizontalAlignment
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR HorizontalAlignment::  LEFT,

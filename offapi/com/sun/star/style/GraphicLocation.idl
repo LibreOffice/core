@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicLocation.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** These enumeration values are used to specify the location of a
     graphic object within its surroundings.
  */
-enum GraphicLocation
+published enum GraphicLocation
 {
     //-------------------------------------------------------------------------
 
