@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:46:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,8 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( pView->IsTextEdit() )
     {
-        StopEditMode();                    // Danebengeklickt, Ende mit Edit
+        if(!IsReSizingNote(rMEvt))
+            StopEditMode();            // Danebengeklickt, Ende mit Edit
         pView->SetCreateMode();
     }
 
@@ -787,11 +788,9 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
     SdrLayer* pLockLayer = NULL;
     if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN )
     {
-        //  auf gelocktem Layer kann nicht editiert werden, darum den Layer
-        //  temporaer auf nicht gelockt setzen
-
+        // A Locked Layer cannot be edited.
         pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
-        if (pLockLayer)
+        if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
             pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
     }
 
@@ -871,7 +870,8 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             }
         }
     }
-    if (pLockLayer)
+    // Leave the internal note object unlocked - re-lock in StopEditMode().
+    if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()) && !pObj->ISA(SdrCaptionObj))
         pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
 }
 
