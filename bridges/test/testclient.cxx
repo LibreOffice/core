@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 09:42:20 $
+ *  last change: $Author: jbu $ $Date: 2002-03-21 16:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMain.hpp>
 
 #include <com/sun/star/test/performance/XPerformanceTest.hpp>
@@ -270,6 +271,11 @@ void main( int argc, char *argv[] )
 //                      assert( ! rBridge.is() );
                 }
 
+            }
+            catch( DisposedException & e )
+            {
+                OString o = OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+                printf( "A remote object reference became invalid\n%s\n" , o.pData->buffer );
             }
             catch( Exception &e )
             {
