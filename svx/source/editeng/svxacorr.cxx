@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 12:20:12 $
+ *  last change: $Author: jp $ $Date: 2001-11-02 17:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2777,6 +2777,8 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             }
         }
     }
+    else if( bCopy && !bError )
+        sShareAutoCorrFile = sUserAutoCorrFile;
 }
 
 /* -----------------18.11.98 11:26-------------------
