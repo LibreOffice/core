@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-17 15:07:24 $
+ *  last change: $Author: sb $ $Date: 2002-09-23 11:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2002-09-17 15:07:24 $
+ * @version     $Revision: 1.13 $ $ $Date: 2002-09-23 11:57:12 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -180,7 +180,7 @@ public class Job {
                 if (DEBUG) {
                     e.printStackTrace(System.err);
                 }
-                exception = e.getCause();
+                exception = e.getTargetException();
                 if (exception == null) {
                     exception = e;
                 }
