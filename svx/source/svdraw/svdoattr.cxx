@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:56:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,17 +497,26 @@ void __EXPORT SdrAttrObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-INT32 SdrAttrObj::ImpGetLineWdt() const
+sal_Int32 SdrAttrObj::ImpGetLineWdt() const
 {
-    const SfxItemSet& rSet = GetMergedItemSet();
-    XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+    sal_Int32 nRetval(0);
 
-    if(XLINE_NONE == eLine)
-        return 0; // Garkeine Linie da.
+    if(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue())
+    {
+        nRetval = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
+    }
 
-    sal_Int32 nWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+    return nRetval;
 
-    return nWdt;
+//#i25616#  const SfxItemSet& rSet = GetMergedItemSet();
+//#i25616#  XLineStyle eLine = ((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
+//#i25616#
+//#i25616#  if(XLINE_NONE == eLine)
+//#i25616#      return 0; // Garkeine Linie da.
+//#i25616#
+//#i25616#  sal_Int32 nWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+//#i25616#
+//#i25616#  return nWdt;
 }
 
 INT32 SdrAttrObj::ImpGetLineEndAdd() const
