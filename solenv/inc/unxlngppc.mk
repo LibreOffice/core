@@ -10,7 +10,7 @@ JAVAFLAGSDEBUG=-g
 LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter" 
 
 # _PTHREADS is needed for the stl 
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=321 -DPOWERPC -DPPC 
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400 -DPOWERPC -DPPC 
 
 .IF "$(SOLAR_JAVA)"!="" 
 JAVADEF=-DSOLAR_JAVA 
@@ -42,7 +42,7 @@ CFLAGSSLOCUIMT=-fPIC
 CFLAGSPROF= 
 CFLAGSDEBUG=-g 
 CFLAGSDBGUTIL= 
-CFLAGSOPT=-O2 
+CFLAGSOPT=-O1 
 CFLAGSNOOPT=-O0
 CFLAGSOUTOBJ=-o 
 
@@ -80,12 +80,12 @@ STDSLOGUI=
 STDOBJCUI= 
 STDSLOCUI= 
 
-STDLIBCUIST=-ldl -lm 
-STDLIBGUIMT=-ldl -lpthread -lm 
-STDLIBCUIMT=-ldl -lpthread -lm 
+STDLIBCUIST=-ldl -lm -lstlport_gcc
+STDLIBGUIMT=-ldl -lpthread -lm -lstlport_gcc
+STDLIBCUIMT=-ldl -lpthread -lm -lstlport_gcc
 STDLIBGUIST=-lXaw -lXt -lX11 -ldl -lm 
-STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -ldl -lpthread -lm 
-STDSHLCUIMT=-ldl -lpthread -lm 
+STDSHLGUIMT=-lXaw -lXt -lX11 -lXext -ldl -lpthread -lm -lstlport_gcc
+STDSHLCUIMT=-ldl -lpthread -lm -lstlport_gcc
 
 LIBMGR=ar 
 LIBFLAGS=-r 
