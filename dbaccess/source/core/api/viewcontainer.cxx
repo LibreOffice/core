@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 12:06:10 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 10:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,5 +435,33 @@ void SAL_CALL OViewContainer::dropByIndex( sal_Int32 index ) throw(SQLException,
 
     dropByName((*m_aElements[index]).first);
 }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    ::rtl::OUString sName;
+    if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterViews->hasByName(sName))
+    {
+        Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
+        OCollection::appendByDescriptor(xProp);
+    }
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    ::rtl::OUString sName;
+    if((Event.Accessor >>= sName) && hasByName(sName) && !m_xMasterViews->hasByName(sName))
+        OCollection::dropByName(sName);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+
 

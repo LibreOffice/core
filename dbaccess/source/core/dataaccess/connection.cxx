@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 10:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,11 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
                 m_bSupportsViews = sal_True;
         }
         if(m_bSupportsViews)
+        {
             m_pViews = new OViewContainer(*this, m_aMutex, this, this);
+            m_pViews->addContainerListener(m_pTables);
+            m_pTables->addContainerListener(m_pViews);
+        }
     }
     catch(const SQLException&)
     {

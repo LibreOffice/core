@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-19 10:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,9 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
-
-
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -121,11 +122,13 @@ namespace dbaccess
     //= IWarningsContainer
     //==========================================================================
     class IWarningsContainer;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OViewContainer_Base;
 
     //==========================================================================
     //= OViewContainer
     //==========================================================================
-    class OViewContainer :  public ::connectivity::sdbcx::OCollection
+    class OViewContainer :  public ::connectivity::sdbcx::OCollection,
+                            public OViewContainer_Base
     {
     protected:
         IWarningsContainer*     m_pWarningsContainer;
@@ -190,6 +193,12 @@ namespace dbaccess
         // XDrop
         virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        // XContainerListener
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // _DBA_CORE_VIEWCONTAINER_HXX_
