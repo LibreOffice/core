@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2001-06-20 16:23:22 $
+#   last change: $Author: vg $ $Date: 2001-06-26 12:34:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.21 $ ';
+$id_str = ' $Revision: 1.22 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -91,7 +91,7 @@ $QuantityToBuild = 0;
 %PathHash = ();
 %PlatformHash = ();
 %DeadDependencies = ();
-%AliveDependencies = ();
+#%AliveDependencies = ();
 %ParentDepsHash = ();
 @UnresolvedParents = ();
 %DeadParents = ();
@@ -178,7 +178,7 @@ sub BuildAll {
             print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
-            system ("$ENV{DELIVER}");
+            #system ("$ENV{DELIVER}");
             RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
@@ -200,7 +200,7 @@ sub MakeDir {
     chdir ($BuildDir);
     print $BuildDir, "\n";
     cwd();
-    $error = system ("$dmake");
+    $error = 0; #system ("$dmake");
     if (!$error) {
         RemoveFromDependencies($DirToBuild, \%LocalDepsHash);
     } else {
@@ -215,8 +215,7 @@ sub MakeDir {
 # Get string (list) of parent projects to build
 #
 sub GetParentsString {
-    my ($PrjDir);
-    $PrjDir = shift;
+    my $PrjDir = shift;
     if (!open (PrjBuildFile, $PrjDir."/prj/build.lst")) {
         return "";
     };
@@ -280,11 +279,11 @@ sub BuildPrj {
             };
             $Dependencies =~ /(\s+)(\S+)(\s+)/;
             $DirAlias = $2;
+            $DirAlias .= '.'.$Platform if ($Platform ne "all");
             if (!CheckPlatform($Platform)) {
                 $DeadDependencies{$DirAlias} = 1;
                 next BuildLstLoop;
             };
-            $PlatformHash{$DirAlias} = 1;
             $Dependencies = $';
             @Array = GetDependenciesArray($Dependencies);
             $LocalDepsHash{$DirAlias} = [@Array];
@@ -295,7 +294,7 @@ sub BuildPrj {
     close PrjBuildFile;
     %DepsArchive = %LocalDepsHash;
     foreach $Dir (keys %DeadDependencies) {
-        next if defined $AliveDependencies{$Dir};
+        #next if defined $AliveDependencies{$Dir};
         if (!IsHashNative($Dir)) {
             RemoveFromDependencies($Dir, \%LocalDepsHash);
             delete $DeadDependencies{$Dir};
@@ -331,12 +330,8 @@ sub CorrectPath {
 #
 sub GetDmakeCommando {
     my ($dmake, $arg);
-
     # Setting alias for dmake
     $dmake = "dmake";
-    #if (defined $ENV{PROFULLSWITCH}) {
-    #   $dmake .= " ".$ENV{PROFULLSWITCH};
-    #};
     while ($arg = pop(@ARGV)) {
         $dmake .= " "."$arg";
     };
@@ -362,8 +357,7 @@ sub GetQuantityToBuild {
 # Procedure prooves if current dir is a root dir of the drive
 #
 sub IsRootDir {
-    my ($Dir);
-    $Dir = shift;
+    my $Dir = shift;
     if (        (($ENV{GUI} eq "UNX") ||
                  ($ENV{GUI} eq "MACOSX")) &&
                 ($Dir eq "\/")) {
@@ -451,8 +445,7 @@ sub PickPrjToBuild {
 # Make a decision if the project should be built on this platform
 #
 sub CheckPlatform {
-    my ($Platform);
-    $Platform = shift;
+    my $Platform = shift;
     if ($Platform eq "all") {
         return 1;
     } elsif (($ENV{GUI} eq "WNT") &&
@@ -530,7 +523,7 @@ sub FindIndepPrj {
                 print " ", ${$$Dependencies{$Prj}}[$i];
             };
         };
-        print "\nhave dead or circular dependencies\n\n";
+        print "\nhave dead or circular dependencies.\nCheck if the projects are platform dependent tagged.\n\n";
         $ENV{mk_tmp} = "";
         exit (1);
     };
@@ -542,8 +535,7 @@ sub FindIndepPrj {
 # Check if given entry is HASH-native, that is not a user-defined data
 #
 sub IsHashNative {
-    my ($Prj);
-    $Prj = shift;
+    my $Prj = shift;
     if ($Prj =~ /^HASH\(0x[\d | a | b | c | d | e | f]{6,}\)/) {
         return 1;
     } else {
@@ -560,23 +552,17 @@ sub GetDependenciesArray {
     @Dependencies = ();
     $DepString = shift;
     while (!($DepString =~ /^NULL/)) {
-        $DepString =~ /(\S+)(\s+)/;
+        $DepString =~ /(\S+)\s+/;
         $ParentPrj = $1;
         $DepString = $';
-        if ($ParentPrj =~ /\.(\w)$/) {
-            $ParentPrj = $`;
-            if (&CheckPlatform($1)) {
-                $AliveDependencies{$ParentPrj} = 1;
-            };
-        };
-        if ($ParentPrj =~ /(\S+)(\.)(\w)/) {
-            $ParentPrj = $1;
-            if (CheckPlatform($3)) {
-                push(@Dependencies, $ParentPrj);
-            };
-        } else {
-            push(@Dependencies, $ParentPrj);
-        };
+        #if ($ParentPrj =~ /(\S+)(\.)(\w)/) {
+        #   $ParentPrj = $1;
+        #   if (CheckPlatform($3)) {
+        #       push(@Dependencies, $ParentPrj);
+        #   };
+        #} else {
+        push(@Dependencies, $ParentPrj);
+        #};
     };
     return @Dependencies;
 };
@@ -586,8 +572,7 @@ sub GetDependenciesArray {
 # Getting current directory list
 #
 sub GetDirectoryList {
-    my ($Path);
-    $Path = shift;
+    my $Path = shift;
     opendir(CurrentDirList, $Path);
     @DirectoryList = readdir(CurrentDirList);
     closedir(CurrentDirList);
