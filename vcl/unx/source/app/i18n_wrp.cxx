@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-16 01:06:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-18 12:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,16 @@ struct XIMArg
 #else
 #include <stdarg.h>
 #endif
+#if defined(NETBSD) || defined(FREEBSD)
+# include <stdlib.h>
+#else
+# include <alloca.h>
+#endif
 #include <string.h>
 #include <dlfcn.h>
 #include <X11/Xlib.h>
 #include <X11/Xlibint.h>
 #include "XIM.h"
-
 
 #ifdef SOLARIS
 #define XIIIMP_PATH     "/usr/openwin/lib/locale/common/xiiimp.so.2"
@@ -221,13 +225,12 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
     {
         /* call a new open IM method */
 
-        XIMArg* args = (XIMArg*)Xmalloc( (total_count + 1) * sizeof(XIMArg) );
+        XIMArg* args = (XIMArg*)alloca( (total_count + 1) * sizeof(XIMArg) );
 
         /*
           * now package it up so we can set it along
           */
 #if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
-
         va_start(variable, res_class);
 #else
         va_start(variable);
