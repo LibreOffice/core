@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:26:51 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,6 +702,17 @@
 #define HID_COLORPAGE_BASICOPERATOR_CB              (HID_SVX_EXT0_START + 106)
 #define HID_COLORPAGE_BASICKEYWORD_CB               (HID_SVX_EXT0_START + 107)
 #define HID_COLORPAGE_BASICERROR_CB                 (HID_SVX_EXT0_START + 108)
+
+#define HID_POPUP_EXTRUSION_DIRECTION           (HID_SVX_EXT0_START + 109)
+#define HID_POPUP_EXTRUSION_DEPTH               (HID_SVX_EXT0_START + 110)
+#define HID_POPUP_EXTRUSION_LIGHTING            (HID_SVX_EXT0_START + 111)
+#define HID_POPUP_EXTRUSION_SURFACE             (HID_SVX_EXT0_START + 112)
+#define HID_MENU_EXTRUSION_DIRECTION            (HID_SVX_EXT0_START + 113)
+#define HID_VALUESET_EXTRUSION_DIRECTION        (HID_SVX_EXT0_START + 114)
+#define HID_MENU_EXTRUSION_DEPTH                (HID_SVX_EXT0_START + 115)
+#define HID_MENU_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 116)
+#define HID_VALUESET_EXTRUSION_LIGHTING         (HID_SVX_EXT0_START + 117)
+#define HID_MENU_EXTRUSION_SURFACE              (HID_SVX_EXT0_START + 118)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
