@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:41:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,7 @@ enum SvXMLStyleTokens
     XML_TOK_STYLE_DAY,
     XML_TOK_STYLE_MONTH,
     XML_TOK_STYLE_YEAR,
+    XML_TOK_STYLE_ERA,
     XML_TOK_STYLE_DAY_OF_WEEK,
     XML_TOK_STYLE_WEEK_OF_YEAR,
     XML_TOK_STYLE_QUARTER,
@@ -326,6 +327,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleElemMap[] =
     { XML_NAMESPACE_NUMBER, sXML_day,               XML_TOK_STYLE_DAY               },
     { XML_NAMESPACE_NUMBER, sXML_month,             XML_TOK_STYLE_MONTH             },
     { XML_NAMESPACE_NUMBER, sXML_year,              XML_TOK_STYLE_YEAR              },
+    { XML_NAMESPACE_NUMBER, sXML_era,               XML_TOK_STYLE_ERA               },
     { XML_NAMESPACE_NUMBER, sXML_day_of_week,       XML_TOK_STYLE_DAY_OF_WEEK       },
     { XML_NAMESPACE_NUMBER, sXML_week_of_year,      XML_TOK_STYLE_WEEK_OF_YEAR      },
     { XML_NAMESPACE_NUMBER, sXML_quarter,           XML_TOK_STYLE_QUARTER           },
@@ -709,8 +711,11 @@ void SvXMLNumFmtElementContext::EndElement()
                 //  skip separator constant after long day of week
                 //  (NF_KEY_NNNN contains the separator)
 
-                //!aContent.setLength(0);       //! doesn't work, #76293#
-                aContent = OUStringBuffer();
+                if ( rParent.ReplaceNfKeyword( NF_KEY_NNN, NF_KEY_NNNN ) )
+                {
+                    //!aContent.setLength(0);       //! doesn't work, #76293#
+                    aContent = OUStringBuffer();
+                }
 
                 rParent.SetHasLongDoW( sal_False );     // only once
             }
@@ -776,7 +781,18 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
                                    rParent.GetInternational().IsDateCentury();
-            rParent.AddNfKeyword( bEffLong ? NF_KEY_YYYY : NF_KEY_YY );
+            // Y after G (era) is replaced by E
+            if ( rParent.HasEra() )
+                rParent.AddNfKeyword( bEffLong ? NF_KEY_EEC : NF_KEY_EC );
+            else
+                rParent.AddNfKeyword( bEffLong ? NF_KEY_YYYY : NF_KEY_YY );
+            break;
+        case XML_TOK_STYLE_ERA:
+            if ( rParent.IsFromSystem() )
+                bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
+                                   rParent.GetInternational().IsDateCentury();
+            rParent.AddNfKeyword( bEffLong ? NF_KEY_GGG : NF_KEY_G );
+            //  HasEra flag is set
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             if ( rParent.IsFromSystem() && bLong )
@@ -865,6 +881,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     bAutoInt( FALSE ),
     bHasExtraText( FALSE ),
     bHasLongDoW( FALSE ),
+    bHasEra( FALSE ),
     bHasDateTime( FALSE ),
     bHasMap( sal_False ),
     pStyles( &rStyles ),
@@ -946,6 +963,7 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
         case XML_TOK_STYLE_DAY:
         case XML_TOK_STYLE_MONTH:
         case XML_TOK_STYLE_YEAR:
+        case XML_TOK_STYLE_ERA:
         case XML_TOK_STYLE_DAY_OF_WEEK:
         case XML_TOK_STYLE_WEEK_OF_YEAR:
         case XML_TOK_STYLE_QUARTER:
@@ -1055,6 +1073,8 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
             //  instead of automatic date format, use fixed formats if bFromSystem is not set
             //! prevent use of automatic formats in other cases, force user-defined format?
 
+            sal_uInt32 nNewIndex = nIndex;
+
             NfIndexTableOffset eOffset = pFormatter->GetIndexTableOffset( nIndex );
             if ( eOffset == NF_DATE_SYSTEM_SHORT )
             {
@@ -1062,9 +1082,9 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                 if ( rInt.IsDateDayLeadingZero() && rInt.IsDateMonthLeadingZero() )
                 {
                     if ( rInt.IsDateCentury() )
-                        nIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
+                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, nFormatLang );
                     else
-                        nIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
+                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYY, nFormatLang );
                 }
             }
             else if ( eOffset == NF_DATE_SYSTEM_LONG )
@@ -1077,13 +1097,23 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                     if ( eMonth == MONTH_LONG && bCentury )
                     {
                         if ( rInt.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG )
-                            nIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
+                            nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, nFormatLang );
                         else
-                            nIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
+                            nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, nFormatLang );
                     }
                     else if ( eMonth == MONTH_SHORT && !bCentury )
-                        nIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
+                        nNewIndex = pFormatter->GetFormatIndex( NF_DATE_SYS_NNDMMMYY, nFormatLang );
                 }
+            }
+
+            if ( nNewIndex != nIndex )
+            {
+                //  verify the fixed format really matches the format string
+                //  (not the case with some formats from locale data)
+
+                const SvNumberformat* pFixedFormat = pFormatter->GetEntry( nNewIndex );
+                if ( pFixedFormat && pFixedFormat->GetFormatstring() == String(sFormat) )
+                    nIndex = nNewIndex;
             }
         }
 
@@ -1224,8 +1254,14 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     if (!pFormatter)
         return;
 
+    if ( nIndex == NF_KEY_G || nIndex == NF_KEY_GG || nIndex == NF_KEY_GGG )
+        bHasEra = sal_True;
+
     if ( nIndex == NF_KEY_NNNN )
+    {
+        nIndex = NF_KEY_NNN;
         bHasLongDoW = sal_True;         // to remove string constant with separator
+    }
 
     String sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
 
@@ -1244,6 +1280,45 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 
     aFormatCode.append( sKeyword );
+}
+
+sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
+{
+    sal_Int32 nBufLen = rBuffer.getLength();
+    xub_StrLen nTokLen = rToken.Len();
+
+    if ( nTokLen > nBufLen )
+        return sal_False;
+
+    sal_Int32 nStartPos = nTokLen - nBufLen;
+    for ( xub_StrLen nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
+        if ( rToken.GetChar( nTokPos ) != rBuffer.charAt( nStartPos + nTokPos ) )
+            return sal_False;
+
+    return sal_True;
+}
+
+sal_Bool SvXMLNumFormatContext::ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew )
+{
+    //  replaces one keyword with another if it is found at the end of the code
+
+    SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+    if (!pFormatter)
+        return sal_False;
+
+    String sOldStr = pFormatter->GetKeyword( nFormatLang, nOld );
+    if ( lcl_IsAtEnd( aFormatCode, sOldStr ) )
+    {
+        // remove old keyword
+        aFormatCode.setLength( aFormatCode.getLength() - sOldStr.Len() );
+
+        // add new keyword
+        String sNewStr = pFormatter->GetKeyword( nFormatLang, nNew );
+        aFormatCode.append( sNewStr );
+
+        return sal_True;    // changed
+    }
+    return sal_False;       // not found
 }
 
 void SvXMLNumFormatContext::AddCondition( )

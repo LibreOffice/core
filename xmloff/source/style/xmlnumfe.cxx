@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-11-24 19:41:01 $
+ *  last change: $Author: nn $ $Date: 2000-11-29 20:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,20 @@ void SvXMLNumFmtExport::WriteYearElement_Impl( sal_Bool bLong )
 {
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_year ) );
+
+    AddStyleAttr_Impl( bLong );     // adds to pAttrList
+
+    xHandler->ignorableWhitespace( sWS );
+    xHandler->startElement( sElem, xAttrList );
+    xHandler->endElement( sElem );
+
+    pAttrList->Clear();
+}
+
+void SvXMLNumFmtExport::WriteEraElement_Impl( sal_Bool bLong )
+{
+    OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
+                        OUString::createFromAscii( sXML_era ) );
 
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
@@ -862,8 +876,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
     //  only used for some built-in formats
     BOOL bSystemDate = ( eBuiltIn == NF_DATE_SYSTEM_SHORT ||
                          eBuiltIn == NF_DATE_SYSTEM_LONG  ||
-                         eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM );
-    BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG );
+                         eBuiltIn == NF_DATETIME_SYSTEM_SHORT_HHMM ) && rFormat.GetComment().Len();
+    BOOL bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG ) && rFormat.GetComment().Len();
     if ( bSystemDate )
     {
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
@@ -1071,9 +1085,11 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_NN:
                 case NF_KEY_NNN:
                 case NF_KEY_NNNN:
+                case NF_KEY_AAA:
+                case NF_KEY_AAAA:
                     {
                         sal_Bool bLong = ( nElemType == NF_KEY_NNN || nElemType == NF_KEY_NNNN ||
-                                           nElemType == NF_KEY_DDDD );
+                                           nElemType == NF_KEY_DDDD || nElemType == NF_KEY_AAAA );
                         WriteDayOfWeekElement_Impl( bSystemDate ? bLongSysDate : bLong );
                         if ( nElemType == NF_KEY_NNNN )
                         {
@@ -1095,9 +1111,21 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                     break;
                 case NF_KEY_YY:
                 case NF_KEY_YYYY:
+                case NF_KEY_EC:
+                case NF_KEY_EEC:
                     {
-                        sal_Bool bLong = ( nElemType == NF_KEY_YYYY );
+                        //! add calendar attribute for E and EE?
+                        sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC );
                         WriteYearElement_Impl( bSystemDate ? bLongSysDate : bLong );
+                    }
+                    break;
+                case NF_KEY_G:
+                case NF_KEY_GG:
+                case NF_KEY_GGG:
+                    {
+                        //! distinguish GG and GGG
+                        sal_Bool bLong = ( nElemType == NF_KEY_GGG );
+                        WriteEraElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
                     break;
                 case NF_KEY_Q:
