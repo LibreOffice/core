@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 09:22:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // -----------
 // - Defines -
 // -----------
@@ -85,7 +89,7 @@
 // - SvxGalleryChildWindow -
 // -------------------------
 
-class GalleryChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
 {
 public:
                         GalleryChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
