@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
                 DBG_ERROR("Wrong type for ExecutePlugins!");
             m_bROConfirmation = seqRO[nProperty];
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtSecurityOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
