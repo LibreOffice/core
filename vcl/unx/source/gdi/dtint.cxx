@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 14:14:43 $
+ *  last change: $Author: pl $ $Date: 2001-08-20 11:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,18 +113,6 @@ DtIntegrator::~DtIntegrator()
 {
 }
 
-BOOL DtIntegrator::StartProcess( String& rFile, String& rParams, const String& rDir )
-{
-    String aFiles( rFile );
-    if( rParams.Len() )
-    {
-        aFiles += ' ';
-        aFiles += rParams;
-    }
-    // try to launch it
-    return LaunchProcess( aFiles, rDir );
-}
-
 DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
 {
     // hack for sclient
@@ -164,39 +152,6 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
 #endif
     // default: generic implementation
     return new DtIntegrator( pFrame );
-}
-
-BOOL DtIntegrator::LaunchProcess( const String& rParam, const String& rDirectory )
-{
-    int nArg;
-
-    char *pDisplayName = DisplayString( mpDisplay );
-    int nToken = GetCommandLineTokenCount( rParam );
-
-    ::rtl::OUString* pArgs = new ::rtl::OUString[nToken];
-    for( nArg = 0; nArg < nToken ; nArg++ )
-        pArgs[ nArg ] = GetCommandLineToken( nArg, rParam );
-    NAMESPACE_VOS(OArgumentList) aArgList( pArgs+1, nToken-1 );
-    delete pArgs;
-
-    ::rtl::OUString aDisplay;
-    if( pDisplayName )
-    {
-        aDisplay = ::rtl::OUString::createFromAscii( "DISPLAY=" );
-        aDisplay += ::rtl::OUString::createFromAscii( pDisplayName );
-    }
-    NAMESPACE_VOS(OEnvironment) aEnvironment( 1, &aDisplay );
-
-    NAMESPACE_VOS( OProcess ) aOProcess( pArgs[0], rDirectory );
-
-    BOOL bSuccess = aOProcess.execute(
-        ( NAMESPACE_VOS( OProcess )::TProcessOption)
-        ( NAMESPACE_VOS( OProcess )::TOption_Detached |
-          NAMESPACE_VOS( OProcess )::TOption_SearchPath ),
-        aArgList, aEnvironment )
-        == NAMESPACE_VOS( OProcess )::E_None ? TRUE : FALSE;
-
-    return bSuccess;
 }
 
 BOOL DtIntegrator::GetSystemLook( SystemLookInfo& rInfo )

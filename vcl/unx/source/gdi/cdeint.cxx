@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-07 18:42:17 $
+ *  last change: $Author: pl $ $Date: 2001-08-20 11:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,110 +291,6 @@ void CDEIntegrator::GlobalDeInit()
         dlclose( pDtSvcLib );
     pttLib = pMrmLib = pXmLib = pXtLib = pDtSvcLib = 0;
 }
-
-void CDEIntegrator::InvokeAction( const String& rAction, const String& rFiles )
-{
-#if 1
-    String aActionLine( RTL_CONSTASCII_STRINGPARAM( "/usr/dt/bin/dtaction " ), RTL_TEXTENCODING_ASCII_US );
-    aActionLine += rAction;
-    aActionLine += ' ';
-    aActionLine += rFiles;
-    DtIntegrator::LaunchProcess( aActionLine );
-#else
-    int nTokens = GetCommandLineTokenCount( rFiles ), i;
-    DtActionArg* pArgs = new DtActionArg[ nTokens ];
-    char** pStrings = new char*[nTokens];
-    for( i = 0; i < nTokens ; i++ )
-    {
-        pStrings[ i ] = strdup( GetCommandLineToken( i, rFiles ).GetStr() );
-        pArgs[ i ].argClass = DtACTION_FILE;
-        pArgs[ i ].u.file.name = pStrings[ i ];
-    }
-
-    pid_t nPID = fork();
-    if( ! nPID )
-        // child
-    {
-        // if the action fails for some reason, CDE tries to raise
-        // an error box which leads to a SIGSEGV somewhere
-        // in Motif (probably because we are not a real Motif app)
-        // so execute this in its own process. if it dies, so what ?
-
-        // this is not perfectly safe though. The second process
-        // can cause an X Error wich comes back through our connection
-        // at an unpredictable time. Some Actions do this reproducable
-        // eg SDTAudio
-        pDtActionInvoke( maAppWidget, const_cast<char*>(rAction.GetStr()), pArgs, nTokens,
-                         NULL, NULL, NULL, True, NULL, NULL );
-        _exit(0);
-    }
-    else
-        // parent
-        if( nPID > 0 )
-            waitpid( nPID, NULL, 0 );
-
-    // dtactioninvoke pops up the widget, pop it down again
-    if( pXtIsRealized( maAppWidget ) )
-        pXtUnrealizeWidget( maAppWidget );
-
-    for( i = 0; i < nTokens; i++ )
-        free( pStrings[i] );
-    delete pStrings;
-    delete pArgs;
-#endif
-}
-
-BOOL CDEIntegrator::StartProcess( String& rFile, String& rParams, const String& rDir )
-{
-    String aFiles;
-    if( rFile.GetChar( 0 ) != '"' )
-    {
-        aFiles  = '\"';
-        aFiles += rFile;
-        aFiles += '\"';
-    }
-    else
-        aFiles = rFile;
-
-    if( rParams.Len() )
-    {
-        aFiles += ' ';
-        aFiles += rParams;
-    }
-    // first try to launch it
-    if( LaunchProcess( aFiles, rDir ) )
-        return TRUE;
-
-    // if not successfull it must be a file of whatever type
-    // look for an apropriate action
-    ByteString aFile( rFile, gsl_getSystemTextEncoding() );
-    char* pAttrValue = pDtDtsFileToAttributeValue( aFile.GetBuffer(), "ACTIONS" );
-    if( pAttrValue )
-    {
-        // there is an action for this file. invoke the first one
-        // (since we do not know which one
-        String aAction( pAttrValue, strlen( pAttrValue ), gsl_getSystemTextEncoding() );
-        pDtDtsFreeAttributeValue( pAttrValue );
-        aAction =
-            WhitespaceToSpace( aAction.GetToken( 0, ',' ) ).GetToken( 0, ' ' );
-        if( ! aAction.Len() )
-            return FALSE;
-
-        BOOL bPreviousState =
-            mpSalDisplay->GetXLib()->GetIgnoreXErrors();
-        mpSalDisplay->GetXLib()->SetIgnoreXErrors( TRUE );
-
-        InvokeAction( aAction, aFiles );
-
-        XSync( mpDisplay, False );
-        mpSalDisplay->GetXLib()->SetIgnoreXErrors( bPreviousState );
-
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
 
 static int getHexDigit( const char c )
 {

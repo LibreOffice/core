@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: pl $ $Date: 2001-08-20 11:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,9 @@ private:
     void GlobalInit();
     void GlobalDeInit();
 
-    void InvokeAction( const String&, const String& );
-
 public:
     virtual ~CDEIntegrator();
 
-    virtual BOOL StartProcess( String&, String&, const String& rDir = String() );
     virtual BOOL GetSystemLook( SystemLookInfo& rInfo );
 };
 

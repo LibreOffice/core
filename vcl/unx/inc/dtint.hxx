@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 14:14:43 $
+ *  last change: $Author: pl $ $Date: 2001-08-20 11:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,6 @@ enum DtType {
 class DtIntegrator
 {
 protected:
-    enum DtDragState { DtDragNone = 0, DtDragging, DtWaitForStatus,
-                       DtWaitForDataRequest };
-
     DtType              meType;
     Display*            mpDisplay;
     SalDisplay*         mpSalDisplay;
@@ -176,8 +173,6 @@ protected:
 
     DtIntegrator( SalFrame* );
 
-    BOOL LaunchProcess( const String&, const String& rDirectory = String() );
-
     static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
 
@@ -185,8 +180,6 @@ public:
     static DtIntegrator* CreateDtIntegrator( SalFrame* );
 
     virtual ~DtIntegrator();
-
-    virtual BOOL    StartProcess( String&, String&, const String& rDir = String() );
 
     // SystemLook
     virtual BOOL GetSystemLook( SystemLookInfo& rInfo );
