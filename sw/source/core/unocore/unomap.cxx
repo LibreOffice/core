@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:26:53 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,14 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),                 RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID, MID_EMPHASIS},\
         { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },    \
-        { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
+        { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     }, \
+        { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,     MID_ROTATE      },  \
+        { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID,         MID_FITTOLINE  },  \
+        { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,          0 },  \
+        { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_TEXT },  \
+        { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,          MID_RUBY_ADJUST },  \
+        { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID,          MID_RUBY_CHARSTYLE },  \
+
 
 #define _BASE_INDEX_PROPERTIES_\
         { SW_PROP_NAME(UNO_NAME_TITLE), WID_IDX_TITLE,  &::getCppuType((const OUString*)0)  , PROPERTY_NONE,     0},\
@@ -782,6 +789,12 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_COMBINE_SUFFIX),           RES_CHRATR_TWO_LINES,           &::getCppuType((const OUString*)0),     PROPERTY_NONE, MID_END_BRACKET},
                     { SW_PROP_NAME(UNO_NAME_CHAR_EMPHASIS),             RES_CHRATR_EMPHASIS_MARK,           &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, MID_EMPHASIS},
                     _PROP_DIFF_FONTHEIGHT
+                    { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,    MID_ROTATE      },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_TEXT },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,         MID_RUBY_ADJUST },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_CHARSTYLE },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aCharStyleMap;
@@ -883,6 +896,12 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     _PROP_DIFF_FONTHEIGHT
+                    { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,    MID_ROTATE      },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE,         0 },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_TEXT           ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_TEXT },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_ADJUST         ),          RES_TXTATR_CJK_RUBY,    &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,         MID_RUBY_ADJUST },
+                    { SW_PROP_NAME(UNO_NAME_RUBY_CHAR_STYLE_NAME),          RES_TXTATR_CJK_RUBY,    &::getCppuType((OUString*)0),   PROPERTY_NONE,         MID_RUBY_CHARSTYLE },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aParaStyleMap;

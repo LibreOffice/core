@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:26:53 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FORBIDDEN_CHARACTERS                (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT                      (MAP_CHAR_LEN("RubyBaseText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT                           (MAP_CHAR_LEN("RubyText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST                         (MAP_CHAR_LEN("RubyAdjust"));
+const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_CHAR_STYLE_NAME                (MAP_CHAR_LEN("RubyCharStyleName"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_HEIGHT                     (MAP_CHAR_LEN("FootnoteHeight"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_WEIGHT                (MAP_CHAR_LEN("FootnoteLineWeight"));
@@ -668,3 +669,8 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_RELATIVE_WIDTH        (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_ADJUST                (MAP_CHAR_LEN("FootnoteLineAdjust"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE         (MAP_CHAR_LEN("FootnoteLineTextDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE              (MAP_CHAR_LEN("FootnoteLineDistance"));
+
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION                       (MAP_CHAR_LEN("CharRotation"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE        (MAP_CHAR_LEN("CharRotationIsFitToLine"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH                    (MAP_CHAR_LEN("CharScaleWidth"));
+

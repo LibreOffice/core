@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:26:04 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,6 +661,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FORBIDDEN_CHARACTERS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_BASE_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_TEXT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_ADJUST;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_RUBY_CHAR_STYLE_NAME;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_HEIGHT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_WEIGHT;
@@ -670,6 +671,9 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_ADJUST;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE;
 
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH;
 #endif
 
 
