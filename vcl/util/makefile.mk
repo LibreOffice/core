@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 14:47:51 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:47:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,6 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/btndlg.hxx      \
             $(INC)$/button.hxx      \
             $(INC)$/ctrl.hxx        \
-            $(INC)$/color.hxx       \
-            $(INC)$/config.hxx      \
             $(INC)$/cursor.hxx      \
             $(INC)$/cmdevt.hxx      \
             $(INC)$/decoview.hxx    \
@@ -105,7 +103,6 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/keycodes.hxx    \
             $(INC)$/keycod.hxx      \
             $(INC)$/image.hxx       \
-            $(INC)$/line.hxx        \
             $(INC)$/lstbox.h        \
             $(INC)$/lstbox.hxx      \
             $(INC)$/mapmod.hxx      \
@@ -119,15 +116,11 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/outdev.hxx      \
             $(INC)$/outdev3d.hxx    \
             $(INC)$/pointr.hxx      \
-            $(INC)$/poly.hxx        \
             $(INC)$/ptrstyle.hxx    \
             $(INC)$/prntypes.hxx    \
             $(INC)$/print.hxx       \
             $(INC)$/prndlg.hxx      \
             $(INC)$/region.hxx      \
-            $(INC)$/rc.hxx          \
-            $(INC)$/resid.hxx       \
-            $(INC)$/resary.hxx      \
             $(INC)$/salbtype.hxx    \
             $(INC)$/scrbar.hxx      \
             $(INC)$/slider.hxx      \
@@ -145,7 +138,6 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/svapp.hxx       \
             $(INC)$/syschild.hxx    \
             $(INC)$/sysdata.hxx     \
-            $(INC)$/system.hxx      \
             $(INC)$/syswin.hxx      \
             $(INC)$/tabctrl.hxx     \
             $(INC)$/tabdlg.hxx      \
@@ -178,12 +170,6 @@ LIB1FILES=  $(SLB)$/app.lib     \
             $(SLB)$/helper.lib
 
 
-.IF "$(remote)" != ""
-    LIB1FILES+= $(SLB)$/remote.lib
-.IF "$(COM)"=="GCC"
-LIB1OBJFILES=$(SLO)$/salmain.obj
-.ENDIF
-.ELSE           # "$(remote)" != ""
 .IF "$(GUI)" == "UNX"
 LIB1FILES+=$(SLB)$/salplug.lib
 .ELSE
@@ -191,7 +177,6 @@ LIB1FILES+= \
             $(SLB)$/salwin.lib  \
             $(SLB)$/salgdi.lib  \
             $(SLB)$/salapp.lib
-.ENDIF          # "$(remote)" != ""
 .ENDIF
 
 SHL1TARGET= vcl$(VERSION)$(DLLPOSTFIX)
@@ -205,11 +190,9 @@ SHL1STDLIBS+=\
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \
-            $(SALLIB)
-
-.IF "$(ENABLE_CTL)"!=""
-    SHL1STDLIBS+= $(ICUUCLIB) $(ICULELIB)
-.ENDIF # ENABLE_CTL
+            $(SALLIB)			\
+            $(ICUUCLIB)			\
+            $(ICULELIB)
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
