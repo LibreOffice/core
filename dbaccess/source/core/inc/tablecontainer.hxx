@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: oj $ $Date: 2000-10-11 08:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ typedef ::cppu::WeakImplHelper4< ::com::sun::star::container::XEnumerationAccess
 //= OTableContainer
 //==========================================================================
 class OTable;
+class WildCard;
 class OTableContainer :  public OTableContainer_Base
 {
 protected:
@@ -117,8 +118,15 @@ protected:
     Tables                  m_aTables;
     TablesIndexAccess       m_aTablesIndexed;
 
-    sal_Bool    m_bConstructed : 1;     // late ctor called
+    // holds the original tables which where set in construct but they can be null
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xMasterTables;
 
+    sal_Bool m_bConstructed : 1;        // late ctor called
+
+    sal_Bool isNameValid(const ::rtl::OUString& _rName,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
+        const ::std::vector< WildCard >& _rWCSearch) const;
 public:
     /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
         interface.<BR>
