@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_qry.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:45:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,11 @@
 #define STR_QUERYDESIGN                     RID_STR_QRY_START + 42
 #define STR_VIEWDESIGN                      RID_STR_QRY_START + 43
 #define STR_JOIN_TYPE_HINT                  RID_STR_QRY_START + 44
+#define STR_QUERY_SAVEMODIFIED              RID_STR_QRY_START + 45
+    // please adjust checking when inserting new strings
 
-// please adjust checking when inserting new strings
 
-
-#if STR_JOIN_TYPE_HINT > RID_STR_QRY_END
+#if STR_QUERY_SAVEMODIFIED > RID_STR_QRY_END
 #error resource id overflow in #file, #line
 #endif
 
