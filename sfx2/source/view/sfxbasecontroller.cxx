@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-14 13:09:53 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,7 +485,6 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
