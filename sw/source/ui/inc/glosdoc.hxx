@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:25:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,19 +86,25 @@ class SwDocShell;
 SV_DECL_REF( SwDocShell )
 #endif
 
-typedef com::sun::star::uno::Reference<com::sun::star::text::XAutoTextGroup>* XAutoTextGroupPtr;
-SV_DECL_PTRARR_DEL(XAutoTextGroupPtrArr, XAutoTextGroupPtr, 4, 4)
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
-typedef com::sun::star::uno::Reference<com::sun::star::uno::XInterface>* XInterfacePtr;
-SV_DECL_PTRARR_DEL(XAutoTextEntryPtrArr, XInterfacePtr, 4, 4)
+#include <vector>
+
+typedef ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XAutoTextGroup > AutoTextGroupRef;
+typedef ::std::vector< AutoTextGroupRef > UnoAutoTextGroups;
+
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry > AutoTextEntryRef;
+typedef ::std::vector< AutoTextEntryRef > UnoAutoTextEntries;
 
 #define GLOS_DELIM (sal_Unicode)'*'
 
 // CLASS -----------------------------------------------------------------
 class SwGlossaries
 {
-    XAutoTextGroupPtrArr    aGlosGroupArr;
-    XAutoTextEntryPtrArr    aGlosEntryArr;
+    UnoAutoTextGroups       aGlossaryGroups;
+    UnoAutoTextEntries      aGlossaryEntries;
     String                  aPath;
     String                  sOldErrPath;
     String                  sErrPath;
@@ -116,8 +122,43 @@ public:
     SwGlossaries();
     ~SwGlossaries();
 
-    XAutoTextGroupPtrArr&   GetUnoGroupArray()  { return aGlosGroupArr; }
-    XAutoTextEntryPtrArr&   GetUnoEntryArray()  { return aGlosEntryArr; }
+    /** returns the cached AutoTextGroup (if any) for the given group name
+
+        @precond
+            If <arg>_bCreate</arg> is <TRUE/>, the SolarMutex must be locked when calling into this method.
+
+        @param _rGroupName
+            the name of the glossaries group
+        @param _bCreate
+            if <TRUE/>, the group is created if it does not yet exist
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextGroup >
+                            GetAutoTextGroup(
+                                const ::rtl::OUString& _rGroupName,
+                                bool _bCreate = false
+                            );
+
+    /** returns the cached AutoTextEntry (if any) for the given group/with the given name
+
+        @precond
+            If <arg>_bCreate</arg> is <TRUE/>, the SolarMutex must be locked when calling into this method.
+
+        @param _rGroupAccessName
+            the name to access the group
+        @param _rGroupName
+            the name of the glossaries group, as to be passed to the entry
+        @param _rEntryName
+            the name of the auto text entry
+        @param _bCreate
+            if <TRUE/>, the entry is created if it does not yet exist
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry >
+                            GetAutoTextEntry(
+                                const String& _rCompleteGroupName,
+                                const ::rtl::OUString& _rGroupName,
+                                const ::rtl::OUString& _rEntryName,
+                                bool _bCreate = false
+                            );
 
     USHORT                  GetGroupCnt();
     String                  GetGroupName(USHORT );
