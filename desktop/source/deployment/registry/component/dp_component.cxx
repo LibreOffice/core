@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:08:32 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,21 +59,25 @@
  *
  ************************************************************************/
 
+#include "dp_component.hrc"
 #include "dp_backend.h"
 #include "dp_ucb.h"
-#include "dp_platform.h"
 #include "dp_persmap.h"
 #include "rtl/string.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
 #include "osl/file.hxx"
+#include "osl/module.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
 #include "xmlscript/xml_helper.hxx"
+#include "svtools/inettype.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/container/XSet.hpp"
+#include "com/sun/star/beans/StringPair.hpp"
 #include "com/sun/star/registry/XSimpleRegistry.hpp"
 #include "com/sun/star/registry/XImplementationRegistration.hpp"
 #include "com/sun/star/loader/XImplementationLoader.hpp"
@@ -83,6 +87,7 @@
 #include "com/sun/star/ucb/NameClash.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include <hash_set>
+#include <hash_map>
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -104,76 +109,97 @@ namespace component
 
 typedef ::std::hash_set<
     ::rtl::OUString, ::rtl::OUStringHash > t_stringset;
+typedef ::std::vector<beans::StringPair> t_stringpairvec;
+
+struct ComponentInfo
+{
+    t_stringset m_implNames;
+    t_stringpairvec m_singletons;
+};
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
+protected:
     t_stringset m_jar_typelibs;
     t_stringset m_rdb_typelibs;
+    t_stringset & getTypelibs( bool jar )
+        { return jar ? m_jar_typelibs : m_rdb_typelibs; }
+
     bool m_unorc_inited;
     bool m_unorc_modified;
 
     OUString m_inflated_dir, m_inflated_reg_dir;
-    ::std::auto_ptr< PersistentMap > m_urlToTemp;
+    ::std::auto_ptr<PersistentMap> m_urlToTemp;
 
-protected:
+    typedef ::std::hash_map< OUString, Reference<XInterface>,
+                             ::rtl::OUStringHash > t_string2object;
+    t_string2object m_backendObjects;
+
     // PackageRegistryBackend
-    virtual Reference< deployment::XPackage > createPackage(
-        OUString const & url,
-        OUString const & mediaType, OUString const & subType,
-        INetContentTypeParameterList const & params,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+    virtual Reference<deployment::XPackage> bindPackage_(
+        OUString const & url, OUString const & mediaType,
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
     virtual void SAL_CALL disposing();
 
+    OUString m_strDynamicComponent;
+    OUString m_strJavaComponent;
+    OUString m_strPythonComponent;
+    OUString m_strRDBTypelib;
+    OUString m_strJavaTypelib;
+
 public:
-    Reference< registry::XImplementationRegistration > m_xImplReg;
-    Reference< registry::XSimpleRegistry > m_xServicesRDB;
+    OUString m_commonRDB;
+    OUString m_nativeRDB;
+    Reference<registry::XSimpleRegistry> m_xCommonRDB;
+    Reference<registry::XSimpleRegistry> m_xNativeRDB;
 
-    t_stringset & getTypelibs( bool jar )
-        { return jar ? m_jar_typelibs : m_rdb_typelibs; }
-    void unorc_verify_init( Reference< XCommandEnvironment > const & xCmdEnv );
-    void unorc_flush( Reference< XCommandEnvironment > const & xCmdEnv );
+    void unorc_verify_init( Reference<XCommandEnvironment> const & xCmdEnv );
+    void unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv );
 
-    OUString getInflatedCopy(
+    Reference<XInterface> getObject( OUString const & id );
+    Reference<XInterface> insertObject(
+        OUString const & id, Reference<XInterface> const & xObject );
+    void releaseObject( OUString const & id );
+
+    bool getInflatedCopy(
+        OUString & inflatedURL /* init: inout */,
         OUString const & url,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        Reference<XCommandEnvironment> const & xCmdEnv,
+        bool create = true );
     void removeInflatedCopy(
         OUString const & url,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
     bool addToUnoRc(
         bool jarFile, OUString const & url,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    bool hasInUnoRc(
+        bool jarFile, OUString const & url,
+        Reference<XCommandEnvironment> const & xCmdEnv );
     bool removeFromUnoRc(
         bool jarFile, OUString const & url,
-        Reference< XCommandEnvironment > const & xCmdEnv );
-
-    Sequence< Reference< lang::XServiceInfo > > loadFactories(
-        OUString const & url, OUString const & loader );
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
     inline BackendImpl(
-        Reference< XComponentContext > const & xComponentContext,
+        Reference<XComponentContext> const & xComponentContext,
         OUString const & implName,
-        Sequence< OUString > const & supported_media_types )
+        Sequence<OUString> const & supported_media_types )
         : PackageRegistryBackend(
             xComponentContext, implName, supported_media_types ),
           m_unorc_inited( false ),
           m_unorc_modified( false ),
-          m_xImplReg(
-              xComponentContext->getServiceManager()
-              ->createInstanceWithContext(
-                  OUSTR("com.sun.star.registry.ImplementationRegistration"),
-                  xComponentContext ), UNO_QUERY_THROW )
+          m_strDynamicComponent( getResourceString(RID_STR_DYN_COMPONENT) ),
+          m_strJavaComponent( getResourceString(RID_STR_JAVA_COMPONENT) ),
+          m_strPythonComponent( getResourceString(RID_STR_PYTHON_COMPONENT) ),
+          m_strRDBTypelib( getResourceString(RID_STR_RDB_TYPELIB) ),
+          m_strJavaTypelib( getResourceString(RID_STR_JAVA_TYPELIB) )
         {}
 
     // XInitialization
-    virtual void SAL_CALL initialize( Sequence< Any > const & args )
-        throw (RuntimeException);
-
-    // XPackageRegistry
-    virtual OUString SAL_CALL detectMediaType( OUString const & url )
-        throw (RuntimeException);
+    virtual void SAL_CALL initialize( Sequence<Any> const & args )
+        throw (Exception);
 };
 
 //==============================================================================
@@ -181,74 +207,170 @@ class ComponentPackageImpl : public ::dp_registry::backend::Package
 {
     OUString m_inflated_url;
     OUString m_loader;
-    t_Registered m_registered;
+    Reference<XComponentContext> m_xRemoteContext;
+
+    enum { REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED }
+    m_registered;
 
     inline BackendImpl * getMyBackend() const
-        { return static_cast< BackendImpl * >(m_myBackend.get()); }
+        { return static_cast<BackendImpl *>(m_myBackend.get()); }
+
+    virtual void SAL_CALL disposing();
 
     // Package
-    virtual t_Registered getRegStatus(
+    virtual bool isRegistered_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
-    virtual bool processPackage(
-        bool register_package,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    virtual void processPackage_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        bool registerPackage,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+
+    Reference<registry::XSimpleRegistry> getRDB() const;
 
 public:
     inline ComponentPackageImpl(
-        ::rtl::Reference< PackageRegistryBackend > const & myBackend,
+        ::rtl::Reference<PackageRegistryBackend> const & myBackend,
         OUString const & url, OUString const & mediaType,
         OUString const & name, OUString const & description,
         OUString const & loader )
-        : Package( myBackend, url, mediaType, name, name /* display-name */,
-                   description ),
+        : Package( myBackend, url, mediaType,
+                   name, name /* display-name */, description ),
           m_loader( loader ),
-          m_registered( REG_VOID )
+          m_registered( REG_UNINIT )
         {}
+
+    // XPackage
+    virtual Any SAL_CALL getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+        throw (RuntimeException);
 };
+
+//______________________________________________________________________________
+Any ComponentPackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+    throw (RuntimeException)
+{
+    OSL_ASSERT( smallIcon );
+    if (smallIcon)
+    {
+        sal_uInt16 ret;
+        if (m_loader.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") ))
+        {
+            ret = highContrast
+                ? RID_IMG_JAVA_COMPONENT_HC : RID_IMG_JAVA_COMPONENT;
+        }
+        else
+        {
+            ret = highContrast
+                ? RID_IMG_COMPONENT_HC : RID_IMG_COMPONENT;
+        }
+        return makeAny(ret);
+    }
+    return Package::getIcon( highContrast, smallIcon );
+}
+
+//______________________________________________________________________________
+Reference<registry::XSimpleRegistry> ComponentPackageImpl::getRDB() const
+{
+    BackendImpl * that = getMyBackend();
+    if (m_loader.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.SharedLibrary") ))
+        return that->m_xNativeRDB;
+    else
+        return that->m_xCommonRDB;
+}
+
+//______________________________________________________________________________
+void ComponentPackageImpl::disposing()
+{
+    m_xRemoteContext.clear();
+    Package::disposing();
+}
 
 //==============================================================================
 class TypelibraryPackageImpl : public ::dp_registry::backend::Package
 {
-    OUString m_inflated_unorc_url;
+    OUString m_inflated_url;
     bool m_jarFile;
-    t_Registered m_registered;
-    Reference< container::XHierarchicalNameAccess > m_xTDprov;
+    Reference<container::XHierarchicalNameAccess> m_xTDprov;
 
     inline BackendImpl * getMyBackend() const
-        { return static_cast< BackendImpl * >(m_myBackend.get()); }
+        { return static_cast<BackendImpl *>(m_myBackend.get()); }
+
+    virtual void SAL_CALL disposing();
 
     // Package
-    virtual t_Registered getRegStatus(
+    virtual bool isRegistered_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
-    virtual bool processPackage(
-        bool register_package,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
+    virtual void processPackage_(
         ::osl::ResettableMutexGuard & guard,
-        Reference< XCommandEnvironment > const & xCmdEnv );
+        bool registerPackage,
+        ::rtl::Reference<AbortChannel> const & abortChannel,
+        Reference<XCommandEnvironment> const & xCmdEnv );
 
 public:
     inline TypelibraryPackageImpl(
-        ::rtl::Reference< PackageRegistryBackend > const & myBackend,
+        ::rtl::Reference<PackageRegistryBackend> const & myBackend,
         OUString const & url, OUString const & mediaType,
         OUString const & name, OUString const & description, bool jarFile )
         : Package( myBackend, url, mediaType, name, name /* display-name */,
                    description ),
-          m_jarFile( jarFile ),
-          m_registered( REG_VOID )
+          m_jarFile( jarFile )
         {}
+
+    // XPackage
+    virtual Any SAL_CALL getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+        throw (RuntimeException);
 };
+
+//______________________________________________________________________________
+Any TypelibraryPackageImpl::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+    throw (RuntimeException)
+{
+    OSL_ASSERT( smallIcon );
+    if (smallIcon)
+    {
+        sal_uInt16 ret;
+        if (m_jarFile)
+            ret = highContrast
+                ? RID_IMG_JAVA_TYPELIB_HC : RID_IMG_JAVA_TYPELIB;
+        else
+            ret = highContrast
+                ? RID_IMG_TYPELIB_HC : RID_IMG_TYPELIB;
+        return makeAny(ret);
+    }
+    return Package::getIcon( highContrast, smallIcon );
+}
+
+//______________________________________________________________________________
+void TypelibraryPackageImpl::disposing()
+{
+    m_xTDprov.clear();
+    Package::disposing();
+}
 
 //______________________________________________________________________________
 void BackendImpl::disposing()
 {
     try
     {
-        m_xServicesRDB->close();
-        m_xServicesRDB.clear();
+        m_backendObjects = t_string2object();
+        if (m_xNativeRDB.is())
+        {
+            m_xNativeRDB->close();
+            m_xNativeRDB.clear();
+        }
+        if (m_xCommonRDB.is())
+        {
+            m_xCommonRDB->close();
+            m_xCommonRDB.clear();
+        }
         m_urlToTemp.reset(0);
-        unorc_flush( Reference< XCommandEnvironment >() );
+        unorc_flush( Reference<XCommandEnvironment>() );
 
         PackageRegistryBackend::disposing();
     }
@@ -261,7 +383,7 @@ void BackendImpl::disposing()
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             OUSTR("caught unexpected exception while disposing..."),
-            static_cast< OWeakObject * >(this), exc );
+            static_cast<OWeakObject *>(this), exc );
     }
 }
 
@@ -274,79 +396,158 @@ struct predicate_equalsIgnoreAsciiCase
 };
 
 //______________________________________________________________________________
-void BackendImpl::initialize( Sequence< Any > const & args )
-    throw (RuntimeException)
+void BackendImpl::initialize( Sequence<Any> const & args )
+    throw (Exception)
 {
     PackageRegistryBackend::initialize( args );
-
-    // services.rdb:
-    m_xServicesRDB.set(
-        getComponentContext()->getServiceManager()
-        ->createInstanceWithContext(
-            OUSTR("com.sun.star.registry.SimpleRegistry"),
-            getComponentContext() ), UNO_QUERY_THROW );
+    Reference<XCommandEnvironment> xCmdEnv;
 
     if (transientMode())
     {
-        // in-mem rdb:
-        m_xServicesRDB->open( OUString() /* in-mem */,
-                              false /* ! read-only */, true /* create */ );
+        // in-mem rdbs:
+        // common rdb for java, native rdb for shared lib components
+        m_xCommonRDB.set(
+            getComponentContext()->getServiceManager()
+            ->createInstanceWithContext(
+                OUSTR("com.sun.star.registry.SimpleRegistry"),
+                getComponentContext() ), UNO_QUERY_THROW );
+        m_xCommonRDB->open( OUString() /* in-mem */,
+                            false /* ! read-only */, true /* create */ );
+        m_xNativeRDB.set(
+            getComponentContext()->getServiceManager()
+            ->createInstanceWithContext(
+                OUSTR("com.sun.star.registry.SimpleRegistry"),
+                getComponentContext() ), UNO_QUERY_THROW );
+        m_xNativeRDB->open( OUString() /* in-mem */,
+                            false /* ! read-only */, true /* create */ );
         // inflated in-mem DB:
         m_urlToTemp.reset( new PersistentMap );
     }
     else
     {
-        m_xServicesRDB->open(
-            // xxx todo: switch to alternating rdbs:
-            expand_reg_url( make_url( getCachePath(), OUSTR("services.rdb") ),
-                            getComponentContext() ),
-            false /* ! read-only */, true /* create */ );
+        unorc_verify_init( xCmdEnv );
+
+        if (! m_readOnly)
+        {
+            ::ucb::Content cacheDir( getCachePath(), xCmdEnv );
+            ::ucb::Content oldRDB;
+            // switch common rdb:
+            if (m_commonRDB.getLength() > 0)
+                create_ucb_content(
+                    &oldRDB, make_url( getCachePath(), m_commonRDB ),
+                    xCmdEnv, false /* no throw */ );
+            m_commonRDB = m_commonRDB.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("common.rdb") )
+                ? OUSTR("common_.rdb") : OUSTR("common.rdb");
+            if (oldRDB.get().is())
+            {
+                if (! cacheDir.transferContent(
+                        oldRDB, ::ucb::InsertOperation_COPY,
+                        m_commonRDB, NameClash::OVERWRITE ))
+                    throw RuntimeException(
+                        OUSTR("UCB transferContent() failed!"), 0 );
+                oldRDB = ::ucb::Content();
+            }
+            // switch native rdb:
+            if (m_nativeRDB.getLength() > 0)
+                create_ucb_content(
+                    &oldRDB, make_url( getCachePath(), m_nativeRDB ),
+                    xCmdEnv, false /* no throw */ );
+            OUString plt_rdb( getPlatformString() + OUSTR(".rdb") );
+            OUString plt_rdb_( getPlatformString() + OUSTR("_.rdb") );
+            m_nativeRDB = m_nativeRDB.equals( plt_rdb ) ? plt_rdb_ : plt_rdb;
+            if (oldRDB.get().is())
+            {
+                if (! cacheDir.transferContent(
+                        oldRDB, ::ucb::InsertOperation_COPY,
+                        m_nativeRDB, NameClash::OVERWRITE ))
+                    throw RuntimeException(
+                        OUSTR("UCB transferContent() failed!"), 0 );
+            }
+
+            // UNO is bootstrapped, flush for next process start:
+            m_unorc_modified = true;
+            unorc_flush( Reference<XCommandEnvironment>() );
+        }
+
+        // common rdb for java, native rdb for shared lib components
+        if (m_commonRDB.getLength() > 0)
+        {
+            m_xCommonRDB.set(
+                getComponentContext()->getServiceManager()
+                ->createInstanceWithContext(
+                    OUSTR("com.sun.star.registry.SimpleRegistry"),
+                    getComponentContext() ), UNO_QUERY_THROW );
+            m_xCommonRDB->open(
+                expand_url( make_url( getCachePath(), m_commonRDB ) ),
+                m_readOnly, !m_readOnly );
+        }
+        if (m_nativeRDB.getLength() > 0)
+        {
+            m_xNativeRDB.set(
+                getComponentContext()->getServiceManager()
+                ->createInstanceWithContext(
+                    OUSTR("com.sun.star.registry.SimpleRegistry"),
+                    getComponentContext() ), UNO_QUERY_THROW );
+            m_xNativeRDB->open(
+                expand_url( make_url( getCachePath(), m_nativeRDB ) ),
+                m_readOnly, !m_readOnly );
+        }
 
         // ensure "inflated" folder:
         m_inflated_reg_dir = make_url( getCachePath(), OUSTR("inflated") );
         ::ucb::Content inflated_dir_content;
-        create_folder( &inflated_dir_content, m_inflated_reg_dir );
-        m_inflated_dir = expand_reg_url(
-            m_inflated_reg_dir, getComponentContext() );
+        create_folder( &inflated_dir_content, m_inflated_reg_dir,
+                       Reference<XCommandEnvironment>(), !m_readOnly );
+        m_inflated_dir = expand_url( m_inflated_reg_dir );
 
         // scan for zombie temp dirs:
         OUString inflated_db_url(
             make_url( getCachePath(), OUSTR("inflated.db") ) );
-        m_urlToTemp.reset( new PersistentMap( inflated_db_url,
-                                              getComponentContext() ) );
-        t_string2string_map urlToTemp( m_urlToTemp->getEntries() );
+        m_urlToTemp.reset( new PersistentMap( inflated_db_url, m_readOnly ) );
 
-        OUString str_Title = OUSTR("Title");
-        Reference< sdbc::XResultSet > xResultSet(
-            inflated_dir_content.createCursor(
-                Sequence< OUString >( &str_Title, 1 ),
-                ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
-        // get all inflated temp directories:
-        ::std::vector< OUString > tempEntries;
-        while (xResultSet->next())
+        if (! m_readOnly)
         {
-            OUString title( Reference< sdbc::XRow >(
-                                xResultSet, UNO_QUERY_THROW )->getString(
-                                    1 /* Title */ ) );
-            tempEntries.push_back( ::rtl::Uri::encode(
-                                       title, rtl_UriCharClassPchar,
-                                       rtl_UriEncodeIgnoreEscapes,
-                                       RTL_TEXTENCODING_UTF8 ) );
-        }
+            t_string2string_map urlToTemp( m_urlToTemp->getEntries() );
 
-        for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
-        {
-            OUString const & tempEntry = tempEntries[ pos ];
-            if (::std::find_if( urlToTemp.begin(), urlToTemp.end(),
-                                predicate_equalsIgnoreAsciiCase( tempEntry ) )
-                == urlToTemp.end())
+            OUString strTitle = OUSTR("Title");
+            Reference<sdbc::XResultSet> xResultSet(
+                inflated_dir_content.createCursor(
+                    Sequence<OUString>( &strTitle, 1 ),
+                    ::ucb::INCLUDE_DOCUMENTS_ONLY ) );
+            // get all inflated temp directories:
+            ::std::vector<OUString> tempEntries;
+            while (xResultSet->next())
             {
-                // temp entry not needed anymore:
-                OUString url( make_url( m_inflated_reg_dir, tempEntry ) );
-                erase_path( url );
-                erase_path( url + OUSTR(".inflated") );
+                OUString title(
+                    Reference<sdbc::XRow>(
+                        xResultSet, UNO_QUERY_THROW )->getString(
+                            1 /* Title */ ) );
+                tempEntries.push_back( ::rtl::Uri::encode(
+                                           title, rtl_UriCharClassPchar,
+                                           rtl_UriEncodeIgnoreEscapes,
+                                           RTL_TEXTENCODING_UTF8 ) );
             }
-            OSL_ASSERT( ! m_urlToTemp->has( tempEntry ) );
+
+            for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
+            {
+                OUString const & tempEntry = tempEntries[ pos ];
+                if (::std::find_if(
+                        urlToTemp.begin(), urlToTemp.end(),
+                        predicate_equalsIgnoreAsciiCase( tempEntry ) )
+                    == urlToTemp.end())
+                {
+                    // temp entry not needed anymore:
+                    OUString url( make_url( m_inflated_reg_dir, tempEntry ) );
+                    erase_path( url,
+                                Reference<XCommandEnvironment>(),
+                                false /* no throw: ignore errors */ );
+                    erase_path( url + OUSTR("_"),
+                                Reference<XCommandEnvironment>(),
+                                false /* no throw: ignore errors */ );
+                }
+                OSL_ASSERT( ! m_urlToTemp->has( tempEntry ) );
+            }
         }
     }
 }
@@ -359,285 +560,164 @@ OUString SAL_CALL getImplementationName()
 }
 
 //==============================================================================
-Reference< XInterface > SAL_CALL create(
-    Reference< XComponentContext > const & xComponentContext )
+Reference<XInterface> SAL_CALL create(
+    Reference<XComponentContext> const & xComponentContext )
     SAL_THROW( (Exception) )
 {
-    OUString const media_types [] = {
+    OUString const mediaTypes [] = {
         OUSTR("application/vnd.sun.star.uno-component"),
         OUSTR("application/vnd.sun.star.uno-typelibrary")
     };
     return static_cast< ::cppu::OWeakObject * >(
         new BackendImpl(
             xComponentContext, getImplementationName(),
-            Sequence< OUString >( media_types, ARLEN(media_types) ) ) );
-}
-
-// XPackageRegistry
-//______________________________________________________________________________
-OUString BackendImpl::detectMediaType( OUString const & url )
-    throw (RuntimeException)
-{
-    ::ucb::Content ucb_content;
-    if (::ucb::Content::create( url, Reference< XCommandEnvironment >(),
-                                ucb_content ))
-    {
-        OUString title( extract_throw< OUString >(
-                            ucb_content.getPropertyValue( OUSTR("Title") ) ) );
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) ))
-            return OUSTR("application/vnd.sun.star.uno-component;type=native;"
-                         "platform=" THIS_OS "_" THIS_CPU);
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".jar") ))
-        {
-            // xxx todo: ait for MAV fix:
-//             // read .jar manifest file:
-//             ::rtl::OUStringBuffer buf;
-//             buf.appendAscii(
-//                 RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://") );
-//             buf.append( ::rtl::Uri::encode( url,
-//                                             rtl_UriCharClassRegName,
-//                                             rtl_UriEncodeIgnoreEscapes,
-//                                             RTL_TEXTENCODING_UTF8 ) );
-//             buf.appendAscii(
-//                 RTL_CONSTASCII_STRINGPARAM("/META-INF/MANIFEST.MF") );
-//             ::ucb::Content manifest_content;
-//             if (create_ucb_content( &manifest_content, buf.makeStringAndClear(),
-//                                     Reference< XCommandEnvironment >(),
-//                                     false /* no throw */ ))
-//             {
-//                 OUString line;
-//                 if (readLine( &line, OUSTR("RegistrationClassName"),
-//                               manifest_content, RTL_TEXTENCODING_ASCII_US ))
-                    return OUSTR(
-                        "application/vnd.sun.star.uno-component;type=Java");
-//             }
-//             return OUSTR("application/vnd.sun.star.uno-typelibrary;type=Java");
-        }
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".py") ))
-            return OUSTR("application/vnd.sun.star.uno-component;type=Python");
-        if (title.endsWithIgnoreAsciiCaseAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(".rdb") ))
-            return OUSTR("application/vnd.sun.star.uno-typelibrary;type=RDB");
-    }
-    return OUString();
+            Sequence<OUString>( mediaTypes, ARLEN(mediaTypes) ) ) );
 }
 
 // PackageRegistryBackend
 //______________________________________________________________________________
-Reference< deployment::XPackage > BackendImpl::createPackage(
-    OUString const & url,
-    OUString const & mediaType, OUString const & subType,
-    INetContentTypeParameterList const & params,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+Reference<deployment::XPackage> BackendImpl::bindPackage_(
+    OUString const & url, OUString const & mediaType_,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    ::ucb::Content ucb_content( url, xCmdEnv );
-    OUString name( extract_throw< OUString >(
-                       ucb_content.getPropertyValue( OUSTR("Title") ) ) );
-
-    // xxx todo: probe and evaluate component xml description
-
-    if (subType.matchIgnoreAsciiCaseAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.uno-component") ))
+    OUString mediaType( mediaType_ );
+    if (mediaType.getLength() == 0)
     {
-        INetContentTypeParameter const * param = params.find( "type" );
-        if (param != 0)
+        // detect media-type:
+        ::ucb::Content ucbContent;
+        if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            OUString value(param->m_sValue);
-            if (value.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("native") ))
+            OUString title(
+                extract_throw<OUString>(
+                    ucbContent.getPropertyValue( OUSTR("Title") ) ) );
+            if (title.endsWithIgnoreAsciiCaseAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) ))
             {
-                return new ComponentPackageImpl(
-                    this, url, mediaType, name,
-                    OUSTR("UNO Shared Library Component"),
-                    OUSTR("com.sun.star.loader.SharedLibrary") );
+                mediaType = OUSTR("application/vnd.sun.star.uno-component;"
+                                  "type=native;platform=") +
+                    getPlatformString();
             }
-            if (value.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("Java") ))
+            else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM(".jar") ))
             {
-                return new ComponentPackageImpl(
-                    this, url, mediaType, name,
-                    OUSTR("UNO Java Component"),
-                    OUSTR("com.sun.star.loader.Java2") );
-            }
-            if (value.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("Python") ))
-            {
-                return new ComponentPackageImpl(
-                    this, url, mediaType, name,
-                    OUSTR("UNO Python Component"),
-                    OUSTR("com.sun.star.loader.Python") );
-            }
-            else // fallback: guess loader  xxx todo discuss
-            {
-                OUString loader( OUSTR("com.sun.star.loader.") + value );
-                // check if loader service available:
-                if (getComponentContext()->getServiceManager()
-                    ->createInstanceWithContext(
-                        loader, getComponentContext() ).is())
+                // read .jar manifest file:
+                ::rtl::OUStringBuffer buf;
+                buf.appendAscii(
+                    RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://") );
+                buf.append( ::rtl::Uri::encode( url,
+                                                rtl_UriCharClassRegName,
+                                                rtl_UriEncodeIgnoreEscapes,
+                                                RTL_TEXTENCODING_UTF8 ) );
+                buf.appendAscii(
+                    RTL_CONSTASCII_STRINGPARAM("/META-INF/MANIFEST.MF") );
+                ::ucb::Content manifestContent;
+                if (create_ucb_content( &manifestContent,
+                                        buf.makeStringAndClear(),
+                                        xCmdEnv, false /* no throw */ ))
                 {
-                    ::rtl::OUStringBuffer buf;
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("UNO ") );
-                    buf.append( value );
-                    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" Component") );
-                    return new ComponentPackageImpl(
-                        this, url, mediaType, name,
-                        buf.makeStringAndClear(), loader );
+                    OUString line;
+                    if (readLine( &line, OUSTR("RegistrationClassName"),
+                                  manifestContent, RTL_TEXTENCODING_ASCII_US ))
+                        mediaType = OUSTR(
+                            "application/vnd.sun.star.uno-component;type=Java");
+                }
+                if (mediaType.getLength() == 0)
+                    mediaType = OUSTR(
+                        "application/vnd.sun.star.uno-typelibrary;type=Java");
+            }
+            else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM(".py") ))
+                mediaType =
+                    OUSTR("application/vnd.sun.star.uno-component;type=Python");
+            else if (title.endsWithIgnoreAsciiCaseAsciiL(
+                         RTL_CONSTASCII_STRINGPARAM(".rdb") ))
+                mediaType =
+                    OUSTR("application/vnd.sun.star.uno-typelibrary;type=RDB");
+        }
+        if (mediaType.getLength() == 0)
+            throw lang::IllegalArgumentException(
+                m_strCannotDetectMediaType + url,
+                static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
+    }
+
+    String type, subType;
+    INetContentTypeParameterList params;
+    if (INetContentTypes::parse( mediaType, type, subType, &params ))
+    {
+        if (type.EqualsIgnoreCaseAscii("application"))
+        {
+            ::ucb::Content ucbContent( url, xCmdEnv );
+            OUString name(
+                extract_throw<OUString>(
+                    ucbContent.getPropertyValue( OUSTR("Title") ) ) );
+
+            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))
+            {
+                // xxx todo: probe and evaluate component xml description
+
+                INetContentTypeParameter const * param = params.find(
+                    ByteString("platform") );
+                if (param == 0 || platform_fits( param->m_sValue ))
+                {
+                    param = params.find( ByteString("type") );
+                    if (param != 0)
+                    {
+                        String const & value = param->m_sValue;
+                        if (value.EqualsIgnoreCaseAscii("native"))
+                        {
+                            return new ComponentPackageImpl(
+                                this, url, mediaType, name,
+                                m_strDynamicComponent,
+                                OUSTR("com.sun.star.loader.SharedLibrary") );
+                        }
+                        if (value.EqualsIgnoreCaseAscii("Java"))
+                        {
+                            return new ComponentPackageImpl(
+                                this, url, mediaType, name,
+                                m_strJavaComponent,
+                                OUSTR("com.sun.star.loader.Java2") );
+                        }
+                        if (value.EqualsIgnoreCaseAscii("Python"))
+                        {
+                            return new ComponentPackageImpl(
+                                this, url, mediaType, name,
+                                m_strPythonComponent,
+                                OUSTR("com.sun.star.loader.Python") );
+                        }
+                    }
                 }
             }
-            throw lang::IllegalArgumentException(
-                OUSTR("no support for UNO Components of type: ") + value,
-                static_cast< OWeakObject * >(this),
-                static_cast< sal_Int16 >(-1 /* not known */) );
-        }
-    }
-    else if (subType.matchIgnoreAsciiCaseAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.uno-typelibrary") ))
-    {
-        INetContentTypeParameter const * param = params.find( "type" );
-        if (param != 0)
-        {
-            OUString value(param->m_sValue);
-            if (value.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("RDB") ))
+            else if (subType.EqualsIgnoreCaseAscii(
+                         "vnd.sun.star.uno-typelibrary"))
             {
-                return new TypelibraryPackageImpl(
-                    this, url, mediaType, name,
-                    OUSTR("Native Type-Library File"), false /* rdb */ );
+                INetContentTypeParameter const * param = params.find(
+                    ByteString("type") );
+                if (param != 0)
+                {
+                    String const & value = param->m_sValue;
+                    if (value.EqualsIgnoreCaseAscii("RDB"))
+                    {
+                        return new TypelibraryPackageImpl(
+                            this, url, mediaType, name,
+                            m_strRDBTypelib, false /* rdb */ );
+                    }
+                    if (value.EqualsIgnoreCaseAscii("Java"))
+                    {
+                        return new TypelibraryPackageImpl(
+                            this, url, mediaType, name,
+                            m_strJavaTypelib, true /* jar */ );
+                    }
+                }
             }
-            if (value.equalsIgnoreAsciiCaseAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("Java") ))
-            {
-                return new TypelibraryPackageImpl(
-                    this, url, mediaType, name,
-                    OUSTR("Java Type-Library File"), true /* jar */ );
-            }
-            throw lang::IllegalArgumentException(
-                OUSTR("no support for type-libraries of type: ") + value,
-                static_cast< OWeakObject * >(this),
-                static_cast< sal_Int16 >(-1 /* not known */) );
         }
     }
     throw lang::IllegalArgumentException(
-        OUSTR("invalid media-type given: ") + mediaType,
-        static_cast< OWeakObject * >(this),
-        static_cast< sal_Int16 >(-1 /* not known */) );
+        m_strUnsupportedMediaType + mediaType,
+        static_cast<OWeakObject *>(this),
+        static_cast<sal_Int16>(-1) );
 }
 
 //##############################################################################
-
-//______________________________________________________________________________
-void BackendImpl::unorc_verify_init(
-    Reference< XCommandEnvironment > const & xCmdEnv )
-{
-    if (transientMode())
-        return;
-    ::osl::MutexGuard guard( getMutex() );
-    if (! m_unorc_inited)
-    {
-        ::ucb::Content ucb_content;
-        if (create_ucb_content(
-                &ucb_content,
-                make_url( getCachePath(), OUSTR(SAL_CONFIGFILE("uno")) ),
-                xCmdEnv, false /* no throw */ ))
-        {
-            OUString line;
-            if (readLine( &line, OUSTR("UNO_JAVA_CLASSPATH="), ucb_content,
-                          RTL_TEXTENCODING_UTF8 ))
-            {
-                sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
-                do
-                {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0)
-                        m_jar_typelibs.insert( token );
-                }
-                while (index >= 0);
-            }
-            if (readLine( &line, OUSTR("UNO_TYPES="), ucb_content,
-                          RTL_TEXTENCODING_UTF8 ))
-            {
-                sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
-                do
-                {
-                    OUString token( line.getToken( 0, ' ', index ).trim() );
-                    if (token.getLength() > 0)
-                        m_rdb_typelibs.insert( token );
-                }
-                while (index >= 0);
-            }
-            m_unorc_modified = false;
-            m_unorc_inited = true;
-        }
-        else
-        {
-            // file has never been written before: write now
-            m_unorc_modified = true;
-            m_unorc_inited = true;
-            unorc_flush( xCmdEnv );
-        }
-    }
-}
-
-//______________________________________________________________________________
-void BackendImpl::unorc_flush(
-    Reference< XCommandEnvironment > const & xCmdEnv )
-{
-    if (transientMode())
-        return;
-    if (!m_unorc_inited || !m_unorc_modified)
-        return;
-
-    ::rtl::OStringBuffer buf;
-    if (! m_jar_typelibs.empty())
-    {
-        t_stringset::const_iterator iPos( m_jar_typelibs.begin() );
-        t_stringset::const_iterator const iEnd( m_jar_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_JAVA_CLASSPATH=") );
-        while (iPos != iEnd)
-        {
-            // encoded ASCII file-urls:
-            ::rtl::OString item(
-                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
-            buf.append( item );
-            ++iPos;
-            if (iPos != iEnd)
-                buf.append( ' ' );
-        }
-        buf.append( '\n' );
-    }
-    if (! m_jar_typelibs.empty())
-    {
-        t_stringset::const_iterator iPos( m_rdb_typelibs.begin() );
-        t_stringset::const_iterator const iEnd( m_rdb_typelibs.end() );
-        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_TYPES=") );
-        while (iPos != iEnd)
-        {
-            // encoded ASCII file-urls:
-            ::rtl::OString item(
-                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
-            buf.append( item );
-            ++iPos;
-            if (iPos != iEnd)
-                buf.append( ' ' );
-        }
-        buf.append( '\n' );
-    }
-    buf.append(
-        RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=$ORIGIN/services.rdb\n") );
-
-    Reference< io::XInputStream > xData(
-        ::xmlscript::createInputStream(
-            ::rtl::ByteSequence(
-                reinterpret_cast< sal_Int8 const * >(buf.getStr()),
-                buf.getLength() ) ) );
-    ::ucb::Content ucb_content(
-        make_url( getCachePath(), OUSTR(SAL_CONFIGFILE("uno")) ), xCmdEnv );
-    ucb_content.writeStream( xData, true /* replace existing */ );
-    m_unorc_modified = false;
-}
 
 //------------------------------------------------------------------------------
 static inline OUString encodeForRcFile( OUString const & str )
@@ -663,14 +743,204 @@ static inline OUString encodeForRcFile( OUString const & str )
     return buf.makeStringAndClear();
 }
 
+//------------------------------------------------------------------------------
+static inline OUString decodeRcEntry( OUString const & str )
+{
+    ::rtl::OUStringBuffer buf;
+    sal_Int32 pos = 0;
+    sal_Int32 len = str.getLength();
+    for ( ; pos < len; ++pos )
+    {
+        sal_Unicode c = str[ pos ];
+        if (c == '\\')
+        {
+            ++pos;
+            if (pos < len)
+                c = str[ pos ];
+        }
+        buf.append( c );
+    }
+    return buf.makeStringAndClear();
+}
+
 //______________________________________________________________________________
-bool BackendImpl::addToUnoRc(
-    bool jarFile, OUString const & rcurl,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+void BackendImpl::unorc_verify_init(
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    if (transientMode())
+        return;
+    ::osl::MutexGuard guard( getMutex() );
+    if (! m_unorc_inited)
+    {
+        // common rc:
+        ::ucb::Content ucb_content;
+        if (create_ucb_content(
+                &ucb_content,
+                make_url( getCachePath(), OUSTR("unorc") ),
+                xCmdEnv, false /* no throw */ ))
+        {
+            OUString line;
+            if (readLine( &line, OUSTR("UNO_JAVA_CLASSPATH="), ucb_content,
+                          RTL_TEXTENCODING_UTF8 ))
+            {
+                sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
+                do
+                {
+                    OUString token( line.getToken( 0, ' ', index ).trim() );
+                    if (token.getLength() > 0 &&
+                        // cleanup, check if existing:
+                        create_ucb_content( 0, decodeRcEntry(token), xCmdEnv,
+                                            false /* no throw */ ))
+                    {
+                        m_jar_typelibs.insert( token );
+                    }
+                }
+                while (index >= 0);
+            }
+            if (readLine( &line, OUSTR("UNO_TYPES="), ucb_content,
+                          RTL_TEXTENCODING_UTF8 ))
+            {
+                sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
+                do
+                {
+                    OUString token( line.getToken( 0, ' ', index ).trim() );
+                    if (token.getLength() > 0)
+                    {
+                        if (token[ 0 ] == '?')
+                            token = token.copy( 1 );
+                        // cleanup, check if existing:
+                        if (create_ucb_content( 0, decodeRcEntry(token),
+                                                xCmdEnv, false /* no throw */ ))
+                        {
+                            m_rdb_typelibs.insert( token );
+                        }
+                    }
+                }
+                while (index >= 0);
+            }
+            if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
+                          RTL_TEXTENCODING_UTF8 ))
+            {
+                sal_Int32 start = sizeof ("UNO_SERVICES=?$ORIGIN/") - 1;
+                sal_Int32 sep = line.indexOf( ' ', start );
+                OSL_ASSERT( sep > 0 );
+                m_commonRDB = line.copy( start, sep - start );
+            }
+
+            // native rc:
+            if (create_ucb_content(
+                    &ucb_content,
+                    make_url( getCachePath(),
+                              getPlatformString() + OUSTR("rc") ),
+                    xCmdEnv, false /* no throw */ ))
+            {
+                if (readLine( &line, OUSTR("UNO_SERVICES="), ucb_content,
+                              RTL_TEXTENCODING_UTF8 ))
+                {
+                    m_nativeRDB = line.copy(
+                        sizeof ("UNO_SERVICES=?$ORIGIN/") - 1 );
+                }
+            }
+        }
+        m_unorc_modified = false;
+        m_unorc_inited = true;
+    }
+}
+
+//______________________________________________________________________________
+void BackendImpl::unorc_flush( Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    if (transientMode())
+        return;
+    if (!m_unorc_inited || !m_unorc_modified)
+        return;
+
+    ::rtl::OStringBuffer buf;
+    if (! m_jar_typelibs.empty())
+    {
+        t_stringset::const_iterator iPos( m_jar_typelibs.begin() );
+        t_stringset::const_iterator const iEnd( m_jar_typelibs.end() );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_JAVA_CLASSPATH=") );
+        while (iPos != iEnd)
+        {
+            // encoded ASCII file-urls:
+            ::rtl::OString item(
+                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append( LF );
+    }
+    if (! m_rdb_typelibs.empty())
+    {
+        t_stringset::const_iterator iPos( m_rdb_typelibs.begin() );
+        t_stringset::const_iterator const iEnd( m_rdb_typelibs.end() );
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_TYPES=") );
+        while (iPos != iEnd)
+        {
+            buf.append( '?' );
+            // encoded ASCII file-urls:
+            ::rtl::OString item(
+                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            buf.append( item );
+            ++iPos;
+            if (iPos != iEnd)
+                buf.append( ' ' );
+        }
+        buf.append( LF );
+    }
+    if (m_commonRDB.getLength() > 0 || m_nativeRDB.getLength() > 0)
+    {
+        buf.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
+        buf.append( ::rtl::OUStringToOString(
+                        m_commonRDB, RTL_TEXTENCODING_ASCII_US ) );
+        if (m_nativeRDB.getLength() > 0)
+        {
+            buf.append( RTL_CONSTASCII_STRINGPARAM(
+                            " ${$ORIGIN/${_OS}_${_ARCH}rc:UNO_SERVICES}") );
+            buf.append( LF );
+
+            // write native rc:
+            ::rtl::OStringBuffer buf2;
+            buf2.append( RTL_CONSTASCII_STRINGPARAM("UNO_SERVICES=?$ORIGIN/") );
+            buf2.append( ::rtl::OUStringToOString(
+                             m_nativeRDB, RTL_TEXTENCODING_ASCII_US ) );
+            buf2.append( LF );
+
+            Reference<io::XInputStream> xData(
+                ::xmlscript::createInputStream(
+                    ::rtl::ByteSequence(
+                        reinterpret_cast<sal_Int8 const *>(buf2.getStr()),
+                        buf2.getLength() ) ) );
+            ::ucb::Content ucb_content(
+                make_url( getCachePath(),
+                          getPlatformString() + OUSTR("rc") ), xCmdEnv );
+            ucb_content.writeStream( xData, true /* replace existing */ );
+        }
+    }
+
+    // write unorc:
+    Reference<io::XInputStream> xData(
+        ::xmlscript::createInputStream(
+            ::rtl::ByteSequence(
+                reinterpret_cast<sal_Int8 const *>(buf.getStr()),
+                buf.getLength() ) ) );
+    ::ucb::Content ucb_content(
+        make_url( getCachePath(), OUSTR("unorc") ), xCmdEnv );
+    ucb_content.writeStream( xData, true /* replace existing */ );
+
+    m_unorc_modified = false;
+}
+
+//______________________________________________________________________________
+bool BackendImpl::addToUnoRc( bool jarFile, OUString const & rcurl,
+                              Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
-    ::std::pair< t_stringset::iterator, bool > insertion(
+    ::std::pair<t_stringset::iterator, bool> insertion(
         getTypelibs(jarFile).insert( rcurl ) );
     m_unorc_modified |= insertion.second;
     // write immediately:
@@ -681,7 +951,7 @@ bool BackendImpl::addToUnoRc(
 //______________________________________________________________________________
 bool BackendImpl::removeFromUnoRc(
     bool jarFile, OUString const & rcurl,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
@@ -694,24 +964,44 @@ bool BackendImpl::removeFromUnoRc(
     return ret;
 }
 
-//------------------------------------------------------------------------------
-void copyDeep( OUString const & source_url, OUString const & dest_url,
-               Reference< XCommandEnvironment > const & xCmdEnv )
+//______________________________________________________________________________
+bool BackendImpl::hasInUnoRc(
+    bool jarFile, OUString const & url,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
+    ::osl::MutexGuard guard( getMutex() );
+    t_stringset const & rSet = getTypelibs(jarFile);
+    return rSet.find( url ) != rSet.end();
+}
+
+
+//------------------------------------------------------------------------------
+static void copyDeep( OUString const & source_url, OUString const & dest_url,
+                      Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    ::ucb::Content source_content;
+    if (! create_ucb_content( &source_content, source_url, xCmdEnv,
+                              false /* no throw */ ))
+    {
+#if OSL_DEBUG_LEVEL > 0
+        {
+            ::rtl::OStringBuffer buf;
+            buf.append( "### file does not exist, "
+                        "but is referenced in the package: " );
+            buf.append( ::rtl::OUStringToOString(
+                            source_url, RTL_TEXTENCODING_UTF8 ) );
+            OSL_ENSURE( 0, buf.makeStringAndClear().getStr() );
+        }
+#endif
+        return;
+    }
+
     // prepare destination folder:
     ::ucb::Content ucb_dest_folder;
     create_folder( &ucb_dest_folder,
-                   dest_url.copy( 0, dest_url.lastIndexOf( '/' ) ) );
+                   dest_url.copy( 0, dest_url.lastIndexOf( '/' ) ),
+                   xCmdEnv );
 
-    ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("inflating ") );
-    buf.append( source_url );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" to ") );
-    buf.append( dest_url );
-    ProgressLevel progress( xCmdEnv );
-    progress.update( buf.makeStringAndClear() );
-
-    ::ucb::Content source_content( source_url, xCmdEnv );
     if (! ucb_dest_folder.transferContent(
             source_content, ::ucb::InsertOperation_COPY,
             OUString(), NameClash::OVERWRITE ))
@@ -719,15 +1009,14 @@ void copyDeep( OUString const & source_url, OUString const & dest_url,
             OUSTR("::ucb::Content::transferContent() failed!"), 0 );
 
     // copy dependent files:
-    if (// xxx todo: wait for MAV fix in package
-        dest_url.endsWithIgnoreAsciiCaseAsciiL(
+    if (source_url.endsWithIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM(".jar") ))
     {
         // .jar manifest Class-Path dependencies:
         ::rtl::OUStringBuffer buf;
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://") );
-        buf.append( ::rtl::Uri::encode( /* xxx todo */dest_url,
+        buf.append( ::rtl::Uri::encode( source_url,
                                         rtl_UriCharClassRegName,
                                         rtl_UriEncodeIgnoreEscapes,
                                         RTL_TEXTENCODING_UTF8 ) );
@@ -767,26 +1056,43 @@ void copyDeep( OUString const & source_url, OUString const & dest_url,
             }
         }
     }
-//     else if (source_url.endsWithIgnoreAsciiCaseAsciiL(
-//                  RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) ))
-//     {
-//         // xxx todo?
-//         // check .RPATH dependencies for .so files:
-//     }
 }
 
 //______________________________________________________________________________
-OUString BackendImpl::getInflatedCopy(
-    OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
+bool BackendImpl::getInflatedCopy(
+    OUString & inflatedURL, OUString const & url,
+    Reference<XCommandEnvironment> const & xCmdEnv,
+    bool create )
 {
     ::osl::MutexGuard guard( getMutex() );
     OUString package( url.copy( url.lastIndexOf( '/' ) + 1 ) );
     OUString tempEntry;
     if (m_urlToTemp->get( &tempEntry, url ))
     {
-        OUString dir( make_url( m_inflated_reg_dir, tempEntry ) );
-        dir += OUSTR(".inflated");
-        return make_url( dir, package );
+        if (inflatedURL.getLength() == 0)
+        {
+            OUString dir( make_url( m_inflated_reg_dir, tempEntry ) );
+            dir += OUSTR("_");
+            inflatedURL = make_url( dir, package );
+        }
+        return true;
+    }
+    else if (! create)
+    {
+        return false;
+    }
+    else if (inflatedURL.getLength() > 0)
+    {
+        // reuse entry:
+        // cut reg dir, package:
+        OUString tempEntry(
+            inflatedURL.copy( m_inflated_reg_dir.getLength() + 1,
+                              inflatedURL.lastIndexOf('/') -
+                              m_inflated_reg_dir.getLength() - 1 ) );
+        // cut _:
+        tempEntry = tempEntry.copy( 0, tempEntry.getLength() - 1 );
+        m_urlToTemp->put( url, tempEntry );
+        return true;
     }
 
     OUString dir;
@@ -807,19 +1113,19 @@ OUString BackendImpl::getInflatedCopy(
     if (rc != File::E_None)
         throw RuntimeException(
             OUSTR("::osl::File::createTempFile() failed!"), 0 );
-    dir += OUSTR(".inflated");
+    dir += OUSTR("_");
 
-    OUString dest_url( make_url( dir, package ) );
-    copyDeep( url, dest_url, xCmdEnv );
+    inflatedURL = make_url( dir, package );
+    copyDeep( url, inflatedURL, xCmdEnv );
 
     // add new entry to DB:
     m_urlToTemp->put( url, tempEntry );
-    return dest_url;
+    return true;
 }
 
 //______________________________________________________________________________
 void BackendImpl::removeInflatedCopy(
-    OUString const & url, Reference< XCommandEnvironment > const & xCmdEnv )
+    OUString const & url, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     ::osl::MutexGuard guard( getMutex() );
     bool erased = m_urlToTemp->erase( url );
@@ -827,318 +1133,487 @@ void BackendImpl::removeInflatedCopy(
 }
 
 //______________________________________________________________________________
-Sequence< Reference< lang::XServiceInfo > > BackendImpl::loadFactories(
-    OUString const & url, OUString const & loader )
+void BackendImpl::releaseObject( OUString const & id )
+{
+    ::osl::MutexGuard guard( getMutex() );
+    ::std::size_t erased = m_backendObjects.erase( id );
+    OSL_ASSERT( erased == 1 );
+}
+
+//______________________________________________________________________________
+Reference<XInterface> BackendImpl::getObject( OUString const & id )
+{
+    ::osl::MutexGuard guard( getMutex() );
+    t_string2object::const_iterator const iFind( m_backendObjects.find( id ) );
+    if (iFind == m_backendObjects.end())
+        return Reference<XInterface>();
+    else
+        return iFind->second;
+}
+
+//______________________________________________________________________________
+Reference<XInterface> BackendImpl::insertObject(
+    OUString const & id, Reference<XInterface> const & xObject )
+{
+    ::osl::MutexGuard guard( getMutex() );
+    ::std::pair<t_string2object::iterator, bool> insertion(
+        m_backendObjects.insert( t_string2object::value_type(
+                                     id, xObject ) ) );
+    return insertion.first->second;
+}
+
+//------------------------------------------------------------------------------
+static Reference<XComponentContext> raise_uno_process(
+    Reference<XComponentContext> const & xContext,
+    ::rtl::Reference<AbortChannel> const & abortChannel )
+{
+    static OUString s_programDir;
+    {
+    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+    if (s_programDir.getLength() == 0)
+    {
+        ::osl::Module::getUrlFromAddress( (void *) raise_uno_process,
+                                          s_programDir );
+        s_programDir = s_programDir.copy(
+            0, s_programDir.lastIndexOf( '/' ) );
+    }
+    }
+
+    ::rtl::OUStringBuffer buf;
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
+    OUString pipeId( generateRandomPipeId() );
+    buf.append( pipeId );
+    buf.appendAscii(
+        RTL_CONSTASCII_STRINGPARAM(";urp;uno.ComponentContext") );
+    OUString connectStr( buf.makeStringAndClear() );
+
+    // raise core UNO process to register/run a component,
+    // javavm service uses unorc next to executable to retrieve deployed
+    // jar typelibs
+
+    ::std::vector<OUString> args;
+#if OSL_DEBUG_LEVEL <= 1
+    args.push_back( OUSTR("--quiet") );
+#endif
+    args.push_back( OUSTR("--singleaccept") );
+    args.push_back( OUSTR("-u") );
+    args.push_back( connectStr );
+    OSL_ASSERT( buf.getLength() == 0 );
+    // use only preinstalled services:
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("-env:UNO_SERVICES=") );
+    buf.append( s_programDir );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/services.rdb") );
+    args.push_back( buf.makeStringAndClear() );
+
+    oslProcess hProcess = raiseProcess(
+        s_programDir + OUSTR("/uno"),
+        Sequence<OUString>( &args[ 0 ], args.size() ) );
+    try
+    {
+        return Reference<XComponentContext>(
+            resolveUnoURL( connectStr, xContext, abortChannel.get() ),
+            UNO_QUERY_THROW );
+    }
+    catch (...)
+    {
+        // try to terminate process:
+        oslProcessError rc = osl_terminateProcess( hProcess );
+        OSL_ASSERT( rc == osl_Process_E_None );
+        throw;
+    }
+}
+
+//------------------------------------------------------------------------------
+static ComponentInfo * getComponentInfo(
+    OUString const & loader, OUString const & url,
+    Reference<XComponentContext> const & xContext )
 {
     // HACK: highly dependent on stoc/source/servicemanager
     //       and stoc/source/implreg implementation which rely on the same
     //       services.rdb format!
-    Reference< XComponentContext > const & xContext = getComponentContext();
-    Reference< registry::XSimpleRegistry > xMemReg(
+
+    Reference<registry::XSimpleRegistry> xMemReg(
         xContext->getServiceManager()->createInstanceWithContext(
             OUSTR("com.sun.star.registry.SimpleRegistry"), xContext ),
         UNO_QUERY_THROW );
     xMemReg->open( OUString() /* in mem */, false, true );
 
-    Reference< loader::XImplementationLoader > xLoader(
+    Reference<loader::XImplementationLoader> xLoader(
         xContext->getServiceManager()->createInstanceWithContext(
             loader, xContext ), UNO_QUERY_THROW );
-    try
+    xLoader->writeRegistryInfo( xMemReg->getRootKey(), OUString(), url );
+
+    ::std::auto_ptr<ComponentInfo> info( new ComponentInfo );
+
+    Sequence< Reference<registry::XRegistryKey> > keys(
+        xMemReg->getRootKey()->openKeys() );
+    Reference<registry::XRegistryKey> const * pkeys = keys.getConstArray();
+    for ( sal_Int32 pos = keys.getLength(); pos--; )
     {
-        xLoader->writeRegistryInfo( xMemReg->getRootKey(), OUString(), url );
-    }
-    // ignore if factory cannot be registered:
-    catch (registry::CannotRegisterImplementationException &)
-    {
+        Reference<registry::XRegistryKey> const & xImplKey = pkeys[ pos ];
+        OUString implName( xImplKey->getKeyName().copy( 1 /*leading slash*/ ) );
+        info->m_implNames.insert( implName );
+
+        // check for singletons:
+        Reference<registry::XRegistryKey> xSingletonKey(
+            xImplKey->openKey( OUSTR("UNO/SINGLETONS") ) );
+        if (xSingletonKey.is() && xSingletonKey->isValid())
+        {
+            Sequence< Reference<registry::XRegistryKey> > singletonKeys(
+                xSingletonKey->openKeys() );
+            Reference<registry::XRegistryKey> const * psingletonKeys =
+                singletonKeys.getConstArray();
+            for ( sal_Int32 i = singletonKeys.getLength(); i--; )
+            {
+                Reference<registry::XRegistryKey> const & xSingleton =
+                    psingletonKeys[ i ];
+                info->m_singletons.push_back(
+                    beans::StringPair( xSingleton->getKeyName().copy(
+                                           implName.getLength() +
+                                           sizeof ("//UNO/SINGLETONS/") - 1 ),
+                                       xSingleton->getStringValue() ) );
+            }
+        }
     }
 
-    Sequence< Reference< registry::XRegistryKey > > keys(
-        xMemReg->getRootKey()->openKeys() );
-    ::std::vector< Reference< lang::XServiceInfo > > ret;
-    ret.reserve( keys.getLength() );
-    Reference< registry::XRegistryKey > const * pkeys = keys.getConstArray();
-    for ( sal_Int32 pos = 0; pos < keys.getLength(); ++pos )
-    {
-        try
-        {
-            ret.push_back(
-                Reference< lang::XServiceInfo >(
-                    xLoader->activate( pkeys[ pos ]->getKeyName().copy(
-                                           1 /* loading slash */ ),
-                                       OUString(),
-                                       url,
-                                       pkeys[ pos ] ), UNO_QUERY_THROW ) );
-        }
-        // ignore if factory cannot be activated:
-        catch (loader::CannotActivateFactoryException &)
-        {
-        }
-    }
-    return Sequence< Reference< lang::XServiceInfo > >( &ret[ 0 ], ret.size() );
+    return info.release();
 }
 
 // Package
 //______________________________________________________________________________
-ComponentPackageImpl::t_Registered ComponentPackageImpl::getRegStatus(
+bool ComponentPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    if (m_registered == REG_VOID)
+    if (m_registered == REG_UNINIT)
     {
         m_registered = REG_NOT_REGISTERED;
-        // lookup rdb for location URL:
-        if (m_inflated_url.getLength() == 0) // get an inflated URL:
-            m_inflated_url = that->getInflatedCopy( m_url, xCmdEnv );
-
-        Reference< registry::XRegistryKey > xRootKey(
-            that->m_xServicesRDB->getRootKey() );
-        Reference< registry::XRegistryKey > xImplKey(
-            xRootKey->openKey( OUSTR("IMPLEMENTATIONS") ) );
-        Sequence< OUString > implNames;
-        if (xImplKey.is())
-            implNames = xImplKey->getKeyNames();
-        OUString const * pImplNames = implNames.getConstArray();
-        for ( sal_Int32 pos = implNames.getLength(); pos--; )
+        if (that->getInflatedCopy( m_inflated_url, m_url, xCmdEnv,
+                                   false /* don't create new one */ ))
         {
-            OUString key( pImplNames[ pos ] + OUSTR("/UNO/LOCATION") );
-            Reference< registry::XRegistryKey > xKey( xRootKey->openKey(key) );
-            if (xKey.is() && xKey->isValid())
+            Reference<registry::XSimpleRegistry> xRDB( getRDB() );
+            if (xRDB.is())
             {
-                OUString location( xKey->getAsciiValue() );
-                if (location.equalsIgnoreAsciiCase( m_inflated_url ))
+                // lookup rdb for location URL:
+                Reference<registry::XRegistryKey> xRootKey(
+                    xRDB->getRootKey() );
+                Reference<registry::XRegistryKey> xImplKey(
+                    xRootKey->openKey( OUSTR("IMPLEMENTATIONS") ) );
+                Sequence<OUString> implNames;
+                if (xImplKey.is() && xImplKey->isValid())
+                    implNames = xImplKey->getKeyNames();
+                OUString const * pImplNames = implNames.getConstArray();
+                sal_Int32 pos = implNames.getLength();
+                for ( ; pos--; )
                 {
-                    m_registered = REG_REGISTERED;
-                    break;
+                    checkAborted( abortChannel );
+
+                    OUString key( pImplNames[ pos ] + OUSTR("/UNO/LOCATION") );
+                    Reference<registry::XRegistryKey> xKey(
+                        xRootKey->openKey(key) );
+                    if (xKey.is() && xKey->isValid())
+                    {
+                        OUString location( xKey->getAsciiValue() );
+                        if (location.equalsIgnoreAsciiCase( m_inflated_url ))
+                            break;
+                    }
                 }
+                if (pos >= 0)
+                    m_registered = REG_REGISTERED;
             }
         }
     }
-    return m_registered;
+    if (m_registered == REG_VOID)
+        throw beans::UnknownPropertyException(
+            OUSTR("registration status unknown: ") + m_url,
+            static_cast<OWeakObject *>(this) );
+    return m_registered == REG_REGISTERED;
 }
 
 //______________________________________________________________________________
-bool ComponentPackageImpl::processPackage(
-    bool register_package,
+void ComponentPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    bool registerPackage,
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    that->ensure_no_running_office();
-
-    if (m_inflated_url.getLength() == 0) // get an inflated URL:
-        m_inflated_url = that->getInflatedCopy( m_url, xCmdEnv );
+    that->getInflatedCopy( m_inflated_url, m_url, xCmdEnv );
     bool java = m_loader.equalsAsciiL(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") );
 
-    bool success = true;
-    ProgressLevel progress( xCmdEnv );
-    that->unorc_verify_init( xCmdEnv ); // ensure written unorc file
-    if (register_package)
+    m_registered = REG_VOID;
+    if (registerPackage)
     {
-        // XXX todo: singletons live deployment
+        if (java) // xxx todo: add to CLASSPATH until we have an
+                  // own extendable classloader, the sandbox
+                  // classloader is insufficient, because the bridge
+                  // and class com.sun.star.uno.Type load classes
+                  // using a different classloader, so add first before
+                  // raising the uno process
+            that->addToUnoRc( java, encodeForRcFile(m_inflated_url), xCmdEnv );
 
-        // rdb part:
-        progress.update(
-            OUSTR("registering UNO component ") + m_inflated_url );
-        OSL_ASSERT( that->m_xServicesRDB.is() );
-        try
+        if (! m_xRemoteContext.is())
         {
-            that->m_xImplReg->registerImplementation(
-                m_loader, m_inflated_url /* loaders will expand */,
-                that->m_xServicesRDB );
+            m_xRemoteContext.set(
+                that->getObject( m_inflated_url ), UNO_QUERY );
+            if (! m_xRemoteContext.is())
+            {
+                m_xRemoteContext.set(
+                    that->insertObject( m_inflated_url,
+                                        raise_uno_process(
+                                            that->getComponentContext(),
+                                            abortChannel ) ),
+                    UNO_QUERY_THROW );
+            }
         }
-        catch (registry::CannotRegisterImplementationException &)
+        Reference<registry::XImplementationRegistration> xImplReg(
+            m_xRemoteContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.registry.ImplementationRegistration"),
+                m_xRemoteContext ), UNO_QUERY_THROW );
+
+        Reference<registry::XSimpleRegistry> xServicesRDB( getRDB() );
+        xImplReg->registerImplementation(
+            m_loader, m_inflated_url /* loaders will expand */, xServicesRDB );
+
+        ::std::auto_ptr<ComponentInfo> info(
+            getComponentInfo( m_loader, m_inflated_url, m_xRemoteContext ) );
+
+        Reference<loader::XImplementationLoader> xLoader(
+            m_xRemoteContext->getServiceManager()->createInstanceWithContext(
+                m_loader, m_xRemoteContext ), UNO_QUERY_THROW );
+
+        // factories live insertion:
+        Reference<container::XSet> xSet(
+            that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
+        for ( t_stringset::const_iterator iPos( info->m_implNames.begin() );
+              iPos != info->m_implNames.end(); ++iPos )
         {
-            success = false;
-            // xxx todo: wait for MAV fix
-            if (java) // workaround typelibs
-                success &= that->addToUnoRc(
-                    java, encodeForRcFile(m_inflated_url), xCmdEnv );
-            else
-                throw;
+            checkAborted( abortChannel );
+
+            OUString const & implName = *iPos;
+            // activate factory:
+            Reference<XInterface> xFactory(
+                xLoader->activate(
+                    implName, OUString(), m_inflated_url,
+                    xServicesRDB->getRootKey()->openKey(
+                        OUSTR("/IMPLEMENTATIONS/") + implName ) ) );
+            try
+            {
+                xSet->insert( makeAny(xFactory) );
+            }
+            // ignore if factory has already been inserted:
+            catch (container::ElementExistException &)
+            {
+                OSL_ENSURE( 0, "### factory already registered?" );
+            }
         }
-        m_registered = REG_VOID;
 
-//         // live insertion:
-//         Sequence< Reference< lang::XServiceInfo > > factories(
-//             that->loadFactories( m_inflated_url, m_loader ) );
-//         Reference< container::XSet > xSet(
-//             that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
-//         Reference< lang::XServiceInfo > const * pfactories =
-//             factories.getConstArray();
-//         for ( sal_Int32 pos = 0; pos < factories.getLength(); ++pos )
-//         {
-//             try
-//             {
-//                 xSet->insert( makeAny(pfactories[ pos ]) );
-//             }
-//             // ignore if factory has already benn inserted:
-//             catch (container::ElementExistException &)
-//             {
-//                 OSL_ENSURE( 0, "### factory already registered?" );
-//             }
-//         }
+        // singletons live insertion: xxx todo
+        xSet.set( that->getComponentContext(), UNO_QUERY/*_THROW*/ );
+        if (xSet.is()) {
+        for ( t_stringpairvec::const_iterator iPos(
+                  info->m_singletons.begin() );
+              iPos != info->m_singletons.end(); ++iPos )
+        {
+            beans::StringPair const & sp = *iPos;
+            try
+            {
+                xSet->insert( makeAny(sp) );
+            }
+            catch (container::ElementExistException &) // ignore
+            {
+                OSL_ENSURE( 0, "### unexpected, insert ought to overwrite "
+                            "existing entries..." );
+            }
+        }
+        }
 
-        if (java && success) // xxx todo: add to CLASSPATH until we have an
-                             // own extendable classloader, the sandbox
-                             // classloader is insufficient, because the bridge
-                             // and class com.sun.star.uno.Type load classes
-                             // using a different classloader, e.g. the
-                             // system classloader.
-            success &= that->addToUnoRc(
-                java, encodeForRcFile(m_inflated_url), xCmdEnv );
-
-        if (success)
-            m_registered = REG_REGISTERED;
+        m_registered = REG_REGISTERED;
     }
     else // revokePackage()
     {
-        m_registered = REG_VOID;
-        // rdb part:
-        that->m_xImplReg->revokeImplementation(
-            m_inflated_url /* loaders will expand */, that->m_xServicesRDB );
+        Reference<XComponentContext> xContext;
+        if (m_xRemoteContext.is()) // has been activated in this process
+            xContext = m_xRemoteContext;
+        else // has been deployed in former times
+            xContext = that->getComponentContext();
+        Reference<registry::XImplementationRegistration> xImplReg(
+            xContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.registry.ImplementationRegistration"),
+                xContext ), UNO_QUERY_THROW );
 
-//         // live removal:
-//         Sequence< Reference< lang::XServiceInfo > > factories(
-//             that->loadFactories( m_inflated_url, m_loader ) );
-//         Reference< container::XSet > xSet(
-//             that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
-//         Reference< lang::XServiceInfo > const * pfactories =
-//             factories.getConstArray();
-//         for ( sal_Int32 pos = 0; pos < factories.getLength(); ++pos )
-//         {
-//             try
-//             {
-//                 xSet->remove(
-//                     makeAny( pfactories[ pos ]->getImplementationName() ) );
-//             }
-//             // ignore if factory is not in:
-//             catch (container::NoSuchElementException &)
-//             {
-//                 OSL_ENSURE( 0, "### registered factory not in?" );
-//             }
-//         }
+        ::std::auto_ptr<ComponentInfo> info(
+            getComponentInfo( m_loader, m_inflated_url, xContext ) );
+
+        // factories live removal:
+        Reference<container::XSet> xSet(
+            that->getComponentContext()->getServiceManager(), UNO_QUERY_THROW );
+        for ( t_stringset::const_iterator iPos( info->m_implNames.begin() );
+              iPos != info->m_implNames.end(); ++iPos )
+        {
+            OUString const & implName = *iPos;
+            try
+            {
+                xSet->remove( makeAny(implName) );
+            }
+            // ignore if factory has not been live deployed:
+            catch (container::NoSuchElementException &)
+            {
+            }
+        }
+
+        // singletons live insertion: xxx todo
+        xSet.set( that->getComponentContext(), UNO_QUERY/*_THROW*/ );
+        if (xSet.is()) {
+        for ( t_stringpairvec::const_iterator iPos(
+                  info->m_singletons.begin() );
+              iPos != info->m_singletons.end(); ++iPos )
+        {
+            beans::StringPair const & sp = *iPos;
+            try
+            {
+                xSet->remove( makeAny(sp.First) );
+            }
+            // ignore if singleton has not been live deployed:
+            catch (container::ElementExistException &)
+            {
+            }
+        }
+        }
+
+        Reference<registry::XSimpleRegistry> xServicesRDB( getRDB() );
+        xImplReg->revokeImplementation(
+            m_inflated_url /* loaders will expand */, xServicesRDB );
 
         if (java) // xxx todo: add to CLASSPATH until we have an
                   // own extendable classloader, the sandbox
                   // classloader is insufficient, because the bridge
                   // and class com.sun.star.uno.Type load classes
-                  // using a different classloader, e.g. the
-                  // system classloader.
-            success &= that->removeFromUnoRc(
+                  // using a different classloader
+            that->removeFromUnoRc(
                 java, encodeForRcFile(m_inflated_url), xCmdEnv );
 
+        if (m_xRemoteContext.is())
+        {
+            that->releaseObject( m_inflated_url );
+            m_xRemoteContext.clear();
+        }
         that->removeInflatedCopy( m_url, xCmdEnv );
 
-        if (success)
-            m_registered = REG_NOT_REGISTERED;
+        m_registered = REG_NOT_REGISTERED;
     }
-
-    return success;
 }
 
 //##############################################################################
 
 // Package
 //______________________________________________________________________________
-TypelibraryPackageImpl::t_Registered TypelibraryPackageImpl::getRegStatus(
+bool TypelibraryPackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    if (m_inflated_unorc_url.getLength() == 0) // get an inflated URL:
-        m_inflated_unorc_url = encodeForRcFile(
-            that->getInflatedCopy( m_url, xCmdEnv ) );
-
-    t_stringset const & rSet = that->getTypelibs(m_jarFile);
-    return rSet.find(m_inflated_unorc_url) == rSet.end()
-        ? REG_NOT_REGISTERED : REG_REGISTERED;
+    if (! that->getInflatedCopy( m_inflated_url, m_url, xCmdEnv,
+                                 false /* don't create new one */ ))
+        return false;
+    return that->hasInUnoRc(
+        m_jarFile, encodeForRcFile(m_inflated_url), xCmdEnv );
 }
 
 //______________________________________________________________________________
-bool TypelibraryPackageImpl::processPackage(
-    bool register_package,
+void TypelibraryPackageImpl::processPackage_(
     ::osl::ResettableMutexGuard & guard,
-    Reference< XCommandEnvironment > const & xCmdEnv )
+    bool registerPackage,
+    ::rtl::Reference<AbortChannel> const & abortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     BackendImpl * that = getMyBackend();
-    that->ensure_no_running_office();
-
-    if (m_inflated_unorc_url.getLength() == 0) // get an inflated URL:
-        m_inflated_unorc_url = encodeForRcFile(
-            that->getInflatedCopy( m_url, xCmdEnv ) );
-
-    bool success = true;
-    m_registered = REG_VOID;
-    if (register_package)
+    if (registerPackage)
     {
+        that->getInflatedCopy( m_inflated_url, m_url, xCmdEnv );
         // xxx todo: check jar, rdb compatibility to existing types
 
-        if (that->addToUnoRc( m_jarFile, m_inflated_unorc_url, xCmdEnv ))
+        that->addToUnoRc( m_jarFile, encodeForRcFile(m_inflated_url), xCmdEnv );
+
+        // live insertion:
+        if (m_jarFile)
         {
-//             // live insertion:
-//             if (m_jarFile)
-//             {
-//                 // xxx todo add to classpath at runtime:
-//                 that->ensure_persistentMode();
-//             }
-//             else // RDB:
-//             {
-//                 Reference< XComponentContext > const & xContext =
-//                     that->getComponentContext();
-//                 if (! m_xTDprov.is())
-//                 {
-//                     m_xTDprov.set(
-//                         xContext->getServiceManager()
-//                         ->createInstanceWithArgumentsAndContext(
-//                             OUSTR("com.sun.star.comp.stoc."
-//                                   "RegistryTypeDescriptionProvider"),
-//                             Sequence< Any >( &arg, 1 ), xContext ), UNO_QUERY );
-//                     OSL_ASSERT( m_xTDprov.is() );
-//                 }
-//                 if (m_xTDprov.is())
-//                 {
-//                     Reference< container::XSet > xSet(
-//                         xContext->getValueByName(
-//                             OUSTR("/singletons/com.sun.star."
-//                                   "reflection.theTypeDescriptionManager") ),
-//                         UNO_QUERY_THROW );
-//                     xSet->insert( makeAny(m_xTDprov) );
-//                 }
-//             }
+            // xxx todo add to classpath at runtime:
         }
-        m_registered = REG_REGISTERED;
+        else // RDB:
+        {
+            Reference<XComponentContext> const & xContext =
+                that->getComponentContext();
+            if (! m_xTDprov.is())
+            {
+                m_xTDprov.set( that->getObject( m_inflated_url ), UNO_QUERY );
+                if (! m_xTDprov.is())
+                {
+                    Reference<registry::XSimpleRegistry> xReg(
+                        xContext->getServiceManager()
+                        ->createInstanceWithContext(
+                            OUSTR("com.sun.star.registry.SimpleRegistry"),
+                            xContext ), UNO_QUERY_THROW );
+                    xReg->open( expand_url( m_inflated_url ),
+                                true /* read-only */, false /* ! create */ );
+                    Any arg( makeAny(xReg) );
+                    Reference<container::XHierarchicalNameAccess> xTDprov(
+                        xContext->getServiceManager()
+                        ->createInstanceWithArgumentsAndContext(
+                            OUSTR("com.sun.star.comp.stoc."
+                                  "RegistryTypeDescriptionProvider"),
+                            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY );
+                    OSL_ASSERT( xTDprov.is() );
+                    if (xTDprov.is())
+                    {
+                        m_xTDprov.set(
+                            that->insertObject(
+                                m_inflated_url, xTDprov ), UNO_QUERY_THROW );
+                    }
+                }
+            }
+            if (m_xTDprov.is())
+            {
+                Reference<container::XSet> xSet(
+                    xContext->getValueByName(
+                        OUSTR("/singletons/com.sun.star."
+                              "reflection.theTypeDescriptionManager") ),
+                    UNO_QUERY_THROW );
+                xSet->insert( makeAny(m_xTDprov) );
+            }
+        }
     }
     else // revokePackage()
     {
-        if (that->removeFromUnoRc( m_jarFile, m_inflated_unorc_url, xCmdEnv ))
+        if (that->getInflatedCopy( m_inflated_url, m_url, xCmdEnv,
+                                   false /* don't create new one */ ))
         {
-//             // revoke live:
-//             if (m_jarFile)
-//             {
-//                 // xxx todo add to classpath at runtime:
-//                 that->ensure_persistentMode();
-//             }
-//             else
-//             {
-//                 if (m_xTDprov.is())
-//                 {
-//                     Reference< container::XSet > xSet(
-//                         xContext->getValueByName(
-//                             OUSTR("/singletons/com.sun.star."
-//                                   "reflection.theTypeDescriptionManager") ),
-//                         UNO_QUERY_THROW );
-//                     xSet->remove( makeAny(m_xTDprov) );
-//                 }
-//             }
+            // xxx todo: revoking types at runtime, possible, sensible?
+
+            that->removeFromUnoRc(
+                m_jarFile, encodeForRcFile(m_inflated_url), xCmdEnv );
+
+            if (m_xTDprov.is())
+            {
+                // remove live:
+                Reference<container::XSet> xSet(
+                    that->getComponentContext()->getValueByName(
+                        OUSTR("/singletons/com.sun.star."
+                              "reflection.theTypeDescriptionManager") ),
+                    UNO_QUERY_THROW );
+                xSet->remove( makeAny(m_xTDprov) );
+
+                that->releaseObject( m_inflated_url );
+                m_xTDprov.clear();
+            }
+
+            that->removeInflatedCopy( m_url, xCmdEnv );
         }
-        else
-            success = false;
-        m_registered = REG_NOT_REGISTERED;
-        that->removeInflatedCopy( m_url, xCmdEnv );
     }
-    return success;
 }
 
 } // namespace component
