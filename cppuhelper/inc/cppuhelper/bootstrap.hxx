@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-29 14:02:06 $
+ *  last change: $Author: kr $ $Date: 2001-07-23 11:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,15 @@ bootstrap_InitialComponentContext(
          simple registry, nested registry,
          implementation registration
          registry typedescription provider, typedescription manager (also installs it into cppu core)
+
+    this function tries to find its parameters via these bootstrap variables:
+
+    UNO_TYPES         -- a space separated list of file urls of type rdbs
+    UNO_SERVICES      -- a space separated list of file urls of service rdbs
+    UNO_WRITERDB      -- a file url of a write rdb (e.g. user.rdb)
+
+    Please look at http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
+    for more info.
 
     @return component context
 */
