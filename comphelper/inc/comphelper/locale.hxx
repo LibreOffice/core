@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:16:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ class Locale
 
         /** @short some predefined Locale objects. */
         static const Locale EN_US();
+        static const Locale EN();
         static const Locale DE_DE();
         static const Locale DE_CH();
         static const Locale DE_AT();
