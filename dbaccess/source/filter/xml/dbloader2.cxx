@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:22:50 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,26 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
+
+    // first check if preview is true, if so return with out creating a controller. Preview is not supported
+    const PropertyValue* pIter  = rArgs.getConstArray();
+    const PropertyValue* pEnd   = pIter + rArgs.getLength();
+
+    for ( ; pIter != pEnd; ++pIter )
+    {
+        if ( ( 0 == pIter->Name.compareToAscii( "Preview" ) ) )
+        {
+            sal_Bool bPreview = sal_False;
+            pIter->Value >>= bPreview;
+            if ( bPreview )
+            {
+                if (rListener.is())
+                    rListener->loadCancelled(this);
+                return;
+            }
+        }
+    }
+
     m_xFrame    = rFrame;
     m_xListener = rListener;
     m_aURL      = rURL;
