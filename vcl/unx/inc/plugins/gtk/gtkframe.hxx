@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:51:17 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:24:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ class GtkSalFrame : public SalFrame
     bool                    m_bSendModChangeOnRelease;
     bool                    m_bWasPreedit;
 
+    Size                    m_aMaxSize;
+    Size                    m_aMinSize;
+
     void Init( SalFrame* pParent, ULONG nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
@@ -157,11 +160,13 @@ class GtkSalFrame : public SalFrame
     {
         return
             (m_nStyle & SAL_FRAME_STYLE_FLOAT) &&       // only a float can be floatgrab
-            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP);      // tool tips are not
+            !(m_nStyle & SAL_FRAME_STYLE_TOOLTIP) &&    // tool tips are not
+            !(m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION); // toolbars are also not
     }
 
     Size calcDefaultSize();
 
+    void setMinMaxSize();
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -202,6 +207,7 @@ public:
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void              SetMinClientSize( long nWidth, long nHeight );
+    virtual void              SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
