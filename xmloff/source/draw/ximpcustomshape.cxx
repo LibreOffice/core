@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:10:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1148,8 +1148,14 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                     maTextPath.push_back( aProp );
                 }
                 break;
-                case EAS_text_path_scale_x :
-                    GetBool( maTextPath, rValue, EAS_ScaleX );
+                case EAS_text_path_scale :
+                {
+                    sal_Bool bScaleX = IsXMLToken( rValue, XML_SHAPE );
+                    beans::PropertyValue aProp;
+                    aProp.Name = EASGet( EAS_ScaleX );
+                    aProp.Value <<= bScaleX;
+                    maTextPath.push_back( aProp );
+                }
                 break;
                 case EAS_text_path_same_letter_heights :
                     GetBool( maTextPath, rValue, EAS_SameLetterHeights );
