@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentTemplates.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module frame {
 /** is an abstract service for accessing the document templates of the office
     and manipulate them ( add or rename or remove templates )
 */
-service DocumentTemplates
+published service DocumentTemplates
 {
     //-------------------------------------------------------------------------
     /** implements a high level interface on top of an ucb content provider
