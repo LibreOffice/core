@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hr $ $Date: 2000-09-18 16:52:26 $ $Revision: 1.1.1.1 $
+    $Author: mba $ $Date: 2002-03-28 15:10:53 $ $Revision: 1.2 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -102,7 +102,6 @@ TypeLibFile( "sfxslots.tlb" )
     item SvxSearch SvxSearchItem;
 
 
-    include "newslots.sdi"
     include "sfx.sdi"
     include "object.sdi"
     include "progress.sdi"
