@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-27 10:28:20 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,7 +2210,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             {
                 MenuItem
                 {
-                    MID_DBUI_REALTION_ADD_RELATION
+                    MID_DBUI_QUERY_ADD_JOIN
                     Command = ".uno:DB/AddRelation";
                 };
                 MenuItem
@@ -2302,15 +2302,16 @@ String STR_DATASOURCE_DELETED
     Text[ catalan ] = "La font de les dades s'ha borrat. No és possible desar dades rellevants sobre ella.";
 };
 
+String STR_COLUMN_UNKNOWN
+{
+    Text = "Die Splate \"$column$\" konnte nicht gefunden werden. Überprüfen Sie bitte die Gross-, und Kleinschreibung.";
+    Text [ ENGLISH ] = "The column \"$column$\" could not be found. Please check if the case is correct.";
+};
 
-
-
-
-
-
-
-
-
-
+String STR_ERR_LIKE_COLUMN
+{
+    Text = "Der WIE Konstrukt ist falsch. Auf der linken Seite muß ein Spaltenname stehen.";
+    Text [ ENGLISH ] = "The LIKE construct is wrong. On the left side must be a column name.";
+};
 
 
