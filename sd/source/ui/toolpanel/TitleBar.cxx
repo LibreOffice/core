@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleBar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:58:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,18 +260,20 @@ void TitleBar::Paint (const Rectangle& rBoundingBox)
 
 
 
-void TitleBar::Expand (bool bFlag)
+bool TitleBar::Expand (bool bFlag)
 {
+    bool bExpansionStateChanged (bFlag!=IsExpanded());
     mbExpanded = bFlag;
     Invalidate ();
+    return bExpansionStateChanged;
 }
 
 
 
 
-void TitleBar::Collapse (void)
+bool TitleBar::IsExpanded (void) const
 {
-    Expand (false);
+    return mbExpanded;
 }
 
 
