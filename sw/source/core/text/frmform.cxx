@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:43:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2089,8 +2089,14 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         if( IsEmptyMaster() )
         {
             SwFrm* pPre = GetPrev();
-            if( pPre && pPre->GetAttrSet()->GetKeep().GetValue() )
+            if( pPre &&
+                // --> FME 2004-07-22 #i10826# It's the first, it cannot keep!
+                pPre->GetIndPrev() &&
+                // <--
+                pPre->GetAttrSet()->GetKeep().GetValue() )
+            {
                 pPre->InvalidatePos();
+            }
         }
     }
     SwTxtFrm *pMaster = IsFollow() ? FindMaster() : this;
