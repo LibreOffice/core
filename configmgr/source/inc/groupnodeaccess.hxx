@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:33:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ namespace configmgr
 
             bool hasChild(Name const& _aName) const
             { return implGetChild(_aName).is(); }
+
+            bool hasChildren() const;
 
             ChildAccessType getChildNode(Name const& _aName) const
             { return NodeAccessRef(&m_aAccessor, implGetChild(_aName)); }
