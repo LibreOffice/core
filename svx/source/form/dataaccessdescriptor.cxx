@@ -1,0 +1,509 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dataaccessdescriptor.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:37:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include "dataaccessdescriptor.hxx"
+#endif
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+//........................................................................
+namespace svx
+{
+//........................................................................
+
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::beans;
+    using namespace ::comphelper;
+
+    //====================================================================
+    //=
+    //====================================================================
+#define CONST_CHAR( propname ) propname, sizeof(propname) - 1
+
+    //====================================================================
+    //= ODADescriptorImpl
+    //====================================================================
+    class ODADescriptorImpl
+    {
+    protected:
+        sal_Bool                    m_bSetOutOfDate         : 1;
+        sal_Bool                    m_bSequenceOutOfDate    : 1;
+
+    public:
+        DECLARE_STL_STDKEY_MAP( DataAccessDescriptorProperty, Any, DescriptorValues );
+        DescriptorValues            m_aValues;
+        Sequence< PropertyValue >   m_aAsSequence;
+        Reference< XPropertySet >   m_xAsSet;
+
+    public:
+        ODADescriptorImpl();
+        ODADescriptorImpl(const ODADescriptorImpl& _rSource);
+
+        void invalidateExternRepresentations();
+
+        void updateSequence();
+        void updateSet();
+
+        /** builds the descriptor from a property value sequence
+            @return <TRUE/>
+                if and only if the sequence contained valid properties only
+        */
+        sal_Bool buildFrom( const Sequence< PropertyValue >& _rValues );
+
+        /** builds the descriptor from a property set
+            @return <TRUE/>
+                if and only if the set contained valid properties only
+        */
+        sal_Bool buildFrom( const Reference< XPropertySet >& _rValues );
+
+    protected:
+        PropertyValue       buildPropertyValue( const ConstDescriptorValuesIterator& _rPos );
+        PropertyMapEntry*   getPropertyMap( ) const;
+        PropertyMapEntry*   getPropertyMapEntry( const ConstDescriptorValuesIterator& _rPos ) const;
+    };
+
+    //--------------------------------------------------------------------
+    ODADescriptorImpl::ODADescriptorImpl()
+        :m_bSetOutOfDate(sal_True)
+        ,m_bSequenceOutOfDate(sal_True)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ODADescriptorImpl::ODADescriptorImpl(const ODADescriptorImpl& _rSource)
+        :m_aValues( _rSource.m_aValues )
+        ,m_bSetOutOfDate( _rSource.m_bSetOutOfDate )
+        ,m_bSequenceOutOfDate( _rSource.m_bSequenceOutOfDate )
+    {
+        if (!m_bSetOutOfDate)
+            m_xAsSet = _rSource.m_xAsSet;
+        if (!m_bSequenceOutOfDate)
+            m_aAsSequence = _rSource.m_aAsSequence;
+    }
+
+    //--------------------------------------------------------------------
+    // Vergleichen von Strings
+    static int
+    #if defined( WNT )
+     __cdecl
+    #endif
+    #if defined( ICC ) && defined( OS2 )
+    _Optlink
+    #endif
+        PropertySearch(const void* pFirst, const void* pSecond)
+    {
+        return static_cast<const PropertyValue*>(pFirst)->Name.compareToAscii(
+            static_cast<const PropertyMapEntry*>(pSecond)->mpName);
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool ODADescriptorImpl::buildFrom( const Sequence< PropertyValue >& _rValues )
+    {
+        PropertyMapEntry* pPropertyMap = getPropertyMap();
+        // determine the size of the map
+        sal_Int32 nMapSize = 0;
+        PropertyMapEntry* pMapLoop = pPropertyMap;
+        while (pMapLoop->mpName)
+        {
+            ++nMapSize; ++pMapLoop;
+        }
+
+        sal_Bool bValidPropsOnly = sal_True;
+
+        // loop through the sequence, and fill our m_aValues
+        const PropertyValue* pValues = _rValues.getConstArray();
+        const PropertyValue* pValuesEnd = pValues + _rValues.getLength();
+        for (;pValues != pValuesEnd; ++pValues)
+        {
+            PropertyMapEntry* pPropPos = static_cast<PropertyMapEntry*>(bsearch(pValues, pPropertyMap, nMapSize, sizeof(*pPropertyMap), PropertySearch));
+            if (pPropPos)
+            {
+                DataAccessDescriptorProperty eProperty = (DataAccessDescriptorProperty)pPropPos->mnHandle;
+                m_aValues[eProperty] = pValues->Value;
+            }
+            else
+                // unknown property
+                bValidPropsOnly = sal_False;
+        }
+
+        if (bValidPropsOnly)
+        {
+            m_aAsSequence = _rValues;
+            m_bSequenceOutOfDate = sal_False;
+        }
+        else
+            m_bSequenceOutOfDate = sal_True;
+
+        return bValidPropsOnly;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool ODADescriptorImpl::buildFrom( const Reference< XPropertySet >& _rxValues )
+    {
+        Reference< XPropertySetInfo > xPropInfo;
+        if (_rxValues.is())
+            xPropInfo = _rxValues->getPropertySetInfo();
+        if (!xPropInfo.is())
+        {
+            OSL_ENSURE(sal_False, "ODADescriptorImpl::buildFrom: invalid property set!");
+            return sal_False;
+        }
+
+        // build a PropertyValue sequence with the current values
+        Sequence< Property > aProperties = xPropInfo->getProperties();
+        const Property* pProperty = aProperties.getConstArray();
+        const Property* pPropertyEnd = pProperty + aProperties.getLength();
+
+        Sequence< PropertyValue > aValues(aProperties.getLength());
+        PropertyValue* pValues = aValues.getArray();
+
+        for (;pProperty != pPropertyEnd; ++pProperty, ++pValues)
+        {
+            pValues->Name = pProperty->Name;
+            pValues->Value = _rxValues->getPropertyValue(pProperty->Name);
+        }
+
+        sal_Bool bValidPropsOnly = buildFrom(aValues);
+        if (bValidPropsOnly)
+        {
+            m_xAsSet = _rxValues;
+            m_bSetOutOfDate = sal_False;
+        }
+        else
+            m_bSetOutOfDate = sal_True;
+
+        return bValidPropsOnly;
+    }
+
+    //--------------------------------------------------------------------
+    void ODADescriptorImpl::invalidateExternRepresentations()
+    {
+        m_bSetOutOfDate = sal_True;
+        m_bSequenceOutOfDate = sal_True;
+    }
+
+    //--------------------------------------------------------------------
+    PropertyMapEntry* ODADescriptorImpl::getPropertyMap( ) const
+    {
+        // the properties we know
+        static PropertyMapEntry s_aDesriptorProperties[] =
+        {
+            { CONST_CHAR("ActiveConnection"),   daConnection,       &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Column"),             daColumnObject,     &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("ColumnName"),         daColumnName,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Command"),            daCommand,          &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("CommandType"),        daCommandType,      &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("DataSourceName"),     daDataSource,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing, &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Selection"),          daSelection,        &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { NULL, 0, 0, NULL, 0, 0 }
+        };
+        // MUST be sorted !!
+
+#ifdef _DEBUG
+        PropertyMapEntry* pLoop = s_aDesriptorProperties;
+        if (pLoop->mpName)
+        {
+            ::rtl::OUString sLeft = ::rtl::OUString::createFromAscii(pLoop->mpName);
+            ::rtl::OUString sRight;
+            while ((++pLoop)->mpName)
+            {
+                sRight = ::rtl::OUString::createFromAscii(pLoop->mpName);
+                OSL_ENSURE(sLeft < sRight, "ODADescriptorImpl::getPropertyMap: property map not sorted!");
+                sLeft = sRight;
+            }
+        }
+#endif
+
+        return s_aDesriptorProperties;
+    }
+
+    //--------------------------------------------------------------------
+    PropertyMapEntry* ODADescriptorImpl::getPropertyMapEntry( const ConstDescriptorValuesIterator& _rPos ) const
+    {
+        PropertyMapEntry* pMap = getPropertyMap();
+
+        // the index in the map above (depends on the property requested)
+        sal_Int32 nNeededHandle = (sal_Int32)(_rPos->first);
+
+        PropertyMapEntry* pSearchHandle = pMap;
+        while (pSearchHandle->mpName)
+        {
+            if (nNeededHandle == pSearchHandle->mnHandle)
+                return pSearchHandle;
+
+            ++pSearchHandle;
+        }
+        OSL_ENSURE(sal_False, "ODADescriptorImpl::getPropertyMapEntry: could not find the property!");
+        return NULL;
+    }
+
+    //--------------------------------------------------------------------
+    PropertyValue ODADescriptorImpl::buildPropertyValue( const ConstDescriptorValuesIterator& _rPos )
+    {
+        // the map entry
+        PropertyMapEntry* pProp = getPropertyMapEntry(_rPos);
+
+        // build the property value
+        PropertyValue aReturn;
+        aReturn.Name    = ::rtl::OUString::createFromAscii(pProp->mpName);
+        aReturn.Handle  = pProp->mnHandle;
+        aReturn.Value   = _rPos->second;
+        aReturn.State   = PropertyState_DIRECT_VALUE;
+
+#ifdef _DEBUG
+        // check for type consistency
+        if (TypeClass_INTERFACE == pProp->mpType->getTypeClass())
+        {
+            Reference< XInterface > xCurrentValue;
+            _rPos->second >>= xCurrentValue;
+            Any aRequestedIFace;
+            if (xCurrentValue.is())
+                aRequestedIFace = xCurrentValue->queryInterface(*pProp->mpType);
+            OSL_ENSURE(aRequestedIFace.hasValue(), "ODADescriptorImpl::buildPropertyValue: invalid property value type (missing the requested interface)!");
+        }
+        else
+            OSL_ENSURE(pProp->mpType->equals(_rPos->second.getValueType()), "ODADescriptorImpl::buildPropertyValue: invalid property value type!");
+#endif
+
+        // outta here
+        return aReturn;
+    }
+
+    //--------------------------------------------------------------------
+    void ODADescriptorImpl::updateSequence()
+    {
+        if (!m_bSequenceOutOfDate)
+            return;
+
+        m_aAsSequence.realloc(m_aValues.size());
+        PropertyValue* pValue = m_aAsSequence.getArray();
+
+        // loop through all our values
+        for (   ConstDescriptorValuesIterator aLoop = m_aValues.begin();
+                aLoop != m_aValues.end();
+                ++aLoop, ++pValue
+            )
+        {
+            *pValue = buildPropertyValue(aLoop);
+        }
+
+        // don't need to rebuild next time
+        m_bSequenceOutOfDate = sal_False;
+    }
+
+    //--------------------------------------------------------------------
+    void ODADescriptorImpl::updateSet()
+    {
+        if (!m_bSetOutOfDate)
+            return;
+
+        // will be the current values
+        Sequence< PropertyValue > aValuesToSet(m_aValues.size());
+        PropertyValue* pValuesToSet = aValuesToSet.getArray();
+
+        // build a new property set info
+        PropertySetInfo* pPropSetInfo = new PropertySetInfo;
+
+        // loop through all our values
+        for (   ConstDescriptorValuesIterator aLoop = m_aValues.begin();
+                aLoop != m_aValues.end();
+                ++aLoop, ++pValuesToSet
+            )
+        {
+            PropertyMapEntry* pMapEntry = getPropertyMapEntry(aLoop);
+            pPropSetInfo->add( pMapEntry, 1 );
+
+            *pValuesToSet = buildPropertyValue(aLoop);
+        }
+
+        // create the generic set
+        m_xAsSet = GenericPropertySet_CreateInstance( pPropSetInfo );
+
+        // no we have the set, still need to set the current values
+        const PropertyValue* pSetValues = aValuesToSet.getConstArray();
+        const PropertyValue* pSetValuesEnd = pSetValues + aValuesToSet.getLength();
+        for (; pSetValues != pSetValuesEnd; ++pSetValues)
+            m_xAsSet->setPropertyValue(pSetValues->Name, pSetValues->Value);
+
+        // don't need to rebuild next time
+        m_bSetOutOfDate = sal_True;
+    }
+
+    //====================================================================
+    //= ODataAccessDescriptor
+    //====================================================================
+    //--------------------------------------------------------------------
+    ODataAccessDescriptor::ODataAccessDescriptor()
+        :m_pImpl(new ODADescriptorImpl)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ODataAccessDescriptor::ODataAccessDescriptor( const ODataAccessDescriptor& _rSource )
+        :m_pImpl(new ODADescriptorImpl(*_rSource.m_pImpl))
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ODataAccessDescriptor::ODataAccessDescriptor( const Reference< XPropertySet >& _rValues )
+        :m_pImpl(new ODADescriptorImpl)
+    {
+        m_pImpl->buildFrom(_rValues);
+    }
+
+    //--------------------------------------------------------------------
+    ODataAccessDescriptor::ODataAccessDescriptor( const Sequence< PropertyValue >& _rValues )
+        :m_pImpl(new ODADescriptorImpl)
+    {
+        m_pImpl->buildFrom(_rValues);
+    }
+
+    //--------------------------------------------------------------------
+    ODataAccessDescriptor::~ODataAccessDescriptor()
+    {
+        delete m_pImpl;
+    }
+
+    //--------------------------------------------------------------------
+    void ODataAccessDescriptor::clear()
+    {
+        m_pImpl->m_aValues.clear();
+    }
+
+    //--------------------------------------------------------------------
+    void ODataAccessDescriptor::erase(DataAccessDescriptorProperty _eWhich)
+    {
+        OSL_ENSURE(has(_eWhich), "ODataAccessDescriptor::erase: invalid call!");
+        if (has(_eWhich))
+            m_pImpl->m_aValues.erase(_eWhich);
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool ODataAccessDescriptor::has(DataAccessDescriptorProperty _eWhich) const
+    {
+        return m_pImpl->m_aValues.find(_eWhich) != m_pImpl->m_aValues.end();
+    }
+
+    //--------------------------------------------------------------------
+    const Any& ODataAccessDescriptor::operator [] ( DataAccessDescriptorProperty _eWhich ) const
+    {
+        if (!has(_eWhich))
+        {
+            OSL_ENSURE(sal_False, "ODataAccessDescriptor::operator[]: invalid acessor!");
+            static const Any aDummy;
+            return aDummy;
+        }
+
+        return m_pImpl->m_aValues[_eWhich];
+    }
+
+    //--------------------------------------------------------------------
+    Any& ODataAccessDescriptor::operator[] ( DataAccessDescriptorProperty _eWhich )
+    {
+        m_pImpl->invalidateExternRepresentations();
+        return m_pImpl->m_aValues[_eWhich];
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< PropertyValue > ODataAccessDescriptor::createPropertyValueSequence()
+    {
+        m_pImpl->updateSequence();
+        return m_pImpl->m_aAsSequence;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XPropertySet > ODataAccessDescriptor::createPropertySet()
+    {
+        m_pImpl->updateSet();
+        return m_pImpl->m_xAsSet;
+    }
+
+//........................................................................
+}   // namespace svx
+//........................................................................
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 10.04.01 17:25:31  fs
+ ************************************************************************/
+
