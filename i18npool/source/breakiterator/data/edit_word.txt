@@ -21,9 +21,13 @@ $Katakana  = [[:Script = KATAKANA:] [:name = KATAKANA-HIRAGANA PROLONGED SOUND M
                                    [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
                                    [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
 
+$Ideographic = [:Ideographic:];
+$Hangul = [:Script = HANGUL:];
 
 $ALetter   = [\u0002 [:Alphabetic:] [:name= NO-BREAK SPACE:] [:name= HEBREW PUNCTUATION GERESH:] 
+                           - $Ideographic
                            - $Katakana
+                           - $Hangul
                            - [:Script = Thai:]
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
@@ -72,6 +76,8 @@ $NumericEx    = $Numeric   $Extend*;
 $MidNumEx     = $MidNum    $Extend*;
 $MidLetterEx  = $MidLetter $Extend*;
 $KatakanaEx   = $Katakana  $Extend*;
+$IdeographicEx= $Ideographic  $Extend*;
+$HangulEx = $Hangul  $Extend*;
 $FormatEx     = $Format    $Extend*;
 
 
@@ -105,7 +111,8 @@ $KatakanaEx ($FormatEx* $KatakanaEx)* {300};
 #                           Separated from the "Everything Else" rule, below, only so that they
 #                           can be tagged with a return value.   TODO:  is this what we want?
 #
-# [:IDEOGRAPHIC:] $Extend* {400};
+$IdeographicEx ($FormatEx* $IdeographicEx)* {400};
+$HangulEx ($FormatEx* $HangulEx)* {400};
 
 #
 #  Everything Else, with no tag.
@@ -126,7 +133,7 @@ $CR $LF;
 #    reaches something that can only be the start (and probably only) char in a "word".
 #    A space or punctuation meets the test.
 #
-$NonStarters = [$Numeric $ALetter $Katakana [:P:] [:S:] $MidLetter $MidNum $Extend $Format];
+$NonStarters = [$Numeric $ALetter $Katakana $Ideographic $Hangul [:P:] [:S:] $MidLetter $MidNum $Extend $Format];
 
 #!.*;
 ! ($NonStarters* | \n \r) .;
