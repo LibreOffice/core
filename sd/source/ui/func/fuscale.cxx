@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,36 @@
 
 #pragma hdrstop
 
+#include "fuscale.hxx"
+
 #include <svx/dialogs.hrc>
 
 #include "app.hrc"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
-#include "slidvish.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "viewshel.hxx"
-#include "fuscale.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FU_ZOOM_HXX
 #include "fuzoom.hxx" // wegen SidArrayZoom[]
+#endif
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -97,6 +114,8 @@
 #include <sfx2/request.hxx>
 #endif
 
+namespace sd {
+
 TYPEINIT1( FuScale, FuPoor );
 
 /*************************************************************************
@@ -105,9 +124,13 @@ TYPEINIT1( FuScale, FuPoor );
 |*
 \************************************************************************/
 
-FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuScale::FuScale (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     INT16 nValue;
 
@@ -122,8 +145,8 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         nValue = (INT16) pWindow->GetZoom();
 
         // Zoom auf Seitengroesse ?
-        if( pViewSh->ISA( SdDrawViewShell ) &&
-            ( (SdDrawViewShell*)pViewSh )->IsZoomOnPage() )
+        if( pViewSh->ISA( DrawViewShell ) &&
+            static_cast<DrawViewShell*>(pViewSh)->IsZoomOnPage() )
         {
             pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue );
         }
@@ -133,7 +156,7 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         }
 
         // Bereich einschraenken
-        if( pViewSh->ISA( SdDrawViewShell ) )
+        if( pViewSh->ISA( DrawViewShell ) )
         {
             SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
@@ -142,13 +165,13 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
         }
-        else if( pViewSh->ISA( SdOutlineViewShell ) )
+        else if( pViewSh->ISA( OutlineViewShell ) )
         {
             nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
             nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
         }
-        else if( pViewSh->ISA( SdSlideViewShell ) )
+        else if( pViewSh->ISA( SlideViewShell ) )
         {
             nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
@@ -159,7 +182,8 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aNewAttr.Put( *pZoomItem );
 
         SvxZoomDialog* pDlg = new SvxZoomDialog( NULL, aNewAttr );
-        pDlg->SetLimits( pWin->GetMinZoom(), pWin->GetMaxZoom() );
+        pDlg->SetLimits((USHORT)pWin->GetMinZoom(),
+            (USHORT)pWin->GetMaxZoom() );
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
@@ -202,13 +226,13 @@ FuScale::FuScale(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
             case SVX_ZOOM_OPTIMAL:
             {
-                if( pViewShell->ISA( SdDrawViewShell ) )
+                if( pViewShell->ISA( DrawViewShell ) )
                 {
                     // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
                     // --> Wird als Optimal im Programm angeboten
                     pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
-                else if( pViewShell->ISA( SdSlideViewShell ) )
+                else if( pViewShell->ISA( SlideViewShell ) )
                     pViewShell->SetZoom( 20 );
                     // Hier sollte sich noch etwas besseres ueberlegt werden !!!
                 // ???!!
@@ -273,3 +297,4 @@ void FuScale::Deactivate()
 
 
 
+} // end of namespace sd
