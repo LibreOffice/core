@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:51:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,19 +75,8 @@ ModalDialog DLG_ORGANIZE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 271 , 162 ) ;
-    Text = "Dokumentvorlagen verwalten" ;
-    Text [ English ] = "Manage document templates" ;
-    Text [ norwegian ] = "Rediger dokumentmaler" ;
-    Text [ italian ] = "Gestione dei modelli" ;
-    Text [ portuguese_brazilian ] = "Gerenciar Modelos" ;
-    Text [ portuguese ] = "Gerir modelos de documentos" ;
-    Text [ finnish ] = "Mallien hallinta" ;
-    Text [ danish ] = "Administrer skabeloner" ;
-    Text [ french ] = "Gestion des modèles de document" ;
-    Text [ swedish ] = "Administrera dokumentmallar" ;
-    Text [ dutch ] = "Sjablonen beheren" ;
-    Text [ spanish ] = "Administración de plantillas" ;
-    Text [ english_us ] = "Template Management" ;
+    Text [ de ] = "Dokumentvorlagen verwalten" ;
+    Text [ en-US ] = "Template Management" ;
     Moveable = TRUE ;
     HelpButton BTN_HELP
     {
@@ -101,110 +90,27 @@ ModalDialog DLG_ORGANIZE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        Text = "Schließen" ;
-        Text [ English ] = "Close" ;
-        Text [ norwegian ] = "Lukk" ;
-        Text [ italian ] = "Chiudi" ;
-        Text [ portuguese_brazilian ] = "Fechar" ;
-        Text [ portuguese ] = "Fechar" ;
-        Text [ finnish ] = "Sulje" ;
-        Text [ danish ] = "Luk" ;
-        Text [ french ] = "Fermer" ;
-        Text [ swedish ] = "Stäng" ;
-        Text [ dutch ] = "Sluiten" ;
-        Text [ spanish ] = "Cerrar" ;
-        Text [ english_us ] = "Close" ;
+        Text [ de ] = "Schließen" ;
+        Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text[ chinese_simplified ] = "å…³é—­";
-        Text[ russian ] = "Çàêğûòü";
-        Text[ polish ] = "Zamknij";
-        Text[ japanese ] = "é–‰ã˜ã‚‹";
-        Text[ chinese_traditional ] = "é—œé–‰";
-        Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ greek ] = "Êëåßóéìï";
-        Text[ korean ] = "ë‹«ê¸°";
-        Text[ turkish ] = "Kapat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tanca";
-        Text[ thai ] = "à¸›à¸´à¸”";
-        Text[ czech ] = "ZavÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-        Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ZavrieÅ¥";
-        Text[ hungarian ] = "BezÃ¡rÃ¡s";
-        Text[ slovenian ] = "Zapri";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_FILES
     {
         Pos = MAP_APPFONT ( 205 , 143 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Datei..." ;
-        Text [ English ] = "~Files..." ;
-        Text [ norwegian ] = "~Filer..." ;
-        Text [ italian ] = "~File..." ;
-        Text [ portuguese_brazilian ] = "~Arquivo..." ;
-        Text [ portuguese ] = "~Ficheiro..." ;
-        Text [ finnish ] = "Tie~dosto..." ;
-        Text [ danish ] = "~Fil..." ;
-        Text [ french ] = "~Fichier..." ;
-        Text [ swedish ] = "~Fil..." ;
-        Text [ dutch ] = "~Bestand..." ;
-        Text [ spanish ] = "~Archivo..." ;
-        Text [ english_us ] = "~File..." ;
+        Text [ de ] = "~Datei..." ;
+        Text [ en-US ] = "~File..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ–‡ä»¶(~F)...";
-        Text[ russian ] = "Ôàéë...";
-        Text[ polish ] = "Pli~k...";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆ~F)...";
-        Text[ chinese_traditional ] = "æª”æ¡ˆ(~F)...";
-        Text[ arabic ] = "...ãáİ";
-        Text[ greek ] = "~Áñ÷åßï...";
-        Text[ korean ] = "íŒŒì¼(~F)...";
-        Text[ turkish ] = "~Dosya...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fitxer...";
-        Text[ thai ] = "à¹~à¸Ÿà¹‰à¸¡...";
-        Text[ czech ] = "Soubor...";
-        Text[ hebrew ] = "â€®×§×•×‘×¥...â€¬";
-        Text[ hindi ] = "~à¤«à¤¾à¤‡à¤²...";
-        Text[ slovak ] = "~SÃºbor...";
-        Text[ hungarian ] = "~FÃ¡jlbÃ³l...";
-        Text[ slovenian ] = "~Datoteka...";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
         Pos = MAP_APPFONT ( 205 , 124 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Adressbuch..." ;
-        Text [ english ] = "~Address Book..." ;
-        Text [ english_us ] = "~Address Book..." ;
-        Text[ portuguese ] = "~Livro de endereços...";
-        Text[ russian ] = "~Àäğåñíàÿ êíèãà...";
-        Text[ greek ] = "~Âéâëßï äéåèıíóåùí...";
-        Text[ dutch ] = "~Adresboek...";
-        Text[ french ] = "Carnet d'~adresses...";
-        Text[ spanish ] = "~Libreta de direcciones...";
-        Text[ italian ] = "~Rubrica...";
-        Text[ danish ] = "~Adressekartotek...";
-        Text[ swedish ] = "~Adressbok...";
-        Text[ polish ] = "K~si¹¿ka adresowa...";
-        Text[ portuguese_brazilian ] = "~Livro de endereços...";
-        Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³(~A)...";
-        Text[ korean ] = "ì£¼ì†Œë¡(~A)...";
-        Text[ chinese_simplified ] = "é€šè®¯ç°¿(~A)...";
-        Text[ chinese_traditional ] = "é€šè¨ŠéŒ„(~A)...";
-        Text[ turkish ] = "~Adres defteri...";
-        Text[ arabic ] = "ÏİÊÑ ÇáÚäÇæíä...";
-        Text[ catalan ] = "Llibreta d'~adreces...";
-        Text[ finnish ] = "O~soitekirja...";
-        Text[ thai ] = "à¸ªà¸¡à¸¸à¸”~à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ...";
-        Text[ czech ] = "Kontakty...";
-        Text[ hebrew ] = "â€®×¡×¤×¨ ×›×ª×•×‘×•×ª...â€¬";
-        Text[ hindi ] = "~à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤•...";
-        Text[ slovak ] = "Kont~akty...";
-        Text[ hungarian ] = "~CÃ­mjegyzÃ©k...";
-        Text[ slovenian ] = "~Adresar...";
+        Text [ de ] = "~Adressbuch..." ;
+        Text [ en-US ] = "~Address Book..." ;
     };
     ListBox LB_LEFT_TYP
     {
@@ -214,161 +120,21 @@ ModalDialog DLG_ORGANIZE
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList =
+        StringList [ de ] =
         {
             < "Dokumentvorlagen" ; Default ; > ;
             < "Dokumente" ; Default ; > ;
         };
-        StringList [ English ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Modelli" ; Default ; > ;
-            < "Documenti" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Modelos de documentos" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Modelos de documentos" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Mallit" ; Default ; > ;
-            < "Asiakirjat" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Skabeloner" ; Default ; > ;
-            < "Dokumenter" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Modèles de document" ; Default ; > ;
-            < "Documents" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Dokumentmallar" ; Default ; > ;
-            < "Dokument" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Sjablonen" ; Default ; > ;
-            < "Documenten" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Plantillas" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Templates" ; Default ; > ;
             < "Documents" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "æ–‡æ¡£æ ·å¼" ; Default ; > ;
-        < "æ–‡æ¡£" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Øàáëîíû" ; Default ; > ;
-        < "Äîêóìåíòû" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Szablony" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ" ; Default ; > ;
-        < "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "æ–‡ä»¶æ¨£å¼" ; Default ; > ;
-        < "æ–‡ä»¶" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ŞæÇáÈ ãÓÊäÏ" ; Default ; > ;
-        < "ãÓÊäÏÇÊ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "Ğñüôõğá åããñÜöïõ" ; Default ; > ;
-        < "¸ããñáöá" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì„œì‹ íŒŒì¼" ; Default ; > ;
-        < "ë¬¸ì„œ" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Şablonlar" ; Default ; > ;
-        < "Belgeler" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "Plantilles" ; Default ; > ;
-        < "Documents" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹à¸¡à¹ˆà¹à¸šà¸š" ; Default ; > ;
-        < "à¹€à¸­à¸à¸ªà¸²à¸£" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Å ablony" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×ª×‘× ×™×•×ªâ€¬" ; Default ; > ;
-        < "â€®××¡××›×™×â€¬" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚" ; Default ; > ;
-        < "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Å ablÃ³ny" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Sablonok" ; Default ; > ;
-        < "Dokumentumok" ; Default ; > ;
-        };
-    StringList [ slovenian ] =
-    {
-         < "Predloge" ; Default ; > ;
-        < "Dokumenti" ; Default ; > ;
-        };
     };
     ListBox LB_RIGHT_TYP
     {
@@ -378,161 +144,21 @@ ModalDialog DLG_ORGANIZE
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 1 ;
-        StringList =
+        StringList [ de ] =
         {
             < "Dokumentvorlagen" ; Default ; > ;
             < "Dokumente" ; Default ; > ;
         };
-        StringList [ English ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Modelli" ; Default ; > ;
-            < "Documenti" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Modelos de documentos" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Modelos de documentos" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Mallit" ; Default ; > ;
-            < "Asiakirjat" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Skabeloner" ; Default ; > ;
-            < "Dokumenter" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Modèles de document" ; Default ; > ;
-            < "Documents" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Dokumentmallar" ; Default ; > ;
-            < "Dokument" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Sjablonen" ; Default ; > ;
-            < "Documenten" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Plantillas" ; Default ; > ;
-            < "Documentos" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Templates" ; Default ; > ;
             < "Documents" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "æ–‡æ¡£æ ·å¼" ; Default ; > ;
-        < "æ–‡æ¡£" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Øàáëîíû" ; Default ; > ;
-        < "Äîêóìåíòû" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Szablony" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ" ; Default ; > ;
-        < "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "æ–‡ä»¶æ¨£å¼" ; Default ; > ;
-        < "æ–‡ä»¶" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ŞæÇáÈ ãÓÊäÏ" ; Default ; > ;
-        < "ãÓÊäÏÇÊ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "Ğñüôõğá åããñÜöïõ" ; Default ; > ;
-        < "¸ããñáöá" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì„œì‹ íŒŒì¼" ; Default ; > ;
-        < "ë¬¸ì„œ" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Şablonlar" ; Default ; > ;
-        < "Belgeler" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "Plantilles" ; Default ; > ;
-        < "Documents" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹à¸¡à¹ˆà¹à¸šà¸š" ; Default ; > ;
-        < "à¹€à¸­à¸à¸ªà¸²à¸£" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "Å ablony" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×ª×‘× ×™×•×ªâ€¬" ; Default ; > ;
-        < "â€®××¡××›×™×â€¬" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚" ; Default ; > ;
-        < "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "Å ablÃ³ny" ; Default ; > ;
-        < "Dokumenty" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Sablonok" ; Default ; > ;
-        < "Dokumentumok" ; Default ; > ;
-        };
-    StringList [ slovenian ] =
-    {
-         < "Predloge" ; Default ; > ;
-        < "Dokumenti" ; Default ; > ;
-        };
     };
     Control LB_LEFT
     {
@@ -578,19 +204,8 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 205 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text = "~Befehle" ;
-        Text [ English ] = "~Commands" ;
-        Text [ norwegian ] = "~Rediger" ;
-        Text [ italian ] = "Comandi" ;
-        Text [ portuguese_brazilian ] = "~Comandos" ;
-        Text [ portuguese ] = "~Comandos" ;
-        Text [ finnish ] = "Komennot" ;
-        Text [ danish ] = "Kommandoer" ;
-        Text [ french ] = "~Commandes" ;
-        Text [ swedish ] = "~Kommandon" ;
-        Text [ dutch ] = "~Opdrachten" ;
-        Text [ spanish ] = "~Órdenes" ;
-        Text [ english_us ] = "Commands" ;
+        Text [ de ] = "~Befehle" ;
+        Text [ en-US ] = "Commands" ;
         TabStop = TRUE ;
         ButtonMenu = Menu
         {
@@ -600,41 +215,13 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_NEW ;
                     HelpId = HID_ORGANIZE_NEW ;
-                    Text = "~Neu" ;
-                    Text [ English ] = "~New" ;
-                    Text [ norwegian ] = "~New" ;
-                    Text [ italian ] = "~Nuovo" ;
-                    Text [ portuguese_brazilian ] = "~Novo" ;
-                    Text [ portuguese ] = "~Novo" ;
-                    Text [ finnish ] = "~Uusi" ;
-                    Text [ danish ] = "~Ny(t)" ;
-                    Text [ french ] = "~Nouveau" ;
-                    Text [ swedish ] = "~Nytt" ;
-                    Text [ dutch ] = "~Nieuw" ;
-                    Text [ spanish ] = "~Nuevo" ;
-                    Text [ english_us ] = "~New" ;
+                    Text [ de ] = "~Neu" ;
+                    Text [ en-US ] = "~New" ;
                     AccelKey = KeyCode
                     {
                         Code = KEY_INSERT ;
                     };
-                    Text[ chinese_simplified ] = "æ–°å»º(~N)";
-                    Text[ russian ] = "Ñîçä~àòü";
-                    Text[ polish ] = "~Nowy";
-                    Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
-                    Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)";
-                    Text[ arabic ] = "ÌÏíÏ";
-                    Text[ greek ] = "~Äçìéïõñãßá";
-                    Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
-                    Text[ turkish ] = "Y~eni";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Nou";
-                    Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
-                    Text[ czech ] = "NovÃ½";
-                    Text[ hebrew ] = "â€®×—×“×©â€¬";
-                    Text[ hindi ] = "~à¤¨à¤¯à¤¾";
-                    Text[ slovak ] = "~NovÃ½";
-                    Text[ hungarian ] = "Ãš~j";
-                    Text[ slovenian ] = "~Nov";
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -642,77 +229,21 @@ ModalDialog DLG_ORGANIZE
                     HelpId = HID_ORGANIZE_DELETE ;
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    Text = "~Löschen" ;
-                    Text [ English ] = "~Delete" ;
-                    Text [ norwegian ] = "~Slett" ;
-                    Text [ italian ] = "~Elimina" ;
-                    Text [ portuguese_brazilian ] = "Exc~luir" ;
-                    Text [ portuguese ] = "E~liminar" ;
-                    Text [ finnish ] = "~Poista" ;
-                    Text [ danish ] = "~Slet" ;
-                    Text [ french ] = "~Supprimer" ;
-                    Text [ swedish ] = "R~adera" ;
-                    Text [ dutch ] = "~Wissen" ;
-                    Text [ spanish ] = "~Borrar" ;
-                    Text [ english_us ] = "~Delete" ;
+                    Text [ de ] = "~Löschen" ;
+                    Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
                         Code = KEY_DELETE ;
                     };
-                    Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-                    Text[ russian ] = "Óäàëèòü";
-                    Text[ polish ] = "~Usuñ";
-                    Text[ japanese ] = "å‰Šé™¤(~D)";
-                    Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-                    Text[ arabic ] = "ÍĞİ";
-                    Text[ greek ] = "Äéáãñá~öŞ";
-                    Text[ korean ] = "ì‚­ì œ(~D)";
-                    Text[ turkish ] = "~Sil";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Suprimeix";
-                    Text[ thai ] = "~à¸¥à¸š";
-                    Text[ czech ] = "Smazat";
-                    Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-                    Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-                    Text[ slovak ] = "~ZmazaÅ¥";
-                    Text[ hungarian ] = "~TÃ¶rlÃ©s";
-                    Text[ slovenian ] = "~IzbriÅ¡i";
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_EDIT ;
                     HelpId = HID_ORGANIZE_EDIT ;
-                    Text = "~Bearbeiten" ;
-                    Text [ English ] = "~Edit" ;
-                    Text [ norwegian ] = "~Rediger" ;
-                    Text [ italian ] = "~Modifica" ;
-                    Text [ portuguese_brazilian ] = "~Editar" ;
-                    Text [ portuguese ] = "~Editar" ;
-                    Text [ finnish ] = "~Muokkaa" ;
-                    Text [ danish ] = "~Rediger" ;
-                    Text [ french ] = "~Édition" ;
-                    Text [ swedish ] = "~Redigera" ;
-                    Text [ dutch ] = "~Bewerken" ;
-                    Text [ spanish ] = "E~ditar" ;
-                    Text [ english_us ] = "~Edit" ;
-                    Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
-                    Text[ russian ] = "~Ïğàâêà";
-                    Text[ polish ] = "~Edytuj";
-                    Text[ japanese ] = "ç·¨é›†(~E)";
-                    Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
-                    Text[ arabic ] = "~ÊÍÑíÑ";
-                    Text[ greek ] = "~Åğåîåñãáóßá";
-                    Text[ korean ] = "í¸ì§‘(~E)";
-                    Text[ turkish ] = "~Düzenle";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Edita";
-                    Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚";
-                    Text[ czech ] = "Upravit";
-                    Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";
-                    Text[ hindi ] = "~à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-                    Text[ slovak ] = "~UpraviÅ¥";
-                    Text[ hungarian ] = "~SzerkesztÃ©s";
-                    Text[ slovenian ] = "~Uredi";
+                    Text [ de ] = "~Bearbeiten" ;
+                    Text [ en-US ] = "~Edit" ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -722,73 +253,17 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_COPY_FROM ;
                     HelpId = HID_ORGANIZE_COPY_FROM ;
-                    Text = "Vorlage ~importieren..." ;
-                    Text [ English ] = "Import from..." ;
-                    Text [ norwegian ] = "Kopier til..." ;
-                    Text [ italian ] = "~Importa modello..." ;
-                    Text [ portuguese_brazilian ] = "I~mportar modelo..." ;
-                    Text [ portuguese ] = "I~mportar modelo..." ;
-                    Text [ finnish ] = "Tuo malli..." ;
-                    Text [ danish ] = "Importer skabelon..." ;
-                    Text [ french ] = "I~mporter un modèle..." ;
-                    Text [ swedish ] = "~Importera mall..." ;
-                    Text [ dutch ] = "Sjabloon ~importeren..." ;
-                    Text [ spanish ] = "I~mportar plantilla..." ;
-                    Text [ english_us ] = "Import Template..." ;
-                    Text[ chinese_simplified ] = "è¾“å…¥æ ·å¼...";
-                    Text[ russian ] = "Èìïîğò øàáëîíà...";
-                    Text[ polish ] = "Importuj szablon...";
-                    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ...";
-                    Text[ chinese_traditional ] = "åŒ¯å…¥æ¨£å¼...";
-                    Text[ arabic ] = "ÇÓÊíÑÇÏ ŞÇáÈ...";
-                    Text[ greek ] = "Å~éóáãùãŞ ğñïôığïõ...";
-                    Text[ korean ] = "ì„œì‹ íŒŒì¼ ê°€ì ¸ì˜¤ê¸°...";
-                    Text[ turkish ] = "Şablonu içe aktar...";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "Importa plantilla...";
-                    Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¹à¸¡à¹ˆà¹à¸šà¸š...";
-                    Text[ czech ] = "Importovat Å¡ablonu...";
-                    Text[ hebrew ] = "â€®×™×‘×•× ×ª×‘× ×™×ª...â€¬";
-                    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤°à¥‹...";
-                    Text[ slovak ] = "ImportovaÅ¥ Å¡ablÃ³nu...";
-                    Text[ hungarian ] = "Sablon importÃ¡lÃ¡sa...";
-                    Text[ slovenian ] = "Uvozi predlogo...";
+                    Text [ de ] = "Vorlage ~importieren..." ;
+                    Text [ en-US ] = "Import Template..." ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_COPY_TO ;
                     HelpId = HID_ORGANIZE_COPY_TO ;
-                    Text = "Vorlage ~exportieren..." ;
-                    Text [ English ] = "Export to..." ;
-                    Text [ norwegian ] = "Kopier fra..." ;
-                    Text [ italian ] = "Esporta modello..." ;
-                    Text [ portuguese_brazilian ] = "E~xportar modelo..." ;
-                    Text [ portuguese ] = "E~xportar modelo..." ;
-                    Text [ finnish ] = "Vie malli..." ;
-                    Text [ danish ] = "Eksporter skabelon..." ;
-                    Text [ french ] = "E~xporter un modèle..." ;
-                    Text [ swedish ] = "~Exportera mall..." ;
-                    Text [ dutch ] = "Sjabloon ~exporteren..." ;
-                    Text [ spanish ] = "E~xportar plantilla..." ;
-                    Text [ english_us ] = "Export Template..." ;
-                    Text[ chinese_simplified ] = "è¾“å‡ºæ ·å¼...";
-                    Text[ russian ] = "İêñïîğò øàáëîíà...";
-                    Text[ polish ] = "Eksportuj szablon...";
-                    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ...";
-                    Text[ chinese_traditional ] = "åŒ¯å‡ºæ¨£å¼...";
-                    Text[ arabic ] = "ÊÕÏíÑ ŞÇáÈ...";
-                    Text[ greek ] = "~ÅîáãùãŞ ğñïôığùí...";
-                    Text[ korean ] = "ì„œì‹ íŒŒì¼ ë‚´ë³´ë‚´ê¸°...";
-                    Text[ turkish ] = "Şablonu dışa aktar...";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "Exporta plantilla...";
-                    Text[ thai ] = "à¸ªà¹ˆà¸‡à¸­à¸­à¸à¹à¸¡à¹ˆà¹à¸šà¸š...";
-                    Text[ czech ] = "Exportovat Å¡ablonu...";
-                    Text[ hebrew ] = "â€®×™×¦×•× ×ª×‘× ×™×ª...â€¬";
-                    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‹ à¤¨à¤¿à¤°à¥à¤¯à¤¾à¤¤ à¤•à¤°à¥‹...";
-                    Text[ slovak ] = "ExportovaÅ¥ Å¡ablÃ³nu...";
-                    Text[ hungarian ] = "Sablon exportÃ¡lÃ¡sa...";
-                    Text[ slovenian ] = "Izvozi predlogo...";
+                    Text [ de ] = "Vorlage ~exportieren..." ;
+                    Text [ en-US ] = "Export Template..." ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -798,73 +273,17 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_PRINT ;
                     HelpId = HID_ORGANIZE_PRINT ;
-                    Text = "~Drucken" ;
-                    Text [ English ] = "~Print" ;
-                    Text [ norwegian ] = "~Skriv ut" ;
-                    Text [ italian ] = "Stam~pa" ;
-                    Text [ portuguese_brazilian ] = "~Imprimir" ;
-                    Text [ portuguese ] = "~Imprimir" ;
-                    Text [ finnish ] = "Tu~losta" ;
-                    Text [ danish ] = "~Udskriv" ;
-                    Text [ french ] = "~Imprimer" ;
-                    Text [ swedish ] = "Skriv ~ut" ;
-                    Text [ dutch ] = "Af~drukken" ;
-                    Text [ spanish ] = "~Imprimir" ;
-                    Text [ english_us ] = "~Print" ;
-                    Text[ chinese_simplified ] = "æ‰“å°(~P)";
-                    Text[ russian ] = "Ïå÷àòü";
-                    Text[ polish ] = "~Drukuj";
-                    Text[ japanese ] = "å°åˆ·(~P)";
-                    Text[ chinese_traditional ] = "åˆ—å°(~P)";
-                    Text[ arabic ] = "ØÈÇÚÉ";
-                    Text[ greek ] = "Åê~ôığùóç";
-                    Text[ korean ] = "ì¸ì‡„(~P)";
-                    Text[ turkish ] = "~Yazdır";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Imprimeix";
-                    Text[ thai ] = "~à¸à¸´à¸¡à¸à¹Œ";
-                    Text[ czech ] = "Tisk";
-                    Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
-                    Text[ hindi ] = "~à¤›à¤ªà¤¾à¤ˆ";
-                    Text[ slovak ] = "~TlaÄ";
-                    Text[ hungarian ] = "~NyomtatÃ¡s";
-                    Text[ slovenian ] = "Na~tisni";
+                    Text [ de ] = "~Drucken" ;
+                    Text [ en-US ] = "~Print" ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_PRINTER_SETUP ;
                     HelpId = HID_ORGANIZE_PRINTER_SETUP ;
-                    Text = "Druckereinstellun~gen..." ;
-                    Text [ English ] = "Printer ~Setup..." ;
-                    Text [ norwegian ] = "~Printer Setup..." ;
-                    Text [ italian ] = "I~mpostazioni stampante..." ;
-                    Text [ portuguese_brazilian ] = "~Configuração da impressora..." ;
-                    Text [ portuguese ] = "~Configuração da impressora..." ;
-                    Text [ french ] = "~Paramètres de l'imprimante..." ;
-                    Text [ dutch ] = "Printerinstellin~gen..." ;
-                    Text [ spanish ] = "~Configuración de la impresora..." ;
-                    Text [ danish ] = "Udskriftsindstillinger..." ;
-                    Text [ swedish ] = "Skrivarinställnin~gar..." ;
-                    Text [ finnish ] = "Tulostimen asetukset..." ;
-                    Text [ english_us ] = "Printer Settings..." ;
-                    Text[ chinese_simplified ] = "è®¾å®šæ‰“å°æœº...";
-                    Text[ russian ] = "Íàñòğîéêè ïğèíòåğà...";
-                    Text[ polish ] = "Ustawienia drukarki...";
-                    Text[ japanese ] = "ãƒ—ãƒªãƒ³ã‚¿ã®è¨­å®š...";
-                    Text[ chinese_traditional ] = "è¨­å®šå°è¡¨æ©Ÿ...";
-                    Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ...";
-                    Text[ greek ] = "Ñõèìßóåéò å~êôõğùôŞ...";
-                    Text[ korean ] = "í”„ë¦°í„° ì„¤ì •...";
-                    Text[ turkish ] = "Yazıcı ayarları....";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "~Configuració de la impressora...";
-                    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸à¸´à¸¡à¸à¹Œ...";
-                    Text[ czech ] = "NastavenÃ­ tiskÃ¡rny...";
-                    Text[ hebrew ] = "â€®×”×’×“×¨×•×ª ××“×¤×¡×ªâ€¬";
-                    Text[ hindi ] = "à¤®à¥à¤¦à¥à¤°à¤• à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£...";
-                    Text[ slovak ] = "Nastavenia tlaÄiarne...";
-                    Text[ hungarian ] = "NyomtatÃ³ beÃ¡llÃ­tÃ¡sai...";
-                    Text[ slovenian ] = "Nastavitve tiskalnika...";
+                    Text [ de ] = "Druckereinstellun~gen..." ;
+                    Text [ en-US ] = "Printer Settings..." ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -874,37 +293,9 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_RESCAN ;
                     HelpId = HID_ORGANIZE_RESCAN ;
-                    Text = "~Aktualisieren" ;
-                    Text [ English ] = "~Update" ;
-                    Text [ norwegian ] = "~Update" ;
-                    Text [ italian ] = "~Aggiorna" ;
-                    Text [ portuguese_brazilian ] = "~Atualizar" ;
-                    Text [ portuguese ] = "~Actualizar" ;
-                    Text [ finnish ] = "Päivitä" ;
-                    Text [ danish ] = "Opdater" ;
-                    Text [ french ] = "~Actualiser" ;
-                    Text [ swedish ] = "Upp~datera" ;
-                    Text [ dutch ] = "~Bijwerken" ;
-                    Text [ spanish ] = "~Actualizar" ;
-                    Text [ english_us ] = "Update" ;
-                    Text[ chinese_simplified ] = "æ›´æ–°";
-                    Text[ russian ] = "Îáíîâèòü";
-                    Text[ polish ] = "Aktualizuj";
-                    Text[ japanese ] = "æ›´æ–°";
-                    Text[ chinese_traditional ] = "æ›´æ–°";
-                    Text[ arabic ] = "ÊÍÏíË";
-                    Text[ greek ] = "~Åíçìİñùóç";
-                    Text[ korean ] = "ì—…ë°ì´íŠ¸";
-                    Text[ turkish ] = "Güncelle";
-                    Text[ language_user1 ] = " ";
-                    Text[ catalan ] = "Actualitza";
-                    Text[ thai ] = "à¸›à¸£à¸±à¸šà¸›à¸£à¸¸à¸‡";
-                    Text[ czech ] = "Aktualizovat";
-                    Text[ hebrew ] = "â€®×¢×™×“×›×•×Ÿâ€¬";
-                    Text[ hindi ] = "à¤…à¤ªà¤¡à¥‡à¤Ÿà¥ à¤•à¤°à¥‹";
-                    Text[ slovak ] = "AktualizÃ¡cia";
-                    Text[ hungarian ] = "FrissÃ­tÃ©s";
-                    Text[ slovenian ] = "Posodobi";
+                    Text [ de ] = "~Aktualisieren" ;
+                    Text [ en-US ] = "Update" ;
+                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -914,88 +305,19 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_DEFAULT_TEMPLATE ;
                     HelpId = HID_ORGANIZE_STDTEMPLATE_ADD ;
-                    Text = "Als S~tandardvorlage setzen" ;
-                    Text [ english_us ] = "Set As Default Template" ;
-                    Text[ portuguese ] = "~Definir como modelo padrão";
-                    Text[ russian ] = "Ñäåëàòü øàáëîíîì ïî óìîë÷àíèş";
-                    Text[ greek ] = "Ïñéóìüò ùò ğñïåğéëåãìİíïõ ğñïôığïõ";
-                    Text[ dutch ] = "Als s~tandaardsjabloon";
-                    Text[ french ] = "Définir comme modèle ~par défaut";
-                    Text[ spanish ] = "Definir como plantilla predeterminada";
-                    Text[ finnish ] = "Aseta oletusmalliksi";
-                    Text[ italian ] = "~Imposta come modello standard";
-                    Text[ danish ] = "Anvend som standardskabelon";
-                    Text[ swedish ] = "Definiera som s~tandardmall";
-                    Text[ polish ] = "Us~taw jako szablon domyœlny";
-                    Text[ portuguese_brazilian ] = "~Definir como modelo padrão";
-                    Text[ japanese ] = "æ¨™æº–ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¨ã—ã¦è¨­å®š";
-                    Text[ korean ] = "ê¸°ë³¸ ì„œì‹ íŒŒì¼ë¡œ ì„¤ì •";
-                    Text[ chinese_simplified ] = "è®¾å®šæˆæ ‡å‡†æ ·å¼";
-                    Text[ chinese_traditional ] = "è¨­å®šæˆæ¨™æº–æ¨£å¼";
-                    Text[ turkish ] = "Standart şablon gibi tanımla";
-                    Text[ arabic ] = "Set As Default Template";
-                    Text[ catalan ] = "Estableix com a plantilla per defecte";
-                    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¹€à¸›à¹‡à¸™à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹à¸¡à¹ˆà¹à¸šà¸š";
-                    Text[ czech ] = "Nastavit jako vÃ½chozÃ­ Å¡ablonu";
-                    Text[ hebrew ] = "â€®×§×‘×™×¢×” ×›×ª×‘× ×™×ª ×‘×¨×™×¨×ª ×”××—×“×œâ€¬";
-                    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤¨à¤®à¥‚à¤¨à¥‡ à¤œà¥ˆà¤¸à¥‡ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-                    Text[ slovak ] = "NastaviÅ¥ ako vÃ½chodziu Å¡ablÃ³nu";
-                    Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡s alapÃ©rtelmezett sablonkÃ©nt";
-                    Text[ slovenian ] = "Nastavi za privzeto predlogo";
+                    Text [ de ] = "Als S~tandardvorlage setzen" ;
+                    Text [ en-US ] = "Set As Default Template" ;
                 };
                 MenuItem
                 {
                     Identifier = ID_RESET_DEFAULT_TEMPLATE ;
                     HelpId = HID_ORGANIZE_STDTEMPLATE_DEL ;
-                    Text = "~Standardvorlage zurücksetzen" ;
-                    Text [ english_us ] = "Reset Default Template" ;
-                    Text[ portuguese ] = "~Restaurar modelo padrão";
-                    Text[ russian ] = "~Âîññòàíîâèòü ñòàíäàğòíûé øàáëîí";
-                    Text[ greek ] = "ÅğáíáöïñÜ ğñïåğéëåãìİíïõ ğñïôığïõ";
-                    Text[ dutch ] = "~Standaardsjabloon";
-                    Text[ french ] = "Restaurer le modèle par ~défaut";
-                    Text[ spanish ] = "Restaurar plantilla predeterminada";
-                    Text[ finnish ] = "Palauta oletusmalli";
-                    Text[ italian ] = "~Ripristina il modello standard";
-                    Text[ danish ] = "Nulstil standardskabeloner";
-                    Text[ swedish ] = "Återställ ~standardmall";
-                    Text[ polish ] = "~Przywróæ szablon domyœlny";
-                    Text[ portuguese_brazilian ] = "~Restaurar o modelo padrão";
-                    Text[ japanese ] = "æ¨™æº–ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’å…ƒã«æˆ»ã™";
-                    Text[ korean ] = "ê¸°ë³¸ ì„œì‹ íŒŒì¼ì„ ì›ë˜ëŒ€ë¡œ";
-                    Text[ chinese_simplified ] = "é‡è®¾æ ‡å‡†æ ·å¼";
-                    Text[ chinese_traditional ] = "é‡è¨­æ¨™æº–æ¨£å¼";
-                    Text[ turkish ] = "Standart şablon u başa al";
-                    Text[ arabic ] = "Reset Default Template";
-                    Text[ catalan ] = "Restaura la plantilla per defecte";
-                    Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹à¸¡à¹ˆà¹à¸šà¸šà¹ƒà¸«à¸¡à¹ˆ";
-                    Text[ czech ] = "Obnovit vÃ½chozÃ­ Å¡ablonu";
-                    Text[ hebrew ] = "â€®×—×–×¨×” ×œ×ª×‘× ×™×ª ×‘×¨×™×¨×ª ×”××—×“×œ ×”××§×•×¨×™×ªâ€¬";
-                    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‹ à¤°à¤¿à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-                    Text[ slovak ] = "ObnoviÅ¥ vÃ½chodziu Å¡ablÃ³nu";
-                    Text[ hungarian ] = "AlapÃ©rtelmezett sablon visszaÃ¡llÃ­tÃ¡sa";
-                    Text[ slovenian ] = "Ponastavi privzeto predlogo";
+                    Text [ de ] = "~Standardvorlage zurücksetzen" ;
+                    Text [ en-US ] = "Reset Default Template" ;
                 };
             };
         };
-        Text[ chinese_simplified ] = "å‘½ä»¤";
-        Text[ russian ] = "Êîìàíäû";
-        Text[ polish ] = "Polecenia";
-        Text[ japanese ] = "ã‚³ãƒãƒ³ãƒ‰";
-        Text[ chinese_traditional ] = "æŒ‡ä»¤";
-        Text[ arabic ] = "ÃæÇãÑ";
-        Text[ greek ] = "Å~íôïëİò";
-        Text[ korean ] = "ëª…ë ¹";
-        Text[ turkish ] = "Komutlar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ordres";
-        Text[ thai ] = "à¸„à¸³à¸ªà¸±à¹ˆà¸‡";
-        Text[ czech ] = "PÅ™Ã­kazy";
-        Text[ hebrew ] = "â€®×¤×§×•×“×•×ªâ€¬";
-        Text[ hindi ] = "à¤†à¤œà¥à¤à¤¾";
-        Text[ slovak ] = "PrÃ­kazy";
-        Text[ hungarian ] = "Parancsok";
-        Text[ slovenian ] = "Ukazi";
+        Text [ x-comment ] = " ";
     };
     Image IMG_OPENED_FOLDER
     {
@@ -1041,43 +363,15 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 3 , 161 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text = "Standardvorlage:" ;
-        Text [ English ] = "Default template:" ;
-        Text [ norwegian ] = "Standardmal:" ;
-        Text [ italian ] = "Modello standard:" ;
-        Text [ portuguese_brazilian ] = "Modelo padrão:" ;
-        Text [ portuguese ] = "Modelo padrão:" ;
-        Text [ finnish ] = "Oletusmalli:" ;
-        Text [ danish ] = "Standardskabelon:" ;
-        Text [ french ] = "Modèle par défaut :" ;
-        Text [ swedish ] = "Standardmall:" ;
-        Text [ dutch ] = "Standaardsjabloon:" ;
-        Text [ spanish ] = "Plantilla estándar:" ;
-        Text [ english_us ] = "Default template:" ;
+        Text [ de ] = "Standardvorlage:" ;
+        Text [ en-US ] = "Default template:" ;
     };
     FixedText FT_DEFAULT_TEMPLATE
     {
         Pos = MAP_APPFONT ( 66 , 161 ) ;
         Size = MAP_APPFONT ( 131 , 10 ) ;
     };*/
-    Text[ chinese_simplified ] = "ç®¡ç†æ–‡æ¡£æ ·å¼";
-    Text[ russian ] = "Óïğàâëåíèå øàáëîíàìè";
-    Text[ polish ] = "Zarz¹dzanie szablonami";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ç®¡ç†";
-    Text[ chinese_traditional ] = "ç®¡ç†æ–‡ä»¶æ¨£å¼";
-    Text[ arabic ] = "ÅÏÇÑÉ ŞæÇáÈ ÇáãÓÊäÏ";
-    Text[ greek ] = "Äéá÷åßñéóç ğñüôõğùí åããñÜöïõ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼ ê´€ë¦¬";
-    Text[ turkish ] = "Belge şablonları";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Organitza les plantilles";
-    Text[ thai ] = "à¸à¸²à¸£à¸ˆà¸±à¸”à¸à¸²à¸£à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ czech ] = "SprÃ¡va Å¡ablon";
-    Text[ hebrew ] = "â€®× ×™×”×•×œ ×ª×‘× ×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¤¾ à¤ªà¥à¤°à¤¬à¤¨à¥à¤§";
-    Text[ slovak ] = "SprÃ¡va Å¡ablÃ³n";
-    Text[ hungarian ] = "SablonszervezÅ‘";
-    Text[ slovenian ] = "Upravljanje predlog";
+    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
