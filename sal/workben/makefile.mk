@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2000-09-29 11:11:26 $
+#   last change: $Author: tra $ $Date: 2000-11-22 14:17:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,12 +62,13 @@
 
 PRJ=..
 
-PRJNAME=osl
+PRJNAME=sal
 TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
-TESTAPP=
+#TESTAPP=salstattest
+TESTAPP=saldyntest
 
 #TESTAPP=t_cipher
 #TESTAPP=t_digest
@@ -81,7 +82,7 @@ TESTAPP=
 #TESTAPP=testpip2
 #TESTAPP=testproc
 #TESTAPP=tgetpwnam
-
+#TESTAPP=salstattest
 
 # --- Settings -----------------------------------------------------
 
@@ -90,6 +91,42 @@ TESTAPP=
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(TESTAPP)" == "salstattest"
+
+    CFLAGS+= /DUSE_SAL_STATIC
+
+    OBJFILES=	$(OBJ)$/salstattest.obj
+
+    APP1TARGET=	salstattest
+    APP1OBJS=	$(OBJFILES)
+    APP1STDLIBS=\
+                $(LB)$/asal.lib\
+                shell32.lib\
+                user32.lib\
+                comdlg32.lib\
+                advapi32.lib
+
+    APP1DEPN=	$(LB)$/asal.lib	
+
+.ENDIF # salstattest
+
+.IF "$(TESTAPP)" == "saldyntest"
+
+    OBJFILES=	$(OBJ)$/saldyntest.obj
+
+    APP1TARGET=	saldyntest
+    APP1OBJS=	$(OBJFILES)
+    APP1STDLIBS=\
+                $(LB)$/isal.lib\
+                shell32.lib\
+                user32.lib\
+                comdlg32.lib\
+                advapi32.lib
+
+    APP1DEPN=	$(LB)$/isal.lib
+
+.ENDIF # salstattest
 
 #
 # t_cipher
