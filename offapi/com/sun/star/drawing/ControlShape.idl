@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlShape.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
     @see Shape
     @see XControlShape
  */
-service ControlShape
+published service ControlShape
 {
     service com::sun::star::drawing::Shape;
     interface com::sun::star::drawing::XControlShape;
