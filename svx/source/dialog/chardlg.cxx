@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 09:06:47 $
+ *  last change: $Author: jp $ $Date: 2001-04-25 09:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,7 +1017,11 @@ void SvxCharStdPage::Reset( const SfxItemSet& rSet )
     rFont.SetShadow( StateToAttr( aShadowBtn.GetState() ) );
 
     // Color
-    rFont.SetColor( aColorBox.GetSelectEntryColor() );
+    {
+        Color aCol( aColorBox.GetSelectEntryColor() );
+        rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
+    }
+
     if( aFillColorBox.IsVisible() )
     {
         Color aSelectedColor;
@@ -1663,7 +1667,10 @@ IMPL_LINK_INLINE_START( SvxCharStdPage, ColorBoxSelectHdl_Impl, ColorListBox *, 
         aSelectedColor = pBox->GetSelectEntryColor();
 
     if( pBox == &aColorBox )
-        rFont.SetColor( aSelectedColor );
+    {
+        rFont.SetColor( COL_AUTO == aSelectedColor.GetColor()
+                            ? Color(COL_BLACK) : aSelectedColor );
+    }
     else
         rFont.SetFillColor( aSelectedColor );
     UpdateExample_Impl();
@@ -2462,7 +2469,8 @@ void SvxCharExtPage::ActivatePage( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= eState )
     {
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-        rFont.SetColor( rItem.GetValue() );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
     }
     nWhich = GetWhich( SID_ATTR_CHAR_FILLCOLOR );
     if ( rSet.GetItemState( nWhich ) >= eState )
@@ -4177,7 +4185,8 @@ void SvxCharEffectsPage::ActivatePage( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= eState )
     {
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-        rFont.SetColor( rItem.GetValue() );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
     }
 
     m_aPreviewWin.Invalidate();
@@ -5027,7 +5036,8 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= eState )
     {
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-        rFont.SetColor( rItem.GetValue() );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
     }
 
     // Underline
@@ -5692,7 +5702,8 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich ) >= eState )
     {
         const SvxColorItem& rItem = (SvxColorItem&)rSet.Get( nWhich );
-        rFont.SetColor( rItem.GetValue() );
+        Color aCol( rItem.GetValue() );
+        rFont.SetColor( COL_AUTO == aCol.GetColor() ? Color(COL_BLACK) : aCol);
     }
 
     // Underline
