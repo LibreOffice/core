@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:56:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ void SAL_CALL SchemaBuilder::startGroup( const OUString& aName, sal_Int16 aAttri
 {
     bool bExtensible = isExtensible(aAttributes);
 
-    std::auto_ptr<ISubtree> aTree = m_aFactory.createGroup(aName,bExtensible,m_aContext.getCurrentAttributes());
+    std::auto_ptr<ISubtree> aTree = m_aFactory.createGroup(aName,bExtensible,getNodeAttributes());
 
     ISubtree * pTree = m_aContext.addNodeToCurrent(aTree);
 
@@ -283,7 +283,7 @@ void SAL_CALL SchemaBuilder::startSet( const OUString& aName, sal_Int16 aAttribu
     TemplateIdentifier aFullType = m_aContext.completeComponent(aItemType);
     bool bExtensible = isExtensible(aAttributes);
 
-    std::auto_ptr<ISubtree> aTree = m_aFactory.createSet(aName,aFullType,bExtensible,m_aContext.getCurrentAttributes());
+    std::auto_ptr<ISubtree> aTree = m_aFactory.createSet(aName,aFullType,bExtensible,getNodeAttributes());
 
     ISubtree * pTree = m_aContext.addNodeToCurrent(aTree);
 
@@ -301,7 +301,7 @@ void SAL_CALL SchemaBuilder::endNode( )
 }
 // -----------------------------------------------------------------------------
 
-node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttributes)
+node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttributes) const
 {
     const sal_uInt16 c_AllPropertyAttributes =
         SchemaAttribute::REQUIRED | SchemaAttribute::LOCALIZED;
@@ -309,7 +309,7 @@ node::Attributes SchemaBuilder::makePropertyAttributes(sal_Int16 aSchemaAttribut
     if ((aSchemaAttributes & c_AllPropertyAttributes) != aSchemaAttributes)
         m_aContext.raiseIllegalArgumentException("SchemaBuilder: Unreckognized Attribute for Property",2);
 
-    node::Attributes aAttributes = m_aContext.getCurrentAttributes();
+    node::Attributes aAttributes = getNodeAttributes();
 
     if (aSchemaAttributes & SchemaAttribute::REQUIRED)
         aAttributes.setNullable (false);
@@ -395,12 +395,19 @@ void SAL_CALL SchemaBuilder::addItemType( const TemplateIdentifier& aItemType )
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
+node::Attributes SchemaBuilder::getNodeAttributes() const
+{
+    node::Attributes aResult = m_aContext.getCurrentAttributes();
+    aResult.setState( node::isDefault );
+    return aResult;
+}
+// -----------------------------------------------------------------------------
+
 node::Attributes SchemaBuilder::getComponentRootAttributes()
 {
-// setting state will be done later (when preparing for merge)
-//    node::Attributes aResult;
-//    aResult.setState( node::isDefault );
-    return node::Attributes();
+    node::Attributes aResult;
+    aResult.setState( node::isDefault );
+    return aResult;
 }
 // -----------------------------------------------------------------------------
 
