@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-18 13:44:55 $
+ *  last change: $Author: dv $ $Date: 2001-07-19 10:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ public:
     void                    SetFocus();
 
     void                    EnableContextMenu( sal_Bool bEnable );
+    void                    EnableDelete( sal_Bool bEnable );
 };
 
 // struct SvtContentEntry ------------------------------------------------
@@ -145,18 +146,32 @@ struct SvtContentEntry
 };
 
 namespace svtools {
+
+// -----------------------------------------------------------------------
 // QueryDeleteDlg_Impl
+// -----------------------------------------------------------------------
+
+enum QueryDeleteResult_Impl
+{
+    QUERYDELETE_YES = 0,
+    QUERYDELETE_NO,
+    QUERYDELETE_ALL,
+    QUERYDELETE_CANCEL
+};
+
 
 class QueryDeleteDlg_Impl : public ModalDialog
 {
     FixedText               _aEntryLabel;
     FixedText               _aEntry;
-
     FixedText               _aQueryMsg;
 
     PushButton              _aYesButton;
+    PushButton              _aAllButton;
     PushButton              _aNoButton;
     CancelButton            _aCancelButton;
+
+    QueryDeleteResult_Impl  _eResult;
 
 private:
 
@@ -166,6 +181,9 @@ public:
 
                             QueryDeleteDlg_Impl( Window* pParent,
                                                  const String& rName );
+
+    void                    EnableAllButton() { _aAllButton.Enable( sal_True ); }
+    QueryDeleteResult_Impl  GetResult() const { return _eResult; }
 };
 
 }
