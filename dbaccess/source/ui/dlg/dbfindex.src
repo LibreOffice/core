@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:04:38 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "~Tabell";
         Text[ polish ] = "Tabela";
         Text[ portuguese_brazilian ] = "Tabelle:";
-        Text[ japanese ] = "Ã°ÌŞÙ(~T)";
-        Text[ korean ] = "Å×ÀÌºí(~T):";
-        Text[ chinese_simplified ] = "±í¸ñ(~T)";
-        Text[ chinese_traditional ] = "ªí®æ(~T)";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™(~T)";
+        Text[ korean ] = "í…Œì´ë¸”(~T):";
+        Text[ chinese_simplified ] = "è¡¨æ ¼(~T)";
+        Text[ chinese_traditional ] = "è¡¨æ ¼(~T)";
         Text[ turkish ] = "Tablo:";
         Text[ arabic ] = "ÌÏæá:";
         Text[ catalan ] = "~Tabla:";
@@ -156,10 +156,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "Tilldelning";
         Text[ polish ] = "Przydzia³";
         Text[ portuguese_brazilian ] = "Assignment";
-        Text[ japanese ] = "“K—p";
-        Text[ korean ] = "ÇÒ´ç";
-        Text[ chinese_simplified ] = "Ö¸¶¨";
-        Text[ chinese_traditional ] = "«ü©w";
+        Text[ japanese ] = "é©ç”¨";
+        Text[ korean ] = "í• ë‹¹";
+        Text[ chinese_simplified ] = "æŒ‡å®š";
+        Text[ chinese_traditional ] = "æŒ‡å®š";
         Text[ arabic ] = "ÊÚííä";
         Text[ turkish ] = "Atama";
         Text[ catalan ] = "Asignación";
@@ -184,10 +184,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "T~abellindex";
         Text[ polish ] = "Indeksy tabeli";
         Text[ portuguese_brazilian ] = "Tabellenindizes:";
-        Text[ japanese ] = "Ã°ÌŞÙ‚Ì²İÃŞ¯¸½(~A)";
-        Text[ korean ] = "Ç¥ »öÀÎ(~A):";
-        Text[ chinese_simplified ] = "±í¸ñ±êÖ¾(~A)";
-        Text[ chinese_traditional ] = "ªí®æ¼Ğ»x(~A)";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½(~A)";
+        Text[ korean ] = "í‘œ ìƒ‰ì¸(~A):";
+        Text[ chinese_simplified ] = "è¡¨æ ¼æ ‡å¿—(~A)";
+        Text[ chinese_traditional ] = "è¡¨æ ¼æ¨™èªŒ(~A)";
         Text[ turkish ] = "Tablo dizinleri:";
         Text[ arabic ] = "İåÇÑÓ ÌÏæá:";
         Text[ catalan ] = "Índices de ta~bla:";
@@ -219,10 +219,10 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ swedish ] = "~Fria index";
         Text[ polish ] = "Wolne indeksy";
         Text[ portuguese_brazilian ] = "Freie Indizes";
-        Text[ japanese ] = "ÌØ°²İÃŞ¯¸½(~F)";
-        Text[ korean ] = "ÀÓÀÇÀÇ »öÀÎ(~F)";
-        Text[ chinese_simplified ] = "×ÔÓÉ±êÖ¾(~F)";
-        Text[ chinese_traditional ] = "¦Û¥Ñ¼Ğ»x(~F)";
+        Text[ japanese ] = "ï¾Œï¾˜ï½°ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½(~F)";
+        Text[ korean ] = "ì„ì˜ì˜ ìƒ‰ì¸(~F)";
+        Text[ chinese_simplified ] = "è‡ªç”±æ ‡å¿—(~F)";
+        Text[ chinese_traditional ] = "è‡ªç”±æ¨™èªŒ(~F)";
         Text[ turkish ] = "Boş dizinler:";
         Text[ arabic ] = "İåÇÑÓ ÍÑÉ:";
         Text[ catalan ] = "Índices lib~res:";
@@ -315,14 +315,14 @@ ModalDialog DLG_DBASE_INDEXES
     Text [ portuguese_brazilian ] = "Indizes" ;
     Text [ swedish ] = "Index" ;
     Text [ danish ] = "Indeks" ;
-    Text[ chinese_simplified ] = "±êÖ¾";
+    Text[ chinese_simplified ] = "æ ‡å¿—";
     Text[ russian ] = "Èíäåêñû";
     Text[ polish ] = "Indeksy";
-    Text[ japanese ] = "²İÃŞ¯¸½";
-    Text[ chinese_traditional ] = "¼Ğ»x";
+    Text[ japanese ] = "ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½";
+    Text[ chinese_traditional ] = "æ¨™èªŒ";
     Text[ arabic ] = "İåÇÑÓ";
     Text[ greek ] = "ÅõñåôŞñéá";
-    Text[ korean ] = "»öÀÎ";
+    Text[ korean ] = "ìƒ‰ì¸";
     Text[ turkish ] = "Dizinler";
     Text[ catalan ] = "Índices";
     Text[ finnish ] = "Hakemistot";
@@ -331,6 +331,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/07/13 21:04:38  kz
+ *  Merge SRC638: 13.07.01 - 23:04:13
+ *
  *  Revision 1.10  2001/06/29 02:12:41  kz
  *  Merge SRC633: 29.06.01 - 04:12:23
  *
@@ -364,6 +367,7 @@ ModalDialog DLG_DBASE_INDEXES
  *
  *  Revision 1.0 26.09.00 17:03:30  fs
  ************************************************************************/
+
 
 
 
