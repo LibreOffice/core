@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-20 16:16:46 $
+ *  last change: $Author: mtg $ $Date: 2001-02-26 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,9 +789,9 @@ USHORT SwTextBlocks::PutDoc()
             {
                 pImp->AddName( pImp->aShort, pImp->aLong );
                 pImp->nCur = pImp->GetIndex( pImp->aShort );
-                if( !pImp->bInPutMuchBlocks )
-                    nErr = pImp->MakeBlockList();
             }
+            if( !pImp->bInPutMuchBlocks )
+                nErr = pImp->MakeBlockList();
         }
         if( !pImp->bInPutMuchBlocks )
         {
@@ -852,9 +852,9 @@ USHORT SwTextBlocks::PutText( const String& rShort, const String& rName,
                 {
                     pImp->AddName( pImp->aShort, rName, TRUE );
                     nIdx = pImp->GetIndex( pImp->aShort );
-                    if( !pImp->bInPutMuchBlocks )
-                        nErr = pImp->MakeBlockList();
                 }
+                if( !pImp->bInPutMuchBlocks )
+                    nErr = pImp->MakeBlockList();
             }
         }
         if( !pImp->bInPutMuchBlocks )
