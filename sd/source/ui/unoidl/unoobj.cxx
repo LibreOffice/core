@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-17 11:38:58 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 11:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         {
             SdrObject* pObj = mpShape->GetSdrObject();
             SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
-            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() )
+            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
             {
                 sal_Int32 nOrdNum;
                 if( aAny >>= nOrdNum )
@@ -811,7 +811,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         {
             SdrObject* pObj = mpShape->GetSdrObject();
             SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
-            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() )
+            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
             {
                 sal_Int32 nOrdNum;
                 if( aRet >>= nOrdNum )

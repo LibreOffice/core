@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 14:43:47 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 11:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2031,7 +2031,7 @@ SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
 : SdGenericDrawPage( mpModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) ),
   mpBackgroundObj(NULL)
 {
-    if( pPage /* && GetPage()->GetPageKind() == PK_STANDARD */ )
+    if( pPage && GetPage()->GetPageKind() == PK_STANDARD )
     {
         sal_uInt32 nMasterIndex = 0;
         sal_uInt32 nMasterCount = GetPage()->GetPresObjList()->Count();
