@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryWizard.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:35:47 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:58:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.query;
 
 import com.sun.star.frame.XFrame;
@@ -67,6 +66,7 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
+import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.ui.*;
@@ -79,7 +79,6 @@ public class QueryWizard extends WizardDialog {
     public XWindowPeer xWindowPeer;
     public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
 
-    // TODO remove redundancy
     public static final int SOFIELDSELECTIONPAGE = 1;
     public static final int SOSORTINGPAGE = 2;
     public static final int SOFILTERPAGE = 3;
@@ -121,12 +120,12 @@ public class QueryWizard extends WizardDialog {
     }
 
     public static void main(String args[]) {
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //  //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+        String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //  //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             if (xLocMSF != null) {
                 PropertyValue[] curproperties = new PropertyValue[1];
-                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/New Database9.odb"); //baseLocation ); "DataSourceName", "db1");
+                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizard2DocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
 
 //              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
@@ -155,12 +154,17 @@ public class QueryWizard extends WizardDialog {
             setRightPaneHeaders(oResource, UIConsts.RID_QUERY + 70, 8);
             this.setMaxStep(8);
             buildSteps();
+            this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
             CurFrame = Desktop.getActiveFrame(xMSF);
-            xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getComponentWindow());
+//          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
+//          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
+
+            xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
             this.xMSF = xMSF;
             createWindowPeer(xWindowPeer);
+            CurDBMetaData.setWindowPeer(this.xControl.getPeer());
             insertQueryRelatedSteps();
-            short RetValue = executeDialog(CurFrame.getComponentWindow().getPosSize());
+            short RetValue = executeDialog(CurFrame.getContainerWindow().getPosSize());
         }
     } catch (java.lang.Exception jexception) {
         jexception.printStackTrace(System.out);
@@ -235,18 +239,18 @@ public class QueryWizard extends WizardDialog {
             boolean bEnabled;
             CurDBCommandFieldSelection = new CommandFieldSelection(this, CurDBMetaData, 120, reslblFields, reslblSelFields, reslblTables, false, 40850);
             CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-            CurSortingComponent = new SortingComponent(this, SOSORTINGPAGE, 95, 30, 210, 40865);
+            CurSortingComponent = new SortingComponent(this, SOSORTINGPAGE, 95, 27, 210, 40865);
             CurFilterComponent = new FilterComponent(this, xMSF, SOFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40878);
-            CurFilterComponent.addNumberFormatsSupplier(CurDBMetaData.xNumberFormatsSupplier);
+            CurFilterComponent.addNumberFormats();
             int i = CurDBMetaData.xDBMetaData.getMaxTablesInSelect();
             if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
-                CurAggregateComponent = new AggregateComponent(this, CurDBMetaData, SOAGGREGATEPAGE, 97, 61, 209, 5, 40895);
+                CurAggregateComponent = new AggregateComponent(this, CurDBMetaData, SOAGGREGATEPAGE, 97, 69, 209, 5, 40895);
             if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
                 CurGroupFieldSelection = new FieldSelection(this, SOGROUPSELECTIONPAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
                 CurGroupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
                 CurGroupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40925);
             }
-            CurTitlesComponent = new TitlesComponent(this, SOTITLESPAGE, 97, 31, 210, 7, reslblFieldHeader, reslblAliasHeader, 40940);
+            CurTitlesComponent = new TitlesComponent(this, SOTITLESPAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
             CurFinalizer = new Finalizer(this, CurDBMetaData);
             enableNavigationButtons(false, false, false);
         } catch (com.sun.star.uno.Exception exception){
@@ -302,7 +306,6 @@ public class QueryWizard extends WizardDialog {
     }}
 
 
-
     protected void leaveStep(int nOldStep, int nNewStep) {
         switch (nOldStep) {
             case SOFIELDSELECTIONPAGE :
@@ -343,7 +346,7 @@ public class QueryWizard extends WizardDialog {
                         CurGroupFieldSelection.initialize(CurDBMetaData.getUniqueAggregateFieldNames(), false, CurDBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
                         CurGroupFieldSelection.intializeSelectedFields(CurDBMetaData.NonAggregateFieldNames);
                         CurGroupFieldSelection.setMultipleMode(false);
-                        setStepEnabled(SOGROUPFILTERPAGE, CurDBMetaData.NonAggregateFieldNames.length > 0);
+                        setStepEnabled(SOGROUPFILTERPAGE, CurAggregateComponent.isGroupingpossible() && CurDBMetaData.NonAggregateFieldNames.length > 0);
                     }
                 }
             } catch (SQLException e) {
@@ -351,7 +354,6 @@ public class QueryWizard extends WizardDialog {
             }
         }
     }
-
 
     private void searchForOutdatedFields() {
         String[] GroupCompNames;
