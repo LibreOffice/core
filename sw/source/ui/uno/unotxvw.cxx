@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-24 07:54:53 $
+ *  last change: $Author: os $ $Date: 2002-11-04 09:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,7 +1048,8 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.text.TextView") == rServiceName;
+    return rServiceName.equalsAscii("com.sun.star.text.TextDocumentView") ||
+            rServiceName.equalsAscii("com.sun.star.view.OfficeDocumentView");
 }
 /* -----------------------------06.04.00 11:07--------------------------------
 
@@ -1057,7 +1058,8 @@ Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeE
 {
     Sequence< OUString > aRet(1);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.TextView");
+    pArray[0] = C2U("com.sun.star.text.TextDocumentView");
+    pArray[1] = C2U("com.sun.star.view.OfficeDocumentView");
     return aRet;
 }
 
