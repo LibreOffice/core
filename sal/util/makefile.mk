@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-03-12 16:05:15 $
+#   last change: $Author: jsc $ $Date: 2001-05-04 13:20:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,12 +77,10 @@ USE_DEFFILE=TRUE
 TARGETTYPE=CUI
 .ENDIF
 
-# --- Settings -----------------------------------------------------
+UNIXVERSIONNAMES=UDK
 
-.INCLUDE :  svpre.mk
+# --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE :  ..$/version.mk
 
 .IF "$(depend)" == ""
 
@@ -100,7 +98,7 @@ LIB1FILES+=$(SLB)$/textenc.lib
 .ENDIF
 
 LIB3TARGET=$(LB)$/a$(TARGET).lib
-LIB3ARCHIV=$(LB)$/lib$(TARGET)$(SAL_MAJOR)$(DLLPOSTFIX).a
+LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
 .IF "$(GUI)"=="WNT"
 LIB3FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/comdlg9x.lib $(LB)$/tools32.lib
@@ -112,8 +110,10 @@ LIB3FILES+=$(LB)$/textenc.lib
 .ENDIF
 .ENDIF
 
-SHL1TARGET= $(SAL_TARGET)$(SAL_MAJOR)
+SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
+
+SHL1VERSIONMAP=	$(TARGET).map
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
@@ -183,13 +183,7 @@ SHL1OBJS= \
 SHL1DEPN=
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME    =$(SHL1TARGET)
-.IF "$(GUI)"=="WIN"
-DEF1EXPORTFILE=	sal.w16
-.ELSE
-DEF1EXPORTFILE=	sal.dxp 
-.ENDIF
-
+DEF1NAME= $(SHL1TARGET)
 .IF "$(GUI)"=="OS2"
 DEF1EXPORT1=SignalHandlerFunction
 .ENDIF
