@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define SC_PREVWSH_HXX
 
 class ScrollBar;
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
 #ifndef _VIEWFAC_HXX //autogen
 #include <sfx2/viewfac.hxx>
@@ -140,7 +144,7 @@ public:
 
     virtual         ~ScPreviewShell();
 
-    void            InitStartTable(USHORT nTab);
+    void            InitStartTable(SCTAB nTab);
 
     void            UpdateScrollBars();
     BOOL            ScrollCommand( const CommandEvent& rCEvt );
