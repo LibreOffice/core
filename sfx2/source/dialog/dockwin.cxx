@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:42:12 $
+ *  last change: $Author: mba $ $Date: 2002-04-19 07:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,29 +371,7 @@ BOOL SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
         }
     }
 
-    if ( SFX_ALIGN_NOALIGNMENT == pImp->GetDockAlignment() || pImp->bSplitable )
-    {
-        // Falls durch ein ver"andertes tracking rectangle die Mausposition
-        // nicht mehr darin liegt, mu\s die Position des rectangles noch
-        // angepa\st werden
-
-        Point aMouseOffset;
-        aMouseOffset.X() = rRect.Left() - rPos.X();
-        aMouseOffset.Y() = rRect.Top()  - rPos.Y();
-
-        if ( (rPos.X() < rRect.Left()) || (rPos.X() > rRect.Right()) )
-        {
-            rRect.SetPos( rPos );
-            rRect.Move( -5, aMouseOffset.Y() );
-        }
-
-        if ( (rPos.Y() < rRect.Top()) || (rPos.Y() > rRect.Bottom()) )
-        {
-            rRect.SetPos( rPos );
-            rRect.Move( aMouseOffset.X(), -5 );
-        }
-    }
-    else if ( !pImp->bSplitable )
+    if ( !pImp->bSplitable )
     {
         // Bei individuell angedocktem Window wird die Position durch das
         // Alignment und die docking rects festgelegt.
@@ -792,17 +770,28 @@ void SfxDockingWindow::Initialize_Impl()
         return;
     }
 
-    Point aPos = GetFloatingPos();
-    if ( aPos == Point() )
+    FloatingWindow* pFloatWin = GetFloatingWindow();
+    BOOL bSet = FALSE;
+    if ( pFloatWin )
+    {
+        bSet = !pFloatWin->IsDefaultPos();
+    }
+    else
+    {
+        Point aPos = GetFloatingPos();
+        if ( aPos != Point() )
+            bSet = TRUE;
+    }
+
+    if ( !bSet)
     {
         SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         Window* pEditWin = pFrame->GetViewShell()->GetWindow();
-        aPos = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        Point aPos = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
         aPos = GetParent()->ScreenToOutputPixel( aPos );
         SetFloatingPos( aPos );
     }
 
-    FloatingWindow* pFloatWin = GetFloatingWindow();
     if ( pFloatWin )
     {
         // initialize floating window
@@ -992,18 +981,20 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
 
     // Nun das neue Alignment berechnen
     SfxChildAlignment eDockAlign = pImp->GetDockAlignment();
-
+/*
     if ( aInRect.IsInside( rPos ) )
     {
         // Maus im inneren Rechteck: wird/bleibt FloatingMode
         eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_NOALIGNMENT);
     }
     else
+ */
     {
         // Wir befinden uns im Dock-Bereich. Jetzt m"u\sen wir feststellen,
         // an welcher Kante angedockt werden soll
 
-        Point aInPos( rPos.X()-aInRect.Left(), rPos.Y()-aInRect.Top() );
+        Point aInPosTL( rPos.X()-aInRect.Left(), rPos.Y()-aInRect.Top() );
+        Point aInPosBR( rPos.X()-aInRect.Left() + rRect.GetWidth(), rPos.Y()-aInRect.Top() + rRect.GetHeight() );
         Size  aInSize = aInRect.GetSize();
         BOOL  bNoChange = FALSE;
 
@@ -1013,7 +1004,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
             case SFX_ALIGN_LEFT:
             case SFX_ALIGN_FIRSTLEFT:
             case SFX_ALIGN_LASTLEFT:
-                if (aInPos.X() <= 0)
+                if (aInPosTL.X() <= 0)
                 {
                     eDockAlign = GetAlignment();
                     bNoChange = TRUE;
@@ -1022,7 +1013,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
             case SFX_ALIGN_TOP:
             case SFX_ALIGN_LOWESTTOP:
             case SFX_ALIGN_HIGHESTTOP:
-                if ( aInPos.Y() <= 0)
+                if ( aInPosTL.Y() <= 0)
                 {
                     eDockAlign = GetAlignment();
                     bNoChange = TRUE;
@@ -1031,7 +1022,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
             case SFX_ALIGN_RIGHT:
             case SFX_ALIGN_FIRSTRIGHT:
             case SFX_ALIGN_LASTRIGHT:
-                if ( aInPos.X() >= aInSize.Width())
+                if ( aInPosBR.X() >= aInSize.Width())
                 {
                     eDockAlign = GetAlignment();
                     bNoChange = TRUE;
@@ -1040,7 +1031,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
             case SFX_ALIGN_BOTTOM:
             case SFX_ALIGN_LOWESTBOTTOM:
             case SFX_ALIGN_HIGHESTBOTTOM:
-                if ( aInPos.Y() >= aInSize.Height())
+                if ( aInPosBR.Y() >= aInSize.Height())
                 {
                     eDockAlign = GetAlignment();
                     bNoChange = TRUE;
@@ -1055,7 +1046,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
             // Wenn dem nicht so ist, links/oben/rechts/unten in dieser Reihenfolge
             // testen
             BOOL bForbidden = TRUE;
-            if ( aInPos.X() <= 0)
+            if ( aInPosTL.X() <= 0)
             {
                 eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_LEFT);
                 bForbidden = ( eDockAlign != SFX_ALIGN_LEFT &&
@@ -1063,7 +1054,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                                eDockAlign != SFX_ALIGN_LASTLEFT );
             }
 
-            if ( bForbidden && aInPos.Y() <= 0)
+            if ( bForbidden && aInPosTL.Y() <= 0)
             {
                 eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_TOP);
                 bForbidden = ( eDockAlign != SFX_ALIGN_TOP &&
@@ -1071,7 +1062,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                                eDockAlign != SFX_ALIGN_LOWESTTOP );
             }
 
-            if ( bForbidden && aInPos.X() >= aInSize.Width())
+            if ( bForbidden && aInPosBR.X() >= aInSize.Width())
             {
                 eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_RIGHT);
                 bForbidden = ( eDockAlign != SFX_ALIGN_RIGHT &&
@@ -1079,7 +1070,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                                eDockAlign != SFX_ALIGN_LASTRIGHT );
             }
 
-            if ( bForbidden && aInPos.Y() >= aInSize.Height())
+            if ( bForbidden && aInPosBR.Y() >= aInSize.Height())
             {
                 eDockAlign = CheckAlignment(pImp->GetDockAlignment(),SFX_ALIGN_BOTTOM);
                 bForbidden = ( eDockAlign != SFX_ALIGN_BOTTOM &&
@@ -1137,6 +1128,40 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
                     rRect.SetSize( aHorizontalSize );
                     break;
             }
+        }
+    }
+
+    switch ( eDockAlign )
+    {
+        case SFX_ALIGN_LEFT:
+        case SFX_ALIGN_FIRSTLEFT:
+        case SFX_ALIGN_LASTLEFT:
+            rRect.SetPos( aInnerRect.TopLeft() );
+            break;
+        case SFX_ALIGN_RIGHT:
+        case SFX_ALIGN_FIRSTRIGHT:
+        case SFX_ALIGN_LASTRIGHT:
+        {
+            Point aPt( aInnerRect.TopRight() );
+            aPt.X() -= rRect.GetWidth();
+            rRect.SetPos( aPt );
+            break;
+        }
+
+        case SFX_ALIGN_TOP:
+        case SFX_ALIGN_LOWESTTOP:
+        case SFX_ALIGN_HIGHESTTOP:
+            rRect.SetPos( aInnerRect.TopLeft() );
+            break;
+
+        case SFX_ALIGN_BOTTOM:
+        case SFX_ALIGN_LOWESTBOTTOM:
+        case SFX_ALIGN_HIGHESTBOTTOM:
+        {
+            Point aPt( aInnerRect.BottomLeft() );
+            aPt.Y() -= rRect.GetHeight();
+            rRect.SetPos( aPt );
+            break;
         }
     }
 
