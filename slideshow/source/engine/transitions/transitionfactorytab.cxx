@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transitionfactorytab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:53:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         1.0, // no scaling
         1.0, // no scaling
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
+        false, // 'out' by subtraction
         false // scale isotrophically to target size
     },
     {
@@ -109,7 +109,7 @@ static const TransitionInfo lcl_transitionInfo[] =
         1.0, // no scaling
         1.0, // no scaling
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
+        false, // 'out' by subtraction
         false // scale isotrophically to target size
     },
 
