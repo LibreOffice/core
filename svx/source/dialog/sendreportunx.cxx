@@ -1,0 +1,219 @@
+#include "docrecovery.hxx"
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <pwd.h>
+
+#define RCFILE ".crash_reportrc"
+
+using namespace ::std;
+
+static const char *get_home_dir()
+{
+    struct passwd *ppwd = getpwuid( getuid() );
+
+    return ppwd ? (ppwd->pw_dir ? ppwd->pw_dir : "/") : "/";
+}
+
+static bool read_line( FILE *fp, string& rLine )
+{
+    char szBuffer[1024];
+    bool bSuccess = false;
+    bool bEOL = false;
+    string  line;
+
+
+    while ( !bEOL && fgets( szBuffer, sizeof(szBuffer), fp ) )
+    {
+        int len = strlen(szBuffer);
+
+        bSuccess = true;
+
+        while ( len && szBuffer[len - 1] == '\n' )
+        {
+            szBuffer[--len] = 0;
+            bEOL = true;
+        }
+
+        line.append( szBuffer );
+    }
+
+    rLine = line;
+    return bSuccess;
+}
+
+static string trim_string( const string& rString )
+{
+    string temp = rString;
+
+    while ( temp.length() && temp[0] == ' ' || temp[0] == '\t' )
+        temp.erase( 0, 1 );
+
+    string::size_type   len = temp.length();
+
+    while ( len && temp[len-1] == ' ' || temp[len-1] == '\t' )
+    {
+        temp.erase( len - 1, 1 );
+        len = temp.length();
+    }
+
+    return temp;
+}
+
+static string get_profile_string( const char *pFileName, const char *pSectionName, const char *pKeyName, const char *pDefault = NULL )
+{
+    FILE    *fp = fopen( pFileName, "r" );
+    string  retValue = pDefault ? pDefault : "";
+
+    if ( fp )
+    {
+        string line;
+        string section;
+
+        while ( read_line( fp, line ) )
+        {
+            line = trim_string( line );
+
+            if ( line.length() && line[0] == '[' )
+            {
+                line.erase( 0, 1 );
+                string::size_type end = line.find( ']', 0 );
+
+                if ( string::npos != end )
+                    section = trim_string( line.substr( 0, end ) );
+            }
+            else
+            {
+
+                string::size_type iEqualSign = line.find( '=', 0 );
+
+                if ( iEqualSign != string::npos )
+                {
+                    string  keyname = line.substr( 0, iEqualSign );
+                    keyname = trim_string( keyname );
+
+                    string  value = line.substr( iEqualSign + 1, -1 );
+                    value = trim_string( value );
+
+                    if (
+                        0 == strcasecmp( section.c_str(), pSectionName ) &&
+                        0 == strcasecmp( keyname.c_str(), pKeyName )
+                         )
+                    {
+                        retValue = value;
+                        break;
+                    }
+                }
+            }
+        }
+
+        fclose( fp );
+    }
+
+    return retValue;
+}
+
+static bool get_profile_bool( const char *pFileName, const char *pSectionName, const char *pKeyName )
+{
+    string  str = get_profile_string( pFileName, pSectionName, pKeyName );
+
+    if ( !strcasecmp( str.c_str(), "true" ) )
+        return true;
+    return false;
+}
+
+static String get_profile_String( const char *pFileName, const char *pSectionName, const char *pKeyName, const char *pDefault = NULL )
+{
+    string  str = get_profile_string( pFileName, pSectionName, pKeyName );
+    String  result( str.c_str(), RTL_TEXTENCODING_UTF8 );
+
+    return result;
+}
+
+namespace svx{
+    namespace DocRecovery{
+
+        bool ErrorRepSendDialog::ReadParams()
+        {
+            string  sRCFile = get_home_dir();
+
+            sRCFile += "/";
+            sRCFile += string(RCFILE);
+
+            maEMailAddrED.SetText( get_profile_String( sRCFile.c_str(), "Options", "ReturnAddress" ) );
+            maParams.maHTTPProxyServer = get_profile_String( sRCFile.c_str(), "Options", "ProxyServer" );
+            maParams.maHTTPProxyPort = get_profile_String( sRCFile.c_str(), "Options", "ProxyPort" );
+            maParams.miHTTPConnectionType = get_profile_bool( sRCFile.c_str(), "Options", "UseProxy" ) ? 2 : 1;
+            maContactCB.Check( get_profile_bool( sRCFile.c_str(), "Options", "AllowContact" ) );
+
+            return true;
+        }
+
+        bool ErrorRepSendDialog::SaveParams()
+        {
+            bool success = false;
+            string  sRCFile = get_home_dir();
+
+            sRCFile += "/";
+            sRCFile += string(RCFILE);
+
+            FILE *fp = fopen( sRCFile.c_str(), "w" );
+
+            if ( fp )
+            {
+                fprintf( fp, "[Options]\n" );
+                fprintf( fp, "UseProxy=%s\n", 2 == maParams.miHTTPConnectionType ? "true" : "false" );
+                fprintf( fp, "ProxyServer=%s\n", ByteString( maParams.maHTTPProxyServer, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                fprintf( fp, "ProxyPort=%s\n", ByteString( maParams.maHTTPProxyPort, RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                fprintf( fp, "ReturnAddress=%s\n", ByteString( GetEMailAddress(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                fprintf( fp, "AllowContact=%s\n", IsContactAllowed() ? "true" : "false" );
+                fclose( fp );
+            }
+
+            return success;
+        }
+
+        bool ErrorRepSendDialog::SendReport()
+        {
+            ByteString  strSubject( GetDocType(), RTL_TEXTENCODING_UTF8 );
+
+#ifdef LINUX
+            setenv( "ERRORREPORT_SUBJECT", strSubject.GetBuffer(), 1 );
+#else
+            static ::rtl::OString   strEnvSubject = "ERRORREPORT_SUBJECT";
+            strEnvSubject += "=";
+            strEnvSubject += strSubject.GetBuffer();
+            putenv( (char *)strEnvSubject.getStr() );
+#endif
+
+            char szBodyFile[L_tmpnam] = "";
+            FILE *fp = fopen( tmpnam( szBodyFile ), "w" );
+
+            if ( fp )
+            {
+                ByteString  strUTF8( GetUsing(), RTL_TEXTENCODING_UTF8 );
+
+                fwrite( strUTF8.GetBuffer(), 1, strUTF8.Len(), fp );
+                fclose( fp );
+#ifdef LINUX
+                setenv( "ERRORREPORT_BODYFILE", szBodyFile, 1 );
+#else
+            static ::rtl::OString   strEnvBodyFile = "ERRORREPORT_BODYFILE";
+            strEnvBodyFile += "=";
+            strEnvBodyFile += szBodyFile;
+            putenv( (char *)strEnvBodyFile.getStr() );
+#endif
+            }
+
+            int ret = system( "crash_report -load -send -noui" );
+
+            if ( szBodyFile[0] );
+                unlink( szBodyFile );
+
+            return -1 != ret;
+        }
+
+
+    }   // namespace DocRecovery
+}   // namespace svx
