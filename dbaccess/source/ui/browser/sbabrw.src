@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:25:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 06:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1381,11 +1381,11 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ turkish ] = "No table format found.";
         Text[ arabic ] = "No table format found.";
         Text[ catalan ] = "No table format found.";
-    };
+};
 
-
-
-
-
-
-
+String STR_COULDNOTCONNECT_DATASOURCE
+{
+    Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
+    Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
+    Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
+};
