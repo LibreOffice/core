@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,14 @@ public:
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
     rtl::OUString                       sFormulaAddress;
+    rtl::OUString                       sFormula;
     ScBigRange                          aBigRange;
+    double                              fValue;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBaseCell*                         pCell;
     sal_uInt32                          nID;
+    sal_uInt16                          nType;
+    sal_uInt8                           nMatrixFlag;
     sal_Bool                            bBigRange;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -301,12 +305,15 @@ public:
 class ScXMLChangeCellContext : public SvXMLImportContext
 {
     rtl::OUString           sText;
-    rtl::OUString           sValue;
-    rtl::OUString           sFormula;
-    rtl::OUString&          rAddress;
-    ScBaseCell*&                rOldCell;
+    ScBaseCell*&            rOldCell;
     ScEditEngineTextObj*    pEditTextObj;
+    double&                 rDateTimeValue;
     double                  fValue;
+    sal_Int32               nMatrixRows;
+    sal_Int32               nMatrixCols;
+    sal_uInt16&             rType;
+    sal_Bool                bIsMatrix;
+    sal_Bool                bIsCoveredMatrix;
     sal_Bool                bEmpty;
     sal_Bool                bFirstParagraph;
     sal_Bool                bString;
@@ -319,7 +326,9 @@ public:
     ScXMLChangeCellContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScBaseCell*& rOldCell, rtl::OUString& sAddress);
+                                      ScBaseCell*& rOldCell, rtl::OUString& sAddress, rtl::OUString& sFormula,
+                                      double& fValue, sal_uInt16& nType,
+                                      sal_uInt8& nMatrixFlag);
     virtual ~ScXMLChangeCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
@@ -337,9 +346,13 @@ public:
 class ScXMLPreviousContext : public SvXMLImportContext
 {
     rtl::OUString                       sFormulaAddress;
+    rtl::OUString                       sFormula;
+    double                              fValue;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScBaseCell*                         pOldCell;
     sal_uInt32                          nID;
+    sal_uInt16                          nType;
+    sal_uInt8                           nMatrixFlag;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

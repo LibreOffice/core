@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -88,58 +91,154 @@
 
 #define SC_CHANGE_ID_PREFIX "ct"
 
-ScMyCellDeleted::ScMyCellDeleted()
+ScMyCellInfo::ScMyCellInfo()
     : pCell(NULL),
-    sFormulaAddress()
+    sFormulaAddress(),
+    sFormula(),
+    sResult(),
+    fValue(0.0),
+    nType(NUMBERFORMAT_ALL),
+    nMatrixFlag(MM_NONE)
 {
 }
 
-ScMyCellDeleted::~ScMyCellDeleted()
+ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaAddress, const rtl::OUString& rFormula,
+            const double& rValue, const sal_uInt16 nTempType, sal_uInt8 nTempMatrixFlag)
+    : pCell(pTempCell),
+    sFormulaAddress(rFormulaAddress),
+    sFormula(rFormula),
+    fValue(rValue),
+    nType(nTempType),
+    nMatrixFlag(nTempMatrixFlag)
+{
+}
+
+ScMyCellInfo::~ScMyCellInfo()
 {
     if (pCell)
         pCell->Delete();
 }
 
+ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
+{
+    if (!pCell && sFormula.getLength() && sFormulaAddress.getLength())
+    {
+        ScAddress aPos;
+        sal_Int32 nOffset(0);
+        ScXMLConverter::GetAddressFromString(aPos, sFormulaAddress, pDoc, nOffset);
+        pCell = new ScFormulaCell(pDoc, aPos, sFormula, nMatrixFlag);
+    }
+
+    if (nType != NUMBERFORMAT_ALL)
+    {
+        if (nType == NUMBERFORMAT_DATE)
+            pDoc->GetFormatTable()->GetInputLineString(fValue, NF_DATE_SYS_DDMMYYYY, sResult);
+        else if (nType == NUMBERFORMAT_TIME)
+            pDoc->GetFormatTable()->GetInputLineString(fValue, NF_TIME_HHMMSS, sResult);
+    }
+
+    if (pCell)
+        return pCell->Clone(pDoc);
+    else
+        return NULL;
+}
+
 ScMyDeleted::ScMyDeleted()
-    : pCellDeleted(NULL)
+    : pCellInfo(NULL)
 {
 }
 
 ScMyDeleted::~ScMyDeleted()
 {
-    if (pCellDeleted)
-        delete pCellDeleted;
+    if (pCellInfo)
+        delete pCellInfo;
 }
 
-ScMyGenerated::ScMyGenerated(ScBaseCell* pTempCell, const rtl::OUString& sTempFormulaAddress, const ScBigRange& aTempBigRange)
-    :
-    pCell(pTempCell),
-    sFormulaAddress(sTempFormulaAddress),
-    aBigRange(aTempBigRange),
-    nID(0)
+ScMyGenerated::ScMyGenerated(ScMyCellInfo* pTempCellInfo, const ScBigRange& aTempBigRange)
+    : aBigRange(aTempBigRange),
+    nID(0),
+    pCellInfo(pTempCellInfo)
 {
 }
 
-ScMyAction::ScMyAction()
-    : sFormulaAddress(),
-    pOldCell(NULL),
-    pInsCutOff(NULL),
-    pMoveRanges(NULL),
-    aDependences(),
+ScMyGenerated::~ScMyGenerated()
+{
+    if (pCellInfo)
+        delete pCellInfo;
+}
+
+ScMyBaseAction::ScMyBaseAction(const ScChangeActionType nTempActionType)
+    : aDependences(),
     aDeletedList(),
-    aMoveCutOffs(),
     nActionNumber(0),
     nRejectingNumber(0),
     nPreviousAction(0),
+    nActionType(nTempActionType),
+    nActionState(SC_CAS_VIRGIN)
+{
+}
+
+ScMyBaseAction::~ScMyBaseAction()
+{
+}
+
+ScMyInsAction::ScMyInsAction(const ScChangeActionType nActionType)
+    : ScMyBaseAction(nActionType)
+{
+}
+
+ScMyInsAction::~ScMyInsAction()
+{
+}
+
+ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionType)
+    : ScMyBaseAction(nActionType),
+    pInsCutOff(NULL),
+    aMoveCutOffs(),
+    aGeneratedList(),
     nD(0)
 {
 }
 
-ScMyAction::~ScMyAction()
+ScMyDelAction::~ScMyDelAction()
 {
     if (pInsCutOff)
         delete pInsCutOff;
-    // pOldCell have not to delete it is given to tracked changes
+}
+
+ScMyMoveAction::ScMyMoveAction()
+    : ScMyBaseAction(SC_CAT_MOVE),
+    pMoveRanges(NULL),
+    aGeneratedList()
+{
+}
+
+ScMyMoveAction::~ScMyMoveAction()
+{
+    if (pMoveRanges)
+        delete pMoveRanges;
+}
+
+
+ScMyContentAction::ScMyContentAction()
+    : ScMyBaseAction(SC_CAT_CONTENT),
+    pCellInfo(NULL)
+{
+}
+
+ScMyContentAction::~ScMyContentAction()
+{
+    if (pCellInfo)
+        delete pCellInfo;
+}
+
+ScMyRejAction::ScMyRejAction()
+    : ScMyBaseAction(SC_CAT_REJECT)
+{
+}
+
+ScMyRejAction::~ScMyRejAction()
+{
 }
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
@@ -160,8 +259,38 @@ ScXMLChangeTrackingImportHelper::~ScXMLChangeTrackingImportHelper()
 void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType nActionType)
 {
     DBG_ASSERT(!pCurrentAction, "a not inserted action");
-    pCurrentAction = new ScMyAction();
-    pCurrentAction->nActionType = nActionType;
+    switch (nActionType)
+    {
+        case SC_CAT_INSERT_COLS:
+        case SC_CAT_INSERT_ROWS:
+        case SC_CAT_INSERT_TABS:
+        {
+            pCurrentAction = new ScMyInsAction(nActionType);
+        }
+        break;
+        case SC_CAT_DELETE_COLS:
+        case SC_CAT_DELETE_ROWS:
+        case SC_CAT_DELETE_TABS:
+        {
+            pCurrentAction = new ScMyDelAction(nActionType);
+        }
+        break;
+        case SC_CAT_MOVE:
+        {
+            pCurrentAction = new ScMyMoveAction();
+        }
+        break;
+        case SC_CAT_CONTENT:
+        {
+            pCurrentAction = new ScMyContentAction();
+        }
+        break;
+        case SC_CAT_REJECT:
+        {
+            pCurrentAction = new ScMyRejAction();
+        }
+        break;
+    }
 }
 
 sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString& sID)
@@ -191,6 +320,15 @@ void ScXMLChangeTrackingImportHelper::SetActionInfo(const ScMyActionInfo& aInfo)
     StrData* pStrData = new StrData( aUser );
     if ( !aUsers.Insert( pStrData ) )
         delete pStrData;
+}
+
+void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPreviousAction,
+                            ScMyCellInfo* pCellInfo)
+{
+    DBG_ASSERT(pCurrentAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+    ScMyContentAction* pAction = static_cast<ScMyContentAction*>(pCurrentAction);
+    pAction->nPreviousAction = nPreviousAction;
+    pAction->pCellInfo = pCellInfo;
 }
 
 void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable)
@@ -232,16 +370,11 @@ void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID)
     pCurrentAction->aDeletedList.push_front(aDeleted);
 }
 
-void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScBaseCell* pCell, const rtl::OUString& sFormulaAddress)
+void ScXMLChangeTrackingImportHelper::AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo)
 {
     ScMyDeleted aDeleted;
     aDeleted.nID = nID;
-    aDeleted.pCellDeleted = new ScMyCellDeleted();
-    if (aDeleted.pCellDeleted)
-    {
-        aDeleted.pCellDeleted->pCell = pCell;
-        aDeleted.pCellDeleted->sFormulaAddress = sFormulaAddress;
-    }
+    aDeleted.pCellInfo = pCellInfo;
     pCurrentAction->aDeletedList.push_front(aDeleted);
 }
 
@@ -258,37 +391,70 @@ void ScXMLChangeTrackingImportHelper::SetMultiSpanned(const sal_Int16 nTempMulti
 
 void ScXMLChangeTrackingImportHelper::SetInsertionCutOff(const sal_uInt32 nID, const sal_Int32 nPosition)
 {
-    pCurrentAction->pInsCutOff = new ScMyInsertionCutOff(nID, nPosition);
+    if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
+        (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
+    {
+        static_cast<ScMyDelAction*>(pCurrentAction)->pInsCutOff = new ScMyInsertionCutOff(nID, nPosition);
+    }
+    else
+        DBG_ERROR("wrong action type");
 }
 
 void ScXMLChangeTrackingImportHelper::AddMoveCutOff(const sal_uInt32 nID, const sal_Int32 nStartPosition, const sal_Int32 nEndPosition)
 {
-    pCurrentAction->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
+    if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
+        (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
+    {
+        static_cast<ScMyDelAction*>(pCurrentAction)->aMoveCutOffs.push_front(ScMyMoveCutOff(nID, nStartPosition, nEndPosition));
+    }
+    else
+        DBG_ERROR("wrong action type");
 }
 
 void ScXMLChangeTrackingImportHelper::SetMoveRanges(const ScBigRange& aSourceRange, const ScBigRange& aTargetRange)
 {
-    pCurrentAction->pMoveRanges = new ScMyMoveRanges(aSourceRange, aTargetRange);
+    if (pCurrentAction->nActionType == SC_CAT_MOVE)
+    {
+         static_cast<ScMyMoveAction*>(pCurrentAction)->pMoveRanges = new ScMyMoveRanges(aSourceRange, aTargetRange);
+    }
+    else
+        DBG_ERROR("wrong action type");
 }
 
 void ScXMLChangeTrackingImportHelper::GetMultiSpannedRange()
 {
-    if (nMultiSpannedSlaveCount)
+    if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
+        (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
     {
-        pCurrentAction->nD = nMultiSpannedSlaveCount;
+        if (nMultiSpannedSlaveCount)
+        {
+            static_cast<ScMyDelAction*>(pCurrentAction)->nD = nMultiSpannedSlaveCount;
+        }
+        nMultiSpannedSlaveCount++;
+        if (nMultiSpannedSlaveCount >= nMultiSpanned)
+        {
+            nMultiSpanned = 0;
+            nMultiSpannedSlaveCount = 0;
+        }
     }
-    nMultiSpannedSlaveCount++;
-    if (nMultiSpannedSlaveCount >= nMultiSpanned)
-    {
-        nMultiSpanned = 0;
-        nMultiSpannedSlaveCount = 0;
-    }
+    else
+        DBG_ERROR("wrong action type");
 }
 
-void ScXMLChangeTrackingImportHelper::AddGenerated(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const ScBigRange& aBigRange)
+void ScXMLChangeTrackingImportHelper::AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange)
 {
-    ScMyGenerated aGenerated(pCell, sFormulaAddress, aBigRange);
-    pCurrentAction->aGeneratedList.push_back(aGenerated);
+    ScMyGenerated aGenerated(pCellInfo, aBigRange);
+    if (pCurrentAction->nActionType == SC_CAT_MOVE)
+    {
+        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(aGenerated);
+    }
+    else if ((pCurrentAction->nActionType == SC_CAT_DELETE_COLS) ||
+        (pCurrentAction->nActionType == SC_CAT_DELETE_ROWS))
+    {
+        static_cast<ScMyMoveAction*>(pCurrentAction)->aGeneratedList.push_back(aGenerated);
+    }
+    else
+        DBG_ERROR("try to insert a generated action to a wrong action");
 }
 
 void ScXMLChangeTrackingImportHelper::EndChangeAction()
@@ -317,7 +483,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, s
         delete pStrData;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyInsAction* pAction)
 {
     DateTime aDateTime;
     sal_uInt16 nPos;
@@ -335,7 +501,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateInsertAction(ScMyAction* 
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyDelAction* pAction)
 {
     DateTime aDateTime;
     sal_uInt16 nPos;
@@ -353,7 +519,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateDeleteAction(ScMyAction* 
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyMoveAction* pAction)
 {
     DBG_ASSERT(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
@@ -377,7 +543,7 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateMoveAction(ScMyAction* pA
     return NULL;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyRejAction* pAction)
 {
     DateTime aDateTime;
     sal_uInt16 nPos;
@@ -390,20 +556,16 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateRejectionAction(ScMyActio
 
     String sComment (pAction->aInfo.sComment);
 
-
     ScChangeAction* pNewAction = new ScChangeActionReject(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
         pAction->aBigRange, aUser, aDateTime, sComment);
     return pNewAction;
 }
 
-ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyAction* pAction)
+ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyContentAction* pAction)
 {
-    if (pAction->pOldCell && (pAction->pOldCell->GetCellType() == CELLTYPE_FORMULA) && pAction->sFormulaAddress.getLength())
-    {
-        ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pAction->pOldCell);
-        sal_Int32 nOffset(0);
-        ScXMLConverter::GetAddressFromString(pFormulaCell->aPos, pAction->sFormulaAddress, pDoc, nOffset);
-    }
+    ScBaseCell* pCell = NULL;
+    if (pAction->pCellInfo)
+         pCell = pAction->pCellInfo->CreateCell(pDoc);
 
     DateTime aDateTime;
     sal_uInt16 nPos;
@@ -417,36 +579,140 @@ ScChangeAction* ScXMLChangeTrackingImportHelper::CreateContentAction(ScMyAction*
     String sComment (pAction->aInfo.sComment);
 
     ScChangeAction* pNewAction = new ScChangeActionContent(pAction->nActionNumber, pAction->nActionState, pAction->nRejectingNumber,
-        pAction->aBigRange, aUser, aDateTime, sComment, pAction->pOldCell, pDoc);
+        pAction->aBigRange, aUser, aDateTime, sComment, pCell, pDoc, pAction->pCellInfo->sResult);
     return pNewAction;
 }
 
-void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyAction* pAction)
+void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& rList)
 {
-    if (!pAction->aGeneratedList.empty())
+    if (!rList.empty())
     {
-        ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
-        while (aItr != pAction->aGeneratedList.end())
+        ScMyGeneratedList::iterator aItr = rList.begin();
+        while (aItr != rList.end())
         {
-            if ((aItr->nID == 0) && aItr->pCell)
+            if ((aItr->nID == 0))
             {
-                if ((aItr->pCell->GetCellType() == CELLTYPE_FORMULA) &&
-                    aItr->sFormulaAddress.getLength())
-                {
-                    ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(aItr->pCell);
-                    sal_Int32 nOffset(0);
-                    ScXMLConverter::GetAddressFromString(pFormulaCell->aPos, aItr->sFormulaAddress, pDoc, nOffset);
-                }
+                ScBaseCell* pCell = NULL;
+                if (aItr->pCellInfo)
+                    pCell = aItr->pCellInfo->CreateCell(pDoc);
 
-                aItr->nID = pTrack->AddLoadedGenerated(aItr->pCell, aItr->aBigRange );
-                DBG_ASSERT(aItr->nID, "could not insert generated action");
+                if (pCell)
+                {
+                    aItr->nID = pTrack->AddLoadedGenerated(pCell, aItr->aBigRange );
+                    DBG_ASSERT(aItr->nID, "could not insert generated action");
+                }
             }
             aItr++;
         }
     }
 }
 
-void ScXMLChangeTrackingImportHelper::SetDependences(ScMyAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetDeletionDependences(ScMyDelAction* pAction, ScChangeActionDel* pDelAct)
+{
+    if (!pAction->aGeneratedList.empty())
+    {
+        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+            (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
+            (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
+        if (pDelAct)
+        {
+            ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
+            while (aItr != pAction->aGeneratedList.end())
+            {
+                DBG_ASSERT(aItr->nID, "a not inserted generated action");
+                pDelAct->LoadCellContent(aItr->nID, pTrack);
+                aItr = pAction->aGeneratedList.erase(aItr);
+            }
+        }
+    }
+    if (pAction->pInsCutOff)
+    {
+        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+            (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
+            (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
+        ScChangeAction* pChangeAction = pTrack->GetAction(pAction->pInsCutOff->nID);
+        if (pChangeAction && pChangeAction->IsInsertType())
+        {
+            ScChangeActionIns* pInsAction = static_cast<ScChangeActionIns*>(pChangeAction);
+            if (pInsAction && pDelAct)
+                pDelAct->SetCutOffInsert(pInsAction, static_cast<sal_Int16>(pAction->pInsCutOff->nPosition));
+        }
+        else
+            DBG_ERROR("no cut off insert action");
+    }
+    if (!pAction->aMoveCutOffs.empty())
+    {
+        DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+            (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
+            (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
+        ScMyMoveCutOffs::iterator aItr = pAction->aMoveCutOffs.begin();
+        while(aItr != pAction->aMoveCutOffs.end())
+        {
+            ScChangeAction* pChangeAction = pTrack->GetAction(aItr->nID);
+            if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
+            {
+                ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
+                if (pMoveAction && pDelAct)
+                    pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(aItr->nStartPosition),
+                                        static_cast<sal_Int16>(aItr->nEndPosition));
+            }
+            else
+                DBG_ERROR("no cut off move action");
+        }
+    }
+}
+
+void ScXMLChangeTrackingImportHelper::SetMovementDependences(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct)
+{
+    if (!pAction->aGeneratedList.empty())
+    {
+        if (pAction->nActionType == SC_CAT_MOVE)
+        {
+            if (pMoveAct)
+            {
+                ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
+                while (aItr != pAction->aGeneratedList.end())
+                {
+                    DBG_ASSERT(aItr->nID, "a not inserted generated action");
+                    pMoveAct->LoadCellContent(aItr->nID, pTrack);
+                    aItr = pAction->aGeneratedList.erase(aItr);
+                }
+            }
+        }
+    }
+}
+
+void ScXMLChangeTrackingImportHelper::SetContentDependences(ScMyContentAction* pAction, ScChangeActionContent* pActContent)
+{
+    if (pAction->nPreviousAction)
+    {
+        DBG_ASSERT(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
+        ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
+        if (pPrevAct)
+        {
+            ScChangeActionContent* pPrevActContent = static_cast<ScChangeActionContent*>(pPrevAct);
+            if (pPrevActContent && pActContent)
+            {
+                pActContent->SetPrevContent(pPrevActContent);
+                pPrevActContent->SetNextContent(pActContent);
+                const ScBaseCell* pOldCell = pActContent->GetOldCell();
+                if (pOldCell)
+                {
+                    ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
+                    if (pNewCell)
+                    {
+                        pPrevActContent->SetNewCell(pNewCell, pDoc);
+                        String sTemp;
+                        pActContent->GetOldString(sTemp);
+                        pPrevActContent->SetNewValue(sTemp, pDoc);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void ScXMLChangeTrackingImportHelper::SetDependences(ScMyBaseAction* pAction)
 {
     ScChangeAction* pAct = pTrack->GetAction(pAction->nActionNumber);
     if (pAct)
@@ -466,130 +732,36 @@ void ScXMLChangeTrackingImportHelper::SetDependences(ScMyAction* pAction)
             while(aItr != pAction->aDeletedList.end())
             {
                 pAct->LoadDeleted(aItr->nID, pTrack);
-                if ((pAct->GetType() == SC_CAT_CONTENT) && aItr->pCellDeleted)
+                if ((pAct->GetType() == SC_CAT_CONTENT) && aItr->pCellInfo)
                 {
                     ScChangeActionContent* pContentAct = static_cast<ScChangeActionContent*>(pAct);
                     if (pContentAct)
                     {
-                        if (aItr->pCellDeleted->pCell &&
-                            (aItr->pCellDeleted->pCell->GetCellType() == CELLTYPE_FORMULA) &&
-                            aItr->pCellDeleted->sFormulaAddress.getLength())
+                        ScBaseCell* pCell = NULL;
+                        if (aItr->pCellInfo)
                         {
-                            ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(aItr->pCellDeleted->pCell);
-                            sal_Int32 nOffset(0);
-                            ScXMLConverter::GetAddressFromString(pFormulaCell->aPos, aItr->pCellDeleted->sFormulaAddress, pDoc, nOffset);
+                            pCell = aItr->pCellInfo->CreateCell(pDoc);
+                            pContentAct->SetNewCell(pCell, pDoc);
+                            pContentAct->SetNewValue(aItr->pCellInfo->sResult, pDoc);
                         }
-                        pContentAct->SetNewCell(aItr->pCellDeleted->pCell, pDoc);
                     }
                 }
                 aItr = pAction->aDeletedList.erase(aItr);
             }
         }
-        if (!pAction->aGeneratedList.empty())
-        {
-            if (pAction->nActionType == SC_CAT_MOVE)
-            {
-                ScChangeActionMove* pMoveAct = static_cast<ScChangeActionMove*>(pAct);
-                if (pMoveAct)
-                {
-                    ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
-                    while (aItr != pAction->aGeneratedList.end())
-                    {
-                        DBG_ASSERT(aItr->nID, "a not inserted generated action");
-                        pMoveAct->LoadCellContent(aItr->nID, pTrack);
-                        aItr = pAction->aGeneratedList.erase(aItr);
-                    }
-                }
-            }
-            else
-            {
-                DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
-                    (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
-                    (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-                ScChangeActionDel* pDelAct = static_cast<ScChangeActionDel*>(pAct);
-                if (pDelAct)
-                {
-                    ScMyGeneratedList::iterator aItr = pAction->aGeneratedList.begin();
-                    while (aItr != pAction->aGeneratedList.end())
-                    {
-                        DBG_ASSERT(aItr->nID, "a not inserted generated action");
-                        pDelAct->LoadCellContent(aItr->nID, pTrack);
-                        aItr = pAction->aGeneratedList.erase(aItr);
-                    }
-                }
-            }
-        }
-        if (pAction->pInsCutOff)
-        {
-            DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
-                (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
-                (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-            ScChangeAction* pChangeAction = pTrack->GetAction(pAction->pInsCutOff->nID);
-            if (pChangeAction && pChangeAction->IsInsertType())
-            {
-                ScChangeActionIns* pInsAction = static_cast<ScChangeActionIns*>(pChangeAction);
-                if (pInsAction)
-                {
-                    ScChangeActionDel* pDelAct = static_cast<ScChangeActionDel*>(pAct);
-                    if (pDelAct)
-                        pDelAct->SetCutOffInsert(pInsAction, static_cast<sal_Int16>(pAction->pInsCutOff->nPosition));
-                }
-            }
-            else
-                DBG_ERROR("no cut off insert action");
-        }
-        if (!pAction->aMoveCutOffs.empty())
-        {
-            DBG_ASSERT(((pAction->nActionType == SC_CAT_DELETE_COLS) ||
-                (pAction->nActionType == SC_CAT_DELETE_ROWS) ||
-                (pAction->nActionType == SC_CAT_DELETE_TABS)), "wrong action type");
-            ScMyMoveCutOffs::iterator aItr = pAction->aMoveCutOffs.begin();
-            while(aItr != pAction->aMoveCutOffs.end())
-            {
-                ScChangeAction* pChangeAction = pTrack->GetAction(aItr->nID);
-                if (pChangeAction && (pChangeAction->GetType() == SC_CAT_MOVE))
-                {
-                    ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*>(pChangeAction);
-                    if (pMoveAction)
-                    {
-                        ScChangeActionDel* pDelAct = static_cast<ScChangeActionDel*>(pAct);
-                        if (pDelAct)
-                            pDelAct->AddCutOffMove(pMoveAction, static_cast<sal_Int16>(aItr->nStartPosition),
-                                                static_cast<sal_Int16>(aItr->nEndPosition));
-                    }
-                }
-                else
-                    DBG_ERROR("no cut off move action");
-            }
-        }
-        if (pAction->nPreviousAction)
-        {
-            DBG_ASSERT(pAction->nActionType == SC_CAT_CONTENT, "wrong action type");
-            ScChangeAction* pPrevAct = pTrack->GetAction(pAction->nPreviousAction);
-            if (pPrevAct)
-            {
-                ScChangeActionContent* pPrevActContent = static_cast<ScChangeActionContent*>(pPrevAct);
-                ScChangeActionContent* pActContent = static_cast<ScChangeActionContent*>(pAct);
-                if (pPrevActContent && pActContent)
-                {
-                    pActContent->SetPrevContent(pPrevActContent);
-                    pPrevActContent->SetNextContent(pActContent);
-                    const ScBaseCell* pOldCell = pActContent->GetOldCell();
-                    if (pOldCell)
-                    {
-                        ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
-                        if (pNewCell)
-                            pPrevActContent->SetNewCell(pNewCell, pDoc);
-                    }
-                }
-            }
-        }
+        if ((pAction->nActionType == SC_CAT_DELETE_COLS) ||
+            (pAction->nActionType == SC_CAT_DELETE_ROWS))
+            SetDeletionDependences(static_cast<ScMyDelAction*>(pAction), static_cast<ScChangeActionDel*>(pAct));
+        else if (pAction->nActionType == SC_CAT_MOVE)
+            SetMovementDependences(static_cast<ScMyMoveAction*>(pAction), static_cast<ScChangeActionMove*>(pAct));
+        else if (pAction->nActionType == SC_CAT_CONTENT)
+            SetContentDependences(static_cast<ScMyContentAction*>(pAction), static_cast<ScChangeActionContent*>(pAct));
     }
     else
         DBG_ERROR("could not find the action");
 }
 
-void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyAction* pAction)
+void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
 {
     ScChangeAction* pChangeAction = pTrack->GetAction(pAction->nActionNumber);
     if (pChangeAction)
@@ -640,29 +812,33 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 case SC_CAT_INSERT_ROWS:
                 case SC_CAT_INSERT_TABS:
                 {
-                    pAction = CreateInsertAction(*aItr);
+                    pAction = CreateInsertAction(static_cast<ScMyInsAction*>(*aItr));
                 }
                 break;
                 case SC_CAT_DELETE_COLS:
                 case SC_CAT_DELETE_ROWS:
                 case SC_CAT_DELETE_TABS:
                 {
-                    pAction = CreateDeleteAction(*aItr);
+                    ScMyDelAction* pDelAct = static_cast<ScMyDelAction*>(*aItr);
+                    pAction = CreateDeleteAction(pDelAct);
+                    CreateGeneratedActions(pDelAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_MOVE:
                 {
-                    pAction = CreateMoveAction(*aItr);
+                    ScMyMoveAction* pMovAct = static_cast<ScMyMoveAction*>(*aItr);
+                    pAction = CreateMoveAction(pMovAct);
+                    CreateGeneratedActions(pMovAct->aGeneratedList);
                 }
                 break;
                 case SC_CAT_CONTENT:
                 {
-                    pAction = CreateContentAction(*aItr);
+                    pAction = CreateContentAction(static_cast<ScMyContentAction*>(*aItr));
                 }
                 break;
                 case SC_CAT_REJECT:
                 {
-                    pAction = CreateRejectionAction(*aItr);
+                    pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(*aItr));
                 }
                 break;
             }
@@ -671,8 +847,6 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                 pTrack->AppendLoaded(pAction);
             else
                 DBG_ERROR("no action");
-
-            CreateGeneratedActions(*aItr);
 
             aItr++;
         }
@@ -697,7 +871,8 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
         aItr = aActions.begin();
         while (aItr != aActions.end())
         {
-            SetNewCell(*aItr);
+            DBG_ASSERT((*aItr)->nActionType == SC_CAT_CONTENT, "wrong action type");
+            SetNewCell(static_cast<ScMyContentAction*>(*aItr));
             if (*aItr)
                 delete (*aItr);
             aItr = aActions.erase(aItr);

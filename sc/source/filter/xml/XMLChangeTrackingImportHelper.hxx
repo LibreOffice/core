@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef __SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -87,19 +87,28 @@ struct ScMyActionInfo
     com::sun::star::util::DateTime aDateTime;
 };
 
-struct ScMyCellDeleted
+struct ScMyCellInfo
 {
     ScBaseCell*     pCell;
     rtl::OUString   sFormulaAddress;
+    rtl::OUString   sFormula;
+    String          sResult;
+    double          fValue;
+    sal_uInt16      nType;
+    sal_uInt8       nMatrixFlag;
 
-    ScMyCellDeleted();
-    ~ScMyCellDeleted();
+    ScMyCellInfo();
+    ScMyCellInfo(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const rtl::OUString& sFormula,
+                const double& fValue, const sal_uInt16 nType, sal_uInt8 nMatrixFlag);
+    ~ScMyCellInfo();
+
+    ScBaseCell* CreateCell(ScDocument* pDoc);
 };
 
 struct ScMyDeleted
 {
     sal_uInt32 nID;
-    ScMyCellDeleted* pCellDeleted;
+    ScMyCellInfo* pCellInfo;
 
     ScMyDeleted();
     ~ScMyDeleted();
@@ -110,11 +119,11 @@ typedef std::list<ScMyDeleted> ScMyDeletedList;
 struct ScMyGenerated
 {
     ScBigRange      aBigRange;
-    rtl::OUString   sFormulaAddress;
-    ScBaseCell*     pCell;
     sal_uInt32      nID;
+    ScMyCellInfo*   pCellInfo;
 
-    ScMyGenerated(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const ScBigRange& aBigRange);
+    ScMyGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
+    ~ScMyGenerated();
 };
 
 typedef std::list<ScMyGenerated> ScMyGeneratedList;
@@ -151,30 +160,63 @@ struct ScMyMoveRanges
 
 typedef std::list<sal_uInt32> ScMyDependences;
 
-struct ScMyAction
+struct ScMyBaseAction
 {
     ScMyActionInfo aInfo;
-    rtl::OUString sFormulaAddress;
     ScBigRange aBigRange;
     ScMyDependences aDependences;
     ScMyDeletedList aDeletedList;
-    ScMyGeneratedList aGeneratedList;
-    ScMyMoveCutOffs aMoveCutOffs;
-    ScBaseCell* pOldCell;
-    ScMyInsertionCutOff* pInsCutOff;
-    ScMyMoveRanges* pMoveRanges;
     sal_uInt32 nActionNumber;
     sal_uInt32 nRejectingNumber;
     sal_uInt32 nPreviousAction;
-    sal_Int16 nD;
     ScChangeActionType nActionType;
     ScChangeActionState nActionState;
 
-    ScMyAction();
-    ~ScMyAction();
+    ScMyBaseAction(const ScChangeActionType nActionType);
+    ~ScMyBaseAction();
 };
 
-typedef std::list<ScMyAction*> ScMyActions;
+struct ScMyInsAction : public ScMyBaseAction
+{
+    ScMyInsAction(const ScChangeActionType nActionType);
+    ~ScMyInsAction();
+};
+
+struct ScMyDelAction : public ScMyBaseAction
+{
+    ScMyGeneratedList aGeneratedList;
+    ScMyInsertionCutOff* pInsCutOff;
+    ScMyMoveCutOffs aMoveCutOffs;
+    sal_Int16 nD;
+
+    ScMyDelAction(const ScChangeActionType nActionType);
+    ~ScMyDelAction();
+};
+
+struct ScMyMoveAction : public ScMyBaseAction
+{
+    ScMyGeneratedList aGeneratedList;
+    ScMyMoveRanges* pMoveRanges;
+
+    ScMyMoveAction();
+    ~ScMyMoveAction();
+};
+
+struct ScMyContentAction : public ScMyBaseAction
+{
+    ScMyCellInfo*   pCellInfo;
+
+    ScMyContentAction();
+    ~ScMyContentAction();
+};
+
+struct ScMyRejAction : public ScMyBaseAction
+{
+    ScMyRejAction();
+    ~ScMyRejAction();
+};
+
+typedef std::list<ScMyBaseAction*> ScMyActions;
 
 class ScXMLChangeTrackingImportHelper
 {
@@ -182,7 +224,7 @@ class ScXMLChangeTrackingImportHelper
     ScMyActions         aActions;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
-    ScMyAction*         pCurrentAction;
+    ScMyBaseAction*     pCurrentAction;
     rtl::OUString       sIDPrefix;
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
@@ -201,33 +243,35 @@ public:
     void SetRejectingNumber(const sal_uInt32 nRejectingNumber) { pCurrentAction->nRejectingNumber = nRejectingNumber; }
     void SetActionInfo(const ScMyActionInfo& aInfo);
     void SetBigRange(const ScBigRange& aBigRange) { pCurrentAction->aBigRange = aBigRange; }
-    void SetPreviousChange(const sal_uInt32 nPreviousAction, ScBaseCell* pOldCell, const rtl::OUString& sFormulaAddress)
-                                { pCurrentAction->nPreviousAction = nPreviousAction; pCurrentAction->pOldCell = pOldCell; pCurrentAction->sFormulaAddress = sFormulaAddress; }
+    void SetPreviousChange(const sal_uInt32 nPreviousAction, ScMyCellInfo* pCellInfo);
     void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
     void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependences.push_front(nID); }
     void AddDeleted(const sal_uInt32 nID);
-    void AddDeleted(const sal_uInt32 nID, ScBaseCell* pCell, const rtl::OUString& sFormulaAddress);
+    void AddDeleted(const sal_uInt32 nID, ScMyCellInfo* pCellInfo);
     void SetMultiSpanned(const sal_Int16 nMultiSpanned);
     void SetInsertionCutOff(const sal_uInt32 nID, const sal_Int32 nPosition);
     void AddMoveCutOff(const sal_uInt32 nID, const sal_Int32 nStartPosition, const sal_Int32 nEndPosition);
     void SetMoveRanges(const ScBigRange& aSourceRange, const ScBigRange& aTargetRange);
     void GetMultiSpannedRange();
-    void AddGenerated(ScBaseCell* pCell, const rtl::OUString& sFormulaAddress, const ScBigRange& aBigRange);
+    void AddGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
 
     void EndChangeAction();
 
     void ConvertInfo(const ScMyActionInfo& aInfo, sal_uInt16& nUserPos, DateTime& aDateTime);
-    ScChangeAction* CreateInsertAction(ScMyAction* pAction);
-    ScChangeAction* CreateDeleteAction(ScMyAction* pAction);
-    ScChangeAction* CreateMoveAction(ScMyAction* pAction);
-    ScChangeAction* CreateRejectionAction(ScMyAction* pAction);
-    ScChangeAction* CreateContentAction(ScMyAction* pAction);
+    ScChangeAction* CreateInsertAction(ScMyInsAction* pAction);
+    ScChangeAction* CreateDeleteAction(ScMyDelAction* pAction);
+    ScChangeAction* CreateMoveAction(ScMyMoveAction* pAction);
+    ScChangeAction* CreateRejectionAction(ScMyRejAction* pAction);
+    ScChangeAction* CreateContentAction(ScMyContentAction* pAction);
 
-    void CreateGeneratedActions(ScMyAction* pAction);
+    void CreateGeneratedActions(ScMyGeneratedList& rList);
 
-    void SetDependences(ScMyAction* pAction);
+    void SetDeletionDependences(ScMyDelAction* pAction, ScChangeActionDel* pDelAct);
+    void SetMovementDependences(ScMyMoveAction* pAction, ScChangeActionMove* pMoveAct);
+    void SetContentDependences(ScMyContentAction* pAction, ScChangeActionContent* pActContent);
+    void SetDependences(ScMyBaseAction* pAction);
 
-    void SetNewCell(ScMyAction* pAction);
+    void SetNewCell(ScMyContentAction* pAction);
 
     void CreateChangeTrack(ScDocument* pDoc);
 };

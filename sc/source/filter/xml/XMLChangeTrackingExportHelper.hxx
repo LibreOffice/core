@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
 #ifndef __SGI_STL_LIST
-#include <stl/list>
+#include <list>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -105,12 +105,12 @@ class ScChangeTrackingExportHelper
     void WriteDependings(ScChangeAction* pAction);
 
     void WriteEmptyCell();
-    void WriteValueCell(const ScBaseCell* pCell);
-    void WriteStringEditCell(const rtl::OUString& rString);
+    void SetValueAttributes(const double& fValue, const String& sValue);
+    void WriteValueCell(const ScBaseCell* pCell, const String& sValue);
     void WriteStringCell(const ScBaseCell* pCell);
     void WriteEditCell(const ScBaseCell* pCell);
-    void WriteFormulaCell(const ScBaseCell* pCell);
-    void WriteCell(const ScBaseCell* pCell);
+    void WriteFormulaCell(const ScBaseCell* pCell, const String& sValue);
+    void WriteCell(const ScBaseCell* pCell, const String& sValue);
 
     void WriteContentChange(ScChangeAction* pAction);
     void AddInsertionAttributes(const ScChangeAction* pAction);

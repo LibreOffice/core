@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
+ *  last change: $Author: sab $ $Date: 2001-02-05 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
 #define SC_CHANGE_ID_PREFIX "ct"
@@ -215,7 +218,9 @@ void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGenerat
     DBG_ASSERT(pChangeTrack->IsGenerated(nActionNumber), "a not generated action found");
     SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
     WriteBigRange(pGeneratedAction->GetBigRange(), sXML_cell_address);
-    WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell());
+    String sValue;
+    static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewString(sValue);
+    WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell(), sValue);
 }
 
 void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAction)
@@ -227,7 +232,11 @@ void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAc
         rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
         if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
-             WriteCell(static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewCell());
+        {
+            String sValue;
+            static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewString(sValue);
+             WriteCell(static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewCell(), sValue);
+        }
     }
     else
     {
@@ -310,22 +319,64 @@ void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
 
 void ScChangeTrackingExportHelper::WriteEmptyCell()
 {
-    SvXMLElementExport aElemEmptyCell(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+    SvXMLElementExport aElemEmptyCell(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
 }
 
-void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell)
+void ScChangeTrackingExportHelper::SetValueAttributes(const double& fValue, const String& sValue)
+{
+    sal_Bool bSetAttributes(sal_False);
+    if (sValue.Len())
+    {
+        sal_uInt32 nIndex;
+        double fTempValue;
+        if (rExport.GetDocument()->GetFormatTable()->IsNumberFormat(sValue, nIndex, fTempValue))
+        {
+            sal_uInt16 nType = rExport.GetDocument()->GetFormatTable()->GetType(nIndex);
+            switch(nType & NUMBERFORMAT_DEFINED)
+            {
+                case NUMBERFORMAT_DATE:
+                    {
+                        if ( rExport.GetMM100UnitConverter().setNullDate(rExport.GetModel()) )
+                        {
+                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_date);
+                            rtl::OUStringBuffer sBuffer;
+                            rExport.GetMM100UnitConverter().convertDateTime(sBuffer, fTempValue);
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_date_value, sBuffer.makeStringAndClear());
+                            bSetAttributes = sal_True;
+                        }
+                    }
+                    break;
+                case NUMBERFORMAT_TIME:
+                    {
+                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_time);
+                        rtl::OUStringBuffer sBuffer;
+                        rExport.GetMM100UnitConverter().convertTime(sBuffer, fTempValue);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_time_value, sBuffer.makeStringAndClear());
+                        bSetAttributes = sal_True;
+                    }
+                    break;
+            }
+        }
+    }
+    if (!bSetAttributes)
+    {
+        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
+        rtl::OUStringBuffer sBuffer;
+        SvXMLUnitConverter::convertNumber(sBuffer, fValue);
+        rtl::OUString sValue(sBuffer.makeStringAndClear());
+        if (sValue.getLength())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sValue);
+    }
+}
+
+
+void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell, const String& sValue)
 {
     const ScValueCell* pValueCell = static_cast<const ScValueCell*>(pCell);
     if (pValueCell)
     {
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
-        rtl::OUStringBuffer sBuffer;
-        SvXMLUnitConverter::convertNumber(sBuffer, pValueCell->GetValue());
-        rtl::OUString sValue(sBuffer.makeStringAndClear());
-        //rtl::OUString sText(pValueCell->GetStringData());
-        if (sValue.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sValue);
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+        SetValueAttributes(pValueCell->GetValue(), sValue);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
         /*if (sText.getLength())
         {
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
@@ -333,10 +384,6 @@ void ScChangeTrackingExportHelper::WriteValueCell(const ScBaseCell* pCell)
             rExport.GetTextParagraphExport()->exportText(sText, bPrevCharWasSpace);
         }*/
     }
-}
-
-void ScChangeTrackingExportHelper::WriteStringEditCell(const rtl::OUString& rString)
-{
 }
 
 void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
@@ -348,7 +395,7 @@ void ScChangeTrackingExportHelper::WriteStringCell(const ScBaseCell* pCell)
         pStringCell->GetString(sString);
         rtl::OUString sOUString(sString);
         rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_string);
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
         if (sOUString.getLength())
         {
             SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
@@ -366,7 +413,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
         String sString;
         pEditCell->GetString(sString);
         rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_string);
-        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+        SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
         if (sString.Len())
         {
             if (!pEditTextObj)
@@ -381,7 +428,7 @@ void ScChangeTrackingExportHelper::WriteEditCell(const ScBaseCell* pCell)
     }
 }
 
-void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell)
+void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell, const String& sValue)
 {
     ScBaseCell* pBaseCell = const_cast<ScBaseCell*>(pCell);
     ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pBaseCell);
@@ -393,16 +440,33 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell)
         String sFormula;
         pFormulaCell->GetEnglishFormula(sFormula, sal_True);
         rtl::OUString sOUFormula(sFormula);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_formula, sFormula);
+        sal_uInt8 nMatrixFlag(pFormulaCell->GetMatrixFlag());
+        if (nMatrixFlag)
+        {
+            if (nMatrixFlag == MM_FORMULA)
+            {
+                sal_uInt16 nColumns, nRows;
+                pFormulaCell->GetMatColsRows(nColumns, nRows);
+                rtl::OUStringBuffer sColumns;
+                rtl::OUStringBuffer sRows;
+                SvXMLUnitConverter::convertNumber(sColumns, static_cast<sal_Int32>(nColumns));
+                SvXMLUnitConverter::convertNumber(sRows, static_cast<sal_Int32>(nRows));
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_number_matrix_columns_spanned, sColumns.makeStringAndClear());
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_number_matrix_rows_spanned, sRows.makeStringAndClear());
+            }
+            else
+            {
+                rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_matrix_covered, sXML_true);
+            }
+            rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_formula, sMatrixFormula);
+        }
+        else
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_formula, sFormula);
         if (pFormulaCell->IsValue())
         {
-            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_value_type, sXML_float);
-            rtl::OUStringBuffer sBuffer;
-            SvXMLUnitConverter::convertNumber(sBuffer, pFormulaCell->GetValue());
-            rtl::OUString sValue(sBuffer.makeStringAndClear());
-            if (sValue.getLength())
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sValue);
-            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+            SetValueAttributes(pFormulaCell->GetValue(), sValue);
+            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
         }
         else
         {
@@ -410,7 +474,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell)
             String sValue;
             pFormulaCell->GetString(sValue);
             rtl::OUString sOUValue(sValue);
-            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
+            SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_change_track_table_cell, sal_True, sal_True);
             if (sOUValue.getLength())
             {
                 SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
@@ -421,7 +485,7 @@ void ScChangeTrackingExportHelper::WriteFormulaCell(const ScBaseCell* pCell)
     }
 }
 
-void ScChangeTrackingExportHelper::WriteCell(const ScBaseCell* pCell)
+void ScChangeTrackingExportHelper::WriteCell(const ScBaseCell* pCell, const String& sValue)
 {
     if (pCell)
     {
@@ -431,7 +495,7 @@ void ScChangeTrackingExportHelper::WriteCell(const ScBaseCell* pCell)
                 WriteEmptyCell();
                 break;
             case CELLTYPE_VALUE:
-                WriteValueCell(pCell);
+                WriteValueCell(pCell, sValue);
                 break;
             case CELLTYPE_STRING:
                 WriteStringCell(pCell);
@@ -440,7 +504,7 @@ void ScChangeTrackingExportHelper::WriteCell(const ScBaseCell* pCell)
                 WriteEditCell(pCell);
                 break;
             case CELLTYPE_FORMULA:
-                WriteFormulaCell(pCell);
+                WriteFormulaCell(pCell, sValue);
                 break;
         }
     }
@@ -460,7 +524,9 @@ void ScChangeTrackingExportHelper::WriteContentChange(ScChangeAction* pAction)
         if (pPrevAction)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(pPrevAction->GetActionNumber()));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_previous, sal_True, sal_True);
-        WriteCell(static_cast<ScChangeActionContent*>(pAction)->GetOldCell());
+        String sValue;
+        static_cast<ScChangeActionContent*>(pAction)->GetOldString(sValue);
+        WriteCell(static_cast<ScChangeActionContent*>(pAction)->GetOldCell(), sValue);
     }
 }
 
