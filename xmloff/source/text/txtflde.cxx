@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:16:40 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,7 +1506,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DATABASE_DISPLAY:
     {
         // get database, table and column name from field master
-        Reference<XPropertySet> & xMaster = GetMasterPropertySet(rTextField);
+        Reference<XPropertySet> xMaster = GetMasterPropertySet(rTextField);
         ProcessString(XML_DATABASE_NAME,
                       GetStringProperty(sPropertyDataBaseName, xMaster));
         ProcessString(XML_TABLE_NAME,
