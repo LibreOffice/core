@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-19 14:03:45 $
+ *  last change: $Author: abi $ $Date: 2001-08-21 11:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,7 +480,26 @@ KeywordInfo::Compare::Compare( const Reference< XCollator >& xCollator )
 int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString& r )
 {
     if( m_xCollator.is() )
-        return ( m_xCollator->compareString( l,r ) <= 0 ) ? 1 : 0;
+    {
+        sal_Int32 l1 = l.indexOf( sal_Unicode( ';' ) );
+        sal_Int32 l2 = l.getLength() - l1 - 1;
+
+        sal_Int32 r1 = r.indexOf( sal_Unicode( ';' ) );
+        sal_Int32 r2 = r.getLength() - r1 - 1;
+
+        sal_Int32 c1 = m_xCollator->compareSubstring( l,0,l1,r,0,r1 );
+
+        if( c1 == +1 )
+            return 0;
+        else
+        {
+            if( c1 == 0 )
+                return ( m_xCollator->compareSubstring( l,1+l1,l2,r,1+r1,r2 ) <= 0 ) ? 1 : 0;
+            else
+                return 1;
+        }
+//          return ( m_xCollator->compareString( l,r ) <= 0 ) ? 1 : 0;
+    }
     else
         return ( l <= r ) ? 1 : 0;
 }
@@ -613,9 +632,9 @@ void Databases::setFromURL( const rtl::OUString& url,const Reference< XInputStre
 Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& jar,
                                                          const rtl::OUString& Language )
 {
-   if( ! jar.getLength() ||
-      ! Language.getLength() )
-    return Reference< XHierarchicalNameAccess >( 0 );
+    if( ! jar.getLength() ||
+        ! Language.getLength() )
+        return Reference< XHierarchicalNameAccess >( 0 );
 
     rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + jar;
 
@@ -633,10 +652,10 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
             aArguments[ 0 ] <<= zipFile;
 
             Reference< XInterface > xIfc
-              = m_xSMgr->createInstanceWithArguments(
-                                 rtl::OUString::createFromAscii(
-                                                "com.sun.star.packages.comp.ZipPackage" ),
-                                 aArguments );
+                = m_xSMgr->createInstanceWithArguments(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.packages.comp.ZipPackage" ),
+                    aArguments );
 
             if ( xIfc.is() )
             {
