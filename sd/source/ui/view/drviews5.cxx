@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-21 14:09:47 $
+ *  last change: $Author: ka $ $Date: 2002-06-24 13:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,13 +562,14 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             svx::ColorConfig    aColorConfig;
             Color               aFillColor;
             const BOOL          bOldMap = pWin->IsMapModeEnabled();
-            const Rectangle     aOutputRect( Point(), pWin->GetOutputSizePixel() );
+            Point               aNullPoint;
+            const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
             Rectangle           aOutputPaperRect, aPaperRect;
 
             if( pPageView )
                 aPaperRect = pPageView->GetPageRect();
             else
-                aPaperRect = Rectangle( Point(), pActualPage->GetSize() );
+                aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
 
             ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
 
