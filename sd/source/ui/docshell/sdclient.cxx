@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-05 15:24:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,8 @@ void SdClient::ViewChanged(USHORT nAspect)
                     pView->GetModel()->setLock( sal_True );
                     pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aScaledSize ) );
                     pView->GetModel()->setLock( bOldLock );
-                    pSdrOle2Obj->SendRepaintBroadcast();
+
+                    pSdrOle2Obj->BroadcastObjectChange();
                 }
             }
         }
