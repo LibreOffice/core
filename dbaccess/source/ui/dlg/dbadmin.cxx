@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 13:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 15:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,6 +659,9 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SHOWDELETEDROWS, ::rtl::OUString::createFromAscii("ShowDeleted")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, ::rtl::OUString::createFromAscii("SystemDriverSettings")));
+
+    // remove the reset button - it's meaning is much too ambiguous in this dialog
+    RemoveResetButton();
 
     // enable an apply button
     EnableApplyButton(sal_True);
@@ -2296,6 +2299,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36  2001/02/20 13:18:26  fs
+ *  #84151# when entering the queries page for a new data source, apply the changes asynchronously
+ *
  *  Revision 1.35  2001/02/07 10:05:43  fs
  *  introduce the connection option 'SystemDriverSettings'
  *
