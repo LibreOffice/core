@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 17:30:27 $
+ *  last change: $Author: nn $ $Date: 2001-07-12 15:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,10 +457,6 @@ void ScViewFunc::PasteFromSystem()
             // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
             else if (aDataHelper.HasFormat(nBiff))      // before xxx_OLE formats
                 PasteFromSystem(nBiff);
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
             else if (aDataHelper.HasFormat(FORMAT_RTF))
                 PasteFromSystem(FORMAT_RTF);
             else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
@@ -475,6 +471,11 @@ void ScViewFunc::PasteFromSystem()
                 PasteFromSystem(FORMAT_GDIMETAFILE);
             else if (aDataHelper.HasFormat(FORMAT_BITMAP))
                 PasteFromSystem(FORMAT_BITMAP);
+            // #89579# xxx_OLE formats come last, like in SotExchange tables
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
+                PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
+                PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
 //          else
 //              ErrorMessage(STR_PASTE_ERROR);
         }
