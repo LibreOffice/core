@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-25 16:29:45 $
+ *  last change: $Author: cl $ $Date: 2001-08-03 15:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,6 @@ void SAL_CALL SdXImpressDocument::unlockControllers(  )
     if( pDoc && pDoc->isLocked() )
     {
         pDoc->setLock( sal_False );
-        pDoc->ReformatAllTextObjects();
     }
 }
 
