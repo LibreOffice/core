@@ -382,6 +382,7 @@ hedabu: ..\inc\fontsubstconfig.hxx %_DEST%\inc%_EXT%\svtools\fontsubstconfig.hxx
 hedabu: ..\inc\apearcfg.hxx %_DEST%\inc%_EXT%\svtools\apearcfg.hxx
 hedabu: ..\inc\fltrcfg.hxx %_DEST%\inc%_EXT%\svtools\fltrcfg.hxx
 hedabu: ..\inc\misccfg.hxx %_DEST%\inc%_EXT%\svtools\misccfg.hxx
+hedabu: ..\inc\acceleratorexecute.hxx %_DEST%\inc%_EXT%\svtools\acceleratorexecute.hxx
 
 hedabu: ..\inc\QueryFolderName.hxx %_DEST%\inc%_EXT%\svtools\QueryFolderName.hxx
 hedabu: ..\inc\DocumentInfoPreview.hxx %_DEST%\inc%_EXT%\svtools\DocumentInfoPreview.hxx
