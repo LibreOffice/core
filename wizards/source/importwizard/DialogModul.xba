@@ -230,12 +230,8 @@ Dim bDoEnable as Boolean
 		.DocumentSearchSubDir.Enabled = bDoEnable
 		.DocumentImportPath.Enabled = bDoEnable
 		.DocumentExportPath.Enabled = bDoEnable
-		If Not bDoEnable Then
-			.cbGoOn.Enabled = .TemplateCheckbox.State = 1
-		Else
-			.cbGoOn.Enabled = True
-		End If
 	End With
+	ToggleNextButton()
 End Sub
 
 
@@ -397,10 +393,12 @@ Sub SetupXMLConfiguration()
 End Sub
 
 
-Function CheckControlPath(oTextBox as Object, ByVal bDoEnable as Boolean)
+Function CheckControlPath(oCheckbox as Object, oTextBox as Object, ByVal bDoEnable as Boolean)
 Dim sPath as String
 	If Not bDoEnable Then
 		CheckControlPath = False
+	ElseIf oCheckbox.State = 0 Then
+		CheckControlPath = True
 	Else
 		sPath = ConvertToUrl(Trim(oTextBox.Text)
 		CheckControlPath = oUcb.Exists(sPath)
@@ -496,5 +494,6 @@ Dim oRefControl
 	RefControlName = aEvent.Source.Model.Tag
 	oRefControl = ImportDialogArea.GetControl(RefControlName)
 	GetFolderName(oRefControl.Model)
+	ToggleNextButton()
 End Sub
 </script:module>

@@ -88,7 +88,7 @@ Dim iCurStep as Integer
 					Call ConvertAllDocuments(XMLFilterName())
 			End Select
 		Case 4
-			CancelButton()
+			CancelTask(True)
 	End Select
 	ImportDialog.cbGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
@@ -129,15 +129,15 @@ RTError:
 End Sub
 
 
-Sub CancelTask(Optional bCloseDialog)
+Sub CallCancelTask()
+	CancelTask(True)
+End Sub
+
+Sub CancelTask(bCloseDialog as Boolean)
 	If bConversionIsRunnig Then
 		If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
-			If IsMissing(bDontCloseDialog) Then
+			If bCloseDialog Then
 				ImportDialogArea.EndExecute
-			Else
-				If bCloseDialog Then
-					ImportDialogArea.EndExecute
-				End If
 			End If
 			bCancelTask = True
 		Else
@@ -148,7 +148,6 @@ Sub CancelTask(Optional bCloseDialog)
 		ImportDialogArea.EndExecute()	
 	End If
 End Sub
-
 
 
 Sub TemplateDirSearchDialog()
@@ -204,10 +203,8 @@ Dim i as Integer
 			End With
 			bDoKeepApplValues = False
 		Case 2
-			bDoEnable = CheckControlPath(ImportDialog.TemplateImportPath, True)
-&apos;			bDoEnable = CheckControlPath(ImportDialog.TemplateExportPath, bDoEnable)
-			bDoEnable = CheckControlPath(ImportDialog.DocumentImportPath, bDoEnable)
-&apos;			bDoEnable = CheckControlPath(ImportDialog.DocumentExportPath, bDoenable)
+			bDoEnable = CheckControlPath(ImportDialog.TemplateCheckbox, ImportDialog.TemplateImportPath, True)
+			bDoEnable = CheckControlPath(ImportDialog.DocumentPathCheckbox, ImportDialog.DocumentImportPath, bDoEnable)
 	End Select
 	ImportDialog.cbGoOn.Enabled = bDoEnable
 End Sub

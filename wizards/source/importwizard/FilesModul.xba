@@ -70,6 +70,7 @@ End Sub
 Sub ConvertAllDocuments(sFilterName())
 Dim FileProperties() as new com.sun.star.beans.PropertyValue
 Dim OpenProperties(0) as new com.sun.star.beans.PropertyValue
+Dim TemplateProperties(1) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
@@ -97,6 +98,7 @@ Dim oTask as Object
 Dim oModel as Object
 Dim oTaskController as Object
 Dim MaxFileIndex as Integer
+Dim sOldExtension as String
 	bConversionIsRunnig = True
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
@@ -106,7 +108,6 @@ Dim MaxFileIndex as Integer
 		CurFound = ReadApplicationDirectories(i, FilesList(), bIsDocument, sFilterName())
 		ShowCurrentProgress(bIsDocument, CurFound)
 	Next i
-
 	For i = 0 To ApplCount-1
 		&apos;documents
 		bIsDocument = True
@@ -119,6 +120,11 @@ Dim MaxFileIndex as Integer
 		InitializeProgressPage(ImportDialog)
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
+		TemplateProperties(0).Name = &quot;Hidden&quot;
+		TemplateProperties(0).Value = True
+		TemplateProperties(1).Name = &quot;AsTemplate&quot;
+		TemplateProperties(1).Value = True
+
 		MaxFileIndex = Ubound(FilesList(),1)
 		For i = 0 To MaxFileIndex
 			If bCancelTask Then
@@ -131,7 +137,14 @@ Dim MaxFileIndex as Integer
 			ApplIndex = FilesList(i,2)
 			sViewPath = CutPathView(sFullName, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+			
+			sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
+			Select Case sOldExtension
+				Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
+					oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, TemplateProperties())				
+				Case Else
+					oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+			End Select
 			If bSetFonts Then
 				CheckScripts(oDocument, 1)
 			End If
@@ -283,11 +296,16 @@ End Function
 
 
 Function GetMimeTypeList(BigFiltername as STring)
+Dim sBigList() as String
+Dim sSmallList() as String
 Dim sMimeTypeList()
-	sMimeTypeList() = ArrayoutofString(BigFilterName,&quot;;&quot;)
-	If Instr(sMimetypeList(0), &quot;|&quot;) &lt;&gt; 0 Then
-		sMimeTypeList() = ArrayoutofString(sMimeTypeList(0),&quot;|&quot;)
-	End If
+Dim BigMaxIndex as Integer
+Dim n as Integer
+	sBigList() = ArrayoutofString(BigFilterName,&quot;|&quot;, BigMaxIndex)
+	For n = 0 To BigMaxIndex
+		sSmallList() = ArrayoutofString(sBigList(n),&quot;;&quot;)
+		sMimeTypeList() = AddListToList(sMimeTypeList(), sSmallList())
+	Next n
 	GetMimetypeList() = sMimeTypeList()
 End Function
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="ImportDialog" dlg:title="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34570">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" dlg:id="ImportDialog" dlg:title="ImportDialog" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34570">
  <dlg:bulletinboard>
   <dlg:text dlg:id="TemplateExportLabel" dlg:tab-index="0" dlg:left="12" dlg:top="94" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="TemplateExportLabel"/>
   <dlg:textfield dlg:id="TemplateImportPath" dlg:tab-index="1" dlg:left="73" dlg:top="76" dlg:width="170" dlg:height="12" dlg:page="2" dlg:help-url="HID:34583">
@@ -29,7 +29,7 @@
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.PrevStep"/>
   </dlg:button>
   <dlg:button dlg:id="cbCancel" dlg:tab-index="18" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34572" dlg:value="cbCancel">
-   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CancelTask"/>
+   <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="ImportWizard.Main.CallCancelTask"/>
   </dlg:button>
   <dlg:button dlg:id="cbHelp" dlg:tab-index="19" dlg:left="65" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34571" dlg:help-url="HID:34571" dlg:value="cbHelp">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="Tools.Recursive.ShowHelperDialog"/>
