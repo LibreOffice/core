@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:25:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #endif
 #ifndef _IMAPDLG_HXX_ //autogen
 #include <svx/imapdlg.hxx>
-#endif
-#ifndef _SBASLTID_HRC //autogen
-#include <offmgr/sbasltid.hrc>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
