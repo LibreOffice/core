@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:47:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#include "embedhlp.hxx"
 
 using namespace ::com::sun::star;
 
@@ -180,21 +182,14 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                     {
                     }
                 }
-                else
+                else if ( m_xObj.is() && :: svt::EmbeddedObjectRef::TryRunningState( m_xObj ) )
                 {
-                    uno::Reference< embed::XComponentSupplier > xCompSupplier( m_xObj, uno::UNO_QUERY );
-                    if ( xCompSupplier.is() )
+                    uno::Reference< datatransfer::XTransferable > xTransferable( m_xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xTransferable.is() )
                     {
-                        if ( m_xObj->getCurrentState() == embed::EmbedStates::LOADED )
-                            m_xObj->changeState( embed::EmbedStates::RUNNING );
-
-                        uno::Reference< datatransfer::XTransferable > xTransferable( xCompSupplier->getComponent(), uno::UNO_QUERY );
-                        if ( xTransferable.is() )
-                        {
-                            uno::Any aAny = xTransferable->getTransferData( rFlavor );
-                            SetAny( aAny, rFlavor );
-                            bRet = sal_True;
-                        }
+                        uno::Any aAny = xTransferable->getTransferData( rFlavor );
+                        SetAny( aAny, rFlavor );
+                        bRet = sal_True;
                     }
                 }
             }
@@ -232,6 +227,8 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.mnOle2Misc = xObj->getStatus( rDesc.mnViewAspect );
     awt::Size aSz = xObj->getVisualAreaSize( rDesc.mnViewAspect );
 
+    // TODO/LEAN: getMapUnit still needs running state
+    svt::EmbeddedObjectRef::TryRunningState( xObj );
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) );
     rDesc.maSize = OutputDevice::LogicToLogic( Size( aSz.Width, aSz.Height ), aMapUnit, MAP_100TH_MM );
     rDesc.maDragStartPos = Point();
