@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:24:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,13 +887,13 @@ XMLTransformerActionInit aTableCellPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_BORDER_LINE_WIDTH_RIGHT, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR, XML_ATACTION_INCHS2INS,
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BLTR_WIDTH, XML_ATACTION_INCHS2INS,
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR_WIDTH, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR, XML_ATACTION_INCHS2INS,
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TLBR_WIDTH, XML_ATACTION_INCHS2INS,
+    { XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR_WIDTH, XML_ATACTION_INCHS2INS,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_PADDING, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
