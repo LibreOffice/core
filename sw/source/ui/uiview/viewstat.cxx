@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 20:00:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -458,13 +457,6 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_INSERT_FIELD_DATA_ONLY :
                 if(!bInMailMerge && !GetViewFrame()->HasChildWindow(nWhich))
                     rSet.DisableItem(nWhich);
-            break;
-            case SID_SPELL_DIALOG:
-            {
-                SfxChildWindow* pCh = GetViewFrame()->GetChildWindow( SID_SPELL_DIALOG );
-                if( !pCh && pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
-                    rSet.DisableItem(nWhich);
-            }
             break;
             case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
             break;
