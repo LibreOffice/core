@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:40:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -85,9 +82,6 @@
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVX_TEXTANIM_HXX //autogen
-#include <svx/textanim.hxx>
 #endif
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include <svx/tabarea.hxx>
@@ -99,14 +93,15 @@
 #include <svx/drawitem.hxx>
 #endif
 
-
+#include <svx/xtable.hxx>
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "docsh.hxx"
 #include "cmdid.h"
 
 #include "drawsh.hxx"
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -131,20 +126,25 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
     {
         case FN_DRAWTEXT_ATTR_DLG:
         {
-            SvxTextTabDialog* pDlg = new SvxTextTabDialog( NULL, &aNewAttr , pView);
-            USHORT nResult = pDlg->Execute();
-
-            if (nResult == RET_OK)
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            if ( pFact )
             {
-                if (pView->HasMarkedObj())
+                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
+                USHORT nResult = pDlg->Execute();
+
+                if (nResult == RET_OK)
                 {
-                    pSh->StartAction();
-                    pView->SetAttributes(*pDlg->GetOutputItemSet());
-                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                    pSh->EndAction();
+                    if (pView->HasMarkedObj())
+                    {
+                        pSh->StartAction();
+                        pView->SetAttributes(*pDlg->GetOutputItemSet());
+                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                        pSh->EndAction();
+                    }
                 }
+
+                delete( pDlg );
             }
-            delete( pDlg );
         }
         break;
 
@@ -153,10 +153,18 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             BOOL bHasMarked = pView->HasMarkedObj();
 
 
-            SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc, pView );
+            //CHINA001 SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc, pView );
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+            AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
+                                                                            &aNewAttr,
+                                                                            pDoc,
+                                                                            ResId(RID_SVXDLG_AREA),
+                                                                            pView);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
-            if(pColorItem->GetColorTable() == OFF_APP()->GetStdColorTable())
+            if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
                 pDlg->DontDeleteColorTable();
             if (pDlg->Execute() == RET_OK)
             {
@@ -189,9 +197,17 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
                 pObj = rMarkList.GetMark(0)->GetObj();
 
-            SvxLineTabDialog* pDlg = new SvxLineTabDialog(NULL, &aNewAttr,
-                                                            pDoc, pObj, bHasMarked);
-
+            //CHINA001 SvxLineTabDialog* pDlg = new SvxLineTabDialog(NULL, &aNewAttr,
+//CHINA001                                                          pDoc, pObj, bHasMarked);
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+            SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
+                    &aNewAttr,
+                pDoc,
+                ResId(RID_SVXDLG_LINE),
+                pObj,
+                bHasMarked);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
