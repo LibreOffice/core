@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 15:47:03 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 13:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,6 +646,8 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     ,m_bResetting(sal_False)
     ,m_aDatasources(_rxORB)
     ,m_xORB(_rxORB)
+    ,m_nPostApplyPage(0)
+    ,m_pPostApplyPageSettings(NULL)
 {
     // add the initial tab pages
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
@@ -841,6 +843,38 @@ void ODbAdminDialog::clearPassword()
 }
 
 //-------------------------------------------------------------------------
+void ODbAdminDialog::successfullyConnected()
+{
+    DBG_ASSERT(GetExampleSet(), "ODbAdminDialog::successfullyConnected: not to be called without an example set!");
+    if (!GetExampleSet())
+        return;
+
+    if (hasAuthentication(*GetExampleSet()))
+    {
+    }
+    SFX_ITEMSET_GET(*GetExampleSet(), pPassword, SfxStringItem, DSID_PASSWORD, sal_True);
+    if (pPassword && (0 != pPassword->GetValue().Len()))
+    {
+        ::rtl::OUString sPassword = pPassword->GetValue();
+
+        ODatasourceMap::ODatasourceInfo aDatasourceInfo = m_aDatasources[m_sCurrentDatasource];
+        Reference< XPropertySet > xCurrentDatasource = aDatasourceInfo.getDatasource();
+        DBG_ASSERT(xCurrentDatasource.is(), "ODbAdminDialog::successfullyConnected: no data source!");
+        if (xCurrentDatasource.is())
+        {
+            try
+            {
+                xCurrentDatasource->setPropertyValue(m_aDirectPropTranslator[DSID_PASSWORD], makeAny(sPassword));
+            }
+            catch(const Exception&)
+            {
+                DBG_ERROR("ODbAdminDialog::successfullyConnected: caught an exception!");
+            }
+        }
+    }
+}
+
+//-------------------------------------------------------------------------
 sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverParam)
 {
     DBG_ASSERT(GetExampleSet(), "ODbAdminDialog::getCurrentSettings : not to be called without an example set!");
@@ -906,16 +940,48 @@ sal_Bool ODbAdminDialog::getCurrentSettings(Sequence< PropertyValue >& _rDriverP
 }
 
 //-------------------------------------------------------------------------
-sal_Bool ODbAdminDialog::isApplyable()
+sal_Bool ODbAdminDialog::isCurrentModified() const
+{
+    if (0 == m_aSelector.count())
+        return sal_False;
+
+    String sCurrentlySelected = m_aSelector.getSelected();
+    return const_cast<ODbAdminDialog*>(this)->m_aDatasources[sCurrentlySelected].isModified();
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODbAdminDialog::isApplyable() const
 {
     return GetApplyButton()->IsEnabled();
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::applyChangesAsync(sal_Int32 _nOnErrorPageId)
+void ODbAdminDialog::applyChangesAsync(const OPageSettings* _pUseTheseSettings)
 {
     DBG_ASSERT(isApplyable(), "ODbAdminDialog::applyChangesAsync: invalid call!");
-    PostUserEvent(LINK(this, ODbAdminDialog, OnAsyncApplyChanges), reinterpret_cast<void*>(_nOnErrorPageId));
+    DBG_ASSERT((0 == m_nPostApplyPage) && !m_pPostApplyPageSettings, "ODbAdminDialog::applyChangesAsync: already doing this!");
+
+    sal_uInt16 nCurrentPageId = GetCurPageId();
+
+    // get the view settings
+    if (!_pUseTheseSettings)
+    {
+        OGenericAdministrationPage* pCurrentPage = static_cast<OGenericAdministrationPage*>(GetTabPage(nCurrentPageId));
+        OPageSettings* pViewSettings = NULL;
+        if (pCurrentPage)
+        {   // get the pages current view settings
+            pViewSettings = pCurrentPage->createViewSettings();
+            pCurrentPage->fillViewSettings(pViewSettings);
+        }
+        m_pPostApplyPageSettings = pViewSettings;
+    }
+    else
+        m_pPostApplyPageSettings = _pUseTheseSettings;
+
+    // remember the page id
+    m_nPostApplyPage = nCurrentPageId;
+
+    PostUserEvent(LINK(this, ODbAdminDialog, OnAsyncApplyChanges));
 }
 
 //-------------------------------------------------------------------------
@@ -2082,7 +2148,23 @@ IMPL_LINK(ODbAdminDialog, OnAsyncApplyChanges, void*, _OnErrorResId)
     SfxTabDialog::Ok();
     if (AR_KEEP != implApplyChanges())
     {
-        ShowPage((sal_uInt16)reinterpret_cast<sal_Int32>(_OnErrorResId));
+        // show the page
+        if (GetCurPageId() != m_nPostApplyPage)
+            ShowPage(m_nPostApplyPage);
+
+        // restore the view settings
+        if (m_pPostApplyPageSettings)
+        {
+            SfxTabPage* pPage = GetTabPage(m_nPostApplyPage);
+            if (pPage)
+                static_cast<OGenericAdministrationPage*>(pPage)->restoreViewSettings(m_pPostApplyPageSettings);
+
+            delete m_pPostApplyPageSettings;
+            m_pPostApplyPageSettings = NULL;
+        }
+
+        m_nPostApplyPage = 0;
+
         return 1L;
     }
     return 0L;
@@ -2091,7 +2173,33 @@ IMPL_LINK(ODbAdminDialog, OnAsyncApplyChanges, void*, _OnErrorResId)
 //-------------------------------------------------------------------------
 IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 {
+    const sal_uInt16 nOldPageId = GetCurPageId();
+
+    // get the view settings of the current page
+    SfxTabPage* pCurrentPage = GetTabPage(nOldPageId);
+    OPageSettings* pViewSettings = NULL;
+    if (pCurrentPage)
+    {
+        pViewSettings = static_cast<OGenericAdministrationPage *>(pCurrentPage)->createViewSettings();
+        static_cast<OGenericAdministrationPage *>(pCurrentPage)->fillViewSettings(pViewSettings);
+    }
+
+    // really apply the changes
     implApplyChanges();
+
+    // select the old page, again (if possible)
+    const sal_uInt16 nNewPageId = GetCurPageId();
+
+    pCurrentPage = GetTabPage(nOldPageId);
+    if (pCurrentPage)
+    {
+        if (nNewPageId != nOldPageId)
+            ShowPage(nOldPageId);
+
+        static_cast<OGenericAdministrationPage *>(pCurrentPage)->restoreViewSettings(pViewSettings);
+    }
+
+    delete pViewSettings;
     return 0L;
 }
 
@@ -2456,6 +2564,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.47  2001/04/27 15:47:03  fs
+ *  resetPages: do a ShowPage(GENERAL) before removing pages
+ *
  *  Revision 1.46  2001/04/26 11:40:21  fs
  *  file is alive, again - added support for data source associated bookmarks
  *
@@ -2473,66 +2584,6 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
  *
  *  Revision 1.41  2001/03/29 07:34:00  oj
  *  dispose connection in dtor and type casts
- *
- *  Revision 1.40  2001/03/27 08:05:56  oj
- *  impl new page for adabas
- *
- *  Revision 1.39  2001/03/15 08:23:00  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.38  2001/03/13 10:21:34  fs
- *  #84827# #84908# allow changes to be applied without re-initializing the page (which could lead to opening a connection)
- *
- *  Revision 1.37  2001/03/05 15:32:14  fs
- *  #84620# remove the reset button
- *
- *  Revision 1.36  2001/02/20 13:18:26  fs
- *  #84151# when entering the queries page for a new data source, apply the changes asynchronously
- *
- *  Revision 1.35  2001/02/07 10:05:43  fs
- *  introduce the connection option 'SystemDriverSettings'
- *
- *  Revision 1.34  2001/02/07 09:32:15  fs
- *  renamed JDBCDRV to JavaDriverClass
- *
- *  Revision 1.33  2001/02/05 14:00:08  fs
- *  #83430# applyChanges / isApplyable
- *
- *  Revision 1.32  2001/01/29 16:16:08  nn
- *  added DST_CALC
- *
- *  Revision 1.31  2001/01/26 16:13:26  fs
- *  added the query administration page
- *
- *  Revision 1.30  2001/01/26 06:59:12  fs
- *  some basics for the query administration page - not enabled yet
- *
- *  Revision 1.29  2001/01/17 09:17:27  fs
- *  #82627# implApplyChanges: do an ShowPage after applying the changes
- *
- *  Revision 1.28  2001/01/04 11:23:01  fs
- *  #81485# +ADO page
- *
- *  Revision 1.27  2000/12/20 13:28:06  fs
- *  #81761# dis-/enable the apply button the same way as the ok button
- *
- *  Revision 1.26  2000/12/14 08:23:14  fs
- *  #81938# make the ThousandsSeparator persistent
- *
- *  Revision 1.25  2000/12/07 14:16:41  fs
- *  #80186# reset the 'password required' flag when changing the data source type to one without passwords
- *
- *  Revision 1.24  2000/12/03 10:29:23  fs
- *  #79820# SetSavePassword on the login dialog
- *
- *  Revision 1.23  2000/11/30 08:32:30  fs
- *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
- *
- *  Revision 1.22  2000/11/28 13:47:59  fs
- *  #80152# implApplyChanges: check the entry count of the listbox
- *
- *  Revision 1.21  2000/11/28 11:41:42  oj
- *  #80827# check dbroot if dbconfig failed
  *
  *  Revision 1.0 20.09.00 10:55:58  fs
  ************************************************************************/
