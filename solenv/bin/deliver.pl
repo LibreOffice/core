@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2002-04-09 14:59:37 $
+#   last change: $Author: hr $ $Date: 2002-04-11 15:40:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.24 $ ';
+$id_str = ' $Revision: 1.25 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -319,7 +319,7 @@ sub do_symlink
             print_error("can't symlink $from -> $to: $!",0);
         }
         else {
-            push_on_ziplist($symlib) if $opt_zip;
+            push_on_ziplist($to) if $opt_zip;
         }
     }
 }
