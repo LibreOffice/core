@@ -34,11 +34,9 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-
-$(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+$(CLASSFILES) : $(JAVAFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 JavaDocumentHandlingExamples : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
