@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 09:51:39 $
+ *  last change: $Author: kso $ $Date: 2000-11-06 14:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -232,6 +232,7 @@ namespace ucb
 struct ResultSet_Impl
 {
     Reference< XMultiServiceFactory >   m_xSMgr;
+    Reference< XCommandEnvironment >    m_xEnv;
     Reference< XPropertySetInfo >       m_xPropSetInfo;
     Reference< XResultSetMetaData >     m_xMetaData;
     Sequence< Property >                m_aProperties;
@@ -246,7 +247,8 @@ struct ResultSet_Impl
     inline ResultSet_Impl( const Reference< XMultiServiceFactory >& rxSMgr,
                            const Sequence< Property >& rProperties,
                            const vos::ORef<
-                                       ResultSetDataSupplier >& rDataSupplier );
+                                       ResultSetDataSupplier >& rDataSupplier,
+                           const Reference< XCommandEnvironment >& rxEnv );
     inline ~ResultSet_Impl();
 };
 
@@ -255,8 +257,10 @@ struct ResultSet_Impl
 inline ResultSet_Impl::ResultSet_Impl(
                     const Reference< XMultiServiceFactory >& rxSMgr,
                     const Sequence< Property >& rProperties,
-                    const vos::ORef< ResultSetDataSupplier >& rDataSupplier )
+                    const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
+                    const Reference< XCommandEnvironment >& rxEnv )
 : m_xSMgr( rxSMgr ),
+  m_xEnv( rxEnv ),
   m_aProperties( rProperties ),
   m_xDataSupplier( rDataSupplier ),
   m_pDisposeEventListeners( 0 ),
@@ -285,7 +289,20 @@ inline ResultSet_Impl::~ResultSet_Impl()
 ResultSet::ResultSet( const Reference< XMultiServiceFactory >& rxSMgr,
                       const Sequence< Property >& rProperties,
                       const vos::ORef< ResultSetDataSupplier >& rDataSupplier )
-: m_pImpl( new ResultSet_Impl( rxSMgr, rProperties, rDataSupplier ) )
+: m_pImpl( new ResultSet_Impl( rxSMgr,
+                               rProperties,
+                               rDataSupplier,
+                               Reference< XCommandEnvironment >() ) )
+{
+    rDataSupplier->m_pResultSet = this;
+}
+
+//=========================================================================
+ResultSet::ResultSet( const Reference< XMultiServiceFactory >& rxSMgr,
+                      const Sequence< Property >& rProperties,
+                      const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
+                      const Reference< XCommandEnvironment >& rxEnv )
+: m_pImpl( new ResultSet_Impl( rxSMgr, rProperties, rDataSupplier, rxEnv ) )
 {
     rDataSupplier->m_pResultSet = this;
 }
@@ -1312,11 +1329,7 @@ void SAL_CALL ResultSet::close()
 //=========================================================================
 
 // virtual
-#if SUP>611
 OUString SAL_CALL ResultSet::queryContentIdentifierString()
-#else
-OUString SAL_CALL ResultSet::queryContentIdentfierString()
-#endif
     throw( RuntimeException )
 {
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
@@ -1591,6 +1604,12 @@ void ResultSet::rowCountFinal()
 const Sequence< Property >& ResultSet::getProperties()
 {
     return m_pImpl->m_aProperties;
+}
+
+//=========================================================================
+const Reference< XCommandEnvironment >& ResultSet::getEnvironment()
+{
+    return m_pImpl->m_xEnv;
 }
 
 //=========================================================================

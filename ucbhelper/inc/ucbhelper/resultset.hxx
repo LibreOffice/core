@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 09:50:50 $
+ *  last change: $Author: kso $ $Date: 2000-11-06 14:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_RESULTSETEXCEPTION_HPP_
 #include <com/sun/star/ucb/ResultSetException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -154,6 +157,24 @@ public:
             const com::sun::star::uno::Sequence<
                 com::sun::star::beans::Property >& rProperties,
             const vos::ORef< ResultSetDataSupplier >& rDataSupplier );
+    /**
+      * Construction.
+      *
+      * @param rxSMgr is a Service Manager.
+      * @param rProperties is a sequence of properties for that the resultset
+      *        shall be able to obtain the values.
+      * @param rDataSupplier is a supplier for the resultset data.
+      * @param rxEnv is the environment for interactions, progress propagation,
+      *        ...
+      */
+    ResultSet(
+            const com::sun::star::uno::Reference<
+                com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const com::sun::star::uno::Sequence<
+                com::sun::star::beans::Property >& rProperties,
+            const vos::ORef< ResultSetDataSupplier >& rDataSupplier,
+            const com::sun::star::uno::Reference<
+                com::sun::star::ucb::XCommandEnvironment >& rxEnv );
     virtual ~ResultSet();
 
     // XInterface
@@ -180,11 +201,7 @@ public:
 
     // XContentAccess
     virtual rtl::OUString SAL_CALL
-#if SUPD>611
     queryContentIdentifierString()
-#else
-    queryContentIdentfierString()
-#endif
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier > SAL_CALL
@@ -456,6 +473,16 @@ public:
       */
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property >&
     getProperties();
+
+    /**
+      * This method returns the environment to use for interactions, progress
+      * propagation, ... It can by empty.
+      *
+      * @return an environment or an empty reference.
+      */
+    const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment >&
+    getEnvironment();
 };
 
 //=========================================================================
