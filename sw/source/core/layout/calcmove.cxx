@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-24 09:23:07 $
+ *  last change: $Author: ama $ $Date: 2002-08-19 09:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,7 +1367,7 @@ void SwCntntFrm::MakeAll()
 #endif
             bMovedBwd = TRUE;
             bFormatted = FALSE;
-            if ( bKeep )
+            if ( bKeep && bMoveable )
             {
                 if( CheckMoveFwd( bMakePage, FALSE, bMovedBwd ) )
                 {
@@ -1490,7 +1490,7 @@ void SwCntntFrm::MakeAll()
              Frm().Top()+Frm().Height() )
 #endif
         {
-            if ( bKeep )
+            if ( bKeep && bMoveable )
             {
                 //Wir sorgen dafuer, dass der Nachfolger gleich mit formatiert
                 //wird. Dadurch halten wir das Heft in der Hand, bis wirklich
