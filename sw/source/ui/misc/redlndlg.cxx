@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:11:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,9 +600,10 @@ void SwRedlineAcceptDlg::InitAuthors()
     bHasReadonlySel = FALSE;
     BOOL bReadonlySel = FALSE;
     BOOL bIsNotFormated = FALSE;
+    USHORT i;
 
     // Autoren ermitteln
-    for (USHORT i = 0; i < nCount; i++)
+    for ( i = 0; i < nCount; i++)
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
@@ -738,8 +739,9 @@ void SwRedlineAcceptDlg::Activate()
 
     // Anzahl und Pointer ueberpruefen
     SwRedlineDataParent *pParent = 0;
+    USHORT i;
 
-    for (USHORT i = 0; i < nCount; i++)
+    for ( i = 0; i < nCount; i++)
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
@@ -860,7 +862,8 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
 
     // Wurden Eintraege geloescht?
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    for (USHORT i = nStart + 1; i < aRedlineParents.Count(); i++)
+    USHORT i;
+    for ( i = nStart + 1; i < aRedlineParents.Count(); i++)
     {
         if (aRedlineParents[i]->pData == pRedlineData)
         {
