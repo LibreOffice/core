@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:54:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _TOOLS_RCID_H
 #include <tools/rcid.h>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #include "svtools.hrc"
@@ -307,11 +310,51 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     };
 #endif
 
+struct SvtFactory2ExtensionMapping_Impl
+{
+    char*   _pFactory;
+    char*   _pExtension;
+};
+
+// mapping from "private:factory" url to extension
+
+static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
+{
+    { "swriter",                "oot" },
+    { "swriter/web",            "html" },
+    { "swriter/GlobalDocument", "oom" },
+    { "scalc",                  "oos" },
+    { "simpress",               "oop" },
+    { "sdraw",                  "ood" },
+    { "smath",                  "oof" },
+    { NULL, NULL }
+};
+
 //****************************************************************************
 
 String GetImageExtensionByFactory_Impl( const String& rURL )
 {
+    INetURLObject aObj( rURL );
+    String aPath = aObj.GetURLPath( INetURLObject::NO_DECODE );
     String aExtension;
+
+    if ( aPath.Len() )
+    {
+        USHORT nIndex = 0;
+        while ( Fac2ExtMap_Impl[ nIndex ]._pFactory )
+        {
+            if ( aPath.EqualsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
+            {
+                // extension found
+                aExtension = String::CreateFromAscii( Fac2ExtMap_Impl[ nIndex ]._pExtension );
+                // and return it
+                return aExtension;
+            }
+            ++nIndex;
+        }
+    }
+
+    // no extension found, so use the type detection (performance brake)
 
     try
     {
@@ -450,6 +493,8 @@ USHORT GetFolderImageId_Impl( const String& rURL )
 
 USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetImageId_Impl()" );
+
     String aExt, sURL = rObject.GetMainURL( INetURLObject::NO_DECODE );
     USHORT nImage = IMG_FILE;
 
@@ -744,6 +789,8 @@ Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetDescription_Impl()" );
+
     String sDescription;
     String sExtension( rObject.getExtension() ), sURL( rObject.GetMainURL( INetURLObject::NO_DECODE ) );
     USHORT nResId = 0;
