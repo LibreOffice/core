@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #include <rtl/tencinfo.h>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -122,7 +122,7 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
         m_xSelectionManager( & rManager ),
         m_aSelection( aSelection )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "creating instance of X11Clipboard (this=%x)\n", this );
 #endif
 
@@ -143,7 +143,7 @@ X11Clipboard::~X11Clipboard()
 {
     MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "shutting down instance of X11Clipboard (this=%x, Selecttion=\"%s\")\n", this, OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     if( m_aSelection != None )
@@ -161,7 +161,7 @@ X11Clipboard::~X11Clipboard()
 void X11Clipboard::fireChangedContentsEvent()
 {
     ClearableMutexGuard aGuard( m_aMutex );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "X11Clipboard::fireChangedContentsEvent for %s (%d listeners)\n",
              OUStringToOString( m_rSelectionManager.getString( m_aSelection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), m_aListeners.size() );
 #endif
