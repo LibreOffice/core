@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:25:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-17 16:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,10 +575,13 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
     if(pEntry)
     {
-        String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
-        sGroup += GLOS_DELIM;
-        sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
-        bEnableDel = IsDeleteAllowed(sGroup);
+        GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
+        bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
+
+//      String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
+//      sGroup += GLOS_DELIM;
+//      sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
+//      bEnableDel = IsDeleteAllowed(sGroup);
     }
 
     aDelPB.Enable(bEnableDel);
@@ -621,12 +624,11 @@ BOOL SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 --------------------------------------------------*/
 void FEdit::KeyInput( const KeyEvent& rKEvent )
 {
-    String sKey(rKEvent.GetCharCode());
     KeyCode aCode = rKEvent.GetKeyCode();
-
-    if (aCode.GetGroup() == KEYGROUP_CURSOR ||
-        ((aCode.GetGroup() == KEYGROUP_MISC) && aCode.GetCode() <= KEY_DELETE) ||
-        sKey != SVT_SEARCHPATH_DELIMITER)
+    if( KEYGROUP_CURSOR == aCode.GetGroup() ||
+        ( KEYGROUP_MISC == aCode.GetGroup() &&
+          KEY_DELETE >= aCode.GetCode() ) ||
+        SVT_SEARCHPATH_DELIMITER != rKEvent.GetCharCode() )
         Edit::KeyInput( rKEvent );
 }
 /* -----------------------------08.02.00 15:07--------------------------------
@@ -682,6 +684,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/09/05 10:25:33  jp
+      Task #91873#: use SvtSysLocale and Transliterationrwapper for string compare
+
       Revision 1.8  2001/05/21 12:29:30  fme
       Fix #86988#: Redesign of dialogs
 
