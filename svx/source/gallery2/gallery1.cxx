@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:11:40 $
+ *  last change: $Author: ka $ $Date: 2000-11-02 13:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,19 +868,7 @@ GalleryTheme* Gallery::AcquireTheme( const String& rThemeName, SfxListener& rLis
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rThemeName );
 
     if( pThemeEntry && ( ( pTheme = ImplGetCachedTheme( pThemeEntry ) ) != NULL ) )
-    {
-#ifdef DBG_UTIL
-        for( USHORT i = 0; i < pTheme->GetListenerCount(); i++ )
-        {
-            if( pTheme->GetListener( i ) == &rListener )
-            {
-                DBG_ERROR( "Theme is already registered at this listener" );
-            }
-        }
-
-#endif
         rListener.StartListening( *pTheme );
-    }
 
     return pTheme;
 }
