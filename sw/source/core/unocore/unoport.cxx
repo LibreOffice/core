@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ OUString SwXTextPortion::getString(void) throw( uno::RuntimeException )
 void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwUnoCrsr* pUnoCrsr = ((SwXTextCursor*)this)->GetCrsr();
+    SwUnoCrsr* pUnoCrsr = GetCrsr();
     EXCEPT_ON_PROTECTION(*pUnoCrsr)
     if(pUnoCrsr)
         SwXTextCursor::SetString(*pUnoCrsr, aString);
@@ -677,28 +677,5 @@ void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     if(!aFrameDepend.GetRegisteredIn())
         pFrameFmt = 0;
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/18 16:04:34  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/09/07 07:57:19  os
-    new properties: IsCollapsed, IsStart
-
-    Revision 1.4  2000/09/05 15:20:12  os
-    footnote property at SwTextPortion
-
-    Revision 1.3  2000/09/04 12:50:47  os
-    TextPortionEnumeration almost completed
-
-    Revision 1.2  2000/09/01 14:31:57  os
-    properties added
-
-    Revision 1.1  2000/05/04 15:14:08  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
 
 
