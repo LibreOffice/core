@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:13:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,12 +375,7 @@ sal_Bool    bNoInterrupt    = sal_False;
 
 #include <svx/svxerr.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::scanner;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::linguistic2;
-using namespace ::rtl;
+namespace css = com::sun::star;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
@@ -449,24 +444,32 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     StartListening( *SFX_APP() );
 
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    if( xMgr.is() )
-    {
-        m_xScannerManager = Reference< XScannerManager >(
-                        xMgr->createInstance( OUString::createFromAscii( "com.sun.star.scanner.ScannerManager" ) ),
-                        UNO_QUERY );
-
-//      if( m_xScannerManager.is() )
-//      {
-//          m_xScannerListener = Reference< lang::XEventListener >(
-//                                      OWeakObject* ( new ScannerEventListener( this ) ), UNO_QUERY );
-//      }
-    }
-
     // OD 14.02.2003 #107424# - init color configuration
     // member <pColorConfig> is created and the color configuration is applied
     // at the view options.
     GetColorConfig();
+}
+
+//************************************************************************
+
+css::uno::Reference< css::scanner::XScannerManager >
+SwModule::GetScannerManager()
+{
+    if (!m_xScannerManager.is())
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xMgr (
+            comphelper::getProcessServiceFactory() );
+        if( xMgr.is() )
+        {
+            m_xScannerManager =
+                css::uno::Reference< css::scanner::XScannerManager >(
+                    xMgr->createInstance(
+                        rtl::OUString::createFromAscii(
+                            "com.sun.star.scanner.ScannerManager" ) ),
+                    css::uno::UNO_QUERY );
+        }
+    }
+    return m_xScannerManager;
 }
 
 //************************************************************************
