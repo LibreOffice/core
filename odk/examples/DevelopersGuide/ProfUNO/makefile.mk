@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:45:06 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:49:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,10 +91,21 @@ LIFETIME_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/Lifetime$/MyUnoObject.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/Lifetime$/object_lifetime.cxx
 
+SIMPLEBOOTSTRAP_JAVA_FILES=\
+    $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/SimpleBootstrap_java$/SimpleBootstrap_java.java \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/SimpleBootstrap_java$/manifest.mf \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/SimpleBootstrap_java$/Makefile
+
+SIMPLEBOOTSTRAP_CPP_FILES=\
+    $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/SimpleBootstrap_cpp$/SimpleBootstrap_cpp.cxx \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/ProfUNO$/SimpleBootstrap_cpp$/Makefile
+
 DIR_FILE_LIST= \
     $(CPPBINDING_FILES) \
     $(INTERPROCESSCONN_FILES) \
-    $(LIFETIME_FILES)
+    $(LIFETIME_FILES) \
+    $(SIMPLEBOOTSTRAP_JAVA_FILES) \
+    $(SIMPLEBOOTSTRAP_CPP_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/devguide_profuno_dirs_created.txt
