@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:22 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,13 @@ void ImportExcel8::Iteration( void )
     pD->SetDocOptions( aOpt );
 }
 
+void ImportExcel8:: WinProtection( void )
+{
+    if( aIn.ReaduInt16() )
+    {
+        pExcRoot->pExtDocOpt->SetWinProtection( true );
+    }
+}
 
 void ImportExcel8::Verticalpagebreaks( void )
 {

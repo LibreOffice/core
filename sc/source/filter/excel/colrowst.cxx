@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:58 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,7 @@ ScExtDocOptions::ScExtDocOptions( void )
     bChanged = TRUE;
 
     fColScale = 0.0;
+    SetWinProtection(false);
 }
 
 

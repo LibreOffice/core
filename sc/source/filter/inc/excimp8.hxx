@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:01:28 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ class ImportExcel8 : public ImportExcel
         void                    Horizontalpagebreaks( void );   // 0x1B
         void                    Note( void );                   // 0x1C
         void                    Format( void );                 // 0x1E
+        void                    WinProtection(  void );         // 0x19
         void                    Cont( void );                   // 0x3C
         void                    Dconref( void );                // 0x51
         void                    Obj( void );                    // 0x5D

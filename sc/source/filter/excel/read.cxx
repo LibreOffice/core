@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:43 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1106,6 +1106,7 @@ FltError ImportExcel8::Read( void )
                         aIn.SeekGlobalPosition();          // und zurueck an alte Position
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
+                    case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         if( Filepass() )
                         {

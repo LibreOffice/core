@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dr $ $Date: 2002-12-06 16:39:22 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,10 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     }
     else
     {
-        Add( new XclExpWindowProtection(false) );
+        if(rDoc.GetExtDocOptions())
+            Add( new XclExpWindowProtection(rDoc.GetExtDocOptions()->IsWinProtected()) );
+        else
+            Add( new XclExpWindowProtection(false));
         Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new ExcDummy8_040 );
         Add( new ExcWindow18( rR ) );

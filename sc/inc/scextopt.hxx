@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-08 14:51:06 $
+ *  last change: $Author: jmarmion $ $Date: 2002-12-10 14:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ private:
     CodenameList*           pCodenames;
 
     BOOL                    bChanged;       // for import: copy data only first time to doc
+    bool                    bWinProtection;  // Excel Workbook Windows protection flag
 
 public:
     UINT32                  nLinkCnt;       // Zaehlt die Rekursionstufe beim Laden
@@ -188,6 +189,8 @@ public:
 
     void                    SetCodename( const String& );   // -> Workbook globals
     void                    AddCodename( const String& );   // -> tables
+    inline void             SetWinProtection(bool bImportWinProtection) {bWinProtection = bImportWinProtection; }
+    inline bool             IsWinProtected()         { return bWinProtection; }
 };
 
 
