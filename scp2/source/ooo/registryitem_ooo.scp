@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-26 21:54:38 $
+*  last change: $Author: rt $ $Date: 2004-12-07 11:26:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -595,7 +595,7 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DatabaseDocument.1\DefaultIcon";
     ModuleID = gid_Module_Root;
-    Value = "<progpath>\program\soffice.exe,14";
+    Value = "<progpath>\program\soffice.exe,13";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
