@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:41:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ClientView::~ClientView()
 void ClientView::InvalidateOneWin(::Window& rWin)
 {
     Region aRegion;
-    InitRedraw(&rWin, aRegion);
+    CompleteRedraw(&rWin, aRegion);
 }
 
 /*************************************************************************
@@ -127,7 +127,7 @@ void ClientView::InvalidateOneWin(::Window& rWin)
 
 void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 {
-    InitRedraw(&rWin, rRect);
+    CompleteRedraw(&rWin, rRect);
 }
 
 
@@ -137,9 +137,9 @@ void ClientView::InvalidateOneWin(::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ClientView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void ClientView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg)
 {
-    DrawView::InitRedraw(pOutDev, rReg);
+    DrawView::CompleteRedraw(pOutDev, rReg);
 
     // Stets Demo-Output auf dem ganzen Fenster ausgeben
     Rectangle aRect( Point(0, 0), pOutDev->GetOutputSize() );
