@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:21:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,8 +446,6 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
 
     {
         WaitObject( this );
-        //Application::EnterWait();
-
         // get FontList from printer (if possible), otherwise from application window
         SmViewShell *pView = SmGetActiveView();
         DBG_ASSERT(pView, "Sm : NULL pointer");
@@ -472,8 +470,6 @@ SmFontDialog::SmFontDialog(Window * pParent, BOOL bFreeRes)
 
         // preview like controls should have a 2D look
         aShowFont.SetBorderStyle( WINDOW_BORDER_MONO );
-
-        //Application::LeaveWait();
     }
 
     aFontBox.SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
