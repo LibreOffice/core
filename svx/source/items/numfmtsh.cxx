@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:10:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SV_COLOR_HXX
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 #pragma hdrstop
 
