@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:05:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "±êÇ©";
         Text[ russian ] = "Ìàğêà";
         Text[ polish ] = "Znacznik";
-        Text[ japanese ] = "»‘¢Œ³";
+        Text[ japanese ] = "»•i–¼";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¶K¼Ğ";
         Text[ arabic ] = "ÇáãÇÑßÉ";
@@ -1130,16 +1130,16 @@ TabPage TP_PRIVATE_DATA
         Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
         Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
         Text[ dutch ] = "Phone/Mobile";
-        Text[ french ] = "Phone/Mobile";
-        Text[ spanish ] = "Phone/Mobile";
+        Text[ french ] = "Téléphone/Portable";
+        Text[ spanish ] = "Teléfono/Móvil";
         Text[ italian ] = "Phone/Mobile";
         Text[ danish ] = "Phone/Mobile";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Komórka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
-        Text[ japanese ] = "Phone/Mobile";
+        Text[ japanese ] = "©‘î“d˜b/Œg‘Ñ“d˜b";
         Text[ korean ] = "Phone/Mobile";
-        Text[ chinese_simplified ] = "Phone/Mobile";
+        Text[ chinese_simplified ] = "µç»°/ÊÖ»ú";
         Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊİ/ÇáãÍãæá";
@@ -1174,7 +1174,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Fa~x";
         Text[ polish ] = "Faks";
         Text[ portuguese_brazilian ] = "Fax";
-        Text[ japanese ] = "Fax(~X)";
+        Text[ japanese ] = "Fa~x";
         Text[ korean ] = "ÆÑ½º(~X)";
         Text[ chinese_simplified ] = "´«Õæ(~X)";
         Text[ chinese_traditional ] = "¶Ç¯u(~X)";
@@ -1505,16 +1505,16 @@ TabPage TP_BUSINESS_DATA
         Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
         Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
         Text[ dutch ] = "Phone/Mobile";
-        Text[ french ] = "Phone/Mobile";
-        Text[ spanish ] = "Phone/Mobile";
+        Text[ french ] = "Téléphone/Portable";
+        Text[ spanish ] = "Teléfono/Móvil";
         Text[ italian ] = "Phone/Mobile";
         Text[ danish ] = "Phone/Mobile";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/Komórka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
-        Text[ japanese ] = "Phone/Mobile";
+        Text[ japanese ] = "‰ïĞ“d˜b/Œg‘Ñ“d˜b";
         Text[ korean ] = "Phone/Mobile";
-        Text[ chinese_simplified ] = "Phone/Mobile";
+        Text[ chinese_simplified ] = "µç»°/ÊÖ»ú";
         Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊİ/ÇáãÍãæá";
@@ -1551,7 +1551,7 @@ TabPage TP_BUSINESS_DATA
         Text[ portuguese_brazilian ] = "Fax";
         Text[ japanese ] = "Fax";
         Text[ korean ] = "Fax";
-        Text[ chinese_simplified ] = "Fax";
+        Text[ chinese_simplified ] = "´«Õæ";
         Text[ chinese_traditional ] = "¶Ç¯u";
         Text[ turkish ] = "Fax";
         Text[ arabic ] = "ÇáİÇßÓ";
