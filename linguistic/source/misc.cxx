@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:47:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ rtl_TextEncoding GetTextEncoding( INT16 nLanguage )
             case LANGUAGE_NORWEGIAN_BOKMAL :
             case LANGUAGE_NORWEGIAN_NYNORSK :
             case LANGUAGE_AFRIKAANS :
+            case LANGUAGE_ENGLISH_EIRE :
+            case LANGUAGE_ENGLISH_AUS :
 #ifdef WNT
                     nEncoding = RTL_TEXTENCODING_MS_1252;   break;
 #else
