@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 07:08:06 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,12 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
-
+#ifndef _COM_SUN_STAR_UCB_XANYCOMPAREFACTORY_HPP_
+#include <com/sun/star/ucb/XAnyCompareFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
@@ -225,6 +229,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using ::com::sun::star::util::DateTime;
+using namespace ::com::sun::star::ucb;
 
 #if SUPD > 632 || DVO_TEST
 using ::comphelper::UStringLess;
@@ -493,6 +498,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW,   XML_MIME_TYPE,  XML_TOK_TEXT_FRAME_MIME_TYPE },
     { XML_NAMESPACE_DRAW, XML_APPLET_NAME, XML_TOK_TEXT_FRAME_APPLET_NAME },
     { XML_NAMESPACE_DRAW, XML_FRAME_NAME, XML_TOK_TEXT_FRAME_FRAME_NAME },
+    { XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE, XML_TOK_TEXT_FRAME_NOTIFY_ON_UPDATE },
     XML_TOKEN_MAP_END
 };
 
@@ -1210,9 +1216,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     if( bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
     {
         // Set numbering rules
-        Reference < XIndexReplace > xNumRule;
+        Reference < XIndexReplace > xNumRules;
         Any aAny = xPropSet->getPropertyValue( sNumberingRules );
-        aAny >>= xNumRule;
+        aAny >>= xNumRules;
 
         if( IsInList() )
         {
@@ -1220,7 +1226,46 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             Reference < XIndexReplace > xNewNumRules =
                 pListBlock->GetNumRules();
 
-            if( xNewNumRules != xNumRule )
+            sal_Bool bSameNumRules = xNewNumRules == xNumRules;
+            if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
+            {
+                // If the interface pointers are different then this does
+                // not mean that the num rules are different. Further tests
+                // are rquired then. However, if only one num rule is
+                // set, no tests are required of course.
+                Reference< XNamed > xNewNamed( xNewNumRules, UNO_QUERY );
+                Reference< XNamed > xNamed( xNumRules, UNO_QUERY );
+                if( xNewNamed.is() && xNamed.is() )
+                {
+                    bSameNumRules = xNewNamed->getName() == xNamed->getName();
+                }
+                else
+                {
+                    if( !xNumRuleCompare.is() )
+                    {
+                        Reference<XAnyCompareFactory> xCompareFac( xServiceFactory, UNO_QUERY );
+                        OSL_ENSURE( xCompareFac.is(), "got no XAnyCompareFactory" );
+                        if( xCompareFac.is() )
+                        {
+                            Reference< XAnyCompare > xNumRuleCompare =
+                                xCompareFac->createAnyCompareByName(
+                                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "NumberingRules" ) ) );
+                            OSL_ENSURE( xNumRuleCompare .is(),
+                                    "got no Numbering Rules comparison" );
+                        }
+                    }
+                    if( xNumRuleCompare.is() )
+                    {
+                        Any aNewAny;
+                        aNewAny <<= xNewNumRules;
+                        bSameNumRules = (xNumRuleCompare->compare( aAny,
+                                                                aNewAny ) == 0);
+                    }
+                }
+            }
+
+            if( !bSameNumRules )
             {
                 aAny <<= xNewNumRules;
                 xPropSet->setPropertyValue( sNumberingRules, aAny );
@@ -1228,7 +1273,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
             XMLTextListItemContext *pListItem = GetListItem();
 
-            sal_Int8 nLevel = pListBlock->GetLevel();
+            sal_Int8 nLevel = (sal_Int8)pListBlock->GetLevel();
             if( !pListItem &&
                 xPropSetInfo->hasPropertyByName( sNumberingIsNumber ) )
             {
@@ -1263,7 +1308,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             // If the paragraph is not in a list but its style, remove it from
             // the list.
-            if( xNumRule.is() )
+            if( xNumRules.is() )
             {
                 Reference < XIndexReplace > xEmpty;
                 aAny <<= xEmpty;
@@ -1971,6 +2016,7 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
                                         SvXMLImport& rImport,
                                         const OUString& rHRef,
                                         const OUString& rStyleName,
+                                        const OUString& rTblName,
                                         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference< XPropertySet> xPropSet;
