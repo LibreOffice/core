@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 13:59:27 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,10 +264,20 @@ hidspecial HID_DSBROWSER_DISCONNECTING                  { HelpId = HID_DSBROWSER
 hidspecial HID_DSBROWSER_DIRECTSQL                      { HelpId = HID_DSBROWSER_DIRECTSQL   ; };
 hidspecial HID_DSADMIN_LDAP_ROWCOUNT                    { HelpId = HID_DSADMIN_LDAP_ROWCOUNT     ; };
 hidspecial HID_BROWSER_QUERY_PASTE                      { HelpId = HID_BROWSER_QUERY_PASTE   ; };
+hidspecial HID_BROWSER_QUERY_EDITSQL                    { HelpId = HID_BROWSER_QUERY_EDITSQL     ; };
+hidspecial HID_BROWSER_NEW_LINK                         { HelpId = HID_BROWSER_NEW_LINK  ; };
+hidspecial HID_BROWSER_EDIT_LINK                        { HelpId = HID_BROWSER_EDIT_LINK     ; };
+hidspecial HID_BROWSER_DROP_LINK                        { HelpId = HID_BROWSER_DROP_LINK     ; };
+hidspecial HID_BROWSER_OPEN_DOCUMENT                    { HelpId = HID_BROWSER_OPEN_DOCUMENT ; };
+hidspecial HID_BROWSER_EDIT_DOCUMENT                    { HelpId = HID_BROWSER_EDIT_DOCUMENT ; };
+hidspecial HID_BROWSER_BEW_DOCUMENT                     { HelpId = HID_BROWSER_BEW_DOCUMENT ; };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/07/03 13:59:27  oj
+ *  #86890# impl query paste in contextmenu
+ *
  *  Revision 1.30  2001/06/25 08:23:11  oj
  *  #88699# new helpids
  *
