@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-13 20:26:21 $
+ *  last change: $Author: hdu $ $Date: 2002-07-19 17:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
     mnLayoutWidth( 0 ),
     mpDXArray( NULL ),
     maDrawPosition( 0, 0 ),
-    mnOrientation( 0 )
+    mnOrientation( 0 ),
+    mnCharExtra( 0 )
 {}
 
 // =======================================================================
@@ -117,7 +118,8 @@ SalLayout::SalLayout( const ImplLayoutArgs& rArgs )
     mnEndCharIndex( rArgs.mnEndCharIndex ),
     maDrawPosition( rArgs.maDrawPosition ),
     mnUnitsPerPixel( 1 ),
-    mnOrientation( rArgs.mnOrientation )
+    mnOrientation( rArgs.mnOrientation ),
+    mnCharExtra( rArgs.mnCharExtra )
 {}
 
 // -----------------------------------------------------------------------
@@ -492,7 +494,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth ) const
 // -----------------------------------------------------------------------
 
 int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nStart, sal_Int32* pXOffset ) const
+    int& nStart, long* pGlyphAdvances, int* pCharIndexes ) const
 {
     const GlyphItem* pG = mpGlyphItems + nStart;
 
@@ -517,33 +519,33 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 
     // find more glyphs which can be merged into one drawing instruction
     int nCount = 0;
+    long nYPos = pG->maLinearPos.Y();
     while( nCount < nLen )
     {
         *(pGlyphs++) = pG->mnGlyphIndex;
-        if( pXOffset )
-            *(pXOffset++) = pG->maLinearPos.X() - aRelativePos.X();
+        if( pGlyphAdvances )
+            *(pGlyphAdvances++) = pG->mnNewWidth;
+        if( pCharIndexes )
+            *(pCharIndexes++) = pG->mnCharIndex;
         ++nCount;
 
         if( ++nStart >= mnGlyphCount )
             break;
 
-        Point aOldPos = pG->maLinearPos;
-        int nOrigWidth = pG->mnOrigWidth;
+        // stop when x-position is unexpected
+        if( !pGlyphAdvances && (pG->mnOrigWidth != pG->mnNewWidth) )
+            break;
+
         ++pG;
+
+        // stop when y-position is unexpected
+        if( nYPos != pG->maLinearPos.Y() )
+            break;
 
         // stop when no longer in string
         int n = pG->mnCharIndex;
         if( (n < mnFirstCharIndex) || (n >= mnEndCharIndex) )
             break;
-
-        // stop when baseline changes
-        if( aOldPos.Y() != pG->maLinearPos.Y() )
-            break;
-
-        // stop when x-position is unexpected
-        if( !pXOffset )
-            if( aOldPos.X() + nOrigWidth != pG->maLinearPos.X() )
-                break;
     }
 
     aRelativePos.X() /= mnUnitsPerPixel;
