@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:19:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2357,15 +2357,21 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
 /* -----------------------------30.08.2001 12:00------------------------------
 
  ---------------------------------------------------------------------------*/
+SwDbtoolsClient* SwNewDBMgr::pDbtoolsClient = NULL;
+
 SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
 {
-    static SwDbtoolsClient* pDbtoolsClient = NULL;
     if ( !pDbtoolsClient )
-    {
-        static SwDbtoolsClient aDbToolsClient;
-        pDbtoolsClient = &aDbToolsClient;
-    }
+        pDbtoolsClient = new SwDbtoolsClient;
     return *pDbtoolsClient;
+}
+/* -----------------13.05.2003 15:34-----------------
+
+ --------------------------------------------------*/
+void SwNewDBMgr::RemoveDbtoolsClient()
+{
+    delete pDbtoolsClient;
+    pDbtoolsClient = 0;
 }
 /* -----------------------------20.08.2002 12:00------------------------------
 
