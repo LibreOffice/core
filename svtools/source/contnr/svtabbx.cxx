@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:48:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,9 +876,9 @@ sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn
     return sal_True;
 }
 // -----------------------------------------------------------------------
-String SvHeaderTabListBox::GetCellText( long _nRow, USHORT _nColumn ) const
+String SvHeaderTabListBox::GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const
 {
-    return ::rtl::OUString( GetTabEntryText( _nRow, _nColumn ) );
+    return ::rtl::OUString( GetTabEntryText( _nRow, _nColumnPos ) );
 }
 // -----------------------------------------------------------------------
 Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen )
@@ -930,10 +930,10 @@ Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 
     return aRect;
 }
 // -----------------------------------------------------------------------
-Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
+Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
     OSL_ENSURE( m_pAccessible, "Invalid call: Accessible is null" );
-    return new ::svt::AccessibleBrowseBoxTableCell( m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumn );
+    return new ::svt::AccessibleBrowseBoxTableCell( m_pAccessible->getAccessibleChild( 0 ), *this, NULL, _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------
 Reference< XAccessible > SvHeaderTabListBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
@@ -1178,15 +1178,15 @@ Reference< XAccessible > SvHeaderTabListBox::CreateAccessible()
     return xAccessible;
 }
 // -----------------------------------------------------------------------------
-Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 _nIndex)
+Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
 {
     Rectangle aRect;
     return aRect;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
-    String sText = GetCellText(_nRow,_nColumnId);
+    String sText = GetAccessibleCellText(_nRow,_nColumnPos);
     MetricVector aRects;
     if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
     {
