@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:54:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 15:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,20 +114,22 @@ namespace sd {
 |*
 \************************************************************************/
 
-Window::Window(::Window* pParent) :
-    ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
-    DropTargetHelper( this ),
-    pShareWin(NULL),
-    mpViewShell(NULL),
-    aWinPos(0, 0),          // vorsichtshalber; die Werte sollten aber
-    aViewOrigin(0, 0),      // vom Besitzer des Fensters neu gesetzt
-    aViewSize(1000, 1000),  // werden
-    nMinZoom(MIN_ZOOM),
-    nMaxZoom(MAX_ZOOM),
-    bMinZoomAutoCalc(FALSE),
-    bCalcMinZoomByMinSide(TRUE),
-    bCenterAllowed(TRUE),
-    nTicks (0)
+Window::Window(::Window* pParent)
+    : ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+      DropTargetHelper( this ),
+      mpShareWin(NULL),
+      maWinPos(0, 0),           // vorsichtshalber; die Werte sollten aber
+      maViewOrigin(0, 0),       // vom Besitzer des Fensters neu gesetzt
+      maViewSize(1000, 1000),   // werden
+      mnMinZoom(MIN_ZOOM),
+      mnMaxZoom(MAX_ZOOM),
+      mbMinZoomAutoCalc(false),
+      mbCalcMinZoomByMinSide(true),
+      mbCenterAllowed(true),
+      mnTicks (0),
+      mbDraggedFrom(false),
+      mpViewShell(NULL),
+      mbUseDropScroll (true)
 {
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
@@ -155,7 +157,7 @@ Window::Window(::Window* pParent) :
 |*
 \************************************************************************/
 
-Window::~Window()
+Window::~Window (void)
 {
     if (mpViewShell != NULL)
     {
@@ -168,7 +170,7 @@ Window::~Window()
 
 
 
-void Window::SetViewShell(ViewShell* pViewSh)
+void Window::SetViewShell (ViewShell* pViewSh)
 {
     WindowUpdater* pWindowUpdater = NULL;
     // Unregister at device updater of old view shell.
@@ -201,12 +203,12 @@ void Window::SetViewShell(ViewShell* pViewSh)
 
 void Window::ShareViewArea(Window* pOtherWin)
 {
-    pShareWin       = pOtherWin;
-    aViewOrigin     = pOtherWin->aViewOrigin;
-    aViewSize       = pOtherWin->aViewSize;
-    nMinZoom        = pOtherWin->nMinZoom;
-    nMaxZoom        = pOtherWin->nMaxZoom;
-    bCenterAllowed  = pOtherWin->bCenterAllowed;
+    mpShareWin      = pOtherWin;
+    maViewOrigin    = pOtherWin->maViewOrigin;
+    maViewSize      = pOtherWin->maViewSize;
+    mnMinZoom       = pOtherWin->mnMinZoom;
+    mnMaxZoom       = pOtherWin->mnMaxZoom;
+    mbCenterAllowed = pOtherWin->mbCenterAllowed;
 
     long nZoom = pOtherWin->GetZoom();
     MapMode aMap(GetMapMode());
@@ -222,15 +224,15 @@ void Window::ShareViewArea(Window* pOtherWin)
 void Window::CalcMinZoom()
 {
     // Are we entitled to change the minimal zoom factor?
-    if ( bMinZoomAutoCalc )
+    if ( mbMinZoomAutoCalc )
     {
         // Get current zoom factor.
         long nZoom = GetZoom();
 
-        if ( pShareWin )
+        if ( mpShareWin )
         {
-            pShareWin->CalcMinZoom();
-            nMinZoom = pShareWin->nMinZoom;
+            mpShareWin->CalcMinZoom();
+            mnMinZoom = mpShareWin->mnMinZoom;
         }
         else
         {
@@ -240,26 +242,72 @@ void Window::CalcMinZoom()
             // window.
             Size aWinSize = PixelToLogic(GetOutputSizePixel());
             ULONG nX = (ULONG) ((double) aWinSize.Width()
-                * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Width());
+                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Width());
             ULONG nY = (ULONG) ((double) aWinSize.Height()
-                * (double) ZOOM_MULTIPLICATOR / (double) aViewSize.Height());
+                * (double) ZOOM_MULTIPLICATOR / (double) maViewSize.Height());
 
             // Decide whether to take the larger or the smaller factor.
             ULONG nFact;
-            if ( bCalcMinZoomByMinSide )    nFact = Min(nX, nY);
-            else                            nFact = Max(nX, nY);
+            if (mbCalcMinZoomByMinSide)
+                nFact = Min(nX, nY);
+            else
+                nFact = Max(nX, nY);
 
             // The factor is tansfomed according to the current zoom factor.
             nFact = nFact * nZoom / ZOOM_MULTIPLICATOR;
-            nMinZoom = Max((USHORT) MIN_ZOOM, (USHORT) nFact);
+            mnMinZoom = Max((USHORT) MIN_ZOOM, (USHORT) nFact);
         }
         // If the current zoom factor is smaller than the calculated minimal
         // zoom factor then set the new minimal factor as the current zoom
         // factor.
-        if ( nZoom < (long) nMinZoom )
-            SetZoomFactor(nMinZoom);
+        if ( nZoom < (long) mnMinZoom )
+            SetZoomFactor(mnMinZoom);
     }
 }
+
+
+
+
+void Window::SetMinZoom (long int nMin)
+{
+    mnMinZoom = (USHORT) nMin;
+}
+
+
+
+
+long Window::GetMinZoom (void) const
+{
+    return mnMinZoom;
+}
+
+
+
+
+void Window::SetMaxZoom (long int nMax)
+{
+    mnMaxZoom = (USHORT) nMax;
+}
+
+
+
+
+long Window::GetMaxZoom (void) const
+{
+    return mnMaxZoom;
+}
+
+
+
+
+long Window::GetZoom (void) const
+{
+    return GetMapMode().GetScaleX().GetNumerator() * 100L
+        / GetMapMode().GetScaleX().GetDenominator();
+}
+
+
+
 
 /*************************************************************************
 |*
@@ -341,7 +389,7 @@ void Window::MouseMove(const MouseEvent& rMEvt)
 
 void Window::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    nTicks = 0;
+    mnTicks = 0;
 
     if ( mpViewShell )
         mpViewShell->MouseButtonUp(rMEvt, this);
@@ -376,6 +424,33 @@ void Window::RequestHelp(const HelpEvent& rEvt)
         ::Window::RequestHelp( rEvt );
 }
 
+
+
+
+Point Window::GetWinViewPos (void) const
+{
+    return maWinPos;
+}
+
+
+
+
+Point Window::GetViewOrigin (void) const
+{
+    return maViewOrigin;
+}
+
+
+
+
+Size Window::GetViewSize (void) const
+{
+    return maViewSize;
+}
+
+
+
+
 /*************************************************************************
 |*
 |* Position der linken oberen Ecke des im Fenster sichtbaren Bereichs
@@ -385,7 +460,7 @@ void Window::RequestHelp(const HelpEvent& rEvt)
 
 void Window::SetWinViewPos(const Point& rPnt)
 {
-    aWinPos = rPnt;
+    maWinPos = rPnt;
 }
 
 /*************************************************************************
@@ -396,7 +471,7 @@ void Window::SetWinViewPos(const Point& rPnt)
 
 void Window::SetViewOrigin(const Point& rPnt)
 {
-    aViewOrigin = rPnt;
+    maViewOrigin = rPnt;
 }
 
 /*************************************************************************
@@ -408,8 +483,16 @@ void Window::SetViewOrigin(const Point& rPnt)
 
 void Window::SetViewSize(const Size& rSize)
 {
-    aViewSize = rSize;
+    maViewSize = rSize;
     CalcMinZoom();
+}
+
+
+
+
+void Window::SetCenterAllowed (bool bIsAllowed)
+{
+    mbCenterAllowed = bIsAllowed;
 }
 
 
@@ -421,8 +504,8 @@ long Window::SetZoomFactor(long nZoom)
     // calculated by CalcMinZoom() and the constant MAX_ZOOM.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < (long) nMinZoom )
-        nZoom = nMinZoom;
+    if ( nZoom < (long) mnMinZoom )
+        nZoom = mnMinZoom;
 
     // Set the zoom factor at the window's map mode.
     MapMode aMap(GetMapMode());
@@ -453,17 +536,17 @@ void Window::SetZoom(long nZoom)
     // MAX_ZOOM constant.
     if ( nZoom > MAX_ZOOM )
         nZoom = MAX_ZOOM;
-    if ( nZoom < (long) nMinZoom )
-        nZoom = nMinZoom;
+    if ( nZoom < (long) mnMinZoom )
+        nZoom = mnMinZoom;
 
     // Calculate the window's new origin.
     Size aSize = PixelToLogic(GetOutputSizePixel());
     long nW = aSize.Width()  * GetZoom() / nZoom;
     long nH = aSize.Height() * GetZoom() / nZoom;
-    aWinPos.X() += (aSize.Width()  - nW) / 2;
-    aWinPos.Y() += (aSize.Height() - nH) / 2;
-    if ( aWinPos.X() < 0 ) aWinPos.X() = 0;
-    if ( aWinPos.Y() < 0 ) aWinPos.Y() = 0;
+    maWinPos.X() += (aSize.Width()  - nW) / 2;
+    maWinPos.Y() += (aSize.Height() - nH) / 2;
+    if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
+    if ( maWinPos.Y() < 0 ) maWinPos.Y() = 0;
 
     // Finally update this window's map mode to the given zoom factor that
     // has been clipped to the valid range.
@@ -477,7 +560,7 @@ void Window::SetZoom(long nZoom)
     is displayed centered and as large as possible while still being fully
     visible in the window.
 */
-long Window::SetZoomRect(const Rectangle& rZoomRect)
+long Window::SetZoomRect (const Rectangle& rZoomRect)
 {
     long nNewZoom = 100;
 
@@ -527,15 +610,15 @@ long Window::SetZoomRect(const Rectangle& rZoomRect)
             if ( nZoom > MAX_ZOOM )
                 nFact = nFact * MAX_ZOOM / nZoom;
 
-            aWinPos = aViewOrigin + aPos;
+            maWinPos = maViewOrigin + aPos;
 
             aWinSize.Width() = (long) ((double) aWinSize.Width() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
-            aWinPos.X() += (rZoomRect.GetWidth() - aWinSize.Width()) / 2;
+            maWinPos.X() += (rZoomRect.GetWidth() - aWinSize.Width()) / 2;
             aWinSize.Height() = (long) ((double) aWinSize.Height() * (double) ZOOM_MULTIPLICATOR / (double) nFact);
-            aWinPos.Y() += (rZoomRect.GetHeight() - aWinSize.Height()) / 2;
+            maWinPos.Y() += (rZoomRect.GetHeight() - aWinSize.Height()) / 2;
 
-            if ( aWinPos.X() < 0 )  aWinPos.X() = 0;
-            if ( aWinPos.Y() < 0 )  aWinPos.Y() = 0;
+            if ( maWinPos.X() < 0 ) maWinPos.X() = 0;
+            if ( maWinPos.Y() < 0 ) maWinPos.Y() = 0;
 
             // Adapt the window's map mode to the new zoom factor.
             nNewZoom = SetZoomFactor(nZoom);
@@ -544,6 +627,17 @@ long Window::SetZoomRect(const Rectangle& rZoomRect)
 
     return(nNewZoom);
 }
+
+
+
+
+void Window::SetMinZoomAutoCalc (bool bAuto)
+{
+    mbMinZoomAutoCalc = bAuto;
+}
+
+
+
 
 /*************************************************************************
 |*
@@ -555,78 +649,89 @@ long Window::SetZoomRect(const Rectangle& rZoomRect)
 
 void Window::UpdateMapOrigin(BOOL bInvalidate)
 {
-    MapMode aMap(GetMapMode());
-    Point   aNewOrigin;
     BOOL    bChanged = FALSE;
     Size    aWinSize = PixelToLogic(GetOutputSizePixel());
 
-    if ( bCenterAllowed )
+    if ( mbCenterAllowed )
     {
-        if ( aWinPos.X() > aViewSize.Width() - aWinSize.Width() )
+        if ( maWinPos.X() > maViewSize.Width() - aWinSize.Width() )
         {
-            aWinPos.X() = aViewSize.Width() - aWinSize.Width();
+            maWinPos.X() = maViewSize.Width() - aWinSize.Width();
             bChanged = TRUE;
         }
-        if ( aWinPos.Y() > aViewSize.Height() - aWinSize.Height() )
+        if ( maWinPos.Y() > maViewSize.Height() - aWinSize.Height() )
         {
-            aWinPos.Y() = aViewSize.Height() - aWinSize.Height();
+            maWinPos.Y() = maViewSize.Height() - aWinSize.Height();
             bChanged = TRUE;
         }
-        if ( aWinSize.Width() > aViewSize.Width() || aWinPos.X() < 0 )
+        if ( aWinSize.Width() > maViewSize.Width() || maWinPos.X() < 0 )
         {
-            aWinPos.X() = aViewSize.Width()  / 2 - aWinSize.Width()  / 2;
+            maWinPos.X() = maViewSize.Width()  / 2 - aWinSize.Width()  / 2;
             bChanged = TRUE;
         }
-        if ( aWinSize.Height() > aViewSize.Height() || aWinPos.Y() < 0 )
+        if ( aWinSize.Height() > maViewSize.Height() || maWinPos.Y() < 0 )
         {
-            aWinPos.Y() = aViewSize.Height() / 2 - aWinSize.Height() / 2;
+            maWinPos.Y() = maViewSize.Height() / 2 - aWinSize.Height() / 2;
             bChanged = TRUE;
         }
-        aWinPos -= aViewOrigin;
-        Size aPix(aWinPos.X(), aWinPos.Y());
-        aPix = LogicToPixel(aPix);
-        // Groesse muss vielfaches von BRUSH_SIZE sein, damit Muster
-        // richtig dargestellt werden
-        // #i2237#
-        // removed old stuff here which still forced zoom to be
-        // %BRUSH_SIZE which is outdated now
-
-        if (mpViewShell && mpViewShell->ISA(DrawViewShell))
-        {
-            Size aViewSizePixel = LogicToPixel(aViewSize);
-            Size aWinSizePixel = LogicToPixel(aWinSize);
-
-            // Seite soll nicht am Fensterrand "kleben"
-            if (aPix.Width() == 0)
-            {
-                // #i2237#
-                // Since BRUSH_SIZE alignment is outdated now, i use the
-                // former constant here directly
-                aPix.Width() -= 8;
-            }
-            if (aPix.Height() == 0)
-            {
-                // #i2237#
-                // Since BRUSH_SIZE alignment is outdated now, i use the
-                // former constant here directly
-                aPix.Height() -= 8;
-            }
-        }
-
-        aPix = PixelToLogic(aPix);
-        aWinPos.X() = aPix.Width();
-        aWinPos.Y() = aPix.Height();
-        aNewOrigin.X() = - aWinPos.X();
-        aNewOrigin.Y() = - aWinPos.Y();
-        aWinPos += aViewOrigin;
-
-        aMap.SetOrigin(aNewOrigin);
-        SetMapMode(aMap);
-
-        if ( bChanged && bInvalidate )
-            Invalidate();
     }
+
+    UpdateMapMode ();
+
+    if (bChanged && bInvalidate)
+        Invalidate();
 }
+
+
+
+
+void Window::UpdateMapMode (void)
+{
+    Size aWinSize = PixelToLogic(GetOutputSizePixel());
+    maWinPos -= maViewOrigin;
+    Size aPix(maWinPos.X(), maWinPos.Y());
+    aPix = LogicToPixel(aPix);
+    // Groesse muss vielfaches von BRUSH_SIZE sein, damit Muster
+    // richtig dargestellt werden
+    // #i2237#
+    // removed old stuff here which still forced zoom to be
+    // %BRUSH_SIZE which is outdated now
+
+    if (mpViewShell && mpViewShell->ISA(DrawViewShell))
+    {
+        Size aViewSizePixel = LogicToPixel(maViewSize);
+        Size aWinSizePixel = LogicToPixel(aWinSize);
+
+        // Seite soll nicht am Fensterrand "kleben"
+        if (aPix.Width() == 0)
+        {
+            // #i2237#
+            // Since BRUSH_SIZE alignment is outdated now, i use the
+            // former constant here directly
+            aPix.Width() -= 8;
+        }
+        if (aPix.Height() == 0)
+        {
+            // #i2237#
+            // Since BRUSH_SIZE alignment is outdated now, i use the
+            // former constant here directly
+            aPix.Height() -= 8;
+        }
+    }
+
+    aPix = PixelToLogic(aPix);
+    maWinPos.X() = aPix.Width();
+    maWinPos.Y() = aPix.Height();
+    Point aNewOrigin (-maWinPos.X(), -maWinPos.Y());
+    maWinPos += maViewOrigin;
+
+    MapMode aMap(GetMapMode());
+    aMap.SetOrigin(aNewOrigin);
+    SetMapMode(aMap);
+}
+
+
+
 
 /*************************************************************************
 |*
@@ -637,7 +742,7 @@ void Window::UpdateMapOrigin(BOOL bInvalidate)
 
 double Window::GetVisibleX()
 {
-    return ((double) aWinPos.X() / aViewSize.Width());
+    return ((double) maWinPos.X() / maViewSize.Width());
 }
 
 /*************************************************************************
@@ -649,7 +754,7 @@ double Window::GetVisibleX()
 
 double Window::GetVisibleY()
 {
-    return ((double) aWinPos.Y() / aViewSize.Height());
+    return ((double) maWinPos.Y() / maViewSize.Height());
 }
 
 /*************************************************************************
@@ -662,17 +767,17 @@ double Window::GetVisibleY()
 
 void Window::SetVisibleXY(double fX, double fY)
 {
-    long nOldX = aWinPos.X();
-    long nOldY = aWinPos.Y();
+    long nOldX = maWinPos.X();
+    long nOldY = maWinPos.Y();
 
     if ( fX >= 0 )
-        aWinPos.X() = (long) (fX * aViewSize.Width());
+        maWinPos.X() = (long) (fX * maViewSize.Width());
     if ( fY >= 0 )
-        aWinPos.Y() = (long) (fY * aViewSize.Height());
+        maWinPos.Y() = (long) (fY * maViewSize.Height());
     UpdateMapOrigin(FALSE);
-    Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
-    sz = LogicToPixel(sz);
-    Scroll(nOldX - aWinPos.X(), nOldY - aWinPos.Y(), SCROLL_CHILDREN);
+    //  Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
+    //  sz = LogicToPixel(sz);
+    Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
     Update();
 }
 
@@ -686,9 +791,9 @@ void Window::SetVisibleXY(double fX, double fY)
 double Window::GetVisibleWidth()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Width() > aViewSize.Width() )
-        aWinSize.Width() = aViewSize.Width();
-    return ((double) aWinSize.Width() / aViewSize.Width());
+    if ( aWinSize.Width() > maViewSize.Width() )
+        aWinSize.Width() = maViewSize.Width();
+    return ((double) aWinSize.Width() / maViewSize.Width());
 }
 
 /*************************************************************************
@@ -701,9 +806,9 @@ double Window::GetVisibleWidth()
 double Window::GetVisibleHeight()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
-    if ( aWinSize.Height() > aViewSize.Height() )
-        aWinSize.Height() = aViewSize.Height();
-    return ((double) aWinSize.Height() / aViewSize.Height());
+    if ( aWinSize.Height() > maViewSize.Height() )
+        aWinSize.Height() = maViewSize.Height();
+    return ((double) aWinSize.Height() / maViewSize.Height());
 }
 
 /*************************************************************************
@@ -756,62 +861,14 @@ double Window::GetScrlPageHeight()
 
 /*************************************************************************
 |*
-|* Scrolling bei AcceptDrop-Events
-|*
-\************************************************************************/
-
-void Window::DropScroll(const Point& rMousePos)
-{
-    BOOL bReturn = FALSE;
-
-    short nDx = 0;
-    short nDy = 0;
-
-    Size aSize = GetOutputSizePixel();
-
-    if (aSize.Width() > SCROLL_SENSITIVE * 3)
-    {
-        if ( rMousePos.X() < SCROLL_SENSITIVE )
-        {
-            nDx = -1;
-        }
-
-        if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE )
-        {
-            nDx = 1;
-        }
-    }
-
-    if (aSize.Height() > SCROLL_SENSITIVE * 3)
-    {
-        if ( rMousePos.Y() < SCROLL_SENSITIVE )
-        {
-            nDy = -1;
-        }
-
-        if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE )
-        {
-            nDy = 1;
-        }
-    }
-
-    if ( (nDx || nDy) && (rMousePos.X()!=0 || rMousePos.Y()!=0 ) )
-    {
-                if (nTicks > 20) mpViewShell->ScrollLines(nDx, nDy);
-        else nTicks ++;
-    }
-}
-
-/*************************************************************************
-|*
 |* Fenster deaktivieren
 |*
 \************************************************************************/
 
 void Window::LoseFocus()
 {
-    nTicks = 0;
-        ::Window::LoseFocus ();
+    mnTicks = 0;
+    ::Window::LoseFocus ();
 }
 
 /*************************************************************************
@@ -822,8 +879,8 @@ void Window::LoseFocus()
 
 void Window::GrabFocus()
 {
-    nTicks       = 0;
-        ::Window::GrabFocus ();
+    mnTicks      = 0;
+    ::Window::GrabFocus ();
 }
 
 
@@ -980,6 +1037,9 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+
+
+
 /*************************************************************************
 |*
 |* DropTargetHelper::AcceptDrop
@@ -995,7 +1055,7 @@ sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
         if( mpViewShell )
             nRet = mpViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
-        if( !mpViewShell->ISA(OutlineViewShell ) )
+        if (mbUseDropScroll && ! mpViewShell->ISA(OutlineViewShell))
             DropScroll( rEvt.maPosPixel );
     }
 
@@ -1018,6 +1078,67 @@ sal_Int8 Window::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
 
     return nRet;
+}
+
+
+
+
+void Window::SetUseDropScroll (bool bUseDropScroll)
+{
+    mbUseDropScroll = bUseDropScroll;
+}
+
+
+
+
+/*************************************************************************
+|*
+|* Scrolling bei AcceptDrop-Events
+|*
+\************************************************************************/
+
+void Window::DropScroll(const Point& rMousePos)
+{
+    BOOL bReturn = FALSE;
+
+    short nDx = 0;
+    short nDy = 0;
+
+    Size aSize = GetOutputSizePixel();
+
+    if (aSize.Width() > SCROLL_SENSITIVE * 3)
+    {
+        if ( rMousePos.X() < SCROLL_SENSITIVE )
+        {
+            nDx = -1;
+        }
+
+        if ( rMousePos.X() >= aSize.Width() - SCROLL_SENSITIVE )
+        {
+            nDx = 1;
+        }
+    }
+
+    if (aSize.Height() > SCROLL_SENSITIVE * 3)
+    {
+        if ( rMousePos.Y() < SCROLL_SENSITIVE )
+        {
+            nDy = -1;
+        }
+
+        if ( rMousePos.Y() >= aSize.Height() - SCROLL_SENSITIVE )
+        {
+            nDy = 1;
+        }
+    }
+
+    if ( (nDx || nDy) && (rMousePos.X()!=0 || rMousePos.Y()!=0 ) )
+    {
+        if (mnTicks > 20)
+            mpViewShell->ScrollLines(nDx, nDy);
+        else
+            mnTicks ++;
+    }
 }
 
 
