@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:46:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,10 +290,11 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
         pWasInTblNd = IsCrsrInTbl();
 
         if( SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
-            SwCrsrShell::IsEndPara() && !IsCrsrInTbl() &&
+            SwCrsrShell::IsEndPara() &&
             SwCrsrShell::Right(1,CRSR_SKIP_CHARS) )
         {
-            BOOL bDelFull = 0 != IsCrsrInTbl();
+            const SwTableNode * pCurrTblNd = IsCrsrInTbl();
+            const BOOL bDelFull = pCurrTblNd && pCurrTblNd != pWasInTblNd;
             SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
 
             if( bDelFull )
@@ -303,7 +304,7 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
                 break;
             }
         }
-        else
+
         {
             /* #108049# Save the startnode of the current cell */
             const SwStartNode * pSNdOld;
