@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:25:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #endif
 
 #include <comphelper/fileformat.h>
@@ -765,6 +768,10 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     try {
         nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
     }
+    catch ( beans::IllegalTypeException& )
+    {
+        // the container just has an unknown type, use current file format
+    }
     catch ( uno::Exception& )
     {
         OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
@@ -1000,11 +1007,49 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
 
-    // TODO/LATER: Storing to different format can be done only in running state,
-    //           copiing is not legal for documents with relative links.
+    sal_Int32 nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+    sal_Int32 nOriginalStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+    try {
+        nTargetStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
+    }
+    catch ( beans::IllegalTypeException& )
+    {
+        // the container just has an unknown type, use current file format
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can not retrieve target storage media type!\n" );
+    }
+
+    try
+    {
+        nOriginalStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
+    }
+    catch ( beans::IllegalTypeException& )
+    {
+        // the container just has an unknown type, use current file format
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can not retrieve own storage media type!\n" );
+    }
+
+    sal_Bool bSwitchBackToLoaded = sal_False;
+
+    // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
-        m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
-    else
+    {
+        // TODO/LATER: copiing is not legal for documents with relative links.
+        if ( nTargetStorageFormat == nOriginalStorageFormat )
+            m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        else
+        {
+            changeState( embed::EmbedStates::RUNNING );
+            bSwitchBackToLoaded = sal_True;
+        }
+    }
+
+    if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
         uno::Reference< embed::XStorage > xSubStorage =
                     xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
@@ -1012,17 +1057,10 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         if ( !xSubStorage.is() )
             throw uno::RuntimeException(); //TODO
 
-        sal_Int32 nStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
-        try {
-            nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
-        }
-        catch ( uno::Exception& )
-        {
-            OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
-        }
-
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        if ( bSwitchBackToLoaded )
+            changeState( embed::EmbedStates::LOADED );
     }
 
     // TODO: should the listener notification be done?
@@ -1063,20 +1101,49 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     OSL_ENSURE( m_xParentStorage.is() && m_xObjectStorage.is(), "The object has no valid persistence!\n" );
 
-    sal_Int32 nStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+    sal_Int32 nTargetStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
+    sal_Int32 nOriginalStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
     try {
-        nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
+        nTargetStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( xStorage );
+    }
+    catch ( beans::IllegalTypeException& )
+    {
+        // the container just has an unknown type, use current file format
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
+        OSL_ENSURE( sal_False, "Can not retrieve target storage media type!\n" );
+    }
+
+    try
+    {
+        nOriginalStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
+    }
+    catch ( beans::IllegalTypeException& )
+    {
+        // the container just has an unknown type, use current file format
+    }
+    catch ( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can not retrieve own storage media type!\n" );
     }
 
     PostEvent_Impl( ::rtl::OUString::createFromAscii( "OnSaveAs" ) );
 
-    // TODO/MAV: in case storage type is changed storing can be done only in running state
+    sal_Bool bSwitchBackToLoaded = sal_False;
+
+    // Storing to different format can be done only in running state.
     if ( m_nObjectState == embed::EmbedStates::LOADED )
-        m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+    {
+        // TODO/LATER: copiing is not legal for documents with relative links.
+        if ( nTargetStorageFormat == nOriginalStorageFormat )
+            m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
+        else
+        {
+            changeState( embed::EmbedStates::RUNNING );
+            bSwitchBackToLoaded = sal_True;
+        }
+    }
 
     uno::Reference< embed::XStorage > xSubStorage =
                 xStorage->openStorageElement( sEntName, embed::ElementModes::READWRITE );
@@ -1087,7 +1154,9 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        if ( bSwitchBackToLoaded )
+            changeState( embed::EmbedStates::LOADED );
     }
 
     m_bWaitSaveCompleted = sal_True;
@@ -1279,6 +1348,10 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         sal_Int32 nStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
         try {
             nStorageFormat = ::comphelper::OStorageHelper::GetXStorageFormat( m_xParentStorage );
+        }
+        catch ( beans::IllegalTypeException& )
+        {
+            // the container just has an unknown type, use current file format
         }
         catch ( uno::Exception& )
         {
