@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:15:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ sal_Int32 OGroupManager::getGroupCount()
 //------------------------------------------------------------------
 void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
 {
-    OSL_ENSURE(nGroup >= 0 && nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
+    OSL_ENSURE(nGroup >= 0 && (size_t)nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
     OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
     _rName                          = aGroupPos->second.GetGroupName();
     _rGroup                         = aGroupPos->second.GetControlModels();
