@@ -10,4 +10,4 @@
  <toolbar:toolbaritem xlink:href=".uno:ColorView" toolbar:helpid="helpid:27257" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="helpid:10157" toolbar:text="" />
- /toolbar:toolbar>
+</toolbar:toolbar>
