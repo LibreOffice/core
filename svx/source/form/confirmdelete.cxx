@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confirmdelete.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:37:28 $
+ *  last change: $Author: mh $ $Date: 2001-07-31 14:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include <svx/dialmgr.hxx>
+#include <dialmgr.hxx>
 #endif
 #ifndef _SVX_FMHELP_HRC
 #include "fmhelp.hrc"
@@ -176,6 +176,9 @@ namespace svxform
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:37:28  fs
+ *  initial checkin - replacement of the SvxDbMsgBox, now only used for deletion confirmation
+ *
  *
  *  Revision 1.0 25.07.01 09:44:47  fs
  ************************************************************************/
