@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:03:48 $
+#   last change: $Author: vg $ $Date: 2004-02-02 17:50:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,20 +71,21 @@
     use POSIX;
     use Cwd;
     use File::Path;
-#use Thread 'yield';    # Should be uncommented if you have Thread.pm (untested)
 
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
         require Cws; import Cws;
+        require Logging; import Logging;
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
+        require IO::Handle; import IO::Handle;
     };
 
 #### script id #####
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.95 $ ';
+    $id_str = ' $Revision: 1.96 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -96,6 +97,15 @@
 #                       #
 #########################
 
+    if (defined $ENV{CWS_WORK_STAMP}) {
+        if (defined $ENV{VCSID}) {
+            $vcsid = $ENV{VCSID};
+        } else {
+            print_error("Can't determine VCSID. Please use setsolar.", 5);
+        };
+        $log = Logging->new();
+    };
+    $modules_number = 0;
     $perl = "";
     $remove_commando = "";
     if ( $^O eq 'MSWin32' ) {
@@ -152,7 +162,7 @@
     $only_common = ''; # the only common output tree to delete when preparing
     %build_modes = ();
     $maximal_processes = 0; # the max number of the processes run
-
+    %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
 ### main ###
 
     &get_options;
@@ -282,6 +292,7 @@
             delete $global_deps_hash{$parent};
             &RemoveFromDependencies($parent, $deps_hash);
         };
+        &check_deps_hash($deps_hash);
     };
 
 #
@@ -296,6 +307,7 @@
             if ($build_from_opt || $build_since) {
                 &prepare_build_from_opt(\%global_deps_hash);
             };
+            $modules_number = scalar keys %global_deps_hash;
             if ($QuantityToBuild) {
                 &build_multiprocessing;
                 return;
@@ -503,6 +515,7 @@ sub get_deps_hash {
             delete $DeadDependencies{$Dir};
         };
     };
+    &check_deps_hash($dependencies_hash);
 };
 
 #
@@ -658,6 +671,47 @@ sub RemoveFromDependencies {
     };
 };
 
+
+#
+# Check the hash for consistency
+#
+sub check_deps_hash {
+    my $deps_hash_ref = shift;
+    return if (!scalar keys %$deps_hash_ref);
+    my %deps_hash = %$deps_hash_ref;
+    my $consistent;
+    foreach $key (keys %$deps_hash_ref) {
+        $deps_hash{$key} = [@{$$deps_hash_ref{$key}}];
+    };
+
+    do {
+        $consistent = '';
+        foreach $key (keys %deps_hash) {
+            @value_array = @{$deps_hash{$key}};
+            if ($#value_array == -1) {
+                &RemoveFromDependencies($key, \%deps_hash);
+                delete $deps_hash{$key};
+                $consistent = 1;
+            };
+        };
+    } while ($consistent && (scalar keys %deps_hash));
+    return if ($consistent);
+    print STDERR "Fatal error:";
+    foreach (keys %deps_hash) {
+        print STDERR "\n\t$_ depends on: ";
+        foreach my $i (@{$deps_hash{$_}}) {
+            print STDERR (' ', $i);
+        };
+    };
+    if ($child) {
+        my $oldfh = select STDERR;
+        $| = 1;
+        _exit(1);
+    } else {
+        &print_error ("There are dead or circular dependencies\n");
+    };
+};
+
 #
 # Find undependent project
 #
@@ -673,24 +727,7 @@ sub FindIndepPrj {
             @PrjDeps = @{$$Dependencies{$Prj}};
             return $Prj if ($#PrjDeps == -1);
         };
-        # If there are only dependent projects in hash - generate error
-        return '' if ($BuildAllParents && !$children);
-        if ($children) {
-            $only_dependent = 1;
-            return '';
-        };
-        print STDERR "\nFatal error:";
-        foreach $Prj (keys %$Dependencies) {
-            if (&IsHashNative($Prj)) {
-                next;
-            };
-            $i = 0;
-            print STDERR "\n$Prj depends on:";
-            foreach $i (0 .. $#{$$Dependencies{$Prj}}) {
-                print STDERR (' ', ${$$Dependencies{$Prj}}[$i]);
-            };
-        };
-        &print_error ("\nhave dead or circular dependencies\n");
+        return '';
     } else {
         $no_projects = 1;
         return '';
@@ -752,8 +789,19 @@ sub GetDirectoryList {
     return @DirectoryList;
 };
 
+sub finish_logging {
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    my $message = shift;
+    $message = 'SUCCESS.'  if (!$message);
+    $message .= " Built $modules_number modules.";
+    $log->end_log_extended($script_name,$vcsid,$message);
+};
+
 sub print_error {
     my $message = shift;
+    $modules_number -= scalar keys %global_deps_hash;
+    $modules_number -= 1;
+    &finish_logging("FAILURE: " . $message);
     print STDERR "\nERROR: $message\n";
     $ENV{mk_tmp} = '';
     close CMD_FILE if ($cmd_file);
@@ -785,11 +833,38 @@ sub usage {
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
 
+sub init_logging {
+    return if (!defined $ENV{CWS_WORK_STAMP} || $show);
+    my $parameter_list;
+    foreach (@ARGV) {$parameter_list .= "$_\;"};
+    $parameter_list = $` if ($parameter_list =~ /;$/o);
+
+    my $cws = Cws->new();
+    my $childws  = $ENV{CWS_WORK_STAMP};
+    my $masterws = $ENV{WORK_STAMP};
+    $cws->child($childws);
+    $cws->master($masterws);
+    $log->set_cws_handle($cws);
+    $log->start_log_extended($script_name, $parameter_list, $masterws, $childws, $vcsid);
+    # Set interrupt handler
+    $SIG{'INT'} = 'INT_handler';
+};
+
+#
+# Interrupt handler to log ctrl+c ua
+#
+sub INT_handler {
+    print("Command aborted!\n");
+    &finish_logging('Manual abort (ctrl-c)');
+    exit(1);
+}
+
 #
 # Get all options passed
 #
 sub get_options {
     my $arg;
+    &init_logging;
     while ($arg = shift @ARGV) {
         $arg =~ /^-P$/          and $QuantityToBuild = shift @ARGV  and next;
         $arg =~ /^-P(\d+)$/         and $QuantityToBuild = $1 and next;
@@ -899,20 +974,26 @@ sub get_switch_options {
 # cancel build when one of children has error exit code
 #
 sub cancel_build {
+    $modules_number -= scalar keys %global_deps_hash;
+    my $log_string = 'FAILURE. Build is broken in modules: ';
     if ($BuildAllParents) {
+        $modules_number -= scalar @broken_modules_names;
         print STDERR "\n";
         print STDERR scalar @broken_modules_names;
         print STDERR " module(s): ";
         foreach (@broken_modules_names) {
             print STDERR "\n\t$_";
+            $log_string .= " $_";
             &RemoveFromDependencies($_, \%global_deps_hash);
         };
+        &finish_logging($log_string);
         print STDERR "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
         foreach (keys %broken_build) {
             print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
         print STDERR "\nAttention: if you build and deliver the above module(s) you may prolongue your build from module " . &PickPrjToBuild(\%global_deps_hash) . "\n";
     } else {
+        &finish_logging($log_string . $CurrentPrj);
         kill 9 => -$$;
     };
     print STDERR "\n";
@@ -1260,13 +1341,8 @@ sub get_cvs_root
     my $cws    = shift;
     my $module = shift;
     my $cvsroot = &get_link_cvs_root($module);
-    my $vcsid = $ENV{VCSID};
     if (!$cvsroot) {
         my $master = $cws->master();
-
-        if ( !$vcsid ) {
-            print_error("Can't determine VCSID. Please use setsolar.", 5);
-        }
 
         my $workspace_lst = get_workspace_lst();
         my $workspace_db = GenInfoParser->new();
@@ -1321,7 +1397,7 @@ sub get_workspace_lst
 #
 sub ensure_clear_module {
     my $Prj = shift;
-    my $module_type = &module_classify($$Prj);
+    my $module_type = shift;
     if ($module_type eq 'mod') {
         &clear_module($$Prj);
         my $lnk_name = $$Prj.'.lnk';
@@ -1415,6 +1491,20 @@ sub check_module_consistency {
     };
 };
 
+sub check_modules {
+    my $modules_ref = shift;
+    my @images = ();
+    foreach my $module (@$modules_ref) {
+        my $type = &module_classify($module);
+        push(@images, $module) if ($type eq 'img');
+        next if (scalar @images);
+        $modules_types{$module} = $type;
+    };
+    if (scalar @images) {
+        &print_error("You have incomplete modules: " . "@images\n" . "\nThis can cause incompatible binaries in the output tree. Please check these modules out or copy them with copyprj");
+    };
+};
+
 #
 # Removes projects which it is not necessary to build
 # in incompartible build
@@ -1442,15 +1532,16 @@ sub prepare_incompartible_build {
     };
     if ($prepare) {
         @modules_built = keys %$deps_hash;
+        &check_modules(\@modules_built);
         &clear_delivered;
     };
     print "\n";
     foreach $prj (keys %$deps_hash) {
         my $prj_lnk = '';
-        my $module_type = &module_classify($prj);
+        my $module_type = $modules_types{$prj};
         $prj_lnk = $prj if ($module_type =~ /\.lnk$/o);
         if ($prepare) {
-            &ensure_clear_module(\$prj);
+            &ensure_clear_module(\$prj, $module_type);
         } else {
             my $message;
             if ($module_type ne 'mod') {
