@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:32:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 15:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
+                USHORT nSub;
+                for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
                     ByteString aStr( pSlot->pUnoName );
