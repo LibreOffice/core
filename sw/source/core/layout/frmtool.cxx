@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:50:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@
 #include "node2lay.hxx"
 #include "ndole.hxx"
 #include "ndtxt.hxx"
+#include "swtable.hxx"
+#include "hints.hxx"
 #ifndef _LAYHELP_HXX
 #include <layhelp.hxx>
 #endif
@@ -804,7 +806,23 @@ SwCntntNotify::~SwCntntNotify()
                 {   if ( pTmp->ISA( SwCrsrShell ) )
                     {
                         pFESh = (SwFEShell*)pTmp;
-                        if ( !bFirst )
+                        // #108369#: Here used to be the condition if (!bFirst).
+                        // I think this should mean "do not call CalcAndSetScale"
+                        // if the frame is formatted for the first time.
+                        // Unfortunately this is not valid anymore since the
+                        // SwNoTxtFrm already gets a width during CalcLowerPreps.
+                        // Nevertheless, the indention of !bFirst seemed to be
+                        // to assure that the OLE objects have already been notified
+                        // if necessary before calling CalcAndSetScale.
+                        // So I replaced !bFirst by !IsOLESizeInvalid. There is
+                        // one additional problem specific to the word import:
+                        // The layout is calculated _before_ calling PrtOLENotify,
+                        // and the OLE objects are not invalidated during import.
+                        // Therefore I added the condition !IsUpdateExpFld,
+                        // have a look at the occurence of CalcLayout in
+                        // uiview/view.cxx.
+                        if ( !pNd->IsOLESizeInvalid() &&
+                             !pSh->GetDoc()->IsUpdateExpFld() )
                             pFESh->CalcAndSetScale( xObj, &pFly->Prt(), &pFly->Frm());
                     }
                     pTmp = (ViewShell*)pTmp->GetNext();
@@ -1183,6 +1201,15 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         else if ( pNd->IsTableNode() )
         {   //Sollten wir auf eine Tabelle gestossen sein?
             SwTableNode *pTblNode = (SwTableNode*)pNd;
+
+            // #108116# loading may produce table structures that GCLines
+            // needs to clean up. To keep table formulas correct, change
+            // all table formulas to internal (BOXPTR) representation.
+            SwTableFmlUpdate aMsgHnt( &pTblNode->GetTable() );
+            aMsgHnt.eFlags = TBL_BOXPTR;
+            pDoc->UpdateTblFlds( &aMsgHnt );
+            pTblNode->GetTable().GCLines();
+
             pFrm = pTblNode->MakeFrm();
 
             if( pPageMaker && pPageMaker->CheckInsert( nIndex )
@@ -1223,10 +1250,16 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     //des Uppers erzeugt.
                     SwSectionFrm *pTmp = pActualSection->GetUpper()->GetSectionFrm();
                     pFrm->InsertBehind( pTmp->GetUpper(), pTmp );
+                    // OD 25.03.2003 #108339# - direct initialization of section
+                    // after insertion in the layout
+                    static_cast<SwSectionFrm*>(pFrm)->Init();
                 }
                 else
                 {
                     pFrm->InsertBehind( pLay, pPrv );
+                    // OD 25.03.2003 #108339# - direct initialization of section
+                    // after insertion in the layout
+                    static_cast<SwSectionFrm*>(pFrm)->Init();
                     if( pPrv && pPrv->IsInFtn() )
                     {
                         if( pPrv->IsSctFrm() )
@@ -1236,7 +1269,6 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                     }
                 }
                 pFrm->CheckDirChange();
-                static_cast<SwSectionFrm*>(pFrm)->Init();
 
                 pFrm->Frm().Pos() = pLay->Frm().Pos();
                 pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
