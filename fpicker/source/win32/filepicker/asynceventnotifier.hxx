@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-22 09:58:44 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <list>
 #include <utility>
 
+#ifndef _EVENTNOTIFICATION_HXX_
+#include "eventnotification.hxx"
+#endif
+
 //---------------------------------------------
 //
 //---------------------------------------------
@@ -94,36 +98,33 @@
 class CAsyncEventNotifier
 {
 public:
-    typedef void (SAL_CALL ::com::sun::star::ui::dialogs::XFilePickerListener::*EventListenerMethod_t)(const ::com::sun::star::ui::dialogs::FilePickerEvent&);
-
-public:
     CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper);
 
     bool SAL_CALL start();
     void SAL_CALL stop();
 
-    void SAL_CALL notifyEvent( EventListenerMethod_t aListenerMethod, ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+    // this class is responsible for the memory management of
+    // the CEventNotification instance
+    void SAL_CALL notifyEvent(CEventNotification* EventNotification);
 
 private:
-    typedef std::pair<EventListenerMethod_t, ::com::sun::star::ui::dialogs::FilePickerEvent> EventRecord_t;
-
-    size_t        SAL_CALL getEventListSize();
-    void          SAL_CALL resetNotifyEvent();
-    EventRecord_t SAL_CALL getNextEventRecord();
-    void          SAL_CALL removeNextEventRecord();
+    size_t              SAL_CALL getEventListSize();
+    void                SAL_CALL resetNotifyEvent();
+    CEventNotification* SAL_CALL getNextEventRecord();
+    void                SAL_CALL removeNextEventRecord();
 
     void SAL_CALL run( );
 
-    static unsigned int WINAPI ThreadProc( LPVOID pParam );
+    static unsigned int WINAPI ThreadProc(LPVOID pParam);
 
 private:
-    std::list<EventRecord_t>    m_EventList;
-    HANDLE                      m_hThread;
-    bool                        m_bRun;
-    unsigned                    m_ThreadId;
-    ::cppu::OBroadcastHelper&   m_rBroadcastHelper;
-    osl::Condition              m_NotifyEvent;
-    osl::Mutex                  m_Mutex;
+    std::list<CEventNotification*>  m_EventList;
+    HANDLE                          m_hThread;
+    bool                            m_bRun;
+    unsigned                        m_ThreadId;
+    ::cppu::OBroadcastHelper&       m_rBroadcastHelper;
+    osl::Condition                  m_NotifyEvent;
+    osl::Mutex                      m_Mutex;
 
 // prevent copy and assignment
 private:

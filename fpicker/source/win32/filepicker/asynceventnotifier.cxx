@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-22 09:58:44 $
+ *  last change: $Author: tra $ $Date: 2002-03-21 07:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 #include <process.h>
 #include <windows.h>
+#include <memory>
 
 //------------------------------------------------
 //
@@ -143,7 +144,7 @@ void SAL_CALL CAsyncEventNotifier::stop()
 {
     OSL_PRECOND(GetCurrentThreadId() != m_ThreadId, "Method called in wrong thread context!");
 
-    ClearableMutexGuard aGuard(m_Mutex);
+    ResettableMutexGuard aGuard(m_Mutex);
 
     OSL_PRECOND(m_bRun,"Event notifier does not run!");
 
@@ -163,8 +164,7 @@ void SAL_CALL CAsyncEventNotifier::stop()
 
     // lock mutex again to reset m_hThread
     // and prevent a race with start()
-
-    MutexGuard anotherGuard(m_Mutex);
+    aGuard.reset();
 
     CloseHandle(m_hThread);
     m_hThread = 0;
@@ -174,7 +174,7 @@ void SAL_CALL CAsyncEventNotifier::stop()
 //
 //------------------------------------------------
 
-void SAL_CALL CAsyncEventNotifier::notifyEvent(EventListenerMethod_t aListenerMethod, FilePickerEvent aEvent)
+void SAL_CALL CAsyncEventNotifier::notifyEvent(CEventNotification* EventNotification)
 {
     MutexGuard aGuard(m_Mutex);
 
@@ -182,7 +182,7 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(EventListenerMethod_t aListenerMe
 
     if (m_bRun)
     {
-        m_EventList.push_back(std::make_pair(aListenerMethod, aEvent));
+        m_EventList.push_back(EventNotification);
         m_NotifyEvent.set();
     }
 }
@@ -212,7 +212,7 @@ void SAL_CALL CAsyncEventNotifier::resetNotifyEvent()
 //
 //------------------------------------------------
 
-CAsyncEventNotifier::EventRecord_t SAL_CALL CAsyncEventNotifier::getNextEventRecord()
+CEventNotification* SAL_CALL CAsyncEventNotifier::getNextEventRecord()
 {
     MutexGuard aGuard(m_Mutex);
     return m_EventList.front();
@@ -236,13 +236,13 @@ void SAL_CALL CAsyncEventNotifier::run()
 {
     while (m_bRun)
     {
-        m_NotifyEvent.wait( );
+        m_NotifyEvent.wait();
 
         if (m_bRun)
         {
             while (getEventListSize() > 0)
             {
-                EventRecord_t aEventRecord = getNextEventRecord();
+                std::auto_ptr<CEventNotification> EventNotification(getNextEventRecord());
                 removeNextEventRecord();
 
                 ::cppu::OInterfaceContainerHelper* pICHelper =
@@ -254,16 +254,13 @@ void SAL_CALL CAsyncEventNotifier::run()
 
                     while(iter.hasMoreElements())
                     {
-                        Reference<XFilePickerListener> xFPListener(iter.next(), UNO_QUERY);
-
                         try
                         {
-                            if (xFPListener.is())
-                                (xFPListener.get()->*aEventRecord.first)(aEventRecord.second);
+                            EventNotification->notifyEventListener(iter.next());
                         }
                         catch(RuntimeException&)
                         {
-                            OSL_ENSURE(sal_False, "RuntimeException during event dispatching");
+                            OSL_ENSURE(sal_False,"RuntimeException during event dispatching");
                         }
                     }
                 }
