@@ -80,7 +80,7 @@ import sun.awt.*;
 public class SpriteRep
 {
     private java.awt.image.BufferedImage    buffer;
-    private BitmapCanvas                    bitmapCanvas;
+    private CanvasBitmap                    canvasBitmap;
     private double                          alpha;
     private java.awt.geom.Point2D.Double    outputPosition;
     private boolean                         bufferOwned;
@@ -112,10 +112,10 @@ public class SpriteRep
 
     public synchronized void renderAnimation( XAnimation animation, ViewState viewState, double t )
     {
-        if( bitmapCanvas != null )
+        if( canvasBitmap != null )
         {
             // clear buffer with all transparent
-            Graphics2D bitmapGraphics = bitmapCanvas.getGraphics();
+            Graphics2D bitmapGraphics = canvasBitmap.getGraphics();
 
             // before that, setup _everything_ we might have changed in CanvasUtils.setupGraphicsState
             bitmapGraphics.setColor( new Color( 0.0f, 0.0f, 0.0f, 1.0f ) );
@@ -129,7 +129,7 @@ public class SpriteRep
             {
                 // now push the animation at time instance t into the
                 // virginal graphics
-                animation.render(bitmapCanvas, viewState, t);
+                animation.render(canvasBitmap, viewState, t);
             }
             catch( com.sun.star.lang.IllegalArgumentException e )
             {
@@ -174,8 +174,8 @@ public class SpriteRep
 
     public synchronized void setupBuffer( java.awt.Graphics2D graphics, int width, int height )
     {
-        if( bitmapCanvas != null )
-            bitmapCanvas.dispose();
+        if( canvasBitmap != null )
+            canvasBitmap.dispose();
 
         if( buffer != null )
             buffer.flush();
@@ -183,8 +183,8 @@ public class SpriteRep
         buffer         = graphics.getDeviceConfiguration().createCompatibleImage(Math.max(1,width),
                                                                                  Math.max(1,height),
                                                                                  Transparency.TRANSLUCENT);
-        bitmapCanvas   = new BitmapCanvas(buffer.createGraphics());
-        CanvasUtils.initGraphics( bitmapCanvas.getGraphics() );
+        canvasBitmap   = new CanvasBitmap( buffer );
+        CanvasUtils.initGraphics( canvasBitmap.getGraphics() );
 
         CanvasUtils.printLog( "SpriteRep.setupBuffer called, with dimensions (" + width + ", " + height + ")" );
     }
@@ -198,23 +198,23 @@ public class SpriteRep
     {
         CanvasUtils.printLog( "SpriteRep.getContentCanvas() called" );
 
-        Graphics2D graphics = bitmapCanvas.getGraphics();
+        Graphics2D graphics = canvasBitmap.getGraphics();
         graphics.setTransform( new AffineTransform() );
         graphics.setComposite( AlphaComposite.getInstance(AlphaComposite.CLEAR));
         graphics.fillRect( 0,0,buffer.getWidth(),buffer.getHeight() );
 
-        return bitmapCanvas;
+        return canvasBitmap;
     }
 
     public void dispose()
     {
-        if( bitmapCanvas != null  )
-            bitmapCanvas.dispose();
+        if( canvasBitmap != null  )
+            canvasBitmap.dispose();
 
         if( buffer != null && bufferOwned )
             buffer.flush();
 
-        bitmapCanvas = null;
+        canvasBitmap = null;
         buffer = null;
     }
 }
