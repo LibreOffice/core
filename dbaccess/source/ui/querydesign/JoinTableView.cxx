@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,11 +1627,15 @@ void OJoinTableView::HideTabWins()
     SetUpdateMode(sal_False);
 
     OTableWindowMap* pTabWins = GetTabWinMap();
-    if (pTabWins)
+    if ( pTabWins )
     {
-        OTableWindowMap::const_iterator aIter = pTabWins->begin();
-        for(;aIter != pTabWins->end();++aIter)
-            RemoveTabWin(aIter->second);
+        OTableWindowMap::iterator aIter = pTabWins->begin();
+        while(aIter != pTabWins->end())
+        {
+            OTableWindow* pTabWin = aIter->second;
+            ++aIter;
+            RemoveTabWin(pTabWin);
+        }
     }
 
     m_pView->getController()->setModified(sal_True);
@@ -1704,13 +1708,8 @@ Reference< XAccessible > OJoinTableView::CreateAccessible()
     Reference< XAccessible > aRet;
     if (getDesignView()->getController())
     {
-        Reference< XAccessible > xParent;
-        Window* pParent = GetParent();
-        if(pParent)
-            xParent = pParent->GetAccessible();
         // create our VIEWPORT
-
-        OJoinDesignViewAccess* pAccessible = new OJoinDesignViewAccess(this,xParent);
+        OJoinDesignViewAccess* pAccessible = new OJoinDesignViewAccess(this);
         m_pAccessible = pAccessible;
         aRet = pAccessible;
     }
