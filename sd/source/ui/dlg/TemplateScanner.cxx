@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:48:46 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,12 @@ void TemplateScanner::ScanFolders (void)
         if (xResultSet.is())
         {
             Reference<XContentAccess> xContentAccess (xResultSet, UNO_QUERY);
-            Reference<XRow> xRow (xResultSet, UNO_QUERY);
 
             while (xResultSet->next())
             {
+                Reference<XRow> xRow (xResultSet, UNO_QUERY);
+                if ( ! xRow.is())
+                    continue;
                 OUString aTitle (xRow->getString (1));
                 OUString aTargetDir (xRow->getString (2));
 
