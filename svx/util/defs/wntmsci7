@@ -21252,3 +21252,5 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?__copy_aux@_STL@@YAPAGPBG0PAGABU__true_type@1@@Z
 ?__find@_STL@@YAPAGPAG0ABHABUrandom_access_iterator_tag@1@@Z
 ??0?$_STLP_alloc_proxy@PAPAXPAXV?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@_STL@@@_STL@@QAE@ABV01@@Z
+?GetBackgroundColor@SdrPage@@QBE?AVColor@@XZ
+?GetVisibleArea@SdrPaintView@@QAE?AVRectangle@@G@Z
