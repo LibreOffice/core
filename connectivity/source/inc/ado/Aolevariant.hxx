@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 09:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ namespace connectivity
             OLEVariant(sal_Int8 n)              {   VariantInit(this);  vt = VT_I1;     bVal        = n;}
             OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_I2;     intVal      = n;}
             OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
-            OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I8;     llVal       = x;}
+            OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = x;}
 
             OLEVariant(const rtl::OUString& us)
             {
