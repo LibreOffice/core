@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 08:58:40 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ public class ReportWizard {
             break;
 
         case SOCONTENTLST:
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
             CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xContentListBox.getSelectedItemPos();
             CurReportDocument.loadSectionsfromTemplate(CurReportPaths.ContentFiles[0][iPos]);
@@ -495,9 +496,11 @@ public class ReportWizard {
             CurReportDocument.setTableColumnSeparators();
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             break;
 
         case SOLAYOUTLST:
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
             CurReportDocument.ReportTextDocument.lockControllers();
             iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
@@ -505,6 +508,7 @@ public class ReportWizard {
             CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, bOldIsCurLandscape);
             CurReportDocument.ReportTextDocument.unlockControllers();
             CurReportDocument.selectFirstPage();
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
             break;
         default:
             break;
@@ -582,11 +586,15 @@ public class ReportWizard {
                        break;
 
                     case SOOPTLANDSCAPE:
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
                         CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, true);
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
                         break;
 
                     case SOOPTPORTRAIT:
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(false));
                         CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, CurUNODialog, false);
+            tools.setUNOPropertyValue(CurUNODialog.DialogModel, "Enabled", new Boolean(true));
                         break;
 
             case SOOPTSAVEASTEMPLATE:
@@ -1129,7 +1137,7 @@ public class ReportWizard {
     try{
     CurUNODialog.assignPropertyToDialogControl("cmdBack", "Enabled", new Boolean(true));
         CurDBMetaData.FieldNames = xSelFieldsListBox.getItems();
-    CurDBMetaData.getFormatKeys();
+//  CurDBMetaData.getFormatKeys();
     XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xGroupListBox);
     xWindow.setFocus();
 

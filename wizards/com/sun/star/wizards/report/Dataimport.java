@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-13 08:58:40 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ public class Dataimport extends ReportWizard{
         bStopProcess = false;
         while (CurDBMetaData.ResultSet.next() == true){
             if (bStopProcess == true){
+            insertDataToRecordTable(CurReportDocument, xTextCursor, DataVector, RecordFieldCount);
             xTextDocument.unlockControllers();
             return;
             }
