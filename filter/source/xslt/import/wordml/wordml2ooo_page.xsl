@@ -49,7 +49,7 @@
    All Rights Reserved.
 
    Contributor(s): _______________________________________
-
+   
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt  v">
     <xsl:template match="w:footnotePr" mode="config">
@@ -178,6 +178,23 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <xsl:template match="w:bgPict">
+        <xsl:if test="w:background/@w:bgcolor">
+            <xsl:attribute name="fo:background-color">
+                <xsl:call-template name="MapConstColor">
+                    <xsl:with-param name="color" select="w:background/@w:bgcolor"/>
+                </xsl:call-template>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="w:background/@w:background">
+            <style:background-image>
+                <office:binary-data>
+                    <xsl:variable name="the-image" select="key('imagedata',w:background/@w:background)"/>
+                    <xsl:value-of select="translate($the-image/text(),'&#9;&#10;&#13;&#32;','' ) "/>
+                </office:binary-data>
+            </style:background-image>
+        </xsl:if>
+    </xsl:template>
     <xsl:template match="w:sectPr" mode="page-layout">
         <style:page-layout>
             <xsl:attribute name="style:name">pm<xsl:number from="/w:wordDocument/w:body" level="any" count="w:sectPr" format="1"/>
@@ -231,9 +248,13 @@
                         <xsl:attribute name="fo:margin-left">
                             <xsl:call-template name="ConvertMeasure">
                                 <xsl:with-param name="value">
-                                    <xsl:choose >
-                                        <xsl:when test="w:pgMar/@w:gutter"><xsl:value-of select="concat(w:pgMar/@w:left +w:pgMar/@w:gutter, 'twip') "/></xsl:when>
-                                        <xsl:otherwise><xsl:value-of select="concat(w:pgMar/@w:left , 'twip') "/></xsl:otherwise>
+                                    <xsl:choose>
+                                        <xsl:when test="w:pgMar/@w:gutter">
+                                            <xsl:value-of select="concat(w:pgMar/@w:left +w:pgMar/@w:gutter, 'twip') "/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="concat(w:pgMar/@w:left , 'twip') "/>
+                                        </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:with-param>
                             </xsl:call-template>cm</xsl:attribute>
@@ -269,6 +290,7 @@
                             </xsl:call-template>cm</xsl:attribute>
                     </style:columns>
                 </xsl:if>
+                <xsl:apply-templates select="/w:wordDocument/w:bgPict"/>
             </style:page-layout-properties>
         </style:page-layout>
     </xsl:template>
