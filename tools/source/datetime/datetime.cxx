@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datetime.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: er $ $Date: 2000-11-10 17:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <datetime.hxx>
+#include <solmath.hxx>
 
 /*************************************************************************
 |*
@@ -346,4 +347,68 @@ DateTime operator -( const DateTime& rDateTime, const Time& rTime )
     DateTime aDateTime( rDateTime );
     aDateTime -= rTime;
     return aDateTime;
+}
+
+/*************************************************************************
+|*
+|*    DateTime::operator +=( double )
+|*
+*************************************************************************/
+
+DateTime& DateTime::operator +=( double fTimeInDays )
+{
+    double fInt, fFrac;
+    if ( fTimeInDays < 0.0 )
+    {
+        fInt = SolarMath::ApproxCeil( fTimeInDays );
+        fFrac = fInt <= fTimeInDays ? 0.0 : fTimeInDays - fInt;
+    }
+    else
+    {
+        fInt = SolarMath::ApproxFloor( fTimeInDays );
+        fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
+    }
+    Date::operator+=( long(fInt) );     // full days
+    if ( fFrac )
+    {
+        Time aTime(0);  // default ctor calls system time, we don't need that
+        fFrac *= 24UL * 60 * 60 * 1000;     // time expressed in milliseconds
+        aTime.MakeTimeFromMS( long(fFrac) );    // method handles negative ms
+        operator+=( aTime );
+    }
+    return *this;
+}
+
+/*************************************************************************
+|*
+|*    DateTime::operator +( double )
+|*
+*************************************************************************/
+
+DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
+{
+    DateTime aDateTime( rDateTime );
+    aDateTime += fTimeInDays;
+    return aDateTime;
+}
+
+/*************************************************************************
+|*
+|*    DateTime::operator -()
+|*
+*************************************************************************/
+
+double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
+{
+    long nDays = (const Date&) rDateTime1 - (const Date&) rDateTime2;
+    long nTime = rDateTime1.GetMSFromTime() - rDateTime2.GetMSFromTime();
+    if ( nTime )
+    {
+        double fTime = double(nTime);
+        fTime /= 24UL * 60 * 60 * 1000; // convert from milliseconds to fraction
+        if ( nDays < 0 && fTime > 0.0 )
+            fTime = 1.0 - fTime;
+        return double(nDays) + fTime;
+    }
+    return double(nDays);
 }
