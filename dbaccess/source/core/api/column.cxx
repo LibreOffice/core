@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:02:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
+#include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#include "core_resource.hrc"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -1024,7 +1030,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
         OColumns_BASE::appendObject(descriptor);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_ADD),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -1040,7 +1046,7 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         OColumns_BASE::dropObject(_nPos,_sElementName);
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
-        throw SQLException();
+        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_DROP),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
