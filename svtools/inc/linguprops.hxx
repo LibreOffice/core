@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linguprops.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 12:34:10 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,13 @@
 #define UPN_IS_SPELL_SPECIAL                "IsSpellSpecial"
 #define UPN_IS_WRAP_REVERSE                 "IsWrapReverse"
 
+// UNO property names for text conversion options
+#define UPN_ACTIVE_CONVERSION_DICTIONARIES  "ActiveConversionDictionaries"
+#define UPN_IS_IGNORE_POST_POSITIONAL_WORD  "IsIgnorePostPositionalWord"
+#define UPN_IS_AUTO_CLOSE_DIALOG            "IsAutoCloseDialog"
+#define UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST     "IsShowEntriesRecentlyUsedFirst"
+#define UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES  "IsAutoReplaceUniqueEntries"
+
 // uno property handles
 #define UPH_IS_GERMAN_PRE_REFORM             0
 #define UPH_IS_USE_DICTIONARY_LIST           1
@@ -116,6 +123,11 @@
 #define UPH_DEFAULT_LOCALE_CJK              22
 #define UPH_DEFAULT_LOCALE_CTL              23
 #define UPH_ACTIVE_DICTIONARIES             24
+#define UPH_ACTIVE_CONVERSION_DICTIONARIES  25
+#define UPH_IS_IGNORE_POST_POSITIONAL_WORD  26
+#define UPH_IS_AUTO_CLOSE_DIALOG            27
+#define UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST     28
+#define UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES  29
 
 #endif
 
