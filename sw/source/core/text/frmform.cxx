@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:20:36 $
+ *  last change: $Author: ama $ $Date: 2001-03-29 11:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,7 +1066,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     if ( bUnChg && !bPrev )
     {
         // 6672: Toleranz von SLOPPY_TWIPS (5 Twips); vgl. 6922
-        const KSHORT nWidthDiff = nOldWidth > pNew->Width()
+        const long nWidthDiff = nOldWidth > pNew->Width()
                                 ? nOldWidth - pNew->Width()
                                 : pNew->Width() - nOldWidth;
         bUnChg = nOldHeight == pNew->Height() &&
@@ -1771,9 +1771,9 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 if ( 0 != (pObjs = pMaster->GetDrawObjs()) )
                 {
                     MSHORT nAutoCnt = 0;
-                    for ( int i = 0; i < int(pObjs->Count()); ++i )
+                    for( MSHORT i = 0; i < pObjs->Count(); ++i )
                     {
-                        SdrObject *pO = (*pObjs)[MSHORT(i)];
+                        SdrObject *pO = (*pObjs)[i];
                         if ( pO->IsWriterFlyFrame() )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
