@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:42:01 $
+ *  last change: $Author: pb $ $Date: 2001-05-21 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,7 @@ ToolBox TB_SVT_FILEVIEW
         ToolBoxItem
         {
             Identifier = TI_DOCTEMPLATE_BACK;
+            HelpId = HID_TEMPLATEDLG_TB_BACK;
             ItemBitmap = Bitmap { File = "back_small.bmp" ; };
             Text = "Zurück" ;
             Text [ english_us ] = "Backward" ;
@@ -258,6 +259,7 @@ ToolBox TB_SVT_FILEVIEW
         ToolBoxItem
         {
             Identifier = TI_DOCTEMPLATE_PREV;
+            HelpId = HID_TEMPLATEDLG_TB_PREV;
             ItemBitmap = Bitmap { File = "up_small.bmp" ; };
             Text = "Ein Verzeichnis hoch" ;
             Text [ english_us ] = "Up One Level" ;
@@ -289,6 +291,7 @@ ToolBox TB_SVT_FILEVIEW
         ToolBoxItem
         {
             Identifier = TI_DOCTEMPLATE_PRINT;
+            HelpId = HID_TEMPLATEDLG_TB_PRINT;
             ItemBitmap = Bitmap { File = "sc05504.bmp" ; };
             Text = "Drucken" ;
             Text [ english_us ] = "Print" ;
@@ -312,6 +315,35 @@ ToolBox TB_SVT_FILEVIEW
             Text[ arabic ] = "Print";
             Text[ catalan ] = "Print";
             Text[ finnish ] = "Print";
+        };
+    };
+};
+
+ToolBox TB_SVT_FRAMEWIN
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 100 , 12 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+            Identifier = TI_DOCTEMPLATE_DOCINFO;
+            HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
+            ItemBitmap = Bitmap { File = "info_small.bmp" ; };
+            Text = "Dokumenteigenschaften" ;
+            Text [ english_us ] = "Docinfo" ;
+        };
+        ToolBoxItem
+        {
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+            Identifier = TI_DOCTEMPLATE_PREVIEW;
+            HelpId = HID_TEMPLATEDLG_TB_PREVIEW;
+            ItemBitmap = Bitmap { File = "preview_small.bmp" ; };
+            Text = "Vorschau" ;
+            Text [ english_us ] = "Preview" ;
         };
     };
 };
@@ -440,5 +472,37 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ arabic ] = "Templates and Documents";
     Text[ catalan ] = "Templates and Documents";
     Text[ finnish ] = "Vorlagen und Dokumente";
+};
+
+StringArray STRARY_SVT_DOCINFO
+{
+    ItemList =
+    {
+        < "Titel" ; DI_TITLE ; > ;
+        < "Von" ; DI_FROM ; > ;
+        < "Datum" ; DI_DATE ; > ;
+        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
+        < "Beschreibung" ; DI_DESCRIPTION ; > ;
+        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
+        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
+        < "Geändert von" ; DI_MODIFIEDBY ; > ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Thema" ; DI_THEME ; > ;
+    };
+    ItemList [ english_us ] =
+    {
+        < "Title" ; DI_TITLE ; > ;
+        < "From" ; DI_FROM ; > ;
+        < "Date" ; DI_DATE ; > ;
+        < "Keywords" ; DI_KEYWORDS ; > ;
+        < "Description" ; DI_DESCRIPTION ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
+        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
+        < "Geändert von" ; DI_MODIFIEDBY ; > ;
+        < "Druckdatum" ; DI_PRINTDATE ; > ;
+        < "Gedruckt von" ; DI_PRINTBY ; > ;
+        < "Theme" ; DI_THEME ; > ;
+    };
 };
 

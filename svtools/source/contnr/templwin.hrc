@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 08:29:39 $
+ *  last change: $Author: pb $ $Date: 2001-05-21 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,20 @@
 #define TI_DOCTEMPLATE_BACK     1
 #define TI_DOCTEMPLATE_PREV     2
 #define TI_DOCTEMPLATE_PRINT    3
+#define TI_DOCTEMPLATE_DOCINFO  4
+#define TI_DOCTEMPLATE_PREVIEW  5
 
 #define HBI_CATEGORY            1
+
+#define DI_TITLE                1
+#define DI_FROM                 2
+#define DI_DATE                 3
+#define DI_KEYWORDS             4
+#define DI_DESCRIPTION          5
+#define DI_MIMETYPE             6
+#define DI_MODIFIEDDATE         7
+#define DI_MODIFIEDBY           8
+#define DI_PRINTDATE            9
+#define DI_PRINTBY              10
+#define DI_THEME                11
 

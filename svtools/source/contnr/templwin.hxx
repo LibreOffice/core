@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-15 06:13:36 $
+ *  last change: $Author: pb $ $Date: 2001-05-21 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,25 +64,16 @@
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/splitwin.hxx>
+#include <vcl/resary.hxx>
 
 #include "ivctrl.hxx"
 #include "fileview.hxx"
 #include "headbar.hxx"
+#include "svmedit2.hxx"
 
-namespace com
-{
-    namespace sun
-    {
-        namespace star
-        {
-            namespace frame
-            {
-                class XFrame;
-            }
-        }
-    }
-};
-
+namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } };
+namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } };
+namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } };
 
 // class SvtIconWindow_Impl ----------------------------------------------
 
@@ -146,16 +137,48 @@ public:
     String              GetRootURL() const { return aCurrentRootURL; }
     sal_Bool            HasPreviousLevel( String& rURL ) const;
     String              GetFolderTitle() const;
+    String              GetFolderURL() const { return aFolderURL; }
 };
 
 // class SvtFrameWindow_Impl ---------------------------------------------
 
+class SvtDocInfoTable_Impl : public ResStringArray
+{
+private:
+    String          aEmptyString;
+
+public:
+    SvtDocInfoTable_Impl();
+
+    const String&   GetString( long nId ) const;
+};
+
+class SvtExtendedMultiLineEdit_Impl : public ExtMultiLineEdit
+{
+public:
+    SvtExtendedMultiLineEdit_Impl( Window* pParent );
+    ~SvtExtendedMultiLineEdit_Impl() {}
+
+    virtual void        Resize();
+
+    void                Clear() { SetText( String() ); }
+    void                InsertEntry( const String& rTitle, const String& rValue );
+};
+
 class SvtFrameWindow_Impl : public Window
 {
 private:
-    Window*                 pTextWin;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
-                            xFrame;
+                                xFrame;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
+                                xDocInfo;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+                                xWindow;
+
+    SvtExtendedMultiLineEdit_Impl*  pEditWin;
+    Window*                         pTextWin;
+    SvtDocInfoTable_Impl            aInfoTable;
+    String                          aCurrentURL;
 
 public:
     SvtFrameWindow_Impl( Window* pParent );
@@ -164,19 +187,24 @@ public:
     virtual void            Resize();
 
     void                    OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bAsTemplate );
+    void                    ToggleView( sal_Bool bDocInfo );
 };
 
 // class SvtTemplateWindow -----------------------------------------------
 
+class HistoryList_Impl;
+
 class SvtTemplateWindow : public Window
 {
 private:
-    ToolBox                     aToolBox;
+    ToolBox                     aFileViewTB;
+    ToolBox                     aFrameWinTB;
     SplitWindow                 aSplitWin;
 
     SvtIconWindow_Impl*         pIconWin;
     SvtFileViewWindow_Impl*     pFileWin;
     SvtFrameWindow_Impl*        pFrameWin;
+    HistoryList_Impl*           pHistoryList;
 
     Link                        aSelectHdl;
     Link                        aDoubleClickHdl;
@@ -196,8 +224,11 @@ private:
     DECL_LINK(          ResetHdl_Impl, Timer* );
     DECL_LINK(          TimeoutHdl_Impl, Timer* );
     DECL_LINK(          ClickHdl_Impl, ToolBox* );
+    DECL_LINK(          SplitHdl_Impl, SplitWindow* );
 
     void                PrintFile( const String& rURL );
+    void                AppendHistoryURL( const String& rURL );
+    void                OpenHistory();
 
 public:
     SvtTemplateWindow( Window* pParent );
