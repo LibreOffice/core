@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+#   last change: $Author: os $ $Date: 2000-12-01 17:36:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ CXXFILES = \
         unoidx.cxx \
         unomap.cxx \
         unoobj.cxx \
+        unoobj2.cxx \
         unoport.cxx \
         unoprnms.cxx \
         unorefmk.cxx \
@@ -119,6 +120,7 @@ SLOFILES =	\
         $(SLO)$/unoidx.obj\
         $(SLO)$/unomap.obj\
         $(SLO)$/unoobj.obj\
+        $(SLO)$/unoobj2.obj\
         $(SLO)$/unoport.obj\
         $(SLO)$/unoprnms.obj\
         $(SLO)$/unosrch.obj\
@@ -139,6 +141,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/unoidx.obj\
         $(SLO)$/unomap.obj\
         $(SLO)$/unoobj.obj\
+        $(SLO)$/unoobj2.obj\
         $(SLO)$/unoport.obj\
         $(SLO)$/unosrch.obj\
         $(SLO)$/unostyle.obj\

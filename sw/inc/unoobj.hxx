@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
+ *  last change: $Author: os $ $Date: 2000-12-01 17:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,17 @@ class SwFmtFld;
 class SwFmtRefMark;
 class SwEvtLstnrArray;
 class GetCurTxtFmtColl;
+/* -----------------------------01.12.00 18:09--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwParaSelection
+{
+    SwUnoCrsr* pUnoCrsr;
+public:
+    SwParaSelection(SwUnoCrsr* pCrsr);
+    ~SwParaSelection();
+};
+
 /* -----------------29.04.98 07:35-------------------
  *
  * --------------------------------------------------*/
