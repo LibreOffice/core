@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-07-11 11:44:36 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public:
     SvxAutoCorrect          &rAutoCorrect;
     SvStorageRef            &rStorage;
     SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect, SvStorageRef & rNewStorage);
-    ~SvXMLAutoCorrectImport ( void );
+    ~SvXMLAutoCorrectImport ( void ) throw ();
 };
 
 class SvXMLWordListContext : public SvXMLImportContext
@@ -146,7 +146,7 @@ protected:
 public:
     SvStringsISortDtor  &rList;
     SvXMLExceptionListImport ( SvStringsISortDtor & rNewList );
-    ~SvXMLExceptionListImport ( void );
+    ~SvXMLExceptionListImport ( void ) throw ();
 };
 
 class SvXMLExceptionListContext : public SvXMLImportContext

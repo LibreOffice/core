@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 16:46:53 $
+ *  last change: $Author: hjs $ $Date: 2001-09-12 13:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutoco
             XML_NAMESPACE_BLOCKLIST );
 }
 
-SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void )
+SvXMLAutoCorrectImport::~SvXMLAutoCorrectImport ( void ) throw ()
 {
 }
 
@@ -200,7 +200,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport ( SvStringsISortDtor & rNewLi
             XML_NAMESPACE_BLOCKLIST );
 }
 
-SvXMLExceptionListImport::~SvXMLExceptionListImport ( void )
+SvXMLExceptionListImport::~SvXMLExceptionListImport ( void ) throw ()
 {
 }
 
