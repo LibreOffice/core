@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:23:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ public:
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
                   objectpositioning::AsCharFlags nFlags );
-    const SwFrmFmt *GetFrmFmt() const;
     xub_StrLen GetFlyCrsrOfst( const KSHORT nOfst, const Point &rPoint,
                         SwPosition *pPos, SwCrsrMoveState* pCMS ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
