@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Scripting.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:54:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Scripting" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>DF</author>
+		<desc xml:lang="en-US">Contains the various settings needed by the Scripting Framework and its runtimes.</desc>
+	</info>
+	<templates>
+		<group oor:name="RuntimeNode">
+			<info>
+				<desc xml:lang="en-US">Specifies the runtimes available to the Scriptying Framework.</desc>
+			</info>
+			<prop oor:name="SupportedFileExtensions" oor:type="oor:string-list">
+				<info>
+					<desc xml:lang="en-US">Lists the file extensions that are recognized by this runtime.</desc>
+				</info>
+			</prop>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="ScriptRuntimes" oor:node-type="RuntimeNode">
+			<info>
+				<desc xml:lang="en-US">Lists the registered Scripting Framework runtimes.</desc>
+			</info>
+		</set>
+		<group oor:name="ScriptDisplaySettings">
+			<info>
+				<desc xml:lang="en-US">
+					Specifies display settings for assignment dialogs
+				</desc>
+			</info>
+			<prop oor:name="ShowBasic" oor:type="xs:boolean">
+				<info>
+					<desc xml:lang="en-US">Show Basic scripts in assignment dialogs</desc>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="ShowSF" oor:type="xs:boolean">
+				<info>
+					<desc xml:lang="en-US">Show Scripting Framework scripts in assignment dialogs</desc>
+				</info>
+				<value>false</value>
+			</prop>
+		</group>
+	</component>
+</oor:component-schema>
