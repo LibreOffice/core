@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 12:11:51 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:04:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,13 +106,6 @@ LIB2TARGET= $(SLB)$/btstrpsh.lib
 LIB2ARCHIV= $(SLB)$/libbtstrpsh.a
 LIB2FILES=  $(SLB)$/bootstrp.lib
 
-APP1TARGET=  i_server
-APP1STACK=   16000
-APP1OBJS=    $(OBJ)$/iserver.obj
-APP1LIBS=    $(LB)$/bootstrp.lib
-APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
-
-
 APP1TARGET= sspretty
 APP1OBJS=	$(OBJ)$/sspretty.obj
 APP1LIBS=	$(LB)$/bootstrp.lib
@@ -124,7 +117,12 @@ APP2OBJS=	$(OBJ)$/rscdep.obj
 APP2LIBS=	$(LB)$/bootstrp.lib
 APP2STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB)
 
-DEPOBJFILES	= $(APP1OBJS) $(APP2OBJS) 
+APP3TARGET=  so_checksum
+APP3OBJS=    $(OBJ)$/md5.obj \
+             $(OBJ)$/so_checksum.obj
+APP3STDLIBS= $(TOOLSLIB) $(SALLIB)
+
+DEPOBJFILES	= $(APP1OBJS) $(APP2OBJS) $(APP3OBJS)
 
 .ENDIF	# "$(OS)"=="MACOS"
 
