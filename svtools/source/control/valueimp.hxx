@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:38:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,14 @@ private:
         of being disposed. Otherwise, sal_False is returned.
     */
     sal_Bool IsDisposed (void);
+
+    /** Check whether the value set has a 'none' field, i.e. a field (button)
+        that deselects any items (selects none of them).
+        @return
+            Returns <true/> if there is a 'none' field and <false/> it it is
+            missing.
+    */
+    bool HasNoneField (void) const;
 };
 
 // ----------------
