@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:31:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
     Text[ thai ] = "สีพื้นหลัง";
     Text[ czech ] = "Barva pozadí";
     Text[ hebrew ] = "‮צבע רקע‬";
-    Text[ hindi ] = "Background color";
+    Text[ hindi ] = "पृष्ठभाग का रंग";
     Text[ slovak ] = "Farba pozadia";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
@@ -178,7 +178,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
     Text[ thai ] = "ไม่มี";
     Text[ czech ] = "Nic";
     Text[ hebrew ] = "‮ללא‬";
-    Text[ hindi ] = "None";
+    Text[ hindi ] = "कोई नहीं";
     Text[ slovak ] = "Žiadne";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
@@ -208,7 +208,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
     Text[ thai ] = "ทึบ";
     Text[ czech ] = "Pevná";
     Text[ hebrew ] = "‮חלק‬";
-    Text[ hindi ] = "Solid";
+    Text[ hindi ] = "ठोस";
     Text[ slovak ] = "Plné";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
@@ -269,7 +269,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
     Text[ language_user1 ] = "; Corr; Correct German is \"Verlauf\"";
     Text[ czech ] = "Přechod";
     Text[ hebrew ] = "‮שיפוע‬";
-    Text[ hindi ] = "Gradient";
+    Text[ hindi ] = "ग्रेडिऐन्ट्";
     Text[ slovak ] = "Prechod";
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
@@ -300,7 +300,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
     Text[ language_user1 ] = "; Corr; Correct German is \"Bitmap\"";
     Text[ czech ] = "Rastr";
     Text[ hebrew ] = "‮מפת סיביות‬";
-    Text[ hindi ] = "Bitmap";
+    Text[ hindi ] = "बिटमॉप्";
     Text[ slovak ] = "Bitová mapa";
 };
 String RID_SVXSTR_A11Y_WITH
@@ -360,7 +360,7 @@ String RID_SVXSTR_A11Y_STYLE
     Text[ thai ] = "ลักษณะ";
     Text[ czech ] = "styl";
     Text[ hebrew ] = "‮סגנון‬";
-    Text[ hindi ] = "Style";
+    Text[ hindi ] = "शैली";
     Text[ slovak ] = "Štýl";
 };
 String RID_SVXSTR_A11Y_AND
@@ -1307,6 +1307,10 @@ String RID_SVXSTR_CHARACTER_CODE
     Text[ hindi ] = "Character code ";
     Text[ slovak ] = "Kód znaku ";
 };
+
+
+
+
 
 
 
