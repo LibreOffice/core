@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:47:13 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ namespace dbaui
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
         }
+
         m_aPB_Connection.SetHelpId(HID_DSADMIN_BROWSECONN);
         BOOL bShowUserAuthenfication = m_pCollection->hasAuthentication(m_eType);
         m_aFL2.Show(bShowUserAuthenfication);
