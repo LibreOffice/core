@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:33:15 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:19:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,11 @@
 
 package installer::windows::idtglobal;
 
+use installer::existence;
 use installer::exiter;
 use installer::globals;
 use installer::pathanalyzer;
+use installer::remover;
 use installer::systemactions;
 use installer::windows::language;
 
@@ -360,6 +362,17 @@ sub write_idt_header
         $oneline = "Icon\tName\n";
         push(@{$idtref}, $oneline);
     }
+
+    if ( $definestring eq "selfreg" )
+    {
+        $oneline = "File_\tCost\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "s72\tI2\n";
+        push(@{$idtref}, $oneline);
+        $oneline = "SelfReg\tFile_\n";
+        push(@{$idtref}, $oneline);
+    }
+
 }
 
 ##############################################################
@@ -513,7 +526,7 @@ sub translate_idtfile
 
 sub prepare_language_idt_directory
 {
-    my ($destinationdir, $newidtdir, $onelanguage, $iconfilecollector) = @_;
+    my ($destinationdir, $newidtdir, $onelanguage, $filesref, $iconfilecollector) = @_;
 
     # Copying all idt-files from the source $installer::globals::idttemplatepath to the destination $destinationdir
     # Copying all files in the subdirectory "Binary"
@@ -541,6 +554,18 @@ sub prepare_language_idt_directory
         my $iconfilename = ${$iconfilecollector}[$i];
         installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$iconfilename);
         installer::systemactions::copy_one_file(${$iconfilecollector}[$i], $destinationdir . $installer::globals::separator . "Icon" . $installer::globals::separator . $iconfilename);
+    }
+
+    # Copying all files in @installer::globals::binarytablefiles in the binary directory
+
+    for ( my $i = 0; $i <= $#installer::globals::binarytablefiles; $i++ )
+    {
+        my $binaryfilegid = $installer::globals::binarytablefiles[$i];
+        my $binaryfile = installer::existence::get_specified_file($filesref, $binaryfilegid);
+        my $binaryfilepath = $binaryfile->{'sourcepath'};
+        my $binaryfilename = $binaryfilepath;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$binaryfilename);
+        installer::systemactions::copy_one_file($binaryfilepath, $destinationdir . $installer::globals::separator . "Binary" . $installer::globals::separator . $binaryfilename);
     }
 
     # Copying all new created and language independent idt-files to the destination $destinationdir.
@@ -818,64 +843,289 @@ sub get_last_position_in_sequencetable
     return $position;
 }
 
+#########################################################################
+# Determining the position of a specified Action in the sequencetable
+#########################################################################
+
+sub get_position_in_sequencetable
+{
+    my ($action, $sequencetable) = @_;
+
+    my $position = 0;
+
+    for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
+    {
+        my $line = ${$sequencetable}[$i];
+
+        if ( $line =~ /^\s*(\w+)\t.*\t\s*(\d+)\s$/ )
+        {
+            my $compareaction = $1;
+            $position = $2;
+            if ( $compareaction eq $action ) { last; }
+        }
+    }
+
+    return $position;
+}
+
 ################################################################################################
 # Including the CustomAction for the configuration
 # into the tables CustomAc.idt and InstallE.idt.
 #
 # CustomAc.idt: ExecutePkgchk 82 pkgchk.exe -s
-# InstallE.idt: ExecutePkgchk 3175
+# InstallE.idt: ExecutePkgchk Not REMOVE="ALL" 3175
 #
+# CustomAc.idt: ExecuteQuickstart 82 install_quickstart.exe
+# InstallE.idt: ExecuteQuickstart &gm_o_Quickstart=3 3200
+#
+# CustomAc.idt: ExecuteInstallRegsvrex 82 regsvrex.exe shlxthdl.dll
+# InstallE.idt: ExecuteInstallRegsvrex Not REMOVE="ALL" 3225
+#
+# CustomAc.idt: ExecuteUninstallRegsvrex 82 regsvrex.exe /u shlxthdl.dll
+# InstallE.idt: ExecuteUninstallRegsvrex REMOVE="ALL" 690
+#
+# CustomAc.idt: Regmsdocmsidll1 1 reg4msdocmsidll Reg4MsDocEntry
+# InstallU.idt: Regmsdocmsidll1 Not REMOVE="ALL" 610
+#
+# CustomAc.idt: Regmsdocmsidll2 1 reg4msdocmsidll Reg4MsDocEntry
+# InstallE.idt: Regmsdocmsidll2 Not REMOVE="ALL" 3160
 ################################################################################################
 
-sub set_configuration_custom_action
+sub set_custom_action
 {
-    my ($customactionidttable, $installexecutetable, $filesref) = @_;
+    my ($customactionidttable, $installtable, $binarytable, $actionname, $actionflags, $exefilename, $actionparameter, $actioncondition, $position, $inbinarytable, $filesref, $customactionidttablename, $installtablename) = @_;
 
     my $included_customaction = 0;
+    my $feature = "";
+    my $infoline = "";
+    my $customaction_exefilename = $exefilename;
 
-    # is pkgchk.exe included into the product?
+    # is the $exefilename a library that is included into the binary table
 
-    my $pkgchkfilename = "pkgchk.exe";
-    my $contains_pkgchk = 0;
+    if ( $inbinarytable ) { $customaction_exefilename =~ s/\.//; }  # this is the entry in the binary table ("abc.dll" -> "abcdll")
+
+    # is the $exefilename included into the product?
+
+    my $contains_file = 0;
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
         my $filename = ${$filesref}[$i]->{'Name'};
 
-        if ( $filename eq $pkgchkfilename )
+        if ( $filename eq $exefilename )
         {
-            $contains_pkgchk = 1;
+            $contains_file = 1;
+
+            # Determining the feature of the file
+
+            if ( ${$filesref}[$i] ) { $feature = ${$filesref}[$i]->{'modules'}; }
+
+            # If modules contains a list of modules, only taking the first one.
+            if ( $feature =~ /^\s*(.*?)\,/ ) { $feature = $1; }
+            # Attention: Maximum feature length is 38!
+            shorten_feature_gid(\$feature);
+
             last;
         }
     }
 
-    if ( $contains_pkgchk )
+    if ( $contains_file )
     {
         # Now the CustomAction can be included
         # First the CustomAc.idt
 
-        my $actionname = "ExecutePkgchk";
-        my $actionflags = "82";
-        my $actionfile = $pkgchkfilename;
-        my $actionparameter = "-s";
-
-        my $line = $actionname . "\t" . $actionflags . "\t" . $actionfile . "\t" . $actionparameter . "\n";
-
+        my $line = $actionname . "\t" . $actionflags . "\t" . $customaction_exefilename . "\t" . $actionparameter . "\n";
         push(@{$customactionidttable}, $line);
 
         # then the InstallE.idt.idt
 
-        my $actioncondition = "";
-        my $actionposition = get_last_position_in_sequencetable($installexecutetable) + 25;
+        $actioncondition =~ s/FEATURETEMPLATE/$feature/g;   # only execute Custom Action, if feature of the file is installed
+
+        my $actionposition = 0;
+
+        if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
+        if ( $position eq "InstallWelcome" ) { $actionposition = get_position_in_sequencetable($position, $installtable) - 5; }
 
         $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
-
-        push(@{$installexecutetable}, $line);
+        push(@{$installtable}, $line);
 
         $included_customaction = 1;
     }
 
-    return $included_customaction;
+    if ( $included_customaction ) { $infoline = "Added $actionname CustomAction into table $customactionidttablename and $installtablename\n"; }
+    else { $infoline = "Did not add $actionname CustomAction into table $customactionidttablename and $installtablename\n"; }
+    push(@installer::globals::logfileinfo, $infoline);
+
+}
+
+##################################################################
+# Searching for a sequencenumber in InstallUISequence table
+# "ExecuteAction" must be the last action
+##################################################################
+
+sub get_free_number_in_uisequence_table
+{
+    my ( $installuitable ) = @_;
+
+    # determining the sequence of "ExecuteAction"
+
+    my $executeactionnumber = 0;
+
+    for ( my $i = 0; $i <= $#{$installuitable}; $i++ )
+    {
+        if ( ${$installuitable}[$i] =~ /^\s*(\w+)\t\w*\t(\d+)\s*$/ )
+        {
+            my $actionname = $1;
+            my $actionnumber = $2;
+
+            if ( $actionname eq "ExecuteAction" )
+            {
+                $executeactionnumber = $actionnumber;
+                last;
+            }
+        }
+    }
+
+    if ( $executeactionnumber == 0 ) { installer::exiter::exit_program("ERROR: Did not find \"ExecuteAction\" in InstallUISequence table!", "get_free_number_in_uisequence_table"); }
+
+    # determining the sequence of the action before "ExecuteAction"
+
+    my $lastactionnumber = 0;
+
+    for ( my $i = 0; $i <= $#{$installuitable}; $i++ )
+    {
+        if ( ${$installuitable}[$i] =~ /^\s*\w+\t\w*\t(\d+)\s*$/ )
+        {
+            my $actionnumber = $1;
+
+            if (( $actionnumber > $lastactionnumber ) && ( $actionnumber != $executeactionnumber ))
+            {
+                $lastactionnumber = $actionnumber;
+            }
+        }
+    }
+
+    # the new number can now be calculated
+
+    my $newnumber = 0;
+
+    if ((( $lastactionnumber + $executeactionnumber ) % 2 ) == 0 ) { $newnumber = ( $lastactionnumber + $executeactionnumber ) / 2; }
+    else { $newnumber = ( $lastactionnumber + $executeactionnumber -1 ) / 2; }
+
+    return $newnumber;
+}
+
+##################################################################
+# Searching for a specified string in the feature table
+##################################################################
+
+sub get_feature_name
+{
+    my ( $string, $featuretable ) = @_;
+
+    my $featurename = "";
+
+    for ( my $i = 0; $i <= $#{$featuretable}; $i++ )
+    {
+        if ( ${$featuretable}[$i] =~ /^\s*(\w+$string)\t/ )
+        {
+            $featurename = $1;
+            last;
+        }
+    }
+
+    return $featurename;
+}
+
+################################################################################################
+# Including the content for the child installations
+# into the tables:
+# CustomAc.idt, InstallU.idt, Feature.idt
+################################################################################################
+
+sub add_childprojects
+{
+    my ($customactiontable, $installuitable, $featuretable, $directorytable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename) = @_;
+
+    my $infoline = "";
+    my $line = "";
+
+    # Content for Directory table
+    # SystemFolder TARGETDIR .
+
+    my $contains_systemfolder = 0;
+
+    for ( my $i = 0; $i <= $#{$directorytable}; $i++ )
+    {
+        if ( ${$directorytable}[$i] =~ /^\s*SystemFolder\t/ )
+        {
+            $contains_systemfolder = 1;
+            last;
+        }
+    }
+
+    if ( ! $contains_systemfolder )
+    {
+        $line = "SystemFolder\tTARGETDIR\t\.\n";
+        push(@{$directorytable}, $line);
+        installer::remover::remove_leading_and_ending_whitespaces(\$line);
+        $infoline = "Added $line into table $directorytablename\n";
+    }
+    else
+    {
+        $infoline = "SystemFolder already exists in table $directorytablename\n";
+    }
+
+    push(@installer::globals::logfileinfo, $infoline);
+
+    # Content for CustomAction table
+    # InstallAdabas 98 SystemFolder msiexec.exe /i "[SourceDir]adabas\adabasd1201.msi" /qr
+    # InstallJava 98 SystemFolder msiexec.exe /i "[SourceDir]java\Java 2 Runtime Environment, SE v1.4.2.msi" /qr REBOOT=R
+
+    my $installsetdir = $installer::globals::msifilespath . $installer::globals::separator . "adabas";
+    my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $installsetdir);
+    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $installsetdir !", "add_childprojects"); }
+
+    $line = "InstallAdabas\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]adabas\\${$msifilenamesref}[0]\" \/qr\n";
+    push(@{$customactiontable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $customactiontablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $installsetdir = $installer::globals::msifilespath . $installer::globals::separator . "java";
+    $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $installsetdir);
+    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $installsetdir !", "add_childprojects"); }
+
+    $line = "InstallJava\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]java\\${$msifilenamesref}[0]\" \/qr REBOOT=R\n";
+    push(@{$customactiontable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $customactiontablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    # Content for InstallUISequence table
+    # InstallJava &gm_o_Java=3 830
+    # InstallAdabas &gm_o_Adabas=3 840
+
+    my $number = get_free_number_in_uisequence_table($installuitable);
+    my $featurename = get_feature_name("_Java", $featuretable);
+    $line = "InstallJava\t\&$featurename\=3\t$number\n";
+    push(@{$installuitable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $installuitablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $number = get_free_number_in_uisequence_table($installuitable) + 2;
+    $featurename = get_feature_name("_Adabas", $featuretable);
+    $line = "InstallAdabas\t\&$featurename\=3\t$number\n";
+    push(@{$installuitable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $installuitablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    # Content for Feature table, better from scp (translation)
+    # gm_o_java gm_optional Java 1.4.2 Description 2 200
+    # gm_o_adabas gm_optional Adabas Description 2 200
+
 }
 
 1;
