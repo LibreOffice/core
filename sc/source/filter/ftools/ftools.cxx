@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:03:26 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,13 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
 #endif
 
+#ifndef _COLOR_HXX
+#include <tools/color.hxx>
+#endif
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
@@ -292,7 +293,7 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const String& rStyleNa
     // find an unused name
     String aNewName( rStyleName );
     sal_Int32 nIndex = 0;
-    SfxStyleSheetBase* pOldStyleSheet = NULL;
+    SfxStyleSheetBase* pOldStyleSheet = 0;
     while( SfxStyleSheetBase* pStyleSheet = rPool.Find( aNewName, eFamily ) )
     {
         if( !pOldStyleSheet )
@@ -418,12 +419,12 @@ String ScfTools::GetNameFromHTMLName( const String& rTabName )
 
 bool ScfTools::IsHTMLDocName( const String& rSource )
 {
-    return rSource.EqualsIgnoreCaseAscii( GetHTMLDocName() ) == TRUE;
+    return rSource.EqualsIgnoreCaseAscii( GetHTMLDocName() );
 }
 
 bool ScfTools::IsHTMLTablesName( const String& rSource )
 {
-    return rSource.EqualsIgnoreCaseAscii( GetHTMLTablesName() ) == TRUE;
+    return rSource.EqualsIgnoreCaseAscii( GetHTMLTablesName() );
 }
 
 bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
