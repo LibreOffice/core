@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-20 12:39:41 $
+ *  last change: $Author: hr $ $Date: 2000-11-20 17:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,11 @@
 
 #include <unohelp.hxx>
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
-
-#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
-#include <com/sun/star/text/WordType.hpp>
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #if defined UNX
@@ -3663,14 +3662,14 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         i18n::LineBreakUserOptions aUserOptions;
 
-        i18n::Boundary aBoundary = xBI->getWordBoundary( aText, 0, GetSettings().GetLocale(), text::WordType::ANYWORD_IGNOREWHITESPACES, TRUE );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( aText, 0, GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, TRUE );
         while ( ( aBoundary.startPos >= 0 ) && ( aBoundary.startPos < nLen ) )
         {
             xub_StrLen nWordEnd = Max( (xub_StrLen)aBoundary.endPos, nLen );
             long nTempX = ImplGetTextWidth( pStr, aBoundary.startPos, pDXAry );
             long nWidth = ImplGetTextWidth( pStr+aBoundary.startPos, aBoundary.endPos-aBoundary.startPos, pDXAry );
             ImplDrawTextLine( nX, nX + nTempX, nY, nWidth, eStrikeout, eUnderline );
-            aBoundary = xBI->nextWord( aText, aBoundary.endPos, GetSettings().GetLocale(), text::WordType::ANYWORD_IGNOREWHITESPACES );
+            aBoundary = xBI->nextWord( aText, aBoundary.endPos, GetSettings().GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         }
     }
     else
