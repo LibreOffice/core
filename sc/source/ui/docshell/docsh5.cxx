@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
+ *  last change: $Author: vg $ $Date: 2002-08-12 16:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,7 +967,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScDBData*, pDBData )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XResultSet> xResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> xResultSet;
         bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, xResultSet, NULL, TRUE, FALSE ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
