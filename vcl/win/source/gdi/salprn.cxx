@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:52:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
-
-#define _SV_SALPRN_CXX
 
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
