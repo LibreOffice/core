@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-11 07:49:38 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 11:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _XMLOFF_XMLPAGEEXPORT_HXX
+#include "XMLPageExport.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -94,9 +98,11 @@
 #ifndef _XMLOFF_XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
-
-#ifndef _XMLOFF_XMLPAGEEXPORT_HXX
-#include "XMLPageExport.hxx"
+#ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
+#include "PageMasterStyleMap.hxx"
+#endif
+#ifndef _XMLOFF_PAGEMASTERPROPMAPPER_HXX
+#include "PageMasterPropMapper.hxx"
 #endif
 
 using namespace ::rtl;
@@ -109,12 +115,23 @@ using namespace ::com::sun::star::beans;
 void XMLPageExport::collectPageMasterAutoStyle(
             const Reference < XPropertySet > & rPropSet )
 {
+    std::vector<XMLPropertyState> xPropStates = rExport.GetPageMasterPropSetMapper()->Filter( rPropSet );
+    if(xPropStates.size())
+    {
+        rtl::OUString sParent;
+        rtl::OUString sName( rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates) );
+        if (!sName.getLength())
+        {
+            sName = rExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates);
+        }
+    }
 }
 
 void XMLPageExport::exportMasterPageContent(
                 const Reference < XPropertySet > & rPropSet,
                 sal_Bool bAutoStyles )
 {
+
 }
 
 sal_Bool XMLPageExport::exportStyle(
