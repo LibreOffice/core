@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:42:49 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ class SwDrawTextInfo
     BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
                             // fix margin portion.
+    BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
 #endif
     SwDrawTextInfo();       // nicht zulaessig
 public:
@@ -245,6 +246,8 @@ public:
     BOOL bUppr  : 1;
     BOOL bDrawSp: 1;
     BOOL bGreyWv: 1;
+    BOOL bSpaceSt: 1;
+    BOOL bSnapToGrd : 1;
     BOOL bLeft  : 1;
     BOOL bRight : 1;
     BOOL bKana  : 1;
@@ -257,7 +260,8 @@ public:
     {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
         nLen = nL; nKern = 0; nCompress = 0; nWidth = nW;
 #ifdef VERTICAL_LAYOUT
-        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = bSpaceStop = FALSE;
+        bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = bSpaceStop =
+        bSnapToGrid = FALSE;
         pFrm = 0;
 #else
         bBullet = bB; pUnderFnt = 0; bGreyWave = bDarkBack = FALSE;
@@ -392,7 +396,12 @@ public:
     }
 #ifdef VERTICAL_LAYOUT
     BOOL IsSpaceStop() const {
+        ASSERT( bSpaceSt, "DrawTextInfo: Undefined SpaceStop" );
         return bSpaceStop;
+    }
+    BOOL SnapToGrid() const {
+        ASSERT( bSnapToGrd, "DrawTextInfo: Undefined Grid" );
+        return bSnapToGrid;
     }
 #endif
 
@@ -527,7 +536,16 @@ public:
     void SetDarkBack( BOOL bNew ){ bDarkBack = bNew; }
 
 #ifdef VERTICAL_LAYOUT
-    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew; }
+    void SetSpaceStop( BOOL bNew ) { bSpaceStop = bNew;
+#ifndef PRODUCT
+        bSpaceSt = TRUE;
+#endif
+    }
+    void SetSnapToGrid( BOOL bNew ) { bSnapToGrid = bNew;
+#ifndef PRODUCT
+        bSnapToGrd = TRUE;
+#endif
+    }
 #endif
 
     void Shift( USHORT nDir );

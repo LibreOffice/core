@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:50:43 $
+ *  last change: $Author: fme $ $Date: 2002-02-07 11:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,6 @@ class SwTxtFrm: public SwCntntFrm
 #ifdef VERTICAL_LAYOUT
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
-    sal_Bool bGridMode      : 1;        // do we align to the the document grid?
 #endif
 
     void ResetPreps();
@@ -360,8 +359,6 @@ public:
 
 #ifdef VERTICAL_LAYOUT
     inline sal_Bool IsSwapped() const { return bIsSwapped; }
-    inline sal_Bool GetGridModeAllowed() const { return bGridMode; }
-    inline void SetGridModeAllowed( sal_Bool bNew ) { bGridMode = bNew; }
 #endif
 
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
