@@ -631,45 +631,33 @@ End Sub
 
 
 
-Function ModifyPropertyValue(oContent() as Object, TargetProperties() as New com.sun.star.beans.PropertyValue )
+Function ModifyPropertyValue(oContent() as New com.sun.star.beans.PropertyValue, TargetProperties() as New com.sun.star.beans.PropertyValue)
 Dim MaxIndex as Integer
 Dim i as Integer
 Dim a as Integer
-Dim bDoReplace as Boolean
 	MaxIndex = Ubound(oContent())
 	bDoReplace = False
-	Dim oNewBuffer(MaxIndex) as New com.sun.star.beans.PropertyValue
 	For i = 0 To MaxIndex
-		oNewBuffer(i).Name = oContent(i).Name
 		a = GetPropertyValueIndex(oContent(i).Name, TargetProperties())
 		If a &lt;&gt; -1 Then
 			If Vartype(TargetProperties(a).Value) &lt;&gt; 9 Then
 				If TargetProperties(a).Value &lt;&gt; oContent(i).Value Then
-					oNewBuffer(i).Value = TargetProperties(a).Value
+					oContent(i).Value = TargetProperties(a).Value
 					bDoReplace = True
-				Else
-					oNewBuffer(i).Value = oContent(i).Value			
 				End If
 			Else
-				If Not equalUnoObjects(TargetProperties(a).Value, oContent(i).Value) Then
-					oNewBuffer(i).Value = TargetProperties(a).Value
+				If Not EqualUnoObjects(TargetProperties(a).Value, oContent(i).Value) Then
+					oContent(i).Value = TargetProperties(a).Value
 					bDoReplace = True
-				Else
-					oNewBuffer(i).Value = oContent(i).Value		
 				End If
 			End If
-		Else
-			oNewBuffer(i).Value = oContent(i).Value
 		End If
 	Next i
-	If bDoReplace Then
-		oContent() = oNewBuffer()
-	End If
 	ModifyPropertyValue() = bDoReplace
 End Function
 
 
-Function GetPropertyValueIndex(SearchName as String, TargetProperties() as New com.sun.star.beans.PropertyValue )
+Function GetPropertyValueIndex(SearchName as String, TargetProperties() as New com.sun.star.beans.PropertyValue ) as Integer
 Dim i as Integer
 	For i = 0 To Ubound(TargetProperties())
 		If Searchname = TargetProperties(i).Name Then
