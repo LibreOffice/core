@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-11 11:23:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     if ( !pEditView )   // Passiert unter W95 bei letzte Version, Ctrl-Tab
         return;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Range aRange = pModulWindow->GetHScrollBar()->GetRange();
     long nVisSz = pModulWindow->GetHScrollBar()->GetVisibleSize();
     long nPapSz = pModulWindow->GetHScrollBar()->GetPageSize();
