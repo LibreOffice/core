@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:57:24 $
+ *  last change: $Author: mib $ $Date: 2000-11-29 15:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,8 +236,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
 
-const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.Package:";
-const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.GraphicObject:";
+const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.star.Package:";
+const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
 
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
 //{ UNO_NAME_CLIENT_MAP     ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_MAYBEVOID ,MID_URL_CLIENTMAP        },
