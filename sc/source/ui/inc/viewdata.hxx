@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:45:36 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_VIEWDATA_HXX
 #define SC_VIEWDATA_HXX
+
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_VIEWOPTI_HXX
 #include "viewopti.hxx"
@@ -161,7 +165,7 @@ private:
 
 // ---------------------------------------------------------------------------
 
-class ScViewData
+class SC_DLLPUBLIC ScViewData
 {
 private:
     double              nPPTX, nPPTY;               // Scaling-Faktoren
@@ -219,10 +223,10 @@ private:
     BYTE                nFillMode;                  // Modus
     BOOL                bPagebreak;                 // Seitenumbruch-Vorschaumodus
 
-    DECL_LINK (EmptyEditHdl, EditStatus*);
-    DECL_LINK (EditEngineHdl, EditStatus*);
+    SC_DLLPRIVATE DECL_LINK (EmptyEditHdl, EditStatus*);
+    SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
 
-    void            CalcPPT();
+    SC_DLLPRIVATE void          CalcPPT();
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
