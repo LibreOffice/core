@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-18 13:37:36 $
+ *  last change: $Author: dv $ $Date: 2001-05-18 15:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ public:
 
     sal_Bool            Send();
 };
+
+BOOL CreateFromAddress_Impl( String& rFrom );
 
 #endif // INCLUDED_SFX_MAILMODEL_HXX
 
