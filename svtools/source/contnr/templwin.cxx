@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: gt $ $Date: 2001-10-19 13:59:02 $
+ *  last change: $Author: pb $ $Date: 2001-10-29 08:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _INETTYPE_HXX
 #include "inettype.hxx"
+#endif
+#ifndef _SVTOOLS_IMAGEMGR_HXX
+#include "imagemgr.hxx"
 #endif
 
 #ifndef _SVTOOLS_HRC
@@ -803,7 +806,10 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
                             if ( DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
                             {
                                 INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
-                                aValueStr = INetContentTypes::GetPresentation( eTypeID, eLangType );
+                                if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
+                                    aValueStr = INetContentTypes::GetPresentation( eTypeID, eLangType );
+                                else
+                                    aValueStr = SvFileInformationManager::GetDescription( rURL );
                                 if ( aValueStr.Len() == 0 )
                                     aValueStr = String( aStringValue );
                             }
