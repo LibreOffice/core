@@ -958,6 +958,25 @@ fi
 else
         with_unzip_home="NO_UNZIP_HOME"
 fi
+
+dnl ===================================================================
+dnl Test for the presence of the required gpc.{c,h} files
+dnl ===================================================================
+
+AC_MSG_CHECKING([GPC files])
+if test -e ../external/gpc/gpc.h; then
+	HAVE_GPC_H="yes"
+fi
+if test -e ../external/gpc/gpc.c; then
+	HAVE_GPC_C="yes"
+fi
+
+if test "$HAVE_GPC_H" == "yes" -a "$HAVE_GPC_C" == "yes"; then
+	AC_MSG_RESULT([GPC files found])
+else
+	AC_MSG_ERROR([GPC files not found])
+fi
+
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
