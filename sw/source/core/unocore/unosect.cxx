@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-10-09 10:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,18 +800,20 @@ OUString SwXTextSection::getImplementationName(void) throw( uno::RuntimeExceptio
  --------------------------------------------------*/
 sal_Bool SwXTextSection::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
-    return rServiceName == C2U("com.sun.star.text.TextSection") ||
-                rServiceName == C2U("com.sun.star.document.LinkTarget");
+    return !rServiceName.compareToAscii("com.sun.star.text.TextSection") ||
+                !rServiceName.compareToAscii("com.sun.star.document.LinkTarget") ||
+                    !rServiceName.compareToAscii("com.sun.star.text.TextContent");
 }
 /* -----------------02.11.99 11:30-------------------
 
  --------------------------------------------------*/
 uno::Sequence< OUString > SwXTextSection::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(3);
     OUString* pArr = aRet.getArray();
     pArr[0] = C2U("com.sun.star.text.TextSection");
     pArr[1] = C2U("com.sun.star.document.LinkTarget");
+    pArr[2] = C2U("com.sun.star.text.TextContent");
     return aRet;
 }
 
@@ -828,31 +830,4 @@ void SwXTextSection::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     if(!GetRegisteredIn())
         aLstnrCntnr.Disposing();
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2000/09/18 16:04:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.6  2000/09/05 15:23:19  os
-    operators corrected
-
-    Revision 1.5  2000/08/31 10:04:35  os
-    DDECommand splitted into three parts
-
-    Revision 1.4  2000/07/19 11:01:32  os
-    properties added/renamed
-
-    Revision 1.3  2000/07/11 13:43:44  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.2  2000/06/26 13:01:08  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.1  2000/05/04 15:14:57  os
-    reduce size of unoobj.cxx
-
-
-------------------------------------------------------------------------*/
 
