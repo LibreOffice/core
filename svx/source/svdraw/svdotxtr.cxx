@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:33:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,17 +425,18 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const XPolyPolygon& rXPP, FASTBOOL bClo
     }
     if (!bBezier && pModel!=NULL) {
         // Polygon aus Bezierkurve interpolieren
-        VirtualDevice   aVDev;
+//BFS09     VirtualDevice   aVDev;
         XPolyPolygon    aXPolyPoly;
 
-        MapMode aMap = aVDev.GetMapMode();
-        aMap.SetMapUnit(pModel->GetScaleUnit());
-        aMap.SetScaleX(pModel->GetScaleFraction());
-        aMap.SetScaleY(pModel->GetScaleFraction());
-        aVDev.SetMapMode(aMap);
+//BFS09     MapMode aMap = aVDev.GetMapMode();
+//BFS09     aMap.SetMapUnit(pModel->GetScaleUnit());
+//BFS09     aMap.SetScaleX(pModel->GetScaleFraction());
+//BFS09     aMap.SetScaleY(pModel->GetScaleFraction());
+//BFS09     aVDev.SetMapMode(aMap);
 
         for (USHORT i=0; i<aXPP.Count(); i++)
-            aXPolyPoly.Insert(XOutCreatePolygon(aXPP[i],&aVDev));
+            aXPolyPoly.Insert(XOutCreatePolygon(aXPP[i]));
+//BFS09         aXPolyPoly.Insert(XOutCreatePolygon(aXPP[i],&aVDev));
         aXPP=aXPolyPoly;
         ePathKind=bClosed?OBJ_POLY:OBJ_PLIN;
     }
