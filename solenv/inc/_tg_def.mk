@@ -47,16 +47,13 @@ EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP1HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF1TARGETN) : \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF1TARGETN) .PHONY : \
-        $(DEF1DEPN) \
-        $(DEF1EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF1TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB1NAME)"!=""
@@ -179,7 +176,6 @@ $(DEF1TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP1HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -244,16 +240,13 @@ EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP2HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF2TARGETN) : \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF2TARGETN) .PHONY : \
-        $(DEF2DEPN) \
-        $(DEF2EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF2TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB2NAME)"!=""
@@ -376,7 +369,6 @@ $(DEF2TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP2HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -441,16 +433,13 @@ EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP3HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF3TARGETN) : \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF3TARGETN) .PHONY : \
-        $(DEF3DEPN) \
-        $(DEF3EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF3TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB3NAME)"!=""
@@ -573,7 +562,6 @@ $(DEF3TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP3HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -638,16 +626,13 @@ EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP4HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF4TARGETN) : \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF4TARGETN) .PHONY : \
-        $(DEF4DEPN) \
-        $(DEF4EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF4TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB4NAME)"!=""
@@ -770,7 +755,6 @@ $(DEF4TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP4HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -835,16 +819,13 @@ EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP5HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF5TARGETN) : \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF5TARGETN) .PHONY : \
-        $(DEF5DEPN) \
-        $(DEF5EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF5TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB5NAME)"!=""
@@ -967,7 +948,6 @@ $(DEF5TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP5HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -1032,16 +1012,13 @@ EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP6HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF6TARGETN) : \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF6TARGETN) .PHONY : \
-        $(DEF6DEPN) \
-        $(DEF6EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF6TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB6NAME)"!=""
@@ -1164,7 +1141,6 @@ $(DEF6TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP6HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -1229,16 +1205,13 @@ EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP7HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF7TARGETN) : \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF7TARGETN) .PHONY : \
-        $(DEF7DEPN) \
-        $(DEF7EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF7TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB7NAME)"!=""
@@ -1361,7 +1334,6 @@ $(DEF7TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP7HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -1426,16 +1398,13 @@ EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP8HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF8TARGETN) : \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF8TARGETN) .PHONY : \
-        $(DEF8DEPN) \
-        $(DEF8EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF8TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB8NAME)"!=""
@@ -1558,7 +1527,6 @@ $(DEF8TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP8HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -1623,16 +1591,13 @@ EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP9HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF9TARGETN) : \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF9TARGETN) .PHONY : \
-        $(DEF9DEPN) \
-        $(DEF9EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF9TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB9NAME)"!=""
@@ -1755,7 +1720,6 @@ $(DEF9TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP9HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
@@ -1820,16 +1784,13 @@ EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP10HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF10TARGETN) : \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF10TARGETN) .PHONY : \
-        $(DEF10DEPN) \
-        $(DEF10EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF10TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB10NAME)"!=""
@@ -1952,7 +1913,6 @@ $(DEF10TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP10HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
