@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:43:01 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _PVER_HXX //autogen
 #include <svtools/pver.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -196,7 +198,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // Gr"ossen und Positionen berechnen
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
     Size aOutSiz = GetOutputSizePixel();
-    Size aTextSize = Size( GetTextWidth( DEFINE_CONST_UNICODE( "StarOfficeAbout" ) ), GetTextHeight() );
+    //Size aTextSize = Size( GetTextWidth( DEFINE_CONST_UNICODE( "StarOfficeAbout" ) ), GetTextHeight() );
 
     // Fenstergr"osse
     aOutSiz.Width() = aAppLogoSiz.Width();
@@ -402,8 +404,6 @@ void AboutDialog::Paint( const Rectangle& rRect )
     long nPos = 0;
     long nW = GetOutputSizePixel().Width() / 2 - 5;
     Size aSize = Size( GetTextWidth( aDevVersionStr ), GetTextHeight() );
-    USHORT nStartPos = 0;
-    USHORT nEndPos = 0;
     Point aPnt( nW - ( aSize.Width() / 2 ), nPos );
     long nPos1 = aPnt.Y(), nPos2 = nPos1 + aSize.Height(), nTop = rRect.Top();
 
