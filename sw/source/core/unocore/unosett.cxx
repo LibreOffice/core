@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:33:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,8 @@ SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
     SwStyleNameMapper::FillUIName(uTmp, sPageDesc, GET_POOLID_PAGEDESC, sal_True );
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
-        const SwPageDesc& rDesc = pDoc->GetPageDesc( i );
+        const SwPageDesc& rDesc = const_cast<const SwDoc *>(pDoc)
+            ->GetPageDesc( i );
         if(rDesc.GetName() == sPageDesc)
         {
             pRet = (SwPageDesc*)&rDesc;
