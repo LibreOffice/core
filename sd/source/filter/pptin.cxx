@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 15:29:52 $
+ *  last change: $Author: sj $ $Date: 2001-08-28 11:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,20 @@ BOOL SdPPTImport::Import()
             }
         }
     }
+
+    Size aVisAreaSize;
+    switch ( aUserEditAtom.eLastViewType )
+    {
+        case 5 :    // notes master
+        case 3 :    // notes
+            aVisAreaSize = aDocAtom.GetNotesPageSize();
+        break;
+        default :
+            aVisAreaSize = aDocAtom.GetSlidesPageSize();
+    }
+    Scale( aVisAreaSize );
+    pDocShell->SetVisArea( Rectangle( Point(), aVisAreaSize ) );
+
     ///////////////////////////////////////////////////////////
     // create master pages:
     ///////////////////////////////////////////////////////////
