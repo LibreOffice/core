@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cp $ $Date: 2002-07-01 12:12:54 $
+ *  last change: $Author: hdu $ $Date: 2002-08-16 09:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,6 +675,11 @@ X11FontLayout* ExtendedFontStruct::LayoutText( const ImplLayoutArgs& rArgs )
     pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
     pLayout->SetOrientation( 0 ); //### TODO
     pLayout->SetWantFallback( false );
+
+    if( rArgs.mpDXArray )
+        pLayout->ApplyDXArray( rArgs.mpDXArray );
+    else if( rArgs.mnLayoutWidth )
+        pLayout->Justify( rArgs.mnLayoutWidth );
 
     return pLayout;
 }
