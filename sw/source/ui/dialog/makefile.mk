@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 08:49:10 $
+#   last change: $Author: rt $ $Date: 2004-09-17 14:02:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES =  \
         $(SLO)$/ascfldlg.obj \
         $(SLO)$/docstdlg.obj \
         $(SLO)$/macassgn.obj \
+        $(SLO)$/SwSpellDialogChildWindow.obj \
         $(SLO)$/regionsw.obj	\
         $(SLO)$/uiregionsw.obj	\
         $(SLO)$/swabstdlg.obj	\
@@ -104,6 +105,7 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 LIB1OBJFILES =  \
         $(SLO)$/regionsw.obj \
         $(SLO)$/swabstdlg.obj \
+        $(SLO)$/SwSpellDialogChildWindow.obj \
         $(SLO)$/swwrtshitem.obj
 
 #		$(SLO)$/macassgn.obj \
