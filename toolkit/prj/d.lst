@@ -18,6 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 hedabu: ..\inc\toolkit\awt\vclxaccessiblecomponent.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxaccessiblecomponent.hxx
 hedabu: ..\inc\toolkit\awt\vclxcontainer.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxcontainer.hxx
 hedabu: ..\inc\toolkit\awt\vclxdevice.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdevice.hxx
+hedabu: ..\inc\toolkit\awt\vclxfont.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxfont.hxx
 hedabu: ..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
 hedabu: ..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
 hedabu: ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
