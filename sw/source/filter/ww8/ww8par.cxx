@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:30:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 17:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,17 +1197,12 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mpSFlyPara(pRdr->pSFlyPara), mpPreviousNumPaM(pRdr->pPreviousNumPaM),
     mpPrevNumRule(pRdr->pPrevNumRule), mpTableDesc(pRdr->pTableDesc),
     mnInTable(pRdr->nInTable), mnAktColl(pRdr->nAktColl),
-    mnParaNumber(pRdr->nParaNumber), mcSymbol(pRdr->cSymbol),
     mbIgnoreText(pRdr->bIgnoreText), mbSymbol(pRdr->bSymbol),
     mbHdFtFtnEdn(pRdr->bHdFtFtnEdn), mbTxbxFlySection(pRdr->bTxbxFlySection),
     mbAnl(pRdr->bAnl), mbInHyperlink(pRdr->bInHyperlink),
     mbPgSecBreak(pRdr->bPgSecBreak), mbWasParaEnd(pRdr->bWasParaEnd),
-    mbHasBorder(pRdr->bHasBorder)
-    mcSymbol(pRdr->cSymbol), mbIgnoreText(pRdr->bIgnoreText),
-    mbSymbol(pRdr->bSymbol), mbHdFtFtnEdn(pRdr->bHdFtFtnEdn),
-    mbTxbxFlySection(pRdr->bTxbxFlySection), mbAnl(pRdr->bAnl),
-    mbInHyperlink(pRdr->bInHyperlink), mbPgSecBreak(pRdr->bPgSecBreak),
-    mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder),
+    mbHasBorder(pRdr->bHasBorder),
+    mcSymbol(pRdr->cSymbol),
     mbFirstPara(pRdr->bFirstPara)
 {
     pRdr->bSymbol = false;
@@ -1267,7 +1262,6 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bPgSecBreak = mbPgSecBreak;
     pRdr->nAktColl = mnAktColl;
     pRdr->bHasBorder = mbHasBorder;
-    pRdr->nParaNumber = mnParaNumber;
     pRdr->bFirstPara = mbFirstPara;
 
     // schliesse alle Attribute, da sonst Attribute
