@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:45:43 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CATEGORY                               
 const SwPropNameLen __FAR_DATA  UNO_NAME_DEPENDENT_TEXT_FIELDS                  (MAP_CHAR_LEN("DependentTextFields"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CURRENT_PRESENTATION                   (MAP_CHAR_LEN("CurrentPresentation"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_ADJUST                                 (MAP_CHAR_LEN("Adjust"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_INSTANCE_NAME                          (MAP_CHAR_LEN("InstanceName"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_PORTION_TYPE                       (MAP_CHAR_LEN("TextPortionType"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CONTROL_CHARACTER                       (MAP_CHAR_LEN("ControlCharacter"));
@@ -648,6 +649,7 @@ const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_COMMENT                     (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TYPE                        (MAP_CHAR_LEN("RedlineType"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_SUCCESSOR_DATA              (MAP_CHAR_LEN("RedlineSuccessorData"));
 const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_IDENTIFIER                  (MAP_CHAR_LEN("RedlineIdentifier"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_IN_HEADER_FOOTER                 (MAP_CHAR_LEN("IsInHeaderFooter"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_START_REDLINE                       (MAP_CHAR_LEN("StartRedline"));
 const SwPropNameLen __FAR_DATA UNO_NAME_END_REDLINE                         (MAP_CHAR_LEN("EndRedline"));

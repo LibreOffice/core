@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:47:03 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,9 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     else
     {
         aRet = GetPropertyValue( rPropertyName, *pRedline);
-        if(!aRet.hasValue())
+        if(!aRet.hasValue() &&
+           ! rPropertyName.equalsAsciiL(UNO_NAME_REDLINE_SUCCESSOR_DATA.pName,
+                                     UNO_NAME_REDLINE_SUCCESSOR_DATA.nNameLen))
             aRet = SwXTextPortion::getPropertyValue(rPropertyName);
     }
     return aRet;
@@ -425,6 +427,13 @@ Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const S
         OUStringBuffer sBuf;
         sBuf.append((sal_Int64)&rRedline);
         aRet <<= sBuf.makeStringAndClear();
+    }
+    else if (rPropertyName.equalsAsciiL(UNO_NAME_IS_IN_HEADER_FOOTER.pName,
+                                        UNO_NAME_IS_IN_HEADER_FOOTER.nNameLen))
+    {
+        sal_Bool bRet =
+            rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
+        aRet.setValue(&bRet, ::getBooleanCppuType());
     }
     return aRet;
 }

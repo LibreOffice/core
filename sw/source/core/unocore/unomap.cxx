@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 10:13:55 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     {SW_PROP_NAME(UNO_NAME_REDLINE_TYPE),       0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA),  0, &::getCppuType((Sequence<PropertyValue>*)0),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},\
     {SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER), 0, &::getCppuType((OUString*)0),                        PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
+    {SW_PROP_NAME(UNO_NAME_IS_IN_HEADER_FOOTER),0, &::getBooleanCppuType(),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0},\
     {SW_PROP_NAME(UNO_NAME_REDLINE_TEXT  ), 0, &::getCppuType((Reference<XText>*)0),                    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
 
 /* -----------------24.06.98 18:12-------------------

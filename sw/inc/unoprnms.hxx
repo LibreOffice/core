@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: os $ $Date: 2001-03-06 15:42:27 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,6 +563,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CATEGORY                         
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DEPENDENT_TEXT_FIELDS                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CURRENT_PRESENTATION             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ADJUST                           ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_INSTANCE_NAME;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_PORTION_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTROL_CHARACTER;
@@ -649,6 +650,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_COMMENT;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_TYPE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_SUCCESSOR_DATA;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_REDLINE_IDENTIFIER;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_IN_HEADER_FOOTER;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_START_REDLINE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_END_REDLINE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class SwDoc;
 class SwFmtFld;
 class SwField;
 class SwSetExpField;
+class String;
 /* -----------------04.12.98 12:49-------------------
  *
  * --------------------------------------------------*/
@@ -262,6 +263,9 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+
+    static sal_Bool getInstanceName(const SwFieldType& rFldType, String& rName);
 };
 
 /* -----------------21.12.98 10:26-------------------

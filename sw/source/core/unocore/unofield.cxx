@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 10:15:55 $
+ *  last change: $Author: dvo $ $Date: 2001-03-08 14:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,6 +763,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_VALUE),          0,  &::getCppuType((const Double*)0), PROPERTY_NONE,    0},
                 {SW_PROP_NAME(UNO_NAME_CONTENT),            0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aUserFieldTypePropMap;
@@ -777,6 +778,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE    ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), 0,  &::getBooleanCppuType(), PROPERTY_NONE,    0},
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aDDEFieldTypePropMap;
@@ -795,6 +797,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR), 0, &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           0,  &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aSetExpFieldTypePropMap;
@@ -813,6 +816,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
 #else
                 {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
 #endif
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aDBFieldTypePropMap;
@@ -831,6 +835,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
 #endif
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aStandardFieldMasterMap;
@@ -863,6 +868,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
 #else
                 {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, &::getCppuType((Sequence<PropertyValues>*)0),PROPERTY_NONE, 0},
 #endif
+                {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
                 {0,0,0,0}
             };
             pRet = aBibliographyFieldMasterMap;
@@ -1281,6 +1287,15 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         if(COMPARE_EQUAL == rPropertyName.compareToAscii("Name"))
         {
             aRet <<= OUString(SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc()));
+        }
+        else if( rPropertyName.equalsAsciiL(UNO_NAME_INSTANCE_NAME.pName,
+                                            UNO_NAME_INSTANCE_NAME.nNameLen) )
+        {
+            String sName;
+            if (SwXTextFieldMasters::getInstanceName(*pType, sName))
+            {
+                aRet <<= OUString(sName);
+            }
         }
         else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DEPENDENT_TEXT_FIELDS))
         {
@@ -2812,6 +2827,53 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
     uno::Any aRet(&aRef, ::getCppuType((const uno::Reference<XPropertySet>*)0));
     return aRet;
 }
+/*-- 06.03.2001 11:29:34,5-------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwXTextFieldMasters::getInstanceName(
+    const SwFieldType& rFldType, String& rName)
+{
+    sal_Bool bRet = sal_True;
+
+    sal_uInt16 nWhich = rFldType.Which();
+    if(RES_USERFLD == nWhich)
+    {
+        rName += C2S("com.sun.star.text.FieldMaster.");
+        rName += C2S("User.");
+        rName += rFldType.GetName();
+    }
+    else if(RES_DDEFLD == nWhich)
+    {
+        rName += C2S("com.sun.star.text.FieldMaster.");
+        rName += C2S("DDE.");
+        rName += rFldType.GetName();
+    }
+    else if(RES_SETEXPFLD == nWhich)
+    {
+        rName += C2S("com.sun.star.text.FieldMaster.");
+        rName += C2S("SetExpression.");
+        rName += String(SwXFieldMaster::GetSetExpProgrammaticName(rFldType.GetName()));
+    }
+    else if(RES_DBFLD == nWhich)
+    {
+        rName += C2S("com.sun.star.text.FieldMaster.");
+        rName += C2S("DataBase.");
+        String sDBName(rFldType.GetName());
+        sDBName.SearchAndReplaceAll(DB_DELIM, '.');
+        rName += sDBName;
+    }
+    else if(RES_AUTHORITY == nWhich)
+    {
+        rName += C2S("com.sun.star.text.FieldMaster.");
+        rName += C2S("Bibliography");
+    }
+    else
+        bRet = sal_False;
+
+    return bRet;
+}
+
+
 /*-- 21.12.98 10:37:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2826,48 +2888,18 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
     sal_uInt16 nCount = pFldTypes->Count();
 
     SvStrings aFldNames;
-    String sPrefix(C2S("com.sun.star.text.FieldMaster."));
+    String* pString = new String();
     for( sal_uInt16 i = 0; i < nCount; i++)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
-        sal_uInt16 nWhich = rFldType.Which();
-        if(RES_USERFLD == nWhich)
+
+        if (SwXTextFieldMasters::getInstanceName(rFldType, *pString))
         {
-            String* pString = new String(sPrefix);
-            *pString +=  C2S("User.");
-            *pString += rFldType.GetName();
             aFldNames.Insert(pString, aFldNames.Count());
-        }
-        if(RES_DDEFLD == nWhich)
-        {
-            String* pString = new String(sPrefix);
-            *pString += C2S("DDE.");
-            *pString += rFldType.GetName();
-            aFldNames.Insert(pString, aFldNames.Count());
-        }
-        if(RES_SETEXPFLD == nWhich)
-        {
-            String* pString = new String(sPrefix);
-            *pString += C2S("SetExpression.");
-            *pString += String(SwXFieldMaster::GetSetExpProgrammaticName(rFldType.GetName()));
-            aFldNames.Insert(pString, aFldNames.Count());
-        }
-        if(RES_DBFLD == nWhich)
-        {
-            String* pString = new String(sPrefix);
-            *pString += C2S("DataBase.");
-            String sDBName(rFldType.GetName());
-            sDBName.SearchAndReplaceAll(DB_DELIM, '.');
-            *pString += sDBName;
-            aFldNames.Insert(pString, aFldNames.Count());
-        }
-        if(RES_AUTHORITY == nWhich)
-        {
-            String* pString = new String(sPrefix);
-            *pString += C2S("Bibliography");
-            aFldNames.Insert(pString, aFldNames.Count());
+            pString = new String();
         }
     }
+    delete pString;
 
     uno::Sequence< OUString > aSeq(aFldNames.Count());
     OUString* pArray = aSeq.getArray();
