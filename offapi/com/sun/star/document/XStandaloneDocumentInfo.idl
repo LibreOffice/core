@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStandaloneDocumentInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:04:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {   module sun {   module star {   module document {
     @see StandaloneDocumentInfo
     @see XDocumentInfo
  */
-interface XStandaloneDocumentInfo: XDocumentInfo
+published interface XStandaloneDocumentInfo: XDocumentInfo
 {
     //-------------------------------------------------------------------------
     /** loads the document information from a file referred by an URL
