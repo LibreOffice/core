@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodelapi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:33:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( )
                         xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
                     }
 
-                    Sequence< OUString > aAttachmentSeq( (OUString*)maAttachedDocuments.begin(),maAttachedDocuments.size() );
+                    Sequence< OUString > aAttachmentSeq(&(maAttachedDocuments[0]),maAttachedDocuments.size());
 
                     xSimpleMailMessage->setSubject( maSubject );
                     xSimpleMailMessage->setAttachement( aAttachmentSeq );
