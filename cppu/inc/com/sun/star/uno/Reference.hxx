@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:18:18 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,7 @@ template< class interface_type >
 inline XInterface * Reference< interface_type >::iquery(
     XInterface * pInterface ) SAL_THROW( (RuntimeException) )
 {
-    return BaseReference::iquery(
-        pInterface, ::getCppuType( (const Reference< interface_type > *)0 ) );
+    return BaseReference::iquery(pInterface, interface_type::static_type());
 }
 #ifndef EXCEPTIONS_OFF
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
@@ -130,7 +129,7 @@ inline XInterface * Reference< interface_type >::iquery_throw(
     XInterface * pInterface ) SAL_THROW( (RuntimeException) )
 {
     return BaseReference::iquery_throw(
-        pInterface, ::getCppuType( (const Reference< interface_type > *)0 ) );
+        pInterface, interface_type::static_type());
 }
 #endif
 
