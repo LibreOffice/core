@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-20 08:09:03 $
+ *  last change: $Author: hr $ $Date: 2000-09-26 12:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <string>           // prevent conflict with STL includes
 #ifndef _SV_DRAG_HXX
 #include <vcl/drag.hxx>
 #endif
