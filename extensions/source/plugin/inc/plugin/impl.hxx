@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:37:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ public:
     virtual void SAL_CALL createPeer( const Reference< com::sun::star::awt::XToolkit > & xToolkit, const Reference< com::sun::star::awt::XWindowPeer > & Parent) throw( RuntimeException );
 
     virtual sal_Bool SAL_CALL setModel( const Reference< com::sun::star::awt::XControlModel > & Model ) throw( RuntimeException );
-    virtual Reference< com::sun::star::awt::XControlModel > SAL_CALL getModel(void) const throw( RuntimeException )
+    virtual Reference< com::sun::star::awt::XControlModel > SAL_CALL getModel()throw( RuntimeException )
     { return m_xModel; }
 
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException );
