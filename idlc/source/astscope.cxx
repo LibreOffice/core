@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-04-10 09:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ AstDeclaration* AstScope::lookupInInherited(const OString& scopedName)
         {
             pDecl = ((AstInterface*)(*iter))->lookupByName(scopedName);
             if ( pDecl )
-                return pDecl;;
+                return pDecl;
+            iter++;
         }
     }
     // Not found
