@@ -156,6 +156,8 @@
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"UpdateTableName#optional"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"UpdateCatalogName#optional"
 "ODatabaseForm";"com::sun::star::sdb::RowSet";"UpdateSchemaName#optional"
+"ODatabaseForm";"com::sun::star::sdb::RowSet";"HavingClause#optional"
+"ODatabaseForm";"com::sun::star::sdb::RowSet";"GroupBy#optional"
 "ODatabaseForm";"com::sun::star::container::XContainer";"addContainerListener()"
 "ODatabaseForm";"com::sun::star::container::XContainer";"removeContainerListener()"
 "ODatabaseForm";"com::sun::star::sdbc::XRow";"wasNull()"
