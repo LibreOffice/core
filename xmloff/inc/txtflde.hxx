@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:56:54 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace com { namespace sun { namespace star {
     namespace text { class XTextField; }
     namespace text { class XText; }
     namespace beans { class XPropertySet; }
+    namespace beans { class XPropertySetInfo; }
     namespace frame { class XModel; }
     namespace uno { template<typename A> class Sequence; }
 } } }
@@ -435,6 +436,15 @@ protected:
         const ::com::sun::star::uno::Sequence<rtl::OUString>& rSequence,
         sal_Int32 nSelected );
 
+    /// export attributes that describe a data source
+    void ExportDataBaseElement(
+        enum ::xmloff::token::XMLTokenEnum eElement,
+        const ::rtl::OUString& sContent,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        const ::com::sun::star::uno::Reference <
+            ::com::sun::star::beans::XPropertySetInfo > & rPropertySetInfo );
+
     /// for XDependentTextFields, get PropertySet of FieldMaster
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >
     GetMasterPropertySet(const ::com::sun::star::uno::Reference <
@@ -508,6 +518,7 @@ private:
     const ::rtl::OUString sPropertyNumberingSeparator;
     const ::rtl::OUString sPropertyNumberingType;
     const ::rtl::OUString sPropertyDataBaseName;
+    const ::rtl::OUString sPropertyDataBaseURL;
     const ::rtl::OUString sPropertyDataTableName;
     const ::rtl::OUString sPropertyDateTimeValue;
     const ::rtl::OUString sPropertyDataColumnName;
