@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-04 06:26:24 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 11:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,10 +664,10 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
 {
     DBG_ASSERT(pRowDefaults, "no row defaults");
     DBG_ASSERT(pColDefaults, "no column defaults");
-    sal_Int32 nEnd (rFormatRange.nRepeatRows + nRow - 1);
+    sal_uInt32 nEnd (rFormatRange.nRepeatRows + nRow - 1);
     sal_Int32 nPrevIndex((*pRowDefaults)[nRow].nIndex);
     sal_Bool bPrevAutoStyle((*pRowDefaults)[nRow].bIsAutoStyle);
-    sal_Int32 i(nRow + 1);
+    sal_uInt32 i(nRow + 1);
     sal_Bool bReady(sal_False);
     while ((i < nEnd) && !bReady && (i < pRowDefaults->size()))
     {
@@ -687,23 +687,23 @@ void ScRowFormatRanges::AddRange(ScMyRowFormatRange& rFormatRange,
         bPrevAutoStyle = (*pColDefaults)[rFormatRange.nStartColumn].bIsAutoStyle;
         sal_Int32 nPrevStartCol(rFormatRange.nStartColumn);
         sal_Int32 nRepeat(1);
-        sal_Int32 nEnd(rFormatRange.nStartColumn + rFormatRange.nRepeatColumns);
-        for(i = rFormatRange.nStartColumn + 1; i < nEnd; i += (*pColDefaults)[i].nRepeat)
+        nEnd = rFormatRange.nStartColumn + rFormatRange.nRepeatColumns;
+        for(i = sal_uInt32(rFormatRange.nStartColumn + 1); i < nEnd; i += (*pColDefaults)[i].nRepeat)
         {
-            DBG_ASSERT((nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
+            DBG_ASSERT(sal_uInt32(nPrevStartCol + nRepeat) <= nEnd, "something wents wrong");
             if ((nPrevIndex != (*pColDefaults)[i].nIndex) ||
                 (bPrevAutoStyle != (*pColDefaults)[i].bIsAutoStyle))
             {
                 AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
-                nPrevStartCol = nPrevStartCol + nRepeat - 1;
-                nRepeat = 1;
+                nPrevStartCol = i;
+                nRepeat = (*pColDefaults)[i].nRepeat;
                 nPrevIndex = (*pColDefaults)[i].nIndex;
                 bPrevAutoStyle = (*pColDefaults)[i].bIsAutoStyle;
             }
             else
                 nRepeat += (*pColDefaults)[i].nRepeat;
         }
-        if ((nPrevStartCol + nRepeat) > nEnd)
+        if (sal_uInt32(nPrevStartCol + nRepeat) > nEnd)
             nRepeat = nEnd - nPrevStartCol;
         AddRange(nPrevStartCol, nRepeat, nPrevIndex, bPrevAutoStyle, rFormatRange);
     }
@@ -964,6 +964,9 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
     {
+#ifdef DEBUG
+        table::CellRangeAddress aTempRangeAddress = (*aItr).aRangeAddress;
+#endif
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
         {
