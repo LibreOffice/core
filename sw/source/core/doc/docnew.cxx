@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:59:12 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,8 +279,6 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
  * exportierte Methoden
  */
 
-
-
 SwDoc::SwDoc() :
     aAttrPool( this ),
     aNodes( this ),
@@ -375,6 +373,7 @@ SwDoc::SwDoc() :
     bInsOnlyTxtGlssry =
     bContains_MSVBasic =
     bKernAsianPunctuation =
+    bOldNumbering =
 #ifndef PRODUCT
     bXMLExport =
 #endif
