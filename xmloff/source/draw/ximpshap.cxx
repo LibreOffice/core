@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-26 09:59:25 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 10:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@ SdXMLShapeContext::~SdXMLShapeContext()
 {
     if(mxCursor.is())
         GetImport().GetTextImport()->ResetCursor();
+
+    if(mxOldCursor.is())
+        GetImport().GetTextImport()->SetCursor( mxOldCursor );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -204,6 +207,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
         uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
         if( xText.is() )
         {
+            mxOldCursor = GetImport().GetTextImport()->GetCursor();
             mxCursor = xText->createTextCursor();
             if( mxCursor.is() )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-26 09:59:25 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 10:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >  mxShapes;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
     com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxCursor;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextCursor > mxOldCursor;
     rtl::OUString               maDrawStyleName;
     rtl::OUString               maPresentationClass;
     sal_Int32                   mnRotate;
