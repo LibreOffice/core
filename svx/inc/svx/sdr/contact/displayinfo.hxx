@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:29:36 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,6 @@ namespace sdr
             // ProccessDisplay()
             ViewObjectContact*                              mpRootVOC;
 
-            // remember the original drawmode for entered group visualisation
-            sal_uInt32                                      mnOriginalDrawMode;
-
             // bitfield
             // Internal flag to know when the control layer is painted. Default is
             // sal_False. If set to sal_True, painting of the page, page borders and
@@ -256,10 +253,9 @@ namespace sdr
             const svtools::ColorConfig& GetColorConfig() const;
 
             // Save the original DrawMode from outdev
-            void SaveOriginalDrawMode();
             sal_uInt32 GetOriginalDrawMode() const;
             sal_uInt32 GetCurrentDrawMode() const;
-            void RestoreOriginalDrawMode();
+            void ClearGhostedDrawMode();
             void SetGhostedDrawMode();
             sal_Bool IsGhostedDrawModeActive() const;
 
