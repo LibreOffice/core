@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:39:39 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@ void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
     {
         DBG_ERRORFILE("ScMatrix::CreateMatrix: dimension error");
         nColCount = nRowCount = 1;
-        pMat = new MatValue[1];
+        pMat = new ScMatrixValue[1];
         pMat[0].fVal = CreateDoubleError( errStackOverflow);
     }
     else
-        pMat = new MatValue[nCount];
+        pMat = new ScMatrixValue[nCount];
     bIsString = NULL;
 }
 
@@ -406,19 +406,20 @@ const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
     return ScGlobal::GetEmptyString();
 }
 
-const MatValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, BOOL& bString) const
+const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) const
 {
     if (ValidColRow( nC, nR))
     {
         SCSIZE nIndex = CalcOffset( nC, nR);
-        if (bIsString && bIsString[nIndex])
-            bString = TRUE;
+        if (bIsString)
+            nType = bIsString[nIndex];
         else
-            bString = FALSE;
+            nType = SC_MATVAL_VALUE;
         return &pMat[nIndex];
     }
     else
         DBG_ERRORFILE("ScMatrix::Get: dimension error");
+    nType = SC_MATVAL_EMPTY;
     return NULL;
 }
 
