@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -925,6 +925,9 @@ Optional Features:
                           the static libraries instead of the dynamic ones.
                           (enables -Bstatic linker flag for gtk libraries)
 
+  --enable-build-mozilla  Use this option if you want to build the mozilla
+                          components from the mozilla source code.
+
   --enable-kde            Determines whether to use Qt/KDE vclplug on platforms
                           where Qt and KDE are available.
 
@@ -969,6 +972,13 @@ Optional Packages:
   --with-system-stdlibs   use libstdc++/libgcc_s already on system
 
   --with-system-mspack    use libmspack already installed on system
+
+  --with-mozilla-version   Choose which version of mozilla to use while building
+                           mozilla. Default: 1.7.5.
+                           Note that not all versions are supported.
+
+  --with-mozilla-toolkit   Choose which GUI toolkit to use while building mozilla
+                           components. Default: gtk2
 
   --without-myspell-dicts   Removes myspell dictionaries from openoffice.org
                          installation set, for people building for specific
@@ -1752,6 +1762,23 @@ fi;
 # Check whether --enable-static-gtk or --disable-static-gtk was given.
 if test "${enable_static_gtk+set}" = set; then
   enableval="$enable_static_gtk"
+
+fi;
+# Check whether --enable-build-mozilla or --disable-build-mozilla was given.
+if test "${enable_build_mozilla+set}" = set; then
+  enableval="$enable_build_mozilla"
+
+fi;
+
+# Check whether --with-mozilla-version or --without-mozilla-version was given.
+if test "${with_mozilla_version+set}" = set; then
+  withval="$with_mozilla_version"
+
+fi;
+
+# Check whether --with-mozilla-toolkit or --without-mozilla-toolkit was given.
+if test "${with_mozilla_toolkit+set}" = set; then
+  withval="$with_mozilla_toolkit"
 
 fi;
 # Check whether --enable-kde or --disable-kde was given.
@@ -14460,6 +14487,513 @@ fi
 
 
 
+if test -z "$with_mozilla_version"; then
+   MOZILLA_VERSION=
+else
+   echo "$as_me:$LINENO: checking which mozilla version to build" >&5
+echo $ECHO_N "checking which mozilla version to build... $ECHO_C" >&6
+   MOZILLA_VERSION=$with_mozilla_version
+   enable_build_mozilla=1
+   echo "$as_me:$LINENO: result: $MOZILLA_VERSION" >&5
+echo "${ECHO_T}$MOZILLA_VERSION" >&6
+fi
+
+
+
+if test -z "$with_mozilla_toolkit"; then
+   echo "$as_me:$LINENO: checking for toolkit which mozilla should use" >&5
+echo $ECHO_N "checking for toolkit which mozilla should use... $ECHO_C" >&6
+   if test "$_os" != "WINNT"; then
+      MOZILLA_TOOLKIT=gtk2
+      echo "$as_me:$LINENO: result: gtk2" >&5
+echo "${ECHO_T}gtk2" >&6
+   fi
+else
+   MOZILLA_TOOLKIT=$with_mozilla_toolkit
+   enable_build_mozilla=1
+   echo "$as_me:$LINENO: result: $MOZILLA_TOOLKIT" >&5
+echo "${ECHO_T}$MOZILLA_TOOLKIT" >&6
+fi
+
+
+
+echo "$as_me:$LINENO: checking whether to build Mozilla" >&5
+echo $ECHO_N "checking whether to build Mozilla... $ECHO_C" >&6
+if test -n "$enable_build_mozilla"; then
+   BUILD_MOZAB="TRUE"
+   echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+   BUILD_MOZAB=""
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test "$BUILD_MOZAB" = "TRUE"; then
+   if test -z "$MOZILLA_VERSION"; then
+      MOZILLA_VERSION=1.7.5
+   fi
+   if test "$MOZILLA_VERSION" == "1.7b" ; then
+      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source.tar.gz"
+   else
+      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}.tar.gz"
+   fi
+   echo "$as_me:$LINENO: checking for $MOZILLA_SOURCE_VERSION" >&5
+echo $ECHO_N "checking for $MOZILLA_SOURCE_VERSION... $ECHO_C" >&6
+   if test ! -e "../moz/download/$MOZILLA_SOURCE_VERSION"; then
+      { { echo "$as_me:$LINENO: error: Mozilla source archive not found.
+Please copy $MOZILLA_SOURCE_VERSION to moz/download/.
+The archive can be found here:
+http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&5
+echo "$as_me: error: Mozilla source archive not found.
+Please copy $MOZILLA_SOURCE_VERSION to moz/download/.
+The archive can be found here:
+http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&2;}
+   { (exit 1); exit 1; }; }
+   else
+      echo "$as_me:$LINENO: result: found" >&5
+echo "${ECHO_T}found" >&6
+   fi
+   if test "$_os" = "WINNT"; then
+      echo "$as_me:$LINENO: checking for glib and libIDL binaries" >&5
+echo $ECHO_N "checking for glib and libIDL binaries... $ECHO_C" >&6
+      if test ! -e "../moz/download/vc71-glib-1.2.10-bin.zip" \
+           -o ! -e "../moz/download/vc71-libIDL-0.6.8-bin.zip" \
+           -o ! -e "../moz/download/wintools.zip" ; then
+{ { echo "$as_me:$LINENO: error: One or more of the following archives is missing in moz/download/
+  vc71-glib-1.2.10-bin.zip
+  vc71-libIDL-0.6.8-bin.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/)
+  wintools.zip
+(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&5
+echo "$as_me: error: One or more of the following archives is missing in moz/download/
+  vc71-glib-1.2.10-bin.zip
+  vc71-libIDL-0.6.8-bin.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/)
+  wintools.zip
+(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         echo "$as_me:$LINENO: result: ok" >&5
+echo "${ECHO_T}ok" >&6
+      fi
+   elif test "$_os" = "Darwin"; then
+      { echo "$as_me:$LINENO: WARNING: Mozilla build environment for MacOSX not checked. Do it yourself or supply patches." >&5
+echo "$as_me: WARNING: Mozilla build environment for MacOSX not checked. Do it yourself or supply patches." >&2;}
+   else
+      # Generic Unix/Linux section
+      if test "$MOZILLA_TOOLKIT" = "gtk2"; then
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gtk+-2.0" >&5
+echo $ECHO_N "checking for gtk+-2.0... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gtk+-2.0" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_CFLAGS" >&5
+echo $ECHO_N "checking MOZLIBREQ_CFLAGS... $ECHO_C" >&6
+            MOZLIBREQ_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_CFLAGS" >&5
+echo "${ECHO_T}$MOZLIBREQ_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_LIBS" >&5
+echo $ECHO_N "checking MOZLIBREQ_LIBS... $ECHO_C" >&6
+            MOZLIBREQ_LIBS=`$PKG_CONFIG --libs "gtk+-2.0"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_LIBS" >&5
+echo "${ECHO_T}$MOZLIBREQ_LIBS" >&6
+        else
+            MOZLIBREQ_CFLAGS=""
+            MOZLIBREQ_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZLIBREQ_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-2.0"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MOZGTK="TRUE"
+  else
+     MOZGTK=""
+  fi
+
+         if test -z "$MOZGTK"; then
+            { { echo "$as_me:$LINENO: error: GTK2 is needed to build mozilla." >&5
+echo "$as_me: error: GTK2 is needed to build mozilla." >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for libIDL-2.0 >= 0.8.0" >&5
+echo $ECHO_N "checking for libIDL-2.0 >= 0.8.0... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "libIDL-2.0 >= 0.8.0" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_CFLAGS" >&5
+echo $ECHO_N "checking MOZLIBREQ_CFLAGS... $ECHO_C" >&6
+            MOZLIBREQ_CFLAGS=`$PKG_CONFIG --cflags "libIDL-2.0 >= 0.8.0"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_CFLAGS" >&5
+echo "${ECHO_T}$MOZLIBREQ_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_LIBS" >&5
+echo $ECHO_N "checking MOZLIBREQ_LIBS... $ECHO_C" >&6
+            MOZLIBREQ_LIBS=`$PKG_CONFIG --libs "libIDL-2.0 >= 0.8.0"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_LIBS" >&5
+echo "${ECHO_T}$MOZLIBREQ_LIBS" >&6
+        else
+            MOZLIBREQ_CFLAGS=""
+            MOZLIBREQ_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZLIBREQ_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libIDL-2.0 >= 0.8.0"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MOZIDL="TRUE"
+  else
+     MOZIDL=""
+  fi
+
+         if test -z "$MOZIDL"; then
+            { { echo "$as_me:$LINENO: error: libIDL >= 0.8.0 is needed when using GTK2 to build mozilla." >&5
+echo "$as_me: error: libIDL >= 0.8.0 is needed when using GTK2 to build mozilla." >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+      else
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gtk+ >= 1.2.3" >&5
+echo $ECHO_N "checking for gtk+ >= 1.2.3... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gtk+ >= 1.2.3" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_CFLAGS" >&5
+echo $ECHO_N "checking MOZLIBREQ_CFLAGS... $ECHO_C" >&6
+            MOZLIBREQ_CFLAGS=`$PKG_CONFIG --cflags "gtk+ >= 1.2.3"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_CFLAGS" >&5
+echo "${ECHO_T}$MOZLIBREQ_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_LIBS" >&5
+echo $ECHO_N "checking MOZLIBREQ_LIBS... $ECHO_C" >&6
+            MOZLIBREQ_LIBS=`$PKG_CONFIG --libs "gtk+ >= 1.2.3"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_LIBS" >&5
+echo "${ECHO_T}$MOZLIBREQ_LIBS" >&6
+        else
+            MOZLIBREQ_CFLAGS=""
+            MOZLIBREQ_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZLIBREQ_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+ >= 1.2.3"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MOZGTK="TRUE"
+  else
+     MOZGTK=""
+  fi
+
+         if test -z "$MOZGTK"; then
+            { { echo "$as_me:$LINENO: error: gtk 1.2 is needed when not using GTK2 to build mozilla." >&5
+echo "$as_me: error: gtk 1.2 is needed when not using GTK2 to build mozilla." >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for libidl >= 0.6.3 libidl <= 0.6.8" >&5
+echo $ECHO_N "checking for libidl >= 0.6.3 libidl <= 0.6.8... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "libidl >= 0.6.3 libidl <= 0.6.8" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_CFLAGS" >&5
+echo $ECHO_N "checking MOZLIBREQ_CFLAGS... $ECHO_C" >&6
+            MOZLIBREQ_CFLAGS=`$PKG_CONFIG --cflags "libidl >= 0.6.3 libidl <= 0.6.8"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_CFLAGS" >&5
+echo "${ECHO_T}$MOZLIBREQ_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking MOZLIBREQ_LIBS" >&5
+echo $ECHO_N "checking MOZLIBREQ_LIBS... $ECHO_C" >&6
+            MOZLIBREQ_LIBS=`$PKG_CONFIG --libs "libidl >= 0.6.3 libidl <= 0.6.8"`
+            echo "$as_me:$LINENO: result: $MOZLIBREQ_LIBS" >&5
+echo "${ECHO_T}$MOZLIBREQ_LIBS" >&6
+        else
+            MOZLIBREQ_CFLAGS=""
+            MOZLIBREQ_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            MOZLIBREQ_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libidl >= 0.6.3 libidl <= 0.6.8"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     MOZIDL="TRUE"
+  else
+     MOZIDL=""
+  fi
+
+         if test -z "$MOZIDL"; then
+            { { echo "$as_me:$LINENO: error: libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla." >&5
+echo "$as_me: error: libIDL 0.6.3 - 0.6.8 is needed when not using GTK2 to build mozilla." >&2;}
+   { (exit 1); exit 1; }; }
+         fi
+      fi
+   fi
+fi
+
+
+
 echo "$as_me:$LINENO: checking whether to include FontOOo" >&5
 echo $ECHO_N "checking whether to include FontOOo... $ECHO_C" >&6
 if test -n "$enable_fontooo"; then
@@ -15314,6 +15848,7 @@ fi
 
 
 
+
           ac_config_files="$ac_config_files set_soenv"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16107,6 +16642,11 @@ s,@MOZILLA_LIBS@,$MOZILLA_LIBS,;t t
 s,@MOZILLABASE_CFLAGS@,$MOZILLABASE_CFLAGS,;t t
 s,@MOZILLABASE_LIBS@,$MOZILLABASE_LIBS,;t t
 s,@SYSTEM_MOZILLA@,$SYSTEM_MOZILLA,;t t
+s,@MOZILLA_VERSION@,$MOZILLA_VERSION,;t t
+s,@MOZILLA_TOOLKIT@,$MOZILLA_TOOLKIT,;t t
+s,@MOZLIBREQ_CFLAGS@,$MOZLIBREQ_CFLAGS,;t t
+s,@MOZLIBREQ_LIBS@,$MOZLIBREQ_LIBS,;t t
+s,@BUILD_MOZAB@,$BUILD_MOZAB,;t t
 s,@WITH_FONTOOO@,$WITH_FONTOOO,;t t
 s,@SYSTEM_MSPACK@,$SYSTEM_MSPACK,;t t
 s,@WITH_FONTS@,$WITH_FONTS,;t t
