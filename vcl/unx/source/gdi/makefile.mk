@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-20 08:59:20 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:58:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ SLOFILES=	\
         $(SLO)$/salvd.obj		\
         $(SLO)$/salogl.obj		\
         $(SLO)$/dtint.obj		\
-        $(SLO)$/kdeint.obj		\
         $(SLO)$/salcvt.obj		\
         $(SLO)$/xfont.obj		\
         $(SLO)$/xlfd_attr.obj	\
@@ -95,6 +94,15 @@ SLOFILES=	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/pspgraphics.obj
+
+.IF "$(WITH_WIDGETSET)"=="kde"
+    # salnativewidgets-kde.cxx contains own implementation of KDEintegrator
+    SLOFILES+=$(SLO)/salnativewidgets-kde.obj
+    CFLAGS+=$(WIDGETSET_CFLAGS)
+.ELSE
+    SLOFILES+= \
+        $(SLO)$/kdeint.obj
+.ENDIF
 
 .IF "$(USE_XPRINT)" == "TRUE"
 CFLAGS+=-D_USE_PRINT_EXTENSION_=1
