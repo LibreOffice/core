@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:15:50 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1614,6 +1614,8 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
                 }
                 break;
                 case RES_PAGEDESC :
+                if( MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)
+                    goto put_itemset;
                 {
                     // Sonderbehandlung RES_PAGEDESC
                     if(aValue.getValueType() != ::getCppuType((const OUString*)0))
@@ -1632,7 +1634,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
                         pNewDesc = new SwFmtPageDesc();
                     OUString uDescName;
                     aValue >>= uDescName;
-                    String sDescName(uDescName);
+                    String sDescName(SwXStyleFamilies::GetUIName(uDescName, SFX_STYLE_FAMILY_PAGE));
                     if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
                     {
                         sal_uInt16 nCount = m_pDoc->GetPageDescCnt();
@@ -1741,6 +1743,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
                 }
                 //no break!
                 default:
+put_itemset:
                 {
                     SfxItemSet& rStyleSet = aBase.GetItemSet();
                     SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
@@ -1822,6 +1825,8 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(SwXStyleFamilies::GetProgrammaticName(aStyle.GetFollow(), eFamily));
                 break;
                 case RES_PAGEDESC :
+                if( MID_PAGEDESC_PAGEDESCNAME != pMap->nMemberId)
+                    goto query_itemset;
                 {
                     // Sonderbehandlung RES_PAGEDESC
                     const SfxPoolItem* pItem;
@@ -1829,7 +1834,7 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
                     {
                         const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                         if(pDesc)
-                            aRet <<= OUString(pDesc->GetName());
+                            aRet <<= OUString( SwXStyleFamilies::GetProgrammaticName(pDesc->GetName(), SFX_STYLE_FAMILY_PAGE) );
                     }
                 }
                 break;
@@ -1878,6 +1883,7 @@ Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 default:
+query_itemset:
                 {
                     SfxItemSet& rSet = aStyle.GetItemSet();
                     aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
@@ -2561,6 +2567,9 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/12 17:15:50  mib
+    (Header|Footer)Text(Left)? now don't respect UsedOn property
+
     Revision 1.1.1.1  2000/09/19 00:08:29  hr
     initial import
 
