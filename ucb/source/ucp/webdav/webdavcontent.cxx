@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:37:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 15:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 
  *************************************************************************/
 
-#include "osl/getglobalmutex.hxx"
-#include "rtl/instance.hxx"
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include "osl/doublecheckedlocking.h"
+
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
@@ -336,14 +336,42 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 //=========================================================================
-
-namespace
+// virtual
+uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+    throw( uno::RuntimeException )
 {
-    struct InitFolderTypes
+    sal_Bool bFolder = sal_False;
+    try
     {
-        cppu::OTypeCollection * operator()()
+        bFolder
+            = isFolder(
+                uno::Reference< star::ucb::XCommandEnvironment >() );
+    }
+    catch ( uno::RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( uno::Exception const & )
+    {
+        OSL_ENSURE( sal_False,
+                    "Content::getTypes - caught exception." );
+    }
+
+    cppu::OTypeCollection * pCollection = 0;
+
+    if ( bFolder )
+    {
+        static cppu::OTypeCollection* pFolderTypes = 0;
+
+        pCollection = pFolderTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pFolderTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                         CPPU_TYPE_REF( lang::XTypeProvider ),
                         CPPU_TYPE_REF( lang::XServiceInfo ),
                         CPPU_TYPE_REF( lang::XComponent ),
@@ -355,15 +383,27 @@ namespace
                         CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                         CPPU_TYPE_REF( container::XChild ),
                         CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pFolderTypes = pCollection;
+            }
         }
-    };
-
-    struct InitDocTypes
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+    else
     {
-        cppu::OTypeCollection * operator()()
+        static cppu::OTypeCollection* pDocumentTypes = 0;
+
+        pCollection = pDocumentTypes;
+        if ( !pCollection )
         {
-            static cppu::OTypeCollection aInstance(
+            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+
+            pCollection = pDocumentTypes;
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection aCollection(
                         CPPU_TYPE_REF( lang::XTypeProvider ),
                         CPPU_TYPE_REF( lang::XServiceInfo ),
                         CPPU_TYPE_REF( lang::XComponent ),
@@ -374,49 +414,16 @@ namespace
                         CPPU_TYPE_REF( beans::XPropertyContainer ),
                         CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                         CPPU_TYPE_REF( container::XChild ) );
-            return &aInstance;
+                pCollection = &aCollection;
+                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+                pDocumentTypes = pCollection;
+            }
         }
-    };
-}
-
-//=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
-{
-    bool bFolder = false;
-    try
-    {
-        bFolder
-            = isFolder( uno::Reference< star::ucb::XCommandEnvironment >() );
-    }
-    catch ( uno::RuntimeException const & )
-    {
-        throw;
-    }
-    catch ( uno::Exception const & )
-    {
-        OSL_ENSURE( sal_False, "Content::getTypes - caught exception." );
+        else
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
 
-    if ( bFolder )
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitFolderTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitFolderTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
-    else
-    {
-        return (*rtl_Instance< cppu::OTypeCollection,
-                               InitDocTypes,
-                               ::osl::MutexGuard,
-                               ::osl::GetGlobalMutex >::create(
-                                    InitDocTypes(),
-                                    ::osl::GetGlobalMutex() ) ).getTypes();
-    }
+    return (*pCollection).getTypes();
 }
 
 //=========================================================================
