@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:40 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
+#endif
+#ifndef SVTOOLS_FOLDER_RESTRICTION_HXX
+#include <svtools/folderrestriction.hxx>
 #endif
 #include <vcl/toolbox.hxx>
 #ifndef _VOS_THREAD_HXX //autogen
@@ -209,50 +212,59 @@ void SfxURLToolBoxControl_Impl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    if( nSID == SID_FOCUSURLBOX )
+    if ( nSID == SID_OPENURL )
     {
-        if ( GetURLBox()->IsVisible() )
-            GetURLBox()->GrabFocus();
+        // Disable URL box if command is disabled #111014#
+        GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
     }
-    else if ( !GetURLBox()->IsModified() && SFX_ITEM_AVAILABLE == eState )
+
+    if ( GetURLBox()->IsEnabled() )
     {
-        SvtURLBox* pURLBox = GetURLBox();
-        pURLBox->Clear();
-
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(eHISTORY);
-        for (sal_Int32 i=0; i<lList.getLength(); ++i)
+        if( nSID == SID_FOCUSURLBOX )
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lProps = lList[i];
-            for (sal_Int32 p=0; p<lProps.getLength(); ++p)
+            if ( GetURLBox()->IsVisible() )
+                GetURLBox()->GrabFocus();
+        }
+        else if ( !GetURLBox()->IsModified() && SFX_ITEM_AVAILABLE == eState )
+        {
+            SvtURLBox* pURLBox = GetURLBox();
+            pURLBox->Clear();
+
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > lList = SvtHistoryOptions().GetList(eHISTORY);
+            for (sal_Int32 i=0; i<lList.getLength(); ++i)
             {
-                if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
-                    continue;
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lProps = lList[i];
+                for (sal_Int32 p=0; p<lProps.getLength(); ++p)
+                {
+                    if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
+                        continue;
 
-                ::rtl::OUString sURL;
-                if (!(lProps[p].Value>>=sURL) || !sURL.getLength())
-                    continue;
+                    ::rtl::OUString sURL;
+                    if (!(lProps[p].Value>>=sURL) || !sURL.getLength())
+                        continue;
 
-                INetURLObject aURL    ( sURL );
-                String        sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-                String        sFile;
+                    INetURLObject aURL    ( sURL );
+                    String        sMainURL( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
+                    String        sFile;
 
-                if (::utl::LocalFileHelper::ConvertURLToSystemPath(sMainURL,sFile))
-                    pURLBox->InsertEntry(sFile);
-                else
-                    pURLBox->InsertEntry(sMainURL);
+                    if (::utl::LocalFileHelper::ConvertURLToSystemPath(sMainURL,sFile))
+                        pURLBox->InsertEntry(sFile);
+                    else
+                        pURLBox->InsertEntry(sMainURL);
+                }
             }
-        }
 
-        const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);
-        String aRep( pURL->GetValue() );
-        INetURLObject aURL( aRep );
-        INetProtocol eProt = aURL.GetProtocol();
-        if ( eProt == INET_PROT_FILE )
-        {
-            pURLBox->SetText( aURL.PathToFileName() );
+            const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);
+            String aRep( pURL->GetValue() );
+            INetURLObject aURL( aRep );
+            INetProtocol eProt = aURL.GetProtocol();
+            if ( eProt == INET_PROT_FILE )
+            {
+                pURLBox->SetText( aURL.PathToFileName() );
+            }
+            else
+                pURLBox->SetText( aURL.GetURLNoPass() );
         }
-        else
-            pURLBox->SetText( aURL.GetURLNoPass() );
     }
 }
 
