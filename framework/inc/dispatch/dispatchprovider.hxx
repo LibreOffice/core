@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
+ *  last change: $Author: as $ $Date: 2002-05-02 11:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
 #endif
+
+#include <classes/protocolhandlercache.hxx>
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
@@ -148,7 +150,6 @@ enum EDispatchHelper
 {
     E_DEFAULTDISPATCHER     ,
     E_MENUDISPATCHER        ,
-    E_MAILTODISPATCHER      ,
     E_HELPAGENTDISPATCHER   ,
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
@@ -250,11 +251,11 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatchProvider >        m_xAppDispatchProvider      ;   /// For some dispatches we should call our global app dispatch provider
         css::uno::Reference< css::frame::XDispatch >                m_xMenuDispatcher           ;   /// different dispatcher to handle special dispatch calls, protocols or URLs
         css::uno::Reference< css::frame::XDispatch >                m_xHelpAgentDispatcher      ;
-        css::uno::Reference< css::frame::XDispatch >                m_xMailToDispatcher         ;
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
         css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
         css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
         css::uno::Reference< css::frame::XDispatch >                m_xDefaultDispatcher        ;
+        HandlerCache                                                m_aProtocolHandlerCache     ;
 
 };      //  class DispatchProvider
 
