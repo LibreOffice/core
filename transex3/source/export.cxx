@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-17 10:45:22 $
+ *  last change: $Author: nf $ $Date: 2001-05-18 11:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,14 +1325,19 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += pResData->sPForm; sOutput += "\t";
                     sOutput += ByteString::CreateFromInt64( pResData->nWidth ); sOutput += "\t";
                     sOutput += ByteString::CreateFromInt64( LangId[ i ] ); sOutput += "\t";
+
+                    if ( bUTF8 ) {
+                        sXText = UTF8Converter::ConvertToUTF8( sXText, GetCharSet( LangId[ i ] ));
+                        sXHText = UTF8Converter::ConvertToUTF8( sXHText, GetCharSet( LangId[ i ] ));
+                        sXQHText = UTF8Converter::ConvertToUTF8( sXQHText, GetCharSet( LangId[ i ] ));
+                        sXTitle = UTF8Converter::ConvertToUTF8( sXTitle, GetCharSet( LangId[ i ] ));
+                    }
+
                     sOutput += sXText; sOutput += "\t";
                     sOutput += sXHText; sOutput += "\t";
                     sOutput += sXQHText; sOutput += "\t";
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
-
-                    if ( bUTF8 )
-                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ i ] ));
 
                     aOutput.WriteLine( sOutput );
                 }
@@ -1421,11 +1426,12 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sLID; sOutput += "\t\t";
                         sOutput += pResData->sPForm; sOutput += "\t0\t";
                         sOutput += ByteString::CreateFromInt64( LangId[ j ] ); sOutput += "\t";
-                        sOutput += sText; sOutput += "\t\t\t\t";
-                        sOutput += sTimeStamp;
 
                         if ( bUTF8 )
-                            sOutput = UTF8Converter::ConvertToUTF8( sOutput, GetCharSet( LangId[ j ] ));
+                            sText = UTF8Converter::ConvertToUTF8( sText, GetCharSet( LangId[ j ] ));
+
+                        sOutput += sText; sOutput += "\t\t\t\t";
+                        sOutput += sTimeStamp;
 
                         aOutput.WriteLine( sOutput );
                     }
