@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:49:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5033,8 +5033,8 @@ WW8Fib::WW8Fib(SvStream& rSt, BYTE nWantedVersion, UINT32 nOffset)
     rSt >> aBits1;
     rSt >> aBits2;
     rSt >> nFibBack;
-    rSt >> lKey1;
-    rSt >> lKey2;
+    rSt >> nHash;
+    rSt >> nKey;
     rSt >> envr;
     rSt >> aVer8Bits1;      // unter Ver67  nur leeres Reservefeld
                             // Inhalt von aVer8Bits1
@@ -5407,8 +5407,8 @@ bool WW8Fib::Write(SvStream& rStrm)
     Set_UInt16( pData, nBits16 );
 
     Set_UInt16( pData, nFibBack );
-    Set_UInt16( pData, lKey1 );
-    Set_UInt16( pData, lKey2 );
+    Set_UInt16( pData, nHash );
+    Set_UInt16( pData, nKey );
     Set_UInt8( pData, envr );
 
     BYTE nBits8 = 0;
