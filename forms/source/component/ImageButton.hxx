@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageButton.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _FRM_IMAGE_BUTTON_HXX_
 #define _FRM_IMAGE_BUTTON_HXX_
 
-#ifndef _FRM_IMAGE_HXX_
-#include "Image.hxx"
+#ifndef FORMS_SOURCE_CLICKABLEIMAGE_HXX
+#include "clickableimage.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XMOUSELISTENER_HPP_
@@ -79,7 +79,7 @@ namespace frm
 // OImageButtonModel
 //==================================================================
 class OImageButtonModel
-        :public OImageModel
+        :public OClickableImageBaseModel
         ,public ::comphelper::OAggregationArrayUsageHelper< OImageButtonModel >
 {
 public:
@@ -113,7 +113,7 @@ protected:
 // OImageButtonControl
 //==================================================================
 typedef ::cppu::ImplHelper1< ::com::sun::star::awt::XMouseListener> OImageButtonControl_BASE;
-class OImageButtonControl : public OImageControl,
+class OImageButtonControl : public OClickableImageBaseControl,
                             public OImageButtonControl_BASE
 {
 protected:
@@ -128,7 +128,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OImageControl);
+    DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XEventListener
