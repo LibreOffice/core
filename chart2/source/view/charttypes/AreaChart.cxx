@@ -702,23 +702,16 @@ void AreaChart::createShapes()
                                 ( xPointProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
                                 xErrorBarProp.is())
                             {
-                                if(    !::rtl::math::isNan(fLogicX) && !::rtl::math::isInf(fLogicX)
-                                    && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
-                                    && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
-                                {
-//                                     drawing::Position3D aUnScaledPoint( fLogicX, fLogicY,fLogicZ);
+                                uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
+                                    getErrorBarsGroupShape(*aSeriesIter, m_xLogicTarget) );
 
-                                    uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-                                        getErrorBarsGroupShape(*aSeriesIter, m_xLogicTarget) );
-
-
-                                    createErrorBar(   xErrorBarsGroup_Shapes
-                                                    , aUnScaledPoint
-                                                    , xErrorBarProp
-                                                    , (*aSeriesIter)->getAllY()
-                                                    , nIndex
-                                                    , true /* bVertical */ );
-                                }
+                                createErrorBar(
+                                    xErrorBarsGroup_Shapes
+                                  , aUnScaledPoint
+                                  , xErrorBarProp
+                                  , (*aSeriesIter)->getAllY()
+                                  , nIndex
+                                  , true /* bVertical */ );
                             }
                         }
                     }
