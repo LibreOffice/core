@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:01:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <paravertalignitem.hxx>
 #endif
+#include <svtools/eitem.hxx> //add CHINA001
+#include <sfx2/request.hxx> //add CHINA001
+#include <svtools/intitem.hxx> //add CHINA001
 
 // static ----------------------------------------------------------------
 
@@ -1043,6 +1046,47 @@ void    SvxStdParagraphTabPage::EnableAbsLineDist(long nMinTwip)
     nMinFixDist = nMinTwip;
 }
 
+//addd CHINA001 begin
+void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
+{
+
+/* CHINA001 different bit represent call to different method of SvxStdParagraphTabPage
+                        0x0001 --->EnableRelativeMode()
+                        0x0002 --->EnableRegisterMode()
+                        0x0004 --->EnableAutoFirstLine()
+                        0x0008 --->EnableNegativeMode()
+
+
+            */
+    SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pLineDistItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,sal_False);
+
+    if (pPageWidthItem)
+        SetPageWidth(pPageWidthItem->GetValue());
+
+    if (pFlagSetItem )
+        if (( 0x0001 & pFlagSetItem->GetValue())== 0x0001 )
+            EnableRelativeMode();
+
+    if (pFlagSetItem)
+        if (( 0x0002 & pFlagSetItem->GetValue())== 0x0002 )
+                EnableRegisterMode();
+
+    if (pFlagSetItem)
+        if ( ( 0x0004 & pFlagSetItem->GetValue())== 0x0004 )
+            EnableAutoFirstLine();
+
+    if(pLineDistItem)
+        EnableAbsLineDist(pLineDistItem->GetValue());
+
+    if (pFlagSetItem)
+        if  (( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
+                EnableNegativeMode();
+
+}
+//end of CHINA001
+
 #define LASTLINEPOS_DEFAULT     0
 #define LASTLINEPOS_LEFT        1
 
@@ -1428,8 +1472,15 @@ void SvxParaAlignTabPage::EnableJustifyExt()
         aSnapToGridCB.Show();
 
 }
-
-
+//add CHINA001 begin
+void SvxParaAlignTabPage::PageCreated (SfxAllItemSet aSet)
+{
+    SFX_ITEMSET_ARG (&aSet,pBoolItem,SfxBoolItem,SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_False);
+    if (pBoolItem)
+        if(pBoolItem->GetValue())
+            EnableJustifyExt();
+}
+//end of CHINA001
 // class SvxExtParagraphTabPage ------------------------------------------
 
 SfxTabPage* SvxExtParagraphTabPage::Create( Window* pParent,
@@ -2247,6 +2298,20 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
         PageBreakPosHdl_Impl( &aBreakPositionLB );
     return 0;
 }
+//Add CHINA001 begin
+void SvxExtParagraphTabPage::PageCreated(SfxAllItemSet aSet)
+{
+
+
+    SFX_ITEMSET_ARG (&aSet,pDisablePageBreakItem,SfxBoolItem,SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK,sal_False);
+
+    if (pDisablePageBreakItem)
+        if ( pDisablePageBreakItem->GetValue())
+                    DisablePageBreak();
+
+
+}
+//end of Add CHINA001
 /*-- 29.11.00 11:36:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
