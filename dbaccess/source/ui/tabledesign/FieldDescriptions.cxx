@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:15:35 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,6 +551,14 @@ sal_Int32                   OFieldDescription::GetType()                const
         return ::comphelper::getINT32(m_xDest->getPropertyValue(PROPERTY_TYPE));
     else
         return m_pType.get() ? m_pType->nType : m_nType;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString             OFieldDescription::GetTypeName()            const
+{
+    if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
+        return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_TYPENAME));
+    else
+        return m_pType.get() ? m_pType->aTypeName : m_sTypeName;
 }
 // -----------------------------------------------------------------------------
 sal_Int32                   OFieldDescription::GetPrecision()           const
