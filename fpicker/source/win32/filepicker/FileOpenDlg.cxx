@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2002-06-11 18:30:32 $
+ *  last change: $Author: tra $ $Date: 2002-07-03 11:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ CFileOpenDialog::CFileOpenDialog(
         m_ofn.lStructSize = _OPENFILENAME_SIZE_VERSION_400W;
     }
 
+    // 0x02000000 for #97681, sfx will make the entry into
+    // the recent document list
     m_ofn.Flags |= dwFlags |
                    OFN_EXPLORER |
                    OFN_ENABLEHOOK |
@@ -140,7 +142,8 @@ CFileOpenDialog::CFileOpenDialog(
                    OFN_PATHMUSTEXIST |
                    OFN_FILEMUSTEXIST |
                    OFN_OVERWRITEPROMPT |
-                   OFN_ENABLESIZING;
+                   OFN_ENABLESIZING |
+                   0x02000000; // 0x02000000 -> OFN_DONTADDTORECENT only available with new platform sdk
 
     // it is a little hack but how else could
     // we get a parent window (using a vcl window?)
