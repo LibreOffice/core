@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:27:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3720,11 +3720,8 @@ void WW8RStyle::PostProcessStyles()
      Clear all imported flags so that we can recursively apply numbering
      formats and use it to mark handled ones
     */
-    for(i=0; i < cstd; i++)
-    {
-        SwWW8StyInf* pSI = &pIo->pCollA[ i ];
-        pSI->bImported = false;
-    }
+    for (i=0; i < cstd; ++i)
+        pIo->pCollA[i].bImported = false;
 
     /*
      Register the num formats and tabstop changes on the styles recursively.
@@ -3737,13 +3734,14 @@ void WW8RStyle::PostProcessStyles()
      tabstops we don't get problems with doubly adjusting tabstops that
      are inheritied.
     */
-    for(i=0; i < cstd; i++)
-        if( pIo->pCollA[i].bValid )
-            RecursiveReg( i );
-
-    pIo->StrengthReduceListStyles();
+    for (i=0; i < cstd; ++i)
+    {
+        if (pIo->pCollA[i].bValid)
+        {
+            RecursiveReg(i);
+        }
+    }
 }
-
 
 void WW8RStyle::ScanStyles()        // untersucht Style-Abhaengigkeiten
 {                               // und ermittelt die Filepos fuer jeden Style
