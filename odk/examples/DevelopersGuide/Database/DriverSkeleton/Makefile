@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:18:13 $
+#  last change: $Author: vg $ $Date: 2003-07-09 10:37:59 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -120,7 +120,7 @@ $(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))	 
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_MISC)/$(PACKAGE_LIB_DIR))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_MISC)/$(PACKAGE_LIB_DIR))
-	cd $(OUT_COMP_MISC) && jar cvfM ../../bin/$(@F) $(PACKAGE_LIB_DIR)/$(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_MISC)) && jar cvfM ../../bin/$(@F) $(PACKAGE_LIB_DIR)/$(<F)
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
