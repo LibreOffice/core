@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:49:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ TabPage TP_DROPCAPS
         Text [ English ] = "D~istance" ;
         Text [ norwegian ] = "A~vstand" ;
         Text [ italian ] = "D~istanza dal testo" ;
-        Text [ portuguese_brazilian ] = "Dist‚ncia atÈ o corpo do texto" ;
+        Text [ portuguese_brazilian ] = "Dist‚ncia do corpo do texto" ;
         Text [ portuguese ] = "~Dist‚ncia do texto" ;
         Text [ finnish ] = "Et‰isyys tekstist‰" ;
         Text [ danish ] = "Afstand til tekst" ;
@@ -472,7 +472,7 @@ TabPage TP_DROPCAPS
         Text[ greek ] = "”ÙıÎ ˜·Ò·ÍÙﬁÒ˘Ì";
         Text[ korean ] = "Î¨∏Ïûê Ïä§ÌÉÄÏùº(~Y)";
         Text[ turkish ] = "Karakter ~biÁimi";
-        Text[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+        Text[ language_user1 ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
         Text[ catalan ] = "E~stil de car‡cter";
         Text[ thai ] = "‡∏•‡∏±‡∏Å~‡∏©‡∏ì‡∏∞‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏Ç‡∏£‡∏∞";
         Text[ czech ] = "Styl znaku:";
@@ -523,6 +523,7 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
 
