@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-01-18 20:35:45 $
+ *  last change: $Author: er $ $Date: 2002-01-22 18:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ using namespace ::com::sun::star::i18n;
         { "en",     "p.",       "pp." },
         { "de",     "f.",       "ff." },
         { "es",     " s.",      " ss." },
-        { "it",     "seg.",     " e seg." },
+        { "it",     " e seg.",  " e segg." },
         { "fr",     " sv",      " sv" },
         { "sv",     "f.",       "ff." },
         { "zh",     "",         "" },
