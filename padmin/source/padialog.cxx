@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2001-07-09 15:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 
 using namespace psp;
@@ -448,6 +451,9 @@ void PADialog::PrintTestPage()
                          aPrintText,
                          TEXT_DRAW_MULTILINE );
 
+    AllSettings aSettings( Application::GetSettings() );
+    const LocaleDataWrapper& rLocaleWrapper( aSettings.GetLocaleDataWrapper() );
+
     aPrintText = String( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
     aPrintText += sPrinter;
     aPrintText.AppendAscii( "\n: " );
@@ -460,9 +466,9 @@ void PADialog::PrintTestPage()
     aPrintText.AppendAscii( "\n: " );
     aPrintText += String( aInfo.m_aComment );
     aPrintText.AppendAscii( "\n: " );
-    aPrintText += Application::GetAppInternational().GetLongDate( Date() );
+    aPrintText += rLocaleWrapper.getDate( Date() );
     aPrintText.AppendAscii( "\n: " );
-    aPrintText += Application::GetAppInternational().GetTime( Time() );
+    aPrintText += rLocaleWrapper.getTime( Time() );
 
     m_pPrinter->DrawText( Rectangle( Point( 1100 + nMaxWidth, 2000 ),
                                     Size( aPaperSize.Width() - 2100 - nMaxWidth,

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pl $ $Date: 2001-06-20 08:49:34 $
+#   last change: $Author: pl $ $Date: 2001-07-09 15:46:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,11 +110,12 @@ OBJFILES=\
 SHL1TARGET= spa$(UPD)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
-    $(COMPHELPERLIB)				\
-    $(CPPUHELPERLIB)				\
-    $(CPPULIB)						\
     $(VCLLIB)						\
     -lpsp$(UPD)$(DLLPOSTFIX)		\
+    $(COMPHELPERLIB)				\
+    $(UNOTOOLSLIB)					\
+    $(CPPUHELPERLIB)				\
+    $(CPPULIB)						\
     $(TOOLSLIB)						\
     $(UNOLIB)						\
     $(SOTLIB)						\
