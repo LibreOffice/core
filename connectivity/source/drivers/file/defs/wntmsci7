@@ -2256,3 +2256,6 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ??_C@_0DG@BMEA@o?3?2SRC638?2wntmsci7?2inc?2comphelpe@
 ?throwUrlNotValid@OConnection@file@connectivity@@IAEXABVOUString@rtl@@0@Z
 ?createStream_simpleError@OFileTable@file@connectivity@@SAPAVSvStream@@ABVString@@G@Z
+?_M_fill_insert@?$vector@VORowSetValue@connectivity@@V?$allocator@VORowSetValue@connectivity@@@_STL@@@_STL@@QAEXPAVORowSetValue@connectivity@@IABV34@@Z
+?checkAndResizeParameters@OPreparedStatement@file@connectivity@@IAEXJ@Z
+?setParameter@OPreparedStatement@file@connectivity@@IAEXJABVORowSetValue@3@@Z
