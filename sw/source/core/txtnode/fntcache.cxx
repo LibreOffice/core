@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:59:18 $
+ *  last change: $Author: fme $ $Date: 2002-01-18 09:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,9 +787,9 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            USHORT i = 1;
-            while ( nWidthPerChar > i * nGridWidth )
-                ++i;
+            const USHORT i = nWidthPerChar ?
+                             ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                             1;
 
             nWidthPerChar = i * nGridWidth;
 
@@ -1501,9 +1501,9 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         {
             long nWidthPerChar = aTxtSize.Width() / nLn;
 
-            USHORT i = 1;
-            while ( nWidthPerChar > i * nGridWidth )
-                ++i;
+            const USHORT i = nWidthPerChar ?
+                             ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                             1;
 
             aTxtSize.Width() = i * nGridWidth * nLn;
         }
@@ -1551,18 +1551,13 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         {
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            USHORT i = 1;
-            while ( nWidthPerChar > i * nGridWidth )
-                ++i;
+            USHORT i = nWidthPerChar ?
+                       ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                       1;
 
             nWidthPerChar = i * nGridWidth;
 
-            i = 1;
-            while ( i * nWidthPerChar < rInf.GetOfst() )
-            {
-                ++i;
-                ++nCnt;
-            }
+            nCnt = rInf.GetOfst() / nWidthPerChar + 1;
 
             delete[] pKernArray;
             return nCnt;
@@ -1743,9 +1738,9 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
             long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
-            USHORT i = 1;
-            while ( nWidthPerChar > i * nGridWidth )
-                ++i;
+            const USHORT i = nWidthPerChar ?
+                             ( nWidthPerChar - 1 ) / nGridWidth + 1:
+                             1;
 
             nWidthPerChar = i * nGridWidth;
             long nCurrPos = nWidthPerChar;
