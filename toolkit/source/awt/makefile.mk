@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mt $ $Date: 2002-02-14 17:23:20 $
+#   last change: $Author: pb $ $Date: 2002-02-22 08:39:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/vclxaccessiblecomponent.obj 	\
+            $(SLO)$/vclxaccessiblecomponent.obj 			\
+            $(SLO)$/vclxaccessiblelistbox.obj			\
+            $(SLO)$/vclxaccessiblelistitem.obj			\
             $(SLO)$/vclxbitmap.obj 					\
             $(SLO)$/vclxcontainer.obj 				\
             $(SLO)$/vclxdevice.obj 					\
@@ -86,11 +88,11 @@ SLOFILES=   \
             $(SLO)$/vclxpointer.obj 				\
             $(SLO)$/vclxprinter.obj 				\
             $(SLO)$/vclxregion.obj 					\
-            $(SLO)$/vclxsystemdependentwindow.obj 	\
+            $(SLO)$/vclxsystemdependentwindow.obj			\
             $(SLO)$/vclxtoolkit.obj 				\
             $(SLO)$/vclxtopwindow.obj 				\
             $(SLO)$/vclxwindow.obj 					\
-            $(SLO)$/vclxwindows.obj			
+            $(SLO)$/vclxwindows.obj
 
 # --- Targets ------------------------------------------------------
 
