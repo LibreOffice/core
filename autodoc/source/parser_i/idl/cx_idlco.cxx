@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_idlco.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:40:55 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,18 @@ Context_UidlCode::Context_UidlCode( Token_Receiver &     o_rReceiver,
     :   aStateMachine(C_nStatusSize,C_nCppInitialNrOfStati),
         pReceiver(&o_rReceiver),
         pDocuContext(&let_drContext_Docu),
-        dpContext_MLComment(new Context_MLComment(o_rReceiver,*this)),
-        dpContext_SLComment(new Context_SLComment(o_rReceiver,*this)),
-        dpContext_Preprocessor(new Context_Praeprocessor(o_rReceiver,*this)),
-        dpContext_Assignment(new Context_Assignment(o_rReceiver,*this)),
+        dpContext_MLComment(0),
+        dpContext_SLComment(0),
+        dpContext_Preprocessor(0),
+        dpContext_Assignment(0),
         pNewToken(0),
         pFollowUpContext(0)
 {
+    dpContext_MLComment = new Context_MLComment(o_rReceiver,*this),
+    dpContext_SLComment = new Context_SLComment(o_rReceiver,*this),
+    dpContext_Preprocessor = new Context_Praeprocessor(o_rReceiver,*this),
+    dpContext_Assignment = new Context_Assignment(o_rReceiver,*this),
+
     pDocuContext->SetParentContext(*this,"*/");
     SetupStateMachine();
 }
@@ -305,6 +310,7 @@ Context_UidlCode::PerformStatusFunction( uintt              i_nStatusSignal,
         case nF_fin_EOL:
             io_rText.CutToken();
             pNewToken = new Tok_EOL;
+            pReceiver->Increment_CurLine();
             break;
         case nF_fin_EOF:
             pNewToken = new Tok_EOF;
