@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:04:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <svx/svdview.hxx>
 //CHINA001 #include <svx/zoom.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
 #include <svtools/printdlg.hxx>
