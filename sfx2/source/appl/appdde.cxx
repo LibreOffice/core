@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:02:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,14 @@
 #ifndef _SVDDE_HXX //autogen
 #include <svtools/svdde.hxx>
 #endif
+
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include "lnkbase.hxx"
 #endif
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include "linkmgr.hxx"
 #endif
+
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #ifndef GCC
@@ -309,7 +311,7 @@ long SfxApplication::DdeSetData
 
 //--------------------------------------------------------------------
 
-so3::SvLinkSource* SfxApplication::DdeCreateLinkSource
+::sfx2::SvLinkSource* SfxApplication::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -400,8 +402,7 @@ long SfxObjectShell::DdeSetData
 }
 
 //--------------------------------------------------------------------
-
-::so3::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
+::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -490,7 +491,7 @@ long SfxViewFrame::DdeSetData
 
 //--------------------------------------------------------------------
 
-::so3::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
+::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
 (
     const String&   rItem      // das zu erzeugende Item
 )
@@ -506,7 +507,6 @@ long SfxViewFrame::DdeSetData
 {
     return 0;
 }
-
 
 //========================================================================
 
@@ -755,16 +755,15 @@ BOOL SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
 BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
     BOOL bRet = FALSE;
-    ::so3::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
+    ::sfx2::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
     if( pNewObj )
     {
         // dann richten wir auch einen entsprechenden SvBaseLink ein
         String sNm, sTmp( Application::GetAppName() );
-        so3::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
-        new so3::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
+        ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
+        new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
         bRet = TRUE;
     }
     return bRet;
 }
-
 
