@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 10:01:41 $
+ *  last change: $Author: pl $ $Date: 2001-05-14 09:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             else
                 bRet = sal_False;
         }
-        else if(0 == rPropName.search(C2U("IsSortNumeric")) &&
+        else if(0 == rPropName.indexOf(C2U("IsSortNumeric")) &&
             rPropName.getLength() == 14 &&
             (rPropName.getStr()[13] >= '0' && rPropName.getStr()[13] <= '9'))
         {
@@ -648,7 +648,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             else
                 bRet = sal_False;
         }
-        else if(0 == rPropName.search(C2U("IsSortAscending")) && rPropName.getLength() == 16 &&
+        else if(0 == rPropName.indexOf(C2U("IsSortAscending")) && rPropName.getLength() == 16 &&
             lcl_IsNumeric(String(rPropName[(sal_uInt16)15])))
         {
             sal_uInt16 nIndex = rPropName.getStr()[16];
