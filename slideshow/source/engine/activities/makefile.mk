@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 17:00:11 $
+#   last change: $Author: rt $ $Date: 2005-03-30 08:04:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,16 +71,9 @@ PRJINC=..$/..
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Common ----------------------------------------------------------
-
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
-.ENDIF
-
-.IF "$(debug)"!="" || "$(DEBUG)"!=""
-CDEFS+= -DBOOST_SP_ENABLE_DEBUG_HOOKS
-.ENDIF
 
 SLOFILES =	$(SLO)$/activitybase.obj 					\
             $(SLO)$/activitiesfactory.obj 				\
