@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:32:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,16 +559,16 @@ void OApplicationDetailView::onCreationClick( const ::rtl::OUString& _sCommand)
     static_cast<OAppBorderWindow*>(GetParent())->getView()->getElementNotification()->onCreationClick(_sCommand);
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject, const Reference< XConnection >& _rxConn )
+SvLBoxEntry*  OApplicationDetailView::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject, const Reference< XConnection >& _rxConn )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    return m_pControlHelper->elementAdded(eType,_rName, _rObject, _rxConn );
+    return m_pControlHelper->elementAdded(_eType,_rName, _rObject, _rxConn );
 }
 // -----------------------------------------------------------------------------
-void OApplicationDetailView::elementRemoved(const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
+void OApplicationDetailView::elementRemoved(ElementType _eType,const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConn )
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
-    m_pControlHelper->elementRemoved(_rName, _rxConn );
+    m_pControlHelper->elementRemoved(_eType,_rName, _rxConn );
 }
 // -----------------------------------------------------------------------------
 void OApplicationDetailView::elementReplaced(ElementType _eType
