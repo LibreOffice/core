@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:23:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@ private:
     BYTE            nDBType;            // enum DBObject (bisher nur dbTable, dbQuery)
 
     USHORT          nIndex;             // eindeutiger Index fuer Formeln
-    USHORT          nExportIndex;       // used by Xcl export
     BOOL            bAutoFilter;        // AutoFilter? (nicht gespeichert)
     BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
 
@@ -198,7 +197,7 @@ public:
             void        SetByRow(BOOL bByR)             { bByRow = bByR; }
             BOOL        HasHeader() const               { return bHasHeader; }
             void        SetHeader(BOOL bHasH)           { bHasHeader = bHasH; }
-            void        SetIndex(USHORT nInd)           { nIndex = nExportIndex = nInd; }
+            void        SetIndex(USHORT nInd)           { nIndex = nInd; }
             USHORT      GetIndex() const                { return nIndex; }
             BOOL        IsDoSize() const                { return bDoSize; }
             void        SetDoSize(BOOL bSet)            { bDoSize = bSet; }
@@ -244,10 +243,6 @@ public:
 
             BOOL        IsModified() const          { return bModified; }
             void        SetModified(BOOL bMod)      { bModified = bMod; }
-
-            void        SetExportIndex( USHORT nIdx )   { nExportIndex = nIdx; }
-            USHORT      GetExportIndex() const      { return nExportIndex; }
-
 };
 
 
