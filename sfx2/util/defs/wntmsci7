@@ -8559,3 +8559,6 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?GetMacroRecorder@SfxRequest@@SA?AV?$Reference@VXDispatchRecorder@frame@star@sun@com@@@uno@star@sun@com@@XZ
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx3171529935@@YAXABVSbxVariableRef@@PAX@Z
 ?CreateMatcher@FileDialogHelper@sfx2@@QAEXABVSfxObjectFactory@@@Z
+?lcl_translateBasic2Uno@?%O:\SRC656\src\sfx2\source\doc\objmisc.cxx1259912515@@YAXABVSbxVariableRef@@PAX@Z
+??0FileDialogHelper@sfx2@@QAE@FKABVSfxObjectFactory@@KK@Z
+??0FileDialogHelper@sfx2@@QAE@KABVSfxObjectFactory@@KK@Z
