@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 09:31:59 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 11:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2275,6 +2275,7 @@ public:
 
     // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
+    void IndentNumRule(SwPosition & rPos, short nAmount);
     // <- #i23726#
 };
 
