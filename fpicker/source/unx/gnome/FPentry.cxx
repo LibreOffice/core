@@ -82,6 +82,9 @@
 #include "SalGtkFolderPicker.hxx"
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _FPSERVICEINFO_HXX_
 #include "FPServiceInfo.hxx"
@@ -180,11 +183,12 @@ void* SAL_CALL component_getFactory(
     if( pSrvManager )
     {
             if (
-                 !g_type_from_name( "GdkDisplay" ) ||
-                 !( gtk_major_version >= 2 && gtk_minor_version >= 4 )
+                 /* crude gtkplug check */ !g_type_from_name( "GdkDisplay" ) ||
+                 /* old version */ !( gtk_major_version >= 2 && gtk_minor_version >= 4 ) ||
+                 /* #i42429# */ Application::GetSettings().GetMiscSettings().GetEnableATToolSupport()
                )
             {
-                    return 0; // crude gtkplug check.
+                    return 0;
             }
 
             Reference< XSingleServiceFactory > xFactory;
