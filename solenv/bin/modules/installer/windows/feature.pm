@@ -2,9 +2,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 15:00:42 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:54:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ package installer::windows::feature;
 use installer::files;
 use installer::globals;
 use installer::windows::idtglobal;
+use installer::windows::language;
 
 ##############################################################
 # Returning the gid for a feature.
@@ -139,6 +140,8 @@ sub get_feature_display
         $display = "2";                                 # all other modules do not show subfeatures
     }
 
+    if ( $installer::globals::languagepack ) { $display = "0"; }     # making all feature invisible!
+
     return $display
 }
 
@@ -205,6 +208,64 @@ sub get_feature_attributes
     return $attributes
 }
 
+##############################################################
+# Searching for Name and Description of language pack
+# modules in Langpack.mlf
+##############################################################
+
+sub get_localized_string
+{
+    my ($featuregid, $onelanguage, $translationfile, $type) = @_;
+
+    my $locallanguage = "";
+    if ( $featuregid =~ /^\s*(\w+)_(.+?)\s*$/ ) { $locallanguage = $2; }
+
+    my $windowslanguage = installer::windows::language::get_windows_language($locallanguage);
+
+    my $searchstring = "";
+    if ( $type eq "Name" ) { $searchstring = "OOO_LANGPACK_NAME_" . $windowslanguage; }
+    else { $searchstring = "OOO_LANGPACK_DESC_" . $windowslanguage; }
+
+    my $language_block = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $translationfile);
+    my $newstring = installer::windows::idtglobal::get_language_string_from_language_block($language_block, $onelanguage, $searchstring);
+
+    return $newstring;
+}
+
+##############################################################
+# Creating the feature for the language packs.
+##############################################################
+
+sub add_language_pack_feature
+{
+    my ($featuretableref, $translationfile, $onelanguage) = @_;
+
+    for ( my $i = 0; $i <= $#installer::globals::languagepackfeature; $i++ )
+    {
+        my %feature = ();
+
+        my $gid = $installer::globals::languagepackfeature[$i];
+        # Attention: Maximum feature length is 38!
+        installer::windows::idtglobal::shorten_feature_gid(\$gid);
+
+        $feature{'feature'} = $gid;     # "gm_Langpack_de"
+        $feature{'feature_parent'} = "";
+        $feature{'Title'} = get_localized_string($gid, $onelanguage, $translationfile, "Name");
+        $feature{'Description'} = get_localized_string($gid, $onelanguage, $translationfile, "Description");
+        $feature{'Display'} = "1";
+        $feature{'Level'} =  "20";
+        $feature{'Directory_'} =  "INSTALLLOCATION";
+        $feature{'Attributes'} =  "8";
+
+        my $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
+                    . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
+                    . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
+
+        push(@{$featuretableref}, $oneline);
+
+    }
+}
+
 #################################################################################
 # Creating the file Feature.idt dynamically
 # Content:
@@ -214,6 +275,9 @@ sub get_feature_attributes
 sub create_feature_table
 {
     my ($modulesref, $basedir, $languagesarrayref) = @_;
+
+    my $translationfile = "";
+    if ( $installer::globals::languagepack ) { $translationfile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::langpackfilename); }
 
     for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
     {
@@ -253,6 +317,8 @@ sub create_feature_table
 
             push(@featuretable, $oneline);
         }
+
+        if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, $translationfile, $onelanguage); }
 
         # Saving the file
 
