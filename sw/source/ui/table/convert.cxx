@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 15:12:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -96,19 +93,43 @@
 #include "table.hrc"
 #include "convert.hrc"
 
+//keep the state of the buttons on runtime
+static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used
+static sal_Bool bIsKeepColumn = sal_True;
+static sal_Unicode uOther = ',';
 
 void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
                                     USHORT& rInsTblFlags,
                                     SwTableAutoFmt *& prTAFmt )
 {
     if( aTabBtn.IsChecked() )
-        rDelim = aKeepColumn.IsChecked() ? 0x09 : 0x0b;
+    {
+        bIsKeepColumn = aKeepColumn.IsChecked();
+        rDelim = bIsKeepColumn ? 0x09 : 0x0b;
+        nSaveButtonState = 0;
+    }
     else if( aSemiBtn.IsChecked() )
+    {
         rDelim = ';';
+        nSaveButtonState = 1;
+    }
     else if( aOtherBtn.IsChecked() && aOtherEd.GetText().Len() )
-        rDelim = aOtherEd.GetText().GetChar( 0 );
+    {
+        uOther = aOtherEd.GetText().GetChar( 0 );
+        rDelim = uOther;
+        nSaveButtonState = 3;
+    }
     else
+    {
+        nSaveButtonState = 2;
         rDelim = cParaDelim;
+        if(aOtherBtn.IsChecked())
+        {
+            nSaveButtonState = 3;
+            uOther = 0;
+        }
+    }
+
 
     rInsTblFlags = 0;
     if (aBorderCB.IsChecked())
@@ -152,6 +173,24 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
     sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
 {
     FreeResource();
+    if(nSaveButtonState > -1)
+    {
+        switch (nSaveButtonState)
+        {
+            case 0:
+                aTabBtn.Check();
+                aKeepColumn.Check(bIsKeepColumn);
+            break;
+            case 1: aSemiBtn.Check();break;
+            case 2: aParaBtn.Check();break;
+            case 3:
+                aOtherBtn.Check();
+                if(uOther)
+                    aOtherEd.SetText(uOther);
+            break;
+        }
+
+    }
     if( 0 == pShell->GetTableFmt() )
     {
         SetText( sConvertTextTable );
@@ -159,11 +198,9 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
         aAutoFmtBtn.Show();
         aKeepColumn.Show();
         aKeepColumn.Enable( aTabBtn.IsChecked() );
-        aKeepColumn.Check( !aTabBtn.IsChecked() );
     }
     else
     {
-        aKeepColumn.Check( TRUE );
         //Einfuege-Optionen verstecken
         aHeaderCB          .Show(FALSE);
         aRepeatHeaderCB    .Show(FALSE);
