@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ public:
 
     virtual SfxStyleSheetBase& Make( const String&, SfxStyleFamily eFam,
                                      USHORT nMask = 0xffff, USHORT nPos = 0xffff );
+
+    void                ConvertFontsAfterLoad();     // old binary file format
 
 protected:
     virtual SfxStyleSheetBase* Create( const String&    rName,

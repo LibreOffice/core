@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 20:17:08 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
+
 
 class Font;
 class OutputDevice;
@@ -128,7 +132,23 @@ public:
 
     BOOL                    IsVisible() const;
     BOOL                    IsVisibleEqual( const ScPatternAttr& rOther ) const;
+
+                            /** If font is an old symbol font StarBats/StarMath
+                                with text encoding RTL_TEXTENC_SYMBOL */
     BOOL                    IsSymbolFont() const;
+
+                            /** Create a FontToSubsFontConverter if needed for
+                                this pattern, else return 0.
+
+                                @param nFlags is the bit mask which shall be
+                                used for CreateFontToSubsFontConverter().
+
+                                The converter must be destroyed by the caller
+                                using DestroyFontToSubsFontConverter() which
+                                should be accomplished using the
+                                ScFontToSubsFontConverter_AutoPtr
+                             */
+    FontToSubsFontConverter GetSubsFontConverter( ULONG nFlags ) const;
 
     ULONG                   GetNumberFormat( SvNumberFormatter* ) const;
     ULONG                   GetNumberFormat( SvNumberFormatter* pFormatter,
@@ -137,5 +157,41 @@ public:
     long                    GetRotateVal( const SfxItemSet* pCondSet ) const;
     BYTE                    GetRotateDir( const SfxItemSet* pCondSet ) const;
 };
+
+
+class ScFontToSubsFontConverter_AutoPtr
+{
+            FontToSubsFontConverter h;
+
+            void                    release()
+                                    {
+                                        if ( h )
+                                            DestroyFontToSubsFontConverter( h );
+                                    }
+
+                                // prevent usage
+                                ScFontToSubsFontConverter_AutoPtr( const ScFontToSubsFontConverter_AutoPtr& );
+    ScFontToSubsFontConverter_AutoPtr& operator=( const ScFontToSubsFontConverter_AutoPtr& );
+
+public:
+                                ScFontToSubsFontConverter_AutoPtr()
+                                    : h(0)
+                                    {}
+                                ~ScFontToSubsFontConverter_AutoPtr()
+                                    {
+                                        release();
+                                    }
+
+    ScFontToSubsFontConverter_AutoPtr& operator=( FontToSubsFontConverter hN )
+                                    {
+                                        release();
+                                        h = hN;
+                                        return *this;
+                                    }
+
+            operator FontToSubsFontConverter() const
+                                    { return h; }
+};
+
 
 #endif

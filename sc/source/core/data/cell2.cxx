@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:22:45 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1511,10 +1511,37 @@ ScStringCell::ScStringCell( SvStream& rStream, USHORT nVer ) :
     rStream.ReadByteString( aString, rStream.GetStreamCharSet() );
 }
 
-void ScStringCell::Save( SvStream& rStream ) const
+void ScStringCell::Save( SvStream& rStream, FontToSubsFontConverter hConv ) const
 {
     rStream << (BYTE) 0x00;
-    rStream.WriteByteString( aString, rStream.GetStreamCharSet() );
+    if ( !hConv )
+        rStream.WriteByteString( aString, rStream.GetStreamCharSet() );
+    else
+    {
+        String aTmp( aString );
+        sal_Unicode* p = aTmp.GetBufferAccess();
+        sal_Unicode const * const pStop = p + aTmp.Len();
+        for ( ; p < pStop; ++p )
+        {
+            *p = ConvertFontToSubsFontChar( hConv, *p );
+        }
+        aTmp.ReleaseBufferAccess();
+        rStream.WriteByteString( aTmp, rStream.GetStreamCharSet() );
+    }
+}
+
+void ScStringCell::ConvertFont( FontToSubsFontConverter hConv )
+{
+    if ( hConv )
+    {
+        sal_Unicode* p = aString.GetBufferAccess();
+        sal_Unicode const * const pStop = p + aString.Len();
+        for ( ; p < pStop; ++p )
+        {
+            *p = ConvertFontToSubsFontChar( hConv, *p );
+        }
+        aString.ReleaseBufferAccess();
+    }
 }
 
 ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :

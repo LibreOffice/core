@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:14:42 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,11 @@ class SvxSearchItem;
 class SvxShadowItem;
 class Window;
 class XColorTable;
+class List;
 
 class ScAutoFormatData;
 class ScBaseCell;
+class ScStringCell;
 class ScBroadcastAreaSlotMachine;
 class ScChangeViewSettings;
 class ScChartCollection;
@@ -303,6 +305,14 @@ struct ScCopyBlockFromClipParams
 #define ROWINFO_MAX 1024
 
 
+// for loading of binary file format symbol string cells which need font conversion
+struct ScSymbolStringCellEntry
+{
+    ScStringCell*   pCell;
+    USHORT          nRow;
+};
+
+
 // Spezialwert fuer Recalc-Alwyas-Zellen
 
 #define BCA_BRDCST_ALWAYS ScAddress( 0, 32767, 0 )
@@ -378,6 +388,8 @@ private:
     ScDocOptions*       pDocOptions;                    // Dokument-Optionen
     ScExtDocOptions*    pExtDocOptions;                 // fuer Import etc.
     ScConsolidateParam* pConsolidateDlgData;
+
+    List*               pLoadedSymbolStringCellList;    // binary file format import of symbol font string cells
 
     ScRange             aClipRange;
     ScRange             aEmbedRange;
@@ -1513,6 +1525,11 @@ public:
         { return pRefreshTimerControl; }
     ScRefreshTimerControl * const * GetRefreshTimerControlAddress() const
         { return &pRefreshTimerControl; }
+
+                    /// if symbol string cells of old binary file format are in list
+    BOOL            SymbolStringCellsPending() const;
+                    /// get list of ScSymbolStringCellEntry, create if necessary
+    List&           GetLoadedSymbolStringCellsList();
 
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );

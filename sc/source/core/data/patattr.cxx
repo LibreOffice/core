@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-18 19:41:13 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,6 +1058,17 @@ BOOL ScPatternAttr::IsSymbolFont() const
     else
         return FALSE;
 }
+
+FontToSubsFontConverter ScPatternAttr::GetSubsFontConverter( ULONG nFlags ) const
+{
+    const SfxPoolItem* pItem;
+    if( GetItemSet().GetItemState( ATTR_FONT, TRUE, &pItem ) == SFX_ITEM_SET )
+        return CreateFontToSubsFontConverter(
+            ((const SvxFontItem*) pItem)->GetFamilyName(), nFlags );
+    else
+        return 0;
+}
+
 
 ULONG ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-18 16:48:35 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #include <svtools/itemset.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
 
 #include "sc.hrc"
 #include "attrib.hxx"
@@ -97,6 +103,7 @@
 #include "stlsheet.hxx"
 #include "rechead.hxx"
 #include "editutil.hxx"
+#include "patattr.hxx"
 
 
 //========================================================================
@@ -614,5 +621,31 @@ ScStyleSheet* ScStyleSheetPool::FindCaseIns( const String& rName, SfxStyleFamily
 }
 
 
-
+void ScStyleSheetPool::ConvertFontsAfterLoad()
+{
+    ScFontToSubsFontConverter_AutoPtr xFontConverter;
+    const ULONG nFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+    SfxStyleSheetIterator aIter( this, SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aIter.First(); pStyle; pStyle = aIter.Next() )
+    {
+        const SfxPoolItem* pItem;
+        if( pStyle->GetItemSet().GetItemState( ATTR_FONT, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SvxFontItem* pFontItem = (const SvxFontItem*) pItem;
+            const String& rOldName = pFontItem->GetFamilyName();
+            xFontConverter = CreateFontToSubsFontConverter( rOldName, nFlags );
+            if ( xFontConverter )
+            {
+                String aNewName( GetFontToSubsFontName( xFontConverter ) );
+                if ( aNewName != rOldName )
+                {
+                    SvxFontItem aNewItem( pFontItem->GetFamily(), aNewName,
+                        pFontItem->GetStyleName(), pFontItem->GetPitch(),
+                        RTL_TEXTENCODING_DONTKNOW, ATTR_FONT );
+                    pStyle->GetItemSet().Put( aNewItem );
+                }
+            }
+        }
+    }
+}
 

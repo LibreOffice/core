@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-15 17:21:10 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
 #endif
 
 #define USE_MEMPOOL
@@ -206,7 +210,9 @@ public:
     void            SetString( const String& rString );
     void            GetString( String& rString ) const;
 
-    void            Save( SvStream& rStream ) const;
+    void            Save( SvStream& rStream, FontToSubsFontConverter hConv = 0 ) const;
+                    // convert symbol font after loading binary format
+    void            ConvertFont( FontToSubsFontConverter hConv );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-02 19:36:20 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,13 @@
 #include <svx/boxitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svtools/poolcach.hxx>
+
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
 
 #include "attarray.hxx"
 #include "global.hxx"
@@ -2439,6 +2446,40 @@ void ScAttrArray::Load( SvStream& rStream )
 }
 
 
+void ScAttrArray::ConvertFontsAfterLoad()
+{
+    ScFontToSubsFontConverter_AutoPtr xFontConverter;
+    const ULONG nFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+    short   nIndex = 0;
+    USHORT  nThisRow = 0;
 
-
+    while ( nThisRow <= MAXROW )
+    {
+        const ScPatternAttr* pOldPattern = pData[nIndex].pPattern;
+        const SfxPoolItem* pItem;
+        if( pOldPattern->GetItemSet().GetItemState( ATTR_FONT, FALSE, &pItem ) == SFX_ITEM_SET )
+        {
+            const SvxFontItem* pFontItem = (const SvxFontItem*) pItem;
+            const String& rOldName = pFontItem->GetFamilyName();
+            xFontConverter = CreateFontToSubsFontConverter( rOldName, nFlags );
+            if ( xFontConverter )
+            {
+                String aNewName( GetFontToSubsFontName( xFontConverter ) );
+                if ( aNewName != rOldName )
+                {
+                    USHORT nAttrRow = pData[nIndex].nRow;
+                    SvxFontItem aNewItem( pFontItem->GetFamily(), aNewName,
+                        pFontItem->GetStyleName(), pFontItem->GetPitch(),
+                        RTL_TEXTENCODING_DONTKNOW, ATTR_FONT );
+                    ScPatternAttr aNewPattern( *pOldPattern );
+                    aNewPattern.GetItemSet().Put( aNewItem );
+                    SetPatternArea( nThisRow, nAttrRow, &aNewPattern, TRUE );
+                    Search( nThisRow, nIndex );     //! data changed
+                }
+            }
+        }
+        ++nIndex;
+        nThisRow = pData[nIndex-1].nRow+1;
+    }
+}
 

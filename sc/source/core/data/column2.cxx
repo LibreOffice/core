@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:37:39 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,51 +199,21 @@ void ScColumn::LoadData( SvStream& rStream )
                 {
                     ScStringCell* pCell = new ScStringCell( rStream, nVer );
                     Append( nNewRow, pCell );
-
-//  special handling for non-convertable characters is no longer needed here
-//! handle non-convertable characters when saving to file?
-#if 0
-                    // #68427# manually convert CharSet so non-convertable characters
-                    // can be stored in an EditEngine cell
-
-                    CharSet eSystemCharSet = ::GetSystemCharSet();
-                    CharSet eSourceCharSet = pDocument->GetSrcCharSet();
-                    String aSourceString = lcl_ReadOriginalStringCell( rStream, nVer, eSystemCharSet );
-
-                    ScBaseCell* pCell = NULL;
-                    String aCellString = aSourceString;
-                    if ( eSourceCharSet != eSystemCharSet )
-                    {
-                        //  bReplace = FALSE: null characters for non-convertable
-                        aCellString.Convert( eSourceCharSet, eSystemCharSet, FALSE );
-                        if ( aCellString.Search( (char)0 ) != STRING_NOTFOUND )
-                        {
-                            //  contains non-convertable characters -> use EditEngine
-
-                            EditEngine& rEngine = pDocument->GetEditEngine();
-                            rEngine.SetText( aSourceString, eSourceCharSet );
-                            EditTextObject* pObj = rEngine.CreateTextObject();
-                            pCell = new ScEditCell( pObj, pDocument, rEngine.GetEditTextObjectPool() );
-                            delete pObj;
-                        }
-                        // else use aCellString
-                    }
-
-                    // create string cell if no edit cell is needed
-                    if ( !pCell )
-                        pCell = new ScStringCell( aCellString );
-                    Append( nNewRow, pCell );
-#endif
                 }
                 break;
             case CELLTYPE_SYMBOLS:
                 {
-//!                 CharSet eOld = rStream.GetStreamCharSet();
-//!                 //  convert into true symbol characters
-//!                 rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
+                    CharSet eOld = rStream.GetStreamCharSet();
+                    //  convert into true symbol characters
+                    rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
                     ScStringCell* pCell = new ScStringCell( rStream, nVer );
                     Append( nNewRow, pCell );
-//!                 rStream.SetStreamCharSet( eOld );
+                    rStream.SetStreamCharSet( eOld );
+                    ScSymbolStringCellEntry * pEntry = new ScSymbolStringCellEntry;
+                    pEntry->pCell = pCell;
+                    pEntry->nRow = nNewRow;
+                    pDocument->GetLoadedSymbolStringCellsList().Insert(
+                        pEntry, LIST_APPEND );
                 }
                 break;
             case CELLTYPE_EDIT:
@@ -327,6 +297,8 @@ void ScColumn::SaveData( SvStream& rStream ) const
     CellType eCellType;
     ScBaseCell* pCell;
     USHORT i;
+    ScFontToSubsFontConverter_AutoPtr xFontConverter;
+    const ULONG nFontConverterFlags = FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
 
     ScMultipleWriteHeader aHdr( rStream );
 
@@ -367,7 +339,9 @@ void ScColumn::SaveData( SvStream& rStream ) const
     {
         pAttr = aIter.Next( nStt, nEnd );
     }
-    while( pAttr && !pAttr->IsSymbolFont() );
+    while( pAttr && !(
+        (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags ))
+        || pAttr->IsSymbolFont()) );
 
     for (i=0; i<nSaveCount; i++)        // nSaveCount: Ende auf MAXROW angepasst
     {
@@ -390,11 +364,15 @@ void ScColumn::SaveData( SvStream& rStream ) const
                     if( pAttr )
                     {
                         if( nRow > nEnd )
-                        do
                         {
-                            pAttr = aIter.Next( nStt, nEnd );
+                            do
+                            {
+                                pAttr = aIter.Next( nStt, nEnd );
+                            }
+                            while( pAttr && !(
+                                (xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags ))
+                                || pAttr->IsSymbolFont()) );
                         }
-                        while( pAttr && !pAttr->IsSymbolFont() );
                         if( pAttr && nRow >= nStt && nRow <= nEnd )
                             eCellType = CELLTYPE_SYMBOLS;
                     }
@@ -402,10 +380,10 @@ void ScColumn::SaveData( SvStream& rStream ) const
                     if ( eCellType == CELLTYPE_SYMBOLS )
                     {
                         //  cell string contains true symbol characters
-//!                     CharSet eOld = rStream.GetStreamCharSet();
-//!                     rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
-                        ((ScStringCell*)pCell)->Save( rStream );
-//!                     rStream.SetStreamCharSet( eOld );
+                        CharSet eOld = rStream.GetStreamCharSet();
+                        rStream.SetStreamCharSet( RTL_TEXTENCODING_SYMBOL );
+                        ((ScStringCell*)pCell)->Save( rStream, xFontConverter );
+                        rStream.SetStreamCharSet( eOld );
                     }
                     else
                         ((ScStringCell*)pCell)->Save( rStream );
@@ -546,6 +524,35 @@ BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
         }
     }
     rHdr.EndEntry();
+
+    if ( pDocument->SymbolStringCellsPending() )
+    {
+        ScFontToSubsFontConverter_AutoPtr xFontConverter;
+        const ULONG nFontConverterFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
+        ScSymbolStringCellEntry* pE;
+        USHORT nStt, nEnd;
+
+        ScAttrIterator aIter( pAttrArray, 0, MAXROW );
+        const ScPatternAttr* pAttr = aIter.Next( nStt, nEnd );
+        xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags );
+
+        List& rList = pDocument->GetLoadedSymbolStringCellsList();
+        for ( pE = (ScSymbolStringCellEntry*) rList.First(); pE;
+                pE = (ScSymbolStringCellEntry*) rList.Next() )
+        {
+            const ScPatternAttr* pLastAttr = pAttr;
+            while ( nEnd < pE->nRow )
+            {
+                pAttr = aIter.Next( nStt, nEnd );
+            }
+            if ( pAttr != pLastAttr )
+                xFontConverter = pAttr->GetSubsFontConverter( nFontConverterFlags );
+            pE->pCell->ConvertFont( xFontConverter );
+            delete pE;
+        }
+        rList.Clear();
+    }
+    pAttrArray->ConvertFontsAfterLoad();
 
     return TRUE;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:46:38 $
+ *  last change: $Author: er $ $Date: 2001-08-10 18:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,9 @@
 #ifndef _TOOLS_TENCCVT_HXX
 #include <tools/tenccvt.hxx>
 #endif
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 
 #include "document.hxx"
 #include "table.hxx"
@@ -371,7 +374,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
         pScriptTypeData( NULL ),
-        nAsianCompression(SC_ASIANCOMPRESSION_INVALID)
+        nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
+        pLoadedSymbolStringCellList( NULL )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -665,6 +669,21 @@ void lcl_RefreshPivotData( ScPivotCollection* pColl )
     }
 }
 
+
+BOOL ScDocument::SymbolStringCellsPending() const
+{
+    return pLoadedSymbolStringCellList && pLoadedSymbolStringCellList->Count();
+}
+
+
+List& ScDocument::GetLoadedSymbolStringCellsList()
+{
+    if ( !pLoadedSymbolStringCellList )
+        pLoadedSymbolStringCellList = new List;
+    return *pLoadedSymbolStringCellList;
+}
+
+
 void lcl_AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
     //  Sprache dann dazutueten, wenn ein Zahlformat mit einer anderen Sprache
@@ -936,6 +955,9 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
                 lcl_AddLanguage( pStyle->GetItemSet(), *pFormatter );
         }
 
+        // change FontItems in styles
+        xPoolHelper->GetStylePool()->ConvertFontsAfterLoad();
+
         //  Druckbereiche etc.
 
         SfxStyleSheetIterator   aIter( xPoolHelper->GetStylePool(), SFX_STYLE_FAMILY_PAGE );
@@ -1028,6 +1050,12 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
         if (pDrawLayer)
             RefreshNoteFlags();
         CalcAfterLoad();
+    }
+
+    if ( pLoadedSymbolStringCellList )
+    {   // we had symbol string cells, list was cleared by columns, delete it
+        delete pLoadedSymbolStringCellList;
+        pLoadedSymbolStringCellList = NULL;
     }
 
     //----------------------------------------------------
