@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 09:17:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
 #include "connectivity/sdbcx/VKey.hxx"
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
 #endif
 
 
@@ -290,8 +293,9 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(Runtim
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-
-    return this;
+    OTable* pTable = new OTable(m_pTables,isCaseSensitive(),m_Name,m_Type,m_Description,m_SchemaName,m_CatalogName);
+    pTable->setNew(sal_True);
+    return pTable;
 }
 // -------------------------------------------------------------------------
 // XIndexesSupplier
@@ -325,19 +329,18 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     ::rtl::OUString sOldComposedName = getName();
-    ::rtl::OUString sNewComposedName;
-    sal_Int32 nPos = sOldComposedName.lastIndexOf('.');
-    if(nPos != -1)
-    {
-        sNewComposedName = sOldComposedName.copy(0,nPos);
-        sNewComposedName += ::rtl::OUString::createFromAscii(".") ;
-        sNewComposedName += newName;
-    }
+    Reference< XDatabaseMetaData> xMetaData = getMetaData();
+    if ( xMetaData.is() )
+        ::dbtools::qualifiedNameComponents(xMetaData,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInDataManipulation);
     else
-        sNewComposedName = newName;
+        m_Name = newName;
 
-    m_pTables->renameObject(sOldComposedName,sNewComposedName);
-    m_Name = newName;
+    m_pTables->renameObject(sOldComposedName,newName);
+}
+// -----------------------------------------------------------------------------
+Reference< XDatabaseMetaData> OTable::getMetaData() const
+{
+    return NULL;
 }
 // -------------------------------------------------------------------------
 // XAlterTable
