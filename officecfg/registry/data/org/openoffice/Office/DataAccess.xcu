@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:25:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,37 +186,14 @@
       </node>
     </node>
   </node>
-  <node oor:name="DataSources">
+  <node oor:name="RegisteredNames">
     <node oor:name="Bibliography" oor:op="replace">
-      <prop oor:name="URL">
-        <value>sdbc:dbase:$(userurl)/database/biblio</value>
-      </prop>
-      <prop oor:name="IsPasswordRequired">
-        <value>false</value>
-      </prop>
-      <prop oor:name="TableFilter">
-        <value>%</value>
-      </prop>
-      <prop oor:name="TableTypeFilter"/>
-      <prop oor:name="NumberFormatSettings"/>
-      <prop oor:name="User"/>
-      <prop oor:name="LoginTimeout">
-        <value>0</value>
-      </prop>
-      <prop oor:name="SuppressVersionColumns">
-        <value>false</value>
-      </prop>
-      <prop oor:name="LayoutInformation"/>
-      <node oor:name="DataSourceSettings">
-        <node oor:name="CharSet" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:string">
-            <value>IBM850</value>
-          </prop>
-        </node>
-      </node>
-      <node oor:name="Tables"/>
-      <node oor:name="Queries"/>
-      <node oor:name="Bookmarks"/>
+        <prop oor:name="Location" oor:type="xs:string">
+            <value>$(userurl)/database/biblio.odb</value>
+        </prop>
+        <prop oor:name="Name" oor:type="xs:string">
+            <value>Bibliography</value>
+        </prop>
     </node>
   </node>
   <node oor:name="Bibliography">
