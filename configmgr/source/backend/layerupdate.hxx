@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerupdate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:16:28 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,8 @@ namespace configmgr
             void makeContextPath(OUString const & _aContextPath);
 
         private:
-            ContextPath     m_aContextPath;
             NodeUpdateRef   m_xContextNode;
+            ContextPath     m_aContextPath;
         };
 // -----------------------------------------------------------------------------
 
