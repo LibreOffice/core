@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-03 14:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
             Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
             if(xTabSup.is())
             {
-                Image aImage(ModuleRes(DBTreeListModel::getImageResId(DBTreeListModel::etTable)));
+                ModuleRes aResId(DBTreeListModel::getImageResId(DBTreeListModel::etTable));
+                Image aImage(aResId);
                 populateTree(xTabSup->getTables(),_pParent,aImage);
                 Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
                 if(xCont.is())
