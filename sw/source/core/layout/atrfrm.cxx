@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 13:13:51 $
+ *  last change: $Author: tl $ $Date: 2002-09-26 13:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,9 @@
 #ifndef _UNOMID_H
 #include <unomid.h>
 #endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -381,7 +384,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         SwClient *pLast = aIter.GoStart();
         if( pLast )
             do {
-                bDel = pLast->IsA( TYPE(SwFrm) );
+                bDel = pLast->IsA( TYPE(SwFrm) )|| pLast->IsA(TYPE(SwXHeadFootText));
             } while( bDel && 0 != ( pLast = aIter++ ));
     }
 
