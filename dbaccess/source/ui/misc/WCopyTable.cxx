@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:56:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
         if(xColSupp.is())
             m_xSourceColumns = xColSupp->getColumns();
 
-        if(!_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
+        if(!m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
         {
             ::rtl::OUString sCatalog,sSchema,sTable;
             m_xSourceObject->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
@@ -243,7 +243,7 @@ void OCopyTableWizard::construct()
 
     FreeResource();
 
-    fillTypeInfo();
+    ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);
 }
 //------------------------------------------------------------------------
 OCopyTableWizard::~OCopyTableWizard()
@@ -254,6 +254,15 @@ OCopyTableWizard::~OCopyTableWizard()
         RemovePage( pPage );
         delete pPage;
     }
+
+    // clear the type information
+    m_aTypeInfoIndex.clear();
+    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
+    for(;aIter != m_aTypeInfo.end();++aIter)
+        delete aIter->second;
+
+    m_aTypeInfo.clear();
+
     DBG_DTOR(OCopyTableWizard,NULL);
 }
 // -----------------------------------------------------------------------
@@ -300,72 +309,75 @@ void OCopyTableWizard::CheckColumns()
     m_vColumnPos.clear();
     m_vColumnTypes.clear();
 
+    OSL_ENSURE(m_xConnection.is(),"OCopyTableWizard::CheckColumns: No connection!");
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
-    sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
-
-
-    if(m_vDestColumns.size())
-    {   // we have dest columns so look for the column matching
-        ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-        for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
-        {
-            ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
-
-            if(aDestIter != m_vDestColumns.end())
-            {
-                ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
-                m_vColumnPos.push_back((aFind - m_aDestVec.begin())+1);
-                m_vColumnTypes.push_back((*aFind)->second->GetType());
-            }
-            else
-            {
-                m_vColumnPos.push_back(CONTAINER_ENTRY_NOTFOUND);
-                m_vColumnTypes.push_back(0);
-            }
-        }
-    }
-    else
+    if(m_xConnection.is())
     {
-        //  DlgFieldMatch   dlgMissingFields(this);
-        //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
-        ::rtl::OUString aColumnName,aOldColName;
-        sal_Int32 nMaxNameLen = xMetaData->getMaxColumnNameLength();
-        ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-        for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
-        {
-            if(nMaxNameLen && nMaxNameLen < (*aSrcIter)->first.getLength())
+        Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
+        sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+
+        if(m_vDestColumns.size())
+        {   // we have dest columns so look for the column matching
+            ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
+            for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
             {
-                ::rtl::OUString aAlias(::dbtools::convertName2SQLName((*aSrcIter)->first,xMetaData->getExtraNameCharacters()));
+                ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
 
-                if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
-                    aAlias = aAlias.copy(0,aAlias.getLength() - (aAlias.getLength()-nMaxNameLen-2));
-
-                ::rtl::OUString sName(aAlias);
-                sal_Int32 nPos = 1;
-                sName += ::rtl::OUString::valueOf(nPos);
-
-                while(m_vDestColumns.find(sName) != m_vDestColumns.end())
+                if(aDestIter != m_vDestColumns.end())
                 {
-                    sName = aAlias;
-                    sName += ::rtl::OUString::valueOf(++nPos);
+                    ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                    m_vColumnPos.push_back((aFind - m_aDestVec.begin())+1);
+                    m_vColumnTypes.push_back((*aFind)->second->GetType());
                 }
-                aAlias = sName;
-
-                m_mNameMapping[(*aSrcIter)->first] = aAlias;
+                else
+                {
+                    m_vColumnPos.push_back(CONTAINER_ENTRY_NOTFOUND);
+                    m_vColumnTypes.push_back(0);
+                }
             }
-            else
-                m_mNameMapping[(*aSrcIter)->first] = (*aSrcIter)->first;
-
-            // now create a column
-            insertColumn(m_vDestColumns.size(),new OFieldDescription(*(*aSrcIter)->second));
-            m_vColumnPos.push_back(m_vDestColumns.size());
-            m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
         }
+        else
+        {
+            //  DlgFieldMatch   dlgMissingFields(this);
+            //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
+            ::rtl::OUString aColumnName,aOldColName;
+            sal_Int32 nMaxNameLen = xMetaData->getMaxColumnNameLength();
+            ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
+            for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
+            {
+                if(nMaxNameLen && nMaxNameLen < (*aSrcIter)->first.getLength())
+                {
+                    ::rtl::OUString aAlias(::dbtools::convertName2SQLName((*aSrcIter)->first,xMetaData->getExtraNameCharacters()));
 
-//      if(pInfoBox->GetEntryCount())
-//          dlgMissingFields.Execute();
+                    if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
+                        aAlias = aAlias.copy(0,aAlias.getLength() - (aAlias.getLength()-nMaxNameLen-2));
+
+                    ::rtl::OUString sName(aAlias);
+                    sal_Int32 nPos = 1;
+                    sName += ::rtl::OUString::valueOf(nPos);
+
+                    while(m_vDestColumns.find(sName) != m_vDestColumns.end())
+                    {
+                        sName = aAlias;
+                        sName += ::rtl::OUString::valueOf(++nPos);
+                    }
+                    aAlias = sName;
+
+                    m_mNameMapping[(*aSrcIter)->first] = aAlias;
+                }
+                else
+                    m_mNameMapping[(*aSrcIter)->first] = (*aSrcIter)->first;
+
+                // now create a column
+                insertColumn(m_vDestColumns.size(),new OFieldDescription(*(*aSrcIter)->second));
+                m_vColumnPos.push_back(m_vDestColumns.size());
+                m_vColumnTypes.push_back((*aSrcIter)->second->GetType());
+            }
+
+    //      if(pInfoBox->GetEntryCount())
+    //          dlgMissingFields.Execute();
+        }
     }
 }
 // -----------------------------------------------------------------------
@@ -374,34 +386,33 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
     m_ePressed = WIZARD_FINISH;
     sal_Bool bFinish = DeactivatePage() != 0;
 
-    if(!bFinish)
-        return sal_False;
-
-    sal_Bool bWasEmpty = !m_vDestColumns.size();
-    if(m_eCreateStyle != WIZARD_DEF_VIEW && m_eCreateStyle != WIZARD_APPEND_DATA )
-        CheckColumns();
-
-    switch(m_eCreateStyle)
-    {
-        case WIZARD_APPEND_DATA:
-        {
-            break;
-        }
-        case WIZARD_DEF_DATA:
-        case WIZARD_DEF:
-        {
-            break;
-        }
-        case WIZARD_DEF_VIEW:
-            break;
-        default:
-        {
-            OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
-        }
-    }
-
     if(bFinish)
+    {
+        sal_Bool bWasEmpty = !m_vDestColumns.size();
+        if(m_eCreateStyle != WIZARD_DEF_VIEW && m_eCreateStyle != WIZARD_APPEND_DATA )
+            CheckColumns();
+
+        switch(m_eCreateStyle)
+        {
+            case WIZARD_APPEND_DATA:
+            {
+                break;
+            }
+            case WIZARD_DEF_DATA:
+            case WIZARD_DEF:
+            {
+                break;
+            }
+            case WIZARD_DEF_VIEW:
+                break;
+            default:
+            {
+                OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
+            }
+        }
+
         EndDialog(sal_True);
+    }
     return bFinish;
 }
 //------------------------------------------------------------------------
@@ -414,17 +425,18 @@ sal_Bool OCopyTableWizard::SetAutoincrement() const
 IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 {
     OWizardPage* pCurrent = (OWizardPage*)GetPage(GetCurLevel());
-    if(!pCurrent)
-        return 0;
-    sal_Bool bFirstTime = pCurrent->IsFirstTime();
-    if(bFirstTime)
-        pCurrent->Reset();
+    if(pCurrent)
+    {
+        sal_Bool bFirstTime = pCurrent->IsFirstTime();
+        if(bFirstTime)
+            pCurrent->Reset();
 
-    CheckButtons();
+        CheckButtons();
 
-    SetText(pCurrent->GetTitle());
+        SetText(pCurrent->GetTitle());
 
-    Invalidate();
+        Invalidate();
+    }
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -483,144 +495,6 @@ void OCopyTableWizard::RemoveWizardPage(OWizardPage* pPage)
     --m_nPageCount;
 }
 // -----------------------------------------------------------------------------
-void OCopyTableWizard::fillTypeInfo()
-{
-    if(!m_xConnection.is())
-        return;
-    Reference< XResultSet> xRs = m_xConnection->getMetaData()->getTypeInfo();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-    ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
-    ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
-
-    // Loop on the result set until we reach end of file
-    while (xRs->next())
-    {
-        OTypeInfo* pInfo = new OTypeInfo();
-        pInfo->aTypeName        = xRow->getString (1);
-        pInfo->nType            = xRow->getShort (2);
-        pInfo->nPrecision       = xRow->getInt (3);
-        pInfo->aLiteralPrefix   = xRow->getString (4);
-        pInfo->aLiteralSuffix   = xRow->getString (5);
-        pInfo->aCreateParams    = xRow->getString (6);
-        pInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
-        pInfo->bCaseSensitive   = xRow->getBoolean (8);
-        pInfo->nSearchType      = xRow->getShort (9);
-        pInfo->bUnsigned        = xRow->getBoolean (10);
-        pInfo->bCurrency        = xRow->getBoolean (11);
-        pInfo->bAutoIncrement   = xRow->getBoolean (12);
-        pInfo->aLocalTypeName   = xRow->getString (13);
-        pInfo->nMinimumScale    = xRow->getShort (14);
-        pInfo->nMaximumScale    = xRow->getShort (15);
-        pInfo->nNumPrecRadix    = xRow->getInt (18);
-
-        String aName;
-        switch(pInfo->nType)
-        {
-            case DataType::CHAR:
-                aName = m_sTypeNames.GetToken(TYPE_CHAR);
-                break;
-            case DataType::VARCHAR:
-                aName = m_sTypeNames.GetToken(TYPE_TEXT);
-                break;
-            case DataType::DECIMAL:
-                aName = m_sTypeNames.GetToken(TYPE_DECIMAL);
-                break;
-            case DataType::NUMERIC:
-                aName = m_sTypeNames.GetToken(TYPE_NUMERIC);
-                break;
-            case DataType::BIGINT:
-                aName = m_sTypeNames.GetToken(TYPE_BIGINT);
-                break;
-            case DataType::FLOAT:
-                aName = m_sTypeNames.GetToken(TYPE_FLOAT);
-                break;
-            case DataType::DOUBLE:
-                aName = m_sTypeNames.GetToken(TYPE_DOUBLE);
-                break;
-            case DataType::LONGVARCHAR:
-                aName = m_sTypeNames.GetToken(TYPE_MEMO);
-                break;
-            case DataType::LONGVARBINARY:
-                aName = m_sTypeNames.GetToken(TYPE_IMAGE);
-                break;
-            case DataType::DATE:
-                aName = m_sTypeNames.GetToken(TYPE_DATE);
-                break;
-            case DataType::TIME:
-                aName = m_sTypeNames.GetToken(TYPE_TIME);
-                break;
-            case DataType::TIMESTAMP:
-                aName = m_sTypeNames.GetToken(TYPE_DATETIME);
-                break;
-            case DataType::BIT:
-                aName = m_sTypeNames.GetToken(TYPE_BOOL);
-                break;
-            case DataType::TINYINT:
-                aName = m_sTypeNames.GetToken(TYPE_TINYINT);
-                break;
-            case DataType::SMALLINT:
-                aName = m_sTypeNames.GetToken(TYPE_SMALLINT);
-                break;
-            case DataType::INTEGER:
-                aName = m_sTypeNames.GetToken(TYPE_INTEGER);
-                break;
-            case DataType::REAL:
-                aName = m_sTypeNames.GetToken(TYPE_REAL);
-                break;
-            case DataType::BINARY:
-                aName = m_sTypeNames.GetToken(TYPE_BINARY);
-                break;
-            case DataType::VARBINARY:
-                aName = m_sTypeNames.GetToken(TYPE_VARBINARY);
-                break;
-            case DataType::SQLNULL:
-                aName = m_sTypeNames.GetToken(TYPE_SQLNULL);
-                break;
-            case DataType::OBJECT:
-                aName = m_sTypeNames.GetToken(TYPE_OBJECT);
-                break;
-            case DataType::DISTINCT:
-                aName = m_sTypeNames.GetToken(TYPE_DISTINCT);
-                break;
-            case DataType::STRUCT:
-                aName = m_sTypeNames.GetToken(TYPE_STRUCT);
-                break;
-            case DataType::ARRAY:
-                aName = m_sTypeNames.GetToken(TYPE_ARRAY);
-                break;
-            case DataType::BLOB:
-                aName = m_sTypeNames.GetToken(TYPE_BLOB);
-                break;
-            case DataType::CLOB:
-                aName = m_sTypeNames.GetToken(TYPE_CLOB);
-                break;
-            case DataType::REF:
-                aName = m_sTypeNames.GetToken(TYPE_REF);
-                break;
-            case DataType::OTHER:
-                aName = m_sTypeNames.GetToken(TYPE_OTHER);
-                break;
-            default:
-                OSL_ENSURE(0,"Unknown type");
-        }
-        pInfo->aUIName = aName.GetBuffer();
-        pInfo->aUIName += aB1;
-        pInfo->aUIName += pInfo->aTypeName;
-        pInfo->aUIName += aB2;
-        // Now that we have the type info, save it in the multimap
-        m_aTypeInfo.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
-    }
-    // for a faster index access
-    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
-    for(;aIter != m_aTypeInfo.end();++aIter)
-        m_aTypeInfoIndex.push_back(aIter);
-
-    // Close the result set/statement.
-
-    ::comphelper::disposeComponent(xRs);
-}
-// -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
     m_aDestVec.insert(m_aDestVec.begin() + _nPos,
@@ -637,111 +511,83 @@ void OCopyTableWizard::loadData()
     m_vSourceVec.clear();
     m_vSourceColumns.clear();
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    //////////////////////////////////////////////////////////////////////
-    // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
-    if(m_xSourceObject.is())
+    OSL_ENSURE(m_xConnection.is(),"OCopyTableWizard::CheckColumns: No connection!");
+    if(m_xConnection.is())
     {
-        Reference<XColumnsSupplier> xColSup(m_xSourceObject,UNO_QUERY);
-        OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
-        Reference<XNameAccess> xColumns = xColSup->getColumns();
-        OFieldDescription* pActFieldDescr = NULL;
-        String aType;
+        Reference< XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
         //////////////////////////////////////////////////////////////////////
-        // ReadOnly-Flag
-        // Bei Drop darf keine Zeile editierbar sein.
-        // Bei Add duerfen nur die leeren Zeilen editierbar sein.
-        // Bei Add und Drop koennen alle Zeilen editiert werden.
-        Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin   = aColumns.getConstArray();
-        const ::rtl::OUString* pEnd     = pBegin + aColumns.getLength();
-
-        for(;pBegin != pEnd;++pBegin)
+        // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
+        if(m_xSourceObject.is())
         {
-            Reference<XPropertySet> xColumn;
-            xColumns->getByName(*pBegin) >>= xColumn;
-            sal_Int32 nType         = 0;
-            sal_Int32 nScale        = 0;
-            sal_Int32 nPrecision    = 0;
-            sal_Int32 nNullable     = 0;
-            sal_Int32 nFormatKey    = 0;
-            sal_Int32 nAlign        = 0;
-
-            sal_Bool bIsAutoIncrement,bIsCurrency;
-            ::rtl::OUString sName,sDefaultValue,sDescription,sTypeName;
-
-            // get the properties from the column
-            xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
-            xColumn->getPropertyValue(PROPERTY_TYPENAME)        >>= sTypeName;
-            xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
-            bIsAutoIncrement    = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
-            bIsCurrency         = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISCURRENCY));
-            xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
-            xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
-            xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
-
-
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                xColumn->getPropertyValue(PROPERTY_DESCRIPTION) >>= sDescription;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-                xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)>>= sDefaultValue;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                xColumn->getPropertyValue(PROPERTY_FORMATKEY)   >>= nFormatKey;
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                xColumn->getPropertyValue(PROPERTY_ALIGN)       >>= nAlign;
-
-
-            pActFieldDescr = new OFieldDescription();
-            // search for type
-            sal_Bool bForce;
-            const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
-
-            pActFieldDescr->SetType(pTypeInfo);
-            switch(pTypeInfo->nType)
-            {
-                case DataType::CHAR:
-                case DataType::VARCHAR:
-                    pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),pTypeInfo->nPrecision));
-                    break;
-                default:
-                    if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
-                    {
-                        pActFieldDescr->SetPrecision(5);
-                        pActFieldDescr->SetScale(0);
-                    }
-                    else if(pTypeInfo->nPrecision)
-                        pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),pTypeInfo->nPrecision));
-            }
-
-            pActFieldDescr->SetName(sName);
-            pActFieldDescr->SetFormatKey(nFormatKey);
-            pActFieldDescr->SetDescription(sDescription);
-            pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
-            pActFieldDescr->SetHorJustify((SvxCellHorJustify)nAlign);
-            pActFieldDescr->SetCurrency(bIsCurrency);
-
+            Reference<XColumnsSupplier> xColSup(m_xSourceObject,UNO_QUERY);
+            OSL_ENSURE(xColSup.is(),"No XColumnsSupplier!");
+            Reference<XNameAccess> xColumns = xColSup->getColumns();
+            OFieldDescription* pActFieldDescr = NULL;
+            String aType;
             //////////////////////////////////////////////////////////////////////
-            // Spezielle Daten
-            pActFieldDescr->SetIsNullable(nNullable);
-            pActFieldDescr->SetDefaultValue(sDefaultValue);
-            pActFieldDescr->SetPrecision(nPrecision);
-            pActFieldDescr->SetScale(nScale);
-            m_vSourceColumns[sName] = pActFieldDescr;
-            m_vSourceVec.push_back(m_vSourceColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
-        }
-        // fill the primary  key information
-        Reference<XNameAccess> xKeyColumns  = getKeyColumns();
-        if(xKeyColumns.is())
-        {
-            Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-            const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
-            const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
+            // ReadOnly-Flag
+            // Bei Drop darf keine Zeile editierbar sein.
+            // Bei Add duerfen nur die leeren Zeilen editierbar sein.
+            // Bei Add und Drop koennen alle Zeilen editiert werden.
+            Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
+            const ::rtl::OUString* pBegin   = aColumns.getConstArray();
+            const ::rtl::OUString* pEnd     = pBegin + aColumns.getLength();
 
-            for(;pKeyBegin != pKeyEnd;++pKeyBegin)
+            for(;pBegin != pEnd;++pBegin)
             {
-                ODatabaseExport::TColumns::iterator aIter = m_vSourceColumns.find(*pKeyBegin);
-                if(aIter != m_vSourceColumns.end())
-                    aIter->second->SetPrimaryKey(sal_True);
+                Reference<XPropertySet> xColumn;
+                xColumns->getByName(*pBegin) >>= xColumn;
+
+                sal_Int32 nType         = 0;
+                sal_Int32 nScale        = 0;
+                sal_Int32 nPrecision    = 0;
+                ::rtl::OUString sTypeName;
+
+                // get the properties from the column
+                xColumn->getPropertyValue(PROPERTY_TYPENAME)        >>= sTypeName;
+                xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
+                xColumn->getPropertyValue(PROPERTY_SCALE)           >>= nScale;
+                xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
+
+                pActFieldDescr = new OFieldDescription(xColumn);
+                // search for type
+                sal_Bool bForce;
+                const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
+
+                pActFieldDescr->SetType(pTypeInfo);
+                switch(pTypeInfo->nType)
+                {
+                    case DataType::CHAR:
+                    case DataType::VARCHAR:
+                        pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),pTypeInfo->nPrecision));
+                        break;
+                    default:
+                        if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
+                        {
+                            pActFieldDescr->SetPrecision(5);
+                            pActFieldDescr->SetScale(0);
+                        }
+                        else if(pTypeInfo->nPrecision)
+                            pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),pTypeInfo->nPrecision));
+                }
+
+                m_vSourceColumns[pActFieldDescr->GetName()] = pActFieldDescr;
+                m_vSourceVec.push_back(m_vSourceColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
+            }
+            // fill the primary  key information
+            Reference<XNameAccess> xKeyColumns  = getKeyColumns();
+            if(xKeyColumns.is())
+            {
+                Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
+                const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
+                const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
+
+                for(;pKeyBegin != pKeyEnd;++pKeyBegin)
+                {
+                    ODatabaseExport::TColumns::iterator aIter = m_vSourceColumns.find(*pKeyBegin);
+                    if(aIter != m_vSourceColumns.end())
+                        aIter->second->SetPrimaryKey(sal_True);
+                }
             }
         }
     }
@@ -816,7 +662,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
         if(xColumn.is())
         {
             if(!_bKeyColumns)
-                setColumnProperties(xColumn,pField);
+                ::dbaui::setColumnProperties(xColumn,pField);
             else
                 xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
 
@@ -862,26 +708,10 @@ void OCopyTableWizard::appendKey(Reference<XKeysSupplier>& _rxSup,const ODatabas
     {
         appendColumns(xColSup,_pVec,sal_True);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
-        if(xColumns->getElementNames().getLength())
+        if(xColumns.is() && xColumns->getElementNames().getLength())
             xAppend->appendByDescriptor(xKey);
     }
 
-}
-// -----------------------------------------------------------------------------
-void OCopyTableWizard::setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
-{
-    _rxColumn->setPropertyValue(PROPERTY_NAME,makeAny(_pFieldDesc->GetName()));
-    _rxColumn->setPropertyValue(PROPERTY_TYPE,makeAny(_pFieldDesc->GetType()));
-    _rxColumn->setPropertyValue(PROPERTY_TYPENAME,makeAny(_pFieldDesc->getTypeInfo()->aTypeName));
-    _rxColumn->setPropertyValue(PROPERTY_PRECISION,makeAny(_pFieldDesc->GetPrecision()));
-    _rxColumn->setPropertyValue(PROPERTY_SCALE,makeAny(_pFieldDesc->GetScale()));
-    _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
-    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
-    //  _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-        _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-        _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > OCopyTableWizard::createView()

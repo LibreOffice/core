@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 10:36:33 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,27 +148,30 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
 {
     DBG_CTOR(OFieldDescription,NULL);
     OSL_ENSURE(xAffectedCol.is(),"PropetySet can notbe null!");
-    Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
-        SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
-        SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-        SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
-        SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
-        SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
-        SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
-        SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-        SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-        SetHorJustify((SvxCellHorJustify)::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN)));
-    if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
-        SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+    if(xAffectedCol.is())
+    {
+        Reference<XPropertySetInfo> xPropSetInfo = xAffectedCol->getPropertySetInfo();
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_NAME))
+            SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+            SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+            SetDefaultValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
+            SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
+            SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
+            SetScale(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_SCALE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
+            SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
+            SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
+            SetHorJustify((SvxCellHorJustify)::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN)));
+        if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
+            SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+    }
 }
 // -----------------------------------------------------------------------------
 

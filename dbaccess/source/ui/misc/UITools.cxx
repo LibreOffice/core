@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:56:55 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
@@ -118,6 +121,9 @@
 #endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
+#endif
+#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
+#include "FieldDescriptions.hxx"
 #endif
 
 // .........................................................................
@@ -353,6 +359,166 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 
     return pTypeInfo;
 }
+void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+                    const String& _rsTypeNames,
+                    OTypeInfoMap& _rTypeInfoMap,
+                    ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
+{
+    if(!_rxConnection.is())
+        return;
+    Reference< XResultSet> xRs = _rxConnection->getMetaData ()->getTypeInfo ();
+    Reference< XRow> xRow(xRs,UNO_QUERY);
+    // Information for a single SQL type
+    if(xRs.is())
+    {
+        static const ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
+        static const ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
+        // Loop on the result set until we reach end of file
+        while (xRs->next())
+        {
+            OTypeInfo* pInfo = new OTypeInfo();
+            pInfo->aTypeName        = xRow->getString (1);
+            pInfo->nType            = xRow->getShort (2);
+            pInfo->nPrecision       = xRow->getInt (3);
+            pInfo->aLiteralPrefix   = xRow->getString (4);
+            pInfo->aLiteralSuffix   = xRow->getString (5);
+            pInfo->aCreateParams    = xRow->getString (6);
+            pInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
+            pInfo->bCaseSensitive   = xRow->getBoolean (8);
+            pInfo->nSearchType      = xRow->getShort (9);
+            pInfo->bUnsigned        = xRow->getBoolean (10);
+            pInfo->bCurrency        = xRow->getBoolean (11);
+            pInfo->bAutoIncrement   = xRow->getBoolean (12);
+            pInfo->aLocalTypeName   = xRow->getString (13);
+            pInfo->nMinimumScale    = xRow->getShort (14);
+            pInfo->nMaximumScale    = xRow->getShort (15);
+            pInfo->nNumPrecRadix    = xRow->getInt (18);
+
+            String aName;
+            switch(pInfo->nType)
+            {
+                case DataType::CHAR:
+                    aName = _rsTypeNames.GetToken(TYPE_CHAR);
+                    break;
+                case DataType::VARCHAR:
+                    aName = _rsTypeNames.GetToken(TYPE_TEXT);
+                    break;
+                case DataType::DECIMAL:
+                    aName = _rsTypeNames.GetToken(TYPE_DECIMAL);
+                    break;
+                case DataType::NUMERIC:
+                    aName = _rsTypeNames.GetToken(TYPE_NUMERIC);
+                    break;
+                case DataType::BIGINT:
+                    aName = _rsTypeNames.GetToken(TYPE_BIGINT);
+                    break;
+                case DataType::FLOAT:
+                    aName = _rsTypeNames.GetToken(TYPE_FLOAT);
+                    break;
+                case DataType::DOUBLE:
+                    aName = _rsTypeNames.GetToken(TYPE_DOUBLE);
+                    break;
+                case DataType::LONGVARCHAR:
+                    aName = _rsTypeNames.GetToken(TYPE_MEMO);
+                    break;
+                case DataType::LONGVARBINARY:
+                    aName = _rsTypeNames.GetToken(TYPE_IMAGE);
+                    break;
+                case DataType::DATE:
+                    aName = _rsTypeNames.GetToken(TYPE_DATE);
+                    break;
+                case DataType::TIME:
+                    aName = _rsTypeNames.GetToken(TYPE_TIME);
+                    break;
+                case DataType::TIMESTAMP:
+                    aName = _rsTypeNames.GetToken(TYPE_DATETIME);
+                    break;
+                case DataType::BIT:
+                    aName = _rsTypeNames.GetToken(TYPE_BOOL);
+                    break;
+                case DataType::TINYINT:
+                    aName = _rsTypeNames.GetToken(TYPE_TINYINT);
+                    break;
+                case DataType::SMALLINT:
+                    aName = _rsTypeNames.GetToken(TYPE_SMALLINT);
+                    break;
+                case DataType::INTEGER:
+                    aName = _rsTypeNames.GetToken(TYPE_INTEGER);
+                    break;
+                case DataType::REAL:
+                    aName = _rsTypeNames.GetToken(TYPE_REAL);
+                    break;
+                case DataType::BINARY:
+                    aName = _rsTypeNames.GetToken(TYPE_BINARY);
+                    break;
+                case DataType::VARBINARY:
+                    aName = _rsTypeNames.GetToken(TYPE_VARBINARY);
+                    break;
+                case DataType::SQLNULL:
+                    aName = _rsTypeNames.GetToken(TYPE_SQLNULL);
+                    break;
+                case DataType::OBJECT:
+                    aName = _rsTypeNames.GetToken(TYPE_OBJECT);
+                    break;
+                case DataType::DISTINCT:
+                    aName = _rsTypeNames.GetToken(TYPE_DISTINCT);
+                    break;
+                case DataType::STRUCT:
+                    aName = _rsTypeNames.GetToken(TYPE_STRUCT);
+                    break;
+                case DataType::ARRAY:
+                    aName = _rsTypeNames.GetToken(TYPE_ARRAY);
+                    break;
+                case DataType::BLOB:
+                    aName = _rsTypeNames.GetToken(TYPE_BLOB);
+                    break;
+                case DataType::CLOB:
+                    aName = _rsTypeNames.GetToken(TYPE_CLOB);
+                    break;
+                case DataType::REF:
+                    aName = _rsTypeNames.GetToken(TYPE_REF);
+                    break;
+                case DataType::OTHER:
+                    aName = _rsTypeNames.GetToken(TYPE_OTHER);
+                    break;
+                default:
+                    OSL_ENSURE(0,"Unknown type");
+            }
+            pInfo->aUIName = aName.GetBuffer();
+            pInfo->aUIName += aB1;
+            pInfo->aUIName += pInfo->aTypeName;
+            pInfo->aUIName += aB2;
+            // Now that we have the type info, save it in the multimap
+            _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
+        }
+        // for a faster index access
+        OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
+        for(;aIter != _rTypeInfoMap.end();++aIter)
+            _rTypeInfoIters.push_back(aIter);
+
+        // Close the result set/statement.
+
+        ::comphelper::disposeComponent(xRs);
+    }
+}
+// -----------------------------------------------------------------------------
+void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
+{
+    _rxColumn->setPropertyValue(PROPERTY_NAME,makeAny(_pFieldDesc->GetName()));
+    _rxColumn->setPropertyValue(PROPERTY_TYPE,makeAny(_pFieldDesc->GetType()));
+    _rxColumn->setPropertyValue(PROPERTY_TYPENAME,makeAny(_pFieldDesc->getTypeInfo()->aTypeName));
+    _rxColumn->setPropertyValue(PROPERTY_PRECISION,makeAny(_pFieldDesc->GetPrecision()));
+    _rxColumn->setPropertyValue(PROPERTY_SCALE,makeAny(_pFieldDesc->GetScale()));
+    _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
+    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
+    //  _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
+        _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
+        _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
+}
+// -----------------------------------------------------------------------------
+
 // .........................................................................
 }
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:53:02 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
@@ -249,6 +252,7 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
 // -----------------------------------------------------------------------------
 OTableController::~OTableController()
 {
+    m_aTypeInfoIndex.clear();
     OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
     for(;aIter != m_aTypeInfo.end();++aIter)
         delete aIter->second;
@@ -701,7 +705,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
-        fillTypeInfo();             // fill the needed type information
+        ::dbaui::fillTypeInfo(getConnection(),m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);               // fill the needed type information
         loadData();                 // fill the column information form the table
         getView()->initialize();    // show the windows and fill with our informations
         getUndoMgr()->Clear();      // clear all undo redo things
@@ -855,144 +859,6 @@ void OTableController::createNewConnection(sal_Bool _bUI)
     }
 }
 // -----------------------------------------------------------------------------
-void OTableController::fillTypeInfo()
-{
-    if(!getConnection().is())
-        return;
-    Reference< XResultSet> xRs = getConnection()->getMetaData ()->getTypeInfo ();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-
-    ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
-    ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
-    // Loop on the result set until we reach end of file
-    while (xRs->next())
-    {
-        OTypeInfo* pInfo = new OTypeInfo();
-        pInfo->aTypeName        = xRow->getString (1);
-        pInfo->nType            = xRow->getShort (2);
-        pInfo->nPrecision       = xRow->getInt (3);
-        pInfo->aLiteralPrefix   = xRow->getString (4);
-        pInfo->aLiteralSuffix   = xRow->getString (5);
-        pInfo->aCreateParams    = xRow->getString (6);
-        pInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
-        pInfo->bCaseSensitive   = xRow->getBoolean (8);
-        pInfo->nSearchType      = xRow->getShort (9);
-        pInfo->bUnsigned        = xRow->getBoolean (10);
-        pInfo->bCurrency        = xRow->getBoolean (11);
-        pInfo->bAutoIncrement   = xRow->getBoolean (12);
-        pInfo->aLocalTypeName   = xRow->getString (13);
-        pInfo->nMinimumScale    = xRow->getShort (14);
-        pInfo->nMaximumScale    = xRow->getShort (15);
-        pInfo->nNumPrecRadix    = xRow->getInt (18);
-
-        String aName;
-        switch(pInfo->nType)
-        {
-            case DataType::CHAR:
-                aName = m_sTypeNames.GetToken(TYPE_CHAR);
-                break;
-            case DataType::VARCHAR:
-                aName = m_sTypeNames.GetToken(TYPE_TEXT);
-                break;
-            case DataType::DECIMAL:
-                aName = m_sTypeNames.GetToken(TYPE_DECIMAL);
-                break;
-            case DataType::NUMERIC:
-                aName = m_sTypeNames.GetToken(TYPE_NUMERIC);
-                break;
-            case DataType::BIGINT:
-                aName = m_sTypeNames.GetToken(TYPE_BIGINT);
-                break;
-            case DataType::FLOAT:
-                aName = m_sTypeNames.GetToken(TYPE_FLOAT);
-                break;
-            case DataType::DOUBLE:
-                aName = m_sTypeNames.GetToken(TYPE_DOUBLE);
-                break;
-            case DataType::LONGVARCHAR:
-                aName = m_sTypeNames.GetToken(TYPE_MEMO);
-                break;
-            case DataType::LONGVARBINARY:
-                aName = m_sTypeNames.GetToken(TYPE_IMAGE);
-                break;
-            case DataType::DATE:
-                aName = m_sTypeNames.GetToken(TYPE_DATE);
-                break;
-            case DataType::TIME:
-                aName = m_sTypeNames.GetToken(TYPE_TIME);
-                break;
-            case DataType::TIMESTAMP:
-                aName = m_sTypeNames.GetToken(TYPE_DATETIME);
-                break;
-            case DataType::BIT:
-                aName = m_sTypeNames.GetToken(TYPE_BOOL);
-                break;
-            case DataType::TINYINT:
-                aName = m_sTypeNames.GetToken(TYPE_TINYINT);
-                break;
-            case DataType::SMALLINT:
-                aName = m_sTypeNames.GetToken(TYPE_SMALLINT);
-                break;
-            case DataType::INTEGER:
-                aName = m_sTypeNames.GetToken(TYPE_INTEGER);
-                break;
-            case DataType::REAL:
-                aName = m_sTypeNames.GetToken(TYPE_REAL);
-                break;
-            case DataType::BINARY:
-                aName = m_sTypeNames.GetToken(TYPE_BINARY);
-                break;
-            case DataType::VARBINARY:
-                aName = m_sTypeNames.GetToken(TYPE_VARBINARY);
-                break;
-            case DataType::SQLNULL:
-                aName = m_sTypeNames.GetToken(TYPE_SQLNULL);
-                break;
-            case DataType::OBJECT:
-                aName = m_sTypeNames.GetToken(TYPE_OBJECT);
-                break;
-            case DataType::DISTINCT:
-                aName = m_sTypeNames.GetToken(TYPE_DISTINCT);
-                break;
-            case DataType::STRUCT:
-                aName = m_sTypeNames.GetToken(TYPE_STRUCT);
-                break;
-            case DataType::ARRAY:
-                aName = m_sTypeNames.GetToken(TYPE_ARRAY);
-                break;
-            case DataType::BLOB:
-                aName = m_sTypeNames.GetToken(TYPE_BLOB);
-                break;
-            case DataType::CLOB:
-                aName = m_sTypeNames.GetToken(TYPE_CLOB);
-                break;
-            case DataType::REF:
-                aName = m_sTypeNames.GetToken(TYPE_REF);
-                break;
-            case DataType::OTHER:
-                aName = m_sTypeNames.GetToken(TYPE_OTHER);
-                break;
-            default:
-                OSL_ENSURE(0,"Unknown type");
-        }
-        pInfo->aUIName = aName.GetBuffer();
-        pInfo->aUIName += aB1;
-        pInfo->aUIName += pInfo->aTypeName;
-        pInfo->aUIName += aB2;
-        // Now that we have the type info, save it in the multimap
-        m_aTypeInfo.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
-    }
-    // for a faster index access
-    OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
-    for(;aIter != m_aTypeInfo.end();++aIter)
-        m_aTypeInfoIndex.push_back(aIter);
-
-    // Close the result set/statement.
-
-    ::comphelper::disposeComponent(xRs);
-}
-// -----------------------------------------------------------------------------
 const OTypeInfo* OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
 {
     OTypeInfoMap::const_iterator aIter = m_aTypeInfo.find(_nDataType);
@@ -1031,7 +897,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
             if(xColumn.is())
             {
                 if(!_bKeyColumns)
-                    setColumnProperties(xColumn,pField);
+                    ::dbaui::setColumnProperties(xColumn,pField);
                 else
                     xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
 
@@ -1422,7 +1288,7 @@ void OTableController::alterColumns()
             {
                 Reference<XPropertySet> xNewColumn;
                 xNewColumn = xColumnFactory->createDataDescriptor();
-                setColumnProperties(xNewColumn,pField);
+                ::dbaui::setColumnProperties(xNewColumn,pField);
                 // first try to alter the column
                 sal_Bool bNotOk = sal_False;
                 try
@@ -1463,7 +1329,7 @@ void OTableController::alterColumns()
         {// column not found by its name so we assume it is new
             // Column is new
             xColumn = xColumnFactory->createDataDescriptor();
-            setColumnProperties(xColumn,pField);
+            ::dbaui::setColumnProperties(xColumn,pField);
             xAppend->appendByDescriptor(xColumn);
             if(xColumns->hasByName(pField->GetName()))
             {   // ask for the append by name
@@ -1486,7 +1352,7 @@ void OTableController::alterColumns()
         { // we can't find the column nor can we append a new one so we alter it by index
             Reference<XPropertySet> xNewColumn;
             xNewColumn = xColumnFactory->createDataDescriptor();
-            setColumnProperties(xNewColumn,pField);
+            ::dbaui::setColumnProperties(xNewColumn,pField);
             xAlter->alterColumnByIndex(nPos,xNewColumn);
             if(xColumns->hasByName(pField->GetName()))
             {   // ask for the append by name
@@ -1584,22 +1450,6 @@ void OTableController::alterColumns()
         getUndoMgr()->Clear();      // clear all undo redo things
         setModified(sal_False);     // and we are not modified yet
     }
-}
-// -----------------------------------------------------------------------------
-void OTableController::setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
-{
-    _rxColumn->setPropertyValue(PROPERTY_NAME,makeAny(_pFieldDesc->GetName()));
-    _rxColumn->setPropertyValue(PROPERTY_TYPE,makeAny(_pFieldDesc->GetType()));
-    _rxColumn->setPropertyValue(PROPERTY_TYPENAME,makeAny(_pFieldDesc->getTypeInfo()->aTypeName));
-    _rxColumn->setPropertyValue(PROPERTY_PRECISION,makeAny(_pFieldDesc->GetPrecision()));
-    _rxColumn->setPropertyValue(PROPERTY_SCALE,makeAny(_pFieldDesc->GetScale()));
-    _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
-    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
-    //  _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-        _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
-        _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
 }
 // -----------------------------------------------------------------------------
 void OTableController::dropKey()

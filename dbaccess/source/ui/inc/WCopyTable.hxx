@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,14 +143,12 @@ namespace dbaui
         DECL_LINK( ImplOKHdl    , OKButton* );
         DECL_LINK( ImplActivateHdl, WizardDialog* );
         void CheckColumns();
-        void fillTypeInfo();
         void loadData();
         void construct();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
         // need for table creation
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,const ODatabaseExport::TColumnVector* _pVec,sal_Bool _bKeyColumns=sal_False);
         void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
-        void setColumnProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc);
 
     protected:
         OTypeInfoMap                m_aTypeInfo;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,33 @@
 #ifndef DBAUI_TOOLS_HXX
 #define DBAUI_TOOLS_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
+#ifndef DBAUI_TYPEINFO_HXX
+#include "TypeInfo.hxx"
+#endif
+
+// we only need forward decl here
+namespace com { namespace sun { namespace star {
+
+    namespace beans     { class XPropertySet;}
+    namespace container { class XNameAccess;}
+    namespace lang
+    {
+        class XEventListener;
+        class XMultiServiceFactory;
+    }
+    namespace sdbc
+    {
+        class XDatabaseMetaData;
+        class XConnection;
+    }
+
+}}}
 
 class Window;
 // .........................................................................
@@ -132,6 +135,24 @@ namespace dbaui
         getKeyColumns(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTable,
                         sal_Int32 _nKeyType);
 
+    /** fills a map and a vector with localized type names
+        @param  _rxConnection   the connection to acces the metadata
+        @param  _rsTypeNames    a list of localized type names seperated with ';'
+        @param  _rTypeInfoMap   the filled map with the type names
+        @param  _rTypeInfoIters the vector filled with map iterators
+    */
+    void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+                        const String& _rsTypeNames,
+                        OTypeInfoMap& _rTypeInfoMap,
+                        ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
+
+    /** fill a column with data of a field description
+        @param  _rxColumn   the column which should be filled
+        @param  _pFieldDesc the source of the data
+    */
+    class OFieldDescription;
+    void setColumnProperties(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
+                                const OFieldDescription* _pFieldDesc);
 // .........................................................................
 }
 // .........................................................................

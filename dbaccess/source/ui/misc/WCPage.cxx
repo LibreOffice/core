@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,72 +120,75 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
 {
     DBG_CTOR(OCopyTable,NULL);
 
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-    try
+    if(m_pParent->m_xConnection.is())
     {
-        static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
-        Reference<XResultSet> xRs = xMetaData->getTableTypes();
-        if(xRs.is())
+        Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+        try
         {
-            Reference<XRow> xRow(xRs,UNO_QUERY);
-            while(xRs->next())
+            static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
+            Reference<XResultSet> xRs = xMetaData->getTableTypes();
+            if(xRs.is())
             {
-                ::rtl::OUString sValue = xRow->getString(1);
-                if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
+                Reference<XRow> xRow(xRs,UNO_QUERY);
+                while(xRs->next())
                 {
-                    m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
-                    break;
+                    ::rtl::OUString sValue = xRow->getString(1);
+                    if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
+                    {
+                        m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
+                        break;
+                    }
                 }
             }
         }
-    }
-    catch(SQLException&)
-    {
-    }
+        catch(SQLException&)
+        {
+        }
 
-    if(!m_bIsViewAllowed)
-        m_aRB_View.Disable();
+        if(!m_bIsViewAllowed)
+            m_aRB_View.Disable();
 
-    //////////////////////////////////////////////////////////////////////
-    // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+        //////////////////////////////////////////////////////////////////////
+        // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
+        m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
 
-    m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
+        m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
-    switch(nLastAction)
-    {
-        case OCopyTableWizard::WIZARD_DEF_DATA:
-            m_aRB_DefData.Check(sal_True);
-            break;
-        case OCopyTableWizard::WIZARD_DEF:
-            m_aRB_Def.Check(sal_True);
-            break;
-        case OCopyTableWizard::WIZARD_APPEND_DATA:
-            m_aRB_AppendData.Check(sal_True);
-            m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
-            break;
-        case OCopyTableWizard::WIZARD_DEF_VIEW:
-            if(m_bIsViewAllowed)
-            {
-                m_aRB_View.Check(sal_True);
-                m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
-            }
-            else
+        switch(nLastAction)
+        {
+            case OCopyTableWizard::WIZARD_DEF_DATA:
                 m_aRB_DefData.Check(sal_True);
+                break;
+            case OCopyTableWizard::WIZARD_DEF:
+                m_aRB_Def.Check(sal_True);
+                break;
+            case OCopyTableWizard::WIZARD_APPEND_DATA:
+                m_aRB_AppendData.Check(sal_True);
+                m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
+                break;
+            case OCopyTableWizard::WIZARD_DEF_VIEW:
+                if(m_bIsViewAllowed)
+                {
+                    m_aRB_View.Check(sal_True);
+                    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
+                }
+                else
+                    m_aRB_DefData.Check(sal_True);
+        }
+        m_aRB_AppendData.SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
+
+        m_aRB_DefData.SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_aRB_Def.SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
+        m_aRB_View.SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
+
+        m_aCB_PrimaryColumn.SetClickHdl( LINK( this, OCopyTable, KeyClickHdl ) );
+
+        m_aFT_KeyName.Enable(sal_False);
+        m_edKeyName.Enable(sal_False);
+        m_edKeyName.SetText(String::CreateFromAscii("ID"));
+        sal_Int32 nMaxLen = xMetaData->getMaxColumnNameLength();
+        m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
     }
-    m_aRB_AppendData.SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
-
-    m_aRB_DefData.SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
-    m_aRB_Def.SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
-    m_aRB_View.SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
-
-    m_aCB_PrimaryColumn.SetClickHdl( LINK( this, OCopyTable, KeyClickHdl ) );
-
-    m_aFT_KeyName.Enable(sal_False);
-    m_edKeyName.Enable(sal_False);
-    m_edKeyName.SetText(String::CreateFromAscii("ID"));
-    sal_Int32 nMaxLen = xMetaData->getMaxColumnNameLength();
-    m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
 
     FreeResource();
 
@@ -208,7 +211,6 @@ OCopyTable::~OCopyTable()
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, pButton )
 {
     sal_Bool bChecked = m_aRB_AppendData.IsChecked();
-    //m_pParent->EnableButton(OCopyTableWizard::WIZARD_FINISH,bChecked);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
     m_aFT_KeyName.Enable(sal_False);
     m_aCB_PrimaryColumn.Enable(sal_False);
@@ -362,7 +364,9 @@ void OCopyTable::Reset()
 {
     m_bFirstTime = sal_False;
 
-    sal_Int32 nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
+    sal_Int32 nLen = 0;
+    if(m_pParent->m_xConnection.is())
+        nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
 
     m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
     String aTableName = m_pParent->m_sName;
