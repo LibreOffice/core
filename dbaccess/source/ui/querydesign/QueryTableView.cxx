@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:30:50 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,11 @@
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
 #endif
-#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
-#include "QueryMoveTabWinUndoAct.hxx"
-#endif
 #ifndef DBAUI_QUERYADDTABCONNUNDOACTION_HXX
 #include "QueryAddTabConnUndoAction.hxx"
 #endif
 #ifndef DBAUI_QUERYTABWINSHOWUNDOACT_HXX
 #include "QueryTabWinShowUndoAct.hxx"
-#endif
-#ifndef DBAUI_QUERYSIZETABWINUNDOACT_HXX
-#include "QuerySizeTabWinUndoAct.hxx"
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -146,6 +140,9 @@
 #ifndef DBAUI_QUERYDESIGNVIEW_HXX
 #include "QueryDesignView.hxx"
 #endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -186,7 +183,7 @@ TYPEINIT1(OQueryTableView, OJoinTableView);
 //==================================================================
 // class OQueryTableView
 //==================================================================
-DBG_NAME(OQueryTableView);
+DBG_NAME(OQueryTableView)
 //------------------------------------------------------------------------
 OQueryTableView::OQueryTableView( Window* pParent,OQueryDesignView* pView)
     : OJoinTableView( pParent,pView)
@@ -224,28 +221,6 @@ sal_Int32 OQueryTableView::CountTableAlias(const String& rName, sal_Int32& rMax)
 
     return nRet;
 }
-
-
-//------------------------------------------------------------------------
-void OQueryTableView::TabWinMoved(OTableWindow* pWhich, const Point& ptOldPosition)
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    OJoinTableView::TabWinMoved(pWhich, ptOldPosition);
-
-    SfxUndoAction* pUndoAction = new OQueryMoveTabWinUndoAct(this, ptOldPosition, static_cast< OQueryTableWindow*>(pWhich));
-    m_pView->getController()->getUndoMgr()->AddUndoAction(pUndoAction);
-}
-
-//------------------------------------------------------------------------
-void OQueryTableView::TabWinSized(OTableWindow* pWhich, const Point& ptOldPosition, const Size& szOldSize)
-{
-    DBG_CHKTHIS(OQueryTableView,NULL);
-    OJoinTableView::TabWinSized(pWhich, ptOldPosition, szOldSize);
-
-    SfxUndoAction* pUndoAction = new OQuerySizeTabWinUndoAct(this, ptOldPosition, szOldSize, static_cast< OQueryTableWindow*>(pWhich));
-    m_pView->getController()->getUndoMgr()->AddUndoAction(pUndoAction);
-}
-
 //------------------------------------------------------------------------
 void OQueryTableView::ReSync()
 {

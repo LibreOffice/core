@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryMoveTabWinUndoAct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,23 +77,24 @@ namespace dbaui
     // ================================================================================================
     // OQueryMoveTabWinUndoAct - Undo-Klasse fuer Verschieben eines TabWins
     class OQueryTableWindow;
-    class OQueryMoveTabWinUndoAct : public OQueryDesignUndoAction
+    class OTableWindow;
+    class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
     {
-        Point                   m_ptNextPosition;
-        OQueryTableWindow*      m_pTabWin;
+        Point           m_ptNextPosition;
+        OTableWindow*   m_pTabWin;
 
     protected:
         void TogglePosition();
 
     public:
-        OQueryMoveTabWinUndoAct(OQueryTableView* pOwner, const Point& ptOriginalPosition, OQueryTableWindow* pTabWin);
+        OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin);
 
         virtual void    Undo() { TogglePosition(); }
         virtual void    Redo() { TogglePosition(); }
     };
 
     // ------------------------------------------------------------------------------------------------
-    inline OQueryMoveTabWinUndoAct::OQueryMoveTabWinUndoAct(OQueryTableView* pOwner, const Point& ptOriginalPosition, OQueryTableWindow* pTabWin)
+    inline OJoinMoveTabWinUndoAct::OJoinMoveTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPosition, OTableWindow* pTabWin)
         :OQueryDesignUndoAction(pOwner, STR_QUERY_UNDO_MOVETABWIN)
         ,m_ptNextPosition(ptOriginalPosition)
         ,m_pTabWin(pTabWin)

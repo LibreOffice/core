@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QuerySizeTabWinUndoAct.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:21:06 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,18 +73,18 @@ namespace dbaui
 
     // ================================================================================================
     // OQuerySizeTabWinUndoAct - Undo-Klasse fuer Groessenveraenderung eines TabWins
-    class OQueryTableWindow;
-    class OQuerySizeTabWinUndoAct : public OQueryDesignUndoAction
+    class OTableWindow;
+    class OJoinSizeTabWinUndoAct : public OQueryDesignUndoAction
     {
-        Point                   m_ptNextPosition;
-        Size                    m_szNextSize;
-        OQueryTableWindow*      m_pTabWin;
+        Point           m_ptNextPosition;
+        Size            m_szNextSize;
+        OTableWindow*   m_pTabWin;
 
     protected:
         inline void ToggleSizePosition();
 
     public:
-        OQuerySizeTabWinUndoAct(OQueryTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OQueryTableWindow* pTabWin);
+        OJoinSizeTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OTableWindow* pTabWin);
         // Nebenbedingung : es darf nicht gescrollt worden sein, waehrend die neue Groesse/Position ermittelt wurde, das heisst, die Position
         // hier sind physische, nicht logische Koordinaten
         // (im Gegensatz zur QueryMoveTabWinUndoAct)
@@ -94,7 +94,7 @@ namespace dbaui
     };
 
     //------------------------------------------------------------------------------
-    inline OQuerySizeTabWinUndoAct::OQuerySizeTabWinUndoAct(OQueryTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OQueryTableWindow* pTabWin)
+    inline OJoinSizeTabWinUndoAct::OJoinSizeTabWinUndoAct(OJoinTableView* pOwner, const Point& ptOriginalPos, const Size& szOriginalSize, OTableWindow* pTabWin)
         :OQueryDesignUndoAction(pOwner, STR_QUERY_UNDO_SIZETABWIN)
         ,m_ptNextPosition(ptOriginalPos)
         ,m_szNextSize(szOriginalSize)
@@ -103,7 +103,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    inline void OQuerySizeTabWinUndoAct::ToggleSizePosition()
+    inline void OJoinSizeTabWinUndoAct::ToggleSizePosition()
     {
         Point ptNext = m_pTabWin->GetPosPixel();
         Size szNext = m_pTabWin->GetSizePixel();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 09:55:43 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,6 @@ namespace dbaui
     protected:
         virtual void ConnDoubleClicked(OTableConnection* pConnection);
         virtual void KeyInput(const KeyEvent& rEvt);
-
-        // wird nach Verschieben/Groessenaenderung der TabWins aufgerufen (die Standardimplementation reicht die neuen Daten einfach
-        // an die Daten des Wins weiter)
-        virtual void TabWinMoved(OTableWindow* pWhich, const Point& ptOldPosition);
-        virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
-
     public:
         TYPEINFO();
         OQueryTableView(Window* pParent,OQueryDesignView* pView);

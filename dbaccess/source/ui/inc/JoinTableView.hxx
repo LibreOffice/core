@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:01 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace dbaui
                             ,public IDragTransferableListener
                             ,public DropTargetHelper
     {
+        friend class OJoinMoveTabWinUndoAct;
     public:
         DECLARE_STL_USTRINGACCESS_MAP(OTableWindow*,OTableWindowMap);
     private:

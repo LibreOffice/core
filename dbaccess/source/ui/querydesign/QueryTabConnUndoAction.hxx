@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabConnUndoAction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 namespace dbaui
 {
     class OQueryTableConnection;
+    class OQueryTableView;
     class OQueryTabConnUndoAction : public OQueryDesignUndoAction
     {
     protected:

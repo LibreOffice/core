@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#endif
+#ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
+#include "QueryMoveTabWinUndoAct.hxx"
+#endif
+#ifndef DBAUI_QUERYSIZETABWINUNDOACT_HXX
+#include "QuerySizeTabWinUndoAct.hxx"
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -436,39 +442,40 @@ void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 
     BOOL bFitsHor = (aUpperLeft.X() >= 0) && (aLowerRight.X() <= aSize.Width());
     BOOL bFitsVert = (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
-    if (bFitsHor && bFitsVert)
-        // nothing to do
-        return;
-
-    long nScrollX(0);
-    if (!bFitsHor)
+    if (!bFitsHor || !bFitsVert)
     {
-        // ensure the visibility of the right border
-        if (aLowerRight.X() > aSize.Width())
-            nScrollX = (aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X);
+        long nScrollX(0);
+        if (!bFitsHor)
+        {
+            // ensure the visibility of the right border
+            if (aLowerRight.X() > aSize.Width())
+                nScrollX = (aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X);
 
-        // ensure the cisibility of the left border (higher priority)
-        if (aUpperLeft.X() - nScrollX < 0)
-            nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
+            // ensure the cisibility of the left border (higher priority)
+            if (aUpperLeft.X() - nScrollX < 0)
+                nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
+        }
+
+        long nScrollY(0);
+        if (!bFitsVert)
+        {
+            // lower border
+            if (aLowerRight.Y() > aSize.Height())
+                nScrollY = (aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y);
+
+            // upper border
+            if (aUpperLeft.Y() - nScrollY < 0)
+                nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
+        }
+
+        if (nScrollX)
+            Scroll(nScrollX, TRUE, TRUE);
+
+        if (nScrollY)
+            Scroll(nScrollY, FALSE, TRUE);
     }
 
-    long nScrollY(0);
-    if (!bFitsVert)
-    {
-        // lower border
-        if (aLowerRight.Y() > aSize.Height())
-            nScrollY = (aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y);
-
-        // upper border
-        if (aUpperLeft.Y() - nScrollY < 0)
-            nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
-    }
-
-    if (nScrollX)
-        Scroll(nScrollX, TRUE, TRUE);
-
-    if (nScrollY)
-        Scroll(nScrollY, FALSE, TRUE);
+    Invalidate(INVALIDATE_NOCHILDREN);
 }
 
 //------------------------------------------------------------------------------
@@ -1141,6 +1148,10 @@ void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPositi
     DBG_CHKTHIS(OJoinTableView,NULL);
     Point ptThumbPos(GetHScrollBar()->GetThumbPos(), GetVScrollBar()->GetThumbPos());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel() + ptThumbPos);
+
+    SfxUndoAction* pUndoAction = new OJoinMoveTabWinUndoAct(this, ptOldPosition, ptWhich);
+    m_pView->getController()->getUndoMgr()->AddUndoAction(pUndoAction);
+    m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
 }
 
 //------------------------------------------------------------------------
@@ -1149,6 +1160,10 @@ void OJoinTableView::TabWinSized(OTableWindow* ptWhich, const Point& ptOldPositi
     DBG_CHKTHIS(OJoinTableView,NULL);
     ptWhich->GetData()->SetSize(ptWhich->GetSizePixel());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel());
+
+    SfxUndoAction* pUndoAction = new OJoinSizeTabWinUndoAct(this, ptOldPosition, szOldSize, ptWhich);
+    m_pView->getController()->getUndoMgr()->AddUndoAction(pUndoAction);
+    m_pView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabConnUndoAction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:25:10 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,22 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef DBAUI_QUERYTABLEVIEW_HXX
+#include "QueryTableView.hxx"
+#endif
+#ifndef DBAUI_QUERYADDTABCONNUNDOACTION_HXX
+#include "QueryAddTabConnUndoAction.hxx"
+#endif
+#ifndef DBAUI_QUERYTABWINSHOWUNDOACT_HXX
+#include "QueryTabWinShowUndoAct.hxx"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
 using namespace dbaui;
 
-DBG_NAME(OQueryTabConnUndoAction);
+DBG_NAME(OQueryTabConnUndoAction)
 // ------------------------------------------------------------------------------------------------
 OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
 {
@@ -89,5 +102,72 @@ OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, USHORT
 {
     DBG_CTOR(OQueryTabConnUndoAction,NULL);
 }
-
-
+// -----------------------------------------------------------------------------
+OQueryAddTabConnUndoAction::OQueryAddTabConnUndoAction(OQueryTableView* pOwner)
+    : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_INSERTCONNECTION)
+{
+}
+// -----------------------------------------------------------------------------
+void OQueryAddTabConnUndoAction::Undo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
+    SetOwnership(TRUE);
+}
+// -----------------------------------------------------------------------------
+void OQueryAddTabConnUndoAction::Redo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
+    SetOwnership(FALSE);
+}
+// -----------------------------------------------------------------------------
+OQueryDelTabConnUndoAction::OQueryDelTabConnUndoAction(OQueryTableView* pOwner)
+    : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_REMOVECONNECTION)
+{
+}
+// -----------------------------------------------------------------------------
+void OQueryDelTabConnUndoAction::Undo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->GetConnection(m_pConnection);
+    SetOwnership(FALSE);
+}
+// -----------------------------------------------------------------------------
+void OQueryDelTabConnUndoAction::Redo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->DropConnection(m_pConnection);
+    SetOwnership(TRUE);
+}
+// -----------------------------------------------------------------------------
+OQueryTabWinShowUndoAct::OQueryTabWinShowUndoAct(OQueryTableView* pOwner)
+ : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW)
+{
+}
+// -----------------------------------------------------------------------------
+void OQueryTabWinShowUndoAct::Undo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->HideTabWin(m_pTabWin, this);
+    SetOwnership(TRUE);
+}
+// -----------------------------------------------------------------------------
+void OQueryTabWinShowUndoAct::Redo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin(m_pTabWin, this,sal_True);
+    SetOwnership(FALSE);
+}
+// -----------------------------------------------------------------------------
+OQueryTabWinDelUndoAct::OQueryTabWinDelUndoAct(OQueryTableView* pOwner)
+ : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE)
+{
+}
+// -----------------------------------------------------------------------------
+void OQueryTabWinDelUndoAct::Undo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->ShowTabWin( m_pTabWin, this,sal_True );
+    SetOwnership(FALSE);
+}
+// -----------------------------------------------------------------------------
+void OQueryTabWinDelUndoAct::Redo()
+{
+    static_cast<OQueryTableView*>(m_pOwner)->HideTabWin( m_pTabWin, this );
+    SetOwnership(TRUE);
+}
+// -----------------------------------------------------------------------------

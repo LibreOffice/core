@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinShowUndoAct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef DBAUI_QUERYTABWINUNDOACT_HXX
 #include "QueryTabWinUndoAct.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
-#endif
 
 namespace dbaui
 {
@@ -77,10 +74,10 @@ namespace dbaui
     class OQueryTabWinShowUndoAct : public OQueryTabWinUndoAct
     {
     public:
-        OQueryTabWinShowUndoAct(OQueryTableView* pOwner) : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINSHOW) { }
+        OQueryTabWinShowUndoAct(OQueryTableView* pOwner);
 
-        virtual void    Undo() { m_pOwner->HideTabWin(m_pTabWin, this); SetOwnership(TRUE); }
-        virtual void    Redo() { m_pOwner->ShowTabWin(m_pTabWin, this,sal_True); SetOwnership(FALSE); }
+        virtual void    Undo();
+        virtual void    Redo();
     };
 
     // ================================================================================================
@@ -89,10 +86,10 @@ namespace dbaui
     class OQueryTabWinDelUndoAct : public OQueryTabWinUndoAct
     {
     public:
-        OQueryTabWinDelUndoAct(OQueryTableView* pOwner) : OQueryTabWinUndoAct(pOwner, STR_QUERY_UNDO_TABWINDELETE) { }
+        OQueryTabWinDelUndoAct(OQueryTableView* pOwner);
 
-        virtual void    Undo() { m_pOwner->ShowTabWin( m_pTabWin, this,sal_True ); SetOwnership(FALSE); }
-        virtual void    Redo() { m_pOwner->HideTabWin( m_pTabWin, this ); SetOwnership(TRUE); }
+        virtual void    Undo();
+        virtual void    Redo();
     };
 }
 #endif // DBAUI_QUERYTABWINSHOWUNDOACT_HXX

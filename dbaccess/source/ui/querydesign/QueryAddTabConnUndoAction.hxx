@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryAddTabConnUndoAction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:24:34 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,14 @@ namespace dbaui
     // ================================================================================================
     // OQueryAddTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
 
+    class OQueryTableView;
     class OQueryAddTabConnUndoAction : public OQueryTabConnUndoAction
     {
     public:
-        OQueryAddTabConnUndoAction(OQueryTableView* pOwner) : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_INSERTCONNECTION) { }
+        OQueryAddTabConnUndoAction(OQueryTableView* pOwner);
 
-        virtual void Undo() { m_pOwner->DropConnection(m_pConnection); SetOwnership(TRUE); }
-        virtual void Redo() { m_pOwner->GetConnection(m_pConnection); SetOwnership(FALSE); }
+        virtual void Undo();
+        virtual void Redo();
     };
 
     // ================================================================================================
@@ -85,10 +86,10 @@ namespace dbaui
     class OQueryDelTabConnUndoAction : public OQueryTabConnUndoAction
     {
     public:
-        OQueryDelTabConnUndoAction(OQueryTableView* pOwner) : OQueryTabConnUndoAction(pOwner, STR_QUERY_UNDO_REMOVECONNECTION) { }
+        OQueryDelTabConnUndoAction(OQueryTableView* pOwner);
 
-        virtual void Undo() { m_pOwner->GetConnection(m_pConnection); SetOwnership(FALSE); }
-        virtual void Redo() { m_pOwner->DropConnection(m_pConnection); SetOwnership(TRUE); }
+        virtual void Undo();
+        virtual void Redo();
     };
 }
 #endif // DBAUI_QUERYADDTABCONNUNDOACTION_HXX

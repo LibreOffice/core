@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:34:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,21 @@
 #ifndef DBAUI_QUERYDESIGNFIELDUNDOACT_HXX
 #include "QueryDesignFieldUndoAct.hxx"
 #endif
+#ifndef DBAUI_QUERYTABLEVIEW_HXX
+#include "QueryTableView.hxx"
+#endif
 
 
 using namespace dbaui;
+DBG_NAME(OQueryTabWinUndoAct )
+// ------------------------------------------------------------------------------------------------
+OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID)
+    :OQueryDesignUndoAction(pOwner, nCommentID)
+    ,m_pTabWin(NULL)
+    ,m_bOwnerOfObjects(FALSE)
+{
+    DBG_CTOR(OQueryTabWinUndoAct ,NULL);
+}
 //==============================================================================
 OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
@@ -102,6 +114,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         }
         m_vTableConnection.clear();
     }
+    DBG_DTOR(OQueryTabWinUndoAct ,NULL);
 }
 //------------------------------------------------------------------------------
 void OTabFieldCellModifiedUndoAct::Undo()

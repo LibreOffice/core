@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-06 13:31:44 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,10 @@
 #ifndef DBAUI_QUERYDESIGNUNDOACTION_HXX
 #include "QueryDesignUndoAction.hxx"
 #endif
-#ifndef _VECTOR_
+#ifndef INCLUDED_VECTOR
+#define INCLUDED_VECTOR
 #include <vector>
-#endif
+#endif // INCLUDED_VECTOR
 
 #include <algorithm>
 
@@ -77,6 +78,7 @@ namespace dbaui
 
     class OQueryTableWindow;
     class OTableConnection;
+    class OQueryTableView;
     class OQueryTabWinUndoAct : public OQueryDesignUndoAction
     {
     protected:
@@ -107,17 +109,11 @@ namespace dbaui
         void InsertConnection( OTableConnection* pConnection ) { m_vTableConnection.push_back(pConnection); }
         void RemoveConnection( OTableConnection* pConnection )
         {
-            m_vTableConnection.erase(::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),pConnection));
+            m_vTableConnection.erase(::std::remove(m_vTableConnection.begin(),m_vTableConnection.end(),pConnection),m_vTableConnection.end());
         }
     };
 
-    // ------------------------------------------------------------------------------------------------
-    inline OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID)
-        :OQueryDesignUndoAction(pOwner, nCommentID)
-        ,m_pTabWin(NULL)
-        ,m_bOwnerOfObjects(FALSE)
-    {
-    }
+
 }
 #endif // DBAUI_QUERYTABWINUNDOACT_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryMoveTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:25:03 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,15 @@
 #ifndef DBAUI_OQUERYMOVETABWINUNDOACT_HXX
 #include "QueryMoveTabWinUndoAct.hxx"
 #endif
-#ifndef DBAUI_QUERYTABLEVIEW_HXX
-#include "QueryTableView.hxx"
+#ifndef DBAUI_JOINTABLEVIEW_HXX
+#include "JoinTableView.hxx"
 #endif
 #ifndef DBAUI_QUERY_TABLEWINDOW_HXX
 #include "QTableWindow.hxx"
 #endif
 using namespace dbaui;
 //------------------------------------------------------------------------------
-void OQueryMoveTabWinUndoAct::TogglePosition()
+void OJoinMoveTabWinUndoAct::TogglePosition()
 {
     Point ptFrameScrollPos(m_pOwner->GetHScrollBar()->GetThumbPos(), m_pOwner->GetVScrollBar()->GetThumbPos());
     Point ptNext = m_pTabWin->GetPosPixel() + ptFrameScrollPos;
