@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 16:29:56 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2736,8 +2736,11 @@ BOOL ScViewData::UpdateFixX( USHORT nTab )              // TRUE = Wert geaendert
     if (!pView || pTabData[nTab]->eHSplitMode != SC_SPLIT_FIX)
         return FALSE;
 
-    USHORT nFix = pTabData[nTab]->nFixPosX;
     ScDocument* pDoc = GetDocument();
+    if (!pDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
+        return FALSE;
+
+    USHORT nFix = pTabData[nTab]->nFixPosX;
     long nNewPos = 0;
     for (USHORT nX=pTabData[nTab]->nPosX[SC_SPLIT_LEFT]; nX<nFix; nX++)
     {
@@ -2768,8 +2771,11 @@ BOOL ScViewData::UpdateFixY( USHORT nTab )              // TRUE = Wert geaendert
     if (!pView || pTabData[nTab]->eVSplitMode != SC_SPLIT_FIX)
         return FALSE;
 
-    USHORT nFix = pTabData[nTab]->nFixPosY;
     ScDocument* pDoc = GetDocument();
+    if (!pDoc->HasTable(nTab))          // #114007# if called from reload, the sheet may not exist
+        return FALSE;
+
+    USHORT nFix = pTabData[nTab]->nFixPosY;
     long nNewPos = 0;
     for (USHORT nY=pTabData[nTab]->nPosY[SC_SPLIT_TOP]; nY<nFix; nY++)
     {
