@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmxtrct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:54 $
+ *  last change: $Author: ka $ $Date: 2000-12-07 19:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,9 +197,16 @@ REF( NMSP_IO::XInputStream ) SAL_CALL XMLExtractor::extract( const REF( NMSP_IO:
     {
         SvStream        aIStm( new XMXLockBytes( rxIStm ) );
         SvStorageRef    aStorage( new SvStorage( aIStm ) );
-        const String    aStmName( String::CreateFromAscii( "XMLFormat" ) );
+        String          aStmName;
+        const String    aFormat1( String::CreateFromAscii( "XMLFormat" ) );
+        const String    aFormat2( String::CreateFromAscii( "XMLFormat2" ) );
 
-        if( !aStorage->GetError() && aStorage->IsStream( aStmName ))
+        if( aStorage->IsContained( aFormat2 ) )
+            aStmName = aFormat2;
+        else if( aStorage->IsContained( aFormat1 ) )
+            aStmName = aFormat1;
+
+        if( !aStorage->GetError() && aStmName.Len() && aStorage->IsStream( aStmName ) )
         {
             SvStorageStreamRef xStream( aStorage->OpenStream( aStmName ) );
 
