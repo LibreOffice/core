@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ Resource RID_SVXERRCTX
         Text [ french ] = "$(ERR) lors du chargement d'un graphique" ;
         Text [ dutch ] = "$(ERR) bij het laden van een afbeelding" ;
         Text [ swedish ] = "$(ERR) vid laddning av en grafik." ;
-        Text [ danish ] = "$(ERR) under indlæsning af et billede." ;
+        Text [ danish ] = "$(ERR) under indlæsning af en grafik." ;
         Text [ portuguese ] = "$(ERR) ao carregar imagem." ;
         Text [ portuguese_brazilian ] = "$(ERR) beim Laden einer Grafik." ;
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÔØÒ»¸öÍ¼ÐÎÊ±¡£";
@@ -413,7 +413,7 @@ Resource RID_SVXERRCODE
         Text [ french ] = "Impossible de trouver le fichier §(ARG1)." ;
         Text [ dutch ] = "Afbeelding $(ARG1) niet gevonden." ;
         Text [ swedish ] = "Grafiken $(ARG1) kunde inte hittas." ;
-        Text [ danish ] = "Det var ikke muligt at finde billedet $(ARG1)." ;
+        Text [ danish ] = "Det var ikke muligt at finde grafiken $(ARG1)." ;
         Text [ portuguese_brazilian ] = "Die Grafik $(ARG1) konnte nicht gefunden werden." ;
         Text [ portuguese ] = "Foi impossível encontrar a imagem $(ARG1)." ;
         Text[ chinese_simplified ] = "ÎÞ·¨ÕÒµ½Í¼ÐÎ $(ARG1)¡£";
