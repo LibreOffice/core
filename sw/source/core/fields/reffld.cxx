@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:32:25 $
+ *  last change: $Author: tl $ $Date: 2002-06-18 14:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,8 +687,8 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
     {
         OUString sTmp;
         rAny >>= sTmp;
-        ConvertProgrammaticToUIName();
         SetPar1(sTmp);
+        ConvertProgrammaticToUIName();
     }
     break;
     case FIELD_PROP_PAR3:
