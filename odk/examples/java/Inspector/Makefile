@@ -93,5 +93,5 @@ endif
 register: $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute
-	@echo java -classpath $(subst \\,\,$(DK_CLASSPATH)) Test
+	@echo java -classpath $(subst \\,\,$(DK_CLASSPATH)) Test $(OSEP)Connection$(CSEP)
 	@echo --------------------------------------------------------------------------------
