@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyaggregation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:57:46 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 15:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,16 @@ namespace comphelper
         if ( xFactory.is() )
         {
             m_xProxyAggregate = xFactory->createProxy( _rxComponent );
+            if ( m_xProxyAggregate.is() )
+                m_xProxyAggregate->queryAggregation( ::getCppuType( &m_xProxyTypeAccess ) ) >>= m_xProxyTypeAccess;
 
             // aggregate the proxy
             osl_incrementInterlockedCount( &_rRefCount );
             if ( m_xProxyAggregate.is() )
             {
-                // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
-                // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
+                // At this point in time, the proxy has a ref count of exactly two - in m_xControlContextProxy,
+                // and in m_xProxyTypeAccess.
+                // Remember to _not_ reset these members unless the delegator of the proxy has been reset, too!
                 m_xProxyAggregate->setDelegator( _rDelegator );
             }
             osl_decrementInterlockedCount( &_rRefCount );
@@ -124,10 +127,8 @@ namespace comphelper
         Sequence< Type > aTypes;
         if ( m_xProxyAggregate.is() )
         {
-            Reference< XTypeProvider > xTypes;
-            m_xProxyAggregate->queryAggregation( ::getCppuType( &xTypes ) ) >>= xTypes;
-            if ( xTypes.is() )
-                aTypes = xTypes->getTypes();
+            if ( m_xProxyTypeAccess.is() )
+                aTypes = m_xProxyTypeAccess->getTypes();
         }
         return aTypes;
     }
@@ -138,7 +139,8 @@ namespace comphelper
         if ( m_xProxyAggregate.is() )
             m_xProxyAggregate->setDelegator( NULL );
         m_xProxyAggregate.clear();
-            // this should remove the _one_and_only_ "real" reference (means not delegated to
+        m_xProxyTypeAccess.clear();
+            // this should remove the _two_only_ "real" references (means not delegated to
             // ourself) to this proxy, and thus delete it
     }
 
