@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: os $ $Date: 2002-08-30 10:23:52 $
+#   last change: $Author: rt $ $Date: 2003-04-08 15:33:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ CXXFILES = \
         prtopt.cxx \
         uinums.cxx \
         usrpref.cxx \
-        viewopt.cxx
+        viewopt.cxx \
+        swlinguconfig.cxx
 
 SRCFILES =	\
         optdlg.src \
@@ -110,7 +111,8 @@ SLOFILES =	\
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
-        $(SLO)$/viewopt.obj
+        $(SLO)$/viewopt.obj \
+        $(SLO)$/swlinguconfig.obj
 
 # --- Targets -------------------------------------------------------
 
