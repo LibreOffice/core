@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:03:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,16 +352,16 @@ void FmFormObj::SetPage(SdrPage* _pNewPage)
 //------------------------------------------------------------------
 sal_uInt32 FmFormObj::GetObjInventor()   const
 {
-    if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-        return SdrInventor;
+//BFS01 if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
+//BFS01     return SdrInventor;
     return FmFormInventor;
 }
 
 //------------------------------------------------------------------
 sal_uInt16 FmFormObj::GetObjIdentifier() const
 {
-    if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
-        return OBJ_RECT;
+//BFS01 if( GetModel() && ((FmFormModel*)GetModel())->IsStreamingOldVersion() )
+//BFS01     return OBJ_RECT;
     return OBJ_FM_CONTROL;
 }
 
@@ -517,25 +517,25 @@ void FmFormObj::operator= (const SdrObject& rObj)
 }
 
 //------------------------------------------------------------------
-void FmFormObj::WriteData(SvStream& rOut) const
-{
-    FmFormModel* pModel = (FmFormModel*)GetModel();
-    if( pModel && pModel->IsStreamingOldVersion() )
-    {
-        SdrLayerID nOld = GetLayer();
-        ((FmFormObj*)this)->NbcSetLayer( pModel->GetControlExportLayerId( *this ) );
-        SdrUnoObj::WriteData( rOut );
-        ((FmFormObj*)this)->NbcSetLayer( nOld );
-        return;
-    }
-    SdrUnoObj::WriteData(rOut);
-}
+//BFS01void FmFormObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 FmFormModel* pModel = (FmFormModel*)GetModel();
+//BFS01 if( pModel && pModel->IsStreamingOldVersion() )
+//BFS01 {
+//BFS01     SdrLayerID nOld = GetLayer();
+//BFS01     ((FmFormObj*)this)->NbcSetLayer( pModel->GetControlExportLayerId( *this ) );
+//BFS01     SdrUnoObj::WriteData( rOut );
+//BFS01     ((FmFormObj*)this)->NbcSetLayer( nOld );
+//BFS01     return;
+//BFS01 }
+//BFS01 SdrUnoObj::WriteData(rOut);
+//BFS01}
 
 //------------------------------------------------------------------
-void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    SdrUnoObj::ReadData(rHead,rIn);
-}
+//BFS01void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 SdrUnoObj::ReadData(rHead,rIn);
+//BFS01}
 
 //------------------------------------------------------------------
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
