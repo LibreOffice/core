@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:20:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ hindi ] = "स्तंभो को दिखाओ";
     Text[ slovak ] = "Zobraziť stĺpce";
 };
+
 
 
 
