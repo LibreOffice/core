@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:11:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
 
 void ScXMLTableScenarioContext::EndElement()
 {
-    sal_Int16   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
+    SCTAB   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
     ScDocument* pDoc = GetScImport().GetDocument();
     if (pDoc)
     {
