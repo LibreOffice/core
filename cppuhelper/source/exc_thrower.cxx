@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 12:55:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "uno/dispatcher.hxx"
 #include "uno/mapping.hxx"
 #include "cppu/XExceptionThrower.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
