@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-16 13:17:51 $
+#   last change: $Author: vg $ $Date: 2002-09-16 14:17:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.63 $ ';
+$id_str = ' $Revision: 1.64 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -446,8 +446,9 @@ sub CorrectPath {
 };
 
 sub check_dmake {
-    my $dmake = `which dmake`;
-    &print_error("dmake - no such file or directory") if (!-x $dmake);
+    my $dmake_exe = `which dmake`;
+    chomp $dmake_exe;
+    &print_error("dmake - no such file or directory") unless -x $dmake_exe;
 };
 
 #
