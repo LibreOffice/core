@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 14:04:19 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 07:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,12 +565,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                 String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
-                Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-                if(xTask.is())
-                {
-                    xTask->close();
-                    throw SQLException();
-                }
+                throw SQLException();
             }
         }
 
@@ -609,14 +604,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                         bClose = aDlg.Execute() == RET_NO;
                     }
                     if(bClose)
-                    {
-                        Reference<XTask> xTask(m_xCurrentFrame,UNO_QUERY);
-                        if(xTask.is())
-                        {
-                            xTask->close();
-                            throw SQLException();
-                        }
-                    }
+                        throw Exception();
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:30:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 07:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,7 +357,6 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
             }
-            closeTask();
             throw SQLException();
         }
     }
@@ -370,7 +369,6 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
             OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
             aDlg.Execute();
         }
-        closeTask();
         throw SQLException();
     }
     if(!m_bRelationsPossible)
