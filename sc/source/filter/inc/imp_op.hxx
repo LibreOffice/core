@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:55:05 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ protected:
                                             // Achtung: rUnconvertedText wird moeglicherweise veraendert
 
 public:
-                            ImportExcel( SvStream&, ScDocument*, const String& rDocUrl );
+                            ImportExcel( SvStream&, XclBiff, ScDocument*, const String& rDocUrl );
 
     virtual                 ~ImportExcel( void );
 
