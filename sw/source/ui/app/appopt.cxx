@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:16:59 $
+ *  last change: $Author: os $ $Date: 2001-03-22 10:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@
 
 #ifndef _OPTPAGE_HXX //autogen
 #include <optpage.hxx>
-#endif
-#ifndef _OPTINS_HXX
-#include <optins.hxx>
 #endif
 #ifndef _OPTLOAD_HXX
 #include <optload.hxx>
@@ -572,6 +569,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/22 09:16:59  os
+    options dialog changes
+
     Revision 1.5  2001/02/09 07:56:41  os
     TabPage size changed
 
