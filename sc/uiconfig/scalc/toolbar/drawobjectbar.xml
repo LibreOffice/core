@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="helpid:10126" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="helpid:10143" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="helpid:10301" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="helpid:10169" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="helpid:10171" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:helpid="helpid:10172" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="helpid:10142" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="helpid:10164" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="helpid:10129" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:26412" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:helpid="helpid:10283" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="helpid:10282" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130" toolbar:text="" />
+</toolbar:toolbar>
