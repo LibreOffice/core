@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:58:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,7 +866,7 @@ public:
     TYPEINFO();
     FmXTextCell( DbGridColumn* pColumn, DbCellControl* pControl )
         :FmXDataCell( pColumn, pControl )
-        ,m_bFastPaint( sal_False )
+        ,m_bFastPaint( sal_True )
     {
     }
 
