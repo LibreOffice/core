@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:38:28 $
+ *  last change: $Author: tl $ $Date: 2000-10-12 11:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,7 +1035,8 @@ SwView::~SwView()
 
 SwDocShell* SwView::GetDocShell()
 {
-    return PTR_CAST(SwDocShell, GetViewFrame()->GetObjectShell());
+    SfxObjectShell* pDocShell = GetViewFrame()->GetObjectShell();
+    return PTR_CAST(SwDocShell, pDocShell);
 }
 
 /*--------------------------------------------------------------------
