@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:12:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -803,12 +800,11 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
                         SwDoc* pDoc = rPam.GetDoc();
                         //default character style mustn't be set as default format
-                        if(sStyle.EqualsAscii("Standard"))
-                            throw lang::IllegalArgumentException();
                         SwDocStyleSheet* pStyle =
                             (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
                         SwFmtDrop* pDrop = 0;
-                        if(pStyle)
+                        if(pStyle &&
+                                ((SwDocStyleSheet*)pStyle)->GetCharFmt() != pDoc->GetDfltCharFmt())
                         {
                             const SfxPoolItem* pItem;
                             if(SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
