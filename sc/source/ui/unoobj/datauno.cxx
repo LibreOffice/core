@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:28:38 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 10:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,7 +1099,6 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
         aField.IsNumeric     = !rEntry.bQueryByString;
         aField.StringValue   = aStringValue;
         aField.NumericValue  = rEntry.nVal;
-        pAry[i] = aField;
 
         switch (rEntry.eOp)             // ScQueryOp
         {
@@ -1134,6 +1133,7 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
                 DBG_ERROR("Falscher Filter-enum");
                 aField.Operator = sheet::FilterOperator_EMPTY;
         }
+        pAry[i] = aField;
     }
     return aSeq;
 }
