@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:17:02 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,11 +416,11 @@ WarningBox STR_RECOVER_PREPARED
     Message [ portuguese ] = "Surgiu um erro irrecuperável. Contudo, todos os ficheiros \nmodificados foram guardados e poderão provavelmente \nser recuperados ao reiniciar o programa." ;
     Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
     Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
-    Message [ swedish ] = "Ett icke reparerbart fel har uppträtt.\n\nAlla ändrade filer sparades\noch kan förmodligen återupprättas\nvid nästa programstart." ;
+    Message [ swedish ] = "Ett irreparabelt fel har uppstått.\n\nMen alla ändrade filer sparades\noch kan förmodligen återställas\nvid nästa programstart." ;
     Message [ danish ] = "Der opstod en irreparabel fejl.\n\nAlle ændrede filer er dog\nblevet gemt og kan sandsynligvis gendannes\nved næste programstart." ;
     Message [ italian ] = "Si è verificato un errore irrimediabile.\n\nTutti i file modificati sono stati \nsalvati e probabilmente verranno recuperati \nal prossimo avvio del programma." ;
     Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa." ;
-    Message [ french ] = "Une erreur fatale est survenue.\n\nTous les fichiers édités ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
+    Message [ french ] = "Une erreur irrécupérable s'est produite.\n\nTous les fichiers édités ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
     Message [ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden." ;
     Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
     Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
@@ -852,7 +852,7 @@ String GID_TEMPLATE
     Text[ dutch ] = "Sjablonen";
     Text[ chinese_simplified ] = "ÑùÊ½";
     Text[ greek ] = "Ğñüôõğá";
-    Text[ korean ] = "ÅÛÇÃ¸®Æ®";
+    Text[ korean ] = "ÅÛÇÃ¸´";
     Text[ turkish ] = "Şablon";
     Text[ language_user1 ] = " ";
 };
@@ -1460,55 +1460,55 @@ QueryBox MSG_IS_SERVER
 
 String STR_NODOUBLE
 {
-    TEXT = "StarOffice kann nicht mehrfach gestartet werden." ;
+    TEXT = "%PRODUCTNAME kann nicht mehrfach gestartet werden." ;
     TEXT [ English ] = "StarOffice cannot be started multiply." ;
-    Text [ english_us ] = "StarOffice cannot be started more than once." ;
-    Text [ portuguese_brazilian ] = "StarOffice Applikationen können nicht mehrfach\ngestartet werden." ;
-    Text [ swedish ] = "StarOffice kan inte startas flera gånger samtidigt." ;
-    Text [ danish ] = "Det er ikke muligt at starte StarOffice flere gange." ;
-    Text [ italian ] = "StarOffice non può essere avviato più volte" ;
-    Text [ spanish ] = "StarOffice no se puede iniciar más de una vez." ;
-    Text [ french ] = "Impossible de lancer plusieurs applications de \nStarOffice à la fois." ;
-    Text [ dutch ] = "StarOffice kan maar één keer tegelijk worden gestart." ;
-    Text [ portuguese ] = "O StarOffice não pode ser inicializado mais do que uma vez." ;
-    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ StarOffice ¡£";
-    Text[ russian ] = "Ìíîãîêğàòíûé çàïóñê StarOffice íåâîçìîæåí.";
-    Text[ polish ] = "StarOffice nie mo¿na kilkakrotnie uruchomiæ.";
-    Text[ japanese ] = "StarOffice‚Í ‰½‰ñ‚à½À°Ä‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "µLªk¦P®É¦h¦¸±Ò°ÊStarOffice¡C";
-    Text[ arabic ] = "áÇ íãßä ÈÏÁ StarOffice ÃßËÑ ãä ãÑÉ.";
-    Text[ dutch ] = "StarOffice kan maar één keer tegelijk worden gestart.";
-    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ StarOffice ¡£";
-    Text[ greek ] = "Ç äéáäéêáóßá åêêßíçóçò ôïõ StarOffice äåí ìğïñåß íá ğñáãìáôïğïéçèåß ğåñéóóüôåñåò áğü ìéá öïñÜ.";
-    Text[ korean ] = "StarOffice´Â ÇÑ¹øÀÌ»ó ½ÃÀÛµÇÁö ¸øÇÕ´Ï´Ù .";
-    Text[ turkish ] = "StarOffice için birden fazla oturum açılamaz.";
+    Text [ english_us ] = "%PRODUCTNAME cannot be started more than once." ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Applikationen können nicht mehrfach\ngestartet werden." ;
+    Text [ swedish ] = "%PRODUCTNAME kan inte startas flera gånger samtidigt." ;
+    Text [ danish ] = "Det er ikke muligt at starte %PRODUCTNAME flere gange." ;
+    Text [ italian ] = "%PRODUCTNAME non può essere avviato più volte" ;
+    Text [ spanish ] = "%PRODUCTNAME no se puede iniciar más de una vez." ;
+    Text [ french ] = "Impossible de lancer plusieurs applications de \n%PRODUCTNAME à la fois." ;
+    Text [ dutch ] = "%PRODUCTNAME kan maar één keer tegelijk worden gestart." ;
+    Text [ portuguese ] = "O %PRODUCTNAME não pode ser inicializado mais do que uma vez." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ %PRODUCTNAME ¡£";
+    Text[ russian ] = "Ìíîãîêğàòíûé çàïóñê %PRODUCTNAME íåâîçìîæåí.";
+    Text[ polish ] = "%PRODUCTNAME nie mo¿na kilkakrotnie uruchomiæ.";
+    Text[ japanese ] = "%PRODUCTNAME‚Í ‰½‰ñ‚à½À°Ä‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¦P®É¦h¦¸±Ò°Ê%PRODUCTNAME¡C";
+    Text[ arabic ] = "áÇ íãßä ÈÏÁ %PRODUCTNAME ÃßËÑ ãä ãÑÉ.";
+    Text[ dutch ] = "%PRODUCTNAME kan maar één keer tegelijk worden gestart.";
+    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ %PRODUCTNAME ¡£";
+    Text[ greek ] = "Ç äéáäéêáóßá åêêßíçóçò ôïõ %PRODUCTNAME äåí ìğïñåß íá ğñáãìáôïğïéçèåß ğåñéóóüôåñåò áğü ìéá öïñÜ.";
+    Text[ korean ] = "%PRODUCTNAME´Â ÇÑ¹øÀÌ»ó ½ÃÀÛµÇÁö ¸øÇÕ´Ï´Ù .";
+    Text[ turkish ] = "%PRODUCTNAME için birden fazla oturum açılamaz.";
     Text[ language_user1 ] = " ";
 };
 
 String STR_NOPRINTER
 {
-    TEXT = "Einige StarOffice-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    TEXT = "Einige %PRODUCTNAME-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
     TEXT [ English ] = "Some StarOffice functions are not available without printer driver.\nPlease install a priter driver." ;
-    Text [ english_us ] = "Some StarOffice functions will not work properly without a printer driver.\nPlease install a printer driver." ;
-    Text [ swedish ] = "Några StarOffice-funktioner kan inte arbeta korrekt utan en skrivardrivrutin.\nVar vänlig och installera en skrivardrivrutin." ;
-    Text [ danish ] = "Enkelte StarOffice-funktioner kanl ikke arbejde korrekt uden en printerdriver.\nInstaller venligst en printerdriver." ;
-    Text [ italian ] = "Alcune funzioni StarOffice non funzionano correttamente senza il driver stampante.\nInstallatene uno." ;
-    Text [ spanish ] = "Algunas funciones de StarOffice no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno." ;
-    Text [ french ] = "Certaines fonctions StarOffice ne peuvent pas travailler correctement sans pilote d'imprimante.\nVeuillez installer un pilote d'imprimante." ;
-    Text [ dutch ] = "Enkele StarOffice-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver." ;
-    Text [ portuguese_brazilian ] = "Einige StarOffice-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
-    Text [ portuguese ] = "Algumas das funções do StarOffice não podem funcionar correctamente sem um controlador de impressora.\nFaça a respectiva instalação." ;
-    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©StarOffice¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
-    Text[ russian ] = "Áåç äğàéâåğà ïå÷àòè íåêîòîğûå ôóíêöèè StarOffice ìîãóò íåïğàâèëüíî ğàáîòàòü.\nÈíñòàëëèğóéòå, ïîæàëóéñòà, äğàéâåğ ïå÷àòè.";
-    Text[ polish ] = "Niektóre funkcje w StarOffice nie mog¹ poprawnie pracowaæ bez sterownika drukarki.\nZainstaluj sterownik drukarki.";
-    Text[ japanese ] = "StarOffice ‚Ì‚¢‚­‚Â‚©‚Ì‹@”\\‚Í ÌßØİÀ ÄŞ×²ÌŞ‚È‚µ‚Å³‚µ‚­‹N“®‚µ‚Ü‚¹‚ñB\nÌßØİÀ ÄŞ×²ÊŞ‚ğ²İ½Ä°Ù‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¦C¦LÅX°Êµ{¦¡¡M¤@¨ÇStarOffice¥\\¯à¹BÂà¤£·|¥¿±`¡C\n½Ğ±z¦w¸Ë¤@­Ó¦C¦LÅX°Êµ{¦¡¡C";
-    Text[ arabic ] = "áÇ íãßä ÊÔÛíá ÈÚÖ ãåÇã StarOffice ÈÔßá ÕÍíÍ ÈÏæä ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.\náåĞÇ íÑÌì ÊËÈíÊ ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.";
-    Text[ dutch ] = "Enkele StarOffice-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
-    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©StarOffice¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
-    Text[ greek ] = "Ìåñéêİò áğü ôéò ëåéôïõñãßåò ôïõ StarOffice äåí èá ëåéôïõñãŞóïõí óùóôÜ ÷ùñßò ôï ğñüãñáììá ïäŞãçóçò ôïõ åêôõğùôŞ.\nĞáñáêáëş íá ãßíåé åãêáôÜóôáóç åíüò ğñïãñÜììáôïò ïäŞãçóçò åêôõğùôŞ.";
-    Text[ korean ] = "¸î¸îÀÇ  StarOffice ±â´ÉÀº ÇÁ¸°ÅÍ µå¶óÀÌ¹ö ¾øÀÌ´Â ÀûÀıÈ÷ ÀÛµ¿µÇÁö ¾Ê½À´Ï´Ù.\nÇÁ¸°ÅÍ µå¶óÀÌ¹ö¸¦ ¼³Ä¡ ÇÏ½Ê½Ã¿À.";
-    Text[ turkish ] = "Bazı StarOffice işlevleri yazıcı sürücüsü olmadan doğru çalışamaz.\nBir yazıcı sürücüsü kurun.";
+    Text [ english_us ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver." ;
+    Text [ swedish ] = "Några %PRODUCTNAME-funktioner kan inte arbeta korrekt utan en skrivardrivrutin.\nVar vänlig och installera en skrivardrivrutin." ;
+    Text [ danish ] = "Enkelte %PRODUCTNAME-funktioner kanl ikke arbejde korrekt uden en printerdriver.\nInstaller venligst en printerdriver." ;
+    Text [ italian ] = "Alcune funzioni %PRODUCTNAME non funzionano correttamente senza il driver stampante.\nInstallatene uno." ;
+    Text [ spanish ] = "Algunas funciones de %PRODUCTNAME no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno." ;
+    Text [ french ] = "Certaines fonctions %PRODUCTNAME ne peuvent pas travailler correctement sans pilote d'imprimante.\nVeuillez installer un pilote d'imprimante." ;
+    Text [ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver." ;
+    Text [ portuguese_brazilian ] = "Einige %PRODUCTNAME-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    Text [ portuguese ] = "Algumas das funções do %PRODUCTNAME não podem funcionar correctamente sem um controlador de impressora.\nFaça a respectiva instalação." ;
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©%PRODUCTNAME¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
+    Text[ russian ] = "Áåç äğàéâåğà ïå÷àòè íåêîòîğûå ôóíêöèè %PRODUCTNAME ìîãóò íåïğàâèëüíî ğàáîòàòü.\nÈíñòàëëèğóéòå, ïîæàëóéñòà, äğàéâåğ ïå÷àòè.";
+    Text[ polish ] = "Niektóre funkcje w %PRODUCTNAME nie mog¹ poprawnie pracowaæ bez sterownika drukarki.\nZainstaluj sterownik drukarki.";
+    Text[ japanese ] = "%PRODUCTNAME ‚Ì‚¢‚­‚Â‚©‚Ì‹@”\\‚Í ÌßØİÀ ÄŞ×²ÌŞ‚È‚µ‚Å³‚µ‚­‹N“®‚µ‚Ü‚¹‚ñB\nÌßØİÀ ÄŞ×²ÊŞ‚ğ²İ½Ä°Ù‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¦C¦LÅX°Êµ{¦¡¡M¤@¨Ç%PRODUCTNAME¥\\¯à¹BÂà¤£·|¥¿±`¡C\n½Ğ±z¦w¸Ë¤@­Ó¦C¦LÅX°Êµ{¦¡¡C";
+    Text[ arabic ] = "áÇ íãßä ÊÔÛíá ÈÚÖ ãåÇã %PRODUCTNAME ÈÔßá ÕÍíÍ ÈÏæä ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.\náåĞÇ íÑÌì ÊËÈíÊ ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.";
+    Text[ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©%PRODUCTNAME¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
+    Text[ greek ] = "Ìåñéêİò áğü ôéò ëåéôïõñãßåò ôïõ %PRODUCTNAME äåí èá ëåéôïõñãŞóïõí óùóôÜ ÷ùñßò ôï ğñüãñáììá ïäŞãçóçò ôïõ åêôõğùôŞ.\nĞáñáêáëş íá ãßíåé åãêáôÜóôáóç åíüò ğñïãñÜììáôïò ïäŞãçóçò åêôõğùôŞ.";
+    Text[ korean ] = "¸î¸îÀÇ  %PRODUCTNAME ±â´ÉÀº ÇÁ¸°ÅÍ µå¶óÀÌ¹ö ¾øÀÌ´Â ÀûÀıÈ÷ ÀÛµ¿µÇÁö ¾Ê½À´Ï´Ù.\nÇÁ¸°ÅÍ µå¶óÀÌ¹ö¸¦ ¼³Ä¡ ÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bazı %PRODUCTNAME işlevleri yazıcı sürücüsü olmadan doğru çalışamaz.\nBir yazıcı sürücüsü kurun.";
     Text[ language_user1 ] = " ";
 };
 
@@ -1516,26 +1516,26 @@ String STR_NOMODUL
 {
     TEXT = "Applikationsmodule können nicht als Applikationen\ngestartet werden, wenn der StarDesktop aktiv ist." ;
     TEXT [ English ] = "Application modules may not be started\nif StarDesktop is active." ;
-    Text [ english_us ] = "Application modules may not be started\n when StarOffice Desktop is active." ;
-    Text [ italian ] = "Se lo StarOffice Desktop è attivo i moduli applicativi\n non possono essere avviati come apllicazioni." ;
-    Text [ spanish ] = "Los módulos de aplicación no pueden ser\niniciados como aplicaciones si el escritorio (StarOffice Desktop) está activo." ;
-    Text [ french ] = "Impossible de démarrer les modules d'application comme applications,\n si le StarOffice Desktop est actif." ;
+    Text [ english_us ] = "Application modules may not be started\n when %PRODUCTNAME Desktop is active." ;
+    Text [ italian ] = "Se lo %PRODUCTNAME Desktop è attivo i moduli applicativi\n non possono essere avviati come apllicazioni." ;
+    Text [ spanish ] = "Los módulos de aplicación no pueden ser\niniciados como aplicaciones si el escritorio (%PRODUCTNAME Desktop) está activo." ;
+    Text [ french ] = "Impossible de démarrer les modules d'application comme applications,\n si le %PRODUCTNAME Desktop est actif." ;
     Text [ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is." ;
-    Text [ swedish ] = "Tillämpningsmoduler kan inte startas som\ntillämpningar när StarOffice Desktop är aktiv." ;
-    Text [ danish ] = "Det er ikke muligt at starte applikationsmoduler som applikationer,\når StarOffice Desktop er aktiv." ;
-    Text [ portuguese_brazilian ] = "Applikationsmodule können nicht als Applikationen\ngestartet werden, wenn der StarOffice Desktop aktiv ist." ;
-    Text [ portuguese ] = "Impossível iniciar os módulos como aplicações quando o StarOffice Desktop se encontra activo." ;
-    Text[ chinese_simplified ] = "Èç¹ûStarOffice Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
+    Text [ swedish ] = "Tillämpningsmoduler kan inte startas som\ntillämpningar när %PRODUCTNAME Desktop är aktiv." ;
+    Text [ danish ] = "Det er ikke muligt at starte applikationsmoduler som applikationer,\når %PRODUCTNAME Desktop er aktiv." ;
+    Text [ portuguese_brazilian ] = "Applikationsmodule können nicht als Applikationen\ngestartet werden, wenn der %PRODUCTNAME Desktop aktiv ist." ;
+    Text [ portuguese ] = "Impossível iniciar os módulos como aplicações quando o %PRODUCTNAME Desktop se encontra activo." ;
+    Text[ chinese_simplified ] = "Èç¹û%PRODUCTNAME Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
     Text[ russian ] = "Çàïóñê ìîäóëåé ïğèëîæåíèÿ â êà÷åñòâå ïğèëîæåíèé íåâîçìîæåí,\nåñëè àêòèâèğîâàí StarDesktoğ.";
-    Text[ polish ] = "Modu³y aplikacji nie mog¹ zostaæ uruchomione jako aplikacje\n, jeœli jest w³¹czony pulpit StarOffice Desktop.";
-    Text[ japanese ] = "StarOffice Desktop ‚ª±¸Ã¨ÌŞ‚Ì‚Æ‚«‚ÍA±ÌßØ¹°¼®İ‚Æ‚µ‚Ä±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ğ\nŠJn‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¦bStarOffice Desktop³B¤_¿E¬¡ª¬ºA®É\n¡MÀ³¥Îµ{§Çªº¼Ò¶ô¤£¯à°÷·í§@À³¥Îµ{¦¡±Ò°Ê¹B¦æ¡C";
-    Text[ arabic ] = "áÇ íãßä ÈÏÁ æÍÏÇÊ ÇáÊØÈíŞÇÊ ÇáäãØíÉ ßÊØÈíŞÇÊ¡\nÅĞÇ ßÇä StarOffice Desktop äÔØÇğ.";
+    Text[ polish ] = "Modu³y aplikacji nie mog¹ zostaæ uruchomione jako aplikacje\n, jeœli jest w³¹czony pulpit %PRODUCTNAME Desktop.";
+    Text[ japanese ] = "%PRODUCTNAME Desktop ‚ª±¸Ã¨ÌŞ‚Ì‚Æ‚«‚ÍA±ÌßØ¹°¼®İ‚Æ‚µ‚Ä±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ğ\nŠJn‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦b%PRODUCTNAME Desktop³B¤_¿E¬¡ª¬ºA®É\n¡MÀ³¥Îµ{§Çªº¼Ò¶ô¤£¯à°÷·í§@À³¥Îµ{¦¡±Ò°Ê¹B¦æ¡C";
+    Text[ arabic ] = "áÇ íãßä ÈÏÁ æÍÏÇÊ ÇáÊØÈíŞÇÊ ÇáäãØíÉ ßÊØÈíŞÇÊ¡\nÅĞÇ ßÇä %PRODUCTNAME Desktop äÔØÇğ.";
     Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
-    Text[ chinese_simplified ] = "Èç¹ûStarOffice Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôïıí ïé ëåéôïõñãéêİò ìïíÜäåò åöáñìïãşí\nüôáí åßíáé åíåñãïğïéçìİíï ôï StarOffice Desktop.";
-    Text[ korean ] = "StarOffice µ¥½ºÅ© Å¾ÀÌ È°¼ºÈ­ µÇ¾îÀÖÀ¸¸é.\n ÀÀ¿ëÇÁ·Î±×·¥ ¸ğµâÀº ÀÀ¿ëÇÁ·Î±×·¥ \n·Î¼­ ½ÃÀÛ µÉ ¼ö ¾ø½À´Ï´Ù.";
-    Text[ turkish ] = "Uygulama modülleri, StarOffice masaüstü etkinken uygulama olarak\nçalıştırılamaz.";
+    Text[ chinese_simplified ] = "Èç¹û%PRODUCTNAME Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôïıí ïé ëåéôïõñãéêİò ìïíÜäåò åöáñìïãşí\nüôáí åßíáé åíåñãïğïéçìİíï ôï %PRODUCTNAME Desktop.";
+    Text[ korean ] = "%PRODUCTNAME ¹ÙÅÁÈ­¸éÀÌ È°¼ºÈ­µÇ¾î ÀÖÀ¸¸é.\n ÀÀ¿ëÇÁ·Î±×·¥ ¸ğµâÀº ÀÀ¿ëÇÁ·Î±×·¥ \n·Î¼­ ½ÃÀÛµÉ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Uygulama modülleri, %PRODUCTNAME masaüstü etkinken uygulama olarak\nçalıştırılamaz.";
     Text[ language_user1 ] = " ";
 };
 
@@ -1543,26 +1543,26 @@ String STR_NOOFFICE
 {
     TEXT = "Der StarDesktop kann nicht gestartet werden,\nwenn das StarWriter Applikationsmodul als\nApplikation gestartet wurde." ;
     TEXT [ English ] = "StarDesktop  may not be started if StarWriter\napplication module is active in application mode\n" ;
-    Text [ english_us ] = "StarOffice Desktop cannot be started if the StarOffice Writer\napplication module has been started\nas an application." ;
-    Text [ italian ] = "Se il modulo di applicazione StarOffice Writer è stato avviato\ncome applicazione non è possibile\navviare lo StarOffice Desktop." ;
-    Text [ spanish ] = "No se pude iniciar el escritorio\nsi se ha iniciado StarOffice Writer\ncomo aplicación." ;
-    Text [ french ] = "Impossible de lancer le StarOffice Desktop,\nsi le module d'application StarOffice Writer a été lancé\ncomme application." ;
-    Text [ dutch ] = "StarOffice Desktop kan niet worden gestart\nals een StarOffice Writer applicatiemodule als\napplicatie werd gestart." ;
-    Text [ swedish ] = "StarOffice Desktop kan inte startas\nnär StarOffice Writer-tillämpningsmodulen\nhar startats som tillämpning." ;
-    Text [ danish ] = "Det er ikke muligt at starte StarOffice Desktop,\nnår StarOffice Writer applikationsmodulet er blevet startet \nsom applikation." ;
-    Text [ portuguese_brazilian ] = "Der StarOffice Desktop kann nicht gestartet werden,\nwenn das StarOffice Writer Applikationsmodul als\nApplikation gestartet wurde." ;
-    Text [ portuguese ] = "Impossível iniciar o StarOffice Desktop quando o módulo da\naplicação StarOffice Writer é iniciado\ncomo aplicação." ;
-    Text[ chinese_simplified ] = "ÔÚStarOffice WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯StarOffice Desktop ¡£";
-    Text[ russian ] = "Çàïóñòèòü StarOffice Desktop íåâîçìîæíî,\nåñëè ìîäóëü ïğèëîæåíèÿ StarOffice Writer çàïóùåí â êà÷åñòâå\nïğèëîæåíèÿ.";
-    Text[ polish ] = "Pulpitu StarOffice Desktop nie mo¿na uruchomiæ, \njeœli modu³ aplikacji StarOffice Writer \nzosta³ uruchomiony jako aplikacja.";
-    Text[ japanese ] = "StarOffice Writer ±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ª\n±ÌßØ¹°¼®İ‚Æ‚µ‚ÄŠJn‚³‚ê‚Ä‚¢‚é‚ÍA\nStarOffice Desktop‚ÍŠJn‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¦bStarOffice WriterÀ³¥Îµ{¦¡¼Ò¶ô³Q·í§@\nÀ³¥Îµ{¦¡±Ò°Ê¹B¦æ®ÉµLªk±Ò°ÊStarOffice Desktop¡C";
-    Text[ arabic ] = "áÇ íãßäß ÈÏÁ StarOffice Desktop¡\nÅĞÇ ßäÊ ŞÏ ÈÏÃÊ æÍÏÉ ÇáÊØÈíŞ ÇáäãØíÉ áÜ StarOffice Writer ŞÈá Ğáß\nßÊØÈíŞ.";
-    Text[ dutch ] = "StarOffice Desktop kan niet worden gestart\nals een StarOffice Writer applicatiemodule als\napplicatie werd gestart.";
-    Text[ chinese_simplified ] = "ÔÚStarOffice WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯StarOffice Desktop ¡£";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêêéíŞóåé ôï StarOffice Desktop\náí åêêßíçóå ç ëåéôïõñãéêŞ ìïíÜäá ôçò åöáñìïãŞò\n ôïõ StarOffice Writer ùò åöáñíïãŞ.";
-    Text[ korean ] = "StarOffice WriterÀÀ¿ë ÇÁ·Î±×·¥ ¸ğµâÀÌ\n ÀÀ¿ëÇÁ·Î±×·¥À¸·Î¼­ ½ÃÀÛµÇ¾ú´Ù¸é,\n StarOffice µ¥½ºÅ© Å¾Àº ½ÃÀÛ µÉ¼ö ¾ø½À´Ï´Ù.";
-    Text[ turkish ] = "StarOffice masaüstü, StarOffice Writer uygulama modulü\nuygulama olarak çalıştırılmışsa başlatılamaz.";
+    Text [ english_us ] = "%PRODUCTNAME Desktop cannot be started if the %PRODUCTNAME Writer\napplication module has been started\nas an application." ;
+    Text [ italian ] = "Se il modulo di applicazione %PRODUCTNAME Writer è stato avviato\ncome applicazione non è possibile\navviare lo %PRODUCTNAME Desktop." ;
+    Text [ spanish ] = "No se pude iniciar el escritorio\nsi se ha iniciado %PRODUCTNAME Writer\ncomo aplicación." ;
+    Text [ french ] = "Impossible de lancer le %PRODUCTNAME Desktop,\nsi le module d'application %PRODUCTNAME Writer a été lancé\ncomme application." ;
+    Text [ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart." ;
+    Text [ swedish ] = "%PRODUCTNAME Desktop kan inte startas\nnär %PRODUCTNAME Writer-tillämpningsmodulen\nhar startats som tillämpning." ;
+    Text [ danish ] = "Det er ikke muligt at starte %PRODUCTNAME Desktop,\nnår %PRODUCTNAME Writer applikationsmodulet er blevet startet \nsom applikation." ;
+    Text [ portuguese_brazilian ] = "Der %PRODUCTNAME Desktop kann nicht gestartet werden,\nwenn das %PRODUCTNAME Writer Applikationsmodul als\nApplikation gestartet wurde." ;
+    Text [ portuguese ] = "Impossível iniciar o %PRODUCTNAME Desktop quando o módulo da\naplicação %PRODUCTNAME Writer é iniciado\ncomo aplicação." ;
+    Text[ chinese_simplified ] = "ÔÚ%PRODUCTNAME WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯%PRODUCTNAME Desktop ¡£";
+    Text[ russian ] = "Çàïóñòèòü %PRODUCTNAME Desktop íåâîçìîæíî,\nåñëè ìîäóëü ïğèëîæåíèÿ %PRODUCTNAME Writer çàïóùåí â êà÷åñòâå\nïğèëîæåíèÿ.";
+    Text[ polish ] = "Pulpitu %PRODUCTNAME Desktop nie mo¿na uruchomiæ, \njeœli modu³ aplikacji %PRODUCTNAME Writer \nzosta³ uruchomiony jako aplikacja.";
+    Text[ japanese ] = "%PRODUCTNAME Writer ±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ª\n±ÌßØ¹°¼®İ‚Æ‚µ‚ÄŠJn‚³‚ê‚Ä‚¢‚é‚ÍA\n%PRODUCTNAME Desktop‚ÍŠJn‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦b%PRODUCTNAME WriterÀ³¥Îµ{¦¡¼Ò¶ô³Q·í§@\nÀ³¥Îµ{¦¡±Ò°Ê¹B¦æ®ÉµLªk±Ò°Ê%PRODUCTNAME Desktop¡C";
+    Text[ arabic ] = "áÇ íãßäß ÈÏÁ %PRODUCTNAME Desktop¡\nÅĞÇ ßäÊ ŞÏ ÈÏÃÊ æÍÏÉ ÇáÊØÈíŞ ÇáäãØíÉ áÜ %PRODUCTNAME Writer ŞÈá Ğáß\nßÊØÈíŞ.";
+    Text[ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart.";
+    Text[ chinese_simplified ] = "ÔÚ%PRODUCTNAME WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯%PRODUCTNAME Desktop ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêêéíŞóåé ôï %PRODUCTNAME Desktop\náí åêêßíçóå ç ëåéôïõñãéêŞ ìïíÜäá ôçò åöáñìïãŞò\n ôïõ %PRODUCTNAME Writer ùò åöáñíïãŞ.";
+    Text[ korean ] = "%PRODUCTNAME WriterÀÀ¿ë ÇÁ·Î±×·¥ ¸ğµâÀÌ\n ÀÀ¿ëÇÁ·Î±×·¥À¸·Î¼­ ½ÃÀÛµÇ¾ú´Ù¸é,\n %PRODUCTNAME µ¥½ºÅ© Å¾Àº ½ÃÀÛ µÉ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "%PRODUCTNAME masaüstü, %PRODUCTNAME Writer uygulama modulü\nuygulama olarak çalıştırılmışsa başlatılamaz.";
     Text[ language_user1 ] = " ";
 };
 
@@ -1933,7 +1933,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend als gevolg van ongeldige filedescriptor.";
     Text[ chinese_simplified ] = "ÒòÎŞĞ§µÄÎÄ¼ş±êÊ¶Öµ¶øÎŞ·¨´ò¿ªÎÄ¼ş $(FILE) ¡£";
     Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï áñ÷åßï $(FILE) ëüãù ìŞ İãêõñïõ ÷åéñéóìïı ôïõ áñ÷åßïõ.";
-    Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº  ÆÄÀÏ ÇÚµé·Î ÀÎÇØ, ÆÄÀÏ $(FILE) °¡(ÀÌ) ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº  ÆÄÀÏ ÇÚµé·Î ÀÎÇØ, ÆÄÀÏ $(FILE) À»(¸¦) ¿­Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "$(FILE) dosyası geçersiz bir dosya tutamacı nedeniyle açılamadı.";
     Text[ language_user1 ] = " ";
 };
@@ -2576,7 +2576,7 @@ String STR_ERR_NOTEMPLATE
     Text[ dutch ] = "De geselecteerde sjabloon heeft een verkeerd formaat";
     Text[ chinese_simplified ] = "ÑùÊ½¸ñÊ½´íÎó¡£";
     Text[ greek ] = "Ôï ğñüôõğï İ÷åé ëÜèïò ìïñöŞ";
-    Text[ korean ] = "¼±ÅÃµÈ ÅÛÇÃ¸®Æ®´Â Àß¸øµÈ ¼­½ÄÀ» °¡Áö°í ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "¼±ÅÃµÈ ÅÛÇÃ¸´Àº Æ²¸°  ¼­½ÄÀ» °¡Áö°í ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Seçilen şablonun formatı yanlış";
     Text[ language_user1 ] = " ";
 };
@@ -3251,7 +3251,7 @@ String RID_SPECIALCONFIG_ERROR
     Text[ dutch ] = "In de speciale configuratie is een fout opgetreden. Wendt u zich s.v.p. aan uw administrator!";
     Text[ chinese_simplified ] = "ÔÚÒ»¸öÌØÊâµÄÅäÖÃÎÄ¼şÄÚ·¢ÏÖÒ»¸ö´íÎó¡£\nÇëºÍÄúµÄ¹ÜÀíÔ±ÁªÏµ£¡";
     Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá óôçí åéäéêŞ äéáìüñöùóç.\nĞáñáêáëş áğåõèõíèåßôå óôïí äéá÷åéñéóôŞ ôïõ äéêôıïõ!";
-    Text[ korean ] = "Æ¯¼ö ÄÁÇÇ±Ô·¹ÀÌ¼Ç¿¡¼­ ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù.°ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ã±â ¹Ù¶ø´Ï´Ù !";
+    Text[ korean ] = "Æ¯¼ö ÄÁÇÇ±Ô·¹ÀÌ¼Ç¿¡¼­ ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù.°ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ê½Ã¿À !";
     Text[ turkish ] = "Özel konfigürasyonda bir hata bulundu.\nLütfen sistem yöneticinize başvurun!";
 };
 
@@ -3419,7 +3419,7 @@ String STR_KEY_CONFIG_DIR
     Text [ english_us ] = "Configuration" ;
     Text[ chinese_simplified ] = "ÅäÖÃ";
     Text[ russian ] = "Êîíôèãóğàöèÿ";
-    Text[ polish ] = "Ustawienia";
+    Text[ polish ] = "Konfiguracje";
     Text[ japanese ] = "İ’è";
     Text[ chinese_traditional ] = "°t¸m";
     Text[ arabic ] = "Êßæíä";
@@ -3454,7 +3454,7 @@ String STR_KEY_WORK_PATH
     Text[ dutch ] = "Werkmap";
     Text[ chinese_simplified ] = "¹¤×÷Ä¿Â¼";
     Text[ greek ] = "ÊáôÜëïãïò åñãáóßáò";
-    Text[ korean ] = "³» ¹®¼­";
+    Text[ korean ] = "ÀÛ¾÷ µğ·ºÅä¸®";
     Text[ turkish ] = "Çalışma dizini";
     Text[ language_user1 ] = " ";
 };
@@ -3529,7 +3529,7 @@ String STR_KEY_DATABASE_PATH
     Text [ french ] = "Interrogations de B.D." ;
     Text [ swedish ] = "Databasförfrågningar" ;
     Text [ dutch ] = "Database query's" ;
-    Text [ spanish ] = "Consulta de base de datos" ;
+    Text [ spanish ] = "Consultas de base de datos" ;
     Text [ english_us ] = "Database Queries" ;
     Text[ chinese_simplified ] = "²éÑ¯Êı¾İ¿â";
     Text[ russian ] = "Çàïğîñû áàçû äàííûõ";
@@ -3641,7 +3641,7 @@ String STR_KEY_TEMPLATE_PATH
     Text [ french ] = "Modèles de document" ;
     Text [ swedish ] = "Dokumentmallar" ;
     Text [ dutch ] = "Sjablonen" ;
-    Text [ spanish ] = "Plantilla de documento" ;
+    Text [ spanish ] = "Plantillas de documento" ;
     Text [ english_us ] = "Templates" ;
     Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
     Text[ russian ] = "Øàáëîíû äîêóìåíòà";
@@ -3722,7 +3722,7 @@ String STR_KEY_HELP_DIR
     Text [ portuguese_brazilian ] = "Hilfedateien" ;
     Text[ chinese_simplified ] = "°ïÖúÎÄ¼ş";
     Text[ russian ] = "Ôàéëû ñïğàâêè";
-    Text[ polish ] = "Pliki pomocy";
+    Text[ polish ] = "Pliki Pomocy";
     Text[ japanese ] = "ÍÙÌßÌ§²Ù";
     Text[ chinese_traditional ] = "»¡©úÀÉ®×";
     Text[ arabic ] = "ãáİÇÊ ÇáãÓÇÚÏÉ";
@@ -3781,7 +3781,7 @@ String STR_KEY_NEW_DIR
     Text[ dutch ] = "Standaardsjablonen";
     Text[ chinese_simplified ] = "±ê×¼ÑùÊ½";
     Text[ greek ] = "Ğñüôõğá ğñïåğéëïãŞò";
-    Text[ korean ] = "±âº» ¼­½Ä";
+    Text[ korean ] = "±âº» ÅÛÇÃ¸´";
     Text[ turkish ] = "Standart şablonlar";
     Text[ language_user1 ] = " ";
 };
@@ -3826,14 +3826,14 @@ String STR_KEY_STORAGE_DIR
     Text [ dutch ] = "Geheugen voor berichten" ;
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
     Text[ russian ] = "Íàêîïèòåëü ñîîáùåíèé";
-    Text[ polish ] = "Pamiêæ wiadomoœci";
+    Text[ polish ] = "Pamiêæ Poczty/Wiadomoœci";
     Text[ japanese ] = "Ò¯¾°¼Ş—pÒÓØ";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó/·s»DÀx¦sÅé";
     Text[ arabic ] = "ÍİÙ ÇáÃÎÈÇÑ";
     Text[ dutch ] = "Geheugen voor berichten";
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
     Text[ greek ] = "Óôïé÷åßï áğïèŞêåõóçò ìçíõìÜôùí";
-    Text[ korean ] = "¿ìÆí/´º½º ÀúÀåÀå¼Ò";
+    Text[ korean ] = "¸ŞÀÏ/´º½º  ÀúÀåÀå¼Ò";
     Text[ turkish ] = "İleti depolama alanı";
     Text[ language_user1 ] = " ";
 };
@@ -3852,7 +3852,7 @@ String STR_KEY_AUTOPILOT_DIR
     Text [ dutch ] = "AutoPiloot" ;
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí";
     Text[ russian ] = "Àâòîïèëîòû";
-    Text[ polish ] = "Autopiloci";
+    Text[ polish ] = "AutoPiloci";
     Text[ japanese ] = "µ°ÄÊß²Û¯Ä";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z";
     Text[ arabic ] = "ãÑÔÏæä Âáíæä";
@@ -3885,7 +3885,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ dutch ] = "Plugins directory";
     Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
     Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õğïìïíÜäùí";
-    Text[ korean ] = "ÇÃ·¯±× ÀÎ µğ·ºÅä¸®";
+    Text[ korean ] = "ÇÃ·¯±×ÀÎ-µğ·ºÅä¸®";
     Text[ turkish ] = "Plug-In dizini";
 };
 String STR_KEY_FAVORITES_DIR
@@ -3906,7 +3906,7 @@ String STR_KEY_FAVORITES_DIR
     Text[ polish ] = "Zak³adki folderu";
     Text[ portuguese_brazilian ] = "User directories";
     Text[ japanese ] = "Ì«ÙÀŞ‚ÌÌŞ¯¸Ï°¸";
-    Text[ korean ] = "Æú´õ Ã¥°¥ÇÇ";
+    Text[ korean ] = "Æú´õ-Ã¥°¥ÇÇ";
     Text[ chinese_simplified ] = "ÎÄ¼ş¼ĞÊéÇ©";
     Text[ chinese_traditional ] = "¸ê®Æ§¨®ÑÅÒ";
     Text[ arabic ] = "ÅÔÇÑÇÊ ãÑÌÚíÉ áãÌáÏÇÊ";
@@ -3950,7 +3950,7 @@ String STR_KEY_ADDINS_PATH
     Text[ russian ] = "AddIns";
     Text[ italian ] = "AddIns";
     Text[ danish ] = "Add-Ins";
-    Text[ polish ] = "AddIns";
+    Text[ polish ] = "Add-Ins";
     Text[ portuguese_brazilian ] = "AddIns";
     Text[ japanese ] = "±ÄŞ²İ";
     Text[ korean ] = "¾ÖµåÀÎ";
@@ -4044,7 +4044,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ italian ] = "Linguistica";
     Text[ danish ] = "Lingvistik";
     Text[ swedish ] = "Lingvistik";
-    Text[ polish ] = "Lingwistyka";
+    Text[ polish ] = "Pisownia";
     Text[ portuguese_brazilian ] = "Linguistic";
     Text[ japanese ] = "Œ¾Œê";
     Text[ korean ] = "¾ğ¾î";
