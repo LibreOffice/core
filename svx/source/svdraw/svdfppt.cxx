@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-19 11:20:13 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,7 +1286,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             aSet.Put( SdrTextMinFrameHeightItem( nMinFrameHeight ) );
             pTObj->SetModel( pSdrModel );
 
-//-/            pTObj->NbcSetAttributes( aSet, FALSE );
             pTObj->SetItemSet(aSet);
 
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
@@ -2742,9 +2741,6 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
                                                             void* pPtr;
                                                             const SfxPoolItem* pPoolItem = NULL;
 
-//-/                                                            SfxItemSet aSourceAttr( pSdrModel->GetItemPool() );
-//-/                                                            pBackGroundObj->TakeAttributes( aSourceAttr, FALSE, TRUE );
-//-/                                                            SfxItemState eState = aSourceAttr.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
                                                             SfxItemState eState = pBackGroundObj->GetItemSet().GetItemState(XATTR_FILLCOLOR, FALSE, &pPoolItem);
 
                                                             if ( pPoolItem )
@@ -2752,10 +2748,6 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
                                                                 for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
                                                                 {
                                                                     ((SdrObject*)pPtr)->SetItem(*pPoolItem);
-//-/                                                                    SfxItemSet aTempAttr( pSdrModel->GetItemPool() );
-//-/                                                                    ((SdrObject*)pPtr)->TakeAttributes( aTempAttr, FALSE, TRUE );
-//-/                                                                    aTempAttr.Put( *pPoolItem );
-//-/                                                                    ((SdrObject*)pPtr)->NbcSetAttributes( aTempAttr, FALSE );
                                                                 }
                                                             }
                                                         }
@@ -3060,7 +3052,6 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         pRet = new SdrRectObj( aRect );
         pRet->SetModel( pSdrModel );
 
-//-/        pRet->NbcSetAttributes( *pSet, FALSE );
         pRet->SetItemSet(*pSet);
 
         pRet->SetMarkProtect( TRUE );

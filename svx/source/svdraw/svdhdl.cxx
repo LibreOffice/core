@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,8 +852,6 @@ IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, pHdl)
 void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL bUndo)
 {
     // from IAO positions and colors to gradient
-//-/    SfxItemSet aSet(pObj->GetModel()->GetItemPool());
-//-/    pObj->TakeAttributes(aSet, FALSE, FALSE);
     const SfxItemSet& rSet = pObj->GetItemSet();
 
     GradTransformer aGradTransformer;
@@ -903,10 +901,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* pObj, BOOL bSetItemOnObject, BOOL 
             pModel->EndUndo();
         }
 
-//-/        pObj->SetAttributes(aNewSet, FALSE);
-//-/        SdrBroadcastItemChange aItemChange(*pObj);
         pObj->SetItemSetAndBroadcast(aNewSet);
-//-/        pObj->BroadcastItemChange(aItemChange);
     }
 
     // back transformation, set values on pIAOHandle
@@ -1144,8 +1139,6 @@ BOOL ImpEdgeHdl::IsHorzDrag() const
     if (pEdge==NULL) return FALSE;
     if (nObjHdlNum<=1) return FALSE;
 
-//-/    SdrEdgeKind eKind=SDREDGE_ORTHOLINES;
-//-/    if (pEdge->pEdgeAttr!=NULL) eKind=((SdrEdgeKindItem&)(pEdge->pEdgeAttr->GetItemSet().Get(SDRATTR_EDGEKIND))).GetValue();
     SdrEdgeKind eKind = ((SdrEdgeKindItem&)(pEdge->GetItem(SDRATTR_EDGEKIND))).GetValue();
 
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;

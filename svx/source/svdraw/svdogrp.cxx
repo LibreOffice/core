@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-12 17:03:53 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,64 +1348,7 @@ void SdrObjGroup::SetRelativePos(const Point& rPnt)
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//-/void SdrObjGroup::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    const SfxItemSet* pAttr=&rAttr;
-//-/    //
-//-/    //SfxItemSet aSet(rAttr);
-//-/    //pAttr=&aSet;
-//-/    //for (USHORT nWhich=SDRATTR_NOTPERSIST_FIRST; nWhich<=SDRATTR_NOTPERSIST_LAST; nWhich++) {
-//-/    //    aSet.InvalidateItem(nWhich);
-//-/    //}
-//-/
-//-/    if (!IsLinkedGroup()) {
-//-/        SdrObjList* pOL=pSub;
-//-/        ULONG nObjAnz=pOL->GetObjCount();
-//-/        for (ULONG i=0; i<nObjAnz; i++) {
-//-/            pOL->GetObj(i)->NbcSetAttributes(*pAttr,bReplaceAll);
-//-/        }
-//-/    }
-//-/
-//-/    // NbcApplyNotPersistAttr(rAttr);
-//-/}
-
-//-/void SdrObjGroup::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    if (!IsLinkedGroup()) {
-//-/        SdrObjList* pOL=pSub;
-//-/        ULONG nObjAnz=pOL->GetObjCount();
-//-/        for (ULONG i=0; i<nObjAnz; i++) {
-//-/            pOL->GetObj(i)->SetAttributes(rAttr,bReplaceAll);
-//-/        }
-//-/    }
-//-/}
-
-//-/void SdrObjGroup::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/    SdrObjList* pOL=pSub;
-//-/    ULONG nObjAnz=pOL->GetObjCount();
-//-/    for (ULONG i=0; i<nObjAnz; i++) {
-//-/        pOL->GetObj(i)->TakeAttributes(rAttr,TRUE,bOnlyHardAttr);
-//-/    }
-//-/
-//-/    //if (bMerge) {
-//-/        // NotPersist-Items erstmal mit Put, damit die Werte der Sub-Objekte ueberschrieben werden
-//-/        // Todo: Muss mit den urspruenglichen Werten Gemerged werden!
-//-/    //}
-//-/    // TakeNotPersistAttr(rAttr,FALSE);
-//-/}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// groups may contain 3d objects(?)
-//-/SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
-//-/{
-//-/    return new SfxItemSet(rPool,
-//-/        SDRATTR_START,  SDRATTR_END,
-//-/        SID_ATTR_3D_START, SID_ATTR_3D_END,
-//-/        0, 0);
-//-/}
+// ItemSet access
 
 const SfxItemSet& SdrObjGroup::GetItemSet() const
 {
@@ -1441,42 +1384,40 @@ const SfxItemSet& SdrObjGroup::GetItemSet() const
     return *mpGroupItemSet;
 }
 
-void SdrObjGroup::SetItem( const SfxPoolItem& rItem )
-{
-    if(!IsLinkedGroup())
-    {
-        sal_uInt32 nCount(pSub->GetObjCount());
-        for(sal_uInt32 a(0); a < nCount; a++)
-            pSub->GetObj(a)->SetItem( rItem );
-    }
-}
-
-void SdrObjGroup::ClearItem( USHORT nWhich )
-{
-    if(!IsLinkedGroup())
-    {
-        sal_uInt32 nCount(pSub->GetObjCount());
-        for(sal_uInt32 a(0); a < nCount; a++)
-            pSub->GetObj(a)->ClearItem( nWhich );
-    }
-}
-
-void SdrObjGroup::SetItemSet( const SfxItemSet& rSet )
-{
-    if(!IsLinkedGroup())
-    {
-        sal_uInt32 nCount(pSub->GetObjCount());
-        for(sal_uInt32 a(0); a < nCount; a++)
-            pSub->GetObj(a)->SetItemSet( rSet );
-    }
-}
-
 SfxItemSet* SdrObjGroup::CreateNewItemSet(SfxItemPool& rPool)
 {
     // include ALL items
     return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// private support routines for ItemSet access
+
+void SdrObjGroup::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    if(!IsLinkedGroup())
+    {
+        // ItemChange at all contained objects
+        List aPostItemChangeList;
+        sal_uInt32 nCount(pSub->GetObjCount());
+
+        for(sal_uInt32 a(0); a < nCount; a++)
+        {
+            SdrObject* pObj = pSub->GetObj(a);
+            if(pObj->AllowItemChange(nWhich, pNewItem))
+            {
+                pObj->ItemChange(nWhich, pNewItem);
+                aPostItemChangeList.Insert((void*)pObj, LIST_APPEND);
+            }
+        }
+
+        for(a = 0; a < aPostItemChangeList.Count(); a++)
+        {
+            SdrObject* pObj = (SdrObject*)aPostItemChangeList.GetObject(a);
+            pObj->PostItemChange(nWhich);
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // pre- and postprocessing for objects for saving
@@ -1506,16 +1447,6 @@ void SdrObjGroup::PostSave()
             pSub->GetObj(a)->PostSave();
     }
 }
-
-//-/void SdrObjGroup::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
-//-/{
-//-/    if(!IsLinkedGroup())
-//-/    {
-//-/        sal_uInt32 nCount(pSub->GetObjCount());
-//-/        for(sal_uInt32 a(0); a < nCount; a++)
-//-/            pSub->GetObj(a)->BroadcastItemChange(rOldRect);
-//-/    }
-//-/}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-01 18:11:49 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,222 +245,15 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
     }
 }
 
-//-/void SdrTextObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    SfxItemSet aAttr( rAttr );
-//-/
-//-/    BOOL bCreateLRSpaceItems = FALSE;
-//-/
-//-/    if ( aAttr.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_ON )
-//-/    {
-//-/        // SvxLRSpaceItem hart gesetzt: SvxNumBulletItem anpassen
-//-/        SfxItemSet aSet( *aAttr.GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE, 0 );
-//-/        TakeAttributes( aSet, TRUE, TRUE);
-//-/
-//-/        if ( aSet.GetItemState( EE_PARA_LRSPACE ) != SFX_ITEM_ON ||
-//-/            ((const SvxLRSpaceItem&) aSet.Get( EE_PARA_LRSPACE )) !=
-//-/            ((const SvxLRSpaceItem&) aAttr.Get( EE_PARA_LRSPACE )) )
-//-/        {
-//-/            SvxNumBulletItem* pNumBullet = NULL;
-//-/
-//-/            if ( aAttr.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-//-/                pNumBullet = new SvxNumBulletItem( (const SvxNumBulletItem&) aAttr.Get(EE_PARA_NUMBULLET) );
-//-/            else
-//-/            {
-//-/                pNumBullet = new SvxNumBulletItem( (const SvxNumBulletItem&) aSet.Get(EE_PARA_NUMBULLET) );
-//-/
-//-/                if( eTextKind == OBJ_OUTLINETEXT &&
-//-/                    pNumBullet->GetNumRule()->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING )
-//-/                {
-//-/                    // Das ist das 10er-Item aus den Defaults.
-//-/                    // Dieses darf bei Gliederungsobjekten nicht verwendet werden!
-//-/                    // Daher wird das Item aus der Vorlage geholt
-//-/                    delete pNumBullet;
-//-/                    pNumBullet = NULL;
-//-/
-//-/                    if( GetStyleSheet() &&
-//-/                        GetStyleSheet()->GetItemSet().GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-//-/                        pNumBullet = new SvxNumBulletItem( (const SvxNumBulletItem&) GetStyleSheet()->GetItemSet().Get(EE_PARA_NUMBULLET) );
-//-/                }
-//-/            }
-//-/
-//-/            if( pNumBullet )
-//-/            {
-//-/                USHORT nLevel = 0;
-//-/                if( pNumBullet->GetNumRule()->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING )
-//-/                    nLevel = 1;
-//-/
-//-/                EditEngine::ImportBulletItem( *pNumBullet, nLevel, NULL,
-//-/                                              &(const SvxLRSpaceItem&) aAttr.Get( EE_PARA_LRSPACE ) );
-//-/                ( (SfxItemSet&) aAttr).Put( *pNumBullet );
-//-/
-//-/                delete pNumBullet;
-//-/            }
-//-/            else
-//-/                DBG_ASSERT(FALSE, "SdrTextObj::NbcSetAttributes: SvxNumBulletItem nicht angepasst!");
-//-/        }
-//-/    }
-//-/    else if ( aAttr.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
-//-/    {
-//-/        // SvxNumBulletItem hart gesetzt: SvxLRSpaceItem anpassen
-//-/        SfxItemSet aSet( *aAttr.GetPool(), EE_PARA_NUMBULLET, EE_PARA_NUMBULLET, 0 );
-//-/        TakeAttributes( aSet, TRUE, TRUE);
-//-/
-//-/        if ( aSet.GetItemState( EE_PARA_NUMBULLET ) != SFX_ITEM_ON ||
-//-/            ((const SvxNumBulletItem&) aSet.Get( EE_PARA_NUMBULLET )) !=
-//-/            ((const SvxNumBulletItem&) aAttr.Get( EE_PARA_NUMBULLET )) )
-//-/        {
-//-/            SvxLRSpaceItem aLRSpace( (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE) );
-//-/            USHORT nLevel = 0;
-//-/            if( eTextKind == OBJ_OUTLINETEXT )
-//-/                nLevel = 1;
-//-/
-//-/            if ( Outliner::CreateLRSpaceItem( (const SvxNumBulletItem&) aAttr.Get( EE_PARA_NUMBULLET ), nLevel, aLRSpace ) )
-//-/                ( (SfxItemSet&) aAttr).Put( aLRSpace );
-//-/
-//-/            bCreateLRSpaceItems = TRUE;
-//-/        }
-//-/    }
-//-/
-//-/    if ( aAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) == SFX_ITEM_ON )
-//-/    {
-//-/        // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-//-/        SendRepaintBroadcast();
-//-/
-//-/        if(IsTextEditActive())
-//-/        {
-//-/            // Text wird gerade editiert, zusaetzlich redraw auf EditText
-//-/            const EditEngine& rEditEng = pEdtOutl->GetEditEngine();
-//-/            for(UINT16 a=0;a<rEditEng.GetViewCount();a++)
-//-/            {
-//-/                EditView* pEdView = rEditEng.GetView(a);
-//-/
-//-/                if(pEdView)
-//-/                {
-//-/                    pEdView->Invalidate();
-//-/                }
-//-/            }
-//-/        }
-//-/    }
-//-/
-//-/    SdrAttrObj::NbcSetAttributes(aAttr,bReplaceAll);
-//-/    FASTBOOL bGrowChecked=FALSE;
-//-/    // Attribute auf den gesamten Text anwenden
-//-/    if (pOutlinerParaObject!=NULL)
-//-/    {
-//-/        if ((pEdtOutl==NULL || bCreateLRSpaceItems) && !IsLinkedText())
-//-/        {
-//-/            // #46762# Sonderbehandlung fuer bReplaceAll
-//-/            if (SearchOutlinerItems(aAttr,bReplaceAll))
-//-/            {
-//-/                Outliner* pOutliner;
-//-/                if(pEdtOutl == NULL)
-//-/                {
-//-/                    pOutliner = &ImpGetDrawOutliner();
-//-/                    pOutliner->SetText(*pOutlinerParaObject);
-//-/                }
-//-/                else
-//-/                {
-//-/                    pOutliner = pEdtOutl;
-//-/                }
-//-/                USHORT nParaCount=(USHORT)pOutliner->GetParagraphCount();
-//-/                if (nParaCount!=0)
-//-/                {
-//-/                    for (USHORT nPara=0; nPara<nParaCount; nPara++)
-//-/                    {
-//-/                        // Neue Attribute mit alten (bereits vorhandenen) mergen
-//-/                        SfxItemSet aTmpSet(pOutliner->GetParaAttribs(nPara));
-//-/
-//-/                        SvxLRSpaceItem aLRSpace( (const SvxLRSpaceItem&) aTmpSet.Get(EE_PARA_LRSPACE) );
-//-/
-//-/                        if(pEdtOutl==NULL)
-//-/                        {
-//-/                            if(bReplaceAll)
-//-/                            {
-//-/                                // #46762#: bReplaceAll beachten
-//-/                                SfxWhichIter aIter(aAttr);
-//-/                                USHORT nWh=aIter.FirstWhich();
-//-/                                while (nWh!=0)
-//-/                                {
-//-/                                    if (nWh>=EE_ITEMS_START && nWh<=EE_ITEMS_END)
-//-/                                    {
-//-/                                        SfxItemState eState=aAttr.GetItemState(nWh,FALSE);
-//-/                                        if (eState==SFX_ITEM_DEFAULT) aTmpSet.ClearItem(nWh);
-//-/                                    }
-//-/                                    nWh=aIter.NextWhich();
-//-/                                }
-//-/                            }
-//-/                            aTmpSet.Put(aAttr,FALSE); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
-//-/                        }
-//-/
-//-/                        if(bCreateLRSpaceItems)
-//-/                        {
-//-/                            const INT16 nLevel = pOutliner->GetDepth( nPara );
-//-/
-//-/                            if ( Outliner::CreateLRSpaceItem( (const SvxNumBulletItem&) aAttr.Get( EE_PARA_NUMBULLET ), nLevel, aLRSpace ) )
-//-/                                aTmpSet.Put( aLRSpace );
-//-/                        }
-//-/
-//-/                        pOutliner->SetParaAttribs(nPara,aTmpSet);
-//-/
-//-/                        if(pEdtOutl==NULL)
-//-/                        {
-//-/                            // Fuer alle hinzugekommenen Attribute:
-//-/                            // entsprechende CharAttribs entfernen.
-//-/                            if (bReplaceAll)
-//-/                            {
-//-/                                if( aAttr.Count() == 0 && aTmpSet.Count() == 0 )
-//-/                                {
-//-/                                    // Format -> Standard
-//-/                                    pOutliner->QuickRemoveCharAttribs(nPara, 0);
-//-/                                }
-//-/                                else
-//-/                                {
-//-/                                    SfxItemIter aIter( aTmpSet );
-//-/                                    const SfxPoolItem* pItem = aIter.FirstItem();
-//-/                                    while ( pItem )
-//-/                                    {
-//-/                                        if ( !IsInvalidItem(pItem) )
-//-/                                        {
-//-/                                            USHORT nW = pItem->Which();
-//-/                                            if ( nW >= EE_CHAR_START && nW <= EE_CHAR_END )
-//-/                                                pOutliner->QuickRemoveCharAttribs( nPara, nW );
-//-/                                        }
-//-/
-//-/                                        pItem=aIter.NextItem();
-//-/                                    }
-//-/                                }
-//-/                            }
-//-/                        }
-//-/                    }
-//-/                    if(pEdtOutl == NULL)
-//-/                    {
-//-/                        OutlinerParaObject* pTemp=pOutliner->CreateParaObject( 0, nParaCount );
-//-/                        pOutliner->Clear();
-//-/                        NbcSetOutlinerParaObject(pTemp);
-//-/                    }
-//-/                    bGrowChecked=TRUE;
-//-/                }
-//-/            }
-//-/        }
-//-/
-//-/        // #36989#: AutoGrow auch bei TextEdit
-//-/        if (bTextFrame && !bGrowChecked)
-//-/        {
-//-/            NbcAdjustTextFrameWidthAndHeight();
-//-/            bGrowChecked=TRUE;
-//-/        }
-//-/    }
-//-/}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// private support routines for ItemSet access
 
-void SdrTextObj::SetItem( const SfxPoolItem& rItem )
+void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
 {
     // handle outliner attributes
     if(pOutlinerParaObject)
     {
-        if(rItem.Which() >= EE_CHAR_START && rItem.Which() <= EE_CHAR_END)
+        if(nWhich >= EE_CHAR_START && nWhich <= EE_CHAR_END)
         {
             Outliner* pOutliner;
 
@@ -477,67 +270,25 @@ void SdrTextObj::SetItem( const SfxPoolItem& rItem )
             sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
             for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
             {
-                SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                aSet.Put(rItem);
-                pOutliner->SetParaAttribs(nPara, aSet);
-            }
-
-            if(!pEdtOutl)
-            {
-                if(nParaCount)
-                {
-                    SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                    ImpForceItemSet();
-                    mpObjectItemSet->Put(aNewSet);
-                }
-
-                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
-                pOutliner->Clear();
-                NbcSetOutlinerParaObject(pTemp);
-            }
-        }
-    }
-
-    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-    if(rItem.Which() == SDRATTR_TEXT_CONTOURFRAME)
-        SendRepaintBroadcast();
-
-    // call parent
-    SdrAttrObj::SetItem(rItem);
-}
-
-void SdrTextObj::ClearItem( USHORT nWhich )
-{
-    // handle outliner attributes
-    if(pOutlinerParaObject)
-    {
-        if(!nWhich || (nWhich >= EE_CHAR_START && nWhich <= EE_CHAR_END))
-        {
-            Outliner* pOutliner;
-
-            if(!pEdtOutl)
-            {
-                pOutliner = &ImpGetDrawOutliner();
-                pOutliner->SetText(*pOutlinerParaObject);
-            }
-            else
-            {
-                pOutliner = pEdtOutl;
-            }
-
-            sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
-            for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
-            {
-                if(nWhich)
+                if(pNewItem)
                 {
                     SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                    aSet.ClearItem(nWhich);
+                    aSet.Put(*pNewItem);
                     pOutliner->SetParaAttribs(nPara, aSet);
                 }
                 else
                 {
-                    pOutliner->SetParaAttribs(nPara, pOutliner->GetEmptyItemSet());
-                    pOutliner->QuickRemoveCharAttribs(nPara, 0);
+                    if(nWhich)
+                    {
+                        SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+                        aSet.ClearItem(nWhich);
+                        pOutliner->SetParaAttribs(nPara, aSet);
+                    }
+                    else
+                    {
+                        pOutliner->SetParaAttribs(nPara, pOutliner->GetEmptyItemSet());
+                        pOutliner->QuickRemoveCharAttribs(nPara, 0);
+                    }
                 }
             }
 
@@ -555,277 +306,19 @@ void SdrTextObj::ClearItem( USHORT nWhich )
                 NbcSetOutlinerParaObject(pTemp);
             }
         }
-    }
 
-    // call parent
-    SdrAttrObj::ClearItem(nWhich);
-}
-
-void SdrTextObj::SetItemSet(const SfxItemSet& rSet)
-{
-    // handle outliner attributes
-    if(pOutlinerParaObject)
-    {
-        Outliner* pOutliner;
-
-        if(!pEdtOutl)
-        {
-            pOutliner = &ImpGetDrawOutliner();
-            pOutliner->SetText(*pOutlinerParaObject);
-        }
-        else
-        {
-            pOutliner = pEdtOutl;
-        }
-
-        sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
-        for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
-        {
-            SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-            aSet.Put(rSet);
-            pOutliner->SetParaAttribs(nPara, aSet);
-        }
-
-        if(!pEdtOutl)
-        {
-            if(nParaCount)
-            {
-                SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                ImpForceItemSet();
-                mpObjectItemSet->Put(aNewSet);
-            }
-
-            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
-            pOutliner->Clear();
-            NbcSetOutlinerParaObject(pTemp);
-        }
-    }
-
-    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-    if(SFX_ITEM_SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
-        SendRepaintBroadcast();
-
-    // call parent
-    SdrAttrObj::SetItemSet(rSet);
-}
-
-void SdrTextObj::ImpCheckItemSetChanges(const SfxItemSet& rAttr)
-{
-/*  BOOL bReplaceAll = TRUE;
-    BOOL bCreateLRSpaceItems(FALSE);
-    const SfxItemSet& rSet = GetItemSet();
-
-    if(SFX_ITEM_ON == rAttr.GetItemState(EE_PARA_LRSPACE))
-    {
-        // SvxLRSpaceItem hart gesetzt: SvxNumBulletItem anpassen
-        if(rSet.GetItemState(EE_PARA_LRSPACE) != SFX_ITEM_ON
-            || ((const SvxLRSpaceItem&)rSet.Get(EE_PARA_LRSPACE))
-                != ((const SvxLRSpaceItem&)rAttr.Get(EE_PARA_LRSPACE)))
-        {
-            SvxNumBulletItem* pNumBullet = NULL;
-
-            if(SFX_ITEM_ON == rAttr.GetItemState(EE_PARA_NUMBULLET))
-            {
-                pNumBullet = new SvxNumBulletItem((const SvxNumBulletItem&)rAttr.Get(EE_PARA_NUMBULLET));
-            }
-            else
-            {
-                pNumBullet = new SvxNumBulletItem((const SvxNumBulletItem&)rSet.Get(EE_PARA_NUMBULLET));
-
-                if(OBJ_OUTLINETEXT == eTextKind
-                    && pNumBullet->GetNumRule()->GetNumRuleType() != SVX_RULETYPE_PRESENTATION_NUMBERING)
-                {
-                    // Das ist das 10er-Item aus den Defaults.
-                    // Dieses darf bei Gliederungsobjekten nicht verwendet werden!
-                    // Daher wird das Item aus der Vorlage geholt
-                    delete pNumBullet;
-                    pNumBullet = NULL;
-
-                    if(GetStyleSheet()
-                        && SFX_ITEM_ON == GetStyleSheet()->GetItemSet().GetItemState(EE_PARA_NUMBULLET))
-                    {
-                        pNumBullet = new SvxNumBulletItem((const SvxNumBulletItem&)
-                            GetStyleSheet()->GetItemSet().Get(EE_PARA_NUMBULLET));
-                    }
-                }
-            }
-
-            if(pNumBullet)
-            {
-                sal_uInt16 nLevel(0);
-
-                if(pNumBullet->GetNumRule()->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
-                    nLevel = 1;
-
-                EditEngine::ImportBulletItem(*pNumBullet, nLevel, NULL,
-                    &(const SvxLRSpaceItem&)rAttr.Get(EE_PARA_LRSPACE));
-
-                ((SfxItemSet&)rAttr).Put(*pNumBullet);
-
-                delete pNumBullet;
-            }
-            else
-                DBG_ASSERT(FALSE, "SdrTextObj::NbcSetAttributes: SvxNumBulletItem nicht angepasst!");
-        }
-    }
-    else if(SFX_ITEM_ON == rAttr.GetItemState(EE_PARA_NUMBULLET))
-    {
-        // SvxNumBulletItem hart gesetzt: SvxLRSpaceItem anpassen
-        SfxItemSet aSet(*rAttr.GetPool(),
-            EE_PARA_NUMBULLET,  EE_PARA_NUMBULLET,
-            0, 0);
-        aSet.Put(rSet);
-
-        if(SFX_ITEM_ON != aSet.GetItemState(EE_PARA_NUMBULLET)
-            || ((const SvxNumBulletItem&)aSet.Get(EE_PARA_NUMBULLET))
-                != ((const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET)))
-        {
-            SvxLRSpaceItem aLRSpace((const SvxLRSpaceItem&)aSet.Get(EE_PARA_LRSPACE));
-            sal_uInt16 nLevel(0);
-
-            if(eTextKind == OBJ_OUTLINETEXT)
-                nLevel = 1;
-
-            if(Outliner::CreateLRSpaceItem((const SvxNumBulletItem&)rAttr.Get(EE_PARA_NUMBULLET), nLevel, aLRSpace))
-                ((SfxItemSet&)rAttr).Put(aLRSpace);
-
-            bCreateLRSpaceItems = TRUE;
-        }
-    }
-
-    if(rAttr.GetItemState(SDRATTR_TEXT_CONTOURFRAME) == SFX_ITEM_ON)
-    {
         // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-        SendRepaintBroadcast();
-
-        if(IsTextEditActive())
-        {
-            // Text wird gerade editiert, zusaetzlich redraw auf EditText
-            const EditEngine& rEditEng = pEdtOutl->GetEditEngine();
-            for(sal_uInt16 a(0); a < rEditEng.GetViewCount(); a++)
-            {
-                EditView* pEdView = rEditEng.GetView(a);
-                if(pEdView)
-                    pEdView->Invalidate();
-            }
-        }
+        if(nWhich == SDRATTR_TEXT_CONTOURFRAME)
+            SendRepaintBroadcast();
     }
 
-    BOOL bGrowChecked(FALSE);
-    // Attribute auf den gesamten Text anwenden
-    if(pOutlinerParaObject)
-    {
-        if((!pEdtOutl || bCreateLRSpaceItems) && !IsLinkedText())
-        {
-            // #46762# Sonderbehandlung fuer bReplaceAll
-            if(SearchOutlinerItems(rAttr, bReplaceAll))
-            {
-                Outliner* pOutliner;
-
-                if(!pEdtOutl)
-                {
-                    pOutliner = &ImpGetDrawOutliner();
-                    pOutliner->SetText(*pOutlinerParaObject);
-                }
-                else
-                {
-                    pOutliner = pEdtOutl;
-                }
-
-                sal_uInt16 nParaCount((USHORT)pOutliner->GetParagraphCount());
-
-                if(nParaCount)
-                {
-                    for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
-                    {
-                        // Neue Attribute mit alten (bereits vorhandenen) mergen
-                        SfxItemSet aTmpSet(pOutliner->GetParaAttribs(nPara));
-                        SvxLRSpaceItem aLRSpace((const SvxLRSpaceItem&)aTmpSet.Get(EE_PARA_LRSPACE));
-
-                        if(!pEdtOutl)
-                        {
-                            if(bReplaceAll)
-                            {
-                                // #46762#: bReplaceAll beachten
-                                SfxWhichIter aIter(rAttr);
-                                sal_uInt16 nWh(aIter.FirstWhich());
-
-                                while(nWh)
-                                {
-                                    if(nWh >= EE_ITEMS_START && nWh <= EE_ITEMS_END)
-                                    {
-                                        SfxItemState eState = rAttr.GetItemState(nWh, FALSE);
-                                        if(eState == SFX_ITEM_DEFAULT)
-                                            aTmpSet.ClearItem(nWh);
-                                    }
-                                    nWh = aIter.NextWhich();
-                                }
-                            }
-                            aTmpSet.Put(rAttr, FALSE); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
-                        }
-
-                        if(bCreateLRSpaceItems)
-                        {
-                            const sal_Int16 nLevel(pOutliner->GetDepth(nPara));
-
-                            if( Outliner::CreateLRSpaceItem((const SvxNumBulletItem&)rAttr.Get(EE_PARA_NUMBULLET), nLevel, aLRSpace))
-                                aTmpSet.Put(aLRSpace);
-                        }
-
-                        pOutliner->SetParaAttribs(nPara, aTmpSet);
-
-                        if(!pEdtOutl)
-                        {
-                            // Fuer alle hinzugekommenen Attribute:
-                            // entsprechende CharAttribs entfernen.
-                            if(bReplaceAll)
-                            {
-                                if(!rAttr.Count() && !aTmpSet.Count())
-                                {
-                                    // Format -> Standard
-                                    pOutliner->QuickRemoveCharAttribs(nPara, 0);
-                                }
-                                else
-                                {
-                                    SfxItemIter aIter(aTmpSet);
-                                    const SfxPoolItem* pItem = aIter.FirstItem();
-
-                                    while(pItem)
-                                    {
-                                        if (!IsInvalidItem(pItem))
-                                        {
-                                            sal_uInt16 nW(pItem->Which());
-
-                                            if(nW >= EE_CHAR_START && nW <= EE_CHAR_END)
-                                                pOutliner->QuickRemoveCharAttribs(nPara, nW);
-                                        }
-                                        pItem = aIter.NextItem();
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if(!pEdtOutl)
-                    {
-                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
-                        pOutliner->Clear();
-                        NbcSetOutlinerParaObject(pTemp);
-                    }
-
-                    bGrowChecked = TRUE;
-                }
-            }
-        }
-
-        // #36989#: AutoGrow auch bei TextEdit
-        if(bTextFrame && !bGrowChecked)
-        {
-            NbcAdjustTextFrameWidthAndHeight();
-            bGrowChecked = TRUE;
-        }
-    }*/
+    // call parent
+    SdrAttrObj::ItemChange(nWhich, pNewItem);
 }
+
+//void SdrTextObj::ImpCheckItemSetChanges(const SfxItemSet& rAttr)
+//{
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1121,8 +614,6 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
         if (nY>0xFFFF) nY=0xFFFF;
         if (nX!=100 || nY!=100)
         {
-//-/            if(mpObjectItemSet)
-//-/            {
             // Rahmenattribute
             const SfxItemSet& rSet = GetItemSet();
             const SvxFontWidthItem& rOldWdt=(SvxFontWidthItem&)rSet.Get(EE_CHAR_FONTWIDTH);
@@ -1151,12 +642,6 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             // und nun attributieren
             SetItem(SvxFontWidthItem((USHORT)nAbsWdt,(USHORT)nRelWdt));
             SetItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
-//-/                SdrOutlinerSetItem aNewOI(*pOutlAttr);
-//-/                SfxItemSet& rNewSet=aNewOI.GetItemSet();
-//-/                rNewSet.Put(SvxFontWidthItem((USHORT)nAbsWdt,(USHORT)nRelWdt));
-//-/                rNewSet.Put(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
-//-/                pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aNewOI);
-//-/            }
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
@@ -1168,4 +653,3 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
         }
     }
 }
-

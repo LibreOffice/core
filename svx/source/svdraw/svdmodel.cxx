@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-24 12:46:49 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     bUIOnlyKomma=FALSE;
     pLayerAdmin=NULL;
     pItemPool=pPool;
-//-/    pUndoItemPool=NULL;
     bMyPool=FALSE;
     pPersist=pPers;
     pDrawOutliner=NULL;
@@ -344,17 +343,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     }
     pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
     SetTextDefaults();
-
-    // Undo-ItemPool anlegen
-//-/    if(!pUndoItemPool)
-//-/    {
-//-/        // Pool fuer UNDO-Objekte anlegen
-//-/        pUndoItemPool = new SdrItemPool(SDRATTR_START, SDRATTR_END);
-//-/        SfxItemPool* pUndoOutlPool = EditEngine::CreatePool();
-//-/        pUndoItemPool->SetSecondaryPool(pUndoOutlPool);
-//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-//-/        pUndoItemPool->FreezeIdRanges();
-//-/    }
 
     pLayerAdmin=new SdrLayerAdmin;
     pLayerAdmin->SetModel(this);
@@ -458,14 +446,6 @@ SdrModel::~SdrModel()
         // referenzieren (Joe)
         delete pOutlPool;
     }
-
-//-/    // UndoItemPool wegwerfen
-//-/    if(pUndoItemPool)
-//-/    {
-//-/        SfxItemPool* pUndoOutlPool = pUndoItemPool->GetSecondaryPool();
-//-/        delete pUndoItemPool;
-//-/        delete pUndoOutlPool;
-//-/    }
 
     delete pLoadedModel;
 
@@ -1040,7 +1020,6 @@ void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
         eObjUnit=eMap;
         aObjUnit=rFrac;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
@@ -1053,7 +1032,6 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
     if (eObjUnit!=eMap) {
         eObjUnit=eMap;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
-//-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
@@ -2379,36 +2357,6 @@ void SdrModel::PrepareStore()
     DBG_ERROR("Please call PreSave now. It'll do the desired job.");
 }
 
-//-/void SdrModel::PrepareStore()
-//-/{
-//-/    // Prepare OutlinerParaObjects for storing
-//-/    USHORT nCnt = GetMasterPageCount();
-//-/    for ( USHORT i = 0; i < nCnt; i++ )
-//-/    {
-//-/        // MasterPages
-//-/        SdrObjListIter aIter( *GetMasterPage( i ) );
-//-/        while( aIter.IsMore() )
-//-/        {
-//-/            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-//-/            if( pOPO )
-//-/                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
-//-/        }
-//-/    }
-//-/
-//-/    nCnt = GetPageCount();
-//-/    for ( i = 0; i < nCnt; i++ )
-//-/    {
-//-/        // Pages
-//-/        SdrObjListIter aIter( *GetPage( i ) );
-//-/        while( aIter.IsMore() )
-//-/        {
-//-/            OutlinerParaObject* pOPO = aIter.Next()->GetOutlinerParaObject();
-//-/            if( pOPO )
-//-/                pOPO->PrepareStore( (SfxStyleSheetPool*) pStyleSheetPool );
-//-/        }
-//-/    }
-//-/}
-
 void SdrModel::PreSave()
 {
     sal_uInt16 nCnt(GetMasterPageCount());
@@ -2423,9 +2371,6 @@ void SdrModel::PreSave()
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
             rPage.GetObj(b)->PreSave();
-//-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
-//-/        while(aIter.IsMore())
-//-/            aIter.Next()->PreSave();
     }
 
     nCnt = GetPageCount();
@@ -2439,9 +2384,6 @@ void SdrModel::PreSave()
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
             rPage.GetObj(b)->PreSave();
-//-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
-//-/        while(aIter.IsMore())
-//-/            aIter.Next()->PreSave();
     }
 }
 
@@ -2459,9 +2401,6 @@ void SdrModel::PostSave()
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
             rPage.GetObj(b)->PostSave();
-//-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
-//-/        while(aIter.IsMore())
-//-/            aIter.Next()->PreSave();
     }
 
     nCnt = GetPageCount();
@@ -2475,9 +2414,6 @@ void SdrModel::PostSave()
 
         for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
             rPage.GetObj(b)->PostSave();
-//-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
-//-/        while(aIter.IsMore())
-//-/            aIter.Next()->PreSave();
     }
 }
 

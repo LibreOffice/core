@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,11 +157,6 @@ void SdrVirtObj::RecalcBoundRect()
     aOutRect=rRefObj.GetBoundRect();
     aOutRect+=aAnchor;
 }
-
-//-/void SdrVirtObj::SendRepaintBroadcast(FASTBOOL bNoPaintNeeded) const
-//-/{
-//-/    SdrObject::SendRepaintBroadcast(bNoPaintNeeded);
-//-/}
 
 void SdrVirtObj::SetChanged()
 {
@@ -566,25 +561,16 @@ void SdrVirtObj::SetGeoData(const SdrObjGeoData& rGeo)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//-/void SdrVirtObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/    rRefObj.TakeAttributes(rAttr,bMerge,bOnlyHardAttr);
-//-/}
-
-//-/void SdrVirtObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    rRefObj.NbcSetAttributes(rAttr,bReplaceAll);
-//-/}
-
-//-/void SdrVirtObj::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    rRefObj.SetAttributes(rAttr,bReplaceAll);
-//-/}
+// ItemSet access
 
 const SfxItemSet& SdrVirtObj::GetItemSet() const
 {
     return rRefObj.GetItemSet();
+}
+
+SfxItemSet* SdrVirtObj::CreateNewItemSet(SfxItemPool& rPool)
+{
+    return rRefObj.CreateNewItemSet(rPool);
 }
 
 void SdrVirtObj::SetItem( const SfxPoolItem& rItem )
@@ -592,7 +578,7 @@ void SdrVirtObj::SetItem( const SfxPoolItem& rItem )
     rRefObj.SetItem(rItem);
 }
 
-void SdrVirtObj::ClearItem( USHORT nWhich )
+void SdrVirtObj::ClearItem( const sal_uInt16 nWhich )
 {
     rRefObj.ClearItem(nWhich);
 }
@@ -607,9 +593,21 @@ void SdrVirtObj::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
     rRefObj.BroadcastItemChange(rChange);
 }
 
-SfxItemSet* SdrVirtObj::CreateNewItemSet(SfxItemPool& rPool)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// private support routines for ItemSet access
+BOOL SdrVirtObj::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
 {
-    return rRefObj.CreateNewItemSet(rPool);
+    return rRefObj.AllowItemChange(nWhich, pNewItem);
+}
+
+void SdrVirtObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    rRefObj.ItemChange(nWhich, pNewItem);
+}
+
+void SdrVirtObj::PostItemChange(const sal_uInt16 nWhich)
+{
+    rRefObj.PostItemChange(nWhich);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

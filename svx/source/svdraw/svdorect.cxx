@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-10 14:33:30 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,11 +320,8 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetItemSet();
-//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-//-/    TakeAttributes(aSet, FALSE, TRUE);
 
     // perepare ItemSet to avoid old XOut line drawing
-//-/    XLineAttrSetItem aXLSet(rSet.GetPool());
     SfxItemSet aEmptySet(*rSet.GetPool());
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
@@ -747,14 +744,9 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 {
-//-/    INT32 nWdt=0;
-
-//-/    if(mpObjectItemSet)
-//-/    {
     INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
     nWdt++;
     nWdt /= 2;
-//-/    }
 
     Point aPt;
     switch (nPosNum) {
@@ -773,14 +765,9 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 
 SdrGluePoint SdrRectObj::GetCornerGluePoint(USHORT nPosNum) const
 {
-//-/    INT32 nWdt=0;
-
-//-/    if(mpObjectItemSet)
-//-/    {
     INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
     nWdt++;
     nWdt /= 2;
-//-/    }
 
     Point aPt;
     switch (nPosNum) {
@@ -818,29 +805,14 @@ void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const Sf
     SetXPolyDirty(); // wg. Eckenradius
 }
 
-//-/void SdrRectObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    SdrTextObj::NbcSetAttributes(rAttr,bReplaceAll);
-//-/    SetXPolyDirty(); // wg. Eckenradius
-//-/}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrRectObj::SetItem(const SfxPoolItem& rItem)
+// private support routines for ItemSet access
+void SdrRectObj::PostItemChange(const sal_uInt16 nWhich)
 {
-    SdrTextObj::SetItem(rItem);
-    SetXPolyDirty();
-}
+    // call parent
+    SdrTextObj::PostItemChange(nWhich);
 
-void SdrRectObj::ClearItem(USHORT nWhich)
-{
-    SdrTextObj::ClearItem(nWhich);
-    SetXPolyDirty();
-}
-
-void SdrRectObj::SetItemSet(const SfxItemSet& rSet)
-{
-    SdrTextObj::SetItemSet(rSet);
+    // local changes
     SetXPolyDirty();
 }
 
@@ -898,7 +870,6 @@ void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
             aSet.Put(XLineStyleItem(XLINE_NONE));
 
-//-/            NbcSetAttributes(aSet,FALSE);
             SetItemSet(aSet);
         }
     } else {

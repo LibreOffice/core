@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,9 +385,6 @@ void SdrTextObj::ImpConvertSetAttrAndLayer(SdrObject* pObj, FASTBOOL bNoSetAttr)
         if (pModel!=NULL) {
             pObj->SetModel(pModel);
             if (!bNoSetAttr) {
-//-/                SfxItemSet aItemSet((SfxItemPool&)(*GetItemPool()));
-//-/                TakeAttributes(aItemSet,FALSE,TRUE);
-//-/                pObj->SetAttributes(aItemSet,TRUE);
                 SdrBroadcastItemChange aItemChange(*pObj);
                 pObj->ClearItem();
                 pObj->SetItemSet(GetItemSet());

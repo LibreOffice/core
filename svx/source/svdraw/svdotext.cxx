@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-25 10:56:46 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,8 +331,6 @@ FASTBOOL SdrTextObj::IsAutoGrowHeight() const
         return FALSE; // AutoGrow nur bei TextFrames
 
     const SfxItemSet& rSet = GetItemSet();
-//-/    if(mpObjectItemSet)
-//-/    {
     BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
 
     if(bRet)
@@ -350,8 +348,6 @@ FASTBOOL SdrTextObj::IsAutoGrowHeight() const
         }
     }
     return bRet;
-//-/    }
-//-/    return TRUE; // default ist TRUE
 }
 
 FASTBOOL SdrTextObj::IsAutoGrowWidth() const
@@ -360,8 +356,6 @@ FASTBOOL SdrTextObj::IsAutoGrowWidth() const
         return FALSE; // AutoGrow nur bei TextFrames
 
     const SfxItemSet& rSet = GetItemSet();
-//-/    if(mpObjectItemSet)
-//-/    {
     BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
     if(bRet)
@@ -379,8 +373,6 @@ FASTBOOL SdrTextObj::IsAutoGrowWidth() const
         }
     }
     return bRet;
-//-/    }
-//-/    return FALSE; // default ist FALSE
 }
 
 SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
@@ -389,8 +381,6 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
         return SDRTEXTHORZADJUST_BLOCK;
 
     const SfxItemSet& rSet = GetItemSet();
-//-/    if(mpObjectItemSet)
-//-/    {
     SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
 
     if(eRet == SDRTEXTHORZADJUST_BLOCK)
@@ -408,9 +398,6 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
         }
     }
     return eRet;
-//-/    }
-//-/
-//-/    return bTextFrame ? SDRTEXTHORZADJUST_BLOCK : SDRTEXTHORZADJUST_CENTER;
 } // defaults: BLOCK fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
 SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
@@ -418,13 +405,8 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
     if(IsContourTextFrame())
         return SDRTEXTVERTADJUST_TOP;
 
-//-/    if(mpObjectItemSet)
-//-/    {
     SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(GetItem(SDRATTR_TEXT_VERTADJUST))).GetValue();
     return eRet;
-//-/    }
-
-//-/    return bTextFrame ? SDRTEXTVERTADJUST_TOP : SDRTEXTVERTADJUST_CENTER;
 } // defaults: TOP fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
 void SdrTextObj::ImpJustifyRect(Rectangle& rRect) const
@@ -541,11 +523,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             // zunaechst das HeightItem festklopfen, damit
             // 1. Es eben bestehen bleibt und
             // 2. DoStretchChars vom richtigen Wert ausgeht
-            //-/            aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
             SetItem(SvxFontHeightItem(nOldFontHgt));
-//-/            SdrOutlinerSetItem aSI(*pOutlAttr);
-//-/            aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
-//-/            pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
         }
         // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -565,9 +543,6 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
                 // Und nun noch das Rahmenattribut korregieren
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
                 SetItem(SvxFontHeightItem(nOldFontHgt));
-//-/                SdrOutlinerSetItem aSI(*pOutlAttr);
-//-/                aSI.GetItemSet().Put(SvxFontHeightItem(nOldFontHgt));
-//-/                pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSI);
             }
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
@@ -607,12 +582,8 @@ SdrOutliner& SdrTextObj::ImpGetDrawOutliner() const
 
 FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
 {
-//-/    if(mpObjectItemSet)
-//-/    {
     SetItem(SdrEckenradiusItem(nRad));
     return TRUE;
-//-/    }
-//-/    return FALSE;
 }
 
 FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
@@ -1021,11 +992,6 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                     rOutliner.SetUpdateMode(TRUE); // hier kann ggf. noch optimiert werden !!!
                     ImpTextPortionHandler aTPHandler(rOutliner,*this);
 
-//-/                    rXOut.SetTextAttr(*pTextAttr);
-//-/                    const SfxItemSet& rSet = GetItemSet();
-//-/                    XTextAttrSetItem aTextSetItem(rSet.GetPool());
-//-/                    aTextSetItem.GetItemSet().Put(rSet);
-
                     // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
                     // SetLineAttr(...) needs to be called if the outline item is set
                     const SfxItemSet& rSet = GetItemSet();
@@ -1238,9 +1204,6 @@ FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffs
     SdrOutliner& rOutliner, const Rectangle& rAnchorRect, const Rectangle& rPaintRect,
     const SdrPaintInfoRec& rInfoRec) const
 {
-//-/    if(!mpObjectItemSet)
-//-/        return FALSE;
-
     SdrTextAniKind eAniKind = GetTextAniKind();
     FASTBOOL bBlink = eAniKind == SDRTEXTANI_BLINK;
     const SfxItemSet& rSet = GetItemSet();
@@ -1388,14 +1351,7 @@ void SdrTextObj::ImpAddTextToBoundRect()
                 rOutl.SetUpdateMode(TRUE);
                 ImpTextPortionHandler aTPHandler(rOutl,*this);
 
-//-/                if(mpObjectItemSet)
-//-/                {
-//-/                const SfxItemSet& rSet = GetItemSet();
-//-/                XTextAttrSetItem aTextSetItem(rSet.GetPool());
-//-/                aTextSetItem.GetItemSet().Put(rSet);
                 aXOut.SetTextAttr(GetItemSet());
-//-/                    aXOut.SetTextAttr(*pTextAttr);
-//-/                }
 
                 aTPHandler.DrawTextToPath(aXOut,FALSE);
                 if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
@@ -1917,8 +1873,6 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     {
         mpObjectItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
         mpObjectItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-//-/        SdrOutlinerSetItem aOutl(*pOutlAttr);
-//-/        aOutl.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         mpObjectItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
     }
 

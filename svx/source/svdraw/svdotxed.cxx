@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,6 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             // werden, da sonst bei SetParaAttribs() auch alle in diesem
             // Parent enthaltenen Items hart am Absatz attributiert werden.
             // -> BugID 22467
-//-/            if(mpObjectItemSet)
-//-/            {
             const SfxItemSet& rSet = GetItemSet();
             SdrOutlinerSetItem aOutlSetItem(rSet.GetPool());
             aOutlSetItem.GetItemSet().Put(rSet);
@@ -147,7 +145,6 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
             ((SfxItemSet*)pTmpSet)->SetParent(NULL);
             rOutl.SetParaAttribs(0,*pTmpSet);
             ((SfxItemSet*)pTmpSet)->SetParent(pParentMerk);
-//-/            }
         }
     }
     if (bFitToSize) {

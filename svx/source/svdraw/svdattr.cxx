@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-28 15:30:43 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,6 @@ SdrItemPool::SdrItemPool(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEn
 
 void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
 {
-//-/#ifdef SDRDEFITEMCACHE
-//-/    pDefLineAttr=NULL;
-//-/#endif SDRDEFITEMCACHE
-
     if (pMaster==NULL) {
         pMaster=this;
     }
@@ -448,43 +444,6 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
         SetItemInfos(pItemInfos);
     }
 }
-
-//-/void SdrItemPool::ImpMakeDefItems()
-//-/{
-//-/#ifdef SDRDEFITEMCACHE
-//-/    if (pDefLineAttr==NULL) {
-//-/        XLineAttrSetItem aLineSetItem(this);
-//-/        pDefLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
-//-/        aLineSetItem.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
-//-/        pDefTextFrameLineAttr=(XLineAttrSetItem*)&Put(aLineSetItem);
-//-/
-//-/        XFillAttrSetItem aFillSetItem(this);
-//-/        pDefFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
-//-/        aFillSetItem.GetItemSet().Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
-//-/        aFillSetItem.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-//-/        pDefTextFrameFillAttr=(XFillAttrSetItem*)&Put(aFillSetItem);
-//-/
-//-/        XTextAttrSetItem aTextSetItem(this);
-//-/        pDefTextAttr=(XTextAttrSetItem*)&Put(aTextSetItem);
-//-/        pDefTextFrameTextAttr=pDefTextAttr;
-//-/
-//-/        SdrShadowSetItem aShadSetItem(this);
-//-/        pDefShadAttr=(SdrShadowSetItem*)&Put(aShadSetItem);
-//-/        pDefTextFrameShadAttr=pDefShadAttr;
-//-/
-//-/        SdrOutlinerSetItem aOutlSetItem(this);
-//-/        pDefTextFrameOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
-//-/        aOutlSetItem.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
-//-/        pDefOutlAttr=(SdrOutlinerSetItem*)&Put(aOutlSetItem);
-//-/
-//-/        SdrMiscSetItem aMiscSetItem(this);
-//-/        pDefTextFrameMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
-//-/        aMiscSetItem.GetItemSet().Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-//-/        aMiscSetItem.GetItemSet().Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-//-/        pDefMiscAttr=(SdrMiscSetItem*)&Put(aMiscSetItem);
-//-/    }
-//-/#endif SDRDEFITEMCACHE
-//-/}
 
 /*************************************************************************
 |*

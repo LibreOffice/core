@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-19 15:59:18 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                 BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
 
-//-/                pAktCreate->NbcSetAttributes(aDefaultAttr,FALSE);
                 pAktCreate->SetItemSet(aDefaultAttr);
 
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
@@ -460,7 +459,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
-//-/                    pAktCreate->NbcSetAttributes(aSet,FALSE);
                     pAktCreate->SetItemSet(aSet);
 
                     bStartEdit=TRUE;
@@ -475,7 +473,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
-//-/                    pAktCreate->NbcSetAttributes(aSet,FALSE);
                     pAktCreate->SetItemSet(aSet);
 
                     bStartEdit=TRUE;
@@ -535,7 +532,6 @@ BOOL SdrCreateView::BegCreateLibObj(const Point& rPnt, SdrObject* pObj, BOOL bMo
         if (bSetDefAttr) {
             if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
 
-//-/            pObj->NbcSetAttributes(aDefaultAttr,FALSE);
             pObj->SetItemSet(aDefaultAttr);
         }
         if (bSetDefLayer) {
@@ -577,8 +573,6 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
         if (IsSolidDraggingNow() && !IsSolidDraggingCheck()) {
             // Z.B. fuer Fill+Linelose Textrahmen bei SolidDragging
             SetSolidDraggingCheck(TRUE);
-//-/            SfxItemSet aSet(pMod->GetItemPool());
-//-/            pAktCreate->TakeAttributes(aSet,FALSE,FALSE);
             const SfxItemSet& rSet = pAktCreate->GetItemSet();
             XFillStyle eFill=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
             XLineStyle eLine=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
@@ -945,7 +939,6 @@ BOOL SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) co
 {
     if(pAktCreate)
     {
-//-/        pAktCreate->TakeAttributes(rTargetSet, FALSE, bOnlyHardAttr);
         rTargetSet.Put(pAktCreate->GetItemSet());
         return TRUE;
     }
@@ -959,7 +952,6 @@ BOOL SdrCreateView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 {
     if(pAktCreate)
     {
-//-/        pAktCreate->SetAttributes(rSet,bReplaceAll);
         SdrBroadcastItemChange aItemChange(*pAktCreate);
         if(bReplaceAll)
             pAktCreate->ClearItem();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-08 16:55:29 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,8 +1030,6 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
             if(nMarkAnz == 1)
             {
                 SdrObject* pObj = aMark.GetMark(0)->GetObj();
-//-/                SfxItemSet aSet(GetModel()->GetItemPool());
-//-/                pObj->TakeAttributes(aSet, FALSE, FALSE);
                 const SfxItemSet& rSet = pObj->GetItemSet();
                 XFillStyle eFillStyle = ((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-15 13:27:13 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,12 +211,6 @@
 TYPEINIT1(SdrAttrObj,SdrObject);
 
 SdrAttrObj::SdrAttrObj()
-//-/    pLineAttr(NULL),
-//-/    pFillAttr(NULL),
-//-/    pTextAttr(NULL),
-//-/    pShadAttr(NULL),
-//-/    pOutlAttr(NULL),
-//-/    pMiscAttr(NULL),
 :   mpStyleSheet(NULL),
     mpObjectItemSet(NULL)
 {
@@ -224,12 +218,6 @@ SdrAttrObj::SdrAttrObj()
 
 SdrAttrObj::~SdrAttrObj()
 {
-//-/    pLineAttr=(XLineAttrSetItem*)  ImpSetNewAttr(pLineAttr,NULL,FALSE);
-//-/    pFillAttr=(XFillAttrSetItem*)  ImpSetNewAttr(pFillAttr,NULL,FALSE);
-//-/    pTextAttr=(XTextAttrSetItem*)  ImpSetNewAttr(pTextAttr,NULL,FALSE);
-//-/    pShadAttr=(SdrShadowSetItem*)  ImpSetNewAttr(pShadAttr,NULL,FALSE);
-//-/    pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,NULL,FALSE);
-//-/    pMiscAttr=(SdrMiscSetItem*)    ImpSetNewAttr(pMiscAttr,NULL,FALSE);
     ImpDeleteItemSet();
 }
 
@@ -273,17 +261,10 @@ void SdrAttrObj::operator=(const SdrObject& rObj)
     SdrAttrObj* pAO = PTR_CAST(SdrAttrObj, (SdrObject*)&rObj);
     if(pAO)
     {
-//-/        pLineAttr=(const XLineAttrSetItem*)  ImpSetNewAttr(pLineAttr,pAO->pLineAttr);
-//-/        pFillAttr=(const XFillAttrSetItem*)  ImpSetNewAttr(pFillAttr,pAO->pFillAttr);
-//-/        pTextAttr=(const XTextAttrSetItem*)  ImpSetNewAttr(pTextAttr,pAO->pTextAttr);
-//-/        pShadAttr=(const SdrShadowSetItem*)  ImpSetNewAttr(pShadAttr,pAO->pShadAttr);
-//-/        pOutlAttr=(const SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,pAO->pOutlAttr);
-//-/        pMiscAttr=(const SdrMiscSetItem*)    ImpSetNewAttr(pMiscAttr,pAO->pMiscAttr);
         ImpDeleteItemSet();
 
         if(pAO->mpObjectItemSet)
             mpObjectItemSet = pAO->mpObjectItemSet->Clone(TRUE);
-//-/        mpObjectItemSet = new SfxItemSet(*pAO->mpObjectItemSet);
 
         if(pAO->GetStyleSheet())
             AddStyleSheet(pAO->GetStyleSheet(), TRUE);
@@ -422,23 +403,6 @@ void SdrAttrObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
                 if(pTmpStyleSheet)
                     AddStyleSheet(pTmpStyleSheet, TRUE);
-//-/                {
-//-/                    StartListening(*pPool);
-//-/                    StartListening(*pTmpStyleSheet);
-//-/
-//-///-/                    SfxItemSet* pParent = &pTmpStyleSheet->GetItemSet();
-//-///-/                    if (pLineAttr!=NULL) ((SfxItemSet*)&pLineAttr->GetItemSet())->SetParent(pParent);
-//-///-/                    if (pFillAttr!=NULL) ((SfxItemSet*)&pFillAttr->GetItemSet())->SetParent(pParent);
-//-///-/                    if (pTextAttr!=NULL) ((SfxItemSet*)&pTextAttr->GetItemSet())->SetParent(pParent);
-//-///-/                    if (pShadAttr!=NULL) ((SfxItemSet*)&pShadAttr->GetItemSet())->SetParent(pParent);
-//-///-/                    if (pOutlAttr!=NULL) ((SfxItemSet*)&pOutlAttr->GetItemSet())->SetParent(pParent);
-//-///-/                    if (pMiscAttr!=NULL) ((SfxItemSet*)&pMiscAttr->GetItemSet())->SetParent(pParent);
-//-/
-//-/                    if(!mpObjectItemSet)
-//-/                        mpObjectItemSet = new SfxItemSet(*pPool);
-//-/
-//-/                    mpObjectItemSet->SetParent(&pTmpStyleSheet->GetItemSet());
-//-/                }
             }
         }
     }
@@ -526,46 +490,6 @@ void SdrAttrObj::WriteData(SvStream& rOut) const
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_SHADOW));
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_OUTLINER));
         pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_MISC));
-
-
-
-//-/        const SfxItemSet& rSet = GetItemSet();
-//-/
-//-/        XLineAttrSetItem aLineAttr(pPool);
-//-/        aLineAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rLineAttr = pPool->Put(aLineAttr);
-//-/        pPool->StoreSurrogate(rOut, &rLineAttr);
-//-/        pPool->Remove(rLineAttr);
-//-/
-//-/        XFillAttrSetItem aFillAttr(pPool);
-//-/        aFillAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rFillAttr = pPool->Put(aFillAttr);
-//-/        pPool->StoreSurrogate(rOut, &rFillAttr);
-//-/        pPool->Remove(rFillAttr);
-//-/
-//-/        XTextAttrSetItem aTextAttr(pPool);
-//-/        aTextAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rTextAttr = pPool->Put(aTextAttr);
-//-/        pPool->StoreSurrogate(rOut, &rTextAttr);
-//-/        pPool->Remove(rTextAttr);
-//-/
-//-/        SdrShadowSetItem aShadAttr(pPool);
-//-/        aShadAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rShadAttr = pPool->Put(aShadAttr);
-//-/        pPool->StoreSurrogate(rOut, &rShadAttr);
-//-/        pPool->Remove(rShadAttr);
-//-/
-//-/        SdrOutlinerSetItem aOutlAttr(pPool);
-//-/        aOutlAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rOutlAttr = pPool->Put(aOutlAttr);
-//-/        pPool->StoreSurrogate(rOut, &rOutlAttr);
-//-/        pPool->Remove(rOutlAttr);
-//-/
-//-/        SdrMiscSetItem aMiscAttr(pPool);
-//-/        aMiscAttr.GetItemSet().Put(rSet);
-//-/        const SfxPoolItem& rMiscAttr = pPool->Put(aMiscAttr);
-//-/        pPool->StoreSurrogate(rOut, &rMiscAttr);
-//-/        pPool->Remove(rMiscAttr);
     }
     else
     {
@@ -591,50 +515,6 @@ void SdrAttrObj::WriteData(SvStream& rOut) const
         rOut.WriteByteString(String());
     }
 }
-
-//-/SfxItemPool* SdrAttrObj::ImpGetItemPool(const SfxPoolItem* pAlternateItem1, const SfxPoolItem* pAlternateItem2) const
-//-/{
-//-/    SfxItemPool* pPool= (pModel==NULL) ? NULL : &pModel->GetItemPool();
-//-/    if (pPool==NULL) {
-//-/        SfxSetItem* pSI;
-//-/        if (pAlternateItem1!=NULL) {
-//-/            pSI=PTR_CAST(SfxSetItem,pAlternateItem1);
-//-/            if (pSI!=NULL) pPool=(SfxItemPool*)pSI->GetItemSet().GetPool();
-//-/        }
-//-/        if (pPool==NULL && pAlternateItem2!=NULL) {
-//-/            pSI=PTR_CAST(SfxSetItem,pAlternateItem2);
-//-/            if (pSI!=NULL) pPool=(SfxItemPool*)pSI->GetItemSet().GetPool();
-//-/        }
-//-/    }
-//-/    return pPool;
-//-/}
-
-//-/SfxItemPool* SdrAttrObj::ImpGetItemPool() const
-//-/{
-//-/    SfxItemPool* pPool = (!pModel) ? NULL : &pModel->GetItemPool();
-//-/
-//-/    if(!pPool && mpObjectItemSet)
-//-/        pPool = mpObjectItemSet->GetPool();
-//-/    {
-//-/        USHORT nAnz=GetSetItemCount();
-//-/        for (USHORT i=0; i<nAnz && pPool==NULL; i++) {
-//-/            const SfxSetItem* pSI=GetSetItem(i);
-//-/            if (pSI!=NULL) pPool=pSI->GetItemSet().GetPool();
-//-/        }
-//-/    }
-//-/
-//-/    return pPool;
-//-/}
-
-//-/const SfxPoolItem* SdrAttrObj::ImpSetNewAttr(const SfxPoolItem* pAkt, const SfxPoolItem* pNew, FASTBOOL bChg)
-//-/{
-//-/    SfxItemPool* pPool=ImpGetItemPool(pAkt,pNew);
-//-/    if (pPool!=NULL) {
-//-/        if (pAkt!=NULL) pPool->Remove(*pAkt);
-//-/        if (pNew!=NULL) pNew=&pPool->Put(*pNew);
-//-/    }
-//-/    return pNew;
-//-/}
 
 static void ImpScaleItemSet(SfxItemSet& rSet, const Fraction& rScale)
 {
@@ -676,9 +556,6 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
     if(pOldModel != pNewModel && pNewModel && !pNewModel->IsLoading())
     {
-//-/        // fuer ein frisch eingefuegtes Obj die Defaultattribute setzen
-//-/        if(!pOldModel)
-//-/            ForceDefaultAttr(&pModel->GetItemPool());
 
         // fuer ein bereits "lebendes" Model die Attribute von einem Pool in den anderen schieben
         if(pOldModel)
@@ -700,41 +577,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
             // Und nun alle Items auf die das Obj verweisst aus
             // dem alten Pools raus und in den neuen rein.
-//-/            SdrItemPool& rOldPool = (SdrItemPool&)pOldModel->GetItemPool();
-//-/            SdrItemPool& rNewPool = (SdrItemPool&)pModel->GetItemPool();
             SfxStyleSheet* pOldStyleSheet = GetStyleSheet();
-
-//-/            DBG_ASSERT(&rOldPool != NULL, "SdrAttrObj::SetModel(): Kein ItemPool am alten Model");
-//-/            DBG_ASSERT(&rNewPool != NULL, "SdrAttrObj::SetModel(): Kein ItemPool am neuen Model");
-
-//-/            if(mpObjectItemSet)
-//-/            {
-//-/                SfxItemSet* pNewSet = mpObjectItemSet->Clone(TRUE, &rNewPool);
-//-/
-//-/                if(bScaleUnitChanged)
-//-/                    ImpScaleItemSet(*pNewSet, aMetricFactor);
-//-/
-//-/                // set new itemset
-//-/                ImpDeleteItemSet();
-//-/                mpObjectItemSet = pNewSet;
-//-/            }
-//-/            sal_uInt16 nItemSetAnz(GetSetItemCount());
-//-/            for(sal_uInt16 i(0); i < nItemSetAnz; i++)
-//-/            {
-//-/                const SfxSetItem* pSI=GetSetItem(i);
-//-/                if (pSI!=NULL) {
-//-/                    const SfxSetItem* pNewAttr=NULL;
-//-/                    if (!bScaleUnitChanged) {
-//-/                        pNewAttr=&(const SfxSetItem&)rNewPool.Put(*pSI);
-//-/                    } else  { // ggf. alle MetrikItems Skalieren
-//-/                        SfxSetItem* pNewSetItem=(SfxSetItem*)pSI->Clone(&rNewPool);
-//-/                        ImpScaleItemSet(pNewSetItem->GetItemSet(),aMetricFactor);
-//-/                        pNewAttr=&(const SfxSetItem&)rNewPool.Put(*pNewSetItem);
-//-/                    }
-//-/                    rOldPool.Remove(*pSI);
-//-/                    SetSetItem(i,pNewAttr);
-//-/                }
-//-/            }
 
             // ***** StyleSheets Anfang *****
             // ggfs. StyleSheet und dessen Parents kopieren
@@ -845,34 +688,12 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
                             nWhich = aIter.NextWhich();
                         }
                     }
-//-/                        for(sal_uInt16 i(0); i < nItemSetAnz; i++)
-//-/                        {
-//-/                            const SfxSetItem* pSI = GetSetItem(i);
-//-/                            if(pSI)
-//-/                            {
-//-/                                const SfxItemSet& rIS = pSI->GetItemSet();
-//-/                                SfxWhichIter aIter(rIS);
-//-/                                sal_uInt16 nWhich = aIter.FirstWhich();
-//-/
-//-/                                while(nWhich)
-//-/                                {
-//-/                                    if(rIS.GetItemState(nWhich, FALSE) == SFX_ITEM_SET)
-//-/                                        aSet.ClearItem(nWhich);
-//-/
-//-/                                    nWhich = aIter.NextWhich();
-//-/                                }
-//-/                            }
-//-/                        }
-
 
                     if(bScaleUnitChanged)
                         ImpScaleItemSet(*pNewSet, aMetricFactor);
 
                     ImpDeleteItemSet();
                     mpObjectItemSet = pNewSet;
-
-//-/                    SetAttributes(*pNewSet, FALSE);
-//-/                    RemoveStyleSheet();
                 }
             }
             // ***** StyleSheets Ende *****
@@ -895,12 +716,8 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
 void SdrAttrObj::ForceDefaultAttr()
 {
-//-/    if(pPool)
-//-/    {
     SdrTextObj* pText = PTR_CAST(SdrTextObj, this);
     BOOL bTextFrame(pText && pText->IsTextFrame());
-
-//-/        mpObjectItemSet = CreateNewItemSet(*pPool);
 
     ImpForceItemSet();
     if(bTextFrame)
@@ -920,313 +737,15 @@ void SdrAttrObj::ForceDefaultAttr()
         mpObjectItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
         mpObjectItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
     }
-//-/    }
-//-/    if (pPool!=NULL && pLineAttr==NULL) {
-//-/        SdrTextObj* pText=PTR_CAST(SdrTextObj,this);
-//-/        SdrCaptionObj* pCapt=PTR_CAST(SdrCaptionObj,this);
-//-/        FASTBOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
-//-/        FASTBOOL bCaption=pCapt!=NULL;
-//-/
-//-///-/#ifdef SDRDEFITEMCACHE
-//-///-/        // SdrItemPool in der Verkettung suchen (wg. Writer)
-//-///-/        SdrItemPool* pSdrPool=NULL;
-//-///-/        SfxItemPool* pTmpPool=pPool;
-//-///-/        while (pTmpPool!=NULL && pSdrPool==NULL) {
-//-///-/            // Etwas komplizierte Abfrage und auch Hack, weil am
-//-///-/            // Pool kein RTTI vorhanden ist! Joe, 02-09-1997
-//-///-/            if (pTmpPool->GetFirstWhich()<=SDRATTR_START && pTmpPool->GetLastWhich()>=SDRATTR_END) {
-//-///-/                if (pTmpPool->GetName().EqualsAscii("XOutdevItemPool"))
-//-///-/                    pSdrPool=(SdrItemPool*)pTmpPool;
-//-///-/            }
-//-///-/            pTmpPool=pTmpPool->GetSecondaryPool();
-//-///-/        }
-//-///-/        DBG_ASSERT(pSdrPool!=NULL,"SdrAttrObj::ForceDefaultAttr(): Kein SdrItemPool gefunden!");
-//-///-/        if (pSdrPool->pDefLineAttr==NULL) pSdrPool->ImpMakeDefItems();
-//-///-/        if (bTextFrame) {
-//-///-/            pLineAttr=bCaption ? pSdrPool->pDefLineAttr : pSdrPool->pDefTextFrameLineAttr;
-//-///-/            pFillAttr=pSdrPool->pDefTextFrameFillAttr;
-//-///-/            pTextAttr=pSdrPool->pDefTextFrameTextAttr;
-//-///-/            pShadAttr=pSdrPool->pDefTextFrameShadAttr;
-//-///-/            pOutlAttr=pSdrPool->pDefTextFrameOutlAttr;
-//-///-/            pMiscAttr=pSdrPool->pDefTextFrameMiscAttr;
-//-///-/        } else {
-//-///-/            pLineAttr=pSdrPool->pDefLineAttr;
-//-///-/            pFillAttr=pSdrPool->pDefFillAttr;
-//-///-/            pTextAttr=pSdrPool->pDefTextAttr;
-//-///-/            pShadAttr=pSdrPool->pDefShadAttr;
-//-///-/            pOutlAttr=pSdrPool->pDefOutlAttr;
-//-///-/            pMiscAttr=pSdrPool->pDefMiscAttr;
-//-///-/        }
-//-///-/        pLineAttr->AddRef();
-//-///-/        pFillAttr->AddRef();
-//-///-/        pTextAttr->AddRef();
-//-///-/        pShadAttr->AddRef();
-//-///-/        pOutlAttr->AddRef();
-//-///-/        pMiscAttr->AddRef();
-//-///-/#else // SDRDEFITEMCACHE
-//-/        if (pLineAttr==NULL) {
-//-/            XLineAttrSetItem aSetItem(pPool);
-//-/            if (bTextFrame && !bCaption) {
-//-/                 aSetItem.GetItemSet().Put(XLineStyleItem(XLINE_NONE));
-//-/            }
-//-/            pLineAttr=(XLineAttrSetItem*)ImpSetNewAttr(pLineAttr,&aSetItem,FALSE);
-//-/        }
-//-/        if (pFillAttr==NULL) {
-//-/            XFillAttrSetItem aSetItem(pPool);
-//-/            if (bTextFrame) {
-//-/                aSetItem.GetItemSet().Put(XFillColorItem(String(),Color(COL_WHITE))); // Falls einer auf Solid umschaltet
-//-/                aSetItem.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-//-/            }
-//-/            pFillAttr=(XFillAttrSetItem*)ImpSetNewAttr(pFillAttr,&aSetItem,FALSE);
-//-/        }
-//-/        if (pTextAttr==NULL) {
-//-/            XTextAttrSetItem aSetItem(pPool);
-//-/            pTextAttr=(XTextAttrSetItem*)ImpSetNewAttr(pTextAttr,&aSetItem,FALSE);
-//-/        }
-//-/        if (pShadAttr==NULL) {
-//-/            SdrShadowSetItem aSetItem(pPool);
-//-/            pShadAttr=(SdrShadowSetItem*)ImpSetNewAttr(pShadAttr,&aSetItem,FALSE);
-//-/        }
-//-/        if (pOutlAttr==NULL) {
-//-/            SdrOutlinerSetItem aSetItem(pPool);
-//-/            if (!bTextFrame) {
-//-/                aSetItem.GetItemSet().Put(SvxAdjustItem(SVX_ADJUST_CENTER));
-//-/            }
-//-/            pOutlAttr=(SdrOutlinerSetItem*)ImpSetNewAttr(pOutlAttr,&aSetItem,FALSE);
-//-/        }
-//-/        if (pMiscAttr==NULL) {
-//-/            SdrMiscSetItem aSetItem(pPool);
-//-/            if (!bTextFrame) {
-//-/                aSetItem.GetItemSet().Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-//-/                aSetItem.GetItemSet().Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-//-/            }
-//-/            pMiscAttr=(SdrMiscSetItem*)ImpSetNewAttr(pMiscAttr,&aSetItem,FALSE);
-//-/        }
-//-///-/#endif // SDRDEFITEMCACHE
-//-/    }
 }
-
-//-/void SdrAttrObj::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/    USHORT nAnz=GetSetItemCount();
-//-/    FASTBOOL bHasText=GetOutlinerParaObject()!=NULL;
-//-/    SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,this);
-//-/    FASTBOOL bIsContourFrame=pTextObj!=NULL && pTextObj->IsContourTextFrame();
-//-/    SdrMeasureObj* pMeasObj=PTR_CAST(SdrMeasureObj,this);
-//-/    if (!bHasText && pTextObj!=NULL && pTextObj->IsTextEditActive()) bHasText=TRUE;
-//-/    FASTBOOL bTextFrame=pTextObj!=NULL && pTextObj->IsTextFrame();
-//-/    FASTBOOL bCanFontwork=bHasText && pTextObj!=NULL && !bTextFrame && pMeasObj==NULL;
-//-/    FASTBOOL bCanContourFrame=bHasText && pTextObj!=NULL && !bTextFrame;
-//-/    FASTBOOL bGrafObj=HAS_BASE(SdrGrafObj,this) || HAS_BASE(SdrOle2Obj,this);
-//-/    FASTBOOL bHasEckRad=!bGrafObj && !bIsUnoObj && HAS_BASE(SdrRectObj,this) && !HAS_BASE(SdrCircObj,this);
-//-/    FASTBOOL bHasFill=bClosedObj;
-//-/    FASTBOOL bHasLEnd=!bClosedObj || HAS_BASE(SdrCaptionObj,this);
-//-/    for (USHORT i=0; i<nAnz; i++) {
-//-/        const SfxSetItem* pSI=GetSetItem(i);
-//-/        FASTBOOL bOk=pSI!=NULL;
-//-/        if (pSI==pFillAttr && !bHasFill) bOk=FALSE;
-//-/        if (pSI==pTextAttr && !bCanFontwork) bOk=FALSE;
-//-/        if (pSI==pOutlAttr && !bHasText) bOk=FALSE;
-//-/        if (bGrafObj && (pSI==pFillAttr || pSI==pLineAttr)) bOk=FALSE; // fuer Grafik und OLE
-//-/        if (pSI!=NULL && !bMerge && bOnlyHardAttr) bOk=TRUE; // z.B. im Falle Undo
-//-/        if (bOk) {
-//-/            const SfxItemSet& rIS=pSI->GetItemSet();
-//-/            SfxWhichIter aIter(rIS);
-//-/            USHORT nWhich=aIter.FirstWhich();
-//-/            while (nWhich!=0) {
-//-/                if ((bHasLEnd || nWhich<XATTR_LINESTART || nWhich>XATTR_LINEENDCENTER) &&
-//-/                    (bHasEckRad || nWhich!=SDRATTR_ECKENRADIUS) &&
-//-/                    (bHasText || nWhich<SDRATTR_TEXT_MINFRAMEHEIGHT || nWhich>SDRATTR_TEXT_CONTOURFRAME) &&
-//-/                    (bTextFrame || (nWhich!=SDRATTR_TEXT_AUTOGROWHEIGHT && nWhich!=SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich!=SDRATTR_TEXT_MAXFRAMEHEIGHT &&
-//-/                                    nWhich!=SDRATTR_TEXT_AUTOGROWWIDTH && nWhich!=SDRATTR_TEXT_MINFRAMEWIDTH && nWhich!=SDRATTR_TEXT_MAXFRAMEWIDTH)) &&
-//-/                    (bCanContourFrame || nWhich!=SDRATTR_TEXT_CONTOURFRAME) &&
-//-/                    (!bIsContourFrame || nWhich<SDRATTR_TEXT_MINFRAMEHEIGHT || nWhich>SDRATTR_TEXT_HORZADJUST) &&
-//-/                    (nWhich<EE_FEATURE_START || nWhich>EE_FEATURE_END) )
-//-/                {
-//-/                    if (!bOnlyHardAttr || rIS.GetItemState(nWhich,FALSE)==SFX_ITEM_SET) {
-//-/                        const SfxPoolItem& rItem=rIS.Get(nWhich);
-//-/                        if (bMerge) rAttr.MergeValue(rItem,TRUE);
-//-/                        else rAttr.Put(rItem);
-//-/                    }
-//-/                }
-//-/                nWhich=aIter.NextWhich();
-//-/            }
-//-/        }
-//-/    }
-//-/    if (!bMerge && pLineAttr!=NULL) {
-//-/        rAttr.SetParent(pLineAttr->GetItemSet().GetParent());
-//-/    }
-//-/}
-
-//-/void SdrAttrObj::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    SfxItemPool* pPool=GetItemPool();
-//-/    if (pPool==NULL) pPool=(SfxItemPool*)rAttr.GetPool();
-//-/    ForceDefaultAttr(pPool);
-//-/    USHORT nAnz=GetSetItemCount();
-//-/
-//-/    if (bReplaceAll) {
-//-/        SfxWhichIter aWhIter(rAttr);
-//-/        for (USHORT i=0; i<nAnz; i++) {
-//-/            const SfxSetItem* pOldSI=GetSetItem(i);
-//-/            if (pOldSI!=NULL) {
-//-/                const SfxItemSet& rOldIS=pOldSI->GetItemSet();
-//-/                const USHORT* pRanges=rOldIS.GetRanges();
-//-/                FASTBOOL bOneRange=pRanges[2]==0;
-//-/                USHORT nAnf=pRanges[0];
-//-/                USHORT nEnd=pRanges[1];
-//-/                SfxSetItem* pNewSI=NULL; //MakeNewSetItem(i,TRUE);
-//-/                SfxItemSet* pDstSet=NULL; //pNewSI->GetItemSet();
-//-/                // funkt nicht:
-//-/                // pNewSI->GetItemSet().Set(rAttr);
-//-/                // deshalb manuell #36313#
-//-/                pNewSI=MakeNewSetItem(i,TRUE);
-//-/                pDstSet=&pNewSI->GetItemSet();
-//-/                USHORT nWhich=aWhIter.FirstWhich();
-//-/                while (nWhich!=0) {
-//-/                    const SfxPoolItem* pItem=NULL;
-//-/                    SfxItemState eState=rAttr.GetItemState(nWhich,TRUE,&pItem);
-//-/                    if (eState==SFX_ITEM_DEFAULT) {
-//-/                        pDstSet->ClearItem(nWhich);
-//-/                    } else if (eState==SFX_ITEM_SET) {
-//-/                        if (nWhich<EE_FEATURE_START || nWhich>EE_FEATURE_END) {
-//-/                            pDstSet->Put(*pItem);
-//-/                        }
-//-/                    }
-//-/                    nWhich=aWhIter.NextWhich();
-//-/                }
-//-/                if (pNewSI!=NULL) {
-//-/                    SetSetItem(i,(SfxSetItem*)ImpSetNewAttr(pOldSI,pNewSI));
-//-/                    delete pNewSI;
-//-/                }
-//-/            }
-//-/        }
-//-/    } else {
-//-/        SfxItemIter aItIter(rAttr);
-//-/        for (USHORT i=0; i<nAnz; i++) {
-//-/            const SfxSetItem* pOldSI=GetSetItem(i);
-//-/            if (pOldSI!=NULL) {
-//-/                const SfxItemSet& rOldIS=pOldSI->GetItemSet();
-//-/                const USHORT* pRanges=rOldIS.GetRanges();
-//-/                FASTBOOL bOneRange=pRanges[2]==0;
-//-/                USHORT nAnf=pRanges[0];
-//-/                USHORT nEnd=pRanges[1];
-//-/                SfxSetItem* pNewSI=NULL; //MakeNewSetItem(i,TRUE);
-//-/                SfxItemSet* pDstSet=NULL; //pNewSI->GetItemSet();
-//-/                // funkt nicht:
-//-/                //pNewSI->GetItemSet().Put(rAttr,FALSE); // FALSE= InvalidItems nicht als Default, sondern als "Loecher" betrachten
-//-/                // deshalb manuell. (Bug 21223)
-//-/                const SfxPoolItem* pItem=aItIter.FirstItem();
-//-/                BOOL bFillAttrChangeHint(FALSE);
-//-/
-//-/                while (pItem!=NULL) {
-//-/                    if (!IsInvalidItem(pItem)) {
-//-/                        USHORT nWhich=pItem->Which();
-//-/                        if ((nWhich<EE_FEATURE_START || nWhich>EE_FEATURE_END) &&
-//-/                            (!bOneRange || (nWhich>=nAnf && nWhich<=nEnd))) {
-//-/                            if (pNewSI==NULL) {
-//-/                                pNewSI=MakeNewSetItem(i,TRUE);
-//-/                                pDstSet=&pNewSI->GetItemSet();
-//-/                            }
-//-/
-//-/                            // Hinweis auf Veraenderung FillStyle
-//-/                            if(i==1 && nWhich == XATTR_FILLSTYLE)
-//-/                                bFillAttrChangeHint = TRUE;
-//-/
-//-/                            pDstSet->Put(*pItem);
-//-/                        }
-//-/                    }
-//-/                    pItem=aItIter.NextItem();
-//-/                }
-//-/
-//-/                if (pNewSI!=NULL)
-//-/                {
-//-/                    if(bFillAttrChangeHint)
-//-/                    {
-//-/                        // FillStyle hat sich eventuell geaendert
-//-/                        XFillStyle eFillStyle = ((XFillStyleItem&)(rAttr.Get(XATTR_FILLSTYLE))).GetValue();
-//-/
-//-/                        // Alle vom momentanen Stil nicht benutzten Items
-//-/                        // rauswerfen. Dies gilt NICHT fuer die Fuellfarbe
-//-/                        // (XFILL_SOLID). Diese wird als immer vorhandene
-//-/                        // Grundfarbe des Objektes angesehen (wird von 3D
-//-/                        // bereits so verwendet)
-//-/
-//-/                        if(eFillStyle != XFILL_GRADIENT)
-//-/                            pDstSet->ClearItem(XATTR_FILLGRADIENT);
-//-/
-//-/                        if(eFillStyle != XFILL_HATCH)
-//-/                            pDstSet->ClearItem(XATTR_FILLHATCH);
-//-/
-//-/                        if(eFillStyle != XFILL_BITMAP)
-//-/                            pDstSet->ClearItem(XATTR_FILLBITMAP);
-//-/                    }
-//-/
-//-/                    SetSetItem(i,(SfxSetItem*)ImpSetNewAttr(pOldSI,pNewSI));
-//-/                    delete pNewSI;
-//-/                }
-//-/            }
-//-/        }
-//-/    }
-//-/    bBoundRectDirty=TRUE;
-//-/    SetRectsDirty(TRUE);
-//-/}
-
-//-/void SdrAttrObj::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/    Rectangle aBoundRect0;
-//-/
-//-/    if(pUserCall)
-//-/        aBoundRect0 = GetBoundRect();
-//-/
-//-/    SendRepaintBroadcast();
-//-/    NbcSetAttributes(rAttr, bReplaceAll);
-//-/    SetChanged();
-//-/    SendRepaintBroadcast();
-//-/    SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect0);
-//-/}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // ItemSet access
-const SfxItemSet& SdrAttrObj::GetUnmergedItemSet() const
-{
-    return SdrAttrObj::GetItemSet();
-}
 
 const SfxItemSet& SdrAttrObj::GetItemSet() const
 {
     ((SdrAttrObj*)this)->ImpForceItemSet();
     return *mpObjectItemSet;
-}
-
-void SdrAttrObj::SetItem(const SfxPoolItem& rItem)
-{
-    ((SdrAttrObj*)this)->ImpForceItemSet();
-    mpObjectItemSet->Put(rItem);
-    bBoundRectDirty = TRUE;
-    SetRectsDirty(TRUE);
-    SetChanged();
-}
-
-void SdrAttrObj::ClearItem( USHORT nWhich )
-{
-    if(mpObjectItemSet)
-    {
-        mpObjectItemSet->ClearItem(nWhich);
-        bBoundRectDirty = TRUE;
-        SetRectsDirty(TRUE);
-        SetChanged();
-    }
-}
-
-void SdrAttrObj::SetItemSet( const SfxItemSet& rSet )
-{
-    ((SdrAttrObj*)this)->ImpForceItemSet();
-    mpObjectItemSet->Put(rSet);
-    bBoundRectDirty = TRUE;
-    SetRectsDirty(TRUE);
-    SetChanged();
 }
 
 SfxItemSet* SdrAttrObj::CreateNewItemSet(SfxItemPool& rPool)
@@ -1242,19 +761,45 @@ SfxItemSet* SdrAttrObj::CreateNewItemSet(SfxItemPool& rPool)
         0, 0);
 }
 
-//-/void SdrAttrObj::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
-//-/{
-//-/    Rectangle aBoundRect0;
-//-/
-//-/    if(pUserCall)
-//-/        aBoundRect0 = GetBoundRect();
-//-/
-//-/    SendRepaintBroadcast();
-//-/    NbcSetAttributes(rAttr, bReplaceAll);
-//-/    SetChanged();
-//-/    SendRepaintBroadcast();
-//-/    SendUserCall(SDRUSERCALL_CHGATTR, aBoundRect0);
-//-/}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// syntactical sugar for ItemSet accesses
+
+const SfxItemSet& SdrAttrObj::GetUnmergedItemSet() const
+{
+    return SdrAttrObj::GetItemSet();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// private support routines for ItemSet access
+
+void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    if(pNewItem)
+    {
+        // set item
+        ((SdrAttrObj*)this)->ImpForceItemSet();
+        mpObjectItemSet->Put(*pNewItem);
+    }
+    else
+    {
+        // clear item
+        if(mpObjectItemSet)
+        {
+            mpObjectItemSet->ClearItem(nWhich);
+        }
+    }
+}
+
+void SdrAttrObj::PostItemChange(const sal_uInt16 nWhich)
+{
+    // call parent
+    SdrObject::PostItemChange(nWhich);
+
+    // own modifications
+    bBoundRectDirty = TRUE;
+    SetRectsDirty(TRUE);
+    SetChanged();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1336,88 +881,11 @@ void SdrAttrObj::RemoveStyleSheet()
         if(mpObjectItemSet)
             mpObjectItemSet->SetParent(NULL);
 
-//-/        USHORT nAnz=GetSetItemCount();
-//-/        for (USHORT i=0; i<nAnz; i++) {
-//-/            SfxSetItem* pNewSI=MakeNewSetItem(i,TRUE);
-//-/            if (pNewSI!=NULL) {
-//-/                pNewSI->GetItemSet().SetParent(NULL);
-//-/                const SfxSetItem* pOldSI=GetSetItem(i);
-//-/                // Alle Items aus der Vorlage von pOldSI nach pNewSI putten,
-//-/                // also hart Attributieren.
-//-/                // ... fehlende Implementation
-//-/
-//-/                const SfxSetItem* pNewSI2=(const SfxSetItem*)ImpSetNewAttr(pOldSI,pNewSI);
-//-/                SetSetItem(i,pNewSI2);
-//-/                delete pNewSI;
-//-/            }
-//-/        }
         bBoundRectDirty = TRUE;
         SetRectsDirty(TRUE);
     }
-//-/
     mpStyleSheet = NULL;
 }
-
-//-/USHORT SdrAttrObj::GetSetItemCount() const
-//-/{
-//-/    return 6;
-//-/}
-
-//-/const SfxSetItem* SdrAttrObj::GetSetItem(USHORT nNum) const
-//-/{
-//-/    switch (nNum)
-//-/    {
-//-/        case 0 : return pLineAttr;
-//-/        case 1 : return pFillAttr;
-//-/        case 2 : return pTextAttr;
-//-/        case 3 : return pShadAttr;
-//-/        case 4 : return pOutlAttr;
-//-/        case 5 : return pMiscAttr;
-//-/    }
-//-/    return NULL; // damit der Compiler nicht meckert
-//-/}
-
-//-/void SdrAttrObj::SetSetItem(USHORT nNum, const SfxSetItem* pAttr)
-//-/{
-//-/    switch (nNum)
-//-/    {
-//-/        case 0 : pLineAttr = (const XLineAttrSetItem*)  pAttr; break;
-//-/        case 1 : pFillAttr = (const XFillAttrSetItem*)  pAttr; break;
-//-/        case 2 : pTextAttr = (const XTextAttrSetItem*)  pAttr; break;
-//-/        case 3 : pShadAttr = (const SdrShadowSetItem*)  pAttr; break;
-//-/        case 4 : pOutlAttr = (const SdrOutlinerSetItem*)pAttr; break;
-//-/        case 5 : pMiscAttr = (const SdrMiscSetItem*)    pAttr; break;
-//-/    }
-//-/}
-
-//-/SfxSetItem* SdrAttrObj::MakeNewSetItem(USHORT nNum, FASTBOOL bClone) const
-//-/{
-//-/    if (bClone)
-//-/    {
-//-/        switch (nNum)
-//-/        {
-//-/            case 0 : return new XLineAttrSetItem(*pLineAttr);
-//-/            case 1 : return new XFillAttrSetItem(*pFillAttr);
-//-/            case 2 : return new XTextAttrSetItem(*pTextAttr);
-//-/            case 3 : return new SdrShadowSetItem(*pShadAttr);
-//-/            case 4 : return new SdrOutlinerSetItem(*pOutlAttr);
-//-/            case 5 : return new SdrMiscSetItem(*pMiscAttr);
-//-/        }
-//-/    }
-//-/    else
-//-/    {
-//-/        switch (nNum)
-//-/        {
-//-/            case 0 : return new XLineAttrSetItem(GetItemPool());
-//-/            case 1 : return new XFillAttrSetItem(GetItemPool());
-//-/            case 2 : return new XTextAttrSetItem(GetItemPool());
-//-/            case 3 : return new SdrShadowSetItem(GetItemPool());
-//-/            case 4 : return new SdrOutlinerSetItem(GetItemPool());
-//-/            case 5 : return new SdrMiscSetItem(GetItemPool());
-//-/        }
-//-/    }
-//-/    return NULL; // damit der Compiler nicht meckert
-//-/}
 
 void SdrAttrObj::AddStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
 {
@@ -1453,53 +921,6 @@ void SdrAttrObj::AddStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemo
         // set new stylesheet as parent
         mpObjectItemSet->SetParent(&pNewStyleSheet->GetItemSet());
     }
-//-/    pStyleSheet=pNewStyleSheet;
-//-/    if(pNewStyleSheet && GetStyleSheet() != pNewStyleSheet)
-//-/    {
-//-/        // als Listener anmelden
-//-/        StartListening(pNewStyleSheet->GetPool());
-//-/        StartListening(*pNewStyleSheet);
-//-/
-//-/        // harte Attributierung dort loeschen, wo was in der Vorlage steht?
-//-/        const SfxItemSet& rStyle = pNewStyleSheet->GetItemSet();
-//-/
-//-/        // pWhichRangesInStyle enthaelt Zahlenpaare der Which-Ranges.
-//-/        // am Ende steht eine 0.
-//-/        const sal_uInt16* pWhichRangesInStyle = rStyle.GetRanges();
-//-/        sal_uInt16 nAnz(GetSetItemCount());
-//-/
-//-/        for(sal_uInt16 i(0); i < nAnz; i++)
-//-/        {
-//-/            const SfxSetItem* pOldSI=GetSetItem(i);
-//-/            SfxSetItem* pNewSI=MakeNewSetItem(i,pOldSI!=NULL);
-//-/            pNewSI->GetItemSet().SetParent(NULL);
-//-/            SfxItemSet& rIS=pNewSI->GetItemSet();
-//-/
-//-/            USHORT  nIndex  =0;
-//-/            USHORT  nCurrent=pWhichRangesInStyle[nIndex];
-//-/            USHORT  nEnd    =pWhichRangesInStyle[nIndex+1];
-//-/
-//-/            while (nCurrent!=0) {
-//-/                if (!bDontRemoveHardAttr && rStyle.GetItemState(nCurrent)==SFX_ITEM_SET) {
-//-/                    rIS.ClearItem(nCurrent);
-//-/                }
-//-/
-//-/                nCurrent++;
-//-/                if (nCurrent>nEnd) {
-//-/                    nIndex+=2;
-//-/                    nCurrent=pWhichRangesInStyle[nIndex];
-//-/                    if (nCurrent!=0) {         // Ende der Ranges? nein
-//-/                        nEnd=pWhichRangesInStyle[nIndex+1];
-//-/                    }
-//-/                }
-//-/            }
-//-/            // ItemSet des StyleSheets als Parent der ItemSets der SetItems setzen
-//-/            rIS.SetParent(&(pNewStyleSheet->GetItemSet()));
-//-/            // die Zeiger auf die SetItems neu setzen
-//-/            SetSetItem(i,(const SfxSetItem*)ImpSetNewAttr(pOldSI,pNewSI));
-//-/            delete pNewSI;
-//-/        }
-//-/    }
 }
 
 void SdrAttrObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
@@ -1752,25 +1173,7 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNo
 
 void SdrAttrObj::BurnInStyleSheetAttributes()
 {
-//-/    SfxItemPool* pPool = GetItemPool();
-//-/
-//-/    if(pPool)
-//-/    {
-//-/        SfxItemSet aSet(*pPool,
-//-/            SDRATTR_START,              SDRATTR_NOTPERSIST_FIRST-1,
-//-/            SDRATTR_NOTPERSIST_LAST+1,  SDRATTR_END,
-//-/            EE_ITEMS_START,             EE_ITEMS_END,
-//-/            0, 0);
-//-/
-//-/        TakeAttributes(aSet,FALSE,FALSE);
-//-/        NbcSetAttributes(aSet,FALSE);
-//-/    }
 }
-
-//-/void SdrAttrObj::CopyAttributes(SdrObject* pDestObj) const
-//-/{
-//-/    // ...
-//-/}
 
 // ItemPool fuer dieses Objekt wechseln
 void SdrAttrObj::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
@@ -1805,17 +1208,6 @@ void SdrAttrObj::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
             }
         }
     }
-//-/        UINT16 nItemSetAnz = GetSetItemCount();
-//-/        for(UINT16 i=0;i<nItemSetAnz;i++)
-//-/        {
-//-/            const SfxSetItem* pSI = GetSetItem(i);
-//-/            if(pSI != NULL)
-//-/            {
-//-/                const SfxSetItem* pNewAttr = &(const SfxSetItem&)pDestPool->Put(*pSI);
-//-/                pSrcPool->Remove(*pSI);
-//-/                SetSetItem(i, pNewAttr);
-//-/            }
-//-/        }
 }
 
 BOOL SdrAttrObj::HasFill() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 12:53:11 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,6 @@ Color SdrObjEditView::ImpGetTextEditBackgroundColor() const
     SdrTextObj* pText=PTR_CAST(SdrTextObj,pTextEditObj);
     if (pText!=NULL && pText->IsClosedObj())
     {
-//-/        SfxItemSet aSet(pMod->GetItemPool());
-//-/        pText->TakeAttributes(aSet,FALSE,FALSE);
         bFound=GetDraftFillColor(pText->GetItemSet(),aBackground);
     }
     if (!bFound && pTextEditPV!=NULL && pTextEditObj!=NULL)
@@ -1330,7 +1328,6 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
         DBG_ASSERT(pTextEditOutlinerView!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutlinerView=NULL");
         DBG_ASSERT(pTextEditOutliner!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutliner=NULL");
 
-//-/        pTextEditObj->TakeAttributes(rTargetSet, TRUE, bOnlyHardAttr);
         rTargetSet.Put( pTextEditObj->GetItemSet() );
 
         if( pTextEditObj->GetOutlinerParaObject() )
@@ -1410,7 +1407,6 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,!bNoEEItems));
             EndUndo();
 
-//-/            pTextEditObj->SetAttributes(*pSet,bReplaceAll);
             SdrBroadcastItemChange aItemChange(*pTextEditObj);
             if(bReplaceAll)
                 pTextEditObj->ClearItem();
@@ -1440,7 +1436,6 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,FALSE));
             EndUndo();
 
-//-/            pTextEditObj->SetAttributes(aSet,bReplaceAll);
             SdrBroadcastItemChange aItemChange(*pTextEditObj);
             if(bReplaceAll)
                 pTextEditObj->ClearItem();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,10 +569,8 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
             EE_ITEMS_START,             EE_ITEMS_END,
             0, 0); // #52757#, #52762#
 
-//-/        pSource->TakeAttributes(aSet,FALSE,FALSE);
         aSet.Put(pSource->GetItemSet());
 
-//-/        pDest->NbcSetAttributes(aSet,TRUE);
         pDest->ClearItem();
         pDest->SetItemSet(aSet);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-12 17:02:25 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,113 +722,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
 
             nWhich = aIter.NextWhich();
         }
-
-//      SfxWhichIter aIter(rSet);
-//      sal_uInt16 nWhich(aIter.FirstWhich());
-//
-//      while(nWhich)
-//      {
-//          const SfxPoolItem* pItem = NULL;
-//          rSet.GetItemState(nWhich, FALSE, &pItem);
-//
-//          if(pItem)
-//          {
-//              if(pItem == (SfxPoolItem *)-1)
-//                  rAttr.InvalidateItem(nWhich);
-//              else
-//                  rAttr.MergeValue(*pItem, TRUE);
-//          }
-//          nWhich = aIter.NextWhich();
-//      }
     }
-
-
-
-//-/    ULONG nMarkAnz=aMark.GetMarkCount();
-//-/    for (ULONG nm=0; nm<nMarkAnz; nm++) {
-//-/        SdrMark* pM=aMark.GetMark(nm);
-//-///-/        pM->GetObj()->TakeAttributes(rAttr,TRUE,bOnlyHardAttr);
-//-///-/        rAttr.Put(pM->GetObj()->GetItemSet());
-//-/        const SfxItemSet& rSet = pM->GetObj()->GetItemSet();
-//-/
-//-/
-//-/
-//-/
-//-/
-//-/        static BOOL bTestOwnLoop(FALSE);
-//-/        if(bTestOwnLoop)
-//-/        {
-//-/
-//-/            SfxWhichIter aIter(rSet);
-//-/            sal_uInt16 nWhich(aIter.FirstWhich());
-//-/
-//-/            while(nWhich)
-//-/            {
-//-/                rAttr.MergeValue(rSet.Get(nWhich), TRUE);
-//-/                nWhich = aIter.NextWhich();
-//-/            }
-//-/
-//-/        }
-//-/        else
-//-/        {
-//-/
-//-/            rAttr.MergeValues(rSet, TRUE);
-//-/
-//-/        }
-
-//-/            SfxWhichIter aIter(rIS);
-//-/            USHORT nWhich=aIter.FirstWhich();
-//-/            while (nWhich!=0) {
-//-/                if ((bHasLEnd || nWhich<XATTR_LINESTART || nWhich>XATTR_LINEENDCENTER) &&
-//-/                    (bHasEckRad || nWhich!=SDRATTR_ECKENRADIUS) &&
-//-/                    (bHasText || nWhich<SDRATTR_TEXT_MINFRAMEHEIGHT || nWhich>SDRATTR_TEXT_CONTOURFRAME) &&
-//-/                    (bTextFrame || (nWhich!=SDRATTR_TEXT_AUTOGROWHEIGHT && nWhich!=SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich!=SDRATTR_TEXT_MAXFRAMEHEIGHT &&
-//-/                                    nWhich!=SDRATTR_TEXT_AUTOGROWWIDTH && nWhich!=SDRATTR_TEXT_MINFRAMEWIDTH && nWhich!=SDRATTR_TEXT_MAXFRAMEWIDTH)) &&
-//-/                    (bCanContourFrame || nWhich!=SDRATTR_TEXT_CONTOURFRAME) &&
-//-/                    (!bIsContourFrame || nWhich<SDRATTR_TEXT_MINFRAMEHEIGHT || nWhich>SDRATTR_TEXT_HORZADJUST) &&
-//-/                    (nWhich<EE_FEATURE_START || nWhich>EE_FEATURE_END) )
-//-/                {
-//-/                    if (!bOnlyHardAttr || rIS.GetItemState(nWhich,FALSE)==SFX_ITEM_SET) {
-//-/                        const SfxPoolItem& rItem=rIS.Get(nWhich);
-//-/                        if (bMerge) rAttr.MergeValue(rItem,TRUE);
-//-/                        else rAttr.Put(rItem);
-//-/                    }
-//-/                }
-//-/                nWhich=aIter.NextWhich();
-//-/            }
-
-
-
-//-/        SfxItemIter aIter(rSet);
-//-/        const SfxPoolItem* pItem = aIter.FirstItem();
-//-/
-//-/        // merge items to destination rAttr
-//-/        while(pItem)
-//-/        {
-//-/            sal_uInt16 nWhich = pItem->Which();
-//-/            SfxItemState eState = rSet.GetItemState(nWhich);
-//-/
-//-/            if(SFX_ITEM_SET == eState)
-//-/            {
-//-/                // Ist gesetzt
-//-/                if(*rAttr.GetItem(nWhich) != *pItem)
-//-/                {
-//-/                    // SfxPoolItem muss invalidiert werden
-//-/                    rAttr.InvalidateItem(nWhich);
-//-/                }
-//-/            }
-//-/            else
-//-/            {
-//-/                if(SFX_ITEM_DONTCARE != eState)
-//-/                {
-//-/                    // Item gab es noch nicht, setze es
-//-/                    rAttr.Put(*pItem);
-//-/                }
-//-/            }
-//-/
-//-/            pItem = aIter.NextItem();
-//-/        }
-//-/    }
 }
 
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
@@ -870,8 +764,14 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             SfxItemState eState = rAttr.GetItemState(nWhich);
             if(eState == SFX_ITEM_SET)
             {
-                if(nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)
+                if((nWhich >= SDRATTR_TEXT_MINFRAMEHEIGHT && nWhich <= SDRATTR_TEXT_CONTOURFRAME)
+                    || nWhich == SDRATTR_3DOBJ_PERCENT_DIAGONAL
+                    || nWhich == SDRATTR_3DOBJ_BACKSCALE
+                    || nWhich == SDRATTR_3DOBJ_DEPTH
+                    || nWhich == SDRATTR_3DOBJ_END_ANGLE)
+                {
                     bPossibleGeomChange = TRUE;
+                }
             }
             nWhich = aIter.NextWhich();
         }
@@ -898,7 +798,6 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             // add attribute undo
             AddUndo(new SdrUndoAttrObj(*pM->GetObj(),FALSE,bHasEEItems || bPossibleGeomChange));
 
-//-/            pM->GetObj()->SetAttributes(rAttr,bReplaceAll);
             SdrBroadcastItemChange aItemChange(*pM->GetObj());
             if(bReplaceAll)
                 pM->GetObj()->ClearItem();

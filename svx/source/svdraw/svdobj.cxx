@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-16 11:40:41 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,10 @@
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
+#endif
+
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1297,7 +1301,6 @@ void SdrObject::FreeGlobalDrawObjectItemPool()
 
 SdrItemPool* SdrObject::GetItemPool() const
 {
-//-/    return pModel==NULL ? NULL : (SdrItemPool*)(&pModel->GetItemPool());
     if(pModel)
         return (SdrItemPool*)(&pModel->GetItemPool());
 
@@ -1542,9 +1545,6 @@ void SdrObject::CreateLinePoly(PolyPolygon3D& rPolyPolygon, PolyPolygon3D& rPoly
     TakeXorPoly(aTmpPolyPolygon, TRUE);
 
     // get LineStyleParameterPack
-//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-//-/    TakeAttributes(aSet, FALSE, TRUE);
-//-/    LineStyleParameterPack aLineAttr(aSet, bForceHair || bIsLineDraft, rOut);
     LineStyleParameterPack aLineAttr(GetItemSet(), bForceHair || bIsLineDraft, rOut);
     LineGeometryCreator aLineCreator(aLineAttr, rPolyPolygon, rPolyLine, bIsLineDraft);
 
@@ -2191,9 +2191,6 @@ void SdrObject::ImpDrawLineGeometry(
 
 BOOL SdrObject::LineGeometryUsageIsNecessary() const
 {
-//-/    SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-//-/    TakeAttributes(aSet, FALSE, TRUE);
-//-/    XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)aSet.Get(XATTR_LINESTYLE)).GetValue();
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)GetItem(XATTR_LINESTYLE)).GetValue();
     return (eXLS != XLINE_NONE);
 }
@@ -2344,17 +2341,6 @@ void SdrObject::TakeContour( XPolyPolygon& rPoly ) const
 
     ExtOutputDevice aXOut( &aBlackHole );
     SdrObject*      pClone = Clone();
-//-/    SfxItemSet      aSet( (SfxItemPool&)( *GetItemPool() ),
-//-/                          XATTR_LINESTYLE, XATTR_LINESTYLE,
-//-/                          XATTR_LINECOLOR, XATTR_LINECOLOR,
-//-/                          XATTR_FILLSTYLE, XATTR_FILLSTYLE, 0 );
-//-/
-//-/    pClone->TakeAttributes( aSet, TRUE, FALSE );
-//-/
-//-/    aSet.Put( XLineStyleItem( XLINE_SOLID ) );
-//-/    aSet.Put( XLineColorItem(String(), Color( COL_BLACK ) ) );
-//-/    aSet.Put( XFillStyleItem( XFILL_NONE ) );
-//-/    pClone->NbcSetAttributes( aSet, FALSE );
     pClone->SetItem(XLineStyleItem(XLINE_SOLID));
     pClone->SetItem(XLineColorItem(String(), Color(COL_BLACK)));
     pClone->SetItem(XFillStyleItem(XFILL_NONE));
@@ -3261,28 +3247,7 @@ void SdrObject::SetGeoData(const SdrObjGeoData& rGeo)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//-/void SdrObject::TakeAttributes(SfxItemSet& rAttr, FASTBOOL bMerge, FASTBOOL bOnlyHardAttr) const
-//-/{
-//-/}
-
-//-/void SdrObject::SetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/}
-
-//-/void SdrObject::NbcSetAttributes(const SfxItemSet& rAttr, FASTBOOL bReplaceAll)
-//-/{
-//-/}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-SfxItemSet* SdrObject::CreateNewItemSet(SfxItemPool& rPool)
-{
-    DBG_ASSERT(FALSE,"SdrObject::CreateNewItemSet() should never be called, SdrObject has no Items");
-    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
-    // Basic implementation; Basic object has NO attributes
-//-/    return NULL;
-}
+// ItemSet access
 
 SfxItemSet* SdrObject::mpEmptyItemSet = 0L;
 const SfxItemSet& SdrObject::GetItemSet() const
@@ -3290,19 +3255,62 @@ const SfxItemSet& SdrObject::GetItemSet() const
     if(!mpEmptyItemSet)
         mpEmptyItemSet = ((SdrObject*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
     DBG_ASSERT(mpEmptyItemSet, "Could not create an SfxItemSet(!)");
+    DBG_ASSERT(FALSE,"SdrObject::GetItemSet() should never be called, SdrObject has no Items");
     return *mpEmptyItemSet;
+}
+
+SfxItemSet* SdrObject::CreateNewItemSet(SfxItemPool& rPool)
+{
+    // Basic implementation; Basic object has NO attributes
+    DBG_ASSERT(FALSE,"SdrObject::CreateNewItemSet() should never be called, SdrObject has no Items");
+    return new SfxItemSet(rPool, SDRATTR_START, SDRATTR_END);
 }
 
 void SdrObject::SetItem( const SfxPoolItem& rItem )
 {
+    sal_uInt16 nWhichID(rItem.Which());
+
+    if(AllowItemChange(nWhichID, &rItem))
+    {
+        ItemChange(nWhichID, &rItem);
+        PostItemChange(nWhichID);
+    }
 }
 
-void SdrObject::ClearItem( USHORT nWhich )
+void SdrObject::ClearItem( const sal_uInt16 nWhich )
 {
+    if(AllowItemChange(nWhich))
+    {
+        ItemChange(nWhich);
+        PostItemChange(nWhich);
+    }
 }
 
 void SdrObject::SetItemSet( const SfxItemSet& rSet )
 {
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich(aIter.FirstWhich());
+    const SfxPoolItem *pPoolItem;
+    List aPostItemChangeList;
+
+    while(nWhich)
+    {
+        if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE, &pPoolItem))
+        {
+            if(AllowItemChange(nWhich, pPoolItem))
+            {
+                ItemChange(nWhich, pPoolItem);
+                aPostItemChangeList.Insert((void*)((sal_uInt32)nWhich), LIST_APPEND);
+            }
+        }
+        nWhich = aIter.NextWhich();
+    }
+
+    for(sal_uInt32 a(0); a < aPostItemChangeList.Count(); a++)
+    {
+        nWhich = (sal_uInt16)aPostItemChangeList.GetObject(a);
+        PostItemChange(nWhich);
+    }
 }
 
 void SdrObject::BroadcastItemChange(const SdrBroadcastItemChange& rChange)
@@ -3338,7 +3346,7 @@ void SdrObject::SetItemAndBroadcast(const SfxPoolItem& rItem)
     BroadcastItemChange(aC);
 }
 
-void SdrObject::ClearItemAndBroadcast(USHORT nWhich)
+void SdrObject::ClearItemAndBroadcast(const sal_uInt16 nWhich)
 {
     SdrBroadcastItemChange aC(*this);
     ClearItem(nWhich);
@@ -3352,9 +3360,26 @@ void SdrObject::SetItemSetAndBroadcast(const SfxItemSet& rSet)
     BroadcastItemChange(aC);
 }
 
-const SfxPoolItem& SdrObject::GetItem(USHORT nWhich) const
+const SfxPoolItem& SdrObject::GetItem(const sal_uInt16 nWhich) const
 {
     return GetItemSet().Get(nWhich);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// private support routines for ItemSet access
+
+BOOL SdrObject::AllowItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem) const
+{
+    return TRUE;
+}
+
+void SdrObject::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    DBG_ASSERT(FALSE,"SdrObject::ItemChange() should never be called, SdrObject has no Items");
+}
+
+void SdrObject::PostItemChange(const sal_uInt16 nWhich)
+{
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3755,8 +3780,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
         // useful when new closed filled polygons are created
         if(aPolyPoly3D.Count() || (bForceLineDash && aLinePoly3D.Count()))
         {
-//-/            SfxItemSet aSet((SfxItemPool&)(*GetItemPool()));
-//-/            pRet->TakeAttributes(aSet, TRUE, FALSE);
             SfxItemSet aSet(pRet->GetItemSet());
             XFillStyle eOldFillStyle = ((const XFillStyleItem&)(aSet.Get(XATTR_FILLSTYLE))).GetValue();
             SdrPathObj* aLinePolygonPart = NULL;
@@ -3778,7 +3801,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aSet.Put(XLineStyleItem(XLINE_NONE));
                 aSet.Put(XFillTransparenceItem(nTransLine));
 
-//-/                aLinePolygonPart->NbcSetAttributes(aSet, FALSE);
                 aLinePolygonPart->SetItemSet(aSet);
             }
 
@@ -3791,7 +3813,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 aSet.Put(XFillStyleItem(XFILL_NONE));
                 aSet.Put(XLineStyleItem(XLINE_SOLID));
 
-//-/                aLineLinePart->NbcSetAttributes(aSet, FALSE);
                 aLineLinePart->SetItemSet(aSet);
 
                 if(aLinePolygonPart)
@@ -3815,7 +3836,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
                 aSet.ClearItem();
 
-//-/                pRet->TakeAttributes(aSet, TRUE, FALSE);
                 aSet.Put(pRet->GetItemSet());
 
                 aSet.Put(XLineStyleItem(XLINE_NONE));
@@ -3824,7 +3844,6 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
                 SdrObject* pClone = pRet->Clone();
                 pClone->SetModel(pRet->GetModel());
 
-//-/                pClone->NbcSetAttributes(aSet, FALSE);
                 pClone->SetItemSet(aSet);
 
                 pGroup->GetSubList()->NbcInsertObject( pClone );

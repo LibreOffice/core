@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,14 +305,12 @@ BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList
     pObj->NbcSetText(rStr); // #32424# SetText vor SetAttr, weil SetAttr sonst unwirksam!
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
 
-//-/    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
     pObj->SetItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
-//-/    pObj->NbcSetAttributes(aTempAttr, FALSE);
     pObj->SetItemSet(aTempAttr);
 
     pObj->FitFrameToTextSize();
@@ -351,14 +349,12 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, USHORT eFormat, const Point& rPos,
     pObj->SetLayer(nLayer);
     if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
 
-//-/    pObj->NbcSetAttributes(aDefaultAttr,FALSE);
     pObj->SetItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
-//-/    pObj->NbcSetAttributes(aTempAttr, FALSE);
     pObj->SetItemSet(aTempAttr);
 
     pObj->NbcSetText(rInput,eFormat);

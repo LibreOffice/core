@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 16:54:08 $
+ *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,8 +1330,6 @@ FASTBOOL SdrPageView::MasterShouldBeCached(const SdrPage* pPg) const
             if (!bYes) bYes=pObj->GetSubList()!=NULL;
             // Und nun Attribute Checken
             if (!bYes) {
-//-/                SfxItemSet aSet(rView.pMod->GetItemPool());
-//-/                pObj->TakeAttributes(aSet,FALSE,FALSE);
                 const SfxItemSet& rSet = pObj->GetItemSet();
                 XLineStyle eLineStyle=((XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue();
                 XFillStyle eFillStyle=((XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
