@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.44 2001-04-27 17:12:41 cl Exp $
+	$Id: drawing.mod,v 1.45 2001-05-04 15:34:10 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -401,6 +401,8 @@
 <!ATTLIST style:properties draw:frame-display-border %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:frame-margin-horizontal %nonNegativePixelLength; #IMPLIED>
 <!ATTLIST style:properties draw:frame-margin-vertical %nonNegativePixelLength; #IMPLIED>
+<!ATTLIST style:properties draw:size-protect %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:move-protect %boolean; #IMPLIED>
 
 <!-- ole object attributes -->
 <!ATTLIST style:properties draw:visible-area-left %nonNegativeLength; #IMPLIED>

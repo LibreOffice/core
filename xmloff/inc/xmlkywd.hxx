@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 10:56:02 $
+ *  last change: $Author: cl $ $Date: 2001-05-04 15:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,7 @@ XML_CONSTASCII_ACTION( sXML_move_from_bottom, "move-from-bottom" );
 XML_CONSTASCII_ACTION( sXML_move_from_left, "move-from-left" );
 XML_CONSTASCII_ACTION( sXML_move_from_right, "move-from-right" );
 XML_CONSTASCII_ACTION( sXML_move_from_top, "move-from-top" );
+XML_CONSTASCII_ACTION( sXML_move_protect, "move-protect" );
 XML_CONSTASCII_ACTION( sXML_mover, "mover" );
 XML_CONSTASCII_ACTION( sXML_movement, "movement" );
 XML_CONSTASCII_ACTION( sXML_movement_cut_off, "movement-cut-off" );
@@ -1513,6 +1514,7 @@ XML_CONSTASCII_ACTION( sXML_since_date_time, "since-date-time" );
 XML_CONSTASCII_ACTION( sXML_since_save, "since-save" );
 XML_CONSTASCII_ACTION( sXML_sinh, "sinh" );
 XML_CONSTASCII_ACTION( sXML_size, "size" );
+XML_CONSTASCII_ACTION( sXML_size_protect, "size-protect" );
 XML_CONSTASCII_ACTION( sXML_slide, "slide" );
 XML_CONSTASCII_ACTION( sXML_slow, "slow" );
 XML_CONSTASCII_ACTION( sXML_solid, "solid" );
