@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:02:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -296,6 +299,7 @@ class ScCellRangesBase : public com::sun::star::beans::XPropertySet,
                          public com::sun::star::lang::XServiceInfo,
                          public com::sun::star::lang::XUnoTunnel,
                          public com::sun::star::lang::XTypeProvider,
+                         public com::sun::star::beans::XTolerantMultiPropertySet,
                          public cppu::OWeakObject,
                          public SfxListener
 {
@@ -448,6 +452,18 @@ public:
     virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener )
                                 throw (::com::sun::star::uno::RuntimeException);
+
+                            // XTolerantMultiPropertySet
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::SetPropertyTolerantFailed > SAL_CALL
+        setPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues )
+                                    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetPropertyTolerantResult > SAL_CALL
+        getPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+                                    throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL
+        getDirectPropertyValuesTolerant( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+                                    throw (::com::sun::star::uno::RuntimeException);
 
                             // XPropertyState
     virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(
