@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:43:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,15 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
+#include <com/sun/star/task/InteractionClassification.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
@@ -155,6 +164,10 @@ using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
+
+using ::com::sun::star::task::InteractionClassification_ERROR;
+using ::com::sun::star::ucb::IOErrorCode_NO_FILE;
+using ::com::sun::star::ucb::InteractiveIOException;
 
 //==========================================================================
 
@@ -309,6 +322,25 @@ void ODatabaseContext::disposing()
     m_aDatabaseObjects.clear();
 }
 
+//------------------------------------------------------------------------------
+bool ODatabaseContext::getURLForRegisteredObject( const ::rtl::OUString& _rRegisteredName, ::rtl::OUString& _rURL )
+{
+    if ( !_rRegisteredName.getLength() )
+        throw IllegalArgumentException();
+
+    // the config node where all pooling relevant info are stored under
+    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName( _rRegisteredName ) )
+    {
+        OConfigurationNode aRegisterObj = aDbRegisteredNamesRoot.openNode( _rRegisteredName );
+        aRegisterObj.getNodeValue(getDbLocationNodeName()) >>= _rURL;
+        _rURL = SvtPathOptions().SubstituteVariable( _rURL );
+        return true;
+    }
+    return false;
+}
+
 // XNamingService
 //------------------------------------------------------------------------------
 Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
@@ -317,28 +349,20 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const rtl::OUStri
     if (DatabaseAccessContext_Base::rBHelper.bDisposed)
         throw DisposedException();
 
-    if (!_rName.getLength())
-        throw IllegalArgumentException();
-
     ::rtl::OUString sURL;
-    // the config node where all pooling relevant info are stored under
-    OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
-    if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
-    {
-        OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
-        aThisDriverSettings.getNodeValue(getDbLocationNodeName()) >>= sURL;
-        sURL = SvtPathOptions().SubstituteVariable(sURL);
+    if ( !getURLForRegisteredObject( _rName, sURL ) )
+        NoSuchElementException();
 
-        // check if URL is already loaded
-        Reference< XInterface > xExistent = getObject(sURL);
-        if ( xExistent.is() )
-            return xExistent;
-    }
     if ( !sURL.getLength() )
+        // there is a registration for this name, but no URL
         throw IllegalArgumentException();
 
-    return loadObjectFromURL(_rName,sURL);
+    // check if URL is already loaded
+    Reference< XInterface > xExistent = getObject( sURL );
+    if ( xExistent.is() )
+        return xExistent;
+
+    return loadObjectFromURL( _rName, sURL );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL)
@@ -347,16 +371,17 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     {
         ::ucb::Content aContent(_sURL,Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         if ( !aContent.isDocument() )
-            throw IllegalArgumentException(_sURL, Reference<XNamingService>(this),1);
+            throw InteractiveIOException(
+                _sURL, *this, InteractionClassification_ERROR, IOErrorCode_NO_FILE
+            );
     }
-    catch(IllegalArgumentException)
+    catch(InteractiveIOException e)
     {
-        throw;
+        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), makeAny( e ) );
     }
-    catch(Exception)
+    catch(Exception e)
     {
-        throw IllegalArgumentException(_sURL, Reference<XNamingService>(this),1);
-        OSL_ENSURE(0,"Exception catched!");
+        throw WrappedTargetException( _sURL, Reference<XNamingService>(this), makeAny( e ) );
     }
 
     Reference< XInterface > xExistent = *(new ODatabaseSource(*this, _rName, m_xServiceManager,this));
@@ -599,20 +624,21 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
         if ( xExistent.is() )
             return makeAny(xExistent);
 
-        try
+        // see whether this is an registered name
+        ::rtl::OUString sURL;
+        if ( getURLForRegisteredObject( _rName, sURL ) )
         {
-            xExistent = getRegisteredObject(_rName);
+            // is the object cached under its URL?
+            xExistent = getObject( sURL );
         }
-        catch(Exception)
-        {
-            // will throw an NoSuchElementException if neccessary
-            if ( !xExistent.is() )
-            {
-                // try to load this as URL
-                xExistent = loadObjectFromURL(_rName,_rName);
-            }
-        }
-        return makeAny(xExistent);
+        else
+            // interpret the name as URL
+            sURL = _rName;
+
+        if ( !xExistent.is() )
+            // try to load this as URL
+            xExistent = loadObjectFromURL( _rName, sURL );
+        return makeAny( xExistent );
     }
     catch (NoSuchElementException&)
     {   // let these exceptions through
@@ -628,7 +654,7 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
     }
     catch (Exception& e)
     {   // exceptions other than the speciafied ones -> wrap
-        throw NoSuchElementException(_rName, *this);
+        throw WrappedTargetException(_rName, *this, makeAny( e ) );
     }
 }
 
