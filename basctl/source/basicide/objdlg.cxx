@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-26 09:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,16 +84,6 @@
 //#include <sfx2/sfxhelp.hxx>
 //#endif
 
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
-#endif
-
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
-
-
-
 
 ObjectTreeListBox::ObjectTreeListBox( Window* pParent, const ResId& rRes )
     : BasicTreeListBox( pParent, rRes )
@@ -106,6 +96,7 @@ ObjectTreeListBox::~ObjectTreeListBox()
 
 void ObjectTreeListBox::Command( const CommandEvent& rCEvt )
 {
+    /*
     if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
     {
         String aText;
@@ -132,6 +123,7 @@ void ObjectTreeListBox::Command( const CommandEvent& rCEvt )
             DragServer::Clear();
         }
     }
+    */
 }
 
 void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
