@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-30 14:38:57 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 13:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,11 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
     else if( IsSelection() )
     {
         SvCacheStream aStream(20480);
+#ifdef __BIGENDIAN
+        aStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+#else
+        aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+#endif
         WriterRef xWrt;
         SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_TEXT ), xWrt );
         if( xWrt.Is() )
