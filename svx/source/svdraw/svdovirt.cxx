@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:59:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,22 @@
 #include "svdetc.hxx"
 #include "svdhdl.hxx"
 
+#ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
+#include <svx/sdr/contact/viewcontactofvirtobj.hxx>
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 {
     return rRefObj.GetProperties();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// AW, OD 2004-05-03 #i27224#
+sdr::contact::ViewContact* SdrVirtObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfVirtObj(*this);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
