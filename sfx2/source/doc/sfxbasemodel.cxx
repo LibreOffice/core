@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:10:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2538,7 +2538,11 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
     {
         OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( rHint.GetEventId() );
         DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
-        OINTERFACEITERATORHELPER aIt( *pIC );
+        OINTERFACECONTAINERHELPER aIC( m_aMutex );
+        SEQUENCE < REFERENCE < XINTERFACE > > aElements = pIC->getElements();
+        for ( sal_Int32 nElem=0; nElem<aElements.getLength(); nElem++ )
+            aIC.addInterface( aElements[nElem] );
+        OINTERFACEITERATORHELPER aIt( aIC );
         while( aIt.hasMoreElements() )
         {
             try
