@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:37:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -192,17 +190,13 @@ extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, FASTBOOL bChk );
 SV_IMPL_PTRARR( SwFlySaveArr, SwFlySave* )
 
 inline const SwFmtFrmSize GetFrmSize(const SfxItemSet& rSet, BOOL bInP=TRUE)
-    { return (const SwFmtFrmSize&)rSet.Get( RES_FRM_SIZE,bInP); }
+{
+    return (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE,bInP);
+}
 
-
-/*  */
-
-
-SwFlySave::SwFlySave( const SwPaM& rPam, SfxItemSet& rSet )
-    : aFlySet( rSet ),
-    nSttNd( rPam.GetPoint()->nNode ), nEndNd( nSttNd ),
-    nEndCnt( 0 ), nPageWidth( ATT_MIN_SIZE ),
-    nDropLines( 0 ), nDropAnchor( 0 )
+SwFlySave::SwFlySave(const SwPaM& rPam, SfxItemSet& rSet)
+    : aFlySet(rSet), nSttNd(rPam.GetPoint()->nNode), nEndNd(nSttNd), nEndCnt(0),
+     nPageWidth(ATT_MIN_SIZE), nDropLines(0), nDropAnchor(0)
 {
 }
 
@@ -1018,7 +1012,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         if( USHRT_MAX == nColSpace )
             nColSpace = 720;
 
-        const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)pSet->Get( RES_LR_SPACE );
         ULONG nWidth = USHRT_MAX;
         aCol.Init( nCols, nColSpace, USHORT( nWidth ) );
         if( nCols == ( aColumns.Count() / 2 ) )
@@ -1483,6 +1476,12 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
 void SwRTFParser::GetPageSize( Size& rSize )
 {
     ASSERT(!maSegments.empty(), "not possible");
+    if (maSegments.empty())
+    {
+        rSize.Width() = 12240 - 1800 - 1800;
+        rSize.Height() = 15840 - 1440 - 1440;
+        return;
+    }
 
     const rtfSection &rSect = maSegments.back();
 
