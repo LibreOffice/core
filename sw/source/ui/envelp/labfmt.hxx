@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include "labimp.hxx"
 #include "labimg.hxx"
 
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 class SwLabFmtPage;
 
 // class SwLabPreview -------------------------------------------------------
@@ -117,6 +120,8 @@ public:
 
 class SwLabFmtPage : public SfxTabPage
 {
+    FixedInfo       aMakeFI;
+    FixedInfo       aTypeFI;
     SwLabPreview aPreview;
     FixedText    aHDistText;
     MetricField  aHDistField;
@@ -134,6 +139,7 @@ class SwLabFmtPage : public SfxTabPage
     NumericField aColsField;
     FixedText    aRowsText;
     NumericField aRowsField;
+    PushButton   aSavePB;
 
     Timer aPreviewTimer;
     BOOL  bModified;
@@ -146,6 +152,7 @@ class SwLabFmtPage : public SfxTabPage
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( PreviewHdl, Timer * );
     DECL_LINK( LoseFocusHdl, Control * );
+    DECL_LINK( SaveHdl, PushButton* );
 
     void ChangeMinMax();
 
@@ -161,6 +168,39 @@ public:
 
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 };
+/* -----------------------------23.01.01 10:26--------------------------------
 
+ ---------------------------------------------------------------------------*/
+class SwSaveLabelDlg : public ModalDialog
+{
+    GroupBox        aOptionsGB;
+    FixedText       aMakeFT;
+    ComboBox        aMakeCB;
+    FixedText       aTypeFT;
+    Edit            aTypeED;
+
+    OKButton        aOKPB;
+    CancelButton    aCancelPB;
+    HelpButton      aHelpPB;
+
+    QueryBox        aQueryMB;
+
+    sal_Bool        bSuccess;
+    SwLabFmtPage*   pLabPage;
+    SwLabRec&       rLabRec;
+
+    DECL_LINK(OkHdl, OKButton*);
+    DECL_LINK(ModifyHdl, Edit*);
+
+public:
+    SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
+
+    void    SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType)
+        {
+            aMakeCB.SetText(String(rMake));
+            aTypeED.SetText(String(rType));
+        }
+    sal_Bool GetLabel(SwLabItem& rItem);
+};
 #endif
 

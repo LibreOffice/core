@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:22:03 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,25 @@ TabPage TP_LAB_FMT
     HelpID = HID_LAB_FMT ;
     Size = MAP_APPFONT ( 260 , 135 ) ;
     Hide = TRUE ;
+    FixedText FI_MAKE
+    {
+        Pos = MAP_APPFONT ( 108 , 7 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+    };
+    FixedText FI_TYPE
+    {
+        Pos = MAP_APPFONT ( 160 , 7 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+    };
     Window WIN_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 108 , 6 ) ;
-        Size = MAP_APPFONT ( 146 , 123 ) ;
+        Pos = MAP_APPFONT ( 108 , 20 ) ;
+        Size = MAP_APPFONT ( 146 , 109 ) ;
     };
     FixedText TXT_HDIST
     {
-        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Horiz. Abstand" ;
         Text [ English ] = "Horiz. distance" ;
@@ -108,7 +118,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_HDIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 6 ) ;
+        Pos = MAP_APPFONT ( 62 , 5 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -120,7 +130,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_VDIST
     {
-        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Vert. Abstand" ;
         Text [ English ] = "Vert. distance" ;
@@ -150,7 +160,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_VDIST
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 21 ) ;
+        Pos = MAP_APPFONT ( 62 , 19 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -162,7 +172,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Breite" ;
         Text [ English ] = "Width" ;
@@ -192,7 +202,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_WIDTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 36 ) ;
+        Pos = MAP_APPFONT ( 62 , 33 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -204,7 +214,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 49 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "H~öhe" ;
         Text [ English ] = "Height" ;
@@ -234,7 +244,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_HEIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 51 ) ;
+        Pos = MAP_APPFONT ( 62 , 47 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -246,7 +256,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_LEFT
     {
-        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Rand ~links" ;
         Text [ English ] = "Left margin" ;
@@ -276,7 +286,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_LEFT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 66 ) ;
+        Pos = MAP_APPFONT ( 62 , 61 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -290,7 +300,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_UPPER
     {
-        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Rand ~oben" ;
         Text [ English ] = "Upper margin" ;
@@ -320,7 +330,7 @@ TabPage TP_LAB_FMT
     MetricField FLD_UPPER
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 81 ) ;
+        Pos = MAP_APPFONT ( 62 , 75 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -334,7 +344,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_COLUMNS
     {
-        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Spalten" ;
         Text [ English ] = "Columns" ;
@@ -364,7 +374,7 @@ TabPage TP_LAB_FMT
     NumericField FLD_COLUMNS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 96 ) ;
+        Pos = MAP_APPFONT ( 62 , 89 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -375,7 +385,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_ROWS
     {
-        Pos = MAP_APPFONT ( 6 , 113 ) ;
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Zeilen" ;
         Text [ English ] = "Rows" ;
@@ -405,7 +415,7 @@ TabPage TP_LAB_FMT
     NumericField FLD_ROWS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 62 , 111 ) ;
+        Pos = MAP_APPFONT ( 62 , 103 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -413,6 +423,13 @@ TabPage TP_LAB_FMT
         Spin = TRUE ;
         Minimum = 1 ;
         First = 1 ;
+    };
+    PushButton  PB_SAVE
+    {
+        Pos = MAP_APPFONT ( 52 , 118 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Speichern..." ;
+        Text [ English ] = "Save..." ;
     };
 };
  // String *******************************************************************
@@ -623,4 +640,79 @@ String STR_ROWS
     Text[ korean ] = "Çà";
     Text[ turkish ] = "Satýr";
     Text[ language_user1 ] = " ";
+};
+ModalDialog DLG_SAVE_LABEL
+{
+    HelpID = HID_SAVE_LABEL_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 230 , 60 ) ;
+    Text = "Etikettenformat speichern" ;
+    Text [ ENGLISH ] = "Save label format" ;
+    Moveable = TRUE ;
+    FixedText FT_MAKE
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Neuer Name" ;
+        Text [ ENGLISH ] = "New name" ;
+    };
+    ComboBox CB_MAKE
+    {
+        Pos = MAP_APPFONT ( 65 , 15 ) ;
+        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+        Text = "Neuer Name" ;
+        Text [ ENGLISH ] = "New name" ;
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Typ" ;
+        Text [ ENGLISH ] = "Typ" ;
+    };
+    Edit ED_TYPE
+    {
+        Pos = MAP_APPFONT ( 65 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Border = TRUE;
+    };
+    GroupBox GB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 165 , 54 ) ;
+        Text = "Optionen";
+        Text [ ENGLISH ] = "Options" ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 174 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 174 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 174 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    QueryBox MB_QUERY
+    {
+        Buttons = WB_YES_NO ;
+        DefButton = WB_DEF_CANCEL ;
+        Message = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?" ;
+        Message [ English ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?" ;
+    };
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,11 +81,20 @@
 #include "label.hrc"
 #include "labfmt.hrc"
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+using namespace utl;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 
 // #define ------------------------------------------------------------------
 
 #define ROUND(x) ((USHORT) ((x) + .5))
-
+#define C2S(cChar) String::CreateFromAscii(cChar)
+#define C2U(cChar) OUString::createFromAscii(cChar)
 // --------------------------------------------------------------------------
 
 
@@ -343,25 +352,26 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_LAB_FMT), rSet),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL)),
-
-    aPreview     (this, SW_RES(WIN_PREVIEW)),
-    aHDistText   (this, SW_RES(TXT_HDIST  )),
-    aHDistField  (this, SW_RES(FLD_HDIST  )),
-    aVDistText   (this, SW_RES(TXT_VDIST  )),
-    aVDistField  (this, SW_RES(FLD_VDIST  )),
-    aWidthText   (this, SW_RES(TXT_WIDTH  )),
-    aWidthField  (this, SW_RES(FLD_WIDTH  )),
-    aHeightText  (this, SW_RES(TXT_HEIGHT )),
-    aHeightField (this, SW_RES(FLD_HEIGHT )),
-    aLeftText    (this, SW_RES(TXT_LEFT  )),
-    aLeftField   (this, SW_RES(FLD_LEFT  )),
-    aUpperText   (this, SW_RES(TXT_UPPER  )),
-    aUpperField  (this, SW_RES(FLD_UPPER  )),
-    aColsText    (this, SW_RES(TXT_COLUMNS)),
-    aColsField   (this, SW_RES(FLD_COLUMNS)),
-    aRowsText    (this, SW_RES(TXT_ROWS  )),
-    aRowsField   (this, SW_RES(FLD_ROWS  )),
-
+    aMakeFI      (this, ResId(FI_MAKE)),
+    aTypeFI      (this, ResId(FI_TYPE)),
+    aPreview     (this, ResId(WIN_PREVIEW)),
+    aHDistText   (this, ResId(TXT_HDIST  )),
+    aHDistField  (this, ResId(FLD_HDIST  )),
+    aVDistText   (this, ResId(TXT_VDIST  )),
+    aVDistField  (this, ResId(FLD_VDIST  )),
+    aWidthText   (this, ResId(TXT_WIDTH  )),
+    aWidthField  (this, ResId(FLD_WIDTH  )),
+    aHeightText  (this, ResId(TXT_HEIGHT )),
+    aHeightField (this, ResId(FLD_HEIGHT )),
+    aLeftText    (this, ResId(TXT_LEFT   )),
+    aLeftField   (this, ResId(FLD_LEFT   )),
+    aUpperText   (this, ResId(TXT_UPPER  )),
+    aUpperField  (this, ResId(FLD_UPPER  )),
+    aColsText    (this, ResId(TXT_COLUMNS)),
+    aColsField   (this, ResId(FLD_COLUMNS)),
+    aRowsText    (this, ResId(TXT_ROWS   )),
+    aRowsField   (this, ResId(FLD_ROWS   )),
+    aSavePB      (this, ResId(PB_SAVE  )),
     bModified(FALSE)
 
 {
@@ -398,6 +408,7 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aColsField  .SetLoseFocusHdl( aLk );
     aRowsField  .SetLoseFocusHdl( aLk );
 
+    aSavePB.SetClickHdl( LINK (this, SwLabFmtPage, SaveHdl));
     // Timer einstellen
     aPreviewTimer.SetTimeout(1000);
     aPreviewTimer.SetTimeoutHdl(LINK(this, SwLabFmtPage, PreviewHdl));
@@ -573,8 +584,6 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
 
 BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
-    SwLabItem aItem;
-    GetParent()->GetLabItem(aItem);
     FillItem(aItem);
     rSet.Put(aItem);
 
@@ -582,9 +591,6 @@ BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 }
 
 // --------------------------------------------------------------------------
-
-
-
 void SwLabFmtPage::Reset(const SfxItemSet& rSet)
 {
     // Fields initialisieren
@@ -609,146 +615,133 @@ void SwLabFmtPage::Reset(const SfxItemSet& rSet)
 
     aColsField  .SetValue(aItem.nCols);
     aRowsField  .SetValue(aItem.nRows);
-
+    aMakeFI.SetText(aItem.aMake);
+    aTypeFI.SetText(aItem.aType);
     PreviewHdl(0);
 }
+/* -----------------------------22.01.01 15:11--------------------------------
 
+ ---------------------------------------------------------------------------*/
 
+IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
+{
+    SwLabRec aRec;
+    aRec.lHDist  = GETFLDVAL(aHDistField );
+    aRec.lVDist  = GETFLDVAL(aVDistField );
+    aRec.lWidth  = GETFLDVAL(aWidthField );
+    aRec.lHeight = GETFLDVAL(aHeightField);
+    aRec.lLeft   = GETFLDVAL(aLeftField  );
+    aRec.lUpper  = GETFLDVAL(aUpperField );
+    aRec.nCols   = (USHORT) aColsField.GetValue();
+    aRec.nRows   = (USHORT) aRowsField.GetValue();
+    aRec.bCont = aItem.bCont;
+    SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
+    pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
+    pSaveDlg->Execute();
+    if(pSaveDlg->GetLabel(aItem))
+    {
+        bModified = FALSE;
+        const Sequence<OUString>& rMan = GetParent()->GetLabelsConfig().GetManufacturers();
+        SvStringsDtor& rMakes = GetParent()->Makes();
+        if(rMakes.Count() < (USHORT)rMan.getLength())
+        {
+            rMakes.DeleteAndDestroy(0, rMakes.Count());
+            const OUString* pMan = rMan.getConstArray();
+            for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
+            {
+                rMakes.Insert( new String(pMan[nMan]), rMakes.Count() );
+            }
+        }
+        aMakeFI.SetText(aItem.aMake);
+        aTypeFI.SetText(aItem.aType);
+    }
+    delete pSaveDlg;
+    return 0;
+}
+/* -----------------------------23.01.01 10:41--------------------------------
 
-/*
-$Log: not supported by cvs2svn $
-Revision 1.60  2000/09/18 16:05:26  willem.vandorp
-OpenOffice header added.
+ ---------------------------------------------------------------------------*/
+SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
+    ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
+    rLabRec(rRec),
+    pLabPage(pParent),
+    aOptionsGB(this,ResId(GB_OPTIONS  )),
+    aMakeFT(this,   ResId(FT_MAKE     )),
+    aMakeCB(this,   ResId(CB_MAKE     )),
+    aTypeFT(this,   ResId(FT_TYPE     )),
+    aTypeED(this,   ResId(ED_TYPE     )),
+    aOKPB(this,     ResId(PB_OK     )),
+    aCancelPB(this, ResId(PB_CANCEL )),
+    aHelpPB(this,   ResId(PB_HELP   )),
+    aQueryMB(this,  ResId(MB_QUERY )),
+    bSuccess(sal_False)
+{
+    FreeResource();
 
-Revision 1.59  2000/04/18 15:31:35  os
-UNICODE
+    aOKPB.SetClickHdl(LINK(this, SwSaveLabelDlg, OkHdl));
+    Link aLk(LINK(this, SwSaveLabelDlg, ModifyHdl));
+    aMakeCB.SetModifyHdl(aLk);
+    aTypeED.SetModifyHdl(aLk);
 
-Revision 1.58  2000/03/03 15:17:00  os
-StarView remainders removed
+    SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
+    const Sequence<OUString>& rMan = rCfg.GetManufacturers();
+    const OUString* pMan = rMan.getConstArray();
+    for(sal_Int32 i = 0; i < rMan.getLength(); i++)
+        aMakeCB.InsertEntry(pMan[i]);
+}
+/* -----------------------------23.01.01 10:40--------------------------------
 
-Revision 1.57  2000/02/11 14:45:37  hr
-#70473# changes for unicode ( patched by automated patchtool )
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, pButton)
+{
+    SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
+    String sMake(aMakeCB.GetText());
+    String sType(aTypeED.GetText());
+    if(rCfg.HasLabel(sMake, sType))
+    {
+        String sTmp(aQueryMB.GetMessText());
+        String sQuery(sTmp);
+        sQuery.SearchAndReplace(C2S("%1"), sMake);
+        sQuery.SearchAndReplace(C2S("%2"), sType);
+        aQueryMB.SetMessText(sQuery);
 
-Revision 1.56  1999/07/23 08:00:30  OS
-#67818# set font transparent
+        short eRet = aQueryMB.Execute();
+        aQueryMB.SetMessText(sTmp);
+        if(RET_YES != eRet)
+            return 0;
+    }
+    rLabRec.aType = sType;
+    rCfg.SaveLabel(sMake, sType, rLabRec);
+    bSuccess = sal_True;
+    EndDialog(RET_OK);
+    return 0;
+}
+/* -----------------------------23.01.01 11:22--------------------------------
 
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SwSaveLabelDlg, ModifyHdl, Edit*, EMPTYARG)
+{
+    aOKPB.Enable(aMakeCB.GetText().Len() && aTypeED.GetText().Len());
+    return 0;
+}
+/* -----------------------------23.01.01 16:06--------------------------------
 
-      Rev 1.55   23 Jul 1999 10:00:30   OS
-   #67818# set font transparent
-
-      Rev 1.54   23 Sep 1998 12:42:28   OM
-   #56852# Minimale Etikettengroesse 1mm
-
-      Rev 1.53   11 Sep 1998 12:29:46   OM
-   #56319# Richtiges Etikettenformat verwenden
-
-      Rev 1.52   08 Sep 1998 16:52:34   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.51   07 Sep 1998 16:59:32   OM
-   #55930# Einzelnes Etikett an der korrekten Position drucken
-
-      Rev 1.50   08 Jul 1998 17:16:48   OM
-   #52127# os2icci3-Compiler Optimierungsbug umpropelt
-
-      Rev 1.49   14 Mar 1998 14:31:36   OM
-   ExchangeSupport repariert/implementiert
-
-      Rev 1.48   14 Mar 1998 14:10:24   OM
-   ExchangeSupport repariert/implementiert
-
-      Rev 1.47   24 Nov 1997 11:52:12   MA
-   includes
-
-      Rev 1.46   03 Nov 1997 13:17:10   MA
-   precomp entfernt
-
-      Rev 1.45   07 Apr 1997 14:46:28   MH
-   chg: header
-
-      Rev 1.44   11 Nov 1996 09:44:16   MA
-   ResMgr
-
-      Rev 1.43   26 Jul 1996 20:36:38   MA
-   includes
-
-      Rev 1.42   07 Mar 1996 14:14:44   HJS
-   line 270: &aArr => aArr
-
-      Rev 1.41   06 Mar 1996 10:52:36   MA
-   chg: SV309
-
-      Rev 1.40   06 Feb 1996 15:19:04   JP
-   Link Umstellung 305
-
-      Rev 1.39   25 Jan 1996 16:58:16   OM
-   Dialogfelder richtig initialisieren
-
-      Rev 1.38   24 Jan 1996 18:25:08   OM
-   #24534# Redraw-Bug in Etiketten Preview gefixt
-
-      Rev 1.37   22 Jan 1996 12:36:50   OM
-   Berechnungsfehler in Labels-Preview gefixt
-
-      Rev 1.36   28 Nov 1995 21:14:56   JP
-   UiSystem-Klasse aufgehoben, in initui/swtype aufgeteilt
-
-      Rev 1.35   27 Nov 1995 19:36:32   OM
-   HasExchangeSupport->303a
-
-      Rev 1.34   24 Nov 1995 16:59:42   OM
-   PCH->PRECOMPILED
-
-      Rev 1.33   23 Nov 1995 18:02:08   OM
-   In DeactivatePage ItemSet fuellen
-
-      Rev 1.32   08 Nov 1995 13:48:22   OM
-   Change->Set
-
-      Rev 1.31   10 Jul 1995 09:50:56   MA
-   LabelDlg optimiert und etwas aufgeraeumt.
-
-      Rev 1.30   24 May 1995 18:15:58   ER
-   Segmentierung
-
-      Rev 1.29   23 Apr 1995 17:33:32   PK
-   bugfix: etik.-fmt. wurde manchm. falsch angezeigt
-
-      Rev 1.28   05 Apr 1995 19:35:18   PK
-   fertig zur beta
-
-      Rev 1.27   05 Apr 1995 09:26:58   JP
-   Benutzung vom Link-Makro eingeschraenkt
-
-      Rev 1.26   04 Apr 1995 18:38:42   PK
-   geht immer weiter
-
-      Rev 1.25   24 Mar 1995 20:30:40   PK
-   geht immer weiter
-
-      Rev 1.24   23 Mar 1995 18:33:48   PK
-   geht immer weiter ...
-
-      Rev 1.23   17 Mar 1995 17:10:30   PK
-   geht immer weiter
-
-      Rev 1.22   15 Mar 1995 13:27:04   PK
-   geht immer weiter
-
-      Rev 1.21   06 Mar 1995 00:08:18   PK
-   linkbarer envelp-zustand
-
-      Rev 1.20   21 Feb 1995 15:39:32   PK
-   erstmal eingecheckt
-
-      Rev 1.19   25 Jan 1995 17:55:56   OS
-   Timerinstrumentierung
-
-      Rev 1.18   18 Nov 1994 15:54:42   MA
-   min -> Min, max -> Max
-
-      Rev 1.17   25 Oct 1994 17:33:36   ER
-   add: PCH
-
-*/
+ ---------------------------------------------------------------------------*/
+sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
+{
+    if(bSuccess)
+    {
+        rItem.aMake = aMakeCB.GetText();
+        rItem.aType = aTypeED.GetText();
+        rItem.lHDist  = rLabRec.lHDist;
+        rItem.lVDist  = rLabRec.lVDist;
+        rItem.lWidth  = rLabRec.lWidth;
+        rItem.lHeight = rLabRec.lHeight;
+        rItem.lLeft   = rLabRec.lLeft;
+        rItem.lUpper  = rLabRec.lUpper;
+        rItem.nCols   = rLabRec.nCols;
+        rItem.nRows   = rLabRec.nRows;
+    }
+    return bSuccess;
+}
 

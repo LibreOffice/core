@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 13:49:34 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #endif
 
 class SwLabRecs;
+class SwLabRec;
 class SwLabelConfig : public utl::ConfigItem
 {
     com::sun::star::uno::Sequence<rtl::OUString> aNodeNames;
@@ -80,6 +81,10 @@ public:
     void    FillLabels(const rtl::OUString& rManufacturer, SwLabRecs& rLabArr);
     const com::sun::star::uno::Sequence<rtl::OUString>&
             GetManufacturers() const {return aNodeNames;}
+
+    sal_Bool    HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType);
+    void        SaveLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType,
+                            const SwLabRec& rRec);
 };
 
 #endif

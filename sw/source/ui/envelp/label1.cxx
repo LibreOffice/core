@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 14:05:11 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,8 +507,6 @@ SwLabRec* SwLabDlg::GetRecord(const String &rRecName, sal_Bool bCont)
 
 // --------------------------------------------------------------------------
 
-
-
 Printer *SwLabDlg::GetPrt()
 {
     if (pPrtPage)
@@ -518,7 +516,6 @@ Printer *SwLabDlg::GetPrt()
 }
 
 // --------------------------------------------------------------------------
-
 SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_LAB_LAB), rSet),
     pNewDBMgr(NULL),
@@ -543,7 +540,6 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aTypeBox       (this, SW_RES(BOX_TYPE   )),
     aFormatInfo    (this, SW_RES(INF_FORMAT )),
     aFormatGroup   (this, SW_RES(GRP_FORMAT ))
-
 {
     WaitObject aWait( pParent );
 
@@ -885,8 +881,6 @@ sal_Bool SwLabPage::FillItemSet(SfxItemSet& rSet)
 
 // --------------------------------------------------------------------------
 
-
-
 void SwLabPage::Reset(const SfxItemSet& rSet)
 {
     aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
@@ -896,8 +890,21 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
     aAddrBox    .Check      ( aItem.bAddr );
     aWritingEdit.SetText    ( aWriting.ConvertLineEnd() );
-    aMakeBox    .SelectEntry( aItem.aMake );
 
+    const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().Count();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        String &rStr = *GetParent()->Makes()[i];
+        if(aMakeBox.GetEntryPos(String(rStr)) == LISTBOX_ENTRY_NOTFOUND)
+            aMakeBox.InsertEntry( rStr );
+    }
+
+
+    aMakeBox    .SelectEntry( aItem.aMake );
+    //save the current type
+    String sType(aItem.aType);
+    aMakeBox.GetSelectHdl().Call( &aMakeBox );
+    aItem.aType = sType;
     if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {
         aTypeBox.SelectEntry(aItem.aType);

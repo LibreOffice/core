@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-15 14:03:51 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,8 @@ public:
     static void UpdateFieldInformation(::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
                                                                                 const SwLabItem& rItem);
     const String& GetBusinessCardStr() const {return sBusinessCardDlg;}
+
+    SwLabelConfig& GetLabelsConfig() {return aLabelsCfg;}
 
 };
 

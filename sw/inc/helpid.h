@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:00:02 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,3 +876,5 @@
 #define HID_INSERT_IDX_MRK_SRCH_WORDONLY        (HID_BASE + 2148 )
 #define HID_DLG_CREATE_AUTOMARK                 (HID_BASE + 2149 )
 #define HID_BUSINESS_CARD_CONTENT               (HID_BASE + 2150 )
+#define HID_SAVE_LABEL_DLG                      (HID_BASE + 2151 )
+

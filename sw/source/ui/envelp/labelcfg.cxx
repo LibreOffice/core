@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-16 10:42:30 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 /* -----------------------------15.01.01 11:17--------------------------------
@@ -163,6 +164,33 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
     return pNewRec;
 }
 //-----------------------------------------------------------------------------
+Sequence<PropertyValue> lcl_CreateProperties(
+    Sequence<OUString>& rPropNames, const SwLabRec& rRec)
+{
+    const OUString* pNames = rPropNames.getConstArray();
+    Sequence<PropertyValue> aRet(rPropNames.getLength());
+    PropertyValue* pValues = aRet.getArray();
+
+    for(sal_Int32 nProp = 0; nProp < 10; nProp++)
+    {
+        pValues[nProp].Name = pNames[nProp];
+        switch(nProp)
+        {
+            case 0: pValues[nProp].Value <<= OUString(rRec.aType); break;
+            case 1: pValues[nProp].Value.setValue(&rRec.bCont, ::getBooleanCppuType());break;
+            case 2: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lHDist);break;
+            case 3: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lVDist);     break;
+            case 4: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lWidth);     break;
+            case 5: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lHeight);    break;
+            case 6: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lLeft);      break;
+            case 7: pValues[nProp].Value <<= TWIP_TO_MM100(rRec.lUpper);     break;
+            case 8: pValues[nProp].Value <<= rRec.nCols;      break;
+            case 9: pValues[nProp].Value <<= rRec.nRows;      break;
+        }
+    }
+    return aRet;
+}
+//-----------------------------------------------------------------------------
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
     const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
@@ -178,6 +206,126 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         SwLabRec* pNewRec = lcl_CreateSwLabRec(aValues, rManufacturer);
         rLabArr.C40_INSERT( SwLabRec, pNewRec, rLabArr.Count() );
     }
+}
+/* -----------------------------23.01.01 11:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
+{
+    const OUString* pNode = aNodeNames.getConstArray();
+    sal_Bool bFound = sal_False;
+    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength() && !bFound; nNode++)
+    {
+        if(pNode[nNode] == rManufacturer)
+            bFound = sal_True;
+    }
+    if(bFound)
+    {
+        const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
+        const OUString* pLabels = aLabels.getConstArray();
+        for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
+        {
+            OUString sPrefix(rManufacturer);
+            sPrefix += C2U("/");
+            sPrefix += pLabels[nLabel];
+            sPrefix += C2U("/");
+            Sequence<OUString> aProperties(1);
+            aProperties.getArray()[0] = sPrefix;
+            aProperties.getArray()[0] += C2U("Name");
+            Sequence<Any>   aValues = GetProperties(aProperties);
+            const Any* pValues = aValues.getConstArray();
+            if(pValues[0].hasValue())
+            {
+                OUString sTmp;
+                pValues[0] >>= sTmp;
+                if(rType == sTmp)
+                    return sal_True;
+            }
+        }
+    }
+    return sal_False;
+}
+/* -----------------------------23.01.01 11:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
+{
+    const OUString* pLabels = rLabels.getConstArray();
+    for(sal_Int32 i = 0; i < rLabels.getLength(); i++)
+        if(pLabels[i] == rNode)
+            return sal_True;
+    return sal_False;
+}
+//-----------------------------------------------------------------------------
+void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
+        const rtl::OUString& rType, const SwLabRec& rRec)
+{
+    const OUString* pNode = aNodeNames.getConstArray();
+    sal_Bool bFound = sal_False;
+    for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength() && !bFound; nNode++)
+    {
+        if(pNode[nNode] == rManufacturer)
+            bFound = sal_True;
+    }
+    if(!bFound)
+    {
+        if(!AddNode(OUString(), rManufacturer))
+        {
+            DBG_ERROR("New configuration node could not be created")
+            return ;
+        }
+        else
+        {
+            aNodeNames = GetNodeNames(OUString());
+        }
+    }
+
+    const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
+    const OUString* pLabels = aLabels.getConstArray();
+    OUString sFoundNode;
+    for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
+    {
+        OUString sPrefix(rManufacturer);
+        sPrefix += C2U("/");
+        sPrefix += pLabels[nLabel];
+        sPrefix += C2U("/");
+        Sequence<OUString> aProperties(1);
+        aProperties.getArray()[0] = sPrefix;
+        aProperties.getArray()[0] += C2U("Name");
+        Sequence<Any>   aValues = GetProperties(aProperties);
+        const Any* pValues = aValues.getConstArray();
+        if(pValues[0].hasValue())
+        {
+            OUString sTmp;
+            pValues[0] >>= sTmp;
+            if(rType == sTmp)
+            {
+                sFoundNode = pLabels[nLabel];
+                break;
+            }
+        }
+    }
+    // if not found - generate a unique node name
+    if(!sFoundNode.getLength())
+    {
+        sal_Int32 nIndex = aLabels.getLength();
+        OUString sPrefix(C2U("Label"));
+        sFoundNode = sPrefix;
+        sFoundNode += OUString::valueOf(nIndex);
+        while(lcl_Exists(sFoundNode, aLabels))
+        {
+            sFoundNode = sPrefix;
+            sFoundNode += OUString::valueOf(nIndex++);
+        }
+    }
+    OUString sPrefix(rManufacturer);
+    sPrefix += C2U("/");
+    sPrefix += sFoundNode;
+    sPrefix += C2U("/");
+    Sequence<OUString> aPropNames = lcl_CreatePropertyNames(sPrefix);
+    Sequence<PropertyValue> aPropValues = lcl_CreateProperties(aPropNames, rRec);
+    SetSetProperties(rManufacturer, aPropValues);
+
 }
 
 

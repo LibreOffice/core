@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2001-01-24 09:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,19 @@
 #define TXT_ROWS     16
 #define FLD_ROWS     17
 #define GRP_NONAME   18
-#define BTN_OK       19
-#define BTN_CANCEL   20
+#define PB_SAVE      19
+#define FI_MAKE      20
+#define FI_TYPE      21
+
+#define GB_OPTIONS      1
+#define FT_MAKE         2
+#define CB_MAKE         3
+#define FT_TYPE         4
+#define ED_TYPE         5
+#define PB_OK           6
+#define PB_CANCEL       7
+#define PB_HELP         8
+#define MB_QUERY        9
 
 // Globale Resourcen ********************************************************
 
