@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:50:52 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:48:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,8 +100,6 @@ JAVA_BEAN_SRC_FILES=\
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/NativeService.java \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeConnection.java \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/beans$/OfficeWindow.java
-
-IDLFILES={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 
 AUTODOCPARAMS= -lg c++ \
         -p sal $(INCOUT) -t sal -t osl -t rtl \
