@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryptiontemplateimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper3<
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTarget ;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
+        ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public :
         XMLEncryptionTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
@@ -139,6 +140,13 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper3<
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL getTarget(
         ) throw (com::sun::star::uno::RuntimeException) ;
+
+        virtual void SAL_CALL setStatus(
+            ::com::sun::star::xml::crypto::SecurityOperationStatus status )
+            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::xml::crypto::SecurityOperationStatus
+            SAL_CALL getStatus(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
         //Methods from XInitialization
         virtual void SAL_CALL initialize(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signaturecreatorimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,7 @@ void SignatureCreatorImpl::notifyResultListener() const
     cssu::Reference< cssxc::sax::XSignatureCreationResultListener >
         xSignatureCreationResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
 
-    xSignatureCreationResultListener->signatureCreated(
-        m_nSecurityId,
-        m_bOperationSucceed?(cssxc::sax::SignatureCreationResult_CREATIONSUCCEED):
-              (cssxc::sax::SignatureCreationResult_CREATIONFAIL));
+    xSignatureCreationResultListener->signatureCreated( m_nSecurityId, m_nStatus );
 }
 
 void SignatureCreatorImpl::startEngine( const cssu::Reference<
@@ -202,18 +199,17 @@ void SignatureCreatorImpl::startEngine( const cssu::Reference<
     try
     {
         xResultTemplate = m_xXMLSignature->generate(xSignatureTemplate, m_xXMLSecurityContext);
+        m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
     {
-        xResultTemplate = NULL;
+        m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
 
-    if (xResultTemplate.is())
+    if (m_nStatus == cssxc::SecurityOperationStatus_OPERATION_SUCCEEDED)
     {
         cssu::Reference < cssxw::XXMLElementWrapper > xResultSignature = xResultTemplate->getTemplate();
         m_xSAXEventKeeper->setElement(m_nIdOfTemplateEC, xResultSignature);
-
-        m_bOperationSucceed = true;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturetemplateimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,11 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 
-XMLSignatureTemplateImpl :: XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) , m_xTemplate( NULL ) {
+XMLSignatureTemplateImpl :: XMLSignatureTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+    :m_xServiceManager( aFactory ),
+     m_xTemplate( NULL ),
+     m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN )
+{
 }
 
 XMLSignatureTemplateImpl :: ~XMLSignatureTemplateImpl() {
@@ -139,6 +143,19 @@ void SAL_CALL XMLSignatureTemplateImpl::setBinding(
     throw (::com::sun::star::uno::RuntimeException)
 {
     return m_xUriBinding;
+}
+
+void SAL_CALL XMLSignatureTemplateImpl::setStatus(
+    ::com::sun::star::xml::crypto::SecurityOperationStatus status )
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    m_nStatus = status;
+}
+
+::com::sun::star::xml::crypto::SecurityOperationStatus SAL_CALL XMLSignatureTemplateImpl::getStatus(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nStatus;
 }
 
 /* XInitialization */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryptiontemplateimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,11 @@ using ::rtl::OUString ;
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 
-XMLEncryptionTemplateImpl :: XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) , m_xTemplate( NULL ) , m_xTarget( NULL ) {
+XMLEncryptionTemplateImpl :: XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
+    : m_xServiceManager( aFactory ),
+      m_xTemplate( NULL ),
+      m_xTarget( NULL ),
+      m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN ) {
 }
 
 XMLEncryptionTemplateImpl :: ~XMLEncryptionTemplateImpl() {
@@ -110,6 +114,19 @@ Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl :: getTarget(
 throw (com::sun::star::uno::RuntimeException)
 {
     return m_xTarget ;
+}
+
+void SAL_CALL XMLEncryptionTemplateImpl::setStatus(
+    ::com::sun::star::xml::crypto::SecurityOperationStatus status )
+    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    m_nStatus = status;
+}
+
+::com::sun::star::xml::crypto::SecurityOperationStatus SAL_CALL XMLEncryptionTemplateImpl::getStatus(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nStatus;
 }
 
 /* XInitialization */

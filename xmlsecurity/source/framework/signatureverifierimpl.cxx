@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signatureverifierimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,7 @@ void SignatureVerifierImpl::notifyResultListener() const
     cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >
         xSignatureVerifyResultListener ( m_xResultListener , cssu::UNO_QUERY ) ;
 
-    xSignatureVerifyResultListener->signatureVerified(
-        m_nSecurityId,
-        m_bOperationSucceed?(cssxc::sax::SignatureVerifyResult_VERIFYSUCCEED):
-              (cssxc::sax::SignatureVerifyResult_VERIFYFAIL));
+    xSignatureVerifyResultListener->signatureVerified( m_nSecurityId, m_nStatus );
 }
 
 void SignatureVerifierImpl::startEngine( const cssu::Reference<
@@ -191,16 +188,15 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
+    cssu::Reference< cssxc::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        if ( m_xXMLSignature->validate(xSignatureTemplate, m_xXMLSecurityContext))
-        {
-            m_bOperationSucceed = true;
-        }
+        xResultTemplate = m_xXMLSignature->validate(xSignatureTemplate, m_xXMLSecurityContext);
+        m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
     {
-        m_bOperationSucceed = false;
+        m_nStatus = cssxc::SecurityOperationStatus_RUNTIMEERROR_FAILED;
     }
 }
 
