@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 15:52:39 $
+ *  last change: $Author: mba $ $Date: 2001-09-04 10:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,6 +1896,9 @@ void SfxFrame::Appear()
         pImp->xFrame->getContainerWindow()->setVisible( sal_True );
         if ( pParentFrame )
             pParentFrame->Appear();
+        Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( pImp->xFrame->getContainerWindow(), UNO_QUERY );
+        if ( xTopWindow.is() )
+            xTopWindow->toFront();
     }
 }
 
