@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:43:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-29 08:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ extern int _dlclose(void *handle);
 #endif /* MACOSX */
 
 /* implemented in file.c */
-extern UnicodeToText( char *, size_t, const sal_Unicode *, sal_Int32 );
+extern int UnicodeToText( char *, size_t, const sal_Unicode *, sal_Int32 );
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolName);
@@ -263,16 +263,34 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     if (pszModuleName)
     {
 #ifndef NO_DL_FUNCTIONS
+
         void* pLib = dlopen(pszModuleName, rtld_mode );
+        if ((pLib == 0) && (strchr (pszModuleName, '/') == 0))
+        {
+            /* module w/o pathname not found, try cwd as last chance */
+            char buffer[PATH_MAX];
+
+            buffer[0] = '.', buffer[1] = '/', buffer[2] = '\0';
+            strncat (buffer, pszModuleName, sizeof(buffer) - 2);
+
+            pLib = dlopen(buffer, rtld_mode);
+        }
+
 #if OSL_DEBUG_LEVEL > 1
-        if( ! pLib )
-            fprintf( stderr, "osl_loadModule: cannot load module %s for reason: %s\n",
-                     pszModuleName, dlerror() );
-#endif
-        return ((oslModule)pLib);
-#else
+        if (pLib == 0)
+        {
+            /* module not found, give up */
+            fprintf (stderr,
+                     "osl_loadModule: cannot load module %s for reason: %s\n",
+                     pszModuleName, dlerror());
+        }
+#endif  /* OSL_DEBUG_LEVEL */
+
+        return ((oslModule)(pLib));
+
+#else   /* NO_DL_FUNCTIONS */
         printf("No DL Functions\n");
-#endif
+#endif  /* NO_DL_FUNCTIONS */
     }
     return NULL;
 
@@ -491,7 +509,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 #else   /* MACOSX */
     Dl_info dl_info;
 
-    if(result = dladdr(addr, &dl_info))
+    if((result = dladdr(addr, &dl_info)) != 0)
     {
         rtl_uString * workDir = NULL;
         osl_getProcessWorkingDir(&workDir);
