@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:08:03 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
             if ( bCopyTo )
                 aSavedInfo = GetDocInfo();
 
-            bOk = CommonSaveAs_Impl( aFileName, aFilterName, aParams );
+            bOk = CommonSaveAs_Impl( INetURLObject(aFileName), aFilterName,
+                aParams );
 
             if ( bCopyTo )
             {
