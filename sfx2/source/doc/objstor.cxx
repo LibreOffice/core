@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:27:52 $
+ *  last change: $Author: mba $ $Date: 2001-06-15 09:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,9 +441,18 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         SFX_ITEMSET_ARG(
             pSet, pTemplateItem, SfxBoolItem,
             SID_TEMPLATE, sal_False);
+#if SUPD < 635
+        SFX_ITEMSET_ARG(
+            pSet, pBrowsingItem, SfxBoolItem, SID_BROWSING, sal_False );
+        SetActivateEvent_Impl(
+            ( pTemplateItem && pTemplateItem->GetValue() )
+            ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC,
+            pBrowsingItem && pBrowsingItem->GetValue() );
+#else
         SetActivateEvent_Impl(
             ( pTemplateItem && pTemplateItem->GetValue() )
             ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
+#endif
     }
 
 
@@ -1998,7 +2007,12 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 sal_Bool SfxObjectShell::LoadFrom( SvStorage *pStor )
 {
+#if SUPD<635
+    if (pStor->IsStream(SfxConfigManager::GetStreamName()))
+        SetConfigManager (new SfxConfigManager( pStor, 0));
+#else
     GetConfigManager();
+#endif
     GetDocInfo().Load(pStor);
     return sal_True;
 }
@@ -2052,6 +2066,11 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     SvStorageRef xStor = rMedium.GetStorage();
     if ( xStor.Is() )
     {
+#if SUPD < 635
+        // Config
+        if ( xStor->IsStream(SfxConfigManager::GetStreamName()) )
+            SetConfigManager (new SfxConfigManager( xStor, SFX_CFGMANAGER()));
+#endif
         if ( rMedium.GetFileVersion() )
             xStor->SetVersion( rMedium.GetFileVersion() );
 
