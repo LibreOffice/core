@@ -10,6 +10,7 @@ mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 ..\source\useatjava.txt %_DEST%\bin%_EXT%\useatjava.txt
+..\source\javasettings.xml %_DEST%\bin%_EXT%\javasettings.xml
 ..\distributions\StarOffice\javavendors_unx.xml %_DEST%\bin%_EXT%\jvmfwk_so_unx\javavendors.xml
 ..\distributions\StarOffice\javavendors_wnt.xml %_DEST%\bin%_EXT%\jvmfwk_so_wnt\javavendors.xml
 
