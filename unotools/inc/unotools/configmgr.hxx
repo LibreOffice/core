@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:52 $
+ *  last change: $Author: os $ $Date: 2000-09-21 12:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@ namespace com{ namespace sun{ namespace star{
     namespace lang{
         class XMultiServiceFactory;
     }
-    namespace beans{
-        class XMultiPropertySet;
+    namespace container{
+        class XHierarchicalNameAccess;
     }
 }}}
 
@@ -98,7 +98,7 @@ namespace utl
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                 GetConfigurationProvider();
 
-            com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet>
+            com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess>
                 AddConfigItem(utl::ConfigItem& rCfgItem);
 
             void RemoveConfigItem(utl::ConfigItem& rCfgItem);
