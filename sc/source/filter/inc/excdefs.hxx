@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:42:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,70 +66,40 @@
 #include <sal/types.h>
 #endif
 
-// (0x0031) FONT ==============================================================
-
-// color
-#define EXC_FONTCOL_IGNORE          0x7FFF
-
-// height
-#define EXC_FONTHGHT_COEFF          20.0
-
-// (0x0092) PALETTE ===========================================================
-
-// special color indices
-#define EXC_COLIND_AUTOTEXT         77
-#define EXC_COLIND_AUTOLINE         77
-#define EXC_COLIND_AUTOFILLBG       77
-#define EXC_COLIND_AUTOFILLFG       78
-
 // (0x009B, 0x009D, 0x009E) AUTOFILTER ========================================
 
 // flags
-#define EXC_AFFLAG_AND              0x0000
-#define EXC_AFFLAG_OR               0x0001
-#define EXC_AFFLAG_ANDORMASK        0x0003
-#define EXC_AFFLAG_SIMPLE1          0x0004
-#define EXC_AFFLAG_SIMPLE2          0x0008
-#define EXC_AFFLAG_TOP10            0x0010
-#define EXC_AFFLAG_TOP10TOP         0x0020
-#define EXC_AFFLAG_TOP10PERC        0x0040
+const sal_uInt16 EXC_AFFLAG_AND             = 0x0000;
+const sal_uInt16 EXC_AFFLAG_OR              = 0x0001;
+const sal_uInt16 EXC_AFFLAG_ANDORMASK       = 0x0003;
+const sal_uInt16 EXC_AFFLAG_SIMPLE1         = 0x0004;
+const sal_uInt16 EXC_AFFLAG_SIMPLE2         = 0x0008;
+const sal_uInt16 EXC_AFFLAG_TOP10           = 0x0010;
+const sal_uInt16 EXC_AFFLAG_TOP10TOP        = 0x0020;
+const sal_uInt16 EXC_AFFLAG_TOP10PERC       = 0x0040;
 
 // data types
-#define EXC_AFTYPE_NOTUSED          0x00
-#define EXC_AFTYPE_RK               0x02
-#define EXC_AFTYPE_DOUBLE           0x04
-#define EXC_AFTYPE_STRING           0x06
-#define EXC_AFTYPE_BOOLERR          0x08
-#define EXC_AFTYPE_INVALID          0x0A
-#define EXC_AFTYPE_EMPTY            0x0C
-#define EXC_AFTYPE_NOTEMPTY         0x0E
+const sal_uInt8 EXC_AFTYPE_NOTUSED          = 0x00;
+const sal_uInt8 EXC_AFTYPE_RK               = 0x02;
+const sal_uInt8 EXC_AFTYPE_DOUBLE           = 0x04;
+const sal_uInt8 EXC_AFTYPE_STRING           = 0x06;
+const sal_uInt8 EXC_AFTYPE_BOOLERR          = 0x08;
+const sal_uInt8 EXC_AFTYPE_INVALID          = 0x0A;
+const sal_uInt8 EXC_AFTYPE_EMPTY            = 0x0C;
+const sal_uInt8 EXC_AFTYPE_NOTEMPTY         = 0x0E;
 
 // comparison operands
-#define EXC_AFOPER_NONE             0x00
-#define EXC_AFOPER_LESS             0x01
-#define EXC_AFOPER_EQUAL            0x02
-#define EXC_AFOPER_LESSEQUAL        0x03
-#define EXC_AFOPER_GREATER          0x04
-#define EXC_AFOPER_NOTEQUAL         0x05
-#define EXC_AFOPER_GREATEREQUAL     0x06
+const sal_uInt8 EXC_AFOPER_NONE             = 0x00;
+const sal_uInt8 EXC_AFOPER_LESS             = 0x01;
+const sal_uInt8 EXC_AFOPER_EQUAL            = 0x02;
+const sal_uInt8 EXC_AFOPER_LESSEQUAL        = 0x03;
+const sal_uInt8 EXC_AFOPER_GREATER          = 0x04;
+const sal_uInt8 EXC_AFOPER_NOTEQUAL         = 0x05;
+const sal_uInt8 EXC_AFOPER_GREATEREQUAL     = 0x06;
 
 // (0x00AE, 0x00AF) SCENARIO, SCENMAN =========================================
 
 #define EXC_SCEN_MAXCELL            32
-
-// (0x023E) WINDOW2 ===========================================================
-
-#define EXC_WIN2_SHOWFORMULAS       0x0001
-#define EXC_WIN2_SHOWGRID           0x0002
-#define EXC_WIN2_SHOWHEADINGS       0x0004
-#define EXC_WIN2_FROZEN             0x0008
-#define EXC_WIN2_SHOWZEROS          0x0010
-#define EXC_WIN2_DEFAULTCOLOR       0x0020
-const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
-#define EXC_WIN2_OUTLINE            0x0080
-#define EXC_WIN2_FROZENNOSPLIT      0x0100
-#define EXC_WIN2_SELECTED           0x0200
-#define EXC_WIN2_DISPLAYED          0x0400
 
 // defines for change tracking ================================================
 
