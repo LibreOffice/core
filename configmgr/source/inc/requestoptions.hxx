@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:26:18 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,14 @@ namespace configmgr
         RequestOptions()
         : m_sLocale()
         , m_sEntity()
-        , m_bEnableAsync(false)
+        , m_bEnableAsync(true)
+        , m_bReload(false)
         {}
 
         /// @returns <TRUE/>, if data can be written asynchronously
         bool isAsyncEnabled() const { return m_bEnableAsync; }
-
+        /// @returns <TRUE/>, if data is reloaded into cache
+        bool isRefreshEnabled() const { return m_bReload; }
         /** @returns
                 <TRUE/>,  if a locale is specified, <BR/>
                 <FALSE/>, if the default locale should be used
@@ -135,7 +137,8 @@ namespace configmgr
 
         /// marks asyncronous access a enabled or disabled
         void enableAsync(bool _bEnable = true)  { m_bEnableAsync = _bEnable; }
-
+        /// enforce a refresh to cache
+        void forceRefresh(bool _bEnable = true)  { m_bReload = _bEnable; }
     // comparison/container helpers
         /// return a hash code for this object
         sal_Int32 hashCode() const;
@@ -145,6 +148,7 @@ namespace configmgr
         Locale      m_sLocale;                              /// locale to fetch data for
         Entity      m_sEntity;                              /// user/group/role to fetch data for
         bool        m_bEnableAsync;                         /// true, if data may be
+        bool        m_bReload;                              /// reload into cache from backend
     };
 
 // ---------------------------------------------------------------------------
