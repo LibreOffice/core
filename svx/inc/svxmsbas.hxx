@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:45:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ private:
     BOOL ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           BOOL bAsComment, BOOL bStripped);
+    bool ImportForms_Impl(const String& rStorageName,
+        const String &rSubStorageName);
     BOOL CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
 };
