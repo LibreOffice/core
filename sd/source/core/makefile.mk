@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:47:12 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:21:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,7 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
 
 EXCEPTIONSFILES= \
            $(SLO)$/drawdoc3.obj \
+           $(SLO)$/drawdoc2.obj \
            $(SLO)$/drawdoc.obj
 
 # --- Tagets -------------------------------------------------------
