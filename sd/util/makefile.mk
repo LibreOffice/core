@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-16 15:02:25 $
+#   last change: $Author: kz $ $Date: 2000-11-07 17:10:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,7 +142,8 @@ SHL1STDLIBS=        \
     $(UNOTOOLSLIB) \
     $(SOTLIB) \
     $(XMLOFFLIB) \
-    $(BASCTLLIB)
+    $(BASCTLLIB) \
+    $(COMPHELPERLIB)
 
 .IF "$(TF_UCB)" == ""
 SHL1STDLIBS+=\
