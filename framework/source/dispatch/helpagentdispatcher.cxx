@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-17 08:47:41 $
+ *  last change: $Author: pb $ $Date: 2001-10-11 09:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,9 +254,8 @@ namespace framework
         // stop the expiration timer for the old URL
         stopAutoCloseTimer();
 
-        // set the URL as tooltip text
+        // save the URL
         m_sCurrentURL = _rURL.Complete;
-        m_pAgentWindow->SetQuickHelpText(m_sCurrentURL);
 
         // start the expiration timer for the new URL
         startAutoCloseTimer();
@@ -424,6 +423,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/17 08:47:41  pb
+ *  fix: #91160# ignore the url also on click closer
+ *
  *  Revision 1.1  2001/07/02 13:27:02  as
  *  #79955# move to dispatch dir
  *
