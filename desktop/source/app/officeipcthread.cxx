@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:42:42 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStrin
 
 void SAL_CALL OfficeIPCThread::run()
 {
-    while (schedule())
+    do
     {
         OPipe::TPipeError
             nError = maPipe.accept( maStreamPipe );
@@ -705,14 +705,14 @@ void SAL_CALL OfficeIPCThread::run()
             // processing finished, inform the requesting end
             nBytes = 0;
             while (
-                (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
-                ((nBytes += nResult) < sc_nCSeqLength) );
+                   (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
+                   ((nBytes += nResult) < sc_nCSeqLength) );
             // now we can close, don't we?
             // maStreamPipe.close();
 
-    }
-    else
-    {
+        }
+        else
+        {
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             fprintf( stderr, "Error on accept: %d\n", (int)nError );
 #endif
@@ -721,7 +721,7 @@ void SAL_CALL OfficeIPCThread::run()
             tval.Nanosec = 0;
             sleep( tval );
         }
-    }
+    } while( schedule() );
 }
 
 static void AddToDispatchList(
