@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:44:51 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,8 @@ public:
 class XclImpString
 {
 public:
+    /** Constructs an empty string. */
+    explicit            XclImpString();
     /** Constructs an unformatted string. */
     explicit            XclImpString( const String& rString );
     /** Constructs a formatted string by reading completely from stream. */
@@ -186,6 +188,9 @@ public:
     void                ReadFormats( XclImpStream& rStrm );
     /** Reads and appends nRunCount formatting runs from stream. */
     void                ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount );
+
+    /** Reads a complete string from the passed stream. */
+    void                Read( XclImpStream& rStrm, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
     /** Returns the pure text data of the string. */
     inline const String& GetText() const { return maString; }
