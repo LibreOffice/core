@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: mtg $ $Date: 2001-05-03 14:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <tools/string.hxx>
 #endif
 
+
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
@@ -75,6 +76,15 @@
 
 class SwTextBlocks;
 class SvStrings;
+class SwDocShell;
+
+#ifndef SW_DECL_SWDOCSHELL_DEFINED
+#define SW_DECL_SWDOCSHELL_DEFINED
+#ifndef _REF_HXX
+#include <tools/ref.hxx>
+#endif
+SV_DECL_REF( SwDocShell )
+#endif
 
 typedef com::sun::star::uno::Reference<com::sun::star::text::XAutoTextGroup>* XAutoTextGroupPtr;
 SV_DECL_PTRARR_DEL(XAutoTextGroupPtrArr, XAutoTextGroupPtr, 4, 4)
@@ -121,12 +131,13 @@ public:
     BOOL            NewGroupDoc(String &rGroupName, const String& rTitle);
     BOOL            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
     BOOL            DelGroupDoc(const String &);
-    void            EditGroupDoc(const String &rGrpName, const String& rShortName );
+    SwDocShellRef*  EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
     void            UpdateGlosPath(BOOL bFull);
     void            ShowError();
     inline ULONG    IsGlosPathErr() { return bError; }
     const SvStrings*    GetPathArray() const {return pPathArr;}
 };
+
 
 #endif // _GLOSDOC_HXX
