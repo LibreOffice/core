@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 14:19:34 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 16:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,8 +282,13 @@ BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
         *pDtorNotify = TRUE;
-    if ( IsMouseCaptured() )
-        ReleaseMouse();
+/*
+ *  #90565# nobody knows why this was done. Since
+ *  the mouse must NOT be captured on startDrag
+ *  let's comment this out.
+ */
+//  if ( IsMouseCaptured() )
+//      ReleaseMouse();
 }
 
 //-------------------------------------------------------------------
@@ -505,7 +510,12 @@ void BrowserDataWin::Command( const CommandEvent& rEvt )
 void BrowserDataWin::MouseButtonDown( const MouseEvent& rEvt )
 {
     aLastMousePos = OutputToScreenPixel( rEvt.GetPosPixel() );
-    CaptureMouse();
+/*
+ *  #90565# nobody knows why this was done. Since
+ *  the mouse must NOT be captured on startDrag
+ *  let's comment this out.
+ */
+//  CaptureMouse();
     GetParent()->MouseButtonDown( BrowserMouseEvent( this, rEvt ) );
 }
 
@@ -519,9 +529,14 @@ void BrowserDataWin::MouseMove( const MouseEvent& rEvt )
         return;
     aLastMousePos = aNewPos;
 
+/*
+ *  #90565# nobody knows why this was done. Since
+ *  the mouse must NOT be captured on startDrag
+ *  let's comment this out.
+ */
     // Paint-Probleme abfangen
-    if ( !IsMouseCaptured() )
-        return;
+//  if ( !IsMouseCaptured() )
+//      return;
 
     // transform to a BrowseEvent
     GetParent()->MouseMove( BrowserMouseEvent( this, rEvt ) );
@@ -558,9 +573,14 @@ void BrowserDataWin::MouseButtonUp( const MouseEvent& rEvt )
     Point aNewPos = OutputToScreenPixel( rEvt.GetPosPixel() );
     aLastMousePos = aNewPos;
 
+/*
+ *  #90565# nobody knows why this was done. Since
+ *  the mouse must NOT be captured on startDrag
+ *  let's comment this out.
+ */
     // Paint-Probleme abfangen
-    if ( !IsMouseCaptured() )
-        return;
+//  if ( !IsMouseCaptured() )
+//      return;
 
     // Move an die aktuelle Position simulieren
     MouseMove( rEvt );
