@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-12-05 10:11:34 $
+ *  last change: $Author: sab $ $Date: 2002-09-12 13:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,13 +843,13 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                 nRow++;
             do
             {
+                if ( ++nCol > aParam.nCol2 )
+                    return NULL;                // Ende und Aus
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
                     nFirstQueryField = aParam.GetEntry(0).nField;
                 }
-                if ( ++nCol > aParam.nCol2 )
-                    return NULL;                // Ende und Aus
                 pCol = &(pDoc->pTab[nTab])->aCol[nCol];
             } while ( pCol->nCount == 0 );
             pCol->Search( nRow, nColRow );
