@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ObjectIndex.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 // DocMerge from xml: service com::sun::star::text::ObjectIndex
 /** specifies service of object indexes within a document.@see com::sun::star::text::BaseIndex
  */
-service ObjectIndex
+published service ObjectIndex
 {
     // DocMerge: empty anyway
     service  com::sun::star::text::BaseIndex;
