@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-03-12 13:06:30 $
+ *  last change: $Author: cl $ $Date: 2002-05-21 10:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include "fillctrl.hxx"
 #include "itemwin.hxx"
 #include "dialmgr.hxx"
+#include "helpid.hrc"
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
@@ -537,6 +538,10 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 
         pFillAttrLB = (SvxFillAttrBox*)pFillControl->pLbFillAttr;
         pFillTypeLB = (SvxFillTypeBox*)pFillControl->pLbFillType;
+
+        pFillAttrLB->SetUniqueId( HID_FILL_ATTR_LISTBOX );
+        pFillTypeLB->SetUniqueId( HID_FILL_TYPE_LISTBOX );
+
         return pFillControl;
     }
     return NULL;
