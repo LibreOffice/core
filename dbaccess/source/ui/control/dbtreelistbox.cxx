@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:36:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
-#ifndef DBAUI_TOOLBOX_HXX
-#include "toolbox.hrc"
-#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
@@ -83,6 +80,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGGESTURERECOGNIZER_HPP_
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -102,6 +102,7 @@ namespace dbaui
 // .........................................................................
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
 
@@ -116,6 +117,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
     ,m_pSelectedEntry(NULL)
     ,m_xORB(_rxORB)
     ,m_nSelectLock(0)
+    ,m_pDragedEntry(NULL)
     ,m_pActionListener(NULL)
     ,m_pContextMenuActionListener(NULL)
     ,m_bHandleEnterKey(_bHandleEnterKey)
@@ -127,6 +129,7 @@ DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFac
 DBTreeListBox::DBTreeListBox( Window* pParent, const Reference< XMultiServiceFactory >& _rxORB, const ResId& rResId,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,rResId)
     ,m_pSelectedEntry(NULL)
+    ,m_pDragedEntry(NULL)
     ,m_xORB(_rxORB)
     ,m_nSelectLock(0)
     ,m_pActionListener(NULL)
@@ -318,9 +321,27 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     sal_Int8 nDropOption = DND_ACTION_NONE;
     if ( m_pActionListener )
     {
-        nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
-        m_aMousePos = _rEvt.maPosPixel;
-        m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
+        SvLBoxEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
+        if ( m_pDragedEntry && m_pDragedEntry != pDroppedEntry )
+        {
+            // check if drag is on child entry, which is not allowed
+            SvLBoxEntry* pParent = GetParent(pDroppedEntry);
+            while ( pParent && pParent != m_pDragedEntry )
+                pParent = GetParent(pParent);
+
+            if ( !pParent )
+            {
+                nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
+                // check if move is allowed
+                if ( _rEvt.mnAction & DND_ACTION_MOVE && nDropOption & DND_ACTION_MOVE )
+                {
+                    if ( GetEntryPosByName(GetEntryText(m_pDragedEntry),pDroppedEntry) )
+                        nDropOption &= ~DND_ACTION_MOVE;
+                }
+                m_aMousePos = _rEvt.maPosPixel;
+                m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
+            }
+        }
     }
 
     return nDropOption;
@@ -339,13 +360,16 @@ sal_Int8 DBTreeListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     if ( m_pActionListener )
-        if ( GetEntry(_rPosPixel) && m_pActionListener->requestDrag( _nAction, _rPosPixel ) )
+    {
+        m_pDragedEntry = GetEntry(_rPosPixel);
+        if ( m_pDragedEntry && m_pActionListener->requestDrag( _nAction, _rPosPixel ) )
         {
             // if the (asynchronous) drag started, stop the selection timer
             m_aTimer.Stop();
             // and stop selecting entries by simply moving the mouse
             EndSelection();
         }
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -486,7 +510,11 @@ namespace
                 if ( pSubPopUp )
                     lcl_enableEntries(pSubPopUp,_pController);
                 else
-                    _pPopup->EnableItem(nId,_pController->isCommandEnabled(nId));
+                {
+                    ::com::sun::star::util::URL aCommand;
+                    aCommand.Complete = _pPopup->GetItemCommand(nId);
+                    _pPopup->EnableItem(nId,_pController->isCommandEnabled(aCommand));
+                }
             }
         }
 
@@ -509,7 +537,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
 void DBTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
 {
     if ( m_pContextMenuActionListener )
-        m_pContextMenuActionListener->executeChecked(_nSelectedPopupEntry);
+        m_pContextMenuActionListener->executeChecked(_nSelectedPopupEntry,Sequence<PropertyValue>());
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK(DBTreeListBox, OnTimeOut, void*, EMPTY_ARG)
