@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-08 14:35:52 $
+ *  last change: $Author: dvo $ $Date: 2000-11-10 11:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
 static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
 static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
+static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
 
 
 SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
@@ -323,6 +324,8 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     { FIELD_SERVICE_MACRO,                  FIELD_ID_MACRO },
     { FIELD_SERVICE_GET_REFERENCE,          FIELD_ID_REF_REFERENCE },
     { FIELD_SERVICE_DDE,                    FIELD_ID_DDE },
+
+    { FIELD_SERVICE_BIBLIOGRAPHY,           FIELD_ID_BIBLIOGRAPHY },
 
     // non-writer fields
     { FIELD_SERVICE_SHEET_NAME,             FIELD_ID_SHEET_NAME },
@@ -544,10 +547,15 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             break;
 
         case FIELD_ID_PAGENUMBER:
-            if (NumberingType::CHAR_SPECIAL == GetIntProperty(
-                                            sPropertyNumberingType, xPropSet))
+            // NumberingType not available in non-Writer apps
+            if (xPropSet->getPropertySetInfo()->
+                hasPropertyByName(sPropertyNumberingType))
             {
-                nToken = FIELD_ID_PAGESTRING;
+                if (NumberingType::CHAR_SPECIAL == GetIntProperty(
+                                            sPropertyNumberingType, xPropSet))
+                {
+                    nToken = FIELD_ID_PAGESTRING;
+                }
             }
             break;
 
@@ -596,6 +604,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
             }
             break;
 
+        case FIELD_ID_BIBLIOGRAPHY:
         case FIELD_ID_DDE:
         case FIELD_ID_MACRO:
         case FIELD_ID_REFPAGE_SET:
@@ -708,6 +717,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
         // always number
         return sal_False;
 
+    case FIELD_ID_BIBLIOGRAPHY:
     case FIELD_ID_DDE:
     case FIELD_ID_REF_REFERENCE:
     case FIELD_ID_REF_SEQUENCE:
@@ -809,6 +819,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         }
         break;
 
+    case FIELD_ID_BIBLIOGRAPHY:
     case FIELD_ID_DDE:
     case FIELD_ID_REF_REFERENCE:
     case FIELD_ID_REF_SEQUENCE:
@@ -1433,6 +1444,11 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         break;
     }
 
+    case FIELD_ID_BIBLIOGRAPHY:
+        // TODO: API missing
+        DBG_ERROR("not implemeted; API is missing.");
+        break;
+
     case FIELD_ID_UNKNOWN:
     default:
         DBG_ERROR("unkown field type encountered!");
@@ -1847,7 +1863,8 @@ void XMLTextFieldExport::ProcessBoolean(const sal_Char* pXmlName,
     }
 
     // write attribute (if different than default)
-    if (bBool != bDefault) {
+    // negate to force 0/1 values (and make sal_Bool comparable)
+    if ((!bBool) != (!bDefault)) {
         GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT,
                                       pXmlName,
                                       (bBool ? sXML_true : sXML_false) );

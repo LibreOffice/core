@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
+ *  last change: $Author: dvo $ $Date: 2000-11-10 11:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ enum FieldIdEnum {
     FIELD_ID_REF_ENDNOTE,           // get reference field (endnote)
     FIELD_ID_DDE,                   // DDE field
 
+    FIELD_ID_BIBLIOGRAPHY,          // bibliography index entry
+
     FIELD_ID_SHEET_NAME,            // name of current (spread-)sheet
     FIELD_ID_URL,                   // URL field (only Calc, Draw, Impress)
 
@@ -193,6 +195,24 @@ public:
     /// export field declarations.
     /// to be called once at beginning of document body.
     void ExportFieldDeclarations();
+
+    // determine element or attribute names
+    // (public, because they may be useful in related XML export classes)
+    static const sal_Char* MapPlaceholderType(sal_uInt16 nType);
+    static const sal_Char* MapTemplateDisplayFormat(sal_Int16 nType);
+    static const sal_Char* MapChapterDisplayFormat(sal_Int16 nType);
+    static const sal_Char* MapFilenameDisplayFormat(sal_Int16 nType);
+    static const sal_Char* MapDocInfoFieldName(enum FieldIdEnum nToken);
+    static const sal_Char* MapReferenceSource(sal_Int16 nType);
+    static const sal_Char* MapReferenceType(sal_Int16 nType);
+    static const sal_Char* MapCountFieldName(sal_Int16 nToken);
+    const sal_Char* MapPageNumberName(const ::com::sun::star::uno::Reference<
+                      ::com::sun::star::beans::XPropertySet> & xPropSet,
+                      sal_Int32& nOffset);  /// also adjust page offset
+    const sal_Char* MapAuthorFieldName(const ::com::sun::star::uno::Reference <
+                      ::com::sun::star::beans::XPropertySet > & xPropSet);
+    const sal_Char* MapSenderFieldName(const ::com::sun::star::uno::Reference <
+                      ::com::sun::star::beans::XPropertySet > & xPropSet);
 
 protected:
 
@@ -307,23 +327,6 @@ protected:
         ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xField);
 
-
-    // determine element name from field properties
-    const sal_Char* MapAuthorFieldName(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::beans::XPropertySet > & xPropSet);
-    const sal_Char* MapSenderFieldName(const ::com::sun::star::uno::Reference <
-                      ::com::sun::star::beans::XPropertySet > & xPropSet);
-    const sal_Char* MapPlaceholderType(sal_uInt16 nType);
-    const sal_Char* MapTemplateDisplayFormat(sal_Int16 nType);
-    const sal_Char* MapChapterDisplayFormat(sal_Int16 nType);
-    const sal_Char* MapFilenameDisplayFormat(sal_Int16 nType);
-    const sal_Char* MapDocInfoFieldName(enum FieldIdEnum nToken);
-    const sal_Char* MapReferenceSource(sal_Int16 nType);
-    const sal_Char* MapReferenceType(sal_Int16 nType);
-    const sal_Char* MapPageNumberName(const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::beans::XPropertySet> & xPropSet,
-                      sal_Int32& nOffset);  /// also adjust page offset
-    const sal_Char* MapCountFieldName(sal_Int16 nToken);
 
     /// get field ID from XTextField (and it's Property-Set)
     enum FieldIdEnum GetFieldID(const ::com::sun::star::uno::Reference <
