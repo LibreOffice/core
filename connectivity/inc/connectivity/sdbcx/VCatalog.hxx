@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
-#endif
 #ifndef _CPPUHELPER_COMPBASE5_HXX_
 #include <cppuhelper/compbase5.hxx>
 #endif
@@ -129,11 +126,15 @@ namespace connectivity
     namespace sdbcx
     {
 
-                typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::sdbcx::XTablesSupplier,
-                                                                                                  ::com::sun::star::sdbcx::XViewsSupplier,
-                                                                                                  ::com::sun::star::sdbcx::XUsersSupplier,
-                                                                                                  ::com::sun::star::sdbcx::XGroupsSupplier,
-                                                                                                  ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
+        // OCatalog is a general catalog class
+        // other drivers can be derived their catalog from this class when they want to support sdbcx
+        // it holds already tables, views, groups and users
+
+        typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::sdbcx::XTablesSupplier,
+                                                  ::com::sun::star::sdbcx::XViewsSupplier,
+                                                  ::com::sun::star::sdbcx::XUsersSupplier,
+                                                  ::com::sun::star::sdbcx::XGroupsSupplier,
+                                                  ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
 
 
         class OCatalog :    public OCatalog_BASE,
@@ -144,8 +145,10 @@ namespace connectivity
             friend class connectivity::OSubComponent<OCatalog>;
         protected:
 
-            ::osl::Mutex    m_aMutex;
+            ::osl::Mutex        m_aMutex;
 
+            // this members are deleted when the dtor is called
+            // they are hold weak
             OCollection*        m_pTables;
             OCollection*        m_pViews;
             OCollection*        m_pGroups;
@@ -154,21 +157,23 @@ namespace connectivity
         public:
             DECLARE_CTY_ACQUIRE( OCatalog_BASE);
 
-                        OCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> &_xConnection);
+            OCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> &_xConnection);
             virtual ~OCatalog();
 
             DECLARE_SERVICE_INFO();
 
+            // refreshTables is called when the method getTables had been called
+            // the member m_pTables has to be created
             virtual void refreshTables()    = 0;
+            // refreshViews is called when the method getViews had been called
             virtual void refreshViews()     = 0;
+
+            // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
+
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-//                      virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-//          {
-//              return  OCatalog_BASE::queryInterface(rType);
-//          }
-                        void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             // XTablesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
             // XViewsSupplier

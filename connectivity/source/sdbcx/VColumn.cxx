@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 // -------------------------------------------------------------------------
@@ -134,7 +134,7 @@ Any SAL_CALL OColumn::queryInterface( const Type & rType ) throw(RuntimeExceptio
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
 {
-    return ::utl::concatSequences(ODescriptor::getTypes(),OColumn_BASE::getTypes());
+    return ::comphelper::concatSequences(ODescriptor::getTypes(),OColumn_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
 void OColumn::construct()

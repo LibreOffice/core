@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:29 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 // -------------------------------------------------------------------------
 using namespace connectivity;
@@ -125,7 +125,7 @@ Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException)
         aTypes.getArray()[0] = ::getCppuType(static_cast< Reference< ::com::sun::star::container::XNamed> *> (NULL));
         aTypes.getArray()[1] = ::getCppuType(static_cast< Reference< XServiceInfo> *> (NULL));
 
-    return ::utl::concatSequences(ODescriptor::getTypes(),aTypes);
+    return ::comphelper::concatSequences(ODescriptor::getTypes(),aTypes);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)

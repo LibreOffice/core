@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 12:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #endif
 #ifndef _CONNECTIVITY_ENUMHELPER_HXX_
 #include "enumhelper.hxx"
+#endif
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
 
 using namespace connectivity::sdbcx;
