@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:27:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+/** @HTML */
 
 #ifndef _OSL_FILE_H_
 #define _OSL_FILE_H_
@@ -175,6 +176,7 @@ typedef enum {
     osl_File_E_OVERFLOW,
     osl_File_E_NOTREADY,
     osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
+    osl_File_E_TIMEDOUT,
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
 
@@ -949,6 +951,41 @@ oslFileError SAL_CALL osl_writeFile( oslFileHandle Handle, const void *pBuffer, 
 
 oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSequence );
 
+/** Synchronize the memory representation of a file with that on the physical medium.
+
+     The function ensures that all modified data and attributes of the file associated with
+     the given file handle have been written to the physical medium.
+     In case the hard disk has a write cache enabled, the data may not really be on
+     permanent storage when osl_syncFile returns.
+
+      @param Handle
+      [in] Handle to a file received by a previous call to osl_openFile().
+
+      @return
+      <dl>
+      <dt>osl_File_E_None</dt>
+      <dd>On success</dd>
+      <dt>osl_File_E_INVAL</dt>
+      <dd>The value of the input parameter is invalid</dd>
+      </dl>
+      <br><p><strong>In addition to these error codes others may occur as well, for instance:</strong></p><br>
+      <dl>
+      <dt>osl_File_E_BADF</dt>
+      <dd>The file associated with the given file handle is not open for writing</dd>
+      <dt>osl_File_E_IO</dt>
+      <dd>An I/O error occurred</dd>
+      <dt>osl_File_E_NOSPC</dt>
+      <dd>There is no enough space on the target device</dd>
+      <dt>osl_File_E_ROFS</dt>
+      <dd>The file associated with the given file handle is located on a read only file system</dd>
+      <dt>osl_File_E_TIMEDOUT</dt>
+      <dd>A remote connection timed out. This may happen when a file is on a remote location</dd>
+      </dl>
+
+      @see osl_openFile()
+      @see osl_writeFile()
+*/
+oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle);
 
 /** Close an open file.
 
