@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,17 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
         m_lastInTid = ByteSequence();
         m_lastOutTid = ByteSequence();
     }
+
+    if( m_properties.bNegotiate != props.bNegotiate )
+    {
+        m_properties.bNegotiate = props.bNegotiate;
+    }
+
+    if( m_properties.bForceSynchronous != props.bForceSynchronous )
+    {
+        m_properties.bForceSynchronous = props.bForceSynchronous;
+    }
+
 }
 
 }

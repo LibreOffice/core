@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace bridges_urp
         sal_Bool bTid;
         sal_Bool bException;
         sal_Bool bMustReply;
-        sal_Bool bSynchronous;
+         sal_Bool bSynchronous;
         sal_Bool bMoreFlags;
         sal_Bool bIgnoreCache;
         sal_Bool bBridgePropertyCall;
@@ -535,7 +535,18 @@ void OReaderThread::run()
                         //        Otherwise, instance provider may block the bridge
                     }
 
-                    if( pMultiJob && ! flags.bTid && pMethodType && pMethodType->bOneWay && ! pMultiJob->isFull())
+                    sal_Bool bCallIsOneway = sal_False;
+                    if( flags.bMoreFlags )
+                    {
+                        // flags override the default !
+                        bCallIsOneway = ! flags.bSynchronous;
+                    }
+                    else if( pMethodType && pMethodType->bOneWay )
+                    {
+                        bCallIsOneway = sal_True;
+                    }
+
+                    if( pMultiJob && ! flags.bTid && bCallIsOneway && ! pMultiJob->isFull())
                     {
                         // add to the existing multijob, nothing to do here
                     }
@@ -556,9 +567,19 @@ void OReaderThread::run()
                     pMultiJob->setIgnoreCache( flags.bIgnoreCache );
                     pMultiJob->setType( *ppLastType );
                     if( pMethodType )
-                        pMultiJob->setMethodType( pMethodType , REMOTE_RELEASE_METHOD_INDEX == flags.nMethodId);
+                    {
+                        pMultiJob->setMethodType( pMethodType ,
+                                                  REMOTE_RELEASE_METHOD_INDEX == flags.nMethodId,
+                                                  bCallIsOneway );
+                    }
                     else if( pAttributeType )
-                        pMultiJob->setAttributeType( pAttributeType, bIsSetter  );
+                    {
+                        pMultiJob->setAttributeType( pAttributeType, bIsSetter, bCallIsOneway );
+                    }
+                    else
+                    {
+                        OSL_ASSERT( 0 );
+                    }
 
                     if( pLastRemoteI )
                         pMultiJob->setInterface( pLastRemoteI );

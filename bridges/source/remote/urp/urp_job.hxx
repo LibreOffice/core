@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 #include "urp_threadid.hxx"
 #include "urp_unmarshal.hxx"
-#include <bridges/remote/bridgeimpl.hxx>
+#include "urp_bridgeimpl.hxx"
 
 
 namespace bridges_urp
@@ -165,6 +165,7 @@ private:
     sal_uInt16 m_nMethodIndex;
     uno_Environment *m_pEnvRemote;
     rtl_uString *m_pOid;
+    sal_Bool m_bCallingConventionForced;
 };
 
 struct MemberTypeInfo
@@ -176,6 +177,7 @@ struct MemberTypeInfo
     sal_Bool  m_bIsReleaseCall;
     sal_Bool  *m_pbIsIn;
     sal_Bool  *m_pbIsOut;
+    sal_Bool  m_bIsOneway;
     typelib_TypeDescription *m_pReturnType;
     typelib_TypeDescription **m_ppArgType;
 };
@@ -212,20 +214,26 @@ public:
 
 public:
     // setMethodType or setAttributeType MUST be called before extract
-    inline void setMethodType( typelib_InterfaceMethodTypeDescription *pMethodType, sal_Bool bIsReleaseCall)
+    inline void setMethodType(
+        typelib_InterfaceMethodTypeDescription *pMethodType,
+        sal_Bool bIsReleaseCall,
+        sal_Bool bIsOneway )
         {
             m_aTypeInfo[m_nCalls].m_pMethodType = pMethodType;
             m_aTypeInfo[m_nCalls].m_pAttributeType = 0;
             m_aTypeInfo[m_nCalls].m_nArgCount = pMethodType->nParams;
             m_aTypeInfo[m_nCalls].m_bIsReleaseCall = bIsReleaseCall;
+            m_aTypeInfo[m_nCalls].m_bIsOneway = bIsOneway;
         }
 
-    inline void setAttributeType( typelib_InterfaceAttributeTypeDescription *pAttributeType, sal_Bool bIsSetter )
+    inline void setAttributeType(
+        typelib_InterfaceAttributeTypeDescription *pAttributeType, sal_Bool bIsSetter, sal_Bool bIsOneway )
         {
             m_aTypeInfo[m_nCalls].m_pAttributeType = pAttributeType;
             m_aTypeInfo[m_nCalls].m_pMethodType = 0;
             m_aTypeInfo[m_nCalls].m_nArgCount = bIsSetter ? 1 : 0;
             m_aTypeInfo[m_nCalls].m_bIsReleaseCall = sal_False;
+            m_aTypeInfo[m_nCalls].m_bIsOneway = bIsOneway;
         }
 
     inline void setType( typelib_TypeDescriptionReference *pTypeRef )
@@ -319,6 +327,7 @@ inline ClientJob::ClientJob(
     , m_pInterfaceType( pInterfaceType ) // weak
     , m_bReleaseForTypeDescriptionNecessary( sal_False )
     , m_bBridgePropertyCall( sal_False )
+    , m_bCallingConventionForced( sal_False )
 {
     uno_getIdOfCurrentThread( &m_pTid );
 
@@ -353,9 +362,32 @@ inline ClientJob::ClientJob(
         // setter
         m_nMethodIndex ++;
     }
-    m_bOneway = typelib_TypeClass_INTERFACE_METHOD == pMemberType->eTypeClass ?
-                (( typelib_InterfaceMethodTypeDescription * ) pMemberType)->bOneWay :
-                sal_False;
+
+    if( typelib_TypeClass_INTERFACE_METHOD == pMemberType->eTypeClass )
+    {
+//          if( (( typelib_InterfaceMemberTypeDescription * ) pMemberType)->nPosition
+//              == REMOTE_RELEASE_METHOD_INDEX )
+//          {
+//              m_bOneway = sal_True;
+//          }
+//          else
+        if( pBridgeImpl->m_properties.bForceSynchronous )
+        {
+            m_bOneway = sal_False;
+            if( (( typelib_InterfaceMethodTypeDescription * ) pMemberType)->bOneWay )
+            {
+                m_bCallingConventionForced = sal_True;
+            }
+        }
+        else
+        {
+            m_bOneway = (( typelib_InterfaceMethodTypeDescription * ) pMemberType)->bOneWay;
+        }
+    }
+    else
+    {
+        m_bOneway = sal_False;
+    }
 }
 
 }

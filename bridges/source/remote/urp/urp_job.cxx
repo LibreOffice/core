@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,11 @@ namespace bridges_urp
             nFlags = nFlags | HDRFLAG_NEWTID;
             bTid = sal_True;
         }
+
+        if( m_bCallingConventionForced )
+        {
+            nFlags = nFlags | HDRFLAG_MOREFLAGS;
+        }
 #ifdef BRIDGES_URP_PROT
         sal_Int32 nLogStart = m_pBridgeImpl->m_blockMarshaler.getPos();
 #endif
@@ -246,6 +251,15 @@ namespace bridges_urp
             }
             m_pBridgeImpl->m_blockMarshaler.packInt8( &nFlags  );
 
+            if( nFlags & HDRFLAG_MOREFLAGS )
+            {
+                sal_uInt8 nMoreFlags = 0;
+                if( ! m_bOneway )
+                {
+                    nMoreFlags = HDRFLAG_SYNCHRONOUS |HDRFLAG_MUSTREPLY;
+                }
+                m_pBridgeImpl->m_blockMarshaler.packInt8( &nMoreFlags  );
+            }
             if( nFlags & HDRFLAG_LONGMETHODID )
             {
                 sal_uInt16 nMethod = (sal_uInt16 ) m_nMethodIndex;
@@ -514,7 +528,7 @@ namespace bridges_urp
 
             // now destruct parameters and marshal replies
             // Note : when call is synchron => m_nCalls == 1
-            if( pMTI->m_pMethodType && pMTI->m_pMethodType->bOneWay )
+              if( pMTI->m_bIsOneway )
             {
                 // Oneway call, destruct in parameters
                 for( sal_Int32 i = 0 ; i < pMTI->m_pMethodType->nParams ; i ++ )
@@ -663,7 +677,7 @@ namespace bridges_urp
     {
         uno_threadpool_putRequest(
             m_pTid, this, doit,
-            m_aTypeInfo[0].m_pMethodType && m_aTypeInfo[0].m_pMethodType->bOneWay );
+            m_aTypeInfo[0].m_bIsOneway );
     }
 
 

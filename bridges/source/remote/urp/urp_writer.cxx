@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ void OWriterThread::abort()
 {
     m_bAbort = sal_True;
     osl_setCondition( m_oslCondition );
-    join();
 }
 
 

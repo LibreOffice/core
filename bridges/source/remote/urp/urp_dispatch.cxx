@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ void SAL_CALL urp_sendCloseConnection( uno_Environment *pEnvRemote )
         }
 
         pImpl->m_pWriter->sendEmptyMessage();
+        // no more data via this connection !
+        pImpl->m_pWriter->abort();
     }
 }
 void SAL_CALL urp_sendRequest(

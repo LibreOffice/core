@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,11 +293,8 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
         // from now on, no calls can be delivered via the bridge
         uno_threadpool_disposeThreads( (sal_Int64) pEnvRemote );
 
-
         // close the connection
         urp_sendCloseConnection( pEnvRemote );
-        pImpl->m_pWriter->abort();
-          pContext->m_pConnection->close( pContext->m_pConnection );
 
         if( osl_getThreadIdentifier(0) ==
             (oslThreadIdentifier) pImpl->m_pReader->getIdentifier() )
@@ -314,9 +311,10 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
             pImpl->m_pReader->join();
         }
 
+          pContext->m_pConnection->close( pContext->m_pConnection );
+
         // wait for the writer thread
         pImpl->m_pWriter->join();
-
 
         // now let the context go !
         pContext->dispose( pContext );
@@ -417,18 +415,6 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
 
     // take the bridgepointer as id
     pImpl->m_properties.seqBridgeID = ByteSequence( (sal_Int8*)&pEnvRemote , sizeof( pEnvRemote ) );
-    pImpl->m_properties.nFlushBlockSize = 4*1024;
-    pImpl->m_properties.nTypeCacheSize = 256;
-    pImpl->m_properties.nOnewayTimeoutMUSEC = 10000;
-    pImpl->m_properties.nOidCacheSize = 256;
-    pImpl->m_properties.nTidCacheSize = 256;
-    pImpl->m_properties.sVersion = OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) );
-    pImpl->m_properties.sSupportedVersions = OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) );
-    pImpl->m_properties.bSupportsMultipleSynchronous = sal_False;
-    pImpl->m_properties.bSupportsMustReply = sal_False;
-    pImpl->m_properties.bSupportsSynchronous = sal_False;
-    pImpl->m_properties.bClearCache = sal_False;
-
 
     pImpl->m_cndWaitForThreads.reset();
     pImpl->m_allThreadsAreGone = allThreadsAreGone;
@@ -439,6 +425,24 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
 
     pImpl->m_pPropertyObject = new PropertyObject( &(pImpl->m_properties ),  pEnvRemote, pImpl );
     pImpl->m_pPropertyObject->thisAcquire();
+
+    OUString sProtocolProperties;
+    if( pContext->m_pProtocol->length > 3 )
+    {
+        sProtocolProperties = OUString( pContext->m_pProtocol ).copy( 4, pContext->m_pProtocol->length-4);
+    }
+    if( sProtocolProperties.getLength() )
+    {
+        struct Properties props = pImpl->m_properties;
+        assignFromStringToStruct( sProtocolProperties , &props );
+        if( ! props.bNegotiate )
+        {
+            // no negotiation takes place, the creator of the bridge knows the parameter
+            // of the other side !
+            pImpl->applyProtocolChanges( props );
+            sProtocolProperties = OUString();
+        }
+    }
 
     // start reader and writer threads
     pImpl->m_pWriter = new ::bridges_urp::OWriterThread( pContext->m_pConnection , pImpl );
@@ -464,11 +468,6 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pE
 #endif
 
     // start the property-set-thread, if necessary
-    OUString sProtocolProperties;
-    if( pContext->m_pProtocol->length > 3 )
-    {
-        sProtocolProperties = OUString( pContext->m_pProtocol ).copy( 4, pContext->m_pProtocol->length-4);
-    }
     if( sProtocolProperties.getLength() )
     {
         PropertySetterThread *pPropsSetterThread =

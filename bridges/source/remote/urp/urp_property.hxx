@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_property.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,24 @@ namespace bridges_urp
         sal_Bool            bSupportsSynchronous;
         sal_Bool            bSupportsMultipleSynchronous;
         sal_Bool            bClearCache;
+        sal_Bool            bNegotiate;
+        sal_Bool            bForceSynchronous;
+
+        inline Properties()
+            : nFlushBlockSize( 4*1024 )
+            , nTypeCacheSize( 256 )
+            , nOnewayTimeoutMUSEC( 10000 )
+            , nOidCacheSize( 256 )
+            , nTidCacheSize( 256 )
+            , sVersion( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) ) )
+            , sSupportedVersions( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1.0" ) ) )
+            , bSupportsMultipleSynchronous( sal_False )
+            , bSupportsMustReply( sal_False )
+            , bSupportsSynchronous( sal_False )
+            , bClearCache( sal_False )
+            , bNegotiate( sal_True )
+            , bForceSynchronous( sal_False )
+            {}
 
         inline Properties & SAL_CALL operator = ( const Properties &props )
         {
@@ -96,6 +114,8 @@ namespace bridges_urp
             bSupportsSynchronous         = props.bSupportsSynchronous;
             bSupportsMultipleSynchronous = props.bSupportsMultipleSynchronous;
             bClearCache                  = props.bClearCache;
+            bNegotiate                   = props.bNegotiate;
+            bForceSynchronous            = props.bForceSynchronous;
             return *this;
         }
     };

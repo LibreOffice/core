@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-20 16:44:05 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 14:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include <stdlib.h>
 
 #include <osl/diagnose.h>
+#include <osl/process.h>
 
 #include <rtl/random.h>
 
@@ -98,8 +99,10 @@ static const sal_Int32 PROPERTY_SUPPORTSMUSTREPLY = 8;
 static const sal_Int32 PROPERTY_SUPPERTSSYNCHRONOUS = 9;
 static const sal_Int32 PROPERTY_SUPPORTSMULTIPLESYNCHRONOUS = 10;
 static const sal_Int32 PROPERTY_CLEARCACHE = 11;
+static const sal_Int32 PROPERTY_NEGOTIATE = 12;
+static const sal_Int32 PROPERTY_FORCESYNCHRONOUS = 13;
 
-static const sal_Int32 MAX_PROPERTIES = PROPERTY_CLEARCACHE +1;
+static const sal_Int32 MAX_PROPERTIES = PROPERTY_FORCESYNCHRONOUS +1;
 
 const sal_Char *g_aPropertyName[] =
 {
@@ -114,7 +117,9 @@ const sal_Char *g_aPropertyName[] =
     "SupportsMustReply",
     "SupportsSynchronous",
     "SupportsMultipleSynchronous",
-    "ClearCache"
+    "ClearCache",
+    "Negotiate",
+    "ForceSynchronous"
 };
 
 // nice little helper functions for conversion
@@ -204,6 +209,12 @@ static sal_Bool assignFromIdlToStruct( Properties *pProps, const ProtocolPropert
         case PROPERTY_CLEARCACHE:
             assignFromIdl( &(pProps->bClearCache) ,idl );
             break;
+        case PROPERTY_NEGOTIATE:
+            assignFromIdl( &(pProps->bNegotiate) ,idl );
+            break;
+        case PROPERTY_FORCESYNCHRONOUS:
+            assignFromIdl( &(pProps->bForceSynchronous) ,idl );
+            break;
         default:
             bReturn = sal_False;
         }
@@ -213,6 +224,108 @@ static sal_Bool assignFromIdlToStruct( Properties *pProps, const ProtocolPropert
         bReturn = sal_False;
     }
     return bReturn;
+}
+
+static void extractTokens(
+    const ::rtl::OUString &sProps , ::std::list< OUString > &lst )
+{
+    sal_Int32 nNext = 0;
+    while ( sal_True )
+    {
+        sal_Int32 nStart = nNext;
+        nNext = sProps.indexOf( ',' , nNext );
+        if( -1 == nNext )
+        {
+            lst.push_back( sProps.copy( nStart, sProps.getLength() - nStart ) );
+            break;
+        }
+        lst.push_back( sProps.copy( nStart , nNext - nStart ) );
+        nNext ++;
+    }
+}
+
+
+static void assignFromStringToPropSeq( const OUString &sProps, uno_Sequence **ppPropertySeq)
+{
+    ::std::list< OUString > lst;
+    extractTokens( sProps , lst );
+
+    typelib_TypeDescription *pSequenceType = 0;
+    getCppuType( (Sequence< ProtocolProperty > *)0).getDescription( &pSequenceType );
+    uno_Sequence *pSeq = 0;
+    uno_sequence_construct( &pSeq , pSequenceType , 0, lst.size() , 0 );
+    ProtocolProperty *pElements = (ProtocolProperty * ) pSeq->elements;
+
+    sal_Int32 i = 0;
+    for( ::std::list< OUString >::iterator ii = lst.begin() ; ii != lst.end() ; ++ ii, i++ )
+    {
+        sal_Int32 nAssign = (*ii).indexOf( '=' );
+        if( -1 == nAssign )
+        {
+            OString o = OUStringToOString( *ii, RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( !"wrong protocol propertyt format, ignored", o.getStr() );
+        }
+        OUString sPropName = (*ii).copy( 0, nAssign );
+        OUString sValue    = (*ii).copy( nAssign +1, (*ii).getLength() - nAssign -1 );
+
+        sal_Int32 nIndex = getIndexFromString( sPropName );
+        if( -1 == nIndex )
+        {
+            OString o = OUStringToOString( sPropName , RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE( !"unknown protocol property, ignored", o.getStr() );
+        }
+        switch( nIndex )
+        {
+            // bools
+        case PROPERTY_CLEARCACHE:
+        case PROPERTY_NEGOTIATE:
+        case PROPERTY_FORCESYNCHRONOUS:
+        {
+            sal_Bool bClearCache = (sal_Bool ) sValue.toInt32();
+            assignToIdl( &(pElements[i]) , nIndex , bClearCache );
+            break;
+        }
+            // ints
+        case PROPERTY_TYPECACHESIZE:
+        case PROPERTY_OIDCACHESIZE:
+        case PROPERTY_TIDCACHESIZE:
+        case PROPERTY_FLUSHBLOCKSIZE:
+        case PROPERTY_ONEWAYTIMEOUT_MUSEC:
+        {
+            sal_Int32 nValue = sValue.toInt32();
+            assignToIdl( &(pElements[i]) , nIndex , nValue );
+            break;
+        }
+
+            // strings
+        case PROPERTY_VERSION:
+            assignToIdl( &(pElements[i]) , nIndex , sValue );
+            break;
+        default:
+            OString o = OUStringToOString( sPropName, RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( !"readonly protocol property, ignored" , o.getStr() );
+        }
+    }
+    *ppPropertySeq = pSeq;
+    typelib_typedescription_release( pSequenceType );
+}
+
+static void assignFromPropSeqToStruct( uno_Sequence *pSeq , struct Properties *pProps )
+{
+    sal_Int32 i;
+    ProtocolProperty *pElements = (ProtocolProperty *)pSeq->elements;
+    for( i = 0 ; i < pSeq->nElements ; i ++ )
+    {
+        assignFromIdlToStruct( pProps , pElements[i] );
+    }
+}
+
+void assignFromStringToStruct( const OUString & sProps , struct Properties *pProps )
+{
+    uno_Sequence *pSeq = 0;
+    assignFromStringToPropSeq( sProps , &pSeq );
+    assignFromPropSeqToStruct( pSeq , pProps );
+    uno_type_destructData( &pSeq, getCppuType( (Sequence< ProtocolProperty > *)0).getTypeLibType(),0);
 }
 
 
@@ -373,7 +486,14 @@ sal_Int32 SAL_CALL PropertyObject::localRequestChange( )
 
         if( bCall )
         {
+            // gather some more random data
+            oslProcessInfo data;
+            data.Size = sizeof( data );
+            osl_getProcessInfo( 0 , osl_Process_HEAPUSAGE | osl_Process_IDENTIFIER , &data );
+
+            // calulate random number
             rtlRandomPool pool = rtl_random_createPool ();
+            rtl_random_addBytes( pool, &data , sizeof( data ) );
             rtl_random_getBytes( pool , &m_nRandomNumberOfRequest, sizeof( m_nRandomNumberOfRequest ) );
             rtl_random_destroyPool( pool );
         }
@@ -489,23 +609,6 @@ sal_Int32 SAL_CALL PropertyObject::implRequestChange( sal_Int32 nRandomNumber, u
     return nResult;
 }
 
-static void extractTokens(
-    const ::rtl::OUString &sProps , ::std::list< OUString > &lst )
-{
-    sal_Int32 nNext = 0;
-    while ( sal_True )
-    {
-        sal_Int32 nStart = nNext;
-        nNext = sProps.indexOf( ',' , nNext );
-        if( -1 == nNext )
-        {
-            lst.push_back( sProps.copy( nStart, sProps.getLength() - nStart ) );
-            break;
-        }
-        lst.push_back( sProps.copy( nStart , nNext - nStart ) );
-        nNext ++;
-    }
-}
 
 
 void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps , sal_Bool *pbExceptionThrown )
@@ -538,64 +641,67 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
 
     typelib_TypeDescription *pSequenceType= 0;
 
+
     // extract name/value pairs
-    ::std::list< OUString > lst;
-    extractTokens( sProps , lst );
-
-    getCppuType( (Sequence< ProtocolProperty > *)0).getDescription( &pSequenceType );
     uno_Sequence *pSeq = 0;
-    uno_sequence_construct( &pSeq , pSequenceType , 0, lst.size() , 0 );
-    ProtocolProperty *pElements = (ProtocolProperty * ) pSeq->elements;
+    assignFromStringToPropSeq( sProps, &pSeq );
+    assignFromPropSeqToStruct( pSeq , &props );
+//      ::std::list< OUString > lst;
+//      extractTokens( sProps , lst );
 
-    sal_Int32 i = 0;
-    for( ::std::list< OUString >::iterator ii = lst.begin() ; ii != lst.end() ; ++ ii, i++ )
-    {
-        sal_Int32 nAssign = (*ii).indexOf( '=' );
-        if( -1 == nAssign )
-        {
-            OString o = OUStringToOString( *ii, RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( !"wrong protocol propertyt format, ignored", o.getStr() );
-        }
-        OUString sPropName = (*ii).copy( 0, nAssign );
-        OUString sValue    = (*ii).copy( nAssign +1, (*ii).getLength() - nAssign -1 );
+//      getCppuType( (Sequence< ProtocolProperty > *)0).getDescription( &pSequenceType );
+//      uno_sequence_construct( &pSeq , pSequenceType , 0, lst.size() , 0 );
+//      ProtocolProperty *pElements = (ProtocolProperty * ) pSeq->elements;
 
-        sal_Int32 nIndex = getIndexFromString( sPropName );
-        if( -1 == nIndex )
-        {
-            OString o = OUStringToOString( sPropName , RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE( !"unknown protocol property, ignored", o.getStr() );
-        }
-        switch( nIndex )
-        {
-            // bools
-        case PROPERTY_CLEARCACHE:
-        {
-            sal_Bool bClearCache = (sal_Bool ) sValue.toInt32();
-            assignToIdl( &(pElements[i]) , nIndex , bClearCache );
-            break;
-        }
-            // ints
-        case PROPERTY_TYPECACHESIZE:
-        case PROPERTY_OIDCACHESIZE:
-        case PROPERTY_TIDCACHESIZE:
-        case PROPERTY_FLUSHBLOCKSIZE:
-        case PROPERTY_ONEWAYTIMEOUT_MUSEC:
-        {
-            sal_Int32 nValue = sValue.toInt32();
-            assignToIdl( &(pElements[i]) , nIndex , nValue );
-            break;
-        }
+//      sal_Int32 i = 0;
+//      for( ::std::list< OUString >::iterator ii = lst.begin() ; ii != lst.end() ; ++ ii, i++ )
+//      {
+//          sal_Int32 nAssign = (*ii).indexOf( '=' );
+//          if( -1 == nAssign )
+//          {
+//              OString o = OUStringToOString( *ii, RTL_TEXTENCODING_ASCII_US );
+//              OSL_ENSURE( !"wrong protocol propertyt format, ignored", o.getStr() );
+//          }
+//          OUString sPropName = (*ii).copy( 0, nAssign );
+//          OUString sValue    = (*ii).copy( nAssign +1, (*ii).getLength() - nAssign -1 );
 
-            // strings
-        case PROPERTY_VERSION:
-            assignToIdl( &(pElements[i]) , nIndex , sValue );
-            break;
-        default:
-            OString o = OUStringToOString( sPropName, RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( !"readonly protocol property, ignored" , o.getStr() );
-        }
-        assignFromIdlToStruct( &props, pElements[i] );
-    }
+//          sal_Int32 nIndex = getIndexFromString( sPropName );
+//          if( -1 == nIndex )
+//          {
+//              OString o = OUStringToOString( sPropName , RTL_TEXTENCODING_ASCII_US);
+//              OSL_ENSURE( !"unknown protocol property, ignored", o.getStr() );
+//          }
+//          switch( nIndex )
+//          {
+//              // bools
+//          case PROPERTY_CLEARCACHE:
+//          {
+//              sal_Bool bClearCache = (sal_Bool ) sValue.toInt32();
+//              assignToIdl( &(pElements[i]) , nIndex , bClearCache );
+//              break;
+//          }
+//              // ints
+//          case PROPERTY_TYPECACHESIZE:
+//          case PROPERTY_OIDCACHESIZE:
+//          case PROPERTY_TIDCACHESIZE:
+//          case PROPERTY_FLUSHBLOCKSIZE:
+//          case PROPERTY_ONEWAYTIMEOUT_MUSEC:
+//          {
+//              sal_Int32 nValue = sValue.toInt32();
+//              assignToIdl( &(pElements[i]) , nIndex , nValue );
+//              break;
+//          }
+
+//              // strings
+//          case PROPERTY_VERSION:
+//              assignToIdl( &(pElements[i]) , nIndex , sValue );
+//              break;
+//          default:
+//              OString o = OUStringToOString( sPropName, RTL_TEXTENCODING_ASCII_US );
+//              OSL_ENSURE( !"readonly protocol property, ignored" , o.getStr() );
+//          }
+//          assignFromIdlToStruct( &props, pElements[i] );
+//      }
 
     void *pArg1 = &pSeq;
     uno_Sequence *pResult = 0;
@@ -614,7 +720,8 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
     job.pack();
     job.wait();
 
-    ::uno_destructData( &pSeq, pSequenceType, 0 );
+    ::uno_type_destructData(
+        &pSeq, getCppuType( (Sequence< ProtocolProperty > *)0).getTypeLibType(), 0 );
 
     *pbExceptionThrown = pException ? sal_True : sal_False;
 
@@ -637,7 +744,6 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
     m_bClientWaitingForCommit = sal_False;
     osl_setCondition( m_commitChangeCondition );
 
-    typelib_typedescription_release( pSequenceType );
     typelib_typedescription_release( pMethodType );
     typelib_typedescription_release( pInterfaceType );
 }
