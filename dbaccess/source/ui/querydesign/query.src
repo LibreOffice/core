@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-04 12:31:55 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 05:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2033,7 +2033,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
 
     MenuItem
     {
-        Identifier = MN_EXTRA ;
+        Identifier = ITEM_TOOLS_ID ;
         HelpID = MN_EXTRA ;
         Text = "E~xtras" ;
         Text [ English ] = "T~ools" ;
