@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SqlNameEdit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 13:05:17 $
+ *  last change: $Author: oj $ $Date: 2001-04-03 13:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,8 @@ namespace dbaui
         {
             if(!isCharOk(sText.GetBuffer()[i],i == 0,m_bOnlyUpperCase,m_sAllowedChars))
             {
-                sSavedValue += sText.Copy(nMatch,i-nMatch);
+                if(i) // only set when not first char
+                    sSavedValue = sText.Copy(nMatch,i-nMatch);
                 SetText(sSavedValue);
                 break;
             }
