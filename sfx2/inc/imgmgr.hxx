@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:35:28 $
+ *  last change: $Author: mba $ $Date: 2001-11-28 11:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ public:
     const Bitmap&   GetUserDefBitmap_Impl(USHORT nId) const;
     Image           GetAndLockImage_Impl(USHORT nId, SfxModule* pMod = 0);
     Image           GetImageFromModule_Impl( USHORT nId, SfxModule *pMod );
+    static BOOL     CopyConfiguration_Impl( SfxConfigManager& rSource, SfxConfigManager& rDest );
 #endif
 };
 
