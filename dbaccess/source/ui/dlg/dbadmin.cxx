@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:43:20 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 07:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,9 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ALLOWLONGTABLENAMES, ::rtl::OUString::createFromAscii("NoNameLengthLimit")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ADDITIONALOPTIONS, ::rtl::OUString::createFromAscii("SystemDriverSettings")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_SQL92CHECK, PROPERTY_ENABLESQL92CHECK));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTOINCREMENTVALUE, PROPERTY_AUTOINCREMENTCREATION));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEVALUE, ::rtl::OUString::createFromAscii("AutoRetrievingStatement")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEENABLED, ::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled")));
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
@@ -720,12 +723,17 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
     *pCounter++ = new SfxBoolItem(DSID_SQL92CHECK, sal_False);
-
+    *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, String());
+    *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, String());
+    *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, sal_False);
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
+        {0,0},
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -2142,6 +2150,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.79  2002/07/09 12:43:20  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.78  2002/01/30 14:15:30  fs
  *  #97122# when selecting a data source, make sure it is no no-op causing unnecessary things
  *
