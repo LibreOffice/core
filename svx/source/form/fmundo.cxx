@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:48:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,11 +1003,7 @@ String FmUndoPropertyAction::GetComment() const
 {
     String aStr(static_STR_UNDO_PROPERTY);
 
-    ::rtl::OUString sPropertyDisplayName = FmPropertyInfoService::getPropertyTranslation( aPropertyName );
-    if ( sPropertyDisplayName.getLength() )
-        sPropertyDisplayName = aPropertyName;
-
-    aStr.SearchAndReplace( '#', sPropertyDisplayName );
+    aStr.SearchAndReplace( '#', aPropertyName );
     return aStr;
 }
 
