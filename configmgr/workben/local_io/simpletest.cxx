@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:38:57 $
+ *  last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 #include<osl/file.hxx>
 #endif
 
-#include <rtl/ustring>
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -174,6 +175,8 @@
 
 #include "confname.hxx"
 
+#include "FileHelper.hxx"
+
 // -----------------------------------------------------------------------------
 // --------------------------------- namespaces ---------------------------------
 // -----------------------------------------------------------------------------
@@ -183,15 +186,14 @@ namespace io = com::sun::star::io;
 namespace sax = com::sun::star::xml::sax;
 namespace script = com::sun::star::script;
 
-using ::rtl::OUString;
-using ::osl::File;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
+using namespace rtl;
+using namespace osl;
 
 // -----------------------------------------------------------------------------
 // ---------------------------------- defines ----------------------------------
@@ -762,5 +764,75 @@ void ConfigName()
     }
 }
 
+void ConfigName2()
+{
+    OUString aSubtreePath = ASCII("/org.openoffice.office.common/path/blah/blub");
+    ConfigurationName aName(aSubtreePath);
+    ConfigurationName aParent = aName.getParentName();
+
+    for (ConfigurationName::Iterator it = aName.begin();
+         it != aName.end();
+         ++it)
+    {
+        rtl::OUString aName = *it;
+        volatile int dummy = 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+inline void operator <<= (rtl::OUString& _rUnicodeString, const sal_Char* _pAsciiString)
+{
+    _rUnicodeString = ::rtl::OUString::createFromAscii(_pAsciiString);
+}
+
+inline void operator <<= (rtl::OUString& _rUnicodeString, const rtl::OString& _rAsciiString)
+{
+    _rUnicodeString <<= _rAsciiString.getStr();
+}
+
+inline void operator <<= (rtl::OString& _rAsciiString, const rtl::OUString& _rUnicodeString)
+{
+    _rAsciiString = rtl::OUStringToOString(_rUnicodeString,RTL_TEXTENCODING_ASCII_US);
+}
+
+// -----------------------------------------------------------------------------
+bool isBTimeGreaterATime(TimeValue const& A, TimeValue const& B)
+{
+    if (B.Seconds > A.Seconds) return true;
+    if (B.Nanosec > A.Nanosec) return true;
+
+    // lower or equal
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+
+void oslTest()
+{
+
+    OUString aDirectory(FileHelper::convertFilenameToFileURL(ASCII("c:/temp/file.out.1")));
+    TimeValue a = FileHelper::getFileModificationStamp(aDirectory);
+
+    OUString aDirectory2(FileHelper::convertFilenameToFileURL(ASCII("c:/temp/file.out.2")));
+    TimeValue b = FileHelper::getFileModificationStamp(aDirectory2);
+
+    if (isBTimeGreaterATime(a,b))
+    {
+        OSL_ENSURE(false, "FileB ist neuer als FileA");
+    }
+
+
+/*
+    OUString aDirectory(FileHelper::convertFilenameToFileURL(ASCII("c:/temp/dies")));
+    osl::FileBase::RC eError = osl::Directory::create(aDirectory);
+    if (eError != osl::FileBase::E_None)
+    {
+        OUString aUStr = FileHelper::createOSLErrorString(eError);
+        OString aStr;
+        aStr <<= aUStr;
+        OSL_ENSURE(false, aStr.getStr());
+    }
+*/
+}
 
 } // namespace configmgr

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: cfgfile.cxx,v $
+ *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
  *
@@ -58,68 +58,54 @@
  *
  *
  ************************************************************************/
+#include <iostream>
+using namespace std;
 
+#define ENABLE_MEMORYMEASURE
+#define ENABLE_LOGMECHANISM
 
+// If you wish to enable this memory measure macros ... you need "windows.h"
+// But it's not agood idea to include it in your header!!! Because it's not compatible to VCL header .-(
+// So you must include it here ... in cxx, where you whish to use it.
+#ifdef ENABLE_MEMORYMEASURE
+    #define VCL_NEED_BASETSD
+    #include <tools/presys.h>
+    #include <windows.h>
+    #include <tools/postsys.h>
+    #undef  VCL_NEED_BASETSD
+#endif
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_MEMORYMEASURE_HXX_
+#include "memorymeasure.hxx"
+#endif
+
+#include "logmechanism.hxx"
 // -----------------------------------------------------------------------------
-// ------------------------------------ main ------------------------------------
+// ---------------------------------- M A I N ----------------------------------
 // -----------------------------------------------------------------------------
-
-/*
-  OUString operator+(const OUString &a, const OUString &b)
-  {
-  OUString c = a;
-  c += b;
-  return c;
-  }
-*/
-
-namespace configmgr
-{
-    void simpleMappingTest();
-
-    void importTest();
-    void exportTest();
-
-    void hierarchyTest();
-    //void simpleTest();
-    void speedTest();
-    void stringTest();
-    void classTest();
-    void hash_test();
-    void testRefs();
-    void ConfigName();
-
-    void oslTest();
-}
-
-
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
 #else
-    int _cdecl main( int argc, char * argv[] )
+int _cdecl main( int argc, char * argv[] )
 #endif
 {
 
-//  configmgr::hierarchyTest();
+    START_MEMORYMEASURE( aMemoryInfo );
 
 
-//  configmgr::importTest();
-//  configmgr::exportTest();
-//  configmgr::speedTest();
-//  configmgr::simpleTest();
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "first start" );
 
-//  configmgr::simpleMappingTest();
-//  configmgr::stringTest();
-//  configmgr::classTest();
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "1" );
 
-//  configmgr::hash_test();
+    sal_Char* pTest = new sal_Char[1000 * 1000 * 50];
+    sal_Char* pTest1 = new sal_Char[1000 * 1000 * 50];
+    sal_Char* pTest2 = new sal_Char[1000 * 1000 * 50];
 
-    // configmgr::testRefs();
-    // configmgr::ConfigName();
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "2" );
 
-    configmgr::oslTest();
+    LOG_MEMORYMEASURE( "FirstTest_of_memusage", "Values of memory access for standard filters.", aMemoryInfo );
+
     return 0;
 }
-
 

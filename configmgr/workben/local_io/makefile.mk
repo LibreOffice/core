@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-29 13:59:56 $
+#   last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,12 +104,13 @@ APP1TARGET= $(TARGET)
 APP1OBJS=	\
     $(SLO)$/cfgfile.obj \
     $(SLO)$/oslstream.obj \
-    $(SLO)$/xmlexport.obj \
-    $(SLO)$/xmlimport.obj \
     $(SLO)$/filehelper.obj \
     $(SLO)$/simpletest.obj \
     $(SLO)$/strimpl.obj \
     $(SLO)$/confname.obj \
+
+#	$(SLO)$/xmlexport.obj \
+#	$(SLO)$/xmlimport.obj \
 
 # 	  $(SLO)$/xmltreebuilder.obj \
 # 	  $(SLO)$/cmtree.obj \
