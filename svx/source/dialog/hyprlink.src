@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:58:15 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ swedish ] = "URL-namn" ;
         QuickHelpText[ russian ] = "Èìÿ URL";
         QuickHelpText[ danish ] = "URL navn";
-        QuickHelpText[ polish ] = "Nazwa URL";
+        QuickHelpText[ polish ] = "Nazwa URL!";
         QuickHelpText[ japanese ] = "URL‚Ì–¼‘O!";
         QuickHelpText[ chinese_simplified ] = "URL Ãû³Æ";
         QuickHelpText[ chinese_traditional ] = "URL ¦WºÙ";
@@ -161,7 +161,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText [ swedish ] = "Samlingsbox till webbadresser" ;
         QuickHelpText[ russian ] = "Íàêîïèòåëü URL Èíòåğíåòà";
         QuickHelpText[ danish ] = "Samleboks til Internet URL";
-        QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu";
+        QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu!";
         QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½!";
         QuickHelpText[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍø URL µØÖ·À¸";
         QuickHelpText[ chinese_traditional ] = "Internet URL ¦ì§}¦C";
