@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2001-10-24 13:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,10 +988,27 @@ void SdrDragView::ImpDrawEdgeXor(ExtOutputDevice& rXOut, BOOL bFull) const
 
 void SdrDragView::ShowDragObj(OutputDevice* pOut)
 {
-    if (pDragBla!=NULL && !aDragStat.IsShown()) {
-        DrawDragObj(pOut,FALSE);
+    if(pDragBla && !aDragStat.IsShown())
+    {
+        DrawDragObj(pOut, FALSE);
         aDragStat.SetShown(TRUE);
-        if (aAni.IsStripes() && IsDragStripes()) {
+
+        // #93700# set shown state at views
+        if(pOut)
+        {
+            sal_uInt16 nw(aWinList.Find(pOut));
+
+            if(nw < GetWinCount() && SDRVIEWWIN_NOTFOUND != nw)
+            {
+                if(!IsShownXorVisibleWinNum(nw))
+                {
+                    SetShownXorVisible(nw, TRUE);
+                }
+            }
+        }
+
+        if(aAni.IsStripes() && IsDragStripes())
+        {
             aAni.Start();
         }
     }
@@ -999,10 +1016,27 @@ void SdrDragView::ShowDragObj(OutputDevice* pOut)
 
 void SdrDragView::HideDragObj(OutputDevice* pOut)
 {
-    if (pDragBla!=NULL && aDragStat.IsShown()) {
-        if (aAni.IsStripes() && IsDragStripes()) aAni.Stop();
-        DrawDragObj(pOut,FALSE);
+    if(pDragBla && aDragStat.IsShown())
+    {
+        if(aAni.IsStripes() && IsDragStripes())
+            aAni.Stop();
+
+        DrawDragObj(pOut, FALSE);
         aDragStat.SetShown(FALSE);
+
+        // #93700# clear shown state at views
+        if(pOut)
+        {
+            sal_uInt16 nw(aWinList.Find(pOut));
+
+            if(nw < GetWinCount() && SDRVIEWWIN_NOTFOUND != nw)
+            {
+                if(IsShownXorVisibleWinNum(nw))
+                {
+                    SetShownXorVisible(nw, FALSE);
+                }
+            }
+        }
     }
 }
 
