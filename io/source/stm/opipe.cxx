@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-09-18 10:03:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 
-#include <assert.h>
 #include <string.h>
 
 using namespace ::rtl;
