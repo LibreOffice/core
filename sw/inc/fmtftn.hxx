@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #ifndef _FMTFTN_HXX
 #define _FMTFTN_HXX
 
-
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -69,11 +68,15 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwDoc;
 
 // ATT_FTN **********************************************************
 
-class SwFmtFtn: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
     SwTxtFtn* pTxtAttr;     //mein TextAttribut
@@ -87,7 +90,7 @@ class SwFmtFtn: public SfxPoolItem
 
 public:
     SwFmtFtn( BOOL bEndNote = FALSE );
-    ~SwFmtFtn();
+    virtual ~SwFmtFtn();
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
