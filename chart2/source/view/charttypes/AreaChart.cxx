@@ -545,6 +545,9 @@ void AreaChart::createShapes()
                     || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
                     || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                 {
+                    if(! (m_bCategoryXAxis&&m_bArea) )
+                        continue;
+
                     bPointForAreaBoundingOnly = true;
                     fLogicX = nIndex;
                     fLogicY=0;//@todo maybe there is another grounding ?? - for sum 0 is right
@@ -611,6 +614,7 @@ void AreaChart::createShapes()
                             aLogicGeom,m_pPosHelper->getTransformationLogicToScene()) );
 
                     //create data point
+                    drawing::Direction3D aSymbolSize(0,0,0);
                     if( m_bSymbol )
                     {
                         if(m_nDimension==3)
@@ -628,11 +632,10 @@ void AreaChart::createShapes()
                             {
                                 if( pSymbolProperties->aStyle == SymbolStyle_STANDARD )
                                 {
-                                    drawing::Direction3D aSize;
-                                    aSize.DirectionX = pSymbolProperties->aSize.Width;
-                                    aSize.DirectionY = pSymbolProperties->aSize.Height;
+                                    aSymbolSize.DirectionX = pSymbolProperties->aSize.Width;
+                                    aSymbolSize.DirectionY = pSymbolProperties->aSize.Height;
                                     m_pShapeFactory->createSymbol2D( xPointGroupShape_Shapes
-                                            , aTransformedGeom.m_aPosition, aSize
+                                            , aTransformedGeom.m_aPosition, aSymbolSize
                                             , pSymbolProperties->nStandardSymbol
                                             , pSymbolProperties->nFillColor );
                                     }
@@ -640,7 +643,18 @@ void AreaChart::createShapes()
                             }
                         }
                     }
+                    //create error bar
                     createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
+
+                    //create data point label
+                    LabelAlignment eAlignment(LABEL_ALIGN_TOP);
+                    awt::Point aScreenPosition2D = awt::Point(
+                            static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionX)
+                            ,static_cast<sal_Int32>(aTransformedGeom.m_aPosition.PositionY
+                            -aSymbolSize.DirectionY/2-1));
+                    this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
+                                    , aUnscaledLogicPosition.PositionY
+                                    , fLogicYSum, aScreenPosition2D, eAlignment );
                 }
 
                 //remove PointGroupShape if empty
