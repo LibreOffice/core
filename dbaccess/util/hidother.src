@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:46:19 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 16:55:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,3 +328,5 @@ hidspecial HID_DSADMIN_CHARSET_USERDEF                  { HelpId = HID_DSADMIN_C
 hidspecial HID_DSADMIN_USER_LDAP                        { HelpId = HID_DSADMIN_USER_LDAP ; };
 hidspecial HID_DSADMIN_PWDREC_LDAP                      { HelpId = HID_DSADMIN_PWDREC_LDAP ; };
 hidspecial HID_DSADMIN_USESSL_LDAP                      { HelpId = HID_DSADMIN_USESSL_LDAP ; };
+hidspecial HID_BROWSER_QUERY_WIZARD                     { HelpId = HID_BROWSER_QUERY_WIZARD ; };
+
