@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 14:57:10 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 14:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OWizardPage::commitPage( COMMIT_REASON _eReason )
     {
         return sal_True;
     }
@@ -214,15 +214,15 @@ namespace svt
     //=====================================================================
     //= WizardMachineImplData
     //=====================================================================
-    struct WizardMachineImplData
+    struct WizardMachineImplData : public WizardTypes
     {
         String                          sTitleBase;         // the base for the title
-        ::std::stack< sal_uInt16 >      aStateHistory;      // the history of all states (used for implementing "Back")
+        ::std::stack< WizardState >     aStateHistory;      // the history of all states (used for implementing "Back")
         Bitmap                          aHeaderBitmap;      // the bitmap to use for the page header
 
         sal_Int32                       nHeaderHeight;      // the height (in pixels) of the page header
 
-        sal_uInt16                      nFirstUnknownPage;
+        WizardState                     nFirstUnknownPage;
             // the WizardDialog does not allow non-linear transitions (e.g. it's
             // not possible to add pages in a non-linear order), so we need some own maintainance data
 
@@ -239,7 +239,7 @@ namespace svt
     //= OWizardMachine
     //=====================================================================
     //---------------------------------------------------------------------
-    OWizardMachine::OWizardMachine(Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags)
+    OWizardMachine::OWizardMachine( Window* _pParent, const ResId& _rRes, sal_uInt32 _nButtonFlags )
         :WizardDialog(_pParent, _rRes)
         ,m_pFinish(NULL)
         ,m_pCancel(NULL)
@@ -323,7 +323,7 @@ namespace svt
         delete m_pPrevPage;
         delete m_pHelp;
 
-        for (sal_uInt16 i=0; i<m_pImpl->nFirstUnknownPage; ++i)
+        for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
             delete GetPage(i);
 
         delete m_pImpl;
@@ -337,7 +337,7 @@ namespace svt
         {   // append the page title only if we're not using headers - in this case, the title
             // would be part of the header
             OWizardPage* pCurrentPage = getPage(getCurrentState());
-            if (pCurrentPage)
+            if ( pCurrentPage && pCurrentPage->GetText().Len() )
             {
                 sCompleteTitle += String::CreateFromAscii(" - ");
                 sCompleteTitle += pCurrentPage->GetText();
@@ -364,7 +364,7 @@ namespace svt
         m_pImpl->nHeaderHeight = _nPixelHeight;
 
 #ifdef DBG_UTIL
-        for (sal_uInt16 i=0; i<m_pImpl->nFirstUnknownPage; ++i)
+        for (WizardState i=0; i<m_pImpl->nFirstUnknownPage; ++i)
         {
             DBG_ASSERT( NULL == GetPage( i ), "OWizardMachine::enableHeader: there already are pages!" );
             // this method has not to be called if there already have been created any pages
@@ -390,7 +390,7 @@ namespace svt
     {
         WizardDialog::ActivatePage();
 
-        sal_uInt16 nCurrentLevel = GetCurLevel();
+        WizardState nCurrentLevel = GetCurLevel();
         if (NULL == GetPage(nCurrentLevel))
         {
             OWizardPage* pNewPage = createPage(nCurrentLevel);
@@ -424,7 +424,7 @@ namespace svt
     //---------------------------------------------------------------------
     long OWizardMachine::DeactivatePage()
     {
-        sal_uInt16 nCurrentState = getCurrentState();
+        WizardState nCurrentState = getCurrentState();
         if (!leaveState(nCurrentState) || !WizardDialog::DeactivatePage())
             return sal_False;
         return sal_True;
@@ -519,7 +519,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OWizardMachine::enterState(sal_uInt16 _nState)
+    void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
         OWizardPage* pCurrentPage = getPage(_nState);
@@ -531,7 +531,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardMachine::leaveState(sal_uInt16 _nState)
+    sal_Bool OWizardMachine::leaveState(WizardState _nState)
     {
         // no need to ask the page here.
         // If we reach this point, we already gave the current page the chance to commit it's data,
@@ -549,24 +549,89 @@ namespace svt
     //---------------------------------------------------------------------
     IMPL_LINK(OWizardMachine, OnFinish, PushButton*, NOINTERESTEDIN)
     {
-        if (!implCommitCurrentPage(OWizardPage::CR_FINISH))
+        if ( !prepareLeaveCurrentState( eFinish ) )
             return 0L;
 
         return onFinish( RET_OK );
     }
 
     //---------------------------------------------------------------------
-    sal_uInt16 OWizardMachine::determineNextState(sal_uInt16 _nCurrentState)
+    OWizardMachine::WizardState OWizardMachine::determineNextState( WizardState _nCurrentState )
     {
         return _nCurrentState + 1;
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardMachine::implCommitCurrentPage(OWizardPage::COMMIT_REASON _eReason)
+    sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
-        OWizardPage* pCurrentPage = getPage(getCurrentState());
-        if (pCurrentPage)
-            return pCurrentPage->commitPage(_eReason);
+        OWizardPage* pCurrentPage = getPage( getCurrentState() );
+        if ( pCurrentPage )
+            return pCurrentPage->commitPage( ( OWizardPage::COMMIT_REASON )_eReason );
+        return sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OWizardMachine::skipBackwardUntil( WizardState _nTargetState )
+    {
+        // alowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+            return sal_False;
+
+        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
+        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+
+        WizardState nCurrentRollbackState = getCurrentState();
+        while ( nCurrentRollbackState != _nTargetState )
+        {
+            DBG_ASSERT( !aTravelVirtually.empty(), "OWizardMachine::skipBackwardUntil: this target state does not exist in the history!" );
+            nCurrentRollbackState = aTravelVirtually.top();
+            aTravelVirtually.pop();
+        }
+
+        if ( !ShowPage( _nTargetState ) )
+            return sal_False;
+
+        m_pImpl->aStateHistory = aTravelVirtually;
+        return sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OWizardMachine::skipUntil( WizardState _nTargetState )
+    {
+        // alowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+            return sal_False;
+
+        // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
+        ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
+
+        WizardState nCurrentState = getCurrentState();
+        while ( nCurrentState != _nTargetState )
+        {
+            WizardState nNextState = determineNextState( nCurrentState );
+            if ( WZS_INVALID_STATE == nNextState )
+            {
+                DBG_ERROR( "OWizardMachine::skipUntil: the given target state does not exist!" );
+                return sal_False;
+            }
+
+            // remember the skipped state in the history
+            aTravelVirtually.push( nCurrentState );
+
+            // get the next state
+            nCurrentState = nNextState;
+        }
+
+        // show the target page
+        if ( !ShowPage( nCurrentState ) )
+        {
+            // argh! prepareLeaveCurrentPage succeeded, determineNextState succeeded,
+            // but ShowPage doesn't? Somebody behaves very strange here ....
+            DBG_ERROR( "OWizardMachine::skipUntil: very unpolite ...." );
+            return sal_False;
+        }
+
+        m_pImpl->aStateHistory = aTravelVirtually;
         return sal_True;
     }
 
@@ -575,11 +640,11 @@ namespace svt
     {
         DBG_ASSERT(_nSteps > 0, "OWizardMachine::skip: invalid number of steps!");
         // alowed to leave the current page?
-        if (!implCommitCurrentPage(OWizardPage::CR_TRAVEL_NEXT))
+        if ( !prepareLeaveCurrentState( eTravelForward ) )
             return sal_False;
 
-        sal_uInt16 nCurrentState = getCurrentState();
-        sal_uInt16 nNextState = determineNextState(nCurrentState);
+        WizardState nCurrentState = getCurrentState();
+        WizardState nNextState = determineNextState(nCurrentState);
         // loop _nSteps steps
         while (_nSteps-- > 0)
         {
@@ -613,13 +678,13 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::travelNext()
     {
-        // alowed to leave the current page?
-        if (!implCommitCurrentPage(OWizardPage::CR_TRAVEL_NEXT))
+        // allowed to leave the current page?
+        if ( !prepareLeaveCurrentState( eTravelForward ) )
             return sal_False;
 
         // determine the next state to travel to
-        sal_uInt16 nCurrentState = getCurrentState();
-        sal_uInt16 nNextState = determineNextState(nCurrentState);
+        WizardState nCurrentState = getCurrentState();
+        WizardState nNextState = determineNextState(nCurrentState);
         if (WZS_INVALID_STATE == nNextState)
             return sal_False;
 
@@ -637,11 +702,11 @@ namespace svt
         DBG_ASSERT(m_pImpl->aStateHistory.size() > 0, "OWizardMachine::travelPrevious: have no previous page!");
 
         // alowed to leave the current page?
-        if (!implCommitCurrentPage(OWizardPage::CR_TRAVEL_PREVIOUS))
+        if ( !prepareLeaveCurrentState( eTravelBackward ) )
             return sal_False;
 
         // the next state to switch to
-        sal_uInt16 nPreviousState = m_pImpl->aStateHistory.top();
+        WizardState nPreviousState = m_pImpl->aStateHistory.top();
 
         // show this page
         if (!ShowPage(nPreviousState))
@@ -671,6 +736,15 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6.344.2  2004/04/07 08:35:37  tv
+ *  #100000# compiler problems under solaris fixed
+ *
+ *  Revision 1.6.344.1  2004/04/05 12:26:18  fs
+ *  some cleanup / additions for #i27457#
+ *
+ *  Revision 1.6  2001/08/08 14:57:10  fs
+ *  #90716# the help button is the most-left one
+ *
  *  Revision 1.5  2001/08/02 10:37:38  fs
  *  #88530# added functionality for adding a WizardHeader (upon request of the derived class)
  *
