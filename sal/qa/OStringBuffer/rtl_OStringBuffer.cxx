@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lwang $ $Date: 2003-01-04 09:44:07 $
+ *  last change: $Author: lwang $ $Date: 2003-01-14 03:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8850,6 +8850,9389 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
+//------------------------------------------------------------------------
+// testing the method append( sal_Int32 i, sal_Int16 radix ) where radix = -5
+//------------------------------------------------------------------------
+    class  append_006_Int32_WrongRadix : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+        sal_Int32 intVal;
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+            intVal = 11;
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr59 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[0]",
+                sal_True
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[1]",
+                sal_True
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[2]",
+                sal_True
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[3]",
+                sal_True
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr61 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[4]",
+                sal_True
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer(with INT_MAX)",
+                sal_True
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_006_Int32_WrongRadix );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_006 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+    class  append_006_Int32_defaultParam : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr59 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[0]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr62 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[0]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr63 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[0]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr64 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[0]+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr65 );
+            sal_Int32              input = kNonSInt32Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[0]+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr60 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[1]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr66 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[1]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr67 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[1]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr68 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[1]+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr69 );
+            sal_Int32              input = -2147483648;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[1]+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr60 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[2]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr66 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OUStringBuffer[2]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr67 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OUStringBuffer[2]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr68 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[2]+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr69 );
+            sal_Int32              input = -2147483648;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[2]+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr60 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[3]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr66 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[3]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr67 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[3]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr68 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[3]+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr69 );
+            sal_Int32              input = -2147483648;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[3]+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr61 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer[4]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr70 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer[4]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr71 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer[4]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr72 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer[4]+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr73 );
+            sal_Int32              input = -2147483648;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer[4]+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr60 );
+            sal_Int32              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 11 and return OStringBuffer(kSInt32Max)+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr66 );
+            sal_Int32              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 0 and return OStringBuffer(kSInt32Max)+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr67 );
+            sal_Int32              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -11 and return OStringBuffer(kSInt32Max)+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr68 );
+            sal_Int32              input = 2147483647;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 2147483647 and return OStringBuffer(kSInt32Max)+2147483647",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr69 );
+            sal_Int32              input = -2147483648;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int32 -2147483648 and return OStringBuffer(kSInt32Max)+(-2147483648)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_006_Int32_defaultParam );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( sal_Int64 l, sal_Int16 radix=2 )
+// testing the method append( sal_Int64 l, sal_Int16 radix=8 )
+// testing the method append( sal_Int64 l, sal_Int16 radix=10 )
+// testing the method append( sal_Int64 l, sal_Int16 radix=16 )
+// testing the method append( sal_Int64 l, sal_Int16 radix=36 )
+//------------------------------------------------------------------------
+    class  append_007_Int64 : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64             input = 0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_043()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_044()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_045()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_046()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_047()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_048()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_049()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_050()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_051()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_052()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_053()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_054()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_055()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_056()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_057()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_058()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_059()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_060()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_061()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_062()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_063()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_064()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_065()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_066()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_067()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_068()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_069()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_070()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_071()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_072()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_073()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_074()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_075()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_076()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_077()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_078()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_079()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_080()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_081()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_082()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_083()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_084()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_085()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_086()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_087()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_088()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_089()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_090()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_091()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_092()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_093()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_094()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_095()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_096()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_097()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_098()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_099()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_100()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = 35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        CPPUNIT_TEST_SUITE( append_007_Int64 );
+        CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 ); CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 ); CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 ); CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 ); CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 ); CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 ); CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 ); CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 ); CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 ); CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 ); CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 ); CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 ); CPPUNIT_TEST( append_030 );
+        CPPUNIT_TEST( append_031 ); CPPUNIT_TEST( append_032 );
+        CPPUNIT_TEST( append_033 ); CPPUNIT_TEST( append_034 );
+        CPPUNIT_TEST( append_035 ); CPPUNIT_TEST( append_036 );
+        CPPUNIT_TEST( append_037 ); CPPUNIT_TEST( append_038 );
+        CPPUNIT_TEST( append_039 ); CPPUNIT_TEST( append_040 );
+        CPPUNIT_TEST( append_041 ); CPPUNIT_TEST( append_042 );
+        CPPUNIT_TEST( append_043 ); CPPUNIT_TEST( append_044 );
+        CPPUNIT_TEST( append_045 ); CPPUNIT_TEST( append_046 );
+        CPPUNIT_TEST( append_047 ); CPPUNIT_TEST( append_048 );
+        CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
+        CPPUNIT_TEST( append_051 ); CPPUNIT_TEST( append_052 );
+        CPPUNIT_TEST( append_053 ); CPPUNIT_TEST( append_054 );
+        CPPUNIT_TEST( append_055 ); CPPUNIT_TEST( append_056 );
+        CPPUNIT_TEST( append_057 ); CPPUNIT_TEST( append_058 );
+        CPPUNIT_TEST( append_059 ); CPPUNIT_TEST( append_060 );
+        CPPUNIT_TEST( append_061 ); CPPUNIT_TEST( append_062 );
+        CPPUNIT_TEST( append_063 ); CPPUNIT_TEST( append_064 );
+        CPPUNIT_TEST( append_065 ); CPPUNIT_TEST( append_066 );
+        CPPUNIT_TEST( append_067 ); CPPUNIT_TEST( append_068 );
+        CPPUNIT_TEST( append_069 ); CPPUNIT_TEST( append_070 );
+        CPPUNIT_TEST( append_071 ); CPPUNIT_TEST( append_072 );
+        CPPUNIT_TEST( append_073 ); CPPUNIT_TEST( append_074 );
+        CPPUNIT_TEST( append_075 ); CPPUNIT_TEST( append_076 );
+        CPPUNIT_TEST( append_077 ); CPPUNIT_TEST( append_078 );
+        CPPUNIT_TEST( append_079 ); CPPUNIT_TEST( append_080 );
+        CPPUNIT_TEST( append_081 ); CPPUNIT_TEST( append_082 );
+        CPPUNIT_TEST( append_083 ); CPPUNIT_TEST( append_084 );
+        CPPUNIT_TEST( append_085 ); CPPUNIT_TEST( append_086 );
+        CPPUNIT_TEST( append_087 ); CPPUNIT_TEST( append_088 );
+        CPPUNIT_TEST( append_089 ); CPPUNIT_TEST( append_090 );
+        CPPUNIT_TEST( append_091 ); CPPUNIT_TEST( append_092 );
+        CPPUNIT_TEST( append_093 ); CPPUNIT_TEST( append_094 );
+        CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
+        CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
+        CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( sal_Int64 i, sal_Int16 radix=2 )
+// where i = large constants
+// testing the method append( sal_Int64 i, sal_Int16 radix=8 )
+// where i = large constants
+// testing the method append( sal_Int64 i, sal_Int16 radix=10 )
+// where i = large constants
+// testing the method append( sal_Int64 i, sal_Int16 radix=16 )
+// where i = large constants
+// testing the method append( sal_Int64 i, sal_Int16 radix=36 )
+// where i = large constants
+//------------------------------------------------------------------------
+    class  append_007_Int64_Bounderies : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "177" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64             input = kSInt64Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "777777777777777777777" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "127" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "9223372036854775807" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7fffffffffffffff" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "3j" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "1y2p0ij32e8e7" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "177" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "777777777777777777777" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "127" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "9223372036854775807" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7fffffffffffffff" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "3j" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "1y2p0ij32e8e7" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "177" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "777777777777777777777" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "127" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "9223372036854775807" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7fffffffffffffff" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "3j" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "1y2p0ij32e8e7" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "177" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "777777777777777777777" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "127" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "9223372036854775807" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7fffffffffffffff" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "3j" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "1y2p0ij32e8e7" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "1111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "111111111111111111111111111111111111111111111111111111111111111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_043()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "177" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_044()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "777777777777777777777" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_045()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "127" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_046()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "9223372036854775807" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_047()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_048()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "7fffffffffffffff" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_049()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt8Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "3j" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_050()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = kSInt64Max;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "1y2p0ij32e8e7" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_Bounderies_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        CPPUNIT_TEST_SUITE( append_007_Int64_Bounderies );
+        CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 ); CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 ); CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 ); CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 ); CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 ); CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 ); CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 ); CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 ); CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 ); CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 ); CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 ); CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 ); CPPUNIT_TEST( append_030 );
+        CPPUNIT_TEST( append_031 ); CPPUNIT_TEST( append_032 );
+        CPPUNIT_TEST( append_033 ); CPPUNIT_TEST( append_034 );
+        CPPUNIT_TEST( append_035 ); CPPUNIT_TEST( append_036 );
+        CPPUNIT_TEST( append_037 ); CPPUNIT_TEST( append_038 );
+        CPPUNIT_TEST( append_039 ); CPPUNIT_TEST( append_040 );
+        CPPUNIT_TEST( append_041 ); CPPUNIT_TEST( append_042 );
+        CPPUNIT_TEST( append_043 ); CPPUNIT_TEST( append_044 );
+        CPPUNIT_TEST( append_045 ); CPPUNIT_TEST( append_046 );
+        CPPUNIT_TEST( append_047 ); CPPUNIT_TEST( append_048 );
+        CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( sal_Int64 i, sal_Int16 radix=2 )
+// for negative value
+// testing the method append( sal_Int64 i, sal_Int16 radix=8 )
+// for negative value
+// testing the method append( sal_Int64 i, sal_Int16 radix=10 )
+// for negative value
+// testing the method append( sal_Int64 i, sal_Int16 radix=16 )
+// for negative value
+// testing the method append( sal_Int64 i, sal_Int16 radix=36 )
+// for negative value
+//------------------------------------------------------------------------
+    class  append_007_Int64_Negative : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[0]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[1]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_043()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_044()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_045()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_046()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_047()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_048()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_049()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_050()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_051()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_052()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_053()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_054()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_055()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_056()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_057()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_058()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_059()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_060()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[2]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_061()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_062()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_063()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_064()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_065()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_066()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_067()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_068()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_069()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_070()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_071()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_072()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_073()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_074()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_075()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_076()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_077()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_078()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_079()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_080()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[3]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_081()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_082()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "100" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_083()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1000" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_084()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 2;
+
+            expVal += OString( "-" );
+            expVal += OString( "1111" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 2)_006_negative_kRadixBinary for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_085()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_086()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_087()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "10" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_088()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 8;
+
+            expVal += OString( "-" );
+            expVal += OString( "17" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 8)_006_negative_kRadixOctol for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_089()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_090()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_091()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_092()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 10;
+
+            expVal += OString( "-" );
+            expVal += OString( "15" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 10)_006_negative_kRadixDecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_093()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_094()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_095()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_096()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -15;
+            sal_Int16              radix = 16;
+
+            expVal += OString( "-" );
+            expVal += OString( "f" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 16)_006_negative_kRadixHexdecimal for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_097()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -0;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "0" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_098()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -4;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "4" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_099()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -8;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "8" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_100()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( aStrBuf.getStr() );
+            sal_Int64              input = -35;
+            sal_Int16              radix = 36;
+
+            expVal += OString( "-" );
+            expVal += OString( "z" );
+            aStrBuf.append( input, radix );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int64, radix 36)_006_negative_kRadixBase36 for arrOUS[4]",
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        CPPUNIT_TEST_SUITE( append_007_Int64_Negative );
+        CPPUNIT_TEST( append_001 ); CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 ); CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 ); CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 ); CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 ); CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 ); CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 ); CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 ); CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 ); CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 ); CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 ); CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 ); CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 ); CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 ); CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 ); CPPUNIT_TEST( append_030 );
+        CPPUNIT_TEST( append_031 ); CPPUNIT_TEST( append_032 );
+        CPPUNIT_TEST( append_033 ); CPPUNIT_TEST( append_034 );
+        CPPUNIT_TEST( append_035 ); CPPUNIT_TEST( append_036 );
+        CPPUNIT_TEST( append_037 ); CPPUNIT_TEST( append_038 );
+        CPPUNIT_TEST( append_039 ); CPPUNIT_TEST( append_040 );
+        CPPUNIT_TEST( append_041 ); CPPUNIT_TEST( append_042 );
+        CPPUNIT_TEST( append_043 ); CPPUNIT_TEST( append_044 );
+        CPPUNIT_TEST( append_045 ); CPPUNIT_TEST( append_046 );
+        CPPUNIT_TEST( append_047 ); CPPUNIT_TEST( append_048 );
+        CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
+        CPPUNIT_TEST( append_051 ); CPPUNIT_TEST( append_052 );
+        CPPUNIT_TEST( append_053 ); CPPUNIT_TEST( append_054 );
+        CPPUNIT_TEST( append_055 ); CPPUNIT_TEST( append_056 );
+        CPPUNIT_TEST( append_057 ); CPPUNIT_TEST( append_058 );
+        CPPUNIT_TEST( append_059 ); CPPUNIT_TEST( append_060 );
+        CPPUNIT_TEST( append_061 ); CPPUNIT_TEST( append_062 );
+        CPPUNIT_TEST( append_063 ); CPPUNIT_TEST( append_064 );
+        CPPUNIT_TEST( append_065 ); CPPUNIT_TEST( append_066 );
+        CPPUNIT_TEST( append_067 ); CPPUNIT_TEST( append_068 );
+        CPPUNIT_TEST( append_069 ); CPPUNIT_TEST( append_070 );
+        CPPUNIT_TEST( append_071 ); CPPUNIT_TEST( append_072 );
+        CPPUNIT_TEST( append_073 ); CPPUNIT_TEST( append_074 );
+        CPPUNIT_TEST( append_075 ); CPPUNIT_TEST( append_076 );
+        CPPUNIT_TEST( append_077 ); CPPUNIT_TEST( append_078 );
+        CPPUNIT_TEST( append_079 ); CPPUNIT_TEST( append_080 );
+        CPPUNIT_TEST( append_081 ); CPPUNIT_TEST( append_082 );
+        CPPUNIT_TEST( append_083 ); CPPUNIT_TEST( append_084 );
+        CPPUNIT_TEST( append_085 ); CPPUNIT_TEST( append_086 );
+        CPPUNIT_TEST( append_087 ); CPPUNIT_TEST( append_088 );
+        CPPUNIT_TEST( append_089 ); CPPUNIT_TEST( append_090 );
+        CPPUNIT_TEST( append_091 ); CPPUNIT_TEST( append_092 );
+        CPPUNIT_TEST( append_093 ); CPPUNIT_TEST( append_094 );
+        CPPUNIT_TEST( append_095 ); CPPUNIT_TEST( append_096 );
+        CPPUNIT_TEST( append_097 ); CPPUNIT_TEST( append_098 );
+        CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( sal_Int64 i, sal_Int16 radix ) where radix = -5
+//------------------------------------------------------------------------
+    class  append_007_Int64_WrongRadix : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+        sal_Int64 intVal;
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+            intVal = 11;
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr59 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[0]",
+                sal_True
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[1]",
+                sal_True
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[2]",
+                sal_True
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[3]",
+                sal_True
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr61 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer arrOUS[4]",
+                sal_True
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr60 );
+
+            aStrBuf.append( intVal, -5 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the WrongRadix to the string buffer(with INT_MAX)",
+                sal_True
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_007_Int64_WrongRadix );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_006 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+    class  append_007_Int64_defaultParam : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr59 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[0]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr62 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[0]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr63 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[0]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr116 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[0]+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr117 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[0]+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr60 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[1]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr66 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[1]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr67 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[1]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr118 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[1]+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr119 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[1]+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr60 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[2]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr66 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OUStringBuffer[2]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr67 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OUStringBuffer[2]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr118 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[2]+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr119 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[2]+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr60 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[3]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr66 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[3]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr67 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[3]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr118 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[3]+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr119 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[3]+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr61 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer[4]+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr70 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer[4]+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr71 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer[4]+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr120 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer[4]+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr121 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer[4]+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr60 );
+            sal_Int64              input = 11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 11 and return OStringBuffer(kSInt64Max)+11",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr66 );
+            sal_Int64              input = 0;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 0 and return OStringBuffer(kSInt64Max)+0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr67 );
+            sal_Int64              input = -11;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -11 and return OStringBuffer(kSInt64Max)+(-11)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr118 );
+            sal_Int64              input = 9223372036854775807;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 9223372036854775807 and return OStringBuffer(kSInt64Max)+9223372036854775807",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
+            OString                expVal( kTestStr119 );
+            sal_Int64              input = kNonSInt64Max;
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "input Int64 -9223372036854775808 and return OStringBuffer(kSInt64Max)+(-9223372036854775808)",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_007_Int64_defaultParam );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( float f )
+//------------------------------------------------------------------------
+    class  append_008_float : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr74 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr75 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr76 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr77 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr78 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr79 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr80 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr81 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr82 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr83 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr84 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr85 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr86 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr87 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr81 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr82 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr83 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr84 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr85 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr86 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr87 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr81 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr82 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr83 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr84 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr85 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr86 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr87 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr88 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr89 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr90 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr91 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr92 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr93 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr94 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr81 );
+            float                  input = (float)atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr82 );
+            float                  input = (float)atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr83 );
+            float                  input = (float)atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr84 );
+            float                  input = (float)atof("3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr85 );
+            float                  input = (float)atof("3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr86 );
+            float                  input = (float)atof("3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr87 );
+            float                  input = (float)atof("3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_008_float );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( float f ) for negative value
+//------------------------------------------------------------------------
+    class  append_008_Float_Negative : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr95 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr96 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr97 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr98 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr99 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr100 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr101 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr102 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr103 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr104 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr105 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr106 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr107 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr108 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr102 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr103 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr104 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr105 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr106 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr107 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr108 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr102 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr103 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr104 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr105 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr106 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr107 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr108 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr109 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr110 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr111 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr112 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr113 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr114 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr115 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr102 );
+            float                  input = (float)atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr103 );
+            float                  input = (float)atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr104 );
+            float                  input = (float)atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr105 );
+            float                  input = (float)atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr106 );
+            float                  input = (float)atof("-3.141592");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.141592",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr107 );
+            float                  input = (float)atof("-3.5025255");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.5025255",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr108 );
+            float                  input = (float)atof("-3.00390625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0039062",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_008_Float_Negative );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( double d )
+//------------------------------------------------------------------------
+/*
+    class  append_009_double : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr74 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr75 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr76 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr122 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr123 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr124 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr125 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+            OString     *result = new OString( aStrBuf.getStr());
+            double      output = result->toDouble();
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+printf("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    printf("%c",final->pData->buffer[m]);
+}
+printf("\n");
+printf("the OStringBuffer is %d\n", aStrBuf.getLength());
+printf("the expVal is %d\n", expVal.getLength());
+printf("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    printf("%c",*(aStrBuf.getStr()+j));
+}
+printf("\n");
+printf("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    printf("%c",expVal.pData->buffer[k]);
+}
+printf("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr88 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr89 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr90 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr130 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr131 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr132 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr133 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793";
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr128 );
+            double                 input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_009_double );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };
+//------------------------------------------------------------------------
+// testing the method append( double f ) for negative value
+//------------------------------------------------------------------------
+    class  append_009_Double_Negative : public CppUnit::TestFixture
+    {
+        OString* arrOUS[5];
+
+    public:
+        void setUp()
+        {
+            arrOUS[0] = new OString( kTestStr7 );
+            arrOUS[1] = new OString(  );
+            arrOUS[2] = new OString( kTestStr25 );
+            arrOUS[3] = new OString( "\0"  );
+            arrOUS[4] = new OString( kTestStr28 );
+
+        }
+
+        void tearDown()
+        {
+            delete arrOUS[0]; delete arrOUS[1]; delete arrOUS[2];
+            delete arrOUS[3]; delete arrOUS[4];
+        }
+
+        void append_001()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr95 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr96 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr97 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr98 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr134 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr135 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr136 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+            OString     *result = new OString( aStrBuf.getStr());
+            double      output = result->toDouble();
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+printf("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    printf("%c",final->pData->buffer[m]);
+}
+printf("\n");
+printf("the OStringBuffer is %d\n", aStrBuf.getLength());
+printf("the expVal is %d\n", expVal.getLength());
+printf("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    printf("%c",*(aStrBuf.getStr()+j));
+}
+printf("\n");
+printf("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    printf("%c",expVal.pData->buffer[k]);
+}
+printf("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            double      output = atof("-3.50252");
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+printf("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    printf("%c",final->pData->buffer[m]);
+}
+printf("\n");
+printf("the OStringBuffer is %d\n", aStrBuf.getLength());
+printf("the expVal is %d\n", expVal.getLength());
+printf("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    printf("%c",*(aStrBuf.getStr()+j));
+}
+printf("\n");
+printf("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    printf("%c",expVal.pData->buffer[k]);
+}
+printf("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr109 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr110 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr111 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr112 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr140 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr141 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_035()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr142 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr138 );
+            double                 input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+
+        CPPUNIT_TEST_SUITE( append_009_Double_Negative );
+        CPPUNIT_TEST( append_001 );
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+        CPPUNIT_TEST_SUITE_END();
+    };*/
 } // namespace rtl_OStringBuffer
 
 
@@ -8890,7 +18273,28 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Bounde
                                                 "rtl_OStringBuffer");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_Negative,
                                                 "rtl_OStringBuffer");
-
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_WrongRadix,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_006_Int32_defaultParam,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Bounderies,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_Negative,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_WrongRadix,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_007_Int64_defaultParam,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_008_float,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative,
+                                                "rtl_OStringBuffer");
+/*CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_009_double,
+                                                "rtl_OStringBuffer");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative,
+                                                "rtl_OStringBuffer");*/
 
 // -----------------------------------------------------------------------------
 
