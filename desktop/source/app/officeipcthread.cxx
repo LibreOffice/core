@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2001-07-20 09:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "app.hxx"
 #include "officeipcthread.hxx"
+#include "cmdlineargs.hxx"
 #include <stdio.h>
 
 #ifndef _VOS_PROCESS_HXX_
@@ -75,6 +76,7 @@
 
 using namespace vos;
 using namespace rtl;
+using namespace desktop;
 
 #define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
 #define TERMINATION_LENGTH 28
@@ -223,51 +225,24 @@ void SAL_CALL OfficeIPCThread::run()
                                       TERMINATION_LENGTH ) == COMPARE_EQUAL )
                 return;
 
-            // parse command line arguments
-            // dispatch open and print events
-            int     nToken = aArguments.GetTokenCount( '|' );
-            BOOL    bPrintEvent = FALSE;
-            BOOL    bOpenEvent  = TRUE;
-            String  aOpenList;
-            String  aPrintList;
-            String  aEmpty;
+            ::rtl::OUString aOpenList;
+            ::rtl::OUString aPrintList;
+            String          aEmpty;
+            CommandLineArgs aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
 
-            for( int n=0; n<nToken; n++ )
+            if ( aCmdLineArgs.IsQuickstart() )
             {
-                String aArg( aArguments.GetToken( n, '|' ), gsl_getSystemTextEncoding() );
-                if ( aArg.Len() > 0 )
-                {
-                    if ( aArg.GetChar(0) == '-' )
-                    {
-                        // handle this argument as an option
-                        if ( aArg.EqualsIgnoreCaseAscii( "-p" ))
-                        {
-                            bPrintEvent = TRUE;
-                            bOpenEvent = FALSE;    // Ab hier keine OpenEvents mehr
-                        }
-                    }
-                    else
-                    {
-                        // handle this argument as a filename
-                        if ( bOpenEvent )
-                        {
-                            // Open Event anhaengen
-                            if ( aOpenList.Len() )
-                                aOpenList += APPEVENT_PARAM_DELIMITER;
-                            aOpenList += aArg;
-                        }
-                        else if ( bPrintEvent )
-                        {
-                            // Print Event anhaengen
-                            if( aPrintList.Len() )
-                                aPrintList += APPEVENT_PARAM_DELIMITER;
-                            aPrintList += aArg;
-                        }
-                    }
-                }
+                // we have to use application event, because we have to start quickstart service in main thread!!
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty,
+                                          "QUICKSTART", aEmpty );
+                ImplPostForeignAppEvent( pAppEvent );
             }
 
-            if( aOpenList.Len() )
+            aCmdLineArgs.GetOpenList( aOpenList );
+            aCmdLineArgs.GetPrintList( aPrintList );
+
+            if( aOpenList.getLength() )
             {
                 // open file(s)
                 ApplicationEvent* pAppEvent =
@@ -276,7 +251,7 @@ void SAL_CALL OfficeIPCThread::run()
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
-            if ( aPrintList.Len() )
+            if ( aPrintList.getLength() )
             {
                 // print file(s)
                 ApplicationEvent* pAppEvent =
@@ -285,7 +260,7 @@ void SAL_CALL OfficeIPCThread::run()
                 ImplPostForeignAppEvent( pAppEvent );
             }
 
-            if ( aPrintList.Len() == 0 && aOpenList.Len() == 0 )
+            if ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 )
             {
                 // no document was send, just bring Office to front
                 ApplicationEvent* pAppEvent =
@@ -305,4 +280,4 @@ void SAL_CALL OfficeIPCThread::run()
             sleep( tval );
         }
     }
-};
+}

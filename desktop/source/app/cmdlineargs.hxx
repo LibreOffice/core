@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *  last change: $Author: cd $ $Date: 2001-07-20 09:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,10 @@ namespace desktop
 class CommandLineArgs
 {
     private:
+        sal_Bool        InterpretCommandLineParameter( const ::rtl::OUString& );
         void            ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
+        void            ParseCommandLine_String( const ::rtl::OUString& );
+        void            ResetParamValues();
 
         sal_Bool            m_bMinimized;
         sal_Bool            m_bInvisible;
@@ -102,6 +105,7 @@ class CommandLineArgs
     public:
         CommandLineArgs();
         CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine );
+        CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
 
         sal_Bool        IsMinimized(){ return m_bMinimized; }
         sal_Bool        IsInvisible(){ return m_bInvisible; }
