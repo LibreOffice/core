@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:15:50 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 07:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,83 +65,87 @@
 
  // images ********************************************************************
 
+#define X_IMAGE_LIST \
+        IMG_IMPRESS ; \
+        IMG_WORKPLACE ; \
+        IMG_BITMAP ; \
+        IMG_CALC ; \
+        IMG_CALCTEMPLATE ; \
+        IMG_CHART ; \
+        IMG_DATABASE ; \
+        IMG_IMPRESSTEMPLATE ; \
+        IMG_EXCEL ; \
+        IMG_EXCELTEMPLATE ; \
+        IMG_FTPSERVER ; \
+        IMG_GALLERY ; \
+        IMG_GALLERYTHEME ; \
+        IMG_GIF ; \
+        IMG_HELP ; \
+        IMG_HTML ; \
+        IMG_JPG ; \
+        IMG_LINK ; \
+        IMG_LOTUS ; \
+        IMG_MATH ; \
+        IMG_MATHTEMPLATE ; \
+        IMG_FILE ; \
+        IMG_APP ; \
+        IMG_PCD ; \
+        IMG_PCT ; \
+        IMG_PCX ; \
+        IMG_SIM ; \
+        IMG_TEXTFILE ; \
+        IMG_SVHELP ; \
+        IMG_TIFF ; \
+        IMG_URL ; \
+        IMG_WMF ; \
+        IMG_WORD ; \
+        IMG_WRITER ; \
+        IMG_WRITERTEMPLATE ; \
+        IMG_FIXEDDEV ; \
+        IMG_REMOVEABLEDEV ; \
+        IMG_CDROMDEV ; \
+        IMG_NETWORKDEV ; \
+        IMG_RAMDEV ; \
+        IMG_TABLEFOLDER ; \
+        IMG_TABLE ; \
+        IMG_FOLDER ; \
+        IMG_EXPANDEDFOLDER ; \
+        IMG_XXX ; \
+        IMG_GALLERYIMPORT ; \
+        IMG_QUERYFOLDER ; \
+        IMG_QUERY ; \
+        IMG_FORM ; \
+        IMG_FORMFOLDER ; \
+        IMG_REPORT ; \
+        IMG_REPORTFOLDER ; \
+        IMG_OTHERS ; \
+        IMG_MACROLIB ; \
+        IMG_DXF ; \
+        IMG_MET ; \
+        IMG_PNG ; \
+        IMG_SGF ; \
+        IMG_SGV ; \
+        IMG_SVM ; \
+        IMG_GLOBAL_DOC ; \
+        IMG_DRAW ; \
+        IMG_DRAWTEMPLATE ; \
+        IMG_TASK ; \
+        IMG_APPOINTMENT ; \
+        IMG_RELATION ; \
+        IMG_IMPRESSPACKED ; \
+        IMG_NEWFROMTEMPLATE ;
+
 ImageList RID_SVTOOLS_IMAGELIST_BIG
 {
     ImageBitmap = Bitmap { File = "lx_files.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
-        IMG_IMPRESS ;
-        IMG_WORKPLACE ;
-        IMG_BITMAP ;
-        IMG_CALC ;
-        IMG_CALCTEMPLATE ;
-        IMG_CHART ;
-        IMG_DATABASE ;
-        IMG_IMPRESSTEMPLATE ;
-        IMG_EXCEL ;
-        IMG_EXCELTEMPLATE ;
-        IMG_FTPSERVER ;
-        IMG_GALLERY ;
-        IMG_GALLERYTHEME ;
-        IMG_GIF ;
-        IMG_HELP ;
-        IMG_HTML ;
-        IMG_JPG ;
-        IMG_LINK ;
-        IMG_LOTUS ;
-        IMG_MATH ;
-        IMG_MATHTEMPLATE ;
-        IMG_FILE ;
-        IMG_APP ;
-        IMG_PCD ;
-        IMG_PCT ;
-        IMG_PCX ;
-        IMG_SIM ;
-        IMG_TEXTFILE ;
-        IMG_SVHELP ;
-        IMG_TIFF ;
-        IMG_URL ;
-        IMG_WMF ;
-        IMG_WORD ;
-        IMG_WRITER ;
-        IMG_WRITERTEMPLATE ;
-        IMG_FIXEDDEV ;
-        IMG_REMOVEABLEDEV ;
-        IMG_CDROMDEV ;
-        IMG_NETWORKDEV ;
-        IMG_RAMDEV ;
-        IMG_TABLEFOLDER ;
-        IMG_TABLE ;
-        IMG_FOLDER ;
-        IMG_EXPANDEDFOLDER ;
-        IMG_XXX ;
-        IMG_GALLERYIMPORT ;
-        IMG_QUERYFOLDER ;
-        IMG_QUERY ;
-        IMG_FORM ;
-        IMG_FORMFOLDER ;
-        IMG_REPORT ;
-        IMG_REPORTFOLDER ;
-        IMG_OTHERS ;
-        IMG_MACROLIB ;
-        IMG_DXF ;
-        IMG_MET ;
-        IMG_PNG ;
-        IMG_SGF ;
-        IMG_SGV ;
-        IMG_SVM ;
-        IMG_GLOBAL_DOC ;
-        IMG_DRAW ;
-        IMG_DRAWTEMPLATE ;
-        IMG_TASK ;
-        IMG_APPOINTMENT ;
-        IMG_RELATION;
-        IMG_IMPRESSPACKED;
+        X_IMAGE_LIST
     };
     IdCount =
     {
-        67 ;
+        68 ;
     };
 };
 
@@ -151,77 +155,11 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
     IdList =
     {
-        IMG_IMPRESS ;
-        IMG_WORKPLACE ;
-        IMG_BITMAP ;
-        IMG_CALC ;
-        IMG_CALCTEMPLATE ;
-        IMG_CHART ;
-        IMG_DATABASE ;
-        IMG_IMPRESSTEMPLATE ;
-        IMG_EXCEL ;
-        IMG_EXCELTEMPLATE ;
-        IMG_FTPSERVER ;
-        IMG_GALLERY ;
-        IMG_GALLERYTHEME ;
-        IMG_GIF ;
-        IMG_HELP ;
-        IMG_HTML ;
-        IMG_JPG ;
-        IMG_LINK ;
-        IMG_LOTUS ;
-        IMG_MATH ;
-        IMG_MATHTEMPLATE ;
-        IMG_FILE ;
-        IMG_APP ;
-        IMG_PCD ;
-        IMG_PCT ;
-        IMG_PCX ;
-        IMG_SIM ;
-        IMG_TEXTFILE ;
-        IMG_SVHELP ;
-        IMG_TIFF ;
-        IMG_URL ;
-        IMG_WMF ;
-        IMG_WORD ;
-        IMG_WRITER ;
-        IMG_WRITERTEMPLATE ;
-        IMG_FIXEDDEV ;
-        IMG_REMOVEABLEDEV ;
-        IMG_CDROMDEV ;
-        IMG_NETWORKDEV ;
-        IMG_RAMDEV ;
-        IMG_TABLEFOLDER ;
-        IMG_TABLE ;
-        IMG_FOLDER ;
-        IMG_EXPANDEDFOLDER ;
-        IMG_XXX ;
-        IMG_GALLERYIMPORT ;
-        IMG_QUERYFOLDER ;
-        IMG_QUERY ;
-        IMG_FORM ;
-        IMG_FORMFOLDER ;
-        IMG_REPORT ;
-        IMG_REPORTFOLDER ;
-        IMG_OTHERS ;
-        IMG_MACROLIB ;
-        IMG_DXF ;
-        IMG_MET ;
-        IMG_PNG ;
-        IMG_SGF ;
-        IMG_SGV ;
-        IMG_SVM ;
-        IMG_GLOBAL_DOC ;
-        IMG_DRAW ;
-        IMG_DRAWTEMPLATE ;
-        IMG_TASK ;
-        IMG_APPOINTMENT ;
-        IMG_RELATION;
-        IMG_IMPRESSPACKED;
+        X_IMAGE_LIST
     };
     IdCount =
     {
-        67;
+        68;
     };
 };
 
