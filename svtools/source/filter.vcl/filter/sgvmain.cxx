@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:19:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,14 +137,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//  Einschränkungen:
+//  Einschraenkungen:
 //
-//  þ Flächenmuster werden den unter StarView verfügbaren Mustern angenähert.
-//  þ Linienenden werden unter StarView immer rund dargestellt und gehen über
+//  - Flaechenmuster werden den unter StarView verfuegbaren Mustern angenaehert.
+//  - Linienenden werden unter StarView immer rund dargestellt und gehen ueber
 //    den Endpunkt der Linie hinaus.
-//  þ Linienmuster werden den unter StarView verfügbaren Mustern angenähert.
-//    Transparent/Opak wird zur Zeit noch nicht berücksichtigt.
-//  þ Keine gedrehten Ellipsen
+//  - Linienmuster werden den unter StarView verfuegbaren Mustern angenaehert.
+//    Transparent/Opak wird zur Zeit noch nicht beruecksichtigt.
+//  - Keine gedrehten Ellipsen
 //
 //
 //
@@ -156,7 +156,7 @@
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Für Fontübersetzung /////////////////////////////////////////////////////////////////////////////
+// Fuer Fontuebersetzung ///////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 SgfFontLst* pSgfFonts = 0;
 
@@ -166,7 +166,7 @@ static void AntiMscBug() {}
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Für Kreisunterarten, Text und gedrehte Rechtecke ////////////////////////////////////////////////
+// Fuer Kreisunterarten, Text und gedrehte Rechtecke ///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void RotatePoint(PointType& P, INT16 cx, INT16 cy, double sn, double cs)
 {
@@ -241,7 +241,7 @@ void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
 }
 
 SvStream& operator>>(SvStream& rInp, ObjkType& rObjk)
-{   // Die Fileposition im Stream bleibt unverändert!
+{   // Die Fileposition im Stream bleibt unveraendert!
     ULONG nPos;
     nPos=rInp.Tell();
     rInp.Read((char*)&rObjk.Last,ObjkSize);
@@ -419,12 +419,12 @@ void SetLine(ObjLineType& rLine, OutputDevice& rOut)
     switch(rLine.LMuster & 0x07) {
         case 0: aStyle=PEN_NULL;    break;
         case 1: aStyle=PEN_SOLID;   break;
-        case 2: aStyle=PEN_DOT;     break;    // ù ù ù ù ù ù ù ù ù ù ù ù ù ù
-        case 3: aStyle=PEN_DASH;    break;    // ÄÄ ÄÄ ÄÄ ÄÄ ÄÄ ÄÄ ÄÄ ÄÄ ÄÄ
-        case 4: aStyle=PEN_DASH;    break;    // ÄÄÄ ÄÄÄ ÄÄÄ ÄÄÄ ÄÄÄ ÄÄÄ ÄÄÄ
-        case 5: aStyle=PEN_DASHDOT; break;    // ÄÄ ù ÄÄ ù ÄÄ ù ÄÄ ù ÄÄ ù ÄÄ
-        case 6: aStyle=PEN_DASHDOT; break;    // ÄÄ Ä ÄÄ Ä ÄÄ Ä ÄÄ Ä ÄÄ Ä ÄÄ
-        case 7: aStyle=PEN_DASHDOT; break;    // ÄÄÄ Ä Ä ÄÄÄ Ä Ä ÄÄÄ Ä Ä ÄÄÄ
+        case 2: aStyle=PEN_DOT;     break;    // . . . . . . . . . . . . . .
+        case 3: aStyle=PEN_DASH;    break;    // __ __ __ __ __ __ __ __ __
+        case 4: aStyle=PEN_DASH;    break;    // ___ ___ ___ ___ ___ ___ ___
+        case 5: aStyle=PEN_DASHDOT; break;    // __ . __ . __ . __ . __ . __
+        case 6: aStyle=PEN_DASHDOT; break;    // __ _ __ _ __ _ __ _ __ _ __
+        case 7: aStyle=PEN_DASHDOT; break;    // ___ _ _ ___ _ _ ___ _ _ ___
     }
     Pen aPen(Sgv2SvFarbe(rLine.LFarbe,rLine.LBFarbe,rLine.LIntens),rLine.LDicke,aStyle);
     SetPen(aPen,rOut);
@@ -589,7 +589,7 @@ void DrawSlideRect(INT16 x1, INT16 y1, INT16 x2, INT16 y2, ObjAreaType& F, Outpu
                     if (b!=b0) {
                         SgfAreaColorIntens(F.FMuster,(BYTE)Col1,(BYTE)Col2,(BYTE)b0,rOut);
                         //if (i0>200 || (Col1 & $80)!=0 || (Col2 & $80)!=0) {
-                        //  then begin { Fallunterscheidung für etwas bessere Performance }
+                        //  then begin { Fallunterscheidung fuer etwas bessere Performance }
                         //    s2:=i0-i+2;
                         //    SetPenSize(s2);
                         //    s2:=s2 div 2;
@@ -936,7 +936,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     TextType aText;
                     rInp>>aText;
                     if (!rInp.GetError()) {
-                        aText.Buffer=new UCHAR[aText.BufSize+1]; // Ein mehr für LookAhead bei CK-Trennung
+                        aText.Buffer=new UCHAR[aText.BufSize+1]; // Ein mehr fuer LookAhead bei CK-Trennung
                         rInp.Read((char* )aText.Buffer,aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
                         delete[] aText.Buffer;
@@ -979,13 +979,13 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     GrupType aGrup;
                     rInp>>aGrup;
                     if (!rInp.GetError()) {
-                        rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhängsel
+                        rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhaengsel
                         if(aGrup.GetSubPtr()!=0L) nGrpCnt++;// DrawObjkList(rInp,rOut );
                     }
                 } break;
                 default: {
                     aObjk.Draw(rOut);          // Objektbezeichnung auf 2. Screen
-                    ObjkOverSeek(rInp,aObjk);  // zum nächsten Objekt
+                    ObjkOverSeek(rInp,aObjk);  // zum naechsten Objekt
                 }
             }
         } // if rInp
@@ -1018,10 +1018,10 @@ void SkipObjkList(SvStream& rInp)
         if(aObjk.Art==ObjGrup) {
             GrupType aGrup;
             rInp>>aGrup;
-            rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhängsel
+            rInp.Seek(rInp.Tell()+aGrup.Last); // Obj-Anhaengsel
             if(aGrup.GetSubPtr()!=0L) SkipObjkList(rInp);
         } else {
-            ObjkOverSeek(rInp,aObjk);  // zum nächsten Objekt
+            ObjkOverSeek(rInp,aObjk);  // zum naechsten Objekt
         }
     } while (aObjk.Next!=0L && !rInp.GetError());
 }
@@ -1097,7 +1097,7 @@ BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 *************************************************************************/
 BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
-#if OSL_DEBUG_LEVEL > 1 // Recordgrößen checken. Neuer Compiler hat vielleichte anderes Alignment!
+#if OSL_DEBUG_LEVEL > 1 // Recordgroessen checken. Neuer Compiler hat vielleichte anderes Alignment!
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return FALSE;
 #endif
 
