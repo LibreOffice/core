@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.43 $
- *
- *  last change: $Author: rt $ $Date: 2004-02-10 15:10:43 $
+ *  $Revision: 1.44 $
+
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 /*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
  *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
  */
+
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
         SwLinePortion *pTmp = GetPortion();
