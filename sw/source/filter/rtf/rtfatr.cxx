@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 12:40:10 $
+ *  last change: $Author: jp $ $Date: 2001-08-13 16:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,32 +1430,37 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
     const SwMirrorGrf& rMirror = pNd->GetSwAttrSet().GetMirrorGrf();
     if( !pNd->IsLinkedFile() || RES_DONT_MIRROR_GRF != rMirror.GetValue() )
     {
+        USHORT nErr = 1;
         // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
-        aGrfNm = *rWrt.GetOrigFileName();
-        pNd->SwapIn( TRUE );
-        ULONG nFlags = XOUTBMP_USE_NATIVE_IF_POSSIBLE;
-        switch( rMirror.GetValue() )
+        // but only if we save into a file and have a URL
+        if( rWrt.GetOrigFileName() )
         {
-        case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRF_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
-        case RES_MIRROR_GRF_BOTH:
-            nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
-            break;
-        }
+            aGrfNm = *rWrt.GetOrigFileName();
+            pNd->SwapIn( TRUE );
+            ULONG nFlags = XOUTBMP_USE_NATIVE_IF_POSSIBLE;
+            switch( rMirror.GetValue() )
+            {
+            case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
+            case RES_MIRROR_GRF_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
+            case RES_MIRROR_GRF_BOTH:
+                nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
+                break;
+            }
 
-        Size aMM100Size;
-        Size* pMM100Size = 0;
-        if( rRTFWrt.pFlyFmt )
-        {
-            const SwFmtFrmSize& rSize = rRTFWrt.pFlyFmt->GetFrmSize();
-            aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
-                            MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
-            pMM100Size = &aMM100Size;
-        }
+            Size aMM100Size;
+            Size* pMM100Size = 0;
+            if( rRTFWrt.pFlyFmt )
+            {
+                const SwFmtFrmSize& rSize = rRTFWrt.pFlyFmt->GetFrmSize();
+                aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
+                                MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
+                pMM100Size = &aMM100Size;
+            }
 
-        USHORT nErr = XOutBitmap::WriteGraphic( pNd->GetGrf(), aGrfNm,
-                String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "JPG" )),
-                                                nFlags, pMM100Size );
+            nErr = XOutBitmap::WriteGraphic( pNd->GetGrf(), aGrfNm,
+                    String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "JPG" )),
+                                                    nFlags, pMM100Size );
+        }
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rRTFWrt.Strm() << "}}";
@@ -3905,11 +3910,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.21 2001-07-05 12:40:10 ama Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.22 2001-08-13 16:59:25 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/07/05 12:40:10  ama
+      Chg #89181#: New data exchange methods
+
       Revision 1.20  2001/06/01 10:42:52  jp
       Bug #87720#: im-/export of ruby attribute and combined characters
 
