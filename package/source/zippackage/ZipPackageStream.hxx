@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 09:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,12 +94,14 @@ public:
     inline sal_Bool IsToBeCompressed () { return bToBeCompressed;}
     inline sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
     inline sal_Bool IsPackageMember ()  { return bPackageMember;}
-    const vos::ORef < EncryptionData > & getEncryptionData ()
+    vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
     const com::sun::star::uno::Sequence < sal_Int8 >& getKey ()
     { return xEncryptionData->aKey;}
     const com::sun::star::uno::Sequence < sal_uInt8 >& getInitialisationVector ()
     { return xEncryptionData->aInitVector;}
+    const com::sun::star::uno::Sequence < sal_uInt8 >& getDigest ()
+    { return xEncryptionData->aDigest;}
     const com::sun::star::uno::Sequence < sal_uInt8 >& getSalt ()
     { return xEncryptionData->aSalt;}
     const sal_Int32 getIterationCount ()
@@ -116,6 +118,8 @@ public:
     { xEncryptionData->aInitVector = rNewVector;}
     inline void setSalt (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewSalt )
     { xEncryptionData->aSalt = rNewSalt;}
+    inline void setDigest (const com::sun::star::uno::Sequence < sal_uInt8 >& rNewDigest )
+    { xEncryptionData->aDigest = rNewDigest;}
     inline void setIterationCount (const sal_Int32 nNewCount)
     { xEncryptionData->nIterationCount = nNewCount;}
     void setSize (const sal_Int32 nNewSize);
