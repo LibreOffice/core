@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:24:19 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ void BasicLibInfo::CalcRelStorageName( const String& rMgrStorageName )
         SetRelStorageName( String() );
 }
 
-BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, String* pLibPath )
+BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib, String* pLibPath )
 {
     DBG_CTOR( BasicManager, 0 );
 
@@ -718,7 +718,7 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
     // Aktionen noetig.
     if ( rStorage.IsStream( ManagerStreamName ) )
     {
-        LoadBasicManager( rStorage );
+        LoadBasicManager( rStorage, rBaseURL );
         // StdLib erhaelt gewuenschten Parent:
         StarBASIC* pStdLib = GetStdLib();
         DBG_ASSERT( pStdLib, "Standard-Lib nicht geladen?" );
@@ -935,13 +935,13 @@ BOOL BasicManager::HasBasicManager( const SotStorage& rStorage )
     return rStorage.IsStream( ManagerStreamName );
 }
 
-BOOL BasicManager::HasBasicWithModules( const SotStorage& rStorage )
+BOOL BasicManager::HasBasicWithModules( const SotStorage& rStorage, const String& rBaseURL )
 {
     if( !rStorage.IsStream( ManagerStreamName ) )
         return FALSE;
 
     StarBASIC* pDummyParentBasic = new StarBASIC();
-    BasicManager* pBasMgr = new BasicManager( (SotStorage&)rStorage, pDummyParentBasic );
+    BasicManager* pBasMgr = new BasicManager( (SotStorage&)rStorage, rBaseURL, pDummyParentBasic );
     BOOL bRet = FALSE;
 
     USHORT nLibs = pBasMgr->GetLibCount();
@@ -1001,7 +1001,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
 }
 
 
-void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
+void BasicManager::LoadBasicManager( SotStorage& rStorage, const String& rBaseURL, BOOL bLoadLibs )
 {
     DBG_CHKTHIS( BasicManager, 0 );
 
@@ -1025,10 +1025,10 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, BOOL bLoadLibs )
     String aRealStorageName = aStorageName;  // fuer relative Pfade, kann durch BaseURL umgebogen werden.
 
     // Wenn aus Vorlagen geladen wird, gilt nur die BaseURL:
-    String aBaseURL = INetURLObject::GetBaseURL();
-    if ( aBaseURL.Len() )
+    //String aBaseURL = INetURLObject::GetBaseURL();
+    if ( rBaseURL.Len() )
     {
-        INetURLObject aObj( aBaseURL );
+        INetURLObject aObj( rBaseURL );
         if ( aObj.GetProtocol() == INET_PROT_FILE )
             aRealStorageName = aObj.PathToFileName();
     }
@@ -1221,7 +1221,7 @@ BasicLibInfo* BasicManager::CreateLibInfo()
     return pInf;
 }
 
-BOOL BasicManager::CopyBasicData( SotStorage* pStorFrom, const String& rSourceURL, SotStorage* pStorTo )
+BOOL BasicManager::CopyBasicData( SotStorage* pStorFrom, const String& rSourceURL, const String& rBaseURL, SotStorage* pStorTo )
 {
     /*-----------------------------------------------------------------
      Diese Methode wird vom SXF gerufen bei 'Datei speichern unter',
@@ -1240,27 +1240,23 @@ BOOL BasicManager::CopyBasicData( SotStorage* pStorFrom, const String& rSourceUR
             // bOk = pStorFrom->CopyTo( szManagerStream, pStorTo, szManagerStream );
             BasicManager aBasMgr;
             // Die aktuelle Base-URL ist die vom speichern...
-            String aOldURL = INetURLObject::GetBaseURL();
-            if ( rSourceURL.Len() )
-                INetURLObject::SetBaseURL( rSourceURL );
             String aStorName( pStorFrom->GetName() );
             DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-            aBasMgr.LoadBasicManager( *pStorFrom, FALSE );
-            INetURLObject::SetBaseURL( aOldURL );
-            aBasMgr.Store( *pStorTo, FALSE );
+            aBasMgr.LoadBasicManager( *pStorFrom, rSourceURL, FALSE );
+            aBasMgr.Store( *pStorTo, rBaseURL, FALSE );
         }
     }
 
     return bOk;
 }
 
-void BasicManager::Merge( SotStorage& rFromStorage )
+void BasicManager::Merge( SotStorage& rFromStorage, const String& rBaseURL )
 {
     String aStorName( rFromStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-    BasicManager aTmpMgr( rFromStorage, NULL, &pLibs->aBasicLibPath );
+    BasicManager aTmpMgr( rFromStorage, rBaseURL, NULL, &pLibs->aBasicLibPath );
     USHORT nLibs = aTmpMgr.GetLibCount();
     for ( USHORT nL = 1 /* ohne STANDARD */; nL < nLibs; nL++ )
     {
@@ -1291,12 +1287,12 @@ void BasicManager::Merge( SotStorage& rFromStorage )
     }
 }
 
-void BasicManager::Store( SotStorage& rStorage )
+void BasicManager::Store( SotStorage& rStorage, const String& rBaseURL )
 {
-    Store( rStorage, TRUE );
+    Store( rStorage, rBaseURL, TRUE );
 }
 
-void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
+void BasicManager::Store( SotStorage& rStorage, const String& rBaseURL, BOOL bStoreLibs )
 {
     // #91626
     sal_Bool bModified = mpImpl->mbModifiedByLibraryContainer || mpImpl->mbError;
@@ -1465,10 +1461,10 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
 
             // Falls ins Temp-Verzeichniss gesichert wird, sollte der richtige
             // Storage-Name an der globalen URL haengen...
-            String aBaseURL = INetURLObject::GetBaseURL();
-            if ( aBaseURL.Len() )
+            //String aBaseURL = INetURLObject::GetBaseURL();
+            if ( rBaseURL.Len() )
             {
-                INetURLObject aObj( aBaseURL );
+                INetURLObject aObj( rBaseURL );
                 if ( aObj.GetProtocol() == INET_PROT_FILE )
                     aStrgName = aObj.PathToFileName();
             }
