@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-22 12:57:00 $
+ *  last change: $Author: nf $ $Date: 2000-12-12 10:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,7 +1767,7 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 
             nEnd --;
             sLastListLine = rText;
-            pResData->sId = nListIndex;
+            pResData->sId = ByteString::CreateFromInt32( nListIndex );
             if ( pResData->sGId.Len())
                 pResData->sGId += ".";
             pResData->sGId += sOldId;
@@ -2255,7 +2255,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     }
                     for ( USHORT nLang = 0; nLang < LANGUAGES; nLang ++ ) {
                         USHORT nIdx = 1;
-                        pResData->sId = nIdx;
+                        pResData->sId = ByteString::CreateFromInt32( nIdx );
                         PFormEntrys *pEntrys;
                         while( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) {
                             ByteString sText;
@@ -2322,7 +2322,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                 sText += sSpace;
                                 sText += "\t";
                                 WriteToMerged( sText );
-                                pResData->sId = ++nIdx;
+                                pResData->sId = ByteString::CreateFromInt32( ++nIdx );
                             }
                             else
                                 break;
