@@ -1,0 +1,251 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Storage.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:23:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_embed_Storage_idl__
+#define __com_sun_star_embed_Storage_idl__
+
+#ifndef __com_sun_star_embed_XStorage_idl__
+#include <com/sun/star/embed/XStorage.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XEncryptionProtectedSource_idl__
+#include <com/sun/star/embed/XEncryptionProtectedSource.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XTransactedObject_idl__
+#include <com/sun/star/embed/XTransactedObject.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XTransactionBroadcaster_idl__
+#include <com/sun/star/embed/XTransactionBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModifiable_idl__
+#include <com/sun/star/util/XModifiable.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/**  The <type>Storage</type> is a service that allows to get access to
+a storage hierarchy. A root storage should be retrieved by <type>ServiceFactory</type>
+service. Substorages are created by <type>XStorage</type> interface of a parent storage.
+ */
+service Storage
+{
+    //================================================================
+    /** This is a general interface representing storage functionality.
+    It allows to copy storages, get access to child elements and etc.
+     */
+    interface ::com::sun::star::embed::XStorage;
+
+    //================================================================
+    /** Allow to get list of child elements and to check if an element with a
+    specified name exists in a storage.
+    <p>
+    It is also possible to use this interface to get read access to a child
+    element by <type>XNameAccess</type>::getByName() call. But the recommended way is to
+    use <type>XStorage</type> interface for this purpose.
+    </p>
+     */
+    interface ::com::sun::star::container::XNameAccess;
+
+    //================================================================
+    /** Allows to controll and track lifetime of a storage.
+    <p>
+        A root storage is created by <type>StorageFactory</type> and is controlled by
+    refcounting. In case refcounting is decreased to zero the storage will be disposed
+    automatically. It is still strongly recommended that a root storage is disposed explicitly
+    since in garbage collector based languages the refcounting can be decreased too late
+    and resources locked by the storage will not be freed until then.
+    </p>
+
+    <p>
+        A substorage is created by <type>XStorage</type> interface of storage. Only one
+    instance in a time can be created. It means that in case such a substorage is open
+    it is not possible to open it another time untill existing instance is disposed. The
+    lifetime of substorage is also controlled by refcounting but because of mentioned
+    garbage collection specific it is strongly recommended to dispose substorages explicitly.
+    </p>
+
+    <p>
+        In case a storage is disposed the whole it's subtree will be disposed.
+    All noncommited changes will be lost. Of course in case storage implements autocommit
+    mode the changes will be commited automatically.
+    </p>
+
+    <p>
+        In case a storage is disposed any call to it's methods should result in <type>DisposedException</type>.
+    </p>
+     */
+    interface ::com::sun::star::lang::XComponent;
+
+    //================================================================
+    /** Allows to get access to storage properties.
+     */
+    interface ::com::sun::star::beans::XPropertySet;
+
+    //================================================================
+    /** Supporting of this interface means that the storage must be used in transacted mode.
+    <p>
+        If a storage is commited all changes made to it will be integrated to it's parent
+    storage. This is recursive process, so the last commited storage should be the root one.
+    For the package based storages commit of a root storage also means flashing to the related medium.
+    If a storage is not commited, no changes for it or it's child elements will be stored.
+    </p>
+    <p>
+        In case storage does not support this interface an autocommit mode is used.
+    That means that all the changes are immediatelly integrated to the parent storage.
+    </p>
+     */
+    [optional]
+    interface ::com::sun::star::embed::XTransactedObject;
+
+    //================================================================
+    /** Transacted storage can support this interface to allow to track it's transaction state.
+     */
+    [optional]
+    interface ::com::sun::star::embed::XTransactionBroadcaster;
+
+    //================================================================
+    /** Allows to set encryption key to a root storage.
+
+    <p>
+        This interface can be supported by a storage to allow to set
+    a common storage encryption key. This key is used as default key
+    to decrypt all encrypted streams and encrypt all the streams that
+    must be encrypted on storing.
+        Specifying of the key for a storage allows to use it for the
+    whole subtree. Of course substorage can allow to overwrite the common
+    storage key for own subtree.
+    </p>
+     */
+    [optional]
+    interface ::com::sun::star::embed::XEncryptionProtectedSource;
+
+    //================================================================
+    /** Allows to get and set the media type of the storage.
+     */
+    [property] string MediaType;
+
+    //================================================================
+    /** Allows to detect if the storage is a root one.
+     */
+    [property, readonly] boolean IsRoot;
+
+    //================================================================
+    /** Allows to get the mode the storage is open in.
+    <p>
+        Can be a combination of values from <type>ElementModes</type>.
+    </p>
+     */
+    [property, readonly] long OpenMode;
+
+    //================================================================
+    /** Optional readonly property that can be supported by storage.
+    <p>
+        This property allows to retrieve URL the storage is based on.
+    </p>
+     */
+    [property, optional, readonly] string URL;
+
+    //================================================================
+    /** Optional readonly property that can be supported by storage.
+    <p>
+        Allows to detect whether storage is open in "repair package" mode or not.
+    </p>
+     */
+    [property, optional, readonly] boolean RepairPackage;
+
+    //================================================================
+    /** Optional readonly property that can be supported by storage.
+    <p>
+        In case it is set to <TRUE/> the storage itself and/or a tree of substorages
+    contain encrypted streams.
+        Usually in case this property is supported the implementation supports
+    <type>XEncryptionProtectedSource</type> interface.
+    </p>
+     */
+    [property, optional, readonly] boolean HasEncryptedEntries;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
