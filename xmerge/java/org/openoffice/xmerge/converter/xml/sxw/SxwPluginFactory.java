@@ -93,5 +93,14 @@ public abstract class SxwPluginFactory extends PluginFactory {
         doc.read(is);
         return doc;
     }
+
+     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+        throws IOException {
+
+        // read XML stream
+        SxwDocument doc = new SxwDocument(name);
+        doc.read(is,isZip);
+        return doc;
+    }
 }
 
