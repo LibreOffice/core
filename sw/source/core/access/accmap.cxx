@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:55:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,10 +442,10 @@ private:
 public:
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                              const SwFrmOrObj& rFrmOrObj ) :
-        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), mnStates( 0 )
+        mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( 0 )
     {}
     SwAccessibleEvent_Impl( EventType eT, const SwFrmOrObj& rFrmOrObj ) :
-        meType( eT ), maFrmOrObj( rFrmOrObj ), mnStates( 0 )
+        maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::DISPOSE == meType,
                 "wrong event constructor, DISPOSE only" );
@@ -458,7 +458,7 @@ public:
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrmOrObj& rFrmOrObj, const SwRect& rR ) :
-        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), maOldBox( rR ),
+        maOldBox( rR ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ),
         mnStates( 0 )
     {
         ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
@@ -467,7 +467,7 @@ public:
     }
     SwAccessibleEvent_Impl( EventType eT, SwAccessibleContext *pA,
                             const SwFrmOrObj& rFrmOrObj, sal_uInt8 nSt  ) :
-        meType( eT ), mxAcc( pA ), maFrmOrObj( rFrmOrObj ), mnStates( nSt )
+        mxAcc( pA ), maFrmOrObj( rFrmOrObj ), meType( eT ), mnStates( nSt )
     {
         ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
                 "wrong event constructor, CARET_OR_STATES only" );
@@ -615,6 +615,8 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
         case SwAccessibleEvent_Impl::DISPOSE:
             ASSERT( xAccImpl.isValid(),
                     "dispose event has been stored" );
+            break;
+        default:
             break;
         }
         if( SwAccessibleEvent_Impl::DISPOSE != rEvent.GetType() )
@@ -799,7 +801,6 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     if( pShapes )
     {
         ::std::list< const SwFrm * > aParents;
-        sal_Bool bChanged = sal_False;
         Window *pWin = GetShell()->GetWin();
         sal_Bool bFocused = pWin && pWin->HasFocus();
         SwAccessibleObjShape_Impl *pShape = pShapes;
@@ -924,11 +925,11 @@ SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     mpEvents( 0  ),
     mpEventMap( 0  ),
     mpVSh( pSh ),
+        mpPreview( 0 ),
     mnPara( 1 ),
     mnFootnote( 1 ),
     mnEndnote( 1 ),
-    mbShapeSelected( sal_False ),
-    mpPreview( NULL )
+    mbShapeSelected( sal_False )
 {
     pSh->GetLayout()->AddAccessibleShell();
 }
