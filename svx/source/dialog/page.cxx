@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:47:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,8 +283,15 @@ BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 struct SvxPage_Impl
 {
     MarginPosition  m_nPos;
+    Printer*        mpDefPrinter;
+    bool            mbDelPrinter;
 
-    SvxPage_Impl() : m_nPos( 0 ) {}
+    SvxPage_Impl() :
+        m_nPos( 0 ),
+        mpDefPrinter( 0 ),
+        mbDelPrinter( false ) {}
+
+    ~SvxPage_Impl() { if ( mbDelPrinter ) delete mpDefPrinter; }
 };
 
 // class SvxPageDescPage --------------------------------------------------
@@ -412,34 +419,29 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     SetFieldUnit( aPaperWidthEdit, eFUnit );
     SetFieldUnit( aPaperHeightEdit, eFUnit );
 
-    Printer* pDefPrinter = 0;
-    BOOL bPrinterDel = FALSE;
-
     if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
-        pDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
+        pImpl->mpDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
     else
     {
-        pDefPrinter = new Printer;
-        bPrinterDel = TRUE;
+        pImpl->mpDefPrinter = new Printer;
+        pImpl->mbDelPrinter = true;
     }
 
-    MapMode aOldMode = pDefPrinter->GetMapMode();
-    pDefPrinter->SetMapMode( MAP_TWIP );
+    MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
+    pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
 
     // First- und Last-Werte f"ur die R"ander setzen
-    Size aPaperSize = pDefPrinter->GetPaperSize();
-    Size aPrintSize = pDefPrinter->GetOutputSize();
+    Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
+    Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
     /*
      * einen Punkt ( 0,0 ) in logische Koordinaten zu konvertieren,
      * sieht aus wie Unsinn; ist aber sinnvoll, wenn der Ursprung des
      * Koordinatensystems verschoben ist.
      */
-    Point aPrintOffset = pDefPrinter->GetPageOffset() -
-                         pDefPrinter->PixelToLogic( Point() );
-    pDefPrinter->SetMapMode( aOldMode );
+    Point aPrintOffset = pImpl->mpDefPrinter->GetPageOffset() -
+                         pImpl->mpDefPrinter->PixelToLogic( Point() );
+    pImpl->mpDefPrinter->SetMapMode( aOldMode );
 
-    if ( bPrinterDel )
-        delete pDefPrinter;
     long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     aLeftMarginEdit.SetFirst( aLeftMarginEdit.Normalize( aPrintOffset.X() ), FUNIT_TWIP );
     nFirstLeftMargin = aLeftMarginEdit.GetFirst();
@@ -550,21 +552,9 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             (USHORT)ConvertLong_Impl( (long)rULSpace.GetLower(), eUnit ) );
     }
 
-    // Printer f"ur die Sch"achte besorgen
-    Printer* pDefPrinter = 0;
-    BOOL bPrinterDel = FALSE;
-
-    if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
-        pDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
-    else
-    {
-        pDefPrinter = new Printer;
-        bPrinterDel = TRUE;
-    }
-
     // allgemeine Seitendaten
     SvxNumType eNumType = SVX_ARABIC;
-    bLandscape = ( pDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+    bLandscape = ( pImpl->mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
     USHORT nUse = (USHORT)SVX_PAGE_ALL;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
@@ -593,7 +583,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     {
         nPaperBin = ( (const SvxPaperBinItem*)pItem )->GetValue();
 
-        if ( nPaperBin >= pDefPrinter->GetPaperBinCount() )
+        if ( nPaperBin >= pImpl->mpDefPrinter->GetPaperBinCount() )
             nPaperBin = PAPERBIN_PRINTER_SETTINGS;
     }
 
@@ -602,21 +592,21 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = SVX_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
-        aBinName = pDefPrinter->GetPaperBinName( (USHORT)nPaperBin );
+        aBinName = pImpl->mpDefPrinter->GetPaperBinName( (USHORT)nPaperBin );
 
     USHORT nEntryPos = aPaperTrayBox.InsertEntry( aBinName );
     aPaperTrayBox.SetEntryData( nEntryPos, (void*)(ULONG)nPaperBin );
     aPaperTrayBox.SelectEntry( aBinName );
 
     // Size rausholen
-    Size aPaperSize = SvxPaperInfo::GetPaperSize( pDefPrinter );
+    Size aPaperSize = SvxPaperInfo::GetPaperSize( pImpl->mpDefPrinter );
     pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
 
     FASTBOOL bOrientationSupport =
-        pDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
+        pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
     // unter OS/2 wird bei HasSupport() immer TRUE returned
     // aber nur als Dummy, deshalb FALSE
@@ -665,10 +655,6 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
     // aktuelles Papierformat selektieren
     aPaperSizeBox.SelectEntryPos( nActPos );
-
-    // ggf. angelegten Printer wieder l"oschen
-    if ( bPrinterDel )
-        delete pDefPrinter;
 
     // Applikationsspezifisch
 
@@ -1044,16 +1030,6 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
     if ( aPaperTrayBox.GetEntryCount() > 1 )
         // schon gef"ullt
         return 0;
-    Printer* pDefPrinter = 0;
-    BOOL bPrinterDel = FALSE;
-
-    if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
-        pDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
-    else
-    {
-        pDefPrinter = new Printer;
-        bPrinterDel = TRUE;
-    }
 
     // Schacht-Box initialisieren
     String aOldName = aPaperTrayBox.GetSelectEntry();
@@ -1064,11 +1040,11 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
     aPaperTrayBox.SetEntryData( nEntryPos,
         (void*)(ULONG)PAPERBIN_PRINTER_SETTINGS );
     String aPaperBin( SVX_RES( RID_SVXSTR_PAPERBIN ) );
-    USHORT nBinCount = pDefPrinter->GetPaperBinCount();
+    USHORT nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
 
     for ( USHORT i = 0; i < nBinCount; ++i )
     {
-        String aName = pDefPrinter->GetPaperBinName(i);
+        String aName = pImpl->mpDefPrinter->GetPaperBinName(i);
 
         if ( !aName.Len() )
         {
@@ -1082,8 +1058,6 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
     aPaperTrayBox.SelectEntry( aOldName );
     aPaperTrayBox.SetUpdateMode( TRUE );
 
-    if ( bPrinterDel )
-        delete pDefPrinter;
     return 0;
 }
 
@@ -1217,41 +1191,27 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 
 void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
 {
-    Printer* pDefPrinter = 0;
-    BOOL bPrinterDel = FALSE;
-
-    if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
-        pDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
-    else
-    {
-        pDefPrinter = new Printer;
-        bPrinterDel = TRUE;
-    }
-
-    MapMode aOldMode = pDefPrinter->GetMapMode();
+    MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     Orientation eOri = ORIENTATION_PORTRAIT;
 
     if ( bLandscape )
         eOri = ORIENTATION_LANDSCAPE;
-    Orientation eOldOri = pDefPrinter->GetOrientation();
-    pDefPrinter->SetOrientation( eOri );
-    pDefPrinter->SetMapMode( MAP_TWIP );
+    Orientation eOldOri = pImpl->mpDefPrinter->GetOrientation();
+    pImpl->mpDefPrinter->SetOrientation( eOri );
+    pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
 
     // First- und Last-Werte f"ur die R"ander setzen
-    Size aPaperSize = pDefPrinter->GetPaperSize();
-    Size aPrintSize = pDefPrinter->GetOutputSize();
+    Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
+    Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
     /*
      * einen Punkt ( 0,0 ) in logische Koordinaten zu konvertieren,
      * sieht aus wie Unsinn; ist aber sinnvoll, wenn der Ursprung des
      * Koordinatensystems verschoben ist.
      */
-    Point aPrintOffset = pDefPrinter->GetPageOffset() -
-                         pDefPrinter->PixelToLogic( Point() );
-    pDefPrinter->SetMapMode( aOldMode );
-    pDefPrinter->SetOrientation( eOldOri );
-
-    if ( bPrinterDel )
-        delete pDefPrinter;
+    Point aPrintOffset = pImpl->mpDefPrinter->GetPageOffset() -
+                         pImpl->mpDefPrinter->PixelToLogic( Point() );
+    pImpl->mpDefPrinter->SetMapMode( aOldMode );
+    pImpl->mpDefPrinter->SetOrientation( eOldOri );
 
     long nSetL = aLeftMarginEdit.Denormalize(
                     aLeftMarginEdit.GetValue( FUNIT_TWIP ) );
