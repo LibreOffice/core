@@ -100,3 +100,10 @@ ALL_4fcfg_internalgraphics = \
     $(FILTERS_4fcfg_internalgraphics) \
     $(FRAMELOADERS_4fcfg_internalgraphics) \
     $(CONTENTHANDLERS_4fcfg_internalgraphics)
+    
+# do not add internal filter
+# ALL_UI_FILTERS+=
+    
+# do not add internal filter
+# ALL_PACKAGES+=internalgraphics
+    
