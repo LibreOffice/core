@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.83 $
- *  last change: $Author: hdu $ $Date: 2002-11-20 15:49:23 $
+ *  $Revision: 1.84 $
+ *  last change: $Author: hdu $ $Date: 2002-11-21 14:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,38 +792,7 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
         GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
         if( it == maGlyphSubstitution.end() )
         {
-            int nTemp = 0;
-            switch( aChar )
-            {
-                // CJK compatibility forms
-                case 0x2025: nTemp = 0xFE30; break;
-                case 0x2014: nTemp = 0xFE31; break;
-                case 0x2013: nTemp = 0xFE32; break;
-                case 0x005F: nTemp = 0xFE33; break;
-                case 0x0028: nTemp = 0xFE35; break;
-                case 0x0029: nTemp = 0xFE36; break;
-                case 0x007B: nTemp = 0xFE37; break;
-                case 0x007D: nTemp = 0xFE38; break;
-                case 0x3014: nTemp = 0xFE39; break;
-                case 0x3015: nTemp = 0xFE3A; break;
-                case 0x3010: nTemp = 0xFE3B; break;
-                case 0x3011: nTemp = 0xFE3C; break;
-                case 0x300A: nTemp = 0xFE3D; break;
-                case 0x300B: nTemp = 0xFE3E; break;
-                case 0x3008: nTemp = 0xFE3F; break;
-                case 0x3009: nTemp = 0xFE40; break;
-                case 0x300C: nTemp = 0xFE41; break;
-                case 0x300D: nTemp = 0xFE42; break;
-                case 0x300E: nTemp = 0xFE43; break;
-                case 0x300F: nTemp = 0xFE44; break;
-                // #104627# special treatment for some unicodes
-                case 0x002C: nTemp = 0x3001; break;
-                case 0x002E: nTemp = 0x3002; break;
-                case 0x2018: nTemp = 0xFE41; break;
-                case 0x2019: nTemp = 0xFE42; break;
-                case 0x201C: nTemp = 0xFE43; break;
-                case 0x201D: nTemp = 0xFE44; break;
-            }
+            int nTemp = GetVerticalChar( aChar );
             if( nTemp ) // is substitution possible
                 nTemp = GetRawGlyphIndex( nTemp );
             if( nTemp ) // substitute manually if sensible
