@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 14:09:51 $
+ *  last change: $Author: sj $ $Date: 2002-10-14 13:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,8 +958,8 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 bFlag = sal_True;
             case EMR_EXTTEXTOUTW :
             {
-                INT32           nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
-                UINT32          nCurPos, nLen, nOffString, nOptions, offDx;
+                sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
+                sal_uInt32  nCurPos, nLen, nOffString, nOptions, offDx;
 
                 nCurPos = pWMF->Tell() - 8;
 
@@ -969,13 +969,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> offDx;
 
-                Point aPos;
-
-                if ( nGfxMode != GM_COMPATIBLE )
-                    aPos = Point( nLeft, nTop );
-                else
-                    aPos = Point( ptlReferenceX, ptlReferenceY );
-
+                Point aPos( ptlReferenceX, ptlReferenceY );
                 if ( nLen )
                 {
                     pWMF->Seek( nCurPos + nOffString );
@@ -984,7 +978,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         sal_Char* pBuf = new sal_Char[ nLen ];
                         pWMF->Read( pBuf, nLen );
                         String aText( pBuf, (sal_uInt16)nLen, pOut->GetCharSet() );
-                        pOut->DrawText( aPos, aText, NULL, bRecordPath );
+                        pOut->DrawText( aPos, aText, NULL, bRecordPath, nGfxMode );
                         delete[] pBuf;
                     }
                     else
@@ -1001,7 +995,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                         }
 #endif
                         String aText( pBuf, (xub_StrLen)nLen );
-                        pOut->DrawText( aPos, aText, NULL, bRecordPath );
+                        pOut->DrawText( aPos, aText, NULL, bRecordPath, nGfxMode );
                         delete[] pBuf;
                     }
                 }

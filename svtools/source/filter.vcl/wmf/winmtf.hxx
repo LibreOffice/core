@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-19 10:57:46 $
+ *  last change: $Author: sj $ $Date: 2002-10-14 13:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,7 @@ class WinMtfOutput
 
         SaveStack           maSaveStack;            // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
 
+        sal_uInt32          mnGfxMode;
         sal_uInt32          mnMapMode;
         XForm               maXForm;
         long                mnDevOrgX, mnDevOrgY;
@@ -631,6 +632,8 @@ class WinMtfOutput
         UINT32              SetRasterOp( UINT32 nRasterOp );
         void                StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
 
+        void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };
+        sal_Int32           GetGfxMode() const { return mnGfxMode; };
         void                SetBkMode( UINT32 nMode );
         void                SetBkColor( const Color& rColor );
         void                SetTextColor( const Color& rColor );
@@ -659,7 +662,8 @@ class WinMtfOutput
         void                DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
         void                DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
         void                DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
-        void                DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
+        void                DrawText( Point& rPosition, String& rString, sal_Int32* pDXArry = NULL, sal_Bool bRecordPath = sal_False,
+                                        sal_Int32 nGraphicsMode = GM_COMPATIBLE );
         void                ResolveBitmapActions( List& rSaveList );
 
         void                IntersectClipRect( const Rectangle& rRect );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 16:18:31 $
+ *  last change: $Author: sj $ $Date: 2002-10-14 13:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,14 +397,18 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 
         fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
         fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
-        fX2 -= mnWinOrgX;
-        fY2 -= mnWinOrgY;
-        fX2 /= mnWinExtX;
-        fY2 /= mnWinExtY;
-        fX2 *= mnDevWidth;
-        fY2 *= mnDevHeight;
-        fX2 += mnDevOrgX;
-        fY2 += mnDevOrgY;
+
+        if ( mnGfxMode == GM_COMPATIBLE )
+        {
+            fX2 -= mnWinOrgX;
+            fY2 -= mnWinOrgY;
+            fX2 /= mnWinExtX;
+            fY2 /= mnWinExtY;
+            fX2 *= mnDevWidth;
+            fY2 *= mnDevHeight;
+            fX2 += mnDevOrgX;
+            fY2 += mnDevOrgY;
+        }
         return Point( FRound( fX2 ), FRound( fY2 ) );
     }
     else
@@ -417,16 +421,20 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
 {
     if ( mnWinExtX && mnWinExtY )
     {
-        double fWidth = rSz.Width();
-        double fHeight = rSz.Height();
+        double fX = rSz.Width() * maXForm.eM11;
+        double fY = rSz.Width() * maXForm.eM12;
+        double fWidth = sqrt( fX * fX + fY + fY );
+        fX = rSz.Height() * maXForm.eM21;
+        fY = rSz.Height() * maXForm.eM22;
+        double fHeight = sqrt( fX * fX + fY * fY );
 
-        fWidth /= mnWinExtX;
-        fHeight /= mnWinExtY;
-        fWidth *= maXForm.eM11;
-        fHeight *= maXForm.eM22;
-        fWidth *= mnDevWidth;
-        fHeight *= mnDevHeight;
-
+        if ( mnGfxMode == GM_COMPATIBLE )
+        {
+            fWidth /= mnWinExtX;
+            fHeight /= mnWinExtY;
+            fWidth *= mnDevWidth;
+            fHeight *= mnDevHeight;
+        }
         return Size( FRound( fWidth ), FRound( fHeight ) );
     }
     else
@@ -767,7 +775,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maActPos            ( Point() ),
     meRasterOp          ( ROP_OVERPAINT ),
     meLatestRasterOp    ( ROP_INVERT ),
-    mnEntrys            ( 16 )
+    mnEntrys            ( 16 ),
+    mnGfxMode           ( GM_COMPATIBLE )
 {
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
     maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
@@ -1270,24 +1279,26 @@ void WinMtfOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRe
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
+void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry, sal_Bool bRecordPath, sal_Int32 nGfxMode )
 {
     UpdateClipRegion();
 
-    rPosition = ImplMap( rPosition );
-
+    rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
+    sal_Int32 nOldGfxMode = GetGfxMode();
+    SetGfxMode( nGfxMode );
     if ( pDXArry )
     {
-        INT32 i, nSum, nLen = rText.Len();
+        sal_Int32 i, nSum, nLen = rText.Len();
 
         for( i = 0, nSum = 0; i < nLen; i++ )
         {
-            INT32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
+            sal_Int32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
             nSum += nTemp;
             pDXArry[ i ] = nSum;
         }
     }
-    sal_Bool bChangeFont = maLatestFont != maFont;
+
+    sal_Bool bChangeFont = sal_False;
     if ( mnLatestTextAlign != mnTextAlign )
     {
         bChangeFont = sal_True;
@@ -1323,25 +1334,43 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sa
         bChangeFont = sal_True;
         mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
     }
-    if ( bChangeFont )
+
+    Font aTmp( maFont );
+    aTmp.SetColor( maTextColor );
+    aTmp.SetFillColor( maBkColor );
+
+    if( mnBkMode == TRANSPARENT )
+        maFont.SetTransparent( sal_True );
+    else
+        maFont.SetTransparent( sal_False );
+
+    if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
+        aTmp.SetAlign( ALIGN_BASELINE );
+    else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
+        aTmp.SetAlign( ALIGN_BOTTOM );
+    else
+        aTmp.SetAlign( ALIGN_TOP );
+
+    if ( nGfxMode == GM_ADVANCED )
     {
-        maLatestFont = maFont;
-        Font aTmp( maFont );
-        aTmp.SetColor( maTextColor );
-        aTmp.SetFillColor( maBkColor );
+        Point aP1( ImplMap( Point() ) );
+        Point aP2( ImplMap( Point( 0, aTmp.GetHeight() ) ) );
+        aP2.X() -= aP1.X();
+        aP2.Y() -= aP1.Y();
+        double fX = aP2.X();
+        double fY = aP2.Y();
+        double fHeight = sqrt( fX * fX + fY * fY );
+        aTmp.SetHeight( (sal_Int32)fHeight );
 
-        if( mnBkMode == TRANSPARENT )
-            maFont.SetTransparent( sal_True );
-        else
-            maFont.SetTransparent( sal_False );
-
-        if ( ( mnTextAlign & TA_BASELINE) == TA_BASELINE )
-            aTmp.SetAlign( ALIGN_BASELINE );
-        else if( ( mnTextAlign & TA_BOTTOM) == TA_BOTTOM )
-            aTmp.SetAlign( ALIGN_BOTTOM );
-        else
-            aTmp.SetAlign( ALIGN_TOP );
-
+        double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
+        if ( fY > 0 )
+            fOrientation = 360 - fOrientation;
+        fOrientation += 90;
+        aTmp.SetOrientation( sal_Int16( fOrientation * 10.0 ) );
+    }
+    if ( bChangeFont || ( maLatestFont != aTmp ) )
+    {
+        maLatestFont = aTmp;
         mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
         mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlign() ) );
         mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
@@ -1385,6 +1414,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sa
         else
             mpGDIMetaFile->AddAction( new MetaTextAction( rPosition, rText, 0, STRING_LEN ) );
     }
+    SetGfxMode( nOldGfxMode );
 }
 
 //-----------------------------------------------------------------------------------
