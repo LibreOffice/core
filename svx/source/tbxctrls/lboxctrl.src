@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:45:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ czech ] = "Vrátit akce $(ARG1)";
     Text[ hebrew ] = "‮ביטול פעולות $(ARG1)‬";
     Text[ hindi ] = "$(ARG1) कार्यों को अनावृत्ति करो";
+    Text[ slovak ] = "Späť akcia $(ARG1)";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
@@ -147,7 +148,10 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ czech ] = "Znovu akce $(ARG1)";
     Text[ hebrew ] = "‮חזרה על פעולות $(ARG1)‬";
     Text[ hindi ] = "$(ARG1) कार्यों को फिर से करो";
+    Text[ slovak ] = "Znova akcia $(ARG1)";
 };
+
+
 
 
 
