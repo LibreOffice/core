@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,6 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         case KEY_DELETE:
         {
-            bool bHasObjects = false;;
             int nSelectedPagesCount = 0;
             int nPageCount = mrController.GetModel().GetPageCount();
 
@@ -414,26 +413,11 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             while (aSelectedPages.HasMoreElements())
             {
                 nSelectedPagesCount++;
-                model::PageDescriptor& rDescriptor (
-                    aSelectedPages.GetNextElement());
-                if (rDescriptor.GetPage()->GetObjCount() > 0)
-                    bHasObjects = true;
+                aSelectedPages.GetNextElement();
             }
 
             if (nSelectedPagesCount > 0)
-            {
-                String aString (SdResId (
-                    nSelectedPagesCount == 1
-                    ? STR_WARN_DEL_SEL_PAGE
-                    : STR_WARN_DEL_SEL_PAGES));
-
-                if ( ! bHasObjects
-                    || QueryBox (pWindow, WB_YES_NO, aString).Execute()
-                       == RET_YES)
-                {
-                    mrController.DeleteSelectedPages();
-                }
-            }
+                mrController.DeleteSelectedPages();
 
             bResult = TRUE;
         }
