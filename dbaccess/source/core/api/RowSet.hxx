@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:32:26 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 11:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ namespace dbaccess
         friend class ORowSetClone;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xOldConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xActiveConnection;
         ::com::sun::star::uno::Any                                                      m_aActiveConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTypeMap;
@@ -454,6 +455,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.21  2001/04/12 09:32:26  fs
+    #84852# make ActiveConnection a bound property
+
     Revision 1.20  2001/04/06 11:23:52  oj
     #85809# getStatement now returns null
 

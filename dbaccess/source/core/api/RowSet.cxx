@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:15:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 11:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,9 +376,6 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
-
-            // the composer depends on the connection, do dispose the old composer
-            ::comphelper::disposeComponent(m_xComposer);
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -401,7 +398,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             else
                 m_bRebuildConnOnExecute = sal_True;
             m_bCreateStatement = sal_True;
-            m_bOwnConnection   = sal_True;
+            //  m_bOwnConnection   = sal_True;
             break;
         case PROPERTY_ID_FETCHSIZE:
             if(m_pCache)
@@ -686,9 +683,9 @@ void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, sal_Boo
         xComponent->removeEventListener(xListener);
     }
 
-    // if we owned the connection, dispose it
+    // if we owned the connection, remember it for later disposing
     if(m_bOwnConnection)
-        ::comphelper::disposeComponent(m_xActiveConnection);
+        m_xOldConnection = m_xActiveConnection;
 
     // for firing the PropertyChangeEvent
     sal_Int32 nHandle = PROPERTY_ID_ACTIVECONNECTION;
@@ -1807,14 +1804,16 @@ using namespace rtl;
 // XRowSet
 void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotification)
 {
+    // now we can dispose our old connection
+    ::comphelper::disposeComponent(m_xOldConnection);
+    m_xOldConnection = NULL;
+
     ::rtl::OUString aSql;
     // do we need a new statement
     if (m_bCreateStatement)
     {
-        // if we need a new statement we have to free the previous used columns
-        //  m_aColumns.disposing();
-        m_xStatement = NULL;
-        m_xComposer = NULL;
+        m_xStatement    = NULL;
+        m_xComposer     = NULL;
 
         // Build the statement
         sal_Bool bUseEscapeProcessing;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 11:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,24 +176,35 @@ namespace dbaccess
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
+                    );
+        virtual void SAL_CALL disposing(void);
+    };
+    // -------------------------------------------------------------------------
+    OPrivateColumns::OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
+                        sal_Bool _bCase,
+                        ::cppu::OWeakObject& _rParent,
+                        ::osl::Mutex& _rMutex,
+                        const ::std::vector< ::rtl::OUString> &_rVector
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                         ,m_aColumns(_rColumns)
-        {
-        }
-        virtual void SAL_CALL disposing(void)
-        {
-            clear_NoDispose();
-                // we're not owner of the objects we're holding, instead the object we got in our ctor is
-                // So we're not allowed to dispose our elements.
-            OPrivateColumns_Base::disposing();
-        }
-    };
+    {
+    }
+    // -------------------------------------------------------------------------
+    void SAL_CALL OPrivateColumns::disposing(void)
+    {
+        m_aColumns = NULL;
+        clear_NoDispose();
+            // we're not owner of the objects we're holding, instead the object we got in our ctor is
+            // So we're not allowed to dispose our elements.
+        OPrivateColumns_Base::disposing();
+    }
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
         ::connectivity::OSQLColumns::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
         if(aIter != m_aColumns->end())
             return Reference< XNamed >(*aIter,UNO_QUERY);
+        OSL_ENSURE(0,"Column not found in collection!");
         return NULL;
     }
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
