@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeDescriptionEnumerationAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:49:22 $
+ *  last change:$Date: 2005-03-29 11:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,13 @@ public class _XTypeDescriptionEnumerationAccess extends MultiMethodTest {
             return;
         }
         try {
-            XTypeDescriptionEnumeration enum =
+            XTypeDescriptionEnumeration oEnum =
                         oObj.createTypeDescriptionEnumeration(sString, tClass,
                         TypeDescriptionSearchDepth.INFINITE);
             try {
                 log.println("Got an enumeration.");
                 while (true) {
-                    XTypeDescription desc = enum.nextTypeDescription();
+                    XTypeDescription desc = oEnum.nextTypeDescription();
                     i++;
                     log.println("\tdesc name: " + desc.getName());
                 }
