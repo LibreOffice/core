@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:13:31 $
+ *  last change: $Date: 2004-12-10 16:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,9 @@ import java.awt.Image;
 import java.awt.image.PixelGrabber;
 import java.awt.image.ImageObserver;
 import java.io.File;
-import javax.imageio.ImageIO;
+//import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 class ImageHelper
 {
@@ -117,8 +118,34 @@ class ImageHelper
         {
             Image aImage = null;
             File aFile = new File(_sFilename);
-            aImage = ImageIO.read(aFile);
+            Exception ex = null;
+            try {
+                Class imageIOClass = Class.forName("javax.imageio.ImageIO");
+                Method readMethod = imageIOClass.getDeclaredMethod("read", new Class[]{java.io.File.class});
+                Object retValue = readMethod.invoke(imageIOClass, new Object[]{aFile});
+                aImage = (Image)retValue;
+            }
+            catch(java.lang.ClassNotFoundException e) {
+                ex = e;
+            }
+            catch(java.lang.NoSuchMethodException e) {
+                ex = e;
+            }
+            catch(java.lang.IllegalAccessException e) {
+                ex = e;
+            }
+            catch(java.lang.reflect.InvocationTargetException e) {
+                ex = e;
+            }
 
+            if (ex != null) {
+                // get Java version:
+                String javaVersion = System.getProperty("java.version");
+                throw new java.io.IOException(
+                    "Cannot construct object with current Java version " +
+                    javaVersion + ": " + ex.getMessage());
+            }
+//            aImage = ImageIO.read(aFile);
             return new ImageHelper(aImage);
         }
 }
