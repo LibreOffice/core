@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:35 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-27 14:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,6 +1395,15 @@ void XMLValueImportHelper::ProcessAttribute(
             if (bRet) {
                 bFloatValueOK = sal_True;
                 fValue = (bTmp ? 1.0 : 0.0);
+            }
+            else
+            {
+                double fTmp;
+                bRet = SvXMLUnitConverter::convertDouble(fTmp,sAttrValue);
+                if (bRet) {
+                    bFloatValueOK = sal_True;
+                    fValue = fTmp;
+                }
             }
             break;
         }
