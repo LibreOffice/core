@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:49:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,18 @@
 #ifndef _SV_GEN_HXX
 #   include <tools/gen.hxx>     //Size
 #endif
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
+#endif
+#ifndef _FLTSHELL_HXX
+#include <fltshell.hxx>         // fuer den Attribut Stack
+#endif
+#ifndef _REDLINE_HXX
+#include <redline.hxx>
+#endif
+#ifndef _SHELLIO_HXX
+#include <shellio.hxx>
+#endif
 
 class SwDoc;
 class SwPaM;
@@ -137,10 +149,50 @@ namespace sw
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
+
+        /** Convert from DTTM to Writer's DateTime
+
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+        */
+        DateTime DTTM2DateTime( long lDTTM );
+
+        /** Convert from DTTM to Writer's DateTime
+
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+        */
+        long DateTime2DTTM( const DateTime& rDT );
     }
 
     namespace util
     {
+        struct AuthorInfo;
+        typedef AuthorInfo* AuthorInfo_Ptr;
+
+        //-----------------------------------------
+        //     Redlining Authors
+        //-----------------------------------------
+        struct AuthorInfo
+        {
+            USHORT nWWAuthorId;
+            USHORT nOurId;
+
+            AuthorInfo(USHORT nWWAuthorId_, USHORT nOurId_ = 0):
+                nWWAuthorId( nWWAuthorId_ ),
+                nOurId(      nOurId_ )
+                {}
+            bool operator==(const AuthorInfo& rEntry) const
+            {
+                return (nWWAuthorId == rEntry.nWWAuthorId);
+            }
+            bool operator<(const AuthorInfo& rEntry) const
+            {
+                return (nWWAuthorId < rEntry.nWWAuthorId);
+            }
+        };
+
+        SV_DECL_PTRARR_SORT_DEL(AuthorInfos, AuthorInfo_Ptr,16,16)
 
         /** Clips a value to MAX/MIN 16bit value to make it safe for use
             as a position value to give to writer. i.e. +-57.8cm. Sometimes
@@ -328,6 +380,95 @@ namespace sw
         private:
             bool mbHasRoot;
             TblMap maTables;
+        };
+
+        /**
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
+         */
+        class RedlineStack
+        {
+        private:
+            std::vector<SwFltStackEntry *> maStack;
+            typedef std::vector<SwFltStackEntry *>::reverse_iterator myriter;
+            SwDoc &mrDoc;
+        public:
+            explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
+            void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
+            void close(const SwPosition& rPos, SwRedlineType eType);
+            void closeall(const SwPosition& rPos);
+            ~RedlineStack();
+        private:
+            //No copying
+            RedlineStack(const RedlineStack&);
+            RedlineStack& operator=(const RedlineStack&);
+        };
+
+        /**
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
+         */
+        class SetInDocAndDelete
+        {
+        private:
+            SwDoc &mrDoc;
+        public:
+            explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
+            void operator()(SwFltStackEntry *pEntry);
+        private:
+        //No assignment
+        SetInDocAndDelete& operator=(const SetInDocAndDelete&);
+        };
+
+        /**
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
+         */
+        class CloseIfOpen       //Subclass from something ?
+        {
+        private:
+            const SwPosition &mrPos;
+        public:
+            explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
+                void operator()(SwFltStackEntry *pEntry) const
+            {
+                if (pEntry->bLocked)
+                    pEntry->SetEndPos(mrPos);
+            }
+        private:
+        //No assignment
+        CloseIfOpen& operator=(const CloseIfOpen&);
+        };
+
+        /**
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
+         */
+        class CompareRedlines:
+            public std::binary_function<const SwFltStackEntry*, const SwFltStackEntry*,
+            bool>
+        {
+        public:
+            bool operator()(const SwFltStackEntry *pOneE, const SwFltStackEntry *pTwoE)
+                const;
+        };
+
+        class WrtRedlineAuthor
+        {
+        protected:
+            std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
+
+            USHORT GetPos( const String& rNm );
+
+            //No copying
+            WrtRedlineAuthor(const WrtRedlineAuthor&);
+            WrtRedlineAuthor& operator=(const WrtRedlineAuthor&);
+        public:
+            WrtRedlineAuthor() {}
+
+            USHORT AddName( const String& rNm );
+            virtual void Write(Writer &rWrt) = 0;
+            // std::vector<String> GetNames();
         };
 
         /** Given a SwNoTxtNode (ole/graphic) get original size
