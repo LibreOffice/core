@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-26 08:58:22 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,6 @@
 
 #ifndef _SVTABBX_HXX //autogen
 #include <svtools/svtabbx.hxx>
-#endif
-
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 
 #ifndef _SV_TABDLG_HXX //autogen
@@ -223,7 +219,7 @@ private:
 
     BasicCheckBox   aLibBox;
 
-    GroupBox        aGroupBox;
+    FixedLine       aFixedLine;
     CheckBox        aReferenceBox;
     CheckBox        aSepFileBox;
     CheckBox        aReplaceBox;

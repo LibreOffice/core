@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,7 +911,7 @@ LibDialog::LibDialog( Window* pParent )
         aCancelButton(  this, IDEResId( RID_PB_CANCEL ) ),
         aStorageName(   this, IDEResId( RID_FT_STORAGENAME ) ),
         aLibBox(        this, IDEResId( RID_CTRL_LIBS ) ),
-        aGroupBox(      this, IDEResId( RID_GB_OPTIONS ) ),
+        aFixedLine(     this, IDEResId( RID_FL_OPTIONS ) ),
         aReferenceBox(  this, IDEResId( RID_CB_REF ) ),
         aSepFileBox(    this, IDEResId( RID_CB_SEP ) ),
         aReplaceBox(    this, IDEResId( RID_CB_REPL ) )

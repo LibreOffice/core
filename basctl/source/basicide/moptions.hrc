@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #define RID_PB_HELP         5
 #define RID_FT_DESCR        6
 #define RID_ME_DESCR        7
-#define RID_GB_HELP         8
+#define RID_FL_HELP         8
 #define RID_FT_HELPID       9
 #define RID_NF_HELPID       10
 #define RID_FT_HELPNAME     11

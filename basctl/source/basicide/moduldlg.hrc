@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #define RID_PB_OK               31
 #define RID_PB_CANCEL           32
 #define RID_CTRL_LIBS           33
-#define RID_GB_OPTIONS          34
+#define RID_FL_OPTIONS          34
 #define RID_CB_REF              35
 #define RID_CB_REPL             36
 #define RID_CB_SEP              37

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:12:33 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,10 @@ ModalDialog RID_MACROOPTIONS
         VScroll = TRUE ;
         IgnoreTab = TRUE ;
     };
-    GroupBox RID_GB_HELP
+    FixedLine RID_FL_HELP
     {
         Pos = MAP_APPFONT ( 6 , 73 ) ;
-        Size = MAP_APPFONT ( 212 , 42 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Hilfe-Informationen" ;
         Text [ ENGLISH ] = "Help informations" ;
         Text [ norwegian ] = "Help informations" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:11:32 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,10 +673,10 @@ ModalDialog RID_DLG_LIBS
         Size = MAP_APPFONT ( 100 , 67 ) ;
         TabStop = TRUE ;
     };
-    GroupBox RID_GB_OPTIONS
+    FixedLine RID_FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
-        Size = MAP_APPFONT ( 156 , 50 ) ;
+        Size = MAP_APPFONT ( 156 , 8 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Options" ;
         Text [ dutch ] = "Opties" ;
