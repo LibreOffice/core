@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-20 09:21:22 $
+ *  last change: $Author: jp $ $Date: 2001-02-23 14:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@ class OutputDevice;
 #define INS_EMPTYEXPAND     0x0001 // leere Hints beim Einfuegen aufspannen
 #define INS_NOHINTEXPAND    0x0002 // Hints an der InsPos nicht aufspannen
 
+namespace com { namespace sun { namespace star { namespace uno {
+    template < class > class Sequence;
+}}}}
 
 // --------------------
 // SwTxtNode
@@ -224,7 +227,8 @@ public:
     // ersetze im String an Position nIdx das Zeichen
     void Replace( const SwIndex& rStart, xub_Unicode cCh );
     void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
-    void ReplaceTextOnly( xub_StrLen nPos, const XubString& rText );
+    void ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
+                    const ::com::sun::star::uno::Sequence<long>& rOffsets );
 
     // virtuelle Methoden aus dem CntntNode
     virtual SwCntntFrm *MakeFrm();
