@@ -8,8 +8,8 @@
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
             <value xml:lang="de">HTML-Dokument (%productname% Calc)</value>
-            <value xml:lang="en-US">HTML-Document (%productname% Calc)</value>
-            <value xml:lang="x-translate">HTML-Document (%productname% Calc)</value>
+            <value xml:lang="en-US">HTML Document (%productname% Calc)</value>
+            <value xml:lang="x-translate">HTML Document (%productname% Calc)</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
     </node>
