@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStreamListener.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module io {
 // DocMerge from xml: interface com::sun::star::io::XStreamListener
 /** makes it possible to receive events from an active data control.
  */
-interface XStreamListener: com::sun::star::lang::XEventListener
+published interface XStreamListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
