@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-18 10:18:09 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 09:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <svtools/smplhint.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -132,11 +133,22 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
 
             comphelper::decrement( m_refCount );
         }
+
+        StartListening(*pViewShell);
     }
 }
 
 ScDispatchProviderInterceptor::~ScDispatchProviderInterceptor()
 {
+    if (pViewShell)
+        EndListening(*pViewShell);
+}
+
+void ScDispatchProviderInterceptor::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) &&
+            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        pViewShell = NULL;
 }
 
 // XDispatchProvider
@@ -150,8 +162,9 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
 
     uno::Reference<frame::XDispatch> xResult;
     // create some dispatch ...
-    if( !aURL.Complete.compareToAscii(cURLInsertColumns) ||
-        !aURL.Complete.compareToAscii(cURLDocDataSource) )
+    if ( pViewShell && (
+        !aURL.Complete.compareToAscii(cURLInsertColumns) ||
+        !aURL.Complete.compareToAscii(cURLDocDataSource) ) )
     {
         if (!m_xMyDispatch.is())
             m_xMyDispatch = new ScDispatch( pViewShell );
@@ -243,10 +256,15 @@ ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh ),
     bListeningToView( FALSE )
 {
+    if (pViewShell)
+        StartListening(*pViewShell);
 }
 
 ScDispatch::~ScDispatch()
 {
+    if (pViewShell)
+        EndListening(*pViewShell);
+
     if (bListeningToView && pViewShell)
     {
         uno::Reference<view::XSelectionSupplier> xSupplier = lcl_GetSelectionSupplier( pViewShell );
@@ -256,6 +274,13 @@ ScDispatch::~ScDispatch()
             xSupplier->removeSelectionChangeListener(xThis);
         }
     }
+}
+
+void ScDispatch::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) &&
+            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        pViewShell = NULL;
 }
 
 // XDispatch

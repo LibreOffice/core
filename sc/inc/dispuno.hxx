@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-18 10:17:27 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 09:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
+#endif
+
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
@@ -96,7 +100,8 @@ SV_DECL_PTRARR_DEL( XStatusListenerArr_Impl, XStatusListenerPtr, 4, 4 );
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
                                         com::sun::star::frame::XDispatchProviderInterceptor,
-                                        com::sun::star::lang::XEventListener>
+                                        com::sun::star::lang::XEventListener>,
+                                    public SfxListener
 {
     ScTabViewShell*     pViewShell;
 
@@ -118,6 +123,8 @@ public:
 
                             ScDispatchProviderInterceptor(ScTabViewShell* pViewSh);
     virtual                 ~ScDispatchProviderInterceptor();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
@@ -151,7 +158,8 @@ public:
 
 class ScDispatch : public cppu::WeakImplHelper2<
                                     com::sun::star::frame::XDispatch,
-                                    com::sun::star::view::XSelectionChangeListener >
+                                    com::sun::star::view::XSelectionChangeListener >,
+                                public SfxListener
 {
     ScTabViewShell*         pViewShell;
     XStatusListenerArr_Impl aDataSourceListeners;
@@ -162,6 +170,8 @@ public:
 
                             ScDispatch(ScTabViewShell* pViewSh);
     virtual                 ~ScDispatch();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XDispatch
     virtual void SAL_CALL   dispatch( const ::com::sun::star::util::URL& aURL,
