@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mmeeks $ $Date: 2004-08-05 17:40:03 $
+#   last change: $Author: mmeeks $ $Date: 2004-08-24 08:28:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,8 +71,8 @@ TARGET=wpd
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=libwpd-0.8.0
-PATCH_FILE_NAME=libwpd-0.8.0.patch
+TARFILE_NAME=libwpd-snap-20040823
+PATCH_FILE_NAME=
 BUILD_ACTION=dmake
 BUILD_DIR=src/lib
 
