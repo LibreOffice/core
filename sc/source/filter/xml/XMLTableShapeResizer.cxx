@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:30:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@ void ScMyShapeResizer::GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rSt
         aRefPoint.X = rStartRect.Left();
     aRefPoint.Y = rStartRect.Top();
     Rectangle* pRect = new Rectangle(pDoc->GetMMRect(
-        static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row),
-        static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row), rEndCell.Sheet ));
+        static_cast<SCCOL>(rEndCell.Column), static_cast<SCROW>(rEndCell.Row),
+        static_cast<SCCOL>(rEndCell.Column), static_cast<SCROW>(rEndCell.Row), rEndCell.Sheet ));
     if (bNegativePage)
         rEndX = -rEndX + pRect->Right();
     else
@@ -260,11 +260,11 @@ void ScMyShapeResizer::ResizeShapes()
                                 sal_Int32 nHeight;
                                 if (aAny >>= nHeight)
                                 {
-                                    Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
-                                        static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                    Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row),
+                                        static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
                                     awt::Point aPoint(aItr->xShape->getPosition());
                                     awt::Size aSize(aItr->xShape->getSize());
-                                    if (pDoc->IsNegativePage(static_cast<USHORT>(nOldSheet)))
+                                    if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
                                         aPoint.X += aSize.Width;
                                     if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                     {
@@ -326,7 +326,7 @@ void ScMyShapeResizer::ResizeShapes()
                                         {
                                             awt::Size aOldSize(aSize);
                                             GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
-                                            if (pDoc->IsNegativePage(static_cast<USHORT>(nOldSheet)))
+                                            if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
                                                 aPoint.X -= aSize.Width;
                                             aItr->xShape->setPosition(aPoint);
                                             if( (aSize.Width != aOldSize.Width) ||
