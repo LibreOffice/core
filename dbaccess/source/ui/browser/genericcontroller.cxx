@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:54:45 $
+ *  last change: $Author: oj $ $Date: 2002-05-02 07:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,8 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
                     pParentComponent->setVisible(sal_True);
                     loadMenu(xFrame);
                 }
+                // remove the container window
+                ::dbaui::notifySystemWindow(pParentWin,pParentWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
                 break; // no more needed here
             }
             else
@@ -1024,5 +1026,4 @@ void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _r
     }
 }
 // -----------------------------------------------------------------------------
-
 
