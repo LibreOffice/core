@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:32:49 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,13 +1619,13 @@ String S_NO_SCROLLBAR
     Text[ portuguese ] = "No status bar at ($Arg1)";
     Text[ russian ] = "No status bar at ($Arg1)";
     Text[ greek ] = "No status bar at ($Arg1)";
-    Text[ dutch ] = "No status bar at ($Arg1)";
+    Text[ dutch ] = "Geen beeldschuifbalk voorhanden bij ($Arg1)";
     Text[ french ] = "Absence de barre de d�filement pour ($Arg1)";
     Text[ spanish ] = "No status bar at ($Arg1)";
     Text[ finnish ] = "No status bar at ($Arg1)";
     Text[ italian ] = "No status bar at ($Arg1)";
     Text[ danish ] = "No status bar at ($Arg1)";
-    Text[ swedish ] = "No status bar at ($Arg1)";
+    Text[ swedish ] = "No scroll bar at ($Arg1)";
     Text[ polish ] = "No status bar at ($Arg1)";
     Text[ portuguese_brazilian ] = "No status bar at ($Arg1)";
     Text[ japanese ] = "($Arg1) にはｽｸﾛｰﾙﾊﾞｰがありません。";
@@ -1636,4 +1636,5 @@ String S_NO_SCROLLBAR
     Text[ arabic ] = "No status bar at ($Arg1)";
     Text[ catalan ] = "No status bar at ($Arg1)";
 };
+
 
