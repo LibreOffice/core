@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2001-11-30 13:09:09 $
+ *  last change: $Author: os $ $Date: 2001-12-11 11:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,6 @@ BOOL lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     }
     catch(Exception aExcept)
     {
-        DBG_ERROR("exception caught")
     }
     return bRet;
 }
@@ -1626,7 +1625,15 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
     }
     if(pFound && pFound->xResultSet.is() && !pFound->bAfterSelection)
     {
-        sal_Int32 nOldRow = pFound->xResultSet->getRow();
+        sal_Int32 nOldRow = 0;
+        try
+        {
+            nOldRow = pFound->xResultSet->getRow();
+        }
+        catch(Exception& rEx)
+        {
+            return FALSE;
+        }
         //position to the desired index
         BOOL bMove = TRUE;
         if(nOldRow != nAbsRecordId)
@@ -1719,7 +1726,6 @@ BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
     }
     catch(Exception&)
     {
-        DBG_ERROR("exception caught")
     }
     return bRet;
 }
@@ -1748,7 +1754,6 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
     }
     catch(Exception& )
     {
-        DBG_ERROR("exception caught")
     }
     return nRet;
 }
