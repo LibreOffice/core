@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:03:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,7 +1259,7 @@ namespace dbaui
             m_pAdminDialog->saveDatasource();
             try
             {
-                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
+                Reference< XConnection > xConnection = m_pAdminDialog->createConnection().first;
                 if ( xConnection.is() )
                 {
                     OAdabasStatistics aDlg(this,m_sUser,xConnection,m_pAdminDialog->getORB());
