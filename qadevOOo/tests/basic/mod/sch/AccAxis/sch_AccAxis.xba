@@ -6,9 +6,9 @@
 &apos;*
 &apos;*  $RCSfile: sch_AccAxis.xba,v $ 
 &apos;*
-&apos;*  $Revision: 1.1 $ 
+&apos;*  $Revision: 1.2 $ 
 &apos;*
-&apos;*  last change:$Date: 2003-01-27 18:01:00 $ 
+&apos;*  last change:$Date: 2003-05-27 12:11:57 $ 
 &apos;*
 &apos;*  The Contents of this file are made available subject to the terms of
 &apos;*  either of the following licenses
@@ -91,7 +91,7 @@ Sub CreateObj()
 	wait(1000)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 111, &quot;axis&quot;)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.SHAPE, &quot;axis&quot;)
 
 	Exit Sub
 ErrHndl:
