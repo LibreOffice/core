@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 10:52:03 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ void SfxApplication::LockDispatcher
     bDispatcherLocked = bLock;
     if ( !bLock )
     {
-        GetDispatcher().InvalidateBindings_Impl( pAppData_Impl->bInvalidateOnUnlock );
+        GetDispatcher_Impl()->InvalidateBindings_Impl( pAppData_Impl->bInvalidateOnUnlock );
         pAppData_Impl->bInvalidateOnUnlock = sal_False;
     }
 }

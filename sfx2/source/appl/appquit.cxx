@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ BOOL SfxApplication::QueryExit_Impl()
             }
 
             // da das Canceln asynchron ist, Quit erstmal wieder verlassen
-            GetDispatcher().Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
+            GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
             DBG_TRACE( "QueryExit => FALSE (printing)" );
             pAppData_Impl->bInQuit = FALSE;
             return FALSE;

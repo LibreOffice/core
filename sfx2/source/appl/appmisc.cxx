@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 // class SfxApplication: Interface, Array-Impls und allerlei anderes
 //
 // Copyright 2000 Sun Microsystems, Inc. All rights reserved.
-// $Author: hr $ $Date: 2000-09-18 16:52:26 $ $Revision: 1.1.1.1 $
+// $Author: pb $ $Date: 2000-09-26 11:03:29 $ $Revision: 1.2 $
 // $Logfile:   T:/sfx2/source/appl/appmisc.cxv  $ $Workfile:   APPMISC.CXX  $
 //------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(0))
 
 void SfxApplicationClass::ActivateExtHelp()
 {
-    SFX_APP()->GetBindings().Invalidate( SID_EXTENDEDHELP );
+    SFX_APP()->Invalidate( SID_EXTENDEDHELP );
     ShowStatusText(String());
 }
 
@@ -231,7 +231,7 @@ void SfxApplicationClass::ActivateExtHelp()
 
 void SfxApplicationClass::DeactivateExtHelp()
 {
-    SFX_APP()->GetBindings().Invalidate( SID_EXTENDEDHELP );
+    SFX_APP()->Invalidate( SID_EXTENDEDHELP );
     HideStatusText();
 }
 
@@ -856,7 +856,7 @@ void SfxApplication::ToolboxExec_Impl( SfxRequest &rReq )
 
     // ausfuehren
     pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
-    GetBindings().Invalidate( nSID );
+    Invalidate( nSID );
 
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
     while ( pViewFrame )

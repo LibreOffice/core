@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-22 16:37:47 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,8 +1344,7 @@ void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
     if ( pAsynch && pAsynch->GetValue() )
     {
         // asynchron ausf"uhren
-        GetDispatcher().Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON,
-                                  pMacro, 0L );
+        GetDispatcher_Impl()->Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON, pMacro, 0L );
         rReq.Done();
     }
     else if ( pMacro )

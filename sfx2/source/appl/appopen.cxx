@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii("private:user") );
         SfxStringItem aFlags( SID_OPTIONS, String::CreateFromAscii("T") );
         SfxBoolItem aHidden( SID_VIEW, FALSE );
-        const SfxPoolItem *pRet = GetDispatcher().Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
+        const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
         xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
         if ( !xDoc.Is() )
@@ -659,9 +659,9 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
             pFrmItem = (const SfxFrameItem*) SfxRequest::GetItem( pSet, SID_DOCFRAME, FALSE, TYPE(SfxFrameItem) );
         SfxBoolItem aItem( SID_NEWDOCDIRECT, TRUE );
         if ( pFrmItem && pFrmItem->GetFrame() && !pFrmItem->GetFrame()->GetCurrentDocument() )
-            GetDispatcher().Execute( nSlotId, SFX_CALLMODE_SYNCHRON, &aItem, pFrmItem, 0L );
+            GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_SYNCHRON, &aItem, pFrmItem, 0L );
         else
-            GetDispatcher().Execute( nSlotId, SFX_CALLMODE_ASYNCHRON, &aItem, pFrmItem, 0L );
+            GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_ASYNCHRON, &aItem, pFrmItem, 0L );
     }
     else
     {
@@ -943,12 +943,12 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             SfxStringItem aName( SID_FILE_NAME, aObj.GetMainURL() );
             SfxStringItem aTemplName( SID_TEMPLATE_NAME, aTemplateName );
             SfxStringItem aTemplRegionName( SID_TEMPLATE_REGIONNAME, aTemplateRegion );
-            pRet = GetDispatcher().Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
+            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, &aTemplName, &aTemplRegionName, 0L );
         }
         else
         {
             SfxStringItem aName( SID_FILE_NAME, DEFINE_CONST_UNICODE("private:factory") );
-            pRet = GetDispatcher().Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, 0L );
+            pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, eMode, &aName, &aTarget, &aReferer, 0L );
         }
 
         if ( pRet )
@@ -1128,7 +1128,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
                 // synchron ausf"uhren, damit beim Reschedulen nicht schon das n"achste Dokument
                 // geladen wird
-                GetDispatcher().Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
+                GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
             }
             delete pURLList;
             return;

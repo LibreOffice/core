@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     SfxApplication* pApp = (SfxApplication*)pObj;
     Timer* pTimer = (Timer*)pArg;
     delete pTimer;
-    pApp->GetDispatcher().Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
+    pApp->GetDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
     return 0;
 }
 
@@ -550,7 +550,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 // Ausf"uhren ohne Dialog
                 SfxConfigManager *pCfgMgr = new SfxConfigManager(pStringItem->GetValue());
                 pAppData_Impl->pAppCfg->CopyItem(nId, pCfgMgr);
-                GetDispatcher().Update_Impl(TRUE);
+                GetDispatcher_Impl()->Update_Impl(TRUE);
                 if ( nId == GetMenuBarManager()->GetType() || nId == SID_CONFIG )
                     GetMenuBarManager()->ReconfigureObjectMenus();
             }
@@ -584,7 +584,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
 
                 const short nRet = pDlg->Execute();
-                GetDispatcher().Update_Impl(TRUE);
+                GetDispatcher_Impl()->Update_Impl(TRUE);
 
                 if (nRet)
                     bDone = TRUE;
@@ -719,7 +719,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     delete pMgr;
             }
 
-            GetDispatcher().Update_Impl(TRUE);
+            GetDispatcher_Impl()->Update_Impl(TRUE);
             bDone = TRUE;
             break;
         }
@@ -774,6 +774,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
             rReq.SetReturnValue( SfxBoolItem( 0, bOK ) );
             rReq.Done();
+            break;
+        }
+
+        case SID_HELPINDEX:
+        {
+            SfxViewFrame::Current()->SetChildWindow( SID_HELP_PI, TRUE );
             break;
         }
 
