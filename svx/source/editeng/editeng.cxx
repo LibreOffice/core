@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
+ *  last change: $Author: mt $ $Date: 2001-12-04 15:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,7 +1394,18 @@ SfxItemSet EditEngine::GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal
     return pImpEditEngine->GetAttribs( nPara, nStart, nEnd, nFlags );
 }
 
-// MT: Can be remved after 6.x?
+void EditEngine::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+
+    pImpEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
+    EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
+    pImpEditEngine->RemoveCharAttribs( aSel, bRemoveParaAttribs, nWhich  );
+    pImpEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    pImpEditEngine->FormatAndUpdate();
+}
+
+// MT: Can be removed after 6.x?
 Font EditEngine::GetStandardFont( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );

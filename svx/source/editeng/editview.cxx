@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:57:58 $
+ *  last change: $Author: mt $ $Date: 2001-12-04 15:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,8 +462,9 @@ void EditView::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    // Undo ?????????????
+    PIMPEE->UndoActionStart( EDITUNDO_RESETATTRIBS );
     PIMPEE->RemoveCharAttribs( nPara, nWhich );
+    PIMPEE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
     PIMPEE->FormatAndUpdate( this );
 }
 
