@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 15:30:45 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <vos/mutex.hxx>
 
 #include "unoctitm.hxx"
@@ -720,6 +721,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         sal_Int32   nMarkArg = -1;
 
         sal_Bool    bTemp;
+        sal_Int32   nModifierIndex( -1 );
         sal_uInt16  nModifier(0);
         for( sal_Int32 n=0; n<nCount; n++ )
         {
@@ -732,7 +734,17 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             else if( rProp.Name.compareToAscii("Bookmark")== 0 )
                 nMarkArg = n;
             else if( rProp.Name.compareToAscii("KeyModifier")== 0 )
+            {
                 rProp.Value >>= nModifier;
+                nModifierIndex = n;
+            }
+        }
+
+        // Remove "KeyModifier" property from sequence to not interfere with TransformParameters
+        if ( nModifierIndex >= 0 )
+        {
+            comphelper::removeElementAt< ::com::sun::star::beans::PropertyValue >( lNewArgs, nModifierIndex );
+            --nCount;
         }
 
         // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
