@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 16:31:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 
+#include "helpids.h"
 #include "Outliner.hxx"
 #include "dialogs.hrc"
 #include "headerfooterdlg.hxx"
@@ -291,6 +292,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     maTabCtrl.Show();
 
     mpSlideTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pSlide, false );
+    mpSlideTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_SLIDE );
     maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_SLIDE, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
@@ -303,7 +305,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     }
 
     mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pNotes, true );
-
+    mpNotesHandoutsTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT );
     maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT, mpNotesHandoutsTabPage );
 
     aSiz = mpNotesHandoutsTabPage->GetSizePixel();
