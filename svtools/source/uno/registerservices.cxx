@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:53:45 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 
 #include <unoifac3.hxx>
 #include <unoiface.hxx>
+#include <imgprod.hxx>
 
 #include <toolkit/helper/macros.hxx>
 
@@ -104,7 +105,10 @@
 // -------------------------------------------------------------------------------------
 
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
+DECLARE_CREATEINSTANCE( ImageProducer )
 DECLARE_CREATEINSTANCE_NAMESPACE( svt, OAddressBookSourceDialogUno )
+
+IMPL_CREATEINSTANCE( ImageProducer );
 
 extern "C"
 {
@@ -142,6 +146,9 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
+
+        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.awt.ImageProducer/UNO/SERVICES" ) );
+        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ) );
     }
 
     return sal_True;
@@ -163,13 +170,19 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
 //          aServiceNames.getArray()[1] = ::rtl::OUString::createFromAscii( "stardiv.one.frame.TextLoader" );
 //          xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvtTextLoader_CreateInstance, aServiceNames );
 //      }
-        if ( rtl_str_compare( sImplementationName, "com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject") == 0 )
+        if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.ImageProducer") == 0 )
+        {
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" );
+            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), ImageProducer_CreateInstance, aServiceNames );
+        }
+        else if ( rtl_str_compare( sImplementationName, "com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.util.NumberFormatsSupplier" );
             xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), SvNumberFormatsSupplierServiceObject_CreateInstance, aServiceNames );
         }
-        if ( rtl_str_compare( sImplementationName, "org.openoffice.comp.svt.OAddressBookSourceDialogUno") == 0 )
+        else if ( rtl_str_compare( sImplementationName, "org.openoffice.comp.svt.OAddressBookSourceDialogUno") == 0 )
         {
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
