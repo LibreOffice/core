@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:44:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ namespace dbaui
 
         long                    m_nOldVThumb;
         long                    m_nOldHThumb;
+        sal_Int32               m_nWidth;
 
         ULONG                   nDelayedGrabFocusEvent;
 
@@ -189,6 +190,7 @@ namespace dbaui
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
     protected:
         OFieldDescription*      pActFieldDescr; // falls geloescht werden soll
+        sal_Bool                m_bRight;
 
         USHORT              CountActiveAggregates() const;
 
@@ -252,6 +254,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() = 0;
 
         String              getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck = sal_True) const;
+
+        inline void setEditWidth(sal_Int32 _nWidth) { m_nWidth = _nWidth; }
     protected:
         void    implFocusLost(Window* _pWhich);
     };
