@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:19:20 $
+ *  last change: $Author: vg $ $Date: 2001-10-12 20:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Geändert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
+        < "ZL : \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
         < "Größe" ; DI_SIZE ; > ;
     };
@@ -829,20 +829,21 @@ StringArray STRARY_SVT_DOCINFO
     };
     ItemList [ catalan ] =
     {
-         < "Titel" ; DI_TITLE ; > ;
+         < "Títol" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
-        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
-        < "Beschreibung" ; DI_DESCRIPTION ; > ;
+        < "Paraules clau" ; DI_KEYWORDS ; > ;
+        < "Descripció" ; DI_DESCRIPTION ; > ;
         < "Inhaltstyp" ; DI_MIMETYPE ; > ;
         < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
         < "Geändert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
         < "Gedruckt von" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
-        < "Größe" ; DI_SIZE ; > ;
+        < "Mida" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
