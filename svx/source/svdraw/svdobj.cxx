@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-23 09:23:41 $
+ *  last change: $Author: thb $ $Date: 2002-08-23 10:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2326,7 +2326,7 @@ void SdrObject::ImpDrawLineGeometry(
                                       SvtGraphicStroke::capButt,
                                       SvtGraphicStroke::joinRound,
                                       rLineParameters.GetLinejointMiterUpperBound(),
-                                      rLineParameters.GetDotDash() );
+                                      rLineParameters.GetLineStyle() == XLINE_DASH ? rLineParameters.GetDotDash() : SvtGraphicStroke::DashArray() );
 
 #ifdef DBG_UTIL
             ::rtl::OString aStr( aStroke.toString() );
