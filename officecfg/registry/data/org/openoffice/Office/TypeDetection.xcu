@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2002-08-22 13:16:12 $
+ *  last change: $Author: as $ $Date: 2002-08-23 08:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@
         <value xml:lang="en-US">Lotus</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,,,,wk?,0,</value>
+        <value>1,,,,wk1;wk2;wk3;wks,0,</value>
       </prop>
     </node>
     <node oor:name="calc_MS_Excel_40" oor:op="replace">
@@ -292,7 +292,7 @@
         <value xml:lang="en-US">Calc 6.0 Template</value>
       </prop>
       <prop oor:name="Data">
-        <value>2,,Calc%206.0,,stc,0,</value>
+        <value>1,,Calc%206.0,,stc,0,</value>
       </prop>
     </node>
     <node oor:name="calc_Text_txt_csv_StarCalc" oor:op="replace">
@@ -972,7 +972,7 @@
         <value xml:lang="en-US">Lotus 1-2-3 1.0 (DOS) (%productname% 6.0 Writer)</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,,,,wk?,20002,</value>
+        <value>0,,,,wk1;wk2;wk3;wks,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_Lotus_1_2_3_10_WIN_StarWriter" oor:op="replace">
@@ -980,7 +980,7 @@
         <value xml:lang="en-US">Lotus 1-2-3 1.0 (WIN) (%productname% 6.0 Writer)</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,,,,wk?,20002,</value>
+        <value>0,,,,wk1;wk2;wk3;wks,20002,</value>
       </prop>
     </node>
     <node oor:name="writer_Lotus_Manuscript_W4W" oor:op="replace">
@@ -1876,7 +1876,7 @@
         <value xml:lang="en-US">Help content</value>
       </prop>
       <prop oor:name="Data">
-        <value>0,text/html,,vnd.sun.star.help://*,,0,</value>
+        <value>0,,,vnd.sun.star.help://*,,0,</value>
       </prop>
     </node>
     <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template" oor:op="replace">
