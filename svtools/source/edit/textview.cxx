@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-07 10:26:36 $
+ *  last change: $Author: mt $ $Date: 2001-05-07 16:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
@@ -230,8 +234,9 @@ static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
     static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
     if ( !xClipboard.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
+        if ( xMSF.is() )
+            xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
     }
     return xClipboard;
 }
