@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrdtrans.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:31:08 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ WordTransformer::E_Error
 WordTrans_ErrorList::GetError( USHORT       i_nNr,
                                ByteString * o_pErrorText ) const
 {
-    if (0 <= i_nNr && i_nNr < aErrors.size() )
+    if ( i_nNr < aErrors.size() )
     {
         const ByteString & rError = aErrors[i_nNr];
         const char * pErrorChars = rError.GetBuffer();
