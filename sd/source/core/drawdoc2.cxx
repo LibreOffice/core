@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 15:33:38 $
+ *  last change: $Author: cl $ $Date: 2002-02-04 14:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1393,7 +1393,6 @@ void SdDrawDocument::CheckMasterPages()
     // we need at least a handout master and one master page
     if( nMaxPages < 2 )
     {
-        DBG_ERROR("not enough master pages inside document");
         return;
     }
 
