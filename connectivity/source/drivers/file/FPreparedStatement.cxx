@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:41:01 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
         m_aSQLIterator.traverseAll();
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         if(xTabs.begin() == xTabs.end())
-            throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);

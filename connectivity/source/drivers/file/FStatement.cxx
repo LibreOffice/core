@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,18 +291,22 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     {
         m_aSQLIterator.setParseTree(m_pParseTree);
         m_aSQLIterator.traverseAll();
-        const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        if(xTabs.begin() == xTabs.end())
+        if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT)
         {
-            if(!aErr.getLength())
-                aErr = ::rtl::OUString::createFromAscii("Unknown table!");
-            throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+            const OSQLTables& xTabs = m_aSQLIterator.getTables();
+            if(xTabs.begin() == xTabs.end())
+            {
+                if(!aErr.getLength())
+                    aErr = ::rtl::OUString::createFromAscii("Unknown table!");
+                throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+            }
+
+            OResultSet* pResult = createResultSet();
+            pResult->OpenImpl();
+            xRS = pResult;
         }
-
-        OResultSet* pResult = createResultSet();
-        pResult->OpenImpl();
-        xRS = pResult;
-
+        else
+            throw SQLException(::rtl::OUString::createFromAscii("Driver does not support this function!"),*this,::rtl::OUString::createFromAscii("IM001"),0,Any());
     }
     else
         throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
