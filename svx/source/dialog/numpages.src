@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:33:59 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,7 +628,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         < "i,ii,iii, ..." ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
         < "A, .., AA, ..,AAA, ..." ;    9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
         < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < "Wypunktowanie" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Znaki wypunktowania" ;                   6/*SVX_NUM_CHAR_SPECIAL        */; > ;
         < "Grafika" ;                   8/*SVX_NUM_BITMAP              */; > ;
         < "Grafika po³¹czona" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Brak" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
@@ -759,7 +759,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ finnish ] = "Edellä" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "De~vant" ;
-        Text [ swedish ] = "~Före" ;
+        Text [ swedish ] = "Fra~mför" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
         Text [ english_us ] = "Before" ;
@@ -797,7 +797,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ finnish ] = "Jäljessä" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "D~errière" ;
-        Text [ swedish ] = "~Bakom" ;
+        Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
         Text [ english_us ] = "After" ;
@@ -829,7 +829,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "Zeichenv~orlage:" ;
         Text [ ENGLISH ] = "Character style" ;
         Text [ english_us ] = "~Character Style:" ;
-        Text [ swedish ] = "~Teckenformatmall:" ;
+        Text [ swedish ] = "Teckenf~ormatmall:" ;
         Text [ danish ] = "Tegntypografi:" ;
         Text [ italian ] = "Modello di carattere:" ;
         Text [ spanish ] = "Es~tilo de carácter:" ;
@@ -946,7 +946,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ finnish ] = "~Täydellinen" ;
         Text [ danish ] = "Fuldstændig" ;
         Text [ french ] = "~Complet" ;
-        Text [ swedish ] = "~Fullständig" ;
+        Text [ swedish ] = "F~ullständig" ;
         Text [ dutch ] = "~Volledig" ;
         Text [ spanish ] = "~Completo" ;
         Text [ english_us ] = "Show sublevels" ;
@@ -989,7 +989,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ finnish ] = "~Start at" ;
         Text [ danish ] = "Begynd med" ;
         Text [ french ] = "~Commencer à" ;
-        Text [ swedish ] = "~Börja vid" ;
+        Text [ swedish ] = "~Börja med" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ spanish ] = "E~mpezar en" ;
         Text [ english_us ] = "Start at" ;
@@ -1221,7 +1221,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Tegn" ;
         Text [ french ] = "~Caractère" ;
-        Text [ swedish ] = "~Tecken" ;
+        Text [ swedish ] = "Te~cken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
         Text [ english_us ] = "Character" ;
@@ -1778,7 +1778,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "~Continuous numbering" ;
         Text [ english_us ] = "~Consecutive numbering" ;
         Text [ portuguese_brazilian ] = "~Fortlaufende Numerierung" ;
-        Text [ swedish ] = "Fortlöpande numrering" ;
+        Text [ swedish ] = "~Fortlöpande numrering" ;
         Text [ danish ] = "Fortløbende nummerering" ;
         Text [ italian ] = "~Numerazione continua" ;
         Text [ spanish ] = "Numeración c~onsecutiva" ;
@@ -1833,7 +1833,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ English ] = "Thera are no bitmaps in the Gallery theme 'Bullets'." ;
         Text[ english_us ] = "There are no graphics in the 'Bullets' Gallery theme.";
         Text[ portuguese ] = "Não existem imagens no tema \"Bullets\" da Gallery.";
-        Text[ russian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
+        Text[ russian ] = "Â òåìå ãàëåğåè 'Ìàğêåğû' ğèñóíêîâ íå èìååòñÿ.";
         Text[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôï èİìá ôçò Gallery 'Êïõêßäåò'.";
         Text[ dutch ] = "Er zijn geen afbeeldingen voor het gallery-onderwerp  'Bullets'.";
         Text[ french ] = "Il n'existe pas d'image pour le thème 'Bullets' dans la Gallery..";
@@ -1841,7 +1841,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ danish ] = "Der findes ingen grafik i Gallery-emnet 'Punkttegn'.";
         Text[ swedish ] = "Det finns ingen grafik i Gallery-temat 'Bullets'.";
-        Text[ polish ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
+        Text[ polish ] = "Brak grafik w temacie Galerii 'Znaki wypunktowania'.";
         Text[ portuguese_brazilian ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
         Text[ japanese ] = "·Ş¬×ØÃ°Ïu‰Óğ‘‚«¼İÎŞÙv‚É‚Í¸Ş×Ì¨¯¸‚Í‚ ‚è‚Ü‚¹‚ñB";
         Text[ korean ] = "Thera are no bitmaps in the Gallery theme 'Bullets'.";
@@ -1963,7 +1963,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese ] = "~Relativo" ;
         Text [ english_us ] = "Relati~ve" ;
         Text [ portuguese_brazilian ] = "Relati~v" ;
-        Text [ swedish ] = "Relati~v" ;
+        Text [ swedish ] = "Relati~vt" ;
         Text [ danish ] = "Relativ" ;
         Text [ italian ] = "Relativo" ;
         Text [ spanish ] = "Relati~vo" ;
