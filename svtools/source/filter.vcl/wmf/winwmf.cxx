@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:03:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include "winmtf.hxx"
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
+#endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
 #endif
 
 //====================== MS-Windows-defines ===============================
@@ -746,6 +749,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         case W_META_CREATEFONTINDIRECT:
         {
             Size    aFontSize;
+            char    lfFaceName[ LF_FACESIZE ];
             INT16   lfEscapement, lfOrientation, lfWeight;  // ( ehemals USHORT )
 
             LOGFONTW aLogFont;
@@ -753,12 +757,24 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             *pWMF >> lfEscapement >> lfOrientation >> lfWeight
                     >> aLogFont.lfItalic >> aLogFont.lfUnderline >> aLogFont.lfStrikeOut >> aLogFont.lfCharSet >> aLogFont.lfOutPrecision
                         >> aLogFont.lfClipPrecision >> aLogFont.lfQuality >> aLogFont.lfPitchAndFamily;
-            pWMF->Read( aLogFont.lfFaceName, LF_FACESIZE );
+            pWMF->Read( lfFaceName, LF_FACESIZE );
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
             aLogFont.lfEscapement = lfEscapement;
             aLogFont.lfOrientation = lfOrientation;
             aLogFont.lfWeight = lfWeight;
+
+            CharSet eCharSet;
+            if ( ( aLogFont.lfCharSet == OEM_CHARSET ) || ( aLogFont.lfCharSet == DEFAULT_CHARSET ) )
+                eCharSet = gsl_getSystemTextEncoding();
+            else
+                eCharSet = rtl_getTextEncodingFromWindowsCharset( aLogFont.lfCharSet );
+            if ( eCharSet == RTL_TEXTENCODING_DONTKNOW )
+                eCharSet = gsl_getSystemTextEncoding();
+            if ( eCharSet == RTL_TEXTENCODING_SYMBOL )
+                eCharSet = RTL_TEXTENCODING_MS_1252;
+            aLogFont.alfFaceName = UniString( lfFaceName, eCharSet );
+
             pOut->CreateObject( GDI_FONT, new WinMtfFontStyle( aLogFont ) );
         }
         break;
