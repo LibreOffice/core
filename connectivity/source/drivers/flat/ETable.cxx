@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:07:33 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 11:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <ctype.h>
 
 #ifndef _CONNECTIVITY_FLAT_TABLE_HXX_
 #include "flat/ETable.hxx"

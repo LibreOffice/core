@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 10:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ Sequence< Type > SAL_CALL OColumn::getTypes(  ) throw(RuntimeException)
 Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OColumnDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
     return this;
 }

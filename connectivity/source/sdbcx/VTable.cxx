@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:53:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-30 10:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ void SAL_CALL OTable::disposing(void)
 Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     return this;
@@ -150,7 +150,7 @@ Reference< XPropertySet > SAL_CALL OTable::createDataDescriptor(  ) throw(Runtim
 Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     if(!m_pIndexes)
@@ -163,7 +163,7 @@ Reference< XNameAccess > SAL_CALL OTable::getIndexes(  ) throw(RuntimeException)
 void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
 }
@@ -172,7 +172,7 @@ void SAL_CALL OTable::rename( const ::rtl::OUString& newName ) throw(SQLExceptio
 void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
 }
@@ -180,7 +180,7 @@ void SAL_CALL OTable::alterColumnByName( const ::rtl::OUString& colName, const R
 void SAL_CALL OTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if (rBHelper.bDisposed)
+    if (OTableDescriptor_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
 }
