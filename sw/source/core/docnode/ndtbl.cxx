@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:11:43 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 09:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,10 @@
 
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
+#endif
+
+#ifndef _DOCSH_HXX
+#include "docsh.hxx"
 #endif
 
 #ifdef LINUX
@@ -3539,17 +3543,24 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         }
 
         SwDoc* pCpyDoc = (SwDoc*)pSrcTblNd->GetDoc();
+        SvEmbeddedObjectRef* pRefForDocSh;
         BOOL bDelCpyDoc = pCpyDoc == this;
 
         if( bDelCpyDoc )
         {
             // kopiere die Tabelle erstmal in ein temp. Doc
             pCpyDoc = new SwDoc;
+            pCpyDoc->AddLink();
+            pRefForDocSh = new SvEmbeddedObjectRef();
+            pCpyDoc->SetRefForDocShell( pRefForDocSh );
 
             SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
             if( !pSrcTblNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, TRUE, TRUE ))
             {
-                delete pCpyDoc;
+                delete pRefForDocSh;
+                if( pCpyDoc->RemoveLink() == 0 )
+                    delete pCpyDoc;
+
                 if( pUndo )
                 {
                     DoUndo( TRUE );
@@ -3559,6 +3570,8 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             }
             aPos.nNode -= 1;        // auf den EndNode der Tabelle
             pSrcTblNd = aPos.nNode.GetNode().FindTableNode();
+
+            pCpyDoc->SetRefForDocShell( NULL );
         }
 
         const SwStartNode* pSttNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
@@ -3596,7 +3609,11 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         }
 
         if( bDelCpyDoc )
-            delete pCpyDoc;
+        {
+            delete pRefForDocSh;
+            if( pCpyDoc->RemoveLink() == 0 )
+                delete pCpyDoc;
+        }
 
         if( pUndo )
         {
