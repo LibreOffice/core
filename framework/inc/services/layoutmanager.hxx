@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:50:16 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,7 @@ namespace framework
             void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
             sal_Bool    implts_showProgressBar();
             sal_Bool    implts_hideProgressBar();
+            void        implts_backupProgressBarWrapper();
 
             void    implts_setInplaceMenuBar(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
@@ -568,6 +569,7 @@ namespace framework
             css::uno::Reference< ::drafts::com::sun::star::ui::XUIElement >             m_xMenuBar;
             UIElement                                                                   m_aStatusBarElement;
             UIElement                                                                   m_aProgressBarElement;
+            com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement >    m_xProgressBarBackup;
             css::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager >      m_xModuleManager;
             css::uno::Reference< ::drafts::com::sun::star::ui::XUIElementFactory >      m_xUIElementFactoryManager;
             css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
