@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-05 12:03:43 $
+ *  last change: $Author: mba $ $Date: 2000-10-09 15:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,8 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         if ( !pFilter )
         {
             SvStorageRef aStor = aMedium.GetStorage();
-            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+            if ( aStor.Is() )
+                pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
             if ( pFilter )
                 nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
         }
