@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:30:12 $
+ *  last change: $Author: rt $ $Date: 2005-02-08 11:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1256,8 +1256,6 @@ namespace cppcanvas
                                                      rState.clipRect.Top(),
                                                      rState.clipRect.Right(),
                                                      rState.clipRect.Bottom() ) ) );
-
-                    rState.clipRect.SetEmpty();
                 }
 
                 rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
@@ -1272,6 +1270,10 @@ namespace cppcanvas
                 rState.clip = ::basegfx::tools::removeAllIntersections(rState.clip);
                 rState.clip = ::basegfx::tools::removeNeutralPolygons(rState.clip, sal_False);
             }
+
+            // by now, our clip resides in the OutDevState::clip
+            // poly-polygon.
+            rState.clipRect.SetEmpty();
 
             if( rState.clip.count() == 0 )
             {
@@ -1302,10 +1304,12 @@ namespace cppcanvas
                 (bEmptyClipRect && bEmptyClipPoly) )
             {
                 rState.clipRect = rClipRect;
+                rState.clip.clear();
             }
             else if( bEmptyClipPoly )
             {
                 rState.clipRect.Intersection( rClipRect );
+                rState.clip.clear();
             }
             else
             {
@@ -1325,6 +1329,7 @@ namespace cppcanvas
                                                  rClipRect.Right(),
                                                  rClipRect.Bottom() ) ) );
 
+                rState.clipRect.SetEmpty();
                 rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
                 aClipPoly = ::basegfx::tools::correctOrientations( aClipPoly );
 
