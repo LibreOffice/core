@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-27 06:58:20 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 07:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1312,18 +1312,29 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     break;
     */
                 }
-                switch ( eTextAnchor )
+                nTextFlags &= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT   | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT
+                            | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK;
+
+                // if there is a 100% usage of following attributes, the textbox can be aligned also in horizontal direction
+                if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT )
+                    eTHA = SDRTEXTHORZADJUST_LEFT;
+                else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
+                    eTHA = SDRTEXTHORZADJUST_RIGHT;
+                else
                 {
-                    case mso_anchorTopCentered :
-                    case mso_anchorMiddleCentered :
-                    case mso_anchorBottomCentered :
+                    switch ( eTextAnchor )
                     {
-                        // check if it is sensible to use the centered alignment
-                        sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                        if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                            eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
+                        case mso_anchorTopCentered :
+                        case mso_anchorMiddleCentered :
+                        case mso_anchorBottomCentered :
+                        {
+                            // check if it is sensible to use the centered alignment
+                            sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
+                            if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
+                                eTHA = SDRTEXTHORZADJUST_CENTER;    // the text has to be displayed using the full width;
+                        }
+                        break;
                     }
-                    break;
                 }
                 nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
             }
