@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:26:29 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,13 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
     }
     else if( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
     {
-        const Size aSize( S_THUMB, S_THUMB );
+        const Size aPrefSize( rGraphic.GetPrefSize() );
+        const double fFactor  = (double)aPrefSize.Width() / (double)aPrefSize.Height();
+        Size aSize( S_THUMB, S_THUMB );
+        if ( fFactor < 1.0 )
+            aSize.Width() = (sal_Int32)( S_THUMB * fFactor );
+        else
+            aSize.Height() = (sal_Int32)( S_THUMB / fFactor );
 
         aThumbBmp = rGraphic.GetBitmap( &aSize );
 
