@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepct.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:40:58 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <vcl/msgbox.hxx>
 #include <svtools/FilterConfigItem.hxx>
@@ -114,13 +115,14 @@ DlgExportEPCT::DlgExportEPCT( FltCallDialogParameter& rPara ) :
 
     switch ( rPara.eFieldUnit )
     {
-//      case FUNIT_NONE :
-//      case FUNIT_KM :
-//      case FUNIT_PERCENT :
-//      case FUNIT_CUSTOM :
-//      case FUNIT_MILE :
-//      case FUNIT_FOOT :
-//      case FUNIT_M :
+        case FUNIT_NONE :
+        case FUNIT_KM :
+        case FUNIT_PERCENT :
+        case FUNIT_CUSTOM :
+        case FUNIT_MILE :
+        case FUNIT_FOOT :
+        case FUNIT_M :
+            break;  // -Wall not handled.
         case FUNIT_MM :
         case FUNIT_CM :
         case FUNIT_TWIP :
