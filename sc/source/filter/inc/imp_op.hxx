@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:40:03 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,24 +151,24 @@ struct ExcelChartData
                             ~ExcelChartData();
 };
 
-class OutlineDataBuffer
+class XclImpOutlineDataBuffer
 {
 private:
-    typedef ::std::auto_ptr< OutlineBuffer >    OutlineBufferPtr;
-    typedef ::std::auto_ptr< ColRowSettings >   ColRowSettingsPtr;
+    typedef ::std::auto_ptr< XclImpOutlineBuffer >  XclImpOutlineBufferPtr;
+    typedef ::std::auto_ptr< XclImpColRowSettings > XclImpColRowSettingsPtr;
 
-    OutlineBufferPtr            pColOutlineBuff;
-    OutlineBufferPtr            pRowOutlineBuff;
-    ColRowSettingsPtr           pColRowBuff;
+    XclImpOutlineBufferPtr      pColOutlineBuff;
+    XclImpOutlineBufferPtr      pRowOutlineBuff;
+    XclImpColRowSettingsPtr     pColRowBuff;
     SCTAB nTab;
 
 public:
-    OutlineDataBuffer(RootData& rRootData, SCTAB nScTab);
-    ~OutlineDataBuffer();
+    XclImpOutlineDataBuffer(RootData& rRootData, SCTAB nScTab);
+    ~XclImpOutlineDataBuffer();
 
-    inline ColRowSettings* GetColRowBuff() const { return pColRowBuff.get(); }
-    inline OutlineBuffer* GetColOutline()  const { return pColOutlineBuff.get(); }
-    inline OutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff.get(); }
+    inline XclImpColRowSettings* GetColRowBuff() const { return pColRowBuff.get(); }
+    inline XclImpOutlineBuffer* GetColOutline()  const { return pColOutlineBuff.get(); }
+    inline XclImpOutlineBuffer* GetRowOutline()  const { return pRowOutlineBuff.get(); }
     void Apply(ScDocument* pD);
 };
 
@@ -190,12 +190,12 @@ protected:
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter
 
-    OutlineBuffer*          pColOutlineBuff;
-    OutlineBuffer*          pRowOutlineBuff;
-    ColRowSettings*         pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
+    XclImpOutlineBuffer*    pColOutlineBuff;
+    XclImpOutlineBuffer*    pRowOutlineBuff;
+    XclImpColRowSettings*   pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
 
-    typedef ScfDelList< OutlineDataBuffer >        OutlineListBuffer;
-    OutlineListBuffer*      pOutlineListBuffer;
+    typedef ScfDelList< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
+    XclImpOutlineListBuffer* pOutlineListBuffer;
 
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
@@ -274,54 +274,7 @@ protected:
     void                    ChartSelection( void );
     void                    ChartSeriesText( void );
     void                    ChartObjectLink( void );
-    void                    Chart3D( void );
     void                    ChartAi( void );
-    void                    ChartAlruns( void );
-    void                    ChartArea( void );
-    void                    ChartAreaformat( void );
-    void                    ChartAttachedlabel( void );
-    void                    ChartAxesused( void );
-    void                    ChartAxis( void );
-    void                    ChartAxislineformat( void );
-    void                    ChartAxisparent( void );
-    void                    ChartBar( void );
-    void                    ChartCatserrange( void );
-    void                    ChartChart( void );
-    void                    ChartChartformat( void );
-    void                    ChartChartline( void );
-    void                    ChartDataformat( void );
-    void                    ChartDefaulttext( void );
-    void                    ChartDropbar( void );
-    void                    ChartFontx( void );
-    void                    ChartFrame( void );
-    void                    ChartIfmt( void );
-    void                    ChartLegend( void );
-    void                    ChartLegendxn( void );
-    void                    ChartLine( void );
-    void                    ChartLineform( void );
-    void                    ChartMarkerformat( void );
-//      void                ChartObjectlink( void );
-    void                    ChartPicf( void );
-    void                    ChartPie( void );
-    void                    ChartPieformat( void );
-    void                    ChartPlotarea( void );
-    void                    ChartPos( void );
-    void                    ChartRadar( void );
-    void                    ChartRadararea( void );
-    void                    ChartSbaseref( void );
-    void                    ChartSerauxerrbar( void );
-    void                    ChartSerauxtrend( void );
-    void                    ChartSerfmt( void );
-    void                    ChartSeries( void );
-    void                    ChartSerieslist( void );
-    void                    ChartSeriestext( void );
-    void                    ChartSerparent( void );
-    void                    ChartSertocrt( void );
-    void                    ChartShtprops( void );
-    void                    ChartSurface( void );
-    void                    ChartText( void );
-    void                    ChartTick( void );
-    void                    ChartValuerange( void );
 
     // ---------------------------------------------------------------
     void                    Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
