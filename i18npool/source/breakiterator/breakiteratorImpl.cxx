@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 16:55:00 $
+ *  last change: $Author: er $ $Date: 2002-03-27 12:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ static ScriptTypeList typeList[] = {
     { UnicodeScript_kBopomofoExtended,      ScriptType::ASIAN },        // 66,
     { UnicodeScript_kEnclosedCJKLetterMonth,    ScriptType::ASIAN },        // 67,
     { UnicodeScript_kCJKCompatibility,      ScriptType::ASIAN },        // 68,
-    { UnicodeScript_kCJKUnifiedIdeographsExtensionA, ScriptType::ASIAN },   // 69,
+    { UnicodeScript_k_CJKUnifiedIdeographsExtensionA, ScriptType::ASIAN },  // 69,
     { UnicodeScript_kCJKUnifiedIdeograph,   ScriptType::ASIAN },        // 70,
     { UnicodeScript_kYiSyllables,       ScriptType::ASIAN },        // 71,
     { UnicodeScript_kYiRadicals,        ScriptType::ASIAN },        // 72,
