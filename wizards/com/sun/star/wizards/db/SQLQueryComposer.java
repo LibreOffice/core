@@ -2,9 +2,9 @@
 *
 *  $RCSfile: SQLQueryComposer.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: obo $ $Date: 2005-01-06 09:34:14 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:54:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,22 +57,29 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import java.util.Vector;
 
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.sdb.XColumn;
 import com.sun.star.sdb.XSQLQueryComposer;
 import com.sun.star.sdb.XSQLQueryComposerFactory;
+import com.sun.star.sdb.XSingleSelectQueryComposer;
+import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.ui.dialogs.XExecutableDialog;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.sdb.*;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XInitialization;
 import com.sun.star.awt.XWindow;
 
 import com.sun.star.wizards.common.*;
@@ -83,15 +90,11 @@ public class SQLQueryComposer {
     XSQLQueryComposerFactory xSQLComposerFactory;
     XSQLQueryComposer xSQLQueryComposer;
     QueryMetaData CurDBMetaData;
-    //    String Command;
     String selectclause;
     String fromclause;
-    String sIdentifierQuoteString = "";
     public XSingleSelectQueryAnalyzer xQueryAnalyzer;
     Vector composedCommandNames = new Vector(1);
     public XSingleSelectQueryComposer xQueryComposer;
-    String sCatalogSep;
-    boolean bCatalogAtStart;
     XMultiServiceFactory xMSF;
 
     public SQLQueryComposer(QueryMetaData _CurDBMetaData) {
@@ -103,9 +106,6 @@ public class SQLQueryComposer {
             xQueryComposer = (XSingleSelectQueryComposer) UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, xQueryAnalyzer);
             xSQLComposerFactory = (XSQLQueryComposerFactory) UnoRuntime.queryInterface(XSQLQueryComposerFactory.class, CurDBMetaData.DBConnection);
             XSQLQueryComposer xSQLComposer = xSQLComposerFactory.createQueryComposer();
-            sIdentifierQuoteString = CurDBMetaData.xDBMetaData.getIdentifierQuoteString();
-            sCatalogSep = CurDBMetaData.xDBMetaData.getCatalogSeparator();
-            bCatalogAtStart = CurDBMetaData.xDBMetaData.isCatalogAtStart();
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -121,17 +121,20 @@ public class SQLQueryComposer {
         return true;
     }
 
-    public void appendSelectClause() throws SQLException {
+
+    public void appendSelectClause(boolean _baddAliasFieldNames) throws SQLException {
         selectclause = "SELECT ";
         for (int i = 0; i < CurDBMetaData.FieldNames.length; i++) {
             if (addtoSelectClause(CurDBMetaData.FieldNames[i])) {
                 int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.FieldNames[i]);
                 if (iAggregate > -1) {
                     selectclause += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
-                    selectclause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
+                    if (_baddAliasFieldNames)
+                        selectclause += getAliasFieldNameClause(CurDBMetaData.AggregateFieldNames[iAggregate][0]);
                 } else {
                     selectclause += getComposedAliasFieldName(CurDBMetaData.FieldNames[i]);
-                    selectclause += getAliasFieldNameClause(CurDBMetaData.FieldNames[i]);
+                    if (_baddAliasFieldNames)
+                        selectclause += getAliasFieldNameClause(CurDBMetaData.FieldNames[i]);
                 }
                 selectclause += ", ";
             }
@@ -139,10 +142,11 @@ public class SQLQueryComposer {
         selectclause = selectclause.substring(0, selectclause.length() - 2);
     }
 
+
     public String getAliasFieldNameClause(String _FieldName) {
         String FieldTitle = CurDBMetaData.getFieldTitle(_FieldName);
         if (!FieldTitle.equals(_FieldName))
-            return " AS " + quoteName(FieldTitle);
+            return " AS " + CommandName.quoteName(FieldTitle, CurDBMetaData.getIdentifierQuote());
         else
             return "";
     }
@@ -159,8 +163,36 @@ public class SQLQueryComposer {
         }
     }
 
+
+    public void prependSortingCriteria() throws SQLException{
+        XIndexAccess xColumnIndexAccess = xQueryAnalyzer.getOrderColumns();
+        xQueryComposer.setOrder("");
+        for (int i = 0; i < CurDBMetaData.SortFieldNames.length; i++)
+            appendSortingCriterion(i);
+        for (int i = 0; i < xColumnIndexAccess.getCount(); i++){
+            try {
+                XPropertySet xColumnPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
+                String sName = (String) xColumnPropertySet.getPropertyValue("Name");
+                if (JavaTools.FieldInTable(CurDBMetaData.SortFieldNames, sName) == -1){
+                    boolean bascend = AnyConverter.toBoolean(xColumnPropertySet.getPropertyValue("IsAscending"));
+                    xQueryComposer.appendOrderByColumn(xColumnPropertySet, bascend);
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+
+    private void appendSortingCriterion(int _SortIndex ) throws SQLException{
+        XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.SortFieldNames[_SortIndex][0]);
+        boolean bascend = (CurDBMetaData.SortFieldNames[_SortIndex][1] == "ASC");
+        xQueryComposer.appendOrderByColumn(xColumn, bascend);
+    }
+
+
     public void appendSortingcriteria() throws SQLException {
         String sOrder = "";
+        xQueryComposer.setOrder("");
         for (int i = 0; i < CurDBMetaData.SortFieldNames.length; i++) {
             int iAggregate = CurDBMetaData.getAggregateIndex(CurDBMetaData.SortFieldNames[i][0]);
             if (iAggregate > -1){
@@ -171,11 +203,8 @@ public class SQLQueryComposer {
                 sOrder += " " + CurDBMetaData.SortFieldNames[i][1];
                 xQueryComposer.setOrder(sOrder);
             }
-            else {
-                XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.SortFieldNames[i][0]);
-                boolean bascend = (CurDBMetaData.SortFieldNames[i][1] == "ASC");
-                xQueryComposer.appendOrderByColumn(xColumn, bascend);
-            }
+            else
+                appendSortingCriterion(i);
             sOrder = xQueryAnalyzer.getOrder();
         }
     }
@@ -205,25 +234,25 @@ public class SQLQueryComposer {
         return xQueryAnalyzer.getQuery();
     }
 
-    // TODO: this method should not be called when it is not really necessary. At least this is for the execution of the query
-    public boolean setQueryCommand(String QueryName, XWindow _xParentWindow, boolean _bincludeGrouping) {
+
+    public boolean setQueryCommand(String QueryName, XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames) {
         try {
             String s;
             CurDBMetaData.setfieldtitles();
             fromclause = "FROM";
             String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
-            ComposedCommandName curComposedCommandName;
-            for (int i = 0; i < sCommandNames.length; i++) {
-                curComposedCommandName = new ComposedCommandName(sCommandNames[i]);
-                fromclause += " " + curComposedCommandName.sComposedName;
+            for (int i = 0; i < sCommandNames.length; i++){
+                CommandName curCommandName = new CommandName(CurDBMetaData, sCommandNames[i]); //(setComposedCommandName)
+                curCommandName.setAliasName(getuniqueAliasName(curCommandName.getTableName()));
+                fromclause += " " + curCommandName.getComposedName() + " " + quoteName(curCommandName.getAliasName());
                 if (i < sCommandNames.length - 1)
                     fromclause += ", ";
-                composedCommandNames.add(curComposedCommandName);
+                composedCommandNames.add(curCommandName);
             }
-            appendSelectClause();
+            appendSelectClause(_baddAliasFieldNames);
             String queryclause = selectclause + " " + fromclause;
             xQueryAnalyzer.setQuery(queryclause);
-            if (CurDBMetaData.FilterConditions != null) {
+            if (CurDBMetaData.FilterConditions != null){
                 if (CurDBMetaData.FilterConditions.length > 0) {
                     CurDBMetaData.FilterConditions = replaceConditionsByAlias(CurDBMetaData.FilterConditions);
                     xQueryComposer.setStructuredFilter(CurDBMetaData.FilterConditions);
@@ -235,9 +264,7 @@ public class SQLQueryComposer {
                 if (CurDBMetaData.GroupByFilterConditions.length > 0)
                     xQueryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
             }
-            s = xQueryAnalyzer.getQuery();
             appendSortingcriteria();
-            s = xQueryAnalyzer.getQuery();
             return true;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -246,131 +273,62 @@ public class SQLQueryComposer {
         }
     }
 
+
     private String getComposedAliasFieldName(String _fieldname){
         FieldColumn CurFieldColumn = CurDBMetaData.getFieldColumnByDisplayName(_fieldname);
-        ComposedCommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
-        String curAliasName = curComposedCommandName.AliasName;
+        CommandName curComposedCommandName = getComposedCommandByDisplayName(CurFieldColumn.getCommandName());
+        String curAliasName = curComposedCommandName.getAliasName();
         return quoteName(curAliasName) + "." + quoteName(CurFieldColumn.FieldName);
     }
 
 
-    private ComposedCommandName getComposedCommandByAliasName(String _AliasName) {
+    private CommandName getComposedCommandByAliasName(String _AliasName) {
         if (composedCommandNames != null) {
-            ComposedCommandName curComposedName;
+            CommandName curComposedName;
             for (int i = 0; i < composedCommandNames.size(); i++) {
-                curComposedName = (ComposedCommandName) composedCommandNames.elementAt(i);
-                if (curComposedName.AliasName.equals(_AliasName))
+                curComposedName = (CommandName) composedCommandNames.elementAt(i);
+                if (curComposedName.getAliasName().equals(_AliasName))
                     return curComposedName;
             }
         }
         return null;
     }
 
-    private ComposedCommandName getComposedCommandByDisplayName(String _DisplayName) {
+
+    public CommandName getComposedCommandByDisplayName(String _DisplayName) {
         if (composedCommandNames != null) {
-            ComposedCommandName curComposedName;
+            CommandName curComposedName;
             for (int i = 0; i < composedCommandNames.size(); i++) {
-                curComposedName = (ComposedCommandName) composedCommandNames.elementAt(i);
-                if (curComposedName.DisplayName.equals(_DisplayName))
+                curComposedName = (CommandName) composedCommandNames.elementAt(i);
+                if (curComposedName.getDisplayName().equals(_DisplayName))
                     return curComposedName;
             }
         }
         return null;
     }
 
-    private String quoteName(String sName) {
-        if (sName == null)
-            sName = "";
-        String ReturnQuote = "";
-        ReturnQuote = sIdentifierQuoteString + sName + sIdentifierQuoteString;
-        return ReturnQuote;
+
+    public String getuniqueAliasName(String _TableName) {
+        int a = 0;
+        String AliasName = "";
+        boolean bAliasNameexists = true;
+        String locAliasName = _TableName;
+        while (bAliasNameexists == true) {
+            bAliasNameexists = (getComposedCommandByAliasName(locAliasName) != null);
+            if (bAliasNameexists) {
+                a++;
+                locAliasName = _TableName + "_" + String.valueOf(a);
+            } else
+                AliasName = locAliasName;
+        }
+        return AliasName;
     }
 
-    /*    public boolean addtoSelectClause(String CurFieldName){
-        boolean bAddToClause = true;
-        try{
-        bAddToClause = true;
-    /*        if (xDBMetaData.supportsGroupBy() == true)
-                // if xMetaData.supportsGroupByUnrelated() // dann Groupby Feldnamen nicht ins select clause
-            bAddToClause = (Tools.FieldInList(GroupFieldNames, CurFieldName) < 0) && (xDBMetaData.supportsGroupByUnrelated() == false);
-            if (bAddToClause == false)
-                bAddToClause = (Tools.FieldInTable(SortFieldNames, CurFieldName) < 0) && (xDBMetaData.supportsOrderByUnrelated() == false); */
-    //    }
-    /*    catch(Exception exception){
-            exception.printStackTrace(System.out);
-        bAddToClause = false;
-        }
-        return bAddToClause;
-        }*/
 
-    protected class ComposedCommandName {
-        public String CatalogName;
-        public String SchemaName;
-        public String TableName;
-        public String AliasName;
-        public String DisplayName;
-        public String sComposedName = "";
-
-        public ComposedCommandName(String _DisplayName) {
-            try {
-                this.DisplayName = _DisplayName;
-                int iIndex;
-                if (CurDBMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true) { // ...dann Catalog mit in TableName
-                    iIndex = _DisplayName.indexOf(sCatalogSep);
-                    if (iIndex >= 0) {
-                        if (bCatalogAtStart == true) {
-                            CatalogName = _DisplayName.substring(0, iIndex);
-                            _DisplayName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                        } else {
-                            CatalogName = _DisplayName.substring(iIndex + 1, _DisplayName.length());
-                            _DisplayName = _DisplayName.substring(0, iIndex);
-                        }
-                    }
-                }
-                if (CurDBMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true) {
-                    String[] NameList;
-                    NameList = new String[0];
-                    NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
-                    SchemaName = NameList[0];
-                    TableName = NameList[1]; // Todo: Was ist mit diesem Fall: CatalogSep = "." und CatalogName = ""
-                } else
-                    TableName = _DisplayName;
-                setComposedCommandName();
-            } catch (Exception exception) {
-                exception.printStackTrace(System.out);
-            }
-        }
-
-        public void setuniqueAliasName(String _TableName) {
-            int a = 0;
-            boolean bAliasNameexists = true;
-            String locAliasName = _TableName;
-            while (bAliasNameexists == true) {
-                bAliasNameexists = (getComposedCommandByAliasName(locAliasName) != null);
-                if (bAliasNameexists) {
-                    a++;
-                    locAliasName = _TableName + "_" + String.valueOf(a);
-                } else
-                    AliasName = locAliasName;
-            }
-        }
-
-        public void setComposedCommandName() {
-            if (CatalogName != null)
-                if (bCatalogAtStart == true)
-                    sComposedName = quoteName(CatalogName) + sCatalogSep;
-            if (SchemaName != null)
-                sComposedName += quoteName(SchemaName) + ".";
-            if (sComposedName == "")
-                sComposedName = quoteName(TableName);
-            else
-                sComposedName += quoteName(TableName);
-            if ((bCatalogAtStart == false) && (CatalogName != null))
-                sComposedName += sCatalogSep + quoteName(CatalogName);
-            setuniqueAliasName(TableName);
-            sComposedName += " " + quoteName(AliasName);
-        }
+    private String quoteName(String _sname){
+        return CommandName.quoteName(_sname, CurDBMetaData.getIdentifierQuote());
     }
+
 
     public void displaySQLErrorDialog(Exception _exception, XWindow _xParentWindow) {
         try {
@@ -378,8 +336,7 @@ public class SQLQueryComposer {
             XInitialization xInitialize = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
             XExecutableDialog xExecute = (XExecutableDialog) UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
             PropertyValue[] rDispatchArguments = new PropertyValue[3];
-            //TODO replace by resource
-            rDispatchArguments[0] = Properties.createProperty("Title", Configuration.getProductName(CurDBMetaData.xMSF) + "Base");
+            rDispatchArguments[0] = Properties.createProperty("Title", Configuration.getProductName(CurDBMetaData.xMSF) + " Base");
             rDispatchArguments[1] = Properties.createProperty("ParentWindow", _xParentWindow);
             rDispatchArguments[2] = Properties.createProperty("SQLException", _exception);
             xInitialize.initialize(rDispatchArguments);
@@ -389,5 +346,4 @@ public class SQLQueryComposer {
             typeexception.printStackTrace(System.out);
         }
     }
-
 }
