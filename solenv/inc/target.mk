@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-10 16:21:24 $
+#   last change: $Author: rt $ $Date: 2001-05-15 10:05:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2580,7 +2580,6 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .ENDIF
 
 .INCLUDE : tg_jar.mk
-.INCLUDE : tg_jarsign.mk
 
 # ----------------------------------
 # - NOPCH - files ohne PCH -
