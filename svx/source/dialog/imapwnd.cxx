@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:33:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -718,13 +718,13 @@ void IMapWindow::Command(const CommandEvent& rCEvt)
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu           aMenu( SVX_RES( RID_SVXMN_IMAP ) );
-        const SdrMarkList&  rMarkList = pView->GetMarkList();
+        const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
         ULONG               nMarked = rMarkList.GetMarkCount();
 
         aMenu.EnableItem( MN_URL, FALSE );
         aMenu.EnableItem( MN_ACTIVATE, FALSE );
         aMenu.EnableItem( MN_MACRO, FALSE );
-        aMenu.EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->GetMarkedObjCount() );
+        aMenu.EnableItem( MN_MARK_ALL, pModel->GetPage( 0 )->GetObjCount() != pView->GetMarkedObjectCount() );
 
         if ( !nMarked )
         {
@@ -1131,7 +1131,7 @@ void IMapWindow::KeyInput( const KeyEvent& rKEvt )
                 pView->BrkAction();
                 return;
             }
-            else if ( pView->HasMarkedObj() )
+            else if ( pView->AreObjectsMarked() )
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -1171,7 +1171,7 @@ void IMapWindow::StartPolyEdit()
 {
     GrabFocus();
 
-    if( !pView->HasMarkedObj() )
+    if( !pView->AreObjectsMarked() )
         pView->MarkNextObj(TRUE);
 
     const SdrHdlList& rHdlList = pView->GetHdlList();
