@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:25:18 $
+ *  last change: $Author: aw $ $Date: 2001-02-06 13:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                             mnTypeId = 4; // AUTOLAYOUT_TEXTCHART
                         }
                         else if(pObj2->GetName().equals(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("chart"))))
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("graphic"))))
                         {
                             mnTypeId = 6; // AUTOLAYOUT_TEXTCLIP
                         }
