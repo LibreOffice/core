@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:29 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "CommonConverters.hxx"
 #include "VLegendSymbolFactory.hxx"
 #include "chartview/ObjectIdentifier.hxx"
+#include "LayoutHelper.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
@@ -92,7 +93,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XANCHOREDOBJECT_HPP_
+#include <drafts/com/sun/star/layout/XAnchoredObject.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
 
 // header for class Matrix3D
 #ifndef _B2D_MATRIX3D_HXX
@@ -518,6 +524,25 @@ void SAL_CALL VLegend::init(
 
 // ----------------------------------------
 
+// static
+bool VLegend::isVisible( const uno::Reference< chart2::XLegend > & xLegend )
+{
+    sal_Bool bShow = sal_False;
+    try
+    {
+        uno::Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
+        xLegendProp->getPropertyValue( C2U( "Show" )) >>= bShow;
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return bShow;
+}
+
+// ----------------------------------------
+
 void VLegend::createShapes(
     const awt::Size & rAvailableSpace )
 {
@@ -627,29 +652,70 @@ void VLegend::createShapes(
 
 // ----------------------------------------
 
-void VLegend::changePosition(
-    const awt::Point & rPos,
-    const layout::Alignment& rAlignment )
+void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
 {
     if(! m_xShape.is())
         return;
 
-    m_aBoundRect.X = rPos.X;
-    m_aBoundRect.Y = rPos.Y;
-    awt::Point aUpperLeft( rPos );
-    aUpperLeft.X -= static_cast< sal_Int32 >(
-        ::rtl::math::round( rAlignment.Primary * static_cast< double >( m_aBoundRect.Width )));
-    aUpperLeft.Y -= static_cast< sal_Int32 >(
-        ::rtl::math::round( rAlignment.Secondary * static_cast< double >( m_aBoundRect.Height )));
+    try
+    {
+        // determine position and alignment depending on anchor
+        uno::Reference< layout::XAnchoredObject > xAnchObj( m_xLegend, uno::UNO_QUERY_THROW );
+        layout::AnchorPoint aAnchor( xAnchObj->getAnchor());
+        layout::RelativePoint aOffset( xAnchObj->getRelativePosition());
 
-    m_xShape->setPosition( aUpperLeft );
-}
+        helper::LayoutHelper::rotatePoint( aAnchor.EscapeDirection, aOffset.Primary, aOffset.Secondary );
 
-// ----------------------------------------
+        awt::Point aPos( static_cast< sal_Int32 >(
+                             rOutAvailableSpace.X + rOutAvailableSpace.Width *
+                             (aAnchor.Alignment.Primary + aOffset.Primary)),
+                         static_cast< sal_Int32 >(
+                             rOutAvailableSpace.Y + rOutAvailableSpace.Height *
+                             (aAnchor.Alignment.Secondary - aOffset.Secondary)));
+        layout::Alignment aAlignment( helper::LayoutHelper::getStandardAlignmentByAngle(
+                                          aAnchor.EscapeDirection ));
 
-awt::Size VLegend::getSize() const
-{
-    return awt::Size( m_aBoundRect.Width, m_aBoundRect.Height );
+        // set position according to Alignment
+        m_aBoundRect.X = aPos.X;
+        m_aBoundRect.Y = aPos.Y;
+        awt::Point aUpperLeft( aPos );
+        aUpperLeft.X -= static_cast< sal_Int32 >(
+            ::rtl::math::round( aAlignment.Primary * static_cast< double >( m_aBoundRect.Width )));
+        aUpperLeft.Y -= static_cast< sal_Int32 >(
+            ::rtl::math::round( aAlignment.Secondary * static_cast< double >( m_aBoundRect.Height )));
+
+        m_xShape->setPosition( aUpperLeft );
+
+        // adapt rOutAvailableSpace if LegendPosition is not CUSTOM
+        chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
+        uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
+        xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
+
+        if( ePos == chart2::LegendPosition_LINE_START ||
+            ePos == chart2::LegendPosition_LINE_END )
+        {
+            sal_Int32 nExtent = static_cast< sal_Int32 >(
+                (1.0 + fabs(aOffset.Primary)) *
+                static_cast< double >( m_aBoundRect.Width ));
+            rOutAvailableSpace.Width -= nExtent;
+            if( ePos == chart2::LegendPosition_LINE_START )
+                rOutAvailableSpace.X += nExtent;
+        }
+        else if( ePos == chart2::LegendPosition_PAGE_START ||
+                 ePos == chart2::LegendPosition_PAGE_END )
+        {
+            sal_Int32 nExtent = static_cast< sal_Int32 >(
+                (1.0 + fabs(aOffset.Secondary)) *
+                static_cast< double >( m_aBoundRect.Height ));
+            rOutAvailableSpace.Height -= nExtent;
+            if( ePos == chart2::LegendPosition_PAGE_START )
+                rOutAvailableSpace.Y += nExtent;
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 //.............................................................................

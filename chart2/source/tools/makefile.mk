@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+#   last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=	\
                 $(SLO)$/CommonConverters.obj \
                 $(SLO)$/ContextHelper.obj \
                 $(SLO)$/ImplOPropertySet.obj \
+                $(SLO)$/LayoutHelper.obj \
                 $(SLO)$/OChartElementContainerHelper.obj \
                 $(SLO)$/OEnumeration.obj \
                 $(SLO)$/OIndexContainer.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 11:29:10 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,17 @@ public:
 
     void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace );
 
-    void changePosition( const ::com::sun::star::awt::Point & rPos,
-                         const ::drafts::com::sun::star::layout::Alignment& rAlignment );
+    /** Sets the position according to its internal anchor.
 
-    ::com::sun::star::awt::Size getSize() const;
+        @param rOutAvailableSpace
+            is modified by the method, if the legend is in a standard position,
+            such that the space allocated by the legend is removed from it.
+     */
+    void changePosition( ::com::sun::star::awt::Rectangle & rOutAvailableSpace );
+
+    static bool isVisible(
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XLegend > & xLegend );
 
 private:
     ::com::sun::star::uno::Reference<

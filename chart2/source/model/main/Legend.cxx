@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-16 14:41:42 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 09:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "CharacterProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "LegendHelper.hxx"
+#include "LayoutDefaults.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -191,8 +192,9 @@ namespace chart
 
 Legend::Legend( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-    m_aIdentifier( LegendHelper::getIdentifierForLegend() )
+        m_aIdentifier( LegendHelper::getIdentifierForLegend() )
 {
+    setAnchorAndRelposFromProperty( GetDefaultValue( PROP_LEGEND_POSITION ));
 }
 
 Legend::~Legend()
@@ -237,6 +239,71 @@ uno::Sequence< uno::Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntr
     throw (uno::RuntimeException)
 {
     return m_aIdentifier;
+}
+
+// ____ XAnchoredObject ____
+void SAL_CALL Legend::setAnchor( const layout::AnchorPoint& aAnchor )
+    throw (uno::RuntimeException)
+{
+    m_aAnchor = aAnchor;
+}
+
+layout::AnchorPoint SAL_CALL Legend::getAnchor()
+    throw (uno::RuntimeException)
+{
+    return m_aAnchor;
+}
+
+void SAL_CALL Legend::setRelativePosition( const layout::RelativePoint& aPosition )
+    throw (uno::RuntimeException)
+{
+    m_aRelativePosition = aPosition;
+}
+
+layout::RelativePoint SAL_CALL Legend::getRelativePosition()
+    throw (uno::RuntimeException)
+{
+    return m_aRelativePosition;
+}
+
+// private
+void Legend::setAnchorAndRelposFromProperty( const uno::Any & rValue )
+{
+    chart2::LegendPosition ePos;
+    if( rValue >>= ePos )
+    {
+        m_aAnchor.AnchorHolder = uno::Reference< layout::XAnchor >();
+
+        // shift legend about 2% into the primary direction
+        m_aRelativePosition.Primary   = 0.02;
+        m_aRelativePosition.Secondary = 0.0;
+
+        switch( ePos )
+        {
+            case chart2::LegendPosition_LINE_START:
+                m_aAnchor.Alignment = ::layout_defaults::const_aLineStart;
+                m_aAnchor.EscapeDirection = 0.0;
+                break;
+            case chart2::LegendPosition_LINE_END:
+                m_aAnchor.Alignment = ::layout_defaults::const_aLineEnd;
+                m_aAnchor.EscapeDirection = 180.0;
+                break;
+            case chart2::LegendPosition_PAGE_START:
+                m_aAnchor.Alignment = ::layout_defaults::const_aPageStart;
+                m_aAnchor.EscapeDirection = 270.0;
+                break;
+            case chart2::LegendPosition_PAGE_END:
+                m_aAnchor.Alignment = ::layout_defaults::const_aPageEnd;
+                m_aAnchor.EscapeDirection = 90.0;
+                break;
+
+            case chart2::LegendPosition_CUSTOM:
+            // to avoid warning
+            case chart2::LegendPosition_MAKE_FIXED_SIZE:
+                // nothing to be set
+                break;
+        }
+    }
 }
 
 // ================================================================================
@@ -307,6 +374,16 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
+}
+
+void SAL_CALL Legend::setFastPropertyValue_NoBroadcast
+    ( sal_Int32 nHandle, const uno::Any& rValue )
+    throw (uno::Exception)
+{
+    if( nHandle == PROP_LEGEND_POSITION )
+        setAnchorAndRelposFromProperty( rValue );
+
+    OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

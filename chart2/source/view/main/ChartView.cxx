@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:49:39 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "TitleHelper.hxx"
 #include "LegendHelper.hxx"
 #include "VLegend.hxx"
-#include "LayoutDefaults.hxx"
 #include "PropertyMapper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
@@ -104,9 +103,6 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
-#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
@@ -117,6 +113,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
 using namespace ::drafts::com::sun::star::chart2;
 
 //static
@@ -608,80 +605,12 @@ void createLegend( const uno::Reference< XLegend > & xLegend
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
     )
 {
-    if( xLegend.is())
+    if( VLegend::isVisible( xLegend ))
     {
-        LegendPosition ePos = LegendPosition_LINE_END;
-        sal_Bool bShow = sal_True;
-        uno::Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY );
-        if( xLegendProp.is())
-        {
-            try
-            {
-                xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
-                xLegendProp->getPropertyValue( C2U( "Show" )) >>= bShow;
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
-
-        if( ! bShow )
-            return;
-
         VLegend aVLegend( xLegend );
         aVLegend.init( xPageShapes, xShapeFactory );
         aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
-
-        const sal_Int32 nEdgeOffset = 300;
-
-        switch( ePos )
-        {
-            case LegendPosition_LINE_END:
-                // legend is anchored to (right/middle) position
-                // todo: honor Orientation
-                aVLegend.changePosition(
-                    awt::Point( rOutSpaceLeft.X + rOutSpaceLeft.Width - nEdgeOffset,
-                                rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)),
-                    ::layout_defaults::const_aLineEnd );
-                rOutSpaceLeft.Width -= (aVLegend.getSize().Width + nEdgeOffset);
-                break;
-
-            case LegendPosition_LINE_START:
-                // legend is anchored to (left/middle) position
-                // todo: honor Orientation
-                aVLegend.changePosition(
-                    awt::Point( rOutSpaceLeft.X + nEdgeOffset,
-                                rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)),
-                    ::layout_defaults::const_aLineStart );
-                rOutSpaceLeft.Width -= (aVLegend.getSize().Width + nEdgeOffset);
-                rOutSpaceLeft.X += aVLegend.getSize().Width + nEdgeOffset;
-                break;
-
-            case LegendPosition_PAGE_START:
-                // legend is anchored to (middle/top) position
-                // todo: honor Orientation
-                aVLegend.changePosition(
-                    awt::Point( rOutSpaceLeft.X + (rOutSpaceLeft.Width / 2),
-                                rOutSpaceLeft.Y + nEdgeOffset ),
-                    ::layout_defaults::const_aPageStart );
-                rOutSpaceLeft.Height -= (aVLegend.getSize().Height + nEdgeOffset);
-                rOutSpaceLeft.Y += aVLegend.getSize().Height + nEdgeOffset;
-                break;
-
-            case LegendPosition_PAGE_END:
-                // legend is anchored to (middle/bottom) position
-                // todo: honor Orientation
-                aVLegend.changePosition(
-                    awt::Point( rOutSpaceLeft.X + (rOutSpaceLeft.Width / 2),
-                                rOutSpaceLeft.Y + rOutSpaceLeft.Height - nEdgeOffset),
-                    ::layout_defaults::const_aPageEnd );
-                rOutSpaceLeft.Height -= (aVLegend.getSize().Height + nEdgeOffset);
-                break;
-
-            default:
-                break;
-        }
+        aVLegend.changePosition( rOutSpaceLeft );
     }
 }
 

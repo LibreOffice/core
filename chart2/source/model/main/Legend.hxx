@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 09:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
 #include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XLAYOUTELEMENT_HPP_
-#include <drafts/com/sun/star/layout/XLayoutElement.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_XANCHOREDOBJECT_HPP_
+#include <drafts/com/sun/star/layout/XAnchoredObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -101,7 +101,7 @@ typedef ::cppu::WeakImplHelper4<
     ::drafts::com::sun::star::chart2::XLegend,
     ::com::sun::star::lang::XServiceInfo,
     ::drafts::com::sun::star::chart2::XIdentifiable,
-    ::drafts::com::sun::star::layout::XLayoutElement >
+    ::drafts::com::sun::star::layout::XAnchoredObject >
     Legend_Base;
 }
 
@@ -146,6 +146,11 @@ protected:
 //           const ::com::sun::star::uno::Any& rValue )
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast
+        ( sal_Int32 nHandle,
+          const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::uno::Exception);
+
     // ____ XLegend ____
     virtual void SAL_CALL registerEntry( const ::com::sun::star::uno::Reference<
                                          ::drafts::com::sun::star::chart2::XLegendEntry >& xEntry )
@@ -164,16 +169,27 @@ protected:
     virtual ::rtl::OUString SAL_CALL getIdentifier()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XLayoutElement ____
-    // (empty)
+    // ____ XAnchoredObject ____
+    virtual void SAL_CALL setAnchor( const ::drafts::com::sun::star::layout::AnchorPoint& aAnchor )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::drafts::com::sun::star::layout::AnchorPoint SAL_CALL getAnchor()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRelativePosition( const ::drafts::com::sun::star::layout::RelativePoint& aPosition )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::drafts::com::sun::star::layout::RelativePoint SAL_CALL getRelativePosition()
+        throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    void setAnchorAndRelposFromProperty( const ::com::sun::star::uno::Any & rValue );
+
     typedef ::std::vector<
         ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XLegendEntry > > tLegendEntries;
 
-    tLegendEntries           m_aLegendEntries;
-    ::rtl::OUString          m_aIdentifier;
+    tLegendEntries                                    m_aLegendEntries;
+    ::rtl::OUString                                   m_aIdentifier;
+    ::drafts::com::sun::star::layout::AnchorPoint     m_aAnchor;
+    ::drafts::com::sun::star::layout::RelativePoint   m_aRelativePosition;
 };
 
 } //  namespace chart
