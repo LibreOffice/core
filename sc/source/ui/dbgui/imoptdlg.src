@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 21:56:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ chinese_traditional ] = "€ε¦r€ΐΉj²Ε(~T)";
         Text[ arabic ] = "έΗΥα ΗαδΥ";
         Text[ greek ] = "Διαχωριστικό κειμένου";
-        Text[ korean ] = "ΕΨ½ΊΖ® ±ΈΊΠ ±βΘ£(~T)";
+        Text[ korean ] = "ΕΨ½ΊΖ® ΊΠΈ®ΐΪ(~T)";
         Text[ turkish ] = "~Metin ayύrma iώa.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~eparador de texto";
@@ -255,6 +255,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Importar archivo";
 };
+
 
 
 
