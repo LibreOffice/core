@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertbig5hkscs.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:39:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ sal_Size ImplConvertBig5HkscsToUnicode(ImplTextConverterData const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         sal_Bool bUndefined = sal_True;
-        sal_uInt32 nChar = *((sal_uChar const *) pSrcBuf)++;
+        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         if (nRow == 0)
             if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
