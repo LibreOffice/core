@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-14 12:42:25 $
+ *  last change: $Author: mba $ $Date: 2001-03-16 13:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2698,9 +2698,11 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 
             if ( bMatches && aType.getLength() )
             {
+/*
                 ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
                 aDataFlavor.MimeType = aMimeType;
                 nClipId = SotExchange::GetFormat( aDataFlavor );
+ */
                 if ( !nClipId && aHumanName.getLength() )
                 {
                     // old formats are found using HumanPresentableName
