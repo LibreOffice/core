@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:47:11 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 11:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
             aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OutlinerShape") );
             break;
         case PRESOBJ_TEXT:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TextShape") );
+            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SubtitleShape") );
             break;
         case PRESOBJ_GRAPHIC:
             aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape") );
@@ -1269,7 +1269,7 @@ void SAL_CALL SdDrawPage::remove( const uno::Reference< drawing::XShape >& xShap
 void SdDrawPage::setBackground( const uno::Any& rValue )
     throw( lang::IllegalArgumentException )
 {
-    if( rValue.getValue() == NULL )
+    if( !rValue.hasValue() || rValue.getValue() == NULL )
     {
         // the easy case, clear the background obj
         mpPage->SetBackgroundObj( NULL );
@@ -1336,7 +1336,14 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
     }
 
 //-/    pObj->NbcSetAttributes( aSet, sal_False );
-    pObj->SetItemSet(aSet);
+    if( aSet.Count() == 0 )
+    {
+        mpPage->SetBackgroundObj( NULL );
+    }
+    else
+    {
+        pObj->SetItemSet(aSet);
+    }
 
     mpPage->SendRepaintBroadcast();
 }
