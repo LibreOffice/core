@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:33:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,24 @@ namespace
         }
         return bAsterix;
     }
+    // -----------------------------------------------------------------------------
+    sal_Bool lcl_SupportsCoreSQLGrammar(const Reference< XConnection>& _xConnection)
+    {
+        sal_Bool bSupportsCoreGrammar = sal_False;
+        if ( _xConnection.is() )
+        {
+            try
+            {
+                Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
+                bSupportsCoreGrammar = xMetaData.is() && xMetaData->supportsCoreSQLGrammar();
+            }
+            catch(Exception&)
+            {
+            }
+        }
+        return bSupportsCoreGrammar;
+    }
 }
-
 
 DBG_NAME(OSelectionBrowseBox);
 //------------------------------------------------------------------------------
@@ -257,31 +273,32 @@ OSelectionBrowseBox::~OSelectionBrowseBox()
 void OSelectionBrowseBox::initialize()
 {
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-    try
+    if(xConnection.is())
     {
-        if(xConnection.is())
+        // Diese Funktionen stehen nur unter CORE zur Verfügung
+        if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
-
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-            // Diese Funktionen stehen nur unter CORE zur Verfügung
-            if(xMetaData->supportsCoreSQLGrammar())
-            {
-                xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
-                for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
-                    m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
-            }
-            else // sonst nur COUNT(*)
-            {
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
-                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
-            }
-            m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
-            m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
+            xub_StrLen nCount   = m_aFunctionStrings.GetTokenCount();
+            for (xub_StrLen nIdx = 0; nIdx < nCount; nIdx++)
+                m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(nIdx));
         }
-    }
-    catch(const SQLException&)
-    {
-        OSL_ENSURE(0,"Catched Exception when asking for database metadata options!");
+        else // sonst nur COUNT(*)
+        {
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(0));
+            m_pFunctionCell->InsertEntry(m_aFunctionStrings.GetToken(2)); // 2 -> COUNT
+        }
+        try
+        {
+            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+            if ( xMetaData.is() )
+            {
+                m_bOrderByUnRelated = xMetaData->supportsOrderByUnrelated();
+                m_bGroupByUnRelated = xMetaData->supportsGroupByUnrelated();
+            }
+        }
+        catch(Exception&)
+        {
+        }
     }
 
     Init();
@@ -414,7 +431,7 @@ void OSelectionBrowseBox::Init()
         if(xConnection.is())
         {
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-            m_nMaxColumns = xMetaData->getMaxColumnsInSelect();
+            m_nMaxColumns = xMetaData.is() ? xMetaData->getMaxColumnsInSelect() : 0;
 
         }
         else
@@ -599,7 +616,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nR
             break;
         default:
         {
-            sal_uInt16  nIdx = nCellIndex-BROW_CRIT1_ROW;
+            sal_uInt16  nIdx = sal_uInt16(nCellIndex - BROW_CRIT1_ROW);
             setTextCellContext(pEntry,pEntry->GetCriteria( nIdx ),HID_QRYDGN_ROW_CRIT);
         }
     }
@@ -967,38 +984,45 @@ sal_Bool OSelectionBrowseBox::SaveModified()
             case BROW_FIELD_ROW:
             {
                 String aFieldName(m_pFieldCell->GetText());
-                if (!aFieldName.Len())
+                try
                 {
-                    OTableFieldDescRef pNewEntry = new OTableFieldDesc();
-                    pNewEntry->SetColumnId( pEntry->GetColumnId() );
-                    ::std::replace(getFields().begin(),getFields().end(),pEntry,pNewEntry);
-                    sal_uInt16 nCol = GetCurColumnId();
-                    for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
-                        RowModified(i,nCol);
-                }
-                else
-                {
-                    strOldCellContents = pEntry->GetField();
-                    bListAction = sal_True;
-                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-
-                    USHORT nPos = m_pFieldCell->GetEntryPos(aFieldName);
-                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aFieldName.GetTokenCount('.') > 1 )
-                    { // special case, we have a table field so we must cut the table name
-                        String sTableAlias = aFieldName.GetToken(0,'.');
-                        pEntry->SetAlias(sTableAlias);
-                        String sColumnName = aFieldName.GetToken(1,'.');
-                        Reference<XConnection> xConnection = pController->getConnection();
-                        if ( !xConnection.is() )
-                            return sal_False;
-                        Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
-                        bError = fillColumnRef(sColumnName,sTableAlias,xMetaData,pEntry,bListAction);
+                    if (!aFieldName.Len())
+                    {
+                        OTableFieldDescRef pNewEntry = new OTableFieldDesc();
+                        pNewEntry->SetColumnId( pEntry->GetColumnId() );
+                        ::std::replace(getFields().begin(),getFields().end(),pEntry,pNewEntry);
+                        sal_uInt16 nCol = GetCurColumnId();
+                        for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
+                            RowModified(i,nCol);
                     }
                     else
-                        bError = sal_True;
+                    {
+                        strOldCellContents = pEntry->GetField();
+                        bListAction = sal_True;
+                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
 
-                    if ( bError )
-                        bError = saveField(aFieldName,pEntry,bListAction);
+                        USHORT nPos = m_pFieldCell->GetEntryPos(aFieldName);
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aFieldName.GetTokenCount('.') > 1 )
+                        { // special case, we have a table field so we must cut the table name
+                            String sTableAlias = aFieldName.GetToken(0,'.');
+                            pEntry->SetAlias(sTableAlias);
+                            String sColumnName = aFieldName.GetToken(1,'.');
+                            Reference<XConnection> xConnection = pController->getConnection();
+                            if ( !xConnection.is() )
+                                return sal_False;
+                            Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
+                            bError = fillColumnRef(sColumnName,sTableAlias,xMetaData,pEntry,bListAction);
+                        }
+                        else
+                            bError = sal_True;
+
+                        if ( bError )
+                            bError = saveField(aFieldName,pEntry,bListAction);
+                    }
+                }
+                catch(Exception&)
+                {
+                    bError = sal_True;
                 }
                 if ( bError )
                 {
@@ -1115,7 +1139,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 if(!xConnection.is())
                     break;
 
-                sal_uInt16  nIdx = nRow - BROW_CRIT1_ROW;
+                sal_uInt16  nIdx = sal_uInt16(nRow - BROW_CRIT1_ROW);
                 String aText = m_pTextCell->GetText();
 
                 aText.EraseLeadingChars();
@@ -1731,7 +1755,8 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo )
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(!rInfo->IsEmpty(),"AddGroupBy:: OTableFieldDescRef sollte nicht Empty sein!");
     OTableFieldDescRef pEntry;
-    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
     OTableFields::iterator aIter = getFields().begin();
     for(;aIter != getFields().end();++aIter)
     {
@@ -1774,7 +1799,8 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
     DBG_ASSERT(rInfo.isValid() && !rInfo->IsEmpty(),"AddCondition:: OTableFieldDescRef sollte nicht Empty sein!");
 
     OTableFieldDescRef pEntry;
-    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
 
     OTableFields::iterator aIter = getFields().begin();
     for(;aIter != getFields().end();++aIter)
@@ -1838,7 +1864,8 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
     // nPos merkt sich die Spalte in die Sortierung eingetragen wird,
     // da weitere Sortierungen nur dahinter abgelegt werden duerfen
     OTableFieldDescRef pEntry;
-    ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+    ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers());
 
     OTableFields::iterator aIter = getFields().begin();
     for(;aIter != getFields().end();++aIter)
@@ -2185,7 +2212,7 @@ String OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
                 aText = pEntry->GetFunction();
             break;
         default:
-            aText = pEntry->GetCriteria(nRow - BROW_CRIT1_ROW);
+            aText = pEntry->GetCriteria(sal_uInt16(nRow - BROW_CRIT1_ROW));
     }
     return aText;
 }
@@ -2312,7 +2339,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, USHORT nColId, const S
             }
         }   break;
         default:
-            pEntry->SetCriteria(nRow - BROW_CRIT1_ROW, strNewText);
+            pEntry->SetCriteria(sal_uInt16(nRow - BROW_CRIT1_ROW), strNewText);
     }
 
     long nCellIndex = GetRealRow(nRow);
@@ -2389,7 +2416,7 @@ sal_uInt16 OSelectionBrowseBox::GetDefaultColumnWidth(const String& rName) const
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     // die Baissklasse macht das von dem Text abhaengig, ich habe aber keine Spaltenueberschriften, daher haette ich
     // hier gern einen anderen Default-Wert
-    return DEFAULT_SIZE;
+    return static_cast<sal_uInt16>(DEFAULT_SIZE);
 }
 //------------------------------------------------------------------------------
 sal_Bool OSelectionBrowseBox::isCutAllowed()
@@ -2653,10 +2680,8 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if ( xConnection.is() )
     {
-        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-
         // Diese Funktionen stehen nur unter CORE zur Verfügung
-        if ( xMetaData->supportsCoreSQLGrammar() )
+        if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
             // if we have an asterix, no other function than count is allowed
             m_pFunctionCell->Clear();
@@ -2714,3 +2739,5 @@ Reference< XAccessible > OSelectionBrowseBox::CreateAccessibleCell( sal_Int32 _n
     return EditBrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------------
+
+
