@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-09 10:46:41 $
+ *  last change: $Author: aw $ $Date: 2001-04-19 11:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ BOOL E3dView::IsConvertTo3DObjPossible() const
     BOOL bGroupSelected(FALSE);
     BOOL bRetval(TRUE);
 
-    for(INT32 a=0;!bAny3D && a<(sal_Int32)aMark.GetMarkCount();a++)
+    for(sal_uInt32 a=0;!bAny3D && a<aMark.GetMarkCount();a++)
     {
         SdrObject *pObj = aMark.GetMark(a)->GetObj();
         if(pObj)
@@ -889,41 +889,48 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude
         // convert completely to path objects
         SdrObject* pNewObj1 = pObj->ConvertToPolyObj(FALSE, FALSE);
 
-        // change text color attribute for not so dark colors
-        if(pNewObj1->IsGroupObject())
+        if(pNewObj1)
         {
-            SdrObjListIter aIter(*pNewObj1, IM_DEEPWITHGROUPS);
-            while(aIter.IsMore())
+            // change text color attribute for not so dark colors
+            if(pNewObj1->IsGroupObject())
             {
-                SdrObject* pGroupMember = aIter.Next();
-                ImpChangeSomeAttributesFor3DConversion2(pGroupMember);
+                SdrObjListIter aIter(*pNewObj1, IM_DEEPWITHGROUPS);
+                while(aIter.IsMore())
+                {
+                    SdrObject* pGroupMember = aIter.Next();
+                    ImpChangeSomeAttributesFor3DConversion2(pGroupMember);
+                }
             }
-        }
-        else
-            ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
+            else
+                ImpChangeSomeAttributesFor3DConversion2(pNewObj1);
 
-        // convert completely to path objects
-        SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, TRUE);
+            // convert completely to path objects
+            SdrObject* pNewObj2 = pObj->ConvertToContourObj(pNewObj1, TRUE);
 
-        // add all to flat scene
-        if(pNewObj2->IsGroupObject())
-        {
-            SdrObjListIter aIter(*pNewObj2, IM_DEEPWITHGROUPS);
-            while(aIter.IsMore())
+            if(pNewObj2)
             {
-                SdrObject* pGroupMember = aIter.Next();
-                ImpCreateSingle3DObjectFlat(pScene, pGroupMember, bExtrude, fDepth, rLatheMat);
+                // add all to flat scene
+                if(pNewObj2->IsGroupObject())
+                {
+                    SdrObjListIter aIter(*pNewObj2, IM_DEEPWITHGROUPS);
+                    while(aIter.IsMore())
+                    {
+                        SdrObject* pGroupMember = aIter.Next();
+                        ImpCreateSingle3DObjectFlat(pScene, pGroupMember, bExtrude, fDepth, rLatheMat);
+                    }
+                }
+                else
+                    ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
+
+                // delete zwi object
+                if(pNewObj2 != pObj && pNewObj2 != pNewObj1 && pNewObj2)
+                    delete pNewObj2;
             }
+
+            // delete zwi object
+            if(pNewObj1 != pObj && pNewObj1)
+                delete pNewObj1;
         }
-        else
-            ImpCreateSingle3DObjectFlat(pScene, pNewObj2, bExtrude, fDepth, rLatheMat);
-
-        // delete zwi object
-        if(pNewObj2 != pObj && pNewObj2 != pNewObj1)
-            delete pNewObj2;
-
-        if(pNewObj1 != pObj)
-            delete pNewObj1;
     }
 }
 
