@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:00:59 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "~Genişlik";
     };
     MetricField MF_WIDTH
@@ -184,7 +184,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "°ª«×(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~E)";
+        Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "~Yükseklik";
     };
     MetricField MF_HEIGHT
@@ -254,7 +254,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "G~enişlik";
     };
     MetricField MF_WIDTHZOOM
@@ -302,7 +302,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "°ª(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~E)";
+        Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Y~ükseklik";
     };
     MetricField MF_HEIGHTZOOM
@@ -346,7 +346,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "°Å¤U";
         Text[ arabic ] = "ÇŞÊÕÇÕ";
         Text[ greek ] = "ĞñïóáñìïãŞ";
-        Text[ korean ] = "ÀÚ¸£±â";
+        Text[ korean ] = "´Ùµë±â";
         Text[ turkish ] = "Kırp";
     };
     FixedText FT_LEFT
@@ -371,7 +371,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¥ª(~L)";
         Text[ arabic ] = "ÇáíÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ(~L)";
+        Text[ korean ] = "¿ŞÂÊ";
         Text[ turkish ] = "So~l";
     };
     MetricField MF_LEFT
@@ -415,7 +415,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¥k(~R)";
         Text[ arabic ] = "Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ(~R)";
+        Text[ korean ] = "¿À¸¥ÂÊ";
         Text[ turkish ] = "S~ağ";
     };
     MetricField MF_RIGHT
@@ -457,7 +457,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¤W(~T)";
         Text[ arabic ] = "ÃÚáì";
         Text[ greek ] = "ĞÜíù";
-        Text[ korean ] = "À§(~T)";
+        Text[ korean ] = "À§";
         Text[ turkish ] = "Ü~st";
     };
     MetricField MF_TOP
@@ -501,7 +501,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "¤U(~B)";
         Text[ arabic ] = "ÃÓİá";
         Text[ greek ] = "ÊÜôù";
-        Text[ korean ] = "¾Æ·¡(~B)";
+        Text[ korean ] = "¾Æ·¡";
         Text[ turkish ] = "A~lt";
     };
     MetricField MF_BOTTOM
@@ -543,7 +543,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "«O«ù¤j¤p(~Z)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáÍÌã";
         Text[ greek ] = "Äéá~ôŞñçóç ìåãİèïõò";
-        Text[ korean ] = "Å©±â À¯Áö(~Z)";
+        Text[ korean ] = "Å©±â À¯Áö";
         Text[ turkish ] = "Boyutu kor~u";
     };
     RadioButton RB_ZOOMCONST
@@ -569,7 +569,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "«O«ùÅã¥Ü¤ñ¨Ò(~S)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáãŞíÇÓ";
         Text[ greek ] = "ÄéáôŞñçóç êëß~ìáêáò";
-        Text[ korean ] = "¹èÀ² À¯Áö(~S)";
+        Text[ korean ] = "¹èÀ² À¯Áö";
         Text[ turkish ] = "~Orantıyı koru";
     };
     GroupBox GB_EXAMPLE
@@ -632,7 +632,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~O)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü ìİ~ãåèïò";
-        Text[ korean ] = "¿ø·¡ Å©±â(~O)";
+        Text[ korean ] = "¿ø·¡ Å©±â";
         Text[ turkish ] = "İ~lk boyut";
     };
 };
