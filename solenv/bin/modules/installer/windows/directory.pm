@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:21:58 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:56:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,14 +94,7 @@ sub create_unique_directorynames
         }
         else
         {
-            if ($installer::globals::product =~ /ada/i )
-            {
-                $uniqueparentname = "INSTALLLOCATION";
-            }
-            else
-            {
-                $uniqueparentname = $installer::globals::officefolder;      # parent for program, share, user, ...
-            }
+            $uniqueparentname = "INSTALLLOCATION";
         }
 
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
@@ -184,12 +177,9 @@ sub add_root_directories
         $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        my $manufacturer = $installer::globals::manufacturer;
-        my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");  # third parameter not used
-        $shortmanufacturer =~ s/\s/\_/g;                                    # changing empty space to underline
-
-        $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortmanufacturer|$manufacturer\n";
-        push(@{$directorytableref}, $oneline);
+        # my $manufacturer = $installer::globals::manufacturer;
+        # my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");    # third parameter not used
+        # $shortmanufacturer =~ s/\s/\_/g;                                  # changing empty space to underline
 
         my $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
@@ -197,8 +187,23 @@ sub add_root_directories
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
 
-        $oneline = "$installer::globals::officefolder\tINSTALLLOCATION\t$shortproductkey|$productkey\n";
-        push(@{$directorytableref}, $oneline);
+        if ( $installer::globals::isopensourceproduct )
+        {
+            $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortproductkey|$productkey\n";
+            push(@{$directorytableref}, $oneline);
+        }
+        else
+        {
+            # my $manufacturer = $installer::globals::sundirname;
+            # my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");    # third parameter not used
+            # $shortmanufacturer =~ s/\s/\_/g;                                  # changing empty space to underline
+
+            $oneline = "sundirectory\t$installer::globals::programfilesfolder\t$installer::globals::sundirname\n";
+            push(@{$directorytableref}, $oneline);
+
+            $oneline = "INSTALLLOCATION\tsundirectory\t$shortproductkey|$productkey\n";
+            push(@{$directorytableref}, $oneline);
+        }
 
         $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
