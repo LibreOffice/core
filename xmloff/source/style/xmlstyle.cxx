@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@
 #include "xmltoken.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLITEM_HXX
-#include "xmlitem.hxx"
-#endif
 #ifndef _XMLOFF_FAMILIES_HXX
 #include "families.hxx"
 #endif

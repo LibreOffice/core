@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,6 @@
 #include "xmlnmspe.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include "xmlcnitm.hxx"
-#endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include "xmlprmap.hxx"
 #endif
@@ -424,7 +421,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
 
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
-    DBG_ASSERT(nCount == aPropInfos.size(), "wrong property count");
+    OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
     if( !pApiNames )
     {
         pApiNames = new Sequence < OUString >( nCount );
@@ -906,7 +903,7 @@ void SvXMLExportPropertyMapper::handleSpecialItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ASSERT( mxNextMapper.is(), "special item not handled in xml export" );
+    OSL_ENSURE( mxNextMapper.is(), "special item not handled in xml export" );
     if( mxNextMapper.is() )
         mxNextMapper->handleSpecialItem( rAttrList, rProperty, rUnitConverter,
                                         rNamespaceMap, pProperties, nIdx );
@@ -923,7 +920,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    DBG_ASSERT( mxNextMapper.is(), "element item not handled in xml export" );
+    OSL_ENSURE( mxNextMapper.is(), "element item not handled in xml export" );
     if( mxNextMapper.is() )
         mxNextMapper->handleElementItem( rHandler, rProperty, rUnitConverter,
                                            rNamespaceMap, nFlags, pProperties,
@@ -1092,7 +1089,7 @@ void SvXMLExportPropertyMapper::exportElementItems(
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
 
-        DBG_ASSERT( 0 != ( maPropMapper->GetEntryFlags(
+        OSL_ENSURE( 0 != ( maPropMapper->GetEntryFlags(
                 rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),
                 "wrong mid flag!" );
 

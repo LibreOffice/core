@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include "nmspmap.hxx"
-#endif
-#ifndef _XMLOFF_XMLCNITM_HXX
-#include "xmlcnitm.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLIMPPR_HXX
@@ -322,7 +319,7 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
-    DBG_ASSERT( mxNextMapper.is(), "unsuported special item in xml import" );
+    OSL_ENSURE( mxNextMapper.is(), "unsuported special item in xml import" );
     if( mxNextMapper.is() )
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
@@ -364,8 +361,8 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     const UniReference<XMLPropertySetMapper> & rPropMapper,
     struct _ContextID_Index_Pair* pSpecialContextIds )
 {
-    DBG_ASSERT( rPropSet.is(), "need an XPropertySet" );
-    DBG_ASSERT( rPropSetInfo.is(), "need an XPropertySetInfo" );
+    OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
+    OSL_ENSURE( rPropSetInfo.is(), "need an XPropertySetInfo" );
 
     // preliminaries
     sal_Bool bSet = sal_False;
@@ -401,7 +398,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
                 aError += ByteString( String( rPropName),
                                       RTL_TEXTENCODING_ASCII_US );
                 aError += ByteString("'; style may not be imported correctly.");
-                DBG_ERROR( aError.GetBuffer() );
+                OSL_ENSURE( bSet, aError.GetBuffer() );
 #endif
             }
         }
@@ -452,8 +449,8 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     const UniReference<XMLPropertySetMapper> & rPropMapper,
     struct _ContextID_Index_Pair* pSpecialContextIds )
 {
-    DBG_ASSERT( rMultiPropSet.is(), "Need multi property set. ");
-    DBG_ASSERT( rPropSetInfo.is(), "Need property set info." );
+    OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
+    OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
 
     sal_Bool bSuccessful = sal_False;
     sal_Int32 nCount = rProperties.size();
@@ -536,7 +533,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     }
     catch ( ... )
     {
-        DBG_ERROR("Exception caught; style may not be imported correctly.");
+        OSL_ENSURE(bSuccessful, "Exception caught; style may not be imported correctly.");
     }
 
     return bSuccessful;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: bm $ $Date: 2001-05-22 08:04:54 $
+#   last change: $Author: mib $ $Date: 2001-07-04 13:52:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,15 +109,10 @@ CXXFILES = \
         undlihdl.cxx	\
         uniref.cxx		\
         weighhdl.cxx	\
-        xmlastpl.cxx	\
         xmlaustp.cxx	\
         xmlbahdl.cxx	\
-        xmlexpit.cxx	\
         xmlexppr.cxx	\
-        xmlimpit.cxx	\
         xmlimppr.cxx	\
-        xmlitem.cxx		\
-        xmlitmpr.cxx	\
         xmlnume.cxx		\
         xmlnumfe.cxx	\
         xmlnumfi.cxx	\
@@ -201,15 +196,10 @@ SLOFILES =	\
         $(SLO)$/undlihdl.obj	\
         $(SLO)$/uniref.obj		\
         $(SLO)$/weighhdl.obj	\
-        $(SLO)$/xmlastpl.obj	\
         $(SLO)$/xmlaustp.obj	\
         $(SLO)$/xmlbahdl.obj	\
-        $(SLO)$/xmlexpit.obj	\
         $(SLO)$/xmlexppr.obj	\
-        $(SLO)$/xmlimpit.obj	\
         $(SLO)$/xmlimppr.obj	\
-        $(SLO)$/xmlitem.obj		\
-        $(SLO)$/xmlitmpr.obj	\
         $(SLO)$/xmlnume.obj		\
         $(SLO)$/xmlnumfe.obj	\
         $(SLO)$/xmlnumfi.obj	\
