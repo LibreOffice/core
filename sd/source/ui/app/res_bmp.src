@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-15 15:24:58 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ PushButton RID_PREVIEW_BUTTON
     Text [ italian ] = "Esegui" ;
     Text [ spanish ] = "~Reproducir" ;
     Text [ french ] = "Reproduire" ;
-    Text [ dutch ] = "~Spelen" ;
+    Text [ dutch ] = "Af~spelen" ;
     Text [ swedish ] = "~Spela upp" ;
     Text [ danish ] = "Afspil" ;
     Text [ portuguese_brazilian ] = "Ab~spielen" ;
