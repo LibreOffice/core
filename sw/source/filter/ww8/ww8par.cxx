@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:55:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4068,24 +4068,33 @@ namespace
         String aPassw;
 
         using namespace com::sun::star;
-        try
+
+        const SfxItemSet* pSet = rMedium.GetItemSet();
+        const SfxPoolItem *pPasswordItem;
+
+        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pPasswordItem))
+            aPassw = ((const SfxStringItem *)pPasswordItem)->GetValue();
+        else
         {
-            uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
-            if( xHandler.is() )
+            try
             {
-                RequestDocumentPassword* pRequest = new RequestDocumentPassword(
-                    task::PasswordRequestMode_PASSWORD_ENTER,
-                    INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
-                uno::Reference< task::XInteractionRequest > xRequest( pRequest );
+                uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler() );
+                if( xHandler.is() )
+                {
+                    RequestDocumentPassword* pRequest = new RequestDocumentPassword(
+                        task::PasswordRequestMode_PASSWORD_ENTER,
+                        INetURLObject( rMedium.GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                    uno::Reference< task::XInteractionRequest > xRequest( pRequest );
 
-                xHandler->handle( xRequest );
+                    xHandler->handle( xRequest );
 
-                if( pRequest->isPassword() )
-                    aPassw = pRequest->getPassword();
+                    if( pRequest->isPassword() )
+                        aPassw = pRequest->getPassword();
+                }
             }
-        }
-        catch( uno::Exception& )
-        {
+            catch( uno::Exception& )
+            {
+            }
         }
 
         return aPassw;
@@ -4259,6 +4268,8 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
             pWwFib = new WW8Fib(*pStrm, nWantedVersion);
             if (pWwFib->nFibError)
                 nErrRet = ERR_SWG_READ_ERROR;
+            if(!nErrRet && mpDocShell->GetDoc())
+                mpDocShell->GetDoc()->SetWinEncryption(true);
         }
     }
 
