@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-14 10:46:01 $
+ *  last change: $Author: mt $ $Date: 2002-07-12 13:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos
 
 TEIMEInfos::~TEIMEInfos()
 {
-    delete pAttribs;
+    delete[] pAttribs;
 }
 
 void TEIMEInfos::CopyAttribs( const USHORT* pA, USHORT nL )
