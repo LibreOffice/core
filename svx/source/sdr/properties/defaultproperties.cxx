@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:48:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ namespace sdr
         {
             if(!mpItemSet)
             {
-                ((DefaultProperties*)this)->mpItemSet = &(((DefaultProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetItemPool()));
+                ((DefaultProperties*)this)->mpItemSet = &(((DefaultProperties*)this)->CreateObjectSpecificItemSet(*GetSdrObject().GetObjectItemPool()));
                 ((DefaultProperties*)this)->ForceDefaultAttributes();
             }
 
@@ -164,7 +164,7 @@ namespace sdr
                 ItemChange(nWhichID, &rItem);
                 PostItemChange(nWhichID);
 
-                SfxItemSet aSet(*GetSdrObject().GetItemPool(), nWhichID, nWhichID);
+                SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
                 aSet.Put(rItem);
                 ItemSetChanged(aSet);
             }
@@ -189,7 +189,7 @@ namespace sdr
 
                 if(nWhich)
                 {
-                    SfxItemSet aSet(*GetSdrObject().GetItemPool(), nWhich, nWhich, 0, 0);
+                    SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), nWhich, nWhich, 0, 0);
                     ItemSetChanged(aSet);
                 }
             }
@@ -210,7 +210,7 @@ namespace sdr
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
             sal_Bool bDidChange(sal_False);
-            SfxItemSet aSet(*GetSdrObject().GetItemPool(), SDRATTR_START, EE_ITEMS_END, 0, 0);
+            SfxItemSet aSet(*GetSdrObject().GetObjectItemPool(), SDRATTR_START, EE_ITEMS_END, 0, 0);
 
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
@@ -274,13 +274,13 @@ namespace sdr
             return 0L;
         }
 
-        void DefaultProperties::PreProcessSave()
-        {
-        }
+//BFS01     void DefaultProperties::PreProcessSave()
+//BFS01     {
+//BFS01     }
 
-        void DefaultProperties::PostProcessSave()
-        {
-        }
+//BFS01     void DefaultProperties::PostProcessSave()
+//BFS01     {
+//BFS01     }
 
         void DefaultProperties::ForceDefaultAttributes()
         {
