@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:32:45 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,32 +222,63 @@ BOOL ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
 void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, const Rectangle& rDrawingRect,
                                     ScUpdateMode eMode, ULONG nLayer )
 {
-    //!     eMode auswerten !!!
-
-    USHORT nObjectFlags = 0;
+    // #109985#
+    sal_uInt16 nPaintMode(0);
+    sal_Bool bDrawAtAll(sal_False);
     const ScViewOptions& rOpts = pViewData->GetOptions();
-    if ( rOpts.GetObjMode( VOBJ_TYPE_OLE ) == VOBJ_MODE_SHOW )
-        nObjectFlags |= SC_OBJECTS_OLE;
-    if ( rOpts.GetObjMode( VOBJ_TYPE_CHART ) == VOBJ_MODE_SHOW )
-        nObjectFlags |= SC_OBJECTS_CHARTS;
-    if ( rOpts.GetObjMode( VOBJ_TYPE_DRAW ) == VOBJ_MODE_SHOW )
-        nObjectFlags |= SC_OBJECTS_DRAWING;
 
-    USHORT nDummyFlags = 0;
-    if ( rOpts.GetObjMode( VOBJ_TYPE_OLE ) == VOBJ_MODE_DUMMY )
-        nDummyFlags |=  SC_OBJECTS_OLE;
-    if ( rOpts.GetObjMode( VOBJ_TYPE_CHART ) == VOBJ_MODE_DUMMY )
-        nDummyFlags |=  SC_OBJECTS_CHARTS;
-    if ( rOpts.GetObjMode( VOBJ_TYPE_DRAW ) == VOBJ_MODE_DUMMY )
-        nDummyFlags |=  SC_OBJECTS_DRAWING;
-
-    if (nObjectFlags || nDummyFlags)
+    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_OLE))
     {
-        if ( eMode == SC_UPDATE_CHANGED )
-            rOutputData.DrawingSingle( (USHORT) nLayer, nObjectFlags, nDummyFlags );
+        nPaintMode |= SDRPAINTMODE_SC_DRAFT_OLE;
+        bDrawAtAll = sal_True;
+    }
+    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE))
+    {
+        bDrawAtAll = sal_True;
+    }
+    else
+    {
+        nPaintMode |= SDRPAINTMODE_SC_HIDE_OLE;
+    }
+
+    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_CHART))
+    {
+        nPaintMode |= SDRPAINTMODE_SC_DRAFT_CHART;
+        bDrawAtAll = sal_True;
+    }
+    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART))
+    {
+        bDrawAtAll = sal_True;
+    }
+    else
+    {
+        nPaintMode |= SDRPAINTMODE_SC_HIDE_CHART;
+    }
+
+    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
+    {
+        nPaintMode |= SDRPAINTMODE_SC_DRAFT_DRAW;
+        bDrawAtAll = sal_True;
+    }
+    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
+    {
+        bDrawAtAll = sal_True;
+    }
+    else
+    {
+        nPaintMode |= SDRPAINTMODE_SC_HIDE_DRAW;
+    }
+
+    if(bDrawAtAll)
+    {
+        if(SC_UPDATE_CHANGED == eMode)
+        {
+            rOutputData.DrawingSingle((sal_uInt16)nLayer, nPaintMode);
+        }
         else
-            rOutputData.DrawSelectiveObjects( (USHORT) nLayer, rDrawingRect,
-                                                nObjectFlags, nDummyFlags );
+        {
+            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer, rDrawingRect, nPaintMode);
+        }
     }
 }
 
@@ -405,7 +436,7 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                             DrawRect( aEffRect );
                         }
 
-                        //  RedrawOneLayer mit dem Text-Rechteck zeichnet nur die Outliner-View
+                        //  InitRedraw mit dem Text-Rechteck zeichnet nur die Outliner-View
                         //  und den Text-Rahmen (an den kommt man sonst von aussen nicht heran).
 
                         SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
@@ -413,7 +444,7 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                         if (pPV)
                         {
                             SdrLayerID nLayer = pEditObj ? pEditObj->GetLayer() : SC_LAYER_FRONT;
-                            pPV->RedrawOneLayer( nLayer, aEffRect, this );
+                            pPV->InitRedraw( nLayer, aEffRect, this );
                         }
                     }
                     else
@@ -510,7 +541,7 @@ void ScGridWindow::DrawStartTimer()
             pDrView->AfterInitRedraw(nWinNum);
         */
 
-        pDrView->PostPaint();
+        // pDrView->PostPaint();
         pDrView->RestartAfterPaintTimer();
     }
 }
