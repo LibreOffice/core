@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2000-11-01 03:12:46 $
+#   last change: $Author: pluby $ $Date: 2000-12-04 00:10:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,14 @@ dummy:
 SLOFILES=	\
         $(SLO)/salframe.obj		\
         $(SLO)/salobj.obj		\
+        $(SLO)/VCLView.obj		\
         $(SLO)/VCLWindow.obj
 
 .IF "$(UPDATER)"=="YES"
 OBJFILES=	\
         $(OBJ)/salframe.obj		\
         $(OBJ)/salobj.obj		\
+        $(OBJ)/VCLView.obj		\
         $(OBJ)/VCLWindow.obj
 .ENDIF
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-01 22:29:20 $
+ *  last change: $Author: pluby $ $Date: 2000-12-04 00:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@ extern "C" {
 void CallSalTimerCallbackProc()
 {
     SalData* pSalData = GetSalData();
-    pSalData->mpTimerProc();
+
+    if ( pSalData->mpTimerProc )
+        pSalData->mpTimerProc();
 }
 
 #ifdef __cplusplus
