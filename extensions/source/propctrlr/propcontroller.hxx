@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 13:41:46 $
+ *  last change: $Author: fs $ $Date: 2001-06-06 08:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 class SvNumberFormatsSupplierObj;
 class Font;
 class Window;
+class SfxItemSet;
 
 //............................................................................
 namespace pcr
@@ -364,7 +365,14 @@ namespace pcr
         sal_Bool        implGetCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
         ::rtl::OUString implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
         sal_Int16       implGetInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
+        sal_Int32       implGetInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault);
         float           implGetFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
+
+        void            implInvalidateItem(
+                            const ::rtl::OUString& _rPropName,
+                            sal_uInt16 _nItemId,
+                            SfxItemSet& _rSet,
+                            sal_Bool _bForceInvalidation = sal_False);
 
         ::rtl::OUString convertSimpleToString(const ::com::sun::star::uno::Any& _rValue);
 
@@ -383,6 +391,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/30 13:41:46  fs
+ *  #86838# be a focus listener on the container window, forward the focus to the property box
+ *
  *  Revision 1.7  2001/05/29 10:44:32  fs
  *  #87461# +OnImageURLClicked
  *
