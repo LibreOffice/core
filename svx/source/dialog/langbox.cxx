@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 11:45:54 $
+ *  last change: $Author: os $ $Date: 2001-04-18 08:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,24 +190,21 @@ USHORT TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 }
 
 //-----------------------------------------------------------------------
-/*!!! (pb) obsolete
-SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle ) :
-
-    ListBox( pParent, nWinStyle )
-
-{
-    m_pLangTable = new SvxLanguageTable;
-    aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
-    aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
-}
-*/
-//------------------------------------------------------------------------
-
-SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
-
-    ListBox( pParent, rResId ),
-
+SvxLanguageBox::SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck ) :
+    ListBox( pParent, nWinStyle ),
     m_bWithCheckmark( bCheck )
+{
+    Init();
+}
+//------------------------------------------------------------------------
+SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck ) :
+    ListBox( pParent, rResId ),
+    m_bWithCheckmark( bCheck )
+{
+    Init();
+}
+//------------------------------------------------------------------------
+void SvxLanguageBox::Init()
 {
     m_pLangTable = new SvxLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
@@ -242,25 +239,6 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bChec
         m_nLangList = LANG_LIST_ALL;
     }
 }
-
-//------------------------------------------------------------------------
-
-SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId ) :
-    ListBox( pParent, rResId )
-{
-    m_pLangTable        = new SvxLanguageTable;
-    m_aNotCheckedImage  = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
-    m_aCheckedImage     = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
-    m_bWithCheckmark    = FALSE;
-    m_aAllString            = String( SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL ) );
-    m_nLangList             = LANG_LIST_EMPTY;
-    m_bHasLangNone          = FALSE;
-    m_bLangNoneIsLangAll    = FALSE;
-
-    // display entries sorted
-    SetStyle( GetStyle() | WB_SORT );
-}
-
 //------------------------------------------------------------------------
 
 SvxLanguageBox::~SvxLanguageBox()
