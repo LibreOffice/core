@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:28:45 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:48:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,11 +78,11 @@ EXCEPTIONSFILES=\
         $(SLO)$/filtergrouping.obj	\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/mailmodel.obj		\
+        $(SLO)$/cfg.obj				\
         $(SLO)$/partwnd.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-        $(SLO)$/cfg.obj				\
         $(SLO)$/about.obj			\
         $(SLO)$/acccfg.obj			\
         $(SLO)$/basedlgs.obj		\
