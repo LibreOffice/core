@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-09 07:59:55 $
+ *  last change: $Author: mba $ $Date: 2001-04-19 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #include <svtools/svdde.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <osl/file.hxx>
 #pragma hdrstop
 
 #define _SVSTDARR_STRINGSDTOR
@@ -588,6 +589,23 @@ sal_Bool IsTemplate_Impl( const String& aPath )
 
 extern void FATToVFat_Impl( String& );
 
+String GetURL_Impl( const String& rName )
+{
+    // if the filename is a physical name, it is the client file system, not the file system
+    // of the machine where the office is running ( if this are different machines )
+    // so in the remote case we can't handle relative filenames as arguments, because they
+    // are parsed relative to the program path
+    // the file system of the client is addressed through the "file:" protocol
+    ::rtl::OUString aProgName, aTmp;
+    ::vos::OStartupInfo aInfo;
+    aInfo.getExecutableFile( aProgName );
+    ::osl::FileBase::getFileURLFromNormalizedPath( aProgName, aTmp );
+    INetURLObject aObj( aTmp );
+    bool bWasAbsolute;
+    INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
+    return aURL.GetMainURL(INetURLObject::NO_DECODE);
+}
+
 void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
     if ( rAppEvent.IsOpenEvent() )
@@ -602,93 +620,62 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
 #ifdef WNT
             FATToVFat_Impl( aName );
 #endif
+            aName = GetURL_Impl(aName);
+            SfxStringItem aFileName( SID_FILE_NAME, aName );
 
-            // if the filename is a physical name, it is the client file system, not the file system
-            // of the machine where the office is running ( if this are different machines )
-            // the file system of the client is addressed through the "file:" protocol
-            INetURLObject aURL( aName, INET_PROT_FILE );
-            sal_Bool bIsFileURL = INET_PROT_FILE == aURL.GetProtocol();
-            SfxStringItem aFileName( SID_FILE_NAME, aURL.GetMainURL() );
-
-#ifdef APPEVENT_DBG
-            aStream << "Open: " << (const char *)aFileName.GetValue();
-#endif
-            // ist ein oeffnen grundsaetzlich moeglich
-            if ( TRUE ) // (pb)
+            // is it a template ?
+            if ( IsTemplate_Impl( aName ) )
             {
-                // ist es eine Vorlage?
-                if ( bIsFileURL && IsTemplate_Impl( aURL.GetMainURL() ) )
-                {
-#ifdef APPEVENT_DBG
-                    aStream << " Neues Dokument aus Vorlage angelegt\n";
-#endif
-                    // neue Datei aus der Vorlage erzeugen
-                    pAppDispat->Execute( SID_NEWDOC, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
-                }
-                else
-                {
-#ifdef APPEVENT_DBG
-                    aStream << " Neues Dokument geoeffnet\n";
-#endif
-                    // ::com::sun::star::util::URL "offnen
-                    if ( !DocAlreadyLoaded( aFileName.GetValue(), sal_True, sal_True, sal_False ) )
-                    {
-                        SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
-                        SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-                        SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:OpenEvent") );
-                        pAppDispat->Execute( SID_OPENDOC,
-                                SFX_CALLMODE_SYNCHRON, &aTargetName,
-                                &aFileName, &aNewView, &aReferer, 0L );
-                    }
-                }
+                // create new file from template
+                pAppDispat->Execute( SID_NEWDOC, SFX_CALLMODE_SYNCHRON, &aFileName, 0L );
             }
             else
             {
-                // ACHTUNG: keine Fehlermeldung bei '.' (unterdr"uckt OpenClients)
-                HACK(Fehlermeldung fehlt);
-#ifdef APPEVENT_DBG
-                aStream << " FEHLER\n";
-#endif
+                // open the document
+                if ( !DocAlreadyLoaded( aName, sal_True, sal_True, sal_False ) )
+                {
+                    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+                    SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
+                    SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:OpenEvent") );
+                    pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                            &aTargetName, &aFileName, &aNewView, &aReferer, 0L );
+                }
             }
         }
     }
     else if(rAppEvent.IsPrintEvent() )
     {
-        // "uber die Parameter iterieren (zu druckende Dateien + Druckername)
+        // loop on parameters: files to print and name of printer
         SfxStringItem aPrinterName(SID_PRINTER_NAME, String());
         for (sal_uInt16 i=0;i<rAppEvent.GetParamCount();i++)
         {
-            // Druckername?
-            String aArg(rAppEvent.GetParam(i));
-            if(aArg.Len()>1 && *aArg.GetBuffer()=='@')
+            // is the parameter a printername ?
+            String aName(rAppEvent.GetParam(i));
+            if(aName.Len()>1 && *aName.GetBuffer()=='@')
             {
-                aPrinterName.SetValue( aArg.Copy(1) );
+                aPrinterName.SetValue( aName.Copy(1) );
                 continue;
             }
 
-            // Datei "offnen -- immer neue ::com::sun::star::sdbcx::View erzeugen
-            INetURLObject aURL( aArg, INET_PROT_FILE );
+#ifdef WNT
+            FATToVFat_Impl( aName );
+#endif
             SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-            SfxStringItem aFileName( SID_FILE_NAME, aURL.GetMainURL() );
+            SfxStringItem aFileName( SID_FILE_NAME, GetURL_Impl( aName ) );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
             SfxBoolItem aHidden(SID_HIDDEN, sal_True);
             SfxBoolItem aSilent(SID_SILENT, sal_True);
-            const SfxPoolItem *pRet = pAppDispat->Execute( SID_OPENDOC,
-                    SFX_CALLMODE_SYNCHRON, &aTargetName,
-                    &aFileName, &aNewView, &aHidden, &aSilent, 0L );
+            const SfxPoolItem *pRet = pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
+                    &aTargetName, &aFileName, &aNewView, &aHidden, &aSilent, 0L );
             if ( !pRet )
                 continue;
 
-            // die neue ::com::sun::star::sdbcx::View des Dokuments ermitteln
-            const SfxViewFrameItem *pFrameItem =
-                PTR_CAST(SfxViewFrameItem, pRet);
+            const SfxViewFrameItem *pFrameItem = PTR_CAST(SfxViewFrameItem, pRet);
             if ( pFrameItem && pFrameItem->GetFrame() )
             {
-                // "uber die ::com::sun::star::sdbcx::View drucken
                 SfxViewFrame *pFrame = pFrameItem->GetFrame();
                 SfxBoolItem aSilent( SID_SILENT, sal_True );
-                pFrame->GetDispatcher()->Execute( SID_PRINTDOC,
-                        SFX_CALLMODE_SYNCHRON,
+                pFrame->GetDispatcher()->Execute( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON,
                         &aPrinterName, &aSilent, 0L );
                 pFrame->GetFrame()->DoClose();
             }
