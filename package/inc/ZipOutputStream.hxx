@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 19:57:26 $
+ *  last change: $Author: mtg $ $Date: 2001-11-29 13:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,11 @@ protected:
     ByteChucker         aChucker;
     ZipEntry            *pCurrentEntry;
     sal_Int16           nMethod, nLevel, mnDigested;
-    sal_Bool            bFinished, bEncryptCurrentEntry, bSpanning;
+    sal_Bool            bFinished, bEncryptCurrentEntry;
     EncryptionData      *pCurrentEncryptData;
 
 public:
-    ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Bool bNewSpanning );
+    ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream );
     ~ZipOutputStream();
 
     // rawWrite to support a direct write to the output stream
