@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-04 14:41:41 $
+ *  last change: $Author: cp $ $Date: 2000-12-06 10:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         && pXFontStruct->per_char == NULL)
     {
         // get per_char information from the server
-        for ( sal_Unicode nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
+        for ( sal_Int32 nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
             *pWidthArray = QueryCharWidth16( mpDisplay, pXFontStruct->fid,
                             nIdx, mnDefaultWidth );
     }
@@ -503,13 +503,13 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         || (pXFontStruct->per_char == NULL) )
     {
         // really a fixed width font
-        for ( sal_Unicode nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
+        for ( sal_Int32 nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
             *pWidthArray = mnDefaultWidth;
     }
     else
     {
         // get per_char information from the xfontstruct
-        for ( sal_Unicode nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
+        for ( sal_Int32 nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
         {
             XCharStruct* pChar = GetCharinfo( pXFontStruct, nIdx );
             *pWidthArray = CharExists(pChar) ? pChar->width : mnDefaultWidth;
@@ -538,7 +538,7 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
     unsigned char pBuffer[16];
     sal_MultiByte nChar;
 
-    for ( sal_Unicode nIdx = nFrom ; nIdx <= nTo ; nIdx++, pWidthArray++ )
+    for ( sal_Int32 nIdx = nFrom ; nIdx <= nTo ; nIdx++, pWidthArray++ )
     {
         Bool bValid;
         FontPitch nSpacing;
@@ -548,7 +548,8 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
         if ( bValid = GetFontStruct( nIdx, &nEncoding, &pXFontStruct, pCvt ) )
         {
             nSpacing = mpXlfd->GetSpacing( nEncoding );
-            nSize = ConvertStringUTF16( &nIdx, 1,
+            sal_Unicode nUniIdx = (sal_Unicode)nIdx;
+            nSize = ConvertStringUTF16( &nUniIdx, 1,
                             (sal_Char*)pBuffer, sizeof(pBuffer),
                             pCvt->GetU2TConverter(nEncoding) );
         }
