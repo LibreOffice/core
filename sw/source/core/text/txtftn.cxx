@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:16:21 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include "viewsh.hxx"
 #include "doc.hxx"
@@ -123,7 +120,7 @@
 #include "txtfrm.hxx"
 #include "itrform2.hxx"
 #include "frmsh.hxx"
-#include "ftnfrm.hxx"   // FindErgoSumFrm(), FindQuoVadisFrm(),
+#include "ftnfrm.hxx"   // FindQuoVadisFrm(),
 #include "pagedesc.hxx"
 #include "redlnitr.hxx" // SwRedlnItr
 #include "sectfrm.hxx"  // SwSectionFrm
@@ -475,23 +472,6 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 }
 
 /*************************************************************************
- *                      SwTxtFrm::FindErgoSumFrm()
- *************************************************************************/
-
-SwTxtFrm *SwTxtFrm::FindErgoSumFrm()
-{
-    // Erstmal feststellen, ob wir in einem FtnFrm stehen:
-    if( !IsInFtn() )
-        return 0;
-
-    // Zum folgenden FtnFrm
-    SwFtnFrm *pFtnFrm = FindFtnFrm()->GetFollow();
-
-    // Nun den ersten Cntnt:
-    return pFtnFrm ? (SwTxtFrm*)(pFtnFrm->ContainsCntnt()) : 0;
-}
-
-/*************************************************************************
  *                      SwTxtFrm::FindQuoVadisFrm()
  *************************************************************************/
 
@@ -516,20 +496,6 @@ SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
         pCnt = pCnt->GetNextCntntFrm();
     } while( pCnt && pFtnFrm->IsAnLower( pCnt ) );
     return (SwTxtFrm*)pLast;
-}
-
-/*************************************************************************
- *                      SwTxtFrm::SetErgoSumNum()
- *************************************************************************/
-
-void SwTxtFrm::SetErgoSumNum( const MSHORT nErgo )
-{
-    SwParaPortion *pPara = GetPara();
-    if( pPara )
-    {
-        XubString aStr( nErgo );
-        pPara->SetErgoSumNum( aStr );
-    }
 }
 
 /*************************************************************************
@@ -1320,10 +1286,6 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     nLastLeft = nOldRealWidth - pCurr->Width();
     FeedInf( rInf );
-#ifdef USED
-    ASSERT( nOldRealWidth == rInf.RealWidth() && nLastLeft >= pQuo->Width(),
-            "SwTxtFormatter::FormatQuoVadis: crime doesn't pay" );
-#endif
 
     // Es kann durchaus sein, dass am Ende eine Marginportion steht,
     // die beim erneuten Aufspannen nur Aerger bereiten wuerde.
