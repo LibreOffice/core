@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:00:21 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ import org.openoffice.netbeans.modules.office.utils.ManifestParser;
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.filter.FileFilter;
 import org.openoffice.idesupport.ui.ConfigurePanel;
+import org.openoffice.idesupport.xml.ParcelDescriptor;
 
 public class ParcelFolderSupport implements ParcelFolderCookie
 {
@@ -106,6 +107,42 @@ public class ParcelFolderSupport implements ParcelFolderCookie
 
     public ParcelFolderSupport(ParcelFolder pf) {
         this.pf = pf;
+    }
+
+    public String getClasspath() {
+        FileObject primary = pf.getPrimaryFile();
+
+        File contents = FileUtil.toFile(
+            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+
+        try {
+            ParcelDescriptor pd = new ParcelDescriptor(
+                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
+
+            return pd.getLanguageProperty("classpath");
+        }
+        catch (IOException ioe) {
+            ErrorManager.getDefault().notify(ioe);
+        }
+        return "";
+    }
+
+    public void setClasspath(String value) {
+        FileObject primary = pf.getPrimaryFile();
+
+        File contents = FileUtil.toFile(
+            primary.getFileObject(ParcelZipper.CONTENTS_DIRNAME));
+
+        try {
+            ParcelDescriptor pd = new ParcelDescriptor(
+                new File(contents, ParcelZipper.PARCEL_DESCRIPTOR_XML));
+
+            pd.setLanguageProperty("classpath", value);
+            pd.write();
+        }
+        catch (IOException ioe) {
+            ErrorManager.getDefault().notify(ioe);
+        }
     }
 
     public void generate() {
@@ -162,7 +199,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         File parcelDescriptor = new File(contents,
             ParcelZipper.PARCEL_DESCRIPTOR_XML);
 
-        Vector classpath = getClasspath();
+        Vector classpath = getConfigureClasspath();
         classpath.addElement(contents.getAbsolutePath());
 
         try {
@@ -176,13 +213,13 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             ErrorManager.getDefault().notify(ioe);
         }
 
-        DialogDescriptor descriptor = new DialogDescriptor(configuror,
+        DialogDescriptor dd = new DialogDescriptor(configuror,
             ConfigurePanel.DIALOG_TITLE);
 
-        Dialog dialog = TopManager.getDefault().createDialog(descriptor);
+        Dialog dialog = TopManager.getDefault().createDialog(dd);
         dialog.show();
 
-        if (descriptor.getValue() == DialogDescriptor.OK_OPTION) {
+        if (dd.getValue() == DialogDescriptor.OK_OPTION) {
             try {
                 Document doc = configuror.getConfiguration();
                 FileOutputStream fos = new FileOutputStream(parcelDescriptor);
@@ -198,7 +235,7 @@ public class ParcelFolderSupport implements ParcelFolderCookie
         return true;
     }
 
-    private Vector getClasspath() {
+    private Vector getConfigureClasspath() {
         Vector result = new Vector();
 
         String classpath = NbClassPath.createRepositoryPath().getClassPath();

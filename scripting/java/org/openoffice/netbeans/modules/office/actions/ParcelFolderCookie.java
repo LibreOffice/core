@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderCookie.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:33 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,4 +68,7 @@ public interface ParcelFolderCookie extends Node.Cookie
     public void generate();
 
     public boolean configure();
+
+    public void setClasspath(String value);
+    public String getClasspath();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolder.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:34 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-24 12:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ import org.openide.util.HelpCtx;
 
 import org.openoffice.idesupport.filter.*;
 import org.openoffice.idesupport.zip.ParcelZipper;
+import org.openoffice.netbeans.modules.office.actions.ParcelFolderCookie;
 import org.openoffice.netbeans.modules.office.actions.ParcelFolderSupport;
 
 public class ParcelFolder extends DataFolder {
@@ -103,10 +104,12 @@ public class ParcelFolder extends DataFolder {
         private static final String LOCATION = "location";
         private static final String FILTER = "filter";
         private static final String LANGUAGE = LANGUAGE_ATTRIBUTE;
+        private static final String CLASSPATH = "classpath";
 
         private File location;
         private FileFilter filter;
         private String language;
+        private String classpath;
 
         private final FileFilter DEFAULT_FILTER = BinaryOnlyFilter.getInstance();
 
@@ -127,6 +130,14 @@ public class ParcelFolder extends DataFolder {
             }
 
             language = (String)pf.getPrimaryFile().getAttribute(LANGUAGE);
+
+            ParcelFolderCookie cookie =
+                (ParcelFolderCookie)pf.getCookie(ParcelFolderCookie.class);
+            String s = cookie.getClasspath();
+            if (s != null)
+                classpath = s;
+            else
+                classpath = ".";
         }
 
         public File getTargetDir() {
@@ -161,8 +172,14 @@ public class ParcelFolder extends DataFolder {
             prop = createFilterProperty();
             props.put(prop);
 
+            prop = createFilterProperty();
+            props.put(prop);
+
             // prop = createLanguageProperty();
             // props.put(prop);
+
+            prop = createClasspathProperty();
+            props.put(prop);
 
             return sheet;
         }
@@ -279,6 +296,27 @@ public class ParcelFolder extends DataFolder {
                                 return this.getValue().toString();
                             }
                         };
+                    }
+                };
+            return prop;
+        }
+
+        private Node.Property createClasspathProperty() {
+           Node.Property prop =
+               new PropertySupport.ReadWrite(CLASSPATH, String.class,
+                   "Classpath", "Classpath property for scripts in this parcel") {
+                    public void setValue(Object obj) {
+                        if (obj instanceof String) {
+                            classpath = (String)obj;
+
+                            ParcelFolderCookie cookie = (ParcelFolderCookie)
+                                getDataObject().getCookie(ParcelFolderCookie.class);
+                            cookie.setClasspath(classpath);
+                        }
+                    }
+
+                    public Object getValue() {
+                        return classpath;
                     }
                 };
             return prop;
