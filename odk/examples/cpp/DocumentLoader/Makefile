@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.15 $
+#  $Revision: 1.16 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:29:24 $
+#  last change: $Author: rt $ $Date: 2005-01-31 17:02:18 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -85,12 +85,12 @@ include $(SETTINGS)/stdtarget.mk
 # This example type library will be extended by the office types
 $(OUT_BIN)/%.rdb :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
-	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
 	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
@@ -111,7 +111,7 @@ endif
 
 $(COMPOENNT_ENV_FLAG) : 
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $@
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	@echo --------------------------------------------------------------------------------
 	@echo        Register necessary runtime components in the DocumentLoader.rdb 
 	@echo --------------------------------------------------------------------------------
@@ -123,15 +123,21 @@ $(COMPOENNT_ENV_FLAG) :
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The example loads the "$(QM)test.sxw$(QM)" document in the DocumentLoader example directory.
+	@echo The example loads the "$(QM)test.odt$(QM)" document in the DocumentLoader example directory.
 	@echo I you want to load your own document, please use: DocumentLoader "$(QM)filename$(QM)" [connection_url]
+	@echo -
 	@echo Use the following command to execute the example!
 	@echo -
 	@echo make DocumentLoader.run
+	@echo -
+	@echo NOTE: This example does not use the new UNO bootstrap mechanism, it uses still a socket
+	@echo $(SQM)      $(SQM)connection. Before you can run this example you have to start your office in listening mode. 
+	@echo -
+	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.sxw"))
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.odt"))
 
 .PHONY: clean
 clean :
