@@ -35,6 +35,7 @@ hedabu: ..\win\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
 hedabu: ..\%__SRC%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
 hedabu: ..\%__SRC%\inc\svconf.h %_DEST%\inc%_EXT%\tools\svconf.h
 hedabu: ..\%__SRC%\inc\toolerr.hxx %_DEST%\inc%_EXT%\tools\toolerr.hxx
+hedabu: ..\bootstrp\mkcreate.hxx %_DEST%\inc%_EXT%\bootstrp\mkcreate.hxx
 hedabu: ..\bootstrp\minormk.hxx %_DEST%\inc%_EXT%\bootstrp\minormk.hxx
 hedabu: ..\bootstrp\appdef.hxx %_DEST%\inc%_EXT%\bootstrp\appdef.hxx
 hedabu: ..\bootstrp\bsecode.hxx %_DEST%\inc%_EXT%\bootstrp\bsecode.hxx
