@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:02:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,5 +1468,77 @@ sal_Bool SAL_CALL OleComponent::isDataFlavorSupported( const datatransfer::DataF
             return sal_True;
 
     return sal_False;
+}
+
+void SAL_CALL OleComponent::dispose() throw (::com::sun::star::uno::RuntimeException)
+{
+    try
+    {
+        close( sal_True );
+    }
+    catch ( uno::Exception& )
+    {
+    }
+}
+
+void SAL_CALL OleComponent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( !m_pInterfaceContainer )
+        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+
+    m_pInterfaceContainer->addInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ), xListener );
+}
+
+//----------------------------------------------
+void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_pInterfaceContainer )
+        m_pInterfaceContainer->removeInterface( ::getCppuType( ( const uno::Reference< lang::XEventListener >* )0 ),
+                                                xListener );
+}
+
+sal_Bool ClassIDsEqual( const uno::Sequence< sal_Int8 >& aClassID1, const uno::Sequence< sal_Int8 >& aClassID2 );
+
+sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
+{
+    try
+    {
+        uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
+        if ( ClassIDsEqual( aIdentifier, aCLSID ) )
+            return (sal_Int64) (IUnknown*) m_pNativeImpl->m_pObj;
+
+        // compatibility hack for old versions: CLSID was used in wrong order (SvGlobalName order)
+        sal_Int32 nLength = aIdentifier.getLength();
+        if ( nLength == 16 )
+        {
+            for ( sal_Int32 n=8; n<16; n++ )
+                if ( aIdentifier[n] != aCLSID[n] )
+                    return 0;
+            if ( aIdentifier[7] == aCLSID[6] &&
+                 aIdentifier[6] == aCLSID[7] &&
+                 aIdentifier[5] == aCLSID[4] &&
+                 aIdentifier[4] == aCLSID[5] &&
+                 aIdentifier[3] == aCLSID[0] &&
+                 aIdentifier[2] == aCLSID[1] &&
+                 aIdentifier[1] == aCLSID[2] &&
+                 aIdentifier[0] == aCLSID[3] )
+                return (sal_Int64) (IUnknown*) m_pNativeImpl->m_pObj;
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    return 0;
 }
 
