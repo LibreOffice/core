@@ -9,6 +9,7 @@ es	external\expat\rtufiles	nmake	-	all	ex_expatrtu NULL
 es	external\expat\rtufiles\xmlparse	nmake	-	all	ex_expatxmlparse NULL
 es	external\expat\rtufiles\xmltok	nmake	-	all	ex_expatxmltok NULL
 es 	external\freetype	nmake	-	u	es_freetype NULL
+es	external\freetype\freetype-2.0.2\src			nmake	-	u	es_freetypesrc es_freebase.u es_freecache.u es_freesfnt.u es_freecff.u es_freepsnames.u es_freepsaux.u es_freetruetype.u es_freecid.u es_freesmooth.u es_freeraster.u NULL 
 es	external\freetype\freetype-2.0.2\src\base		nmake	-	u	es_freebase es_freetype.u	NULL
 es      external\freetype\freetype-2.0.2\src\cache 		nmake   -       u       es_freecache es_freetype.u	NULL
 es      external\freetype\freetype-2.0.2\src\sfnt 		nmake   -       u       es_freesfnt es_freetype.u	NULL
