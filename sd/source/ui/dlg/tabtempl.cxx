@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:11:14 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,9 @@
 #endif
 #define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
 
-#include <svx/chardlg.hxx>
-#include <svx/paragrph.hxx>
-#include <svx/tabstpge.hxx>
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #include <svx/paragrph.hxx>
+//CHINA001 #include <svx/tabstpge.hxx>
 #include <svx/svxdlg.hxx>
 
 //CHINA001 #ifndef _SVX_CONNECT_HXX //autogen
@@ -113,18 +113,18 @@
 //CHINA001 #ifndef _SVX_MEASURE_HXX //autogen
 //CHINA001 #include <svx/measure.hxx>
 //CHINA001 #endif
-#ifndef _SVX_TEXTATTR_HXX //autogen
-#include <svx/textattr.hxx>
-#endif
+//CHINA001 #ifndef _SVX_TEXTATTR_HXX //autogen
+//CHINA001 #include <svx/textattr.hxx>
+//CHINA001 #endif
 #ifndef _SVX_TAB_LINE_HXX //autogen
 #include <svx/tabline.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
-#ifndef _SVX_TABSTPGE_HXX //autogen
-#include <svx/tabstpge.hxx>
-#endif
+//CHINA001 #ifndef _SVX_TABSTPGE_HXX //autogen
+//CHINA001 #include <svx/tabstpge.hxx>
+//CHINA001 #endif
 #ifndef _XTABLE_HXX
 #include <svx/xtable.hxx>
 #endif
@@ -135,7 +135,7 @@
 #include "sdresid.hxx"
 #include "dlg_char.hxx"
 #include "paragr.hxx"
-
+#include <svx/flagsdef.hxx> //CHINA001
 /*************************************************************************
 |*
 |* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
@@ -169,24 +169,24 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                     //CHINA001 SvxShadowTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_TRANSPARENCE);//CHINA001 AddTabPage( RID_SVXPAGE_TRANSPARENCE, SvxTransparenceTabPage::Create,
                                     //CHINA001 SvxTransparenceTabPage::GetRanges )
-    AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create,
-                                    SvxCharNamePage::GetRanges );
-    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create,
-                                    SvxCharEffectsPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,
-                    SvxStdParagraphTabPage::Create,
-                    SvxStdParagraphTabPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_TEXTATTR, SvxTextAttrPage::Create,
-                    SvxTextAttrPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_CHAR_NAME ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_NAME, SvxCharNamePage::Create,
+                                    //CHINA001 SvxCharNamePage::GetRanges );
+    AddTabPage( RID_SVXPAGE_CHAR_EFFECTS ); //CHINA001 AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, SvxCharEffectsPage::Create,
+                                    //CHINA001 SvxCharEffectsPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_STD_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_STD_PARAGRAPH,
+                    //CHINA001 SvxStdParagraphTabPage::Create,
+                    //CHINA001 SvxStdParagraphTabPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_TEXTATTR );//CHINA001 AddTabPage( RID_SVXPAGE_TEXTATTR, SvxTextAttrPage::Create,
+                    //CHINA001 SvxTextAttrPage::GetRanges );
     AddTabPage( RID_SVXPAGE_TEXTANIMATION );
     AddTabPage( RID_SVXPAGE_MEASURE);//CHINA001 AddTabPage( RID_SVXPAGE_MEASURE, SvxMeasurePage::Create,
                     //CHINA001 {SvxMeasurePage::GetRanges );
     AddTabPage( RID_SVXPAGE_CONNECTION);//CHINA001 AddTabPage( RID_SVXPAGE_CONNECTION, SvxConnectionPage::Create,
                     //CHINA001 SvxConnectionPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,
-                    SvxParaAlignTabPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create,
-                    SvxTabulatorTabPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,
+                    //CHINA001 SvxParaAlignTabPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_TABULATOR );//CHINA001 AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create,
+                    //CHINA001 SvxTabulatorTabPage::GetRanges );
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
         AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
@@ -285,12 +285,16 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             SvxFontListItem aItem(*( (const SvxFontListItem*)
                 ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
-            ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            //CHINA001 ( (SvxCharNamePage&) rPage ).SetFontList( aItem );
+            aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+            rPage.PageCreated(aSet);
         }
         break;
 
         case RID_SVXPAGE_CHAR_EFFECTS:
-            ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            //CHINA001 ( (SvxCharEffectsPage&) rPage ).DisableControls( DISABLE_CASEMAP );
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+            rPage.PageCreated(aSet);
         break;
 
         case RID_SVXPAGE_STD_PARAGRAPH:
@@ -298,8 +302,11 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
         case RID_SVXPAGE_TEXTATTR:
         {
-            ( (SvxTextAttrPage&) rPage ).SetView( pSdrView );
-            ( (SvxTextAttrPage&) rPage ).Construct();
+
+            //CHINA001 ( (SvxTextAttrPage&) rPage ).SetView( pSdrView );
+            //CHINA001 ( (SvxTextAttrPage&) rPage ).Construct();
+            aSet.Put(OfaPtrItem(SID_SVXTEXTATTRPAGE_VIEW,pSdrView)); //add CHINA001
+            rPage.PageCreated(aSet); //add CHINA001
         }
         break;
 
@@ -310,6 +317,7 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 //CHINA001          ( (SvxMeasurePage&) rPage ).SetView( pSdrView );
 //CHINA001          ( (SvxMeasurePage&) rPage ).Construct();
             aSet.Put (OfaPtrItem(SID_OBJECT_LIST,pSdrView));//add CHINA001
+            rPage.PageCreated(aSet); //add CHINA001
         break;
 
         case RID_SVXPAGE_CONNECTION:
@@ -317,6 +325,7 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 //CHINA001          ( (SvxConnectionPage&) rPage ).SetView( pSdrView );
 //CHINA001          ( (SvxConnectionPage&) rPage ).Construct();
             aSet.Put (OfaPtrItem(SID_OBJECT_LIST,pSdrView));//add CHINA001
+            rPage.PageCreated(aSet); //add CHINA001
         }
         break;
     }
