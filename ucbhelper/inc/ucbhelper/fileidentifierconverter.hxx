@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-13 11:35:36 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
 #define _UCBHELPER_FILEIDENTIFIERCONVERTER_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace ucb {
@@ -71,71 +71,26 @@ namespace com { namespace sun { namespace star { namespace ucb {
 } } } }
 namespace rtl { class OUString; }
 
-//============================================================================
-/** Using a specific content provider manager, convert a normalized file path
-    to a (file) URL.
-
-    @param rManager
-    A content provider manager.  Must not be null.
-
-    @param rHostName
-    See the corresponding parameter of
-    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromNormalizedPath().
-
-    @param rNormalizedPath
-    See the corresponding parameter of
-    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromNormalizedPath().
-
-    @returns
-    a URL, if any of the content providers registered at the content provider
-    manager returns a URL when calling
-    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromNormalizedPath()
-    on it.  Otherwise, an empty string is returned.
-
-    @see
-    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromNormalizedPath().
- */
 namespace ucb {
 
-rtl::OUString
-getFileURLFromNormalizedPath(
-    com::sun::star::uno::Reference<
-            com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
-    rtl::OUString const & rHostName,
-    rtl::OUString const & rNormalizedPath);
-
 //============================================================================
-/** Using a specific content provider manager, convert a (file) URL to a
-    normalized file path.
+/** Get a 'root' URL for the most 'local' file content provider.
+
+    @descr
+    The result can be used as the rBaseURL parameter of
+    ucb::getFileURLFromSystemPath().
 
     @param rManager
     A content provider manager.  Must not be null.
 
-    @param rHostName
-    See the corresponding parameter of
-    com::sun::star::ucb::XFileIdentiferConverter::getNormalizedPathFromFileURL().
-
-    @param rURL
-    See the corresponding parameter of
-    com::sun::star::ucb::XFileIdentiferConverter::getNormalizedPathFromFileURL().
-
     @returns
-    a normalized path, if any of the content providers registered at the
-    content provider manager returns a normalized path when calling
-    com::sun::star::ucb::XFileIdentiferConverter::getNormalizedPathFromFileURL()
-    on it.  Otherwise, an empty string is returned.
-
-    @see
-    com::sun::star::ucb::XFileIdentiferConverter::getNormalizedPathFromFileURL().
+    either a 'root' URL for the most 'local' file content provider, or an
+    empty string, if no such URL can meaningfully be constructed.
  */
-rtl::OUString
-getNormalizedPathFromFileURL(
+rtl::OUString getLocalFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
-        rManager,
-    rtl::OUString const & rHostName,
-    rtl::OUString const & rURL);
+        rManager);
 
 //============================================================================
 /** Using a specific content provider manager, convert a file path in system
@@ -176,10 +131,6 @@ getFileURLFromSystemPath(
     @param rManager
     A content provider manager.  Must not be null.
 
-    @param rBaseURL
-    See the corresponding parameter of
-    com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
-
     @param rURL
     See the corresponding parameter of
     com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
@@ -199,7 +150,6 @@ getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
-    rtl::OUString const & rBaseURL,
     rtl::OUString const & rURL);
 
 }

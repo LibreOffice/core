@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-13 11:36:12 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,71 +91,42 @@
 using namespace com::sun;
 using namespace com::sun::star;
 
-//============================================================================
-//
-//  getFileURLFromNormalizedPath
-//
-//============================================================================
-
 namespace ucb {
 
-rtl::OUString
-getFileURLFromNormalizedPath(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
-    rtl::OUString const & rHostName,
-    rtl::OUString const & rNormalizedPath)
-{
-    VOS_ASSERT(rManager.is());
-
-    uno::Sequence< star::ucb::ContentProviderInfo >
-        aProviders(rManager->queryContentProviders());
-    for (sal_Int32 i = 0; i < aProviders.getLength(); ++i)
-    {
-        uno::Reference< star::ucb::XFileIdentifierConverter >
-            xConverter(aProviders[i].ContentProvider, uno::UNO_QUERY);
-        if (xConverter.is())
-        {
-            rtl::OUString
-                aResult(xConverter->
-                            getFileURLFromNormalizedPath(rHostName,
-                                                         rNormalizedPath));
-            if (aResult.getLength() != 0)
-                return aResult;
-        }
-    }
-    return rtl::OUString();
-}
-
 //============================================================================
 //
-//  getNormalizedPathFromFileURL
+//  getLocalFileURL
 //
 //============================================================================
 
 rtl::OUString
-getNormalizedPathFromFileURL(
-    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
-    rtl::OUString const & rHostName,
-    rtl::OUString const & rURL)
+getLocalFileURL(
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager)
 {
     VOS_ASSERT(rManager.is());
 
-    uno::Sequence< star::ucb::ContentProviderInfo >
-        aProviders(rManager->queryContentProviders());
-    for (sal_Int32 i = 0; i < aProviders.getLength(); ++i)
+    static sal_Char const * const aBaseURLs[]
+        = { "file:///", "vnd.sun.star.wfs:///" };
+    sal_Int32 nMaxLocality = -1;
+    rtl::OUString aMaxBaseURL;
+    for (int i = 0; i < sizeof aBaseURLs / sizeof (sal_Char const *); ++i)
     {
+        rtl::OUString aBaseURL(rtl::OUString::createFromAscii(aBaseURLs[i]));
         uno::Reference< star::ucb::XFileIdentifierConverter >
-            xConverter(aProviders[i].ContentProvider, uno::UNO_QUERY);
+            xConverter(rManager->queryContentProvider(aBaseURL),
+                       uno::UNO_QUERY);
         if (xConverter.is())
         {
-            rtl::OUString
-                aResult(xConverter->getNormalizedPathFromFileURL(rHostName,
-                                                                 rURL));
-            if (aResult.getLength() != 0)
-                return aResult;
+            sal_Int32 nLocality
+                = xConverter->getFileProviderLocality(aBaseURL);
+            if (nLocality > nMaxLocality)
+            {
+                nMaxLocality = nLocality;
+                aMaxBaseURL = aBaseURL;
+            }
         }
     }
-    return rtl::OUString();
+    return aMaxBaseURL;
 }
 
 //============================================================================
@@ -189,15 +160,14 @@ getFileURLFromSystemPath(
 rtl::OUString
 getSystemPathFromFileURL(
     uno::Reference< star::ucb::XContentProviderManager > const & rManager,
-    rtl::OUString const & rBaseURL,
     rtl::OUString const & rURL)
 {
     VOS_ASSERT(rManager.is());
 
     uno::Reference< star::ucb::XFileIdentifierConverter >
-        xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
+        xConverter(rManager->queryContentProvider(rURL), uno::UNO_QUERY);
     if (xConverter.is())
-        return xConverter->getSystemPathFromFileURL(rBaseURL, rURL);
+        return xConverter->getSystemPathFromFileURL(rURL);
     else
         return rtl::OUString();
 }
