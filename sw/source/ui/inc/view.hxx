@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:05:14 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
 struct SwPrintData;
 class SwFormatClipboard;
+struct SwConversionArgs;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -382,8 +383,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // used for spell checking and text conversion
     SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
-                                        BOOL bEndDone, SwHHCWrapper *pConvWrapper = 0 );
-    SW_DLLPRIVATE void          SpellEnd( SwHHCWrapper *pConvWrapper = 0 );
+                                        BOOL bEndDone, SwConversionArgs *pConvArgs = 0 );
+    SW_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
     SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SW_DLLPRIVATE BOOL          CheckSpecialCntnt();
