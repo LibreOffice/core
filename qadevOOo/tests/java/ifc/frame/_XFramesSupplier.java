@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFramesSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:18 $
+ *  last change:$Date: 2003-01-31 12:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFramesSupplier;
 import lib.MultiMethodTest;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.frame.XFramesSupplier</code>
@@ -111,7 +114,13 @@ public class _XFramesSupplier extends MultiMethodTest {
             for (int i = 0; i < frames.getCount(); i++) {
                 XFrame fr = null ;
                 try {
-                   fr = (XFrame) frames.getByIndex(i) ;
+                   fr = null;
+                   try {
+                       fr = (XFrame) AnyConverter.toObject(
+                                new Type(XFrame.class),frames.getByIndex(i));
+                   } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                       log.println("Can't convert any");
+                   }
                 } catch (com.sun.star.lang.WrappedTargetException e) {
                    log.println("Exception occured while calling getByIndex() method :") ;
                    e.printStackTrace(log) ;
@@ -192,9 +201,19 @@ public class _XFramesSupplier extends MultiMethodTest {
         if (frames.getCount() > 1) {
             try {
                 if (activeIdx != 0)
-                    sFrame = (XFrame) frames.getByIndex(0) ;
+                   try {
+                       sFrame = (XFrame) AnyConverter.toObject(
+                                new Type(XFrame.class),frames.getByIndex(0));
+                   } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                       log.println("Can't convert any");
+                   }
                 else
-                    sFrame = (XFrame) frames.getByIndex(1) ;
+                   try {
+                       sFrame = (XFrame) AnyConverter.toObject(
+                                new Type(XFrame.class),frames.getByIndex(1));
+                   } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                       log.println("Can't convert any");
+                   }
             } catch (com.sun.star.lang.WrappedTargetException e) {
                     log.println("Exception occured while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
