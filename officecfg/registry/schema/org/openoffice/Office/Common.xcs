@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:03:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6834,6 +6834,7 @@
 				<prop oor:name="OfficeInstall" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
 					<info>
+                        <deprecated/>
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path.</desc>
 						<desc xml:lang="el">Contains the Office installation path.</desc>
@@ -6870,6 +6871,7 @@
 				<prop oor:name="OfficeInstallURL" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
 					<info>
+                        <deprecated/>
 						<author>MBA</author>
 						<desc xml:lang="en-US">Contains the Office installation path in URL notation. Must match the UCB configuration.</desc>
 						<desc xml:lang="el">Contains the Office installation path in URL notation. Must match the UCB configuration.</desc>
