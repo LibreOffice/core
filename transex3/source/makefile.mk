@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: nf $ $Date: 2002-05-07 09:31:20 $
+#   last change: $Author: nf $ $Date: 2002-08-15 11:13:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,8 +95,8 @@ LIB1FILES=  $(LB)$/transex3.lib
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
-APP1OBJS=   $(OBJ)$/src_yy.obj 
-APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
+APP1OBJS=   $(OBJ)$/src_yy.obj
+APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 
@@ -108,7 +108,7 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 # extractor and merger for *.lng and *.lng
 APP3TARGET= lngex
 APP3STACK=  16000
-APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
+APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
 APP3STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # encoding converter for *.gsi
@@ -126,31 +126,31 @@ APP5STDLIBS=$(STATIC_LIBS)
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
 APP6STACK=  16000
-APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP6STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
 APP7STACK=  16000
-APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 #APP8TARGET= xgfconv
 #APP8STACK=  16000
 #APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
-#APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS) 
+#APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # encoding converter for text files
 #APP9TARGET= txtconv
 #APP9STACK=  16000
-#APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj 
+#APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
 #APP9STDLIBS=$(STATIC_LIBS)
 
 # localizer for l10n framework
 APP9TARGET= localize
 APP9STACK=  16000
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
-APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS) 
+APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 

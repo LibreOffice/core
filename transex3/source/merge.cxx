@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-04 13:44:01 $
+ *  last change: $Author: nf $ $Date: 2002-08-15 11:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <tools/fsys.hxx>
 #include "export.hxx"
 #include "utf8conv.hxx"
+
+extern void ConvertHalfwitdhToFullwidth( String& rString );
 
 //
 // class PFormEntrys
@@ -219,6 +221,11 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, BOOL bErrLog,
 
             if ( bUTF8 )
                 sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
+            if (( nLANG == JAPANESE ) && ( Export::GetCharSet( nLANG ) == RTL_TEXTENCODING_UTF8 )) {
+                String sSLine( sLine, RTL_TEXTENCODING_UTF8 );
+                ConvertHalfwitdhToFullwidth( sSLine );
+                sLine = ByteString( sSLine, RTL_TEXTENCODING_UTF8 );
+            }
 
             sTEXT = sLine.GetToken( 6, '\t' );
                 sTEXT = sTEXT.Copy( 1 ); sTEXT.Erase( sTEXT.Len() - 1 );
