@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:05:54 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ TabPage TP_FRM_WRAP
         Text[ portuguese_brazilian ] = "~Esquerda";
         Text[ japanese ] = "å‰";
         Text[ korean ] = "ì•";
-        Text[ chinese_simplified ] = "å‰";
+        Text[ chinese_simplified ] = "ä¹‹å‰";
         Text[ chinese_traditional ] = "å‰";
         Text[ turkish ] = "Önce";
         Text[ arabic ] = "Åáì ÇáíÓÇÑ";
@@ -198,7 +198,7 @@ TabPage TP_FRM_WRAP
         Text[ portuguese_brazilian ] = "~Direita";
         Text[ japanese ] = "å¾Œ";
         Text[ korean ] = "ë’¤";
-        Text[ chinese_simplified ] = "å";
+        Text[ chinese_simplified ] = "ä¹‹å";
         Text[ chinese_traditional ] = "å¾Œ";
         Text[ turkish ] = "Sonra";
         Text[ arabic ] = "Åáì Çáíãíä";
