@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:37:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #include <svtools/sbxdef.hxx>
 #include <svtools/sbx.hxx>
 #include "runtime.hxx"
+#ifndef GCC
 #pragma hdrstop
+#endif
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbintern.hxx"
@@ -577,7 +579,6 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
     SbxVariable* p;
 
     // #57915 Missing sauberer loesen
-    BOOL bIsMissing = FALSE;
     USHORT nParamCount = refParams->Count();
     // Wurden ueberhaupt genug Parameter uebergeben
     if( i >= nParamCount )
@@ -713,6 +714,9 @@ void SbiRuntime::StepSTMNT( USHORT nOp1, USHORT nOp2 )
 
     // Suchen des naechsten STMNT-Befehls,
     // um die End-Spalte dieses Statements zu setzen
+    // Searches of the next STMNT instruction,
+    // around the final column of this statement to set
+
     nCol2 = -1;
     USHORT n1, n2;
     const BYTE* p = pMod->FindNextStmnt( pCode, n1, n2 );
@@ -858,7 +862,7 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
         return;
     }
 
-    SbxDimArray* pArray;
+    SbxDimArray* pArray = 0;
     if( xObj->ISA(SbxDimArray) )
     {
         SbxBase* pObj = (SbxBase*)xObj;
