@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-26 11:58:15 $
+ *  last change: $Author: mib $ $Date: 2002-07-15 12:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,8 +733,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         if( pDrawModel )
         {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
-            if( !pDocShell )
-                pDrawModel->ClearPersist();
+            pDrawModel->SetPersist( pDocShell );
             ASSERT( pDrawModel->GetPersist() == GetPersist(),
                     "draw model's persist is out of sync" );
         }
