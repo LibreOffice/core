@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:04:16 $
+#   last change: $Author: vg $ $Date: 2003-07-02 14:21:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ TARGET=gen
 .INCLUDE : svpre.mk
 .INCLUDE : settings.mk
 .INCLUDE : sv.mk
+
+.IF "$(WITH_GPC)"!="NO"
+CDEFS+=-DHAVE_GPC_H
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
