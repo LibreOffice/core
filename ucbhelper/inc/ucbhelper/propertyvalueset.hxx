@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyvalueset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 10:42:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 #include <ucbhelper/macros.hxx>
 #endif
 
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
+
 namespace com { namespace sun { namespace star { namespace script {
     class XTypeConverter;
 } } } }
@@ -107,7 +111,7 @@ class PropertyValues;
   * values to return can easyly appended to a valueset object. That object can
   * directly be returned by the implementation of the command.
   */
-class PropertyValueSet :
+class UCBHELPER_DLLPUBLIC PropertyValueSet :
                 public cppu::OWeakObject,
                 public com::sun::star::lang::XTypeProvider,
                 public com::sun::star::sdbc::XRow,
@@ -123,7 +127,7 @@ class PropertyValueSet :
     sal_Bool        m_bTriedToGetTypeConverter;
 
 private:
-    const com::sun::star::uno::Reference<
+    UCBHELPER_DLLPRIVATE const com::sun::star::uno::Reference<
             com::sun::star::script::XTypeConverter >&
     getTypeConverter();
 
