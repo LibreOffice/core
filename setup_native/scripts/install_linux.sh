@@ -72,7 +72,7 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core-*" ! -name "*-menus-*" ! -name "adabas*" ! -name "j2re*" ! -name "*-gnome*" -print`
+RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core-*" ! -name "*-menus-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
 CORERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core-*" -print`
 PREFIX=`rpm -qlp $CORERPM | head -n1`
 
