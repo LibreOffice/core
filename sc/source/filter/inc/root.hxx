@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:10:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     const CharSet*      pCharset;               // actual charset (im- / export!)
 
     BOOL                bCellCut;               // bei Ueberlauf max. Cols / Rows
-    BOOL                bBreakSharedFormula;    // SharedFormula bei Export aufbrechen?
     BOOL                bChartTab;              // Tabelle mit einem einzigen Chart
 
     // Biff8
