@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:30:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,7 @@
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <svtools/linguprops.hxx>
 #endif
@@ -90,7 +88,7 @@
 #include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SO_CLSIDS_HXX //autogen
-#include <so3/clsids.hxx>
+#include <sot/clsids.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
@@ -101,6 +99,8 @@
 
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
 #include <comphelper/accessibletexthelper.hxx>
@@ -242,7 +242,8 @@
 #include <smdll.hxx>
 
 #include <sfx2/fcontnr.hxx>
-
+#include <sfx2/msg.hxx>
+#include <sfx2/objface.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -251,15 +252,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
 #define A2OU(x)        rtl::OUString::createFromAscii( x )
-
-#ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
-#define SO2_DECL_SVSTORAGESTREAM_DEFINED
-SO2_DECL_REF(SvStorageStream)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
 
 #define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 
@@ -284,88 +276,7 @@ SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
     SFX_POPUPMENU_REGISTRATION(SmResId(RID_COMMANDMENU));
 }
 
-SFX_IMPL_OBJECTFACTORY(SmDocShell, SFXOBJECTSHELL_STD_NORMAL, smath, SvGlobalName(SO3_SM_CLASSID) )
-/*
-SotFactory * SmDocShell::ClassFactory()
-{
-    SotFactory **ppFactory = GetFactoryAdress();
-    if( !*ppFactory )
-    {
-        *ppFactory = new SfxObjectFactory( SvGlobalName(SO3_SM_CLASSID),
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "SmDocShell" ) ),
-                                SmDocShell::CreateInstance );
-        (*ppFactory)->PutSuperClass( SfxInPlaceObject::ClassFactory() );
-    }
-    return *ppFactory;
-}
-void * __EXPORT SmDocShell::CreateInstance( SotObject ** ppObj )
-{
-    SmDocShell * p = new SmDocShell();
-    SfxInPlaceObject* pSfxInPlaceObject = p;
-    SotObject* pBasicObj = pSfxInPlaceObject;
-    if( ppObj )
-        *ppObj = pBasicObj;
-    return p;
-}
-const SotFactory * __EXPORT SmDocShell::GetSvFactory() const
-{
-    return ClassFactory();
-}
-void * __EXPORT SmDocShell::Cast( const SotFactory * pFact )
-{
-    void * pRet = NULL;
-    if( !pFact || pFact == ClassFactory() )
-        pRet = this;
-    if( !pRet )
-        pRet = SfxInPlaceObject::Cast( pFact );
-    return pRet;
-}
-
-        SfxObjectFactory* SmDocShell::pObjectFactory = 0;
-
-        SfxObjectShell* __EXPORT SmDocShell::CreateObject(SfxObjectCreateMode eMode)
-        {
-            SfxObjectShell* pDoc = new SmDocShell(eMode);
-            return pDoc;
-        }
-        SfxObjectFactory& __EXPORT SmDocShell::GetFactory() const
-        {
-            return Factory();
-        }
-        void __EXPORT SmDocShell::RegisterFactory( USHORT nPrio )
-        {
-            Factory().Construct(
-                nPrio,
-                &SmDocShell::CreateObject, SFXOBJECTSHELL_STD_NORMAL | SFXOBJECTSHELL_HASMENU,
-                "smath" );
-            Factory().RegisterInitFactory( &InitFactory );
-            Factory().Register();
-        }
-        BOOL SmDocShell::DoInitNew( SvStorage *pStor )
-        { return SfxObjectShell::DoInitNew(pStor); }
-
-        BOOL SmDocShell::DoClose()
-        { return SfxInPlaceObject::DoClose(); }
-
-        BOOL SmDocShell::Close()
-        {   SvObjectRef aRef(this);
-            SfxInPlaceObject::Close();
-            return SfxObjectShell::Close(); }
-
-        void SmDocShell::ModifyChanged()
-        { SfxObjectShell::ModifyChanged(); }
-
-        void __EXPORT SmDocShell::InitFactory()
-*/
-{
-    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
-    SfxFilterContainer *pFltContainer = rFactory.GetFilterContainer( FALSE );
-    //rFactory.GetFilterContainer()->SetDetectFilter( &SmDLL::DetectFilter );
-
-   // FG: Sonst gibts keine Hilfe im Math  #38447#
-   Factory().RegisterHelpFile (C2S("smath.svh"));
-   Factory().SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
-}
+SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SFXOBJECTSHELL_STD_NORMAL, "smath" )
 
 void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
                     const SfxHint& rHint, const TypeId&)
@@ -428,7 +339,7 @@ void SmDocShell::SetText(const String& rBuffer)
         if( pViewSh )
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
-            if ( IsInPlaceActive() || SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+            if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
                 Resize();
             else
                 pViewSh->GetGraphicWindow().Invalidate();
@@ -724,8 +635,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pPrinter = rDocShell.GetPrt()) )
     {
         pPrinter->Push( PUSH_MAPMODE );
-        if ( rDocShell.IsInPlaceActive() ||
-             SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
+        if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
@@ -750,8 +660,7 @@ SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
     if ( 0 != (pRefDev = rDocShell.GetRefDev()) && pPrinter != pRefDev )
     {
         pRefDev->Push( PUSH_MAPMODE );
-        if ( rDocShell.IsInPlaceActive() ||
-             SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
+        if ( SFX_CREATE_MODE_EMBEDDED == rDocShell.GetCreateMode() )
         {
             // if it is an embedded object (without it's own printer)
             // we change the MapMode temporarily.
@@ -787,8 +696,7 @@ SmPrinterAccess::~SmPrinterAccess()
 
 Printer* SmDocShell::GetPrt()
 {
-    if ( IsInPlaceActive() ||
-          SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+    if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         //Normalerweise wird der Printer vom Server besorgt. Wenn dieser aber
         //keinen liefert (weil etwa noch keine connection da ist), kann es
@@ -822,8 +730,7 @@ Printer* SmDocShell::GetPrt()
 
 OutputDevice* SmDocShell::GetRefDev()
 {
-    if ( IsInPlaceActive() ||
-         SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+    if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
     {
         OutputDevice* pOutDev = GetDocumentRefDev();
         if ( pOutDev )
@@ -893,7 +800,6 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    SetShell(this);
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
                                     //! im Destruktor nicht explizit gelöscht werden.
                                     //! Dies erledigt das Sfx.
@@ -952,8 +858,10 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     BOOL     bSuccess = FALSE;
     const String& rFltName = rMedium.GetFilter()->GetFilterName();
-    if (rFltName.EqualsAscii( MATHML_XML ) ||
-        rFltName.EqualsAscii( STAROFFICE_XML ))
+
+    DBG_ASSERT( !rFltName.EqualsAscii( STAROFFICE_XML ), "Wrong filter!");
+
+    if ( rFltName.EqualsAscii( MATHML_XML ) )
     {
         if (pTree)
         {
@@ -964,23 +872,32 @@ BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
         SmXMLWrapper aEquation(xModel);
         bSuccess = 0 == aEquation.Import(rMedium);
     }
-    else if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream(
-        C2S( "Equation Native" )))
-    {
-        // is this a MathType Storage?
-        MathType aEquation( aText );
-        if (bSuccess = (1 == aEquation.Parse(rMedium.GetStorage())))
-            Parse();
-    }
     else
     {
         SvStream *pStream = rMedium.GetInStream();
-        if (pStream)
+        if ( pStream )
         {
-            bSuccess = ImportSM20File( pStream );
-            rMedium.CloseInStream();
+            if ( SotStorage::IsStorageFile( pStream ) )
+            {
+                SvStorageRef aStorage = new SotStorage( pStream, FALSE );
+                if ( aStorage->IsStream( C2S( "Equation Native" ) ) )
+                {
+                    // is this a MathType Storage?
+                    MathType aEquation( aText );
+                    if ( bSuccess = ( 1 == aEquation.Parse( aStorage ) ) )
+                        Parse();
+                }
+            }
+            else
+            {
+                bSuccess = ImportSM20File( pStream );
+            }
         }
     }
+
+    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        OnDocumentPrinterChanged(0);
+
     FinishedLoading( SFX_LOADED_ALL );
     return bSuccess;
 }
@@ -1005,7 +922,6 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
         else
         {
             bSuccess = ImportSM20File( pStream );
-            rMedium.CloseInStream();
         }
     }
 
@@ -1036,114 +952,63 @@ BOOL SmDocShell::InsertFrom(SfxMedium &rMedium)
     return bSuccess;
 }
 
-
-
-BOOL SmDocShell::InitNew(SvStorage * pStor)
+BOOL SmDocShell::InitNew( const uno::Reference < embed::XStorage >& xStorage )
 {
     BOOL bRet = FALSE;
-    if (SfxInPlaceObject::InitNew(pStor))
+    if ( SfxObjectShell::InitNew( xStorage ) )
     {
         bRet = TRUE;
         SetVisArea(Rectangle(Point(0, 0), Size(2000, 1000)));
-#if 0
-        if (pStor)
-        {
-            aDocStream = pStor->OpenStream(String::CreateFromAscii(pStarMathDoc));
-            aDocStream->SetVersion (pStor->GetVersion ());
-            GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion()));
-
-            if (! aDocStream )
-                bRet = FALSE;
-        }
-#endif
     }
     return bRet;
 }
 
 
-BOOL SmDocShell::Load(SvStorage *pStor)
+BOOL SmDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     BOOL bRet = FALSE;
-    if( SfxInPlaceObject::Load( pStor ))
+    if( SfxObjectShell::Load( xStorage ))
     {
-        String aTmpStr( C2S( "Equation Native" ));
-        if( pStor->IsStream( aTmpStr ))
-        {
-            // is this a MathType Storage?
-            MathType aEquation(aText);
-            if (bRet = (1 == aEquation.Parse(pStor)))
-                Parse();
-        }
-        else if( pStor->IsStream(C2S("content.xml")) ||
-                 pStor->IsStream(C2S("Content.xml")) )
+        uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
+        if ( xAccess->hasByName( C2S( "content.xml" ) ) && xStorage->isStreamElement( C2S( "content.xml" ) ) ||
+             xAccess->hasByName( C2S( "Content.xml" ) ) && xStorage->isStreamElement( C2S( "Content.xml" ) ) )
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(GetModel());
             SmXMLWrapper aEquation(xModel);
-            SfxMedium aMedium(pStor);
+            SfxMedium aMedium(xStorage);
             ULONG nError = aEquation.Import(aMedium);
             bRet = 0 == nError;
             SetError( nError );
         }
-        else
-        {
-            bRet = Try3x(pStor, STREAM_READWRITE);
-
-            if( !bRet )
-            {
-                pStor->Remove(String::CreateFromAscii(pStarMathDoc));
-                bRet = Try2x(pStor, STREAM_READWRITE);
-                pStor->Remove(C2S("\1Ole10Native"));
-            }
-            else
-            {
-                long nVersion = pStor->GetVersion();
-                if ( nVersion <= SOFFICE_FILEFORMAT_40 )
-                    ConvertText( aText, CONVERT_40_TO_50 );
-                if ( nVersion <= SOFFICE_FILEFORMAT_50 )
-                    ConvertText( aText, CONVERT_50_TO_60 );
-                if (pTree)
-                {   delete pTree;
-                    pTree = NULL;
-                }
-            }
-        }
     }
+
+    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        OnDocumentPrinterChanged(0);
+
     FinishedLoading( SFX_LOADED_ALL );
     return bRet;
 }
 
 
 
-BOOL SmDocShell::Insert(SvStorage *pStor)
+BOOL SmDocShell::Insert( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     String aTemp = aText;
     BOOL bRet = FALSE, bChkOldVersion = TRUE;
 
-    String aTmpStr( C2S( "Equation Native" ));
-    if( pStor->IsStream( aTmpStr ))
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
+    if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
     {
-        bChkOldVersion = FALSE;
-        // is this a MathType Storage?
-        MathType aEquation(aText);
-        if (bRet = (1 == aEquation.Parse(pStor)))
-            Parse();
-    }
-    else if( pStor->IsStream(C2S("content.xml")) ||
-             pStor->IsStream(C2S("Content.xml")) )
-    {
-        bChkOldVersion = FALSE;
-        // is this a fabulous math package ?
-        Reference<com::sun::star::frame::XModel> xModel(GetModel());
-        SmXMLWrapper aEquation(xModel);
-        SfxMedium aMedium(pStor);
-        bRet = 0 == aEquation.Import(aMedium);
-    }
-    else if (!(bRet = Try3x(pStor, STREAM_STD_READ)))
-    {
-        pStor->Remove(String::CreateFromAscii(pStarMathDoc));
-        bRet = Try2x(pStor, STREAM_STD_READ);
-        pStor->Remove(C2S("\1Ole10Native"));
+        if ( xNameAccess->hasByName( C2S( "content.xml" ) ) || xNameAccess->hasByName( C2S( "Content.xml" ) ))
+        {
+            bChkOldVersion = FALSE;
+            // is this a fabulous math package ?
+            Reference<com::sun::star::frame::XModel> xModel(GetModel());
+            SmXMLWrapper aEquation(xModel);
+            SfxMedium aMedium(xStorage);
+            bRet = 0 == aEquation.Import(aMedium);
+        }
     }
 
     if( bRet )
@@ -1158,14 +1023,6 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
             DBG_ERROR( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
-        }
-
-        if( bChkOldVersion )
-        {
-            if( SOFFICE_FILEFORMAT_40 >= pStor->GetVersion() )
-                ConvertText( aText, CONVERT_40_TO_50 );
-            if( SOFFICE_FILEFORMAT_50 >= pStor->GetVersion() )
-                ConvertText( aText, CONVERT_50_TO_60 );
         }
 
         Parse();
@@ -1204,36 +1061,21 @@ BOOL SmDocShell::Save()
     //! apply latest changes if necessary
     UpdateText();
 
-    if ( SfxInPlaceObject::Save() )
+    if ( SfxObjectShell::Save() )
     {
         if( !pTree )
             Parse();
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        SvStorage *pStor = GetStorage();
-        if(pStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
-        {
-            // a math package as a storage
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
-            SfxMedium aMedium(pStor);
-            aEquation.SetFlat(sal_False);
-            return aEquation.Export(aMedium);
-        }
-        else
-        {
-            aDocStream = pStor->OpenStream(String::CreateFromAscii(pStarMathDoc));
-            aDocStream->SetVersion (pStor->GetVersion ());
-            GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion()));
-
-            aDocStream->Seek(0);
-            ImplSave( aDocStream );
-
-            aDocStream.Clear();
-            return TRUE;
-        }
+        uno::Reference < embed::XStorage > xStor = GetStorage();
+        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        SmXMLWrapper aEquation(xModel);
+        SfxMedium aMedium(xStor);
+        aEquation.SetFlat(sal_False);
+        return aEquation.Export(aMedium);
     }
+
     return FALSE;
 }
 
@@ -1249,44 +1091,25 @@ void SmDocShell::UpdateText()
 }
 
 
-BOOL SmDocShell::SaveAs(SvStorage * pNewStor)
+BOOL SmDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     BOOL bRet = FALSE;
 
     //! apply latest changes if necessary
     UpdateText();
 
-    if ( SfxInPlaceObject::SaveAs( pNewStor ) )
+    if ( SfxObjectShell::SaveAs( xStorage ) )
     {
         if( !pTree )
             Parse();
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
 
-        if (pNewStor->GetVersion() >= SOFFICE_FILEFORMAT_60)
-        {
-            // a math package as a storage
-            Reference<com::sun::star::frame::XModel> xModel(GetModel());
-            SmXMLWrapper aEquation(xModel);
-            SfxMedium aMedium(pNewStor);
-            aEquation.SetFlat(sal_False);
-            bRet = aEquation.Export(aMedium);
-        }
-        else
-        {
-            SvStorageStreamRef aStm = pNewStor->OpenStream(
-                                        String::CreateFromAscii(pStarMathDoc));
-            aStm->SetVersion( pNewStor->GetVersion() );
-            GetPool().SetFileFormatVersion( USHORT( pNewStor->GetVersion() ));
-            aStm->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-            aStm->SetKey( pNewStor->GetKey() ); // Passwort setzen
-
-            if ( aStm.Is() )
-            {
-                ImplSave( aStm );
-                bRet = TRUE;
-            }
-        }
+        Reference<com::sun::star::frame::XModel> xModel(GetModel());
+        SmXMLWrapper aEquation(xModel);
+        SfxMedium aMedium(xStorage);
+        aEquation.SetFlat(sal_False);
+        bRet = aEquation.Export(aMedium);
     }
     return bRet;
 }
@@ -1323,23 +1146,11 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
     return bRet;
 }
 
-BOOL SmDocShell::SaveCompleted(SvStorage * pStor)
+BOOL SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    if( SfxInPlaceObject::SaveCompleted( pStor ))
-    {
-#if 0
-        if (! pStor)
-            return TRUE;
-
-        aDocStream = pStor->OpenStream(String::CreateFromAscii(pStarMathDoc));
-        aDocStream->SetVersion (pStor->GetVersion ());
-        GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion()));
-        aDocStream->SetBufferSize(DOCUMENT_BUFFER_SIZE);
-        aDocStream->SetKey( pStor->GetKey() ); // Passwort setzen
-        return aDocStream.Is();
-#endif
+    if( SfxObjectShell::SaveCompleted( xStorage ))
         return TRUE;
-    }
+
     return FALSE;
 }
 
@@ -1624,8 +1435,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
     case SID_COPYOBJECT:
         {
-            Reference< datatransfer::XTransferable > xTrans(
-                                               CreateTransferableSnapshot() );
+            //TODO/LATER: does not work because of UNO Tunneling - will be fixed later
+            Reference< datatransfer::XTransferable > xTrans( GetModel(), uno::UNO_QUERY );
             if( xTrans.is() )
             {
                 Reference< lang::XUnoTunnel> xTnnl( xTrans, uno::UNO_QUERY);
@@ -1644,30 +1455,19 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
     case SID_PASTEOBJECT:
         {
-            TransferableDataHelper aData( TransferableDataHelper::
-                CreateFromSystemClipboard(pViewSh ? pViewSh->GetEditWindow()
-                                                  : 0) );
-            SotStorageStreamRef xStrm;
+            TransferableDataHelper aData( TransferableDataHelper::CreateFromSystemClipboard(pViewSh ? pViewSh->GetEditWindow(): 0) );
+            uno::Reference < io::XInputStream > xStrm;
             SotFormatStringId nId;
             if( aData.GetTransferable().is() &&
                 ( aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
                   (aData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
                    aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))) &&
-                aData.GetSotStorageStream( nId, xStrm ) && xStrm.Is() )
+                aData.GetInputStream( nId, xStrm ) && xStrm.is() )
             {
-                SvStorageRef xStore( new SvStorage( *xStrm ));
-                switch( xStore->GetFormat() )
-                {
-                case SOT_FORMATSTR_ID_STARMATH_8:
-                case SOT_FORMATSTR_ID_STARMATH_60:
-                case SOT_FORMATSTR_ID_STARMATH_50:
-                case SOT_FORMATSTR_ID_STARMATH_40:
-//??            case SOT_FORMATSTR_ID_STARMATH:
-                    Insert( xStore );
-                    break;
-                default:
-                    DBG_ERROR( "unexpected format ID" );
-                }
+                uno::Reference < embed::XStorage > xStorage =
+                        ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
+                uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
+                Insert( xStorage );
                 UpdateText();
             }
         }
@@ -1856,17 +1656,6 @@ void SmDocShell::Draw(OutputDevice *pDevice,
     Draw(*pDevice, atmppoint);
 }
 
-
-
-void SmDocShell::HandsOff()
-{
-    SfxInPlaceObject::HandsOff();
-#if 0
-    aDocStream.Clear();
-#endif
-}
-
-
 SfxItemPool& SmDocShell::GetPool()
 {
     return SFX_APP()->GetPool();
@@ -1885,10 +1674,11 @@ void SmDocShell::SetVisArea (const Rectangle & rVisArea)
     if ( bIsEnabled )
         EnableSetModified( FALSE );
 
+    //TODO/LATER: it's unclear how this interacts with the SFX code
     // If outplace editing, then dont resize the OutplaceWindow. But the
     // ObjectShell has to resize. Bug 56470
     BOOL bUnLockFrame;
-    if( ( GetProtocol().IsEmbed() || GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && !IsInPlaceActive() && GetFrame() )
+    if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !IsInPlaceActive() && GetFrame() )
     {
         GetFrame()->LockAdjustPosSizePixel();
         bUnLockFrame = TRUE;
@@ -1896,7 +1686,7 @@ void SmDocShell::SetVisArea (const Rectangle & rVisArea)
     else
         bUnLockFrame = FALSE;
 
-    SfxInPlaceObject::SetVisArea( aNewRect );
+    SfxObjectShell::SetVisArea( aNewRect );
 
     if( bUnLockFrame )
         GetFrame()->UnlockAdjustPosSizePixel();
@@ -1912,7 +1702,7 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
 {
     BOOL bRet = FALSE;
 
-    SvStorageStreamRef aTempStream = pStor->OpenStream(
+    SvStorageStreamRef aTempStream = pStor->OpenSotStream(
                                 String::CreateFromAscii(pStarMathDoc), eMode);
     aTempStream->SetVersion (pStor->GetVersion ());
     GetPool().SetFileFormatVersion (USHORT(pStor->GetVersion()));
@@ -1986,9 +1776,6 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
             }
 
             bRet = TRUE;
-#if 0
-            aDocStream = aTempStream;
-#endif
         }
     }
 
@@ -2014,7 +1801,7 @@ BOOL SmDocShell::Try3x (SvStorage *pStor,
 BOOL SmDocShell::Try2x (SvStorage *pStor,
                         StreamMode eMode)
 {
-    SvStorageStreamRef aTempStream = pStor->OpenStream(C2S("\1Ole10Native"), eMode);
+    SvStorageStreamRef aTempStream = pStor->OpenSotStream(C2S("\1Ole10Native"), eMode);
     aTempStream->SetVersion (pStor->GetVersion ());
     GetPool().SetFileFormatVersion(USHORT(pStor->GetVersion ()));
 
@@ -2090,12 +1877,11 @@ BOOL SmDocShell::Try2x (SvStorage *pStor,
     return FALSE;
 }
 
-
 void SmDocShell::UIActivate (BOOL bActivate)
 {
     if (bActivate)
     {
-        SfxInPlaceObject::UIActivate (bActivate);
+        SfxObjectShell::UIActivate (bActivate);
         SmCmdBoxWrapper *pWrapper = NULL;
         SmViewShell *pView = SmGetActiveView();
         if (pView)
@@ -2116,44 +1902,18 @@ void SmDocShell::UIActivate (BOOL bActivate)
             Resize();
         }
 
-        SfxInPlaceObject::UIActivate (bActivate);
+        SfxObjectShell::UIActivate (bActivate);
     }
 }
-
 
 void SmDocShell::FillClass(SvGlobalName* pClassName,
                            ULONG*  pFormat,
                            String* pAppName,
                            String* pFullTypeName,
                            String* pShortTypeName,
-                           long    nFileFormat) const
+                           sal_Int32 nFileFormat ) const
 {
-    SfxInPlaceObject::FillClass(pClassName, pFormat, pAppName, pFullTypeName,
-                                pShortTypeName, nFileFormat);
-
-    if (nFileFormat == SOFFICE_FILEFORMAT_31)
-    {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_30);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH;
-        pAppName->AssignAscii( RTL_CONSTASCII_STRINGPARAM("Smath 3.1"));
-        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_31));
-        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
-    }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_40)
-    {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_40);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_40;
-        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_40));
-        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
-    }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_50)
-    {
-        *pClassName     = SvGlobalName(SO3_SM_CLASSID_50);
-        *pFormat        = SOT_FORMATSTR_ID_STARMATH_50;
-        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_50));
-        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
-    }
-    else if (nFileFormat == SOFFICE_FILEFORMAT_60 )
+    if (nFileFormat == SOFFICE_FILEFORMAT_60 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
@@ -2171,7 +1931,7 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
 
 ULONG SmDocShell::GetMiscStatus() const
 {
-    return SfxInPlaceObject::GetMiscStatus() | SVOBJ_MISCSTATUS_NOTRESIZEABLE
+    return SfxObjectShell::GetMiscStatus() | SVOBJ_MISCSTATUS_NOTRESIZEABLE
                                              | SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
 
@@ -2185,7 +1945,8 @@ void SmDocShell::SetModified(BOOL bModified)
 BOOL SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
     MathType aEquation( aText, pTree );
-    BOOL bRet = 0 != aEquation.ConvertFromStarMath( rMedium.GetStorage() );
+
+    BOOL bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
     return bRet;
 }
 
