@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-31 06:57:39 $
+#   last change: $Author: cd $ $Date: 2001-06-11 11:33:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,9 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/bmkmenu.obj								\
                     $(SLO)$/menuconfiguration.obj					\
                     $(SLO)$/xmlnamespaces.obj						\
-                    $(SLO)$/fltdlg.obj
+                    $(SLO)$/fltdlg.obj								\
+                    $(SLO)$/toolboxconfiguration.obj				\
+                    $(SLO)$/toolboxdocumenthandler.obj
 
 SRCFILES=			fltdlg.src
 
