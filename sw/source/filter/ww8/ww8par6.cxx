@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-05 16:54:15 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 14:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3450,7 +3450,7 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, BYTE* pData, short nLen )
     {                               // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-        case 0x93:
+        case 93:
         case 0x4a51:
         case 0x4a4f:    nId = RES_CHRATR_FONT;      break;
         case 0x4a50:    nId = RES_CHRATR_CJK_FONT;  break;
@@ -4220,6 +4220,16 @@ void SwWW8ImplReader::Read_Border( USHORT nId, BYTE* pData, short nLen )
 
         if( bBorder )                                   // Border
         {
+            /*
+            Note: known bug ##653##
+
+            If a style has borders set, and the para attributes attempt
+            remove the borders, then this is perfectably acceptable,
+            so we shouldn't ignore this. We should examine which sprms have
+            been set and use the entry in the brc that matches that sprm
+            if set, regardless of the fact that its "blank"
+            */
+
             BOOL bIsB = IsBorder( aBrcs, TRUE );
             if( !bApo || !bIsB || ( pWFlyPara && !pWFlyPara->bBorderLines ))
             {
@@ -4897,15 +4907,22 @@ SprmReadInfo aSprmReadTab[] = {
     0xD62B, (FNReadRecord)0, //"sprmTVertMerge" // tap.rgtc[].vertMerge;complex (see below);variable length always recorded as 2 bytes;
     0xD62C, (FNReadRecord)0, //"sprmTVertAlign" // tap.rgtc[].vertAlign;complex (see below);variable length always recorded as 3 byte;
     0xCA78, &SwWW8ImplReader::Read_DoubleLine_Rotate,
-    0x6649, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0x6649, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xF614, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xD61A, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xD61B, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xD61C, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xD61D, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xD634, (FNReadRecord)0, //undocumented 4 byte pap sprm (special though)
-    0xF661, (FNReadRecord)0  //undocumented 4 byte pap sprm (special though)
+    0x6649, (FNReadRecord)0, //undocumented
+    0x6649, (FNReadRecord)0, //undocumented
+    0xF614, (FNReadRecord)0, //undocumented
+    0xD612, (FNReadRecord)0, //undocumented
+    0xD613, (FNReadRecord)0, //undocumented
+    0xD61A, (FNReadRecord)0, //undocumented
+    0xD61B, (FNReadRecord)0, //undocumented
+    0xD61C, (FNReadRecord)0, //undocumented
+    0xD61D, (FNReadRecord)0, //undocumented
+    0xD634, (FNReadRecord)0, //undocumented
+    0xD238, (FNReadRecord)0, //undocumented sep
+    0xC64E, (FNReadRecord)0, //undocumented
+    0xC64F, (FNReadRecord)0, //undocumented
+    0xC650, (FNReadRecord)0, //undocumented
+    0xC651, (FNReadRecord)0, //undocumented
+    0xF661, (FNReadRecord)0  //undocumented
 };
 
 //-----------------------------------------
@@ -5007,12 +5024,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.19 2001-04-05 16:54:15 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.20 2001-04-20 14:49:03 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/04/05 16:54:15  cmc
+      ##573## Take first line indent into account before removing tabstops during readjustment
+
       Revision 1.18  2001/04/05 13:52:03  cmc
       ##582## Subtle textbox layout and background colour issues
 
