@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HypertextDocument.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:26 $
+ *  last change: $Author: mi $ $Date: 2001-05-09 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 /** is an extension of a text document which
     can also contain tables and certain kinds of embedded objects
     (e.g. graphics).
+
+    @deprecated
+        use <type>TextDocument</type> instead.
  */
 service HypertextDocument
 {
@@ -112,6 +115,9 @@ service HypertextDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:44:26  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:36:01  hjs
     initial import
 
