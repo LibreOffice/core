@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:27:29 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,29 +83,18 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace rtl;
 
-::cppu::class_data5 ZipPackageStream::s_cd =
-{
-    5 +1, sal_False, sal_False,
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    {
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::io::XActiveDataSink *) (ZipPackageStream * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::beans::XPropertySet *) (ZipPackageStream * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNamed *)   (ZipPackageStream * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XChild *)   (ZipPackageStream * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > const * ))    &getCppuType, ((sal_Int32)(::com::sun::star::lang::XUnoTunnel *)    (ZipPackageStream * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ZipPackageStream * ) 16) - 16 }
-    }
-};
+Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 > ();
 
 ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 : rZipPackage(rNewPackage)
 , bToBeCompressed ( sal_True )
 , bToBeEncrypted ( sal_False )
+, bIsEncrypted ( sal_False )
 , bPackageMember ( sal_False )
 , bHaveOwnKey ( sal_False )
 , xEncryptionData ( )
-, ZipPackageEntry ( false )
 {
+    SetFolder ( sal_False );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
     aEntry.nMethod      = -1;
@@ -114,6 +103,8 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
     aEntry.nCompressedSize  = -1;
     aEntry.nSize        = -1;
     aEntry.nOffset      = -1;
+    if ( !aImplementationId.getLength() )
+        aImplementationId = getImplementationId();
 }
 
 ZipPackageStream::~ZipPackageStream( void )
@@ -151,7 +142,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
         {
             if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData);
+            return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData, bIsEncrypted );
         }
         catch (ZipException &)//rException)
         {
@@ -172,7 +163,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         {
             if ( !xEncryptionData.isEmpty() && !bHaveOwnKey )
                 xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData);
+            return rZipPackage.getZipFile().getInputStream( aEntry, xEncryptionData, bIsEncrypted );
         }
         catch (ZipException &)//rException)
         {
@@ -190,7 +181,7 @@ sal_Int64 SAL_CALL ZipPackageStream::getSomething( const Sequence< sal_Int8 >& a
 {
     sal_Int64 nMe = 0;
     if ( aIdentifier.getLength() == 16 &&
-         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
+         0 == rtl_compareMemory( static_getImplementationId().getConstArray(), aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
@@ -225,7 +216,21 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             xEncryptionData = new EncryptionData;
         bHaveOwnKey = bToBeEncrypted = sal_True;
         if ( !( aValue >>= xEncryptionData->aKey ) )
-            throw IllegalArgumentException();
+        {
+            OUString sTempString;
+            if ( ( aValue >>= sTempString ) )
+            {
+                sal_Int32 nNameLength = sTempString.getLength();
+                Sequence < sal_Int8 > aSequence ( nNameLength );
+                sal_Int8 *pArray = aSequence.getArray();
+                const sal_Unicode *pChar = sTempString.getStr();
+                for ( sal_Int16 i = 0; i < nNameLength; i++)
+                    pArray[i] = static_cast < const sal_Int8 > (pChar[i]);
+                xEncryptionData->aKey = aSequence;
+            }
+            else
+                throw IllegalArgumentException();
+        }
     }
 #if SUPD>617
     else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
@@ -278,4 +283,22 @@ void ZipPackageStream::setSize (const sal_Int32 nNewSize)
     if (aEntry.nCompressedSize != nNewSize )
         aEntry.nMethod = DEFLATED;
     aEntry.nSize = nNewSize;
+}
+OUString ZipPackageStream::getImplementationName()
+    throw (RuntimeException)
+{
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZipPackageStream" ) );
+}
+
+Sequence< OUString > ZipPackageStream::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.PackageStream" ) );
+    return aNames;
+}
+sal_Bool SAL_CALL ZipPackageStream::supportsService( OUString const & rServiceName )
+    throw (RuntimeException)
+{
+    return rServiceName == getSupportedServiceNames()[0];
 }

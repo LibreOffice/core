@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:29:08 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,28 +73,30 @@
 #ifndef _ENCRYPTION_DATA_HXX_
 #include <EncryptionData.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX
+#include <cppuhelper/implbase1.hxx>
 #endif
 
 
 class ZipPackage;
 struct ZipEntry;
-class ZipPackageStream : public ZipPackageEntry,
-                         public cppu::OWeakObject,
-                         public ::com::sun::star::io::XActiveDataSink,
-                         public ::com::sun::star::lang::XTypeProvider
+class ZipPackageStream : public cppu::ImplInheritanceHelper1
+<
+    ZipPackageEntry,
+    ::com::sun::star::io::XActiveDataSink
+>
 {
-    static cppu::class_data5 s_cd;
+    static com::sun::star::uno::Sequence < sal_Int8 > aImplementationId;
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     ZipPackage          &rZipPackage;
-    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember, bHaveOwnKey;
+    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember, bHaveOwnKey, bIsEncrypted;
     vos::ORef < EncryptionData > xEncryptionData;
 public:
     sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () { return bToBeCompressed;}
     sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
+    sal_Bool IsEncrypted ()      { return bIsEncrypted;}
     sal_Bool IsPackageMember ()  { return bPackageMember;}
     vos::ORef < EncryptionData > & getEncryptionData ()
     { return xEncryptionData;}
@@ -112,11 +114,14 @@ public:
     { return aEntry.nSize;}
 
     void SetToBeCompressed (sal_Bool bNewValue) { bToBeCompressed = bNewValue;}
+    void SetIsEncrypted (sal_Bool bNewValue) { bIsEncrypted = bNewValue;}
     void SetToBeEncrypted (sal_Bool bNewValue)
     {
         bToBeEncrypted  = bNewValue;
         if ( bToBeEncrypted && xEncryptionData.isEmpty())
             xEncryptionData = new EncryptionData;
+        else if ( !bToBeEncrypted && !xEncryptionData.isEmpty() )
+            xEncryptionData.unbind();
     }
     void SetPackageMember (sal_Bool bNewValue)  { bPackageMember  = bNewValue;}
     void setKey (const com::sun::star::uno::Sequence < sal_Int8 >& rNewKey )
@@ -138,31 +143,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( )
         throw(::com::sun::star::uno::RuntimeException);
 
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-        throw (::com::sun::star::uno::RuntimeException)
+    static ::com::sun::star::uno::Sequence < sal_Int8 >& static_getImplementationId()
     {
-        return cppu::WeakImplHelper_getTypes( ( cppu::class_data *)&s_cd );
-    }
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
-        throw (::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
-    }
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException)
-    {
-        return cppu::WeakImplHelper_query ( rType, (cppu::class_data *) &s_cd, this, (cppu::OWeakObject *)this );
-    }
-    virtual void SAL_CALL acquire() throw ()
-    {
-        OWeakObject::acquire();
-    }
-    virtual void SAL_CALL release() throw ()
-    {
-        OWeakObject::release();
+        return aImplementationId;
     }
 
     // XActiveDataSink
@@ -172,10 +155,6 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
-    static ::com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
-    {
-        return cppu::ImplHelper_getImplementationId ( ( cppu::class_data * ) &s_cd );
-    }
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException);
 
@@ -184,6 +163,13 @@ public:
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-};
 
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
+};
 #endif
