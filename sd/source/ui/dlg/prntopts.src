@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-05-28 13:32:51 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 14  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Standard" ;
+        Text = "Standa~rd" ;
         Text [ ENGLISH ] = "Default" ;
         Text [ english_us ] = "Default" ;
         TabStop = TRUE ;
@@ -291,7 +291,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 28  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Graustufen" ;
+        Text = "Graustu~fen" ;
         Text [ ENGLISH ] = "Grayscale" ;
         Text [ english_us ] = "Grayscale" ;
         TabStop = TRUE ;
@@ -320,7 +320,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 42  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Schwarzweiß" ;
+        Text = "Schwarz~weiß" ;
         Text [ ENGLISH ] = "Black & White" ;
         Text [ english_us ] = "Black & White" ;
         TabStop = TRUE ;
@@ -678,7 +678,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 200 , 139  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Rückseite" ;
+        Text = "Rücks~eite" ;
         Text [ ENGLISH ] = "Back" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Ba~ck side" ;

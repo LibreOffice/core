@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-05-23 12:58:22 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ TabPage TP_OPTIONS_CONTENTS
         Pos = MAP_APPFONT ( 12 , 125  ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Umriss jedes einzelnen Objektes" ;
+        Text = "U~mriss jedes einzelnen Objektes" ;
         Text [ ENGLISH ] = "Umriß jedes einzelnen Objektes" ;
         Text [ english_us ] = "~Contour of each individual object" ;
         Text [ italian ] = "Profilo di ogni singolo oggetto" ;
@@ -719,7 +719,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Maßeinheit" ;
+        Text = "~Maßeinheit" ;
         Text [ ENGLISH ] = "Metric Units" ;
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ italian ] = "Unità di misura" ;
@@ -755,7 +755,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 130 , 119  ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Tabulatorabstand" ;
+        Text = "~Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
         Text [ english_us ] = "Tab stops" ;
         Text [ swedish ] = "Tabulatoravstånd" ;
@@ -884,7 +884,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text = "Im aktuellen Dokument alle ~Absatzabstände addieren";
+        Text = "Im aktuellen Dokument alle Absatzabst~ände addieren";
         Text [ English ] = "Add ~distances between paragraphs" ;
         Text[ english_us ] = "Add ~spacing between paragraphs in the current document";
         Text[ portuguese ] = "A~dicionar espaçamento entre os parágrafos no documento activo";
@@ -975,7 +975,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text = "Zeichnungsmaßstab" ;
+        Text = "Zeichn~ungsmaßstab" ;
         Text [ ENGLISH ] = "Drawing scale" ;
         Text[ english_us ] = "Drawing scale";
         Text[ portuguese ] = "Escala de desenho";
@@ -1011,7 +1011,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 105 , 149 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text = "Seitenbreite" ;
+        Text = "Seiten~breite" ;
         Text [ ENGLISH ] = "Page width" ;
         Text [ english_us ] = "Page width" ;
         Text [ italian ] = "Larghezza pagina" ;
@@ -1064,7 +1064,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 105 , 165 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text = "Seitenhöhe" ;
+        Text = "Se~itenhöhe" ;
         Text [ ENGLISH ] = "Page height" ;
         Text [ dutch ] = "Paginahoogte" ;
         Text [ english_us ] = "Page height" ;
