@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:49:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:15:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
     {
-        return SvxCreateNumRule( mpDoc );
+        return uno::Reference< uno::XInterface >( SvxCreateNumRule( mpDoc ), uno::UNO_QUERY );
     }
 
     if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapRectangleObject") ) )
