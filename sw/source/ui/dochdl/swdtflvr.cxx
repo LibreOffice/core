@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-26 15:56:21 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,6 +1278,7 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
 
             case SOT_FORMATSTR_ID_HTML:
             case SOT_FORMATSTR_ID_HTML_SIMPLE:
+            case SOT_FORMATSTR_ID_HTML_NO_COMMENT:
             case SOT_FORMAT_RTF:
             case SOT_FORMAT_STRING:
                 nRet = SwTransferable::_PasteFileContent( rData, rSh,
@@ -1626,12 +1627,17 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     default:
         if( rData.GetSotStorageStream( nFmt, xStrm ) )
         {
-            if( SOT_FORMATSTR_ID_HTML_SIMPLE == nFmt )
+            if( ( SOT_FORMATSTR_ID_HTML_SIMPLE == nFmt ) ||
+                ( SOT_FORMATSTR_ID_HTML_NO_COMMENT == nFmt ) )
             {
                 pStream = aMSE40ClpObj.IsValid( *xStrm );
                 pRead = ReadHTML;
                 pRead->SetReadUTF8( TRUE );
                 INetURLObject::SetBaseURL( aMSE40ClpObj.GetBaseURL() );
+
+                BOOL bNoComments =
+                    ( nFmt == SOT_FORMATSTR_ID_HTML_NO_COMMENT );
+                pRead->SetIgnoreHTMLComments( bNoComments );
             }
             else
             {
@@ -2724,6 +2730,7 @@ static USHORT aPasteSpecialIds[] =
 {
     SOT_FORMATSTR_ID_HTML,
     SOT_FORMATSTR_ID_HTML_SIMPLE,
+    SOT_FORMATSTR_ID_HTML_NO_COMMENT,
     FORMAT_RTF,
     FORMAT_STRING,
     SOT_FORMATSTR_ID_SONLK,

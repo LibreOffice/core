@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:10 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bInFootEndNoteAnchor : 1;
     sal_Bool bInFootEndNoteSymbol : 1;
     sal_Bool bDataAvailableLinkSet : 1;
+    sal_Bool bIgnoreHTMLComments : 1;
 
     SvRefBaseRef aLoadEnv;
 
@@ -977,7 +978,8 @@ public:
 
     SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                     const String& rFileName, int bReadNewDoc = sal_True,
-                    SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False );
+                    SfxMedium* pMed = 0, sal_Bool bReadUTF8 = sal_False,
+                    sal_Bool bIgnoreHTMLComments = sal_False );
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 

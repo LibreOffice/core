@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2002-11-21 13:11:49 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,8 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
     ULONG nRet = 0;
     SvParserRef xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, !bInsertMode, pMedium,
-                                            IsReadUTF8() );
+                                            IsReadUTF8(),
+                                            bIgnoreHTMLComments );
 
     SvParserState eState = xParser->CallParser();
 
@@ -446,7 +447,8 @@ ULONG HTMLReader::Read( SwDoc &rDoc,SwPaM &rPam, const String & rName )
 
 SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                             const String& rPath, int bReadNewDoc,
-                            SfxMedium* pMed, BOOL bReadUTF8 )
+                            SfxMedium* pMed, BOOL bReadUTF8,
+                            sal_Bool bNoHTMLComments )
     : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
     SwClient( 0 ),
     aPathToFile( rPath ),
@@ -484,6 +486,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     bFixSelectHeight( FALSE ),
     bTextArea( FALSE ), bSelect( FALSE ),
     bSetModEnabled( FALSE ),
+    bIgnoreHTMLComments( bNoHTMLComments ),
     eJumpTo( JUMPTO_NONE )
 #ifndef PRODUCT
     ,nContinue( 0 )
@@ -2077,7 +2080,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_COMMENT:
-        if( aToken.Len() > 5 )
+        if( ( aToken.Len() > 5 ) && ( ! bIgnoreHTMLComments ) )
         {
             // als Post-It einfuegen
             // MIB 8.12.2000: If there are no space characters right behind
