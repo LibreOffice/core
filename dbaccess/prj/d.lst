@@ -5,4 +5,4 @@
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 
-touch: ..\%__SRC%\misc\dbu.hid %_DEST%\bin%_EXT%\dbu.hid
+touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
