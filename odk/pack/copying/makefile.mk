@@ -384,15 +384,11 @@ all : 	\
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
-    $(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
     $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIRCLASSES)$/officebean.jar \
     $(DESTDIRCLASSES)$/oosupport.nbm \
     $(CONVERTTAGFLAG)
-#	$(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX)  \
-#	$(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)  \
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
@@ -474,12 +470,6 @@ $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
 
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
     $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
-
-$(DESTDIRBIN)$/pkgchk$(PKGCHK_POSTFIX) : $(BINOUT)$/pkgchk$(PKGCHK_POSTFIX)
-    $(GNUCOPY) -p $? $@
-
-$(DESTDIRDLL)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX) : $(DLLOUT)$/$(MY_DLLPREFIX)pkgchk$(UPD)$(DLLPOSTFIX)$(MY_DLLPOSTFIX)
-    $(GNUCOPY) -p $? $@
 
 $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
