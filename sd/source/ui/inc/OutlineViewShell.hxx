@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:57:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ public:
     virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
 
-    ULONG   Read(SvStream& rInput, USHORT eFormat);
+    ULONG   Read(SvStream& rInput, const String& rBaseURL, USHORT eFormat);
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
