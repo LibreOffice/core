@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-01 15:20:56 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 12:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,8 +699,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
 
-        // generate graphic filter only on demand
-        addGraphicFilter();
         break;
 
     case FILEOPEN_PLAY:
@@ -719,8 +717,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
           maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
 
-        // generate graphic filter only on demand
-        addGraphicFilter();
         break;
 
     default:
@@ -734,6 +730,10 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     // set multiselection mode
     if ( nFlags & SFXWB_MULTISELECTION )
         mxFileDlg->setMultiSelectionMode( sal_True );
+
+    if ( mbHasLink )        // generate graphic filter only on demand
+        addGraphicFilter();
+
 
     // the "insert file" dialog needs another title
     if ( mbInsert )
