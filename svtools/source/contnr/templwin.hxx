@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 12:54:02 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ public:
 
     virtual void            Resize();
 
-    void                    OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bAsTemplate );
+    void                    OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate );
     void                    ToggleView( sal_Bool bDocInfo );
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-13 13:47:25 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ void SvtFrameWindow_Impl::Resize()
     pTextWin->SetSizePixel( aWinSize );
 }
 
-void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bAsTemplate )
+void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_Bool bIsTemplate, sal_Bool bAsTemplate )
 {
     if ( bPreview )
         aCurrentURL = rURL;
@@ -754,11 +754,16 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
         xTrans->parseStrict( aURL );
 
         String aTarget;
+        Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
         if ( bPreview )
             aTarget = String( RTL_CONSTASCII_USTRINGPARAM("_self") );
         else
+        {
             aTarget = String( RTL_CONSTASCII_USTRINGPARAM("_blank") );
-        Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
+            xProv = Reference < XDispatchProvider >( ::comphelper::getProcessServiceFactory()->createInstance(
+                String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ) ) ), UNO_QUERY );
+        }
+
         Reference < XDispatch > xDisp = xProv.is() ?
             xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
 
@@ -776,11 +781,11 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                     xDisp->dispatch( aURL, aArgs );
                 }
             }
-            else if ( bAsTemplate )
+            else if ( bIsTemplate || bAsTemplate )
             {
                 Sequence < PropertyValue > aArgs( 1 );
                 aArgs[0].Name = String( RTL_CONSTASCII_USTRINGPARAM("AsTemplate") );
-                aArgs[0].Value <<= sal_True;
+                aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
             }
             else
@@ -804,7 +809,7 @@ void SvtFrameWindow_Impl::ToggleView( sal_Bool bDocInfo )
         pTextWin->Show();
     }
 
-    OpenFile( aCurrentURL, sal_True, sal_False );
+    OpenFile( aCurrentURL, sal_True, sal_False, sal_False );
 }
 
 // class SvtTemplateWindow -----------------------------------------------
@@ -921,7 +926,7 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, pView )
     }
     else
     {
-        pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder() );
+        pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), pFileWin->IsTemplateFolder() );
         aDoubleClickHdl.Call( this );
     }
     return 0;
@@ -931,7 +936,7 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, pView )
 {
     String aTemp;
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, pFileWin->HasPreviousLevel( aTemp ) );
-    pFrameWin->OpenFile( String(), sal_True, sal_False );
+    pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     AppendHistoryURL( pFileWin->GetFolderURL() );
     aNewFolderHdl.Call( this );
     return 0;
@@ -951,7 +956,7 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
     sal_Bool bIsFolder = ( aURL.Len() == 0 || ::utl::UCBContentHelper::IsFolder( aURL ) );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, !bIsFolder );
     if ( !bIsFolder && INetURLObject( aURL ).GetProtocol() != INET_PROT_PRIVATE )
-        pFrameWin->OpenFile( aURL, sal_True, sal_False );
+        pFrameWin->OpenFile( aURL, sal_True, sal_False, sal_False );
     return 0;
 }
 
@@ -1120,7 +1125,7 @@ void SvtTemplateWindow::OpenFile( sal_Bool bNotAsTemplate )
 {
     String aURL = pFileWin->GetSelectedFile();
     if ( aURL.Len() > 0 && !::utl::UCBContentHelper::IsFolder( aURL ) )
-        pFrameWin->OpenFile( aURL, sal_False, ( !bNotAsTemplate && pFileWin->IsTemplateFolder() ) );
+        pFrameWin->OpenFile( aURL, sal_False, pFileWin->IsTemplateFolder(), !bNotAsTemplate );
 }
 
 String SvtTemplateWindow::GetFolderTitle() const
