@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-27 07:10:49 $
+ *  last change: $Author: mt $ $Date: 2002-08-29 11:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,7 +765,8 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
         }
     }
 
-    ImpSetSelection( aCurSel );
+    if ( aCurSel != aOldSel )   // Check if changed, maybe other method already changed maSelection, don't overwrite that!
+        ImpSetSelection( aCurSel );
 
     mpTextEngine->UpdateSelections();
 
@@ -1273,7 +1274,7 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
         aNewSel = aPaM;
     }
 
-    ImpSetSelection( maSelection );
+    ImpSetSelection( aNewSel );
 
     mpTextEngine->FormatAndUpdate( this );
 }
