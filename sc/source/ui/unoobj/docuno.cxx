@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-27 12:18:16 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 09:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -114,6 +117,9 @@
 #include "shapeuno.hxx"
 #include "printfun.hxx"
 #include "pfuncache.hxx"
+#ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
+#include "ViewSettingsSequenceDefines.hxx"
+#endif
 
 using namespace com::sun::star;
 
@@ -153,6 +159,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),                              0},
         {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                  0},
+
         {0,0,0,0}
     };
     return aDocOptPropertyMap_Impl;
@@ -1013,6 +1020,44 @@ void SAL_CALL ScModelObj::refreshArrows() throw(uno::RuntimeException)
         ScDocFunc aFunc(*pDocShell);
         aFunc.DetectiveRefresh();
     }
+}
+
+// XViewDataSupplier
+uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
+    throw (uno::RuntimeException)
+{
+    uno::Reference < container::XIndexAccess > xRet( SfxBaseModel::getViewData() );
+
+    if( !xRet.is() )
+    {
+        ScUnoGuard aGuard;
+        if (pDocShell)
+        {
+            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
+
+            uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
+            DBG_ASSERT( xCont.is(), "ScModelObj::getViewData() failed for OLE object" );
+            if( xCont.is() )
+            {
+                uno::Sequence< beans::PropertyValue > aSeq;
+                ScViewData* pViewData = pDocShell->GetViewData();
+                if (pViewData)
+                    pViewData->WriteUserDataSequence( aSeq );
+                else
+                {
+                    aSeq.realloc(1);
+                    String sName;
+                    pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
+                    rtl::OUString sOUName(sName);
+                    aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
+                    aSeq[0].Value <<= sOUName;
+                }
+                xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
+            }
+        }
+    }
+
+    return xRet;
 }
 
 //  XPropertySet (Doc-Optionen)

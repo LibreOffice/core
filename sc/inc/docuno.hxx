@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 17:57:25 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 09:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,10 @@ public:
 
                             //  XDocumentAuditing
     virtual void SAL_CALL   refreshArrows() throw(::com::sun::star::uno::RuntimeException);
+
+                            //  XViewDataSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData(  )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
