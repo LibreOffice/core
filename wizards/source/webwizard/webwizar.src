@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tv $ $Date: 2001-04-23 11:18:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ String WEBDIALOG + 2
     Text[ spanish ] = "C~ancelar";
     Text[ portuguese ] = "C~ancelar";
     Text[ dutch ] = "A~nnuleren";
-    Text[ swedish ] = "~Avbryt";
+    Text[ swedish ] = "Av~bryt";
     Text[ greek ] = "Ακύρωση";
     Text[ russian ] = "~Ξςμενΰ";
     Text[ danish ] = "~Annuller";
@@ -175,7 +175,7 @@ String WEBDIALOG + 5
     Text[ spanish ] = "ΏQuι estilo desea utilizar?";
     Text[ portuguese ] = "Qual o estilo que deseja utilizar ?";
     Text[ dutch ] = "Welk lay-out wilt u gebruiken?";
-    Text[ swedish ] = "Vilken stil skall anvδndas ?";
+    Text[ swedish ] = "Vilken stil ska anvδndas ?";
     Text[ greek ] = "Επιλέξτε ένα στυλ";
     Text[ russian ] = "Κΰκξι ρςθλό ρλεδσες οπθμενθςό?";
     Text[ danish ] = "Hvilken type vil du bruge?";
@@ -201,7 +201,7 @@ String WEBDIALOG + 6
     Text[ greek ] = "Εικόνα φόντου";
     Text[ dutch ] = "Background Picture";
     Text[ french ] = "Image d'arriθre-plan";
-    Text[ spanish ] = "Background Picture";
+    Text[ spanish ] = "Imagen de fondo";
     Text[ italian ] = "Background Picture";
     Text[ danish ] = "Background Picture";
     Text[ swedish ] = "Bakgrundsbild";
@@ -227,7 +227,7 @@ String WEBDIALOG + 7
     Text[ greek ] = "Σε παράθεση";
     Text[ dutch ] = "Tiling";
     Text[ french ] = "Carrela~ge";
-    Text[ spanish ] = "Tiling";
+    Text[ spanish ] = "A~zulejado";
     Text[ italian ] = "Tiling";
     Text[ danish ] = "Tiling";
     Text[ swedish ] = "Sida vid sida";
@@ -252,7 +252,7 @@ String WEBDIALOG + 8
     Text[ greek ] = "Κλιμάκω~ση";
     Text[ dutch ] = "~Scaled";
     Text[ french ] = "~Graduι";
-    Text[ spanish ] = "~Scaled";
+    Text[ spanish ] = "~Graduado";
     Text[ italian ] = "~Scaled";
     Text[ danish ] = "~Scaled";
     Text[ swedish ] = "~Skalat";
@@ -273,11 +273,11 @@ String WEBDIALOG + 9
     Text[English] = "Edit Document";
     Text[ English_us ] = "Edit document";
     Text[ portuguese ] = "Edit Document";
-    Text[ russian ] = "Οπΰβκΰ δξκσμενςΰ ";
+    Text[ russian ] = "Οπΰβκΰ δξκσμενςΰ";
     Text[ greek ] = "Επεξεργασία εγγράφου";
     Text[ dutch ] = "Edit Document";
     Text[ french ] = "Ιditer le document";
-    Text[ spanish ] = "Edit Document";
+    Text[ spanish ] = "Editar documento";
     Text[ italian ] = "Edit Document";
     Text[ danish ] = "Edit Document";
     Text[ swedish ] = "Redigera dokument";
@@ -325,11 +325,11 @@ String WEBERROR + 1
     Text[English] = "No template for the page content could be found.";
     Text[ English_us ] = "A template for the page setup could not be found.";
     Text[ portuguese ] = "Foi impossνvel encontrar qualquer estilo de configuraηγo de pαgina.";
-    Text[ russian ] = "Ψΰαλξν δλÿ ρξηδΰνθÿ ρςπΰνθφϋ νε νΰιδεν.";
+    Text[ russian ] = "Ψΰαλξν δλÿ ρςπσκςσπϋ ρςπΰνθφϋ νε νΰιδεν.";
     Text[ greek ] = "Δεν βρέθηκε πρότυπο για την δημιουργία της σελίδας.";
     Text[ dutch ] = "Geen sjabloon voor de paginaopbouw gevonden.";
     Text[ french ] = "Impossible de dιtecter un modθle pour la mise en page !";
-    Text[ spanish ] = "No se encontrσ ninguna plantilla para la pαgina.";
+    Text[ spanish ] = "No se encontrσ ninguna plantilla para la configuraciσn de la pαgina.";
     Text[ italian ] = "Non θ stato trovato nessun modello per il layout di pagina.";
     Text[ danish ] = "Der blev ikke fundet en skabelon til sideopsζtningen.";
     Text[ swedish ] = "Det hittades ingen mall fφr siduppbyggnaden.";
@@ -426,7 +426,7 @@ String WEBERROR + 5
     Text[ spanish ] = "Ha ocurrido un error al asignar la plantilla del formato.";
     Text[ portuguese ] = "Surgiu um erro durante a atribuiηγo dos estilos.";
     Text[ dutch ] = "Bij het toewijzen van de opmaakprofielen is een fout opgetreden.";
-    Text[ swedish ] = "Ett fel uppstod vid tilldelning av formatmallarna.";
+    Text[ swedish ] = "Ett fel uppstod vid tilldelningen av formatmallar.";
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την εφαρμογή των προτύπων μορφοποίησης.";
     Text[ russian ] = "Οπθ νΰηνΰχενθθ ρςθλει τξπμΰςΰ οπξθηξψλΰ ξψθακΰ.";
     Text[ danish ] = "Der opstod en fejl under tildeling af formattypografien.";
@@ -448,10 +448,10 @@ String WEBERROR + 6
     Text[ English_us ] = "An error occurred while interpreting the documents.";
     Text[ french ] = "Une erreur s'est produite lors de l'ιvaluation des documents.";
     Text[ italian ] = "Errore durante la valutazione del documento.";
-    Text[ spanish ] = "Ha ocurrido un error al verificar el documento.";
+    Text[ spanish ] = "Ha ocurrido un error durante la evaluaciσn de los documentos.";
     Text[ portuguese ] = "Surgiu um erro ao explorar o documento.";
     Text[ dutch ] = "Bij het verwerken van het document is een fout opgetreden.";
-    Text[ swedish ] = "Ett fel uppstod vid utvδrderingen av dokumenten.";
+    Text[ swedish ] = "Ett fel uppstod vid utvδrderingen av dokument.";
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την ανάλυση των εγγράφων.";
     Text[ russian ] = "Βξ βπεμÿ θνςεποπεςΰφθθ δξκσμενςξβ οπξθηξψλΰ ξψθακΰ.";
     Text[ danish ] = "Der opstod en fejl under fortolkning af dokumenterne.";
