@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-22 10:44:15 $
+ *  last change: $Author: kr $ $Date: 2001-04-04 13:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,11 +180,22 @@ public class MethodDescription {
                 // see if the typeinfo says, that the parameter is an interface
                 // and the parameter is not assignable to xinterface (mapping of xinterface to java.lang.Object)
                 // set the parameter to class of xinterface, cause it must be assignable
+                int arrayNesting = 0;
+                while(parameterClass.isArray()) {
+                    ++ arrayNesting;
+
+                    parameterClass = parameterClass.getComponentType();
+                }
+
                 if(typeInfo.isInterface() && !parameterClass.isInterface())
-                    if(parameterClass.isArray())
-                        typeDescription = __xInterfaceArray;
-                    else
-                        typeDescription = __xInterface;
+                    for(int i = 0; i < arrayNesting; ++ i) {
+                        try {
+                            typeDescription = TypeDescription.getTypeDescription("[]" + typeDescription.getTypeName());
+                        }
+                        catch(ClassNotFoundException classNotFoundException) { // this could never happen, but anyway...
+                            throw new RuntimeException(classNotFoundException.toString());
+                        }
+                    }
             }
             else // this is an out parameter, and must not be passed
                 typeDescription = null;
@@ -203,11 +214,24 @@ public class MethodDescription {
             // see if the typeinfo says, that the parameter is an interface
             // and the parameter is not assignable to xinterface (mapping of xinterface to java.lang.Object)
             // set the parameter to class of xinterface, cause it must be assignable
+            int arrayNesting = 0;
+            while(parameterClass.isArray()) {
+                ++ arrayNesting;
+
+                parameterClass = parameterClass.getComponentType();
+            }
+
             if(typeInfo.isInterface() && !parameterClass.isInterface()) {
-                if(parameterClass.getComponentType().isArray())
-                    typeDescription = __xInterfaceArrayArray;
-                else
-                    typeDescription = __xInterfaceArray;
+                typeDescription = __xInterface;
+
+                for(int i = 0; i < arrayNesting; ++ i) {
+                    try {
+                        typeDescription = TypeDescription.getTypeDescription("[]" + typeDescription.getTypeName());
+                    }
+                    catch(ClassNotFoundException classNotFoundException) { // this could never happen, but anyway...
+                        throw new RuntimeException(classNotFoundException.toString());
+                    }
+                }
             }
         }
         else // this is not an out parameter
