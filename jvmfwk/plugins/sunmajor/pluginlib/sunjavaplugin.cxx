@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:51:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,18 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
          if (sTheMinVersion.getLength() > 0)
          {
-             int nRes = aVendorInfo->compareVersions(sTheMinVersion);
+             int nRes = 0;
+             try
+             {
+                 nRes = aVendorInfo->compareVersions(sTheMinVersion);
+             }
+             catch (MalformedVersionException&)
+             {
+                 //The plug-in must guarantee that the versions from the vendor
+                 //are all recognized.
+                 OSL_ASSERT(0);
+                 return JFW_PLUGIN_E_NO_JRE;
+             }
              if (nRes < 0)
                  return JFW_PLUGIN_E_FAILED_VERSION;
          }
@@ -306,7 +317,18 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
          rtl::OUString sTheMaxVersion((rtl_uString*) sMaxVersion);
          if (sTheMaxVersion.getLength() > 0)
          {
-             int nRes = aVendorInfo->compareVersions(sTheMaxVersion);
+             int nRes = 0;
+             try
+             {
+                 nRes = aVendorInfo->compareVersions(sTheMaxVersion);
+             }
+             catch (MalformedVersionException&)
+             {
+                 //The plug-in must guarantee that the versions from the vendor
+                 //are all recognized.
+                 OSL_ASSERT(0);
+                 return JFW_PLUGIN_E_NO_JRE;
+             }
              if (nRes > 0)
                  return JFW_PLUGIN_E_FAILED_VERSION;
          }
@@ -316,7 +338,18 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
              for (int i = 0; i < nLenList; i++)
              {
                  rtl::OUString sExVer((rtl_uString*) arExcludeList[i]);
-                 int nRes = aVendorInfo->compareVersions(sExVer);
+                 int nRes = 0;
+                 try
+                 {
+                     nRes = aVendorInfo->compareVersions(sExVer);
+                 }
+                 catch (MalformedVersionException&)
+                 {
+                     //The plug-in must guarantee that the versions from the vendor
+                     //are all recognized.
+                     OSL_ASSERT(0);
+                     return JFW_PLUGIN_E_NO_JRE;
+                 }
                  if (nRes == 0)
                      return JFW_PLUGIN_E_FAILED_VERSION;
              }
@@ -353,16 +386,13 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     javaPluginError errcode = JFW_PLUGIN_E_NONE;
     if ( pInfo == NULL || ppVm == NULL || ppEnv == NULL)
         return JFW_PLUGIN_E_INVALID_ARG;
+    //Todo check if the Vendor (pInfo->sVendor) is supported by this plugin
     rtl::OUString sVendor(pInfo->sVendor);
-    rtl::OUString sSunVendor(OUSTR(SUN_MICRO));
-    if (sVendor.equals(sSunVendor) == sal_False)
-        return JFW_PLUGIN_E_WRONG_VENDOR;
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
     rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
-    oslModule moduleRt =
-        osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT);
+    oslModule moduleRt = 0;
 #if defined(LINUX)
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
                                    SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)) == 0 )
@@ -428,7 +458,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
     // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
     JavaVMInitArgs vm_args;
-
 
     boost::scoped_array<JavaVMOption> sarOptions(
         new JavaVMOption[cOptions + 1]);
