@@ -54,20 +54,21 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
+
+import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
 
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
+
 import javax.swing.SwingConstants;
 
-import com.sun.star.uno.*;
-import com.sun.star.accessibility.*;
 
 /**
  */
-public class Separator extends Component implements SwingConstants, javax.accessibility.Accessible {
-
+public class Separator extends Component implements SwingConstants,
+    javax.accessibility.Accessible {
     private int orientation = HORIZONTAL;
 
     public Separator(XAccessible xAccessible, XAccessibleContext xAccessibleContext, int orientation) {
@@ -76,21 +77,18 @@ public class Separator extends Component implements SwingConstants, javax.access
         setFocusable(false);
     }
 
-    public Separator(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
+    public Separator(XAccessible xAccessible,
+        XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
         setFocusable(false);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleSeparator();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleSeparator();
     }
 
     protected class AccessibleSeparator extends AccessibleUNOComponent {
-
         /**
         * Though the class is abstract, this should be called by all sub-classes
         */
@@ -99,16 +97,21 @@ public class Separator extends Component implements SwingConstants, javax.access
         }
 
         /** Returns an AccessibleStateSet that contains corresponding Java states to the UAA state types */
-        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(XAccessibleStateSet unoAS) {
+        protected javax.accessibility.AccessibleStateSet getAccessibleStateSetImpl(
+            XAccessibleStateSet unoAS) {
             javax.accessibility.AccessibleStateSet states = super.getAccessibleStateSetImpl(unoAS);
 
             switch (orientation) {
                 case HORIZONTAL:
                     states.add(AccessibleState.HORIZONTAL);
+
                     break;
+
                 case VERTICAL:
                     states.add(AccessibleState.VERTICAL);
+
                     break;
+
                 default:
                     break;
             }
@@ -126,5 +129,3 @@ public class Separator extends Component implements SwingConstants, javax.access
         }
     }
 }
-
-
