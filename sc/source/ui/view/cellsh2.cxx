@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:58:15 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aExpr1 = pOldData->GetExpression( aCursorPos, 0, nNumFmt );
                             aExpr2 = pOldData->GetExpression( aCursorPos, 1, nNumFmt );
                             bBlank = pOldData->IsIgnoreBlank();
-                            sal_Int16 nListType = pOldData->GetListType();
+                            nListType = pOldData->GetListType();
 
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
                             bShowError = pOldData->GetErrMsg( aErrTitle, aErrText, eErrStyle );
