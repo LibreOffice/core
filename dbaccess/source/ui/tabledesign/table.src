@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-19 11:47:08 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,7 @@ String STR_TAB_FIELD_NULLABLE
     Text [ dutch ] = "Invoer verlangd" ;
     Text [ english_us ] = "Input required" ;
     Text [ italian ] = "Digitazione necessaria" ;
-    Text [ spanish ] = "Se requiere entrada" ;
+    Text [ spanish ] = "Entrada requerida" ;
     Text [ french ] = "Saisie requise" ;
     Text [ swedish ] = "Inmatning krävs" ;
     Text [ danish ] = "Indtastning nødvendig" ;
@@ -624,7 +624,7 @@ ErrorBox ERR_INVALID_LISTBOX_ENTRY
     Message [ English ] = "The text entry does not belong to the list" ;
     Message [ english_us ] = "The text you entered is not a list element. " ;
     Message [ italian ] = "Il testo digitato non è un elemento della lista." ;
-    Message [ spanish ] = "Este texto introducido no pertenece a la lista." ;
+    Message [ spanish ] = "El texto introducido no es un elemento de la lista." ;
     Message [ french ] = "Le texte saisi n'est pas un élément de la liste." ;
     Message [ dutch ] = "De tekstinvoer is geen element van de lijst." ;
     Message [ swedish ] = "Den inmatade texten är inget element i listan." ;
@@ -746,7 +746,7 @@ String STR_TABED_UNDO_CELLMODIFIED
     Text [ swedish ] = "Ändra cell" ;
     Text [ danish ] = "Modificer celle" ;
     Text [ italian ] = "Modifica cella" ;
-    Text [ spanish ] = "Modificar celda" ;
+    Text [ spanish ] = "Modificar la celda" ;
     Text [ french ] = "Modifier une cellule" ;
     Text [ dutch ] = "Cel veranderen" ;
     Text[ chinese_simplified ] = "æ›´æ”¹å•å…ƒæ ¼";
@@ -773,7 +773,7 @@ String STR_TABED_UNDO_ROWDELETED
     Text [ swedish ] = "Radera rad" ;
     Text [ danish ] = "Slet række" ;
     Text [ italian ] = "Elimina riga" ;
-    Text [ spanish ] = "Eliminar fila" ;
+    Text [ spanish ] = "Eliminar la fila" ;
     Text [ french ] = "Supprimer la ligne" ;
     Text [ dutch ] = "Rij wissen" ;
     Text [ portuguese ] = "Eliminar linha" ;
@@ -804,7 +804,7 @@ String STR_TABED_UNDO_TYPE_CHANGED
     Text[ french ] = "Modifier le type de champ";
     Text[ swedish ] = "Ändra fälttyp";
     Text[ dutch ] = "Veldtype veranderen";
-    Text[ spanish ] = "Modificar tipo de campo";
+    Text[ spanish ] = "Modificar el tipo de campo";
     Text[ english_us ] = "Modify Field Type";
     Text[ chinese_simplified ] = "æ›´æ”¹å­—æ®µç±»å‹";
     Text[ russian ] = "Èçìåíèòü òèï ïîëÿ";
@@ -830,7 +830,7 @@ String STR_TABED_UNDO_ROWINSERTED
     Text [ swedish ] = "Infoga rad" ;
     Text [ danish ] = "Indsæt række" ;
     Text [ italian ] = "Inserisci riga" ;
-    Text [ spanish ] = "Insertar fila" ;
+    Text [ spanish ] = "Insertar una fila" ;
     Text [ french ] = "Insérer une ligne" ;
     Text [ dutch ] = "Rij invoegen" ;
     Text [ portuguese ] = "Inserir linha" ;
@@ -858,7 +858,7 @@ String STR_TABED_UNDO_NEWROWINSERTED
     Text [ swedish ] = "Infoga ny rad" ;
     Text [ danish ] = "Indsæt ny række" ;
     Text [ italian ] = "Inserisci riga nuova" ;
-    Text [ spanish ] = "Insertar nueva fila" ;
+    Text [ spanish ] = "Insertar una fila nueva" ;
     Text [ french ] = "Insérer une nouvelle ligne" ;
     Text [ dutch ] = "Nieuwe rij invoegen" ;
     Text [ portuguese ] = "Inserir nova linha" ;
@@ -1306,7 +1306,7 @@ String STR_HELP_DEFAULT_VALUE
     Text [ swedish ] = "Ange ett standardvärde för fältet här.\n\nNär du matar in data i tabellen senare används den här teckensträngen för det aktuella fältet i varje ny datapost. Den bör därför motsvara cellformateringen som skall matas in nedan." ;
     Text [ danish ] = "Indtast en standardværdi til feltet her.\n\nNår du senere indtaster data i tabellen, anvendes denne streng til det aktuelle felt i alle nye dataposter. Den bør derfor svare til den celleformatering, der indtastes senere." ;
     Text [ italian ] = "Specificate qui un valore standard per il campo.\n\nDigitando in seguito dei dati nella tabella, in ogni record di dati nuovo verrà utilizzata questa stringa per il campo attuale. Per questo motivo è necessario che corrisponda al formato della cella da specificare qui di seguito." ;
-    Text [ spanish ] = "Especifique aquí un valor predeterminado para el campo.\n\nSi posteriormente introduce datos en la tabla, en cada registro nuevo se usará esta cadena de carecteres para el campo actual. Por esta razón debe corresponder al formato de celda a introducir más abajo." ;
+    Text [ spanish ] = "Especifique aquí un valor predeterminado para el campo.\n\nSi posteriormente introduce datos en la tabla, en cada registro nuevo se utilizará esta cadena de carecteres para el campo actual. Por esta razón debe corresponder al formato de celda que introducir a continuación." ;
     Text [ french ] = "Saisissez une valeur par défaut pour le champ.\n\nIl s'agit de la chaîne de caractères qui sera utilisée dans chaque nouvel enregistrement pour le champ actif lorsque vous saisirez des données dans la table. Elle doit donc correspondre au format de cellule à saisir plus bas." ;
     Text [ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiëren celopmaak." ;
     Text [ portuguese ] = "Indique um valor padrão para este campo.\n\nEsta cadeia de caracteres será utilizada para todos os novos registos de dados que introduzir no campo activo da tabela. Por esta razão, ela deve corresponder ao formato de célula a indicar mais abaixo." ;
@@ -1335,7 +1335,7 @@ String STR_HELP_FIELD_REQUIRED
     Text [ swedish ] = "Aktivera det här alternativet om inga NULL-värden är tillåtna i det här fältet och användaren alltså alltid måste mata in data." ;
     Text [ danish ] = "Aktiver denne indstilling, hvis NUL-værdier ikke er tilladt i dette felt, så brugeren altså altid skal indtaste data." ;
     Text [ italian ] = "Attivate questa opzione se nel campo non sono ammessi valori ZERO, ossia se l'utente deve sempre inserire dei dati." ;
-    Text [ spanish ] = "Active esta opción si no están permitidos valores null en este campo, es decir, si el usuario debe introducir los datos siempre." ;
+    Text [ spanish ] = "Active esta opción si este campo no acepta ningún valor null. Es decir, si el usuario debe introducir siempre los datos." ;
     Text [ french ] = "Activez cette option si ce champ n'accepte aucune valeur NULL et si l'utilisateur doit donc toujours y saisir des données." ;
     Text [ dutch ] = "Activeer deze optie als in dit veld geen NUL-waarde is toegestaan, d.w.z. dat de gebruiker hier altijd iets moet invullen." ;
     Text [ portuguese ] = "Active esta opção se não forem permitidos valores NULL neste campo, tendo o utilizador que introduzir sempre os dados." ;
@@ -1481,7 +1481,7 @@ String STR_HELP_FORMAT_CODE
     Text[ french ] = "Voici comment les données de la colonne concernée seront formatées si vous utilisez le format actuellement paramétré. Pour modifier ce format, cliquez sur le bouton approprié situé à côté.";
     Text[ swedish ] = "Här ser du hur data i den aktuella kolumnen skulle formateras med det nu inställda formatet, som du kan ändra med hjälp av knapparna som finns bredvid.";
     Text[ dutch ] = "Hier ziet u hoe de gegevens in de actuele kolom eruit zouden zien met de actueel ingestelde opmaak. Deze instelling kunt u veranderen met de nevenstaande buttons.";
-    Text[ spanish ] = "Aquí puede ver cómo serían formateados los datos de la columna actual con el formato definido actualmente, que puede modificar con el botón que se encuentra al lado.";
+    Text[ spanish ] = "Aquí puede ver cómo se formatearían los datos de la columna actual con el formato definido actualmente (utilice el botón de la derecha para modificar el formato).";
     Text[ english_us ] = "This is where you see how the data would be displayed in the current format (use the button on the right to modify the format).";
     Text[ chinese_simplified ] = "æ‚¨çœ‹åˆ°èƒ½å¤Ÿé€šè¿‡ç‚¹å‡»æ—è¾¹çš„æŒ‰é’®ï¼Œæ¥æ›´æ”¹å½“å‰åˆ—çš„æ•°æ®æ ¼å¼ã€‚";
     Text[ russian ] = "Çäåñü Âû ìîæåòå óâèäåòü, êàê ìîæíî îòôîğìàòèğîâàòü äàííûå òåêóùåé êîëîíêè â àêòóàëüíî óñòàíîâëåííîì ôîğìàòå, êîòîğûé Âû ìîæåòå èçìåíÿòü ïğè ïîìîùè ğÿäîì ñòîÿùèõ êíîïîê.";
@@ -1539,7 +1539,7 @@ String STR_HELP_AUTOINCREMENT
     Text[ french ] = "Choisissez si le champ doit contenir des valeurs d'incrément automatique.\n\nDans ce cas, vous ne pourrez pas saisir directement des données : tous les nouveaux enregistrements obtiendront automatiquement leur propre valeur (à savoir la valeur incrémentée à partir de l'enregistrement précédent).";
     Text[ swedish ] = "Välj om det här fältet skall innehålla Auto-Inkrementvärden.\n\nDu kan i så fall inte mata in några data direkt i fältet, utan varje ny datapost tilldelas automatiskt ett eget värde (vilket bestäms av inkrementering från den förra dataposten).";
     Text[ dutch ] = "U kunt dit veld een auto increment-waarde toewijzen.\n\nIn dat geval kunt u hierin geen gegevens typen, maar iedere nieuwe record krijgt automatisch een eigen waarde toegewezen, die het resultaat is van het incrementeren van de vorige.";
-    Text[ spanish ] = "Defina si este campo debe contener valores de incremento automático.\n\nEn este caso no podrá escribir datos directamente, sino que a cada nuevo registro de datos se le asignará automáticamente un valor propio (que resulta del incremento proveniente del registro anterior).";
+    Text[ spanish ] = "Defina si este campo debe contener valores de incremento automático.\n\nEn este caso no podrá introducir los datos directamente, sino que a cada nuevo registro de datos se le asignará automáticamente un valor propio (que resulta del incremento proveniente del registro anterior).";
     Text[ chinese_simplified ] = "è¯·é€‰æ‹©è¿™ä¸ªå­—æ®µæ˜¯å¦åº”è¯¥å«æœ‰è‡ªåŠ¨é€’å¢çš„æ•°å€¼ã€‚\n\næ‚¨ä¸èƒ½æ‰‹åŠ¨è¾“å…¥æ•°æ®ï¼Œå› ä¸ºæ¯ä¸ªæ–°æ•°æ®ç»„ä¼šè‡ªåŠ¨å¾—åˆ°ä¸€ä¸ªè‡ªå·±çš„æ•°å€¼(ä»å®ƒä¹‹å‰çš„æ•°æ®ç»„ä¸­é€šè¿‡é€’å¢æ–¹å¼å¾—åˆ°)ã€‚";
     Text[ russian ] = "Ğåøèòå, äîëæíî ëè ıòî ïîëå ñîäåğæàòü àâòîìàòè÷åñêèå çíà÷åíèÿ èíêğåìåíòà.\n\nÒîãäà Âû íå ñìîæåòå íåïîñğåäñòâåííî ââîäèòü â íåãî äàííûå, ïîñêîëüêó êàæäîé íîâîé çàïèñè áóäåò àâòîìàòè÷åñêè ïğèñâîåíî ñîáòâåííîå çíà÷åíèå (êîòîğîå ïîëó÷èòñÿ áëàãîäàğÿ èíêğåìåíòèğîâàíèş èç ïğåäûäóùåé çàïèñè).";
     Text[ polish ] = "Nale¿y ustaliæ, czy pole to ma zawieraæ wartoœci autoinkrementu.\n\nDo tego pola nie mo¿na wprowadziæ danych bezpoœrednio. Ka¿demu rekordowi zostanie przypisana automatycznie w³asna wartoœæ (która wyniknie z inkrementacji poprzedniego rekordu).";
@@ -1617,7 +1617,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN
     Text[ greek ] = "Ïé ãñáììİò \"$column$\" áíŞêïõí óôï ğñùôåıïí êëåéäß. Óôçí ğåñßğôùóç ğïõ äéáãñáöïıí áõôİò, èá äéáãñáöåß êáé ôï ğñùôåıïí êëåéäß. Èİëåôå íá äéáãñáöïı ";
     Text[ dutch ] = "De kolom \"$column$\" behoort tot de primaire sleutel. Wist u deze kolom dan wordt ook de primaire sleutel gewist. Wilt u de kolom werkelijk wissen?";
     Text[ french ] = "La colonne \"$column$\" appartient à la clé primaire. Sa suppression entraînera également la suppression de la clé primaire. Continuer ?";
-    Text[ spanish ] = "La columna \"$column$\" pertenece a la llave primaria. En caso de que la elimine, eliminará también la llave primaria. ¿Desea continuar?";
+    Text[ spanish ] = "La columna \"$column$\" pertenece a la llave primaria. En caso de eliminarla, eliminará también la llave primaria. ¿Desea continuar?";
     Text[ italian ] = "La colonna \"$column$\" appartiene alla chiave primaria. Se la colonna viene eliminata, si cancellerà anche la chiave primaria. Volete proseguire comunque?";
     Text[ danish ] = "Kolonnerne \"$column$\" hører til primærnøglen. Hvis denne kolonne slettes, slettes også primærnøglen.Vil du fortsætte?";
     Text[ swedish ] = "Kolumnen \"$column$\" hör till primärnyckeln. Om kolumnen raderas kommer även primärnyckeln att raderas. Vill du fortsätta?";
@@ -1677,7 +1677,7 @@ String STR_COLUMN_NAME
     Text[ japanese ] = "åˆ—";
     Text[ korean ] = "ì—´";
     Text[ chinese_simplified ] = "åˆ—";
-    Text[ chinese_traditional ] = "æ¬„ä½";
+    Text[ chinese_traditional ] = "æ¬„";
     Text[ arabic ] = "ÚãæÏ";
     Text[ turkish ] = "Sütun";
     Text[ catalan ] = "Columna";
@@ -1779,7 +1779,7 @@ QueryBox TABLE_QUERY_CONNECTION_LOST
     Message[ greek ] = "Ç óıíäåóç ìå ôçí âÜóç äåäïìİíùí ÷Üèçêå! ×ùñßò ôçí óıíäåóç ï ó÷åäéáóìüò ğéíÜêùí äåí ìğïñåß íá ÷ñçóéìïğïéçèåß ğëŞñùò.\nÍá ãßíåé ç åğáíáóıíäåó? ";
     Message[ dutch ] = "De verbinding met de database is verwijderd! Zonder deze verbinding kan de ontwerp-tabel slechts beperkt worden gebruikt.\nWilt u de verbinding met de database weer tot stand brengen?";
     Message[ french ] = "La connexion à la base de données a été interrompue ! Ceci entraîne une perte de fonctionnalité dans l'utilisation de l'ébauche de table.\nReconnecter ?";
-    Message[ spanish ] = "¡Se ha cancelado la conexión a la base de datos! Sin ella, el diseño de tabla solo se puede usar de forma limitada.\n¿Desea reanudar la conexión?";
+    Message[ spanish ] = "¡Se ha cancelado la conexión a la base de datos! Sin ella, el diseño de tabla sólo se puede usar de forma limitada.\n¿Desea reanudar la conexión?";
     Message[ italian ] = "Il collegamento al database è stato annullato. Senza il collegamento la bozza tabella può essere utilizzata solo in modo limitato:\nVolete ripristinare il collegamento con il database?";
     Message[ danish ] = "Forbindelsen til databasen blev slettet! Uden den kan tabeludkastet kun bruges i begrænset omfang.\nSkal forbindelsen til databasen oprettes igen?";
     Message[ swedish ] = "Förbindelsen till databasen har raderats! Utan den kan bara tabellutkastet användas begränsat.\nSka förbindelsen till databasen upprättas igen?";
@@ -1943,7 +1943,7 @@ String STR_TABLEDESIGN_NO_PRIM_KEY
     Text [ swedish ] = "Ett entydigt index eller en primärnyckel krävs för identifiering av dataposter i den här databasen.\nData kan först matas in i tabellen om de uppfyller en av dessa båda strukturvillkor.\n\nSkall en primärnyckel skapas nu?" ;
     Text [ danish ] = "I denne database kræves et entydigt indeks eller en primærnøgle til datapostidentificering.\nDu kan først indtaste data i tabellen, når den opfylder en af disse to strukturbetingelser.\n\nVil du oprette en primærnøgle nu?" ;
     Text [ italian ] = "Per l'identificazione del record di dati nel database attuale è necessario un indice univoco o una chiave primaria.\nSolo dopo aver soddisfatto una di queste condizioni sarà possibile introdurre dati nella tabella.\n\nVolete creare adesso una chiave primaria?" ;
-    Text [ spanish ] = "Para la identificación de registros en esta base de datos se necesita un índice unívoco o una llave primaria.\nSolo cuando haya cumplido una de estas condiciones podrá introducir datos en la tabla.\n\n¿Desea crear ahora una llave primaria?" ;
+    Text [ spanish ] = "Para la identificación de registros en esta base de datos se necesita un índice unívoco o una llave primaria.\nSólo cuando haya cumplido una de estas condiciones podrá introducir datos en la tabla.\n\n¿Desea crear ahora una llave primaria?" ;
     Text [ french ] = "Un index univoque ou une clé primaire est nécessaire pour l'identification d'enregistrement dans cette base de données.\nVous ne pourrez saisir des données dans la table que si celle-ci remplit une de ces deux conditions de structure.\n\nCréer une clé primaire ?" ;
     Text [ dutch ] = "In deze database wordt een index of een primaire sleutel verlangd ter identificatie van records.\nU kunt alleen gegevens invoeren in de tabel als u voldoet aan een van deze beide criteria.\nWilt u nu een primaire sleutel definiëren?" ;
     Text [ portuguese ] = "Esta base de dados precisa de um índice único ou de uma chave primária para identificação do registo de dados.\nSó poderá introduzir os dados na tabela depois de esta preencher uma destas condições de estrutura.\n\nCriar agora uma chave primária" ;
