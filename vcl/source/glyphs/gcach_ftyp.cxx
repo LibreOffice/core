@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.56 $
- *  last change: $Author: hdu $ $Date: 2001-09-18 15:44:36 $
+ *  $Revision: 1.57 $
+ *  last change: $Author: hdu $ $Date: 2001-09-24 08:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,10 +587,13 @@ bool FreetypeServerFont::TestFont() const
 
 FreetypeServerFont::~FreetypeServerFont()
 {
-    mpFontInfo->Unmap();
+    if( maRecodeConverter )
+        rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
     if( maFaceFT )
         FT_Done_Face( maFaceFT );
+
+    mpFontInfo->Unmap();
 }
 
 // -----------------------------------------------------------------------
