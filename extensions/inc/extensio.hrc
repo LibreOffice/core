@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 16:00:41 $
+ *  last change: $Author: os $ $Date: 2001-03-09 12:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #define HID_BIB_DB_TBX                          (HID_EXTENSIONS_START + 37)
 #define HID_BIB_DB_GRIDCTRL                     (HID_EXTENSIONS_START + 38)
 #define HID_BIB_CONTROL_PAGE                    (HID_EXTENSIONS_START + 39)
+#define HID_BIB_CONTROL_PARENT                  (HID_EXTENSIONS_START + 40)
 
 
 #endif
