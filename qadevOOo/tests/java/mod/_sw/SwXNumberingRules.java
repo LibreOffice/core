@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXNumberingRules.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:34 $
+ *  last change:$Date: 2003-02-06 11:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  * Test for object which is represented by service
  * <code>com.sun.star.text.NumberingRules</code>.<p>
@@ -133,8 +136,7 @@ public class SwXNumberingRules extends TestCase {
     * is obtained. At the end property value 'NumberingRules' is obtained from
     * given style.
     */
-    public TestEnvironment createTestEnvironment(
-            TestParameters tParam, PrintWriter log ) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
         XInterface oObj = null;
         XIndexAccess NumStyleI = null;
 
@@ -158,8 +160,9 @@ public class SwXNumberingRules extends TestCase {
 
         try {
             XNameAccess oStyleFamilies = oStyleFamiliesSupplier.getStyleFamilies();
-            XNameContainer NumStyles = (XNameContainer)
-                oStyleFamilies.getByName("NumberingStyles");
+            XNameContainer NumStyles = (XNameContainer) AnyConverter.toObject(
+                new Type(XNameContainer.class),
+                    oStyleFamilies.getByName("NumberingStyles"));
             NumStyleI = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class,NumStyles);
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
@@ -168,13 +171,18 @@ public class SwXNumberingRules extends TestCase {
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             log.println("Error, no such style family...");
             e.printStackTrace(log);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
         }
 
         try {
-            oObj = (XInterface) NumStyleI.getByIndex(0);
+            oObj = (XInterface) AnyConverter.toObject(
+                    new Type(XInterface.class),NumStyleI.getByIndex(0));
             XPropertySet props = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, oObj);
-            oObj = (XInterface) props.getPropertyValue("NumberingRules");
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),props.getPropertyValue("NumberingRules"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
@@ -184,6 +192,9 @@ public class SwXNumberingRules extends TestCase {
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
+            log.println("Error, exception occured...");
+            e.printStackTrace(log);
         }
 
         TestEnvironment tEnv = new TestEnvironment( oObj );
@@ -191,4 +202,3 @@ public class SwXNumberingRules extends TestCase {
     }
 
 }    // finish class SwXNumberingRules
-

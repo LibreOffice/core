@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXParagraph.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:34 $
+ *  last change:$Date: 2003-02-06 11:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import lib.TestParameters;
 import util.SOfficeFactory;
 
 import com.sun.star.frame.XModel;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * Test for object which is represented by service
@@ -219,15 +222,20 @@ public class SwXParagraph extends TestCase {
         XEnumeration oEnum = oEnumA.createEnumeration();
 
         try {
-            para = (XInterface) oEnum.nextElement();
+            para = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oEnum.nextElement());
             XEnumerationAccess oEnumB = (XEnumerationAccess)
                 UnoRuntime.queryInterface( XEnumerationAccess.class, para );
             XEnumeration oEnum2 = oEnumB.createEnumeration();
-            port = (XInterface) oEnum2.nextElement();
+            port = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oEnum2.nextElement());
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             log.println("Error: exception occured...");
         } catch ( com.sun.star.container.NoSuchElementException e ) {
+            e.printStackTrace(log);
+            log.println("Error: exception occured...");
+        } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
             log.println("Error: exception occured...");
         }
@@ -260,7 +268,8 @@ public class SwXParagraph extends TestCase {
         Object instance = null;
 
         try {
-            oObj = (XInterface) oEnum.nextElement();
+            oObj = (XInterface) AnyConverter.toObject(
+                new Type(XInterface.class),oEnum.nextElement());
         } catch ( Exception e) {
             log.println("Error, exception occured...");
             e.printStackTrace(log);
