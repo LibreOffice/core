@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <comphelper/uno3.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
 
 #define ACCESSIBLE_SELECTION_CHILD_ALL  ((sal_Int32)-1)
@@ -102,7 +102,7 @@ namespace comphelper
     protected:
 
         // access to context - still waiting to be overwritten
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
             implGetAccessibleContext()
             throw ( ::com::sun::star::uno::RuntimeException ) = 0;
 
@@ -125,15 +125,15 @@ namespace comphelper
         void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
         void SAL_CALL selectAllAccessible(  ) throw (::com::sun::star::uno::RuntimeException);
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        void SAL_CALL deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
     //=====================================================================
     //= OAccessibleSelectionHelper
     //=====================================================================
 
-    typedef ::cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleSelection > OAccessibleSelectionHelper_Base;
 
     /** a helper class for implementing an AccessibleSelection which at the same time
         supports an XAccessibleSelection interface.
@@ -150,7 +150,7 @@ namespace comphelper
         OAccessibleSelectionHelper( IMutex* _pExternalLock );
 
         // return ourself here by default
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > implGetAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > implGetAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException );
 
     public:
 
@@ -164,8 +164,8 @@ namespace comphelper
         virtual void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL selectAllAccessible(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     };
 
 //.........................................................................
