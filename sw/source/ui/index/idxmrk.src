@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:48:23 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 18:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ String STR_IDXMRK_INSERT
             Text[ korean ] = "¬™¿∫ ¿Ã∏ß(~N)";\
             Text[ chinese_simplified ] = "ºÚ≥∆(~N)";\
             Text[ chinese_traditional ] = "¬≤µu¥y≠z(~N)";\
-            Text[ arabic ] = "«”„ „Œ ’—";\
+            Text[ arabic ] = "«·«”„ «·„Œ ’—";\
             Text[ turkish ] = "K~˝saltma";\
             Text[ language_user1 ] = " ";\
         };                                              \
