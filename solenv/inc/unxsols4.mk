@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:20:18 $
+#   last change: $Author: rt $ $Date: 2004-08-23 09:18:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,8 @@
 
 
 ASM=/usr/ccs/bin/as
-AFLAGS=-P -q
+# needs -D__sparcv8plus because it's not defined by the assembler with -xarch=v8plus
+AFLAGS=-P -xarch=v8plus -D__sparcv8plus
 
 
 CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
@@ -82,7 +83,8 @@ CXX*=CC
 CC*=cc
 
 CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
-CFLAGSCC=-xCC
+# CC defines __sparcv8plus with -xarch=v8plus, cc does not (sigh)
+CFLAGSCC=-xCC -D__sparcv8plus
 CFLAGSCXX=-features=no%altspell -library=no%Cstd
 
 # flags to enable build with symbols; required for crashdump feature
@@ -100,7 +102,11 @@ CFLAGSSLOCUIMT=-KPIC -mt
 CFLAGSPROF=-xpg
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-CFLAGSOPT=-xarch=v8 -xO3 -xspace
+#  -xarch=v8plus            restrict target to v8plus (UltraSparc)
+#  -xO3                     optimization level 3
+#  -xspace                  don't do optimizations which do increase binary size
+#  -xprefetch=yes           do prefetching (helps on UltraSparc III)
+CFLAGSOPT=-xarch=v8plus -xO3 -xspace -xprefetch=yes
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
 
