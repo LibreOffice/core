@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ private:
     SchXMLAxis maCurrentAxis;
     std::vector< SchXMLAxis >& maAxes;
     rtl::OUString msAutoStyleName;
+    rtl::OUString& mrCategoriesAddress;
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > getTitleShape();
     void CreateGrid( ::rtl::OUString sAutoStyleName, sal_Bool bIsMajor );
@@ -186,7 +187,8 @@ public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                        SvXMLImport& rImport, const rtl::OUString& rLocalName,
                        com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
-                       std::vector< SchXMLAxis >& aAxes );
+                       std::vector< SchXMLAxis >& aAxes,
+                       ::rtl::OUString& rCategoriesAddress );
     virtual ~SchXMLAxisContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
