@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcursors.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:18:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,6 @@
 
 #include "nodrop_curs.h"
 #include "nodrop_mask.h"
-#include "wait_curs.h"
-#include "wait_mask.h"
-#include "hsplit_curs.h"
-#include "hsplit_mask.h"
-#include "vsplit_curs.h"
-#include "vsplit_mask.h"
-#include "neswsize_curs.h"
-#include "neswsize_mask.h"
-#include "nwsesize_curs.h"
-#include "nwsesize_mask.h"
 #include "magnify_curs.h"
 #include "magnify_mask.h"
 #include "rotate_curs.h"
@@ -105,8 +95,6 @@
 #include "crook_mask.h"
 #include "crop_curs.h"
 #include "crop_mask.h"
-#include "move_curs.h"
-#include "move_mask.h"
 #include "movepoint_curs.h"
 #include "movepoint_mask.h"
 #include "movebezierweight_curs.h"
