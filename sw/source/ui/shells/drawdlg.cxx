@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:48:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
                 if (nResult == RET_OK)
                 {
-                    if (pView->HasMarkedObj())
+                    if (pView->AreObjectsMarked())
                     {
                         pSh->StartAction();
                         pView->SetAttributes(*pDlg->GetOutputItemSet());
@@ -150,7 +150,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_AREA:
         {
-            BOOL bHasMarked = pView->HasMarkedObj();
+            BOOL bHasMarked = pView->AreObjectsMarked();
 
 
             //CHINA001 SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc, pView );
@@ -190,10 +190,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
         case SID_ATTRIBUTES_LINE:
         {
-            BOOL bHasMarked = pView->HasMarkedObj();
+            BOOL bHasMarked = pView->AreObjectsMarked();
 
             const SdrObject* pObj = NULL;
-            const SdrMarkList& rMarkList = pView->GetMarkList();
+            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
                 pObj = rMarkList.GetMark(0)->GetObj();
 
@@ -258,7 +258,7 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
 
     if (pArgs)
     {
-        if(pView->HasMarkedObj())
+        if(pView->AreObjectsMarked())
             pView->SetAttrToMarked(*rReq.GetArgs(), FALSE);
         else
             pView->SetDefaultAttr(*rReq.GetArgs(), FALSE);
@@ -299,7 +299,7 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
 {
     SdrView* pSdrView = GetShell().GetDrawView();
 
-    if (pSdrView->HasMarkedObj())
+    if (pSdrView->AreObjectsMarked())
     {
         BOOL bDisable = Disable( rSet );
 
