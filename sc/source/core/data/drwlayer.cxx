@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:50:08 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #ifndef _SVX_FHGTITEM_HXX
 #include <svx/fhgtitem.hxx>
 #endif
+#include <svx/scriptspaceitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
@@ -294,7 +295,17 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     SvxFrameDirectionItem aModeItem( FRMDIR_ENVIRONMENT, EE_PARA_WRITINGDIR );
     rPool.SetPoolDefaultItem( aModeItem );
-    rPool.FreezeIdRanges();                         // der Pool wird auch direkt verwendet
+
+    // #111216# default for script spacing depends on locale, see SdDrawDocument ctor in sd
+    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+    if ( eOfficeLanguage == LANGUAGE_KOREAN || eOfficeLanguage == LANGUAGE_KOREAN_JOHAB ||
+         eOfficeLanguage == LANGUAGE_JAPANESE )
+    {
+        // secondary is edit engine pool
+        rPool.GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( FALSE, EE_PARA_ASIANCJKSPACING ) );
+    }
+
+    rPool.FreezeIdRanges();                         // the pool is also used directly
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
     rAdmin.NewLayer(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("vorne")),    SC_LAYER_FRONT);
