@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:10:55 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 12:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     sal_Bool        bDisplayHelp;
     sal_Bool        bDisplayError;
 
+    SvXMLImportContextRef           xEventContext;
+
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
@@ -136,7 +138,7 @@ public:
 
     void SetHelpMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const sal_Bool bDisplay);
     void SetErrorMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const rtl::OUString& sMessageType, const sal_Bool bDisplay);
-    void SetErrorMacro(const rtl::OUString& sName, const sal_Bool bExecute);
+    void SetErrorMacro(const sal_Bool bExecute);
 };
 
 class ScXMLHelpMessageContext : public SvXMLImportContext
@@ -206,7 +208,6 @@ class ScXMLErrorMacroContext : public SvXMLImportContext
     sal_Bool        bExecute;
 
     ScXMLContentValidationContext*  pValidationContext;
-    SvXMLImportContextRef           xEventContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -225,7 +226,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
     virtual void EndElement();
 };
 
@@ -361,6 +361,10 @@ SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nP
         break;
         case XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO:
             pContext = new ScXMLErrorMacroContext( GetScImport(), nPrefix, rLName, xAttrList, this);
+        break;
+        case XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS:
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName );
+            xEventContext = pContext;
         break;
     }
 
@@ -548,6 +552,28 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
 
 void ScXMLContentValidationContext::EndElement()
 {
+    // #i36650# event-listeners element moved up one level
+    if (xEventContext.Is())
+    {
+        rtl::OUString sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError"));
+        XMLEventsImportContext* pEvents =
+            (XMLEventsImportContext*)&xEventContext;
+        uno::Sequence<beans::PropertyValue> aValues;
+        pEvents->GetEventSequence( sOnError, aValues );
+
+        const beans::PropertyValue* pValues = aValues.getConstArray();
+        sal_Int32 nLength = aValues.getLength();
+        for( sal_Int32 i = 0; i < nLength; i++ )
+        {
+            if ( aValues[i].Name.equalsAsciiL( "MacroName",
+                                                    sizeof("MacroName")-1 ) )
+            {
+                aValues[i].Value >>= sErrorTitle;
+                break;
+            }
+        }
+    }
+
     ScMyImportValidation aValidation;
     sal_Int32 nOffset(0);
     aValidation.sName = sName;
@@ -585,9 +611,8 @@ void ScXMLContentValidationContext::SetErrorMessage(const rtl::OUString& sTitle,
     bDisplayError = bDisplay;
 }
 
-void ScXMLContentValidationContext::SetErrorMacro(const rtl::OUString& sName, const sal_Bool bExecute)
+void ScXMLContentValidationContext::SetErrorMacro(const sal_Bool bExecute)
 {
-    sErrorTitle = sName;
     sErrorMessageType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macro"));
     bDisplayError = bExecute;
 }
@@ -780,15 +805,9 @@ SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = NULL;
 
-    if ((nPrefix == XML_NAMESPACE_OFFICE) && IsXMLToken(rLName, XML_EVENT_LISTENERS))
-    {
-        pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
-        xEventContext = pContext;
-    }
     if ((nPrefix == XML_NAMESPACE_SCRIPT) && IsXMLToken(rLName, XML_EVENTS))
     {
         pContext = new XMLEventsImportContext(GetImport(), nPrefix, rLName);
-        xEventContext = pContext;
     }
     if (!pContext)
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -798,26 +817,5 @@ SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLErrorMacroContext::EndElement()
 {
-    if (xEventContext.Is())
-    {
-        rtl::OUString sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError"));
-        XMLEventsImportContext* pEvents =
-            (XMLEventsImportContext*)&xEventContext;
-        uno::Sequence<beans::PropertyValue> aValues;
-        pEvents->GetEventSequence( sOnError, aValues );
-
-        const beans::PropertyValue* pValues = aValues.getConstArray();
-        sal_Int32 nLength = aValues.getLength();
-        for( sal_Int32 i = 0; i < nLength; i++ )
-        {
-            if ( aValues[i].Name.equalsAsciiL( "MacroName",
-                                                    sizeof("MacroName")-1 ) )
-            {
-                aValues[i].Value >>= sName;
-                break;
-            }
-        }
-    }
-    DBG_ASSERT(sName.getLength(), "no macro name given");
-    pValidationContext->SetErrorMacro(sName, bExecute);
+    pValidationContext->SetErrorMacro( bExecute );
 }
