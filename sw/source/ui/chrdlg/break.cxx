@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:59:28 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,33 +118,20 @@
 
 void SwBreakDlg::Apply()
 {
-    String aTemplate( aEmptyStr );
-    BOOL bTemplate = FALSE;
+    nKind = 0;
     if(aLineBtn.IsChecked())
-    {
-        rSh.InsertLineBreak();
-    }
+        nKind = 1;
     else if(aColumnBtn.IsChecked())
-    {
-        rSh.InsertColumnBreak();
-    }
+        nKind = 2;
     else if(aPageBtn.IsChecked())
     {
-        rSh.StartAllAction();
+        nKind = 3;
         const USHORT nPos = aPageCollBox.GetSelectEntryPos();
-
-        // auf Position 0 steht 'Ohne' Seitenvorlage.
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = aPageCollBox.GetSelectEntry();
-            USHORT nPgNum = aPageNumBox.IsChecked() ? (USHORT)aPageNumEdit.GetValue()
-                                                    : 0;
-            rSh.InsertPageBreak(&aTemplate, nPgNum);
-            bTemplate = TRUE;
+            nPgNum = aPageNumBox.IsChecked() ? (USHORT)aPageNumEdit.GetValue() : 0;
         }
-        else
-            rSh.InsertPageBreak();
-        rSh.EndAllAction();
     }
 }
 
@@ -234,7 +221,9 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this,SW_RES(BT_HELP)),
-    bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
+    bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell())),
+    nPgNum(0),
+    nKind(0)
 {
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
     aPageBtn.SetClickHdl( aLk );
