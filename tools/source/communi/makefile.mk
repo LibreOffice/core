@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: gh $ $Date: 2001-05-29 08:51:08 $
+#   last change: $Author: nf $ $Date: 2001-11-01 14:05:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ OBJFILES=   \
             $(OBJ)$/ssockcon.obj	\
             $(OBJ)$/parser.obj		\
             $(OBJ)$/geninfo.obj		\
+            $(OBJ)$/abthread.obj
 
 SLOFILES=   \
             $(SLO)$/tcpio.obj       \
@@ -102,6 +103,7 @@ SLOFILES=   \
             $(SLO)$/ssockcon.obj	\
             $(SLO)$/parser.obj		\
             $(SLO)$/geninfo.obj		\
+            $(SLO)$/abthread.obj
 
 # --- Targets ------------------------------------------------------
 
