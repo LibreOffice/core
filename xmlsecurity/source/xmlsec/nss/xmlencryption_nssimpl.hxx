@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryption_nssimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ class XMLEncryption_NssImpl : public ::cppu::WeakImplHelper3<
             throw ( com::sun::star::xml::crypto::XMLEncryptionException ,
                     com::sun::star::uno::SecurityException);
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL decrypt(
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate > SAL_CALL decrypt(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& aTemplate ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSecurityContext >& aContext
         ) throw( com::sun::star::xml::crypto::XMLEncryptionException ,

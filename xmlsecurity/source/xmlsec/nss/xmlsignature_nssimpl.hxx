@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignature_nssimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper3<
         ) throw( com::sun::star::xml::crypto::XMLSignatureException,
                  com::sun::star::uno::SecurityException) ;
 
-        virtual sal_Bool SAL_CALL validate(
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSecurityContext >& aContext
         ) throw( com::sun::star::uno::RuntimeException,
