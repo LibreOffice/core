@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDragGestureRecognizer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 module com { module sun { module star { module datatransfer { module dnd {
 
-interface XDragGestureListener;
+ published interface XDragGestureListener;
 
 //=============================================================================
 /** This interface is implemented by a view or window that supports drag
@@ -82,7 +82,7 @@ interface XDragGestureListener;
     be a performance issue.</p>
 */
 
-interface XDragGestureRecognizer: com::sun::star::uno::XInterface
+published interface XDragGestureRecognizer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Registers a new <type>XDragGestureListener</type>.
