@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:39:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ namespace connectivity
                     ,Sequence< ::rtl::OUString >())
                     );
         }
-        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]), aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
 
     //--------------------------------------------------------------------
