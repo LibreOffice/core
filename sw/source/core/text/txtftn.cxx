@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:20:55 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,9 +900,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SdrObject *pO = rObjs[i];
-                SwRect aRect( pO->GetBoundRect() );
+                SwRect aRect( pO->GetCurrentBoundRect() );
 
-                if ( ! pO->IsWriterFlyFrame() ||
+                if ( ! pO->ISA(SwVirtFlyDrawObj) ||
                      ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsValid() )
                 {
                     const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
