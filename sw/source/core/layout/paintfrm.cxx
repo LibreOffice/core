@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:33:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5622,6 +5622,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     SwRect aOriginal( bUseFrmArea ? Frm() : Prt() );
     if ( !bUseFrmArea )
         aOriginal.Pos() += Frm().Pos();
+
     // OD 13.02.2003 #i3662# - enlarge top of column body frame's printing area
     // in sections to top of section frame.
     const bool bColBodyInSection = IsBodyFrm() &&
@@ -5629,7 +5630,10 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                    GetUpper()->GetUpper()->IsSctFrm();
     if ( bColBodyInSection )
     {
-        aOriginal.Top( GetUpper()->GetUpper()->Frm().Top() );
+        if ( IsVertical() )
+            aOriginal.Right( GetUpper()->GetUpper()->Frm().Right() );
+        else
+            aOriginal.Top( GetUpper()->GetUpper()->Frm().Top() );
     }
 
     ::SwAlignRect( aOriginal, pGlobalShell );
