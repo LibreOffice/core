@@ -56,7 +56,6 @@ TextPortionList
 XEditAttrib
 XParaPortionList
 BinTextObject
-DialogsResMgr
 E3dDragMethod
 E3dTriangle
 GetImp
