@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 14:09:17 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,6 +1980,9 @@ namespace xmloff { namespace token {
         TOKEN( "z-index" ),                    // XML_ZINDEX
         TOKEN( "zoom-type" ),                  // XML_ZOOM_TYPE
         TOKEN( "zoom-value" ),                 // XML_ZOOM_VALUE
+
+        TOKEN( "enable" ),                     // XML_ENABLE
+        TOKEN( "use-regular-expressions" ),    // XML_USE_REGULAR_EXPRESSIONS
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
