@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-07-03 15:04:30 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 15:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aFtHelpline2Len         ( this, ResId( FT_HELPLINE2_LEN ) ),
         aMtrFldHelpline2Len     ( this, ResId( MTR_FLD_HELPLINE2_LEN ) ),
         aTsbBelowRefEdge        ( this, ResId( TSB_BELOW_REF_EDGE ) ),
+        aFtDecimalPlaces        ( this, ResId( FT_DECIMALPLACES ) ),
+        aMtrFldDecimalPlaces    ( this, ResId( MTR_FLD_DECIMALPLACES ) ),
         aTsbParallel            ( this, ResId( TSB_PARALLEL ) ),
         aTsbShowUnit            ( this, ResId( TSB_SHOW_UNIT ) ),
         aLbUnit                 ( this, ResId( LB_UNIT ) ),
@@ -199,6 +201,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aMtrFldHelplineDist.SetModifyHdl( aLink );
     aMtrFldHelpline1Len.SetModifyHdl( aLink );
     aMtrFldHelpline2Len.SetModifyHdl( aLink );
+    aMtrFldDecimalPlaces.SetModifyHdl( aLink );
     aTsbBelowRefEdge.SetClickHdl( aLink );
     aTsbParallel.SetClickHdl( aLink );
     aTsbShowUnit.SetClickHdl( aLink );
@@ -305,6 +308,19 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         aTsbBelowRefEdge.SetState( STATE_DONTKNOW );
     }
     aTsbBelowRefEdge.SaveValue();
+
+    // SdrMeasureDecimalPlacesItem
+    pItem = GetItem( rAttrs, SDRATTR_MEASUREDECIMALPLACES );
+    if( pItem || (pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES )))
+    {
+        INT16 nValue = ( ( const SdrMeasureDecimalPlacesItem* )pItem )->GetValue();
+        aMtrFldDecimalPlaces.SetValue( nValue );
+    }
+    else
+    {
+        aMtrFldDecimalPlaces.SetText( String() );
+    }
+    aMtrFldDecimalPlaces.SaveValue();
 
     // SdrMeasureTextRota90Item
     // Attention: negate !
@@ -494,6 +510,13 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
     if( eState != aTsbBelowRefEdge.GetSavedValue() )
     {
         rAttrs.Put( SdrMeasureBelowRefEdgeItem( (BOOL) STATE_CHECK == eState ) );
+        bModified = TRUE;
+    }
+
+    if( aMtrFldDecimalPlaces.GetText() != aMtrFldDecimalPlaces.GetSavedValue() )
+    {
+        nValue = aMtrFldDecimalPlaces.GetValue();
+        rAttrs.Put( SdrMeasureDecimalPlacesItem( nValue ) );
         bModified = TRUE;
     }
 
@@ -742,6 +765,12 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
         TriState eState = aTsbBelowRefEdge.GetState();
         if( eState != STATE_DONTKNOW )
             aAttrSet.Put( SdrMeasureBelowRefEdgeItem( (BOOL) STATE_CHECK == eState ) );
+    }
+
+    if( p == &aMtrFldDecimalPlaces )
+    {
+        INT16 nValue = aMtrFldDecimalPlaces.GetValue();
+        aAttrSet.Put( SdrMeasureDecimalPlacesItem( nValue ) );
     }
 
     if( p == &aTsbParallel )
