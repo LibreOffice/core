@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-11 11:46:59 $
+ *  last change: $Author: thb $ $Date: 2001-10-17 09:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,13 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         // Absatzattribute:
         SvxNumRule aTmpNumRule( 0, 0, FALSE );
 
+#ifndef SVX_LIGHT
         ppDefItems[0]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
+#else
+        // no need to have alien attributes persistent
+        ppDefItems[0]  = new SfxVoidItem( EE_PARA_XMLATTRIBS );
+#endif // #ifndef SVX_LIGHT
+
         ppDefItems[1]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
         ppDefItems[2]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
         ppDefItems[3]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
@@ -181,7 +187,12 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[40] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
         ppDefItems[41] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
         ppDefItems[42] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
+#ifndef SVX_LIGHT
         ppDefItems[43] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
+#else
+        // no need to have alien attributes persistent
+        ppDefItems[43] = new SfxVoidItem( EE_CHAR_XMLATTRIBS );
+#endif // #ifndef SVX_LIGHT
 
         // Features
         ppDefItems[44] = new SfxVoidItem( EE_FEATURE_TAB );
