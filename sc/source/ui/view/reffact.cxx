@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 19:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,10 +254,6 @@ void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet)
 String ScSimpleRefDlgWrapper::GetRefString()
 {
     String aResult;
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    DBG_ASSERT( pViewShell, "missing view shell :-(" );
-
     if(pWindow!=NULL)
     {
         aResult=((ScSimpleRefDlg*)pWindow)->GetRefString();
@@ -272,10 +268,6 @@ void ScSimpleRefDlgWrapper::SetAutoReOpen(BOOL bFlag)
 
 void ScSimpleRefDlgWrapper::SetRefString(const String& rStr)
 {
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    DBG_ASSERT( pViewShell, "missing view shell :-(" );
-
     if(pWindow!=NULL)
     {
         ((ScSimpleRefDlg*)pWindow)->SetRefString(rStr);
@@ -284,22 +276,31 @@ void ScSimpleRefDlgWrapper::SetRefString(const String& rStr)
 
 void ScSimpleRefDlgWrapper::SetCloseHdl( const Link& rLink )
 {
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    DBG_ASSERT( pViewShell, "missing view shell :-(" );
-
     if(pWindow!=NULL)
     {
-        ((ScSimpleRefDlg*)pWindow)->SetCloseHdl(rLink );
+        ((ScSimpleRefDlg*)pWindow)->SetCloseHdl( rLink );
+    }
+}
+
+void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
+                    const Link& rAbort, const Link& rChange )
+{
+    if(pWindow!=NULL)
+    {
+        ((ScSimpleRefDlg*)pWindow)->SetUnoLinks( rDone, rAbort, rChange );
+    }
+}
+
+void ScSimpleRefDlgWrapper::SetFlags( BOOL bCloseOnButtonUp )
+{
+    if(pWindow!=NULL)
+    {
+        ((ScSimpleRefDlg*)pWindow)->SetFlags( bCloseOnButtonUp );
     }
 }
 
 void ScSimpleRefDlgWrapper::StartRefInput()
 {
-    ScTabViewShell* pViewShell =
-        PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-    DBG_ASSERT( pViewShell, "missing view shell :-(" );
-
     if(pWindow!=NULL)
     {
         ((ScSimpleRefDlg*)pWindow)->StartRefInput();

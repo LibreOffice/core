@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reffact.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:00 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 19:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         virtual String  GetRefString();
         virtual void    SetRefString(const String& rStr);
         void            SetCloseHdl( const Link& rLink );
+        void            SetUnoLinks( const Link& rDone, const Link& rAbort,
+                                        const Link& rChange );
+        void            SetFlags( BOOL bCloseOnButtonUp );
         static void     SetAutoReOpen(BOOL bFlag);
 
         void            StartRefInput();
