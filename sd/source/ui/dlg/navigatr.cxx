@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-29 15:44:18 $
+ *  last change: $Author: cl $ $Date: 2002-04-30 09:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #include <vcl/menu.hxx>
 #endif
 
+#ifndef _SFXDOCKWIN_HXX
+#include <sfx2/dockwin.hxx>
+#endif
+
 #include "pres.hxx"
 #include "navigatr.hxx"
 #include "navichld.hxx"
@@ -144,6 +148,7 @@ SdNavigatorWin::SdNavigatorWin( Window* pParent,
     // Da es jetzt kein SetMinOutputSizePixel mehr gibt:
     aMinSize = aSize;
     aMinSize.Height() -= 40;
+    ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel( aMinSize );
 
     // DragType-Button initialisieren
     aToolbox.SetItemImage( TBI_DRAGTYPE, SdResId( GetDragTypeSdResId( eDragType, TRUE ) ) );
