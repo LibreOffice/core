@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-02 12:00:24 $
+ *  last change: $Author: jbu $ $Date: 2002-10-02 12:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,8 +590,8 @@ static bool hasService(
 
 static void bootstrap(
     Options & opt ,
-    const Reference< XMultiServiceFactory > &xSMgr,
-    const Reference< XSimpleRegistry > & reg ) throw ( Exception )
+    Reference< XMultiServiceFactory > &xSMgr,
+    Reference< XSimpleRegistry > & reg ) throw ( Exception )
 {
     if( opt.sRegName.equals( opt.sBootRegName2 ) )
     {
