@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-08 14:23:21 $
+ *  last change: $Author: er $ $Date: 2002-05-31 14:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,31 @@ public:
         needed for the mode set with nType in the ctor */
     void loadModuleIfNeeded( sal_uInt16 nLang );
 
+    /** Load the transliteration module specified by rModuleName, which has to
+        be the UNO service implementation name that is expanded to the full UNO
+        service implementation name, for example, "NumToCharKanjiShort_ja_JP"
+        expands to
+        "com.sun.star.i18n.Transliteration.NumToCharKanjiShort_ja_JP".
+        @ATTENTION!
+        This method ignores the mode type set with the constructor and
+        interferes with the loadModuleIfNeeded() method and the transliterate()
+        method that gets a LanguageType passed as parameter.  Using one of
+        those may load a different module and overwrite this setting. Only the
+        transliterate() method that takes no LanguageType parameter may be used
+        for a specific module loaded with this method.  */
+    void loadModuleByImplName( const String& rModuleName, sal_uInt16 nLang );
+
+    /** This transliteration method corresponds with the loadModuleByImplName()
+        method. It relies on a module being loaded and does not try load one.
+        If for any reason the string can't be transliterated the original
+        string is returned.  */
+    String transliterate( const String& rStr,
+                        xub_StrLen nStart, xub_StrLen nLen,
+                        ::com::sun::star::uno::Sequence <long>* pOffset ) const;
+
     // Wrapper implementations of class Transliteration
     String transliterate( const String& rStr, sal_uInt16 nLanguage,
-                        xub_StrLen nStart, xub_StrLen nEnd,
+                        xub_StrLen nStart, xub_StrLen nLen,
                         ::com::sun::star::uno::Sequence <long>* pOffset );
 
     /** If two strings are equal per this transliteration.

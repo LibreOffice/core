@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-08-08 14:24:17 $
+ *  last change: $Author: er $ $Date: 2002-05-31 14:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,40 @@ String TransliterationWrapper::transliterate(
         {
             loadModuleIfNeeded( nLang );
 
-            Sequence <long> aOffset;
-            if( !pOffset )
-                pOffset = &aOffset;
+            if ( pOffset )
+                sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
+            else
+            {
+                Sequence <long> aOffset;
+                sRet = xTrans->transliterate( rStr, nStart, nLen, aOffset );
+            }
+        }
+        catch( Exception&  )
+        {
+            DBG_ERRORFILE( "transliterate: Exception caught!" );
+        }
+    }
+    return sRet;
+}
 
-            sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
+
+String TransliterationWrapper::transliterate(
+                                const String& rStr,
+                                xub_StrLen nStart, xub_StrLen nLen,
+                                Sequence <long>* pOffset ) const
+{
+    String sRet( rStr );
+    if( xTrans.is() )
+    {
+        try
+        {
+            if ( pOffset )
+                sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
+            else
+            {
+                Sequence <long> aOffset;
+                sRet = xTrans->transliterate( rStr, nStart, nLen, aOffset );
+            }
         }
         catch( Exception&  )
         {
@@ -212,6 +241,31 @@ void TransliterationWrapper::loadModuleImpl() const
     {
 #ifndef PRODUCT
         ByteString aMsg( "loadModuleImpl: Exception caught\n" );
+        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
+        DBG_ERRORFILE( aMsg.GetBuffer() );
+#endif
+    }
+
+    bFirstCall = sal_False;
+}
+
+
+void TransliterationWrapper::loadModuleByImplName(
+        const String& rModuleName, sal_uInt16 nLang )
+{
+    try
+    {
+        setLanguageLocaleImpl( nLang );
+        // Reset LanguageType, so the next call to loadModuleIfNeeded() forces
+        // new settings.
+        nLanguage = LANGUAGE_DONTKNOW;
+        if ( xTrans.is() )
+            xTrans->loadModuleByImplName( rModuleName, aLocale );
+    }
+    catch ( Exception& e )
+    {
+#ifndef PRODUCT
+        ByteString aMsg( "loadModuleByImplName: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
