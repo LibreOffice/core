@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-08 09:00:20 $
+ *  last change: $Author: aw $ $Date: 2002-05-31 11:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ ImpLineStyleParameterPack::ImpLineStyleParameterPack(const SfxItemSet& rSet,
 ImpLineStyleParameterPack::~ImpLineStyleParameterPack()
 {
     if(pDotDashArray)
-        delete pDotDashArray;
+        /*#90353#*/ delete [] pDotDashArray;
 }
 
 UINT16 ImpLineStyleParameterPack::GetFirstDashDotIndex(double fPos, double& rfDist) const
