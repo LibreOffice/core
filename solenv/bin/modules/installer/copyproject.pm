@@ -2,9 +2,9 @@
 #
 #   $RCSfile: copyproject.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:56:20 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:53:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,6 +103,12 @@ sub copy_project
         my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
 
         installer::systemactions::copy_one_file($source, $destination);
+
+        if ( $destination =~ /install\s*$/ )
+        {
+            my $localcall = "chmod 775 $destination \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
     }
 
     # copy ScpActions
@@ -115,6 +121,12 @@ sub copy_project
         my $destination = $installdir . $installer::globals::separator . $onefile->{'Name'};
 
         installer::systemactions::copy_one_file($source, $destination);
+
+        if ( $destination =~ /install\s*$/ )
+        {
+            my $localcall = "chmod 775 $destination \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
     }
 
     # Analyzing the log file
