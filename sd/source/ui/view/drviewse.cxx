@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,36 +843,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_PRESENTATION_END:
         {
-            if( pFuSlideShow )
-            {
-                if( pDrView->IsTextEdit() )
-                    pDrView->EndTextEdit();
-
-                pFuSlideShow->Deactivate();
-                pFuSlideShow->Destroy();
-                pFuSlideShow = NULL;
-
-                if( ISA(PresentationViewShell))
-                {
-                    GetViewFrame()->GetDispatcher()->Execute(
-                        SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
-                }
-                else if( pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
-                {
-                    ViewShell::ShellType ePreviousType (
-                        pFrameView->GetPreviousViewShellType());
-
-                    pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
-                    pFrameView->SetSlotId(SID_OBJECT_SELECT);
-                    pFrameView->SetPreviousViewShellType(GetShellType());
-
-                    GetViewShellBase().GetPaneManager()
-                        .RequestMainViewShellChange(ePreviousType);
-                }
-            }
-
+            StopSlideShow(true);
             rReq.Ignore ();
-            GetViewFrame()->GetBindings().InvalidateAll( TRUE );
         }
         break;
 
@@ -1884,6 +1856,41 @@ void DrawViewShell::ShowUIControls (bool bVisible)
         LayerDialogChildWindow::GetChildWindowId(),
         IsLayerModeActive() && bVisible);
     aTabControl.Show (bVisible);
+}
+
+
+
+
+void DrawViewShell::StopSlideShow (bool bCloseFrame)
+{
+    if (pFuSlideShow != NULL)
+    {
+        if( pDrView->IsTextEdit() )
+            pDrView->EndTextEdit();
+
+        pFuSlideShow->Deactivate();
+        pFuSlideShow->Destroy();
+        pFuSlideShow = NULL;
+
+        if( ISA(PresentationViewShell))
+        {
+
+            if (bCloseFrame)
+                GetViewFrame()->DoClose();
+        }
+        else if( pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
+        {
+            ViewShell::ShellType ePreviousType (pFrameView->GetPreviousViewShellType());
+
+            pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
+            pFrameView->SetSlotId(SID_OBJECT_SELECT);
+            pFrameView->SetPreviousViewShellType(GetShellType());
+
+            GetViewShellBase().GetPaneManager().RequestMainViewShellChange(ePreviousType);
+
+            GetViewFrame()->GetBindings().InvalidateAll( TRUE );
+        }
+    }
 }
 
 
