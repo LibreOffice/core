@@ -9,10 +9,10 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>drafts.com.sun.star.sheet.AccessibleCsvRuler</supported-service>
-        <type>drafts.com.sun.star.accessibility.XAccessibleContext</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleComponent</type>
-        <type>drafts.com.sun.star.accessibility.XAccessibleText</type>
+        <supported-service>com.sun.star.sheet.AccessibleCsvRuler</supported-service>
+        <type>com.sun.star.accessibility.XAccessibleContext</type>
+        <type>com.sun.star.accessibility.XAccessibleComponent</type>
+        <type>com.sun.star.accessibility.XAccessibleText</type>
     </component-description>
     <project-build-dependency>cppu</project-build-dependency>
     <project-build-dependency>cppuhelper</project-build-dependency>
