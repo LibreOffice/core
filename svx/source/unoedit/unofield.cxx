@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:16:00 $
+ *  last change: $Author: cl $ $Date: 2000-11-12 15:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,14 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_FILENAMEDISPLAYFORMAT_HPP_
+#include <com/sun/star/text/FilenameDisplayFormat.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_NOSUPPORTEXCEPTION_HPP_
 #include <com/sun/star/lang/NoSupportException.hpp>
 #endif
@@ -66,6 +74,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -94,24 +105,26 @@ using namespace ::com::sun::star;
         aAny <<= uno::Reference< xint >(this)
 
 
-#define WID_DOUBLE  0
+#define WID_DATE    0
 #define WID_BOOL1   1
 #define WID_BOOL2   2
-#define WID_INTEGER 3
-#define WID_STRING1 4
-#define WID_STRING2 5
-#define WID_STRING3 6
+#define WID_INT32   3
+#define WID_INT16   4
+#define WID_STRING1 5
+#define WID_STRING2 6
+#define WID_STRING3 7
 
 class SvxUnoFieldData_Impl
 {
 public:
-    Double      mdDouble;
     sal_Bool    mbBoolean1;
     sal_Bool    mbBoolean2;
-    sal_Int32   mnInteger;
+    sal_Int32   mnInt32;
+    sal_Int16   mnInt16;
     OUString    msString1;
     OUString    msString2;
     OUString    msString3;
+    util::DateTime maDateTime;
 
     OUString    msPresentation;
 };
@@ -120,10 +133,10 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( USHORT mnId )
 {
     static SfxItemPropertyMap aExDateTimeFieldPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("DateTimeValue"),    WID_DOUBLE,     &::getCppuType((const Double*)0),       0, 0 },
+        { MAP_CHAR_LEN("DateTime"),         WID_DATE,       &::getCppuType((const util::DateTime*)0),       0, 0 },
         { MAP_CHAR_LEN("IsFixed"),          WID_BOOL1,      &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("IsDate"),           WID_BOOL2,      &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("NumberFormat"),     WID_INTEGER,    &::getCppuType((const sal_Int32*)0),    0, 0 },
+        { MAP_CHAR_LEN("NumberFormat"),     WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
         {0,0}
     };
 
@@ -136,7 +149,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( USHORT mnId )
     static SfxItemPropertyMap aUrlFieldPropertyMap_Impl[] =
     {
 
-        { MAP_CHAR_LEN("Format"),           WID_INTEGER,    &::getCppuType((const sal_Int32*)0),    0, 0 },
+        { MAP_CHAR_LEN("Format"),           WID_INT16,      &::getCppuType((const sal_Int16*)0),    0, 0 },
         { MAP_CHAR_LEN("Presentation"),     WID_STRING1,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("TargetFrame"),      WID_STRING2,    &::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("URL"),              WID_STRING3,    &::getCppuType((const OUString*)0),     0, 0 },
@@ -151,7 +164,7 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( USHORT mnId )
     static SfxItemPropertyMap aExtFileFieldPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
-        { MAP_CHAR_LEN("FileFormat"),           WID_INTEGER,&::getCppuType((const sal_Int32*)0),    0, 0 },
+        { MAP_CHAR_LEN("FileFormat"),           WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
         { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
         {0,0}
     };
@@ -161,7 +174,8 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( USHORT mnId )
         { MAP_CHAR_LEN("IsFixed"),              WID_BOOL1,  &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("CurrentPresentation"),  WID_STRING1,&::getCppuType((const OUString*)0),     0, 0 },
         { MAP_CHAR_LEN("Content"),              WID_STRING2,&::getCppuType((const OUString*)0),     0, 0 },
-        { MAP_CHAR_LEN("AuthorFormat"),         WID_INTEGER,&::getCppuType((const sal_Int32*)0),    0, 0 },
+        { MAP_CHAR_LEN("AuthorFormat"),         WID_INT16,  &::getCppuType((const sal_Int16*)0),    0, 0 },
+        { MAP_CHAR_LEN("FullName"),             WID_BOOL2,  &::getBooleanCppuType(),                0, 0 },
         {0,0}
     };
 
@@ -207,6 +221,72 @@ static sal_Char* aFieldItemNameMap_Impl[] =
     "Author"
 };
 
+/* conversion routines */
+
+static sal_Int16 getFileNameDisplayFormat( SvxFileFormat nFormat )
+{
+    switch( nFormat )
+    {
+    case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
+    case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
+    case SVXFILEFORMAT_PATH:    return text::FilenameDisplayFormat::PATH;
+//  case SVXFILEFORMAT_NAME:
+    default: return text::FilenameDisplayFormat::NAME;
+    }
+}
+
+static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
+{
+    switch( nFormat )
+    {
+    case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
+    case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
+    case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
+//  case text::FilenameDisplayFormat::NAME_AND_EXT:
+    default:
+        return SVXFILEFORMAT_NAME_EXT;
+    }
+}
+
+static util::DateTime getDate( ULONG nDate )
+{
+    util::DateTime aDate;
+    memset( &aDate, 0, sizeof( util::DateTime ) );
+
+    Date aTempDate( nDate );
+
+    aDate.Day = aTempDate.GetDay();
+    aDate.Month = aTempDate.GetMonth();
+    aDate.Year = aTempDate.GetYear();
+
+    return aDate;
+}
+
+inline Date setDate( util::DateTime& rDate )
+{
+    return Date( rDate.Day, rDate.Month, rDate.Year );
+}
+
+static util::DateTime getTime( long nTime )
+{
+    util::DateTime aTime;
+    memset( &aTime, 0, sizeof( util::DateTime ) );
+
+    Time aTempTime( nTime );
+
+    aTime.HundredthSeconds = aTempTime.Get100Sec();
+    aTime.Seconds = aTempTime.GetSec();
+    aTime.Minutes = aTempTime.GetMin();
+    aTime.Hours = aTempTime.GetHour();
+
+    return aTime;
+}
+
+inline Time setTime( util::DateTime& rDate )
+{
+    return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.HundredthSeconds  );
+}
+
 // ====================================================================
 // class SvxUnoTextField
 // ====================================================================
@@ -220,10 +300,47 @@ SvxUnoTextField::SvxUnoTextField( sal_Int32 nServiceId ) throw()
 {
     mpPropSet = new SfxItemPropertySet( ImplGetFieldItemPropertyMap(mnServiceId) );
 
-    mpImpl->mdDouble = 0.0;
-    mpImpl->mbBoolean1 = sal_False;
-    mpImpl->mbBoolean2 = sal_False;
-    mpImpl->mnInteger = 0;
+    memset( &(mpImpl->maDateTime), 0, sizeof( util::DateTime ) );
+
+    switch( nServiceId )
+    {
+    case ID_DATEFIELD:
+        mpImpl->mbBoolean2 = sal_True;
+        mpImpl->mnInt16 = SVXDATEFORMAT_STDSMALL;
+        mpImpl->mbBoolean1 = sal_False;
+        break;
+
+    case ID_EXT_TIMEFIELD:
+        mpImpl->mbBoolean2 = sal_False;
+        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mnInt16 = SVXTIMEFORMAT_STANDARD;
+        break;
+
+    case ID_TIMEFIELD:
+        mpImpl->mbBoolean2 = sal_False;
+        break;
+
+    case ID_URLFIELD:
+        mpImpl->mnInt16 = SVXURLFORMAT_URL;
+        break;
+
+    case ID_EXT_FILEFIELD:
+        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mnInt16 = text::FilenameDisplayFormat::FULL;
+        break;
+
+    case ID_AUTHORFIELD:
+        mpImpl->mnInt16 = SVXAUTHORFORMAT_FULLNAME;
+        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mbBoolean2 = sal_True;
+        break;
+    default:
+        mpImpl->mbBoolean1 = sal_False;
+        mpImpl->mbBoolean2 = sal_False;
+        mpImpl->mnInt32 = 0;
+        mpImpl->mnInt16 = 0;
+
+    }
 }
 
 SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pData ) throw()
@@ -250,16 +367,16 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
             {
             case ID_DATEFIELD:
                 mpImpl->mbBoolean2 = sal_True;
-                mpImpl->mdDouble = (double) ((SvxDateField*)pData)->GetFixDate();
-                mpImpl->mnInteger = ((SvxDateField*)pData)->GetFormat();
+                mpImpl->maDateTime = getDate( ((SvxDateField*)pData)->GetFixDate() );
+                mpImpl->mnInt16 = ((SvxDateField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                 break;
 
             case ID_EXT_TIMEFIELD:
                 mpImpl->mbBoolean2 = sal_False;
-                mpImpl->mdDouble = (double) ((SvxExtTimeField*)pData)->GetFixTime();
+                mpImpl->maDateTime = getTime( ((SvxExtTimeField*)pData)->GetFixTime() );
                 mpImpl->mbBoolean1 = ((SvxExtTimeField*)pData)->GetType() == SVXTIMETYPE_FIX;
-                mpImpl->mnInteger = ((SvxExtTimeField*)pData)->GetFormat();
+                mpImpl->mnInt16 = ((SvxExtTimeField*)pData)->GetFormat();
                 break;
 
             case ID_TIMEFIELD:
@@ -270,20 +387,21 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 mpImpl->msString1 = ((SvxURLField*)pData)->GetRepresentation();
                 mpImpl->msString2 = ((SvxURLField*)pData)->GetTargetFrame();
                 mpImpl->msString3 = ((SvxURLField*)pData)->GetURL();
-                mpImpl->mnInteger = ((SvxURLField*)pData)->GetFormat();
+                mpImpl->mnInt16 = ((SvxURLField*)pData)->GetFormat();
                 break;
 
             case ID_EXT_FILEFIELD:
                 mpImpl->msString1 = ((SvxExtFileField*)pData)->GetFile();
                 mpImpl->mbBoolean1 = ((SvxExtFileField*)pData)->GetType() == SVXFILETYPE_FIX;
-                mpImpl->mnInteger = ((SvxExtFileField*)pData)->GetFormat();
+                mpImpl->mnInt16 = getFileNameDisplayFormat(((SvxExtFileField*)pData)->GetFormat());
                 break;
 
             case ID_AUTHORFIELD:
-                mpImpl->msString1 = ((SvxAuthorField*)pData)->GetFormatted();
-                mpImpl->msString2 = ((SvxAuthorField*)pData)->GetFormatted();
-                mpImpl->mnInteger = ((SvxAuthorField*)pData)->GetFormat();
+                mpImpl->msString1  = ((SvxAuthorField*)pData)->GetFormatted();
+                mpImpl->msString2  = ((SvxAuthorField*)pData)->GetFormatted();
+                mpImpl->mnInt16    = ((SvxAuthorField*)pData)->GetFormat();
                 mpImpl->mbBoolean1 = ((SvxAuthorField*)pData)->GetType() == SVXAUTHORTYPE_FIX;
+                mpImpl->mbBoolean2 = ((SvxAuthorField*)pData)->GetType() != SVXAUTHORFORMAT_SHORTNAME;
                 break;
             }
         }
@@ -308,13 +426,10 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     {
         if( mpImpl->mbBoolean2 ) // IsDate?
         {
-            Date aDate;
-            if( mpImpl->mdDouble != 0.0 )
-                aDate.SetDate( (ULONG) mpImpl->mdDouble );
-
+            Date aDate( setDate( mpImpl->maDateTime ) );
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
-            if( mpImpl->mnInteger >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInteger <= SVXDATEFORMAT_F )
-                ((SvxDateField*)pData)->SetFormat( (SvxDateFormat)mpImpl->mnInteger );
+            if( mpImpl->mnInt16 >= SVXDATEFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXDATEFORMAT_F )
+                ((SvxDateField*)pData)->SetFormat( (SvxDateFormat)mpImpl->mnInt16 );
         }
         else
         {
@@ -322,13 +437,11 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
             if( mnServiceId != ID_TIMEFIELD )
             {
-                if( mpImpl->mdDouble != 0.0 )
-                    aTime.SetTime( (ULONG) mpImpl->mdDouble );
-
+                Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
 
-                if( mpImpl->mnInteger >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInteger <= SVXTIMEFORMAT_AM_HMSH )
-                    ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInteger );
+                if( mpImpl->mnInt16 >= SVXTIMEFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXTIMEFORMAT_AM_HMSH )
+                    ((SvxExtTimeField*)pData)->SetFormat( (SvxTimeFormat)mpImpl->mnInt16 );
             }
             else
             {
@@ -342,8 +455,8 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case ID_URLFIELD:
         pData = new SvxURLField( mpImpl->msString3, mpImpl->msString1 );
         ((SvxURLField*)pData)->SetTargetFrame( mpImpl->msString2 );
-        if( mpImpl->mnInteger >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInteger <= SVXURLFORMAT_REPR )
-            ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInteger );
+        if( mpImpl->mnInt16 >= SVXURLFORMAT_APPDEFAULT && mpImpl->mnInt16 <= SVXURLFORMAT_REPR )
+            ((SvxURLField*)pData)->SetFormat( (SvxURLFormat)mpImpl->mnInt16 );
         break;
 
     case ID_PAGEFIELD:
@@ -365,8 +478,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case ID_EXT_FILEFIELD:
     {
         pData = new SvxExtFileField( mpImpl->msString1 );
-        if( mpImpl->mnInteger >= SVXFILEFORMAT_NAME_EXT && mpImpl->mnInteger <= SVXFILEFORMAT_NAME )
-            ((SvxExtFileField*)pData)->SetFormat( (SvxFileFormat)mpImpl->mnInteger );
+        ((SvxExtFileField*)pData)->SetFormat( setFileNameDisplayFormat((SvxFileFormat)mpImpl->mnInt16 ) );
         break;
     }
 
@@ -388,6 +500,16 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
 
         pData = new SvxAuthorField( SvxAddressItem( aEmpty, aEmpty, aFirstName, aLastName ) );
+
+        if( !mpImpl->mbBoolean2 )
+        {
+            ((SvxAuthorField*)pData)->SetFormat( SVXAUTHORFORMAT_SHORTNAME );
+        }
+        else if( mpImpl->mnInt16 >= SVXAUTHORFORMAT_FULLNAME || mpImpl->mnInt16 <= SVXAUTHORFORMAT_SHORTNAME )
+        {
+            ((SvxAuthorField*)pData)->SetFormat( (SvxAuthorFormat) mpImpl->mnInt16 );
+        }
+
         break;
     }
 
@@ -541,8 +663,8 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
 
     switch( pMap->nWID )
     {
-    case WID_DOUBLE:
-        if(aValue >>= mpImpl->mdDouble)
+    case WID_DATE:
+        if(aValue >>= mpImpl->maDateTime)
             return;
         break;
     case WID_BOOL1:
@@ -553,8 +675,12 @@ void SAL_CALL SvxUnoTextField::setPropertyValue( const OUString& aPropertyName, 
         if(aValue >>= mpImpl->mbBoolean2)
             return;
         break;
-    case WID_INTEGER:
-        if(aValue >>= mpImpl->mnInteger)
+    case WID_INT16:
+        if(aValue >>= mpImpl->mnInt16)
+            return;
+        break;
+    case WID_INT32:
+        if(aValue >>= mpImpl->mnInt32)
             return;
         break;
     case WID_STRING1:
@@ -706,8 +832,8 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
 
     switch( pMap->nWID )
     {
-    case WID_DOUBLE:
-        aValue <<= mpImpl->mdDouble;
+    case WID_DATE:
+        aValue <<= mpImpl->maDateTime;
         break;
     case WID_BOOL1:
         aValue <<= mpImpl->mbBoolean1;
@@ -715,8 +841,11 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     case WID_BOOL2:
         aValue <<= mpImpl->mbBoolean2;
         break;
-    case WID_INTEGER:
-        aValue <<= mpImpl->mnInteger;
+    case WID_INT16:
+        aValue <<= mpImpl->mnInt16;
+        break;
+    case WID_INT32:
+        aValue <<= mpImpl->mnInt32;
         break;
     case WID_STRING1:
         aValue <<= mpImpl->msString1;
