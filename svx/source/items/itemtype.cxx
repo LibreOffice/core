@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemtype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,13 +76,20 @@
 
 #define ITEMID_COLOR_TABLE  SID_COLOR_TABLE
 
+
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 #include "xtable.hxx"
 #include "drawitem.hxx"
 #include "itemtype.hxx"
 
 // -----------------------------------------------------------------------
 
-XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit )
+XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, const IntlWrapper* pIntl    )
 {
     sal_Bool bNeg = sal_False;
     long nRet = 0;
@@ -164,7 +171,11 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit )
         nRet %= nDiff;
         if( 4 == nDigits )
         {
-            sRet += sal_Unicode(',');
+            DBG_ASSERT(pIntl, "no IntlWrapper* set")
+            if(pIntl)
+                sRet += pIntl->getLocaleData()->getNumDecimalSep();
+            else
+                sRet += ',';
             if( !nRet )
             {
                 sRet += sal_Unicode('0');
