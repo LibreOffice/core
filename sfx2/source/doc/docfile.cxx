@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-01 16:54:02 $
+ *  last change: $Author: mba $ $Date: 2001-03-07 12:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,20 +872,6 @@ void SfxMedium::CreateFileStream()
     {
         if ( !pImp->pTempFile )
             CreateTempFile();
-
-        SvFileStream aTmpStream( aName, STREAM_STD_WRITE );
-        char        *pBuf = new char [8192];
-        sal_uInt32   nErr = ERRCODE_NONE;
-
-        pInStream->Seek( 0L );
-        while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
-        {
-            sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
-            nErr = pInStream->GetError();
-            aTmpStream.Write( pBuf, nRead );
-        }
-
-        delete pBuf;
         pImp->bIsTemp = sal_True;
         CloseInStream_Impl();
     }
@@ -1738,23 +1724,17 @@ SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
 {
     bDirect       = rMedium.IsDirect();
     nStorOpenMode = rMedium.GetOpenMode();
-    if ( bTemporary )
-        CreateTempFile();
-    else
+    if ( !bTemporary )
         aName = rMedium.GetName();
 
     pImp->bIsTemp = bTemporary;
-    DBG_ASSERT( ! rMedium.pImp->bIsTemp,
-                "Temporaeres Medium darf nicht kopiert werden" );
+    DBG_ASSERT( ! rMedium.pImp->bIsTemp, "Temporaeres Medium darf nicht kopiert werden" );
     aLogicName = rMedium.aLogicName;
     pSet =  rMedium.GetItemSet() ? new SfxItemSet(*rMedium.GetItemSet()) : 0;
     pFilter = rMedium.pFilter;
     Init_Impl();
     if( bTemporary )
-    {
-        if ( !SfxContentHelper::CopyTo( rMedium.GetName(), GetPhysicalName() ) )
-            SetError( ERRCODE_IO_GENERAL );
-    }
+        CreateTempFile();
 
     if ( rMedium.pImp->pEaMgr )
         GetEaMgr();
@@ -2485,6 +2465,8 @@ void SfxMedium::CreateTempFile()
         GetOutStream();
         if ( pInStream && pOutStream )
         {
+            pInStream->Seek(0);
+            pOutStream->Seek(0);
             *pInStream >> *pOutStream;
             CloseInStream();
         }
