@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 11:12:08 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _LINK_HXX //autogen
 #include <tools/link.hxx>
 #endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
 
 class Application;
 class SvStream;
@@ -84,6 +87,8 @@ class ImplRemoteControl
     friend class StatementFlow;
 
     BOOL         m_bIdleInserted;
+    AutoTimer    m_aIdleTimer;
+    BOOL         m_bInsideExecutionLoop;
 #ifdef DEBUG
     EditWindow *m_pDbgWin;
 #endif
