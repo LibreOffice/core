@@ -1,0 +1,42 @@
+    <node oor:name="StarWriter 4.0/GlobalDocument" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>3580</value></prop>
+        <prop oor:name="Type"><value>writer_globaldocument_StarWriter_40GlobalDocument</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CSW4</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">StarWriter 4.0 - Dokument główny</value>
+            <value xml:lang="hu">StarWriter 4.0-fődokumentum</value>
+            <value xml:lang="ja">StarWriter 4.0 マスタードキュメント</value>
+            <value xml:lang="es">StarWriter 4.0 - Documento maestro</value>
+            <value xml:lang="tr">StarWriter 4.0 Ana Belgesi</value>
+            <value xml:lang="ru">StarWriter 4.0 Главный документ</value>
+            <value xml:lang="th">เอกสารต้นฉบับ StarWriter 4.0 </value>
+            <value xml:lang="x-comment">StarWriter 4.0 Globaldokument</value>
+            <value xml:lang="ca">Document mestre de l</value>
+            <value xml:lang="el">StarWriter 4.0 Κύριο έγγραφο</value>
+            <value xml:lang="zh-CN">StarWriter 4.0 主控文档</value>
+            <value xml:lang="pt">StarWriter 4.0 Documento-mestre</value>
+            <value xml:lang="cs">Hlavní dokument StarWriter 4.0</value>
+            <value xml:lang="fr">StarWriter 4.0 Document maître</value>
+            <value xml:lang="ar">StarWriter 4.0 مستند شامل</value>
+            <value xml:lang="zh-TW">StarWriter 4.0 主控文件</value>
+            <value xml:lang="sl">StarWriter 4.0 Glavni dokument</value>
+            <value xml:lang="fi">StarWriter 4.0 -pääasiakirja</value>
+            <value xml:lang="hi-IN">StarWriter 4.0 Master Document</value>
+            <value xml:lang="en-US">StarWriter 4.0 Master Document</value>
+            <value xml:lang="sk">Hlavný dokument StarWriter 4.0</value>
+            <value xml:lang="he">‮מסמך אב StarWriter 4.0‬</value>
+            <value xml:lang="sv">StarWriter 4.0 samlingsdokument</value>
+            <value xml:lang="da">StarWriter 4.0-hoveddokument</value>
+            <value xml:lang="de">StarWriter 4.0 Globaldokument</value>
+            <value xml:lang="ko">StarWriter 4.0 마스터 문서</value>
+            <value xml:lang="nl">StarWriter 4.0 Masterdocument</value>
+            <value xml:lang="pt-BR">Documento Mestre do StarWriter 4.0 </value>
+            <value xml:lang="it">StarWriter 4.0 Documento master</value>
+            <value xml:lang="x-translate">StarWriter 4.0 Globaldokument</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN</value></prop>
+    </node>
