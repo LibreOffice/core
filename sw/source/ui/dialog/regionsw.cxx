@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 14:04:16 $
+ *  last change: $Author: os $ $Date: 2002-07-04 07:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,7 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
-        if( HTML_CFG_NS30 != nHtmlMode && HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
+        if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
             RemoveTabPage(TP_COLUMN);
     }
     SetCurPageId(TP_INSERT_SECTION);
@@ -2303,7 +2303,7 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     if(bWeb)
     {
         RemoveTabPage(TP_SECTION_FTNENDNOTES);
-        if( HTML_CFG_NS30 != nHtmlMode && HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
+        if( HTML_CFG_NS40 != nHtmlMode && HTML_CFG_WRITER != nHtmlMode)
             RemoveTabPage(TP_COLUMN);
     }
 }

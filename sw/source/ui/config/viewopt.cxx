@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 13:38:56 $
+ *  last change: $Author: os $ $Date: 2002-07-04 07:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,9 +627,6 @@ USHORT      GetHtmlMode(const SwDocShell* pShell)
                         HTMLMODE_SOME_STYLES|
                         HTMLMODE_FULL_STYLES|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
-            break;
-            case HTML_CFG_NS30:
-                nRet |= HTMLMODE_BLINK|HTMLMODE_FRM_COLUMNS|HTMLMODE_FIRSTLINE;
             break;
             case HTML_CFG_NS40:
                 nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SOME_STYLES|
