@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 08:46:33 $
+ *  last change: $Author: tra $ $Date: 2002-12-06 08:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,7 +1404,7 @@ public:
     /** Copy constructor.
     */
 
-    DirectoryItem( DirectoryItem& rItem ): _pData( rItem._pData)
+    DirectoryItem( const DirectoryItem& rItem ): _pData( rItem._pData)
     {
         if( _pData )
             osl_acquireDirectoryItem( _pData );
@@ -1422,15 +1422,18 @@ public:
     /** Assignment operator.
     */
 
-    DirectoryItem& operator = ( DirectoryItem& rItem )
+    DirectoryItem& operator=(const DirectoryItem& rItem )
     {
-        if( _pData )
-            osl_releaseDirectoryItem( _pData );
+        if (&rItem != this)
+        {
+            if( _pData )
+                osl_releaseDirectoryItem( _pData );
 
-        _pData = rItem._pData;
+            _pData = rItem._pData;
 
-        if( _pData )
-            osl_acquireDirectoryItem( _pData );
+            if( _pData )
+                osl_acquireDirectoryItem( _pData );
+        }
         return *this;
     }
 
