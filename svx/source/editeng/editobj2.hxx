@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-24 15:32:17 $
+ *  last change: $Author: mt $ $Date: 2001-07-25 14:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #include <editobj.hxx>
 #include <editdoc.hxx>
+
+#include <vcl/fontcvt.hxx>
+
 
 class SfxStyleSheetPool;
 
@@ -151,13 +154,13 @@ public:
 
 struct LoadStoreTempInfos
 {
-    String              aOrgString;
-    SfxPoolItem*        pOrgParaAttrib;
-    XEditAttributeList  aOrgAttribs;
-    XEditAttributeList  aTmpNewAttribs;
+    ByteString              aOrgString_Load;
 
-                        LoadStoreTempInfos( const String& rText );
-                        ~LoadStoreTempInfos();
+    FontToSubsFontConverter hOldSymbolConv_Store;
+    BOOL                    bSymbolParagraph_Store;
+
+
+    LoadStoreTempInfos() { bSymbolParagraph_Store = FALSE; hOldSymbolConv_Store = NULL; }
 };
 
 class ContentInfo
@@ -196,7 +199,7 @@ public:
     void                SetWrongList( WrongList* p )    { pWrongs = p; }
 
     LoadStoreTempInfos* GetLoadStoreTempInfos() const   { return pTempLoadStoreInfos; }
-    void                CreateLoadStoreTempInfos( BOOL bSaveCharAttribs );
+    void                CreateLoadStoreTempInfos();
     void                DestroyLoadStoreTempInfos();
 
 

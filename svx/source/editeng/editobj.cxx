@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-24 15:32:17 $
+ *  last change: $Author: mt $ $Date: 2001-07-25 14:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,6 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
 ContentInfo::~ContentInfo()
 {
-    DBG_ASSERT( !pTempLoadStoreInfos, "~ContentInfo - TempLoadStoreInfos?!" );
     for ( USHORT nAttr = 0; nAttr < aAttribs.Count(); nAttr++ )
     {
         XEditAttribute* pAttr = aAttribs.GetObject(nAttr);
@@ -268,19 +267,10 @@ ContentInfo::~ContentInfo()
 #endif
 }
 
-void ContentInfo::CreateLoadStoreTempInfos( BOOL bSaveCharAttribs )
+void ContentInfo::CreateLoadStoreTempInfos()
 {
     delete pTempLoadStoreInfos;
-    pTempLoadStoreInfos = new LoadStoreTempInfos( aText );
-
-    if ( bSaveCharAttribs )
-    {
-        for ( USHORT nAttr = 0; nAttr < GetAttribs().Count(); nAttr++ )
-        {
-            XEditAttribute* pAttr = GetAttribs().GetObject( nAttr );
-            pTempLoadStoreInfos->aOrgAttribs.Insert( pAttr, nAttr );
-        }
-    }
+    pTempLoadStoreInfos = new LoadStoreTempInfos;
 }
 
 void ContentInfo::DestroyLoadStoreTempInfos()
@@ -288,18 +278,6 @@ void ContentInfo::DestroyLoadStoreTempInfos()
     delete pTempLoadStoreInfos;
     pTempLoadStoreInfos = NULL;
 }
-
-LoadStoreTempInfos::LoadStoreTempInfos( const String& rText )
-    : aOrgString( rText )
-{
-    pOrgParaAttrib = NULL;
-}
-
-LoadStoreTempInfos::~LoadStoreTempInfos()
-{
-    delete pOrgParaAttrib;
-}
-
 
 EditTextObject::EditTextObject( USHORT n)
 {
@@ -1148,7 +1126,13 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
         // Symbols?
         BOOL bSymbolPara = FALSE;
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        if ( pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->bSymbolParagraph_Store )
+        {
+            DBG_ASSERT( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON, "Why bSymbolParagraph_Store?" );
+            aText = ByteString( pC->GetText(), RTL_TEXTENCODING_SYMBOL );
+            bSymbolPara = TRUE;
+        }
+        else if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
@@ -1173,7 +1157,56 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
                     aText.Erase( pAttr->GetStart(), pAttr->GetEnd() - pAttr->GetStart() );
                     aText.Insert( aNew, pAttr->GetStart() );
                 }
+
+                // #88414# Convert StarSymbol back to StarBats
+                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                if ( hConv )
+                {
+                    // Don't create a new Attrib with StarBats font, MBR changed the
+                    // SvxFontItem::Store() to store StarBats instead of StarSymbol!
+                    for ( USHORT nChar = pAttr->GetStart(); nChar < pAttr->GetEnd(); nChar++ )
+                    {
+                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                        char cConv = ByteString::ConvertFromUnicode( ConvertFontToSubsFontChar( hConv, cOld ), RTL_TEXTENCODING_SYMBOL );
+                        if ( cConv )
+                            aText.SetChar( nChar, cConv );
+                    }
+
+                    DestroyFontToSubsFontConverter( hConv );
+                }
             }
+        }
+
+        // #88414# Convert StarSymbol back to StarBats
+        // StarSymbol as paragraph attribute or in StyleSheet?
+
+        FontToSubsFontConverter hConv = NULL;
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        {
+            hConv = CreateFontToSubsFontConverter( ((const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+        }
+        else if ( pC->GetStyle().Len() && pC->GetLoadStoreTempInfos() )
+        {
+            hConv = pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store;
+        }
+
+        if ( hConv )
+        {
+            for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
+            {
+                if ( !pC->GetAttribs().FindAttrib( EE_CHAR_FONTINFO, nChar ) )
+                {
+                    sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                    char cConv = ByteString::ConvertFromUnicode( ConvertFontToSubsFontChar( hConv, cOld ), RTL_TEXTENCODING_SYMBOL );
+                    if ( cConv )
+                        aText.SetChar( nChar, cConv );
+                }
+            }
+
+            DestroyFontToSubsFontConverter( hConv );
+
+            if ( pC->GetLoadStoreTempInfos() )
+                pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store = NULL;
         }
 
 
@@ -1287,18 +1320,6 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
         // Absatzattribute...
         pC->GetParaAttribs().Load( rIStream );
 
-        BOOL bSymbolPara = FALSE;
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
-        {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
-            if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-            {
-                pC->GetText() = String( aByteString, RTL_TEXTENCODING_SYMBOL );
-                bSymbolPara = TRUE;
-            }
-        }
-
-
         // Die Anzahl der Attribute...
         USHORT nAttribs;
         rIStream >> nAttribs;
@@ -1306,7 +1327,8 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
         // Und die einzelnen Attribute
         // Items als Surregate => immer 8 Byte pro Attrib
         // Which = 2; Surregat = 2; Start = 2; End = 2;
-        for ( ULONG nAttr = 0; nAttr < nAttribs; nAttr++ )
+        USHORT nAttr;
+        for ( nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
             USHORT nWhich, nStart, nEnd;
             const SfxPoolItem* pItem;
@@ -1334,20 +1356,103 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
                         if ( (BYTE) aByteString.GetChar( nStart ) == CH_FEATURE_OLD )
                             pC->GetText().SetChar( nStart, CH_FEATURE );
                     }
-                    else if ( nWhich == EE_CHAR_FONTINFO )
+                }
+            }
+        }
+
+        // Symbol-Conversion neccessary?
+        // All Strings are converted with the SourceCharSet in CreateData()...
+
+        // Keep old ByteString, maybe Symbol-Conversion neccessary, will be
+        // checked in FinishLoad(), I need the StyleSheetPool for this...
+        if ( pC->GetStyle().Len() && ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) )
+        {
+            pC->CreateLoadStoreTempInfos();
+            pC->GetLoadStoreTempInfos()->aOrgString_Load = aByteString;
+        }
+
+        // But check for paragraph and character symbol attribs here,
+        // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
+
+        BOOL bSymbolPara = FALSE;
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        {
+            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
+            if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+            {
+                pC->GetText() = String( aByteString, RTL_TEXTENCODING_SYMBOL );
+                bSymbolPara = TRUE;
+            }
+        }
+
+        for ( nAttr = pC->GetAttribs().Count(); nAttr; )
+        {
+            XEditAttribute* pAttr = pC->GetAttribs().GetObject( --nAttr );
+            if ( pAttr->GetItem()->Which() == EE_CHAR_FONTINFO )
+            {
+                const SvxFontItem& rFontItem = (const SvxFontItem&)*pAttr->GetItem();
+                if ( ( !bSymbolPara && ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
+                      || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
+                {
+                    // Not correctly converted
+                    ByteString aPart( aByteString, pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
+                    String aNew( aPart, rFontItem.GetCharSet() );
+                    pC->GetText().Erase( pAttr->GetStart(), pAttr->GetEnd()-pAttr->GetStart() );
+                    pC->GetText().Insert( aNew, pAttr->GetStart() );
+                }
+
+                // #88414# Convert StarMath and StarBats to StarSymbol
+                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+                if ( hConv )
+                {
+                    SvxFontItem aNewFontItem( rFontItem );
+                    aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
+
+                    pC->GetAttribs().Remove( nAttr );
+                    XEditAttribute* pNewAttr = CreateAttrib( aNewFontItem, pAttr->GetStart(), pAttr->GetEnd() );
+                    pC->GetAttribs().Insert( pNewAttr, nAttr );
+                    DestroyAttrib( pAttr );
+
+                    for ( USHORT nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
                     {
-                        const SvxFontItem& rFontItem = (const SvxFontItem&)*pAttr->GetItem();
-                        if ( ( !bSymbolPara && ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
-                              || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
-                        {
-                            // Not correctly converted
-                            ByteString aPart( aByteString, nStart, nEnd-nStart );
-                            String aNew( aPart, rFontItem.GetCharSet() );
-                            pC->GetText().Erase( nStart, nEnd-nStart );
-                            pC->GetText().Insert( aNew, nStart );
-                        }
+                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                        DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
+                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
+                        if ( cConv )
+                            pC->GetText().SetChar( nChar, cConv );
+                    }
+
+                    DestroyFontToSubsFontConverter( hConv );
+                }
+            }
+        }
+
+
+        // #88414# Convert StarMath and StarBats to StarSymbol
+        // Maybe old symbol font as paragraph attribute?
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        {
+            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
+            FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
+            if ( hConv )
+            {
+                SvxFontItem aNewFontItem( rFontItem );
+                aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
+                pC->GetParaAttribs().Put( aNewFontItem );
+
+                for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
+                {
+                    if ( !pC->GetAttribs().FindAttrib( EE_CHAR_FONTINFO, nChar ) )
+                    {
+                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
+                        DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
+                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
+                        if ( cConv )
+                            pC->GetText().SetChar( nChar, cConv );
                     }
                 }
+
+                DestroyFontToSubsFontConverter( hConv );
             }
         }
     }
@@ -1497,74 +1602,36 @@ void BinTextObject::PrepareStore( SfxStyleSheetPool* pStyleSheetPool )
             }
         }
 
-        // #88414# Convert StarSymbol back to StarBats
-        for ( USHORT nAttr = 0; nAttr < pC->GetAttribs().Count(); nAttr++ )
+        // SymbolConvertion because of StyleSheet?
+        // Cannot be checked in StoreData, no StyleSheetPool, so do it here...
+
+        pC->DestroyLoadStoreTempInfos();    // Maybe old infos, if somebody is not calling FinishLoad after CreateData, but PrepareStore...
+
+        if ( ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) && pC->aStyle.Len() && pStyleSheetPool )
         {
-            XEditAttribute* pAttr = pC->GetAttribs().GetObject( nAttr );
-            if ( pAttr->GetItem()->Which() == EE_CHAR_FONTINFO )
+            SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
+            if ( pStyle )
             {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)*pAttr->GetItem();
+                const SvxFontItem& rFontItem = (const SvxFontItem&)pStyle->GetItemSet().Get( EE_CHAR_FONTINFO );
+                if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+                {
+                    if ( !pC->GetLoadStoreTempInfos() )
+                        pC->CreateLoadStoreTempInfos();
+                    pC->GetLoadStoreTempInfos()->bSymbolParagraph_Store = TRUE;
+                }
+
                 FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
                 if ( hConv )
                 {
+                    // #88414# Convert StarSymbol back to StarBats
                     if ( !pC->GetLoadStoreTempInfos() )
-                        pC->CreateLoadStoreTempInfos( TRUE );
-
-                    SvxFontItem aNewFontItem( rFontItem );
-                    aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
-                    aNewFontItem.GetCharSet() = RTL_TEXTENCODING_SYMBOL;
-
-                    XEditAttribute* pNewAttr = CreateAttrib( aNewFontItem, pAttr->GetStart(), pAttr->GetEnd() );
-                    pC->GetAttribs().Remove( nAttr );
-                    pC->GetAttribs().Insert( pNewAttr, nAttr );
-                    pC->GetLoadStoreTempInfos()->aTmpNewAttribs.Insert( pNewAttr, pC->GetLoadStoreTempInfos()->aTmpNewAttribs.Count() );
-
-                    for ( USHORT nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
-                    {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
-                        DBG_ASSERT( cConv >= 0xF000, "cConv not in SymbolArea!!" );
-                        if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
-                    }
-
-                    DestroyFontToSubsFontConverter( hConv );
+                        pC->CreateLoadStoreTempInfos();
+                    pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store = hConv;
                 }
             }
         }
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
-        {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
-            FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-            if ( hConv )
-            {
-                if ( !pC->GetLoadStoreTempInfos() )
-                    pC->CreateLoadStoreTempInfos( FALSE );
-
-                pC->GetLoadStoreTempInfos()->pOrgParaAttrib = rFontItem.Clone();
-
-                SvxFontItem aNewFontItem( rFontItem );
-                aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
-                pC->GetParaAttribs().Put( aNewFontItem );
-
-                for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
-                {
-                    if ( !pC->GetAttribs().FindAttrib( EE_CHAR_FONTINFO, nChar ) )
-                    {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
-                        DBG_ASSERT( cConv >= 0xF000, "cConv not in SymbolArea!!" );
-                        if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
-                    }
-                }
-
-                DestroyFontToSubsFontConverter( hConv );
-            }
-
-        }
-
      }
+
     delete ppNumBulletItems;
 }
 
@@ -1575,32 +1642,7 @@ void BinTextObject::FinishStore()
         ContentInfo* pC = GetContents().GetObject( --nPara );
         pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
 
-        if ( pC->GetLoadStoreTempInfos() )
-        {
-            pC->aText = pC->GetLoadStoreTempInfos()->aOrgString;
-
-            if ( pC->GetLoadStoreTempInfos()->pOrgParaAttrib )
-                pC->GetParaAttribs().Put( *pC->GetLoadStoreTempInfos()->pOrgParaAttrib );
-
-            if ( pC->GetLoadStoreTempInfos()->aOrgAttribs.Count() )
-            {
-                pC->GetAttribs().Remove( 0, pC->GetAttribs().Count() );
-
-                USHORT nAttr;
-                for ( nAttr = 0; nAttr < pC->GetLoadStoreTempInfos()->aOrgAttribs.Count(); nAttr++ )
-                {
-                    XEditAttribute* pAttr = pC->GetLoadStoreTempInfos()->aOrgAttribs.GetObject( nAttr );
-                    pC->GetAttribs().Insert( pAttr, nAttr );
-                }
-                for ( nAttr = 0; nAttr < pC->GetLoadStoreTempInfos()->aTmpNewAttribs.Count(); nAttr++ )
-                {
-                    XEditAttribute* pAttr = pC->GetLoadStoreTempInfos()->aTmpNewAttribs.GetObject( nAttr );
-                    DestroyAttrib( pAttr );
-                }
-            }
-
-            pC->DestroyLoadStoreTempInfos();
-        }
+        pC->DestroyLoadStoreTempInfos();
     }
 }
 
@@ -1669,65 +1711,50 @@ void BinTextObject::FinishLoad( SfxStyleSheetPool* pStyleSheetPool )
             }
         }
 
-        // #88414# Convert StarMath and StarBats to StarSymbol
-        for ( USHORT nAttr = pC->GetAttribs().Count(); nAttr; )
+        // Symbol-Convertion because of StyleSheet?
+        if ( pStyleSheetPool && pC->GetLoadStoreTempInfos() && pC->GetLoadStoreTempInfos()->aOrgString_Load.Len() )
         {
-            XEditAttribute* pAttr = pC->GetAttribs().GetObject( --nAttr );
-            if ( pAttr->GetItem()->Which() == EE_CHAR_FONTINFO )
+            // When getting this assertion, we shouldn't convert anything here !!!
+            DBG_ASSERT( ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_ON ) && pC->aStyle.Len(), "FinishLoad: TempLoadStoreInfos, why?!" );
+
+            SfxStyleSheet* pStyle = (SfxStyleSheet*)pStyleSheetPool->Find( pC->GetStyle(), pC->GetFamily() );
+            if ( pStyle )
             {
-                const SvxFontItem& rFontItem = (const SvxFontItem&)*pAttr->GetItem();
-                FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-                if ( hConv )
+                const SvxFontItem& rFontItem = (const SvxFontItem&)pStyle->GetItemSet().Get( EE_CHAR_FONTINFO );
+                if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
                 {
-                    SvxFontItem aNewFontItem( rFontItem );
-                    aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
+                    String aConverted( pC->GetLoadStoreTempInfos()->aOrgString_Load, RTL_TEXTENCODING_SYMBOL );
 
-                    pC->GetAttribs().Remove( nAttr );
-                    XEditAttribute* pNewAttr = CreateAttrib( aNewFontItem, pAttr->GetStart(), pAttr->GetEnd() );
-                    pC->GetAttribs().Insert( pNewAttr, nAttr );
-                    DestroyAttrib( pAttr );
+                    // Replace only Parts without hard font attribute, other symbol encoding
+                    // is already done in CreateData()...
 
-                    for ( USHORT nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
+                    USHORT nLastEnd = 0;
+                    for ( USHORT nAttr = 0; nAttr < pC->GetAttribs().Count(); nAttr++ )
                     {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                        DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
-                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
-                        if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
-                    }
+                        XEditAttribute* pAttr = pC->GetAttribs().GetObject( nAttr );
+                        if ( pAttr->GetItem()->Which() == EE_CHAR_FONTINFO )
+                        {
+                            if ( nLastEnd < pAttr->GetStart() )
+                            {
+                                USHORT nLen = pAttr->GetStart() - nLastEnd;
+                                pC->GetText().Erase( nLastEnd, nLen );
+                                pC->GetText().Insert( aConverted, nLastEnd, nLen, nLastEnd );
+                            }
+                            nLastEnd = pAttr->GetEnd();
 
-                    DestroyFontToSubsFontConverter( hConv );
+                        }
+                    }
+                    if ( nLastEnd < pC->GetText().Len() )
+                    {
+                        USHORT nLen = pC->GetText().Len() - nLastEnd;
+                        pC->GetText().Erase( nLastEnd, nLen );
+                        pC->GetText().Insert( aConverted, nLastEnd, nLen, nLastEnd );
+                    }
                 }
             }
         }
 
-        // Maybe old symbol font as paragraph attribute?
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
-        {
-            const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
-            FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
-            if ( hConv )
-            {
-                SvxFontItem aNewFontItem( rFontItem );
-                aNewFontItem.GetFamilyName() = GetFontToSubsFontName( hConv );
-                pC->GetParaAttribs().Put( aNewFontItem );
-
-                for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
-                {
-                    if ( !pC->GetAttribs().FindAttrib( EE_CHAR_FONTINFO, nChar ) )
-                    {
-                        sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                        DBG_ASSERT( cOld >= 0xF000, "cOld not converted?!" );
-                        sal_Unicode cConv = ConvertFontToSubsFontChar( hConv, cOld );
-                        if ( cConv )
-                            pC->GetText().SetChar( nChar, cConv );
-                    }
-                }
-
-                DestroyFontToSubsFontConverter( hConv );
-            }
-
-        }
+        pC->DestroyLoadStoreTempInfos();
 
         // MT 07/00: EE_PARA_BULLET no longer needed
         pC->GetParaAttribs().ClearItem( EE_PARA_BULLET );
