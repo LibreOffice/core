@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: th $ $Date: 2001-02-23 18:17:44 $
+ *  last change: $Author: th $ $Date: 2001-02-26 19:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2580,7 +2580,7 @@ int OutputDevice::ImplNewFont()
     if ( maFont.GetEmphasisMark() & EMPHASISMARK_STYLE )
     {
         FontEmphasisMark    nEmphasisMark = ImplGetEmphasisMarkStyle( maFont );
-        long                nEmphasisHeight = (pFontEntry->mnLineHeight*200)/1000;
+        long                nEmphasisHeight = (pFontEntry->mnLineHeight*250)/1000;
         if ( nEmphasisHeight < 1 )
             nEmphasisHeight = 1;
         if ( nEmphasisMark & EMPHASISMARK_POS_BELOW )
@@ -3063,22 +3063,31 @@ void OutputDevice::ImplInitTextLineSize()
     long            n2LineDY2;
     long            nUnderlineOffset;
     long            nStrikeoutOffset;
+    long            nDescent;
 
-    nLineHeight = ((pFontEntry->maMetric.mnDescent*25)+50) / 100;
+    nDescent = pFontEntry->maMetric.mnDescent;
+    if ( !nDescent )
+    {
+        nDescent = pFontEntry->maMetric.mnAscent*100/1000;
+        if ( !nDescent )
+            nDescent = 1;
+    }
+
+    nLineHeight = ((nDescent*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
     nLineHeight2 = nLineHeight / 2;
     if ( !nLineHeight2 )
         nLineHeight2 = 1;
 
-    nBLineHeight = ((pFontEntry->maMetric.mnDescent*50)+50) / 100;
+    nBLineHeight = ((nDescent*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
     nBLineHeight2 = nBLineHeight/2;
     if ( !nBLineHeight2 )
         nBLineHeight2 = 1;
 
-    n2LineHeight = ((pFontEntry->maMetric.mnDescent*16)+50) / 100;
+    n2LineHeight = ((nDescent*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
     n2LineDY = n2LineHeight;
@@ -3088,7 +3097,7 @@ void OutputDevice::ImplInitTextLineSize()
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    nUnderlineOffset = pFontEntry->maMetric.mnDescent/2 + 1;
+    nUnderlineOffset = nDescent/2 + 1;
     nStrikeoutOffset = -((pFontEntry->maMetric.mnAscent-pFontEntry->maMetric.mnLeading)/3);
 
     if ( !pFontEntry->maMetric.mnUnderlineSize )
@@ -3158,7 +3167,8 @@ void OutputDevice::ImplInitAboveTextLineSize()
     nLeading = pFontEntry->maMetric.mnLeading;
     if ( !nLeading )
     {
-        nLeading = pFontEntry->maMetric.mnAscent*4/5;
+        // If no leading is available, we take 15% of the Ascent
+        nLeading = pFontEntry->maMetric.mnAscent*150/1000;
         if ( !nLeading )
             nLeading = 1;
     }
@@ -3187,7 +3197,7 @@ void OutputDevice::ImplInitAboveTextLineSize()
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    nUnderlineOffset = -(pFontEntry->maMetric.mnAscent-(nLeading/2));
+    nUnderlineOffset = -(pFontEntry->maMetric.mnAscent-((nLeading/2)-1));
 
     if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
     {
@@ -3468,7 +3478,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             nLineWidth = 1;
         if ( eUnderline == UNDERLINE_BOLDWAVE )
             nLineWidth *= 2;
-        nLinePos += nY + (nLineHeight / 2);
+        nLinePos += nY - (nLineHeight / 2);
         long nLineWidthHeight = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
         if ( eUnderline == UNDERLINE_DOUBLEWAVE )
         {
@@ -3953,8 +3963,8 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
     switch ( nEmphasisStyle )
     {
         case EMPHASISMARK_DOT:
-            // Dot has 50% of the height
-            nDotSize = (nHeight*500)/1000;
+            // Dot has 55% of the height
+            nDotSize = (nHeight*550)/1000;
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
@@ -3970,8 +3980,8 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
             break;
 
         case EMPHASISMARK_CIRCLE:
-            // Dot has 75% of the height
-            nDotSize = (nHeight*750)/1000;
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
@@ -3996,8 +4006,8 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
             break;
 
         case EMPHASISMARK_DISC:
-            // Dot has 75% of the height
-            nDotSize = (nHeight*750)/1000;
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
@@ -4012,8 +4022,8 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, BOOL& rPolyLine,
             break;
 
         case EMPHASISMARK_ACCENT:
-            // Dot has 75% of the height
-            nDotSize = (nHeight*750)/1000;
+            // Dot has 80% of the height
+            nDotSize = (nHeight*800)/1000;
             if ( !nDotSize )
                 nDotSize = 1;
             if ( nDotSize <= 2 )
