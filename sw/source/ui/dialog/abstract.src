@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:08:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ portuguese ] = "Propriedades" ;
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ russian ] = "Ñâîéñòâà";
-        Text[ polish ] = "W³aœciwoœci";
+        Text[ polish ] = "W³a?ciwo?ci";
         Text[ japanese ] = "ÌßÛÊßÃ¨";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ arabic ] = "ÎÕÇÆÕ";
@@ -156,7 +156,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text = "Absätze je Kapitel" ;
         Text [ English ] = "Paragraphs per Outline" ;
         Text [ english_us ] = "Subpoints per level" ;
-        Text [ portuguese_brazilian ] = "Absätze je Kapitel" ;
+        Text [ portuguese_brazilian ] = "Abs?tze je Kapitel" ;
         Text [ swedish ] = "Stycken per kapitel" ;
         Text [ danish ] = "Afsnit per kapitel" ;
         Text [ italian ] = "Paragrafi per capitolo" ;
@@ -202,7 +202,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ English ] = "The selected number of paragraphs of the included outline levels will be used to create the summary." ;
         WordBreak = TRUE ;
         Text [ english_us ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
-        Text [ portuguese_brazilian ] = "Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen." ;
+        Text [ portuguese_brazilian ] = "Im Abstrakt erscheint die ausgew?hlte Anzahl von Abs?tzen aus den einbezogenen Kapitelebenen." ;
         Text [ swedish ] = "Utdraget innehåller det utvalda antalet stycken från de inkluderade kapitelnivåerna." ;
         Text [ danish ] = "Abstractet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
         Text [ italian ] = "Il sunto contiene il numero di paragrafi scelto dai livelli di capitolo inclusi." ;
@@ -212,7 +212,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ portuguese ] = "O Abstracto contém a quantidade de parágrafos seleccionada dos níveis de capítulos incluídos." ;
         Text[ chinese_simplified ] = "´Ó°üÀ¨µÄÕÂ½Ú¼¶ÖĞÑ¡³öµÄÒ»¶¨ÊıÄ¿µÄ¶ÎÂäÏÔÊ¾ÔÚÕªÒªÖĞ¡£";
         Text[ russian ] = "Â Ïğîñìîòğå ïîÿâèòñÿ âûáğàííîå ÷èñëî àáçàöåâ èç âêëş÷åííûõ óğîâíåé ãëàâ";
-        Text[ polish ] = "Abstrakt zawiera wybran¹ iloœæ akapitów z awieraj¹cych w³¹czone poziomy akapitu.";
+        Text[ polish ] = "Abstrakt zawiera wybran¹ ilo?æ akapitów z awieraj¹cych w³¹czone poziomy akapitu.";
         Text[ japanese ] = "—v–ñ‚É‚ÍAw’è”‚Ì’i—‚ªŠeÍÚÍŞÙ‚©‚ç’Šo‚³‚ê‚Ü‚·B";
         Text[ chinese_traditional ] = "ºK­n¼Ò¦¡Åã¥Ü¬ÛÃö³¹¸`¤¤¿ï¨úªº¤@©w¼Æ¥Øªº¬q¸¨";
         Text[ arabic ] = "Óæİ íÙåÑ İí ÇáÊáÎíÕ ÚÏÏ ÇáİŞÑÇÊ ÇáÊí Êã ÊÍÏíÏåÇ ãä Èíä ãÓÊæíÇÊ ÇáİÕæá ÇáãÖãäÉ.";
