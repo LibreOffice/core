@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 16:11:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:23:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,12 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 
-import com.sun.star.script.framework.browse.ScriptEntry;
-import com.sun.star.script.framework.browse.ParcelDescriptor;
+import com.sun.star.script.framework.container.ScriptEntry;
+import com.sun.star.script.framework.container.ParcelDescriptor;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.filter.AllFilesFilter;
-import com.sun.star.script.framework.browse.XMLParserFactory;
+import com.sun.star.script.framework.container.XMLParserFactory;
 import org.openoffice.idesupport.*;
 
 public class CommandLineTools {
