@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 14:33:18 $
+ *  last change: $Author: os $ $Date: 2001-04-03 07:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -870,6 +870,12 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_Z_ORDER                      (FN_EXTRA2 + 74)
 #define FN_UNO_REDLINE_NODE_START           (FN_EXTRA2 + 75)
 #define FN_UNO_REDLINE_NODE_END             (FN_EXTRA2 + 76)
+#define FN_UNO_TEXT_PORTION_TYPE            (FN_EXTRA2 + 77)
+#define FN_UNO_CONTROL_CHARACTER            (FN_EXTRA2 + 78)
+#define FN_UNO_BOOKMARK                     (FN_EXTRA2 + 79)
+#define FN_UNO_IS_COLLAPSED                 (FN_EXTRA2 + 80)
+#define FN_UNO_IS_START                     (FN_EXTRA2 + 81)
+
 /*--------------------------------------------------------------------
     Bereich: Fenster
  --------------------------------------------------------------------*/
