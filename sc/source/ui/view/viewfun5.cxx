@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:19:11 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,14 +570,14 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     return bRet;
 }
 
-String lcl_GetSubString( sal_Char* pData, long nStart, long nDataSize, rtl_TextEncoding eEncoding )
+ByteString lcl_GetSubString( sal_Char* pData, long nStart, long nDataSize )
 {
     if ( nDataSize <= nStart /* || pData[nDataSize] != 0 */ )
     {
         DBG_ERROR("DDE Data: invalid data");
-        return String();
+        return ByteString();
     }
-    return String( pData + nStart, eEncoding );
+    return ByteString( pData + nStart );
 }
 
 BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
@@ -627,9 +627,13 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 
     rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
 
-    String aApp   = lcl_GetSubString( pData, 0, nSeqLen, eSysEnc );
-    String aTopic = lcl_GetSubString( pData, aApp.Len() + 1, nSeqLen, eSysEnc );
-    String aItem  = lcl_GetSubString( pData, aApp.Len() + aTopic.Len() + 2, nSeqLen, eSysEnc );
+    ByteString aByteApp   = lcl_GetSubString( pData, 0, nSeqLen );
+    ByteString aByteTopic = lcl_GetSubString( pData, aByteApp.Len() + 1, nSeqLen );
+    ByteString aByteItem  = lcl_GetSubString( pData, aByteApp.Len() + aByteTopic.Len() + 2, nSeqLen );
+
+    String aApp( aByteApp, eSysEnc );
+    String aTopic( aByteTopic, eSysEnc );
+    String aItem( aByteItem, eSysEnc );
 
     if (!ScCompiler::pSymbolTableNative)
     {
