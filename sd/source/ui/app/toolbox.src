@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:15:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,42 +443,6 @@ ToolBox RID_SLIDE_OBJ_TOOLBOX
     Align = BOXALIGN_TOP ;
     ItemList =
     {
-        ToolBoxItem
-        {
-            Identifier = SID_DIA_EFFECT ;
-            HelpID = SID_DIA_EFFECT ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DIA_SPEED ;
-            HelpID = SID_DIA_SPEED ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DIA_AUTO ;
-            HelpID = SID_DIA_AUTO ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DIA_TIME ;
-            HelpID = SID_DIA_TIME ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
         ToolBoxItem
         {
             Identifier = SID_REHEARSE_TIMINGS ;
