@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:55:42 $
+ *  last change: $Author: mtg $ $Date: 2001-04-02 15:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,10 @@
 
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+
+#ifndef _FORBIDDENCHARACTERSTABLE_HXX
+#include <svx/forbiddencharacterstable.hxx>
 #endif
 
 #ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
@@ -604,11 +608,12 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
             if (xBox.is() )
             {
                 SwDoc *pDoc = pText->GetDoc();
-                const SwForbiddenCharacterTable *pTable = ( pDoc->GetForbiddenCharacterTbl() );
-                if (pTable)
+                vos::ORef < SvxForbiddenCharactersTable > xTable = pDoc->GetForbiddenCharacterTbl();
+                if (xTable.isValid())
                 {
-                    sal_Int32  nCount = 0, nNum = pTable->Count();
+                    sal_Int32  nCount = 0, nNum = xTable->Count();
                     ForbiddenCharacters *pCharacter;
+                    ForbiddenCharactersInfo *pInfoCharacter;
                     Any aAny;
                     OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
                     OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
@@ -618,8 +623,9 @@ void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::su
 
                     for ( ; nCount < nNum; nCount++ )
                     {
-                        pCharacter = pTable->GetObject( nCount );
-                        ULONG nLanguage = pTable->GetKey( pCharacter );
+                        pInfoCharacter = xTable->GetObject( nCount );
+                        pCharacter = &(pInfoCharacter->aForbiddenChars);
+                        ULONG nLanguage = xTable->GetKey( pInfoCharacter );
                         Locale aLocale;
                         SvxLanguageToLocale ( aLocale, static_cast < LanguageType > (nLanguage) );
                         Sequence < PropertyValue > aSequence ( SW_FORBIDDEN_CHARACTER_MAX );
