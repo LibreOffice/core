@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:24:09 $
+ *  last change: $Author: sab $ $Date: 2001-01-17 09:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ XML_CONSTASCII_ACTION( sXML_bibliography_entry_template, "bibliography-entry-tem
 XML_CONSTASCII_ACTION( sXML_bibliography_mark, "bibliography-mark" );
 XML_CONSTASCII_ACTION( sXML_bibliography_source, "bibliography-source" );
 XML_CONSTASCII_ACTION( sXML_bibliography_type, "bibliography-type" );
+XML_CONSTASCII_ACTION( sXML_big_range, "big-range");
 XML_CONSTASCII_ACTION( sXML_bind_styles_to_content, "bind-styles-to-content");
 XML_CONSTASCII_ACTION( sXML_bitmap , "bitmap" );
 XML_CONSTASCII_ACTION( sXML_black, "black" );
@@ -300,6 +301,7 @@ XML_CONSTASCII_ACTION( sXML_casemap_uppercase, "uppercase" );
 XML_CONSTASCII_ACTION( sXML_categories, "categories" );
 XML_CONSTASCII_ACTION( sXML_category, "category" );
 XML_CONSTASCII_ACTION( sXML_category_and_value, "category-and-value" );
+XML_CONSTASCII_ACTION( sXML_cell_content_change, "cell-content-change");
 XML_CONSTASCII_ACTION( sXML_cell_count, "cell-count");
 XML_CONSTASCII_ACTION( sXML_cell_protect, "cell-protect");
 XML_CONSTASCII_ACTION( sXML_cell_range_address, "cell-range-address");
@@ -490,6 +492,8 @@ XML_CONSTASCII_ACTION( sXML_detective, "detective" );
 XML_CONSTASCII_ACTION( sXML_determinant, "determinant" );
 XML_CONSTASCII_ACTION( sXML_diff, "diff");
 XML_CONSTASCII_ACTION( sXML_diffuse_color, "diffuse-color" );
+XML_CONSTASCII_ACTION( sXML_dependences, "dependences");
+XML_CONSTASCII_ACTION( sXML_dependence, "dependence");
 XML_CONSTASCII_ACTION( sXML_direction, "direction");
 XML_CONSTASCII_ACTION( sXML_disabled, "disabled" );
 XML_CONSTASCII_ACTION( sXML_disc, "disc" );
@@ -539,7 +543,10 @@ XML_CONSTASCII_ACTION( sXML_end, "end" );
 XML_CONSTASCII_ACTION( sXML_end_angle, "end-angle" );
 XML_CONSTASCII_ACTION( sXML_end_cell_address, "end-cell-address" );
 XML_CONSTASCII_ACTION( sXML_end_color, "end-color" );
+XML_CONSTASCII_ACTION( sXML_end_column, "end-column" );
 XML_CONSTASCII_ACTION( sXML_end_intensity, "end-intensity" );
+XML_CONSTASCII_ACTION( sXML_end_row, "end-row" );
+XML_CONSTASCII_ACTION( sXML_end_table, "end-table" );
 XML_CONSTASCII_ACTION( sXML_end_x, "end-x" );
 XML_CONSTASCII_ACTION( sXML_end_y, "end-y" );
 XML_CONSTASCII_ACTION( sXML_endnote, "endnote" );
@@ -966,6 +973,7 @@ XML_CONSTASCII_ACTION( sXML_move_from_left, "move-from-left" );
 XML_CONSTASCII_ACTION( sXML_move_from_right, "move-from-right" );
 XML_CONSTASCII_ACTION( sXML_move_from_top, "move-from-top" );
 XML_CONSTASCII_ACTION( sXML_mover, "mover" );
+XML_CONSTASCII_ACTION( sXML_movement, "movement" );
 XML_CONSTASCII_ACTION( sXML_mpadded, "mpadded");
 XML_CONSTASCII_ACTION( sXML_mphantom, "mphantom");
 XML_CONSTASCII_ACTION( sXML_mprescripts, "mprescripts");
@@ -1340,8 +1348,12 @@ XML_CONSTASCII_ACTION( sXML_standard_deviation, "standard-deviation" );
 XML_CONSTASCII_ACTION( sXML_starbasic, "starbasic" );
 XML_CONSTASCII_ACTION( sXML_start, "start" );
 XML_CONSTASCII_ACTION( sXML_start_color, "start-color" );
+XML_CONSTASCII_ACTION( sXML_start_column, "start-column" );
 XML_CONSTASCII_ACTION( sXML_start_intensity, "start-intensity" );
 XML_CONSTASCII_ACTION( sXML_start_numbering_at, "start-numbering-at" );
+XML_CONSTASCII_ACTION( sXML_start_position, "start-position" );
+XML_CONSTASCII_ACTION( sXML_start_row, "start-row" );
+XML_CONSTASCII_ACTION( sXML_start_table, "start-table" );
 XML_CONSTASCII_ACTION( sXML_start_value, "start-value" );
 XML_CONSTASCII_ACTION( sXML_statistics, "statistics" );
 XML_CONSTASCII_ACTION( sXML_status, "status" );
