@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:48:37 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
 #endif
-#define SYSDATA_ONLY_BASETYPE
 #include <sysdata.hxx>
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
@@ -3215,7 +3214,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 #ifndef REMOTE_APPSERVER
         if( ImplHasMirroredGraphics() )
         {
-            ((SalGraphicsLayout*)mpGraphics)->mirror( aPtDev.X(), this );
+            mpGraphics->mirror( aPtDev.X(), this );
 
             if( IsRTLEnabled() )
             {
@@ -7279,7 +7278,7 @@ void Window::SetPointerPosPixel( const Point& rPos )
             ImplReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
-        ((SalGraphicsLayout*)mpGraphics)->mirror( aPos.X(), this );
+        mpGraphics->mirror( aPos.X(), this );
     }
 #endif
     mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
