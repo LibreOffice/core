@@ -24,7 +24,7 @@ SfxVoidItem AcceptChanges FID_CHG_ACCEPT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Activate SID_OLE_ACTIVATE
+SfxVoidItem ActivateOLE SID_OLE_ACTIVATE
 ()
 [
     /* flags: */
@@ -49,7 +49,7 @@ SfxVoidItem Activate SID_OLE_ACTIVATE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Activate SID_TABLE_ACTIVATE
+SfxVoidItem ActivateTable SID_TABLE_ACTIVATE
 ()
 [
     /* flags: */
@@ -5358,7 +5358,7 @@ SfxVoidItem SearchAll FID_SEARCH_ALL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Select SID_MARKAREA
+SfxVoidItem SelectArea SID_MARKAREA
 ()
 [
     /* flags: */
@@ -5383,7 +5383,7 @@ SfxVoidItem Select SID_MARKAREA
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Select SID_OLE_SELECT
+SfxVoidItem SelectOLE SID_OLE_SELECT
 ()
 [
     /* flags: */
