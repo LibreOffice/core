@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-22 09:57:14 $
+ *  last change: $Author: aw $ $Date: 2002-07-18 09:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,19 @@ class FuPoor
     BOOL            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
+    // #95491# member to hold state of the mouse buttons for creation
+    // of own MouseEvents (like in ScrollHdl)
+private:
+    sal_uInt16      mnCode;
+
  public:
     FuPoor(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
+
+    // #95491# see member
+    void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
+    const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
     virtual void Paint(const Rectangle& rRect, Window* pWin) {}
 
@@ -127,8 +136,13 @@ class FuPoor
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt) { return FALSE; }
+
+    // #95491# moved from inline to *.cxx
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
+
+    // #95491# moved from inline to *.cxx
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
+
     virtual BYTE Command(const CommandEvent& rCEvt);
 
     virtual void Activate();        // Function aktivieren
