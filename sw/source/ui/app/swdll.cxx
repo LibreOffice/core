@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
+ *  last change: $Author: os $ $Date: 2001-07-10 10:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ void SwDLL::Init()
         SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
         SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
         SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+        SwGlobalDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU_PORTAL));
     }
 
     SwWebDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SWWEB_MENU_PORTAL));
