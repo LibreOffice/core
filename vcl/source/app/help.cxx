@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:21:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,15 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
     SetPointFont( rStyleSettings.GetHelpFont() );
     SetTextColor( rStyleSettings.GetHelpTextColor() );
     SetTextAlign( ALIGN_TOP );
-    SetBackground( Wallpaper( rStyleSettings.GetHelpColor() ) );
+    if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
+    {
+        EnableChildTransparentMode( TRUE );
+        SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+        SetPaintTransparent( TRUE );
+        SetBackground();
+    }
+    else
+        SetBackground( Wallpaper( rStyleSettings.GetHelpColor() ) );
     if( rStyleSettings.GetHelpColor().IsDark() )
         SetLineColor( COL_WHITE );
     else
@@ -477,9 +485,17 @@ void HelpTextWindow::ImplShow()
 
 void HelpTextWindow::Paint( const Rectangle& )
 {
-    // Border zeichen
-    // .....
+    // paint native background
+    bool bNativeOK = false;
+    if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
+    {
+        Region aCtrlRegion( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        ImplControlValue    aControlValue;
+        bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                       0, aControlValue, rtl::OUString() );
+    }
 
+    // paint text
     if ( mnHelpWinStyle == HELPWINSTYLE_QUICK )
     {
         if ( mnStyle & QUICKHELP_CTRLTEXT )
@@ -496,17 +512,20 @@ void HelpTextWindow::Paint( const Rectangle& )
         DrawText( maTextRect, maHelpText, nDrawFlags );
     }
 
-    // Umrandung
-    Size aSz = GetOutputSizePixel();
-    DrawRect( Rectangle( Point(), aSz ) );
-    if ( mnHelpWinStyle == HELPWINSTYLE_BALLOON )
+    // border
+    if( ! bNativeOK )
     {
-        aSz.Width() -= 2;
-        aSz.Height() -= 2;
-        Color aColor( GetLineColor() );
-        SetLineColor( ( COL_GRAY ) );
-        DrawRect( Rectangle( Point( 1, 1 ), aSz ) );
-        SetLineColor( aColor );
+        Size aSz = GetOutputSizePixel();
+        DrawRect( Rectangle( Point(), aSz ) );
+        if ( mnHelpWinStyle == HELPWINSTYLE_BALLOON )
+        {
+            aSz.Width() -= 2;
+            aSz.Height() -= 2;
+            Color aColor( GetLineColor() );
+            SetLineColor( ( COL_GRAY ) );
+            DrawRect( Rectangle( Point( 1, 1 ), aSz ) );
+            SetLineColor( aColor );
+        }
     }
 }
 
