@@ -7,6 +7,10 @@ Public AbsDocuFound as Integer
 Public oLogDocument as Object
 Public oLogTable as Object
 Public bInsertRow as Boolean
+Public sLogUrl as String
+Public sCurPassWord as String
+
+
 
 Function ReadApplicationDirectories(ApplIndex as Integer, FilesList(),bIsDocument as Boolean, sFiltername()) as Integer
 Dim bCheckDocuType as Boolean
@@ -68,9 +72,9 @@ End Sub
 
 
 Sub ConvertAllDocuments(sFilterName())
-Dim FileProperties(0) as new com.sun.star.beans.PropertyValue
+Dim FileProperties(1) as new com.sun.star.beans.PropertyValue
 Dim WriterWebProperties(0) as new com.sun.star.beans.PropertyValue
-Dim OpenProperties(1) as new com.sun.star.beans.PropertyValue
+Dim OpenProperties(2) as new com.sun.star.beans.PropertyValue
 Dim FilesList(0,2) as String
 Dim sViewPath as String
 Dim i as Integer
@@ -96,7 +100,9 @@ Dim sCurFileExists as String
 Dim oModel as Object
 Dim MaxFileIndex as Integer
 Dim FileCount as Integer
-Dim sOldExtension as String
+&apos;Dim sOldExtension as String
+Dim bContainsBasicMacro as Boolean
+Dim bIsPassWordProtected as Boolean
 	bConversionIsRunnig = True
 	AbsTemplateFound = 0
 	AbsDocuFound = 0
@@ -119,6 +125,10 @@ Dim sOldExtension as String
 		OpenProperties(0).Name = &quot;Hidden&quot;
 		OpenProperties(0).Value = True
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
+		OpenProperties(1).Name = False
+		OpenProperties(2).Name = &quot;Silent&quot;
+		OpenProperties(2).Name = True
+		
 		MaxFileIndex = Ubound(FilesList(),1)
 		FileCount = 0
 		For i = 0 To MaxFileIndex
@@ -132,15 +142,16 @@ Dim sOldExtension as String
 			ApplIndex = FilesList(i,2)
 			sViewPath = CutPathView(sFullName, 60)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
-			
-			sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
-			Select Case sOldExtension
-				Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
-					OpenProperties(1).Value = False
-				Case Else
-					OpenProperties(1).Value = False
-			End Select
+&apos;		sOldExtension = GetFileNameExtension(sFullName, &quot;/&quot;)
+&apos;		Select Case sOldExtension
+&apos;			Case &quot;vor&quot;, &quot;dot&quot;, &quot;xlt&quot;, &quot;pot&quot;
+&apos;				OpenProperties(1).Value = False
+&apos;			Case Else
+&apos;				OpenProperties(1).Value = False
+&apos;		End Select
 			oDocument = StarDesktop.LoadComponentFromURL(sFullName, &quot;_blank&quot;, 0, OpenProperties())
+			bIsPassWordProtected = CheckPassWordProtection(oDocument)
+			bContainsBasicMacro = CheckIfMacroExists(oDocument)
 			If bSetFonts Then
 				CheckScripts(oDocument, 1)
 			End If
@@ -181,10 +192,14 @@ Dim sOldExtension as String
 					End Select
 				End If
 				If bDoSave Then
-					InsertDocNamesToLogDocument(sFullName, TargetFile)
+					InsertDocNamesToLogDocument(sFullName, TargetFile, bContainsBasicMacro)
 					On Local Error Resume Next
 					FileProperties(0).Name = &quot;FilterName&quot;
 					FileProperties(0).Value = CurFilterName
+					If bIsPassWordProtected Then
+						FileProperties(1).Name = &quot;PassWord&quot;
+						FileProperties(1).Value = sCurPassWord
+					End If
 					oDocument.StoreAsUrl(TargetFile,FileProperties())
 					FileCount = FileCount + 1
 					oDocument.Dispose()
@@ -194,6 +209,10 @@ Dim sOldExtension as String
 		Next i
 	End If
 	AddLogStatistics(FileCount)
+	oLogDocument.Dispose()
+	If (ImportDialog.chkLogfile.State = 1) And (FileCount &gt; 0) Then
+		ImportDialog.cmdShowLogFile.Enabled = True
+	End If
 	ImportDialog.cmdCancel.Label = sCloseButton
 	ImportDialog.cmdGoOn.Label = sReady
 	ImportDialog.cmdGoOn.Enabled = True
@@ -202,6 +221,7 @@ Dim sOldExtension as String
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
 End Sub
+
 
 
 Sub AddListtoFilesList(FirstList(), SecList(), ApplIndex as Integer)
@@ -294,23 +314,25 @@ End Function
 
 
 Sub CreateLogDocument(HiddenProperties())
+Dim OpenProperties(0) as new com.sun.star.beans.PropertyValue
 Dim oTableCursor as Object
 Dim oLogCursor as Object
 Dim oLogRows as Object
-Dim sLogUrl as String
 Dim NoArgs()
 Dim i as Integer
 Dim bLogExists as Boolean
 	If ImportDialog.chkLogfile.State = 1 Then
 		i = 2
-		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, NoArgs())&apos; HiddenProperties()) &apos; HiddenProperties())
+		OpenProperties(0).Name = &quot;Hidden&quot;
+		OpenProperties(0).Value = True
+		oLogDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter&quot;, &quot;_blank&quot;, 4, OpenProperties())
 		oLogCursor = oLogDocument.Text.CreateTextCursor
 		oLogTable =  oLogDocument.CreateInstance(&quot;com.sun.star.text.TextTable&quot;)
 		oLogTable.RepeatHeadline = true
 		oLogCursor.Text.InsertTextContent(oLogCursor, oLogTable, True)
-		oLogCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor
+		oLogCursor = oLogTable.GetCellbyPosition(0,0).createTextCursor()
 		oLogCursor.SetString(sSourceDocuments)
-		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor
+		oLogCursor = oLogTable.GetCellbyPosition(1,0).createTextCursor()
 		oLogCursor.SetString(sTargetDocuments)
 		bInsertRow = False
 		sLogUrl = SOWorkPath &amp; &quot;/Logfile.sxw&quot;
@@ -330,13 +352,14 @@ Dim bLogExists as Boolean
 End Sub
 
 
-Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String)
+Sub InsertDocNamesToLogDocument(SourceUrl as String, TargetUrl as String, bContainsBasicMacro as Boolean)
 Dim oCell as Object
 Dim oLogCursor as Object
 Dim UrlList(1) as String
 Dim LocFileName as String
 Dim LocUrl as String
 Dim i as Integer
+Dim oCommentCursor as Object
 	If ImportDialog.chkLogfile.State = 1 Then
 		If bInsertRow Then
 			oLogTable.Rows.InsertByIndex(oLogTable.Rows.Count,1)
@@ -347,8 +370,14 @@ Dim i as Integer
 		UrlList(1) = TargetUrl
 		For i = 0 To 1
 			oCell = oLogTable.GetCellbyPosition(i,oLogTable.Rows.Count-1)
-			oLogCursor = oCell.createTextCursor()
+			If i = 1 And bContainsBasicMacro Then
+				oCommentCursor = oCell.createTextCursor()
+				oCell.insertControlCharacter(oCommentCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, False)
+				oCell.insertString(oCommentCursor, sReeditMacro, false)								
+			End If
 			LocUrl = UrlList(i)
+			oLogCursor = oCell.createTextCursor()
+			oLogCursor.CollapseToStart()
 			oLogCursor.HyperLinkURL = LocUrl
 			oLogCursor.HyperLinkName = LocUrl
 			oLogCursor.HyperLinkTarget = LocUrl
@@ -372,10 +401,63 @@ Dim oTableCursor as Object
 		oCell = oLogTable.GetCellbyPosition(0, MaxRowIndex)
 		oLogCursor = oCell.createTextCursor()
 		oCell.InsertString(oLogCursor, sLogSummary,False)
-		oTableCursor = oLogTable.createCursorByCellName(&quot;A1&quot;)
-		oTableCursor.goDown(MaxRowIndex, false)
+		oTableCursor = oLogTable.createCursorByCellName(oCell.CellName)
 		oTableCursor.goRight(1, True)
 		oTableCursor.mergeRange()
 		oLogDocument.Store()
 	End If
+End Sub
+
+
+&apos; This macro has to be reworked out again as it works with deprecated interfaces
+&apos; It can be completed as soon as Bug #93295 will be fixed because right now it
+&apos; is not possible to access BasicLibraries and DialogLibraries from outside the 
+&apos; document
+Function CheckIfMacroExists(oDocument as Object) as Boolean
+Dim ModuleNames() as String
+Dim MaxIndex as Integer
+Dim oLibraryContainer as Object
+&apos;	oLibraryContainer = oDocument.LibraryContainer
+&apos;	If oLibraryContainer.hasElements Then
+&apos;		ModuleNames = oDocument.LibraryContainer.ElementNames
+&apos;		MaxIndex = Ubound(ModuleNames())
+&apos;		For i = 0 To MaxIndex
+&apos;			oLibrary = oLibraryContainer.getByName(ModuleNames(i))
+&apos;			If Not IsNull(oLibrary.getDialogContainer) Then
+&apos;				CheckIf MacroExists = True
+&apos;				Exit Function
+&apos;			End If
+&apos;			If oLibrary.ModuleContainer.HasElements Then
+&apos;				CheckIfMacroExists() = True
+&apos;				Exit Function
+&apos;			End If
+&apos;		Next i
+&apos;	End If
+	CheckIfMacroExists() = False
+End Function
+
+
+
+Function CheckPassWordProtection(oDocument as Object)
+Dim bIsPassWordProtected as Boolean
+Dim i as Integer
+Dim oArgs()
+Dim MaxIndex as Integer
+	bIsPassWordProtected = false
+ 	oArgs() = oDocument.getArgs()
+ 	MaxIndex = Ubound(oArgs())
+	For i = 0 To MaxIndex
+		If oArgs(i).Name = &quot;PassWord&quot; Then
+			bIsPassWordProtected = True
+			sCurPassWord = oArgs(i).Value
+			Exit For
+		End If
+	Next i
+	CheckPassWordProtection() = bIsPassWordProtected
+End Function
+
+
+Sub OpenLogDocument()
+Dim NoArgs() as New com.sun.star.beans.PropertyValue
+	OpenDocument(sLogUrl, NoArgs())
 End Sub</script:module>

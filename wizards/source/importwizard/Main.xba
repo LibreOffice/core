@@ -57,7 +57,8 @@ RTError:
 End Sub
 
 
-Sub NextStep
+
+Sub NextStep()
 Dim iCurStep as Integer
 	If Not bDebugWizard Then
 		On Error Goto RTError
@@ -89,12 +90,17 @@ Dim iCurStep as Integer
 		Case 4
 			CancelTask(True)
 	End Select
-	ImportDialog.cmdGoOn.DefaultButton = True
+
+	If ((ImportDialog.chkLogfile.State &lt;&gt; 1) OR (iCurStep &lt;&gt; 3)) Then
+		ImportDialog.cmdGoOn.DefaultButton = True
+	End If
+	
 	RepaintHeaderPreview()	
 	Exit Sub
 RTError:
 	Msgbox sRTErrorDesc, 16, sRTErrorHeader
 End Sub
+
 
 
 Sub PrevStep()
@@ -119,7 +125,9 @@ Dim iCurStep as Integer
 				FillStep_Welcome()
 				bDoKeepApplValues = True
 			End If
+			
 	End Select
+
 	ImportDialog.cmdGoOn.DefaultButton = True
 	RepaintHeaderPreview()	
 	Exit Sub
@@ -145,7 +153,7 @@ Sub CancelTask(bCloseDialog as Boolean)
 			ImportDialog.cmdCancel.Enabled = True
 		End If
 	Else
-		ImportDialogArea.EndExecute()	
+		ImportDialogArea.EndExecute()
 	End If
 End Sub
 

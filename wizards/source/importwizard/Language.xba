@@ -40,6 +40,7 @@ Public sSumMSDocuments(3) as String
 Public sSumMSTemplates(3) as String
 Public ModuleList(3) as String
 Public sLogSummary as String
+Public sReeditMacro as String
 
 Sub LoadLanguage()
 	If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
@@ -93,6 +94,7 @@ Sub LoadLanguage()
 		sRTErrorHeader = GetResText(1058)
 		sPathDialogMessage = GetResText(1080)
 		sTitle = GetResText(1081)
+		sReeditMacro = &quot;Dokumentenmakro muss überarbeitet werden&quot;
 
 		sProgressPage_1 = GetResText(1090)
 		sProgressPage_2 = GetResText(1091)
@@ -122,6 +124,7 @@ Sub LoadLanguage()
 			.lblTemplateExport.Label = sExportLabel
 			.chkLogfile.Label = GetResText(2032)
 			.chkLogfile.Helptext = GetResText(2033)
+			.cmdShowLogFile.Label = &quot;Logdatei anzeigen&quot;
 		End With
 		ModuleList(0) = &quot;com.sun.star.text.TextDocument&quot;
 		ModuleList(1) = &quot;com.sun.star.sheet.SpreadsheetDocument&quot;

@@ -2,7 +2,7 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="DialogModul" script:language="StarBasic">Option Explicit
 
-Public Const bDebugWizard = False
+Public Const bDebugWizard = True
 
 Public Const SBFIRSTAPPLCHECKED = 0
 Public Const SBSECONDAPPLCHECKED = 1
@@ -90,7 +90,7 @@ Dim i as Integer
 		.cmdBack.Enabled = False
 		.Step = 1
 	End With
-	CheckModuleInstallation()		
+	CheckModuleInstallation()
 	ToggleNextButton()
 End Sub
 
@@ -315,6 +315,10 @@ Sub FillStep_Progress()
    		.LabelCurDocument.Label = &quot;&quot;
 		.Step = 4
 	End With
+	ImportDialogArea.GetControl(&quot;LabelRetrieval&quot;).SetFocus()
+	If ImportDialog.chkLogfile.State = 1 Then
+		ImportDialog.cmdShowLogFile.DefaultButton = True
+	End If
 End Sub
 
 
