@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:52:31 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@
 #include "tpcalc.hxx"
 #include "opredlin.hxx"
 #include "optload.hxx"
+#include "transobj.hxx"
 
 #define ScModule
 #include "scslots.hxx"
@@ -171,6 +172,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("StarCalc")));       // fuer Basic
 
     ResetDragObject();
+    SetClipObject( NULL, NULL );
 
     //  InputHandler braucht nicht mehr angelegt zu werden
 
@@ -691,6 +693,27 @@ void ScModule::SetDragJump( ScDocument* pLocalDoc, const String& rTarget, const 
     aDragData.pJumpLocalDoc = pLocalDoc;
     aDragData.aJumpTarget = rTarget;
     aDragData.aJumpText = rText;
+}
+
+//------------------------------------------------------------------
+
+void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
+{
+    DBG_ASSERT( !pCellObj || !pDrawObj, "SetClipObject: not allowed to set both objects" );
+
+    aClipData.pCellClipboard = pCellObj;
+    aClipData.pDrawClipboard = pDrawObj;
+}
+
+ScDocument* ScModule::GetClipDoc()
+{
+    //  called from document
+
+    ScTransferObj* pObj = ScTransferObj::GetOwnClipboard();
+    if (pObj)
+        return pObj->GetDocument();
+
+    return NULL;
 }
 
 //------------------------------------------------------------------

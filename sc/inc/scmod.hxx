@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:37:39 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ class ScMessagePool;
 class EditFieldInfo;
 class ScNavipiCfg;
 class ScFormEditData;
+class ScTransferObj;
+class ScDrawTransferObj;
 
 //==================================================================
 
@@ -139,6 +141,12 @@ struct ScDragData
     String          aJumpText;
 };
 
+struct ScClipData
+{
+    ScTransferObj*      pCellClipboard;
+    ScDrawTransferObj*  pDrawClipboard;
+};
+
 //==================================================================
 
 
@@ -147,6 +155,7 @@ class ScModule: public ScModuleDummy, public SfxListener
     Timer               aIdleTimer;
     Timer               aSpellTimer;
     ScDragData          aDragData;
+    ScClipData          aClipData;
     ScMessagePool*      pMessagePool;
     //  globalen InputHandler gibt's nicht mehr, jede View hat einen
     ScInputHandler*     pRefInputHandler;
@@ -202,6 +211,12 @@ public:
 
     void                SetDragIntern(BOOL bSet=TRUE)   { bDragWasIntern = bSet; }
     BOOL                GetDragIntern() const           { return bDragWasIntern; }
+
+    //  clipboard:
+    const ScClipData&   GetClipData() const     { return aClipData; }
+    void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
+
+    ScDocument*         GetClipDoc();       // called from document - should be removed later
 
     void                SetWaterCan( BOOL bNew )    { bIsWaterCan = bNew; }
     BOOL                GetIsWaterCan() const       { return bIsWaterCan; }
