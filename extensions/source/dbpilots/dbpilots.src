@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:44:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text[ czech ] = "Průvodce skupinovým prvkem";
     Text[ hebrew ] = "AutoPilot Gruppenelement";
     Text[ hindi ] = "ओटोपैलट् समूह ऐलिमेन्ट्";
+    Text[ slovak ] = "Sprievodca skupinovým prvkom";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -145,6 +146,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text[ czech ] = "Průvodce tabulárním prvkem";
     Text[ hebrew ] = "AutoPilot Tabellenelement";
     Text[ hindi ] = "ओटोपैलट् सारणी ऐलिमेन्ट्";
+    Text[ slovak ] = "Sprievodca prvkom tabuľky";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -177,6 +179,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ czech ] = "Průvodce seznamem";
     Text[ hebrew ] = "AutoPilot Listenfeld";
     Text[ hindi ] = "ओटोपैलट् सूची बॉक्स";
+    Text[ slovak ] = "Sprievodca zoznamom";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
@@ -209,6 +212,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text[ czech ] = "Průvodce kombinovaným polem";
     Text[ hebrew ] = "AutoPilot Kombinationsfeld";
     Text[ hindi ] = "ओटोपैलट् कॉम्बो बॉक्स";
+    Text[ slovak ] = "Sprievodca ";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -239,11 +243,21 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ czech ] = "Spojení tabulky se zdrojem dat nelze navázat.";
     Text[ hebrew ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
     Text[ hindi ] = "ड़ॉटा मूल केलिए सारणी कनेक्शन को स्थापित नहीं कर सकते है ।";
+    Text[ slovak ] = "Tabuľkové spojenie so zdrojom dát sa nepodarilo uskutočniť.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28.26.1  2003/06/12 11:09:54  gh
+ *  final Merge RC
+ *
+ *  Revision 1.28  2003/04/29 17:44:33  hr
+ *  INTEGRATION: CWS mergem8 (1.18.2.7.6.3.2.1.26); FILE MERGED
+ *  2003/04/29 08:35:39 gh 1.18.2.7.6.3.2.1.26.3: final merge for Beta2
+ *  2003/04/16 18:58:08 gh 1.18.2.7.6.3.2.1.26.2: RESYNC: (1.18.2.7.6.3.2.1-1.27); FILE MERGED
+ *  2003/04/14 14:46:27 gh 1.18.2.7.6.3.2.1.26.1: merging all languages
+ *
  *  Revision 1.18.2.7.6.3.2.1.26.3  2003/04/29 08:35:39  gh
  *  final merge for Beta2
  *
@@ -354,6 +368,8 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
+
 
 
 
