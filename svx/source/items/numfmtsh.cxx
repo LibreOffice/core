@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-06-10 21:22:50 $
+ *  last change: $Author: er $ $Date: 2002-03-14 12:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,7 +1059,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     sal_uInt16 nDefault;
     if ( pTmpCurrencyEntry && nCurCategory != NUMBERFORMAT_ALL )
     {
-        nSelPos = nDefault = pFormatter->GetCurrencyFormatStrings(
+        nDefault = pFormatter->GetCurrencyFormatStrings(
             aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
         if ( !bTmpBanking )
             pFormatter->GetCurrencyFormatStrings(
