@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-22 09:23:20 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,93 +418,6 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
     if (bVer67)
         return;
 
-    SwTextGridItem aGrid;
-    aGrid.SetDisplayGrid(FALSE);
-    aGrid.SetPrintGrid(FALSE);
-    SwTextGrid eType=GRID_NONE;
-    if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
-    {
-        switch (nGridType)
-        {
-            case 0:
-                eType = GRID_NONE;
-                break;
-            default:
-                ASSERT(0,"Unknown grid type");
-            case 3:
-                //Text snaps to char grid, this doesn't make a lot of sense to
-                //me. This is closer than LINES_CHARS
-                eType = GRID_LINES_ONLY;
-                break;
-            case 1:
-                eType = GRID_LINES_CHARS;
-                break;
-            case 2:
-                eType = GRID_LINES_ONLY;
-                break;
-        }
-    }
-    aGrid.SetGridType(eType);
-
-    //sep.dyaLinePitch
-    short nLinePitch = ReadULSprm(pSep, 0x9031, 360);
-
-    SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
-    const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)
-        rFmt.GetAttr(RES_UL_SPACE);
-    nTextareaHeight -= rUL.GetUpper();
-    nTextareaHeight -= rUL.GetLower();
-    aGrid.SetLines(nTextareaHeight/nLinePitch);
-
-    //It remains to be seen if a base height of 14points and a ruby height of
-    //4 points should allow 12point text with ruby of 4pt to fit in single
-    //line. I reckon it should (why not), but it doesn't at present :-(
-    //So right now this doesn't always work as I think it should
-
-    //This seems emperically correct, but might require some future tweaking.
-    short nRubyHeight = nLinePitch*2/9;
-    short nBaseHeight = nLinePitch-nRubyHeight;
-    aGrid.SetBaseHeight(nBaseHeight);
-    aGrid.SetRubyHeight(nRubyHeight);
-
-    //Get the size of word's default styles font
-    UINT32 nRubyWidth=240;
-    for (USHORT nI = 0; nI < pStyles->GetCount(); nI++ )
-    {
-        if (pCollA[nI].bValid && pCollA[nI].pFmt &&
-            pCollA[nI].GetWWStyleId() == 0)
-        {
-            const SvxFontHeightItem& rF = (const SvxFontHeightItem&)
-                pCollA[nI].pFmt->GetAttr(RES_CHRATR_CJK_FONTSIZE);
-            nRubyWidth = rF.GetHeight();
-            break;
-        }
-    }
-
-    //dxtCharSpace
-    if (const BYTE* pS = pSep->HasSprm(0x7030))
-    {
-        UINT32 nCharSpace = SVBT32ToLong(pS);
-        //main lives in top 20 bits, and is signed.
-        INT32 nMain = (nCharSpace & 0xFFFFF000);
-        nMain/=0x1000;
-        nRubyWidth += nMain*20;
-
-        int nFraction = (nCharSpace & 0x00000FFF);
-        nFraction = (nFraction*20)/0xFFF;
-        nRubyWidth += nFraction;
-    }
-
-    SwTwips nTextareaWidth = rFmt.GetFrmSize().GetWidth();
-    const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
-        rFmt.GetAttr(RES_LR_SPACE);
-    nTextareaWidth -= rLR.GetLeft();
-    nTextareaWidth -= rLR.GetRight();
-//    nothing I can do with this value at the moment I think
-//    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
-
-    rFmt.SetAttr(aGrid);
-
     //sprmSFBiDi
     BYTE bIsBiDi = ReadBSprm(pSep, 0x3228, 0);
     SvxFrameDirection eDir=FRMDIR_HORI_LEFT_TOP;
@@ -548,6 +461,102 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
         bVerticalEnviron=TRUE;
     else
         bVerticalEnviron=FALSE;
+
+    SwTwips nTextareaHeight = rFmt.GetFrmSize().GetHeight();
+    const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)
+        rFmt.GetAttr(RES_UL_SPACE);
+    nTextareaHeight -= rUL.GetUpper();
+    nTextareaHeight -= rUL.GetLower();
+
+    SwTwips nTextareaWidth = rFmt.GetFrmSize().GetWidth();
+    const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
+        rFmt.GetAttr(RES_LR_SPACE);
+    nTextareaWidth -= rLR.GetLeft();
+    nTextareaWidth -= rLR.GetRight();
+
+    if (bVerticalEnviron)
+    {
+        SwTwips nSwap = nTextareaHeight;
+        nTextareaHeight = nTextareaWidth;
+        nTextareaWidth = nSwap;
+    }
+
+    SwTextGridItem aGrid;
+    aGrid.SetDisplayGrid(FALSE);
+    aGrid.SetPrintGrid(FALSE);
+    SwTextGrid eType=GRID_NONE;
+    if (short nGridType = ReadULSprm( pSep, 0x5032, 0 ))
+    {
+        switch (nGridType)
+        {
+            case 0:
+                eType = GRID_NONE;
+                break;
+            default:
+                ASSERT(0,"Unknown grid type");
+            case 3:
+                //Text snaps to char grid, this doesn't make a lot of sense to
+                //me. This is closer than LINES_CHARS
+                eType = GRID_LINES_ONLY;
+                break;
+            case 1:
+                eType = GRID_LINES_CHARS;
+                break;
+            case 2:
+                eType = GRID_LINES_ONLY;
+                break;
+        }
+    }
+    aGrid.SetGridType(eType);
+
+    //sep.dyaLinePitch
+    short nLinePitch = ReadULSprm(pSep, 0x9031, 360);
+
+    aGrid.SetLines(nTextareaHeight/nLinePitch);
+
+    //It remains to be seen if a base height of 14points and a ruby height of
+    //4 points should allow 12point text with ruby of 4pt to fit in single
+    //line. I reckon it should (why not), but it doesn't at present :-(
+    //So right now this doesn't always work as I think it should
+
+    //This seems emperically correct, but might require some future tweaking.
+    short nRubyHeight = nLinePitch*2/9;
+    short nBaseHeight = nLinePitch-nRubyHeight;
+    aGrid.SetBaseHeight(nBaseHeight);
+    aGrid.SetRubyHeight(nRubyHeight);
+
+    //Get the size of word's default styles font
+    UINT32 nRubyWidth=240;
+    for (USHORT nI = 0; nI < pStyles->GetCount(); nI++ )
+    {
+        if (pCollA[nI].bValid && pCollA[nI].pFmt &&
+            pCollA[nI].GetWWStyleId() == 0)
+        {
+            const SvxFontHeightItem& rF = (const SvxFontHeightItem&)
+                pCollA[nI].pFmt->GetAttr(RES_CHRATR_CJK_FONTSIZE);
+            nRubyWidth = rF.GetHeight();
+            break;
+        }
+    }
+
+    //dxtCharSpace
+    if (const BYTE* pS = pSep->HasSprm(0x7030))
+    {
+        UINT32 nCharSpace = SVBT32ToLong(pS);
+        //main lives in top 20 bits, and is signed.
+        INT32 nMain = (nCharSpace & 0xFFFFF000);
+        nMain/=0x1000;
+        nRubyWidth += nMain*20;
+
+        int nFraction = (nCharSpace & 0x00000FFF);
+        nFraction = (nFraction*20)/0xFFF;
+        nRubyWidth += nFraction;
+    }
+
+//    nothing I can do with this value at the moment I think
+//    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
+
+    rFmt.SetAttr(aGrid);
 }
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
@@ -2249,18 +2258,12 @@ void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29)
     {
         nSp26 = pTabPos->nSp26;
         nSp27 = pTabPos->nSp27;
-        nSp49 = pTabPos->nSp49;
-        //Assume that the older one overrides the newer one.
-        if (!pSprm29)
-        {
-            nSp29 = pTabPos->nSp29;
-            nSp37 = pTabPos->nSp37;
-        }
-        else
-        {
-            ASSERT(nSp29 == pTabPos->nSp29, "report A: need to see such a document");
-            ASSERT(nSp37 == pTabPos->nSp37, "report B: need to see such a document");
-        }
+        nSp29 = pTabPos->nSp29;
+        nLeMgn = pTabPos->nLeMgn;
+        nRiMgn = pTabPos->nRiMgn;
+        nUpMgn = pTabPos->nUpMgn;
+        nLoMgn = pTabPos->nLoMgn;
+        nSp37 = pTabPos->nSp37;
     }
 }
 
@@ -2308,8 +2311,10 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
         SetValSprm( &nSp27, pPap, 27 ); // Y-Position   //sprmPDyaAbs
         SetValSprm( &nSp45, pPap, 45 ); // Hoehe        //sprmPWHeightAbs
         SetValSprm( &nSp28, pPap, 28 ); // Breite       //sprmPDxaWidth
-        SetValSprm( &nSp49, pPap, 49 ); // L/R-Raender  //sprmPDxaFromText
-        SetValSprm( &nSp48, pPap, 48 ); // U/L-Raender  //sprmPDyaFromText
+        SetValSprm( &nLeMgn, pPap, 49 ); // L-Raender   //sprmPDxaFromText
+        SetValSprm( &nRiMgn, pPap, 49 ); // R-Raender   //sprmPDxaFromText
+        SetValSprm( &nUpMgn, pPap, 48 ); // U-Raender   //sprmPDyaFromText
+        SetValSprm( &nLoMgn, pPap, 48 ); // D-Raender   //sprmPDyaFromText
 
         pS = pPap->HasSprm( 37 );                       //sprmPWr
         if( pS )
@@ -2321,8 +2326,10 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
         SetValSprm( &nSp27, pPap, 0x8419 ); // Y-Position
         SetValSprm( &nSp45, pPap, 0x442B ); // Hoehe
         SetValSprm( &nSp28, pPap, 0x841A ); // Breite
-        SetValSprm( &nSp49, pPap, 0x842F ); // L/R-Raender
-        SetValSprm( &nSp48, pPap, 0x842E ); // U/L-Raender
+        SetValSprm( &nLeMgn, pPap, 0x842F );    // L-Raender
+        SetValSprm( &nRiMgn, pPap, 0x842F );    // R-Raender
+        SetValSprm( &nUpMgn, pPap, 0x842E );    // U-Raender
+        SetValSprm( &nLoMgn, pPap, 0x842E );    // D-Raender
 
         pS = pPap->HasSprm( 0x2423 );                               // Umfluss
         if( pS )
@@ -2332,7 +2339,7 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
     if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
-    if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
+    if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
 
     return TRUE;
@@ -2413,8 +2420,10 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
         SetValSprm( &nSp27, pStyle, 27 );   // Y-Position
         SetValSprm( &nSp45, pStyle, 45 );   // Hoehe
         SetValSprm( &nSp28, pStyle, 28 );   // Breite
-        SetValSprm( &nSp49, pStyle, 49 );   // L/R-Raender
-        SetValSprm( &nSp48, pStyle, 48 );   // U/L-Raender
+        SetValSprm( &nLeMgn,    pStyle, 49 );   // L-Raender
+        SetValSprm( &nRiMgn,    pStyle, 49 );   // R-Raender
+        SetValSprm( &nUpMgn,    pStyle, 48 );   // U-Raender
+        SetValSprm( &nLoMgn,    pStyle, 48 );   // D-Raender
 
         pS = pStyle->HasParaSprm( 37 );             // Umfluss
         if( pS )
@@ -2426,15 +2435,17 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
         SetValSprm( &nSp27, pStyle, 0x8419 );   // Y-Position
         SetValSprm( &nSp45, pStyle, 0x442B );   // Hoehe
         SetValSprm( &nSp28, pStyle, 0x841A );   // Breite
-        SetValSprm( &nSp49, pStyle, 0x842F );   // L/R-Raender
-        SetValSprm( &nSp48, pStyle, 0x842E );   // U/L-Raender
+        SetValSprm( &nLeMgn, pStyle, 0x842F );  // L-Raender
+        SetValSprm( &nRiMgn, pStyle, 0x842F );  // R-Raender
+        SetValSprm( &nUpMgn, pStyle, 0x842E );  // U-Raender
+        SetValSprm( &nLoMgn, pStyle, 0x842E );  // D-Raender
 
         pS = pStyle->HasParaSprm( 0x2423 );             // Umfluss
         if( pS )
             nSp37 = *pS;
     }
 
-    if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
+    if( !nSp29 && !nSp27 && !nLeMgn && !nRiMgn && !nSp37 )  // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
 
     if( ::lcl_ReadBorders( bVer67, brc, 0, pStyle ) )       // Umrandung
@@ -2498,26 +2509,50 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     nYPos = 0;
     nXPos = 0;
 
-    nRiMgn = nLeMgn = rWW.nSp49;
-    nLoMgn = nUpMgn = rWW.nSp48;
+    nRiMgn = rWW.nRiMgn;
+    nLeMgn = rWW.nLeMgn;
+    nLoMgn = rWW.nLoMgn;
+    nUpMgn = rWW.nUpMgn;
 
-                // Wenn der Fly links, rechts, oben oder unten aligned ist,
-                // wird der aeussere Textabstand ignoriert, da sonst
-                // der Fly an falscher Position landen wuerde
-                // JP 18.11.98: Problematisch wird es nur bei Innen/Aussen
+    // Wenn der Fly links, rechts, oben oder unten aligned ist,
+    // wird der aeussere Textabstand ignoriert, da sonst
+    // der Fly an falscher Position landen wuerde
+    // JP 18.11.98: Problematisch wird es nur bei Innen/Aussen
+
+    // Bindung
+    nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
+    switch ( nYBind )
+    {                                       // Y - Bindung bestimmt Sw-Bindung
+        case 0:
+            eAnchor = FLY_PAGE;             // Vert Margin
+            eVRel = REL_PG_PRTAREA;
+            break;
+        case 1:
+            eAnchor = FLY_PAGE;             // Vert Page
+            eVRel = REL_PG_FRAME;
+            break;                          // 2=Vert. Paragraph, 3=Use Default
+        default:
+            eAnchor = FLY_AT_CNTNT;
+            eVRel = PRTAREA;
+            if( nYPos < 0 )
+                nYPos = 0;                  // koennen wir nicht
+            break;
+    }
 
     switch( rWW.nSp27 )             // besondere Y-Positionen ?
     {
         case -4:
             eVAlign = VERT_TOP;
-            nUpMgn = 0;
+            if (eAnchor == FLY_PAGE)
+                nUpMgn = 0;
             break;  // oben
         case -8:
             eVAlign = VERT_CENTER;
             break;  // zentriert
         case -12:
             eVAlign = VERT_BOTTOM;
-            nLoMgn = 0;
+            if (eAnchor == FLY_PAGE)
+                nLoMgn = 0;
             break;  // unten
         default:
             nYPos = rWW.nSp27 + (short)nIniFlyDy;
@@ -2550,25 +2585,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             break;  // Korrekturen per Ini-Datei
     }
 
-    // Bindung
-    nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
-    switch ( nYBind )
-    {                                       // Y - Bindung bestimmt Sw-Bindung
-        case 0:
-            eAnchor = FLY_PAGE;             // Vert Margin
-            eVRel = REL_PG_PRTAREA;
-            break;
-        case 1:
-            eAnchor = FLY_PAGE;             // Vert Page
-            eVRel = REL_PG_FRAME;
-            break;                          // 2=Vert. Paragraph, 3=Use Default
-        default:
-            eAnchor = FLY_AT_CNTNT;
-            eVRel = PRTAREA;
-            if( nYPos < 0 )
-                nYPos = 0;                  // koennen wir nicht
-            break;
-    }
     nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
     switch ( nXBind )           // X - Bindung -> Koordinatentransformation
     {
@@ -2664,20 +2680,11 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
                 pFS->bToggelPos ));
     Put( SwFmtVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
-    if( pFS->nLeMgn || pFS->nRiMgn )        // Raender setzen
-    {
-        SvxLRSpaceItem aLR;
-        aLR.SetTxtLeft( pFS->nLeMgn );
-        aLR.SetRight( pFS->nRiMgn );
-        Put( aLR );
-    }
-    if( pFS->nUpMgn || pFS->nLoMgn )
-    {
-        SvxULSpaceItem aUL;
-        aUL.SetUpper( pFS->nUpMgn );
-        aUL.SetLower( pFS->nLoMgn );
-        Put( aUL );
-    }
+    if (pFS->nLeMgn || pFS->nRiMgn)     // Raender setzen
+        Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn));
+
+    if (pFS->nUpMgn || pFS->nLoMgn)
+        Put(SvxULSpaceItem(pFS->nUpMgn, pFS->nLoMgn));
 
     SwFmtSurround aSur( pFS->eSurround );   // Umfluss
 #if 0
@@ -4804,13 +4811,19 @@ BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     if (pRes = pPap->HasSprm(0x360D))
     {
         pTabPos->nSp29 = *pRes;
-        pTabPos->nSp37 = 1;     //Possible fail area
+        pTabPos->nSp37 = 2;     //Possible fail area, always parallel wrap
         if (pRes = pPap->HasSprm(0x940E))
             pTabPos->nSp26 = SVBT16ToShort(pRes);
         if (pRes = pPap->HasSprm(0x940F))
             pTabPos->nSp27 = SVBT16ToShort(pRes);
         if (pRes = pPap->HasSprm(0x9410))
-            pTabPos->nSp49 = SVBT16ToShort(pRes);
+            pTabPos->nLeMgn = SVBT16ToShort(pRes);
+        if (pRes = pPap->HasSprm(0x941E))
+            pTabPos->nRiMgn = SVBT16ToShort(pRes);
+        if (pRes = pPap->HasSprm(0x9411))
+            pTabPos->nUpMgn = SVBT16ToShort(pRes);
+        if (pRes = pPap->HasSprm(0x941F))
+            pTabPos->nLoMgn = SVBT16ToShort(pRes);
         bRet=TRUE;
     }
     return bRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ class WW8TabDesc
 public:
     const SwTable* pTable;          // Tabelle
     SwPosition* pParentPos;
-    SwFrmFmt* pFlyFmt;
+    SwFlyFrmFmt* pFlyFmt;
     SfxItemSet aItemSet;
     BOOL IsValidCell( short nCol ) const;
 
@@ -1842,16 +1842,21 @@ void WW8TabDesc::CreateSwTable()
 
     if (HORI_LEFT_AND_WIDTH == eOri)
     {
-        if (pIo->bApo && pIo->nTable == 1 && pIo->pSFlyPara->pFlyFmt &&
+        if (pIo->bApo && pIo->nTable == 0 && pIo->pSFlyPara->pFlyFmt &&
             GetMinLeft())
         {
             //If we are inside a frame and we have a border, the frames
             //placement does not consider the tables border, which word
             //displays outside the frame, so adjust here.
             SwFmtHoriOrient aHori(pIo->pSFlyPara->pFlyFmt->GetHoriOrient());
-            aHori.SetPos(aHori.GetPos()+GetMinLeft());
-            aHori.SetHoriOrient(HORI_NONE);
-            pIo->pSFlyPara->pFlyFmt->SetAttr( aHori );
+            SwHoriOrient eHori = aHori.GetHoriOrient();
+            if ((eHori == HORI_NONE) || (eHori == HORI_LEFT) ||
+                (eHori == HORI_LEFT_AND_WIDTH))
+            {
+                aHori.SetPos(aHori.GetPos()+GetMinLeft());
+                aHori.SetHoriOrient(HORI_NONE);
+                pIo->pSFlyPara->pFlyFmt->SetAttr(aHori);
+            }
         }
         else
         {

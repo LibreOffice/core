@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-23 12:32:14 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,10 @@ struct WW8_TablePos
 {
     INT16 nSp26;
     INT16 nSp27;
-    INT16 nSp49;
+    INT16 nLeMgn;
+    INT16 nRiMgn;
+    INT16 nUpMgn;
+    INT16 nLoMgn;
     BYTE nSp29;
     BYTE nSp37;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ struct WW8FlyPara
     BOOL bVer67;
     INT16 nSp26, nSp27;         // rohe Position
     INT16 nSp45, nSp28;         // Breite / Hoehe
-    INT16 nSp48, nSp49;         // Raender
+    INT16 nLeMgn, nRiMgn, nUpMgn, nLoMgn;           // Raender
     BYTE nSp29;                 // rohe Bindung + Alignment
     BYTE nSp37;                 // Wrap-Mode ( 1 / 2; 0 = no Apo ? )
     WW8_BRC5 brc;               // Umrandung Top, Left, Bottom, Right, Between
