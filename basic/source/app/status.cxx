@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: gh $ $Date: 2002-11-12 16:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
     x = pTTB->GetItemPos( pTTB->GetCurItemId() );
     x = pWinMenu->GetItemId( nFirstWinPos );
     x = pWinMenu->GetItemCount();
-    AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ) );
+    AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( '~' ) );
     if ( pWin )
     {
         pWin->Minimize( FALSE );

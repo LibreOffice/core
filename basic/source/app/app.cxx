@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-12 11:33:28 $
+ *  last change: $Author: gh $ $Date: 2002-11-12 16:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,6 +1634,7 @@ long BasicFrame::Command( short nID, BOOL bChecked )
                 MenuBar* pMenu = GetMenuBar();
                 PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
                 String aName = pWinMenu->GetItemText( nID );
+                aName..EraseAllChars( '~' );
                 AppWin* pWin = FindWin( aName );
                 if ( pWin )
                     pWin->ToTop();
