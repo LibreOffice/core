@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-27 12:10:54 $
+ *  last change: $Author: cmc $ $Date: 2001-04-30 08:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4020,15 +4020,54 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, BYTE* pData, short nLen )
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_EMPHASIS_MARK );
     else
     {
+        LanguageType nLang;
+        //Check to see if there is an up and coming cjk language property. If
+        //there is use it, if there is not fall back to the currently set one.
+        //Only the cjk language setting seems to matter to word, the western
+        //one is ignored
+        BYTE *pLang = pPlcxMan->GetChpPLCF()->HasSprm(0x486E);
+        if (pLang)
+            nLang = SVBT16ToShort( pLang );
+        else
+        {
+            nLang = ((const SvxLanguageItem *)
+                GetFmtAttr(RES_CHRATR_CJK_LANGUAGE))->GetLanguage();
+        }
+
         sal_uInt16 nVal;
         switch( *pData )
         {
-        case 0:     nVal = EMPHASISMARK_NONE;           break;
-        case 2:     nVal = EMPHASISMARK_SIDE_DOTS;      break;
-        case 3:     nVal = EMPHASISMARK_CIRCLE_ABOVE;   break;
-        case 4:     nVal = EMPHASISMARK_DOTS_BELOW;     break;
-//      case 1:
-        default:    nVal = EMPHASISMARK_DOTS_ABOVE;     break;
+        case 0:
+            nVal = EMPHASISMARK_NONE;
+            break;
+        case 2:
+            if ((nLang == LANGUAGE_CHINESE_HONGKONG) ||
+                (nLang == LANGUAGE_CHINESE_MACAU) ||
+                (nLang == LANGUAGE_CHINESE_TRADITIONAL) ||
+                (nLang == LANGUAGE_KOREAN))
+                nVal = EMPHASISMARK_CIRCLE_ABOVE;
+            else if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
+                (nLang == LANGUAGE_CHINESE_SINGAPORE))
+                nVal = EMPHASISMARK_DOTS_BELOW;
+            else
+                nVal = EMPHASISMARK_SIDE_DOTS;
+            break;
+        case 3:
+            nVal = EMPHASISMARK_CIRCLE_ABOVE;
+            break;
+        case 4:
+            nVal = EMPHASISMARK_DOTS_BELOW;
+            break;
+        case 1:
+            if ((nLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
+                (nLang == LANGUAGE_CHINESE_SINGAPORE))
+                nVal = EMPHASISMARK_DOTS_BELOW;
+            else
+                nVal = EMPHASISMARK_DOTS_ABOVE;
+            break;
+        default:
+            nVal = EMPHASISMARK_DOTS_ABOVE;
+            break;
         }
 
         NewAttr( SvxEmphasisMarkItem( nVal ) );
@@ -5098,12 +5137,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.25 2001-04-27 12:10:54 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.26 2001-04-30 08:52:17 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/04/27 12:10:54  cmc
+      ##826## Allow borders set in styles to be removed by sprms with empty line descriptions
+
       Revision 1.24  2001/04/27 11:17:02  cmc
       ##826## Allow borders set in styles to be removed by sprms with empty line descriptions
 
