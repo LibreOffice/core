@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ String STR_FMT_STD
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "(cap)";
     TEXT[ thai ] = "(à¹„à¸¡à¹ˆà¸¡à¸µ)";
+    TEXT[ czech ] = "(Å¾Ã¡dnÃ½)";
+    TEXT[ hebrew ] = "(keins)";
+    TEXT[ hindi ] = "(à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚)";
 };
 String STR_TEMPLATE_WILDCARD
 {
@@ -118,7 +121,7 @@ String STR_OVERWRITE
     TEXT [ English ] = "Do you really want to overwrite the template?" ;
     TEXT [ norwegian ] = "Do you really want to overwrite the template?" ;
     TEXT [ italian ] = "\nSovrascrivere il modello?" ;
-    TEXT [ portuguese_brazilian ] = "Deseja realmente gravar sobre o modelo?" ;
+    TEXT [ portuguese_brazilian ] = "\nDeseja realmente excluir este modelo?" ;
     TEXT [ portuguese ] = "Deseja realmente eliminar este modelo?" ;
     TEXT [ finnish ] = "\nHaluatko varmasti poistaa tämän mallin?" ;
     TEXT [ danish ] = "Er du sikker på, at du vil overskrive denne skabelon?" ;
@@ -129,7 +132,7 @@ String STR_OVERWRITE
     TEXT [ english_us ] = "\nAre you sure you want to delete this template?" ;
     TEXT[ chinese_simplified ] = "çœŸçš„è¦æ”¹å†™è¿™ä¸ªæ ·å¼å—ï¼Ÿ";
     TEXT[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå çàìåíèòü ıòîò øàáëîí?";
-    TEXT[ polish ] = "Chcesz na pewno skasowaæ ten szablon przez zapisanie?";
+    TEXT[ polish ] = "Czy na pewno chcesz usun¹æ ten szablon?";
     TEXT[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     TEXT[ chinese_traditional ] = "æ‚¨çœŸè¦è¦†å¯«é€™å€‹æ¨£å¼ï¼Ÿ";
     TEXT[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÇáßÊÇÈÉ İæŞ ÇáŞÇáÈ¿";
@@ -141,7 +144,19 @@ String STR_OVERWRITE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "\nEsteu segur de voler suprimir aquesta plantilla?";
     TEXT[ thai ] = "\nà¸„à¸¸à¸“à¹à¸™à¹ˆà¹ƒà¸ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆà¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¹à¸¡à¹ˆà¹à¸šà¸šà¸™à¸µà¹‰?";
+    TEXT[ czech ] = "\nSkuteÄnÄ› chcete smazat tuto Å¡ablonu?";
+    TEXT[ hebrew ] = "Wollen Sie die Vorlage wirklich Ã¼berschreiben?";
+    TEXT[ hindi ] = "\nà¤†à¤ª à¤¸à¤šà¤®à¥à¤š à¤®à¥‡à¤‚ à¤‡à¤¸ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‹ à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
 };
+
+
+
+
+
+
+
+
+
 
 
 
