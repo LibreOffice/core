@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strindlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 21:57:17 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
     SetText( rTitle );
     aFtEditTitle.SetText( rEditTitle );
     aEdInput.SetText( rDefault );
+    aEdInput.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
 
     //  HelpId for Edit different for different uses
 
