@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-04 15:01:45 $
+ *  last change: $Author: aw $ $Date: 2002-07-31 09:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1709,6 +1709,12 @@ void SdrTextObj::operator=(const SdrObject& rObj)
         bTextFrame=pText->bTextFrame;
         aTextSize=pText->aTextSize;
         bTextSizeDirty=pText->bTextSizeDirty;
+
+        // #101776# Not all of the necessary parameters were copied yet.
+        bNoShear = pText->bNoShear;
+        bNoRotate = pText->bNoRotate;
+        bNoMirror = pText->bNoMirror;
+        bDisableAutoWidthOnDragging = pText->bDisableAutoWidthOnDragging;
 
         if (pOutlinerParaObject!=NULL) delete pOutlinerParaObject;
         if (pText->HasText()) {
