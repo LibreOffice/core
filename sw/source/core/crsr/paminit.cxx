@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:16:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,36 +134,6 @@ SwPosRegion fnRegionEnd = &aBwrd;
 
 SwMoveFn fnMoveBackward = &aBwrd;
 SwMoveFn fnMoveForward  = &aFwrd;
-
-
-#ifdef USED
-
-// JP 30.11.95:
-//  war fuer die CFRONT-Compiler noetig, jetzt sollte das nicht mehr
-//  benoetigt werden.
-
-void _InitPam()
-{
-    aBwrd.fnNd      =  &GoPrevious;
-    aBwrd.fnNds     =  &GoPreviousNds;
-    aBwrd.fnDoc     =  &GoStartDoc;
-    aBwrd.fnSections=  &GoStartSection;
-    aBwrd.fnCmpOp   =  &SwPosition::operator>;
-    aBwrd.fnGetHint =  &GetBkwrdTxtHint;
-    aBwrd.fnSearch  =  &SearchText::SearchBkwrd;
-    aBwrd.fnSection =  &SwNodes::GoEndOfSection;
-
-    aFwrd.fnNd      =  &GoNext;
-    aFwrd.fnNds     =  &GoNextNds;
-    aFwrd.fnDoc     =  &GoEndDoc;
-    aFwrd.fnSections=  &GoEndSection;
-    aFwrd.fnCmpOp   =  &SwPosition::operator<;
-    aFwrd.fnGetHint =  &GetFrwrdTxtHint;
-    aFwrd.fnSearch  =  &SearchText::SearchFrwrd;
-    aFwrd.fnSection =  &SwNodes::GoStartOfSection;
-}
-#endif
-
 
 SwWhichPara SwuiGetfnParaCurr() //CHINA001
 {
