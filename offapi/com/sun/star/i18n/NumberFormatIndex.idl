@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ *  $RCSfile: NumberFormatIndex.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: er $ $Date: 2000-11-07 20:04:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_NumberFormatIndex_idl__
+#define __com_sun_star_i18n_NumberFormatIndex_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+//! Do NOT insert any new values!
+//! Locale data number format creation must match these values!
+//! Number formatter internals must match these values!
+
+/**
+    Number format indices to be passed as the index argument to
+     <member>XNumberFormatCode::getFormatCode()</member> or
+    <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
+
+    <p> Format codes supported by each locale can be of any number. But for
+    backward compatiblity reasons, each locale must support some predefined
+     format codes. These predefined format codes are accessed through indices
+     as the following. The values are also used to define the
+     <code>enum NfIndexTableOffset</code> in file svtools/inc/zforlist.hxx </p>
+
+    <p> Note that this index has <bold>nothing</bold> to do with the index key
+    used internally by the number formatter. </p>
+*/
+constants NumberFormatIndex
+{
+    /// Number formats
+    const short NUMBER_START                = 0;
+    /// General
+    const short NUMBER_STANDARD             = NUMBER_START;
+    /// 0
+    const short NUMBER_INT                  = NUMBER_START+1;
+    /// 0.00
+    const short NUMBER_DEC2                 = NUMBER_START+2;
+    /// #,##0
+    const short NUMBER_1000INT              = NUMBER_START+3;
+    /// #,##0.00
+    const short NUMBER_1000DEC2             = NUMBER_START+4;
+    /// #,##0.00 or whatever is the locale default
+    const short NUMBER_SYSTEM               = NUMBER_START+5;
+    const short NUMBER_END                  = NUMBER_SYSTEM ;
+
+
+    /// Scientific formats
+    const short SCIENTIFIC_START            = NUMBER_END+1;
+    /// 0.00E+000
+    const short SCIENTIFIC_000E000          = SCIENTIFIC_START;
+    /// 0.00E+00
+    const short SCIENTIFIC_000E00           = SCIENTIFIC_START+1;
+    const short SCIENTIFIC_END              = SCIENTIFIC_000E00;
+
+
+    /// Percent formats
+    const short PERCENT_START               = SCIENTIFIC_END+1;
+    /// 0%
+    const short PERCENT_INT                 = PERCENT_START;
+    /// 0.00%
+    const short PERCENT_DEC2                = PERCENT_START+1;
+    const short PERCENT_END                 = PERCENT_DEC2;
+
+
+    /// Fraction formats
+    const short FRACTION_START              = PERCENT_END+1;
+    /// # ?/?
+    const short FRACTION_1                  = FRACTION_START;
+    /// # ??/??
+    const short FRACTION_2                  = FRACTION_START+1;
+    const short FRACTION_END                = FRACTION_2;
+
+
+    /// Currency formats
+    const short CURRENCY_START              = FRACTION_END+1;
+    /// #,##0 DM
+    const short CURRENCY_1000INT            = CURRENCY_START;
+    /// #,##0.00 DM
+    const short CURRENCY_1000DEC2           = CURRENCY_START+1;
+    /// #,##0 DM   negative red
+    const short CURRENCY_1000INT_RED        = CURRENCY_START+2;
+    /// #,##0.00 DM   negative red
+    const short CURRENCY_1000DEC2_RED       = CURRENCY_START+3;
+    /// #,##0.00 DEM   currency abbreviation
+    const short CURRENCY_1000DEC2_CCC       = CURRENCY_START+4;
+    /// #,##0.-- DM
+    const short CURRENCY_1000DEC2_DASHED    = CURRENCY_START+5;
+    const short CURRENCY_END                = CURRENCY_1000DEC2_DASHED;
+
+
+    /// Date formats
+    const short DATE_START                  = CURRENCY_END+1;
+    /// 08.10.97   short as default for locale
+    const short DATE_SYSTEM_SHORT           = DATE_START;
+    /// Wednesday, 8. October 1997   long as default for locale
+    const short DATE_SYSTEM_LONG            = DATE_START+1;
+    /// 08.10.97   defined
+    const short DATE_SYS_DDMMYY             = DATE_START+2;
+    /// 08.10.1997
+    const short DATE_SYS_DDMMYYYY           = DATE_START+3;
+    /// 8. Oct 97
+    const short DATE_SYS_DMMMYY             = DATE_START+4;
+    /// 8. Oct 1997
+    const short DATE_SYS_DMMMYYYY           = DATE_START+5;
+    /// 8. Oct. 1997      DIN (Deutsche Industrie Norm) and EN (European Norm)
+    const short DATE_DIN_DMMMYYYY           = DATE_START+6;
+    /// 8. October 1997
+    const short DATE_SYS_DMMMMYYYY          = DATE_START+7;
+    /// 8. October 1997   DIN/EN
+    const short DATE_DIN_DMMMMYYYY          = DATE_START+8;
+    /// Wed, 8. Oct 97
+    const short DATE_SYS_NNDMMMYY           = DATE_START+9;
+    /// Wed 08.Oct 97
+    const short DATE_DEF_NNDDMMMYY          = DATE_START+10;
+    /// Wed, 8. October 1997
+    const short DATE_SYS_NNDMMMMYYYY        = DATE_START+11;
+    /// Wednesday, 8. October 1997
+    const short DATE_SYS_NNNNDMMMMYYYY      = DATE_START+12;
+    /// 10-08             DIN/EN
+    const short DATE_DIN_MMDD               = DATE_START+13;
+    /// 97-10-08          DIN/EN
+    const short DATE_DIN_YYMMDD             = DATE_START+14;
+    /// 1997-10-08        DIN/EN
+    const short DATE_DIN_YYYYMMDD           = DATE_START+15;
+    /// 10.97
+    const short DATE_SYS_MMYY               = DATE_START+16;
+    /// 08.Oct
+    const short DATE_SYS_DDMMM              = DATE_START+17;
+    /// October
+    const short DATE_MMMM                   = DATE_START+18;
+    /// 4. Quarer 97
+    const short DATE_QQJJ                   = DATE_START+19;
+    /// week of year
+    const short DATE_WW                     = DATE_START+20;
+    const short DATE_END                    = DATE_WW;
+
+
+    /// Time formats
+    const short TIME_START                  = DATE_END+1;
+    /// HH:MM
+    const short TIME_HHMM                   = TIME_START;
+    /// HH:MM:SS
+    const short TIME_HHMMSS                 = TIME_START+1;
+    /// HH:MM AM/PM
+    const short TIME_HHMMAMPM               = TIME_START+2;
+    /// HH:MM:SS AM/PM
+    const short TIME_HHMMSSAMPM             = TIME_START+3;
+    /// [HH]:MM:SS
+    const short TIME_HH_MMSS                = TIME_START+4;
+    /// MM:SS,00
+    const short TIME_MMSS00                 = TIME_START+5;
+    /// [HH]:MM:SS,00
+    const short TIME_HH_MMSS00              = TIME_START+6;
+    const short TIME_END                    = TIME_HH_MMSS00;
+
+
+    /// DateTime formats
+    const short DATETIME_START              = TIME_END + 1;
+    /// 08.10.97 01:23
+    const short DATETIME_SYSTEM_SHORT_HHMM  = DATETIME_START;
+    /// 08.10.1997 01:23:45
+    const short DATETIME_SYS_DDMMYYYY_HHMMSS= DATETIME_START+1;
+    const short DATETIME_END                = DATETIME_SYS_DDMMYYYY_HHMMSS;
+
+
+    /**
+        BOOLEAN format
+
+        @ATTENTION
+            <bold>Not</bold> defined in locale data but generated by the number
+             formatter. If you want to access this format you <bold>MUST</bold>
+            do it via <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
+            instead of <member>XNumberFormatCode::getFormatCode()</member>
+     */
+    const short BOOLEAN                     = DATETIME_END+1;
+
+    /**
+        Text format
+
+        @ATTENTION
+            <bold>Not</bold> defined in locale data but generated by the number
+             formatter. If you want to access this format you <bold>MUST</bold>
+            do it via <member scope="com::sun::star::util">XNumberFormatTypes::getFormatIndex()</member>
+            instead of <member>XNumberFormatCode::getFormatCode()</member>
+     */
+    const short TEXT                        = BOOLEAN+1;
+
+    /// count of builtin format codes
+    const short INDEX_TABLE_ENTRIES         = TEXT+1;
+};
+
+
+//=============================================================================
+}; }; }; };
+#endif
+
