@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-10 16:17:13 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,13 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     ItemList[ english_us ] =
     {
         < "Default" ; > ;
-        < "Business correspondence" ; > ;
-        < "Other business documents" ; > ;
-        < "Personal correspondence and documents" ; > ;
-        < "Forms and contracts" ; > ;
+        < "Business Correspondence" ; > ;
+        < "Other Business documents" ; > ;
+        < "Personal Correspondence And Documents" ; > ;
+        < "Forms And Contracts" ; > ;
         < "Finances" ; > ;
         < "Education" ; > ;
-        < "Presentation backgrounds" ; > ;
+        < "Presentation Backgrounds" ; > ;
         < "Presentations" ; > ;
         < "Miscellaneous" ; > ;
     };
@@ -136,29 +136,29 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ russian ] =
     {
-        < "Standard" ; > ;
-        < "Geschäftliche Korrespondenz" ; > ;
-        < "Sonstige geschäftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Präsentationshintergründe" ; > ;
-        < "Präsentationen" ; > ;
-        < "Diverses" ; > ;
+        < "Ñòàíäàğò" ; > ;
+        < "Äåëîâàÿ êîğğåñïîíäåíöèÿ" ; > ;
+        < "Ïğî÷èå äåëîâûå äîêóìåíòû" ; > ;
+        < "Ëè÷íàÿ êîğğåñïîíäåíöèÿ è äîêóìåíòû" ; > ;
+        < "Ôîğìóëÿğû è äîãîâîğû" ; > ;
+        < "Ôèíàíñû" ; > ;
+        < "Îáğàçîâàíèå" ; > ;
+        < "Ôîíû ïğåçåíòàöèè" ; > ;
+        < "Ïğåçåíòàöèè" ; > ;
+        < "Ïğî÷åå" ; > ;
     };
     ItemList[ greek ] =
     {
-        < "Standard" ; > ;
-        < "Geschäftliche Korrespondenz" ; > ;
-        < "Sonstige geschäftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Präsentationshintergründe" ; > ;
-        < "Präsentationen" ; > ;
-        < "Diverses" ; > ;
+        < "ĞñïåğéëïãŞ" ; > ;
+        < "ÅğáããåëìáôéêŞ áëëçëïãñáößá" ; > ;
+        < "ÄéÜöïñá åğáããåëìáôéêÜ İããñáöá" ; > ;
+        < "ĞñïóùğéêŞ áëëçëïãñáößá êáé ğñïóùğéêÜ İããñáöá" ; > ;
+        < "Öüñìåò êáé Óõìâüëáéá" ; > ;
+        < "ÏéêïíïìéêÜ" ; > ;
+        < "Ìüñöùóç" ; > ;
+        < "Öüíôá ğáñïõóéÜóåùí" ; > ;
+        < "ĞáñïõóéÜóåéò" ; > ;
+        < "ÄéÜöïñá" ; > ;
     };
     ItemList[ dutch ] =
     {
@@ -169,7 +169,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Formulieren en contracten" ; > ;
         < "Financieel" ; > ;
         < "Opleiding" ; > ;
-        < "Presentatieachtergrond" ; > ;
+        < "Presentatieachtergronden" ; > ;
         < "Presentaties" ; > ;
         < "Diverse" ; > ;
     };
@@ -204,7 +204,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Standard" ; > ;
         < "Corrispondenza commerciale" ; > ;
         < "Altri documenti commerciali" ; > ;
-        < "Corrispondenza privata" ; > ;
+        < "Corrispondenza privata e documenti" ; > ;
         < "Formulari e contratti" ; > ;
         < "Finanze" ; > ;
         < "Formazione" ; > ;
@@ -230,7 +230,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Standard" ; > ;
         < "Affärskorrespondens" ; > ;
         < "Andra affärsdokument" ; > ;
-        < "Privat korrespondens och dokument" ; > ;
+        < "Privat korrespondens och privata dokument" ; > ;
         < "Formulär och kontrakt" ; > ;
         < "Ekonomi" ; > ;
         < "Utbildning" ; > ;
@@ -240,16 +240,16 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ polish ] =
     {
-        < "Standard" ; > ;
-        < "Geschäftliche Korrespondenz" ; > ;
-        < "Sonstige geschäftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Präsentationshintergründe" ; > ;
-        < "Präsentationen" ; > ;
-        < "Diverses" ; > ;
+        < "Domyœlnie" ; > ;
+        < "Korespondencja s³u¿bowa" ; > ;
+        < "Pozosta³e dokumenty s³u¿bowe" ; > ;
+        < "Korespondecja i dokumenty prywatne" ; > ;
+        < "Formularze i umowy" ; > ;
+        < "Finanse" ; > ;
+        < "Nauka" ; > ;
+        < "T³a prezentacji" ; > ;
+        < "Prezentacje" ; > ;
+        < "Ró¿ne" ; > ;
     };
     ItemList[ portuguese_brazilian ] =
     {
@@ -267,10 +267,10 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     ItemList[ japanese ] =
     {
         < "•W€" ; > ;
-        < "ËŞ¼ŞÈ½ ÚÀ°" ; > ;
-        < "ËŞ¼ŞÈ½ ÄŞ·­ÒİÄ" ; > ;
-        < "ŒÂlÚÀ°EÄŞ·­ÒİÄ" ; > ;
-        < "‹Æ–±˜A—ÒÓ‚ÆŒ_–ñ‘" ; > ;
+        < "Ğ—p‘ŠÈ" ; > ;
+        < "‚»‚Ì‘¼‚ÌĞ—p•¶‘" ; > ;
+        < "ŒÂl‘ŠÈ‚Æ•¶‘" ; > ;
+        < "‹Æ–±—p‘—Ş‚ÆŒ_–ñ‘" ; > ;
         < "à­" ; > ;
         < "‹³—{" ; > ;
         < "ÌßÚ¾ŞİÃ°¼®İ”wŒi" ; > ;
@@ -318,16 +318,16 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ arabic ] =
     {
-        < "Standard" ; > ;
-        < "Geschäftliche Korrespondenz" ; > ;
-        < "Sonstige geschäftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Präsentationshintergründe" ; > ;
-        < "Präsentationen" ; > ;
-        < "Diverses" ; > ;
+        < "ÇİÊÑÇÖí" ; > ;
+        < "ãÑÇÓáÇÊ ÊÌÇÑíÉ" ; > ;
+        < "ãÓÊäÏÇÊ ÊÌÇÑíÉ ÃÎÑì" ; > ;
+        < "ãÑÇÓáÇÊ æãÓÊäÏÇÊ ÎÇÕÉ" ; > ;
+        < "ÇÓÊãÇÑÇÊ æÚŞæÏ" ; > ;
+        < "ãÇáíÉ" ; > ;
+        < "ÊÚáíã" ; > ;
+        < "ÎáİíÇÊ ÚÑæÖ ÊŞÏíãíÉ" ; > ;
+        < "ÚÑæÖ ÊŞÏíãíÉ" ; > ;
+        < "ãÊİÑŞÇÊ" ; > ;
     };
     ItemList[ turkish ] =
     {
@@ -343,7 +343,20 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Diverses" ; > ;
     };
 
-};
+ItemList [ language_user1 ] =
+    {
+            < "Standard" ; > ;
+        < "Geschäftliche Korrespondenz" ; > ;
+        < "Sonstige geschäftliche Dokumente" ; > ;
+        < "Private Korrespondenz und Dokumente" ; > ;
+        < "Formulare und Verträge" ; > ;
+        < "Finanzen" ; > ;
+        < "Bildung" ; > ;
+        < "Präsentationshintergründe" ; > ;
+        < "Präsentationen" ; > ;
+        < "Diverses" ; > ;
+    };
+    };
 
 String RID_CNT_STR_WAITING
 {
@@ -352,17 +365,17 @@ String RID_CNT_STR_WAITING
     Text [ english_us ] = "Initializing the %PRODUCTNAME components for the first time after installation." ;
     Text [ italian ] = "Adesso le componenti di %PRODUCTNAME vengono inizializzate.";
     Text [ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
-    Text [ portuguese ] = "Os componentes do %PRODUCTNAME acabados de instalar estão agora a ser inicializados";
+    Text [ portuguese ] = "Os componentes do %PRODUCTNAME acabados de instalar estão agora a ser inicializados.";
     Text [ danish ] = "%PRODUCTNAME-komponenterne initialiseres.";
     Text [ french ] = "L'initialisation des composants de %PRODUCTNAME qui viennent d'être installés est en cours...";
     Text [ swedish ] = "%PRODUCTNAME-komponenterna initieras nu efter installationen.";
     Text [ dutch ] = "De %PRODUCTNAME-componenten worden na de installatie eerst geïnitialiseerd";
     Text [ spanish ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
-    Text[ chinese_simplified ] = "ÔÚ°²×°Íê³ÉºóÊ×´Î³õÊ¼»¯ %PRODUCTNAME ¡£";
-    Text[ russian ] = "Êîìïîíåíòû %PRODUCTNAME áóäóò ñåé÷àñ îäèí ğàç ïîñëå èíñòàëëÿöèè èíèöèàëèçèğîâàíû.";
-    Text[ polish ] = "Sk³adniki %PRODUCTNAME bêd¹ inicjowane po instalacji.";
-    Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ‚ÍA²İ½Ä°ÙŒã¡‰ñ‰‚ß‚Ä‰Šú‰»‚³‚ê‚Ü‚·B";
-    Text[ chinese_traditional ] = "¦w¸Ë§¹¦¨«á­º¦¸ªì©l¤Æ %PRODUCTNAME ¡C";
+    Text[ chinese_simplified ] = "°²×°Íê³ÉºóÊ×´Î³õÊ¼»¯ %PRODUCTNAME ³ÌÊ½²¿¼ş¡£";
+    Text[ russian ] = "Èíèöèàëèçàöèÿ êîìïîíåíòîâ %PRODUCTNAME ïîñëå èíñòàëëÿöèè.";
+    Text[ polish ] = "Po zakoñczeniu instalacji rozpocznie siê teraz inicjalizacja komponentów %PRODUCTNAME.";
+    Text[ japanese ] = "%PRODUCTNAME ºİÎß°ÈİÄ‚ÍA²İ½Ä°Ù‚³‚ê‚½‚ ‚Æ‚É‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
+    Text[ chinese_traditional ] = "¦w¸Ë§¹¦¨«á­º¦¸ªì©l¤Æ %PRODUCTNAME µ{¦¡³¡¥ó¡C";
     Text[ arabic ] = "ÌÇÑí ÇáÂä ÊåíÆÉ ãßæäÇÊ %PRODUCTNAME ááãÑÉ ÇáÃæáì ÈÚÏ ÇäÊåÇÁ ÚãáíÉ ÇáÊËÈíÊ.";
     Text[ greek ] = "Áñ÷éêïğïßçóç ôùí óôïé÷åßùí ôïõ %PRODUCTNAME ãéá ğñşôç öïñÜ ìåôÜ ôçí åãêáôÜóôáóç.";
     Text[ korean ] = "%PRODUCTNAME ±¸¼º¿ä¼Ò´Â ¼³Ä¡ÇÑ ÈÄ Ã³À½¿¡ ÇÑ¹ø ÃÊ±âÈ­µË´Ï´Ù.";
