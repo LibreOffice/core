@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.43 $
- *  last change: $Author: kz $ $Date: 2001-05-21 13:41:58 $
+ *  $Revision: 1.44 $
+ *  last change: $Author: hdu $ $Date: 2001-05-23 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
 
 #if defined(WIN32)
 #ifndef _SV_SVSYS_HXX
+
 #include <svsys.h>
 #undef CreateFont
 #endif
@@ -437,8 +438,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
     if( nSin != 0 && nCos != 0 )        // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
-    //if( rFSD.mbVertical )
-    //  mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
 
 #if defined(FT20B8) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
@@ -697,7 +696,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
-    // autohinting miscalculates the offsets below by +-1
+    // autohinting in FT<=2.0.2 miscalculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
 
@@ -733,6 +732,10 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags != 0 )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
+#if !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
+    // autohinting in FT<=2.0.2 makes antialiased glyphs look worse
+    nLoadFlags |= FT_LOAD_NO_HINTING;
+#endif
 
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
@@ -1012,6 +1015,7 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints, long nHeight )
 }
 
 // -----------------------------------------------------------------------
+
 
 PolyArgs::~PolyArgs()
 {
