@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:22:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,8 @@
 #include <string.h>
 
 #include <vector>
-#
+
+#include "sal/main.h"
 #include <rtl/strbuf.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
@@ -729,12 +730,7 @@ static void bootstrap(
     }
 }
 
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     sal_Bool    bRet = sal_False;
     sal_uInt32  exitCode = 0;
