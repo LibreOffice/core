@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleEventBroadcaster.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:24 $
+ *  last change:$Date: 2003-02-28 13:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,14 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         }
         return ret;
     }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+
 
 }
 
