@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-05 11:04:47 $
+ *  last change: $Author: as $ $Date: 2001-10-09 11:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -193,6 +197,8 @@ namespace framework{
 #define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
 #define PROPERTYVALUE                       ::com::sun::star::beans::PropertyValue
 #define LOCALE                              ::com::sun::star::lang::Locale
+#define XFLUSHABLE                          ::com::sun::star::util::XFlushable
+#define XFLUSHLISTENER                      ::com::sun::star::util::XFlushListener
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -574,6 +580,7 @@ class cIMPL_Dialog  :   public ModalDialog
 class LoginDialog   :   public XTYPEPROVIDER                ,
                         public XSERVICEINFO                 ,
                         public XDIALOG                      ,
+                        public XFLUSHABLE                   ,
                         private ThreadHelpBase              ,   // Order of baseclasses is neccessary for right initialization!
                         public OBROADCASTHELPER             ,
                         public OPROPERTYSETHELPER           ,
@@ -624,6 +631,28 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XFlushable
+        //---------------------------------------------------------------------------------------------------------
+
+        /*-****************************************************************************************************//**
+            @short      write changed values to configuration
+            @descr      Normaly the dialog returns with an OK or ERROR value. If OK occure - we flush data
+                        auomaticly. But otherwise we do nothing. If user of this service wish to use property set
+                        only without any UI(!) - he must call "flush()" explicitly to write data!
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        virtual void SAL_CALL flush() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addFlushListener( const REFERENCE< XFLUSHLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeFlushListener( const REFERENCE< XFLUSHLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
         //  XDialog
