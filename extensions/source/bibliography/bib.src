@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:39:28 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ polish ] = "Tabela;Kwerenda;Sql;Sql [Native]";
     Text[ portuguese_brazilian ] = "Table;Query;Sql;Sql [Native]";
     Text[ japanese ] = "Ã°ÌÞÙ;¸´Ø°;Sql;Sql [Native]";
-    Text[ korean ] = "Ç¥;ÁúÀÇ;Sql;Sql [Native]";
+    Text[ korean ] = "Å×ÀÌºí;ÁúÀÇ;Sql;Sql [Native]";
     Text[ chinese_simplified ] = "±í¸ñ;²éÑ¯;Sql;Sql [Native]";
     Text[ chinese_traditional ] = "ªí®æ;¬d¸ß;Sql;Sql [Native]";
     Text[ arabic ] = "ÌÏæá;ÇÓÊÝÓÇÑ;Sql;Sql [Native]";
@@ -195,4 +195,5 @@ String RID_MAP_QUESTION
     Text[ catalan ] = "¿Desea modificar el orden de las columnas?";
     Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
 };
+
 
