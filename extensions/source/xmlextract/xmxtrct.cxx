@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmxtrct.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 19:14:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <rtl/memory.h>
 #include <tools/zcodec.hxx>
 #include <unotools/streamhelper.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 
 // ----------------
 // - XMXLockBytes -
@@ -208,7 +208,7 @@ REF( NMSP_IO::XInputStream ) SAL_CALL XMLExtractor::extract( const REF( NMSP_IO:
 
         if( !aStorage->GetError() && aStmName.Len() && aStorage->IsStream( aStmName ) )
         {
-            SvStorageStreamRef xStream( aStorage->OpenStream( aStmName ) );
+            SvStorageStreamRef xStream( aStorage->OpenSotStream( aStmName ) );
 
             if( xStream.Is() )
             {
