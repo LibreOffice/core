@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regband.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:07:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,39 +624,76 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
     ImplRegionBandSep* pNewSep;
     ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
+
     while ( pSep  )
     {
+        // new separation completely left ?
+        if( nXRight < pSep->mnXLeft )
+        {
+            pNewSep             = new ImplRegionBandSep;
+            pNewSep->mnXLeft    = nXLeft;
+            pNewSep->mnXRight   = nXRight;
+            pNewSep->mpNextSep  = pSep;
+            pNewSep->mbRemoved  = FALSE;
+
+            // connections from the new separation
+            pNewSep->mpNextSep = pSep;
+
+            // connections to the new separation
+            if ( pSep == mpFirstSep )
+                mpFirstSep = pNewSep;
+            else
+                pPrevSep->mpNextSep = pNewSep;
+            pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+            break;
+        }
+        // separation equal to band ?
+        //  -> remove band
+        if( nXLeft == pSep->mnXLeft && nXRight == pSep->mnXRight )
+        {
+            pSep->mbRemoved = TRUE;
+            pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
+            break;
+        }
         // new separation completely overlapping?
         //   -> move boundaries to left remainder
         //   -> reduce boundaries of new separation
-        if ( (nXLeft <= pSep->mnXLeft) && (nXRight >= pSep->mnXRight) )
+        if ( (nXLeft <= pSep->mnXLeft) && (nXRight > pSep->mnXRight) )
         {
+            long nNewLeft = pSep->mnXRight;
             pSep->mnXRight = pSep->mnXLeft;
             pSep->mnXLeft = nXLeft;
-            nXLeft = pSep->mnXRight;
+            nXLeft = nNewLeft;
         }
 
         // new separation overlaping from left?
         //   -> move boundaries to left remainder
         //   -> set boundaries of new separation to right remainder
-        if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
+        else if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
         {
+            long nNewLeft = nXRight;
+            nXRight = pSep->mnXRight;
             pSep->mnXRight = pSep->mnXLeft;
             pSep->mnXLeft = nXLeft;
-            nXLeft = pSep->mnXRight;
+            nXLeft = nNewLeft;
         }
 
         // new separation overlaping from right? -> reduce boundary
-        if ( (nXLeft <= pSep->mnXRight) && (nXRight > pSep->mnXRight) )
+        else if ( (nXLeft <= pSep->mnXRight) && (nXRight >= pSep->mnXRight) )
+        {
+            long nNewLeft = pSep->mnXRight;
             pSep->mnXRight = nXLeft;
+            nXLeft = nNewLeft;
+        }
 
-        // new separation within the actual one? -> reduce boundary
-        // and add new entry for reminder
-        if ( (nXLeft >= pSep->mnXLeft) && (nXRight <= pSep->mnXRight) )
+        // new separation within the current one? -> reduce boundary
+        // and add new entry for remainder
+        else if ( (nXLeft >= pSep->mnXLeft) && (nXRight <= pSep->mnXRight) )
         {
             pNewSep             = new ImplRegionBandSep;
             pNewSep->mnXLeft    = pSep->mnXLeft;
             pNewSep->mnXRight   = nXLeft;
+            pNewSep->mbRemoved  = FALSE;
 
             pSep->mnXLeft = nXRight;
 
@@ -672,6 +709,18 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
         pPrevSep = pSep;
         pSep = pSep->mpNextSep;
+    }
+    // new separation completely right ?
+    if( pPrevSep && nXLeft >= pPrevSep->mnXRight )
+    {
+        pNewSep             = new ImplRegionBandSep;
+        pNewSep->mnXLeft    = nXLeft;
+        pNewSep->mnXRight   = nXRight;
+        pNewSep->mpNextSep  = NULL;
+        pNewSep->mbRemoved  = FALSE;
+
+        // connections from the new separation
+        pPrevSep->mpNextSep = pNewSep;
     }
 
     OptimizeBand();
