@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:30:53 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
     if ( pLst && pLst->GetMarkCount() == 1 )
     {
         SdrObject *pO = pLst->GetMark( 0 )->GetObj();
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
             return ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
     }
     return 0;
@@ -323,7 +323,7 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            BOOL bForget = pObj->IsWriterFlyFrame();
+            BOOL bForget = pObj->ISA(SwVirtFlyDrawObj);
             if( bForget )
             {
                 pDView->UnmarkAll();
@@ -399,7 +399,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
     SwFrm* pOld;
     SwFlyFrm* pFly = NULL;
     SdrObject *pObj = pMrkList->GetMark( 0 )->GetObj();
-    if( pObj->IsWriterFlyFrame() )
+    if( pObj->ISA(SwVirtFlyDrawObj) )
     {
         pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         pOld = pFly->GetAnchor();
@@ -527,7 +527,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                     for( i = 0; (USHORT)i<pPage->GetSortedObjs()->Count(); ++i )
                     {
                         SdrObject *pO = (*pPage->GetSortedObjs())[i];
-                        if( pO->IsWriterFlyFrame() )
+                        if( pO->ISA(SwVirtFlyDrawObj) )
                         {
                             SwFlyFrm* pTmp=((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                             if( pTmp == pOld )
@@ -908,7 +908,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         SwHoriOrient aHori;
         SwRect aRect;
         SdrObject *pO = pLst->GetMark( 0 )->GetObj();
-        if ( pO->IsWriterFlyFrame() )
+        if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
 
@@ -938,7 +938,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         for ( USHORT i = 0; i < nCount; ++i )
         {
             SdrObject *pO = (*pPage->GetSortedObjs())[i];
-            if ( !pO->IsWriterFlyFrame() )
+            if ( !pO->ISA(SwVirtFlyDrawObj) )
                 continue;
 
             SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)pO;
@@ -1077,8 +1077,8 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );
-                InvalidateWindows( SwRect( pObj->GetBoundRect() ) );
-                if ( pObj->IsWriterFlyFrame() )
+                InvalidateWindows( SwRect( pObj->GetCurrentBoundRect() ) );
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFmt *pFmt = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
                     SvxOpaqueItem aOpa( pFmt->GetOpaque() );
@@ -1173,7 +1173,7 @@ void SwFEShell::EndTextEdit()
         SdrObject *pTmp = ((SwContact*)pUserCall)->GetMaster();
         if( !pTmp )
             pTmp = pObj;
-        pUserCall->Changed( *pTmp, SDRUSERCALL_RESIZE, pTmp->GetBoundRect() );
+        pUserCall->Changed( *pTmp, SDRUSERCALL_RESIZE, pTmp->GetLastBoundRect() );
     }
     if ( !pObj->GetUpGroup() )
     {
@@ -1292,7 +1292,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             {
                 SdrObject *pCandidate = pPage->GetObj(a);
 
-                if(pCandidate->IsWriterFlyFrame() && ((SwVirtFlyDrawObj*)pCandidate)->GetBoundRect().IsInside(rPt))
+                if(pCandidate->ISA(SwVirtFlyDrawObj) && ((SwVirtFlyDrawObj*)pCandidate)->GetCurrentBoundRect().IsInside(rPt))
                 {
                     bRet = sal_False;
                 }
@@ -1367,7 +1367,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
             if ( rMrkList.GetMarkCount() )
             {
                 const SdrObject* pStartObj = rMrkList.GetMark(0)->GetObj();
-                if( pStartObj->IsWriterFlyFrame() )
+                if( pStartObj->ISA(SwVirtFlyDrawObj) )
                     aPos = ((SwVirtFlyDrawObj*)pStartObj)->GetFlyFrm()->Frm().Pos();
                 else
                     aPos = pStartObj->GetSnapRect().TopLeft();
@@ -1402,7 +1402,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
             for( ULONG nObj = 0; nObj < nObjs; ++nObj )
             {
                 SdrObject* pObj = pList->GetObj( nObj );
-                BOOL bFlyFrm = pObj->IsWriterFlyFrame();
+                BOOL bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
                 if( ( bNoFly && bFlyFrm ) ||
                     ( bNoDraw && !bFlyFrm ) ||
                     ( eType == DRAW_SIMPLE && lcl_IsControlGroup( pObj ) ) ||
@@ -1438,7 +1438,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                     aCurPos = pFly->Frm().Pos();
                 }
                 else
-                    aCurPos = pObj->GetBoundRect().TopLeft();
+                    aCurPos = pObj->GetCurrentBoundRect().TopLeft();
 
                 // Sonderfall wenn ein anderes Obj auf selber Y steht.
                 if( aCurPos != aPos &&          // nur wenn ich es nicht selber bin
@@ -1450,7 +1450,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                     for( ULONG i = 0; i < nObjs; ++i )
                     {
                         SdrObject *pObj = pList->GetObj( i );
-                        bFlyFrm = pObj->IsWriterFlyFrame();
+                        bFlyFrm = pObj->ISA(SwVirtFlyDrawObj);
                         if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
                             continue;
                         if( bFlyFrm )
@@ -1459,7 +1459,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                             aCurPos = pO->GetFlyFrm()->Frm().Pos();
                         }
                         else
-                            aCurPos = pObj->GetBoundRect().TopLeft();
+                            aCurPos = pObj->GetCurrentBoundRect().TopLeft();
 
                         if( aCurPos != aPos && aCurPos.Y() == aPos.Y() &&
                             (bNext? (aCurPos.X() > aPos.X()) :  // liegt neben mir
@@ -1504,7 +1504,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
 
         if( pBest )
         {
-            BOOL bFlyFrm = pBest->IsWriterFlyFrame();
+            BOOL bFlyFrm = pBest->ISA(SwVirtFlyDrawObj);
             if( bFlyFrm )
             {
                 SwVirtFlyDrawObj *pO = (SwVirtFlyDrawObj*)pBest;
@@ -1517,7 +1517,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
             {
                 SelectObj( Point(), 0, (SdrObject*)pBest );
                 if( !ActionPend() )
-                    MakeVisible( pBest->GetBoundRect() );
+                    MakeVisible( pBest->GetCurrentBoundRect() );
             }
             CallChgLnk();
             bRet = TRUE;
@@ -1567,7 +1567,7 @@ BOOL SwFEShell::GotoControl( ULONG nIndex )
                 {
                     SelectObj( Point(), 0, pObj );
                     if( !ActionPend() )
-                        MakeVisible( pObj->GetBoundRect() );
+                        MakeVisible( pObj->GetCurrentBoundRect() );
                     CallChgLnk();
                     return TRUE;
                 }
@@ -2114,7 +2114,7 @@ BOOL SwFEShell::EndMark()
                 for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
                 {
                     SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-                    if( pObj->IsWriterFlyFrame() )
+                    if( pObj->ISA(SwVirtFlyDrawObj) )
                     {
                         if ( !bShowHdl )
                         {
@@ -2184,7 +2184,7 @@ short SwFEShell::GetAnchorId() const
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 nRet = -1;
                 break;
@@ -2376,7 +2376,7 @@ bool SwFEShell::IsGroupAllowed() const
             if ( bIsGroupAllowed )
             {
                 const SwFrm* pAnchorFrm = 0L;
-                if ( pObj->IsWriterFlyFrame() )
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm* pFlyFrm =
                             static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
@@ -2586,7 +2586,7 @@ BYTE SwFEShell::IsSelObjProtected( FlyProtectType eType ) const
                 nChk |= ( pObj->IsMoveProtect() ? FLYPROTECT_POS : 0 ) |
                         ( pObj->IsResizeProtect()? FLYPROTECT_SIZE : 0 );
 
-                if( FLYPROTECT_CONTENT & eType && pObj->IsWriterFlyFrame() )
+                if( FLYPROTECT_CONTENT & eType && pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     if ( pFly->GetFmt()->GetProtect().IsCntntProtected() )
@@ -2612,7 +2612,7 @@ BYTE SwFEShell::IsSelObjProtected( FlyProtectType eType ) const
                     return eType;
             }
             SwFrm* pAnch;
-            if( pObj->IsWriterFlyFrame() )
+            if( pObj->ISA(SwVirtFlyDrawObj) )
                 pAnch = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor();
             else
             {
@@ -2789,7 +2789,7 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
         const USHORT nOld = pDView->GetHitTolerancePixel();
         pDView->SetHitTolerancePixel( 0 );
         if( pDView->PickObj( rPt, pObj, pPView, SDRSEARCH_PICKMARKABLE ) &&
-            pObj->IsWriterFlyFrame() )
+            pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
             rRect = pFly->Frm();
@@ -2960,7 +2960,7 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
             SfxItemSet aAttr(pDrawModel->GetItemPool());
             aAttr.Put(SdrCircStartAngleItem(9000));
             aAttr.Put(SdrCircEndAngleItem(0));
-            pObj->SetItemSet(aAttr);
+            pObj->SetMergedItemSet(aAttr);
         }
         else if(pObj->ISA(SdrPathObj))
         {
@@ -3053,10 +3053,10 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
             ((SdrTextObj*)pObj)->SetVerticalWriting(bVerticalText);
             if(bVerticalText)
             {
-                SfxItemSet aSet(pObj->GetItemSet());
+                SfxItemSet aSet(pObj->GetMergedItemSet());
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-                pObj->SetItemSet(aSet);
+                pObj->SetMergedItemSet(aSet);
             }
 
             ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
@@ -3080,7 +3080,7 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
-                pText->SetItemSet(aSet);
+                pText->SetMergedItemSet(aSet);
             }
 
             if(bMarquee)
@@ -3092,7 +3092,7 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 aSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                 aSet.Put( SdrTextAniCountItem( 1 ) );
                 aSet.Put( SdrTextAniAmountItem( (INT16)GetWin()->PixelToLogic(Size(2,1)).Width()) );
-                pObj->SetItemSetAndBroadcast(aSet);
+                pObj->SetMergedItemSetAndBroadcast(aSet);
             }
         }
         SdrPageView* pPageView = pDrawView->GetPageViewPvNum(0);
@@ -3131,8 +3131,8 @@ const Color SwFEShell::GetShapeBackgrd() const
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetObj();
             // check, if selected object is a shape (drawing object)
-            ASSERT( !pSdrObj->IsWriterFlyFrame(), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
-            if ( !pSdrObj->IsWriterFlyFrame() )
+            ASSERT( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
@@ -3183,8 +3183,8 @@ const bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
             // get selected object
             const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetObj();
             // check, if selected object is a shape (drawing object)
-            ASSERT( !pSdrObj->IsWriterFlyFrame(), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
-            if ( !pSdrObj->IsWriterFlyFrame() )
+            ASSERT( !pSdrObj->ISA(SwVirtFlyDrawObj), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            if ( !pSdrObj->ISA(SwVirtFlyDrawObj) )
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
