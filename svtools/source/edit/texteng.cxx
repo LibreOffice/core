@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-19 17:55:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 14:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,7 +1848,8 @@ void TextEngine::CreateTextPortions( ULONG nPara, USHORT nStartPos )
     // nicht uebereinstimmen, da evtl. Zeilenumbrueche...
     USHORT nPortionStart = 0;
     USHORT nInvPortion = 0;
-    for ( USHORT nP = 0; nP < pTEParaPortion->GetTextPortions().Count(); nP++ )
+    USHORT nP;
+    for ( nP = 0; nP < pTEParaPortion->GetTextPortions().Count(); nP++ )
     {
         TETextPortion* pTmpPortion = pTEParaPortion->GetTextPortions().GetObject(nP);
         nPortionStart += pTmpPortion->GetLen();
