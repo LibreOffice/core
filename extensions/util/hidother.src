@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:27:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,3 +173,32 @@ hidspecial HID_PROP_SPINVALUE_MAX               { HelpId = HID_PROP_SPINVALUE_MA
 hidspecial HID_PROP_DEFAULT_SPINVALUE           { HelpId = HID_PROP_DEFAULT_SPINVALUE; }
 hidspecial HID_PROP_SPININCREMENT               { HelpId = HID_PROP_SPININCREMENT; }
 hidspecial HID_PROP_REPEAT                      { HelpId = HID_PROP_REPEAT; }
+>hidspecial HID_PROP_WORDBREAK                   { HelpId = HID_PROP_WORDBREAK; }
+hidspecial HID_PROP_SHOW_SCROLLBARS             { HelpId = HID_PROP_SHOW_SCROLLBARS; }
+hidspecial HID_PROP_TABORDER_CONTROLS           { HelpId = HID_PROP_TABORDER_CONTROLS; }
+
+hidspecial UID_PROP_DLG_FONT_TYPE               { HelpId = UID_PROP_DLG_FONT_TYPE; }
+hidspecial UID_PROP_DLG_IMAGE_URL               { HelpId = UID_PROP_DLG_IMAGE_URL; }
+hidspecial UID_PROP_DLG_BACKGROUNDCOLOR         { HelpId = UID_PROP_DLG_BACKGROUNDCOLOR; }
+hidspecial UID_PROP_DLG_ATTR_DATASOURCE         { HelpId = UID_PROP_DLG_ATTR_DATASOURCE; }
+hidspecial UID_PROP_DLG_ATTR_TARGET_URL         { HelpId = UID_PROP_DLG_ATTR_TARGET_URL; }
+hidspecial UID_PROP_DLG_NUMBER_FORMAT           { HelpId = UID_PROP_DLG_NUMBER_FORMAT; }
+hidspecial UID_PROP_DLG_CONTROLLABEL            { HelpId = UID_PROP_DLG_CONTROLLABEL; }
+hidspecial UID_PROP_DLG_FILLCOLOR               { HelpId = UID_PROP_DLG_FILLCOLOR; }
+hidspecial UID_PROP_DLG_TABINDEX                { HelpId = UID_PROP_DLG_TABINDEX; }
+hidspecial UID_PROP_DLG_SQLCOMMAND              { HelpId = UID_PROP_DLG_SQLCOMMAND; }
+hidspecial UID_PROP_DLG_FORMLINKFIELDS          { HelpId = UID_PROP_DLG_FORMLINKFIELDS; }
+hidspecial HID_FIELDLINK_DETAIL_COLUMN          { HelpId = HID_FIELDLINK_DETAIL_COLUMN; }
+hidspecial HID_FIELDLINK_MASTER_COLUMN          { HelpId = HID_FIELDLINK_MASTER_COLUMN; }
+hidspecial UID_FIELDLINK_DETAIL1                { HelpId = UID_FIELDLINK_DETAIL1; }
+hidspecial UID_FIELDLINK_MASTER1                { HelpId = UID_FIELDLINK_MASTER1; }
+hidspecial UID_FIELDLINK_DETAIL2                { HelpId = UID_FIELDLINK_DETAIL2; }
+hidspecial UID_FIELDLINK_MASTER2                { HelpId = UID_FIELDLINK_MASTER2; }
+hidspecial UID_FIELDLINK_DETAIL3                { HelpId = UID_FIELDLINK_DETAIL3; }
+hidspecial UID_FIELDLINK_MASTER3                { HelpId = UID_FIELDLINK_MASTER3; }
+hidspecial UID_FIELDLINK_DETAIL4                { HelpId = UID_FIELDLINK_DETAIL4; }
+hidspecial UID_FIELDLINK_MASTER4                { HelpId = UID_FIELDLINK_MASTER4; }
+hidspecial UID_PROP_DLG_FILTER                  { HelpId = UID_PROP_DLG_FILTER; }
+hidspecial UID_PROP_DLG_ORDER                   { HelpId = UID_PROP_DLG_ORDER; }
+hidspecial UID_PROP_DLG_SELECTION               { HelpId = UID_PROP_DLG_SELECTION; }
+hidspecial UID_PROP_DLG_SYMBOLCOLOR             { HelpId = UID_PROP_DLG_SYMBOLCOLOR; }
