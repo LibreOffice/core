@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Defaults.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:55:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
 /** provides default settings of a text component for paragraph and
     character properties.
  */
-service Defaults
+published service Defaults
 {
     service com::sun::star::style::CharacterProperties;
 
