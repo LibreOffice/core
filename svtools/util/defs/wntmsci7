@@ -12248,3 +12248,13 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx281481956@@YAEABVString@@AAV2@@Z
 ?checkActionIndex_Impl@?%O:\SRX642\src\svtools\source\Accessibility\accessiblelistboxentry.cxx91521092@@YAXJ@Z
 ?isHiContrast@?%O:\SRX642\src\svtools\source\brwbox\editbrowsebox.cxx508325386@svt@@YAEPAVWindow@@@Z
+?getRectangle@?%O:\SRC656\src\svtools\source\Accessibility\AccessibleBrowseBoxHeaderCell.cxx1485629105@svt@@YA?AVRectangle@@PAVBrowseBox@@JEE@Z
+?checkActionIndex_Impl@?%O:\SRC656\src\svtools\source\Accessibility\accessiblelistboxentry.cxx3177512775@@YAXJ@Z
+??RFilterTitleMatch@?%O:\SRC656\src\svtools\source\filepicker\filepicker.cxx139402499@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YAXPAVControl@@JJAAJ@Z
+?lcl_autoUpdateFileExtension@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YAXPAVSvtFileDialog@@@Z
+?lcl_getHomeDirectory@?%O:\SRC656\src\svtools\source\filepicker\iodlg.cxx2528432366@@YAEABVString@@AAV2@@Z
+?lcl_DecoratedFilter@?%O:\SRC656\src\svtools\source\filepicker\iodlgimp.cxx3064330792@@YA?AVString@@ABV2@@Z
