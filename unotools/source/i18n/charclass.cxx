@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:27:16 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,10 @@ sal_Bool CharClass::isAsciiAlphaNumeric( const String& rStr )
 
 sal_Bool CharClass::isAlpha( const String& rStr, xub_StrLen nPos ) const
 {
+    sal_Unicode c = rStr.GetChar( nPos );
+    if ( c < 128 )
+        return isAsciiAlpha( c );
+
     try
     {
         if ( xCC.is() )
@@ -255,6 +259,10 @@ sal_Bool CharClass::isAlpha( const String& rStr ) const
 
 sal_Bool CharClass::isLetter( const String& rStr, xub_StrLen nPos ) const
 {
+    sal_Unicode c = rStr.GetChar( nPos );
+    if ( c < 128 )
+        return isAsciiAlpha( c );
+
     try
     {
         if ( xCC.is() )
@@ -290,6 +298,10 @@ sal_Bool CharClass::isLetter( const String& rStr ) const
 
 sal_Bool CharClass::isDigit( const String& rStr, xub_StrLen nPos ) const
 {
+    sal_Unicode c = rStr.GetChar( nPos );
+    if ( c < 128 )
+        return isAsciiDigit( c );
+
     try
     {
         if ( xCC.is() )
@@ -325,6 +337,10 @@ sal_Bool CharClass::isNumeric( const String& rStr ) const
 
 sal_Bool CharClass::isAlphaNumeric( const String& rStr, xub_StrLen nPos ) const
 {
+    sal_Unicode c = rStr.GetChar( nPos );
+    if ( c < 128 )
+        return isAsciiAlphaNumeric( c );
+
     try
     {
         if ( xCC.is() )
@@ -360,6 +376,10 @@ sal_Bool CharClass::isAlphaNumeric( const String& rStr ) const
 
 sal_Bool CharClass::isLetterNumeric( const String& rStr, xub_StrLen nPos ) const
 {
+    sal_Unicode c = rStr.GetChar( nPos );
+    if ( c < 128 )
+        return isAsciiAlphaNumeric( c );
+
     try
     {
         if ( xCC.is() )
