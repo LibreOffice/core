@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootitemcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:38:16 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 11:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ class RootItemContainer :   public ::com::sun::star::lang::XTypeProvider        
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     private:
-        operator=( const RootItemContainer& );
+        RootItemContainer& operator=( const RootItemContainer& );
         RootItemContainer( const RootItemContainer& );
 
         void copyItemContainer( const std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rSourceVector );

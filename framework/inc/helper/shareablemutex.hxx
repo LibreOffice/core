@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shareablemutex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:34:31 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 11:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ class ShareGuard
 
     private:
         ShareGuard();
-        operator=( const ShareGuard& );
+        ShareGuard& operator=( const ShareGuard& );
 
         ShareableMutex& m_rShareMutex;
 };
