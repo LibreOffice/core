@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleCharsOutputException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:36:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module i18n {
     <method>XExtendedTransliteration::transliterateChar2Char()</method>
     </p>
 
-     @since #107627#
+     @since OOo 1.1.2
  */
 published exception MultipleCharsOutputException : ::com::sun::star::uno::Exception
 {

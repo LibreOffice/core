@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTLScriptType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 20:28:11 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com {  module sun {  module star {  module i18n {
 /** CTL tcript type constants for layout engine, returned by
     <member>XScriptTypeDetector::getCTLScriptType()</member>
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 
 published constants CTLScriptType
