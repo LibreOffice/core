@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:25:55 $
+ *  last change: $Author: kso $ $Date: 2001-01-16 14:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1850,24 +1850,24 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 {
                     Any aCompressed
                         = xPropSet->getPropertyValue(
-                            OUString::createFromAscii( "Compressed" ) );
+                            OUString::createFromAscii( "Compress" ) ); // Not Compressed !!!
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Commpressed value!" );
+                            "Content::loadData - Got no Commpress value!" );
                         return sal_False;
                     }
                 }
                 catch ( UnknownPropertyException & )
                 {
                     VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Compressed value!" );
+                            "Content::loadData - Got no Compress value!" );
                     return sal_False;
                 }
                 catch ( WrappedTargetException & )
                 {
                     VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Compressed value!" );
+                            "Content::loadData - Got no Compress value!" );
                     return sal_False;
                 }
             }
@@ -2039,8 +2039,9 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
                                     makeAny( m_aProps.aMediaType ) );
 
 #if SUPD>616
-        xPropSet->setPropertyValue( OUString::createFromAscii( "Compressed" ),
-                                    makeAny( m_aProps.bCompressed ) );
+        if ( !isFolder() )
+            xPropSet->setPropertyValue( OUString::createFromAscii( "Compress" ), // Not Compressed !!!
+                                        makeAny( m_aProps.bCompressed ) );
 #endif
 
         //////////////////////////////////////////////////////////////////

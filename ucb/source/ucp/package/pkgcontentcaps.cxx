@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-15 13:25:55 $
+ *  last change: $Author: kso $ $Date: 2001-01-16 14:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
     Size                  x       x
     Title                 x       x
 #if SUPD>616
-    Compress                      x
+    Compressed                    x
 #endif
 
     getCommandInfo        x       x
@@ -261,7 +261,7 @@ const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
             ///////////////////////////////////////////////////////////////
 #if SUPD>616
             {
-                "Compress",
+                "Compressed",
                 -1,
                 &getCppuType( static_cast< const sal_Bool * >( 0 ) ),
                 PropertyAttribute::BOUND
