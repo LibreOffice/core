@@ -19,14 +19,14 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "UW" "Version 4.01 PL0"
+.TH DMAKE 1  "UW" "Version 4.10"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
 .B dmake
 [\-P#] [\-{f|C|K} file] [\-{w|W} target ...]
 [macro[[!][*][+][:]]=\fIvalue\fP ...]
-[\-v{cdfimtw}] [\-ABcdeEghiknpqrsStTuVxX] [target ...]
+[\-v{cdfimrtw}] [\-ABcdeEghiknpqrsStTuVxX] [target ...]
 .SH DESCRIPTION
 .PP
 .B dmake
@@ -176,9 +176,9 @@ Tells \fBdmake\fP to not perform transitive closure on the inference graph.
 .IP "\fB\-u\fR"
 Force an unconditional update.  (ie. do everything that would
 be done if everything that a target depended on was out of date)
-.IP "\fB\-v[dfimtw]\fR"
+.IP "\fB\-v[cdfimrtw]\fR"
 Verbose flag, when making targets print to stdout what we are going to make
-and what we think its time stamp is.  The optional flags \fB[dfimt]\fP can be
+and what we think its time stamp is.  The optional flags \fB[cdfimrtw]\fP can be
 used to restrict the information that is displayed.  In the absence of any
 optional flags all are assumed to be given (ie. \fB\-v\fP is equivalent to
 \fB\-vdfimt\fP).  The meanings of the optional flags are:
@@ -193,6 +193,10 @@ Notify of file I/O operations only.
 Notify of inference algorithm operation only.
 .IP "\fBm\fP"
 Notify of target update operations only.
+.IP "\fBr\fP"
+Force output of recipe lines and warnings. This switch is usefull when
+debugging makefiles that disable the output using the @ sign for recipe
+lines or the .SILENT target/attribute. It also overrides the -s flag.
 .IP "\fBt\fP"
 Keep any temporary files created; normally they are automatically deleted.
 .IP "\fBw\fP"
@@ -409,6 +413,11 @@ are text or names representing text supplied by the user.
 .Ip "expression" "\(-> \fBLINE\fR"
 \(-> \fBSTRING == LINE\fR
 \(-> \fBSTRING != LINE\fR
+\(-> \fBSTRING <= LINE\fR
+\(-> \fBSTRING >= LINE\fR
+\(-> \fB(\fR expression \fB)\fR
+\(-> expression \fB||\fR expression
+\(-> expression \fB&&\fR expression
 .Ip "Rule-Definition \(-> " "target-definition"
    [ recipe ]
 .PP
@@ -2872,13 +2881,26 @@ nested (ie.  the text may contain another conditional).
 may appear anywhere in the makefile, but a single conditional expression
 may not span multiple makefiles.
 .PP
-\fIexpression\fR can be one of the following three forms:
+\fIexpression\fR can be one of the following forms:
 .sp
+String evaluation
+.br
 \t<text> | <text> == <text> | <text> != <text>
+.sp
+Numeric evaluation
+.br
+\t<text> <= <text> | <text> >= <text>
+.sp
+Boolean evaluation
+.br
+\t( <text> ) | <text> || <text> | <text> && <text>
 .sp
 where \fItext\fR is either text or a macro expression.  In any case,
 before the comparison is made, the expression is expanded.  The text
-portions are then selected and compared.  White space at the start and
+portions are then selected and compared.  In the case of the numeric
+comparisons the expanded expressions are converted to an integer number.
+Expressions can be nested with () and the use of || or &&.
+White space at the start and
 end of the text portion is discarded before the comparison.  This means
 that a macro that evaluates to nothing but white space is considered a
 NULL value for the purpose of the comparison.
