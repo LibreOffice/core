@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.153 $
+#   $Revision: 1.154 $
 #
-#   last change: $Author: pjunck $ $Date: 2004-10-27 15:22:08 $
+#   last change: $Author: pjunck $ $Date: 2004-11-03 08:57:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -911,12 +911,6 @@ SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
 .IF "$(UDK_MAJOR)"!=""
 SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 .ENDIF			# "$(UDK_MAJOR)"!=""
-.IF "$(UDK_MINOR)"!=""
-SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
-.ENDIF			# "$(UDK_MINOR)"!=""
-.IF "$(UDK_MICRO)"!=""
-SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
-.ENDIF			# "$(UDK_MICRO)"!=""
 
 .IF "$(OFFICEUPD)"!=""
 SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
