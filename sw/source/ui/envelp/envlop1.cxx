@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-26 10:13:35 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 14:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,19 @@ SwEnvPreview::~SwEnvPreview()
 }
 
 // ----------------------------------------------------------------------------
+void SwEnvPreview::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+    if ( DATACHANGED_SETTINGS == rDCEvt.GetType() )
+        SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+}
 
-
+// ----------------------------------------------------------------------------
 
 void SwEnvPreview::Paint(const Rectangle &)
 {
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+
     const SwEnvItem& rItem =
         ((SwEnvDlg*) GetParent()->GetParent()->GetParent())->aEnvItem;
 
@@ -142,12 +150,21 @@ void SwEnvPreview::Paint(const Rectangle &)
           fy = (float) GetOutputSizePixel().Height() / nPageH,
           f  = 0.8 * ( fx < fy ? fx : fy );
 
+    Color aBack = rSettings.GetWindowColor( );
+    Color aFront = rSettings.GetWindowTextColor();
+    Color aMedium = Color(  ( aBack.GetRed() + aFront.GetRed() ) / 2,
+                            ( aBack.GetGreen() + aFront.GetGreen() ) / 2,
+                            ( aBack.GetBlue() + aFront.GetBlue() ) / 2
+                        );
+
+    SetLineColor( aFront );
+
     // Umschlag
     long   nW = (USHORT) (f * nPageW),
            nH = (USHORT) (f * nPageH),
            nX = (GetOutputSizePixel().Width () - nW) / 2,
            nY = (GetOutputSizePixel().Height() - nH) / 2;
-    SetFillColor(Color(COL_WHITE));
+    SetFillColor( aBack );
     DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
     // Absender
@@ -157,7 +174,8 @@ void SwEnvPreview::Paint(const Rectangle &)
                nSendY = nY + (USHORT) (f * rItem.lSendFromTop ),
                nSendW = (USHORT) (f * (rItem.lAddrFromLeft - rItem.lSendFromLeft)),
                nSendH = (USHORT) (f * (rItem.lAddrFromTop  - rItem.lSendFromTop  - 566));
-        SetFillColor(Color(COL_GRAY));
+        SetFillColor( aMedium );
+
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
@@ -166,7 +184,7 @@ void SwEnvPreview::Paint(const Rectangle &)
            nAddrY = nY + (USHORT) (f * rItem.lAddrFromTop ),
            nAddrW = (USHORT) (f * (nPageW - rItem.lAddrFromLeft - 566)),
            nAddrH = (USHORT) (f * (nPageH - rItem.lAddrFromTop  - 566));
-    SetFillColor(Color(COL_GRAY));
+    SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
     // Briefmarke
@@ -175,7 +193,7 @@ void SwEnvPreview::Paint(const Rectangle &)
            nStmpX = nX + nW - (USHORT) (f * 566) - nStmpW,
            nStmpY = nY + (USHORT) (f * 566);
 
-    SetFillColor(Color(COL_WHITE));
+    SetFillColor( aBack );
     DrawRect(Rectangle(Point(nStmpX, nStmpY), Size(nStmpW, nStmpH)));
 }
 
