@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-30 13:53:56 $
+#   last change: $Author: hjs $ $Date: 2001-12-06 19:29:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,10 @@ dmake_test_version:
 
 # --- common tool makros --------------------------------------
 .INCLUDE : unitools.mk
+
+.IF "$(PRODUCTNAME)"!=""
+.INCLUDE : product.mk
+.ENDIF			# "$(PRODUCTNAME)"!=""
 
 # --- set SOLARVERSION for older workspaces
 
@@ -1031,7 +1035,7 @@ CDEFSOPT=-DOPTIMIZE
 HDEFS=-D:$(GUI) -D:$(COM)
 
 MKDEPFLAGS=-D_SOLAR__PRIVATE -I$(INCDEPN:s/ / -I/) $(INCPRE:^"-I":s/-I-I/-I/)
-MKDEPALLINC=$(SOLARINCLUDES:s/-I/ -I/)
+MKDEPALLINC=$(SOLARINC:s/-I/ -I/)
 MKDEPPREINC=-I$(PREPATH)$/$(INPATH)$/inc$(UPDMINOREXT)
 MKDEPSOLENV=-I$(SOLARENV)$/inc -I$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
 MKDEPSOLVER=-I$(SOLARVERSION)$/$(INPATH)$/inc.$(UPDMINOR) -I$(SOLARVERSION)$/$(INPATH)$/inc
