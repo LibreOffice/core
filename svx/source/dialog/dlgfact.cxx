@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:37:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,7 +1003,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( const ResId& 
             pDlg = new OfaAutoCorrDlg( pParent, pAttrSet );
             break;
         case RID_SVXDLG_CUSTOMIZE :
-            pDlg = new SvxConfigDialog( pParent, pAttrSet, pViewFrame );
+            pDlg = new SvxConfigDialog( pParent, pAttrSet );
             break;
         default:
             break;
@@ -1712,19 +1712,9 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window
                                                         const String& strContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier,
-                                                        const ResId& rResId,
                                                         FMSEARCH_MODE eMode )
 {
-    FmSearchDialog* pDlg=NULL;
-    switch ( rResId.GetId() )
-    {
-        case RID_SVXDLG_SEARCHFORM :
-            pDlg = new FmSearchDialog( pParent, strInitialText,strContexts,nInitialContext,lnkContextSupplier,eMode );
-            break;
-        default:
-            break;
-    }
-
+    FmSearchDialog* pDlg = new FmSearchDialog( pParent, strInitialText, strContexts, nInitialContext, lnkContextSupplier, eMode );
     if ( pDlg )
         return new AbstractFmSearchDialog_Impl( pDlg );
     return 0;
