@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 10:52:03 $
+ *  last change: $Author: os $ $Date: 2001-03-12 14:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,11 @@ service CharacterProperties
         @optional
      */
     [optional, property] short CharEmphasize;
+    //-------------------------------------------------------------------------
+    /** contains the relief value as <type scope="com::sun::star::text">FontRelief</type>.
+        @optional
+     */
+    [optional, property] short CharRelief;
     //-------------------------------------------------------------------------
     /** contains the text that is set as ruby.
         @optional
