@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-10-19 11:00:38 $
+ *  last change: $Author: as $ $Date: 2000-10-25 06:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,16 +373,13 @@ Reference< XFrame > FrameContainer::getActive() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void FrameContainer::enableQuitTimer(   const   Reference< XDesktop >&  xDesktop    ,
-                                        const   TAsyncQuitMode&         aMode       )
+void FrameContainer::enableQuitTimer( const Reference< XDesktop >& xDesktop )
 {
     // If no current timer exist - create a new one.
     if( m_rQuitTimer.isEmpty() == sal_True )
     {
         m_rQuitTimer.bind( new AsyncQuit( xDesktop ) );
     }
-    // Set given mode on existing or created timer member!
-    m_rQuitTimer->setMode( aMode );
 }
 
 //*****************************************************************************************************************
