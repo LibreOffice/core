@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 08:33:05 $
+ *  last change: $Author: aw $ $Date: 2002-10-08 15:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,7 +1116,8 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
         aNeedLogSize.Width() +=a1Pix.Width();  // 1 Pixel fuer Toleranz drauf
         aNeedLogSize.Height()+=a1Pix.Height();
 
-        pBmp->aVD.SetBackground( Wallpaper( ::svx::ColorConfig().GetColorValue( ::svx::APPBACKGROUND ).nColor ) );
+        // #103834# Use flag that impress application is using this view
+        pBmp->aVD.SetBackground( Wallpaper(maBackgroundColor));
 
         if (pBmp->aVD.SetOutputSize(aNeedLogSize,TRUE))
         {
@@ -2315,6 +2316,12 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
         }
     }
     return rIn;
+}
+
+// #103834# Set background color for svx at SdrPageViews
+void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
+{
+    maBackgroundColor = aBackgroundColor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
