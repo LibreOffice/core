@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2004-02-24 21:45:29 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:01:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES= $(SLO)$/canvastools.obj	
+SLOFILES= $(SLO)$/canvastools.obj	\
+          $(SLO)$/liangbarsky.obj	\
+          $(SLO)$/tools.obj
 
 # --- Targets ----------------------------------
 
