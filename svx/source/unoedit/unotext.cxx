@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:15:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1408,13 +1408,18 @@ sal_Bool SAL_CALL SvxUnoTextRangeBase::supportsService( const OUString& ServiceN
 uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoTextRangeBase::getSupportedServiceNames_Static()
+    SAL_THROW(())
+{
     uno::Sequence< OUString >   aSeq;
     SvxServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.style.CharacterProperties",
                                                   "com.sun.star.style.CharacterPropertiesComplex",
                                                   "com.sun.star.style.CharacterPropertiesAsian");
     return aSeq;
 }
-
 
 // ====================================================================
 // class SvxUnoTextRange
@@ -1538,7 +1543,7 @@ OUString SAL_CALL SvxUnoTextRange::getImplementationName()
 uno::Sequence< uno::Type > SvxUnoTextBase::maTypeSequence;
 
 SvxUnoTextBase::SvxUnoTextBase() throw()
-: SvxUnoTextRangeBase(NULL, aEmptyPropMap )
+: SvxUnoTextRangeBase( NULL )
 {
 
 }
@@ -1939,7 +1944,13 @@ OUString SAL_CALL SvxUnoTextBase::getImplementationName()
 uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames(  )
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames() );
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoTextBase::getSupportedServiceNames_Static(  )
+    SAL_THROW(())
+{
+    uno::Sequence< OUString > aSeq( SvxUnoTextRangeBase::getSupportedServiceNames_Static() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.text.Text" );
     return aSeq;
 }
@@ -1985,6 +1996,11 @@ sal_Int64 SAL_CALL SvxUnoTextBase::getSomething( const uno::Sequence< sal_Int8 >
 // --------------------------------------------------------------------
 
 SvxUnoText::SvxUnoText( ) throw()
+{
+}
+
+SvxUnoText::SvxUnoText( const SfxItemPropertyMap* _pMap ) throw()
+: SvxUnoTextBase( _pMap )
 {
 }
 
