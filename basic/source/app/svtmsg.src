@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-22 23:00:15 $
+ *  last change: $Author: rt $ $Date: 2001-11-27 23:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,5 +1640,25 @@ String S_NO_SAX_PARSER
 {
     Text = "Keine SAX Parser bei ($Arg1). Zuerst mit 'SAXReadFile' initialisieren.";
     Text[ english_us ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ portuguese ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ russian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ greek ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ dutch ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ french ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ spanish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ finnish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ italian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ danish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ swedish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ polish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ portuguese_brazilian ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ japanese ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ korean ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ chinese_simplified ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ chinese_traditional ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ turkish ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ arabic ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
+    Text[ catalan ] = "No SAX Parser using ($Arg1). Initialize with 'SAXReadFile' first.";
 };
+
 
