@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:57:42 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,14 +123,14 @@ ModalDialog DLG_SEL_GLOS
         Text [ dutch ] = "AutoTekst voor afkortingen  " ;
         Text [ spanish ] = "AutoTexto para abreviatura " ;
         Text [ english_us ] = "AutoTexts for shortcut " ;
-        Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ ";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†çš„ç¼©å†™ ";
         Text[ russian ] = "Àâòîòåêñò äëÿ ñîêğàùåíèÿ";
         Text[ polish ] = "Autotekst skrótu";
-        Text[ japanese ] = "¼®°Ä¶¯Ä“ü—Íx‰‡ ";
-        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g ";
+        Text[ japanese ] = "ï½¼ï½®ï½°ï¾„ï½¶ï½¯ï¾„å…¥åŠ›æ”¯æ´ ";
+        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†çš„ç¸®å¯« ";
         Text[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ ";
         Text[ greek ] = "ÁõôïÊåßìåíá ãéá áñ÷éêÜ";
-        Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â ";
+        Text[ korean ] = "ìë™í…ìŠ¤íŠ¸ ë°”ë¡œê°€ê¸° ";
         Text[ turkish ] = "Otomatik metin kısaltması ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "AutoTexto para abreviatura  ";
@@ -143,18 +143,19 @@ ModalDialog DLG_SEL_GLOS
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
-    Text[ chinese_simplified ] = "²åÈë×Ô¶¯Í¼ÎÄ¼¯";
+    Text[ chinese_simplified ] = "æ’å…¥è‡ªåŠ¨å›¾æ–‡é›†";
     Text[ russian ] = "Âñòàâêà àâòîòåêñòà";
     Text[ polish ] = "Wstaw autotekst";
-    Text[ japanese ] = "“ü—Íx‰‡‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J¦Û°Ê¹Ï¤å¶°";
+    Text[ japanese ] = "å…¥åŠ›æ”¯æ´ã®æŒ¿å…¥";
+    Text[ chinese_traditional ] = "æ’å…¥è‡ªå‹•åœ–æ–‡é›†";
     Text[ arabic ] = "ÅÏÑÇÌ äÕ ÊáŞÇÆí";
     Text[ greek ] = "ĞñïóèŞêç ÁõôïÊåéìİíïõ";
-    Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ";
+    Text[ korean ] = "ìë™í…ìŠ¤íŠ¸ ì‚½ì…";
     Text[ turkish ] = "Otomatik metin ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar AutoTexto";
 };
+
 
 
 
