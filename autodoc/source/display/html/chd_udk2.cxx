@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chd_udk2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include "dsply_da.hxx"
 #include "dsply_op.hxx"
 #include "opageenv.hxx"
+#include "outfile.hxx"
 #include "pagemake.hxx"
 
 
@@ -172,6 +173,7 @@ CppHtmlDisplay_Udk2::do_Run( const char *                      i_sOutputDirector
 {
     SetRunData( i_sOutputDirectory, i_rAryGate, i_rLayout, i_pProjectList );
 
+    Create_Css_File();
     Create_Overview_File();
     Create_Help_File();
     Create_AllDefs_File();
@@ -213,8 +215,17 @@ CppHtmlDisplay_Udk2::SetRunData( const char *                       i_sOutputDir
 }
 
 void
+CppHtmlDisplay_Udk2::Create_Css_File()
+{
+    pCurPageEnv->MoveDir_2Root();
+    pCurPageEnv->SetFile_Css();
+    HtmlDocuFile::WriteCssFile(pCurPageEnv->CurPath());
+}
+
+void
 CppHtmlDisplay_Udk2::Create_Overview_File()
 {
+    pCurPageEnv->MoveDir_2Root();
     PageDisplay aPageMaker( *pCurPageEnv );
     aPageMaker.Create_OverviewFile();
 }
