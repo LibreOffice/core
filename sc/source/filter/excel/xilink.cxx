@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,13 @@
 #ifndef _SCEXTOPT_HXX
 #include "scextopt.hxx"
 #endif
-#ifndef SC_RANGENAM_HXX
-#include "rangenam.hxx"
-#endif
 #ifndef SC_TABLINK_HXX
 #include "tablink.hxx"
 #endif
 
-#include "root.hxx"
-#include "excform.hxx"
-#include "excimp8.hxx"
+#ifndef SC_XINAME_HXX
+#include "xiname.hxx"
+#endif
 
 // ============================================================================
 // *** Helper classes ***
@@ -139,7 +136,7 @@ private:
 
 /** This class represents an external linked document (record SUPBOOK).
     @descr  Contains a list of all referenced sheets in the document. */
-class XclImpSupbook
+class XclImpSupbook : protected XclImpRoot
 {
 public:
     /** Reads the SUPBOOK record from stream. */
@@ -170,13 +167,13 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     bool                GetLinkData( String& rApplic, String& rDoc ) const;
+    /** Returns the specified macro name (1-based) or an empty string on error. */
+    const String&       GetMacroName( sal_uInt16 nXclNameIdx ) const;
 
     /** Creates all sheets of this external document.
         @param nFirstTab  The external Excel index of the first sheet to be created.
         @param nLastTab  The external Excel index of the last sheet to be created. */
-    void                CreateTables(
-                            const XclImpRoot& rRoot,
-                            sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast );
+    void                CreateTables( sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast );
 
 private:
     typedef ScfDelList< XclImpSupbookTab >  XclImpSupbookTabList;
@@ -241,6 +238,8 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
+    /** Returns the specified macro name or an empty string on error. */
+    const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
@@ -329,211 +328,6 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
             ++nReturn;
     }
     return 0;
-}
-
-// Internal defined names =====================================================
-
-XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
-    XclImpRoot( rStrm.GetRoot() ),
-    mpScData( 0 ),
-    mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
-    mnScTab( SCTAB_MAX )
-{
-    ExcelToSc& rFmlaConv = GetFmlaConverter();
-    ScRangeName& rRangeNames = GetNamedRanges();
-
-    // 1) *** read data from stream *** ---------------------------------------
-
-    sal_uInt16 nFlags = 0, nFmlaSize, nXclTab = EXC_NAME_GLOBAL;
-    sal_uInt8 nNameLen, nShortCut;
-
-    switch( GetBiff() )
-    {
-        case xlBiff2:
-        {
-            sal_uInt8 nFlagsBiff2;
-            rStrm >> nFlagsBiff2;
-            rStrm.Ignore( 1 );
-            rStrm >> nShortCut >> nNameLen;
-            nFmlaSize = rStrm.ReaduInt8();
-            ::set_flag( nFlags, EXC_NAME_FUNC, ::get_flag( nFlagsBiff2, EXC_NAME2_FUNC ) );
-        }
-        break;
-
-        case xlBiff3:
-        case xlBiff4:
-        {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
-        }
-        break;
-
-        case xlBiff5:
-        case xlBiff7:
-        case xlBiff8:
-        {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
-            rStrm.Ignore( 2 );
-            rStrm >> nXclTab;
-            rStrm.Ignore( 4 );
-        }
-        break;
-
-        default: DBG_ERROR_BIFF();
-    }
-
-    if( GetBiff() < xlBiff8 )
-        maXclName = rStrm.ReadRawByteString( nNameLen );
-    else
-        maXclName = rStrm.ReadUniString( nNameLen );
-
-    // 2) *** convert sheet index and name *** --------------------------------
-
-    // get built-in name, or convert characters invalid in Calc
-    bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
-
-    bool bVBName = ::get_flag( nFlags, EXC_NAME_VB);
-
-    // special case for BIFF5 filter range - name appears as plain text without built-in flag
-    if( ((GetBiff() == xlBiff5) || (GetBiff() == xlBiff7)) &&
-        (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_AUTOFILTER )) )
-    {
-        bBuiltIn = true;
-        maXclName.Assign( EXC_BUILTIN_AUTOFILTER );
-    }
-
-    // convert Excel name to Calc name
-    if( bBuiltIn )
-    {
-        if( maXclName.Len() )
-            mcBuiltIn = maXclName.GetChar( 0 );
-        maScName = XclTools::GetBuiltInDefName( mcBuiltIn );
-    }
-    else
-    {
-        maScName = maXclName;
-        ScfTools::ConvertToScDefinedName( maScName );
-    }
-
-    // add sheet index for local names
-    if( nXclTab != EXC_NAME_GLOBAL )
-    {
-        maScName.Append( '_' ).Append( String::CreateFromInt32( nXclTab ) );
-        mnScTab = static_cast< SCTAB >( nXclTab - 1 );
-    }
-
-    // find an unused name
-    String aOrigName( maScName );
-    sal_Int32 nCounter = 0;
-    USHORT nDummy;
-    while( rRangeNames.SearchName( maScName, nDummy ) )
-        maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
-
-    // 3) *** convert the name definition formula *** -------------------------
-
-    rFmlaConv.Reset();
-    const ScTokenArray* pTokArr = 0; // pointer to token array, owned by rFmlaConv
-    RangeType nNameType = RT_NAME;
-
-    sal_uInt16 nUnsupported = EXC_NAME_VB | EXC_NAME_PROC | EXC_NAME_BIG;
-    if( ::get_flag( nFlags, nUnsupported ) )
-    {
-        // special, unsupported name
-        rFmlaConv.GetDummy( pTokArr );
-    }
-    else if( bBuiltIn )
-    {
-        // --- print ranges or title ranges ---
-        rStrm.PushPosition();
-        switch( mcBuiltIn )
-        {
-            case EXC_BUILTIN_PRINTAREA:
-                if( rFmlaConv.Convert( GetPrintAreaBuffer(), nFmlaSize, FT_RangeName ) == ConvOK )
-                    nNameType |= RT_PRINTAREA;
-            break;
-            case EXC_BUILTIN_PRINTTITLES:
-                if( rFmlaConv.Convert( GetTitleAreaBuffer(), nFmlaSize, FT_RangeName ) == ConvOK )
-                    nNameType |= RT_COLHEADER | RT_ROWHEADER;
-            break;
-        }
-        rStrm.PopPosition();
-
-        // --- name formula ---
-        rFmlaConv.Convert( pTokArr, nFmlaSize, FT_RangeName );
-
-        // --- auto or advanced filter ---
-        if( (GetBiff() >= xlBiff8) && pTokArr && bBuiltIn )
-        {
-            ScRange aRange;
-            if( pTokArr->IsReference( aRange ) )
-            {
-                switch( mcBuiltIn )
-                {
-                    case EXC_BUILTIN_AUTOFILTER:
-                        GetFilterManager().Insert( mpRD, aRange, maScName );
-                    break;
-                    case EXC_BUILTIN_CRITERIA:
-                        GetFilterManager().AddAdvancedRange( aRange );
-                        nNameType |= RT_CRITERIA;
-                    break;
-                    case EXC_BUILTIN_EXTRACT:
-                        if( pTokArr->IsValidReference( aRange ) )
-                            GetFilterManager().AddExtractPos( aRange );
-                    break;
-                }
-            }
-        }
-    }
-    else
-    {
-        // regular defined name
-        rFmlaConv.Convert( pTokArr, nFmlaSize, FT_RangeName );
-    }
-
-    // 4) *** create a defined name in the Calc document *** ------------------
-
-    if( pTokArr && (bBuiltIn || !::get_flag( nFlags, EXC_NAME_HIDDEN )) && !bVBName )
-    {
-        // create the Calc name data
-        ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
-        pData->GuessPosition();
-        pData->SetIndex( nScIndex );
-        rRangeNames.Insert( pData );        // takes ownership of pData
-        mpScData = pData;                   // cache for later use
-    }
-}
-
-// ----------------------------------------------------------------------------
-
-XclImpNameBuffer::XclImpNameBuffer( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot )
-{
-}
-
-void XclImpNameBuffer::ReadName( XclImpStream& rStrm )
-{
-    ULONG nCount = maNameList.Count();
-    if( nCount < 0xFFFF )
-        maNameList.Append( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
-}
-
-const XclImpName* XclImpNameBuffer::FindName( const String& rXclName, SCTAB nScTab ) const
-{
-    const XclImpName* pGlobalName = 0;   // a found global name
-    const XclImpName* pLocalName = 0;    // a found local name
-    for( const XclImpName* pName = maNameList.First(); pName && !pLocalName; pName = maNameList.Next() )
-    {
-        if( pName->GetScTab() == nScTab )
-            pLocalName = pName;
-        else if( pName->IsGlobal() )
-            pGlobalName = pName;
-    }
-    return pLocalName ? pLocalName : pGlobalName;
-}
-
-const XclImpName* XclImpNameBuffer::GetNameFromIndex( sal_uInt16 nXclIndex ) const
-{
-    DBG_ASSERT( nXclIndex > 0, "XclImpNameBuffer::GetNameFromIndex - index must be > 0" );
-    return (nXclIndex <= maNameList.Count()) ? maNameList.GetObject( nXclIndex - 1 ) : 0;
 }
 
 // External names =============================================================
@@ -636,7 +430,8 @@ void XclImpSupbookTab::CreateAndFillTable(
 // External document (SUPBOOK) ================================================
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
-    mnSBTab( EXC_EXTSH_DELETED ),
+    XclImpRoot( rStrm.GetRoot() ),
+    mnSBTab( EXC_TAB_DELETED ),
     meType( EXC_SBTYPE_UNKNOWN )
 {
     sal_uInt16 nSBTabCnt;
@@ -655,7 +450,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
 
     String aEncUrl( rStrm.ReadUniString() );
     bool bSelf = false;
-    XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, rStrm.GetRoot(), aEncUrl );
+    XclImpUrlHelper::DecodeUrl( maXclUrl, bSelf, GetRoot(), aEncUrl );
 
     if( nSBTabCnt )
     {
@@ -726,11 +521,18 @@ bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
     return (meType == EXC_SBTYPE_SPECIAL) && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
 }
 
-void XclImpSupbook::CreateTables( const XclImpRoot& rRoot, sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast )
+const String& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 {
-    if( (meType == EXC_SBTYPE_EXTERN) && (rRoot.GetExtDocOptions().nLinkCnt < 1) && rRoot.GetDocShell() )
+    DBG_ASSERT( nXclNameIdx > 0, "XclImpSupbook::GetMacroName - index must be >0" );
+    const XclImpName* pName = (meType == EXC_SBTYPE_SELF) ? GetNameManager().GetName( nXclNameIdx ) : 0;
+    return (pName && pName->IsVBName()) ? pName->GetScName() : EMPTY_STRING;
+}
+
+void XclImpSupbook::CreateTables( sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast )
+{
+    if( (meType == EXC_SBTYPE_EXTERN) && (GetExtDocOptions().nLinkCnt < 1) && GetDocShell() )
     {
-        String aAbsUrl( ScGlobal::GetAbsDocName( maXclUrl, rRoot.GetDocShell() ) );
+        String aAbsUrl( ScGlobal::GetAbsDocName( maXclUrl, GetDocShell() ) );
 
         // get filter name for external document
         if( !maFilterName.Len() )
@@ -739,7 +541,7 @@ void XclImpSupbook::CreateTables( const XclImpRoot& rRoot, sal_uInt16 nSBTabFirs
         // create tables
         for( sal_uInt16 nSBTab = nSBTabFirst; nSBTab <= nSBTabLast; ++nSBTab )
             if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nSBTab ) )
-                pSBTab->CreateAndFillTable( rRoot.GetDoc(), aAbsUrl, maFilterName, maFilterOpt );
+                pSBTab->CreateAndFillTable( GetDoc(), aAbsUrl, maFilterName, maFilterOpt );
     }
 }
 
@@ -824,6 +626,12 @@ bool XclImpLinkManagerImpl::GetLinkData( String& rApplic, String& rTopic, sal_uI
     return pSupbook && pSupbook->GetLinkData( rApplic, rTopic );
 }
 
+const String& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
+{
+    const XclImpSupbook* pSupbook = GetSupbook( nExtSheet );
+    return pSupbook ? pSupbook->GetMacroName( nExtName ) : EMPTY_STRING;
+}
+
 SCTAB XclImpLinkManagerImpl::GetScTab( const String& rUrl, const String& rTabName ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( rUrl );
@@ -858,7 +666,7 @@ void XclImpLinkManagerImpl::CreateTables()
         bool bLoop = FindNextTabRange( nSBTabFirst, nSBTabLast, nSupbook, 0 );
         while( bLoop && pSupbook )
         {
-            pSupbook->CreateTables( *this, nSBTabFirst, nSBTabLast );
+            pSupbook->CreateTables( nSBTabFirst, nSBTabLast );
             // #96263# don't search again if last sheet == EXC_NOTAB
             bLoop = (nSBTabLast != EXC_NOTAB) && FindNextTabRange( nSBTabFirst, nSBTabLast, nSupbook, nSBTabLast + 1 );
         }
@@ -937,6 +745,11 @@ const XclImpExtName* XclImpLinkManager::GetExternName( sal_uInt16 nXtiIndex, sal
 bool XclImpLinkManager::GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const
 {
     return mxImpl->GetLinkData( rApplic, rTopic, nXtiIndex );
+}
+
+const String& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const
+{
+    return mxImpl->GetMacroName( nExtSheet, nExtName );
 }
 
 SCTAB XclImpLinkManager::GetScTab( const String& rUrl, const String& rTabName ) const
