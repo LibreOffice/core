@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: mav $ $Date: 2005-02-02 16:05:14 $
+ *  last change: $Author: mba $ $Date: 2005-02-04 15:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     if ( GetError() == ERRCODE_NONE && bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage = pMed->GetStorage();
-        if( pMed->GetLastStorageCreationState() == ERRCODE_NONE )
+        if( xStorage.is() && pMed->GetLastStorageCreationState() == ERRCODE_NONE )
         {
             DBG_ASSERT( pFilter, "No filter for storage found!" );
 
