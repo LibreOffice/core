@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:15:59 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 
     return uno::Reference< uno::XInterface >(
                 static_cast< OWeakObject* >( new OStorage(  xTempStream,
-                                                            embed::ElementModes::ELEMENT_READWRITE,
+                                                            embed::ElementModes::READWRITE,
                                                             uno::Sequence< beans::PropertyValue >(),
                                                             m_xFactory ) ),
                 uno::UNO_QUERY );
@@ -146,7 +146,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
     // first try to retrieve storage open mode if any
     // by default the storage will be open in readonly mode
-    sal_Int32 nStorageMode = embed::ElementModes::ELEMENT_READ;
+    sal_Int32 nStorageMode = embed::ElementModes::READ;
     if ( nArgNum >= 2 )
     {
         if( !( aArguments[1] >>= nStorageMode ) )
@@ -155,7 +155,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw uno::Exception(); // TODO: Illegal argument
         }
         // it's allways possible to read written storage in this implementation
-        nStorageMode |= embed::ElementModes::ELEMENT_READ;
+        nStorageMode |= embed::ElementModes::READ;
     }
 
     // retrieve storage source stream
@@ -185,7 +185,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         if ( !xTempAccess.is() )
             throw uno::RuntimeException(); // TODO:
 
-        if ( nStorageMode & embed::ElementModes::ELEMENT_WRITE )
+        if ( nStorageMode & embed::ElementModes::WRITE )
             xStream = xTempAccess->openFileReadWrite( aURL );
         else
             xInputStream = xTempAccess->openFileRead( aURL );
@@ -240,7 +240,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     if ( xInputStream.is() )
     {
         // if xInputStream is set the storage should be open from it
-        if ( ( nStorageMode & embed::ElementModes::ELEMENT_WRITE ) )
+        if ( ( nStorageMode & embed::ElementModes::WRITE ) )
               throw uno::Exception(); // TODO: access denied
 
         return uno::Reference< uno::XInterface >(
@@ -249,7 +249,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
     else if ( xStream.is() )
     {
-        if ( ( nStorageMode & embed::ElementModes::ELEMENT_WRITE ) && !xStream->getOutputStream().is()
+        if ( ( nStorageMode & embed::ElementModes::WRITE ) && !xStream->getOutputStream().is()
           || !xStream->getInputStream().is() )
               throw uno::Exception(); // TODO: access denied
 
