@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:01:51 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 #ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
