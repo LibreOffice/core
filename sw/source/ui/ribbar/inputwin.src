@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:22:02 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "M~edelvärde" ;
                         Text[ chinese_simplified ] = "Æ½¾ùÖµ(~M)";
                         Text[ russian ] = "Ñğåäíåå çíà÷åíèå";
-                        Text[ polish ] = "?rednia warto?æ";
+                        Text[ polish ] = "Œrednia wartoœæ";
                         Text[ japanese ] = "•½‹Ï’l";
                         Text[ chinese_traditional ] = "¥­§¡­È(~M)";
                         Text[ arabic ] = "ÇáãÚÏá";
