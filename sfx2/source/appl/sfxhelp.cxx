@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:58:09 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,44 +485,54 @@ SfxHelp::~SfxHelp()
     return sDefaultModule;
 }
 
-String SfxHelp::GetHelpModuleName_Impl()
+::rtl::OUString getCurrentModuleIdentifier_Impl()
 {
-    String sModuleName;
+    ::rtl::OUString sIdentifier;
     Reference < XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
     Reference < XFrame > xActiveTask = xDesktop->getActiveFrame();
     Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
 
-    rtl::OUString aModuleIdentifier;
-    rtl::OUString aFactoryShortName;
-
     if ( xActiveTask.is() )
     {
         try
         {
-            aModuleIdentifier = xModuleManager->identify( xActiveTask );
+            sIdentifier = xModuleManager->identify( xActiveTask );
         }
         catch ( ::com::sun::star::frame::UnknownModuleException& )
         {
-            DBG_WARNING( "SfxHelp::GetHelpModuleName_Impl(): unknown module (help in help?)" );
+            DBG_WARNING( "SfxHelp::getCurrentModuleIdentifier_Impl(): unknown module (help in help?)" );
         }
         catch ( Exception& )
         {
-            DBG_ERRORFILE( "SfxHelp::GetHelpModuleName_Impl(): exception of XModuleManager::identify()" );
+            DBG_ERRORFILE( "SfxHelp::getCurrentModuleIdentifier_Impl(): exception of XModuleManager::identify()" );
         }
     }
+
+    return sIdentifier;
+}
+
+String SfxHelp::GetHelpModuleName_Impl()
+{
+    String sModuleName;
+    rtl::OUString aFactoryShortName;
+    rtl::OUString aModuleIdentifier = getCurrentModuleIdentifier_Impl();
 
     if ( aModuleIdentifier.getLength() > 0 )
     {
         try
         {
+            Reference < XModuleManager > xModuleManager(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                    DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
             Sequence< PropertyValue > lProps;
             Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY);
-            xCont->getByName( aModuleIdentifier ) >>= lProps;
-            for (sal_Int32 i=0; i<lProps.getLength(); ++i)
+            if ( xCont.is() )
+                xCont->getByName( aModuleIdentifier ) >>= lProps;
+            for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
-                if (lProps[i].Name.equalsAscii("ooSetupFactoryShortName"))
+                if ( lProps[i].Name.equalsAscii("ooSetupFactoryShortName") )
                 {
                     lProps[i].Value >>= aFactoryShortName;
                     break;
@@ -951,5 +961,10 @@ void SfxHelp::OpenHelpAgent( SfxFrame *pFrame, ULONG nHelpId )
 String SfxHelp::GetDefaultHelpModule()
 {
     return getDefaultModule_Impl();
+}
+
+::rtl::OUString SfxHelp::GetCurrentModuleIdentifier()
+{
+    return getCurrentModuleIdentifier_Impl();
 }
 
