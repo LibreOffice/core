@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:31:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 
 #define _SDINTERN_HXX
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _PVER_HXX //autogen
 #include <svtools/pver.hxx>
@@ -165,15 +167,6 @@ DBG_NAME(SfxAppMainAppEvents);*/
 #define SFX_KEY_TEMPNAMEBASE    "Temp-Dir"
 
 //===================================================================
-
-#pragma code_seg("STATICS")
-static SfxVoidItem aStaticDefault(1);
-#pragma code_seg()
-
-static SfxPoolItem* aStaticDefaults[1] =
-{
-    &aStaticDefault
-};
 
 #ifdef TF_POOLABLE
 static SfxItemInfo __READONLY_DATA aItemInfos[] =
@@ -412,7 +405,8 @@ void SfxApplication::ForcePendingInitFactories()
 #if LATEINIT
     DBG_ASSERT( !nPos, "Filter nicht im LateInit" );
 #endif
-    while( nPos = rList.Count() )
+    // FIXME - This needs a comment, it is confusing see dev list 12-jan-2002
+    while( (nPos = rList.Count()) )
     {
         SfxObjectFactory* pFac = (SfxObjectFactory*)rList.Remove( --nPos );
         pFac->DoInitFactory();
