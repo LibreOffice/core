@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-09 09:50:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -108,13 +111,16 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     SfxImageManager *pImgMan = pBindings->GetImageManager();
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
-    pImgMan->RegisterToolBox( &aToolBoxCat );
+    //! register toolbox and prevent it from changing to large buttons
+    //! if the corresponding option in Tools/Options get set
+    const USHORT nFlags = 0xFFFF & ~SFX_TOOLBOX_CHANGESYMBOLSET;
+    pImgMan->RegisterToolBox( &aToolBoxCat, nFlags );
 
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
     {
         ToolBox *pBox = new ToolBox(this, ResId (i+1));
-        pImgMan->RegisterToolBox( pBox );
+        pImgMan->RegisterToolBox( pBox, nFlags );
         vToolBoxCategories[i] = pBox;
         pBox->SetSelectHdl(LINK(this, SmToolBoxWindow, CmdSelectHdl));
     }
