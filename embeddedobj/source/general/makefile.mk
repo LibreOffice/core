@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-28 18:04:04 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:52:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES =  \
         $(SLO)$/xcreator.obj\
         $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
+        $(SLO)$/confighelper.obj\
         $(SLO)$/intercept.obj
 
 
@@ -86,6 +87,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/xcreator.obj\
         $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
+        $(SLO)$/confighelper.obj\
         $(SLO)$/intercept.obj
 
 
