@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:09:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,13 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _AUTHRATR_HXX
 #include "authratr.hxx"
+#endif
 
 class SwRect;
 class Window;
@@ -527,7 +533,7 @@ public:
     void SetPrtFormat( BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
 
-    void            SetZoomType     (BYTE nZoom){ eZoom = nZoom;    }
+    void            SetZoomType     (BYTE eZoom_){ eZoom = eZoom_;  }
     void            SetTblDest( BYTE nNew )     { nTblDest = nNew;  }
 
     const String&   GetSymbolFont() const {return sSymbolFont;}
@@ -598,7 +604,7 @@ public:
     static Color&   GetDirectCursorColor();
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
-    static Color&   GetFontColor();
+    SW_DLLPUBLIC static Color&   GetFontColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
     static Color&   GetPageBreakColor();
@@ -636,7 +642,7 @@ inline void SwViewOption::SetUIOptions( const SwViewOption& rVOpt )
 
 
 // Hilfsfunktion zur Ermittlung der HTML-Faehigkeiten
-USHORT      GetHtmlMode(const SwDocShell*);
+SW_DLLPUBLIC USHORT     GetHtmlMode(const SwDocShell*);
 
 
 #endif
