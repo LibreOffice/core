@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 09:45:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ public:
 class SwOneExampleFrame;
 class SwGlossaryDlg : public SvxStandardDialog
 {
-    friend SwNewGlosNameDlg;
-    friend SwGlTreeListBox;
+    friend class SwNewGlosNameDlg;
+    friend class SwGlTreeListBox;
 
     CheckBox        aInsertTipCB;
     FixedText       aNameLbl;
