@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:33:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 
 #ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
 #include <com/sun/star/ucb/NameClash.hpp>
+#endif
+
+#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
+#include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
@@ -313,7 +317,7 @@
 #define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
 #define XUICONFIGURATIONSTORAGE                 ::drafts::com::sun::star::ui::XUIConfigurationStorage
 #define XPROPERTYSET                            ::com::sun::star::beans::XPropertySet
-
+#define XSCRIPTPROVIDERFACTORY ::drafts::com::sun::star::script::provider::XScriptProviderFactory
 //________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
@@ -3064,19 +3068,27 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         throw DISPOSEDEXCEPTION();
+    REFERENCE< XSCRIPTPROVIDER > xSp;
 
-    if ( !m_pData->m_xScriptProvider.is() )
+    REFERENCE< XPROPERTYSET > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+
+    REFERENCE< XComponentContext > xCtx(
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
+
+    if ( xCtx.is() )
     {
-        SEQUENCE< ANY > aArgs( 1 );
-        aArgs[0] <<= REFERENCE< XMODEL >( (XMODEL*)this );
-        m_pData->m_xScriptProvider = REFERENCE< XSCRIPTPROVIDER >(
-                ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii( "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
-                    aArgs ),
-                 UNOQUERY );
+        REFERENCE< XSCRIPTPROVIDERFACTORY > xFac(
+            xCtx->getValueByName(
+                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
+        if ( xFac.is() )
+        {
+            Any aContext;
+            REFERENCE< XMODEL > xModel( (XMODEL*)this );
+            aContext <<= xModel;
+            xSp.set( xFac->createScriptProvider( aContext ) );
+        }
     }
-
-    return m_pData->m_xScriptProvider;
+    return xSp;
 }
 
 rtl::OUString SfxBaseModel::getRuntimeUID() const
