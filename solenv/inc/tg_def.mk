@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-10 16:53:56 $
+#   last change: $Author: hjs $ $Date: 2001-10-26 15:36:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,7 +119,7 @@ DEF$(TNR)DEPN+=$(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 .IF "$(DEF$(TNR)EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b).dxp
+DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
     +$(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 
