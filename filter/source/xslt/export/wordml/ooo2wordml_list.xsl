@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
    
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:office="http://openoffice.org/2000/office" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:dc="http://purl.org/dc/elements/1.1/" exclude-result-prefixes="office fo w o v style text dc">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882"  xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:openoffice:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:openoffice:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:openoffice:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:openoffice:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:openoffice:xmlns:drawing:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:openoffice:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="urn:oasis:names:tc:openoffice:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:openoffice:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:openoffice:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:openoffice:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="office table style text draw svg   dc config xlink meta oooc dom ooo chart math dr3d form script ooow draw">
     <xsl:template name="ListStyles">
         <w:lists>
             <xsl:if test="descendant::text:list-level-style-image">
@@ -125,10 +125,10 @@
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:choose>
-                            <xsl:when test="style:properties/@fo:text-align = 'end'">
+                            <xsl:when test="style:list-level-properties/@fo:text-align = 'end'">
                                 <w:lvlJc w:val="right"/>
                             </xsl:when>
-                            <xsl:when test="style:properties/@fo:text-align = 'center'">
+                            <xsl:when test="style:list-level-properties/@fo:text-align = 'center'">
                                 <w:lvlJc w:val="center"/>
                             </xsl:when>
                             <xsl:otherwise>
@@ -136,15 +136,15 @@
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:choose>
-                            <xsl:when test="style:properties/@text:space-before | style:properties/@text:min-label-width | style:properties/@text:min-label-distance">
+                            <xsl:when test="style:list-level-properties/@text:space-before | style:list-level-properties/@text:min-label-width | style:list-level-properties/@text:min-label-distance">
                                 <xsl:call-template name="list_position"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <w:suff w:val="Nothing"/>
                             </xsl:otherwise>
                         </xsl:choose>
-                        <xsl:apply-templates select="key('text-style',@text:style-name)/style:properties" mode="character"/>
-                        <xsl:apply-templates select="style:properties" mode="character"/>
+                        <xsl:apply-templates select="key('text-style',@text:style-name)/style:text-properties" mode="character"/>
+                        <xsl:apply-templates select="style:text-properties" mode="character"/>
                     </w:lvl>
                 </xsl:if>
             </xsl:for-each>
@@ -153,11 +153,11 @@
     <xsl:template match="text:list-style" mode="count">
         <xsl:value-of select="count(preceding::text:list-style | preceding::text:outline-style)+1"/>
     </xsl:template>
-    <xsl:template match="text:unordered-list | text:ordered-list">
-        <xsl:apply-templates select="text:unordered-list | text:ordered-list | text:list-item | text:list-header"/>
+    <xsl:template match="text:unordered-list | text:ordered-list | text:list">
+        <xsl:apply-templates select="text:unordered-list | text:ordered-list | text:list-item | text:list-header | text:list"/>
     </xsl:template>
     <xsl:template match="text:list-item | text:list-header">
-        <xsl:apply-templates select="text:unordered-list | text:ordered-list | text:p"/>
+        <xsl:apply-templates select="text:unordered-list | text:ordered-list | text:list |  text:p |  text:h"/>
     </xsl:template>
     <xsl:template name="displaylevel">
         <xsl:param name="number"/>
@@ -173,9 +173,9 @@
     <xsl:template name="list_position">
         <xsl:variable name="spacebefore">
             <xsl:choose>
-                <xsl:when test="style:properties/@text:space-before">
-                    <xsl:call-template name="convert2dxa">
-                        <xsl:with-param name="value" select="style:properties/@text:space-before"/>
+                <xsl:when test="style:list-level-properties/@text:space-before">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:list-level-properties/@text:space-before"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
@@ -183,9 +183,9 @@
         </xsl:variable>
         <xsl:variable name="space2text">
             <xsl:choose>
-                <xsl:when test="style:properties/@text:min-label-width">
-                    <xsl:call-template name="convert2dxa">
-                        <xsl:with-param name="value" select="style:properties/@text:min-label-width"/>
+                <xsl:when test="style:list-level-properties/@text:min-label-width">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:list-level-properties/@text:min-label-width"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
@@ -193,9 +193,9 @@
         </xsl:variable>
         <xsl:variable name="spacedistance">
             <xsl:choose>
-                <xsl:when test="style:properties/@text:min-label-distance">
-                    <xsl:call-template name="convert2dxa">
-                        <xsl:with-param name="value" select="style:properties/@text:min-label-distance"/>
+                <xsl:when test="style:list-level-properties/@text:min-label-distance">
+                    <xsl:call-template name="convert2twip">
+                        <xsl:with-param name="value" select="style:list-level-properties/@text:min-label-distance"/>
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>0</xsl:otherwise>
@@ -225,12 +225,12 @@
                     <v:shape>
                         <xsl:variable name="Picwidth">
                             <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="style:properties/@fo:width"/>
+                                <xsl:with-param name="value" select="style:list-level-properties/@fo:width"/>
                             </xsl:call-template>
                         </xsl:variable>
                         <xsl:variable name="Picheight">
                             <xsl:call-template name="convert2pt">
-                                <xsl:with-param name="value" select="style:properties/@fo:height"/>
+                                <xsl:with-param name="value" select="style:list-level-properties/@fo:height"/>
                             </xsl:call-template>
                         </xsl:variable>
                         <xsl:attribute name="style"><xsl:value-of select="concat('width:', number($Picwidth*1), 'pt;height:', number($Picheight*1), 'pt')"/></xsl:attribute>
