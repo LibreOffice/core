@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:18:53 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@ published service UnoControlCheckBoxModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the background color (RGB) of the control.
+     */
+    [optional, property] long BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
     /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
@@ -123,6 +129,20 @@ published service UnoControlCheckBoxModel
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the position of the image, if any, relative to the text, if any
+
+        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+    */
+    [optional, property] short ImagePosition;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies an URL to an image to display besides the label of the control
+     */
+    [optional, property] string ImageURL;
 
     //-------------------------------------------------------------------------
 
@@ -172,6 +192,16 @@ published service UnoControlCheckBoxModel
      */
     [property] boolean TriState;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies a visual effect to apply to the check box control
+
+        <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
+        <type>VisualEffect</type>::LOOK3D.</p>
+
+        @see com::sun::star::awt::VisualEffect
+    */
+    [optional, property] short VisualEffect;
 };
 
 //=============================================================================
