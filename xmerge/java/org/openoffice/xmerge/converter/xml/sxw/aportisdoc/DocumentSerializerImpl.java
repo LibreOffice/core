@@ -372,6 +372,26 @@ public final class DocumentSerializerImpl
 
             log("<BOOKMARK/>");
 
+        } else if (nodeName.equals(TAG_TEXT_VARIABLE_SET)
+                   || nodeName.equals(TAG_TEXT_VARIABLE_GET)
+                   || nodeName.equals(TAG_TEXT_EXPRESSION)
+                   || nodeName.equals(TAG_TEXT_USER_FIELD_GET)
+                   || nodeName.equals(TAG_TEXT_PAGE_VARIABLE_GET)
+                   || nodeName.equals(TAG_TEXT_SEQUENCE)
+                   || nodeName.equals( TAG_TEXT_VARIABLE_INPUT)
+                   || nodeName.equals(TAG_TEXT_TIME)
+                   || nodeName.equals( TAG_TEXT_PAGE_COUNT)
+                   || nodeName.equals(TAG_TEXT_PAGE_NUMBER )
+                   || nodeName.equals(TAG_TEXT_SUBJECT)
+                   || nodeName.equals(TAG_TEXT_TITLE)
+                   || nodeName.equals(TAG_TEXT_CREATION_TIME)
+                   || nodeName.equals(TAG_TEXT_DATE)
+                   || nodeName.equals(TAG_TEXT_TEXT_INPUT)
+                   || nodeName.equals(TAG_TEXT_AUTHOR_INITIALS)) {
+            log("<FIELD>");
+            traverseParaContents(node);
+            log("</FIELD>");
+
         } else {
 
             log("<OTHERS " + XmlUtil.getNodeInfo(node) + " />");
