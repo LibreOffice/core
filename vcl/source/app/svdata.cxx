@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:32:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 
 #define _SV_SVDATA_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -72,7 +71,6 @@
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
 #endif
 
 #ifndef _VOS_MUTEX_HXX
@@ -150,7 +148,7 @@
 #include <salsys.hxx>
 #include <svids.hrc>
 
-#pragma hdrstop
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -194,9 +192,6 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pSVData, 0, sizeof( ImplSVData ) );
-#ifdef REMOTE_APPSERVER
-    pSVData->mpPrinterEnvironment = new NMSP_CLIENT::PrinterEnvironment();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -239,9 +234,6 @@ void ImplDeInitSVData()
         delete pSVData->maAppData.mpMSFTempFileName;
         pSVData->maAppData.mpMSFTempFileName = NULL;
     }
-#ifdef REMOTE_APPSERVER
-    delete pSVData->mpPrinterEnvironment;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -575,8 +567,6 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
-
 Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -596,18 +586,3 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
 
     return NULL;
 }
-
-#endif
-
-// -----------------------------------------------------------------------
-
-#ifdef REMOTE_APPSERVER
-
-void rvpExceptionHandler()
-{
-#ifdef DBG_UTIL
-    fprintf( stderr, "RVP exception caught!\n" );
-#endif
-}
-
-#endif
