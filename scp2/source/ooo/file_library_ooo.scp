@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.17 $
+*  $Revision: 1.18 $
 *
-*  last change: $Author: hr $ $Date: 2004-05-10 16:43:42 $
+*  last change: $Author: rt $ $Date: 2004-05-19 13:11:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -198,6 +198,8 @@ STD_LIB_FILE(gid_File_Lib_Charttools, charttools)
 
 STD_UNO_LIB_FILE(gid_File_Lib_Chartview, chartview)
 
+
+/*
 #if defined WNT && defined M1300 // currently the only cli platform
 
 File gid_File_Lib_Cli_Cppuhelper
@@ -208,7 +210,9 @@ File gid_File_Lib_Cli_Cppuhelper
 End
 
 #endif
+*/
 
+/*
 #if defined WNT && defined M1300 // currently the only cli platform
 
 File gid_File_Lib_Cli_Types
@@ -219,7 +223,8 @@ File gid_File_Lib_Cli_Types
 End
 
 #endif
-
+*/
+/*
 #if defined WNT && defined M1300 // currently the only cli platform
 
 File gid_File_Lib_Cli_Uno
@@ -230,7 +235,8 @@ File gid_File_Lib_Cli_Uno
 End
 
 #endif
-
+*/
+/*
 #if defined WNT && defined M1300 // currently the only cli platform
 
 File gid_File_Lib_Cli_Ure
@@ -241,7 +247,7 @@ File gid_File_Lib_Cli_Ure
 End
 
 #endif
-
+*/
 SPECIAL_UNO_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Cnt, cnt )
