@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:43:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_ASS
         Text[ polish ] = "P~odgl¹d";
         Text[ portuguese_brazilian ] = "Pre~view";
         Text[ japanese ] = "ÌßÚËŞ­°(~V)";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ(~V)";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ(~V)";
         Text[ chinese_traditional ] = "¹wÄı(~V)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
