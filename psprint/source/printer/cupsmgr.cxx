@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:36 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 10:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@ typedef void ppd_file_t;
 typedef void cups_dest_t;
 typedef void cups_option_t;
 #endif
+
+#include <unistd.h>
 
 #include <osl/thread.h>
 #include <osl/diagnose.h>
