@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:18:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 
 #ifndef __com_sun_star_view_XPrintable_idl__
 #include <com/sun/star/view/XPrintable.idl>
+#endif
+
+#ifndef __com_sun_star_view_XPrintJobBroadcaster_idl__
+#include <com/sun/star/view/XPrintJobBroadcaster.idl>
 #endif
 
 #ifndef __com_sun_star_document_XEventBroadcaster_idl__
@@ -181,6 +185,13 @@ service OfficeDocument
     /** access to some properties describing all open views to a document
      */
     [optional] interface XViewDataSupplier;
+
+    //-------------------------------------------------------------------------
+    /** allows for getting information about a print job
+
+        @since #107627#
+     */
+    [optional] interface com::sun::star::view::XPrintJobBroadcaster;
 
     //-------------------------------------------------------------------------
     /** controls the focus behaviour of the form controls in the document
