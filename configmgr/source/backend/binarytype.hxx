@@ -11,7 +11,7 @@ namespace configmgr
     {
         const sal_uInt32 STR_ASCII_MASK = 0x80000000;
         const sal_Int16 CFG_BINARY_MAGIC = 10001;
-        const sal_Int16 CFG_BINARY_VERSION = 2;
+        const sal_Int16 CFG_BINARY_VERSION = 3;
 
         namespace ValueFlags
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: binaryreadhandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:45:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include "attributes.hxx"
 #endif
 
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
@@ -124,7 +128,9 @@ namespace configmgr
             bool validateHeader(    const uno::Reference<backenduno::XLayer> * pLayers,
                                     sal_Int32 nNumLayers,
                                     const OUString& _aOwnerEntity,
-                                    const OUString& _aLocale);
+                                    localehelper::Locale const & aRequestedLocale,
+                                    localehelper::LocaleSequence & outKnownLocales)
+                SAL_THROW( (io::IOException, uno::RuntimeException) );
 
             std::auto_ptr<ISubtree> readComponentTree()
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
@@ -140,8 +146,11 @@ namespace configmgr
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
         private:
-            bool verifyFileHeader(rtl::OUString const & _aOwnerEntity, rtl::OUString const & _aLocale )
-                SAL_THROW( (io::IOException, uno::RuntimeException) );
+            bool verifyFileHeader(  const uno::Reference<backenduno::XLayer> * pLayers,
+                                    sal_Int32 nNumLayers,
+                                    const OUString& _aOwnerEntity,
+                                    localehelper::Locale const & aRequestedLocale,
+                                    localehelper::LocaleSequence & outKnownLocales);
 
             bool isUptodate(const std::vector<rtl::OUString> & _timeStamps)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
