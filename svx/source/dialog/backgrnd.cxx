@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 14:58:21 $
+ *  last change: $Author: os $ $Date: 2002-09-17 15:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,8 +855,7 @@ BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         const BOOL          bIsBrush    = ( 0 == aLbSelect.GetSelectEntryPos() );
 
         // transparency has to be set if enabled, the color not already set to "No fill" and
-        // if the spin field has been modified
-        if( bColTransparency && (aColTransMF.GetSavedValue() != aColTransMF.GetText()) &&
+        if( bColTransparency &&
             aBgdColor.GetTransparency() < 0xff)
         {
             aBgdColor.SetTransparency(lcl_PercentToTransparency(aColTransMF.GetValue()));
