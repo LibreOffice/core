@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 11:09:52 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@ TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
         Text[ de ] = "%PRODUCTNAME Dokumentwiederherstellung";
         Text[ en-US ] = "%PRODUCTNAME Document Recovery";
     };
+    FixedLine FL_SAVE_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , SAVE_ROW1 );
+        Size = MAP_APPFONT( SAVE_WIDTH, 2 );
+    };
     FixedText FT_SAVE_DESCR
     {
         Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW2 );
@@ -120,6 +125,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
     {
         Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW6 );
         Size = MAP_APPFONT( SAVE_CONTROLWIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Check = TRUE;
         Text[ de ] = "%PRODUCTNAME automatisch starten";
         Text[ en-US ] = "Launch %PRODUCTNAME automatically";
     };
@@ -187,13 +193,18 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
         Text[ de ] = "%PRODUCTNAME Dokumentwiederherstellung";
         Text[ en-US ] = "%PRODUCTNAME Document Recovery";
     };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
+    };
     FixedText FT_RECOV_DESCR
     {
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_DESCRHEIGHT );
         WordBreak = TRUE;
-        Text[ de ] = "%PRODUCTNAME stellt jetzt Ihre Dokumente wieder her. Abhängig von der Größe der Dokumente kann dieser Vorgang etwas länger dauern.\n\nBitte unterstützen Sie uns Fehler in %PRODUCTNAME zu beheben. Von dem Absturz wurde ein Bericht erstellt der uns hilft diesen Fehler zu beseitigen. Klicken Sie \'Weiter\' um zu den Fehlerberichtassistenten zu gelangen.";
-        Text[ en-US ] = "%PRODUCTNAME starts now to recover your documents. Depending on the size of the documents this process can take some time.\n\nPlease support us to solve the issue why %PRODUCTNAME crashed. Click \'Next\' to get to the Error Report Tool.";
+        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.\n\nBitte unterstützen Sie uns, Fehler in %PRODUCTNAME zu beheben. Von dem Absturz wurde ein Bericht erstellt der uns hilft diesen Fehler zu beseitigen.";
+        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nPlease help us solve the problem that caused the crash. You can do this by sending the error report created by %PRODUCTNAME. Click 'Next' to open the Error Report tool.";
     };
     FixedText FT_RECOV_PROGR
     {
@@ -232,21 +243,18 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
         Pos = MAP_APPFONT( 0 , RECOV_ROW8 );
         Size = MAP_APPFONT( RECOV_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
     };
-    PushButton BTN_RECOV_PREV
-    {
-        Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Disable = TRUE;
-        Text[ de ] = "<<Zurück";
-        Text[ en-US ] = "<<Back";
-    };
     PushButton BTN_RECOV_NEXT
     {
-        Pos = MAP_APPFONT( RECOV_COL_D, RECOV_ROW9 );
-        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "Weiter>>";
-        Text[ en-US ] = "Next>>";
+        Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH*2, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ de ] = "~Wiederherstellung starten >";
+        Text[ en-US ] = "~Start Recovery >";
         DefButton = TRUE;
+    };
+    String STR_RECOVERY_NEXT
+    {
+        Text[ de ] = "~Weiter >";
+        Text[ en-US ] = "~Next >";
     };
     CancelButton BTN_RECOV_CANCEL
     {
@@ -263,7 +271,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     };
     Image IMG_YELLOWCHECK
     {
-        ImageBitmap = Bitmap { File = "parallel.png"; };
+        ImageBitmap = Bitmap { File = "nu04.png"; };
     };
     Image IMG_YELLOWCHECK_HC
     {
@@ -304,6 +312,14 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     };
 };
 
+QueryBox RID_SVXQB_EXIT_RECOVERY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ de ] = "Sind Sie sicher, dass Sie die Dokumentwiederherstellung abbrechen wollen?";
+    Message [ en-US ] = "Are you sure you want to cancel the %PRODUCTNAME document recovery?";
+};
+
 ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
 {
     Size = MAP_APPFONT( BROKEN_WIDTH, BROKEN_HEIGHT );
@@ -316,10 +332,10 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
     FixedText FT_BROKEN_DESCR
     {
         Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW0 );
-        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (3*RSC_CD_FIXEDTEXT_HEIGHT) );
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (5*RSC_CD_FIXEDTEXT_HEIGHT) );
         WordBreak = TRUE;
-        Text[ de ] = "Die weiter unten aufgelisteten Dokumente konnten nicht wieder hergestellt werden. Sie können die Dokumente in einem Ordner Ihrer Wahl speichern.";
-        Text[ en-US ] = "The documents listed below could not be recovered. You can save the documents in a folder of your choice.";
+        Text[ de ] = "Der automatische Wiederherstellungsprozess wurde abgebrochen.\n\nKlicken Sie auf 'Speichern', um die unten aufgelisteten Dokumente in den unten angegebene Ordner zu speichern. 'Beenden' verlässt den Assistenten ohne zu speichern.";
+        Text[ en-US ] = "The automatic recovery process was interrupted.\n\nThe documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving these documents.";
     };
     FixedText FT_BROKEN_FILELIST
     {
@@ -335,12 +351,25 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
         Border = TRUE;
         TabStop = TRUE;
     };
-    PushButton BTN_BROKEN_SAVE
+    FixedText FT_BROKEN_SAVEDIR
     {
-        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW4 );
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW4 + 1 ); // see ED_BROKEN_SAVEDIR
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ de ] = "~Speichern in";
+        Text[ en-US ] = "~Save to";
+    };
+    Edit ED_BROKEN_SAVEDIR
+    {
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW5 + 1 ); // center to pushbutton
+        Size = MAP_APPFONT( BROKEN_COL2 - BROKEN_COL0, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+    PushButton BTN_BROKEN_SAVEDIR
+    {
+        Pos = MAP_APPFONT( BROKEN_COL3, BROKEN_ROW5 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "Speichern in...";
-        Text[ en-US ] = "Save in ...";
+        Text [ de ] =  "Ä~ndern...";
+        Text [ en-US ] = "Chan~ge...";
     };
     FixedLine FL_BROKEN_BOTTOM
     {
@@ -349,13 +378,13 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
     };
     OKButton BTN_BROKEN_OK
     {
-        Pos = MAP_APPFONT( BROKEN_COL4, BROKEN_ROW7 );
+        Pos = MAP_APPFONT( BROKEN_COL1, BROKEN_ROW7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         DefButton = TRUE;
     };
     CancelButton BTN_BROKEN_CANCEL
     {
-        Pos = MAP_APPFONT( BROKEN_COL6, BROKEN_ROW7 );
+        Pos = MAP_APPFONT( BROKEN_COL3, BROKEN_ROW7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
 };
@@ -376,8 +405,13 @@ TabPage RID_SVXPAGE_ERR_REP_WELCOME
     {
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW0 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ de ] = "Willkommen beim %PRODUCTNAME %PRODUCTVERSION Fehlerbericht.";
+        Text[ de ] = "Willkommen beim %PRODUCTNAME %PRODUCTVERSION Fehlerbericht";
         Text[ en-US ] = "Welcome to the %PRODUCTNAME %PRODUCTVERSION Error Report";
+    };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
     };
     FixedText FT_RECOV_DESCR
     {
@@ -396,15 +430,15 @@ TabPage RID_SVXPAGE_ERR_REP_WELCOME
     {
         Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "<<Zurück";
-        Text[ en-US ] = "<<Back";
+        Text[ de ] = "< ~Zurück";
+        Text[ en-US ] = "< ~Back";
     };
     OKButton BTN_RECOV_NEXT
     {
         Pos = MAP_APPFONT( RECOV_COL_D, RECOV_ROW9 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "Weiter>>";
-        Text[ en-US ] = "Next>>";
+        Text[ de ] = "~Weiter >";
+        Text[ en-US ] = "~Next >";
         DefButton = TRUE;
     };
     CancelButton BTN_RECOV_CANCEL
@@ -432,6 +466,11 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
         Text[ de ] = "Fehlerbericht versenden";
         Text[ en-US ] = "Sending the Error Report";
+    };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
     };
     FixedText FT_RECOV_DESCR
     {
@@ -467,8 +506,8 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
     {
         Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW8 );
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, (ERRSEND_ROW12-ERRSEND_ROW8-RSC_SP_CTRL_Y) );
-        IgnoreTab = TRUE;
         VScroll = TRUE;
+        IgnoreTab = TRUE;
         Border = TRUE;
     };
     PushButton BTN_ERRSEND_SHOWREP
@@ -515,8 +554,8 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
     {
         Pos = MAP_APPFONT( ERRSEND_COL5, ERRSEND_ROW16 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "<<Zurück";
-        Text[ en-US ] = "<<Back";
+        Text[ de ] = "< ~Zurück";
+        Text[ en-US ] = "< ~Back";
     };
     OKButton BTN_RECOV_NEXT
     {
@@ -556,7 +595,7 @@ ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
     RadioButton BTN_ERROPT_SYSTEM
     {
         Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW1 );
-        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB - RSC_SP_CTRL_GROUP_X, RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
         Text[ de ] = "~Systemeinstellungen verwenden";
         Text[ en-US ] = "Use ~system settings";
     };
@@ -564,7 +603,7 @@ ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
     RadioButton BTN_ERROPT_DIRECT
     {
         Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW2 );
-        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB - RSC_SP_CTRL_GROUP_X, RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
         Text[ de ] = "~Direkte Verbindung zum Internet verwenden";
         Text[ en-US ] = "Use ~direct connection to the Internet";
     };
@@ -572,7 +611,7 @@ ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
     RadioButton BTN_ERROPT_MANUAL
     {
         Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW3 );
-        Size = MAP_APPFONT( ERROPT_COLD - ERROPT_COLB - RSC_SP_CTRL_GROUP_X, RSC_CD_RADIOBUTTON_HEIGHT );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
         Text[ de ] = "~Manuelle Einstellungen verwenden";
         Text[ en-US ] = "Use ~manual settings";
     };
@@ -610,7 +649,7 @@ ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
     FixedText FT_ERROPT_DESCRIPTION
     {
         Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW6 );
-        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB - RSC_SP_CTRL_GROUP_X, ERROPT_ROW7 - ERROPT_ROW6 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, ERROPT_ROW7 - ERROPT_ROW6 );
         WordBreak = TRUE;
         Text[ de ] = "Das %PRODUCTNAME Fehlerbericht-Programm benötigt eine Verbindung zum Internet, um Fehlerberichte zu versenden.\nIn Firmen werden oft Proxy-Server in Verbindung mit einer Firewall zum Schutz des Netzwerkes eingesetzt.\nWenn dies auf Sie zutrifft, müssen Sie die Adresse und den Port des Servers angeben.";
         Text[ en-US ] = "The %PRODUCTNAME Error Report tool needs to be connected to the Internet to be able to send error reports.\nCompanies often use proxy servers in conjunction with a firewall to protect the network.\nIf this applies to your situation, you have to specify the address and port for the server.";
