@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:18:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6572,16 +6572,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
         else if( bHighContrastWhite )
             SetTextColor( COL_LIGHTGREEN );
         else
-        {
-            SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
-            DrawText( Point( rPos.X()+1, rPos.Y()+1 ), aStr, nIndex, nLen );
-            if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) )
-            {
-                if ( nMnemonicPos != STRING_NOTFOUND )
-                    ImplDrawMnemonicLine( nMnemonicX+1, nMnemonicY+1, nMnemonicWidth );
-            }
             SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
-        }
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
         if ( !(GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_NOMNEMONICS) && !pVector )
