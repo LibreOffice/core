@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:49:58 $
+#   last change: $Author: kz $ $Date: 2003-10-15 10:08:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ XCSFILES= \
     org$/openoffice$/Office$/Chart.xcs \
     org$/openoffice$/Office$/Commands.xcs \
     org$/openoffice$/Office$/Common.xcs \
+    org$/openoffice$/Office$/Compatibility.xcs \
     org$/openoffice$/Office$/DataAccess.xcs \
     org$/openoffice$/Office$/Draw.xcs \
     org$/openoffice$/Office$/Impress.xcs \
