@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 14:53:20 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:23:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ namespace dbaccess
 #define PROPERTY_ID_REFERENCEDTABLE         88
 #define PROPERTY_ID_REFERENCEDCOLUMN        89
 #define PROPERTY_ID_PARENTWINDOW            90
+#define PROPERTY_ID_SQLEXCEPTION            91
 
 //============================================================
 //= property names
@@ -276,6 +277,7 @@ DECLARE_CONSTASCII_USTRING(PROPERTY_DELETERULE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_REFERENCEDTABLE);
 DECLARE_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN);
 DECLARE_CONSTASCII_USTRING(PROPERTY_PARENTWINDOW);
+DECLARE_CONSTASCII_USTRING(PROPERTY_SQLEXCEPTION);
 
 //============================================================
 //= service names
