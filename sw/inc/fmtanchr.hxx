@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtanchr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:56:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _FMTANCHR_HXX
 #define _FMTANCHR_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -80,7 +83,7 @@ class IntlWrapper;
 
 //FlyAnchor, Anker des Freifliegenden Rahmen ----
 
-class SwFmtAnchor: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
     SwPosition *pCntntAnchor;   //0 Fuer Seitengebundene Rahmen.
                                 //Index fuer Absatzgebundene Rahmen.
