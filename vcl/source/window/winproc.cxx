@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:24:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@
 #endif
 
 
+
+//#define USE_NEW_RTL_IMPLEMENTATION
 
 
 // =======================================================================
@@ -499,7 +501,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
         {
             // - RTL - re-mirror frame pos at pChild
+#ifdef USE_NEW_RTL_IMPLEMENTATION
+            Window *pRefWindow = (Window*) pChild->mpDummy4;
+            pRefWindow->ImplReMirror( aMousePos );
+#else
             pChild->ImplReMirror( aMousePos );
+#endif
         }
         // no mouse messages to system object windows
         if ( pChild->mpSysObj )
