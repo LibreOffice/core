@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontsubs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:27:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 #include <svtools/ctrlbox.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxFontSubstCheckListBox ------------------------------------------
 
 class SvxFontSubstCheckListBox : public SvxSimpleTable
@@ -105,7 +109,7 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
 // class SvxFontSubstTabPage ----------------------------------------------------
 class SvtFontSubstConfig;
 namespace svt {class SourceViewConfig;}
-class SvxFontSubstTabPage : public SfxTabPage
+class SVX_DLLPUBLIC SvxFontSubstTabPage : public SfxTabPage
 {
     CheckBox                    aUseTableCB;
     FixedText                   aFont1FT;

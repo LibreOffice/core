@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:32:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,12 @@
 #include <sfx2/childwin.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxHyperlinkDialogWrapper ---------------------------------------
-class SvxHyperlinkDlgWrapper : public SfxChildWindow
+class SVX_DLLPUBLIC SvxHyperlinkDlgWrapper : public SfxChildWindow
 {
 public:
     SvxHyperlinkDlgWrapper( Window*pParent, USHORT nId,
