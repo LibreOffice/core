@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,36 +619,58 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
 
     setDetailPage(m_pLists[E_TABLE]);
 }
+
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId )
+{
+    _rImageId = _rHighContrastImageId = 0;
+    switch(_eType )
+    {
+        case E_FORM:
+            _rImageId = FORM_TREE_ICON;
+            _rHighContrastImageId = FORM_TREE_ICON_SCH;
+            break;
+        case E_REPORT:
+            _rImageId = REPORT_TREE_ICON;
+            _rHighContrastImageId = REPORT_TREE_ICON_SCH;
+            break;
+        case E_QUERY:
+            _rImageId = QUERY_TREE_ICON;
+            _rHighContrastImageId = QUERY_TREE_ICON_SCH;
+            break;
+        default:
+            OSL_ENSURE( sal_False, "OAppDetailPageHelper::GetElementIcons: invalid element type!" );
+            break;
+    }
+}
+
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameAccess >& _xContainer)
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    USHORT nHelpId = 0, nIcon = 0, nIconH = 0, nImageId = 0;
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
-    switch(_eType )
+    USHORT nHelpId = 0, nIcon = 0, nIconH = 0, nImageId = 0, nImageIdH = 0;
+    switch( _eType )
     {
         case E_FORM:
             nHelpId = HID_APP_FORM_TREE;
             nIcon = IMG_FORMFOLDER_TREE_S;
             nIconH = IMG_FORMFOLDER_TREE_SCH;
-            nImageId = bHiContrast ? FORM_TREE_ICON_SCH : FORM_TREE_ICON;
             break;
         case E_REPORT:
             nHelpId = HID_APP_REPORT_TREE;
             nIcon = IMG_REPORTFOLDER_TREE_S;
             nIconH = IMG_REPORTFOLDER_TREE_SCH;
-            nImageId = bHiContrast ? REPORT_TREE_ICON_SCH : REPORT_TREE_ICON;
             break;
         case E_QUERY:
             nHelpId = HID_APP_QUERY_TREE;
             nIcon = QUERYFOLDER_TREE_ICON;
             nIconH = QUERYFOLDER_TREE_ICON_SCH;
-            nImageId = bHiContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
             break;
         default:
             OSL_ENSURE(0,"Illegal call!");
     }
+    getElementIcons( _eType, nImageId, nImageIdH );
 
     if ( !m_pLists[_eType] )
     {
@@ -659,7 +681,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
     {
         if ( !m_pLists[_eType]->GetEntryCount() && _xContainer.is() )
         {
-            fillNames(_xContainer,*m_pLists[_eType],nImageId);
+            fillNames( _xContainer, *m_pLists[ _eType ], nImageId, nImageIdH );
 
             m_pLists[_eType]->SelectAll(FALSE);
         }
@@ -684,9 +706,10 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
     Resize();
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::fillNames(const Reference< XNameAccess >& _xContainer,DBTreeListBox& _rList,USHORT _nImageId,SvLBoxEntry* _pParent)
+void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
+                                      USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
 {
-    fillTreeListNames(_xContainer,_rList,_nImageId,_pParent,m_pBorderWin->getView()->getContainerListener());
+    fillTreeListNames( _xContainer, _rList, _nImageId, _nHighContrastImageId, _pParent, m_pBorderWin->getView()->getContainerListener() );
 }
 // -----------------------------------------------------------------------------
 DBTreeListBox* OAppDetailPageHelper::createSimpleTree(ULONG _nHelpId, USHORT _nCollapsedBitmap,USHORT _nCollapsedBitmap_HI)
@@ -804,34 +827,25 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
             }
         }
 
-        USHORT nImageId = 0;
-        sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
-        switch(_eType )
-        {
-            case E_FORM:
-                nImageId = bHiContrast ? FORM_TREE_ICON_SCH : FORM_TREE_ICON;
-                break;
-            case E_REPORT:
-                nImageId = bHiContrast ? REPORT_TREE_ICON_SCH : REPORT_TREE_ICON;
-                break;
-            case E_QUERY:
-                nImageId = bHiContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
-                break;
-            default:
-                OSL_ENSURE(0,"Illegal call!");
-        }
-
+        USHORT nImageId = 0, nImageIdH = 0;
+        getElementIcons( _eType, nImageId, nImageIdH );
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
             pRet = pTreeView->InsertEntry(_rName,pEntry,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
-            fillNames(xContainer,*pTreeView,nImageId,pRet);
+            fillNames( xContainer, *pTreeView, nImageId, nImageIdH, pRet );
         }
         else
         {
-            Image aImage = Image(ModuleRes(nImageId));
+            pRet = pTreeView->InsertEntry( _rName, pEntry );
 
-            pRet = pTreeView->InsertEntry(_rName,aImage,aImage,pEntry);
+            Image aImage = Image( ModuleRes( nImageId ) );
+            pTreeView->SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+            pTreeView->SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
+
+            Image aHCImage = Image( ModuleRes( nImageIdH ) );
+            pTreeView->SetExpandedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
+            pTreeView->SetCollapsedEntryBmp( pRet, aHCImage, BMP_COLOR_HIGHCONTRAST );
         }
     }
     return pRet;
@@ -1205,8 +1219,29 @@ void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
     else
         Window::KeyInput(rKEvt);
 }
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if (  (  ( rDCEvt.GetType() == DATACHANGED_SETTINGS )
+          || ( rDCEvt.GetType() == DATACHANGED_DISPLAY )
+          )
+       && ( rDCEvt.GetFlags() & SETTINGS_STYLE )
+       )
+    {
+        if ( m_pLists[ E_TABLE ] )
+        {
+            OTableTreeListBox* pTableTree = dynamic_cast< OTableTreeListBox* >( m_pLists[ E_TABLE ] );
+            OSL_ENSURE( pTableTree != NULL, "OAppDetailPageHelper::DataChanged: a tree list for tables which is no TableTreeList?" );
+            if ( pTableTree )
+                pTableTree->notifyHiContrastChanged();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 BOOL OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size  aWinSize( GetOutputSizePixel() );
