@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tv $ $Date: 2001-11-08 13:10:23 $
+#   last change: $Author: pjunck $ $Date: 2004-10-27 12:47:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,10 +70,9 @@ TARGET=miscconfiggeneral
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
+ZIPFLAGS                =
 ZIP1TARGET      = $(CONFIG_SERVER_NOLANG_TARGET)
-ZIP1LIST        = srcheng.ini
+ZIP1LIST        = wizard$/* wizard$/*$/* wizard$/*$/*$/*
 
 
 ZIP2TARGET      = $(CONFIG_USER_TARGET)
