@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:30 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:38:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=table
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -100,8 +100,17 @@ SLOFILES =  \
         $(SLO)$/splittbl.obj \
         $(SLO)$/tabledlg.obj \
         $(SLO)$/tablemgr.obj \
+        $(SLO)$/swtablerep.obj \
         $(SLO)$/tautofmt.obj
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+        $(SLO)$/chartins.obj \
+        $(SLO)$/swtablerep.obj \
+        $(SLO)$/tablemgr.obj 
+        
+        
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
