@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ class FlagToolBoxState
             };
             Text[ portuguese ] = "Mostrar sempre nome extenso";
             Text[ russian ] = "Βρεγδΰ οξκΰηϋβΰςό οξλνξε θμÿ";
-            Text[ greek ] = "Να γίνεται πάντα εμφάνιση των ονομάτων μεγάλου μήκους";
+            Text[ greek ] = "Πάντα προβολή ονομάτων μεγάλου μήκους";
             Text[ dutch ] = "Volledige naam altijd weergeven";
             Text[ french ] = "Toujours afficher le nom long";
             Text[ spanish ] = "Mostrar siempre los nombres largos";
