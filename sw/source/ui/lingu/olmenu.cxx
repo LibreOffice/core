@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-07 07:46:14 $
+ *  last change: $Author: os $ $Date: 2002-09-04 14:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 {
     DBG_ASSERT(xSpellAlt.is(), "no spelling alternatives available");
 
+    CreateAutoMnemonics();
     Sequence< OUString >    aStrings;
     if (xSpellAlt.is())
         aStrings = xSpellAlt->getAlternatives();
@@ -258,6 +259,7 @@ SwSpellPopup::SwSpellPopup( SwWrtShell* pWrtSh, const Reference< XSpellAlternati
 
     bEnable = FALSE;    // enable MN_INSERT?
 
+    pMenu->CreateAutoMnemonics();
     Reference< XDictionaryList >    xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
