@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 11:59:13 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if grahics and objects should be displayed</desc>
+            <desc xml:lang="en-US">Specifies if graphics and objects are displayed.</desc>
             <label xml:lang="en-US">Graphics and Objects</label>
           </info>
         </prop>
@@ -96,7 +96,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if tables should be displayed</desc>
+            <desc xml:lang="en-US">Specifies if tables are displayed.</desc>
             <label xml:lang="en-US">Tables</label>
           </info>
         </prop>
@@ -107,7 +107,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if drawings and controls should be displayed</desc>
+            <desc xml:lang="en-US">Specifies if drawings and controls are displayed.</desc>
             <label xml:lang="en-US">Drawings and controls</label>
           </info>
         </prop>
@@ -118,7 +118,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if field codes should be displayed</desc>
+            <desc xml:lang="en-US">Specifies if field codes are displayed.</desc>
             <label xml:lang="en-US">Field codes</label>
           </info>
         </prop>
@@ -129,7 +129,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if notes should be displayed</desc>
+            <desc xml:lang="en-US">Specifies if notes are displayed.</desc>
             <label xml:lang="en-US">Notes</label>
           </info>
         </prop>
@@ -152,7 +152,7 @@
           <!-- UIHints: View - Nonprinting Characters -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Determins whether certain settings are applied or not (display of tab stops, spaces, breaks)</desc>
+            <desc xml:lang="en-US">Determines whether certain settings are applied or not (display of tab stops, spaces, breaks).</desc>
             <label xml:lang="en-US">Meta characters</label>
           </info>
         </prop>
@@ -163,7 +163,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if paragraph ends are shown on the screen</desc>
+            <desc xml:lang="en-US">Specifies if paragraph ends are shown on the screen.</desc>
             <label xml:lang="en-US">Paragraph end</label>
           </info>
         </prop>
@@ -174,7 +174,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if optional hyphens are shown on the screen</desc>
+            <desc xml:lang="en-US">Specifies if optional hyphens are shown on the screen.</desc>
             <label xml:lang="en-US">Optional hyphens</label>
           </info>
         </prop>
@@ -185,7 +185,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if spaces are shown on the screen</desc>
+            <desc xml:lang="en-US">Specifies if spaces are shown on the screen.</desc>
             <label xml:lang="en-US">Spaces</label>
           </info>
         </prop>
@@ -196,7 +196,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if protected spaces are shown on the screen</desc>
+            <desc xml:lang="en-US">Specifies if protected spaces are shown on the screen.</desc>
             <label xml:lang="en-US">Protected Spaces</label>
           </info>
         </prop>
@@ -207,14 +207,14 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents  [Section] Nonprinting characters -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if breaks are shown on the screen</desc>
+            <desc xml:lang="en-US">Specifies if breaks are shown on the screen.</desc>
             <label xml:lang="en-US">Breaks</label>
           </info>
         </prop>
       </group>
       <group oor:name="Highlighting">
         <info>
-          <desc xml:lang="en-US">Contains settings for the highlighting of contents.</desc>
+          <desc xml:lang="en-US">Contains settings for highlighting contents.</desc>
         </info>
         <prop oor:name="Field" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Highlighting -->
@@ -223,7 +223,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Contents - [Section] Highlighting -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if fields are highlighted</desc>
+            <desc xml:lang="en-US">Specifies if fields are highlighted.</desc>
             <label xml:lang="en-US">Fields</label>
           </info>
         </prop>
@@ -231,11 +231,11 @@
     </group>
     <group oor:name="Layout">
       <info>
-        <desc xml:lang="en-US">Contains layout specific settings.</desc>
+        <desc xml:lang="en-US">Contains layout-specific settings.</desc>
       </info>
       <group oor:name="Line">
         <info>
-          <desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selcting/moving an aobject or frame).</desc>
+          <desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selecting/moving an object or frame).</desc>
         </info>
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Lines -->
@@ -244,7 +244,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to display guides around the frames when frames are moved</desc>
+            <desc xml:lang="en-US">Displays guides around the frames when frames are moved.</desc>
             <label xml:lang="en-US">Guides</label>
           </info>
         </prop>
@@ -255,7 +255,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to display the control points as simple squares without a 3D effect</desc>
+            <desc xml:lang="en-US">Displays the control points as simple squares without a 3D effect.</desc>
             <label xml:lang="en-US">Simple control points</label>
           </info>
         </prop>
@@ -266,14 +266,14 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to display bigger control points</desc>
+            <desc xml:lang="en-US">Displays larger control points.</desc>
             <label xml:lang="en-US">Large control points</label>
           </info>
         </prop>
       </group>
       <group oor:name="Window">
         <info>
-          <desc xml:lang="en-US">Contains vaious settings for the window like scrollbars, rules, etc.</desc>
+          <desc xml:lang="en-US">Contains vaious settings for the window, such as scrollbars, rules, etc.</desc>
         </info>
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
@@ -282,7 +282,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the horizontal scroll bar is displayed</desc>
+            <desc xml:lang="en-US">Specifies if the horizontal scroll bar is displayed.</desc>
             <label xml:lang="en-US">Horizontal scroll</label>
           </info>
         </prop>
@@ -293,7 +293,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the vertical scroll bar is displayed</desc>
+            <desc xml:lang="en-US">Specifies if the vertical scroll bar is displayed.</desc>
             <label xml:lang="en-US">Vertical Scroll</label>
           </info>
         </prop>
@@ -313,7 +313,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the horizontal ruler is displayed</desc>
+            <desc xml:lang="en-US">Specifies if the horizontal ruler is displayed.</desc>
             <label xml:lang="en-US">Horizontal ruler</label>
           </info>
         </prop>
@@ -322,7 +322,7 @@
           <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
-            <desc xml:lang="en-US">Specifies the measurement unit of the horizontal ruler units</desc>
+            <desc xml:lang="en-US">Specifies the measurement unit for the horizontal ruler.</desc>
             <label xml:lang="en-US">Horizontal ruler measure unit</label>
           </info>
           <constraints>
@@ -380,7 +380,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the vertical ruler is displayed</desc>
+            <desc xml:lang="en-US">Specifies if the vertical ruler is displayed.</desc>
             <label xml:lang="en-US">Vertical Ruler</label>
           </info>
         </prop>
@@ -389,7 +389,7 @@
           <!-- Responsible: OS -->
           <!-- UIHints: Tools - Options - Text document - View - [Section] View -->
           <info>
-            <desc xml:lang="en-US">Specifies the measurement unit of the Vertical ruler units</desc>
+            <desc xml:lang="en-US">Specifies the measurement unit for the vertical ruler.</desc>
             <label xml:lang="en-US">Vertical ruler measure unit</label>
           </info>
           <constraints>
@@ -447,14 +447,14 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Window -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Activates the smooth page scrolling function</desc>
+            <desc xml:lang="en-US">Activates the smooth page scrolling function.</desc>
             <label xml:lang="en-US">Smooth scroll</label>
           </info>
         </prop>
       </group>
       <group oor:name="Other">
         <info>
-            <desc xml:lang="en-US">Contains misceallenous settings.</desc>
+            <desc xml:lang="en-US">Contains miscellaneous settings.</desc>
         </info>
         <prop oor:name="MeasureUnit" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Layout/Window -->
@@ -463,7 +463,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Meas. Unit -->
           <value>2</value>
           <info>
-            <desc xml:lang="en-US">Specifies the measurement units</desc>
+            <desc xml:lang="en-US">Specifies the measurement units.</desc>
             <label xml:lang="en-US">Measure unit</label>
           </info>
           <constraints>
@@ -524,7 +524,7 @@
           <!-- UIHints: (Status Bar) -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">Specifies the zoom type</desc>
+            <desc xml:lang="en-US">Specifies the zoom type.</desc>
             <label xml:lang="en-US">Zoom Type</label>
           </info>
           <constraints>
@@ -550,7 +550,7 @@
           <!-- UIHints: (Status Bar) -->
           <value>100</value>
           <info>
-            <desc xml:lang="en-US">Specifies the zoom value</desc>
+            <desc xml:lang="en-US">Specifies the zoom value.</desc>
             <label xml:lang="en-US">Zoom Value</label>
           </info>
         </prop>
@@ -558,11 +558,11 @@
     </group>
     <group oor:name="Grid">
       <info>
-        <desc xml:lang="en-US">Contains various for the grid that are not listed in other sections.</desc>
+        <desc xml:lang="en-US">Contains various items for the grid that are not listed in other sections.</desc>
       </info>
       <group oor:name="Option">
         <info>
-          <desc xml:lang="en-US">Contains options settings for the grid.</desc>
+          <desc xml:lang="en-US">Contains options for the grid.</desc>
         </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Grid/Option -->
@@ -571,7 +571,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to move frames and drawing elements an form functions only between the grid points</desc>
+            <desc xml:lang="en-US">Moves frames, drawing elements, and form functions only between the grid points.</desc>
             <label xml:lang="en-US">Snap to grid</label>
           </info>
         </prop>
@@ -582,7 +582,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option for displaying the grid</desc>
+            <desc xml:lang="en-US">Displays the grid.</desc>
             <label xml:lang="en-US">Visible grid</label>
           </info>
         </prop>
@@ -593,14 +593,14 @@
           <!-- UIHints: Tools - Option - HTML-Document  Grid - [Section] Option -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to change the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis will therefore remain the same.</desc>
+            <desc xml:lang="en-US">Changes the current grid settings symmetrically. The resolution and subdivision for the X- and Y-axis remains the same.</desc>
             <label xml:lang="en-US">Synchronize axes</label>
           </info>
         </prop>
       </group>
       <group oor:name="Resolution">
         <info>
-          <desc xml:lang="en-US">Contains settings specifing the grid resolution.</desc>
+          <desc xml:lang="en-US">Contains settings for specifying the grid resolution.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Resolution -->
@@ -609,7 +609,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
-            <desc xml:lang="en-US">Defines the grid points distance in the X-axis  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Defines the distance between the grid points on the X-axis  [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">X Axis Resolution</label>
           </info>
         </prop>
@@ -620,14 +620,14 @@
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1000</value>
           <info>
-            <desc xml:lang="en-US">Defines the grid points distance in the Y-axis  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Defines the distance between the grid points on the Y-axis  [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">Y Axis Resolution</label>
           </info>
         </prop>
       </group>
       <group oor:name="Subdivision">
         <info>
-          <desc xml:lang="en-US">Contains settings specifing the subdivision of the grid.</desc>
+          <desc xml:lang="en-US">Contains settings for subdividing of the grid.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Subdivision -->
@@ -636,7 +636,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
-            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the X-axis</desc>
+            <desc xml:lang="en-US">Specifies the number of intervals between two grid points on the X-axis.</desc>
             <label xml:lang="en-US">X Axis Subdivision</label>
           </info>
         </prop>
@@ -647,7 +647,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Grid - [Section] Grid -->
           <value>1</value>
           <info>
-            <desc xml:lang="en-US">Defines the distance between the grid points on the Y-axis</desc>
+            <desc xml:lang="en-US">Defines the distance between the grid points on the Y-axis.</desc>
             <label xml:lang="en-US">Y Axis Subdivision</label>
           </info>
         </prop>
@@ -655,11 +655,11 @@
     </group>
     <group oor:name="Print">
       <info>
-        <desc xml:lang="en-US">Contains printing relevant settings.</desc>
+        <desc xml:lang="en-US">Contains settings for printing.</desc>
       </info>
       <group oor:name="Content">
         <info>
-          <desc xml:lang="en-US">Contains settings specifing which content types hould be printed.</desc>
+          <desc xml:lang="en-US">Contains settings for specifying which content types are printed.</desc>
         </info>
         <prop oor:name="Graphic" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
@@ -668,7 +668,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if graphics should be printed</desc>
+            <desc xml:lang="en-US">Specifies if graphics are printed.</desc>
             <label xml:lang="en-US">Graphics</label>
           </info>
         </prop>
@@ -679,7 +679,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if tables should be printed</desc>
+            <desc xml:lang="en-US">Specifies if tables are printed.</desc>
             <label xml:lang="en-US">Tables</label>
           </info>
         </prop>
@@ -690,7 +690,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if controls should be printed</desc>
+            <desc xml:lang="en-US">Specifies if controls are printed.</desc>
             <label xml:lang="en-US">Controls</label>
           </info>
         </prop>
@@ -701,7 +701,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if background objects should be printed</desc>
+            <desc xml:lang="en-US">Specifies if background objects are printed.</desc>
             <label xml:lang="en-US">Background</label>
           </info>
         </prop>
@@ -712,7 +712,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Contents -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if text should always be printed in black</desc>
+            <desc xml:lang="en-US">Specifies if text is always printed in black.</desc>
             <label xml:lang="en-US">Print black</label>
           </info>
         </prop>
@@ -723,7 +723,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Notes -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if and how notes should be printed</desc>
+            <desc xml:lang="en-US">Specifies if notes are printed and how they are printed.</desc>
           </info>
           <constraints>
             <enumeration oor:value="0">
@@ -751,7 +751,7 @@
       </group>
       <group oor:name="Page">
         <info>
-          <desc xml:lang="en-US">Contains settings which or how pages should be printed.</desc>
+          <desc xml:lang="en-US">Specifies which pages are printed and how they are printed.</desc>
         </info>
         <prop oor:name="Reversed" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Pages -->
@@ -760,7 +760,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to reverse the printing order</desc>
+            <desc xml:lang="en-US">Reverses the printing order.</desc>
             <label xml:lang="en-US">Reversed</label>
           </info>
         </prop>
@@ -771,14 +771,14 @@
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Pages -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Option to print in brochure format</desc>
+            <desc xml:lang="en-US">Prints in brochure format.</desc>
             <label xml:lang="en-US">Brochure</label>
           </info>
         </prop>
       </group>
       <group oor:name="Output">
         <info>
-          <desc xml:lang="en-US">Contains other output specific settings.</desc>
+          <desc xml:lang="en-US">Contains output-specific settings.</desc>
         </info>
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Output -->
@@ -787,7 +787,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Output -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Controls the print output</desc>
+            <desc xml:lang="en-US">Controls the print output.</desc>
             <label xml:lang="en-US">Create single print jobs</label>
           </info>
         </prop>
@@ -797,7 +797,7 @@
           <!-- Responsible: OS -->
           <!-- UIHints: Tools - Option - HTML-Document  Print - [Section] Fax -->
           <info>
-            <desc xml:lang="en-US">For specifying the fax machine to be used to fax directly from the document</desc>
+            <desc xml:lang="en-US">Specifies which fax machine is used when faxing directly from the document</desc>
             <label xml:lang="en-US">Fax</label>
           </info>
         </prop>
@@ -813,7 +813,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Print - [Section] Paper tray -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">For printers with multiple trays, this option specifies that the defined paper source in the printer setup will be used.</desc>
+            <desc xml:lang="en-US">Specifies that the defined paper source in the printer setup is used for printers with multiple trays.</desc>
             <label xml:lang="en-US">From printer setup</label>
           </info>
         </prop>
@@ -835,7 +835,7 @@
           <!--Notice: NonMetric default: 635 1/100 mm-->
           <value>500</value>
           <info>
-            <desc xml:lang="en-US">Specifies the value to be used for moving a table row (default preference for moving rows)  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default value for moving a table row  [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">Row</label>
           </info>
         </prop>
@@ -847,14 +847,14 @@
           <!-- Notice: NonMetric default: 635 1/100 mm-->
           <value>500</value>
           <info>
-            <desc xml:lang="en-US">Specifies the value to be used for shifting a table column (default preference for moving columns)  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default value for shifting a table column [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">Column</label>
           </info>
         </prop>
       </group>
       <group oor:name="Insert">
         <info>
-          <desc xml:lang="en-US">Contains settings used when insertimng table rows/columns.</desc>
+          <desc xml:lang="en-US">Contains settings used when inserting table rows/columns.</desc>
         </info>
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Insert -->
@@ -864,7 +864,7 @@
           <!-- Notice: NonMetric default: 635 1/100 mm -->
           <value>500</value>
           <info>
-            <desc xml:lang="en-US">Specifies the default value for inserting rows (default preference for inserting additional rows)  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default value for inserting rows [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">Row</label>
           </info>
         </prop>
@@ -876,14 +876,14 @@
           <!-- Notice: The NonMetric Default 2540 1/100 mm-->
           <value>2500</value>
           <info>
-            <desc xml:lang="en-US">Specifies the default value for inserting columns (default preference for inserting additional columns)  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default value for inserting columns  [UNIT=1/100 mm].</desc>
             <label xml:lang="en-US">Column</label>
           </info>
         </prop>
       </group>
       <group oor:name="Change">
         <info>
-          <desc xml:lang="en-US">Contains settings specifing the effect to the table when modifying rows/columns.</desc>
+          <desc xml:lang="en-US">Contains settings specifying the effect that modifying rows/columns has on a table.</desc>
         </info>
         <prop oor:name="Effect" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table -->
@@ -892,7 +892,7 @@
           <!-- UIHints: Tools - Option - HTML-Document - Table  [Section] Effect -->
           <value>2</value>
           <info>
-            <desc xml:lang="en-US">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table</desc>
+            <desc xml:lang="en-US">Determines the relative effect of rows and columns to adjacent rows or columns, as well as to the entire table.</desc>
           </info>
           <constraints>
             <enumeration oor:value="0">
@@ -924,7 +924,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if numbers in a table should be recognized or if they should be saved in a text format</desc>
+            <desc xml:lang="en-US">Specifies if numbers in a table are recognized or if they are saved in a text format.</desc>
             <label xml:lang="en-US">Number recognition</label>
           </info>
         </prop>
@@ -935,7 +935,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if only entries with the defined format will be accepted. This option is only available, if the number format recognition is active (NumberRecognition=True).</desc>
+            <desc xml:lang="en-US">Specifies that only entries with the defined format are accepted. This option is only available if number format recognition is active (NumberRecognition=True).</desc>
             <label xml:lang="en-US">Number format recognition</label>
           </info>
         </prop>
@@ -946,7 +946,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Insert into tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available, if the number format recognition is active (NumberRecognition=True).</desc>
+            <desc xml:lang="en-US">Specifies if all of the numbers are aligned below right of the cell and not above left (as in text). This option is only available if number format recognition is active (NumberRecognition=True).</desc>
             <label xml:lang="en-US">Alignment</label>
           </info>
         </prop>
@@ -954,11 +954,11 @@
     </group>
     <group oor:name="Insert">
       <info>
-        <desc xml:lang="en-US">Settings for insertion of various object types.</desc>
+        <desc xml:lang="en-US">Settings for inserting various object types.</desc>
       </info>
       <group oor:name="Table">
         <info>
-          <desc xml:lang="en-US">Default settings for tables to be inserted.</desc>
+          <desc xml:lang="en-US">Default settings for inserting tables.</desc>
         </info>
         <prop oor:name="Header" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/Tables -->
@@ -967,7 +967,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the table should have a header</desc>
+            <desc xml:lang="en-US">Specifies if the table has a header</desc>
             <label xml:lang="en-US">Header</label>
           </info>
         </prop>
@@ -978,7 +978,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if the header in the new page should be adopted when inserting a page break. This option is only available, if Header=True.</desc>
+            <desc xml:lang="en-US">Specifies if the header in the new page is adopted when inserting a page break. This option is only available if Header=True.</desc>
             <label xml:lang="en-US">Repeat header</label>
           </info>
         </prop>
@@ -989,7 +989,7 @@
           <!-- UIHints: Tools - Option - HTML-Document  Insert - [Section] Tables -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if table cells should have a border by default</desc>
+            <desc xml:lang="en-US">Specifies if table cells have a border by default.</desc>
             <label xml:lang="en-US">Border</label>
           </info>
         </prop>
@@ -1005,43 +1005,43 @@
         <!-- Responsible: OS/OS-->
         <!-- UIHints: Right mouse click to the toolbar with object selection-->
         <info>
-          <desc xml:lang="en-US">Specifies which type of object bars should be visible.</desc>
+          <desc xml:lang="en-US">Specifies the type of object bar that is visible.</desc>
         </info>
         <prop oor:name="Graphic" oor:type="xs:int">
           <value>-1</value>
           <info>
-            <desc xml:lang="en-US">Specifies, wether the Graphic Object Bar or the Text Object Bar/Web should be the visible toolbar with graphic selection</desc>
+            <desc xml:lang="en-US">Specifies whether the Graphic Object Bar or the Text Object Bar/Web is the visible toolbar when a graphic is selected.</desc>
           </info>
         </prop>
         <prop oor:name="Table" oor:type="xs:int">
           <value>-1</value>
           <info>
-            <desc xml:lang="en-US">Specifies, wether the Table Object Bar or the Text Object Bar/Web should be the visible toolbar with table selection</desc>
+            <desc xml:lang="en-US">Specifies whether the Table Object Bar or the Text Object Bar/Web is visible toolbar when a table is selected.</desc>
           </info>
         </prop>
         <prop oor:name="NumberedList" oor:type="xs:int">
           <value>-1</value>
           <info>
-            <desc xml:lang="en-US">Specifies, wether the Numbering Object Bar or the Text Object Bar/Web should be the visible toolbar with numbering/list selection</desc>
+            <desc xml:lang="en-US">Specifies whether the Numbering Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected.</desc>
           </info>
         </prop>
         <prop oor:name="NumberedList_InTable" oor:type="xs:int">
           <value>-1</value>
           <info>
-            <desc xml:lang="en-US">Specifies, wether the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web should be the visible toolbar with numbering/list selection in a table</desc>
+            <desc xml:lang="en-US">Specifies wehther the Numbering Object Bar, the Table Object Bar or the Text Object Bar/Web is visible toolbar when text formatted with numbering/list is selected in a table.</desc>
           </info>
         </prop>
         <prop oor:name="BezierObject" oor:type="xs:int">
           <value>-1</value>
           <info>
-            <desc xml:lang="en-US">Specifies, wether the Bezier Object Bar or the Draw Object Bar should be the visible toolbar with Bezier object in edit mode</desc>
+            <desc xml:lang="en-US">Specifies whether the Bezier Object Bar or the Draw Object Bar is the visible toolbar with a Bezier object in edit mode.</desc>
           </info>
         </prop>
       </group>
     </group>
     <group oor:name="Background">
       <info>
-        <desc xml:lang="en-US">Contains settings for the documents background.</desc>
+        <desc xml:lang="en-US">Contains settings for the background of a document.</desc>
       </info>
       <prop oor:name="Color" oor:type="xs:int">
         <!-- OldPath: HTML_Editor/Background -->
@@ -1049,7 +1049,7 @@
         <!-- Responsible: OS -->
         <!-- UIHints: Tools - Option - HTML-Document  Background - [Section] Background color -->
         <info>
-          <desc xml:lang="en-US">Determines the background color</desc>
+          <desc xml:lang="en-US">Determines the background color.</desc>
           <label xml:lang="en-US">Background color</label>
         </info>
       </prop>
@@ -1064,7 +1064,7 @@
         <!--UIHints: HTML document in readonly mode - context menu of a graphic - Add Graphics - As Link / Copy-->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Specifies, if a graphic should be embedded or added as link when inserting it into the Gallery.</desc>
+          <desc xml:lang="en-US">Specifies if a graphic is embedded or added as link when it is inserted into the Gallery.</desc>
         </info>
       </prop>
     </group>

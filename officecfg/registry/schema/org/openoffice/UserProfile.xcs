@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UserProfile.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2002-08-02 16:28:03 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,17 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="UserProfile" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
 	<!-- Responsible: DG -->
-	<info><desc xml:lang="en-US">Contains user related informations like firstname, lastname, address ...</desc></info>
+	<info><desc xml:lang="en-US">Contains user-related information, such as name and address.</desc></info>
 	<component>
 		<group oor:name="Data">
-			<info><desc xml:lang="en-US">Contains user related informations like firstname, lastname, address ...</desc></info>
+			<info><desc xml:lang="en-US">Contains user-related information, such as name and address.</desc></info>
 			<prop oor:name="o" oor:type="xs:string">
 				<!-- OldPath: User -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The name of the user's company</desc>
+					<desc xml:lang="en-US">The name of the user's company.</desc>
 				</info>
 			</prop>
 			<prop oor:name="givenname" oor:type="xs:string">
@@ -81,7 +81,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The first name of the user</desc>
+					<desc xml:lang="en-US">The first name of the user.</desc>
 				</info>
 			</prop>
 			<prop oor:name="sn" oor:type="xs:string">
@@ -90,7 +90,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The last name of the user</desc>
+					<desc xml:lang="en-US">The last name of the user.</desc>
 				</info>
 			</prop>
 			<prop oor:name="initials" oor:type="xs:string">
@@ -99,7 +99,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The initials of the user</desc>
+					<desc xml:lang="en-US">The user's initials.</desc>
 				</info>
 			</prop>
 			<prop oor:name="street" oor:type="xs:string">
@@ -108,7 +108,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The street of the user's address</desc>
+					<desc xml:lang="en-US">The street where the use lives.</desc>
 				</info>
 			</prop>
 			<prop oor:name="l" oor:type="xs:string">
@@ -117,7 +117,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The city of the user's address</desc>
+					<desc xml:lang="en-US">The city where the user lives.</desc>
 				</info>
 			</prop>
 			<prop oor:name="st" oor:type="xs:string">
@@ -126,7 +126,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The state of the user's address</desc>
+					<desc xml:lang="en-US">The state where the user lives.</desc>
 				</info>
 			</prop>
 			<prop oor:name="postalcode" oor:type="xs:string">
@@ -135,7 +135,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The ZIP-code of the user's address</desc>
+					<desc xml:lang="en-US">The user's ZIP-code.</desc>
 				</info>
 			</prop>
 			<prop oor:name="c" oor:type="xs:string">
@@ -144,7 +144,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The country of the user's address</desc>
+					<desc xml:lang="en-US">The country where the user lives.</desc>
 				</info>
 			</prop>
 			<prop oor:name="title" oor:type="xs:string">
@@ -153,7 +153,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The title of the user</desc>
+					<desc xml:lang="en-US">The user's title.</desc>
 				</info>
 			</prop>
 			<prop oor:name="position" oor:type="xs:string">
@@ -162,7 +162,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The users position, this field is present only for backward compatibility. It is not defined for ldap orgPerson.</desc>
+					<desc xml:lang="en-US">The users position. This field is only present for backward compatibility. It is not defined for ldap orgPerson.</desc>
 				</info>
 			</prop>
 			<prop oor:name="homephone" oor:type="xs:string">
@@ -171,7 +171,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The user's private telephone number</desc>
+					<desc xml:lang="en-US">The user's private telephone number.</desc>
 				</info>
 			</prop>
 			<prop oor:name="telephonenumber" oor:type="xs:string">
@@ -180,7 +180,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The user's work telephone number</desc>
+					<desc xml:lang="en-US">The user's telephone number at work.</desc>
 				</info>
 			</prop>
 			<prop oor:name="facsimiletelephonenumber" oor:type="xs:string">
@@ -189,7 +189,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The user's fax number</desc>
+					<desc xml:lang="en-US">The user's fax number.</desc>
 				</info>
 			</prop>
 			<prop oor:name="mail" oor:type="xs:string">
@@ -198,7 +198,7 @@
 				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<info>
-					<desc xml:lang="en-US">The user's e-mail address</desc>
+					<desc xml:lang="en-US">The user's e-mail address.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UserGroup" oor:type="xs:string">
@@ -208,7 +208,7 @@
 				<!-- UIHints: Tools - Options - General - User Data -->
 				<value>UserGroup</value>
 				<info>
-					<desc xml:lang="en-US">This field is just kept for backward compatibility. It will be dropped as soon as possible.</desc>
+					<desc xml:lang="en-US">This field is kept for backwards compatibility. It will be dropped as soon as possible.</desc>
 				</info>
 			</prop>
 		</group>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-18 08:47:02 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,172 +63,172 @@
 <oor:component-schema oor:name="Math" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <!-- Responsible: TL -->
   <info>
-    <desc xml:lang="en-US">Contains Math specific settings.</desc>
+    <desc xml:lang="en-US">Contains settings for Math.</desc>
   </info>
   <templates>
     <group oor:name="FontFormat">
       <info>
-        <desc xml:lang="en-US">A list of properties describing a font.</desc>
+        <desc xml:lang="en-US">Lists properties for describing a font.</desc>
       </info>
       <prop oor:name="Name" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">The font name.</desc>
+          <desc xml:lang="en-US">Specifies the font name.</desc>
         </info>
       </prop>
       <prop oor:name="CharSet" oor:type="xs:short">
         <info>
-          <desc xml:lang="en-US">The fonts character set.</desc>
+          <desc xml:lang="en-US">Specifies the character set for a font.</desc>
         </info>
       </prop>
       <prop oor:name="Family" oor:type="xs:short">
         <info>
-          <desc xml:lang="en-US">The font family of the font.</desc>
+          <desc xml:lang="en-US">Specifies the font family.</desc>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">The family is not known.</desc>
+              <desc xml:lang="en-US">not known</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">The family is 'decorative'.</desc>
+              <desc xml:lang="en-US">'decorative'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">The family is 'modern'.</desc>
+              <desc xml:lang="en-US">'modern'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="3">
             <info>
-              <desc xml:lang="en-US">The family is 'roman'.</desc>
+              <desc xml:lang="en-US">'roman'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="4">
             <info>
-              <desc xml:lang="en-US">The family is 'script'.</desc>
+              <desc xml:lang="en-US">'script'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="5">
             <info>
-              <desc xml:lang="en-US">The family is 'swiss'.</desc>
+              <desc xml:lang="en-US">'swiss'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="6">
             <info>
-              <desc xml:lang="en-US">The family is 'system'.</desc>
+              <desc xml:lang="en-US">'system'</desc>
             </info>
           </enumeration>
         </constraints>
       </prop>
       <prop oor:name="Pitch" oor:type="xs:short">
         <info>
-          <desc xml:lang="en-US">The pitch of the font.</desc>
+          <desc xml:lang="en-US">Specifies the pitch of a font.</desc>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">The pitch is no known.</desc>
+              <desc xml:lang="en-US">not known</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">The pitch is fixed.</desc>
+              <desc xml:lang="en-US">fixed</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">The pitch is variable.</desc>
+              <desc xml:lang="en-US">variable</desc>
             </info>
           </enumeration>
         </constraints>
       </prop>
       <prop oor:name="Weight" oor:type="xs:short">
         <info>
-          <desc xml:lang="en-US">The fonts weight.</desc>
+          <desc xml:lang="en-US">Specifies the weight of a font.</desc>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">The fonts weight is not known.</desc>
+              <desc xml:lang="en-US">not known</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'thin'.</desc>
+              <desc xml:lang="en-US">'thin'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'ultra light'.</desc>
+              <desc xml:lang="en-US">'ultra light'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="3">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'light'.</desc>
+              <desc xml:lang="en-US">'light'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="4">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'semi light'.</desc>
+              <desc xml:lang="en-US">'semi light'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="5">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'normal'.</desc>
+              <desc xml:lang="en-US">'normal'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="6">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'medium'.</desc>
+              <desc xml:lang="en-US">'medium'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="7">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'semi bold'.</desc>
+              <desc xml:lang="en-US">'semi bold'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="8">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'bold'.</desc>
+              <desc xml:lang="en-US">'bold'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="9">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'ultra bold'.</desc>
+              <desc xml:lang="en-US">'ultra bold'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="10">
             <info>
-              <desc xml:lang="en-US">The fonts weight is 'black'.</desc>
+              <desc xml:lang="en-US">'black'</desc>
             </info>
           </enumeration>
         </constraints>
       </prop>
       <prop oor:name="Italic" oor:type="xs:short">
         <info>
-          <desc xml:lang="en-US">The italic of the font.</desc>
+          <desc xml:lang="en-US">Specifies the font italics.</desc>
         </info>
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">The font is not slanted.</desc>
+              <desc xml:lang="en-US">not slanted</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">The fonts italic is 'oblique'.</desc>
+              <desc xml:lang="en-US">'oblique'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">The fonts italic is 'normal'.</desc>
+              <desc xml:lang="en-US">'normal'</desc>
             </info>
           </enumeration>
           <enumeration oor:value="3">
             <info>
-              <desc xml:lang="en-US">The fonts italic is not known.</desc>
+              <desc xml:lang="en-US">not known</desc>
             </info>
           </enumeration>
         </constraints>
@@ -236,34 +236,34 @@
     </group>
     <group oor:name="Symbol">
       <info>
-        <desc xml:lang="en-US">Settings defining a user- or predefined symbol.</desc>
+        <desc xml:lang="en-US">Contains settings for defining a user- or predefined symbol.</desc>
       </info>
       <prop oor:name="Char" oor:type="xs:int">
         <info>
-          <desc xml:lang="en-US">The character value of the symbol.</desc>
+          <desc xml:lang="en-US">Specifies the character value of the symbol.</desc>
         </info>
       </prop>
       <prop oor:name="Set" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">The symbol set where the symbol is represented in.</desc>
+          <desc xml:lang="en-US">Specifies the symbol set containing the symbol.</desc>
         </info>
       </prop>
       <prop oor:name="Predefined" oor:type="xs:boolean">
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Specifies if a symbol is predefined or user defined.</desc>
+          <desc xml:lang="en-US">Specifies if a symbol is predefined or user-defined.</desc>
         </info>
       </prop>
       <prop oor:name="FontFormatId" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">Specifies the font format used. The value must be one of the node-names of the FontFormatList!</desc>
+          <desc xml:lang="en-US">Specifies the font format used. The value must be one of the node-names in the FontFormatList.</desc>
         </info>
       </prop>
     </group>
   </templates>
   <component>
     <info>
-      <desc xml:lang="en-US">Contains Math specific settings.</desc>
+      <desc xml:lang="en-US">Contains settings for Math.</desc>
     </info>
     <group oor:name="Print">
       <info>
@@ -287,7 +287,7 @@
         <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print options -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Specifies if the formula text is be printed.</desc>
+          <desc xml:lang="en-US">Specifies if the formula text is printed.</desc>
           <label xml:lang="en-US">Formula text</label>
         </info>
       </prop>
@@ -315,17 +315,17 @@
         <constraints>
           <enumeration oor:value="0">
             <info>
-              <desc xml:lang="en-US">Print formula in original size.</desc>
+              <desc xml:lang="en-US">Prints the formula in original size.</desc>
             </info>
           </enumeration>
           <enumeration oor:value="1">
             <info>
-              <desc xml:lang="en-US">Formula size will be adapted to paper size.</desc>
+              <desc xml:lang="en-US">Adapts formula size to paper size.</desc>
             </info>
           </enumeration>
           <enumeration oor:value="2">
             <info>
-              <desc xml:lang="en-US">The size will be defined by the zoom factor.</desc>
+              <desc xml:lang="en-US">Defines the zoom factor.</desc>
             </info>
           </enumeration>
         </constraints>
@@ -337,18 +337,18 @@
         <!-- UIHints: Tools - Options  Formula  Settings - [Section] Print format -->
         <value>100</value>
         <info>
-          <desc xml:lang="en-US">Zoomfactor for printing of formulas. Only valid when the print size is defined by the zoom factor.  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Zoom factor for printing formulas. Only valid when the print size is defined by the zoom factor.  [UNIT=%]</desc>
           <label xml:lang="en-US">Zoom factor</label>
         </info>
         <constraints>
           <minInclusive oor:value="10">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed.</desc>
+              <desc xml:lang="en-US">Minimum value allowed</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="400">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -356,7 +356,7 @@
     </group>
     <group oor:name="Misc">
       <info>
-        <desc xml:lang="en-US">Contains miscelleanous settings.</desc>
+        <desc xml:lang="en-US">Contains miscellaneous settings.</desc>
       </info>
       <prop oor:name="NoSymbolsWarning" oor:type="xs:boolean">
         <!-- OldPath: Math/Misc -->
@@ -376,7 +376,7 @@
         <!-- UIHints: Tools - Options  Formula  Settings - [Section] Miscellaneous options -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Option to ignore spacing symbols at the end of a line.</desc>
+          <desc xml:lang="en-US">Ignores spacing symbols at the end of a line.</desc>
           <label xml:lang="en-US">Ignore ~ and &amp;apos; at the end of the line</label>
         </info>
       </prop>
@@ -403,7 +403,7 @@
         <!-- UIHints: View - AutoRefresh Display -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">If TRUE the display of the formula will be automatically updated after some time when the text has changed.</desc>
+          <desc xml:lang="en-US">Automatically updates th display of the formula after the text has changed.</desc>
           <label xml:lang="en-US">Update display automatically</label>
         </info>
       </prop>
@@ -421,12 +421,12 @@
     </group>
     <set oor:name="FontFormatList" oor:node-type="FontFormat">
       <info>
-        <desc xml:lang="en-US">The list of FontFormat entries allowed to be used in the symbol definitions of the SymbolList.</desc>
+        <desc xml:lang="en-US">Lists the FontFormat entries that can be used as symbol definitions in the SymbolList.</desc>
       </info>
     </set>
     <group oor:name="StandardFormat">
       <info>
-        <desc xml:lang="en-US">Defines the standard (default) format settings for formulas.</desc>
+        <desc xml:lang="en-US">Defines the default format settings for formulas.</desc>
       </info>
       <prop oor:name="Textmode" oor:type="xs:boolean">
         <!-- OldPath: Math/StandardFormat -->
@@ -435,7 +435,7 @@
         <!-- UIHints: Format - Text Mode -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">If TRUE some expressions will be displayed in a more compact form.</desc>
+          <desc xml:lang="en-US">Displays some expressions in a compact form.</desc>
           <label xml:lang="en-US">Textmode</label>
         </info>
       </prop>
@@ -446,7 +446,7 @@
         <!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">If TRUE the usually non scaleable brackets will be scaled to fit the size of their arguments too.</desc>
+          <desc xml:lang="en-US">Attempts to scale non-scaleable brackets to fit the size of the arguments.</desc>
           <label xml:lang="en-US">Scale normal brackets</label>
         </info>
       </prop>
@@ -457,7 +457,7 @@
         <!-- UIHints: Format - Alignment - Horizontal -->
         <value>1</value>
         <info>
-          <desc xml:lang="en-US">The default horizontal alignment for the formula.</desc>
+          <desc xml:lang="en-US">Specifies the default horizontal alignment for the formula.</desc>
           <label xml:lang="en-US">Horizontal alignment</label>
         </info>
         <constraints>
@@ -485,18 +485,18 @@
         <!-- UIHints: Format- Font Size - Base size -->
         <value>12</value>
         <info>
-          <desc xml:lang="en-US">The base size to which all relative sizes refer to.  [UNIT=Pts]</desc>
+          <desc xml:lang="en-US">Specifies the reference base size.  [UNIT=Pts]</desc>
           <label xml:lang="en-US">Base size</label>
         </info>
         <constraints>
           <minInclusive oor:value="4">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed.</desc>
+              <desc xml:lang="en-US">Minimum value allowed</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="127">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -508,18 +508,18 @@
         <!-- UIHints: Format- Font Size - Text -->
         <value>100</value>
         <info>
-          <desc xml:lang="en-US">The size for text (relative to the base size).  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Specifies the text size relative to the base size.  [UNIT=%]</desc>
           <label xml:lang="en-US">Text size</label>
         </info>
         <constraints>
           <minInclusive oor:value="5">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed (must be positive and not too small).</desc>
+              <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -531,18 +531,18 @@
         <!-- UIHints: Format- Font Size - Indices -->
         <value>60</value>
         <info>
-          <desc xml:lang="en-US">The size for indices (relative to the base size).  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Specifies the size of the indices relative to the base size.  [UNIT=%]</desc>
           <label xml:lang="en-US">Index size</label>
         </info>
         <constraints>
           <minInclusive oor:value="5">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed (must be positive and not too small).</desc>
+              <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -554,18 +554,18 @@
         <!-- UIHints: Format- Font Size - Functions -->
         <value>100</value>
         <info>
-          <desc xml:lang="en-US">The size for functions (relative to the base size).  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Specifies the size of the functions relative to the base size.  [UNIT=%]</desc>
           <label xml:lang="en-US">Function size</label>
         </info>
         <constraints>
           <minInclusive oor:value="5">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed (must be positive and not too small).</desc>
+              <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -577,18 +577,18 @@
         <!-- UIHints: Format- Font Size - Operators -->
         <value>100</value>
         <info>
-          <desc xml:lang="en-US">The size for operators (relative to the base size).  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Specifies the size of the operators relative to the base size.  [UNIT=%]</desc>
           <label xml:lang="en-US">Operator size</label>
         </info>
         <constraints>
           <minInclusive oor:value="5">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed (must be positive and not too small).</desc>
+              <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -600,18 +600,18 @@
         <!-- UIHints: Format- Font Size - Limits -->
         <value>60</value>
         <info>
-          <desc xml:lang="en-US">The size for limits (relative to the base size).  [UNIT=%]</desc>
+          <desc xml:lang="en-US">Specifies the size of the limits relative to the base size.  [UNIT=%]</desc>
           <label xml:lang="en-US">Limits size</label>
         </info>
         <constraints>
           <minInclusive oor:value="5">
             <info>
-              <desc xml:lang="en-US">Minimum value allowed (must be positive and not too small).</desc>
+              <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="200">
             <info>
-              <desc xml:lang="en-US">Maximum value allowed.</desc>
+              <desc xml:lang="en-US">Maximum value allowed</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -623,7 +623,7 @@
         <!-- UIHints: Format - Fonts - Variables -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for variables. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Variable Font name</label>
         </info>
       </prop>
@@ -634,7 +634,7 @@
         <!-- UIHints: Format - Fonts - Functions -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for variables. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for functions. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Function Font name</label>
         </info>
       </prop>
@@ -645,7 +645,7 @@
         <!-- UIHints: Format - Fonts - Numbers -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for numbers. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for numbers. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Number Font name</label>
         </info>
       </prop>
@@ -656,7 +656,7 @@
         <!-- UIHints: Format - Fonts - Text -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for text. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for text. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Text Font name</label>
         </info>
       </prop>
@@ -667,7 +667,7 @@
         <!-- UIHints: Format - Fonts - Sans -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'sans'. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'sans'. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Sans Font name</label>
         </info>
       </prop>
@@ -678,7 +678,7 @@
         <!-- UIHints: Format - Fonts - Serif -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'serif'. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'serif'. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Serif Font name</label>
         </info>
       </prop>
@@ -689,13 +689,13 @@
         <!-- UIHints: Format - Fonts - Fixed -->
         <value/>
         <info>
-          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'fixed'. The value must be one of those from the FontFormatList.</desc>
+          <desc xml:lang="en-US">Specifies the FontFormat (font) to be used for 'fixed'. The value must be contained in the FontFormatList.</desc>
           <label xml:lang="en-US">Fixed Font name</label>
         </info>
       </prop>
       <group oor:name="Distance">
         <info>
-          <desc xml:lang="en-US">Specifies various distance settings used for formatting the formula.</desc>
+          <desc xml:lang="en-US">Specifies the distance settings used for formatting a formula.</desc>
         </info>
         <prop oor:name="Horizontal" oor:type="xs:short">
           <!-- OldPath: Math/StandardFormat -->
@@ -704,18 +704,18 @@
           <!-- UIHints: Format - Spacing - Category - Spacing - Spacing -->
           <value>10</value>
           <info>
-            <desc xml:lang="en-US">The horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the horizontal distance of different expressions and of binary operators.  [UNIT=%]</desc>
             <label xml:lang="en-US">Horizontal distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="200">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -727,18 +727,18 @@
           <!-- UIHints: Format - Spacing - Category - Spacing - Line Spacing -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of different lines.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of different lines.  [UNIT=%]</desc>
             <label xml:lang="en-US">Vertical distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="200">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -750,18 +750,18 @@
           <!-- UIHints: Format - Spacing - Category - Spacing - Root Spacing -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the root symbols horizontal bar to the argument.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of the root symbol's horizontal bar to the argument.  [UNIT=%]</desc>
             <label xml:lang="en-US">Distance to root symbol</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -773,18 +773,18 @@
           <!-- UIHints: Format - Spacing - Category - Indexes - Subscript -->
           <value>20</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the subscript to the base.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of the subscript to the base.  [UNIT=%]</desc>
             <label xml:lang="en-US">Subscript distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -796,18 +796,18 @@
           <!-- UIHints: Format - Spacing - Category - Indexes - Superscript -->
           <value>20</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the superscript to the base.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of the superscript to the base.  [UNIT=%]</desc>
             <label xml:lang="en-US">Superscript distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -819,18 +819,18 @@
           <!-- UIHints: Format - Spacing - Category - Limits - Lower Limit -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of the lower limit to the operator.  [UNIT=%]</desc>
             <label xml:lang="en-US">Lower limit distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -842,18 +842,18 @@
           <!-- UIHints: Format - Spacing - Category - Limits - Upper Limit -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance of the upper limit to the operator.  [UNIT=%]</desc>
             <label xml:lang="en-US">Upper limit distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -865,18 +865,18 @@
           <!-- UIHints: Format - Spacing - Category - Operators - Excess size -->
           <value>50</value>
           <info>
-            <desc xml:lang="en-US">The oversize of a large operator relativ to the base size.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the scaling of a large operator relative to the base size.  [UNIT=%]</desc>
             <label xml:lang="en-US">Oversize of large operator</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -888,18 +888,18 @@
           <!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
           <value>20</value>
           <info>
-            <desc xml:lang="en-US">The distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
             <label xml:lang="en-US">Distance to large operator</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -911,18 +911,18 @@
           <!-- UIHints: Format - Spacing - Category - Fractions - Numerator -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the numerator to the fraction seperator.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance from the numerator to the fraction separator.  [UNIT=%]</desc>
             <label xml:lang="en-US">Numerator distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -934,18 +934,18 @@
           <!-- UIHints: Format - Spacing - Category - Fractions - Denominator -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The vertical distance of the denominator to the fraction seperator.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the vertical distance from the denominator to the fraction seperator.  [UNIT=%]</desc>
             <label xml:lang="en-US">Denominator distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -957,18 +957,18 @@
           <!-- UIHints: Format - Spacing - Category - Fraction Bars - Excess length -->
           <value>10</value>
           <info>
-            <desc xml:lang="en-US">The overlength of the fraction seperator relative to its arguments.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the excess length of the fraction separator relative to its arguments.  [UNIT=%]</desc>
             <label xml:lang="en-US">Fraction overlength</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -980,18 +980,18 @@
           <!-- UIHints: Format - Spacing - Category - Fraction Bars - Weight -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The strokewidth of the fraction seperator.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the strokewidth of the fraction seperator.  [UNIT=%]</desc>
             <label xml:lang="en-US">Fraction strokewidth</label>
           </info>
           <constraints>
             <minInclusive oor:value="1">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed (must be positive).</desc>
+                <desc xml:lang="en-US">Minimum value allowed (must be positive)</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1003,18 +1003,18 @@
           <!-- UIHints: Format - Spacing - Category - Brackets - Excess size (left/right) -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The oversize of the scalable brackets relative to the argument.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the excess length of the scalable brackets relative to the argument.  [UNIT=%]</desc>
             <label xml:lang="en-US">Bracket oversize</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1026,18 +1026,18 @@
           <!-- UIHints: Format - Spacing - Category - Brackets - Spacing -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the horizontal distance between the brackets and the enclosed argument.  [UNIT=%]</desc>
             <label xml:lang="en-US">Bracket distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1049,18 +1049,18 @@
           <!-- UIHints: Format - Spacing - Category - Brackets - Excess size -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The oversize of the normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the excess length of normal brackets relative to the argument. Only valid if ScaleNormalBracket = TRUE.  [UNIT=%]</desc>
             <label xml:lang="en-US">Normal bracket oversize</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1072,18 +1072,18 @@
           <!-- UIHints: Format - Spacing - Category - Matrixes - Line Spacing -->
           <value>3</value>
           <info>
-            <desc xml:lang="en-US">The distance between the rows of a matrix.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the distance between the rows of a matrix.  [UNIT=%]</desc>
             <label xml:lang="en-US">Matrix row distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="300">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1095,18 +1095,18 @@
           <!-- UIHints: Format - Spacing - Category - Matrixes - Column Spacing -->
           <value>30</value>
           <info>
-            <desc xml:lang="en-US">The distance between the columns of a matrix.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the distance between the columns of a matrix.  [UNIT=%]</desc>
             <label xml:lang="en-US">Matrix column distance</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="300">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1118,18 +1118,18 @@
           <!-- UIHints: Format - Spacing - Category - Symbols - Primary height -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The distance between the attribute and its base.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the distance between the attribute and its base.  [UNIT=%]</desc>
             <label xml:lang="en-US">Distance to attribute</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1141,18 +1141,18 @@
           <!-- UIHints: Format - Spacing - Category - Symbols - Minimum distance -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">The distance between different attributes of the same base.  [UNIT=%]</desc>
+            <desc xml:lang="en-US">Specifies the distance between different attributes of the same base.  [UNIT=%]</desc>
             <label xml:lang="en-US">Distance between attributes</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="100">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1164,18 +1164,18 @@
           <!-- UIHints: Format - Spacing - Category - Borders - Left -->
           <value>100</value>
           <info>
-            <desc xml:lang="en-US">Size of extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the width of the extra space to the left of the formula.  [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US">Left margin</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="10000">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1187,18 +1187,18 @@
           <!-- UIHints: Format - Spacing - Category - Borders - Right -->
           <value>100</value>
           <info>
-            <desc xml:lang="en-US">Size of extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the width of the extra space to the right of the formula.  [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US">Right margin</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="10000">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1210,18 +1210,18 @@
           <!-- UIHints: Format - Spacing - Category - Borders - Top -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">Size of extra space to the top of the formula.  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the amount of extra space above the formula.  [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US">Top margin</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="10000">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1233,18 +1233,18 @@
           <!-- UIHints: Format - Spacing - Category - Borders - Bottom -->
           <value>0</value>
           <info>
-            <desc xml:lang="en-US">Size of extra space to the bottom of the formula.  [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the amount of extra space below the formula.  [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US">Bottom margin</label>
           </info>
           <constraints>
             <minInclusive oor:value="0">
               <info>
-                <desc xml:lang="en-US">Minimum value allowed.</desc>
+                <desc xml:lang="en-US">Minimum value allowed</desc>
               </info>
             </minInclusive>
             <maxInclusive oor:value="10000">
               <info>
-                <desc xml:lang="en-US">Maximum value allowed.</desc>
+                <desc xml:lang="en-US">Maximum value allowed</desc>
               </info>
             </maxInclusive>
           </constraints>
@@ -1253,7 +1253,7 @@
     </group>
     <set oor:name="SymbolList" oor:node-type="Symbol">
       <info>
-        <desc xml:lang="en-US">The list of defined symbols.</desc>
+        <desc xml:lang="en-US">Lists the defined symbols.</desc>
       </info>
     </set>
   </component>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Views.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-08-07 06:00:04 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,19 @@
 <oor:component-schema oor:name="Views" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <!-- Responsible: AS-->
   <info>
-    <desc xml:lang="en-US">Contains persistent informations about opened dialogs, windows, tab pages ... of the office.</desc>
+    <desc xml:lang="en-US">Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
   </info>
   <templates>
       <info>
-        <desc xml:lang="en-US">Neccessary templates.</desc>
+        <desc xml:lang="en-US">Necessary templates.</desc>
       </info>
     <group oor:name="DialogType">
       <info>
-          <desc xml:lang="en-US">Contains all persistent data of a general office dialog.</desc>
+          <desc xml:lang="en-US">Contains the persistent data for a general office dialog.</desc>
       </info>
       <prop oor:name="WindowState" oor:type="xs:string">
         <info>
-            <desc xml:lang="en-US">Includes information about the used vcl window. (position,size,states)</desc>
+            <desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
         </info>
       </prop>
       <group oor:name="UserData" oor:extensible="true">
@@ -86,16 +86,16 @@
     </group>
     <group oor:name="TabDialogType">
       <info>
-          <desc xml:lang="en-US">Contains all persistent data of a special tab dialog.</desc>
+          <desc xml:lang="en-US">Contains the persistent data for a special tab dialog.</desc>
       </info>
       <prop oor:name="WindowState" oor:type="xs:string">
         <info>
-            <desc xml:lang="en-US">Includes information about the used vcl window. (position,size,states)</desc>
+            <desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
         </info>
       </prop>
       <prop oor:name="PageID" oor:type="xs:int">
         <info>
-            <desc xml:lang="en-US">Represent the number of an active tab page inside a dialog.</desc>
+            <desc xml:lang="en-US">Represents the number of an active tab page inside a dialog.</desc>
         </info>
       </prop>
       <group oor:name="UserData" oor:extensible="true">
@@ -106,11 +106,11 @@
     </group>
     <group oor:name="TabPageType">
       <info>
-          <desc xml:lang="en-US">Contains all persistent data of a tab page.</desc>
+          <desc xml:lang="en-US">Contains the persistent data for a tab page.</desc>
       </info>
       <prop oor:name="WindowState" oor:type="xs:string">
         <info>
-            <desc xml:lang="en-US">Includes information about the used vcl window. (position,size,states)</desc>
+            <desc xml:lang="en-US">Includes information (position,size, and states) about the used vcl window.</desc>
         </info>
       </prop>
       <group oor:name="UserData" oor:extensible="true">
@@ -121,16 +121,16 @@
     </group>
     <group oor:name="WindowType">
       <info>
-          <desc xml:lang="en-US">Contains all persistent data of a general office window.</desc>
+          <desc xml:lang="en-US">Contains the persistent data for a general office window.</desc>
       </info>
       <prop oor:name="WindowState" oor:type="xs:string">
         <info>
-            <desc xml:lang="en-US">Includes information about the used vcl window. (position,size,states)</desc>
+            <desc xml:lang="en-US">Includes information  (position,size, and states) about the used vcl window.</desc>
         </info>
       </prop>
       <prop oor:name="Visible" oor:type="xs:boolean">
         <info>
-            <desc xml:lang="en-US">Mark such window as visible or not.</desc>
+            <desc xml:lang="en-US">Make window visible.</desc>
         </info>
       </prop>
       <group oor:name="UserData" oor:extensible="true">
@@ -146,22 +146,22 @@
       </info>
     <set oor:name="Dialogs" oor:node-type="DialogType">
         <info>
-          <desc xml:lang="en-US">list with all persistent dialog states</desc>
+          <desc xml:lang="en-US">Lists persistent dialog states.</desc>
         </info>
     </set>
     <set oor:name="TabDialogs" oor:node-type="TabDialogType">
         <info>
-          <desc xml:lang="en-US">list with all persistent tab dialog states</desc>
+          <desc xml:lang="en-US">Lists persistent tab dialog states.</desc>
         </info>
     </set>
     <set oor:name="TabPages" oor:node-type="TabPageType">
         <info>
-          <desc xml:lang="en-US">list with all persistent tab page states</desc>
+          <desc xml:lang="en-US">Lists persistent tab page states.</desc>
         </info>
     </set>
     <set oor:name="Windows" oor:node-type="WindowType">
         <info>
-          <desc xml:lang="en-US">list with all persistent window states</desc>
+          <desc xml:lang="en-US">Lists persistent window states.</desc>
         </info>
     </set>
   </component>

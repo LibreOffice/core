@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tpf $ $Date: 2002-09-24 16:15:20 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,42 +62,42 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
 <oor:component-schema oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
 	<!-- Responsible: DG -->
-	<info><desc xml:lang="en-US">Contains Setup related preference settings like the installed UI locales or the available modules.</desc></info>
+	<info><desc xml:lang="en-US">Contains Setup preferences, such as the installed UI locales or the available modules.</desc></info>
 	<templates>
 		<group oor:name="Factory">
             <info>
-                <desc xml:lang="en-US">describes an application module (better: document factory) of the office (e.g. writer)</desc>
+                <desc xml:lang="en-US">Describes an application module (a document factory, such as Writer).</desc>
             </info>
 			<!-- Responsible: AS-->
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
-					<desc xml:lang="en-US">short name of factory</desc>
+					<desc xml:lang="en-US">Specifies the short name of the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryTemplateFile" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
-					<desc xml:lang="en-US">Name of standard template file for modul factory</desc>
+					<desc xml:lang="en-US">Specifies the name of the standard template file for the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
-					<desc xml:lang="en-US">Window attributes of factory window</desc>
+					<desc xml:lang="en-US">Specifies the attributes of the factory window</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
-					<desc xml:lang="en-US">URL for dispatch to open empty document within this factory</desc>
+					<desc xml:lang="en-US">Specifies the URL for opening an empty document in the factory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryIcon" oor:type="xs:int">
 				<!-- UIHints: setup -->
 				<info>
-					<desc xml:lang="en-US">Id of icon for factory</desc>
+					<desc xml:lang="en-US">Specifies the ID of the icon for the factory</desc>
 				</info>
 			</prop>
 		</group>
@@ -108,17 +108,17 @@
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The name of a product.</desc>
+					<desc xml:lang="en-US">Specifies the name of a product.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupVersion" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The version number of the product that appears at the user interface.</desc>
+					<desc xml:lang="en-US">Specifies the version number of the product that appears on the user interface.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
-					<desc xml:lang="en-US">The extension, like a product patch, of the version number to appear at the user interface.</desc>
+					<desc xml:lang="en-US">Specifies the version number that appears on the user interface.</desc>
 				</info>
 			</prop>
 		</group>
@@ -132,7 +132,7 @@
 				<!-- Responsible: AS/BEI -->
 				<!-- Deprecated -->
 				<info>
-					<desc xml:lang="en-US">The user install path. Directory where the user data is copied to. Must be a valid directory.</desc>
+					<desc xml:lang="en-US">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupInstallURL" oor:type="xs:string">
@@ -141,7 +141,7 @@
 				<!-- Responsible: AS/BEI -->
 				<!-- Deprecated -->
 				<info>
-					<desc xml:lang="en-US">The user install path in URL notation. Must match the UCB configuration.</desc>
+					<desc xml:lang="en-US">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
@@ -150,7 +150,7 @@
 				<!-- Responsible: IS/BEI -->
 				<!-- Deprecated -->
 				<info>
-					<desc xml:lang="en-US">True, if user data is copied successfully</desc>
+					<desc xml:lang="en-US">Indicates if the user data is copied successfully.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
@@ -159,7 +159,7 @@
 				<!-- UIHints: setup -->
 				<!--The default list must be deleted, as soon as the setup writes the values (#79254).-->
 				<info>
-					<desc xml:lang="en-US">The application language offered by the setup, if a multilingual version is used.</desc>
+					<desc xml:lang="en-US">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="en-US">
@@ -194,7 +194,7 @@
 			<set oor:name="Factories" oor:node-type="Factory">
 				<!-- Responsible: MBA -->
 				<info>
-					<desc xml:lang="en-US">Contains all document factories that were installed during setup.</desc>
+					<desc xml:lang="en-US">Contains all of the document factories that were installed during setup.</desc>
 				</info>
 			</set>
 		</group>
@@ -208,7 +208,7 @@
 				<!-- UIHints: Tools - Options - General - Other -->
 				<!--The initial default should be written by the setup.-->
 				<info>
-					<desc xml:lang="en-US">The Office language selected by the user.</desc>
+					<desc xml:lang="en-US">Indicates the Office language selected by the user.</desc>
 					<label xml:lang="en-US">Locale</label>
 				</info>
 			</prop>
@@ -216,14 +216,14 @@
 				<!-- Responsible: ER -->
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Locale setting -->
 				<info>
-					<desc xml:lang="en-US">The locale setting the user wants to work with. If empty (default), the locale set at system level is used. Possible values are, for example, "en-US" or "de-DE". Initially set empty by the setup application.</desc>
+					<desc xml:lang="en-US">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupCurrency" oor:type="xs:string">
 				<!-- Responsible: ER -->
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Default currency -->
 				<info>
-					<desc xml:lang="en-US">The default currency the user wants to work with. If empty (default), the default currency of the ooSetupSystemLocale is taken. Possible values are, for example, "USD-en-US" or "EUR-de-DE". Initially set empty by the setup application.</desc>
+					<desc xml:lang="en-US">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 				</info>
 			</prop>
 		</group>

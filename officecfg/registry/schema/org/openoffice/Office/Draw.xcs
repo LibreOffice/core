@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Draw.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-25 11:00:12 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,17 @@
 <oor:component-schema oor:name="Draw" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <!-- Responsible: AF -->
   <info>
-    <desc xml:lang="en-US">Properties of the Draw application.</desc> 
+    <desc xml:lang="en-US">Defines the properties of the Draw application.</desc> 
   </info>
     <import oor:component="org.openoffice.Office.Common"/>
   <component>
     <group oor:name="Layout">
       <info>
-        <desc xml:lang="en-US">General properties of the graphical object representation.</desc> 
+        <desc xml:lang="en-US">Defines the general properties of the graphical object representation.</desc> 
       </info>
       <group oor:name="Display">
         <info>
-          <desc xml:lang="en-US">General properties of the graphical object representation on screen
+          <desc xml:lang="en-US">Defines the general properties of the graphical object representation of screen
           displays.</desc>
         </info>
         <prop oor:name="Ruler" oor:type="xs:boolean">
@@ -95,7 +95,7 @@
           <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">Indicates whether to show help-lines that can be created by
+            <desc xml:lang="en-US">Indicates whether to show help lines that can be created by
             dragging them from the rulers.</desc> 
             <label xml:lang="en-US">Helplines visible</label>
           </info>
@@ -107,7 +107,7 @@
           <!-- UIHints: Tools - Options - Drawing - Layout - [Section] Display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Indicates whether to show help-lines when moving an object.</desc>
+            <desc xml:lang="en-US">Indicates whether to show help lines when moving an object.</desc>
             <label xml:lang="en-US">Guides when moving</label>
           </info>
         </prop>
@@ -131,14 +131,14 @@
           <value>true</value>
           <info>
             <desc xml:lang="en-US">Indicates whether to show the outline of all moved objects when moving
-            more then one object at the same time.</desc> 
+            more then one object at a time.</desc> 
             <label xml:lang="en-US">Contour of each individual object</label>
           </info>
         </prop>
       </group>
       <group oor:name="Other">
         <info>
-          <desc xml:lang="en-US">Other properties regarding device independant graphical object
+          <desc xml:lang="en-US">Defines other properties regarding device independant graphical object
           representation.</desc>
         </info>
         <group oor:name="TabStop">
@@ -241,7 +241,7 @@
             </constraints>
           </prop>
           <info>
-            <desc xml:lang="en-US">This unit is used for specification of distances and sizes.</desc>
+            <desc xml:lang="en-US">Contains the specification of distances and sizes.</desc>
             <label xml:lang="en-US">Measurement unit</label>
           </info>
         </group>
@@ -249,11 +249,11 @@
     </group>
     <group oor:name="Content">
       <info>
-        <desc xml:lang="en-US">Specification of how to display the content of Draw documents.</desc> 
+        <desc xml:lang="en-US">Contains the specification of how to display the content of Draw documents.</desc> 
       </info>
       <group oor:name="Display">
         <info>
-          <desc xml:lang="en-US">Specification of how to display the content of Draw documents on
+          <desc xml:lang="en-US">Contains the specification of how to display the content of Draw documents on
           screen.</desc>
         </info>
         <prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
@@ -275,7 +275,7 @@
           <!-- UIHints: Tools - Options  Drawing - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Indicates whether to show only outlines of draw-objects.</desc>
+            <desc xml:lang="en-US">Indicates whether to show only outlines of draw objects.</desc>
             <label xml:lang="en-US">Contour mode</label>
           </info>
         </prop>
@@ -306,8 +306,7 @@
     </group>
     <group oor:name="Misc">
       <info>
-        <desc xml:lang="en-US">Collection of configuration items of the Draw application that don't
-        fit into another category.</desc>
+        <desc xml:lang="en-US">Contains a collection of configuration items of the Draw application that do not fit into another category.</desc>
       </info>
       <prop oor:name="BackgroundCache" oor:type="xs:boolean">
         <!-- OldPath: Draw/Other -->
@@ -446,7 +445,7 @@
       </prop>
       <group oor:name="TextObject">
         <info>
-          <desc xml:lang="en-US">Text editing related configuration items.</desc>
+          <desc xml:lang="en-US">Defines text editing related configuration items.</desc>
         </info>
         <prop oor:name="QuickEditing" oor:type="xs:boolean">
           <!-- OldPath: Draw/Other/Text_Objects -->
@@ -475,7 +474,7 @@
       </group>
       <group oor:name="CrossFading">
         <info>
-          <desc xml:lang="en-US">Specification of how to morph between objects (e.g. how many steps
+          <desc xml:lang="en-US">Contains a specification of how to morph between objects (e.g. how many steps
           and whether to regard the object's attributes).</desc>
         </info>
         <prop oor:name="Steps" oor:type="xs:short">
@@ -501,8 +500,7 @@
           <value>true</value>
           <info>
             <desc xml:lang="en-US">Indicates whether two objects to be
-            morphed shall have the same orientation.</desc> <label
-            xml:lang="en-US">Orientation</label>
+            morphed shall have the same orientation.</desc> <label xml:lang="en-US">Orientation</label>
           </info>
         </prop>
         <prop oor:name="Attributes" oor:type="xs:boolean">
@@ -526,14 +524,14 @@
         <prop oor:name="Width" oor:type="xs:int">
           <value>8000</value>
           <info>
-            <desc xml:lang="en-US">Default width of new objects. [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default width of new objects. [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US"/>
           </info>
         </prop>
         <prop oor:name="Height" oor:type="xs:int">
           <value>5000</value>
           <info>
-            <desc xml:lang="en-US">Default height of new objects. [UNIT=1/100 mm]</desc>
+            <desc xml:lang="en-US">Specifies the default height of new objects. [UNIT=1/100 mm]</desc>
             <label xml:lang="en-US"/>
           </info>
         </prop>
@@ -545,12 +543,12 @@
     </group>
     <group oor:name="Snap">
       <info>
-        <desc xml:lang="en-US">Specification of how to force object positions and sizes to the snap
+        <desc xml:lang="en-US">Contains the specification of how to force object positions and sizes to the snap
         grid or to align with other objects.</desc>
       </info>
       <group oor:name="Object">
         <info>
-          <desc xml:lang="en-US">Specification of how to force object positions and sizes to
+          <desc xml:lang="en-US">Contains the specification of how to force object positions and sizes to
           predefined locations in relation to other objects.</desc>
         </info>
         <prop oor:name="Grid" oor:type="xs:boolean">
@@ -583,7 +581,7 @@
           <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified with adjacent page margins.</desc>
+            <desc xml:lang="en-US">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
             <label xml:lang="en-US">Page margins</label>
           </info>
         </prop>
@@ -617,7 +615,7 @@
           <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The maximal range in pixel along the coordinate axes at which
+            <desc xml:lang="en-US">Specifies the maximal range in pixel along the coordinate axes at which
             snapping becomes active.</desc> 
             <label xml:lang="en-US">Snap range</label>
           </info>
@@ -629,7 +627,7 @@
       </group>
       <group oor:name="Position">
         <info>
-          <desc xml:lang="en-US">Constraints regarding the creation and modification of graphical
+          <desc xml:lang="en-US">Specifies constraints regarding the creation and modification of graphical
           objects.</desc>
         </info>
         <prop oor:name="CreatingMoving" oor:type="xs:boolean">
@@ -675,8 +673,7 @@
           <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
           <value>1500</value>
           <info>
-            <desc xml:lang="en-US">When snapping for ration is enabled the
-            rotation angle will be a multiple of this angle. [UNIT=Degree/100]</desc> 
+            <desc xml:lang="en-US">Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc> 
             <label xml:lang="en-US">When rotating</label>
           </info>
           <constraints>
@@ -694,7 +691,7 @@
             <desc xml:lang="en-US">When moving a point in the point editor this is the maximal angle
             at the two adjacent points between the lines connecting those two points with each other
             and with the moved point at which snapping to the connection line and removal of the
-            moved point takes place.  [UNIT=Degree/100]</desc> 
+            moved point takes place. [UNIT=Degree/100]</desc> 
             <label xml:lang="en-US">Point reduction</label>
           </info>
           <constraints>
@@ -706,7 +703,7 @@
     </group>
     <group oor:name="Zoom">
       <info>
-        <desc xml:lang="en-US">Configuration items related to zooming.</desc>
+        <desc xml:lang="en-US">Contains configuration items related to zooming.</desc>
       </info>
       <prop oor:name="ScaleX" oor:type="xs:int">
         <!-- OldPath: Draw/Zoom -->
@@ -715,7 +712,7 @@
         <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
         <value>1</value>
         <info>
-          <desc xml:lang="en-US">Zoom factor along the horizontal axis.</desc>
+          <desc xml:lang="en-US">Specifies zoom factor along the horizontal axis.</desc>
           <label xml:lang="en-US">Scale</label>
         </info>
       </prop>
@@ -726,14 +723,14 @@
         <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
         <value>1</value>
         <info>
-          <desc xml:lang="en-US">Zoom factor along the vertical axis.</desc>
+          <desc xml:lang="en-US">Specifies zoom factor along the vertical axis.</desc>
           <label xml:lang="en-US">Scale</label>
         </info>
       </prop>
     </group>
     <group oor:name="Grid">
       <info>
-        <desc xml:lang="en-US">Handling and display of the (snap) grid.</desc> 
+        <desc xml:lang="en-US">Defines handling and display of the (snap) grid.</desc> 
       </info>
       <group oor:name="Option">
         <info>
@@ -758,7 +755,7 @@
           <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Indicates whether to shows the grid.</desc>
+            <desc xml:lang="en-US">Indicates whether to show the grid.</desc>
             <label xml:lang="en-US">Visible grid</label>
           </info>
         </prop>
@@ -777,7 +774,7 @@
       </group>
       <group oor:name="Resolution">
         <info>
-          <desc xml:lang="en-US">Specification of the grid resolution.</desc>
+          <desc xml:lang="en-US">Specifies the grid resolution.</desc>
         </info>
         <group oor:name="XAxis">
           <!-- OldPath: Draw/Grid/Resolution -->
@@ -832,7 +829,7 @@
       </group>
       <group oor:name="Subdivision">
         <info>
-          <desc xml:lang="en-US">Subdivision of the grid.</desc>
+          <desc xml:lang="en-US">Specifies the subdivision of the grid.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:double">
           <!-- OldPath: Draw/Grid/Subdivision -->
@@ -861,7 +858,7 @@
       </group>
       <group oor:name="SnapGrid">
         <info>
-          <desc xml:lang="en-US">Specification of the snap grid.</desc>
+          <desc xml:lang="en-US">Specifies the snap grid.</desc>
         </info>
         <prop oor:name="Size" oor:type="xs:boolean">
           <!-- OldPath: Draw/Grid/Snap_Grid -->
@@ -930,11 +927,11 @@
     </group>
     <group oor:name="Print">
       <info>
-        <desc xml:lang="en-US">Options regarding the printing of Draw documents.</desc>
+        <desc xml:lang="en-US">Defines options regarding the printing of Draw documents.</desc>
       </info>
       <group oor:name="Content">
         <info>
-          <desc xml:lang="en-US">Options regarding the printing of document content.</desc>
+          <desc xml:lang="en-US">Defines options regarding the printing of document content.</desc>
         </info>
         <prop oor:name="Drawing" oor:type="xs:boolean">
           <!-- OldPath: Draw/Print/Contents -->
@@ -951,7 +948,7 @@
       </group>
       <group oor:name="Page">
         <info>
-          <desc xml:lang="en-US">Specification of how and what pages will be printed.</desc>
+          <desc xml:lang="en-US">Specifies how and what pages will be printed.</desc>
         </info>
         <prop oor:name="PageSize" oor:type="xs:boolean">
           <!-- OldPath: Draw/Print/Page -->
@@ -1013,7 +1010,7 @@
       </group>
       <group oor:name="Other">
         <info>
-          <desc xml:lang="en-US">Specification of general printing related issues.</desc>
+          <desc xml:lang="en-US">Contains specifications of general printing related issues.</desc>
         </info>
         <prop oor:name="PageName" oor:type="xs:boolean">
           <!-- OldPath: Draw/Print -->

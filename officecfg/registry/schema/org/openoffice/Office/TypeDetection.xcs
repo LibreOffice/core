@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-08-07 06:00:04 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-schema oor:name="TypeDetection" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
 <!-- Responsible: AS-->
   <info>
-    <desc xml:lang="en-US">Contains all well known content types, filters, deep detection services, frame loader and content handler of the office.</desc>
+    <desc xml:lang="en-US">Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
   </info>
   <templates>
       <info>
@@ -71,58 +71,58 @@
       </info>
     <group oor:name="Type">
       <info>
-          <desc xml:lang="en-US">A list of types, which represent all well known content formats of the office.</desc>
+          <desc xml:lang="en-US">A list of types representing common content formats in Office.</desc>
       </info>
       <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc xml:lang="en-US">Is used to display the type at the user interface as a localized one. That means you can choose an assignment between value and language for it. Thus, support of CJK versions is possible. All UniCode characters are permitted here.</desc>
+          <desc xml:lang="en-US">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
         </info>
       </prop>
       <prop oor:name="Data" oor:type="xs:string">
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Containes all other data of a type as an own formated string. Items are seperated by using "," - lists items are seperated by using ";". Data={Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID}</desc>
+          <desc xml:lang="en-US">Contains all other data of a type as an own formated string. Items are seperated by using "," - list items are seperated by using ";". Data={Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID}</desc>
         </info>
       </prop>
     </group>
     <group oor:name="Filter">
       <info>
-          <desc xml:lang="en-US">A list of filters, which can import/export content into/from the office.</desc>
+          <desc xml:lang="en-US">Lists filters that can import or export content.</desc>
       </info>
       <prop oor:name="Installed" oor:type="xs:boolean">
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">Make it possible to enable or disable filter by setup!</desc>
+          <desc xml:lang="en-US">Enables or disables filter with the setup utility.</desc>
         </info>
       </prop>
       <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc xml:lang="en-US">Is used to display the filter at the user interface as a localized one. That means you can choose an assignment between value and language for it. Thus, support of CJK versions is possible. All UniCode characters are permitted here.</desc>
+          <desc xml:lang="en-US">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
         </info>
       </prop>
       <prop oor:name="Data" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">Containes all other data of a filter as an own formated string. Items are seperated by using "," - lists items are seperated by using ";". Data={Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent}</desc>
+          <desc xml:lang="en-US">Contains all other data of a filter as an own formated string. Items are seperated by "," - lists items are seperated by using ";". Data={Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent}</desc>
         </info>
       </prop>
     </group>
     <group oor:name="DetectService">
       <info>
-          <desc xml:lang="en-US">Such UNO services are used to improve the type detection. They have access on the storage of a content to specify his type.</desc>
+          <desc xml:lang="en-US">Improve the type detection. UNO services access stored content to determine type.</desc>
       </info>
       <prop oor:name="Types" oor:type="oor:string-list">
         <info>
-          <desc xml:lang="en-US">A list of internal type names able to be recognized by this service.</desc>
+          <desc xml:lang="en-US">Lists internal type names that can be recognized by this service.</desc>
         </info>
       </prop>
     </group>
     <group oor:name="ContentHandler">
       <info>
-          <desc xml:lang="en-US">Such UNO services are used to load "non visible" content (e.g. sounds).</desc>
+          <desc xml:lang="en-US">Loads "non visible" content, such as sounds.</desc>
       </info>
       <prop oor:name="Types" oor:type="oor:string-list">
         <info>
-          <desc xml:lang="en-US">A list of internal type names able to be recognized by this service.</desc>
+          <desc xml:lang="en-US">Lists internal type names that can be recognized by this service.</desc>
         </info>
       </prop>
     </group>
@@ -132,12 +132,12 @@
       </info>
       <prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
         <info>
-          <desc xml:lang="en-US">Is used to display the loader at the user interface as a localized one. That means you can choose an assignment between value and language for it. Thus, support of CJK versions is possible. All UniCode characters are permitted here.</desc>
+          <desc xml:lang="en-US">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
         </info>
       </prop>
       <prop oor:name="Types" oor:type="oor:string-list">
         <info>
-          <desc xml:lang="en-US">A list of internal type names able to be recognized by this service.</desc>
+          <desc xml:lang="en-US">Lists internal type names that can be recognized by this service.</desc>
         </info>
       </prop>
     </group>
@@ -148,49 +148,49 @@
       </info>
     <set oor:name="Types" oor:node-type="Type">
         <info>
-          <desc xml:lang="en-US">list of all registered content types</desc>
+          <desc xml:lang="en-US">Lists the registered content types.</desc>
         </info>
     </set>
     <set oor:name="Filters" oor:node-type="Filter">
         <info>
-          <desc xml:lang="en-US">list of all registered office filters</desc>
+          <desc xml:lang="en-US">Lists the registered office filters.</desc>
         </info>
     </set>
     <set oor:name="DetectServices" oor:node-type="DetectService">
         <info>
-          <desc xml:lang="en-US">list of all registered deep detection services</desc>
+          <desc xml:lang="en-US">Lists the registered deep detection services.</desc>
         </info>
     </set>
     <set oor:name="ContentHandlers" oor:node-type="ContentHandler">
         <info>
-          <desc xml:lang="en-US">list of all registered content handler services</desc>
+          <desc xml:lang="en-US">Lists the registered content handler services.</desc>
         </info>
     </set>
     <set oor:name="FrameLoaders" oor:node-type="FrameLoader">
         <info>
-          <desc xml:lang="en-US">list of all registered frame loader services</desc>
+          <desc xml:lang="en-US">Lists the registered frame loader services.</desc>
         </info>
     </set>
     <group oor:name="Defaults">
     <info>
-      <desc xml:lang="en-US">some default objects used as fallbakc, if no specialized (e.g. FrameLoader) was registered</desc>
+      <desc xml:lang="en-US">Contains default objects that are used if no specialized service was registered.</desc>
     </info>
       <prop oor:name="FrameLoader" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">The default frame loader, which can use filters in a generic way (by using her interfaces).</desc>
+          <desc xml:lang="en-US">Specifies the default frame loader.</desc>
         </info>
         <value>com.sun.star.comp.office.FrameLoader</value>
       </prop>
       <prop oor:name="DetectService" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">The generic detect service, which can handle all formats well known by our internal filters.</desc>
+          <desc xml:lang="en-US">Specifies the generic detection service.</desc>
         </info>
         <value>com.sun.star.comp.office.FrameLoader</value>
       </prop>
       <prop oor:name="ShowAlienFilterWarning" oor:type="xs:boolean">
         <!-- Responsible: OS-->
         <info>
-          <desc xml:lang="en-US">It's used to enable/disable the warning, if user try to set an alien filter as the default one by using dialog "Tools->Options".</desc>
+          <desc xml:lang="en-US">Displays a warning when a user tries to set a third-party filter as the default filter in "Tools - Options".</desc>
         </info>
         <value>true</value>
       </prop>

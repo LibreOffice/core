@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-25 11:00:13 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,16 +64,16 @@
   <import oor:component="org.openoffice.Office.Common"/>
   <!-- Responsible: AF -->
     <info>
-      <desc xml:lang="en-US">Configuration items related to the Impress application.</desc>
+      <desc xml:lang="en-US">Contains configuration items related to the Impress application.</desc>
     </info>
   <component>
     <group oor:name="Layout">
       <info>
-        <desc xml:lang="en-US">General properties of the graphical object representation.</desc> 
+        <desc xml:lang="en-US">Contains general properties of the graphical object representation.</desc> 
       </info>
       <group oor:name="Display">
         <info>
-          <desc xml:lang="en-US">General properties of the graphical object representation on screen
+          <desc xml:lang="en-US">Contains general properties of the graphical object representation of screen
           displays.</desc>
         </info>
         <prop oor:name="Ruler" oor:type="xs:boolean">
@@ -140,7 +140,7 @@
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1250</value>
             <info>
-              <desc xml:lang="en-US">Distance between adjacent tab stops in 1/100 mm when the metric
+              <desc xml:lang="en-US">Specifies the distance between adjacent tab stops in 1/100 mm when the metric
               system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
@@ -148,7 +148,7 @@
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">Distance between adjacent tab stops in 1/100 mm when the non-metric
+              <desc xml:lang="en-US">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric
               system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
@@ -166,8 +166,7 @@
           <info>
             <desc xml:lang="en-US">Specifies the measurement unit to be used with respect to whether
             the metric or the non-metric system is selected.</desc> 
-            <label
-            xml:lang="en-US">Measurement unit</label>
+            <label xml:lang="en-US">Measurement unit</label>
           </info>
           <prop oor:name="Metric" oor:type="xs:int">
               <info>
@@ -244,11 +243,11 @@
     </group>
     <group oor:name="Content">
         <info>
-          <desc xml:lang="en-US">Content related configuration items.</desc>
+          <desc xml:lang="en-US">Contains content related configuration items.</desc>
         </info>
       <group oor:name="Display">
         <info>
-          <desc xml:lang="en-US">Configuration items related to the display of Impress documents.</desc>
+          <desc xml:lang="en-US">Contains configuration items related to the display of Impress documents.</desc>
         </info>
         <prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
           <!-- OldPath: Impress/Contents/Display -->
@@ -267,7 +266,7 @@
           <!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Indicates whether to show only outlines of objects like filled
+            <desc xml:lang="en-US">Indicates whether to show only outlines of objects such as filled
             rectangles and filled ellipses.</desc> 
             <label xml:lang="en-US">Contour mode</label>
           </info>
@@ -290,7 +289,7 @@
           <value>false</value>
           <info>
             <desc xml:lang="en-US">Indicates whether to show only hairlines instead of the true
-            line style and width of objects like lines and freeform curves.</desc> 
+            line styles.</desc> 
             <label xml:lang="en-US">Line contour only</label>
           </info>
         </prop>
@@ -298,8 +297,7 @@
     </group>
     <group oor:name="Misc">
       <info>
-        <desc xml:lang="en-US">Collection of configuration items of the Impress application that don't
-        fit into another category.</desc>
+        <desc xml:lang="en-US">Contains a collection of configuration items of the Impress application that do not fit into another category.</desc>
       </info>
       <prop oor:name="BackgroundCache" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
@@ -351,7 +349,7 @@
         <!-- UIHints: Option Bar -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Indicates whether a double-click on a text object changes activates the
+          <desc xml:lang="en-US">Indicates whether a double-click on a text object activates the
           edit mode.</desc> 
           <label xml:lang="en-US">Double-Click Text to Edit</label>
         </info>
@@ -433,13 +431,13 @@
         <!-- UIHints: UNDO stack delete warnng dialog -->
         <value>true</value>
         <info>
-          <desc xml:lang="en-US">Switch between showing the warning dialog when setting new standard page layout or not.</desc>
+          <desc xml:lang="en-US">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
           <label xml:lang="en-US">Show Undo-Stack Delete Warning</label>
         </info>
       </prop>
       <group oor:name="TextObject">
         <info>
-          <desc xml:lang="en-US">Text editing related configuration items.</desc>
+          <desc xml:lang="en-US">Contains text editing related configuration items.</desc>
         </info>
         <prop oor:name="QuickEditing" oor:type="xs:boolean">
           <!-- OldPath: Impress/Other/Text_Objects -->
@@ -466,7 +464,7 @@
       </group>
       <group oor:name="NewDoc">
           <info>
-            <desc xml:lang="en-US">Configuration items governing the behaviour when creating a new
+            <desc xml:lang="en-US">Specifies configuration items governing the behaviour when creating a new
             document or a new page.</desc> 
             <label xml:lang="en-US">Start with AutoPilots</label>
           </info>
@@ -495,7 +493,7 @@
       </group>
       <group oor:name="Start">
           <info>
-            <desc xml:lang="en-US">Configuration items governing the behaviour when starting a
+            <desc xml:lang="en-US">Specifies configuration items governing behaviour when starting a
             presentation.</desc>
           </info>
         <prop oor:name="CurrentPage" oor:type="xs:boolean">
@@ -517,7 +515,7 @@
           <!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
           <value>false</value>
           <info>
-            <desc xml:lang="en-US">Specifies, if spacings between paragraphs should be added to ensure the compatibility to MS Word documents</desc>
+            <desc xml:lang="en-US">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
             <label xml:lang="en-US">Add spacing between paragraphs</label>
           </info>
         </prop>
@@ -549,12 +547,12 @@
     </group>
     <group oor:name="Snap">
       <info>
-        <desc xml:lang="en-US">Specification of how to force object positions and sizes to the snap
+        <desc xml:lang="en-US">Specifies how to force object positions and sizes to the snap
         grid or to align with other objects.</desc>
       </info>
       <group oor:name="Object">
         <info>
-          <desc xml:lang="en-US">Specification of how to force object positions and sizes to
+          <desc xml:lang="en-US">Specifies how to force object positions and sizes to
           predefined locations in relation to other objects.</desc>
         </info>
         <prop oor:name="Grid" oor:type="xs:boolean">
@@ -584,7 +582,7 @@
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>true</value>
           <info>
-            <desc xml:lang="en-US">The outline of an object is justified with adjacent page margins.</desc>
+            <desc xml:lang="en-US">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
             <label xml:lang="en-US">Page margins</label>
           </info>
         </prop>
@@ -615,7 +613,7 @@
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap to -->
           <value>5</value>
           <info>
-            <desc xml:lang="en-US">The maximal range in pixel along the coordinate axes at which
+            <desc xml:lang="en-US">Specifies the maximal range in pixels along the coordinate axes at which
             snapping becomes active.</desc> 
             <label xml:lang="en-US">Snap range</label>
           </info>
@@ -627,7 +625,7 @@
       </group>
       <group oor:name="Position">
         <info>
-          <desc xml:lang="en-US">Constraints regarding the creation and modification of graphical
+          <desc xml:lang="en-US">Specifies constraints regarding the creation and modification of graphical
           objects.</desc>
         </info>
         <prop oor:name="CreatingMoving" oor:type="xs:boolean">
@@ -669,8 +667,7 @@
           <!-- UIHints: Tools - Options - Presentation  Snap to Grid - [Section] Snap position -->
           <value>1500</value>
           <info>
-            <desc xml:lang="en-US">When snapping for ration is enabled the
-            rotation angle will be a multiple of this angle. [UNIT=Degree/100]</desc> 
+            <desc xml:lang="en-US">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc> 
             <label xml:lang="en-US">When rotating</label>
           </info>
           <constraints>
@@ -699,11 +696,11 @@
     </group>
     <group oor:name="Grid">
       <info>
-        <desc xml:lang="en-US">Handling and display of the (snap) grid.</desc> 
+        <desc xml:lang="en-US">Defines the handling and display of the snap grid.</desc> 
       </info>
       <group oor:name="Option">
         <info>
-          <desc xml:lang="en-US">Switches regarding use and display of the (snap) grid.</desc>
+          <desc xml:lang="en-US">Specifies switches regarding use and display of the snap grid.</desc>
         </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Options -->
@@ -740,7 +737,7 @@
       </group>
       <group oor:name="Resolution">
         <info>
-          <desc xml:lang="en-US">Specification of the grid resolution.</desc>
+          <desc xml:lang="en-US">Specifies grid resolution.</desc>
         </info>
         <group oor:name="XAxis">
           <!-- OldPath: Impress/Grid/Resolution -->
@@ -750,16 +747,14 @@
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-                <desc xml:lang="en-US">Horizontal distance between adjacent grid points in 1/100 mm
-                used when the metric system is active.</desc> 
+                <desc xml:lang="en-US">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc> 
                 <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-                <desc xml:lang="en-US">Horizontal distance between adjacent grid points in 1/100 mm
-                used when the non-metric system is active.</desc> 
+                <desc xml:lang="en-US">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
@@ -776,7 +771,7 @@
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-                <desc xml:lang="en-US">Vertical distance between adjacent grid points in 1/100 mm
+                <desc xml:lang="en-US">Defines the vertical distance between adjacent grid points in 1/100 mm,
                 used when the metric system is active.</desc> 
                 <label xml:lang="en-US"/>
             </info>
@@ -784,7 +779,7 @@
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-                <desc xml:lang="en-US">Vertical distance between adjacent grid points in 1/100 mm
+                <desc xml:lang="en-US">Defines the vertical distance between adjacent grid points in 1/100 mm,
                 used when the non-metric system is active.</desc> 
                 <label xml:lang="en-US"/>
             </info>
@@ -797,7 +792,7 @@
       </group>
       <group oor:name="Subdivision">
         <info>
-          <desc xml:lang="en-US">Subdivision of the grid.</desc>
+          <desc xml:lang="en-US">Specifies the subdivision of the grid.</desc>
         </info>
         <prop oor:name="XAxis" oor:type="xs:double">
           <!-- OldPath: Impress/Grid/Subdivision -->
@@ -826,7 +821,7 @@
       </group>
       <group oor:name="SnapGrid">
         <info>
-          <desc xml:lang="en-US">Specification of the snap grid.</desc>
+          <desc xml:lang="en-US">Contains the specifications of the snap grid.</desc>
         </info>
         <prop oor:name="Size" oor:type="xs:boolean">
           <!-- OldPath: Impress/Grid/Snap_Grid -->
@@ -846,16 +841,16 @@
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">Horizontal distance between adjacent points of the snap grid in
-              1/100 mm used when the metric system is selected.</desc> 
+              <desc xml:lang="en-US">Defines the horizontal distance between adjacent points of the snap grid in
+              1/100 mm, used when the metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">Horizontal distance between adjacent points of the snap grid in
-              1/100 mm used when the non-metric system is selected.</desc> 
+              <desc xml:lang="en-US">Defines the horizontal distance between adjacent points of the snap grid in
+              1/100 mm, used when the non-metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
@@ -873,16 +868,16 @@
           <prop oor:name="Metric" oor:type="xs:int">
             <value>1000</value>
             <info>
-              <desc xml:lang="en-US">Vertical distance between adjacent points of the snap grid in
-              1/100 mm used when the metric system is selected.</desc> 
+              <desc xml:lang="en-US">Defines the vertical distance between adjacent points of the snap grid in
+              1/100 mm, used when the metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <value>1270</value>
             <info>
-              <desc xml:lang="en-US">Vertical distance between adjacent points of the snap grid in
-              1/100 mm used when the non-metric system is selected.</desc> 
+              <desc xml:lang="en-US">Defines the vertical distance between adjacent points of the snap grid in
+              1/100 mm, used when the non-metric system is selected.</desc> 
               <label xml:lang="en-US"/>
             </info>
           </prop>
@@ -896,11 +891,11 @@
     </group>
     <group oor:name="Print">
       <info>
-        <desc xml:lang="en-US">Options regarding the printing of Impress documents.</desc>
+        <desc xml:lang="en-US">Defines options regarding the printing of Impress documents.</desc>
       </info>
       <group oor:name="Content">
         <info>
-          <desc xml:lang="en-US">Options regarding the printing of document content.</desc>
+          <desc xml:lang="en-US">Defines options regarding the printing of document content.</desc>
         </info>
         <prop oor:name="Presentation" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Contents -->
@@ -945,7 +940,7 @@
       </group>
       <group oor:name="Page">
         <info>
-          <desc xml:lang="en-US">Specification of how and what pages will be printed.</desc>
+          <desc xml:lang="en-US">Specifies how and which pages will be printed.</desc>
         </info>
         <prop oor:name="PageSize" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print/Page -->
@@ -1002,7 +997,7 @@
       </group>
       <group oor:name="Other">
         <info>
-          <desc xml:lang="en-US">Specification of general printing related issues.</desc>
+          <desc xml:lang="en-US">Specifies general printing related issues.</desc>
         </info>
         <prop oor:name="PageName" oor:type="xs:boolean">
           <!-- OldPath: Impress/Print -->
@@ -1095,7 +1090,7 @@
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <value>true</value>
             <info>
-              <desc xml:lang="en-US">Converts VBA Basic into Office Basic as commands (True)</desc>
+              <desc xml:lang="en-US">Converts VBA Basic into Office Basic as commands (True).</desc>
               <label xml:lang="en-US">Load Basic Code to edit</label>
             </info>
           </prop>
@@ -1106,7 +1101,7 @@
             <!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft PowerPoint 97/2000 -->
             <value>true</value>
             <info>
-              <desc xml:lang="en-US">Holds original VBA storage for saving in the memory (True)</desc>
+              <desc xml:lang="en-US">Holds original VBA storage for saving in the memory (True).</desc>
               <label xml:lang="en-US">Save Original Basic Code again</label>
             </info>
           </prop>
@@ -1114,7 +1109,7 @@
       </group>
       <group oor:name="Export">
           <info>
-            <desc xml:lang="en-US">Export related configuration items.</desc>
+            <desc xml:lang="en-US">Exports related configuration items.</desc>
           </info>
           <prop oor:name="LastUsed" oor:type="xs:string">
           <!-- OldPath: STARIMPRESS -->

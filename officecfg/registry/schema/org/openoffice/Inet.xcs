@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-17 10:34:37 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,12 +268,12 @@
         <constraints>
           <minInclusive oor:value="0">
             <info>
-              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="65535">
             <info>
-              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -298,12 +298,12 @@
         <constraints>
           <minInclusive oor:value="0">
             <info>
-              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="65535">
             <info>
-              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
             </info>
           </maxInclusive>
         </constraints>
@@ -328,12 +328,12 @@
         <constraints>
           <minInclusive oor:value="0">
             <info>
-              <desc xml:lang="en-US">Specifies the minimum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the minimum allowed port number.</desc>
             </info>
           </minInclusive>
           <maxInclusive oor:value="65535">
             <info>
-              <desc xml:lang="en-US">Specifies the maximum allowed port number."</desc>
+              <desc xml:lang="en-US">Specifies the maximum allowed port number.</desc>
             </info>
           </maxInclusive>
         </constraints>

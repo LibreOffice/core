@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-08-07 06:00:03 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,62 +67,62 @@
   </info>
   <templates>
       <info>
-        <desc xml:lang="en-US">Neccessary templates.</desc>
+        <desc xml:lang="en-US">Contains the neccessary templates.</desc>
       </info>
     <group oor:name="Job">
         <info>
-          <desc xml:lang="en-US">describe an UNO service, which is registered for a special event</desc>
+          <desc xml:lang="en-US">Describes an UNO service, which is registered for a special event.</desc>
         </info>
       <prop oor:name="AdminTime" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">time stamp of admin layer; if it newer then UserTime ... job will be reactivated!</desc>
+          <desc xml:lang="en-US">Contains a time stamp of the admin layer.  If it is newer than UserTime, the job will be reactivated.</desc>
         </info>
       </prop>
       <prop oor:name="UserTime" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">time stamp of user layer; if it older then AdminTime ... job will be reactivated!</desc>
+          <desc xml:lang="en-US">Contains a time stamp of the user layer.  If it older then AdminTime, the job will be reactivated.</desc>
         </info>
       </prop>
       <prop oor:name="Service" oor:type="xs:string">
         <info>
-          <desc xml:lang="en-US">specifies uno service name of job implementation</desc>
+          <desc xml:lang="en-US">Specifies the UNO service name of the job implementation.</desc>
         </info>
       </prop>
       <prop oor:name="Async" oor:type="xs:boolean">
         <value>false</value>
         <info>
-          <desc xml:lang="en-US">mark job as asynchronous</desc>
+          <desc xml:lang="en-US">Marks job as asynchronous.</desc>
         </info>
       </prop>
       <group oor:name="Arguments" oor:extensible="true">
         <info>
-          <desc xml:lang="en-US">own configuration data of job</desc>
+          <desc xml:lang="en-US">Specifies own configuration data of a job.</desc>
         </info>
       </group>
     </group>
     <group oor:name="Event">
         <info>
-          <desc xml:lang="en-US">describes the event, for which am uno service can be registered as job</desc>
+          <desc xml:lang="en-US">Describes the event for which a UNO service can be registered as a job.</desc>
         </info>
       <prop oor:name="Joblist" oor:type="oor:string-list">
         <info>
-          <desc xml:lang="en-US">jobs can be registered for events</desc>
+          <desc xml:lang="en-US">Specifies whether jobs can be registered for events.</desc>
         </info>
       </prop>
     </group>
   </templates>
   <component>
       <info>
-        <desc xml:lang="en-US">Used instances.</desc>
+        <desc xml:lang="en-US">Specifies used instances.</desc>
       </info>
     <set oor:name="Jobs" oor:node-type="Job">
         <info>
-          <desc xml:lang="en-US">list of all registered jobs</desc>
+          <desc xml:lang="en-US">Contains a list of all registered jobs.</desc>
         </info>
     </set>
     <set oor:name="Events" oor:node-type="Event">
         <info>
-          <desc xml:lang="en-US">list of all possible events</desc>
+          <desc xml:lang="en-US">Contains a list of all possible events.</desc>
         </info>
     </set>
   </component>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-15 08:39:52 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@
         <!-- OldLocation: java.ini -->
         <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
         <info>
-          <desc xml:lang="en-US">Additional java classes or jars which are contained in the classpath 
+          <desc xml:lang="en-US">Specifies additional java classes or jars which are contained in the classpath 
 	  of the JVM  (java.class.path system property).</desc>
           <label xml:lang="en-US">Classpath</label>
         </info>
@@ -273,7 +273,7 @@
               <desc xml:lang="en-US">The Virtual Machine comes from a JDKxxx or j2sdkxxx installation. </desc>
             </info>
 	  </enumeration>
-          <enumeration oor:value="JRE" >
+          <enumeration oor:value="JRE">
             <info>
               <desc xml:lang="en-US">The Virtual Machine comes from a JRExxx installation. </desc>
             </info>
@@ -312,28 +312,28 @@
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
         <info>
-          <desc xml:lang="en-US">A space separated list of verified Java versions.</desc>
+          <desc xml:lang="en-US">Contains a space separated list of verified Java versions.</desc>
         </info>
       </prop>
       <prop oor:name="Version" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
         <info>
-          <desc xml:lang="en-US">The version of the JRE which is provided by the setup.</desc>
+          <desc xml:lang="en-US">Specifies the version of the JRE which is provided by the setup.</desc>
         </info>
       </prop>
       <prop oor:name="Vendor" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
         <info>
-          <desc xml:lang="en-US">The vendor of the JRE package.</desc>
+          <desc xml:lang="en-US">Specifies the vendor of the JRE package.</desc>
         </info>
       </prop>
       <prop oor:name="RequiredVersion" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
         <info>
-          <desc xml:lang="en-US">All Java installations with a lower version will be 
+          <desc xml:lang="en-US">Specifies that all Java installations with a lower version will be 
 	  ignored by the Java setup  (jvmsetup.exe).</desc>
         </info>
       </prop>

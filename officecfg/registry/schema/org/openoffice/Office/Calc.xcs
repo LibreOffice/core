@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-18 18:55:26 $
+ *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,19 +92,19 @@
 			</info>
 			<prop oor:name="YY" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the year of the date.</desc>
+					<desc xml:lang="en-US">Specifies the year.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
 			<prop oor:name="MM" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the month of the date.</desc>
+					<desc xml:lang="en-US">Specifies the month.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
 			<prop oor:name="DD" oor:type="xs:int">
 				<info>
-					<desc xml:lang="en-US">Specifies the day of the date.</desc>
+					<desc xml:lang="en-US">Specifies the day.</desc>
 					<label xml:lang="en-US">12/30/1899 (Standard) 01/01/1900 (StarCalc 1.0) 01/01/1904</label>
 				</info>
 			</prop>
@@ -125,7 +125,7 @@
 		</set>
 		<group oor:name="Content">
 			<info>
-				<desc xml:lang="en-US">Contains settings for spreadsheet contents.</desc>
+				<desc xml:lang="en-US">Contains settings for spreadsheet content.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -138,7 +138,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether formulas instead of results should be displayed in the cells.</desc>
+						<desc xml:lang="en-US">Indicates whether formulas instead of results are displayed in the cells.</desc>
 						<label xml:lang="en-US">Formulas</label>
 					</info>
 				</prop>
@@ -149,7 +149,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether numbers containing the 0 value should be shown.</desc>
+						<desc xml:lang="en-US">Indicates whether numbers containing the 0 value are shown.</desc>
 						<label xml:lang="en-US">Zero values</label>
 					</info>
 				</prop>
@@ -160,7 +160,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether notes should be marked.</desc>
+						<desc xml:lang="en-US">Indicates whether notes are marked.</desc>
 						<label xml:lang="en-US">Note tags</label>
 					</info>
 				</prop>
@@ -171,7 +171,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether all values should be highlighted in the sheet (text black, numbers blue, others green).</desc>
+						<desc xml:lang="en-US">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 						<label xml:lang="en-US">Value highlighting</label>
 					</info>
 				</prop>
@@ -182,7 +182,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether anchor icons should be displayed next to selected graphics in the document.</desc>
+						<desc xml:lang="en-US">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 						<label xml:lang="en-US">Anchor</label>
 					</info>
 				</prop>
@@ -193,7 +193,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether text overflow should be marked via a small triangle.</desc>
+						<desc xml:lang="en-US">Indicates whether text overflow is marked via a small triangle.</desc>
 						<label xml:lang="en-US">Text overflow</label>
 					</info>
 				</prop>
@@ -204,7 +204,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<value>0</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether objects and graphics should be shown, hidden or replaced by a placeholder.</desc>
+						<desc xml:lang="en-US">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Objects and Graphics</label>
 					</info>
 					<constraints>
@@ -232,7 +232,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<value>0</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether charts should be shown, hidden or replaced by a placeholder.</desc>
+						<desc xml:lang="en-US">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Charts</label>
 					</info>
 					<constraints>
@@ -260,7 +260,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
 					<value>0</value>
 					<info>
-						<desc xml:lang="en-US">Indicates whether drawing objects should be shown, hidden or replaced by a placeholder.</desc>
+						<desc xml:lang="en-US">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Drawing objects</label>
 					</info>
 					<constraints>
@@ -293,13 +293,13 @@
 					<!-- UIHints: Tools - Options - Spreadsheet  Other  [Section] Updating -->
 					<value>2</value>
 					<info>
-						<desc xml:lang="en-US">Specifies if and how links should be updated when loading a document.</desc>
+						<desc xml:lang="en-US">Specifies if and how links are updated when loading a document.</desc>
 						<label xml:lang="en-US">Update Links</label>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
-								<desc xml:lang="en-US">Indicates that links are updated without asking.</desc>
+								<desc xml:lang="en-US">Indicates that links are always updated.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -331,7 +331,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether grid lines should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether grid lines are displayed.</desc>
 						<label xml:lang="en-US">Grid lines</label>
 					</info>
 				</prop>
@@ -343,7 +343,7 @@
 					<!--Default 12632256 = LightGray-->
 					<value>12632256</value>
 					<info>
-						<desc xml:lang="en-US">Specifies the color for the grid lines.</desc>
+						<desc xml:lang="en-US">Specifies the color of the grid lines.</desc>
 						<label xml:lang="en-US">Color</label>
 					</info>
 				</prop>
@@ -354,7 +354,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether page breaks should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether page breaks are displayed.</desc>
 						<label xml:lang="en-US">Page breaks</label>
 					</info>
 				</prop>
@@ -365,7 +365,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether guides should be displayed when moving objects.</desc>
+						<desc xml:lang="en-US">Specifies whether guides are displayed when moving objects.</desc>
 						<label xml:lang="en-US">Guides</label>
 					</info>
 				</prop>
@@ -376,7 +376,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether control points should be displayed as simple squares without 3D effect.</desc>
+						<desc xml:lang="en-US">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 						<label xml:lang="en-US">Simple control points</label>
 					</info>
 				</prop>
@@ -387,7 +387,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether control points should be displayed larger than normal ones.</desc>
+						<desc xml:lang="en-US">Specifies whether control points are displayed as larger than the default size.</desc>
 						<label xml:lang="en-US">Large control points</label>
 					</info>
 				</prop>
@@ -403,7 +403,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether row and column headers should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether row and column headers are displayed.</desc>
 						<label xml:lang="en-US">Column/Row headers</label>
 					</info>
 				</prop>
@@ -414,7 +414,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether a horizontal scroll bar should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether a horizontal scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Horizontal scroll</label>
 					</info>
 				</prop>
@@ -425,7 +425,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether a vertical scroll bar should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether a vertical scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Vertical Scroll</label>
 					</info>
 				</prop>
@@ -436,7 +436,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether sheet tabs should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether sheet tabs are displayed.</desc>
 						<label xml:lang="en-US">Sheet tabs</label>
 					</info>
 				</prop>
@@ -447,7 +447,7 @@
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether outline symbols should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether outline symbols are displayed.</desc>
 						<label xml:lang="en-US">Outline symbols</label>
 					</info>
 				</prop>
@@ -463,7 +463,7 @@
 					<!-- UIHints: (Status Bar) -->
 					<value>9</value>
 					<info>
-						<desc xml:lang="en-US">Selects a function that is calculated for the selected cells to show the result in the status bar.</desc>
+						<desc xml:lang="en-US">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 						<label xml:lang="en-US">Statusbar Function</label>
 					</info>
 					<constraints>
@@ -479,7 +479,7 @@
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
-								<desc xml:lang="en-US">Indicates that the count of numbers is calculated.</desc>
+								<desc xml:lang="en-US">Indicates that the number count is calculated.</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="3">
@@ -512,14 +512,14 @@
 					<prop oor:name="Metric" oor:type="xs:int">
 						<value>1250</value>
 						<info>
-							<desc xml:lang="en-US">Specifies the tabulator distance that is used with locales that use the metric system.</desc>
+							<desc xml:lang="en-US">Specifies the tabulator distance with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
 						<value>1270</value>
 						<info>
-							<desc xml:lang="en-US">Specifies the tabulator distance that is used with locales that don't use the metric system.</desc>
+							<desc xml:lang="en-US">Specifies the tabulator distance with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 					</prop>
@@ -568,7 +568,7 @@
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
 						<info>
-							<desc xml:lang="en-US">Specifies the measurement unit that is used with locales that use the metric system.</desc>
+							<desc xml:lang="en-US">Specifies the measurement unit that is used with locales that don't use the metric system.</desc>
 						</info>
 						<value>8</value>
 						<constraints>
@@ -727,7 +727,7 @@
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether formula references from the input line should be highlighted in color in the cell.</desc>
+					<desc xml:lang="en-US">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 					<label xml:lang="en-US">Show references in color</label>
 				</info>
 			</prop>
@@ -738,7 +738,7 @@
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether references should be expanded when inserting columns or rows next to, above or below the reference range.</desc>
+					<desc xml:lang="en-US">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 					<label xml:lang="en-US">Expand references if new columns/rows are inserted</label>
 				</info>
 			</prop>
@@ -749,7 +749,7 @@
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether column and row headers should be highlighted in the selected columns or rows.</desc>
+					<desc xml:lang="en-US">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 					<label xml:lang="en-US">Highlight selection in column/row headings</label>
 				</info>
 			</prop>
@@ -760,7 +760,7 @@
 				<!-- UIHints: only API (see UseTabCol) -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key has been used to change columns.</desc>
+					<desc xml:lang="en-US">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 					<label xml:lang="en-US">Use Tab Column</label>
 				</info>
 			</prop>
@@ -778,7 +778,7 @@
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether a warning box will appear when existing existing cells are replaced (i.e. pasting from clipboard).</desc>
+					<desc xml:lang="en-US">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 					<label xml:lang="en-US">Warn before replacing cells</label>
 				</info>
 			</prop>
@@ -838,7 +838,7 @@
 				<!-- UIHints: Tools  Detective  AutoRefresh -->
 				<value>true</value>
 				<info>
-					<desc xml:lang="en-US">Specifies whether all the Detective traces in the sheet should automatically be refreshed when modifying a formula.</desc>
+					<desc xml:lang="en-US">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 					<label xml:lang="en-US">Detective Auto Refresh</label>
 				</info>
 			</prop>
@@ -858,7 +858,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether frames, drawing elements and form functions should only be movable between grid points.</desc>
+						<desc xml:lang="en-US">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 					</info>
 				</prop>
@@ -869,7 +869,7 @@
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether the snap grid should be matched with the main grid.</desc>
+						<desc xml:lang="en-US">Specifies whether the snap grid is matched with the main grid.</desc>
 						<label xml:lang="en-US">Size to grid</label>
 					</info>
 				</prop>
@@ -880,7 +880,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether the grid should be displayed.</desc>
+						<desc xml:lang="en-US">Specifies whether the grid is displayed.</desc>
 						<label xml:lang="en-US">Visible grid</label>
 					</info>
 				</prop>
@@ -891,7 +891,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether the current grid settings should be changed symmetrically. The resolution and subdivision for the X/Y axes will remain the same.</desc>
+						<desc xml:lang="en-US">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes will remain the same.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 					</info>
 				</prop>
@@ -1061,7 +1061,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether iterative calculation should be used for formulas with circular references.</desc>
+						<desc xml:lang="en-US">Specifies whether iterative calculation is used for formulas with circular references.</desc>
 						<label xml:lang="en-US">Iterations</label>
 					</info>
 				</prop>
@@ -1099,7 +1099,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Case sensitive -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether upper and lower case in texts should be distinguished when comparing cell contents.</desc>
+						<desc xml:lang="en-US">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 						<label xml:lang="en-US">Case sensitive</label>
 					</info>
 				</prop>
@@ -1110,7 +1110,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Precision as shown -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether the calculation should use the rounded values displayed in the sheet.</desc>
+						<desc xml:lang="en-US">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 						<label xml:lang="en-US">Precision as shown</label>
 					</info>
 				</prop>
@@ -1132,7 +1132,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Automatically find column and row labels -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether column and row labels should be used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
+						<desc xml:lang="en-US">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 						<label xml:lang="en-US">Automatically find column and row labels</label>
 					</info>
 				</prop>
@@ -1152,7 +1152,7 @@
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Specifies whether the calculation should use regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
+						<desc xml:lang="en-US">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 						<label xml:lang="en-US">Enable regular expressions in formulas</label>
 					</info>
 				</prop>
@@ -1364,7 +1364,7 @@
 					</info>
 				</prop>
 				<info>
-					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at a object creating Button.</desc>
+					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at an object creating Button.</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 				</info>
 			</group>
