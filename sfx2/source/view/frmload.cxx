@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2001-02-06 11:34:07 $
+ *  last change: $Author: mba $ $Date: 2001-02-07 11:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
 
     // Extract URL from given descriptor.
     String rURL;
+    rtl::OUString aTypeName;
+    String aPreselectedFilterName;
 
     sal_uInt32 nPropertyCount = rArgs.getLength();
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -211,16 +213,24 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
             rArgs[nProperty].Value >>= sTemp;
             rURL = sTemp;
         }
+        if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
+        {
+            ::rtl::OUString sTemp;
+            rArgs[nProperty].Value >>= sTemp;
+
+            // Convert new type name to filter name in old format ( always gives the name of the preferred filter )
+            aFilterName = SfxFilterContainer::ConvertToOldFilterName(sTemp);
+        }
         if( rArgs[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
         {
             ::rtl::OUString sTemp;
             rArgs[nProperty].Value >>= sTemp;
-            // Convert new filtername to old format!
-            aFilterName = SfxFilterContainer::ConvertToOldFilterName(sTemp);
-            if ( !aFilterName.Len() )
-                aFilterName = sTemp;
+            aPreselectedFilterName = sTemp;
         }
     }
+
+    if ( aPreselectedFilterName.Len() )
+        aFilterName = aPreselectedFilterName;
 
     xFrame = rFrame;
 
@@ -587,8 +597,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     String aURL;
     ::rtl::OUString sTemp;
     rtl::OUString aTypeName;
+    String aPreselectedFilterName;
 
     sal_uInt32 nPropertyCount = lDescriptor.getLength();
+    sal_Int32 nIndexOfFilterName = nPropertyCount;
     for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
@@ -599,9 +611,14 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
         {
             lDescriptor[nProperty].Value >>= sTemp;
-            // Convert new filtername to old format!
             aTypeName = sTemp;
             aFilterName = SfxFilterContainer::ConvertToOldFilterName( sTemp );
+        }
+        if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName")) )
+        {
+            lDescriptor[nProperty].Value >>= sTemp;
+            aPreselectedFilterName = sTemp;
+            nIndexOfFilterName = nProperty;
         }
     }
 
@@ -611,77 +628,104 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         // Convert old to new filter name.
-        aFilterName = SfxFilterContainer::ConvertToNewFilterName( aFilterName );
+        aFilterName = aTypeName;
     }
-    else if ( !aFilterName.Len() )
+    else if ( !aFilterName.Len() && !aPreselectedFilterName.Len() )
     {
         // generic detector will not be called for new types except when this type does not support deep detection
         // in this case it is correct to use the result of the shallow detection ( that may be empty also! )
+        return aTypeName;
     }
     else
     {
         SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-        const SfxFilter* pFilter = rMatcher.GetFilter( aFilterName );
-        if ( pFilter )
+        SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL );
+        const SfxFilter* pNew = NULL;
+
+        SfxApplication* pApp = SFX_APP();
+        SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
+        TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
+
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SfxMedium aMedium( aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
+        if ( aMedium.IsStorage() )
+            aMedium.GetStorage();
+        else
+            aMedium.GetInStream();
+
+        // Access to Medium was successful ?
+        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aURL );
-            const SfxFilter* pNew = NULL;
-
-            SfxApplication* pApp = SFX_APP();
-            SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
-            TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            SfxMedium aMedium( aURL, (STREAM_READ | STREAM_SHARE_DENYNONE), sal_False, NULL, pSet );
-            if ( aMedium.IsStorage() )
-                aMedium.GetStorage();
-            else
-                aMedium.GetInStream();
-
-            // Access to Medium was successfull ?
-            if ( aMedium.GetErrorCode() == ERRCODE_NONE )
-            {
         /*      String aMime;
                 aMedium.GetMIMEAndRedirect( aMime );
                 if( aMime.Len() )
                     pFilter = rMatcher.GetFilter4Mime( aMime );
         */
-                const SfxFilter* pOldFilter = pFilter;
-                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
-                ErrCode nErr = ERRCODE_ABORT;
-                if ( ( (pFilter)->GetFilterFlags() & nMust ) == nMust && ( (pFilter)->GetFilterFlags() & nDont ) == 0 )
+            SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+            ErrCode nErr = ERRCODE_ABORT;
+            const SfxFilter* pOldFilter = NULL;
+            const SfxFilter* pFilter = NULL;
+            if ( aPreselectedFilterName.Len() )
+            {
+                // first check the preselected filter
+                pSet->Put( SfxStringItem( SID_FILTER_NAME, aPreselectedFilterName ) );
+                pOldFilter = pFilter = rMatcher.GetFilter( aPreselectedFilterName );
+                if ( pFilter &&
+                    ( ( (pFilter)->GetFilterFlags() & nMust ) == nMust && ( (pFilter)->GetFilterFlags() & nDont ) == 0 ) )
                     nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
                 else
                     // filterflags not suitable
                     pFilter = NULL;
+
+                if ( !pFilter )
+                    // preselected filter doesn't fit, erase filter name from media descriptor
+                    lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString();
+            }
+
+            if ( !pFilter )
+            {
+                if( !aFilterName.Len() )
+                    // preselected filter was bullshit, but the before detected type is a new type that can't be
+                    // detected with this service
+                    return aTypeName;
+
+                // next try the detected type
+                pSet->Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
+                pOldFilter = pFilter = rMatcher.GetFilter( aFilterName );
+                if ( pFilter &&
+                    ( ( (pFilter)->GetFilterFlags() & nMust ) == nMust && ( (pFilter)->GetFilterFlags() & nDont ) == 0 ) )
+                    nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                else
+                    // filterflags not suitable
+                    pFilter = NULL;
+            }
+
+            // No error while reading from medium ?
+            if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+            {
+                if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
+                {
+                    // try simplest file lookup: clipboard format in storage
+                    pFilter = NULL;
+                    SvStorageRef aStor = aMedium.GetStorage();
+                    SfxFilterFlags nFlags = SFX_FILTER_IMPORT | SFX_FILTER_PREFERED;
+                    if ( aStor.Is() )
+                    {
+                        pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat(), nFlags );
+                        if ( !pFilter || ( (pFilter)->GetFilterFlags() & nMust ) != nMust || ( (pFilter)->GetFilterFlags() & nDont ) != 0 )
+                            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+                    }
+                    if ( pFilter )
+                        nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+                }
 
                 // No error while reading from medium ?
                 if ( aMedium.GetErrorCode() == ERRCODE_NONE )
                 {
                     if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
                     {
-                        // try simplest file lookup: clipboard format in storage
                         pFilter = NULL;
-                        SvStorageRef aStor = aMedium.GetStorage();
-                        SfxFilterFlags nFlags = SFX_FILTER_IMPORT | SFX_FILTER_PREFERED;
-                        if ( aStor.Is() )
-                        {
-                            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat(), nFlags );
-                            if ( !pFilter || ( (pFilter)->GetFilterFlags() & nMust ) != nMust || ( (pFilter)->GetFilterFlags() & nDont ) != 0 )
-                                pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
-                        }
-                        if ( pFilter )
-                            nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
-                    }
-
-                    // No error while reading from medium ?
-                    if ( aMedium.GetErrorCode() == ERRCODE_NONE )
-                    {
-                        if ( !pFilter || pOldFilter == pFilter && nErr != ERRCODE_NONE )
-                        {
-                            pFilter = NULL;
-                            nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
-                        }
+                        nErr = rMatcher.GetFilter4Content( aMedium, &pFilter );
                     }
                 }
             }
@@ -692,12 +736,12 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 pFilter = NULL;
                 ErrorHandler::HandleError( aMedium.GetError() );
             }
-        }
 
-        if ( !pFilter )
-            aFilterName.Erase();
-        else
-            aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
+            if ( !pFilter )
+                aFilterName.Erase();
+            else
+                aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
+        }
     }
 
     if ( aFilterName.Len() )
