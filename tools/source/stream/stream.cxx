@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-03 16:55:08 $
+ *  last change: $Author: er $ $Date: 2000-12-22 01:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,6 +799,121 @@ BOOL SvStream::ReadLine( ByteString& rStr )
     return bEnd;
 }
 
+BOOL SvStream::ReadUniStringLine( String& rStr )
+{
+    sal_Unicode buf[256+1];
+    BOOL        bEnd        = FALSE;
+    ULONG       nOldFilePos = Tell();
+    sal_Unicode c           = 0;
+
+    DBG_ASSERT( sizeof(sal_Unicode) == sizeof(USHORT), "ReadUniStringLine: swapping sizeof(sal_Unicode) not implemented" );
+
+    rStr.Erase();
+    while( !bEnd && !GetError() )   // !!! nicht auf EOF testen,
+                                    // !!! weil wir blockweise
+                                    // !!! lesen
+    {
+        USHORT nLen = (USHORT)Read( (char*)buf, sizeof(buf)-sizeof(sal_Unicode) );
+        nLen /= sizeof(sal_Unicode);
+        if ( !nLen )
+        {
+            if ( rStr.Len() == 0 )
+            {
+                // der allererste Blockread hat fehlgeschlagen -> Abflug
+                bIsEof = TRUE;
+                return FALSE;
+            }
+            else
+                break;
+        }
+
+        for( USHORT n = 0; n < nLen ; n++ )
+        {
+            if ( bSwap )
+                SwapUShort( buf[n] );
+            c = buf[n];
+            if ( c != '\n' && c != '\r' )
+                rStr += c;
+            else
+            {
+                bEnd = TRUE;
+                break;
+            }
+        }
+    }
+
+    if ( !bEnd && !GetError() && rStr.Len() )
+        bEnd = TRUE;
+
+    nOldFilePos += rStr.Len() * sizeof(sal_Unicode);
+    if( Tell() > nOldFilePos )
+        nOldFilePos++;
+    Seek( nOldFilePos );  // seeken wg. obigem BlockRead!
+
+    if ( bEnd && (c=='\r' || c=='\n') )  // Sonderbehandlung DOS-Dateien
+    {
+        sal_Unicode cTemp;
+        Read( (char*)&cTemp, sizeof(cTemp) );
+        if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
+            Seek( nOldFilePos );
+    }
+
+    if ( bEnd )
+        bIsEof = FALSE;
+    return bEnd;
+}
+
+BOOL SvStream::ReadUniOrByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
+{
+    if ( eSrcCharSet == RTL_TEXTENCODING_UNICODE )
+        return ReadUniStringLine( rStr );
+    else
+        return ReadByteStringLine( rStr, eSrcCharSet );
+}
+
+/*************************************************************************
+|*
+|*    Stream::WriteUnicodeText()
+|*
+*************************************************************************/
+
+BOOL SvStream::WriteUnicodeText( const String& rStr )
+{
+    DBG_ASSERT( sizeof(sal_Unicode) == sizeof(USHORT), "WriteUnicodeText: swapping sizeof(sal_Unicode) not implemented" );
+    if ( bSwap )
+    {
+        xub_StrLen nLen = rStr.Len();
+        sal_Unicode aBuf[384];
+        sal_Unicode* const pTmp = ( nLen > 384 ? new sal_Unicode[nLen] : aBuf);
+        memcpy( pTmp, rStr.GetBuffer(), nLen * sizeof(sal_Unicode) );
+        sal_Unicode* p = pTmp;
+        const sal_Unicode* const pStop = pTmp + nLen;
+        while ( p < pStop )
+        {
+            SwapUShort( *p );
+            p++;
+        }
+        Write( (char*)pTmp, nLen * sizeof(sal_Unicode) );
+        if ( pTmp != aBuf )
+            delete [] pTmp;
+    }
+    else
+        Write( (char*)rStr.GetBuffer(), rStr.Len() * sizeof(sal_Unicode) );
+    return nError == SVSTREAM_OK;
+}
+
+BOOL SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding eDestCharSet )
+{
+    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+        return WriteUnicodeText( rStr );
+    else
+    {
+        ByteString aStr( rStr, eDestCharSet );
+        Write( aStr.GetBuffer(), aStr.Len() );
+        return nError == SVSTREAM_OK;
+    }
+}
+
 /*************************************************************************
 |*
 |*    Stream::WriteLine()
@@ -819,6 +934,21 @@ BOOL SvStream::WriteLine( const ByteString& rStr )
     Write( rStr.GetBuffer(), rStr.Len() );
     endl(*this);
     return nError == SVSTREAM_OK;
+}
+
+BOOL SvStream::WriteUniStringLine( const String& rStr )
+{
+    WriteUnicodeText( rStr );
+    endlu(*this);
+    return nError == SVSTREAM_OK;
+}
+
+BOOL SvStream::WriteUniOrByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
+{
+    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+        return WriteUniStringLine( rStr );
+    else
+        return WriteByteStringLine( rStr, eDestCharSet );
 }
 
 /*************************************************************************
@@ -843,6 +973,79 @@ BOOL SvStream::WriteLines( const ByteString& rStr )
     Write( aStr.GetBuffer(), aStr.Len() );
     endl( *this );
     return (BOOL)(nError == SVSTREAM_OK);
+}
+
+BOOL SvStream::WriteUniStringLines( const String& rStr )
+{
+    String aStr( rStr );
+    aStr.ConvertLineEnd( eLineDelimiter );
+    WriteUniStringLine( aStr );
+    return nError == SVSTREAM_OK;
+}
+
+BOOL SvStream::WriteUniOrByteStringLines( const String& rStr, rtl_TextEncoding eDestCharSet )
+{
+    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+        return WriteUniStringLines( rStr );
+    else
+        return WriteByteStringLines( rStr, eDestCharSet );
+}
+
+/*************************************************************************
+|*
+|*    Stream::WriteUniOrByteChar()
+|*
+*************************************************************************/
+
+BOOL SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
+{
+    if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
+        *this << ch;
+    else
+    {
+        ByteString aStr( ch, eDestCharSet );
+        Write( aStr.GetBuffer(), aStr.Len() );
+    }
+    return nError == SVSTREAM_OK;
+}
+
+/*************************************************************************
+|*
+|*    Stream::StartWritingUnicodeText()
+|*
+*************************************************************************/
+
+BOOL SvStream::StartWritingUnicodeText()
+{
+    SetEndianSwap( FALSE );     // write native format
+    // some convention (whose? MS?)
+    // upon read: 0xfeff(-257) => no swap; 0xfffe(-2) => swap
+    *this << UINT16( 0xfeff );
+    return nError == SVSTREAM_OK;
+}
+
+/*************************************************************************
+|*
+|*    Stream::StartReadingUnicodeText()
+|*
+*************************************************************************/
+
+BOOL SvStream::StartReadingUnicodeText()
+{
+    UINT16 nFlag;
+    *this >> nFlag;
+    switch ( nFlag )
+    {
+        case 0xfeff :
+            // native
+        break;
+        case 0xfffe :
+            SetEndianSwap( !bSwap );
+        break;
+        default:
+            SeekRel( -((long)sizeof(nFlag)) );      // no flag, pure data
+    }
+    return nError == SVSTREAM_OK;
 }
 
 /*************************************************************************
@@ -2157,6 +2360,30 @@ SvStream& endl( SvStream& rStr )
     else
         rStr << _CR << _LF;
     return rStr;
+}
+
+SvStream& endlu( SvStream& rStrm )
+{
+    switch ( rStrm.GetLineDelimiter() )
+    {
+        case LINEEND_CR :
+            rStrm << sal_Unicode(_CR);
+        break;
+        case LINEEND_LF :
+            rStrm << sal_Unicode(_LF);
+        break;
+        default:
+            rStrm << sal_Unicode(_CR) << sal_Unicode(_LF);
+    }
+    return rStrm;
+}
+
+SvStream& endlub( SvStream& rStrm )
+{
+    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
+        return endlu( rStrm );
+    else
+        return endl( rStrm );
 }
 
 /*************************************************************************
