@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:13:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fusel.hxx"
+
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -76,7 +78,9 @@
 #ifndef _E3D_POLYSC3D_HXX //autogen
 #include <svx/polysc3d.hxx>
 #endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
 #ifndef _GOODIES_IMAPOBJ_HXX //autogen
 #include <svtools/imapobj.hxx>
 #endif
@@ -122,24 +126,44 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 
-#include "grdocsh.hxx"
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 #include "app.hxx"
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "stlpool.hxx"
 #include "anmdef.hxx"
 #include "anminfo.hxx"
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
-#include "fusel.hxx"
-#include "viewshel.hxx"
-#include "frmview.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 #include "pgjump.hxx"
 #include <svx/globl3d.hxx>
-#include "sdclient.hxx"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
 
 // #108981#
 #ifndef _SVDUNDO_HXX
@@ -147,6 +171,8 @@
 #endif
 
 using namespace ::com::sun::star;
+
+namespace sd {
 
 TYPEINIT1( FuSelection, FuDraw );
 
@@ -156,21 +182,22 @@ TYPEINIT1( FuSelection, FuDraw );
 |*
 \************************************************************************/
 
-FuSelection::FuSelection(SdViewShell*     pViewSh,
-                         SdWindow*        pWin,
-                         SdView*          pView,
-                         SdDrawDocument*  pDoc,
-                         SfxRequest&      rReq) :
-    FuDraw(pViewSh, pWin, pView, pDoc, rReq),
-    bTempRotation(FALSE),
-    bHideAndAnimate(FALSE),
-    bSelectionChanged(FALSE),
-    pHdl(NULL),
-    bSuppressChangesOfSelection(FALSE),
-    bMirrorSide0(FALSE),
-    nEditMode(SID_BEZIER_MOVE),
-    pSound(NULL),
-    pWaterCanCandidate(NULL)
+FuSelection::FuSelection (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+      bTempRotation(FALSE),
+      bHideAndAnimate(FALSE),
+      bSelectionChanged(FALSE),
+      pHdl(NULL),
+      bSuppressChangesOfSelection(FALSE),
+      bMirrorSide0(FALSE),
+      nEditMode(SID_BEZIER_MOVE),
+      pSound(NULL),
+      pWaterCanCandidate(NULL)
 {
     // Objektbar auswaehlen
     SelectionHasChanged();
@@ -350,7 +377,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = TRUE;
             }
             else if(!rMEvt.IsMod2()
-                && pViewShell->ISA(SdDrawViewShell)
+                && pViewShell->ISA(DrawViewShell)
                 )
             {
                 if(pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
@@ -411,7 +438,9 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                     {
-                        SdClient* pIPClient = (SdClient*) pViewShell->GetIPClient();
+                        OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
+                        Client* pIPClient = static_cast<Client*>(
+                            pViewShell->GetViewShell()->GetIPClient());
 
                         if (pIPClient && pIPClient->IsInPlaceActive())
                         {
@@ -989,9 +1018,10 @@ void FuSelection::Activate()
         case SID_OBJECT_ROTATE:
         {
             // (gemapter) Slot wird explizit auf Rotate gesetzt #31052#
-            if( pViewShell->ISA( SdDrawViewShell) )
+            if( pViewShell->ISA(DrawViewShell) )
             {
-                USHORT* pSlotArray = ( (SdDrawViewShell*) pViewShell )->GetSlotArray();
+                USHORT* pSlotArray =
+                    static_cast<DrawViewShell*>(pViewShell)->GetSlotArray();
                 pSlotArray[ 1 ] = SID_OBJECT_ROTATE;
             }
 
@@ -1154,7 +1184,7 @@ void FuSelection::SelectionHasChanged()
     else
         nObjBarId = RID_DRAW_OBJ_TOOLBOX;
 
-    pViewShell->SwitchObjectBar(nObjBarId);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (nObjBarId);
 }
 
 
@@ -1261,16 +1291,16 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 bAnimated = TRUE;
             }
         }
-        else if (!pDocSh->ISA(SdGraphicDocShell)        &&
-                 pView->ISA(SdDrawView)                 &&
-                 ((SdDrawView*) pView)->IsActionMode()  &&
+        else if (!pDocSh->ISA(GraphicDocShell)        &&
+                 pView->ISA(DrawView)                 &&
+                 static_cast<DrawView*>(pView)->IsActionMode()  &&
                  pDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Animations-Objekt in der Mitte getroffen -> Interaktion
             **********************************************************/
             SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-            SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pViewShell;
+            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
             pWindow->ReleaseMouse();
 
             switch (pInfo->eClickAction)
@@ -1421,28 +1451,29 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         }
 
         if (!bAnimated                               &&
-            pView->ISA(SdDrawView)                 &&
-            !pDocSh->ISA(SdGraphicDocShell)        &&
-            ((SdDrawView*) pView)->GetSlideShow()  &&
+            pView->ISA(DrawView)                 &&
+            !pDocSh->ISA(GraphicDocShell)        &&
+            static_cast<DrawView*>(pView)->GetSlideShow()  &&
             pDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
             * Effekt-Objekt in der Mitte getroffen -> Effekt abspielen
             **********************************************************/
             SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-            SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pViewShell;
+            DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
 
             switch (pInfo->eClickAction)
             {
                 case presentation::ClickAction_VANISH:
                 case presentation::ClickAction_INVISIBLE:
                 {
-                    if (((SdDrawView*) pView)->GetSlideShow())
+                    if (static_cast<DrawView*>(pView)->GetSlideShow())
                     {
                         // Objekt ausblenden
                         bHideAndAnimate = TRUE;
                         pDrViewSh->LockInput();
-                        ((SdDrawView*) pView)->HideAndAnimateObject(pObj);
+                        static_cast<DrawView*>(pView)
+                            ->HideAndAnimateObject(pObj);
                         pDrViewSh->UnlockInput();
                         pWindow->ReleaseMouse();
                         bAnimated = TRUE;
@@ -1457,7 +1488,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 break;
             }
 
-            if (!bAnimated && ((SdDrawView*) pView)->GetSlideShow() &&
+            if (!bAnimated && static_cast<DrawView*>(pView)->GetSlideShow() &&
                 ( pInfo->bActive &&
                     ( pInfo->eEffect != presentation::AnimationEffect_NONE ||
                     pInfo->eTextEffect != presentation::AnimationEffect_NONE )))
@@ -1465,7 +1496,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 // Objekt ausblenden
                 bHideAndAnimate = TRUE;
                 pDrViewSh->LockInput();
-                ((SdDrawView*) pView)->HideAndAnimateObject(pObj);
+                static_cast<DrawView*>(pView)->HideAndAnimateObject(pObj);
                 pDrViewSh->UnlockInput();
                 pWindow->ReleaseMouse();
                 bAnimated = TRUE;
@@ -1511,3 +1542,4 @@ SdrObject* FuSelection::pickObject (const Point& rTestPoint)
     pView->PickObj (rTestPoint, nHitLog, pObject, pPageView, SDRSEARCH_PICKMARKABLE);
     return pObject;
 }
+} // end of namespace sd
