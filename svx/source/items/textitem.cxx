@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-01 12:32:47 $
+ *  last change: $Author: mt $ $Date: 2002-11-05 15:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,8 @@
 #include <tools/tenccvt.hxx>
 #endif
 
+#define STORE_UNICODE_MAGIC_MARKER  0xFE331188
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -248,6 +250,8 @@ using namespace ::com::sun::star::text;
 // Konvertierung fuer UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+
+BOOL SvxFontItem::bEnableStoreUnicodeNames = FALSE;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -476,18 +480,20 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
     rStrm << (BYTE) GetFamily() << (BYTE) GetPitch()
           << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion()));
 
+    String aStoreFamilyName( GetFamilyName() );
     if( bToBats )
-    {
-        String sStarBats( "StarBats", sizeof("StarBats")-1, RTL_TEXTENCODING_ASCII_US );
-        rStrm.WriteByteString( sStarBats );
-    }
-    else
-        rStrm.WriteByteString(GetFamilyName());
-
-    // UNICODE: rStrm << GetFamilyName();
-
-    // UNICODE: rStrm << GetStyleName();
+        aStoreFamilyName = String( "StarBats", sizeof("StarBats")-1, RTL_TEXTENCODING_ASCII_US );
+    rStrm.WriteByteString(aStoreFamilyName);
     rStrm.WriteByteString(GetStyleName());
+
+    // #96441# Kach for EditEngine, only set while creating clipboard stream.
+    if ( bEnableStoreUnicodeNames )
+    {
+        ULONG nMagic = STORE_UNICODE_MAGIC_MARKER;
+        rStrm << nMagic;
+        rStrm.WriteByteString( aStoreFamilyName, RTL_TEXTENCODING_UNICODE );
+        rStrm.WriteByteString( GetStyleName(), RTL_TEXTENCODING_UNICODE );
+    }
 
     return rStrm;
 }
@@ -514,6 +520,22 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, USHORT) const
     // irgendwann wandelte sich der StarBats vom ANSI- zum SYMBOL-Font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
+
+    // Check if we have stored unicode
+    ULONG nStreamPos = rStrm.Tell();
+    ULONG nMagic = STORE_UNICODE_MAGIC_MARKER;
+    rStrm >> nMagic;
+    if ( nMagic == STORE_UNICODE_MAGIC_MARKER )
+    {
+        rStrm.ReadByteString( aName, RTL_TEXTENCODING_UNICODE );
+        rStrm.ReadByteString( aStyle, RTL_TEXTENCODING_UNICODE );
+    }
+    else
+    {
+        rStrm.Seek( nStreamPos );
+    }
+
+
 
     return new SvxFontItem( (FontFamily)eFamily, aName, aStyle,
                             (FontPitch)eFontPitch, (rtl_TextEncoding)eFontTextEncoding, Which() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-05 09:48:22 $
+ *  last change: $Author: mt $ $Date: 2002-11-05 15:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ class SvxFontItem : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
+    static BOOL bEnableStoreUnicodeNames;
+
 public:
     TYPEINFO();
 
@@ -146,6 +148,8 @@ public:
         eTextEncoding = rFont.GetCharSet();
         return *this;
     }
+
+    static void EnableStoreUnicodeNames( BOOL bEnable ) { bEnableStoreUnicodeNames = bEnable; }
 
 };
 

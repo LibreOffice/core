@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-01 12:37:49 $
+ *  last change: $Author: mt $ $Date: 2002-11-05 15:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include <adjitem.hxx>
 #include <scripttypeitem.hxx>
 #include <frmdiritem.hxx>
+#include <fontitem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -2938,8 +2939,10 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     aText.ConvertLineEnd(); // Systemspezifisch
     pDataObj->GetString() = aText;
 
+    SvxFontItem::EnableStoreUnicodeNames( TRUE );
     WriteBin( pDataObj->GetStream(), aSelection, TRUE );
     pDataObj->GetStream().Seek( 0 );
+    SvxFontItem::EnableStoreUnicodeNames( FALSE );
 
     ((ImpEditEngine*)this)->WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );
