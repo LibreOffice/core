@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-21 17:53:01 $
+ *  last change: $Author: sj $ $Date: 2001-12-18 17:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1540,6 +1540,16 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( UINT16 nRecId, DffSeekToCont
 //  private Methoden
 //---------------------------------------------------------------------------
 
+struct EscherBlipCacheEntry
+{
+    Graphic     aGraphic;
+    sal_uInt32  nBlip;
+
+    EscherBlipCacheEntry( sal_uInt32 nBlipId, const Graphic& rGraf ) :
+        nBlip( nBlipId ),
+        aGraphic( rGraf ) {}
+};
+
 void SvxMSDffManager::Scale( long& rVal ) const
 {
     if ( bNeedMap )
@@ -2705,8 +2715,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
     String aFilename;
 
     MSO_BlipFlags eFlags = (MSO_BlipFlags)GetPropertyValue( DFF_Prop_pibFlags, mso_blipflagDefault );
-    ULONG nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
-    BOOL bGrfRead = FALSE,
+    sal_uInt32 nBlipId = GetPropertyValue( DFF_Prop_pib, 0 );
+    sal_Bool bGrfRead = sal_False,
+
     // Grafik verlinkt
     bLinkGrf = 0 != ( eFlags & mso_blipflagLinkToFile );
 
@@ -2715,6 +2726,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
     //   UND, ODER folgendes:
     if( !( eFlags & mso_blipflagDoNotSave ) ) // Grafik embedded
+    {
         if (!(bGrfRead = GetBLIP(nBlipId, aGraf)))
         {
             /*
@@ -2740,7 +2752,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
                 }
             }
         }
-
+    }
     if ( bGrfRead )
     {   // the writer is doing it's own cropping, so this part affects only impress and calc
         if ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_CROP_BITMAPS )
@@ -3878,9 +3890,6 @@ SV_IMPL_OP_PTRARR_SORT( SvxMSDffShapeTxBxSort,  SvxMSDffShapeOrder_Ptr  );
 // Liste aller SvxMSDffImportRec fuer eine Gruppe
 SV_IMPL_OP_PTRARR_SORT(MSDffImportRecords, MSDffImportRec_Ptr)
 
-
-
-
 //---------------------------------------------------------------------------
 //  exportierte Klasse: oeffentliche Methoden
 //---------------------------------------------------------------------------
@@ -3908,7 +3917,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nBLIPCount(  USHRT_MAX ),              // mit Error initialisieren, da wir erst pruefen,
      nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
      nSvxMSDffSettings( 0 ),
-     nSvxMSDffOLEConvFlags( 0 )
+     nSvxMSDffOLEConvFlags( 0 ),
+     pEscherBlipCache( NULL )
 {
     SetModel( pSdrModel_, nApplicationScale );
 
@@ -3951,13 +3961,21 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_ )
      nBLIPCount(  USHRT_MAX ),              // mit Error initialisieren, da wir erst pruefen,
      nShapeCount( USHRT_MAX ),              // ob Kontroll-Stream korrekte Daten enthaellt
      nSvxMSDffSettings( 0 ),
-     nSvxMSDffOLEConvFlags( 0 )
+     nSvxMSDffOLEConvFlags( 0 ),
+     pEscherBlipCache( NULL )
 {
     SetModel( NULL, 0 );
 }
 
 SvxMSDffManager::~SvxMSDffManager()
 {
+    if ( pEscherBlipCache )
+    {
+        void* pPtr;
+        for ( pPtr = pEscherBlipCache->First(); pPtr; pPtr = pEscherBlipCache->Next() )
+            delete (EscherBlipCacheEntry*)pPtr;
+        delete pEscherBlipCache;
+    }
     delete pBLIPInfos;
     delete pShapeInfos;
     delete pShapeOrders;
@@ -4564,51 +4582,78 @@ BOOL SvxMSDffManager::GetBLIP(ULONG nIdx_, Graphic& rData) const
     BOOL bOk = FALSE;       // Ergebnisvariable initialisieren
     if ( pStData )
     {
-        USHORT nIdx = USHORT( nIdx_ );
-        if( !nIdx || (pBLIPInfos->Count() < nIdx) ) return FALSE;
-
-        // eventuell alte(s) Errorflag(s) loeschen
-        if( rStCtrl.GetError() )
-            rStCtrl.ResetError();
-        if(    ( &rStCtrl != pStData )
-            && pStData->GetError() )
-            pStData->ResetError();
-
-        // FilePos des/der Stream(s) merken
-        ULONG nOldPosCtrl = rStCtrl.Tell();
-        ULONG nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
-
-        // passende Info-Struct aus unserem Pointer Array nehmen
-        SvxMSDffBLIPInfo& rInfo = *(*pBLIPInfos)[ nIdx-1 ];
-
-        // das BLIP Atom im Daten Stream anspringen
-        pStData->Seek( rInfo.nFilePos );
-        // ggfs. Fehlerstatus zuruecksetzen
-        if( pStData->GetError() )
-            pStData->ResetError();
-        else
-            bOk = GetBLIPDirect( *pStData, rData );
-        if( pStData2 && !bOk )
+        // check if a graphic for this blipId is already imported
+        if ( nIdx_ && pEscherBlipCache )
         {
-            // Fehler, aber zweite Chance: es gibt noch einen zweiten
-            //         Datenstream, in dem die Grafik liegen koennte!
-            if( pStData2->GetError() )
-                pStData2->ResetError();
-            ULONG nOldPosData2 = pStData2->Tell();
-            // das BLIP Atom im zweiten Daten Stream anspringen
-            pStData2->Seek( rInfo.nFilePos );
-            // ggfs. Fehlerstatus zuruecksetzen
-            if( pStData2->GetError() )
-                pStData2->ResetError();
-            else
-                bOk = GetBLIPDirect( *pStData2, rData );
-            // alte FilePos des zweiten Daten-Stream restaurieren
-            pStData2->Seek( nOldPosData2 );
+            EscherBlipCacheEntry* pEntry;
+            for ( pEntry = (EscherBlipCacheEntry*)pEscherBlipCache->First(); pEntry;
+                    pEntry = (EscherBlipCacheEntry*)pEscherBlipCache->Next() )
+            {
+                if ( pEntry->nBlip == nIdx_ )
+                {
+                    rData = pEntry->aGraphic;
+                    bOk = sal_True;
+                    break;
+                }
+            }
         }
-        // alte FilePos des/der Stream(s) restaurieren
-        rStCtrl.Seek( nOldPosCtrl );
-        if( &rStCtrl != pStData )
-          pStData->Seek( nOldPosData );
+        if ( !bOk )
+        {
+            USHORT nIdx = USHORT( nIdx_ );
+            if( !nIdx || (pBLIPInfos->Count() < nIdx) ) return FALSE;
+
+            // eventuell alte(s) Errorflag(s) loeschen
+            if( rStCtrl.GetError() )
+                rStCtrl.ResetError();
+            if(    ( &rStCtrl != pStData )
+                && pStData->GetError() )
+                pStData->ResetError();
+
+            // FilePos des/der Stream(s) merken
+            ULONG nOldPosCtrl = rStCtrl.Tell();
+            ULONG nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+
+            // passende Info-Struct aus unserem Pointer Array nehmen
+            SvxMSDffBLIPInfo& rInfo = *(*pBLIPInfos)[ nIdx-1 ];
+
+            // das BLIP Atom im Daten Stream anspringen
+            pStData->Seek( rInfo.nFilePos );
+            // ggfs. Fehlerstatus zuruecksetzen
+            if( pStData->GetError() )
+                pStData->ResetError();
+            else
+                bOk = GetBLIPDirect( *pStData, rData );
+            if( pStData2 && !bOk )
+            {
+                // Fehler, aber zweite Chance: es gibt noch einen zweiten
+                //         Datenstream, in dem die Grafik liegen koennte!
+                if( pStData2->GetError() )
+                    pStData2->ResetError();
+                ULONG nOldPosData2 = pStData2->Tell();
+                // das BLIP Atom im zweiten Daten Stream anspringen
+                pStData2->Seek( rInfo.nFilePos );
+                // ggfs. Fehlerstatus zuruecksetzen
+                if( pStData2->GetError() )
+                    pStData2->ResetError();
+                else
+                    bOk = GetBLIPDirect( *pStData2, rData );
+                // alte FilePos des zweiten Daten-Stream restaurieren
+                pStData2->Seek( nOldPosData2 );
+            }
+            // alte FilePos des/der Stream(s) restaurieren
+            rStCtrl.Seek( nOldPosCtrl );
+            if( &rStCtrl != pStData )
+              pStData->Seek( nOldPosData );
+
+            if ( bOk )
+            {
+                // create new BlipCacheEntry for this graphic
+                if ( !pEscherBlipCache )
+                    const_cast <List*>(pEscherBlipCache) = new List();
+                EscherBlipCacheEntry* pNewEntry = new EscherBlipCacheEntry( nIdx_, rData );
+                pEscherBlipCache->Insert( pNewEntry, LIST_APPEND );
+            }
+        }
     }
     return bOk;
 }
