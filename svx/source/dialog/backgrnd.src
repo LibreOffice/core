@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:18:33 $
+ *  last change: $Author: os $ $Date: 2001-05-04 06:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,11 +533,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 116 , 145 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_BGDCOLOR
+    FixedLine GB_BGDCOLOR
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 21 ) ;
-        Size = MAP_APPFONT ( 148 , 159 ) ;
+        Size = MAP_APPFONT ( 148 , 8) ;
         Text = "Hintergrundfarbe" ;
         Text [ ENGLISH ] = "Background Color" ;
         Text [ NORWEGIAN ] = "Background Color" ;
@@ -562,11 +562,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_COL_PREVIEW
+    FixedLine GB_COL_PREVIEW
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 160 , 21 ) ;
-        Size = MAP_APPFONT ( 94 , 159 ) ;
+        Size = MAP_APPFONT ( 94 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Preview" ;
         Text [ NORWEGIAN ] = "Preview" ;
@@ -597,7 +597,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Border = TRUE ;
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 166 , 32 ) ;
-        Size = MAP_APPFONT ( 82 , 142 ) ;
+        Size = MAP_APPFONT ( 82 , 40 ) ;
     };
      // Hintergrund-Bitmap ----------------------------------------------------
     FixedText FT_FILE
@@ -687,11 +687,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_FILE
+    FixedLine GB_FILE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 23 ) ;
-        Size = MAP_APPFONT ( 153 , 52 ) ;
+        Size = MAP_APPFONT ( 153 , 8 ) ;
         Text = "Datei" ;
         Text [ ENGLISH ] = "~File" ;
         Text [ ENGLISH_US ] = "File" ;
@@ -805,11 +805,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Size = MAP_APPFONT ( 90 , 87 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GB_POSITION
+    FixedLine GB_POSITION
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 78 ) ;
-        Size = MAP_APPFONT ( 153 , 101 ) ;
+        Size = MAP_APPFONT ( 153 , 8 ) ;
         Text = "Art" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ ENGLISH_US ] = "Type" ;
@@ -840,11 +840,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Pos = MAP_APPFONT ( 170 , 34 ) ;
         Size = MAP_APPFONT ( 81 , 139 ) ;
     };
-    GroupBox GB_PREVIEW
+    FixedLine GB_PREVIEW
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 165 , 23 ) ;
-        Size = MAP_APPFONT ( 91 , 156 ) ;
+        Size = MAP_APPFONT ( 91 , 8 ) ;
         Text = "Grafikvorschau" ;
         Text [ ENGLISH ] = "Image Preview" ;
         Text [ ENGLISH_US ] = "Preview" ;

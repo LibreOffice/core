@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:27:40 $
+ *  last change: $Author: os $ $Date: 2001-05-04 06:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     bAllowShowSelector  ( TRUE ),
     bIsGraphicValid     ( FALSE ),
     bLinkOnly           ( FALSE ),
+    bResized            ( FALSE ),
     pPageImpl           ( new SvxBackgroundPage_Impl ),
     pImportDlg          ( NULL ),
     pTableBck_Impl      ( NULL ),
@@ -611,6 +612,21 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 
             ParaDestinationHdl_Impl(&aParaLBox);
             aParaLBox.SaveValue();
+        }
+    }
+    if(!bResized)
+    {
+        if(!aLbSelect.IsVisible() && !aTblLBox.IsVisible() && !aParaLBox.IsVisible())
+        {
+            long nY = aLbSelect.GetPosPixel().Y();
+            Point aPos(pPreviewWin1->GetPosPixel());
+            aPos.Y() = nY;
+            pPreviewWin1->SetPosPixel(aPos);
+            aPos = aBackgroundColorSet.GetPosPixel();
+            aPos.Y() = nY;
+            aBackgroundColorSet.SetPosPixel(aPos);
+            aPreviewBox.Hide();
+            aBackgroundColorBox.Hide();
         }
     }
 }
