@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-12 10:31:33 $
+ *  last change: $Author: tl $ $Date: 2002-07-24 07:15:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,12 +462,15 @@ BYTE GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
     if( !pMap )
         nId = USHRT_MAX;
     else
+    {
+        nId = USHRT_MAX;    // in case of property not found
         for( ; pMap->pName; ++pMap )
             if( rProperty.equalsAsciiL( pMap->pName, pMap->nNameLen ) )
             {
                 nId = pMap->nWID;
                 break;
             }
+    }
     return (BYTE)nId;
 }
 
@@ -733,6 +736,8 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
             BYTE nMId = GetFieldTypeMId( rPropertyName, *pType  );
             if( UCHAR_MAX != nMId )
                 pType->PutValue( rValue, nMId );
+            else
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else if(!pType && m_pDoc &&
@@ -943,6 +948,8 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             BYTE nMId = GetFieldTypeMId( rPropertyName, *pType );
             if( UCHAR_MAX != nMId )
                 pType->QueryValue( aRet, nMId );
+            else
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         }
         else
         {
