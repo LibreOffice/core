@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:21:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,7 +2363,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
-
     nMarkedNumLevel = 0; // #i27615#
 }
 
@@ -2415,6 +2414,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRoot,
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
+    nMarkedNumLevel = 0; // #i27615#
 }
 
 
