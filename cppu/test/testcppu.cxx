@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-01 12:26:04 $
+ *  last change: $Author: dbo $ $Date: 2001-02-09 09:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,6 +520,11 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aInt32Seq.realloc( 1 ); // reallocate mem
     pArray = aInt32Seq.getConstArray();
     OSL_ASSERT( pArray[0] == 1 );
+
+    Sequence<sal_Int32 > aInt32Seq2( aInt32Seq );
+    aInt32Seq.realloc( 0 );
+    aInt32Seq.realloc( 1 );
+    aInt32Seq.realloc( 0 );
 }
 
 class TestInterface : public XInterface
