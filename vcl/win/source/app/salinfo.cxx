@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 11:09:19 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ String GetSalSummarySystemInfos( ULONG nFlags )
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <salsys.hxx>
+
+#include <algorithm>
 
 // Wegen Stacktrace-Generierung
 #pragma optimize ("", off)
@@ -364,7 +366,7 @@ BOOL WNT_GetLogicalAddress( PVOID addr, PTSTR szModule, DWORD len, DWORD& sectio
         {
             DWORD sectionStart = pSection->VirtualAddress;
             DWORD sectionEnd = sectionStart
-                        + max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
+                        + std::max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
 
             // Is the address in this section???
             if ( (rva >= sectionStart) && (rva <= sectionEnd) )
