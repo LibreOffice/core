@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:53:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
 
         // determine vertical positioning and alignment attributes
         SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
-        bool bVertChgd = false;
 
         // OD 22.09.2003 #i18732# - determine layout frame for vertical
         // positions aligned to 'page areas'.
@@ -451,12 +450,19 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                       _GetTopForObjPos( rAnchorTxtFrm, fnRect, bVert ) );
             }
 
-            // ??? Why saving calculated relative position
-            // keep calculated relative vertical position
-            if ( nRelPosY != aVert.GetPos() )
+            // keep calculated relative vertical position - needed for filters
+            // (including the xml-filter)
             {
-                aVert.SetPos( nRelPosY );
-                bVertChgd = true;
+                // determine position
+                SwTwips nAttrRelPosY = nRelPosY - nAlignAreaOffset;
+                // set
+                if ( nAttrRelPosY != aVert.GetPos() )
+                {
+                    aVert.SetPos( nAttrRelPosY );
+                    const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
+                    const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
+                    const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+                }
             }
 
             // determine absolute 'vertical' position, depending on layout-direction
@@ -942,12 +948,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             }
         }
 
-        // save calculated vertical position
-        const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-        if ( bVertChgd )
-            const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aVert );
-        const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
-
         // keep layout frame vertical position is oriented at.
         mpVertPosOrientFrm = pUpperOfOrientFrm;
 
@@ -957,7 +957,6 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     {
         // determine horizontal positioning and alignment attributes
         SwFmtHoriOrient aHori( rFrmFmt.GetHoriOrient() );
-        bool bHoriChgd = false;
 
         // set calculated vertical position in order to determine correct
         // frame, the horizontal position is oriented at.
@@ -995,20 +994,18 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             maOffsetToFrmAnchorPos.X() = nHoriOffsetToFrmAnchorPos;
         }
 
-        if ( HORI_NONE != aHori.GetHoriOrient() &&
-             aHori.GetPos() != nRelPosX )
+        // save calculated horizontal position - needed for filters
+        // (including the xml-filter)
         {
-            aHori.SetPos( nRelPosX );
-            bHoriChgd = true;
-        }
-
-        // WHY ???
-        // save calculated horizontal position
-        if ( bHoriChgd )
-        {
-            const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
-            const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aHori );
-            const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+            SwTwips nAttrRelPosX = nRelPosX - nHoriOffsetToFrmAnchorPos;
+            if ( aHori.GetHoriOrient() != HORI_NONE &&
+                 aHori.GetPos() != nAttrRelPosX )
+            {
+                aHori.SetPos( nAttrRelPosX );
+                const_cast<SwFrmFmt&>(rFrmFmt).LockModify();
+                const_cast<SwFrmFmt&>(rFrmFmt).SetAttr( aHori );
+                const_cast<SwFrmFmt&>(rFrmFmt).UnlockModify();
+            }
         }
     }
 
