@@ -60,6 +60,8 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\libcppuhelper*.so* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libcppuhelperC52.so.3 %_DEST%\lib%_EXT%\libcppuhelper3C52.so
+..\%__SRC%\lib\libcppuhelpergcc3.so.3 %_DEST%\lib%_EXT%\libcppuhelper3gcc3.so
 ..\%__SRC%\lib\libcppuhelper*.dylib* %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib%_EXT%\*
