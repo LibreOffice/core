@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDataPilotFieldGrouping.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:00:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XDataPilotFieldGrouping_idl__
+#define __com_sun_star_sheet_XDataPilotFieldGrouping_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
+#include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides methods to control a data pilot field which has already
+    been created.
+
+    @see com::sun::star::sheet::DataPilotField
+ */
+published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** Creates a new Field which contains a group containing the given Items.
+
+        @returns
+            the new created field if there is one created.
+
+            @see com::sun::star::sheet::DataPilotField
+
+        @param aItems
+            A sequence containing the Item names which have to be in the new group. This
+            have to be Items of the current field.
+     */
+    com::sun::star::sheet::XDataPilotField createNameGroup([in] sequence< string > aItems)
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** Creates a new Field if the current field is grouped by dates. Doesn't create a new field
+        if the field contains no dates or it isn't grouped yet.
+
+        @returns
+            the new created field if there is one created.
+
+            @see com::sun::star::sheet::DataPilotField
+
+        @param aInfo
+            contains the information how to group the field.
+     */
+    com::sun::star::sheet::XDataPilotField createDateGroup([in] com::sun::star::sheet::DataPilotFieldGroupInfo aInfo)
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
