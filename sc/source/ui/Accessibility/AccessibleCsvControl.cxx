@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:10:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,9 +559,9 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::setCaretPosition( sal_Int32 nIndex )
     ensureAlive();
     ensureValidIndex( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
-    sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
-    rRuler.Execute( CSVCMD_MOVERULERCURSOR, nRulerPos );
-    return rRuler.GetRulerCursorPos() == nRulerPos;
+    sal_Int32 nOldCursor = rRuler.GetRulerCursorPos();
+    rRuler.Execute( CSVCMD_MOVERULERCURSOR, lcl_GetRulerPos( nIndex ) );
+    return rRuler.GetRulerCursorPos() != nOldCursor;
 }
 
 sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
@@ -578,7 +578,7 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    ensureValidIndex( nIndex );
+    ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
     lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
 //! TODO split attribute: waiting for #102221#
@@ -596,10 +596,17 @@ ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBo
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    ensureValidIndex( nIndex );
+    ensureValidIndexWithEnd( nIndex );
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
-    return AwtRectangle( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
+    AwtRectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
+    // #107054# do not return rectangle out of window
+    sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
+    if( aRect.X >= nWidth )
+        throw IndexOutOfBoundsException();
+    if( aRect.X + aRect.Width > nWidth )
+        aRect.Width = nWidth - aRect.X;
+    return aRect;
 }
 
 sal_Int32 SAL_CALL ScAccessibleCsvRuler::getCharacterCount() throw( RuntimeException )
@@ -665,6 +672,8 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextAtIndex( sal_Int32 nIndex, sal_In
 {
     ScUnoGuard aGuard;
     ensureAlive();
+    if( nIndex == implGetTextLength() )
+        return OUString();
     ensureValidIndex( nIndex );
 
     OUStringBuffer aText;
@@ -713,7 +722,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBeforeIndex( sal_Int32 nIndex, sa
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    ensureValidIndex( nIndex );
+    ensureValidIndexWithEnd( nIndex );
 
     OUString aText;
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
@@ -763,11 +772,11 @@ OUString SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex, sa
 {
     ScUnoGuard aGuard;
     ensureAlive();
-    ensureValidIndex( nIndex );
+    ensureValidIndexWithEnd( nIndex );
 
     OUString aText;
     sal_Int32 nRulerPos = lcl_GetRulerPos( nIndex );
-    sal_Int32 nLastValid = implGetTextLength() - 1;
+    sal_Int32 nLastValid = implGetTextLength();
 
     switch( nTextType )
     {
@@ -894,6 +903,13 @@ void ScAccessibleCsvRuler::ensureValidIndex( sal_Int32 nIndex ) const
         throw( IndexOutOfBoundsException )
 {
     if( nIndex >= implGetTextLength() )
+        throw IndexOutOfBoundsException();
+}
+
+void ScAccessibleCsvRuler::ensureValidIndexWithEnd( sal_Int32 nIndex ) const
+        throw( IndexOutOfBoundsException )
+{
+    if( nIndex > implGetTextLength() )
         throw IndexOutOfBoundsException();
 }
 
