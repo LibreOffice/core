@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 08:44:29 $
+ *  last change: $Author: mt $ $Date: 2001-11-06 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3089,7 +3089,7 @@ UnoDateFieldControl::UnoDateFieldControl()
 {
     mnFirst = Date( 1, 1, 1900 ).GetDate();
     mnLast = Date( 31, 12, 2200 ).GetDate();
-    mbLongFormat = sal_False;
+    mbLongFormat = 2;
 }
 
 ::rtl::OUString UnoDateFieldControl::GetComponentServiceName()
@@ -3118,7 +3118,8 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
     uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
-    xField->setLongFormat( mbLongFormat );
+    if ( mbLongFormat != 2 )    // not set
+        xField->setLongFormat( mbLongFormat );
 }
 
 
@@ -3213,7 +3214,7 @@ void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeExce
 
 sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 {
-    return mbLongFormat;
+    return ( mbLongFormat != 2 ) ? mbLongFormat : sal_False;
 }
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
