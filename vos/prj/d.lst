@@ -16,3 +16,9 @@ mkdir: %_DEST%\inc%_EXT%\vos
 ..\%__SRC%\bin\vos*.dll %_DEST%\bin%_EXT%\vos*.dll
 ..\%__SRC%\bin\proxy %_DEST%\bin%_EXT%\proxy
 ..\%__SRC%\bin\proxy.exe %_DEST%\bin%_EXT%\proxy.exe
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
