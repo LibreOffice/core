@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:00:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -859,7 +859,7 @@ ModalDialog DLG_SORTING
         Text [ ENGLISH ] = "Delimiter" ;
         Text [ norwegian ] = "Skilletegn" ;
         Text [ italian ] = "Separatore" ;
-        Text [ portuguese_brazilian ] = "Delimitador" ;
+        Text [ portuguese_brazilian ] = "Separador" ;
         Text [ portuguese ] = "Separador" ;
         Text [ finnish ] = "Erotin" ;
         Text [ danish ] = "Skilletegn" ;
@@ -1013,7 +1013,7 @@ ModalDialog DLG_SORTING
         Text[ danish ] = "Indstilling";
         Text[ swedish ] = "Inställning";
         Text[ polish ] = "Ustawienie";
-        Text[ portuguese_brazilian ] = "Options";
+        Text[ portuguese_brazilian ] = "Configuração";
         Text[ japanese ] = "è©³ç´°è¨­å®š";
         Text[ korean ] = "ì„¤ì •";
         Text[ chinese_simplified ] = "è®¾å®š";
@@ -1038,7 +1038,7 @@ ModalDialog DLG_SORTING
         Text[ english_us ] = "Match case";
         Text[ portuguese ] = "Comparação exacta";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ greek ] = "Áêñéâåßò óıãêñéóç";
+        Text[ greek ] = "Ôáßñéáóìá ğåæşí/êåöáëáßùí";
         Text[ dutch ] = "Exacte vergelijking";
         Text[ french ] = "Comparaison exacte";
         Text[ spanish ] = "Comparación exacta";
@@ -1113,6 +1113,7 @@ InfoBox MSG_SRTERR
     MESSAGE[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ à¤•à¥‹ à¤¸à¥‹à¤°à¥à¤Ÿ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ";
     MESSAGE[ slovak ] = "VybranÃ© objekty nie je moÅ¾nÃ© zoradiÅ¥";
 };
+
 
 
 
