@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-28 16:40:56 $
+ *  last change: $Author: aw $ $Date: 2001-01-12 17:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,17 +702,24 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
     {
         // #80277# merging was done wrong in the prev version
         const SfxItemSet& rSet = aMark.GetMark(a)->GetObj()->GetItemSet();
-//-/        rAttr.MergeValues(rSet, TRUE);
         SfxWhichIter aIter(rSet);
         sal_uInt16 nWhich(aIter.FirstWhich());
 
         while(nWhich)
         {
-            if(!bOnlyHardAttr || SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
+            if(!bOnlyHardAttr)
+            {
+                if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, FALSE))
+                    rAttr.InvalidateItem(nWhich);
+                else
+                    rAttr.MergeValue(rSet.Get(nWhich), TRUE);
+            }
+            else if(SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
             {
                 const SfxPoolItem& rItem = rSet.Get(nWhich);
                 rAttr.MergeValue(rItem, TRUE);
             }
+
             nWhich = aIter.NextWhich();
         }
 
@@ -826,7 +833,8 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
 
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
 {
-    if (HasMarkedObj()) {
+    if (HasMarkedObj())
+    {
 #ifdef DBG_UTIL
         {
             BOOL bHasEEFeatureItems=FALSE;
@@ -870,6 +878,13 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
 
         BegUndo(aStr);
         ULONG nMarkAnz=aMark.GetMarkCount();
+
+        // create ItemSet without SFX_ITEM_DONTCARE. Put()
+        // uses it's second parameter (bInvalidAsDefault) to
+        // remove all such items to set them to default.
+        SfxItemSet aAttr(*rAttr.GetPool(), rAttr.GetRanges());
+        aAttr.Put(rAttr, TRUE);
+
         for (ULONG nm=0; nm<nMarkAnz; nm++) {
             SdrMark* pM=aMark.GetMark(nm);
 
@@ -887,7 +902,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, BOOL bReplaceAll)
             SdrBroadcastItemChange aItemChange(*pM->GetObj());
             if(bReplaceAll)
                 pM->GetObj()->ClearItem();
-            pM->GetObj()->SetItemSet(rAttr);
+            pM->GetObj()->SetItemSet(aAttr);
             pM->GetObj()->BroadcastItemChange(aItemChange);
         }
         // besser vorher checken, was gemacht werden soll:
