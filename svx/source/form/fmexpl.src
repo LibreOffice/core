@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:41:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ turkish ] = "Form";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Formulario";
+                        Text[ finnish ] = "Lomake";
                     };
                     MenuItem
                     {
@@ -138,6 +139,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ turkish ] = "Gizli komut alaný";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "~Control oculto";
+                        Text[ finnish ] = "Piilotettu ohjausobjekti";
                     };
                 };
             };
@@ -152,6 +154,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "~Yeni";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "N~uevo";
+            Text[ finnish ] = "~Uusi";
         };
         MenuItem
         {
@@ -178,6 +181,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Þununla deðiþtir...";
             Text[ catalan ] = "Reemplazar con";
+            Text[ finnish ] = "~Korvaa kohteella";
         };
         MenuItem
         {
@@ -205,6 +209,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar";
+            Text[ finnish ] = "~Poista";
         };
         MenuItem
         {
@@ -232,6 +237,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Etkinleþtirme sýrasý...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Secuencia de activación...";
+            Text[ finnish ] = "Sarkainjärjestys";
         };
         MenuItem
         {
@@ -259,6 +265,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Yeniden adlandýr";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Cambiar nombre";
+            Text[ finnish ] = "~Nimeä uudelleen";
         };
         MenuItem
         {
@@ -286,6 +293,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Özellikler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Propiedades";
+            Text[ finnish ] = "~Ominaisuudet";
         };
         MenuItem
         {
@@ -313,6 +321,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Tasarým kipinde aç";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Abrir en modo diseño";
+            Text[ finnish ] = "Avaa suunnittelunäkymässä";
         };
         MenuItem
         {
@@ -339,6 +348,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = "ÊÑßíÒ ÊáÞÇÆí áÚäÕÑ ÇáÊÍßã";
             Text[ catalan ] = "Foco automático de control";
+            Text[ finnish ] = "Automaattinen kohdistuksen ohjaus";
         };
     };
 };
@@ -373,6 +383,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Metin alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de texto";
+            Text[ finnish ] = "~Tekstikehys";
         };
         MenuItem
         {
@@ -399,6 +410,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÒÑ ÖÛØ";
             Text[ turkish ] = "Düðme";
             Text[ catalan ] = "~Botón";
+            Text[ finnish ] = "~Painike";
         };
         MenuItem
         {
@@ -426,6 +438,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Etiket alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de etiqueta";
+            Text[ finnish ] = "~Nimiökenttä";
         };
         MenuItem
         {
@@ -452,6 +465,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ßÇÏÑ ÊÌãíÚ";
             Text[ turkish ] = "Grup çerçevesi";
             Text[ catalan ] = "~Marco de grupo";
+            Text[ finnish ] = "~Ryhmittele ruudut";
         };
         MenuItem
         {
@@ -479,6 +493,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Liste alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "L~istado";
+            Text[ finnish ] = "~Luetteloruutu";
         };
         MenuItem
         {
@@ -505,6 +520,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
             Text[ turkish ] = "Seçme kutusu";
             Text[ catalan ] = "~Casilla de verificación";
+            Text[ finnish ] = "~Valintaruutu";
         };
         MenuItem
         {
@@ -532,6 +548,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Seçenek düðmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Campo de opción";
+            Text[ finnish ] = "~Valintanappi";
         };
         MenuItem
         {
@@ -558,6 +575,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
             Text[ turkish ] = "Kombinasyon alaný";
             Text[ catalan ] = "Ca~mpo combinado";
+            Text[ finnish ] = "~Yhdistelmäruutu";
         };
         MenuItem
         {
@@ -584,6 +602,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ãÝÊÇÍ ãÕæøÑ";
             Text[ turkish ] = "Grafiksel düðme";
             Text[ catalan ] = "Botón g~ráfico";
+            Text[ finnish ] = "~Kuvapainike";
         };
         MenuItem
         {
@@ -611,6 +630,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Dosya seçimi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Selec~ción de archivo";
+            Text[ finnish ] = "~Tiedoston valinta";
         };
         MenuItem
         {
@@ -638,6 +658,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Tarih alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo de ~fecha";
+            Text[ finnish ] = "~Päivämääräkenttä";
         };
         MenuItem
         {
@@ -665,6 +686,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Zaman alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo ~horario";
+            Text[ finnish ] = "~Aikakenttä";
         };
         MenuItem
         {
@@ -692,6 +714,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Sayýsal alan";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "C~ampo numérico";
+            Text[ finnish ] = "~Numeerinen kenttä";
         };
         MenuItem
         {
@@ -718,6 +741,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ÇáÚãáÉ";
             Text[ turkish ] = "Para birimi alaný";
             Text[ catalan ] = "Cam~po de moneda";
+            Text[ finnish ] = "~Valuuttakenttä";
         };
         MenuItem
         {
@@ -744,6 +768,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÍÞá ãõÞäøóÚ";
             Text[ turkish ] = "Maskelenmiþ alan";
             Text[ catalan ] = "Campo s~eleccionado";
+            Text[ finnish ] = "~Kuviokenttä";
         };
         MenuItem
         {
@@ -770,6 +795,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "ÚäÕÑ ÊÍßã ÑÓæãí";
             Text[ turkish ] = "Grafiksel komut alaný";
             Text[ catalan ] = "Control de ima~gen";
+            Text[ finnish ] = "~Kuvan ohjaus";
         };
         MenuItem
         {
@@ -797,6 +823,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ turkish ] = "Formatlý alan";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Campo for~mateado";
+            Text[ finnish ] = "~Muotoiltu kenttä";
         };
     };
 };
@@ -876,6 +903,7 @@ ModalDialog RID_SVXDLG_SETFORM
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ruta";
+        Text[ finnish ] = "Polku";
     };
     FixedText FT_PATH
     {
@@ -920,6 +948,7 @@ ModalDialog RID_SVXDLG_SETFORM
     Text[ turkish ] = "Form seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de formulario";
+    Text[ finnish ] = "Valitse lomake";
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
@@ -950,4 +979,5 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ turkish ] = "Form navigatörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador de formulario";
+    Text[ finnish ] = "Lomakkeen siirtymävalikko";
 };
