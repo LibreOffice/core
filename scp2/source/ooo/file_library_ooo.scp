@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.95 $
+*  $Revision: 1.96 $
 *
-*  last change: $Author: rt $ $Date: 2005-03-30 08:42:22 $
+*  last change: $Author: rt $ $Date: 2005-03-30 11:40:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -185,6 +185,7 @@ File gid_File_Lib_Behelper
 End
 
 #ifndef WITHOUT_LDAP
+#if !defined WITHOUT_MOZILLA || defined WITH_OPENLDAP
 File gid_File_Lib_Ldapbe2
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT);
@@ -196,6 +197,7 @@ File gid_File_Lib_Ldapbe2
     Name = "ldapbe2.uno.dll";
   #endif
 End
+#endif
 #endif
 
 // BM: #117495# remove chart2 from setup.  I just comment this
@@ -1108,7 +1110,7 @@ File gid_File_Lib_Mcnttype
   #endif
 End
 
-#if !defined(MACOSX) && !defined(WITHOUT_MOZILLA)
+#if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
 
 File gid_File_Lib_Mozab_2
     TXT_FILE_BODY;
@@ -1126,7 +1128,7 @@ End
 
 STD_UNO_LIB_FILE(gid_File_Lib_Wpft,wpft)
 
-#if !defined(MACOSX) && !defined(WITHOUT_MOZILLA)
+#if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
 
 File gid_File_Lib_Mozabdrv
     TXT_FILE_BODY;
@@ -2069,6 +2071,7 @@ SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaWin, avmediawin )
 #endif
 #endif
 
+#ifndef WITHOUT_MOZILLA
 File gid_File_Lib_XSec_Framework
     TXT_FILE_BODY;
 	#ifdef UNX
@@ -2142,6 +2145,7 @@ File gid_File_Lib_LibXMLSec_xmlsecnss
 End
 #endif
 //i20156 - end
+#endif
 
 File gid_File_Lib_Migrationoo2
     TXT_FILE_BODY;
