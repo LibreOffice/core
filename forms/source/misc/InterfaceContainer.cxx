@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:50:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 09:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,18 @@
 namespace frm
 {
 //.........................................................................
-
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::form;
 //------------------------------------------------------------------
 OInterfaceContainer::OInterfaceContainer(
-                const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory,
+                const Reference<XMultiServiceFactory>& _rxFactory,
                 ::osl::Mutex& _rMutex,
-                const staruno::Type& _rElementType)
+                const Type& _rElementType)
         :m_rMutex(_rMutex)
         ,m_aContainerListeners(_rMutex)
         ,m_aElementType(_rElementType)
@@ -134,84 +140,42 @@ OInterfaceContainer::OInterfaceContainer(
 }
 
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OInterfaceContainer::queryInterface(const staruno::Type& _rType) throw (staruno::RuntimeException)
-{
-    staruno::Any aReturn =
-        ::cppu::queryInterface(_rType
-            ,static_cast<starcontainer::XElementAccess*>(static_cast<starcontainer::XNameAccess*>(this))
-            ,static_cast<starcontainer::XIndexAccess*>(this)
-            ,static_cast<starcontainer::XNameAccess*>(this)
-            ,static_cast<starcontainer::XIndexReplace*>(this)
-            ,static_cast<starcontainer::XNameReplace*>(this)
-            ,static_cast<starcontainer::XIndexContainer*>(this)
-            ,static_cast<starcontainer::XNameContainer*>(this)
-            ,static_cast<starcontainer::XEnumerationAccess*>(this)
-            ,static_cast<starcontainer::XContainer*>(this)
-            ,static_cast<starlang::XEventListener*>(this)
-            ,static_cast<starbeans::XPropertyChangeListener*>(this)
-            ,static_cast<starscript::XEventAttacherManager*>(this)
-        );
-
-    if (!aReturn.hasValue())
-        aReturn = ::cppu::queryInterface(_rType
-            ,static_cast<stario::XPersistObject*>(this)
-        );
-
-    return aReturn;
-}
-
-//------------------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OInterfaceContainer::getTypes() throw(staruno::RuntimeException)
-{
-    staruno::Sequence<staruno::Type> aTypes(7);
-    aTypes.getArray()[0] = ::getCppuType(static_cast<staruno::Reference<starcontainer::XNameContainer>*>(NULL));
-    aTypes.getArray()[1] = ::getCppuType(static_cast<staruno::Reference<starcontainer::XIndexContainer>*>(NULL));
-    aTypes.getArray()[2] = ::getCppuType(static_cast<staruno::Reference<starcontainer::XContainer>*>(NULL));
-    aTypes.getArray()[3] = ::getCppuType(static_cast<staruno::Reference<starcontainer::XEnumerationAccess>*>(NULL));
-    aTypes.getArray()[4] = ::getCppuType(static_cast<staruno::Reference<starscript::XEventAttacherManager>*>(NULL));
-    aTypes.getArray()[5] = ::getCppuType(static_cast<staruno::Reference<starbeans::XPropertyChangeListener>*>(NULL));
-    aTypes.getArray()[6] = ::getCppuType(static_cast<staruno::Reference<stario::XPersistObject>*>(NULL));
-
-    return aTypes;
-}
-
-//------------------------------------------------------------------------------
 void OInterfaceContainer::disposing()
 {
     // dispose aller elemente
     for (sal_Int32 i = m_aItems.size(); i > 0; --i)
     {
-        staruno::Reference<starbeans::XPropertySet>  xSet(m_aItems[i - 1], staruno::UNO_QUERY);
+        Reference<XPropertySet>  xSet(m_aItems[i - 1], UNO_QUERY);
         if (xSet.is())
             xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
         // Eventverknüpfungen aufheben
-        InterfaceRef  xIfc(xSet, staruno::UNO_QUERY);
+        InterfaceRef  xIfc(xSet, UNO_QUERY);
         m_xEventAttacher->detach(i - 1, xIfc);
         m_xEventAttacher->removeEntry(i - 1);
 
-        staruno::Reference<starlang::XComponent>  xComponent(xSet, staruno::UNO_QUERY);
+        Reference<XComponent>  xComponent(xSet, UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
     }
     m_aMap.clear();
     m_aItems.clear();
 
-    starlang::EventObject aEvt(static_cast<starcontainer::XContainer*>(this));
+    EventObject aEvt(static_cast<XContainer*>(this));
     m_aContainerListeners.disposeAndClear(aEvt);
 }
 
-// stario::XPersistObject
+// XPersistObject
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::writeEvents(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream)
+void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    staruno::Reference<stario::XMarkableStream>  xMark(_rxOutStream, staruno::UNO_QUERY);
+    Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     sal_Int32 nMark = xMark->createMark();
 
     sal_Int32 nObjLen = 0;
     _rxOutStream->writeLong(nObjLen);
 
-    staruno::Reference<stario::XPersistObject>  xScripts(m_xEventAttacher, staruno::UNO_QUERY);
+    Reference<XPersistObject>  xScripts(m_xEventAttacher, UNO_QUERY);
     if (xScripts.is())
         xScripts->write(_rxOutStream);
 
@@ -224,18 +188,18 @@ void SAL_CALL OInterfaceContainer::writeEvents(const staruno::Reference<stario::
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::readEvents(const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int32 nCount)
+void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream>& _rxInStream, sal_Int32 nCount)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     if (nCount)
     {
         // Scripting Info lesen
-        staruno::Reference<stario::XMarkableStream>  xMark(_rxInStream, staruno::UNO_QUERY);
+        Reference<XMarkableStream>  xMark(_rxInStream, UNO_QUERY);
         sal_Int32 nObjLen = _rxInStream->readLong();
         if (nObjLen)
         {
             sal_Int32 nMark = xMark->createMark();
-            staruno::Reference<stario::XPersistObject>  xObj(m_xEventAttacher, staruno::UNO_QUERY);
+            Reference<XPersistObject>  xObj(m_xEventAttacher, UNO_QUERY);
             if (xObj.is())
                 xObj->read(_rxInStream);
             xMark->jumpToMark(nMark);
@@ -246,9 +210,9 @@ void SAL_CALL OInterfaceContainer::readEvents(const staruno::Reference<stario::X
         // Attachement lesen
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            InterfaceRef  xIfc(m_aItems[i], staruno::UNO_QUERY);
-            staruno::Reference<starbeans::XPropertySet>  xSet(xIfc, staruno::UNO_QUERY);
-            staruno::Any aHelper;
+            InterfaceRef  xIfc(m_aItems[i], UNO_QUERY);
+            Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
+            Any aHelper;
             aHelper <<= xSet;
             m_xEventAttacher->attach( i, xIfc, aHelper );
         }
@@ -261,7 +225,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const staruno::Reference<stario::X
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::write( const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream ) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw(IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     sal_Int32 nLen = m_aItems.size();
@@ -277,7 +241,7 @@ void SAL_CALL OInterfaceContainer::write( const staruno::Reference< stario::XObj
         // 2. Objekte
         for (sal_Int32 i = 0; i < nLen; i++)
         {
-            staruno::Reference<stario::XPersistObject>  xObj(m_aItems[i], staruno::UNO_QUERY);
+            Reference<XPersistObject>  xObj(m_aItems[i], UNO_QUERY);
             if (xObj.is())
                 _rxOutStream->writeObject(xObj);
             else
@@ -292,7 +256,7 @@ void SAL_CALL OInterfaceContainer::write( const staruno::Reference< stario::XObj
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::read( const staruno::Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& _rxInStream ) throw(IOException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -313,51 +277,51 @@ void SAL_CALL OInterfaceContainer::read( const staruno::Reference< stario::XObje
         // 2. Objekte
         for (sal_Int32 i = 0; i < nLen; i++)
         {
-            staruno::Reference<stario::XPersistObject>  xObj;
+            Reference<XPersistObject>  xObj;
             try
             {
                 xObj = _rxInStream->readObject();
             }
-            catch(stario::WrongFormatException& e)
+            catch(WrongFormatException& e)
             {
                 e;  // make compiler happy
                 // the object could not be read
                 xObj = NULL;
                 // create a dummy starform (so the readEvents below will assign the events to the right controls)
-                xObj = staruno::Reference<stario::XPersistObject> (m_xServiceFactory->createInstance(FRM_COMPONENT_HIDDENCONTROL), staruno::UNO_QUERY);
+                xObj = Reference<XPersistObject> (m_xServiceFactory->createInstance(FRM_COMPONENT_HIDDENCONTROL), UNO_QUERY);
                 DBG_ASSERT(xObj.is(), "OInterfaceContainer::read : could not create a substitute for the unknown object !");
                 if (!xObj.is())
                     // couldn't handle it ...
                     throw;
 
                 // set some properties describing what we did
-                staruno::Reference<starbeans::XPropertySet>  xObjProps(xObj, staruno::UNO_QUERY);
+                Reference<XPropertySet>  xObjProps(xObj, UNO_QUERY);
                 if (xObjProps.is())
                 {
                     try
                     {
-                        xObjProps->setPropertyValue(PROPERTY_NAME, staruno::makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_NAME)));
-                        xObjProps->setPropertyValue(PROPERTY_TAG, staruno::makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN)));
+                        xObjProps->setPropertyValue(PROPERTY_NAME, makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_NAME)));
+                        xObjProps->setPropertyValue(PROPERTY_TAG, makeAny(FRM_RES_STRING(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN)));
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                     }
                 }
                 // 72133 - 09.02.00 - FS
             }
-            catch(...)
+            catch(Exception&)
             {
                 // unsere Map leeren
                 while (!m_aItems.empty())
                     removeElementsNoEvents(0);
 
-                // und die staruno::Exception nach aussen
+                // und die Exception nach aussen
                 throw;
             }
 
             if (xObj.is())
             {
-                staruno::Any aElement = xObj->queryInterface(m_aElementType);
+                Any aElement = xObj->queryInterface(m_aElementType);
                 if (aElement.hasValue())
                     insert(m_aItems.size(), *static_cast<const InterfaceRef*>(aElement.getValue()), sal_False);
                 else
@@ -369,22 +333,22 @@ void SAL_CALL OInterfaceContainer::read( const staruno::Reference< stario::XObje
     readEvents(_rxInStream, nLen);
 }
 
-// starcontainer::XContainer
+// XContainer
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::addContainerListener(const staruno::Reference<starcontainer::XContainerListener>& _rxListener) throw( staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::addContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException )
 {
     m_aContainerListeners.addInterface(_rxListener);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeContainerListener(const staruno::Reference<starcontainer::XContainerListener>& _rxListener) throw( staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::removeContainerListener(const Reference<XContainerListener>& _rxListener) throw( RuntimeException )
 {
     m_aContainerListeners.removeInterface(_rxListener);
 }
 
-// starlang::XEventListener
+// XEventListener
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::disposing(const starlang::EventObject& _rSource) throw( staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::disposing(const EventObject& _rSource) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
 
@@ -400,9 +364,9 @@ void SAL_CALL OInterfaceContainer::disposing(const starlang::EventObject& _rSour
     }
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------------------
-void OInterfaceContainer::propertyChange(const starbeans::PropertyChangeEvent& evt)
+void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt)
 {
     if (evt.PropertyName == PROPERTY_NAME)
     {
@@ -418,42 +382,42 @@ void OInterfaceContainer::propertyChange(const starbeans::PropertyChangeEvent& e
     }
 }
 
-// starcontainer::XElementAccess
+// XElementAccess
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OInterfaceContainer::hasElements() throw( staruno::RuntimeException )
+sal_Bool SAL_CALL OInterfaceContainer::hasElements() throw( RuntimeException )
 {
     return !m_aMap.empty();
 }
 
 //------------------------------------------------------------------------------
-staruno::Type SAL_CALL OInterfaceContainer::getElementType() throw(staruno::RuntimeException)
+Type SAL_CALL OInterfaceContainer::getElementType() throw(RuntimeException)
 {
     return m_aElementType;
 }
 
-// starcontainer::XEnumerationAccess
+// XEnumerationAccess
 //------------------------------------------------------------------------------
-staruno::Reference<starcontainer::XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw( staruno::RuntimeException )
+Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    return new ::comphelper::OEnumerationByIndex(static_cast<starcontainer::XIndexAccess*>(this));
+    return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
-// starcontainer::XNameAccess
+// XNameAccess
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
+Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
 
     if (aPair.first == aPair.second)
-        throw starcontainer::NoSuchElementException();
+        throw NoSuchElementException();
 
-    return staruno::Any(&(*aPair.first).second, m_aElementType);
+    return Any(&(*aPair.first).second, m_aElementType);
 }
 
 //------------------------------------------------------------------------------
-StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(staruno::RuntimeException)
+StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException)
 {
     StringSequence aNameList(m_aItems.size());
     ::rtl::OUString* pStringArray = aNameList.getArray();
@@ -466,51 +430,51 @@ StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(staruno::Ru
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OInterfaceContainer::hasByName( const ::rtl::OUString& _rName ) throw(staruno::RuntimeException)
+sal_Bool SAL_CALL OInterfaceContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
 {
     pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
     return aPair.first != aPair.second;
 }
 
-// starcontainer::XIndexAccess
+// XIndexAccess
 //------------------------------------------------------------------------------
-sal_Int32 OInterfaceContainer::getCount() throw( staruno::RuntimeException )
+sal_Int32 OInterfaceContainer::getCount() throw( RuntimeException )
 {
     return m_aItems.size();
 }
 
 //------------------------------------------------------------------------------
-staruno::Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException )
+Any OInterfaceContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     if (_nIndex < 0 || _nIndex >= m_aItems.size())
-        throw starlang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
-    return staruno::Any(&m_aItems[_nIndex], m_aElementType);
+    return Any(&m_aItems[_nIndex], m_aElementType);
 }
 
 //------------------------------------------------------------------------------
-void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( starlang::IllegalArgumentException )
+void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement, sal_Bool bEvents) throw( IllegalArgumentException )
 {
     // das richtige Interface besorgen
-    staruno::Any aCorrectType = xElement->queryInterface(m_aElementType);
+    Any aCorrectType = xElement->queryInterface(m_aElementType);
     if (!aCorrectType.hasValue())
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
     InterfaceRef xCorrectType = *static_cast<const InterfaceRef*>(aCorrectType.getValue());
 
     ::rtl::OUString sName;
-    staruno::Reference<starbeans::XPropertySet>  xSet(xElement, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw starlang::IllegalArgumentException();
+            throw IllegalArgumentException();
 
-        staruno::Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
+        Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
         aValue >>= sName;
         xSet->addPropertyChangeListener(PROPERTY_NAME, this);
     }
     else
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
 
     if (_nIndex > m_aItems.size()) // ermitteln des tatsaechlichen Indexs
     {
@@ -522,15 +486,15 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
 
     m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef  >(sName,xCorrectType));
 
-    staruno::Reference<starcontainer::XChild>  xChild(xElement, staruno::UNO_QUERY);
+    Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(static_cast<starcontainer::XContainer*>(this));
+        xChild->setParent(static_cast<XContainer*>(this));
 
     if (bEvents)
     {
         m_xEventAttacher->insertEntry(_nIndex);
-        InterfaceRef  xIfc(xElement, staruno::UNO_QUERY);// wichtig
-        staruno::Any aHelper;
+        InterfaceRef  xIfc(xElement, UNO_QUERY);// wichtig
+        Any aHelper;
         aHelper <<= xSet;
         m_xEventAttacher->attach(_nIndex, xIfc, aHelper);
     }
@@ -539,11 +503,11 @@ void OInterfaceContainer::insert(sal_Int32 _nIndex, const InterfaceRef& xElement
     implInserted(xCorrectType);
 
     // notify listeners
-    starcontainer::ContainerEvent aEvt;
-    aEvt.Source   = static_cast<starcontainer::XContainer*>(this);
+    ContainerEvent aEvt;
+    aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = staruno::Any(&xCorrectType, m_aElementType);
-    NOTIFY_LISTENERS(m_aContainerListeners, starcontainer::XContainerListener, elementInserted, aEvt);
+    aEvt.Element  = Any(&xCorrectType, m_aElementType);
+    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementInserted, aEvt);
 }
 
 //------------------------------------------------------------------------------
@@ -558,35 +522,35 @@ void OInterfaceContainer::removeElementsNoEvents(sal_Int32 nIndex)
     m_aItems.erase(i);
     m_aMap.erase(j);
 
-    staruno::Reference<starbeans::XPropertySet>  xSet(xElement, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
         xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
-    staruno::Reference<starcontainer::XChild>  xChild(xElement, staruno::UNO_QUERY);
+    Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(InterfaceRef ());
 }
 
-// starcontainer::XIndexContainer
+// XIndexContainer
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const staruno::Any& Element) throw(starlang::IllegalArgumentException, starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::insertByIndex(sal_Int32 _nIndex, const Any& Element) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    if (Element.getValueType().getTypeClass() != staruno::TypeClass_INTERFACE)
-        throw starlang::IllegalArgumentException();
+    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+        throw IllegalArgumentException();
 
     ::osl::MutexGuard aGuard( m_rMutex );
     insert(_nIndex, InterfaceRef (*(InterfaceRef *)Element.getValue()), sal_True);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const staruno::Any& Element) throw( starlang::IllegalArgumentException, starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const Any& Element) throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    if (Element.getValueType().getTypeClass() != staruno::TypeClass_INTERFACE)
-        throw starlang::IllegalArgumentException();
+    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+        throw IllegalArgumentException();
 
     ::osl::MutexGuard aGuard( m_rMutex );
     if (_nIndex < 0 || _nIndex >= m_aItems.size())
-        throw starlang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
 
     InterfaceRef  xOldElement(m_aItems[_nIndex]);
@@ -596,32 +560,32 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const staru
     while (j != m_aMap.end() && (*j).second != xOldElement) ++j;
 
     // Eventverknüpfungen aufheben
-    InterfaceRef  xIfc(xOldElement, staruno::UNO_QUERY);// wichtig
+    InterfaceRef  xIfc(xOldElement, UNO_QUERY);// wichtig
     m_xEventAttacher->detach(_nIndex, xIfc);
     m_xEventAttacher->removeEntry(_nIndex);
 
-    staruno::Reference<starbeans::XPropertySet>  xSet(xOldElement, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(xOldElement, UNO_QUERY);
     if (xSet.is())
         xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
-    staruno::Reference<starcontainer::XChild>  xChild(xOldElement, staruno::UNO_QUERY);
+    Reference<XChild>  xChild(xOldElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(InterfaceRef ());
 
     // neue einfuegen
     ::rtl::OUString sName;
-    xSet = staruno::Reference<starbeans::XPropertySet> (xNewElement, staruno::UNO_QUERY);
+    xSet = Reference<XPropertySet> (xNewElement, UNO_QUERY);
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw starlang::IllegalArgumentException();
+            throw IllegalArgumentException();
 
-        staruno::Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
+        Any aValue = xSet->getPropertyValue(PROPERTY_NAME);
         aValue >>= sName;
         xSet->addPropertyChangeListener(PROPERTY_NAME, this);
     }
     else
-        throw starlang::IllegalArgumentException();
+        throw IllegalArgumentException();
 
     // remove the old one
     m_aMap.erase(j);
@@ -630,31 +594,31 @@ void SAL_CALL OInterfaceContainer::replaceByIndex(sal_Int32 _nIndex, const staru
     m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef  >(sName,xNewElement));
     m_aItems[_nIndex] = xNewElement;
 
-    xChild = staruno::Reference<starcontainer::XChild> (xNewElement, staruno::UNO_QUERY);
+    xChild = Reference<XChild> (xNewElement, UNO_QUERY);
     if (xChild.is())
-        xChild->setParent(static_cast<starcontainer::XContainer*>(this));
+        xChild->setParent(static_cast<XContainer*>(this));
 
     m_xEventAttacher->insertEntry(_nIndex);
-    xIfc = InterfaceRef (xNewElement, staruno::UNO_QUERY);// wichtig
-    staruno::Any aHelper;
+    xIfc = InterfaceRef (xNewElement, UNO_QUERY);// wichtig
+    Any aHelper;
     aHelper <<= xSet;
     m_xEventAttacher->attach(_nIndex, xIfc, aHelper);
 
     // benachrichtigen
-    starcontainer::ContainerEvent aEvt;
-    aEvt.Source   = static_cast<starcontainer::XContainer*>(this);
+    ContainerEvent aEvt;
+    aEvt.Source   = static_cast<XContainer*>(this);
     aEvt.Accessor <<= _nIndex;
-    aEvt.Element  = staruno::Any(&xNewElement, m_aElementType);
-    aEvt.ReplacedElement = staruno::Any(&xOldElement, m_aElementType);
-    NOTIFY_LISTENERS(m_aContainerListeners, starcontainer::XContainerListener, elementReplaced, aEvt);
+    aEvt.Element  = Any(&xNewElement, m_aElementType);
+    aEvt.ReplacedElement = Any(&xOldElement, m_aElementType);
+    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementReplaced, aEvt);
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     if (_nIndex < 0 || _nIndex >= m_aItems.size())
-        throw starlang::IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException();
 
     OInterfaceArray::iterator i = m_aItems.begin() + _nIndex;
     InterfaceRef  xElement(*i);
@@ -666,15 +630,15 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( starl
     m_aMap.erase(j);
 
     // Eventverknüpfungen aufheben
-    InterfaceRef  xIfc(xElement, staruno::UNO_QUERY);// wichtig
+    InterfaceRef  xIfc(xElement, UNO_QUERY);// wichtig
     m_xEventAttacher->detach(_nIndex, xIfc);
     m_xEventAttacher->removeEntry(_nIndex);
 
-    staruno::Reference<starbeans::XPropertySet>  xSet(xElement, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
         xSet->removePropertyChangeListener(PROPERTY_NAME, this);
 
-    staruno::Reference<starcontainer::XChild>  xChild(xElement, staruno::UNO_QUERY);
+    Reference<XChild>  xChild(xElement, UNO_QUERY);
     if (xChild.is())
         xChild->setParent(InterfaceRef ());
 
@@ -682,52 +646,52 @@ void SAL_CALL OInterfaceContainer::removeByIndex(sal_Int32 _nIndex) throw( starl
     implRemoved(xElement);
 
     // notify listeners
-    starcontainer::ContainerEvent aEvt;
-    aEvt.Source     = static_cast<starcontainer::XContainer*>(this);
-    aEvt.Element    = staruno::Any(&xElement, m_aElementType);
+    ContainerEvent aEvt;
+    aEvt.Source     = static_cast<XContainer*>(this);
+    aEvt.Element    = Any(&xElement, m_aElementType);
     aEvt.Accessor   <<= _nIndex;
-    NOTIFY_LISTENERS(m_aContainerListeners, starcontainer::XContainerListener, elementRemoved, aEvt);
+    NOTIFY_LISTENERS(m_aContainerListeners, XContainerListener, elementRemoved, aEvt);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, const staruno::Any& Element) throw( starlang::IllegalArgumentException, starcontainer::ElementExistException, starlang::WrappedTargetException, staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    if (Element.getValueType().getTypeClass() != staruno::TypeClass_INTERFACE)
-        throw starlang::IllegalArgumentException();
+    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+        throw IllegalArgumentException();
 
     InterfaceRef  xElement(*(InterfaceRef *)Element.getValue());
-    staruno::Reference<starbeans::XPropertySet>  xSet(xElement, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(xElement, UNO_QUERY);
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw starlang::IllegalArgumentException();
+            throw IllegalArgumentException();
 
-        xSet->setPropertyValue(PROPERTY_NAME, staruno::makeAny(Name));
+        xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
     }
 
     insertByIndex(m_aItems.size(), Element);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, const staruno::Any& Element) throw( starlang::IllegalArgumentException, starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
-        throw starcontainer::NoSuchElementException();
+        throw NoSuchElementException();
 
-    if (Element.getValueType().getTypeClass() != staruno::TypeClass_INTERFACE)
-        throw starlang::IllegalArgumentException();
+    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+        throw IllegalArgumentException();
 
-    staruno::Reference<starbeans::XPropertySet>  xSet(*(InterfaceRef *)Element.getValue(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(*(InterfaceRef *)Element.getValue(), UNO_QUERY);
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            throw starlang::IllegalArgumentException();
+            throw IllegalArgumentException();
 
-        xSet->setPropertyValue(PROPERTY_NAME, staruno::makeAny(Name));
+        xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
     }
 
     // determine the element pos
@@ -736,83 +700,83 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) throw( starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException )
+void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
-        throw starcontainer::NoSuchElementException();
+        throw NoSuchElementException();
 
     sal_Int32 nPos = find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
     removeByIndex(nPos);
 }
 
 
-// starscript::XEventAttacherManager
+// XEventAttacherManager
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const starscript::ScriptEventDescriptor& aScriptEvent ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::registerScriptEvent( sal_Int32 nIndex, const ScriptEventDescriptor& aScriptEvent ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->registerScriptEvent(nIndex, aScriptEvent);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const staruno::Sequence< starscript::ScriptEventDescriptor >& aScriptEvents ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const Sequence< ScriptEventDescriptor >& aScriptEvents ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->registerScriptEvents(nIndex, aScriptEvents);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->revokeScriptEvent(nIndex,
                         aListenerType, aEventMethod, aRemoveListenerParam );
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::revokeScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->revokeScriptEvents(nIndex);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::insertEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->insertEntry(nIndex);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::removeEntry( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->removeEntry(nIndex);
 }
 
 //------------------------------------------------------------------------
-staruno::Sequence< starscript::ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+Sequence< ScriptEventDescriptor > SAL_CALL OInterfaceContainer::getScriptEvents( sal_Int32 nIndex ) throw(IllegalArgumentException, RuntimeException)
 {
     return m_xEventAttacher->getScriptEvents(nIndex);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const staruno::Reference< staruno::XInterface >& xObject, const staruno::Any& aHelper ) throw(starlang::IllegalArgumentException, starlang::ServiceNotRegisteredException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::attach( sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any& aHelper ) throw(IllegalArgumentException, ServiceNotRegisteredException, RuntimeException)
 {
     m_xEventAttacher->attach(nIndex, xObject, aHelper);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const staruno::Reference< staruno::XInterface >& xObject ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::detach( sal_Int32 nIndex, const Reference< XInterface >& xObject ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->detach(nIndex, xObject);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::addScriptListener( const staruno::Reference< starscript::XScriptListener >& xListener ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::addScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->addScriptListener(xListener);
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeScriptListener( const staruno::Reference< starscript::XScriptListener >& xListener ) throw(starlang::IllegalArgumentException, staruno::RuntimeException)
+void SAL_CALL OInterfaceContainer::removeScriptListener( const Reference< XScriptListener >& xListener ) throw(IllegalArgumentException, RuntimeException)
 {
     m_xEventAttacher->removeScriptListener(xListener);
 }
@@ -821,39 +785,30 @@ void SAL_CALL OInterfaceContainer::removeScriptListener( const staruno::Referenc
 //= OFormComponents
 //==================================================================
 //------------------------------------------------------------------------------
-staruno::Any SAL_CALL OFormComponents::queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException)
+Any SAL_CALL OFormComponents::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
-    staruno::Any aReturn = ::cppu::queryInterface(
-        _rType,
-        static_cast<starform::XFormComponent*>(this),
-        static_cast<starcontainer::XChild*>(static_cast<starform::XFormComponent*>(this))
-    );
-
+    Any aReturn = OFormComponents_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
+    {
         aReturn = OInterfaceContainer::queryInterface(_rType);
 
-    if (!aReturn.hasValue())
-        aReturn = FormComponentsBase::queryAggregation(_rType);
+        if (!aReturn.hasValue())
+            aReturn = FormComponentsBase::queryAggregation(_rType);
+    }
 
     return aReturn;
 }
 
 //------------------------------------------------------------------
-staruno::Sequence<staruno::Type> SAL_CALL OFormComponents::getTypes() throw(staruno::RuntimeException)
+Sequence<Type> SAL_CALL OFormComponents::getTypes() throw(RuntimeException)
 {
-    staruno::Sequence<staruno::Type> aBaseTypes = OInterfaceContainer::getTypes();
-    staruno::Sequence<staruno::Type> aComponentTypes = FormComponentsBase::getTypes();
-
-    staruno::Sequence<staruno::Type> aOwnTypes(1);
-    aOwnTypes.getArray()[0] = ::getCppuType(static_cast<staruno::Reference<starform::XFormComponent>*>(NULL));
-
-    return ::comphelper::concatSequences(aBaseTypes, aComponentTypes, aOwnTypes);
+    return ::comphelper::concatSequences(OInterfaceContainer::getTypes(), FormComponentsBase::getTypes(), OFormComponents_BASE::getTypes());
 }
 
 //------------------------------------------------------------------------------
-OFormComponents::OFormComponents(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory)
+OFormComponents::OFormComponents(const Reference<XMultiServiceFactory>& _rxFactory)
                   :FormComponentsBase(m_aMutex)
-                  ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<staruno::Reference<starform::XFormComponent>*>(NULL)))
+                  ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XFormComponent>*>(NULL)))
 {
 }
 
@@ -878,14 +833,14 @@ void OFormComponents::disposing()
 
 //XChild
 //------------------------------------------------------------------------------
-void OFormComponents::setParent(const InterfaceRef& Parent) throw( starlang::NoSupportException, staruno::RuntimeException )
+void OFormComponents::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef OFormComponents::getParent() throw( staruno::RuntimeException )
+InterfaceRef OFormComponents::getParent() throw( RuntimeException )
 {
     return m_xParent;
 }
