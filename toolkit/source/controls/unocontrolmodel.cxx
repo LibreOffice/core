@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:22 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
     {
         switch ( nPropId )
         {
+            case BASEPROPERTY_SYMBOL_COLOR:
             case BASEPROPERTY_TABSTOP:
             case BASEPROPERTY_TEXTCOLOR:
             case BASEPROPERTY_TEXTLINECOLOR:
@@ -366,10 +367,17 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_PROGRESSVALUE_MAX:    aDefault <<= (sal_Int32) 100;   break;
             case BASEPROPERTY_PROGRESSVALUE_MIN:    aDefault <<= (sal_Int32)   0;   break;
             case BASEPROPERTY_SCROLLVALUE_MAX:      aDefault <<= (sal_Int32) 100;   break;
+            case BASEPROPERTY_SCROLLVALUE_MIN:      aDefault <<= (sal_Int32)   0;   break;
             case BASEPROPERTY_LINEINCREMENT:        aDefault <<= (sal_Int32)   1;   break;
             case BASEPROPERTY_BLOCKINCREMENT:       aDefault <<= (sal_Int32)  10;   break;
             case BASEPROPERTY_ORIENTATION:          aDefault <<= (sal_Int32)   0;   break;
+            case BASEPROPERTY_SPINVALUE:            aDefault <<= (sal_Int32)   0;   break;
+            case BASEPROPERTY_SPININCREMENT:        aDefault <<= (sal_Int32)   1;   break;
+            case BASEPROPERTY_SPINVALUE_MIN:        aDefault <<= (sal_Int32)   0;   break;
+            case BASEPROPERTY_SPINVALUE_MAX:        aDefault <<= (sal_Int32) 100;   break;
+            case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    // 50 milliseconds
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
+
 
             case BASEPROPERTY_MOVEABLE:
             case BASEPROPERTY_CLOSEABLE:
@@ -385,6 +393,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_VSCROLL:
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             case BASEPROPERTY_STRICTFORMAT:
+            case BASEPROPERTY_REPEAT:
             case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
 
             case BASEPROPERTY_AUTOCOMPLETE:
@@ -474,6 +483,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
                 aDefault <<= sCurrencySymbol;
             }
             break;
+
             default:    DBG_ERROR( "ImplGetDefaultValue - unknown Property" );
         }
     }
