@@ -2,7 +2,7 @@
     shell SfxMDIFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-03-11 16:33:15 $ $Revision: 1.3 $
+    $Author: mba $ $Date: 2002-04-05 09:56:27 $ $Revision: 1.4 $
     $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
 =========================================================================*/
 
@@ -214,6 +214,9 @@ shell SfxTask
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/03/11 16:33:15  mba
+    #97063#: SID_NEXT/PREVWINDOW removed
+
     Revision 1.2  2001/06/29 11:29:27  mba
     #77632#: SID_SHOWPOPUPS now supported by TopFrames
 

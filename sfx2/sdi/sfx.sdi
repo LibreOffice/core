@@ -225,6 +225,7 @@ SfxStringItem CurrentURL SID_CURRENT_URL
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -326,6 +327,7 @@ SfxStringItem ModifiedStatus SID_DOC_MODIFIED
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -355,6 +357,7 @@ SfxStringItem OpenUrl SID_OPENURL
     SlotType = SfxStringItem
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -509,6 +512,7 @@ SfxDocumentInfoItem Properties SID_DOCINFO
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -536,6 +540,7 @@ SfxStringItem RedoAction SID_REDO
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -591,6 +596,7 @@ SfxStringItem RepeatAction SID_REPEAT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -748,6 +754,7 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -774,6 +781,7 @@ SfxUInt16Item SearchOptions SID_SEARCH_OPTIONS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -800,6 +808,7 @@ SvxSearchItem SearchProperties SID_SEARCH_ITEM
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -862,7 +871,7 @@ SfxVoidItem BackgroundImage SID_GALLERY_BG_BRUSH
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem FramesetSource SID_SOURCEVIEW
+SfxBoolItem SourceView SID_SOURCEVIEW
 
 [
     /* flags: */
@@ -879,6 +888,7 @@ SfxBoolItem FramesetSource SID_SOURCEVIEW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -906,6 +916,7 @@ SfxStringItem UndoAction SID_UNDO
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -982,6 +993,7 @@ SfxStringItem OnSaveAs SID_ON_SAVEASDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1183,6 +1195,7 @@ SfxStringItem OnDeactivate SID_ON_DEACTIVATEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1209,6 +1222,7 @@ SfxObjectItem ActiveModule SID_ACTIVEMODULE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1235,6 +1249,7 @@ SfxObjectItem FileName SID_FILE_NAME
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1331,11 +1346,12 @@ SfxStringItem FrameContent SID_FRAME_CONTENT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
+    RecordAbsolute = TRUE,
     RecordPerSet;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1362,6 +1378,7 @@ SfxStringItem _PickEntry8 SID_PICK8
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1488,6 +1505,7 @@ SfxBoolItem ObjectBarVisible SID_TOGGLEOBJECTBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1539,6 +1557,7 @@ SfxBoolItem FloatingTask SID_FLOATING_TASK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1615,6 +1634,7 @@ SfxStringItem OnSaveDone SID_ON_SAVEDOCDONE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1641,6 +1661,7 @@ SfxBoolItem EditFrameSet SID_EDIT_FRAMESET
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1692,6 +1713,7 @@ SfxUInt16Item FrameSpacing SID_FRAMESPACING
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1718,6 +1740,7 @@ SfxBoolItem PartWindow SID_PARTWIN
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1769,6 +1792,7 @@ SfxStringItem CurrentTime SID_CURRENTTIME
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1795,6 +1819,7 @@ SfxStringItem FrameTitle SID_FRAMETITLE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1821,6 +1846,7 @@ SfxObjectItem Document SID_DOCUMENT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1847,6 +1873,7 @@ SfxStringItem Path SID_DOCPATH
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1898,6 +1925,7 @@ SfxStringItem Title SID_DOCTITLE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1974,6 +2002,7 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2000,6 +2029,7 @@ SfxObjectItem Open SID_DOCINFO_TITLE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2179,6 +2209,7 @@ SfxBoolItem IsLoading SID_DOC_LOADING
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2230,6 +2261,7 @@ SfxBoolItem _SwitchViewShell1 SID_VIEWSHELL1
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2381,6 +2413,7 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2432,6 +2465,7 @@ SfxBoolItem ConfigureToolboxVisible SID_CUSTOMIZETOOLBOX
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2508,6 +2542,7 @@ SfxStringItem Caption SID_CAPTION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2559,6 +2594,7 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2585,6 +2621,7 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2611,6 +2648,7 @@ SfxBoolItem DesktopMode SID_DESKTOPMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2662,6 +2700,7 @@ SfxStringItem PrivateUse SID_OFFICE_PRIVATE_USE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2716,6 +2755,7 @@ SfxObjectItem Selection SID_SELECTION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2792,6 +2832,7 @@ SfxObjectItem StarWriter SID_STARWRITER
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2818,6 +2859,7 @@ SfxStringItem SelectionTextExt SID_SELECTION_TEXT_EXT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2844,6 +2886,7 @@ SfxObjectItem Task SID_TASK
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2870,6 +2913,7 @@ SfxStringItem SelectionText SID_SELECTION_TEXT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2893,10 +2937,11 @@ SfxBoolItem Recording SID_RECORDMACRO
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2948,6 +2993,7 @@ SfxStringItem FullName SID_PROGFILENAME
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2974,6 +3020,7 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3078,6 +3125,7 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3157,6 +3205,7 @@ SfxObjectItem StarDraw SID_STARDRAW
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3233,6 +3282,7 @@ SfxStringItem StatusBar SID_STATUSBARTEXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3259,6 +3309,7 @@ SfxBoolItem IsTopWindow SID_ISTOP
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3310,6 +3361,7 @@ SfxBoolItem MailWindow SID_MAIL_CHILDWIN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3336,6 +3388,7 @@ SfxBoolItem MailReadDialog SID_MAIL_INBOX
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3387,6 +3440,7 @@ SfxStringItem Printer SID_PRINTER_NAME
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3488,6 +3542,7 @@ SfxStringItem OnSave SID_ON_SAVEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3514,6 +3569,7 @@ SfxBoolItem Visible SID_WIN_VISIBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3540,6 +3596,7 @@ SfxStringItem OnPrepareClose SID_ON_PREPARECLOSEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3566,6 +3623,7 @@ SfxStringItem OnOpen SID_ON_OPENDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3588,7 +3646,7 @@ SfxBoolItem PlayMacro SID_PLAYMACRO
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
@@ -3617,6 +3675,7 @@ SfxStringItem CommercialUse SID_OFFICE_COMMERCIAL_USE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3643,6 +3702,7 @@ SfxStringItem OnStart SID_ON_STARTAPP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3694,6 +3754,7 @@ SfxStringItem OnQuit SID_ON_CLOSEAPP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3720,6 +3781,7 @@ SfxStringItem OldPALK SID_OLD_PALK
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3746,6 +3808,7 @@ SfxStringItem OfficeVersionId SID_OFFICE_VERSION_ID
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3797,6 +3860,7 @@ SfxStringItem OnCreate SID_ON_CREATEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3823,6 +3887,7 @@ SfxStringItem OnClose SID_ON_CLOSEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3874,6 +3939,7 @@ SfxBoolItem Beamer SID_BROWSER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3928,6 +3994,7 @@ SfxStringItem _PickEntry9 SID_PICK9
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3954,6 +4021,7 @@ SfxStringItem DefaultFilePath SID_DEFAULTFILEPATH
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3981,6 +4049,7 @@ SfxBoolItem IsPrinting SID_PRINTOUT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4085,6 +4154,7 @@ SfxStringItem _PickEntry2 SID_PICK2
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4111,6 +4181,7 @@ SfxStringItem _PickEntry1 SID_PICK1
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4165,6 +4236,7 @@ SfxObjectItem ParentWindow SID_PARENTFRAME
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4191,6 +4263,7 @@ SfxStringItem _PickEntry7 SID_PICK7
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4217,6 +4290,7 @@ SfxStringItem _PickEntry6 SID_PICK6
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4238,8 +4312,8 @@ SfxVoidItem ModifyFrame SID_MODIFY_FRAME
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    RecordAbsolute = TRUE,
+    RecordPerItem;
     Synchron;
 
     /* config: */
@@ -4268,6 +4342,7 @@ SfxStringItem _PickEntry3 SID_PICK3
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4319,6 +4394,7 @@ SfxBoolItem Modified SID_MODIFIED
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4345,6 +4421,7 @@ TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4424,6 +4501,7 @@ SfxBoolItem HelperDialog SID_HELP_PI
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4450,6 +4528,7 @@ SfxBoolItem _SwitchViewShell0 SID_VIEWSHELL0
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4476,6 +4555,7 @@ SfxUInt16Item SwitchViewShell SID_VIEWSHELL
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4552,6 +4632,7 @@ SfxBoolItem ActiveHelp SID_HELPBALLOONS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4603,6 +4684,7 @@ SfxUInt32Item UpdateVersion SID_UPDATE_VERSION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4654,6 +4736,7 @@ SfxObjectItem TopWindow SID_TOPWINDOW
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4908,6 +4991,7 @@ SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4934,6 +5018,7 @@ SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4960,6 +5045,7 @@ SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4986,6 +5072,7 @@ SfxRectangleItem Area SID_WIN_POSSIZE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5040,6 +5127,7 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5066,6 +5154,7 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5092,6 +5181,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5143,6 +5233,7 @@ SfxBoolItem HelpTip SID_HELPTIPS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5169,6 +5260,7 @@ SfxTemplateItem TemplateFamily5 SID_STYLE_FAMILY5
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5195,6 +5287,7 @@ SfxTemplateItem PageStyle SID_STYLE_FAMILY4
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5221,6 +5314,7 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5247,6 +5341,7 @@ SfxBoolItem DesignerDialog SID_STYLE_DESIGNER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5273,6 +5368,7 @@ SfxBoolItem Interactive SID_INTERACTIVEMODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5299,6 +5395,7 @@ SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5325,6 +5422,7 @@ SfxBoolItem InternetOnline SID_INTERNET_ONLINE
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5376,6 +5474,7 @@ SfxBoolItem TipsDialog SID_TIPWINDOW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5527,6 +5626,7 @@ SfxBoolItem OptionBarVisible SID_TOGGLEOPTIONBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5553,6 +5653,7 @@ SfxBoolItem NavigationBarVisible SID_TOGGLENAVBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5579,6 +5680,7 @@ SfxBoolItem MacroBarVisible SID_TOGGLEMACROBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5605,6 +5707,7 @@ SfxBoolItem FunctionBarVisible SID_TOGGLEFUNCTIONBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5631,6 +5734,7 @@ SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5732,6 +5836,7 @@ SfxObjectItem ThisDocument SID_THISDOCUMENT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5758,6 +5863,7 @@ SfxBoolItem TaskBarVisible SID_TASKBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5784,6 +5890,7 @@ SfxBoolItem AlwaysVisible SID_TASK_ALWAYSVISIBLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5810,6 +5917,7 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5882,7 +5990,7 @@ SfxVoidItem BasicStop SID_BASICSTOP
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
@@ -5911,6 +6019,7 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5987,6 +6096,7 @@ SfxStringItem _PickEntry5 SID_PICK5
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6013,6 +6123,7 @@ SfxStringItem CheckKey SID_CHECK_KEY
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6039,6 +6150,7 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6065,6 +6177,7 @@ SfxBoolItem BeamerTaskSensitive SID_BROWSER_TASK
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6091,6 +6204,7 @@ SfxUInt32Item BuildVersion SID_BUILD_VERSION
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6117,6 +6231,7 @@ SfxBoolItem Saved SID_DOC_SAVED
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6271,6 +6386,7 @@ SfxObjectItem ThisWindow SID_THISWINDOW
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6397,6 +6513,7 @@ SfxStringItem FullName SID_DOCFULLNAME
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6502,6 +6619,7 @@ SfxTemplateItem StyleApplyState SID_STYLE_APPLY
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6528,6 +6646,7 @@ SfxStringItem ObjectMenue SID_OBJECT
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -6554,6 +6673,7 @@ SfxStringItem LicenceKey SID_OFFICE_PLK
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6605,6 +6725,7 @@ SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6681,6 +6802,7 @@ SfxBoolItem Closing SID_CLOSING
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6707,6 +6829,7 @@ SfxUInt16Item FrameCount SID_FRAMECOUNT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6858,6 +6981,7 @@ SfxBoolItem Navigator SID_NAVIGATOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6884,6 +7008,7 @@ SfxObjectItem ActiveTask SID_ACTIVETASK
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6935,6 +7060,7 @@ SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
     Asynchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -6986,6 +7112,7 @@ SfxStringItem _PickEntry4 SID_PICK4
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7037,6 +7164,7 @@ SfxBoolItem Explorer SID_EXPLORER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7088,6 +7216,7 @@ SfxStringItem CustomerNumber SID_OFFICE_CUSTOMERNUMBER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7245,6 +7374,7 @@ SfxStringItem HelpChooseFile SID_HELP_HELPFILEBOX
     SlotType = SfxStringItem
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7292,7 +7422,7 @@ SfxVoidItem BasicBreak SID_BASICBREAK
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
@@ -7321,6 +7451,7 @@ SfxBoolItem CommonTaskBarVisible SID_TOGGLECOMMONTASKBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7347,6 +7478,7 @@ SfxObjectItem ActiveDocument SID_ACTIVEDOCUMENT
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7373,6 +7505,7 @@ SfxObjectItem ActiveWindow SID_ACTIVEWINDOW
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7424,6 +7557,7 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7470,7 +7604,7 @@ SfxObjectItem Activate SID_ACTIVATE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
+    RecordAbsolute = TRUE,
     RecordPerSet;
     Synchron;
 
@@ -7500,6 +7634,7 @@ SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7526,6 +7661,7 @@ SfxBoolItem AutoHide SID_AUTOHIDE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7652,6 +7788,7 @@ SfxBoolItem ToolBarVisible SID_TOGGLETOOLBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7803,6 +7940,7 @@ SfxBoolItem ShowBrowser SID_SHOW_BROWSER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7829,6 +7967,7 @@ SfxStringItem StatusGetTitle SID_BASICIDE_STAT_TITLE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7855,6 +7994,7 @@ SfxBoolItem LateInitDone SID_LATEINIT_DONE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7881,6 +8021,7 @@ SfxStringItem Path SID_PROGPATH
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7907,6 +8048,7 @@ SfxObjectItem StarCalc SID_STARCALC
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7958,6 +8100,7 @@ SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8137,6 +8280,7 @@ SfxBoolItem FullScreen SID_WIN_FULLSCREEN
     Asynchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8241,6 +8385,7 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8267,6 +8412,7 @@ SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8343,6 +8489,7 @@ SfxStringItem Context SID_CONTEXT
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8419,6 +8566,7 @@ SfxStringItem OnPrint SID_ON_PRINTDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8445,6 +8593,7 @@ SfxStringItem CurrentDate SID_CURRENTDATE
     Synchron;
 
     Readonly = TRUE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8624,6 +8773,7 @@ SfxStringItem OnSaveAsDone SID_ON_SAVEASDOCDONE
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8720,11 +8870,12 @@ SfxStringItem FrameName SID_FRAME_NAME
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
+    RecordAbsolute = TRUE,
     RecordPerSet;
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8751,6 +8902,7 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8777,6 +8929,7 @@ SfxStringItem OnActivate SID_ON_ACTIVATEDOC
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -8878,6 +9031,7 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8929,6 +9083,7 @@ SfxBoolItem RubyDialog SID_RUBY_DIALOG
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -8955,6 +9110,7 @@ SfxBoolItem MenuBarVisible SID_TOGGLE_MENUBAR
     Synchron;
 
     Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,

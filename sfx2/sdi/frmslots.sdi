@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-03-11 16:33:15 $ $Revision: 1.10 $
+    $Author: mba $ $Date: 2002-04-05 09:56:27 $ $Revision: 1.11 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -147,6 +147,13 @@ interface Window : Object
     [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
+    ]
+
+
+    SID_RECORDMACRO // ole(no) api(final/play/norec)
+    [
+                ExecMethod = MiscExec_Impl ;
+                StateMethod = MiscState_Impl ;
     ]
 
     SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
@@ -424,6 +431,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/03/11 16:33:15  mba
+    #97063#: SID_NEXT/PREVWINDOW removed
+
     Revision 1.9  2001/11/15 15:02:11  mba
     #93980#: SID_BROWSE_STOP on TopFrame, not App
 
