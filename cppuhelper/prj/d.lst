@@ -1,6 +1,9 @@
 mkdir: %_DEST%\inc%_EXT%\cppuhelper
 
 ..\inc\cppuhelper\implbase.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase.hxx
+..\inc\cppuhelper\implbase_ex.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase_ex.hxx
+..\inc\cppuhelper\implbase_ex_pre.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase_ex_pre.hxx
+..\inc\cppuhelper\implbase_ex_post.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase_ex_post.hxx
 ..\inc\cppuhelper\implbase1.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase1.hxx
 ..\inc\cppuhelper\implbase2.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase2.hxx
 ..\inc\cppuhelper\implbase3.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase3.hxx
@@ -15,6 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\implbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\implbase12.hxx
 					
 ..\inc\cppuhelper\compbase.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase.hxx
+..\inc\cppuhelper\compbase_ex.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase_ex.hxx
 ..\inc\cppuhelper\compbase1.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase1.hxx
 ..\inc\cppuhelper\compbase2.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase2.hxx
 ..\inc\cppuhelper\compbase3.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase3.hxx

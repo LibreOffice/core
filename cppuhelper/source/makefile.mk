@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:03:49 $
+#   last change: $Author: dbo $ $Date: 2001-09-04 09:03:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,7 @@ SLOFILES= \
         $(SLO)$/exc_thrower.obj 	\
         $(SLO)$/servicefactory.obj 	\
         $(SLO)$/implbase.obj 		\
+        $(SLO)$/implbase_ex.obj 	\
         $(SLO)$/propshlp.obj 		\
         $(SLO)$/weak.obj		\
         $(SLO)$/interfacecontainer.obj	\
@@ -160,7 +161,8 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(OS)$(CPU)$(COM)"=="SOLARISSC52"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COM)"=="SOLARISIC52"
-SHL1VERSIONMAP=cc5_solaris_intel.map
+# use same map for cc solaris
+SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COM)"=="LINUXIGCC"
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ENDIF

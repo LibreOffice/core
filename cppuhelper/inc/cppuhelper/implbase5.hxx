@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase5.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
+ *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,163 +61,35 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #define _CPPUHELPER_IMPLBASE5_HXX_
 
+#define __IFC5 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5
+#define __CLASS_IFC5 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5
+#define __PUBLIC_IFC5 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5
+
+#ifdef MACOSX /* use old impl helpers for macosx */
+
 #ifndef _CPPUHELPER_IMPLBASE_HXX_
 #include <cppuhelper/implbase.hxx>
 #endif
 
-/*
-#define __IFC5 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5
-#define __CLASS_IFC5 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5
-#define __PUBLIC_IFC5 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5
 __DEF_IMPLHELPER_PRE( 5 )
     __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ) __IFC_WRITEOFFSET( 4 )
     __IFC_WRITEOFFSET( 5 )
 __DEF_IMPLHELPER_POST( 5 )
-*/
 
-namespace cppu
-{
-    struct ClassData5 : public ClassDataBase
-    {
-        Type_Offset arType2Offset[ 5 ];
-        ClassData5( sal_Int32 nClassCode ) SAL_THROW( () )
-            : ClassDataBase( nClassCode )
-            {}
-    };
-    /** This template class serves as a base class for all subsequent implementation helper classes.
-        It inherits from given interfaces (template parameters) and com.sun.star.lang.XTypeProvider.
+#else /* ! MACOSX */
 
-        Do not use this class directly, use
-               ImplHelperBaseN<>,
-               WeakImplHelperN<>,
-               WeakAggImplHelperN<>
-               WeakComponentImplHelperN<>,
-               WeakAggComponentImplHelperN<>.
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    class SAL_NO_VTABLE ImplHelperBase5
-        : public ::com::sun::star::lang::XTypeProvider
-        , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5
-    {
-    protected:
-        ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW( () )
-            {
-                ClassData & rCD = * static_cast< ClassData * >( &s_aCD );
-                if (! rCD.bOffsetsInit)
-                {
-                    ::osl::MutexGuard aGuard( getImplHelperInitMutex() );
-                    if (! rCD.bOffsetsInit)
-                    {
-                        char * pBase = (char *)this;
-                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc1 > *)0 ),
-                                             (char *)(Ifc1 *)this - pBase );
-                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc2 > *)0 ),
-                                             (char *)(Ifc2 *)this - pBase );
-                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc3 > *)0 ),
-                                             (char *)(Ifc3 *)this - pBase );
-                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc4 > *)0 ),
-                                             (char *)(Ifc4 *)this - pBase );
-                        rCD.writeTypeOffset( ::getCppuType( (const ::com::sun::star::uno::Reference< Ifc5 > *)0 ),
-                                             (char *)(Ifc5 *)this - pBase );
-                        rCD.bOffsetsInit = sal_True;
-                    }
-                }
-                return rCD;
-            }
-    };
-    /** This template class inherits from ImplHelperBaseN<> and implements
-        com.sun.star.uno.XInterface::queryInterface() and the com.sun.star.lang.XTypeProvider
-        interface.
-
-        All other virtual functions (inherited from given template parameter interfaces)
-        have to be implemented by sub-classing from the templated class, e.g.
-        class MyImpl : public ::cppu::ImplHelperN<> { ... };
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    class SAL_NO_VTABLE ImplHelper5
-        : public ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >
-    {
-        static ClassData5 s_aCD;
-    public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).query( rType, (ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 > *)this ); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getTypes(); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getImplementationId(); }
-    };
-    /** This template class inherits from ::cppu::ImplHelperBaseN<> and ::cppu::OWeakObject,
-        thus delegating life-cycle to that implementation.
-        Use this helper implementing an object, that can be held weakly, using the
-        ::cppu::WeakReference<> template class.
-
-        All other virtual functions (inherited from given template parameter interfaces)
-        have to be implemented by sub-classing from the templated class, e.g.
-        class MyImpl : public ::cppu::WeakImplHelperN<> { ... };
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    class SAL_NO_VTABLE WeakImplHelper5
-        : public ::cppu::OWeakObject
-        , public ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >
-    {
-        static ClassData5 s_aCD;
-    public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 > *)this ) );
-                return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-            }
-        virtual void SAL_CALL acquire() throw ()
-            { OWeakObject::acquire(); }
-        virtual void SAL_CALL release() throw ()
-            { OWeakObject::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getTypes(); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getImplementationId(); }
-    };
-    /** This template class inherits from ::cppu::ImplHelperBaseN<> and ::cppu::OWeakAggObject,
-        thus delegating life-cycle to that implementation.
-        Use this helper implementing an object, that can be held weakly using the
-        ::cppu::WeakReference<> template class and can be aggregated by other objects.
-
-        All other virtual functions (inherited from given template parameter interfaces)
-        have to be implemented by sub-classing from the templated class, e.g.
-        class MyImpl : public ::cppu::WeakAggImplHelperN<> { ... };
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    class SAL_NO_VTABLE WeakAggImplHelper5
-        : public ::cppu::OWeakAggObject
-        , public ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >
-    {
-        static ClassData5 s_aCD;
-    public:
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return OWeakAggObject::queryInterface( rType ); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 > *)this ) );
-                return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
-            }
-        virtual void SAL_CALL acquire() throw ()
-            { OWeakAggObject::acquire(); }
-        virtual void SAL_CALL release() throw ()
-            { OWeakAggObject::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getTypes(); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getImplementationId(); }
-    };
-
-#ifndef MACOSX
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    ClassData5 ImplHelper5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >::s_aCD = ClassData5( 0 );
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    ClassData5 WeakImplHelper5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >::s_aCD = ClassData5( 1 );
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5 >
-    ClassData5 WeakAggImplHelper5< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5 >::s_aCD = ClassData5( 2 );
+#ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
+#include <cppuhelper/implbase_ex.hxx>
 #endif
 
-}
+#include <cppuhelper/implbase_ex_pre.hxx>
+#define __IFC_EX_TYPE_INIT5( class_cast ) \
+    __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 5 )
+#include <cppuhelper/implbase_ex_post.hxx>
+__DEF_IMPLHELPER_EX( 5 )
+
+#endif /* MACOSX */
 
 #endif

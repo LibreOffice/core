@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: compbase7.hxx,v $
+ *  $RCSfile: implbase_ex_pre.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
  *
@@ -58,29 +58,13 @@
  *
  *
  ************************************************************************/
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#define _CPPUHELPER_COMPBASE7_HXX_
+#ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
+#define _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
-#endif
+#define __IFC_EX_TYPE_INIT_NAME( class_cast, ifc_name ) \
+{ (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ifc_name > const * ))&getCppuType, \
+((sal_Int32)(ifc_name *) class_cast 16) - 16 }
 
-#ifdef MACOSX /* use old impl helpers for macosx */
-
-#ifndef _CPPUHELPER_COMPBASE_HXX_
-#include <cppuhelper/compbase.hxx>
-#endif
-
-__DEF_COMPIMPLHELPER( 7 )
-
-#else /* ! MACOSX */
-
-#ifndef _CPPUHELPER_COMPBASE_EX_HXX_
-#include <cppuhelper/compbase_ex.hxx>
-#endif
-
-__DEF_COMPIMPLHELPER_EX( 7 )
-
-#endif /* MACOSX */
+#define __IFC_EX_TYPE_INIT( class_cast, N ) __IFC_EX_TYPE_INIT_NAME( class_cast, Ifc##N )
 
 #endif

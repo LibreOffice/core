@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-27 10:00:48 $
+ *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,120 +61,12 @@
 #ifndef _CPPUHELPER_COMPBASE_HXX_
 #define _CPPUHELPER_COMPBASE_HXX_
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#ifndef _CPPUHELPER_COMPBASE_EX_HXX_
+#include <cppuhelper/compbase_ex.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE_HXX_
 #include <cppuhelper/implbase.hxx>
 #endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-
-#include <com/sun/star/lang/XComponent.hpp>
-
-namespace cppu
-{
-
-/** Implementation helper base class for components. Inherits from ::cppu::OWeakObject and
-    ::com::sun::star::lang::XComponent.
-*/
-class SAL_NO_VTABLE WeakComponentImplHelperBase
-    : public ::cppu::OWeakObject
-    , public ::com::sun::star::lang::XComponent
-{
-protected:
-    /** boradcast helper for disposing events
-    */
-    ::cppu::OBroadcastHelper rBHelper;
-
-    /** this function is called upon disposing the component
-    */
-    virtual void SAL_CALL disposing();
-
-    /** This is the one and only constructor that is called from derived implementations.
-
-        @param rMutex mutex to sync upon disposing
-    */
-    WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
-public:
-    /** Destructor
-    */
-    virtual ~WeakComponentImplHelperBase() SAL_THROW( () );
-
-    // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-        { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-        { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
-        { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
-        {}
-
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire()
-        throw ();
-    virtual void SAL_CALL release()
-        throw ();
-    virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-};
-
-class SAL_NO_VTABLE WeakAggComponentImplHelperBase
-    : public ::cppu::OWeakAggObject
-    , public ::com::sun::star::lang::XComponent
-{
-protected:
-    ::cppu::OBroadcastHelper rBHelper;
-
-    /** Is called upon disposing the component.
-    */
-    virtual void SAL_CALL disposing();
-
-    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW( () );
-public:
-    virtual ~WeakAggComponentImplHelperBase() SAL_THROW( () );
-
-    // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
-        { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
-        { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW( () )
-        { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW( () )
-        {}
-
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(
-        ::com::sun::star::uno::Type const & rType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire()
-        throw ();
-    virtual void SAL_CALL release()
-        throw ();
-    virtual void SAL_CALL dispose()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener(
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-};
-
-}
 
 //==================================================================================================
 #define __DEF_COMPIMPLHELPER_A( N ) \
@@ -198,9 +90,9 @@ public: \
         return WeakComponentImplHelperBase::queryInterface( rType ); \
     } \
     virtual void SAL_CALL acquire() throw () \
-        { WeakComponentImplHelperBase::::acquire(); } \
+        { WeakComponentImplHelperBase::acquire(); } \
     virtual void SAL_CALL release() throw () \
-        { WeakComponentImplHelperBase::::release(); } \
+        { WeakComponentImplHelperBase::release(); } \
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException) \
         { return getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \

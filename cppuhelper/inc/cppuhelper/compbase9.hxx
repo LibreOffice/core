@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase9.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-21 09:14:50 $
+ *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,104 +64,23 @@
 #ifndef _CPPUHELPER_IMPLBASE9_HXX_
 #include <cppuhelper/implbase9.hxx>
 #endif
+
+#ifdef MACOSX /* use old impl helpers for macosx */
+
 #ifndef _CPPUHELPER_COMPBASE_HXX_
 #include <cppuhelper/compbase.hxx>
 #endif
 
-/*
 __DEF_COMPIMPLHELPER( 9 )
-*/
 
-namespace cppu
-{
-    /** This template class unites ::cppu::ImplHelperBaseN<>, com.sun.star.lang.XComponent
-        and ::cppu::OWeakObject, thus delegating life-cycle to that implementation.
-        Use this helper implementing an object, that can be held weakly using the
-        ::cppu::WeakReference<> template class.
-        The template class expects a C++ mutex reference for synchronization in its ctor.
-        The com.sun.star.lang.XComponent implementation fires a final disposing() call
-        to the implementation when the component is to be disposed.  So implement disposing()
-        when sub-classing.
+#else /* ! MACOSX */
 
-        All other virtual functions (inherited from given template parameter interfaces)
-        have to be implemented by sub-classing from the templated class, e.g.
-        class MyImpl : public ::cppu::WeakComponentImplHelperN<> { ... };
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
-    class SAL_NO_VTABLE WeakComponentImplHelper9
-        : public ::cppu::WeakComponentImplHelperBase
-        , public ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >
-    {
-        static ClassData9 s_aCD;
-    public:
-        WeakComponentImplHelper9( ::osl::Mutex & rMutex ) SAL_THROW( () )
-            : WeakComponentImplHelperBase( rMutex )
-            {}
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 > *)this ) );
-                if (aRet.hasValue())
-                    return aRet;
-                return WeakComponentImplHelperBase::queryInterface( rType );
-            }
-        virtual void SAL_CALL acquire() throw ()
-            { WeakComponentImplHelperBase::acquire(); }
-        virtual void SAL_CALL release() throw ()
-            { WeakComponentImplHelperBase::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getTypes(); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getImplementationId(); }
-    };
-    /** This template class unites ::cppu::ImplHelperBaseN<>, com.sun.star.lang.XComponent
-        and ::cppu::OWeakAggObject, thus delegating life-cycle to that implementation.
-        Use this helper implementing an object, that can be held weakly using the
-        ::cppu::WeakReference<> template class and can be aggregated by other objects.
-        The template class expects a C++ mutex reference for synchronization in its ctor.
-        The com.sun.star.lang.XComponent implementation fires a final disposing() call
-        to the implementation when the component is to be disposed.  So implement disposing()
-        when sub-classing.
-
-        All other virtual functions (inherited from given template parameter interfaces)
-        have to be implemented by sub-classing from the templated class, e.g.
-        class MyImpl : public ::cppu::WeakAggComponentImplHelperN<> { ... };
-    */
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
-    class SAL_NO_VTABLE WeakAggComponentImplHelper9
-        : public ::cppu::WeakAggComponentImplHelperBase
-        , public ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >
-    {
-        static ClassData9 s_aCD;
-    public:
-        WeakAggComponentImplHelper9( ::osl::Mutex & rMutex ) SAL_THROW( () )
-            : WeakAggComponentImplHelperBase( rMutex )
-            {}
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
-        virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException)
-            {
-                ::com::sun::star::uno::Any aRet( getClassData( s_aCD ).query( rType, (ImplHelperBase9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 > *)this ) );
-                if (aRet.hasValue())
-                    return aRet;
-                return WeakAggComponentImplHelperBase::queryAggregation( rType );
-            }
-        virtual void SAL_CALL acquire() throw ()
-            { WeakAggComponentImplHelperBase::acquire(); }
-        virtual void SAL_CALL release() throw ()
-            { WeakAggComponentImplHelperBase::release(); }
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getTypes(); }
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
-            { return getClassData( s_aCD ).getImplementationId(); }
-    };
-
-#ifndef MACOSX
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
-    ClassData9 WeakComponentImplHelper9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >::s_aCD = ClassData9( 4 );
-    template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9 >
-    ClassData9 WeakAggComponentImplHelper9< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9 >::s_aCD = ClassData9( 3 );
+#ifndef _CPPUHELPER_COMPBASE_EX_HXX_
+#include <cppuhelper/compbase_ex.hxx>
 #endif
 
-}
+__DEF_COMPIMPLHELPER_EX( 9 )
+
+#endif /* MACOSX */
 
 #endif

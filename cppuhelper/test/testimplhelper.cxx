@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-31 09:12:21 $
+ *  last change: $Author: dbo $ $Date: 2001-09-04 09:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -107,8 +109,8 @@ using namespace test;
 using namespace rtl;
 using namespace osl;
 using namespace cppu;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 
 //==================================================================================================
 struct TestImpl : public ImplHelper4< CA, DBA, FE, G >
@@ -322,6 +324,21 @@ static bool isIn( Sequence< Type > const & rTypes, char const * name )
 //==================================================================================================
 static void dotest( const Reference< XInterface > & xOriginal )
 {
+    Reference< lang::XTypeProvider > xTP( xOriginal, UNO_QUERY );
+    Sequence< sal_Int8 > id( xTP->getImplementationId() );
+    Sequence< Type > types( xTP->getTypes() );
+    ::fprintf( stderr, "> supported types: " );
+    long n = 0;
+    for ( ; n < types.getLength(); ++n )
+    {
+        OString str( OUStringToOString( types[ n ].getTypeName(), RTL_TEXTENCODING_ASCII_US ) );
+        ::fprintf( stderr, (n < (types.getLength()-1)) ? "%s, " : "%s; type-id=\n", str.getStr() );
+    }
+    for ( n = 0; n < 16; ++n )
+    {
+        ::fprintf( stderr, n < 15 ? "%x " : "%x \n", id[ n ] );
+    }
+
     Reference< A > xa( xOriginal, UNO_QUERY );
     OSL_ENSURE( xa->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### A failed!" );
     Reference< BA > xba( xa, UNO_QUERY );
@@ -343,7 +360,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     OSL_ENSURE( xg->a().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ), "### G failed!" );
 
     // type provider
-    Reference< XTypeProvider > xProv( xg, UNO_QUERY );
+    Reference< lang::XTypeProvider > xProv( xg, UNO_QUERY );
     Sequence< Type > aTypes( xProv->getTypes() );
 
     // CA, DBA, FE, G, XTypeProvider
@@ -358,7 +375,7 @@ static void dotest( const Reference< XInterface > & xOriginal )
     {
         OSL_ASSERT( isIn( aTypes, "com.sun.star.uno.XWeak") );
     }
-    Reference< XComponent > xComp( xg, UNO_QUERY );
+    Reference< lang::XComponent > xComp( xg, UNO_QUERY );
     if (xComp.is())
     {
         OSL_ASSERT( isIn( aTypes, "com.sun.star.lang.XComponent") );
@@ -384,20 +401,40 @@ static void dotest( const Reference< XInterface > & xOriginal )
 }
 
 //==================================================================================================
-void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
+void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & xSF )
 {
-    Reference< XInterface > xImpl( (XTypeProvider *)new TestImpl() );
+    Reference< XInterface > xImpl( (lang::XTypeProvider *)new TestImpl() );
+    Reference< lang::XTypeProvider > xTP1( xImpl, UNO_QUERY );
     Reference< XInterface > xWeakImpl( (OWeakObject *)new TestWeakImpl() );
+    Reference< lang::XTypeProvider > xTP2( xWeakImpl, UNO_QUERY );
     Reference< XInterface > xWeakAggImpl( (OWeakObject *)new TestWeakAggImpl() );
+    Reference< lang::XTypeProvider > xTP3( xWeakAggImpl, UNO_QUERY );
     Reference< XInterface > xWeakComponentImpl( (OWeakObject *)new TestWeakComponentImpl() );
+    Reference< lang::XTypeProvider > xTP4( xWeakComponentImpl, UNO_QUERY );
     Reference< XInterface > xWeakAggComponentImpl( (OWeakObject *)new TestWeakAggComponentImpl() );
+    Reference< lang::XTypeProvider > xTP5( xWeakAggComponentImpl, UNO_QUERY );
+    //
+    OSL_ASSERT(
+        xTP1->getImplementationId() != xTP2->getImplementationId() &&
+        xTP1->getImplementationId() != xTP3->getImplementationId() &&
+        xTP1->getImplementationId() != xTP4->getImplementationId() &&
+        xTP1->getImplementationId() != xTP5->getImplementationId() &&
+        xTP2->getImplementationId() != xTP3->getImplementationId() &&
+        xTP2->getImplementationId() != xTP4->getImplementationId() &&
+        xTP2->getImplementationId() != xTP5->getImplementationId() &&
+        xTP3->getImplementationId() != xTP4->getImplementationId() &&
+        xTP3->getImplementationId() != xTP5->getImplementationId() &&
+        xTP4->getImplementationId() != xTP5->getImplementationId() );
+    //
+
     dotest( xImpl );
     dotest( xWeakImpl );
     dotest( xWeakAggImpl );
     dotest( xWeakComponentImpl );
     dotest( xWeakAggComponentImpl );
-    //
+
     xWeakImpl = (OWeakObject *)new TestImplInh();
+    Reference< lang::XTypeProvider > xTP6( xWeakImpl, UNO_QUERY );
     dotest( xWeakImpl );
     Reference< H > xH( xWeakImpl, UNO_QUERY );
     Reference< I > xI( xH, UNO_QUERY );
@@ -405,11 +442,27 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
     OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i") ) );
 
     xWeakAggImpl = (OWeakObject *)new TestAggImplInh();
+    Reference< lang::XTypeProvider > xTP7( xWeakAggImpl, UNO_QUERY );
     dotest( xWeakAggImpl );
     xH.set( xWeakAggImpl, UNO_QUERY );
     xI.set( xH, UNO_QUERY );
     OSL_ASSERT( xH->h().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("h2") ) );
     OSL_ASSERT( xI->i().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("i2") ) );
+
+    //
+    OSL_ASSERT(
+        xTP6->getImplementationId() != xTP1->getImplementationId() &&
+        xTP6->getImplementationId() != xTP2->getImplementationId() &&
+        xTP6->getImplementationId() != xTP3->getImplementationId() &&
+        xTP6->getImplementationId() != xTP4->getImplementationId() &&
+        xTP6->getImplementationId() != xTP5->getImplementationId() &&
+        xTP6->getImplementationId() != xTP7->getImplementationId() &&
+        xTP7->getImplementationId() != xTP1->getImplementationId() &&
+        xTP7->getImplementationId() != xTP2->getImplementationId() &&
+        xTP7->getImplementationId() != xTP3->getImplementationId() &&
+        xTP7->getImplementationId() != xTP4->getImplementationId() &&
+        xTP7->getImplementationId() != xTP5->getImplementationId() );
+    //
 
     // exception helper test
     try
@@ -426,7 +479,7 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
             throwException( makeAny( Exception(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("exc") ), rExc.Context ) ) );
         }
-        catch (IllegalAccessException &)
+        catch (lang::IllegalAccessException &)
         {
             OSL_ENSURE( sal_False, "### unexpected IllegalAccessException exception caught!" );
         }
@@ -436,10 +489,10 @@ void test_ImplHelper( const Reference< XMultiServiceFactory > & xSF )
                          "### unexpected exception content!" );
             try
             {
-                throwException( makeAny( IllegalAccessException(
+                throwException( makeAny( lang::IllegalAccessException(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("axxess exc") ), rExc.Context ) ) );
             }
-            catch (IllegalAccessException & rExc)
+            catch (lang::IllegalAccessException & rExc)
             {
                 OSL_ENSURE( rExc.Message.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("axxess exc") ) && rExc.Context == xImpl,
                              "### unexpected exception content!" );
