@@ -41,6 +41,7 @@ class AccessibleContextHandler
         "TRANSIENT",
         "VERTICAL",
         "VISIBLE",
+        "MANAGES_DESCENDANT",   // 30
     };
     private static HashMap maRoleMap = new HashMap();
     static
@@ -175,7 +176,7 @@ class AccessibleContextHandler
                         xContext.getAccessibleStateSet();
                     if (xStateSet != null)
                     {
-                        for (short i=0; i<=29; i++)
+                        for (short i=0; i<=30; i++)
                         {
                             if (xStateSet.contains (i))
                             {
