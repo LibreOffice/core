@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndlcon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 16:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ using namespace ::com::sun::star::datatransfer::dnd;
 DNDListenerContainer::DNDListenerContainer( sal_Int8 nDefaultActions ) : m_aMutex(),
     WeakComponentImplHelper2< XDragGestureRecognizer, XDropTarget >(m_aMutex)
 {
-    m_bActive = sal_False;
+    m_bActive = sal_True;
     m_nDefaultActions = nDefaultActions;
 }
 
@@ -188,7 +188,7 @@ sal_uInt32 DNDListenerContainer::fireDropEvent( const Reference< XDropTargetDrop
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
 
-    if( pContainer )
+    if( pContainer && m_bActive )
     {
         // do not construct the event before you are sure at least one listener is registered
         DropTargetDropEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions, transferable );
@@ -232,7 +232,7 @@ sal_uInt32 DNDListenerContainer::fireDragExitEvent()
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
 
-    if( pContainer )
+    if( pContainer && m_bActive )
     {
         // do not construct the event before you are sure at least one listener is registered
         DropTargetEvent aEvent( static_cast < XDropTarget * > (this), 0 );
@@ -277,7 +277,7 @@ sal_uInt32 DNDListenerContainer::fireDragOverEvent( const Reference< XDropTarget
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
 
-    if( pContainer )
+    if( pContainer && m_bActive )
     {
         // do not construct the event before you are sure at least one listener is registered
         DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions );
@@ -322,7 +322,7 @@ sal_uInt32 DNDListenerContainer::fireDragEnterEvent( const Reference< XDropTarge
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
 
-    if( pContainer )
+    if( pContainer && m_bActive )
     {
         // do not construct the event before you are sure at least one listener is registered
         DropTargetDragEnterEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions, dataFlavors );
@@ -367,7 +367,7 @@ sal_uInt32 DNDListenerContainer::fireDropActionChangedEvent( const Reference< XD
     // fire DropTargetDropEvent on all XDropTargetListeners
     OInterfaceContainerHelper *pContainer = rBHelper.getContainer( getCppuType( ( Reference < XDropTargetListener > * ) 0) );
 
-    if( pContainer )
+    if( pContainer && m_bActive )
     {
         // do not construct the event before you are sure at least one listener is registered
         DropTargetDragEvent aEvent( static_cast < XDropTarget * > (this), 0, context, dropAction, location, sourceActions );
