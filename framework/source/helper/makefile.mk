@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: as $ $Date: 2002-05-23 12:53:02 $
+#   last change: $Author: as $ $Date: 2002-07-29 08:25:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,12 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/imageproducer.obj						\
                     $(SLO)$/xmldocproperties.obj					\
                     $(SLO)$/propertysetcontainer.obj				\
-                    $(SLO)$/actiontriggerhelper.obj
+                    $(SLO)$/actiontriggerhelper.obj					\
+                    $(SLO)$/asyncloadthread.obj					\
+                    $(SLO)$/componentloader.obj					\
+                    $(SLO)$/loadeventlistener.obj					\
+                    $(SLO)$/stillinteraction.obj					\
+                    $(SLO)$/persistentwindowstate.obj
 
 # --- Targets ------------------------------------------------------
 

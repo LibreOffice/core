@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: as $ $Date: 2002-05-23 12:54:59 $
+#   last change: $Author: as $ $Date: 2002-07-29 08:25:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,7 +239,12 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/jobexecutor.obj				\
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchrecorder.obj		\
-                $(SLO)$/servicehandler.obj
+                $(SLO)$/servicehandler.obj		\
+                $(SLO)$/stillinteraction.obj		\
+                $(SLO)$/loadeventlistener.obj		\
+                $(SLO)$/asyncloadthread.obj		\
+                $(SLO)$/componentloader.obj		\
+                $(SLO)$/persistentwindowstate.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
