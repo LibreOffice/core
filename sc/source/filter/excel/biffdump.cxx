@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-06 12:44:48 $
+ *  last change: $Author: dr $ $Date: 2001-06-07 15:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,6 +1028,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn >> __nFlags;
                 if( __nFlags )
                 {
+                    ADDTEXT( "   " );
                     STARTFLAG();
                     ADDFLAG( 0x01, " fAlwaysCalc" );
                     ADDFLAG( 0x02, " fCalcOnLoad" );
@@ -1037,7 +1038,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 UINT16  n;
                 ADDTEXT( "chn = " );
-                __AddPureHex( t, Read4( rIn ) );
+                ADDHEX( 4 );
                 rIn >> n;
                 ADDTEXT( "    cce = " );
                 __AddDec( t, n );
@@ -3254,8 +3255,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 STARTFLAG();
                 ADDFLAG( 0x0001, " fAlwaysCalc" );
                 ADDFLAG( 0x0002, " fCalcOnLoad" );
-                ADDFLAG( 0x0004, " fExAsc" );
-                ADDFLAG( 0x0008, " fExDsc" );
                 ADDRESERVED( 0xFFFC );
                 PRINT();
                 LINESTART();

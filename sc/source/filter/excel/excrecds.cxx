@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-05 14:23:57 $
+ *  last change: $Author: dr $ $Date: 2001-06-07 15:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4584,7 +4584,7 @@ ExcArray::ExcArray( const ExcUPN& rUPN, UINT8 nCol, UINT16 nRow )
     if( nFormLen )
     {
         pData = new sal_Char[ nFormLen ];
-        memcpy( pData, rUPN.GetCode(), nFormLen );
+        memcpy( pData, rUPN.GetData(), nFormLen );
     }
     else
         pData = NULL;
