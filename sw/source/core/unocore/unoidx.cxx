@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-09 10:24:14 $
+ *  last change: $Author: hr $ $Date: 2000-11-09 15:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifdef PRECOMPILED
 #include "core_pch.hxx"
@@ -149,7 +148,6 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
-
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -878,7 +876,7 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 while( pMark )
                 {
                     if(pMark->GetTxtTOXMark())
-                        aMarks.Insert(pMark, aMarks.Count());
+                        aMarks.C40_INSERT(SwTOXMark, pMark, aMarks.Count());
                     pMark = (SwTOXMark*)aIter.Next();
                 }
                 Sequence< Reference < XDocumentIndexMark > > aXMarks(aMarks.Count());
