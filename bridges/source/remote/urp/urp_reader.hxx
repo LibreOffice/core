@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:06 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include "urp_unmarshal.hxx"
 
@@ -72,7 +72,7 @@ class OWriterThread;
 struct MessageFlags;
 
 class OReaderThread :
-    public ::vos::OThread
+    public ::osl::Thread
 {
 public:
     OReaderThread( remote_Connection *pConnection ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:19:13 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vos/thread.hxx>
+#include <osl/thread.hxx>
 
 #include <com/sun/star/uno/Type.hxx>
 
@@ -81,7 +81,7 @@ namespace bridges_urp
 
     struct urp_BridgeImpl;
     class OWriterThread :
-        public ::vos::OThread
+        public ::osl::Thread
     {
     public:
         OWriterThread( remote_Connection *pConnection,

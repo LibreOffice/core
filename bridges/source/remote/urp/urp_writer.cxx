@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:25:39 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-//#include <vos/thread.hxx>
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-31 16:41:23 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <vos/timer.hxx>
-
 #include <uno/mapping.hxx>
 #include <uno/threadpool.h>
 
@@ -134,7 +132,7 @@ void SAL_CALL urp_sendRequest(
     if( pImpl->m_properties.bForceSynchronous &&
         REMOTE_RELEASE_METHOD_INDEX ==
         ((typelib_InterfaceMemberTypeDescription*)pMemberType)->nPosition &&
-        pImpl->m_pWriter->getIdentifier() != ::vos::OThread::getCurrentIdentifier() )
+        pImpl->m_pWriter->getIdentifier() != ::osl::Thread::getCurrentIdentifier() )
     {
         // all release calls in the FORCE SYNCHRONOUS case are delegated to the writer thread to avoid
         // multiple synchron calls with the same thread id.

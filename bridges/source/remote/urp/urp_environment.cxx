@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-17 19:39:36 $
+ *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,10 @@
 #include <osl/diagnose.h>
 #include <osl/conditn.h>
 #include <osl/mutex.hxx>
+#include <osl/process.h>
 
 #include <rtl/alloc.h>
 #include <rtl/uuid.h>
-#include <vos/thread.hxx>
 
 #include <uno/environment.h>
 #include <uno/lbnames.h>
@@ -94,6 +94,7 @@
 #include "urp_propertyobject.hxx"
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
 namespace bridges_urp
@@ -117,7 +118,7 @@ namespace bridges_urp
 
 // PropertySetterThread
 //------------------------------------
-class PropertySetterThread : public ::vos::OThread
+class PropertySetterThread : public ::osl::Thread
 {
     urp_BridgeImpl *m_pImpl;
     ::rtl::OUString m_sProps;
@@ -329,6 +330,13 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
         }
 
           pContext->m_pConnection->close( pContext->m_pConnection );
+#ifdef BRIDGES_URP_PROT
+        if( pImpl->m_pLogFile )
+        {
+            fclose( pImpl->m_pLogFile );
+            pImpl->m_pLogFile = 0;
+        }
+#endif
 
         // wait for the writer thread
         pImpl->m_pWriter->join();
@@ -462,6 +470,37 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
         }
     }
 
+#ifdef BRIDGES_URP_PROT
+      char *p = getenv( "PROT_REMOTE" );
+    pImpl->m_pLogFile = 0;
+      if( p )
+      {
+        MutexGuard guard( Mutex::getGlobalMutex() );
+        static int counter;
+        oslProcessInfo data;
+        data.Size = sizeof( data );
+        osl_getProcessInfo( 0 , osl_Process_HEAPUSAGE | osl_Process_IDENTIFIER , &data );
+        OString s(p);
+        s += "_pid";
+        s += OString::valueOf( (sal_Int32) data.Ident );
+        s += "_";
+        s += OString::valueOf( (sal_Int32) counter );
+        pImpl->m_sLogFileName = s;
+        // clear the file
+          FILE *f = fopen( s.getStr() , "w" );
+        OSL_ASSERT( f );
+        if( getenv( "PROT_REMOTE_FAST") )
+        {
+            pImpl->m_pLogFile = f;
+        }
+        else
+        {
+            fclose( f );
+        }
+        counter++;
+      }
+#endif
+
     // start reader and writer threads
     pImpl->m_pWriter = new ::bridges_urp::OWriterThread( pContext->m_pConnection , pImpl,
                                                          pEnvRemote);
@@ -473,19 +512,6 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
     pImpl->m_pReader->create();
 
     // create the properties object
-#ifdef BRIDGES_URP_PROT
-      pImpl->m_pLogFile = 0;
-      char *p = getenv( "PROT_REMOTE" );
-      if( p )
-      {
-        static int counter;
-        OString s(p);
-        s += OString::valueOf( (sal_Int32) counter );
-          pImpl->m_pLogFile = fopen( s.getStr() , "w" );
-        counter++;
-      }
-#endif
-
     // start the property-set-thread, if necessary
     if( sProtocolProperties.getLength() )
     {
