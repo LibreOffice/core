@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:38:47 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 20:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,6 +922,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ catalan ] = "Fondo";
 };
  // ********************************************************************** EOF
+
 
 
 
