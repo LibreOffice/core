@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-27 16:28:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef _SVARRAY_HXX //autogen
@@ -174,8 +178,8 @@ public:
     void            CompileAll();
     void            CompileXML();
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz );
-    void            UpdateMoveTab( USHORT nOldPos, USHORT nNewPos );
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void            SourceChanged( const ScAddress& rChanged );
 
@@ -256,8 +260,8 @@ public:
     void            CompileAll();
     void            CompileXML();
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz );
-    void            UpdateMoveTab( USHORT nOldPos, USHORT nNewPos );
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void            SourceChanged( const ScAddress& rAddr );
 
@@ -311,8 +315,8 @@ public:
     void    CompileAll();
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, short nDx, short nDy, short nDz );
-    void    UpdateMoveTab( USHORT nOldPos, USHORT nNewPos );
+                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void    SourceChanged( const ScAddress& rAddr );
 
