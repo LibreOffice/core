@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:55:01 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,14 @@ AccessibleShapeInfo::AccessibleShapeInfo (
     // empty.
 }
 
-
+AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
+    : mxShape (rOther.mxShape),
+      mxParent (rOther.mxParent),
+      mpChildrenManager (rOther.mpChildrenManager),
+      mnIndex (rOther.mnIndex)
+{
+    // empty.
+}
 
 
 AccessibleShapeInfo::~AccessibleShapeInfo (void)
