@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:56:05 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,20 +98,21 @@ ModalDialog DLG_CHANGE_DB
         Text [ danish ] = "Udskift database" ;
         Text [ portuguese_brazilian ] = "Datenbank austauschen" ;
         Text [ portuguese ] = "Substituir base de dados" ;
-        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+        Text[ chinese_simplified ] = "æ›´æ¢æ•°æ®åº“";
         Text[ russian ] = "Çàìåíèòü áàçó äàííûõ";
         Text[ polish ] = "Wymieñ bazê danych";
-        Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÌŒğŠ·";
-        Text[ chinese_traditional ] = "´À´«¸ê®Æ®w";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®äº¤æ›";
+        Text[ chinese_traditional ] = "æ›¿æ›è³‡æ–™åº«";
         Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
         Text[ dutch ] = "Database wisselen";
-        Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+        Text[ chinese_simplified ] = "æ›´æ¢æ•°æ®åº“";
         Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ êµí™˜";
         Text[ turkish ] = "Veritabanının değiştirilmesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar Bases de Datos";
         Text[ finnish ] = "Vaihda tietokannat";
+        Text[ thai ] = "à¹à¸¥à¸à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     };
     FixedText FT_USEDDB
     {
@@ -129,20 +130,21 @@ ModalDialog DLG_CHANGE_DB
         Text [ danish ] = "Anvendte databaser" ;
         Text [ portuguese_brazilian ] = "Verwendete Datenbanken" ;
         Text [ portuguese ] = "Bases de dados utilizadas" ;
-        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÊı¾İ¿â";
+        Text[ chinese_simplified ] = "ä½¿ç”¨çš„æ•°æ®åº“";
         Text[ russian ] = "Èñïîëüçóåìûå áàçû äàííûõ";
         Text[ polish ] = "U¿yte bazy danych";
-        Text[ japanese ] = "g—p‚³‚ê‚½ÃŞ°ÀÍŞ°½";
-        Text[ chinese_traditional ] = "©Ò¨Ï¥Îªº¸ê®Æ®w";
+        Text[ japanese ] = "ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
+        Text[ chinese_traditional ] = "æ‰€ä½¿ç”¨çš„è³‡æ–™åº«";
         Text[ arabic ] = "ŞæÇÚÏ ÇáÈíÇäÇÊ ŞíÏ ÇáÇÓÊÎÏÇã";
         Text[ dutch ] = "Gebruikte databases";
-        Text[ chinese_simplified ] = "Ê¹ÓÃµÄÊı¾İ¿â";
+        Text[ chinese_simplified ] = "ä½¿ç”¨çš„æ•°æ®åº“";
         Text[ greek ] = "×ñçóéìïğïéïıìåíåò âÜóåéò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º°¡ »ç¿ëÁß ÀÔ´Ï´Ù.";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ê°€ ì‚¬ìš©ì¤‘ ì…ë‹ˆë‹¤.";
         Text[ turkish ] = "Kullanılan veritabanları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Bases de datos utilizadas";
         Text[ finnish ] = "Käytössä olevat tietokannat";
+        Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸–à¸¹à¸à¹ƒà¸Šà¹‰";
     };
     FixedText FT_AVAILDB
     {
@@ -161,20 +163,21 @@ ModalDialog DLG_CHANGE_DB
         Text [ danish ] = "Tilgængelige databaser" ;
         Text [ portuguese_brazilian ] = "Verf?bare Datenbanken" ;
         Text [ portuguese ] = "Bases de dados disponíveis" ;
-        Text[ chinese_simplified ] = "¿ÉÊ¹ÓÃµÄÊı¾İ¿â";
+        Text[ chinese_simplified ] = "å¯ä½¿ç”¨çš„æ•°æ®åº“";
         Text[ russian ] = "Äîñòóïíûå áàçû äàííûõ";
         Text[ polish ] = "Dostêpne bazy danych";
-        Text[ japanese ] = "g—p‚Å‚«‚éÃŞ°ÀÍŞ°½";
-        Text[ chinese_traditional ] = "²{¦sªº¸ê®Æ®w";
+        Text[ japanese ] = "ä½¿ç”¨ã§ãã‚‹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
+        Text[ chinese_traditional ] = "ç¾å­˜çš„è³‡æ–™åº«";
         Text[ arabic ] = "ŞæÇÚÏ ÇáÈíÇäÇÊ ÇáãÊÇÍÉ";
         Text[ dutch ] = "Beschikbare databases";
-        Text[ chinese_simplified ] = "¿ÉÊ¹ÓÃµÄÊı¾İ¿â";
+        Text[ chinese_simplified ] = "å¯ä½¿ç”¨çš„æ•°æ®åº“";
         Text[ greek ] = "Äéáèİóéìåò âÜóåéò äåäïìİíùí";
-        Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º »ç¿ë°¡´É";
+        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì‚¬ìš©ê°€ëŠ¥";
         Text[ turkish ] = "Mevcut veritabanları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Bases de datos diponibles";
         Text[ finnish ] = "Käytettävissä olevat tietokannat";
+        Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¹ƒà¸Šà¹‰à¹„à¸”à¹‰";
     };
     Control TLB_USEDDB
     {
@@ -203,25 +206,26 @@ ModalDialog DLG_CHANGE_DB
         Text [ italian ] = "In questo dialogo si possono scambiare database ai quali si accede tramite campi di database. Si può effettuare una modifica per volta. Nell'elenco di sinistra è possibile una selezione multipla." ;
         Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
         Text [ french ] = "Utilisez cette boîte de dialogue pour échanger les bases de données auxquelles vous accédez dans vos documents via des champs de formulaire. Vous ne pouvez exécuter qu'une seule modification à la fois. La liste de gauche permet une sélection multiple." ;
-        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
+        Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. U kunt slechts één wijziging tegelijk aanbrengen. In de linker lijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I den här dialogrutan kan du byta ut databaser, som du kan nå via databasfält i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multimarkering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
         Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opções." ;
-        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÁíÒ»¸öÊı¾İ¿âÀ´´úÌæµ±Ç°±à¼­µÄÎÄµµ¶ÁÈ¡µÄÊı¾İ¿â¡£Ã¿´Î±à¼­ÎÄµµÊ±Ö»ÄÜÒ»´ÎÌæ»»Êı¾İ¿â¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚ¿ÉÒÔÖ´ĞĞ¶àÖØÑ¡ÔñµÄ¹¦ÄÜ¡£";
+        Text[ chinese_simplified ] = "åœ¨è¿™ä¸ªå¯¹è¯æ¡†å†…æ‚¨èƒ½å¤Ÿä½¿ç”¨å¦ä¸€ä¸ªæ•°æ®åº“æ¥ä»£æ›¿å½“å‰ç¼–è¾‘çš„æ–‡æ¡£è¯»å–çš„æ•°æ®åº“ã€‚æ¯æ¬¡ç¼–è¾‘æ–‡æ¡£æ—¶åªèƒ½ä¸€æ¬¡æ›¿æ¢æ•°æ®åº“ã€‚åœ¨å·¦æ–¹çš„åˆ—å•å†…å¯ä»¥æ‰§è¡Œå¤šé‡é€‰æ‹©çš„åŠŸèƒ½ã€‚";
         Text[ russian ] = "Â ıòîì äèàëîãå Âû ìîæåòå çàìåíèòü áàçû äàííûõ, äîñòóï ê êîòîğûì âîçìîæåí ïğè ïîìîùè ïîëåé áàçû äàííûõ, äğóãèìè áàçàìè äàííûõ. Çà îäíó îïåğàöèş ìîæíî ïğîèçâåñòè îäíî èçìåíåíèå. Â ñïèñêå ñëåâà äîñòóïíî ãğóïïîâîå âûäåëåíèå.";
         Text[ polish ] = "Tutaj mo¿na zamieniæ bazy danych, dostêpne w dokumencie poprzez pola baz danych, na inne. Zmieniæ mo¿na tylko jedn¹ bazê danych na raz. Wielokrotnej selekcji dokonaæ mo¿na na liœcie po lewej.";
-        Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚ÍAÄŞ·­ÒİÄ‚ÌÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚©‚ç±¸¾½‚·‚éÃŞ°ÀÍŞ°½‚ªŒğŠ·‚Å‚«‚Ü‚·Bˆê“x‚Ì‘€ì‚Å‚Ğ‚Æ‚Â‚Ì•ÏX‚Ì‚İ‚ªÀs‚³‚ê‚Ü‚·B¶‚ÌØ½Ä‚Å‚Í•¡”‘I‘ğ‚ª‰Â”\\‚Å‚·B";
-        Text[ chinese_traditional ] = "¦b³o­Ó¹ï¸Ü¤è¶ô¤º±z¯à°÷¨Ï¥Î¥t¤@­Ó¸ê®Æ®w¨Ó¥N´À±z·í«e½s¿èªº¤å¥ó©Ò¨Ï¥Îªº¸ê®Æ®w¡C¨C¦¸½s¿è¤å¥ó®É¥u¯à§@¤@¦¸ÅÜ§ó¡C¦b¥ªÄæ¤º¯à°÷°õ¦æ¦h­«¿ï¨úªº¥\\¯à¡C";
+        Text[ japanese ] = "ã“ã®ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã§ã¯ã€ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒäº¤æ›ã§ãã¾ã™ã€‚ä¸€åº¦ã®æ“ä½œã§ã²ã¨ã¤ã®å¤‰æ›´ã®ã¿ãŒå®Ÿè¡Œã•ã‚Œã¾ã™ã€‚å·¦ã®ãƒªã‚¹ãƒˆã§ã¯è¤‡æ•°é¸æŠãŒå¯èƒ½ã§ã™ã€‚";
+        Text[ chinese_traditional ] = "åœ¨é€™å€‹å°è©±æ–¹å¡Šå…§æ‚¨å¯ä»¥ä½¿ç”¨å¦ä¸€å€‹è³‡æ–™åº«ä¾†ä»£æ›¿å·²ç¶“é–‹å•“çš„æ–‡ä»¶æ‰€ä½¿ç”¨çš„è³‡æ–™åº«ã€‚æ¯æ¬¡ç·¨è¼¯æ–‡ä»¶æ™‚åªèƒ½åšä¸€æ¬¡è®Šæ›´ã€‚åœ¨å·¦æ¬„å…§å¯ä»¥åŸ·è¡Œå¤šé‡é¸å–çš„åŠŸèƒ½ã€‚";
         Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ";
-        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
-        Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÁíÒ»¸öÊı¾İ¿âÀ´´úÌæµ±Ç°±à¼­µÄÎÄµµ¶ÁÈ¡µÄÊı¾İ¿â¡£Ã¿´Î±à¼­ÎÄµµÊ±Ö»ÄÜÒ»´ÎÌæ»»Êı¾İ¿â¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚ¿ÉÒÔÖ´ĞĞ¶àÖØÑ¡ÔñµÄ¹¦ÄÜ¡£";
+        Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. U kunt slechts één wijziging tegelijk aanbrengen. In de linker lijst is ook een meervoudige keuze mogelijk.";
+        Text[ chinese_simplified ] = "åœ¨è¿™ä¸ªå¯¹è¯æ¡†å†…æ‚¨èƒ½å¤Ÿä½¿ç”¨å¦ä¸€ä¸ªæ•°æ®åº“æ¥ä»£æ›¿å½“å‰ç¼–è¾‘çš„æ–‡æ¡£è¯»å–çš„æ•°æ®åº“ã€‚æ¯æ¬¡ç¼–è¾‘æ–‡æ¡£æ—¶åªèƒ½ä¸€æ¬¡æ›¿æ¢æ•°æ®åº“ã€‚åœ¨å·¦æ–¹çš„åˆ—å•å†…å¯ä»¥æ‰§è¡Œå¤šé‡é€‰æ‹©çš„åŠŸèƒ½ã€‚";
         Text[ greek ] = "Óå áõôüí ôïí äéÜëïãï ìğïñåßôå íá áëëÜîåôå ôéò âÜóåéò äåäïìİíùí, ôéò ïğïßåò ÷ñçóéìïğïéåßôå óôï İããñáöü óáò ìİóù ôùí ğåäßùí âÜóåùí äåäïìİíùí. Åğéôñİğåôáé ìüíï ìéá áëëáãŞ êÜèå öïñÜ. Óôï áñéóôåñü ôìŞìá ìğïñïıí íá ãßíïõí ğïëëáëİò åğéëïãİò.";
-        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍ º£ÀÌ½º ÇÊµå¸¦ ÅëÇØ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.ÇÏ³ªÀÇ ÀÛ¾÷ °úÁ¤¿¡¼­ ÇÑ¹ø º¯°æ¼öÁ¤ÀÌ ÇàÇØÁı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ®¿¡¼­´Â ´ÙÁß ¼±ÅÃÀÌ °¡´ÉÇÕ´Ï´Ù.";
+        Text[ korean ] = "ì´ ëŒ€í™”ìƒìì—ì„œëŠ” ë¬¸ì„œì—ì„œ ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œë¥¼ í†µí•´ ë°ì´í„°ë² ì´ìŠ¤ë¥¼ ì•¡ì„¸ìŠ¤í•˜ê±°ë‚˜ êµí™˜í•˜ëŠ” ë°ì´í„°ë² ì´ìŠ¤ í•„ë“œë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.í•˜ë‚˜ì˜ ì‘ì—… ê³¼ì •ì—ì„œ ë³€ê²½ ì‘ì—…ì´ í•œ ë²ˆ ìˆ˜í–‰ë©ë‹ˆë‹¤. ì™¼ìª½ì˜ ëª©ë¡ì—ì„œëŠ” ì—¬ëŸ¬ í•­ëª©ì„ ì„ íƒí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanı alanları yoluyla eriştiğiniz veritabanlarını başkaları ile değiştirebilirsiniz. Her işlemde yalnızca tek bir değişiklik yapılabilir. Soldaki listede birden fazla seçim yapılabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
-        Text[ finnish ] = "Tämän valintaikkunan avulla voit vaihtaa asiakirjassa tietokantakenttien kautta käsiteltävän tietokannan toiseen tietokantaan. Voit tehdä kerralla vain yhden muutoksen. Monivalinta on mahdollista vasemmanpuoleisessa luettelossa.";
+        Text[ finnish ] = "Tämän valintaikkunan avulla voit korvata ne tietokannat, joita käytät asiakirjassasi tietokantakenttien avulla, toisilla tietokannoilla. Voit tehdä vain yhden muutoksen kerrallaan. Voit tehdä useita valintoja vasemmalla olevan luettelon avulla.";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰à¹„à¸”à¸­à¸°à¸¥à¹‡à¸­à¸à¸™à¸µà¹‰à¹€à¸à¸·à¹ˆà¸­à¹à¸—à¸™à¸—à¸µà¹ˆà¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸„à¸¸à¸“à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸œà¹ˆà¸²à¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸‚à¸­à¸‡à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¹‰à¸§à¸¢à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸·à¹ˆà¸™ à¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¸—à¸³à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¹„à¸”à¹‰à¸„à¸£à¸±à¹‰à¸‡à¹€à¸”à¸µà¸¢à¸§à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™  à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¸«à¸¥à¸²à¸¢à¸ªà¹ˆà¸§à¸™à¸ªà¸²à¸¡à¸²à¸£à¸–à¸—à¸³à¹„à¸”à¹‰à¹ƒà¸™à¸£à¸²à¸¢à¸à¸²à¸£à¸”à¹‰à¸²à¸™à¸‹à¹‰à¸²à¸¢à¸¡à¸·à¸­";
     };
     /*  MultiListBox LB_USEDDB {
             Sort = TRUE;
@@ -247,27 +251,28 @@ ModalDialog DLG_CHANGE_DB
         Left = TRUE ;
         Text [ english_us ] = "Database applied to document:" ;
         Text [ italian ] = "Database applicato a documento" ;
-        Text [ spanish ] = "Base de datos aplicada al doc.:" ;
+        Text [ spanish ] = "Base de datos aplicada al documento:" ;
         Text [ french ] = "Base de données attachée au document :" ;
         Text [ dutch ] = "Gekoppeld gegevensbestand" ;
         Text [ swedish ] = "Databaser som används för dokumentet:" ;
         Text [ danish ] = "Database tilknyttet til dokument:" ;
         Text [ portuguese_brazilian ] = "Am Dokument gesetzte Datenbank:" ;
         Text [ portuguese ] = "Base de dados aplicada ao documento:" ;
-        Text[ chinese_simplified ] = "ÎÄµµÊ¹ÓÃµÄÊı¾İ¿â£º";
+        Text[ chinese_simplified ] = "æ–‡æ¡£ä½¿ç”¨çš„æ•°æ®åº“ï¼š";
         Text[ russian ] = "Áàçà äàííûõ, óñòàíîâëåííàÿ â äîêóìåíòå:";
         Text[ polish ] = "Baza danych ustawiona przy dok.:";
-        Text[ japanese ] = "ÄŞ·­ÒİÄ‚É“K—p‚³‚ê‚½ÃŞ°ÀÍŞ°½:";
-        Text[ chinese_traditional ] = "¤å¥ó¨Ï¥Îªº¸ê®Æ®w¡G";
+        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«é©ç”¨ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹:";
+        Text[ chinese_traditional ] = "æ–‡ä»¶ä½¿ç”¨çš„è³‡æ–™åº«ï¼š";
         Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáãÑÊÈØÉ ÈÇáãÓÊäÏ:";
         Text[ dutch ] = "Gekoppeld gegevensbestand";
-        Text[ chinese_simplified ] = "ÎÄµµÊ¹ÓÃµÄÊı¾İ¿â£º";
+        Text[ chinese_simplified ] = "æ–‡æ¡£ä½¿ç”¨çš„æ•°æ®åº“ï¼š";
         Text[ greek ] = "Óôï İããñáöï åöáñìïóìİíç âÜóç äåäïìİíùí:";
-        Text[ korean ] = "¹®¼­¿¡ µ¥ÀÌÅÍº£ÀÌ½º Àû¿ë:";
+        Text[ korean ] = "ë¬¸ì„œì— ë°ì´í„°ë² ì´ìŠ¤ ì ìš©:";
         Text[ turkish ] = "Belge ile kullanılan veritabanı:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de datos aplicada al doc.:";
         Text[ finnish ] = "Asiakirjassa käytetty tietokanta:";
+        Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œà¸à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£:";
     };
     FixedText FT_DOCDBNAME
     {
@@ -285,20 +290,21 @@ ModalDialog DLG_CHANGE_DB
         Text [ danish ] = "Adresser.Adresser" ;
         Text [ portuguese_brazilian ] = "Adressen.Adressen" ;
         Text [ portuguese ] = "Endereços. Endereços" ;
-        Text[ chinese_simplified ] = "µØÖ·.µØÖ·";
+        Text[ chinese_simplified ] = "åœ°å€.åœ°å€";
         Text[ russian ] = "Àäğåñà.Àäğåñà";
         Text[ polish ] = "Adresy.Adresy";
-        Text[ japanese ] = "ZŠ.ZŠ";
-        Text[ chinese_traditional ] = "¦a§}.¦a§}";
+        Text[ japanese ] = "ä½æ‰€.ä½æ‰€";
+        Text[ chinese_traditional ] = "åœ°å€.åœ°å€";
         Text[ arabic ] = "ÚäÇæíä ÚäÇæíä";
         Text[ dutch ] = "Adressen.Adressen";
-        Text[ chinese_simplified ] = "µØÖ·.µØÖ·";
+        Text[ chinese_simplified ] = "åœ°å€.åœ°å€";
         Text[ greek ] = "Äéåõèıíóåéò.Äéåõèıíóåéò";
-        Text[ korean ] = "ÁÖ¼Ò.ÁÖ¼Ò";
+        Text[ korean ] = "ì£¼ì†Œ.ì£¼ì†Œ";
         Text[ turkish ] = "Adresler.Adresler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Direcciones.Direcciones";
         Text[ finnish ] = "Osoitteet.Osoitteet";
+        Text[ thai ] = "à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ.à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
     };
 /*  PushButton BT_CHANGEDB
     {
@@ -346,19 +352,20 @@ ModalDialog DLG_CHANGE_DB
         Text [ danish ] = "Definer" ;
         Text [ portuguese ] = "Definir" ;
         Text [ portuguese_brazilian ] = "Festlegen" ;
-        Text[ chinese_simplified ] = "¶¨Òå";
+        Text[ chinese_simplified ] = "å®šä¹‰";
         Text[ russian ] = "Çàäàòü";
         Text[ polish ] = "Zdefiniuj";
-        Text[ japanese ] = "Šm”F";
-        Text[ chinese_traditional ] = "©w¸q";
+        Text[ japanese ] = "æŒ‡å®š";
+        Text[ chinese_traditional ] = "å®šç¾©";
         Text[ arabic ] = "ÊÚÑíİ";
         Text[ dutch ] = "Definiëren";
-        Text[ chinese_simplified ] = "¶¨Òå";
+        Text[ chinese_simplified ] = "å®šä¹‰";
         Text[ greek ] = "Êáèïñéóìüò";
-        Text[ korean ] = "Á¤ÀÇ";
+        Text[ korean ] = "ì •ì˜";
         Text[ turkish ] = "Tanımla";
         Text[ catalan ] = "Definir";
         Text[ finnish ] = "Määritä";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
     };
     CancelButton BT_CANCEL
     {
@@ -373,21 +380,22 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "~Luk" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
-        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "Çàêğûòü";
         Text[ polish ] = "~Zamknij";
-        Text[ japanese ] = "•Â‚¶‚é(~C)";
-        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
+        Text[ chinese_traditional ] = "é—œé–‰(~C)";
         Text[ arabic ] = "ÅÛáÇŞ";
         Text[ greek ] = "Êëåß~óéìï";
-        Text[ korean ] = "´İ±â(~C)";
+        Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "~Çıkış";
         Text[ catalan ] = "~Cerrar";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     HelpButton BT_HELP
     {
@@ -395,40 +403,20 @@ ModalDialog DLG_CHANGE_DB
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Bitmap BMP_ROOT_CLOSED
-    {
-        File = "plus.bmp" ;
-    };
-    Bitmap BMP_ROOT_OPENED
-    {
-        File = "minus.bmp" ;
-    };
-    Image BMP_DB
-    {
-        ImageBitmap = Bitmap { File = "db.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
-    };
-    Image BMP_TABLE
-    {
-        ImageBitmap = Bitmap { File = "table.bmp" ; };
-        MaskColor = IMAGE_STDBTN_COLOR ;
-    };
-    Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+    Text[ chinese_simplified ] = "æ›´æ¢æ•°æ®åº“";
     Text[ russian ] = "Çàìåíèòü áàçó äàííûõ";
     Text[ polish ] = "Wymieñ bazê danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÌŒğŠ·";
-    Text[ chinese_traditional ] = "´À´«¸ê®Æ®w";
+    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®äº¤æ›";
+    Text[ chinese_traditional ] = "æ›¿æ›è³‡æ–™åº«";
     Text[ arabic ] = "ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Database wisselen";
-    Text[ chinese_simplified ] = "¸ü»»Êı¾İ¿â";
+    Text[ chinese_simplified ] = "æ›´æ¢æ•°æ®åº“";
     Text[ greek ] = "ÁëëáãŞ âÜóçò äåäïìİíùí";
-    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ±³È¯";
+    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ êµí™˜";
     Text[ turkish ] = "Veritabanının değiştirilmesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cambiar Bases de Datos";
     Text[ finnish ] = "Vaihda tietokannat";
+    Text[ thai ] = "à¹à¸¥à¸à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
 };
-
-
-
 

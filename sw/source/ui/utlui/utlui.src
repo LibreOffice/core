@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-03-05 08:47:23 $
+ *  last change: $Author: os $ $Date: 2002-05-31 07:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar p�rrafos vac�os";
         Text[ finnish ] = "Poista tyhj�t kappaleet";
+        Text[ thai ] = "เอาย่อหน้าว่างออก";
     };
     String STR_AUTOFMTREDL_USE_REPLACE+1
     {
@@ -118,6 +119,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usar tabla de sustituci�n";
         Text[ finnish ] = "K�yt� korvaustaulukkoa";
+        Text[ thai ] = "ใช้ตารางแทนที่";
     };
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
@@ -146,6 +148,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "S�zc�k ba��ndaki �Ki b�y�k harfi d�zelt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Corregir DOs MAy�sculas a principio de PAlabra";
+        Text[ thai ] = "แก้ไขตัวพิมพ์ใหญ่สองตัวแรกให้ถูกต้อง";
     };
     String STR_AUTOFMTREDL_CPTL_STT_SENT+1
     {
@@ -174,6 +177,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "C�mleleri b�y�k harf ile ba�lat.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Iniciar cada frase con una letra may�scula";
+        Text[ thai ] = "ทำตัวอักษรตัวแรกของประโยคเป็นตัวพิมพ์ใหญ่";
     };
     String STR_AUTOFMTREDL_TYPO+1
     {
@@ -200,6 +204,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ korean ] = "\"직선\" 인용 부호를 %1인쇄체%2 인용 부호로 바꾸기";
         Text[ turkish ] = "\"D�z\" t�rnak i�aretlerini %1tipografik i�aretler ile%2 de�i�tir";
         Text[ catalan ] = "Reemplazar comillas \"rectas\" con comillas %1tipogr�ficas%2";
+        Text[ thai ] = "แทนที่ \"มาตรฐาน\" อ้างคำพูดด้วย %1คำพูด%2 ที่กำหนดเอง";
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
     {
@@ -226,6 +231,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "Kullan�c� bi�imini de�i�tir";
         Text[ catalan ] = "Reemplazar estilos del usuario";
         Text[ finnish ] = "Korvaa mukautetut tyylit";
+        Text[ thai ] = "แทนที่ลักษณะที่กำหนดเอง";
     };
     String STR_AUTOFMTREDL_BULLET+1
     {
@@ -252,6 +258,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ turkish ] = "S�ralama i�areti de�i�tirildi";
         Text[ catalan ] = "Vi�eta reemplazada";
         Text[ finnish ] = "Korvatut luettelomerkit";
+        Text[ thai ] = "แทนที่สัญลักษณ์แสดงหัวข้อย่อย";
     };
     String STR_AUTOFMTREDL_UNDER+1
     {
@@ -278,6 +285,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subrayado_autom�tico_";
         Text[ finnish ] = "Automaattinen _alleviivaus_";
+        Text[ thai ] = "ขีดเส้นใต้ _อัตโนมัติ_";
     };
     String STR_AUTOFMTREDL_BOLD+1
     {
@@ -304,6 +312,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "*Negrita* autom�tico";
         Text[ finnish ] = "Automaattinen *lihavointi*";
+        Text[ thai ] = "*ตัวหนา*อัตโนมัติ";
     };
     String STR_AUTOFMTREDL_FRACTION+1
     {
@@ -330,6 +339,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1/2 ... por � ...";
         Text[ finnish ] = "Korvaa 1/2 -> �1/2";
+        Text[ thai ] = "แทนที่ 1/2 ... ด้วย ฝ ...";
     };
     String STR_AUTOFMTREDL_DETECT_URL+1
     {
@@ -356,6 +366,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reconocer URL";
         Text[ finnish ] = "URL-tunnistus";
+        Text[ thai ] = "จดจำ URL ";
     };
     String STR_AUTOFMTREDL_DASH+1
     {
@@ -382,6 +393,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar comillas";
         Text[ finnish ] = "Korvaa viivat";
+        Text[ thai ] = "แทนที่เส้นประ";
     };
     String STR_AUTOFMTREDL_ORDINAL+1
     {
@@ -408,6 +420,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1st ... con 1^st ...";
         Text[ finnish ] = "Korvaa 1st -> 1^st";
+        Text[ thai ] = "แทนที่ 1st... ด้วย 1^st...";
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
     {
@@ -434,6 +447,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unir p�rrafos de una l�nea";
         Text[ finnish ] = "Yhdist� yksiriviset kappaleet";
+        Text[ thai ] = "เชื่อมย่อหน้าบรรทัดเดียว";
     };
 
     String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
@@ -461,6 +475,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Cuerpo de texto\"";
         Text[ finnish ] = "M��rit� tyyli \"Leip�teksti\"";
+        Text[ thai ] = "กำหนดลักษณะ \"เนื้อความ\" ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
     {
@@ -487,6 +502,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Sangr�a de primera l�nea\"";
         Text[ finnish ] = "M��rit� tyyli \"Sisennetty leip�teksti\"";
+        Text[ thai ] = "กำหนดลักษณะ \"ระยะเยื้องเนื้อความ\" ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
     {
@@ -513,6 +529,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Sangr�a negativa de primera l�nea\"";
         Text[ finnish ] = "M��rit� tyyli \"Riippuva sisennys\"";
+        Text[ thai ] = "กำหนดลักษณะ \"ระยะเยื้องลอย\" ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
     {
@@ -539,6 +556,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Cuerpo de texto con sangr�a\"";
         Text[ finnish ] = "M��rit� tyyli \"Sisennetty leip�teksti\"";
+        Text[ thai ] = "กำหนดลักษณะ \"ระยะเยื้องเนื้อความ\" ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
     {
@@ -565,6 +583,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Encabezado $(ARG1)\"";
         Text[ finnish ] = "M��rit� tyyli \"Otsikko $(ARG1)\"";
+        Text[ thai ] = "กำหนดลักษณะ \"หัวข้อ $(ARG1)\" ";
     };
     String STR_AUTOFMTREDL_SET_NUMBULET +1
     {
@@ -591,6 +610,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo \"Vi�etas\" o \"Numeraci�n\"";
         Text[ finnish ] = "M��rit� luettelomerkkien tai numeroinnin tyyli";
+        Text[ thai ] = "กำหนดลักษณะ \"สัญลักษณ์แสดงหัวข้อย่อย\" หรือ \"ลำดับตัวเลข\" ";
     };
 
     String STR_AUTOFMTREDL_DEL_MORELINES +1
@@ -618,6 +638,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Unir p�rrafos";
         Text[ finnish ] = "Yhdist� kappaleet";
+        Text[ thai ] = "เชื่อมย่อหน้า";
     };
 
 };
@@ -650,6 +671,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pulsar el objeto";
     Text[ finnish ] = "Napsauta objektia";
+    Text[ thai ] = "คลิ๊กที่วัตถุ";
 };
 String STR_EVENT_START_INS_GLOSSARY
 {
@@ -677,6 +699,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Antes de insertar el AutoTexto";
     TEXT[ finnish ] = "Ennen automaattisen tekstin lis��mist�";
+    TEXT[ thai ] = "ก่อนแทรกข้อความอัตโนมัติ";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
@@ -704,6 +727,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Tras insertar el AutoTexto";
     TEXT[ finnish ] = "Automaattisen tekstin lis��misen j�lkeen";
+    TEXT[ thai ] = "หลังจากแทรกข้อความอัตโนมัติ";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
@@ -731,6 +755,7 @@ String STR_EVENT_MOUSEOVER_OBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rat�n sobre objeto";
     Text[ finnish ] = "Hiiri objektin kohdalla";
+    Text[ thai ] = "เม้าส์บนวัตถุ";
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
@@ -758,6 +783,7 @@ String STR_EVENT_MOUSECLICK_OBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ejecutar hiperenlace";
     Text[ finnish ] = "K�ynnist� hyperlinkki";
+    Text[ thai ] = "เชื่อมโยงหลายมิติแบบทริกเกอร";
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
@@ -785,6 +811,7 @@ String STR_EVENT_MOUSEOUT_OBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El rat�n abandona el objeto";
     Text[ finnish ] = "Hiiri poistuu objektista";
+    Text[ thai ] = "เม้าส์ออกจากวัตถุ";
 };
 String STR_EVENT_IMAGE_LOAD
 {
@@ -811,6 +838,7 @@ String STR_EVENT_IMAGE_LOAD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "La carga de la imagen ha finalizado con �xito";
     Text[ finnish ] = "Kuvan lataus onnistunut";
+    Text[ thai ] = "โหลดกราฟิคสำเร็จ";
 };
 String STR_EVENT_IMAGE_ABORT
 {
@@ -837,6 +865,7 @@ String STR_EVENT_IMAGE_ABORT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interrumpida la carga de la imagen";
     Text[ finnish ] = "Kuvan lataus p��ttynyt";
+    Text[ thai ] = "โหลดกราฟิคถูกยกเลิก";
 };
 String STR_EVENT_IMAGE_ERROR
 {
@@ -863,6 +892,7 @@ String STR_EVENT_IMAGE_ERROR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al cargar la imagen";
     Text[ finnish ] = "Virhe kuvan latauksessa";
+    Text[ thai ] = "โหลดกราฟิคผิด";
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
@@ -889,6 +919,7 @@ String STR_EVENT_FRM_KEYINPUT_A
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de caracteres alfanum�ricos";
     Text[ finnish ] = "Aakkosnumeeristen merkkien sy�tt�";
+    Text[ thai ] = "ใส่ตัวอักขระตัวเลขพยัญชนะ";
 };
 String STR_EVENT_FRM_KEYINPUT_NOA
 {
@@ -915,6 +946,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada de caracteres no-alfanum�ricos";
     Text[ finnish ] = "Muiden kuin aakkosnumeeristen merkkien sy�tt�";
+    Text[ thai ] = "ใส่ตัวอักขระที่ไม่ใช่ตัวเลขพยัญชนะ";
 };
 String STR_EVENT_FRM_RESIZE
 {
@@ -942,6 +974,7 @@ String STR_EVENT_FRM_RESIZE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar el tama�o del marco";
     Text[ finnish ] = "Muuta kehyksen kokoa";
+    Text[ thai ] = "ปรับขนาดกรอบ";
 };
 String STR_EVENT_FRM_MOVE
 {
@@ -968,6 +1001,7 @@ String STR_EVENT_FRM_MOVE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar marco";
     Text[ finnish ] = "Siirr� kehyst�";
+    Text[ thai ] = "ย้ายกรอบ";
 };
 String STR_CONTENT_TYPE_OUTLINE
 {
@@ -995,6 +1029,7 @@ String STR_CONTENT_TYPE_OUTLINE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezados";
     Text[ finnish ] = "Otsikot";
+    Text[ thai ] = "หัวข้อ";
 };
 String STR_CONTENT_TYPE_TABLE
 {
@@ -1021,6 +1056,7 @@ String STR_CONTENT_TYPE_TABLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tablas";
     Text[ finnish ] = "Taulukot";
+    Text[ thai ] = "ตาราง";
 };
 String STR_CONTENT_TYPE_FRAME
 {
@@ -1047,6 +1083,7 @@ String STR_CONTENT_TYPE_FRAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de texto";
     Text[ finnish ] = "Tekstikehys";
+    Text[ thai ] = "กรอบข้อความ";
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
@@ -1073,6 +1110,7 @@ String STR_CONTENT_TYPE_GRAPHIC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Im�genes";
     Text[ finnish ] = "Kuvat";
+    Text[ thai ] = "กราฟิค";
 };
 String STR_CONTENT_TYPE_OLE
 {
@@ -1099,6 +1137,7 @@ String STR_CONTENT_TYPE_OLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos OLE";
     Text[ finnish ] = "OLE-objektit";
+    Text[ thai ] = "วัตถุ OLE ";
 };
 String STR_CONTENT_TYPE_BOOKMARK
 {
@@ -1125,6 +1164,7 @@ String STR_CONTENT_TYPE_BOOKMARK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcas de texto";
     Text[ finnish ] = "Kirjanmerkit";
+    Text[ thai ] = "ที่คั่น";
 };
 String STR_CONTENT_TYPE_REGION
 {
@@ -1151,6 +1191,7 @@ String STR_CONTENT_TYPE_REGION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Categor�as";
     Text[ finnish ] = "Osiot";
+    Text[ thai ] = "ส่วน";
 };
 String STR_CONTENT_TYPE_URLFIELD
 {
@@ -1177,6 +1218,7 @@ String STR_CONTENT_TYPE_URLFIELD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hiperenlaces";
     Text[ finnish ] = "Hyperlinkit";
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 String STR_CONTENT_TYPE_REFERENCE
 {
@@ -1203,6 +1245,7 @@ String STR_CONTENT_TYPE_REFERENCE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Referencias";
     Text[ finnish ] = "Viitteet";
+    Text[ thai ] = "อ้างอิง";
 };
 String STR_CONTENT_TYPE_INDEX
 {
@@ -1229,13 +1272,14 @@ String STR_CONTENT_TYPE_INDEX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "�ndices";
     Text[ finnish ] = "Hakemistot";
+    Text[ thai ] = "ดัชนี";
 };
 String STR_CONTENT_TYPE_DRAWOBJECT
 {
     TEXT = "Zeichenobjekte" ;
     TEXT [ English ] = "Drawing objects" ;
     Text [ dutch ] = "Tekenobjecten" ;
-    Text [ english_us ] = "Drawing objects" ;
+    Text [ english_us ] = "Draw objects" ;
     Text [ italian ] = "Oggetti di disegno" ;
     Text [ spanish ] = "Objetos de dibujo" ;
     Text [ french ] = "Objets de dessin" ;
@@ -1255,6 +1299,7 @@ String STR_CONTENT_TYPE_DRAWOBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de dibujo";
     Text[ finnish ] = "Piirrosobjektit";
+    Text[ thai ] = "วาดวัตถุ";
 };
 String STR_CONTENT_TYPE_POSTIT
 {
@@ -1281,6 +1326,7 @@ String STR_CONTENT_TYPE_POSTIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Notas";
     Text[ finnish ] = "Huomautukset";
+    Text[ thai ] = "บันทึกย่อ";
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
@@ -1308,6 +1354,7 @@ String STR_CONTENT_TYPE_SINGLE_OUTLINE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezado";
     Text[ finnish ] = "Yl�otsikko";
+    Text[ thai ] = "หัวข้อ";
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
 {
@@ -1334,6 +1381,7 @@ String STR_CONTENT_TYPE_SINGLE_TABLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla";
     Text[ finnish ] = "Taulukko";
+    Text[ thai ] = "ตาราง";
 };
 String STR_CONTENT_TYPE_SINGLE_FRAME
 {
@@ -1360,6 +1408,7 @@ String STR_CONTENT_TYPE_SINGLE_FRAME
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de texto";
     Text[ finnish ] = "Tekstikehys";
+    Text[ thai ] = "กรอบข้อความ";
 };
 String STR_CONTENT_TYPE_SINGLE_GRAPHIC
 {
@@ -1386,6 +1435,7 @@ String STR_CONTENT_TYPE_SINGLE_GRAPHIC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imagen";
     Text[ finnish ] = "Kuvat";
+    Text[ thai ] = "กราฟิค";
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
 {
@@ -1412,6 +1462,7 @@ String STR_CONTENT_TYPE_SINGLE_OLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto OLE";
     Text[ finnish ] = "OLE-objekti";
+    Text[ thai ] = "วัตถุ OLE ";
 };
 String STR_CONTENT_TYPE_SINGLE_BOOKMARK
 {
@@ -1438,6 +1489,7 @@ String STR_CONTENT_TYPE_SINGLE_BOOKMARK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca de texto";
     Text[ finnish ] = "Kirjanmerkit";
+    Text[ thai ] = "ที่คั่น";
 };
 String STR_CONTENT_TYPE_SINGLE_REGION
 {
@@ -1464,6 +1516,7 @@ String STR_CONTENT_TYPE_SINGLE_REGION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Area";
     Text[ finnish ] = "Osio";
+    Text[ thai ] = "ส่วน";
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
 {
@@ -1490,6 +1543,7 @@ String STR_CONTENT_TYPE_SINGLE_URLFIELD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hiperenlace";
     Text[ finnish ] = "Hyperlinkki";
+    Text[ thai ] = "เชื่อมโยงหลายมิติ";
 };
 String STR_CONTENT_TYPE_SINGLE_REFERENCE
 {
@@ -1516,6 +1570,7 @@ String STR_CONTENT_TYPE_SINGLE_REFERENCE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Referencia";
     Text[ finnish ] = "Viite";
+    Text[ thai ] = "อ้างอิง";
 };
 String STR_CONTENT_TYPE_SINGLE_INDEX
 {
@@ -1542,6 +1597,7 @@ String STR_CONTENT_TYPE_SINGLE_INDEX
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "�ndice";
     Text[ finnish ] = "Hakemisto";
+    Text[ thai ] = "ดัชนี";
 };
 String STR_CONTENT_TYPE_SINGLE_POSTIT
 {
@@ -1568,6 +1624,7 @@ String STR_CONTENT_TYPE_SINGLE_POSTIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nota";
     Text[ finnish ] = "Huomautus:";
+    Text[ thai ] = "บันทึกย่อ";
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 {
@@ -1594,6 +1651,7 @@ String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objeto de dibujo";
     Text[ finnish ] = "Piirrosobjekti";
+    Text[ thai ] = "วาดวัตถุ";
 };
 String STR_DEFINE_NUMBERFORMAT
 {
@@ -1620,6 +1678,7 @@ String STR_DEFINE_NUMBERFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Otros formatos...";
     Text[ finnish ] = "Lis�muotoilut...";
+    Text[ thai ] = "รูปแบบเพิ่มเติม...";
 };
 String RID_STR_SYSTEM
 {
@@ -1645,6 +1704,7 @@ String RID_STR_SYSTEM
     Text[ turkish ] = "[Sistem]";
     Text[ catalan ] = "[Sistema]";
     Text[ finnish ] = "[J�rjestelm�]";
+    Text[ thai ] = "[ระบบ]";
 };
 String STR_MULT_INTERACT_SPELL_WARN
 {
@@ -1670,6 +1730,7 @@ String STR_MULT_INTERACT_SPELL_WARN
     Text[ turkish ] = "Etkile�imli yaz�m denetimi\n�u an ba�ka bir belgede etkin";
     Text[ catalan ] = "La correcci�n ortogr�fica interactiva\nya est� activada en otro documento";
     Text[ finnish ] = "Interaktiivinen oikoluku on jo k�yt�ss�\toisessa asiakirjassa";
+    Text[ thai ] = "การตรวจสอบการสะกดแบบโต้ตอบถูกใช้งานอยู่แล้ว\\ในเอกสารอื่น";
 };
 String STR_MULT_INTERACT_HYPH_WARN
 {
@@ -1695,6 +1756,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ turkish ] = "Etkile�imli heceleme\n�u an ba�ka bir belgede etkin";
     Text[ catalan ] = "La separaci�n sil�bica interactiva\nya est� activa en otro documento";
     Text[ finnish ] = "Interaktiivinen tavutus on jo k�yt�ss�\toisessa asiakirjassa";
+    Text[ thai ] = "การใช้ยัติภังค์แบบโต้ตอบถูกใช้งานอยู่แล้ว\\ในเอกสารอื่น";
 };
 String STR_SPELL_TITLE
 {
@@ -1720,6 +1782,7 @@ String STR_SPELL_TITLE
     Text[ turkish ] = "Yaz�m denetimi";
     Text[ catalan ] = "Correcci�n ortogr�fica";
     Text[ finnish ] = "Oikeinkirjoituksen tarkistus";
+    Text[ thai ] = "ตรวจสอบการสะกด";
 };
 String STR_HYPH_TITLE
 {
@@ -1745,5 +1808,32 @@ String STR_HYPH_TITLE
     Text[ turkish ] = "Heceleme";
     Text[ catalan ] = "Separaci�n sil�bica";
     Text[ finnish ] = "Tavutus";
+    Text[ thai ] = "ใช้ยัติภังค์";
+};
+
+#define IMGLIST_IDS\
+    IdList = \
+    { \
+        IMG_COLLAPSE;\
+        IMG_EXPAND  ;\
+        IMG_DB      ;\
+        IMG_DBTABLE ;\
+        IMG_DBQUERY ;\
+    }; \
+    IdCount = 5
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; }
+ImageList ILIST_DB_DLG
+{
+    ImageBitmap = Bitmap { File = "sx_dbtree.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR;
+    IMGLIST_IDS;
+};
+
+ImageList ILIST_DB_DLG_HC
+{
+    ImageBitmap = Bitmap { File = "sxh_dbtree.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    IMGLIST_IDS;
 };
 
