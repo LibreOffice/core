@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-14 15:49:58 $
+#   last change: $Author: hjs $ $Date: 2002-03-19 18:12:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -406,6 +406,22 @@ SOLARLANG:=$(solarlang)
 .IF "$(wall)"!=""
 COMPILER_WARN_ALL=TRUE
 .ENDIF          # "$(wall)"!=""
+
+.IF "$(RSC_ONCE)"!=""
+rsc_once*=$(RSC_ONCE)
+.ENDIF
+
+.IF "$(COMMON_BUILD)"!=""
+common_build*=$(COMMON_BUILD)
+.ENDIF
+
+.IF "$(USE_SHELL)"!=""
+use_shell*=$(USE_SHELL)
+.ENDIF
+
+.IF "$(USE_SHL_VERSIONS)"!=""
+use_shl_versions*=$(USE_SHL_VERSIONS)
+.ENDIF
 
 # --- env flags nicht case sensitiv --------------------------------
 
