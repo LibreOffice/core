@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:28:07 $
+ *  last change: $Author: os $ $Date: 2001-12-18 11:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_JAVAEDIT
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "Script-T~yp" ;
         Text [ ENGLISH ] = "Script type" ;
         Text [ english_us ] = "Script type" ;
@@ -88,14 +88,14 @@ ModalDialog DLG_JAVAEDIT
         Text [ french ] = "T~ype de script" ;
         Text [ dutch ] = "Scriptt~ype" ;
         Text [ portuguese ] = "~Tipo de script" ;
-        Text[ chinese_simplified ] = "½Å±¾ÀàĞÍ";
+        Text[ chinese_simplified ] = "è„šæœ¬ç±»å‹";
         Text[ russian ] = "Òèï ñêğèïòà";
         Text[ polish ] = "Typ skryptu";
-        Text[ japanese ] = "½¸ØÌßÄ‚Ìí—Ş";
-        Text[ chinese_traditional ] = "©R¥O½ZÃş«¬";
+        Text[ japanese ] = "ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚¿ã‚¤ãƒ—";
+        Text[ chinese_traditional ] = "ç¨‹å¼æª”é¡å‹";
         Text[ arabic ] = "äæÚ ÇáäÕ ÇáÈÑãÌí";
         Text[ greek ] = "Ôığïò ôïõ Script";
-        Text[ korean ] = "½ºÅ©¸³Æ®  À¯Çü";
+        Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ ìœ í˜•";
         Text[ turkish ] = "Script tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo de script";
@@ -106,8 +106,8 @@ ModalDialog DLG_JAVAEDIT
         Border = TRUE ;
         Text = "JavaScript" ;
          // Nicht uebersetzen!!!
-        Pos = MAP_APPFONT ( 57 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 70 , 14 ) ;
+        Size = MAP_APPFONT ( 87 , 12 ) ;
         TabStop = TRUE ;
     };
     RadioButton RB_URL
@@ -115,7 +115,7 @@ ModalDialog DLG_JAVAEDIT
         Text = "~URL" ;
         Text [ ENGLISH ] = "URL" ;
         Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
         TabStop = TRUE ;
         Text [ portuguese ] = "~URL" ;
         Text [ english_us ] = "URL" ;
@@ -142,8 +142,8 @@ ModalDialog DLG_JAVAEDIT
     Edit ED_URL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 57 , 27 ) ;
-        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Pos = MAP_APPFONT ( 70 , 27 ) ;
+        Size = MAP_APPFONT ( 87 , 12 ) ;
         TabStop = TRUE ;
     };
     PushButton PB_URL
@@ -156,7 +156,7 @@ ModalDialog DLG_JAVAEDIT
     RadioButton RB_EDIT
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
         Text = "~Text" ;
         Text [ English ] = "~Text" ;
         Text [ norwegian ] = "~Text" ;
@@ -172,14 +172,14 @@ ModalDialog DLG_JAVAEDIT
         Text [ english_us ] = "~Text" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "Ã·½Ä(~T)";
-        Text[ chinese_traditional ] = "¤å¦r(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "äÕ";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®(~T)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
         Text[ turkish ] = "~Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Texto";
@@ -212,14 +212,14 @@ ModalDialog DLG_JAVAEDIT
         Text [ dutch ] = "Inhoud" ;
         Text [ spanish ] = "Contenido" ;
         Text [ english_us ] = "Contents" ;
-        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ chinese_simplified ] = "å†…å®¹";
         Text[ russian ] = "Ñîäåğæèìîå";
         Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "“à—e";
-        Text[ chinese_traditional ] = "¤º®e";
+        Text[ japanese ] = "å†…å®¹";
+        Text[ chinese_traditional ] = "å…§å®¹";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "³»¿ë";
+        Text[ korean ] = "ë‚´ìš©";
         Text[ turkish ] = "İçerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contenido";
@@ -258,7 +258,7 @@ ModalDialog DLG_JAVAEDIT
         Text = "Script bearbeiten" ;
         Text [ English ] = "Edit script" ;
         Text [ portuguese ] = "Editar Script" ;
-        Text [ english_us ] = "Edit script" ;
+        Text [ english_us ] = "Edit Script" ;
         Text [ portuguese_brazilian ] = "Script bearbeiten" ;
         Text [ swedish ] = "Redigera skript" ;
         Text [ danish ] = "Rediger script" ;
@@ -266,14 +266,14 @@ ModalDialog DLG_JAVAEDIT
         Text [ spanish ] = "Editar script" ;
         Text [ french ] = "Éditer le script" ;
         Text [ dutch ] = "Script bewerken" ;
-        Text[ chinese_simplified ] = "±à¼­½Å±¾";
+        Text[ chinese_simplified ] = "ç¼–è¾‘è„šæœ¬";
         Text[ russian ] = "Ïğàâêà ñêğèïòà";
         Text[ polish ] = "Edytuj skrypt";
-        Text[ japanese ] = "½¸ØÌßÄ‚Ì•ÒW";
-        Text[ chinese_traditional ] = "½s¿è©R¥O½Z";
+        Text[ japanese ] = "ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ç·¨é›†";
+        Text[ chinese_traditional ] = "ç·¨è¼¯ç¨‹å¼æª”";
         Text[ arabic ] = "ÊÍÑíÑ ÇáäÕ ÇáÈÑãÌí";
         Text[ greek ] = "Åğåîåñãáóßá Script";
-        Text[ korean ] = "½ºÅ©¸³Æ® ÆíÁı";
+        Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ í¸ì§‘";
         Text[ turkish ] = "Script bearbeiten";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar script";
@@ -293,14 +293,14 @@ ModalDialog DLG_JAVAEDIT
         Text [ spanish ] = "Insertar script" ;
         Text [ french ] = "Insérer un script" ;
         Text [ dutch ] = "Script invoegen" ;
-        Text[ chinese_simplified ] = "²åÈë½Å±¾";
+        Text[ chinese_simplified ] = "æ’å…¥è„šæœ¬";
         Text[ russian ] = "Âñòàâèòü ñêğèïò";
         Text[ polish ] = "Wstaw skrypt";
-        Text[ japanese ] = "½¸ØÌßÄ‚Ì‘}“ü";
-        Text[ chinese_traditional ] = "´¡¤J©R¥O½Z";
+        Text[ japanese ] = "ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®æŒ¿å…¥";
+        Text[ chinese_traditional ] = "æ’å…¥ç¨‹å¼æª”";
         Text[ arabic ] = "ÅÏÑÇÌ äÕ ÈÑãÌí";
         Text[ greek ] = "ĞñïóèŞêç Script";
-        Text[ korean ] = "½ºÅ©¸³Æ® »ğÀÔ";
+        Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ ì‚½ì…";
         Text[ turkish ] = "Script einfügen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar script";
@@ -315,21 +315,17 @@ ModalDialog DLG_JAVAEDIT
     Text [ french ] = "Éditer le script" ;
     Text [ dutch ] = "Script bewerken" ;
     Text [ portuguese ] = "Editar Script" ;
-    Text[ chinese_simplified ] = "±à¼­½Å±¾";
+    Text[ chinese_simplified ] = "ç¼–è¾‘è„šæœ¬";
     Text[ russian ] = "Ïğàâêà ñêğèïòà";
     Text[ polish ] = "Edytuj skrypt";
-    Text[ japanese ] = "½¸ØÌßÄ‚Ì•ÒW";
-    Text[ chinese_traditional ] = "½s¿è©R¥O½Z";
+    Text[ japanese ] = "ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®ç·¨é›†";
+    Text[ chinese_traditional ] = "ç·¨è¼¯ç¨‹å¼æª”";
     Text[ arabic ] = "ÊÍÑíÑ ÇáäÕ ÇáÈÑãÌí";
     Text[ greek ] = "Åğåîåñãáóßá Script";
-    Text[ korean ] = "½ºÅ©¸³Æ® ÆíÁı";
+    Text[ korean ] = "ìŠ¤í¬ë¦½íŠ¸ í¸ì§‘";
     Text[ turkish ] = "Script'i düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar script";
     Text[ finnish ] = "Muokkaa komentosarjaa";
 };
  // ********************************************************************** EOF
-
-
-
-
