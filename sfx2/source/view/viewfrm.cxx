@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-04 08:51:42 $
+ *  last change: $Author: cd $ $Date: 2002-09-24 10:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ using namespace ::com::sun::star::frame;
 #include "mnumgr.hxx"
 #include "virtmenu.hxx"
 #include "macro.hxx"
+#include "tbxcust.hxx"
 
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
@@ -3656,6 +3657,21 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
     // ausf"uhren
     if ( !pShowItem || bShow != bHasChild )
         ToggleChildWindow( nSID );
+
+    if ( nSID == SID_CUSTOMIZETOOLBOX )
+    {
+        // Provide toolbox type to customize window to preselect it in the modeless dialog
+        SfxToolboxCustomWindow* pTbxCustomWin = (SfxToolboxCustomWindow*)GetChildWindow( nSID );
+        if ( pTbxCustomWin && bShow )
+        {
+            SFX_REQUEST_ARG( rReq, pItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE );
+            if ( pItem )
+            {
+                USHORT nId = pItem->GetValue();
+                pTbxCustomWin->SelectToolbar( nId );
+            }
+        }
+    }
 
     GetBindings().Invalidate( nSID );
     GetDispatcher()->Update_Impl( TRUE );
