@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:44:55 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:36:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,34 +120,30 @@ DESKTOPENV_FILES=\
 DESTASCIIFILTER=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/FilterDevelopment$/AsciiFilter
 ASCIIFILTER_FILES=\
     $(DESTASCIIFILTER)$/AsciiReplaceFilter.java \
-    $(DESTASCIIFILTER)$/Factory.java \
     $(DESTASCIIFILTER)$/FilterOptions.java \
     $(DESTASCIIFILTER)$/Makefile \
-    $(DESTASCIIFILTER)$/regfilter.bas \
-    $(DESTASCIIFILTER)$/regfilter.ini \
     $(DESTASCIIFILTER)$/TypeDetection.xcu
 
 DESTFILTERDETECTION=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/FilterDevelopment$/FlatXmlFilterDetection
 FILTERDETECTION_FILES=\
-    $(DESTFILTERDETECTION)$/exports.dxp \
     $(DESTFILTERDETECTION)$/fdcomp.cxx \
     $(DESTFILTERDETECTION)$/filterdetect.cxx \
     $(DESTFILTERDETECTION)$/filterdetect.hxx \
-    $(DESTFILTERDETECTION)$/FlatXMLFilterDetection.uno.xml \
+    $(DESTFILTERDETECTION)$/FlatXmlTypeDetection.uno.xml \
+    $(DESTFILTERDETECTION)$/FlatXmlTypeDetection.xcu \
     $(DESTFILTERDETECTION)$/Makefile
 
 DESTFLATXMLCPP=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/FilterDevelopment$/FlatXmlFilter_cpp
 FLATXMLCPP_FILES=\
-    $(DESTFLATXMLCPP)$/exports.dxp \
     $(DESTFLATXMLCPP)$/FlatXml.cxx \
     $(DESTFLATXMLCPP)$/FlatXmlFilter_cpp.uno.xml \
     $(DESTFLATXMLCPP)$/Makefile \
-    $(DESTFLATXMLCPP)$/TypeDetection.xcu
+    $(DESTFLATXMLCPP)$/FlatXmlFilter_cpp.xcu
 
 DESTFLATXMLJAVA=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/FilterDevelopment$/FlatXmlFilter_java
 FLATXMLJAVA_FILES=\
     $(DESTFLATXMLJAVA)$/Makefile \
-    $(DESTFLATXMLJAVA)$/TypeDetection.xcu \
+    $(DESTFLATXMLJAVA)$/FlatXmlFilter_java.xcu \
     $(DESTFLATXMLJAVA)$/FlatXml.java
 
 DESTLINGUISTIC=$(DESTDIRDEVGUIDEEXAMPLES)$/OfficeDev$/Linguistic
