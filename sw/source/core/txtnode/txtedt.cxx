@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:25:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>   // ViewShell
 #endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
@@ -209,6 +212,47 @@ bool lcl_IsSkippableWhiteSpace( xub_Unicode cCh )
            ' ' == cCh ||
            '\t' == cCh ||
            0x0a == cCh;
+}
+
+//
+// Replaced deleted redline ranges and hidden text ranges with 0x01, which
+// is ignored by the spell checker.
+//
+bool lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode,
+                                    XubString& rText )
+{
+    const SwDoc& rDoc = *rNode.GetDoc();
+    const sal_Bool bShowChg = ::IsShowChanges( rDoc.GetRedlineMode() );
+    if ( bShowChg )
+    {
+        USHORT nAct = rDoc.GetRedlinePos( rNode );
+
+        for ( ; nAct < rDoc.GetRedlineTbl().Count(); nAct++ )
+        {
+            const SwRedline* pRed = rDoc.GetRedlineTbl()[ nAct ];
+
+            if ( pRed->Start()->nNode > rNode.GetIndex() )
+                break;
+
+            if( REDLINE_DELETE == pRed->GetType() )
+            {
+                xub_StrLen nStart, nEnd;
+                pRed->CalcStartEnd( rNode.GetIndex(), nStart, nEnd );
+
+                while ( nStart < nEnd && nStart < rText.Len() )
+                    rText.SetChar( nStart++, CH_TXTATR_INWORD );
+            }
+        }
+    }
+
+    const bool bHideHidden = !SW_MOD()->GetViewOption( rDoc.IsHTMLMode() )->IsShowHiddenChar();
+    if ( bHideHidden )
+    {
+        const xub_Unicode cChar = CH_TXTATR_INWORD;
+        SwScriptInfo::MaskHiddenRanges( rNode, rText, &cChar );
+    }
+
+    return bShowChg || bHideHidden;
 }
 
 /*
@@ -724,31 +768,9 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 
     xub_StrLen nBegin, nEnd;
 
-    // modify string according to redline information
-    const SwDoc* pDoc = GetDoc();
+    // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
-    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
-    if ( bShowChg )
-    {
-        USHORT nAct = pDoc->GetRedlinePos( *this );
-
-        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
-        {
-            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
-
-            if ( pRed->Start()->nNode > GetIndex() )
-                break;
-
-            if( REDLINE_DELETE == pRed->GetType() )
-            {
-                USHORT nStart, nEnd;
-                pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
-
-                while ( nStart < nEnd && nStart < aText.Len() )
-                    aText.SetChar( nStart++, CH_TXTATR_INWORD );
-            }
-        }
-    }
+    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *this, aText );
 
     if ( pArgs->pStartNode != this )
         nBegin = 0;
@@ -864,7 +886,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
     }
 
     // reset original text
-    if ( bShowChg )
+    if ( bRestoreString )
         aText = aOldTxt;
 
     return pArgs->xSpellAlt.is() ? 1 : 0;
@@ -877,31 +899,9 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     xub_StrLen nBegin, nEnd;
 
-    // modify string according to redline information
-    const SwDoc* pDoc = GetDoc();
+    // modify string according to redline information and hidden text
     const XubString aOldTxt( aText );
-    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
-    if ( bShowChg )
-    {
-        USHORT nAct = pDoc->GetRedlinePos( *this );
-
-        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
-        {
-            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
-
-            if ( pRed->Start()->nNode > GetIndex() )
-                break;
-
-            if( REDLINE_DELETE == pRed->GetType() )
-            {
-                USHORT nStart, nEnd;
-                pRed->CalcStartEnd( GetIndex(), nStart, nEnd );
-
-                while ( nStart < nEnd && nStart < aText.Len() )
-                    aText.SetChar( nStart++, CH_TXTATR_INWORD );
-            }
-        }
-    }
+    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *this, aText );
 
     if ( rArgs.pStartNode != this )
         nBegin = 0;
@@ -979,7 +979,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     }
 
     // reset original text
-    if ( bShowChg )
+    if ( bRestoreString )
         aText = aOldTxt;
 
     return rArgs.bConvTextFound ? 1 : 0;
@@ -1000,33 +1000,11 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( pNode != pActNode || !nActPos )
         nActPos = STRING_LEN;
 
-    SwDoc* pDoc = pNode->GetDoc();
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
-    // modify string according to redline information
-    USHORT nAct = pDoc->GetRedlinePos( *pNode );
+    // modify string according to redline information and hidden text
     const XubString aOldTxt( pNode->aText );
-
-    const sal_Bool bShowChg = ::IsShowChanges( pDoc->GetRedlineMode() );
-    if ( bShowChg )
-    {
-        for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
-        {
-            const SwRedline* pRed = pDoc->GetRedlineTbl()[ nAct ];
-
-            if ( pRed->Start()->nNode > pNode->GetIndex() )
-                break;
-
-            if( REDLINE_DELETE == pRed->GetType() )
-            {
-                USHORT nStart, nEnd;
-                pRed->CalcStartEnd( pNode->GetIndex(), nStart, nEnd );
-
-                while ( nStart < nEnd && nStart < pNode->aText.Len() )
-                    pNode->aText.SetChar( nStart++, CH_TXTATR_INWORD );
-            }
-        }
-    }
+    const bool bRestoreString = lcl_MaskRedlinesAndHiddenText( *pNode, pNode->aText );
 
     // a change of data indicates that at least one word has been modified
     sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != aOldTxt.GetBuffer() );
@@ -1097,6 +1075,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
 
         LanguageType eActLang = pNode->GetLang( nBegin );
+        SwDoc* pDoc = pNode->GetDoc();
 
         SwScanner aScanner( *pNode, NULL, WordType::DICTIONARY_WORD,
                             nBegin, nEnd, FALSE, TRUE );
@@ -1280,7 +1259,7 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         pNode->SetWrongDirty( FALSE );
 
     // reset original text
-    if ( bShowChg )
+    if ( bRestoreString )
         pNode->aText = aOldTxt;
 
     if( bAddAutoCmpl )
