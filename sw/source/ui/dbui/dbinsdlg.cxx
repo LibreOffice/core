@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:37:38 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ const char cDBFldEnd    = '>';
 // Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
 struct _DB_Column
 {
-    enum { DB_FILLTEXT, DB_COL_FIELD, DB_COL_TEXT, DB_SPLITPARA } eColType;
+    enum ColType { DB_FILLTEXT, DB_COL_FIELD, DB_COL_TEXT, DB_SPLITPARA } eColType;
 
     union {
         String* pText;
