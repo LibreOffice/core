@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:38:40 $
+ *  last change: $Author: hr $ $Date: 2004-08-04 12:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ namespace svx
     {
         // get the current URL
         ::rtl::OUString sURL = m_aURL.GetText();
-        OFileNotation aTransformer(sURL, OFileNotation::N_DETECT);
+        OFileNotation aTransformer(sURL);
         sURL = aTransformer.get(OFileNotation::N_URL);
 
         // check for the existence of the selected file
