@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-29 10:01:54 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:13:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,20 +99,21 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     $(SVIDL) @$(mktmp \
     -fs$(INCCOMX)$/$(SDI$(TNR)NAME).hxx	\
     -fd$(INCCOMX)$/$(SDI$(TNR)NAME).ilb	\
-    -fm$(MISCX)$/$(SDI$(TNR)NAME).don	\
+    -fm$(MISC)$/$(SDI$(TNR)NAME).don	\
     -fl$(MISC)$/$(SDI$(TNR)NAME).lst         \
     -fx$(SDI$(TNR)EXPORT).sdi		\
-    -fy$(MISCX)$/xx$(PRJNAME).csv		\
-    -fz$(MISCX)$/$(SDI$(TNR)NAME).sid	\
-    $(SDI$(TNR)NAME).sdi -I$(MISCX) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    -fy$(MISC)$/xx$(PRJNAME).csv		\
+    -fz$(MISC)$/$(SDI$(TNR)NAME).sid	\
+    $(SDI$(TNR)NAME).sdi -I$(MISC) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 
-$(HIDSID$(TNR)PARTICLE): $(MISCX)$/$(SDI$(TNR)NAME).sid
+$(HIDSID$(TNR)PARTICLE): $(MISC)$/$(SDI$(TNR)NAME).sid
     @echo ------------------------------
     @echo Making: $@
+    @+-$(RM) $@.$(ROUT).tmp $@
 .IF "$(USE_SHELL)"=="4nt"
-    @$(TYPE) $(MISCX)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
+    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
 .ELSE
-    @$(TYPE) $(MISCX)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
+    @$(TYPE) $(MISC)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.$(ROUT).tmp $@
