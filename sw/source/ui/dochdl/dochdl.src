@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:39:49 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ String STR_NOGLOS1
     TEXT [ italian ] = "Testo automatico per la sigla" ;
     TEXT [ portuguese_brazilian ] = "Texto Automático para Abreviação" ;
     TEXT [ portuguese ] = "AutoTexto para abreviatura '" ;
-    TEXT [ finnish ] = "Automaattitekstiä lyhenteelle '" ;
+    TEXT [ finnish ] = "Automaattinen teksti pikavalinnalle '" ;
     TEXT [ danish ] = "AutoTekst til genvej '" ;
     TEXT [ french ] = "AutoTexte pour raccourci '" ;
     TEXT [ swedish ] = "AutoText till genvägen '" ;
@@ -108,7 +108,7 @@ String STR_NOGLOS2
     TEXT [ italian ] = "' non trovato." ;
     TEXT [ portuguese_brazilian ] = "' não encontrado." ;
     TEXT [ portuguese ] = "' não localizado." ;
-    TEXT [ finnish ] = "' ei löydy." ;
+    TEXT [ finnish ] = "Kohdetta ' ei löydy." ;
     TEXT [ danish ] = "' blev ikke fundet." ;
     TEXT [ french ] = "' introuvable." ;
     TEXT [ swedish ] = "' hittades inte." ;
@@ -139,7 +139,7 @@ String STR_NO_TABLE
     Text [ italian ] = "Adesso è impossibile inserire una tabella." ;
     Text [ portuguese_brazilian ] = "Inserir a tabela é agora impossível." ;
     Text [ portuguese ] = "De momento não é possível inserir a tabela." ;
-    Text [ finnish ] = "Taulukon lisääminen ei ole nyt mahdollista." ;
+    Text [ finnish ] = "Tällä hetkellä taulukkoa ei voi lisätä" ;
     Text [ danish ] = "Det er for tiden ikke muligt at indsætte en tabel" ;
     Text [ french ] = "Impossible d'insérer un tableau maintenant." ;
     Text [ swedish ] = "En tabell kan inte infogas vid denna tidpunkt." ;
@@ -170,7 +170,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE [ italian ] = "Impossibile creare voce di glossario." ;
     MESSAGE [ portuguese_brazilian ] = "Não pude inserir Texto Automático." ;
     MESSAGE [ portuguese ] = "Impossível inserir o AutoTexto." ;
-    MESSAGE [ finnish ] = "Automaattitekstiä ei voi lisätä." ;
+    MESSAGE [ finnish ] = "Automaattista tekstiä ei voitu luoda." ;
     MESSAGE [ danish ] = "Det var ikke muligt at oprette AutoTeksten." ;
     MESSAGE [ french ] = "Impossible de créer l'AutoTexte." ;
     MESSAGE [ swedish ] = "AutoText kunde inte skapas." ;
@@ -233,7 +233,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     MESSAGE [ italian ] = "Il formato dell'area è vecchio.\nÈ necessario convertirlo per poter\nsalvare le modifiche apportate\nVolete convertirlo?" ;
     MESSAGE [ portuguese_brazilian ] = "O formato de arquivo da regiao está desatualizado.\nDeve ser convertido para que se possa gravar modificações.\nDeseja convertê-lo?" ;
     MESSAGE [ portuguese ] = "O formato do ficheiro está desactualizado.\nDeve ser convertido para que se possam\n guardar as respectivas alterações.\nDeseja convertê-lo?" ;
-    MESSAGE [ finnish ] = "Alueen tiedostomuoto ei ole ajan tasalla.\nSe on muunnettava, jotta muutokset voitaisiin tallentaa.\nHaluatko muuntaa sen?" ;
+    MESSAGE [ finnish ] = "Osion muoto on vanhentunut.\nSe on muunnettava, jotta\nsitä voisi muuttaa.\nMuunnetaanko osio nyt?" ;
     MESSAGE [ danish ] = "Områdets filformat er forældet.\nDet skal konverteres, for at ændringerne kan gemmes.\nVil du konvertere det?" ;
     MESSAGE [ french ] = "La section se trouve dans un format périmé.\nVous ne pourrrez enregistrer aucune modification \n à moins de le convertir.\nVoulez-vous procéder à la conversion sans plus attendre ?" ;
     MESSAGE [ swedish ] = "Området har ett gammalt format.\nDet måste konverteras för att\nändringar skall kunna sparas.\nVill Du konvertera det?" ;
@@ -281,6 +281,7 @@ String STR_PRIVATETEXT
     Text[ turkish ] = "%PRODUCTNAME Writer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "%PRODUCTNAME Writer";
+    Text[ finnish ] = "%PRODUCTNAME! Writer";
 };
 String STR_PRIVATEGRAPHIC
 {
@@ -290,7 +291,7 @@ String STR_PRIVATEGRAPHIC
     Text [ italian ] = "Immagine [%PRODUCTNAME Writer]" ;
     Text [ portuguese_brazilian ] = "Gráfico [%PRODUCTNAME Writer]" ;
     Text [ portuguese ] = "Imagem [%PRODUCTNAME Writer]" ;
-    Text [ finnish ] = "Kuva [%PRODUCTNAME Writer]" ;
+    Text [ finnish ] = "Grafiikka [%PRODUCTNAME Writer]" ;
     Text [ danish ] = "Grafik [%PRODUCTNAME Writer]" ;
     Text [ french ] = "Image [%PRODUCTNAME Writer]" ;
     Text [ swedish ] = "Grafik [%PRODUCTNAME Writer]" ;
@@ -331,6 +332,7 @@ String STR_PRIVATEOLE
     Text[ arabic ] = "[%PRODUCTNAME Writer]ßÇÆä ";
     Text[ turkish ] = "Nesne [%PRODUCTNAME Writer]";
     Text[ catalan ] = "Objeto [%PRODUCTNAME Writer]";
+    Text[ finnish ] = "Objekti [%PRODUCTNAME Writer]";
 };
 String STR_DDEFORMAT
 {
@@ -370,7 +372,7 @@ String STR_RTFFORMAT
     Text [ italian ] = "Testo formattato [RTF]" ;
     Text [ portuguese_brazilian ] = "Texto formatado [RTF]" ;
     Text [ portuguese ] = "Texto formatado [RTF]" ;
-    Text [ finnish ] = "Muotoiltu teksti [RTF]" ;
+    Text [ finnish ] = "Muotoiltu teksti (RTF)" ;
     Text [ danish ] = "Formateret tekst [RTF]" ;
     Text [ french ] = "Texte formaté [RTF]" ;
     Text [ swedish ] = "Formaterad text [RTF]" ;
