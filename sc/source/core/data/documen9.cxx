@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:23:39 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <sot/exchange.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/langitem.hxx>
@@ -89,7 +90,6 @@
 #include <svtools/pathoptions.hxx>
 #include <so3/ipobj.hxx>
 #include <sch/schdll.hxx>
-#include <sch/schdll0.hxx>
 #include <sch/memchrt.hxx>
 
 #include "document.hxx"
@@ -202,7 +202,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, USHORT nSrcPos, USHORT nD
                 {
                     //  test if it's a chart with HasID, because GetChartData always loads the DLL
                     SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pNewObject)->GetObjRef();
-                    if ( aIPObj.Is() && SchModuleDummy::HasID( *aIPObj->GetSvFactory() ) )
+                    if ( aIPObj.Is() && SotExchange::IsChart( *aIPObj->GetSvFactory() ) )
                     {
                         SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
                         if ( pChartData )
@@ -336,7 +336,7 @@ BOOL ScDocument::IsChart( SdrObject* pObject )
         if (aIPObj.Is())
         {
             SvGlobalName aObjClsId = *aIPObj->GetSvFactory();
-            if (SchModuleDummy::HasID( aObjClsId ))
+            if ( SotExchange::IsChart( aObjClsId ))
                 return TRUE;
         }
     }
