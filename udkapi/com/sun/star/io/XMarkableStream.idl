@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMarkableStream.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: jbu $ $Date: 2001-03-19 13:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,8 +119,12 @@ interface XMarkableStream: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::io::XMarkableStream::jumpToFurthest
-    /** jumps to the last read or written position of the stream.
+    /** jumps to the furthest position of the stream.
+
+        <p> In the inputstream case, a subsequent read call returns
+        data, that was never read or skipped over before. In the
+        outputstream case, a subsequent write call will add
+        new data at the end of the stream without overwriting existing data.
      */
     void jumpToFurthest()
             raises( com::sun::star::io::IOException );
@@ -155,6 +159,9 @@ interface XMarkableStream: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 
