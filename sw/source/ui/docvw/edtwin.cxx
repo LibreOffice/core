@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 13:09:00 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 09:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1677,7 +1677,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             // <- #i23725#
                             if( ! bDone && rSh.NumOrNoNum
                                 (KEY_BACKSPACE != rKeyCode.GetFullCode(),
-                                      TRUE, bOutline ))
+                                      TRUE))
                                 eKeyState = KS_NumOrNoNum;
                         }
                     }
