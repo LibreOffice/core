@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: os $ $Date: 2001-04-17 13:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
@@ -93,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
@@ -183,6 +189,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 #define C2U(char) rtl::OUString::createFromAscii(char)
 
 /* -----------------------------05.01.00 15:14--------------------------------
@@ -616,8 +623,19 @@ void SwModule::ExecDB(SfxRequest &rReq)
         {
             SwDBData aData;
 
-            if (GetView())
+            SwView* pView = GetView();
+            if(pView)
             {
+                SfxViewFrame* pVFrame = pView->GetViewFrame();
+                Reference< XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
+                Reference< XFrame >  xBeamerFrame = xFrame->findFrame(
+                                    C2U("_beamer"), FrameSearchFlag::CHILDREN);
+                if(xBeamerFrame.is())
+                {
+                    pVFrame->GetDispatcher()->Execute(SID_BROWSER);
+                    break;
+                }
+
                 SwWrtShell &rSh = GetView()->GetWrtShell();
                 aData = rSh.GetDBData();
                 rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
