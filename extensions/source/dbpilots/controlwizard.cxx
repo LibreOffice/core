@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:11:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -550,10 +547,16 @@ namespace dbp
     //---------------------------------------------------------------------
     Reference< XConnection > OControlWizard::getFormConnection(const OAccessRegulator&) const
     {
+        return getFormConnection();
+    }
+    //---------------------------------------------------------------------
+    Reference< XConnection > OControlWizard::getFormConnection() const
+    {
         Reference< XConnection > xConn;
         try
         {
-            m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+            if ( !::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConn) )
+                m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
         }
         catch(const Exception&)
         {
@@ -597,7 +600,21 @@ namespace dbp
     {
         return initContext();
     }
-
+    //---------------------------------------------------------------------
+    Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
+    {
+        const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
+        Reference< XInteractionHandler > xHandler;
+        try
+        {
+            if (getServiceFactory().is())
+                xHandler = Reference< XInteractionHandler >(getServiceFactory()->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
+        }
+        catch(Exception&) { }
+        if (!xHandler.is())
+            ShowServiceNotAvailableError(_pWindow, sInteractionHandlerServiceName, sal_True);
+        return xHandler;
+    }
     //---------------------------------------------------------------------
     sal_Bool OControlWizard::initContext()
     {
@@ -737,19 +754,9 @@ namespace dbp
             aContext.NextException = aSQLException;
 
             // create an interaction handler to display this exception
-            const ::rtl::OUString sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.InteractionHandler");
-            Reference< XInteractionHandler > xHandler;
-            try
-            {
-                if (getServiceFactory().is())
-                    xHandler = Reference< XInteractionHandler >(getServiceFactory()->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
-            }
-            catch(Exception&) { }
-            if (!xHandler.is())
-            {
-                ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
+            Reference< XInteractionHandler > xHandler = getInteractionHandler(this);
+            if ( !xHandler.is() )
                 return sal_False;
-            }
 
             Reference< XInteractionRequest > xRequest = new OInteractionRequest(makeAny(aContext));
             try
