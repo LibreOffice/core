@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-12 13:52:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 21:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,27 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text = "E~xakte Suche" ;
         Text [ ENGLISH ] = "Case sensitive" ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "Ma~tch case";
+        Text[ portuguese ] = "Procura e~xacta";
+        Text[ russian ] = "Òî÷íûé ïîèñê";
+        Text[ greek ] = "ÁêñéâŞ~ò áíáæŞôçóç";
+        Text[ dutch ] = "E~xact dezelfde tekens";
+        Text[ french ] = "Respecter la ~casse";
+        Text[ spanish ] = "Coincidencia e~xacta";
+        Text[ finnish ] = "Sama kirjainkoko";
+        Text[ italian ] = "Ricerca esatta";
+        Text[ danish ] = "Søg eksakt";
+        Text[ swedish ] = "E~xakt sökning";
+        Text[ polish ] = "Dok³adne wyszukiwanie";
+        Text[ portuguese_brazilian ] = "Igua~lar Caixa";
+        Text[ japanese ] = "Š®‘S‚É“¯ˆê‚È‚à‚Ì‚ğŒŸõ(~T)";
+        Text[ korean ] = "»ó¼¼ÇÏ°Ô Ã£±â(~T)";
+        Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
+        Text[ chinese_traditional ] = "ºë½T·j´M(~T)";
+        Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
+        Text[ arabic ] = "ÈÍË ÏŞíŞ";
+        Text[ catalan ] = "Coincidencia e~xacta";
     };
     CheckBox BTN_BACKWARDS
     {
@@ -851,7 +872,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ portuguese_brazilian ] = "Extras" ;
         Text [ swedish ] = "Tillägg" ;
         Text [ danish ] = "Supplerende" ;
-        Text [ italian ] = "Extra" ;
+        Text [ italian ] = "Strumenti" ;
         Text [ spanish ] = "Opciones" ;
         Text [ french ] = "Classeur à plusieurs feuilles" ;
         Text [ dutch ] = "Extra" ;
@@ -1180,5 +1201,6 @@ ModelessDialog RID_SVXDLG_SEARCH
 };
 
  // ********************************************************************** EOF
+
 
 
