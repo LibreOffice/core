@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationRegistration.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:10 $
+ *  last change: $Author: dbo $ $Date: 2002-11-18 14:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
             specifies the location of the component with the URL.
 
         @param xReg
-            specifies the registry where the component should be installed. If it is a NULL interface
-            the component will be installed in the system registry.
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be installed
+            in the system registry (if this feature is supported).
      */
     void registerImplementation( [in] string aImplementationLoader,
              [in] string aLocation,
@@ -112,8 +113,9 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
             specifies the location of the component with the URL.
 
         @param xReg
-            specifies the registry where the component should be installed. If it is a NULL interface
-            the component will be revoked from the system registry.
+            specifies the registry where the component should be installed.
+            If it is a NULL interface, then the component will be revoked
+            from the system registry (if this feature is supported).
      */
     boolean revokeImplementation( [in] string aLocation,
              [in] com::sun::star::registry::XSimpleRegistry xReg );
@@ -157,6 +159,9 @@ interface XImplementationRegistration: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/10/03 12:44:10  mi
+    #94968# IDL reviews merged
+
     Revision 1.6.2.1  2002/03/26 14:24:17  jsc
     #98365# reviewed
 
