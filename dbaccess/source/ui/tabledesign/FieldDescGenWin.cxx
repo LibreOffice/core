@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:54:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-19 13:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
 OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
-    OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent());
+    OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent());
     return pDesignWin->GetEditorCtrl();
 }
 //------------------------------------------------------------------------------
