@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:37 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,11 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
                 {
                     SdrObject* pObj = aIter.Next();
                     if (pObj && pObj->IsUnoObj())
-                        pObj->SendRepaintBroadcast();
+                    {
+                        // For redraw just use ActionChanged()
+                        // pObj->BroadcastObjectChange();
+                        pObj->ActionChanged();
+                    }
                 }
             }
         }
@@ -488,12 +492,18 @@ sal_Bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* 
 void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
     if (!pPageView) return;
-    const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-    for (sal_uInt16 i = 0; i < rWinList.GetCount(); i++)
+
+    //const SdrPageViewWinList& rWinList = pPageView->GetWinList();
+    //const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+    for (sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++)
     {
-        if (rWinList[i].GetControlList().GetCount())
+        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+
+        if (rPageViewWindow.GetControlList().GetCount())
         {
-            pImpl->addWindow(&rWinList[i]);
+            // pImpl->addWindow(&rWinList[i]);
+            pImpl->addWindow(rPageViewWindow);
         }
     }
 }
@@ -502,12 +512,17 @@ void FmFormView::ActivateControls(SdrPageView* pPageView)
 void FmFormView::DeactivateControls(SdrPageView* pPageView)
 {
     if( !pPageView ) return;
-    const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-    for (sal_uInt16 i = 0; i < rWinList.GetCount(); i++)
+
+    // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
+    // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+    for (sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++)
     {
-        if (rWinList[i].GetControlList().GetCount())
+        const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+
+        if (rPageViewWindow.GetControlList().GetCount())
         {
-            pImpl->removeWindow(rWinList[i].GetControlContainerRef() );
+            pImpl->removeWindow(rPageViewWindow.GetControlContainerRef() );
         }
     }
 }
@@ -629,12 +644,16 @@ void FmFormView::InsertControlContainer(const Reference< ::com::sun::star::awt::
         SdrPageView* pPageView = GetPageViewPvNum(0);
         if( pPageView )
         {
-            const SdrPageViewWinList& rWinList = pPageView->GetWinList();
-            for( sal_uInt16 i = 0; i < rWinList.GetCount(); i++ )
+            // const SdrPageViewWinList& rWinList = pPageView->GetWinList();
+            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+
+            for( sal_uInt32 i = 0L; i < pPageView->WindowCount(); i++ )
             {
-                if( rWinList[i].GetControlContainerRef() == xCC )
+                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
+
+                if( rPageViewWindow.GetControlContainerRef() == xCC )
                 {
-                    pImpl->addWindow(&rWinList[i]);
+                    pImpl->addWindow(rPageViewWindow);
                     break;
                 }
             }
