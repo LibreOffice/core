@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:02:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #endif
+
+#include <svtools/embedhlp.hxx>
 
 #include "ipclient.hxx"
 #include "viewsh.hxx"
@@ -883,6 +885,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
         sal_Bool bSaveCopyAs = sal_False;
         if ( nVerb == -8 ) // "Save Copy as..."
         {
+            svt::EmbeddedObjectRef::TryRunningState( m_pImp->m_xObject );
             // TODO/LATER: this special verb should disappear when outplace activation is completely available
             uno::Reference< frame::XModel > xEmbModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xEmbModel.is() )
