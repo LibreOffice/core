@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,14 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
         }
         if ( rAnchorFrm.IsVertical() )
             rAnchorFrm.SwitchHorizontalToVertical( aAnchorPos );
+
+        // --> OD 2005-03-09 #i44347# - keep last object rectangle at anchored object
+        ASSERT ( GetAnchoredObj().ISA(SwAnchoredDrawObject),
+                 "<SwAsCharAnchoredObjectPosition::CalcPosition()> - wrong type of anchored object." );
+        SwAnchoredDrawObject& rAnchoredDrawObj =
+                        static_cast<SwAnchoredDrawObject&>( GetAnchoredObj() );
+        rAnchoredDrawObj.SetLastObjRect( rAnchoredDrawObj.GetObjRect().SVRect() );
+        // <--
     }
     else
     {
