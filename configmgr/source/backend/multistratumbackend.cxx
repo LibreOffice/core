@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:35:48 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_BACKEND_MULTISTRATUMBACKEND_HXX_
 #include "multistratumbackend.hxx"
-#endif // CONFIGMGR_BACKEND_SINGLEBACKENDADAPTER_HXX_
 
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
@@ -71,26 +69,38 @@
 #include "serviceinfohelper.hxx"
 #endif // CONFIGMGR_SERVICEINFOHELPER_HXX_
 
+#ifndef CONFIGMGR_BACKEND_BACKENDSTRATALISTENER_HXX
+#include "backendstratalistener.hxx"
+#endif
+
 #ifndef _CONFIGMGR_BOOTSTRAP_HXX
 #include "bootstrap.hxx"
+#endif
+
+#ifndef CONFIGMGR_SIMPLEINTERACTIONREQUEST_HXX
+#include "simpleinteractionrequest.hxx"
+#endif
+
+#ifndef CONFIGMGR_CONFIGINTERACTIONHANDLER_HXX
+#include "configinteractionhandler.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XMULTILAYERSTRATUM_HPP_
 #include <com/sun/star/configuration/backend/XMultiLayerStratum.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XSINGLELAYERSTRATUM_HPP_
 #include <com/sun/star/configuration/backend/XSingleLayerStratum.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_STRATUMCREATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/StratumCreationException.hpp>
+#endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif // _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-
-#ifndef CONFIGMGR_BACKEND_BACKENDSTRATALISTENER_HXX
-#include "backendstratalistener.hxx"
-#endif CONFIGMGR_BACKEND_BACKENDSTRATALISTENER_HXX
-
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #endif
@@ -99,10 +109,15 @@
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
 
+#include <cppuhelper/exc_hlp.hxx>
+
 #include <stdio.h>
 
-namespace configmgr { namespace backend {
+//==============================================================================
+#define OU2A(rtlOUString)   (::rtl::OUStringToOString((rtlOUString), RTL_TEXTENCODING_ASCII_US).getStr())
+//==============================================================================
 
+namespace configmgr { namespace backend {
 
 //==============================================================================
 static const rtl::OUString kSchemaServiceParam(
@@ -261,22 +276,17 @@ void SAL_CALL MultiStratumBackend::initialize(
          mStrataListener = new BackendStrataListener(*this);
 
     }
-    catch(uno::Exception& aException)
+    catch(uno::Exception& )
     {
-        if (mSchemaSupplier.is())
-        {
-            mSchemaSupplier.clear();
-        }
-        if(mBackendStrata.empty())
-        {
-            mBackendStrata.clear() ;
-        }
+        mSchemaSupplier.clear();
+        mBackendStrata.clear() ;
+
         throw;
     }
 
 }
 //------------------------------------------------------------------------------
-typedef uno::Reference<backenduno::XSchemaSupplier> xSchemaSupplier;
+typedef uno::Reference<backenduno::XSchemaSupplier> SchemaSupplier;
 void  MultiStratumBackend::initializeSchemaSupplier(const uno::Reference<uno::XComponentContext>& aContext)
 {
 
@@ -285,7 +295,7 @@ void  MultiStratumBackend::initializeSchemaSupplier(const uno::Reference<uno::XC
     aContext->getValueByName(kSchemaServiceParam) >>= aServiceName;
     uno::Sequence< uno::Any > aInitArgs( 1 );
     aInitArgs[0] <<= aContext;
-    mSchemaSupplier = xSchemaSupplier::query(mFactory->createInstanceWithArguments(aServiceName,aInitArgs)) ;
+    mSchemaSupplier = SchemaSupplier::query(mFactory->createInstanceWithArguments(aServiceName,aInitArgs)) ;
     if (!mSchemaSupplier.is())
     {
          throw backenduno::BackendSetupException(
@@ -294,6 +304,44 @@ void  MultiStratumBackend::initializeSchemaSupplier(const uno::Reference<uno::XC
                         *this, uno::Any()) ;
 
     }
+}
+//------------------------------------------------------------------------------
+static
+bool approveRecovery(const backenduno::StratumCreationException & aError)
+{
+    using namespace apihelper;
+    typedef SimpleInteractionRequest::Continuation Choice;
+    Choice const k_supported_choices = CONTINUATION_APPROVE ; //| CONTINUATION_DISAPPROVE;
+
+    Choice chosen = CONTINUATION_UNKNOWN;
+
+    ConfigurationInteractionHandler aHandler;
+    if (aHandler.is())
+    try
+    {
+        rtl::Reference< SimpleInteractionRequest > xRequest(
+            new SimpleInteractionRequest(
+                uno::makeAny(aError),
+                k_supported_choices
+            ) );
+        aHandler.handle(xRequest.get());
+        chosen = xRequest->getResponse();
+    }
+    catch (uno::Exception & e)
+    {
+        OSL_TRACE("Warning - Configuration: Interaction handler failed: [%s]\n", OU2A(e.Message));
+    }
+
+    switch (chosen)
+    {
+    case CONTINUATION_APPROVE:      return true;
+    case CONTINUATION_DISAPPROVE:   return false;
+    case CONTINUATION_UNKNOWN:      break;
+
+    default: OSL_ENSURE(false,"Unsolicited continuation chosen"); break;
+    }
+    // no choice available - default: disapprove
+    return false;
 }
 //------------------------------------------------------------------------------
 void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XComponentContext>& aContext)
@@ -331,10 +379,15 @@ void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XCom
         {
             if(!bOptional)
             {
-                static const sal_Char sErrContext[] = "MultiStratumBackend: Could not create Backend Strata Service: ";
+                static const sal_Char sErrContext[] = "MultiStratumBackend: Could not create Backend Stratum Service: ";
                 OUString const sContext(RTL_CONSTASCII_USTRINGPARAM(sErrContext));
-                exception.Message = sContext.concat(exception.Message);
-                throw;
+                OUString const sMessage = sContext.concat(exception.Message);
+
+                backenduno::StratumCreationException error(sMessage,*this,
+                                                            ::cppu::getCaughtException(),
+                                                            sServiceName,sServiceData);
+                if (!approveRecovery(error))
+                    throw error;
             }
 
         }
