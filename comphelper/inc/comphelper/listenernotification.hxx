@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:31:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,16 @@ namespace comphelper
         */
         void    disposing( const ::com::sun::star::lang::EventObject& _rEventSource );
 
+        /** determines whether the listener container is currently empty
+        */
+        inline bool
+                empty() const SAL_THROW(());
+
+        /** determines the number of elements in the container
+        */
+        inline size_t
+                size() const SAL_THROW(());
+
     protected:
                 OListenerContainer( ::osl::Mutex& _rMutex );
 
@@ -128,7 +138,7 @@ namespace comphelper
 
             @see implNotify
         */
-        bool    notify( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_THROW(());
+        bool    notify( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_THROW(( ::com::sun::star::uno::Exception ));
 
     protected:
         /** call a single listener
@@ -158,6 +168,17 @@ namespace comphelper
                             const ::com::sun::star::lang::EventObject& _rEvent
                         )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
     };
+
+    //====================================================================
+    inline bool OListenerContainer::empty() const SAL_THROW(())
+    {
+        return ( m_aListeners.getLength() == 0 );
+    }
+
+    inline size_t OListenerContainer::size() const SAL_THROW(())
+    {
+        return m_aListeners.getLength();
+    }
 
     //====================================================================
     //= OListenerContainerBase
