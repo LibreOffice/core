@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameOASISTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:42:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,35 @@ using namespace ::xmloff::token;
 
 TYPEINIT1( XMLFrameOASISTransformerContext, XMLTransformerContext );
 
+sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
+            const OUString& rLocalName,
+            const Reference< XAttributeList >& rAttrList )
+{
+    if( !(IsXMLToken( rLocalName, XML_OBJECT ) ||
+          IsXMLToken( rLocalName, XML_OBJECT_OLE)  ) )
+        return sal_False;
+
+    sal_Int16 nAttrCount = rAttrList.is() ? rAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        OUString aAttrName( rAttrList->getNameByIndex( i ) );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( aAttrName,
+                                                                 &aLocalName );
+        if( XML_NAMESPACE_XLINK == nPrefix &&
+            IsXMLToken( aLocalName, XML_HREF ) )
+        {
+            OUString sHRef( rAttrList->getValueByIndex( i ) );
+            GetTransformer().ConvertURIToOOo( sHRef, sal_True );
+            return !(sHRef.getLength() && '#'==sHRef[0]);
+        }
+    }
+
+    return sal_False;
+}
+
+
 XMLFrameOASISTransformerContext::XMLFrameOASISTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
@@ -157,7 +186,8 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
             switch( (*aIter).second.m_nActionType )
             {
             case XML_ETACTION_COPY:
-                if( !m_aElemQName.getLength() )
+                if( !m_aElemQName.getLength() &&
+                    !IsLinkedEmbeddedObject( rLocalName, rAttrList ) )
                 {
                     pContext = new XMLIgnoreTransformerContext( GetTransformer(),
                                                                 rQName,
@@ -166,8 +196,8 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
                         ->AppendAttributeList( rAttrList );
                     GetTransformer().ProcessAttrList( m_xAttrList,
-                                                    OASIS_SHAPE_ACTIONS,
-                                                       sal_False    );
+                                                      OASIS_SHAPE_ACTIONS,
+                                                      sal_False );
                     GetTransformer().GetDocHandler()->startElement( m_aElemQName,
                                                                     m_xAttrList );
                 }
@@ -177,7 +207,6 @@ XMLTransformerContext *XMLFrameOASISTransformerContext::CreateChildContext(
                                                                 rQName,
                                                                 sal_True, sal_True );
                 }
-                break;
             default:
                 OSL_ENSURE( !this, "unknown action" );
                 break;
