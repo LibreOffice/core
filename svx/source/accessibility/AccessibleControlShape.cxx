@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:53:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -101,9 +104,17 @@
 #ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include "SvxShapeTypes.hxx"
 #endif
-
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 #ifndef COMPHELPER_ACCESSIBLE_WRAPPER_HXX
 #include <comphelper/accessiblewrapper.hxx>
+#endif
+#ifndef _SVDVIEW_HXX
+#include "svdview.hxx"
+#endif
+#ifndef _SVDPAGV_HXX
+#include "svdpagv.hxx"
 #endif
 #include "svdstr.hrc"
 #include <algorithm>
@@ -118,6 +129,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::container;
 
 //--------------------------------------------------------------------
 namespace
@@ -189,6 +201,7 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bListeningForDesc( sal_False )
     ,   m_bDisposeNativeContext( sal_False )
     ,   m_bMultiplexingStates( sal_False )
+    ,   m_bWaitingForControl( sal_False )
 {
     m_pChildManager = new OWrappedAccessibleChildrenManager( getProcessServiceFactory() );
     m_pChildManager->acquire();
@@ -219,6 +232,27 @@ SdrObject* AccessibleControlShape::getSdrObject() const
     return GetSdrObjectFromXShape (mxShape);
 }
 
+namespace {
+    Reference< XContainer > lcl_getControlContainer( const Window* _pWin, const SdrView* _pView )
+    {
+        Reference< XContainer > xReturn;
+        DBG_ASSERT( _pView, "lcl_getControlContainer: invalid view!" );
+        if ( _pView )
+        {
+            USHORT nPageViews = _pView->GetPageViewCount();
+            for ( USHORT nPage = 0; ( nPage < nPageViews ) && !xReturn.is(); ++nPage )
+            {
+                SdrPageView* pPageView = _pView->GetPageViewPvNum( nPage );
+                if ( pPageView )
+                {
+                    xReturn = xReturn.query( pPageView->GetControlContainer( _pWin ) );
+                }
+            }
+        }
+        return xReturn;
+    }
+}
+
 //-----------------------------------------------------------------------------
 void AccessibleControlShape::Init()
 {
@@ -239,14 +273,14 @@ void AccessibleControlShape::Init()
         // we would need to adjust our implementation to support this new interface, too. Bad idea.
         //
         // The usual solution for such a problem is aggregation. Aggregation means using UNO's own meachnisms
-        // for merging an inner with an outer component, an get a component which behaves as it is exactly one.
+        // for merging an inner with an outer component, and get a component which behaves as it is exactly one.
         // This is what XAggregation is for. Unfortunately, aggregation requires _exact_ control over the ref count
         // of the inner object, which we do not have at all.
         // Bad, too.
         //
         // But there is a solution: com.sun.star.reflection.ProxyFactory. This service is able to create a proxy
         // for any component, which supports _exactly_ the same interfaces as the component. In addition, it can
-        // be aggregated, as by definition the proxy's ref count is exactly one when returned from the factory.
+        // be aggregated, as by definition the proxy's ref count is exactly 1 when returned from the factory.
         // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
         // I'm aware of at the moment .....
         //
@@ -263,59 +297,81 @@ void AccessibleControlShape::Init()
             // .................................................................
             // get the context of the control - it will be our "inner" context
             m_xUnoControl = pUnoObjectImpl->GetUnoControl( pViewWindow );
-            Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
-            Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
-            Reference< XAccessibleContext > xNativeControlContext;
-            if ( xControlAccessible.is() )
-                xNativeControlContext = xControlAccessible->getAccessibleContext();
-            OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
-            m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
 
-            // .................................................................
-            // add as listener to the context - we want to multiplex some states
-            if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
-            {   // (but only in alive mode)
-                startStateMultiplexing( );
-            }
-
-            // now that we have all information about our control, do some adjustments
-            adjustAccessibleRole();
-            initializeComposedState();
-
-            // some initialization for our child manager, which is used in alive mode only
-            if ( isAliveMode( m_xUnoControl ) )
+            if ( !m_xUnoControl.is() )
             {
-                Reference< XAccessibleStateSet > xStates( getAccessibleStateSet( ) );
-                OSL_ENSURE( xStates.is(), "AccessibleControlShape::AccessibleControlShape: no inner state set!" );
-                m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
-            }
+                // the control has not yet been created. Though speaking strictly, it is a bug that
+                // our instance here is created without an existing control (because an AccessibleControlShape
+                // is a representation of a view object, and can only live if the view it should represent
+                // is complete, which implies a living control), it's by far the easiest and most riskless way
+                // to fix this here in this class.
+                // Okay, we will add as listener to the control container where we expect our control to appear.
+                OSL_ENSURE( !m_bWaitingForControl, "AccessibleControlShape::Init: already waiting for the control!" );
 
-            // .................................................................
-            // finally, aggregate a proxy for the control context
-            // first a factory for the proxy
-            Reference< XProxyFactory > xFactory;
-            xFactory = xFactory.query( createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
-            OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
-            // then the proxy itself
-            if ( xFactory.is() && xNativeControlContext.is() )
-            {
-                m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
-
-                // aggregate the proxy
-                osl_incrementInterlockedCount( &m_refCount );
-                if ( m_xControlContextProxy.is() )
+                Reference< XContainer > xControlContainer = lcl_getControlContainer( pViewWindow, maShapeTreeInfo.GetSdrView() );
+                OSL_ENSURE( xControlContainer.is(), "AccessibleControlShape::Init: unable to find my ControlContainer!" );
+                if ( xControlContainer.is() )
                 {
-                    // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
-                    // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
-                    m_xControlContextProxy->setDelegator( *this );
+                    xControlContainer->addContainerListener( this );
+                    m_bWaitingForControl = sal_True;
                 }
-                osl_decrementInterlockedCount( &m_refCount );
+            }
+            else
+            {
+                Reference< XModeChangeBroadcaster > xControlModes( m_xUnoControl, UNO_QUERY );
+                Reference< XAccessible > xControlAccessible( xControlModes, UNO_QUERY );
+                Reference< XAccessibleContext > xNativeControlContext;
+                if ( xControlAccessible.is() )
+                    xNativeControlContext = xControlAccessible->getAccessibleContext();
+                OSL_ENSURE( xNativeControlContext.is(), "AccessibleControlShape::Init: no AccessibleContext for the control!" );
+                m_aControlContext = WeakReference< XAccessibleContext >( xNativeControlContext );
 
-                m_bDisposeNativeContext = sal_True;
+                // .................................................................
+                // add as listener to the context - we want to multiplex some states
+                if ( isAliveMode( m_xUnoControl ) && xNativeControlContext.is() )
+                {   // (but only in alive mode)
+                    startStateMultiplexing( );
+                }
 
-                // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
-                // we need to dispose ourself.
-                xControlModes->addModeChangeListener( this );
+                // now that we have all information about our control, do some adjustments
+                adjustAccessibleRole();
+                initializeComposedState();
+
+                // some initialization for our child manager, which is used in alive mode only
+                if ( isAliveMode( m_xUnoControl ) )
+                {
+                    Reference< XAccessibleStateSet > xStates( getAccessibleStateSet( ) );
+                    OSL_ENSURE( xStates.is(), "AccessibleControlShape::AccessibleControlShape: no inner state set!" );
+                    m_pChildManager->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS ) );
+                }
+
+                // .................................................................
+                // finally, aggregate a proxy for the control context
+                // first a factory for the proxy
+                Reference< XProxyFactory > xFactory;
+                xFactory = xFactory.query( createProcessComponent( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ) ) );
+                OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
+                // then the proxy itself
+                if ( xFactory.is() && xNativeControlContext.is() )
+                {
+                    m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
+
+                    // aggregate the proxy
+                    osl_incrementInterlockedCount( &m_refCount );
+                    if ( m_xControlContextProxy.is() )
+                    {
+                        // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
+                        // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
+                        m_xControlContextProxy->setDelegator( *this );
+                    }
+                    osl_decrementInterlockedCount( &m_refCount );
+
+                    m_bDisposeNativeContext = sal_True;
+
+                    // Finally, we need to add ourself as mode listener to the control. In case the mode switches,
+                    // we need to dispose ourself.
+                    xControlModes->addModeChangeListener( this );
+                }
             }
         }
     }
@@ -335,7 +391,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleControlShape::getAccessibleCo
 //-----------------------------------------------------------------------------
 void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
 {
-    if ( !isAliveMode( m_xUnoControl ) )
+    if ( !m_xUnoControl.is() || !isAliveMode( m_xUnoControl ) )
     {
         // in design mode, we simply forward the request to the base class
         AccessibleShape::grabFocus();
@@ -518,11 +574,12 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-            // see if any of these notifications affect our child manager
-            m_pChildManager->handleChildNotification( _rEvent );
-
+            // let the child manager translate the event
             aTranslatedEvent.Source = *this;
             m_pChildManager->translateAccessibleEvent( _rEvent, aTranslatedEvent );
+
+            // see if any of these notifications affect our child manager
+            m_pChildManager->handleChildNotification( _rEvent );
         }
 
         FireEvent( aTranslatedEvent );
@@ -590,7 +647,9 @@ sal_Bool AccessibleControlShape::ensureListeningState(
 //--------------------------------------------------------------------
 sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( ) throw(RuntimeException)
 {
-    if ( !isAliveMode( m_xUnoControl ) )
+    if ( !m_xUnoControl.is() )
+        return 0;
+    else if ( !isAliveMode( m_xUnoControl ) )
         // no special action required when in design mode
         return AccessibleShape::getAccessibleChildCount( );
     else
@@ -607,6 +666,10 @@ sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( ) throw(Runt
 Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int32 i ) throw(IndexOutOfBoundsException, RuntimeException)
 {
     Reference< XAccessible > xChild;
+    if ( !m_xUnoControl.is() )
+    {
+        throw IndexOutOfBoundsException();
+    }
     if ( !isAliveMode( m_xUnoControl ) )
     {
         // no special action required when in design mode - let the base class handle this
@@ -630,6 +693,16 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
             }
         }
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    sal_Int32 nChildIndex = -1;
+    Reference< XAccessibleContext > xContext;
+    if ( xChild.is() )
+        xContext = xChild->getAccessibleContext( );
+    if ( xContext.is() )
+        nChildIndex = xContext->getAccessibleIndexInParent( );
+    OSL_ENSURE( nChildIndex == i, "AccessibleControlShape::getAccessibleChild: index mismatch!" );
+#endif
     return xChild;
 }
 
@@ -677,6 +750,18 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     m_xControlModel.clear();
     m_xModelPropsMeta.clear();
     m_aControlContext = WeakReference< XAccessibleContext >();
+
+    // stop listening at the control container (should never be necessary here, but who knows ....)
+    if ( m_bWaitingForControl )
+    {
+        OSL_ENSURE( sal_False, "AccessibleControlShape::disposing: this should never happen!" );
+        Reference< XContainer > xContainer = lcl_getControlContainer( maShapeTreeInfo.GetWindow(), maShapeTreeInfo.GetSdrView() );
+        if ( xContainer.is() )
+        {
+            m_bWaitingForControl = sal_False;
+            xContainer->removeContainerListener( this );
+        }
+    }
 
     // forward the disposel to our inner context
     if ( m_bDisposeNativeContext )
@@ -821,7 +906,7 @@ void AccessibleControlShape::initializeComposedState()
     OSL_PRECOND( pComposedStates,
         "AccessibleControlShape::initializeComposedState: no composed set!" );
 
-    // we need to reset some states of the composed set, because the either do not apply
+    // we need to reset some states of the composed set, because they either do not apply
     // for controls in alive mode, or are in the responsibility of the UNO-control, anyway
     pComposedStates->RemoveState( AccessibleStateType::ENABLED );       // this is controlled by the UNO-control
     pComposedStates->RemoveState( AccessibleStateType::FOCUSABLE );     // this is controlled by the UNO-control
@@ -861,3 +946,45 @@ void AccessibleControlShape::initializeComposedState()
     }
 }
 
+void SAL_CALL AccessibleControlShape::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    Reference< XContainer > xContainer( _rEvent.Source, UNO_QUERY );
+    Reference< XControl > xControl( _rEvent.Element, UNO_QUERY );
+
+    OSL_ENSURE( xContainer.is() && xControl.is(),
+        "AccessibleControlShape::elementInserted: invalid event description!" );
+
+    if ( !xControl.is() )
+        return;
+
+    ensureControlModelAccess();
+
+    Reference< XInterface > xNewNormalized( xControl->getModel(), UNO_QUERY );
+    Reference< XInterface > xMyModelNormalized( m_xControlModel, UNO_QUERY );
+    if ( xNewNormalized.get() && xMyModelNormalized.get() )
+    {
+        // now finally the control for the model we're responsible for has been inserted into the container
+        Reference< XInterface > xKeepAlive( *this );
+
+        // first, we're not interested in any more container events
+        if ( xContainer.is() )
+        {
+            xContainer->removeContainerListener( this );
+            m_bWaitingForControl = sal_False;
+        }
+
+        // second, we need to replace ourself with a new version, which now can be based on the
+        // control
+        OSL_VERIFY( mpParent->ReplaceChild ( this, mxShape, mnIndex, maShapeTreeInfo ) );
+    }
+}
+
+void SAL_CALL AccessibleControlShape::elementRemoved( const ::com::sun::star::container::ContainerEvent& ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // not interested in
+}
+
+void SAL_CALL AccessibleControlShape::elementReplaced( const ::com::sun::star::container::ContainerEvent& ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // not interested in
+}
