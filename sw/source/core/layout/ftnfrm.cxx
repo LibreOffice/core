@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:07:07 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,7 @@ SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
                     }
                     else
                     {
-                        pSect = pSect->FindMaster();
+                        pSect = (SwSectionFrm*)pSect->FindMaster();
                         if( !pSect || !pSect->Lower() )
                             return 0;
                         ASSERT( pSect->Lower()->IsColumnFrm(),
