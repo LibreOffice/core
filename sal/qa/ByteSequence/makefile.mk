@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 16:36:37 $
+#   last change: $Author: obo $ $Date: 2004-03-19 14:46:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..
 
 PRJNAME=sal
-TARGET=qa
+TARGET=qa_bytesequence
 # this is removed at the moment because we need some enhancements
 # TESTDIR=TRUE
 
