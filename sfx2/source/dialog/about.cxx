@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-21 13:05:16 $
+ *  last change: $Author: pb $ $Date: 2002-05-31 13:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
         GetpApp()->InsertAccel( pFirstAccel );
     }
 
-    // Hintergrund-Farbe Weiss
-    Color aWhiteCol( COL_WHITE );
+    // set for background and text the correct system color
+    const StyleSettings& rSettings = GetSettings().GetStyleSettings();
+    Color aWhiteCol( rSettings.GetWindowColor() );
     Wallpaper aWall( aWhiteCol );
     SetBackground( aWall );
     Font aNewFont( aCopyrightText.GetFont() );
@@ -216,7 +217,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     aVersionText.SetBackground( aWall );
     aCopyrightText.SetBackground( aWall );
 
-    Color aTextColor( COL_BLACK );
+    Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
 
@@ -324,13 +325,6 @@ IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
     SetMapMode( aMapMode );
     bNormal = FALSE;
 
-    // text always black on white
-    Font aFont = GetFont();
-    aFont.SetTransparent( TRUE );
-    Color aBlackCol( COL_BLACK );
-    aFont.SetColor( aBlackCol );
-    SetFont( aFont );
-
     // start scroll Timer
     aTimer.SetTimeout( 60 );
     aTimer.Start();
@@ -389,6 +383,9 @@ void AboutDialog::Paint( const Rectangle& rRect )
 
     if ( nDevCnt )
     {
+        // use deactive color for some headers
+        Color aGrayColor = GetSettings().GetStyleSettings().GetDeactiveColor();
+
         for ( USHORT i = 0; i < nDevCnt; ++i )
         {
             String aStr = aDeveloperAry.GetString(i);
@@ -414,16 +411,13 @@ void AboutDialog::Paint( const Rectangle& rRect )
             {
                 if ( nVal )
                 {
-                    // eine "Uberschrift hervorheben
+                    // emphasize the headers
                     Font aFont = GetFont();
                     FontWeight eOldWeight = aFont.GetWeight();
                     Color aOldCol = aFont.GetColor();
                     aFont.SetWeight( (FontWeight)nVal );
                     if ( aStr.GetChar(1) != ' ' && aStr.GetChar(aStr.Len()-2) != ' ' )
-                    {
-                        Color aGrayCol( COL_GRAY );
-                        aFont.SetColor( aGrayCol );
-                    }
+                        aFont.SetColor( aGrayColor );
                     SetFont( aFont );
                     long nOldW = aSize.Width();
                     aSize = Size(GetTextWidth( aStr ),GetTextHeight());
