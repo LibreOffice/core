@@ -1,0 +1,213 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CommandGroup.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:21:53 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_CommandGroup_idl__
+#define __com_sun_star_frame_CommandGroup_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** provides information about a supported command
+
+    @see XDispatchInformationProvider
+    @see Controller
+
+    @since OOo 2.0
+ */
+published constants CommandGroup
+{
+    //-------------------------------------------------------------------------
+    /** specifies interal commands.
+     */
+    const short INTERNAL = 0;
+
+    //-------------------------------------------------------------------------
+    /** specifies application based commands.
+     */
+    const short APPLICATION = 1;
+
+    //-------------------------------------------------------------------------
+    /** specifies view specific commands.
+     */
+    const short VIEW = 2;
+
+    //-------------------------------------------------------------------------
+    /** specifies document specific commands.
+     */
+    const short DOCUMENT = 3;
+
+    //-------------------------------------------------------------------------
+    /** specifies edit specific commands.
+     */
+    const short EDIT = 4;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands used by the built-in Basic.
+     */
+    const short MACRO = 5;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands to change options.
+     */
+    const short OPTIONS = 6;
+
+    //-------------------------------------------------------------------------
+    /** specifies math specific commands.
+     */
+    const short MATH = 7;
+
+    //-------------------------------------------------------------------------
+    /** specifies navigate commands.
+     */
+    const short NAVIGATOR = 8;
+
+    //-------------------------------------------------------------------------
+    /** specifies insert commands.
+     */
+    const short INSERT = 9;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to formats.
+     */
+    const short FORMAT = 10;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to templates.
+     */
+    const short TEMPLATE = 11;
+
+    //-------------------------------------------------------------------------
+    /** specifies text specific commands.
+     */
+    const short TEXT = 12;
+
+    //-------------------------------------------------------------------------
+    /** specifies frame specific commands.
+     */
+    const short FRAME = 13;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to graphical data.
+     */
+    const short GRAPHIC = 14;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to tables.
+     */
+    const short TABLE = 15;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to bullets and numbering.
+     */
+    const short ENUMERATION = 16;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to data.
+     */
+    const short DATA = 17;
+
+    //-------------------------------------------------------------------------
+    /** specifies special commands.
+     */
+    const short SPECIAL = 18;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to images.
+     */
+    const short IMAGE = 19;
+
+    //-------------------------------------------------------------------------
+    /** specifies chart specific commands.
+     */
+    const short CHART = 20;
+
+    //-------------------------------------------------------------------------
+    /** specifies explorer specific commands.
+     */
+    const short EXPLORER = 21;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to connectors.
+     */
+    const short CONNECTOR = 22;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to modifications.
+     */
+    const short MODIFY = 23;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to drawing.
+     */
+    const short DRAWING = 24;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to controls.
+     */
+    const short CONTROLS = 25;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
