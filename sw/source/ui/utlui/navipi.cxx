@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:56:23 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,8 +957,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     aContentTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
-
-    aContentTree.SetSpaceBetweenEntries(0);
+    aContentTree.SetSpaceBetweenEntries(3);
     aContentTree.SetSelectionMode( SINGLE_SELECTION );
     aContentTree.SetDragDropMode(   SV_DRAGDROP_CTRL_MOVE |
                                     SV_DRAGDROP_CTRL_COPY |
