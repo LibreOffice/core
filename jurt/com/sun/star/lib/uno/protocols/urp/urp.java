@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-02 09:01:04 $
+ *  last change: $Author: kr $ $Date: 2001-03-12 15:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-02-02 09:01:04 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-03-12 15:46:07 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -342,7 +342,6 @@ public class urp extends Protocol {
         return result;
     }
 
-
     public void writeRequest(String oid,
                              TypeDescription zInterface,
                              String operation,
@@ -355,164 +354,163 @@ public class urp extends Protocol {
 
         ++ _requestsSend;
         ++ _message_count;
-        synchronized(_marshal) {
-            MethodDescription methodDescription = zInterface.getMethodDescription(operation);
 
-            byte header = 0;
-            boolean bigHeader = false;
+        MethodDescription methodDescription = zInterface.getMethodDescription(operation);
 
-            if(_out_oid == null || !oid.equals(_out_oid)) { // change the oid?
-                header |= NEWOID;
+        byte header = 0;
+        boolean bigHeader = false;
 
-                _out_oid = oid;
-                bigHeader = true;
-            }
-            else
-                oid = null;
+        if(_out_oid == null || !oid.equals(_out_oid)) { // change the oid?
+            header |= NEWOID;
+
+            _out_oid = oid;
+            bigHeader = true;
+        }
+        else
+            oid = null;
 
 
-            if(_out_interface == null || !_out_interface.equals(zInterface)) { // change interface
-                header |= NEWTYPE;
+        if(_out_interface == null || !_out_interface.equals(zInterface)) { // change interface
+            header |= NEWTYPE;
 
-                _out_interface = zInterface;
-                bigHeader = true;
-            }
-            else
-                zInterface = null;
+            _out_interface = zInterface;
+            bigHeader = true;
+        }
+        else
+            zInterface = null;
 
-            if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id
-                header |= NEWTID;
+        if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id
+            header |= NEWTID;
 
-                _out_threadId = threadId;
+            _out_threadId = threadId;
 
-                bigHeader = true;
-            }
-            else
-                threadId = null;
+            bigHeader = true;
+        }
+        else
+            threadId = null;
 
-            boolean hasExFlags = false;
+        boolean hasExFlags = false;
 
-            // if synchron is provided, test if it differs from declaration
-            if(synchron[0] != null) {
-                if(methodDescription.isOneway() == synchron[0].booleanValue()) {
-                    bigHeader = true;
-                    hasExFlags = true;
-                }
-            }
-            else
-                synchron[0] = new Boolean(!methodDescription.isOneway());
-
-            // if mustReply is provided and if it differs from synchron
-            // then we have to write it
-            if(mustReply[0] != null && (mustReply[0] != synchron[0])) {
+        // if synchron is provided, test if it differs from declaration
+        if(synchron[0] != null) {
+            if(methodDescription.isOneway() == synchron[0].booleanValue()) {
                 bigHeader = true;
                 hasExFlags = true;
             }
+        }
+        else
+            synchron[0] = new Boolean(!methodDescription.isOneway());
+
+        // if mustReply is provided and if it differs from synchron
+        // then we have to write it
+        if(mustReply[0] != null && (mustReply[0] != synchron[0])) {
+            bigHeader = true;
+            hasExFlags = true;
+        }
+        else
+            mustReply[0] = synchron[0];
+
+        if(bigHeader) { // something has changed, send big header
+            header |= BIG_HEADER; // big header
+            header |= REQUEST;
+            header |= hasExFlags ? MOREFLAGS : 0;
+
+            if(methodDescription.getIndex() > 255)
+                header |= LONGMETHODID;
+
+            _marshal.writebyte(header);
+
+            if(hasExFlags) {// are there extended flags to write?
+                byte exFlags = 0;
+
+                exFlags |= synchron[0].booleanValue() ? SYNCHRONOUSE : 0;
+                exFlags |= mustReply[0].booleanValue() ? MUSTREPLY : 0;
+
+                _marshal.writebyte(exFlags);
+            }
+
+            // write the method id
+            if(methodDescription.getIndex() > 255)
+                _marshal.writeshort((short)methodDescription.getIndex());
             else
-                mustReply[0] = synchron[0];
+                _marshal.writebyte((byte)methodDescription.getIndex());
 
-            if(bigHeader) { // something has changed, send big header
-                header |= BIG_HEADER; // big header
-                header |= REQUEST;
-                header |= hasExFlags ? MOREFLAGS : 0;
+            if(zInterface != null) // has the interface changed? -> write it
+                _marshal.writeTypeDescrption(zInterface);
 
-                if(methodDescription.getIndex() > 255)
-                    header |= LONGMETHODID;
+            if(oid != null) // has the oid changed? -> write it
+                _marshal.writeOid(_out_oid);
+
+            if(threadId != null) // has the thread id changed? -> write it
+                _marshal.writeThreadID(threadId);
+        }
+        else { // simple request
+            if(methodDescription.getIndex() <= 0x2f) // does the method id fit in the header?
+                _marshal.writebyte((byte)methodDescription.getIndex());
+            else { // no
+                header |= DIR_MID;
+                header |= methodDescription.getIndex() >> 8;
 
                 _marshal.writebyte(header);
-
-                if(hasExFlags) {// are there extended flags to write?
-                    byte exFlags = 0;
-
-                    exFlags |= synchron[0].booleanValue() ? SYNCHRONOUSE : 0;
-                    exFlags |= mustReply[0].booleanValue() ? MUSTREPLY : 0;
-
-                      _marshal.writebyte(exFlags);
-                }
-
-                // write the method id
-                if(methodDescription.getIndex() > 255)
-                    _marshal.writeshort((short)methodDescription.getIndex());
-                else
-                    _marshal.writebyte((byte)methodDescription.getIndex());
-
-                if(zInterface != null) // has the interface changed? -> write it
-                    _marshal.writeTypeDescrption(zInterface);
-
-                if(oid != null) // has the oid changed? -> write it
-                    _marshal.writeOid(_out_oid);
-
-                if(threadId != null) // has the thread id changed? -> write it
-                    _marshal.writeThreadID(threadId);
+                _marshal.writebyte((byte)(methodDescription.getIndex() & 0xff));
             }
-            else { // simple request
-                if(methodDescription.getIndex() <= 0x2f) // does the method id fit in the header?
-                    _marshal.writebyte((byte)methodDescription.getIndex());
-                else { // no
-                    header |= DIR_MID;
-                    header |= methodDescription.getIndex() >> 8;
-
-                    _marshal.writebyte(header);
-                    _marshal.writebyte((byte)(methodDescription.getIndex() & 0xff));
-                }
-            }
-
-            // write the in parameters
-            TypeDescription in_sig[] = methodDescription.getInSignature();
-            TypeDescription out_sig[] = methodDescription.getOutSignature();
-            for(int i = 0; i < in_sig.length; ++ i) {
-                if(in_sig[i] != null) { // is it an in parameter?
-                    if(out_sig[i] != null)  // is it also an out parameter?
-                        _marshal.writeObject(out_sig[i].getComponentType(), ((Object [])params[i])[0]);
-                    else // in only
-                        _marshal.writeObject(in_sig[i], params[i]);
-                }
-            }
-
-            if(synchron[0].booleanValue()) // if we are waiting for a reply, the reply is pending
-                putPendingRequest(_out_threadId, new Object[]{params, out_sig, methodDescription.getReturnSig()});
         }
+
+        // write the in parameters
+        TypeDescription in_sig[] = methodDescription.getInSignature();
+        TypeDescription out_sig[] = methodDescription.getOutSignature();
+        for(int i = 0; i < in_sig.length; ++ i) {
+            if(in_sig[i] != null) { // is it an in parameter?
+                if(out_sig[i] != null)  // is it also an out parameter?
+                    _marshal.writeObject(out_sig[i].getComponentType(), ((Object [])params[i])[0]);
+                else // in only
+                    _marshal.writeObject(in_sig[i], params[i]);
+            }
+        }
+
+        if(synchron[0].booleanValue()) // if we are waiting for a reply, the reply is pending
+            putPendingRequest(_out_threadId, new Object[]{params, out_sig, methodDescription.getReturnSig()});
     }
 
     public void writeReply(boolean exception, ThreadID threadId, Object result) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReply:" + exception + " " + threadId + " " + result);
 
-        synchronized(_marshal) {
-            Object objects[] = (Object[])removePendingReply(threadId);
-            Object params[] = (Object[])objects[0];
-            TypeDescription signature[] = (TypeDescription[])objects[1];
-            TypeDescription resType     = (TypeDescription)objects[2];
+        ++ _message_count;
 
-            byte header = BIG_HEADER; // big header
+        Object objects[] = (Object[])removePendingReply(threadId);
+        Object params[] = (Object[])objects[0];
+        TypeDescription signature[] = (TypeDescription[])objects[1];
+        TypeDescription resType     = (TypeDescription)objects[2];
 
-            if(exception) { // has an exception occurred?
-                header |= EXCEPTION;
+        byte header = BIG_HEADER; // big header
 
-                signature = __emptyTypeDescArray;
-                resType = TypeDescription.__any_TypeDescription;
-            }
+        if(exception) { // has an exception occurred?
+            header |= EXCEPTION;
 
-            if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id ?
-                header |= NEWTID;
-
-                _out_threadId = threadId;
-            }
-            else
-                threadId = null;
-
-            _marshal.writebyte(header);
-
-            if(threadId != null) // has the thread id changed? -> write it
-                _marshal.writeThreadID(threadId);
-
-            // write the result
-            _marshal.writeObject(resType, result);
-
-            // write the out parameters
-            for(int i = 0; i < signature.length; ++ i)
-                if(signature[i] != null)
-                    _marshal.writeObject(signature[i].getComponentType(), Array.get(params[i], 0));
+            signature = __emptyTypeDescArray;
+            resType = TypeDescription.__any_TypeDescription;
         }
+
+        if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id ?
+            header |= NEWTID;
+
+            _out_threadId = threadId;
+        }
+        else
+            threadId = null;
+
+        _marshal.writebyte(header);
+
+        if(threadId != null) // has the thread id changed? -> write it
+            _marshal.writeThreadID(threadId);
+
+        // write the result
+        _marshal.writeObject(resType, result);
+
+        // write the out parameters
+        for(int i = 0; i < signature.length; ++ i)
+            if(signature[i] != null)
+                _marshal.writeObject(signature[i].getComponentType(), Array.get(params[i], 0));
     }
 
 
@@ -531,6 +529,9 @@ public class urp extends Protocol {
 
     private void writeBlock(DataOutput  dataOutput, byte bytes[], int message_count) throws Exception {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
+
+          if(message_count != 1)
+              System.err.println("##### " + getClass().getName() + ".writeBlock: size:" + bytes.length + " message_count:" + message_count);
 
         dataOutput.writeInt(bytes.length);
         dataOutput.writeInt(message_count);
@@ -667,8 +668,11 @@ public class urp extends Protocol {
 
 
     public void flush(DataOutput  dataOutput) throws Exception {
-        writeBlock(dataOutput, _marshal.reset(), _message_count);
-        _message_count = 0;
+        if(_message_count > 0) {
+            writeBlock(dataOutput, _marshal.reset(), _message_count);
+
+            _message_count = 0;
+        }
     }
 
     public IMarshal createMarshal() {
