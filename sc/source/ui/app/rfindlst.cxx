@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rfindlst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: mh $ $Date: 2001-10-22 17:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
 #include "rfindlst.hxx"
 
 // STATIC DATA -----------------------------------------------------------
@@ -78,8 +74,6 @@
 static ColorData aColNames[SC_RANGECOLORS] =
     { COL_LIGHTBLUE, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_GREEN,
         COL_BLUE, COL_RED, COL_MAGENTA, COL_BROWN };
-
-SEG_EOFGLOBALS()
 
 //==================================================================
 
@@ -105,7 +99,4 @@ ColorData ScRangeFindList::GetColorName( USHORT nIndex )        // static
 }
 
 //==================================================================
-
-
-
 
