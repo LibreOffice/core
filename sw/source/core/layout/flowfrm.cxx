@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,10 +346,10 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
         {
             SdrObject *pObj = rObjs[i];
             SdrObjUserCall *pUserCall;
-            const SwFrmFmt *pFmt = pObj->IsWriterFlyFrame() ?
+            const SwFrmFmt *pFmt = pObj->ISA(SwVirtFlyDrawObj) ?
                 ((SwVirtFlyDrawObj*)pObj)->GetFmt() :
                 ((SwContact*)(pUserCall = GetUserCall(pObj)))->GetFmt();
-            const SwRect aRect( pObj->GetBoundRect() );
+            const SwRect aRect( pObj->GetCurrentBoundRect() );
             if ( aRect.IsOver( rRect ) &&
                  pFmt->GetSurround().GetSurround() != SURROUND_THROUGHT )
             {
@@ -357,7 +357,7 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
                     Is_Lower_Of( &rThis, pObj ) )
                     continue;
                 const SwFrm* pAnchor;
-                if( pObj->IsWriterFlyFrame() )
+                if( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     if ( pFly->IsAnLower( &rThis ) )//This Lower vom Fly?
@@ -1076,7 +1076,7 @@ BOOL SwFlowFrm::IsPrevObjMove() const
         for ( USHORT i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
         {
             const SdrObject *pObj = (*pPre->GetDrawObjs())[i];
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
 
