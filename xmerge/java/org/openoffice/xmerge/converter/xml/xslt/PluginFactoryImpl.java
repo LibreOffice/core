@@ -63,7 +63,9 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.DocumentDeserializerFactory;
 import org.openoffice.xmerge.PluginFactory;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
-import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+//import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
+//import org.openoffice.xmerge.converter.xml.OfficeDocument;
+import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 import java.io.InputStream;
@@ -129,9 +131,7 @@ public final class PluginFactoryImpl extends PluginFactory
         return new DocumentDeserializerImpl(this,cd);
     }
 
-
-
-        public org.openoffice.xmerge.Document createDeviceDocument(java.lang.String str, java.io.InputStream inputStream) throws java.io.IOException {
+     public org.openoffice.xmerge.Document createDeviceDocument(java.lang.String str, java.io.InputStream inputStream) throws java.io.IOException {
         String ext = this.getDeviceFileExtension();
         DOMDocument domDoc = new DOMDocument(str,ext);
         domDoc.read(inputStream);
@@ -143,8 +143,17 @@ public final class PluginFactoryImpl extends PluginFactory
         throws IOException {
 
         // read zipped XML stream
-        SxwDocument doc = new SxwDocument(name);
+        GenericOfficeDocument doc = new GenericOfficeDocument(name);
         doc.read(is);
+        return doc;
+    }
+
+     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+        throws IOException {
+
+        // read zipped XML stream
+        GenericOfficeDocument doc = new GenericOfficeDocument(name);
+        doc.read(is,isZip);
         return doc;
     }
 
