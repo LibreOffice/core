@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scripttypedetector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#include <drafts/com/sun/star/i18n/XScriptTypeDetector.hpp>
+#include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -76,7 +76,7 @@
 //  ----------------------------------------------------
 class ScriptTypeDetector : public cppu::WeakImplHelper2
 <
-    ::drafts::com::sun::star::i18n::XScriptTypeDetector,
+    ::com::sun::star::i18n::XScriptTypeDetector,
     ::com::sun::star::lang::XServiceInfo
 >
 {
