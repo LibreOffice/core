@@ -32,7 +32,7 @@ int fstat(int fildes, struct stat *buf)
     if (buf != NULL)
     {
         buf->st_uid = 0; /* root */
-        buf->st_gid = 1; /* other */
+        buf->st_gid = 2; /* bin */
     }
 
     return ret;
