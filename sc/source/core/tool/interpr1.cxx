@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:58:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
 
 #include "interpre.hxx"
 #include "patattr.hxx"
@@ -2947,9 +2948,12 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
 {
     BYTE nParamCount = GetByte();
     USHORT i;
+
+    std::vector<double> values;
     double fSum    = 0.0;
-    double fSumSqr = 0.0;
-    double fVal;
+    double vSum    = 0.0;
+    double vMean    = 0.0;
+    double fVal = 0.0;
     rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -2960,8 +2964,8 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             case svDouble :
             {
                 fVal = GetDouble();
+                values.push_back(fVal);
                 fSum    += fVal;
-                fSumSqr += fVal*fVal;
                 rValCount++;
             }
             break;
@@ -2972,12 +2976,15 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 if (HasCellValueData(pCell))
                 {
                     fVal = GetCellValue( aAdr, pCell );
+                    values.push_back(fVal);
                     fSum += fVal;
-                    fSumSqr += fVal*fVal;
                     rValCount++;
                 }
                 else if ( bTextAsZero && HasCellStringData( pCell ) )
+                {
+                    values.push_back(0.0);
                     rValCount++;
+                }
             }
             break;
             case svDoubleRef :
@@ -2989,8 +2996,8 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 {
                     do
                     {
+                        values.push_back(fVal);
                         fSum += fVal;
-                        fSumSqr += fVal*fVal;
                         rValCount++;
                     }
                     while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
@@ -3011,12 +3018,15 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                             if (!pMat->IsString(i,j))
                             {
                                 fVal= pMat->GetDouble(i,j);
+                                values.push_back(fVal);
                                 fSum += fVal;
-                                fSumSqr += fVal * fVal;
                                 rValCount++;
                             }
                             else if ( bTextAsZero )
+                            {
+                                values.push_back(0.0);
                                 rValCount++;
+                            }
                         }
                     }
                 }
@@ -3025,7 +3035,10 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             case svString :
             {
                 if ( bTextAsZero )
+                {
+                    values.push_back(0.0);
                     rValCount++;
+                }
                 else
                 {
                     Pop();
@@ -3037,7 +3050,13 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 SetError(errIllegalParameter);
         }
     }
-    rVal = ::rtl::math::approxSub( fSumSqr, fSum*fSum/rValCount );
+
+    vMean = fSum / values.size();
+
+    for (i = 0; i < values.size(); i++)
+        vSum += (values[i] - vMean) * (values[i] - vMean);
+
+    rVal = vSum;
 }
 
 
@@ -3411,11 +3430,7 @@ void ScInterpreter::ScMatch()
             rParam.nCol1       = nCol1;
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol2;
-            rParam.bHasHeader  = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = FALSE;
-            rParam.bDuplicate  = FALSE;
+            rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
@@ -3682,11 +3697,6 @@ void ScInterpreter::ScCountIf()
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
             rParam.nRow2       = nRow2;
-            rParam.bHasHeader  = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = FALSE;
-            rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
@@ -3869,11 +3879,6 @@ void ScInterpreter::ScSumIf()
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
             rParam.nRow2       = nRow2;
-            rParam.bHasHeader  = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = FALSE;
-            rParam.bDuplicate  = FALSE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
@@ -4094,11 +4099,7 @@ void ScInterpreter::ScLookup()
         rParam.nRow1       = nRow1;
         rParam.nCol2       = (bSpMatrix ? nCol1 : nCol2);
         rParam.nRow2       = (bSpMatrix ? nRow2 : nRow1);
-        rParam.bHasHeader  = FALSE;
-        rParam.bInplace    = TRUE;
-        rParam.bCaseSens   = FALSE;
-        rParam.bRegExp     = FALSE;
-        rParam.bDuplicate  = FALSE;
+        rParam.bMixedComparison = TRUE;
 
         ScQueryEntry& rEntry = rParam.GetEntry(0);
         rEntry.bDoQuery = TRUE;
@@ -4374,12 +4375,8 @@ void ScInterpreter::ScHLookup()
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol2;
             rParam.nRow2       = nRow1;     // nur in der ersten Zeile suchen
-            rParam.bHasHeader  = FALSE;
             rParam.bByRow      = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = FALSE;
-            rParam.bDuplicate  = FALSE;
+            rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
@@ -4636,11 +4633,7 @@ void ScInterpreter::ScVLookup()
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol1;     // nur in der ersten Spalte suchen
             rParam.nRow2       = nRow2;
-            rParam.bHasHeader  = FALSE;
-            rParam.bInplace    = TRUE;
-            rParam.bCaseSens   = FALSE;
-            rParam.bRegExp     = FALSE;
-            rParam.bDuplicate  = FALSE;
+            rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             rEntry.bDoQuery = TRUE;
@@ -5212,9 +5205,13 @@ void ScInterpreter::ScDBProduct()
 
 void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 {
+    std::vector<double> values;
+    double vSum    = 0.0;
+    double vMean    = 0.0;
+    int i = 0;
+
     rValCount = 0.0;
     double fSum    = 0.0;
-    double fSumSqr = 0.0;
     SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
@@ -5228,8 +5225,8 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
             do
             {
                 rValCount++;
+                values.push_back(fVal);
                 fSum += fVal;
-                fSumSqr += fVal*fVal;
             }
             while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
         }
@@ -5237,7 +5234,13 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     }
     else
         SetIllegalParameter();
-    rVal = ::rtl::math::approxSub( fSumSqr, fSum*fSum/rValCount );
+
+    vMean = fSum / values.size();
+
+    for (i = 0; i < values.size(); i++)
+        vSum += (values[i] - vMean) * (values[i] - vMean);
+
+    rVal = vSum;
 }
 
 
