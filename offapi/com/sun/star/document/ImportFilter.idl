@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 10:04:31 $
+ *  last change: $Author: mi $ $Date: 2000-12-14 11:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,14 +127,30 @@ service ImportFilter
      */
     interface com::sun::star::beans::XPropertySet;
 
-    [property, readonly]    string  Type                ;   /// filter is registered for these type
-    [property, readonly]    string  UIName              ;   /// localized name of filter to show it at UI elements
-    [property, readonly]    string  DocumentService     ;   /// service name which present the document
-    [property, readonly]    string  FilterService       ;   /// service name of these filter implementation
-    [property, readonly]    string  Flags               ;   /// flags to describe the filter
-    [property, readonly]    string  UserData            ;   /// additional informations with private structure!
-    [property, readonly]    string  FileFormatVersion   ;   /// version number of file format
-    [property, readonly]    string  TemplateName        ;   /// name of suitable template
+    /// filter is registered for these type
+    [property, readonly]    string  Type;
+
+    /// localized name of filter to show it at UI elements
+    [property, readonly]    string  UIName;
+
+    /// service name which present the document
+    [property, readonly]    string  DocumentService;
+
+    /// service name of these filter implementation
+    [property, readonly]    string  FilterService;
+
+    /// flags to describe the filter
+    [property, readonly]    string  Flags;
+
+    /// additional informations with private structure!
+    [property, readonly]    string  UserData;
+
+    /// version number of file format
+    [property, readonly]    string  FileFormatVersion;
+
+    /// name of suitable template
+    [property, readonly]    string  TemplateName;
+
 };
 
 //=============================================================================
