@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 13:14:17 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 15:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,7 +1418,7 @@ void Desktop::Main()
     delete pLabelResMgr;
 
 #ifndef BUILD_SOSL
-    if( !TabRegDialog(aTitle) ) return;
+    if( TabRegDialog(aTitle) ) return;
 #endif
 
 #ifndef PRODUCT
@@ -1965,10 +1965,32 @@ void Desktop::OpenDefault()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
-    ::rtl::OUString aName;
+    ::rtl::OUString     aName;
+    SvtModuleOptions    aOpt;
+
+    CommandLineArgs* pArgs = GetCommandLineArgs();
+    if ( pArgs->HasModuleParam() )
+    {
+        // Support new command line parameters to start a module
+        if ( pArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITER );
+        else if ( pArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_CALC );
+        else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
+        else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
+        else if ( pArgs->IsMath() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_MATH );
+        else if ( pArgs->IsGlobal() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITERGLOBAL );
+        else if ( pArgs->IsWeb() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITERWEB );
+    }
+
     if ( !aName.getLength() )
     {
-        SvtModuleOptions aOpt;
+        // Old way to create a default document
         if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITER );
         else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 13:32:53 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 15:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifdef DEBUG
 #include <assert.h>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 using namespace vos;
@@ -698,6 +701,13 @@ OfficeIPCThread::~OfficeIPCThread()
     pGlobalOfficeIPCThread = 0;
 }
 
+static void AddURLToStringList( const rtl::OUString& aURL, rtl::OUString& aStringList )
+{
+    if ( aStringList.getLength() )
+        aStringList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+    aStringList += aURL;
+}
+
 void SAL_CALL OfficeIPCThread::run()
 {
     while (schedule())
@@ -767,6 +777,29 @@ void SAL_CALL OfficeIPCThread::run()
                 bDocRequestSent |= aCmdLineArgs.GetViewList( pRequest->aViewList );
                 bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
                 bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
+
+                // Special command line args to create an empty document for a given module
+                if ( aCmdLineArgs.HasModuleParam() )
+                {
+                    SvtModuleOptions aOpt;
+                    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
+                    if ( aCmdLineArgs.IsWriter() )
+                        eFactory = SvtModuleOptions::E_WRITER;
+                    else if ( aCmdLineArgs.IsCalc() )
+                        eFactory = SvtModuleOptions::E_CALC;
+                    else if ( aCmdLineArgs.IsDraw() )
+                        eFactory = SvtModuleOptions::E_DRAW;
+                    else if ( aCmdLineArgs.IsImpress() )
+                        eFactory = SvtModuleOptions::E_IMPRESS;
+                    else if ( aCmdLineArgs.IsMath() )
+                        eFactory = SvtModuleOptions::E_MATH;
+                    else if ( aCmdLineArgs.IsGlobal() )
+                        eFactory = SvtModuleOptions::E_WRITERGLOBAL;
+                    else if ( aCmdLineArgs.IsWeb() )
+                        eFactory = SvtModuleOptions::E_WRITERWEB;
+                    AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+                    bDocRequestSent = sal_True;
+                }
             }
 
 
@@ -820,7 +853,7 @@ void SAL_CALL OfficeIPCThread::run()
     }
 }
 
-void AddToDispatchList(
+static void AddToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
     const OUString& aRequestList,
     DispatchWatcher::RequestType nType,

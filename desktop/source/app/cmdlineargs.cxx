@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 13:15:14 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,22 @@
 
 namespace desktop
 {
+
+static CommandLineArgs::BoolParam aModuleGroupDefinition[] =
+{
+    CommandLineArgs::CMD_BOOLPARAM_WRITER,
+    CommandLineArgs::CMD_BOOLPARAM_CALC,
+    CommandLineArgs::CMD_BOOLPARAM_DRAW,
+    CommandLineArgs::CMD_BOOLPARAM_IMPRESS,
+    CommandLineArgs::CMD_BOOLPARAM_GLOBAL,
+    CommandLineArgs::CMD_BOOLPARAM_MATH,
+    CommandLineArgs::CMD_BOOLPARAM_WEB
+};
+
+CommandLineArgs::GroupDefinition CommandLineArgs::m_pGroupDefinitions[ CommandLineArgs::CMD_GRPID_COUNT ] =
+{
+    { 7, aModuleGroupDefinition }
+};
 
 CommandLineArgs::CommandLineArgs()
 {
@@ -336,6 +352,68 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_MASTER, sal_True );
         return sal_True;
     }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WRITER );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_WRITER, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-calc" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_CALC );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_CALC, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-draw" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_DRAW );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_DRAW, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-impress" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_IMPRESS );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_IMPRESS, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-global" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_GLOBAL );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_GLOBAL, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-math" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_MATH );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_MATH, sal_True );
+        return sal_True;
+    }
+    else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-web" )) == sal_True )
+    {
+        sal_Bool bAlreadySet = CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_WEB );
+        if ( !bAlreadySet )
+            SetBoolParam_Impl( CMD_BOOLPARAM_WEB, sal_True );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nExcludeMember ) const
+{
+    // Check if at least one bool param out of a group is set. An exclude member can be provided.
+    for ( int i = 0; i < m_pGroupDefinitions[nGroupId].nCount; i++ )
+    {
+        BoolParam nParam = m_pGroupDefinitions[nGroupId].pGroupMembers[i];
+        if ( nParam != nExcludeMember && m_aBoolParams[nParam] )
+            return sal_True;
+    }
 
     return sal_False;
 }
@@ -451,6 +529,54 @@ sal_Bool CommandLineArgs::IsNoLockcheck() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_NOLOCKCHECK ];
+}
+
+sal_Bool CommandLineArgs::IsWriter() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_WRITER ];
+}
+
+sal_Bool CommandLineArgs::IsCalc() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_CALC ];
+}
+
+sal_Bool CommandLineArgs::IsDraw() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_DRAW ];
+}
+
+sal_Bool CommandLineArgs::IsImpress() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_IMPRESS ];
+}
+
+sal_Bool CommandLineArgs::IsGlobal() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_GLOBAL ];
+}
+
+sal_Bool CommandLineArgs::IsMath() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_MATH ];
+}
+
+sal_Bool CommandLineArgs::IsWeb() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_WEB ];
+}
+
+sal_Bool CommandLineArgs::HasModuleParam() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return CheckGroupMembers( CMD_GRPID_MODULE, CMD_BOOLPARAM_COUNT );
 }
 
 sal_Bool CommandLineArgs::GetPortalConnectString( ::rtl::OUString& rPara ) const

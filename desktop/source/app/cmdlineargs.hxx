@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 13:15:14 $
+ *  last change: $Author: cd $ $Date: 2002-10-24 15:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,13 @@ class CommandLineArgs
             CMD_BOOLPARAM_NOLOGO,
             CMD_BOOLPARAM_NOLOCKCHECK,
             CMD_BOOLPARAM_MASTER,
+            CMD_BOOLPARAM_WRITER,
+            CMD_BOOLPARAM_CALC,
+            CMD_BOOLPARAM_DRAW,
+            CMD_BOOLPARAM_IMPRESS,
+            CMD_BOOLPARAM_GLOBAL,
+            CMD_BOOLPARAM_MATH,
+            CMD_BOOLPARAM_WEB,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
@@ -113,6 +120,12 @@ class CommandLineArgs
             CMD_STRINGPARAM_COUNT           // must be last element!
         };
 
+        enum GroupParamId
+        {
+            CMD_GRPID_MODULE,
+            CMD_GRPID_COUNT
+        };
+
         CommandLineArgs();
         CommandLineArgs( const ::vos::OExtCommandLine& aExtCmdLine );
         CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
@@ -124,6 +137,7 @@ class CommandLineArgs
         const rtl::OUString&    GetStringParam( BoolParam eParam ) const;
         void                    SetStringParam( BoolParam eParam, const rtl::OUString& bNewValue );
 
+        // Access to bool parameters
         sal_Bool                IsMaster() const;
         sal_Bool                IsMinimized() const;
         sal_Bool                IsInvisible() const;
@@ -136,7 +150,16 @@ class CommandLineArgs
         sal_Bool                IsTerminateAfterInit() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
+        sal_Bool                IsWriter() const;
+        sal_Bool                IsCalc() const;
+        sal_Bool                IsDraw() const;
+        sal_Bool                IsImpress() const;
+        sal_Bool                IsGlobal() const;
+        sal_Bool                IsMath() const;
+        sal_Bool                IsWeb() const;
+        sal_Bool                HasModuleParam() const;
 
+        // Access to string parameters
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
         sal_Bool                GetAcceptString( ::rtl::OUString& rPara) const;
         sal_Bool                GetUserDir( ::rtl::OUString& rPara) const;
@@ -151,6 +174,12 @@ class CommandLineArgs
         sal_Bool                GetPrinterName( ::rtl::OUString& rPara ) const;
 
     private:
+        struct GroupDefinition
+        {
+            sal_Int32   nCount;
+            BoolParam*  pGroupMembers;
+        };
+
         // no copy and operator=
         CommandLineArgs( const CommandLineArgs& );
         operator=( const CommandLineArgs& );
@@ -159,6 +188,7 @@ class CommandLineArgs
         void                    ParseCommandLine_Impl( const ::vos::OExtCommandLine& );
         void                    ParseCommandLine_String( const ::rtl::OUString& );
         void                    ResetParamValues();
+        sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
         void                    AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
         void                    SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
@@ -167,6 +197,9 @@ class CommandLineArgs
         rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
         sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
         mutable ::osl::Mutex    m_aMutex;
+
+        // static definition for groups where only one member can be true
+        static GroupDefinition  m_pGroupDefinitions[ CMD_GRPID_COUNT ];
 };
 
 }
