@@ -5,5 +5,4 @@
 "ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getLanguageProperties()"
 "ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFileSetNames()"
 "ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFilesInFileSet()"
-"ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getFilesInFileSet()"
 "ScriptInfo";"drafts::com::sun::star::script::framework::storage::XScriptInfo";"getDescription()"
