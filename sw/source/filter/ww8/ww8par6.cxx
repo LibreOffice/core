@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:15:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2488,7 +2488,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                             if (pTblFmt)
                             {
                                 SwFmtFrmSize aSize = pTblFmt->GetFrmSize();
-                                aSize.SetSizeType(ATT_MIN_SIZE);
+                                aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFmt->SetAttr(aSize);
                                 pTblFmt->SetAttr(SwFmtHoriOrient(0,HORI_FULL));
@@ -2731,6 +2731,8 @@ void SwWW8ImplReader::StopApo()
         SwFlyPara reader will have already set a fallback width of the
         printable regions width, so we should reuse it. Despite the related
         problems with layout addressed with a hack in WW8FlyPara's constructor
+        #i27204# Added AutoWidth setting. Left the old CalculateFlySize in place
+        so that if the user unselects autowidth, the width doesn't max out
         */
         else if( !pWFlyPara->nSp28 )
         {
@@ -2738,6 +2740,7 @@ void SwWW8ImplReader::StopApo()
             SfxItemSet aFlySet( pSFlyPara->pFlyFmt->GetAttrSet() );
 
             SwFmtFrmSize aSize(ItemGet<SwFmtFrmSize>(aFlySet, RES_FRM_SIZE));
+
             aFlySet.ClearItem(RES_FRM_SIZE);
 
             CalculateFlySize(aFlySet, pSFlyPara->pMainTextPos->nNode,
@@ -2746,6 +2749,7 @@ void SwWW8ImplReader::StopApo()
             nNewWidth = ItemGet<SwFmtFrmSize>(aFlySet, RES_FRM_SIZE).GetWidth();
 
             aSize.SetWidth(nNewWidth);
+            aSize.SetWidthSizeType(ATT_VAR_SIZE);
 
             pSFlyPara->pFlyFmt->SetAttr(aSize);
         }
