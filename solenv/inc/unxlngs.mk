@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:34:14 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:19:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,7 +106,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -fpermissive -fno-rtti 
+CFLAGSCXX= -pipe -fno-rtti 
 
 # HACK: enable Hamburg developers to build on glibc-2.2 machines but compile vs. glibc-2.1 headers
 .IF "$(BUILD_SPECIAL)"==""
@@ -133,9 +133,7 @@ CFLAGSDBGUTIL=
 # Compiler flags for enabling optimazations
 # CFLAGSOPT=-O2
 # reduce to -O1 to avoid optimisation problems
-# CFLAGSOPT=-01
-# We use -03, also see IZ 17788 -fno-strict-aliasing
-CFLAGSOPT=-O3 -fno-strict-aliasing
+CFLAGSOPT=-O1 -fno-strict-aliasing
 # Compiler flags for disabling optimazations
 #CFLAGSNOOPT=
 CFLAGSNOOPT=-fno-strict-aliasing
