@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:07:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ class SmCmdBoxWindow;
 class SmEditWindow : public Window, public DropTargetHelper
 {
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible >  xAccessible;
+        ::com::sun::star::accessibility::XAccessible >  xAccessible;
     SmEditAccessible *                                          pAccessible;
 
     SmCmdBoxWindow &rCmdBox;
@@ -179,7 +179,7 @@ public:
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
     // for Accessibility
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     SmEditAccessible *   GetAccessible()  { return pAccessible; }
 };
