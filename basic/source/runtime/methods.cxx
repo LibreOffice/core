@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-05 16:47:18 $
+ *  last change: $Author: ab $ $Date: 2001-03-08 13:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,9 +1958,10 @@ RTLFUNC(IsMissing)
 // Function looks for wildcards, removes them and always returns the pure path
 String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bool bUNC )
 {
-    pRTLData->bWildcard = sal_False;
+    pRTLData->bNameCheck = sal_False;
     pRTLData->sExtension = String();
     pRTLData->sPreWildcard = String();
+    pRTLData->sFullNameToBeChecked = String();
 
     String aFileParam = rFileParam;
     String aPathStr;
@@ -1974,27 +1975,27 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
     }
 
     sal_Char cWild = '*';
+    sal_Char cDelim1 = (sal_Char)'/';
+    sal_Char cDelim2 = (sal_Char)'\\';
+    xub_StrLen nLen = aFileParam.Len();
+
+    xub_StrLen nLastDelim = aFileParam.SearchBackward( cDelim1 );
+    if( nLastDelim == STRING_NOTFOUND )
+        nLastDelim = aFileParam.SearchBackward( cDelim2 );
+    String aPureFileName;
+    if( nLastDelim == STRING_NOTFOUND )
+    {
+        aPureFileName = aFileParam;
+        aFileParam = String();
+    }
+    else
+    {
+        aPureFileName = aFileParam.Copy( nLastDelim + 1 );
+        aFileParam = aFileParam.Copy( 0, nLastDelim );
+    }
+
     if( !aPathStr.Len() || aPathStr.SearchBackward( cWild ) != STRING_NOTFOUND )
     {
-        sal_Char cDelim1 = (sal_Char)'/';
-        sal_Char cDelim2 = (sal_Char)'\\';
-        xub_StrLen nLen = aFileParam.Len();
-
-        xub_StrLen nLastDelim = aFileParam.SearchBackward( cDelim1 );
-        if( nLastDelim == STRING_NOTFOUND )
-            nLastDelim = aFileParam.SearchBackward( cDelim2 );
-        String aPureFileName;
-        if( nLastDelim == STRING_NOTFOUND )
-        {
-            aPureFileName = aFileParam;
-            aFileParam = String();
-        }
-        else
-        {
-            aPureFileName = aFileParam.Copy( nLastDelim + 1 );
-            aFileParam = aFileParam.Copy( 0, nLastDelim );
-        }
-
         // Try again to get a valid URL/UNC-path with only the path
         if( bUNC )
             aPathStr = getFullPathUNC( aFileParam );
@@ -2024,12 +2025,18 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
                 nLastDot  != STRING_NOTFOUND &&
                 nLastWild == nLastDot-1 )
             {
-                pRTLData->bWildcard = sal_True;
+                pRTLData->bNameCheck = sal_True;
                 if( !bAnyExtension )
                     pRTLData->sExtension = aPureFileName.Copy( nLastDot + 1 );
                 pRTLData->sPreWildcard = aPureFileName.Copy( 0, nLastWild );
             }
         }
+    }
+    // Check if a complete file name has to be checked
+    else if( aPureFileName.Len() )
+    {
+        pRTLData->bNameCheck = sal_True;
+        pRTLData->sFullNameToBeChecked = aPureFileName;
     }
     return aPathStr;
 }
@@ -2039,31 +2046,42 @@ sal_Bool implCheckWildcard( const String& rName, SbiRTLData* pRTLData )
     sal_Bool bMatch = sal_True;
 
     // #80200 HACK to provide minimum wildcard functionality (*.xxx)
-    if( pRTLData->bWildcard )
+    if( pRTLData->bNameCheck )
     {
         bMatch = sal_False;
 
-        sal_Char cDot = '.';    // char -> sal_Char ok, because ASCII
-        xub_StrLen nLastDot = rName.SearchBackward( cDot );
-        if( nLastDot  != STRING_NOTFOUND )
+        if( pRTLData->sFullNameToBeChecked.Len() )
         {
-            String sExtension = rName.Copy( nLastDot + 1 );
-            String sMainName = rName.Copy( 0, nLastDot );
-            if( !pRTLData->sExtension.Len() || sExtension == pRTLData->sExtension )
-            {
-                sal_Int32 nPreWildcardLen = pRTLData->sPreWildcard.Len();
-                if( nPreWildcardLen )
-                {
-                    String sTmp = sMainName.Copy( 0, nPreWildcardLen );
 #ifdef UNX
-                    bMatch = sTmp.Equals( pRTLData->sPreWildcard );
+            bMatch = rName.Equals( pRTLData->sFullNameToBeChecked );
 #else
-                    bMatch = sTmp.EqualsIgnoreCaseAscii( pRTLData->sPreWildcard );
+            bMatch = rName.EqualsIgnoreCaseAscii( pRTLData->sFullNameToBeChecked );
 #endif
-                }
-                else
+        }
+        else
+        {
+            sal_Char cDot = '.';    // char -> sal_Char ok, because ASCII
+            xub_StrLen nLastDot = rName.SearchBackward( cDot );
+            if( nLastDot  != STRING_NOTFOUND )
+            {
+                String sExtension = rName.Copy( nLastDot + 1 );
+                String sMainName = rName.Copy( 0, nLastDot );
+                if( !pRTLData->sExtension.Len() || sExtension == pRTLData->sExtension )
                 {
-                    bMatch = sal_True;
+                    sal_Int32 nPreWildcardLen = pRTLData->sPreWildcard.Len();
+                    if( nPreWildcardLen )
+                    {
+                        String sTmp = sMainName.Copy( 0, nPreWildcardLen );
+#ifdef UNX
+                        bMatch = sTmp.Equals( pRTLData->sPreWildcard );
+#else
+                        bMatch = sTmp.EqualsIgnoreCaseAscii( pRTLData->sPreWildcard );
+#endif
+                    }
+                    else
+                    {
+                        bMatch = sal_True;
+                    }
                 }
             }
         }
