@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 15:05:04 $
+#   last change: $Author: kz $ $Date: 2004-06-18 16:52:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1122,7 +1122,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::updatepack )
             {
                 # my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
-                my $completeshipinstalldir = installer::worker::link_install_sets_to_ship($destdir, $shipinstalldir);
+                # my $completeshipinstalldir = installer::worker::link_install_sets_to_ship($destdir, $shipinstalldir);
                 installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $completeshipinstalldir);
             }
         }
@@ -1571,7 +1571,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::updatepack )
             {
-                my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
+                # my $completeshipinstalldir = installer::worker::copy_install_sets_to_ship($destdir, $shipinstalldir);
                 installer::mail::send_success_mail($allsettingsarrayref, $languagestringref, $completeshipinstalldir);
             }
         }
