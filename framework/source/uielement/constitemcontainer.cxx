@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constitemcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:50:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,20 @@
 #endif
 
 //_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 using namespace rtl;
 using namespace cppu;
@@ -92,24 +104,102 @@ using namespace com::sun::star::container;
 
 const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >";
 
+const int PROPHANDLE_UINAME     = 1;
+const int PROPCOUNT             = 1;
+const rtl::OUString PROPNAME_UINAME( RTL_CONSTASCII_USTRINGPARAM( "UIName" ));
+
 namespace framework
 {
+
+/**
+ * The class which implements the PropertySetInfo interface.
+ */
+
+static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW( () )
+{
+   return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
+}
+
+class OPropertySetHelperInfo_Impl
+    : public WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+{
+    Sequence < Property > aInfos;
+
+public:
+    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW( () );
+
+    // XPropertySetInfo-Methoden
+    virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException);
+};
+
+
+/**
+ * Create an object that implements XPropertySetInfo IPropertyArrayHelper.
+ */
+OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
+    IPropertyArrayHelper & rHelper_ )
+    SAL_THROW( () )
+    :aInfos( rHelper_.getProperties() )
+{
+}
+
+/**
+ * Return the sequence of properties, which are provided throug the constructor.
+ */
+Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::com::sun::star::uno::RuntimeException)
+{
+    return aInfos;
+}
+
+/**
+ * Return the sequence of properties, which are provided throug the constructor.
+ */
+Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    Property * pR;
+    pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
+                              sizeof( Property ),
+                              compare_OUString_Property_Impl );
+    if( !pR ) {
+        throw UnknownPropertyException();
+    }
+
+    return *pR;
+}
+
+/**
+ * Return the sequence of properties, which are provided throug the constructor.
+ */
+sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Property * pR;
+    pR = (Property *)bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
+                              sizeof( Property ),
+                              compare_OUString_Property_Impl );
+    return pR != NULL;
+}
 
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_4     (   ConstItemContainer                                              ,
+DEFINE_XINTERFACE_6     (   ConstItemContainer                                              ,
                             OWeakObject                                                     ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider         ),
                             DIRECT_INTERFACE( ::com::sun::star::container::XElementAccess   ),
                             DIRECT_INTERFACE( ::com::sun::star::container::XIndexAccess     ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet     ),
+                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet         ),
                             DIRECT_INTERFACE( ::com::sun::star::lang::XUnoTunnel            )
                         )
 
-DEFINE_XTYPEPROVIDER_4  (   ConstItemContainer                          ,
+DEFINE_XTYPEPROVIDER_6  (   ConstItemContainer                          ,
                             ::com::sun::star::lang::XTypeProvider       ,
                             ::com::sun::star::container::XIndexAccess   ,
                             ::com::sun::star::container::XElementAccess ,
+                            ::com::sun::star::beans::XFastPropertySet   ,
+                            ::com::sun::star::beans::XPropertySet       ,
                             ::com::sun::star::lang::XUnoTunnel
                         )
 
@@ -123,6 +213,7 @@ ConstItemContainer::ConstItemContainer( const RootItemContainer& rRootItemContai
 
     // If bFastCopy is set the onwer of the root item container will transfer ownership to us. So
     // it is possible to copy only the root part.
+    m_aUIName = rRootItemContainer.m_aUIName;
     if ( bFastCopy )
         m_aItemVector = rRootItemContainer.m_aItemVector;
     else
@@ -137,6 +228,20 @@ ConstItemContainer::ConstItemContainer( const ItemContainer& rItemContainer )
 
 ConstItemContainer::ConstItemContainer( const Reference< XIndexAccess >& rSourceContainer, sal_Bool bFastCopy )
 {
+    // We also have to copy the UIName property
+    try
+    {
+        Reference< XPropertySet > xPropSet( rSourceContainer, UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            rtl::OUString aUIName;
+            xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ))) >>= m_aUIName;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
     try
     {
         sal_Int32 nCount = rSourceContainer->getCount();
@@ -282,6 +387,137 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
         return makeAny( m_aItemVector[Index] );
     else
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
+}
+
+// XPropertySet
+Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    // Optimize this method !
+    // We initialize a static variable only one time. And we don't must use a mutex at every call!
+    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
+    static Reference< XPropertySetInfo >* pInfo = NULL;
+
+    if( pInfo == NULL )
+    {
+        // Ready for multithreading
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        // Control this pointer again, another instance can be faster then these!
+        if( pInfo == NULL )
+        {
+            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
+            // (Use method "getInfoHelper()".)
+            static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+            pInfo = &xInfo;
+        }
+    }
+
+    return (*pInfo);
+}
+
+void SAL_CALL ConstItemContainer::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+Any SAL_CALL ConstItemContainer::getPropertyValue( const ::rtl::OUString& PropertyName )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    if ( PropertyName.equals( PROPNAME_UINAME ))
+        return makeAny( m_aUIName );
+
+    throw UnknownPropertyException();
+}
+
+void SAL_CALL ConstItemContainer::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+void SAL_CALL ConstItemContainer::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    // Only read-only properties - do nothing
+}
+
+void SAL_CALL ConstItemContainer::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    // Only read-only properties - do nothing
+}
+
+void SAL_CALL ConstItemContainer::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    // Only read-only properties - do nothing
+}
+
+// XFastPropertySet
+void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+}
+
+Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
+throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+{
+    if ( nHandle == PROPHANDLE_UINAME )
+        return makeAny( m_aUIName );
+
+    throw UnknownPropertyException();
+}
+
+::cppu::IPropertyArrayHelper& SAL_CALL ConstItemContainer::getInfoHelper()
+{
+    // Optimize this method !
+    // We initialize a static variable only one time. And we don't must use a mutex at every call!
+    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
+    static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
+
+    if( pInfoHelper == NULL )
+    {
+        // Ready for multithreading
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+        // Control this pointer again, another instance can be faster then these!
+        if( pInfoHelper == NULL )
+        {
+            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
+            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
+            // "sal_True" say: Table is sorted by name.
+            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
+            pInfoHelper = &aInfoHelper;
+        }
+    }
+
+    return(*pInfoHelper);
+}
+
+const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
+{
+    // Create a new static property array to initialize sequence!
+    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
+    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
+    // It's necessary for methods of OPropertySetHelper.
+    // ATTENTION:
+    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
+
+    static const com::sun::star::beans::Property pProperties[] =
+    {
+        com::sun::star::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
+                                         ::getCppuType((const rtl::OUString*)NULL),
+                                         com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY  )
+    };
+    // Use it to initialize sequence!
+    static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );
+    // Return static "PropertyDescriptor"
+    return lPropertyDescriptor;
+}
+
+Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
+    IPropertyArrayHelper & rProperties ) SAL_THROW( () )
+{
+    return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }
 
 } // namespace framework
