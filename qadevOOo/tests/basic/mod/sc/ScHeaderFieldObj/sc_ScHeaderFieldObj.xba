@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScHeaderFieldObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:43 $ 
+'*  last change:$Date: 2003-03-18 11:06:44 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -114,7 +114,21 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    if NOT isNULL(oObj) then oObj.dispose()
-    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
+    if NOT isNULL(oObj) then 
+        if (hasUnoInterfaces(oObj, "com.sun.star.util.XCloseable")) then
+            oObj.close(FALSE)
+        elseif (hasUnoInterfaces(oObj, "com.sun.star.lang.XComponent")) then
+            oObj.dispose()
+        end if
+    end if
+    if NOT isNULL(oComponentInstance) then oComponentInstance
+        if (hasUnoInterfaces(oComponentInstance, _
+                                           "com.sun.star.util.XCloseable")) then
+            oComponentInstance.close(FALSE)
+        elseif (hasUnoInterfaces(oComponentInstance, _
+                                           "com.sun.star.lang.XComponent")) then
+            oComponentInstance.dispose()
+        end if
+    end if
 End Sub
 </script:module>

@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: dbaccess_JoinViewAccessibility.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:56:26 $ 
+'*  last change:$Date: 2003-03-18 11:00:30 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -170,7 +170,11 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    queryWindow.dispose()
+	if (hasUnoInterfaces(queryWindow, "com.sun.star.util.XCloseable")) then
+		queryWindow.close(FALSE)
+	elseif (hasUnoInterfaces(queryWindow, "com.sun.star.lang.XComponent")) then
+		queryWindow.dispose()
+	end if
     if NOT isNull(cancelButton) then
         cancelButton.doAccessibleAction(0)
         wait(1000)

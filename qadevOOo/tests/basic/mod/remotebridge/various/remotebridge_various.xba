@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: remotebridge_various.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:58:44 $ 
+'*  last change:$Date: 2003-03-18 11:02:43 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -127,6 +127,10 @@ Sub DisposeObj()
     if (NOT isNULL(xConnection)) then
         xConnection.close()
     end if
-    oObj.dispose()
+	if (hasUnoInterfaces(oObj, "com.sun.star.util.XCloseable")) then
+		oObj.close(FALSE)
+	elseif (hasUnoInterfaces(oObj, "com.sun.star.lang.XComponent")) then
+		oObj.dispose()
+	end if
 End Sub
 </script:module>
