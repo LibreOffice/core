@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editundo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 class ImpEditEngine;
 class EditView;
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoDelContent
 // ------------------------------------------------------------------------
 class EditUndoDelContent : public EditUndo
@@ -96,7 +96,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoConnectParas
 // ------------------------------------------------------------------------
 class EditUndoConnectParas : public EditUndo
@@ -127,7 +127,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoSplitPara
 // ------------------------------------------------------------------------
 class EditUndoSplitPara : public EditUndo
@@ -146,7 +146,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoInsertChars
 // ------------------------------------------------------------------------
 class EditUndoInsertChars : public EditUndo
@@ -169,7 +169,7 @@ public:
     virtual BOOL    Merge( SfxUndoAction *pNextAction );
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoRemoveChars
 // ------------------------------------------------------------------------
 class EditUndoRemoveChars : public EditUndo
@@ -190,7 +190,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoInsertFeature
 // ------------------------------------------------------------------------
 class EditUndoInsertFeature : public EditUndo
@@ -210,7 +210,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoMoveParagraphs
 // ------------------------------------------------------------------------
 class EditUndoMoveParagraphs: public EditUndo
@@ -229,7 +229,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoSetStyleSheet
 // ------------------------------------------------------------------------
 class EditUndoSetStyleSheet: public EditUndo
@@ -256,7 +256,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoSetParaAttribs
 // ------------------------------------------------------------------------
 class EditUndoSetParaAttribs: public EditUndo
@@ -276,7 +276,7 @@ public:
     virtual void    Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // EditUndoSetAttribs
 // ------------------------------------------------------------------------
 class EditUndoSetAttribs: public EditUndo
@@ -312,7 +312,34 @@ public:
     virtual void        Repeat();
 };
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+// EditUndoTransliteration
+// ------------------------------------------------------------------------
+class EditUndoTransliteration: public EditUndo
+{
+private:
+    ESelection          aOldESel;
+    ESelection          aNewESel;
+
+    sal_Int32           nMode;
+    EditTextObject*     pTxtObj;
+    String              aText;
+
+public:
+                        TYPEINFO();
+                        EditUndoTransliteration( ImpEditEngine* pImpEE, const ESelection& rESel, sal_Int32 nMode );
+                        ~EditUndoTransliteration();
+
+    void                SetText( const String& rText ) { aText = rText; }
+    void                SetText( EditTextObject* pObj ) { pTxtObj = pObj; }
+    void                SetNewSelection( const ESelection& rSel ) { aNewESel = rSel; }
+
+    virtual void        Undo();
+    virtual void        Redo();
+    virtual void        Repeat();
+};
+
+// -----------------------------------------------------------------------
 // EditUndoMarkSelection
 // ------------------------------------------------------------------------
 class EditUndoMarkSelection: public EditUndo
