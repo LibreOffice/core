@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 09:11:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 11:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
 {
-    ImageBitmap = Bitmap { File = "ed_itbrowse.bmp"; };
+    Prefix = "ed";
     MaskColor   = Color {
             Red   = 0xFFFF;
             Green = 0x0000;
@@ -85,7 +85,7 @@ ImageList RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX
 
 ImageList RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H
 {
-    ImageBitmap = Bitmap { File = "edh_itbrowse.bmp"; };
+    Prefix = "edh";
     MaskColor   = Color {
             Red   = 0xFFFF;
             Green = 0x0000;
