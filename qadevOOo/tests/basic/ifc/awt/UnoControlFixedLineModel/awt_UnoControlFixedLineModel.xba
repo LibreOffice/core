@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_UnoControlFixedLineModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:50 $ 
+'*  last change:$Date: 2003-10-06 12:46:17 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -81,8 +81,6 @@ Sub RunTest()
 On Error Goto ErrHndl
 
 
-    PropertyTester.TestProperty("DefaultControl")
-
     PropertyTester.TestProperty("Enabled")
 
     PropertyTester.TestProperty("FontDescriptor")
@@ -98,6 +96,12 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("Printable")
 
     PropertyTester.TestProperty("TextColor")
+
+    PropertyTester.TestProperty("FontEmphasisMark")
+
+    PropertyTester.TestProperty("FontRelief")
+
+    PropertyTester.TestProperty("TextLineColor")
 
 Exit Sub
 ErrHndl:
