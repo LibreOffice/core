@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clippingfunctor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:03:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,10 @@ namespace presentation
             ::basegfx::B2DPolyPolygon aClipPoly = (*mpParametricPoly)(
                 mbForwardParameterSweep ? nValue : 1.0 - nValue );
 
+            // TODO(Q4): workaround here, better be fixed in cppcanvas
+            if (aClipPoly.count() == 0)
+                aClipPoly.append( basegfx::B2DPolygon() );
+
             if (mbFlip)
                 aClipPoly.flip();
 
@@ -217,12 +221,10 @@ namespace presentation
                 ::std::swap( aClipPoly, aTmp );
                 aClipPoly.append( aTmp );
 
-                // TODO(P1): If former aClipPoly is
-                // _strictly_ inside maBackgroundRect,
-                // no need to remove intersections
-                // (but this optimization strictly
-                // speaking belongs into
-                // removeIntersections...)
+                // TODO(P1): If former aClipPoly is _strictly_ inside
+                // maBackgroundRect, no need to remove intersections
+                // (but this optimization strictly speaking belongs
+                // into removeIntersections...)
                 aClipPoly = ::basegfx::tools::removeAllIntersections(aClipPoly);
                 aClipPoly = ::basegfx::tools::removeNeutralPolygons(aClipPoly, sal_True);
 
