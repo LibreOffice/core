@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:34:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,13 +1579,11 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             }
         }
 
-        // adjust advance width from fallback font units to base units
-        if( n > 0 )
-            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
-
         // if a justification array is available => override the advance width
         if( aMultiArgs.mpDXArray )
         {
+            // the run advance is the width from the first char
+        // in the run to the first char in the next run
             nRunAdvance = 0;
             int nRelPos = nCharPos[0] - mnMinCharPos;
             if( nRelPos > 0 )
@@ -1595,7 +1593,13 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 nRunAdvance -= aMultiArgs.mpDXArray[ nRelPos-1 ];
             if( nRunAdvance < 0 )
                 nRunAdvance = -nRunAdvance;
+            // convert justification array units into fallback font units
+            nRunAdvance *= mpLayouts[n]->GetUnitsPerPixel();
         }
+
+    // adjust advance width from fallback font units to base units
+        if( n > 0 )
+            nRunAdvance = static_cast<long>(nRunAdvance*fUnitMul + 0.5);
 
         // calculate new x position
         nXPos += nRunAdvance;
