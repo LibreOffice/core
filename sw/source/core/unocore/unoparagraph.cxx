@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 14:52:16 $
+ *  last change: $Author: os $ $Date: 2001-03-08 10:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,7 @@ void SwXParagraph::dispose(void) throw( uno::RuntimeException )
     {
         // Absatz selektieren
         SwParaSelection aSelection(pUnoCrsr);
-        pUnoCrsr->GetDoc()->DeleteAndJoin(*pUnoCrsr);
+        pUnoCrsr->GetDoc()->DelFullPara(*pUnoCrsr);
         pUnoCrsr->Remove(this);
         aLstnrCntnr.Disposing();
     }
@@ -764,7 +764,10 @@ OUString SwXParagraph::getString(void) throw( uno::RuntimeException )
     OUString aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if( pUnoCrsr)
-        aRet = pUnoCrsr->GetNode()->GetTxtNode()->GetTxt();
+    {
+        SwParaSelection aSelection(pUnoCrsr);
+        SwXTextCursor::getTextFromPam(*pUnoCrsr, aRet);
+    }
     else if(IsDescriptor())
         aRet = m_sText;
     else
