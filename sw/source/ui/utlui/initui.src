@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:27:50 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,7 +1012,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_simplified ] = "±à¼­Ê±¼ä";
         Text[ russian ] = "Âğåìÿ îáğàáîòêè";
         Text[ polish ] = "Czas edycji";
-        Text[ japanese ] = "•ÒWŠÔ";
+        Text[ japanese ] = "•ÒW";
         Text[ chinese_traditional ] = "½s¿è®É¶¡";
         Text[ arabic ] = "æŞÊ ÇáÊÍÑíÑ";
         Text[ greek ] = "×ñüíïò åğåîåñãáóßáò";
@@ -1640,7 +1640,7 @@ String STR_AUTH_FIELD_ANNOTE
     Text[ swedish ] = "Anmärkning";
     Text[ polish ] = "Adnotacja";
     Text[ portuguese_brazilian ] = "Annotation";
-    Text[ japanese ] = "ºÒİÄ(~M)";
+    Text[ japanese ] = "’ß";
     Text[ korean ] = "ÁÖ";
     Text[ chinese_simplified ] = "ËµÃ÷(~M)";
     Text[ chinese_traditional ] = "µû»y(~M)";
@@ -1880,7 +1880,7 @@ String STR_AUTH_FIELD_NOTE
     Text[ swedish ] = "Not";
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Note";
-    Text[ japanese ] = "ÒÓ(~E)";
+    Text[ japanese ] = "ºÒİÄ";
     Text[ korean ] = "¸Ş¸ğ";
     Text[ chinese_simplified ] = "±¸×¢(~E)";
     Text[ chinese_traditional ] = "³Æª`(~E)";
