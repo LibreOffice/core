@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-03 09:30:42 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 12:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ BOOL FontInfo::operator==( const FontInfo& rInfo ) const
 static const sal_UCS4 pDefaultRangeCodes[] = {0x0020,0xD800, 0xE000,0xFFF0};
 
 FontCharMap::FontCharMap()
+:   mpRangeCodes( NULL )
 {
     ImplSetDefaultRanges();
 }
@@ -177,8 +178,8 @@ void FontCharMap::ImplSetRanges( ULONG nPairs, const sal_UCS4* pCodes )
 
 void FontCharMap::ImplSetDefaultRanges()
 {
-    int nCodes = sizeof(pDefaultRangeCodes)/sizeof(*pDefaultRangeCodes);
-    ImplSetRanges( nCodes, pDefaultRangeCodes );
+    int nCodes = sizeof(pDefaultRangeCodes) / sizeof(*pDefaultRangeCodes);
+    ImplSetRanges( nCodes/2, pDefaultRangeCodes );
 }
 
 // -----------------------------------------------------------------------
@@ -186,6 +187,22 @@ void FontCharMap::ImplSetDefaultRanges()
 BOOL FontCharMap::IsDefaultMap() const
 {
     return (mpRangeCodes == pDefaultRangeCodes);
+}
+
+// -----------------------------------------------------------------------
+
+void FontCharMap::GetRange( ULONG i, sal_UCS4& cBegin, sal_UCS4& cEnd ) const
+{
+    if( i < 0 || i >= mnRangeCount )
+    {
+        cBegin = pDefaultRangeCodes[ 0 ];
+        cEnd   = pDefaultRangeCodes[ 1 ];
+    }
+    else
+    {
+        cBegin = mpRangeCodes[ 2*i ];
+        cEnd   = mpRangeCodes[ 2*i+1 ];
+    }
 }
 
 // -----------------------------------------------------------------------
