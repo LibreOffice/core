@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:27:06 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,17 +2125,17 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Çàãëàâíûå/ñòğî÷íûå áóêâû";
         Text[ greek ] = "Change case";
         Text[ dutch ] = "Change case";
-        Text[ french ] = "Change case";
+        Text[ french ] = "Casse/Caractères";
         Text[ spanish ] = "Change case";
         Text[ italian ] = "Change case";
         Text[ danish ] = "Change case";
-        Text[ swedish ] = "Stor/liten bokstav";
+        Text[ swedish ] = "Bokstäver/tecken";
         Text[ polish ] = "Wielkie i ma³e litery";
         Text[ portuguese_brazilian ] = "Change case";
         Text[ japanese ] = "•¶ší‚Ì•ÏŠ·";
         Text[ korean ] = "Change case";
-        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´";
-        Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g";
+        Text[ chinese_simplified ] = "±ä»¯×ÖÄ¸ºÍ×ÖÌå¸ñÊ½";
+        Text[ chinese_traditional ] = "ÅÜ¤Æ¦r¥À©M¦r«¬®æ¦¡";
         Text[ turkish ] = "Change case";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
@@ -8485,7 +8485,7 @@ Resource RID_GLOBSTR
         Text[ portuguese ] = "O conteúdo da área de transferência é maior do que a selecção.\nMesmo assim inserir?";
         Text[ danish ] = "Udklipholderens indhold er større end det markerede område.\nVil du indsætte alligevel?";
         Text[ french ] = "Le contenu du presse-papiers dépasse l'espace offert par la sélection.\nVoulez vous quand même l'insérer ?";
-        Text[ swedish ] = "Innehållet i urklippet är större än markeringen.\nInfoga i alla fall?";
+        Text[ swedish ] = "Innehållet i urklippet är större än det markerade området.\nSka det ändå infogas?";
         Text[ dutch ] = "De inhoud van het Klembord is groter dan het geselecteerde bereik.\nToch invoegen?";
         Text[ spanish ] = "El contenido del portapapeles es mayor que el área seleccionada.\n¿Desea insertarla de todas formas?";
         Text[ english_us ] = "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?";
