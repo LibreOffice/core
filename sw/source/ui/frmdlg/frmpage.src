@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 20:57:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¼e«×(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ";
+        Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "~Genişlik";
     };
     MetricField ED_WIDTH
@@ -882,14 +882,14 @@ TabPage TP_FRM_STD
         Text [ danish ] = "Relativ" ;
         Text [ portuguese_brazilian ] = "~Relativ" ;
         Text [ portuguese ] = "~Relativo" ;
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~V)";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~I)";
         Text[ russian ] = "Îòíîñèò.";
         Text[ polish ] = "Wzglê~dny";
-        Text[ japanese ] = "Š„‡(~V)";
-        Text[ chinese_traditional ] = "¬Û¹ïªº(~V)";
+        Text[ japanese ] = "Š„‡(~I)";
+        Text[ chinese_traditional ] = "¬Û¹ïªº(~I)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "»ó´ë";
+        Text[ korean ] = "»ó´ë(~I)";
         Text[ turkish ] = "~Göreceli";
     };
     FixedText FT_HEIGHT
@@ -917,7 +917,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ";
+        Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "~Yüks.";
     };
     MetricField ED_HEIGHT
@@ -953,14 +953,14 @@ TabPage TP_FRM_STD
         Text [ danish ] = "Relativ" ;
         Text [ portuguese_brazilian ] = "Re~lativ" ;
         Text [ portuguese ] = "Relat~ivo" ;
-        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~E)";
+        Text[ chinese_simplified ] = "Ïà¶ÔµÄ(~L)";
         Text[ russian ] = "Îòíîñèò.";
         Text[ polish ] = "Wzglêd~ny";
-        Text[ japanese ] = "Š„‡(~E)";
-        Text[ chinese_traditional ] = "¬Û¹ïªº(~E)";
+        Text[ japanese ] = "Š„‡(~L)";
+        Text[ chinese_traditional ] = "¬Û¹ïªº(~L)";
         Text[ arabic ] = "äÓÈí";
         Text[ greek ] = "Ó÷åôéêÜ";
-        Text[ korean ] = "»ó´ë";
+        Text[ korean ] = "»ó´ë(~L)";
         Text[ turkish ] = "G~öreceli";
     };
     CheckBox CB_FIXEDRATIO
@@ -979,14 +979,14 @@ TabPage TP_FRM_STD
         Text [ danish ] = "Proport." ;
         Text [ portuguese_brazilian ] = "Abgle~ich" ;
         Text [ portuguese ] = "Pr~oporcional" ;
-        Text[ chinese_simplified ] = "Í¬²½»¯";
-        Text[ russian ] = "Ñèíõğîíèçèğîâàòü";
+        Text[ chinese_simplified ] = "Í¬²½»¯(~K)";
+        Text[ russian ] = "Ñèíõğîíèçàöèÿ";
         Text[ polish ] = "Synchronizacja";
         Text[ japanese ] = "”ä—¦‚ğ•Û‚Â(~K)";
-        Text[ chinese_traditional ] = "¦P¨B¤Æ";
+        Text[ chinese_traditional ] = "¦P¨B¤Æ(~K)";
         Text[ arabic ] = "ÊÒÇãä";
         Text[ greek ] = "ÁíáëïãéêÜ";
-        Text[ korean ] = "ºñÀ² À¯Áö";
+        Text[ korean ] = "ºñÀ² À¯Áö(~K)";
         Text[ turkish ] = "Orant~ı";
     };
     CheckBox CB_AUTOHEIGHT
@@ -1014,7 +1014,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¦Û°Ê°ª«×(~G)";
         Text[ arabic ] = "ÇÑÊİÇÚ ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôï ıøïò";
-        Text[ korean ] = "ÀÚµ¿ ³ôÀÌ";
+        Text[ korean ] = "ÀÚµ¿ ³ôÀÌ(~G)";
         Text[ turkish ] = "otom. ~yüksekl.";
     };
     PushButton BT_REALSIZE
@@ -1079,7 +1079,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "An ~der Seite" ;
         Text [ ENGLISH ] = "At page" ;
-        Text[ english_us ] = "At page";
+        Text[ english_us ] = "To page";
         Text[ portuguese ] = "At page";
         Text[ russian ] = "Ê ñòğàíèöå";
         Text[ greek ] = "Óôç óåëßäá";
@@ -1104,7 +1104,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Am Ab~satz" ;
         Text [ ENGLISH ] = "At paragraph" ;
-        Text[ english_us ] = "At paragraph";
+        Text[ english_us ] = "To paragraph";
         Text[ portuguese ] = "At paragraph";
         Text[ russian ] = "Ê àáçàöó";
         Text[ greek ] = "~Óôç ğáñÜãñáöï";
@@ -1129,7 +1129,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Am Zeiche~n" ;
         Text [ ENGLISH ] = "At character" ;
-        Text[ english_us ] = "At character";
+        Text[ english_us ] = "To character";
         Text[ portuguese ] = "At character";
         Text[ russian ] = "Ê çíàêó";
         Text[ greek ] = "Óôï~í ÷áñáêôŞñá";
@@ -1163,12 +1163,12 @@ TabPage TP_FRM_STD
         Text [ french ] = "Comme c~aractère" ;
         Text [ dutch ] = "als te~ken" ;
         Text [ portuguese ] = "como ~carácter" ;
-        Text[ chinese_simplified ] = "µ±×÷×Ö·û";
+        Text[ chinese_simplified ] = "µ±×÷×Ö·û(~A)";
         Text[ russian ] = "Êàê çíàê";
         Text[ polish ] = "Jako znak";
-        Text[ japanese ] = "•¶š‚Æ‚µ‚Ä(~H)";
+        Text[ japanese ] = "•¶š‚Æ‚µ‚Ä(~A)";
         Text[ language_user1 ] = "èëè: ñèìâîë; èëè ğèñóíîê - èëE ñèEüJ; èëEğèñóûM";
-        Text[ chinese_traditional ] = "·í§@¦r¤¸";
+        Text[ chinese_traditional ] = "·í§@¦r¤¸(~A)";
         Text[ arabic ] = "ßÍÑİ";
         Text[ greek ] = "Ùò ÷áñáêôŞñáò";
         Text[ korean ] = "¹®ÀÚ·Î(~A)";
@@ -1180,7 +1180,7 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Am Rahmen" ;
         Text [ ENGLISH ] = "At frame" ;
-        Text[ english_us ] = "At frame";
+        Text[ english_us ] = "To frame";
         Text[ portuguese ] = "At frame";
         Text[ russian ] = "Ê ğàìêå";
         Text[ greek ] = "Óôï ğë~áßóéï";
@@ -1256,7 +1256,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "¤ô¥­(~Z)";
         Text[ arabic ] = "ÃİŞí";
         Text[ greek ] = "Ïñéæüíôéá";
-        Text[ korean ] = "¼öÆò";
+        Text[ korean ] = "¼öÆò(~Z)";
         Text[ turkish ] = "Ya~tay";
     };
     ListBox DLB_HORIZONTAL
@@ -1361,14 +1361,14 @@ TabPage TP_FRM_STD
         Text [ french ] = "~En vis-à-vis sur les pages paires" ;
         Text [ dutch ] = "Op even pagina's ~spiegelen" ;
         Text [ portuguese ] = "Inverter em páginas ~pares" ;
-        Text[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ";
+        Text[ chinese_simplified ] = "·­×ªµ½Å¼ÊıÒ³Ãæ(~M)";
         Text[ russian ] = "Îòğàçèòü íà ÷åòíûõ ñòğàíèöàõ";
         Text[ polish ] = "Przerzu~æ na parzystych stronach";
-        Text[ japanese ] = "‹ô”Íß°¼Ş‚É”½“](~E)";
-        Text[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±";
+        Text[ japanese ] = "‹ô”Íß°¼Ş‚É”½“](~M)";
+        Text[ chinese_traditional ] = "Â½Âà¨ì°¸¼Æ­¶­±(~M)";
         Text[ arabic ] = "ÇäÚßÇÓ Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
         Text[ greek ] = "Êáèñå~ğôéóìüò óôéò Üñôéåò óåëßäåò";
-        Text[ korean ] = "Â¦¼ö ÂÊ ¸¶ÁÖº¸±â";
+        Text[ korean ] = "Â¦¼ö ÂÊ ¸¶ÁÖº¸±â(~M)";
         Text[ turkish ] = "Çift numaralı sayfalarda ya~nsıt";
     };
     FixedText FT_VERTICAL
@@ -1396,7 +1396,7 @@ TabPage TP_FRM_STD
         Text[ chinese_traditional ] = "««ª½¤è¦V(~V)";
         Text[ arabic ] = "ÑÃÓí";
         Text[ greek ] = "Êáôáêüñõöá";
-        Text[ korean ] = "¼öÁ÷";
+        Text[ korean ] = "¼öÁ÷(~V)";
         Text[ turkish ] = "Di~key";
     };
     ListBox DLB_VERTICAL
@@ -1573,7 +1573,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "ÀÉ®×¦W(~F)";
         Text[ arabic ] = "ÇÓã Çáãáİ";
         Text[ greek ] = "¼íïìá áñ÷åßïõ";
-        Text[ korean ] = "ÆÄÀÏ ÀÌ¸§";
+        Text[ korean ] = "ÆÄÀÏ ÀÌ¸§(~F)";
         Text[ turkish ] = "D~osya adı";
     };
     Edit ED_CONNECT
@@ -1631,7 +1631,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "~....";
         Text[ arabic ] = "...~";
         Text[ greek ] = "~...";
-        Text[ korean ] = "...";
+        Text[ korean ] = "(~.)...";
         Text[ turkish ] = "~...";
     };
     CheckBox CB_VERT
@@ -1660,7 +1660,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "««ª½¤è¦V(~V)";
         Text[ arabic ] = "ÑÃÓí";
         Text[ greek ] = "êáôáêüñõöá";
-        Text[ korean ] = "¼öÁ÷";
+        Text[ korean ] = "¼öÁ÷(~V)";
         Text[ turkish ] = "d~ikey";
     };
     CheckBox CB_HOR
@@ -1682,10 +1682,10 @@ TabPage TP_GRF_EXT
         Text[ swedish ] = "h~orisontalt";
         Text[ polish ] = "p~oziomo";
         Text[ portuguese_brazilian ] = "verti~calmente";
-        Text[ japanese ] = "¶‰E(~H)";
-        Text[ korean ] = "¼öÆò";
+        Text[ japanese ] = "¶‰E(~Z)";
+        Text[ korean ] = "¼öÆò(~Z)";
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò(~Z)";
-        Text[ chinese_traditional ] = "¤ô¥­¤è¦V";
+        Text[ chinese_traditional ] = "¤ô¥­¤è¦V(~Z)";
         Text[ turkish ] = "yata~y";
         Text[ arabic ] = "ÃİŞí";
     };
@@ -1848,14 +1848,14 @@ TabPage TP_FRM_URL
         Text [ danish ] = "URL" ;
         Text [ portuguese_brazilian ] = "U~RL" ;
         Text [ portuguese ] = "U~RL" ;
-        Text[ chinese_simplified ] = "URL(~U)";
+        Text[ chinese_simplified ] = "~URL";
         Text[ russian ] = "U~RL";
         Text[ polish ] = "URL";
-        Text[ japanese ] = "URL(~U)";
+        Text[ japanese ] = "~URL";
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = "U~RL";
         Text[ greek ] = "URL";
-        Text[ korean ] = "URL";
+        Text[ korean ] = "~URL";
         Text[ turkish ] = "U~RL";
     };
     Edit ED_URL
@@ -1887,7 +1887,7 @@ TabPage TP_FRM_URL
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
     };
     Edit ED_NAME
@@ -1953,7 +1953,7 @@ TabPage TP_FRM_URL
         Text[ chinese_traditional ] = "¿ï¾Ü(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÅğéëïãŞ...";
-        Text[ korean ] = "¼±ÅÃ...";
+        Text[ korean ] = "¼±ÅÃ(~B)...";
         Text[ turkish ] = "~Seç...";
     };
     GroupBox GB_HYPERLINK
@@ -2003,7 +2003,7 @@ TabPage TP_FRM_URL
         Text[ chinese_traditional ] = "¦øªA¾¹(~S)";
         Text[ arabic ] = "ÇáãÒæøÏ";
         Text[ greek ] = "ÄéáêïìéóôŞò";
-        Text[ korean ] = "¼­¹ö";
+        Text[ korean ] = "¼­¹ö(~S)";
         Text[ turkish ] = "~Sunucu";
     };
     CheckBox CB_CLIENT
@@ -2028,7 +2028,7 @@ TabPage TP_FRM_URL
         Text[ chinese_traditional ] = "¥Î¤áºİ(~C)";
         Text[ arabic ] = "ÇáÚãíá";
         Text[ greek ] = "ĞåëÜôçò";
-        Text[ korean ] = "Å¬¶óÀÌ¾ğÆ®";
+        Text[ korean ] = "Å¬¶óÀÌ¾ğÆ®(~C)";
         Text[ turkish ] = "~İstemci";
     };
     GroupBox GB_IMAGE
@@ -2086,7 +2086,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
     };
     Edit ED_NAME
@@ -2118,7 +2118,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "´À¥N¤å¦r(~A)";
         Text[ arabic ] = "äÕ ÈÏíá";
         Text[ greek ] = "Åí~áëëáêôéêÜ (Ìüíï êåßìåíï)";
-        Text[ korean ] = "´ëÃ¼¡¡ÅØ½ºÆ®";
+        Text[ korean ] = "´ëÃ¼¡¡ÅØ½ºÆ®(~A)";
         Text[ turkish ] = "~Alternatif metin";
     };
     Edit ED_ALT_NAME
@@ -2150,7 +2150,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¤W¤@­Ó±¶®|(~P)";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "Ğñïçãïıìåíï";
-        Text[ korean ] = "¼±·Ê";
+        Text[ korean ] = "¼±·Ê(~P)";
         Text[ turkish ] = "~Önceki";
     };
     Edit ED_PREV
@@ -2183,7 +2183,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¤U¤@­Ó±¶®|(~N)";
         Text[ arabic ] = "ÇááÇÍŞ";
         Text[ greek ] = "Åğüìåíï";
-        Text[ korean ] = "ÈÄÀÓ";
+        Text[ korean ] = "ÈÄÀÓ(~N)";
         Text[ turkish ] = "S~onraki";
     };
     Edit ED_NEXT
@@ -2242,7 +2242,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¤º®e(~C)";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "³»¿ë";
+        Text[ korean ] = "³»¿ë(~C)";
         Text[ turkish ] = "~İçerik";
     };
     CheckBox CB_PROTECT_FRAME
@@ -2261,14 +2261,14 @@ TabPage TP_FRM_ADD
         Text [ french ] = "Pos~ition" ;
         Text [ dutch ] = "Pos~itie" ;
         Text [ portuguese ] = "~Posição" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ(~P)";
+        Text[ chinese_simplified ] = "Î»ÖÃ(~O)";
         Text[ russian ] = "Ïîçèöèÿ";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u(~P)";
-        Text[ chinese_traditional ] = "¦ì¸m(~P)";
+        Text[ japanese ] = "ˆÊ’u(~O)";
+        Text[ chinese_traditional ] = "¦ì¸m(~O)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "À§Ä¡(~O)";
         Text[ turkish ] = "K~onum";
     };
     CheckBox CB_PROTECT_SIZE
@@ -2294,7 +2294,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¤j¤p(~S)";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
-        Text[ korean ] = "Å©±â";
+        Text[ korean ] = "Å©±â(~S)";
         Text[ turkish ] = "~Boyut";
     };
     GroupBox GB_PROTECT
@@ -2344,7 +2344,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¥i½s¿è°ßÅª¤å¥ó(~E)";
         Text[ arabic ] = "ŞÇÈá ááÊÍÑíÑ İí ãÓÊäÏ ááŞÑÇÁÉ İŞØ";
         Text[ greek ] = "Äõíáôüôçôá ~åğåîåñãáóßáò óå İããñáöï ôığïõ \"Ìüíï ãéá áíÜãíùóç\"";
-        Text[ korean ] = "ÀĞ±âÀü¿ë ¹®¼­¿¡¼­ ÆíÁı°¡´É";
+        Text[ korean ] = "ÀĞ±âÀü¿ë ¹®¼­¿¡¼­ ÆíÁı°¡´É(~E)";
         Text[ turkish ] = "Salt okunur belge içinde düzenlenebilir";
     };
     CheckBox CB_PRINT_FRAME
@@ -2364,14 +2364,14 @@ TabPage TP_FRM_ADD
         Text [ dutch ] = "Afdru~kken" ;
         Text [ spanish ] = "Im~primir" ;
         Text [ english_us ] = "Prin~t" ;
-        Text[ chinese_simplified ] = "´òÓ¡(~P)";
+        Text[ chinese_simplified ] = "´òÓ¡(~T)";
         Text[ russian ] = "Ïå÷àòü";
         Text[ polish ] = "Drukuj";
-        Text[ japanese ] = "ˆóü(~P)";
-        Text[ chinese_traditional ] = "¦C¦L(~P)";
+        Text[ japanese ] = "ˆóü(~T)";
+        Text[ chinese_traditional ] = "¦C¦L(~T)";
         Text[ arabic ] = "ØÈÇÚÉ";
         Text[ greek ] = "Åêôığùóç";
-        Text[ korean ] = "ÀÎ¼â";
+        Text[ korean ] = "ÀÎ¼â(~T)";
         Text[ turkish ] = "~Yazdır";
     };
     GroupBox GB_EXT
