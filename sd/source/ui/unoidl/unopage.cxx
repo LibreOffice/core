@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 14:05:58 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1708,11 +1708,34 @@ String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
     const String aDefPageName(RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ));
     if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
     {
-        OUStringBuffer sBuffer;
-        sBuffer.append( String(SdResId(STR_PAGE)) );
-        sBuffer.append( sal_Unicode( ' ' ) );
-        sBuffer.append( rApiName.copy( aDefPageName.Len() ) );
-        return sBuffer.makeStringAndClear();
+        OUString aNumber( rApiName.copy( sizeof( sEmptyPageName ) - 1 ) );
+
+        // create the page number
+        sal_Int32 nPageNumber = aNumber.toInt32();
+
+        // check if there are non number characters in the number part
+        const sal_Int32 nChars = aNumber.getLength();
+        const sal_Unicode* pString = aNumber.getStr();
+        sal_Int32 nChar;
+        for( nChar = 0; nChar < nChars; nChar++, pString++ )
+        {
+            if((*pString < sal_Unicode('0')) || (*pString > sal_Unicode('9')))
+            {
+                // found a non number character, so this is not the default
+                // name for this page
+                nPageNumber = -1;
+                break;
+            }
+        }
+
+        if( nPageNumber != -1)
+        {
+            OUStringBuffer sBuffer;
+            sBuffer.append( String(SdResId(STR_PAGE)) );
+            sBuffer.append( sal_Unicode( ' ' ) );
+            sBuffer.append( aNumber );
+            return sBuffer.makeStringAndClear();
+        }
     }
 
     return rApiName;
