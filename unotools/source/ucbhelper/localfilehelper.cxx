@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-07-25 10:09:16 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 09:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,12 @@ sal_Bool LocalFileHelper::IsLocalFile( const String& rName )
 {
     String aTmp;
     return ConvertURLToPhysicalName( rName, aTmp );
+}
+
+sal_Bool LocalFileHelper::IsFileContent( const String& rName )
+{
+    String aTmp;
+    return ConvertURLToSystemPath( rName, aTmp );
 }
 
 DECLARE_LIST( StringList_Impl, ::rtl::OUString* )

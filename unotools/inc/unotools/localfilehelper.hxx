@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:29:29 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 09:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ public:
     static sal_Bool ConvertURLToSystemPath( const String& rName, String& rReturn );
 
     static sal_Bool IsLocalFile( const String& rName );
+    static sal_Bool IsFileContent( const String& rName );
 
     static          ::com::sun::star::uno::Sequence< ::rtl::OUString >
                             GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder );
