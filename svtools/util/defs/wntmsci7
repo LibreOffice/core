@@ -10068,3 +10068,4 @@ _real@8@3ffeccccccccccccd000
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx81478788@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx81478788@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx81478788@@YAEABVString@@AAV2@@Z
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx965415635@@QAE_NABUFilterEntry@@@Z
