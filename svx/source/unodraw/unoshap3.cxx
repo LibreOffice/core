@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-12 14:00:36 $
+ *  last change: $Author: aw $ $Date: 2000-12-18 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,13 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
             {
                 // change transformation so that source poly lies in Z == 0,
                 // so it can be exported as 2D polygon
-                aMat.TranslateZ(rFirstPoint.Z());
+                //
+                // ATTENTION: the translation has to be multiplied from LEFT
+                // SIDE since it was executed as the first translate for this
+                // 3D object during it's creation.
+                Matrix4D aTransMat;
+                aTransMat.TranslateZ(rFirstPoint.Z());
+                aMat = aTransMat * aMat;
             }
         }
 
@@ -1003,7 +1009,13 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
             {
                 // change transformation so that source poly lies in Z == 0,
                 // so it can be exported as 2D polygon
-                aMat.TranslateZ(rFirstPoint.Z());
+                //
+                // ATTENTION: the translation has to be multiplied from LEFT
+                // SIDE since it was executed as the first translate for this
+                // 3D object during it's creation.
+                Matrix4D aTransMat;
+                aTransMat.TranslateZ(rFirstPoint.Z());
+                aMat = aTransMat * aMat;
             }
         }
 
