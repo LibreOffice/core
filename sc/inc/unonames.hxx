@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:32:44 $
+ *  last change: $Author: nn $ $Date: 2001-09-26 19:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,8 @@
 #define SC_UNONAME_VALIXML          "ValidationXML"
 #define SC_UNONAME_FORMLOC          "FormulaLocal"
 #define SC_UNONAME_FORMRT           "FormulaResultType"
+
+#define SC_UNONAME_USERDEF          "UserDefinedAttributes"
 
 //  auto format
 #define SC_UNONAME_INCBACK          "IncludeBackground"

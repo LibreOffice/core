@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-16 15:11:18 $
+ *  last change: $Author: nn $ $Date: 2001-09-26 19:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 #define ATTR_CTL_FONT_POSTURE   118
 #define ATTR_CTL_FONT_LANGUAGE  119
 #define ATTR_FONT_EMPHASISMARK  120
-#define ATTR_FONT_TWOLINES      121
+#define ATTR_USERDEF            121     // not saved in binary files
 #define ATTR_FONT_WORDLINE      122
 #define ATTR_FONT_RELIEF        123
 #define ATTR_HYPHENATE          124
@@ -234,7 +234,6 @@
 #define ITEMID_COLOR            ATTR_FONT_COLOR
 #define ITEMID_LANGUAGE         ATTR_FONT_LANGUAGE
 #define ITEMID_EMPHASISMARK     ATTR_FONT_EMPHASISMARK
-#define ITEMID_TWOLINES         ATTR_FONT_TWOLINES
 #define ITEMID_WORDLINEMODE     ATTR_FONT_WORDLINE
 #define ITEMID_CHARRELIEF       ATTR_FONT_RELIEF
 #define ITEMID_SCRIPTSPACE      ATTR_SCRIPTSPACE

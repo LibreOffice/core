@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-08 10:18:17 $
+ *  last change: $Author: nn $ $Date: 2001-09-26 19:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,11 @@
 #include <svx/shdditem.hxx>
 #include <svx/sizeitem.hxx>
 #include <svx/svxitems.hrc>
-#include <svx/twolinesitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svx/wrlmitem.hxx>
+#include <svx/xmlcnitm.hxx>
 
 #include "docpool.hxx"
 #include "global.hxx"
@@ -121,6 +121,8 @@ USHORT* ScDocumentPool::pVersionMap4 = 0;
 USHORT* ScDocumentPool::pVersionMap5 = 0;
 USHORT* ScDocumentPool::pVersionMap6 = 0;
 USHORT* ScDocumentPool::pVersionMap7 = 0;
+
+// ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
 static SfxItemInfo __READONLY_DATA  aItemInfos[] =
 {
@@ -145,7 +147,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_CHAR_CTL_POSTURE,    SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_POSTURE    from 614
     { SID_ATTR_CHAR_CTL_LANGUAGE,   SFX_ITEM_POOLABLE },    // ATTR_CTL_FONT_LANGUAGE   from 614
     { SID_ATTR_CHAR_EMPHASISMARK,   SFX_ITEM_POOLABLE },    // ATTR_FONT_EMPHASISMARK   from 614
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_FONT_TWOLINES       from 614
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_USERDEF             from 614 / 641c
     { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE },    // ATTR_FONT_WORDLINE       from 632b
     { SID_ATTR_CHAR_RELIEF,         SFX_ITEM_POOLABLE },    // ATTR_FONT_RELIEF         from 632b
     { SID_ATTR_ALIGN_HYPHENATION,   SFX_ITEM_POOLABLE },    // ATTR_HYPHENATE           from 632b
@@ -271,7 +273,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_CTL_FONT_LANGUAGE-ATTR_STARTINDEX ] = new SvxLanguageItem( LanguageType(LANGUAGE_DONTKNOW),
                                                                     ATTR_CTL_FONT_LANGUAGE );
     ppPoolDefaults[ ATTR_FONT_EMPHASISMARK-ATTR_STARTINDEX ] = new SvxEmphasisMarkItem;
-    ppPoolDefaults[ ATTR_FONT_TWOLINES   - ATTR_STARTINDEX ] = new SvxTwoLinesItem;
+    ppPoolDefaults[ ATTR_USERDEF         - ATTR_STARTINDEX ] = new SvXMLAttrContainerItem( ATTR_USERDEF );
     ppPoolDefaults[ ATTR_FONT_WORDLINE   - ATTR_STARTINDEX ] = new SvxWordLineModeItem;
     ppPoolDefaults[ ATTR_FONT_RELIEF     - ATTR_STARTINDEX ] = new SvxCharReliefItem;
     ppPoolDefaults[ ATTR_HYPHENATE       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_HYPHENATE );
