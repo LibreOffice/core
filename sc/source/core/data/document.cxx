@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
+ *  last change: $Author: nn $ $Date: 2001-01-22 14:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,10 +569,18 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
             ScAddress( nEndCol, MAXROW, nEndTab )), 0, nSize, 0 );
         UpdateReference( URM_INSDEL, nStartCol, nStartRow, nStartTab,
                          nEndCol, MAXROW, nEndTab,
-                         0, nSize, 0 );
+                         0, nSize, 0, NULL, FALSE );        // without drawing objects
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i])
                 pTab[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
+
+        //  #82991# UpdateRef for drawing layer must be after inserting,
+        //  when the new row heights are known.
+        for (i=nStartTab; i<=nEndTab; i++)
+            if (pTab[i])
+                pTab[i]->UpdateDrawRef( URM_INSDEL,
+                            nStartCol, nStartRow, nStartTab, nEndCol, MAXROW, nEndTab,
+                            0, nSize, 0 );
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
         {   // durch Restaurierung von Referenzen auf geloeschte Bereiche ist
