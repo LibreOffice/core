@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-15 17:25:17 $
+ *  last change: $Author: armin $ $Date: 2001-03-07 17:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef __SGI_STL_ALGORITHM
-#include <stl/algorithm>
+#include <algorithm>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>

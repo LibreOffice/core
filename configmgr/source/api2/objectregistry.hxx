@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectregistry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-03 11:55:41 $
+ *  last change: $Author: armin $ $Date: 2001-03-07 17:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <osl/mutex.hxx>
 #include <vos/refernce.hxx>
 
-#include <stl/hash_map>
+#include <hash_map>
 #include "tracer.hxx"
 
 namespace configmgr

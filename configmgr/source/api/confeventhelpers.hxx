@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
+ *  last change: $Author: armin $ $Date: 2001-03-07 17:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@
 #endif
 
 #ifndef __SGI_STL_MAP
-#include <stl/map>
+#include <map>
 #endif
 #ifndef __SGI_STL_SET
-#include <stl/set>
+#include <set>
 #endif
 
 namespace configmgr
