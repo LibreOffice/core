@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,19 @@
 
  *************************************************************************/
 
+#include <hash_map>
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
 
 #ifndef _PKGPROVIDER_HXX
@@ -88,6 +96,81 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
+namespace package_ucp
+{
+
+//=========================================================================
+//
+// class Package.
+//
+//=========================================================================
+
+class Package : public cppu::OWeakObject,
+                public com::sun::star::container::XHierarchicalNameAccess
+{
+    friend class ContentProvider;
+
+    OUString                             m_aName;
+    Reference< XHierarchicalNameAccess > m_xNA;
+    ContentProvider*                     m_pOwner;
+
+public:
+    Package( const OUString& rName,
+             const Reference< XHierarchicalNameAccess > & xNA,
+             ContentProvider* pOwner )
+    : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
+    ~Package() { m_pOwner->removePackage( m_aName ); }
+
+    // XInterface
+    XINTERFACE_DECL()
+
+    virtual ::com::sun::star::uno::Any SAL_CALL
+    getByHierarchicalName( const ::rtl::OUString& aName )
+        throw( NoSuchElementException, RuntimeException )
+    { return m_xNA->getByHierarchicalName( aName ); }
+    virtual sal_Bool SAL_CALL
+    hasByHierarchicalName( const OUString& aName )
+        throw( RuntimeException )
+    { return m_xNA->hasByHierarchicalName( aName ); }
+};
+
+XINTERFACE_IMPL_1( Package, XHierarchicalNameAccess );
+
+//=========================================================================
+//
+// Packages.
+//
+//=========================================================================
+
+struct equalString
+{
+    bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
+      {
+          return !!( rKey1 == rKey2 );
+      }
+};
+
+struct hashString
+{
+    size_t operator()( const OUString & rName ) const
+    {
+        return rName.hashCode();
+    }
+};
+
+typedef std::hash_map
+<
+    OUString,
+    Package*,
+    hashString,
+    equalString
+>
+PackageMap;
+
+class Packages : public PackageMap {};
+
+}
+
 using namespace package_ucp;
 
 //=========================================================================
@@ -100,7 +183,8 @@ using namespace package_ucp;
 
 ContentProvider::ContentProvider(
                             const Reference< XMultiServiceFactory >& rSMgr )
-: ::ucb::ContentProviderImplHelper( rSMgr )
+: ::ucb::ContentProviderImplHelper( rSMgr ),
+  m_pPackages( 0 )
 {
 }
 
@@ -108,6 +192,7 @@ ContentProvider::ContentProvider(
 // virtual
 ContentProvider::~ContentProvider()
 {
+    delete m_pPackages;
 }
 
 //=========================================================================
@@ -192,5 +277,92 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
         throw IllegalIdentifierException();
 
     return xContent;
+}
+
+//=========================================================================
+//
+// Other methods.
+//
+//=========================================================================
+
+Reference< XHierarchicalNameAccess > ContentProvider::createPackage(
+                                                const OUString & rName )
+{
+    vos::OGuard aGuard( m_aMutex );
+
+    if ( !rName.getLength() )
+    {
+        VOS_ENSURE( sal_False,
+                    "ContentProvider::createPackage - Invalid URL!" );
+        return Reference< XHierarchicalNameAccess >();
+    }
+
+    if ( m_pPackages )
+    {
+        Packages::const_iterator it = m_pPackages->find( rName );
+        if ( it != m_pPackages->end() )
+        {
+            // Already instanciated. Return package.
+            return (*it).second->m_xNA;
+        }
+    }
+    else
+        m_pPackages = new Packages;
+
+    // Create new package...
+    try
+    {
+        Sequence< Any > aArguments( 1 );
+        aArguments[ 0 ] <<= rName;
+
+        Reference< XInterface > xIfc
+            = m_xSMgr->createInstanceWithArguments(
+                OUString::createFromAscii( "com.sun.star.package.Package" ),
+                aArguments );
+
+        if ( xIfc.is() )
+        {
+            Reference< XHierarchicalNameAccess > xNameAccess
+                = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
+
+            VOS_ENSURE( xNameAccess.is(),
+                        "ContentProvider::createPackage - "
+                        "Got no hierarchical name access!" );
+
+            vos::ORef< Package> xPackage
+                = new Package( rName, xNameAccess, this );
+
+            (*m_pPackages)[ rName ] = xPackage.getBodyPtr();
+
+            return xPackage.getBodyPtr();
+        }
+    }
+    catch ( RuntimeException & )
+    {
+        // createInstanceWithArguemts
+    }
+    catch ( Exception & )
+    {
+        // createInstanceWithArguemts
+    }
+
+    return Reference< XHierarchicalNameAccess >();
+}
+
+//=========================================================================
+sal_Bool ContentProvider::removePackage( const OUString & rName )
+{
+    vos::OGuard aGuard( m_aMutex );
+
+    if ( m_pPackages )
+    {
+        Packages::iterator it = m_pPackages->find( rName );
+        if ( it != m_pPackages->end() )
+        {
+            m_pPackages->erase( it );
+            return sal_True;
+        }
+    }
+    return sal_False;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 14:41:33 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <ucbhelper/providerhelper.hxx>
 #endif
 
+namespace com { namespace sun { namespace star { namespace container {
+    class XHierarchicalNameAccess;
+} } } }
+
 namespace package_ucp {
 
 //=========================================================================
@@ -84,8 +88,12 @@ namespace package_ucp {
 
 //=========================================================================
 
+class Packages;
+
 class ContentProvider : public ::ucb::ContentProviderImplHelper
 {
+    Packages* m_pPackages;
+
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
@@ -115,6 +123,12 @@ public:
     //////////////////////////////////////////////////////////////////////
     // Non-interface methods.
     //////////////////////////////////////////////////////////////////////
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XHierarchicalNameAccess >
+    createPackage( const rtl::OUString & rName );
+    sal_Bool
+    removePackage( const rtl::OUString & rName );
 };
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ struct ContentProperties
 
 //=========================================================================
 
+class ContentProvider;
+
 class Content : public ::ucb::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
@@ -142,29 +144,30 @@ class Content : public ::ucb::ContentImplHelper,
                         DEAD        // processed "delete"
                       };
 
-    PackageUri        m_aUri;
-    ContentProperties m_aProps;
-    ContentState      m_eState;
+    PackageUri              m_aUri;
+    ContentProperties       m_aProps;
+    ContentState            m_eState;
     com::sun::star::uno::Reference<
-        com::sun::star::container::XHierarchicalNameAccess > m_xPackage;
+        com::sun::star::container::XHierarchicalNameAccess >    m_xPackage;
+    ContentProvider*        m_pProvider;
 
 private:
     Content( const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-             ::ucb::ContentProviderImplHelper* pProvider,
+             ContentProvider* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
-             const com::sun::star::uno::Reference<
-                com::sun::star::container::XHierarchicalNameAccess >& Package,
+             const ::com::sun::star::uno::Reference<
+                 com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const ContentProperties& rProps );
     Content( const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-             ::ucb::ContentProviderImplHelper* pProvider,
+             ContentProvider* pProvider,
              const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
              const com::sun::star::uno::Reference<
-                com::sun::star::container::XHierarchicalNameAccess >& Package,
+                 com::sun::star::container::XHierarchicalNameAccess >& Package,
              const PackageUri& rUri,
              const com::sun::star::ucb::ContentInfo& Info );
 
@@ -189,25 +192,28 @@ private:
             const ::com::sun::star::uno::Sequence<
                      ::com::sun::star::beans::PropertyValue >& rValues );
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XHierarchicalNameAccess >
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
+    getPackage( const PackageUri& rURI );
+    com::sun::star::uno::Reference<
+        com::sun::star::container::XHierarchicalNameAccess >
     getPackage();
-    static ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XHierarchicalNameAccess >
-    getPackage( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > & rxSMgr,
-                const PackageUri& rURI );
+
     static sal_Bool
-    loadData( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+    loadData( ContentProvider* pProvider,
               const PackageUri& rURI,
               ContentProperties& rProps,
               com::sun::star::uno::Reference<
-                com::sun::star::container::XHierarchicalNameAccess >& Package );
+                  com::sun::star::container::XHierarchicalNameAccess > &
+                    rxPackage );
     static sal_Bool
-    hasData( const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-              const PackageUri& rURI );
+    hasData( ContentProvider* pProvider,
+             const PackageUri& rURI,
+             com::sun::star::uno::Reference<
+                 com::sun::star::container::XHierarchicalNameAccess > &
+                    rxPackage );
+    sal_Bool
+    hasData( const PackageUri& rURI );
     sal_Bool
     renameData( const com::sun::star::uno::Reference<
                      com::sun::star::ucb::XContentIdentifier >& xOldId,
@@ -257,7 +263,7 @@ public:
     static Content* create(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            ContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier );
 
@@ -265,7 +271,7 @@ public:
     static Content* create(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            ::ucb::ContentProviderImplHelper* pProvider,
+            ContentProvider* pProvider,
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >& Identifier,
             const com::sun::star::ucb::ContentInfo& Info );
@@ -328,8 +334,7 @@ public:
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
-                       const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
-                               rProvider,
+                       ContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );
 
     // Called from resultset data supplier.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _PKGCONTENT_HXX
 #include "pkgcontent.hxx"
+#endif
+#ifndef _PKGPROVIDER_HXX
+#include "pkgprovider.hxx"
 #endif
 
 using namespace com::sun::star::beans;
@@ -470,10 +473,11 @@ Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     if ( getResult( nIndex ) )
     {
         Reference< XRow > xRow = Content::getPropertyValues(
-                                    m_pImpl->m_xSMgr,
-                                    getResultSet()->getProperties(),
-                                    m_pImpl->m_xContent->getProvider(),
-                                    queryContentIdentifierString( nIndex ) );
+                        m_pImpl->m_xSMgr,
+                        getResultSet()->getProperties(),
+                        static_cast< ContentProvider * >(
+                            m_pImpl->m_xContent->getProvider().getBodyPtr() ),
+                        queryContentIdentifierString( nIndex ) );
         m_pImpl->m_aResults[ nIndex ]->xRow = xRow;
         return xRow;
     }

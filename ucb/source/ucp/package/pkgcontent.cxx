@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
+ *  last change: $Author: kso $ $Date: 2000-11-29 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,14 +164,14 @@ using namespace package_ucp;
 
 // static ( "virtual" ctor )
 Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
-                          ::ucb::ContentProviderImplHelper* pProvider,
+                          ContentProvider* pProvider,
                           const Reference< XContentIdentifier >& Identifier )
 {
     PackageUri aURI( Identifier->getContentIdentifier() );
     ContentProperties aProps;
     Reference< XHierarchicalNameAccess > xPackage;
 
-    if ( loadData( rxSMgr, aURI, aProps, xPackage ) )
+    if ( loadData( pProvider, aURI, aProps, xPackage ) )
     {
         // resource exists
 
@@ -228,7 +228,7 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
 //=========================================================================
 // static ( "virtual" ctor )
 Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
-                          ::ucb::ContentProviderImplHelper* pProvider,
+                          ContentProvider* pProvider,
                           const Reference< XContentIdentifier >& Identifier,
                           const ContentInfo& Info )
 {
@@ -240,43 +240,47 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
         return 0;
 
     PackageUri aURI( Identifier->getContentIdentifier() );
+    Reference< XHierarchicalNameAccess > xPackage;
 
 #if 0
     // Fail, if content does exist.
-    if ( hasData( rxSMgr, aURI ) )
+    if ( hasData( pProvider, aURI, xPackage ) )
         return 0;
+#else
+    xPackage = pProvider->createPackage( aURI.getPackage() );
 #endif
 
-    Reference< XHierarchicalNameAccess > xPackage;
     return new Content( rxSMgr, pProvider, Identifier, xPackage, aURI, Info );
 }
 
 //=========================================================================
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                  ::ucb::ContentProviderImplHelper* pProvider,
+                  ContentProvider* pProvider,
                   const Reference< XContentIdentifier >& Identifier,
-                  const Reference< XHierarchicalNameAccess >& Package,
+                   const Reference< XHierarchicalNameAccess > & Package,
                   const PackageUri& rUri,
                   const ContentProperties& rProps )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
   m_xPackage( Package ),
   m_aUri( rUri ),
   m_aProps( rProps ),
-  m_eState( PERSISTENT )
+  m_eState( PERSISTENT ),
+  m_pProvider( pProvider )
 {
 }
 
 //=========================================================================
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                  ::ucb::ContentProviderImplHelper* pProvider,
+                  ContentProvider* pProvider,
                   const Reference< XContentIdentifier >& Identifier,
-                  const Reference< XHierarchicalNameAccess >& Package,
+                   const Reference< XHierarchicalNameAccess > & Package,
                   const PackageUri& rUri,
                   const ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   m_xPackage( Package ),
   m_aUri( rUri ),
-  m_eState( TRANSIENT )
+  m_eState( TRANSIENT ),
+  m_pProvider( pProvider )
 {
     if ( Info.Type.compareToAscii( PACKAGE_FOLDER_CONTENT_TYPE ) == 0 )
     {
@@ -695,7 +699,7 @@ Reference< XContent > SAL_CALL Content::createNewContent(
         Reference< XContentIdentifier > xId(
                         new ::ucb::ContentIdentifier( m_xSMgr, aURL ) );
 
-        return create( m_xSMgr, m_xProvider.getBodyPtr(), xId, Info );
+        return create( m_xSMgr, m_pProvider, xId, Info );
     }
     else
     {
@@ -722,17 +726,18 @@ OUString Content::getParentURL()
 Reference< XRow > Content::getPropertyValues(
                 const Reference< XMultiServiceFactory >& rSMgr,
                 const Sequence< Property >& rProperties,
-                const vos::ORef< ucb::ContentProviderImplHelper >& rProvider,
+                ContentProvider* pProvider,
                 const OUString& rContentId )
 {
     ContentProperties aData;
     Reference< XHierarchicalNameAccess > xPackage;
-    if ( loadData( rSMgr, PackageUri( rContentId ), aData, xPackage ) )
+    if ( loadData( pProvider, PackageUri( rContentId ), aData, xPackage ) )
     {
         return getPropertyValues( rSMgr,
                                   rProperties,
                                   aData,
-                                  rProvider,
+                                  vos::ORef< ucb::ContentProviderImplHelper >(
+                                      pProvider ),
                                   rContentId );
     }
     else
@@ -1208,7 +1213,7 @@ void Content::insert(
     {
         // fail.
         case NameClash::ERROR:
-            if ( hasData( m_xSMgr, aNewUri ) )
+            if ( hasData( aNewUri ) )
                 throw CommandAbortedException();
 
             break;
@@ -1219,7 +1224,7 @@ void Content::insert(
 
         // "invent" a new valid title.
         case NameClash::RENAME:
-            if ( hasData( m_xSMgr, aNewUri ) )
+            if ( hasData( aNewUri ) )
             {
                 sal_Int32 nTry = 0;
 
@@ -1230,7 +1235,7 @@ void Content::insert(
                     aNew += OUString::valueOf( ++nTry );
                     aNewUri.setUri( aNew );
                 }
-                while ( hasData( m_xSMgr, aNewUri ) && ( nTry < 100000 ) );
+                while ( hasData( aNewUri ) && ( nTry < 100000 ) );
 
                 if ( nTry == 100000 )
                 {
@@ -1573,7 +1578,7 @@ sal_Bool Content::exchangeIdentity(
 
     // Fail, if a content with given id already exists.
     PackageUri aNewUri( xNewId->getContentIdentifier() );
-    if ( !hasData( m_xSMgr, aNewUri ) )
+    if ( !hasData( aNewUri ) )
     {
         OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
@@ -1668,83 +1673,68 @@ void Content::queryChildren( ContentRefList& rChildren )
 }
 
 //=========================================================================
-Reference< XHierarchicalNameAccess > Content::getPackage()
+Reference< XHierarchicalNameAccess > Content::getPackage(
+                                                const PackageUri& rURI )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    if ( !m_xPackage.is() )
-        m_xPackage = getPackage( m_xSMgr, m_aUri );
+    Reference< XHierarchicalNameAccess > xPackage;
+    if ( rURI.getPackage() == m_aUri.getPackage() )
+    {
+        if ( !m_xPackage.is() )
+            m_xPackage = m_pProvider->createPackage( m_aUri.getPackage() );
 
-    return m_xPackage;
+        return m_xPackage;
+    }
+
+    return m_pProvider->createPackage( rURI.getPackage() );
+}
+
+//=========================================================================
+Reference< XHierarchicalNameAccess > Content::getPackage()
+{
+    return getPackage( m_aUri );
 }
 
 //=========================================================================
 // static
-Reference< XHierarchicalNameAccess > Content::getPackage(
-                             const Reference< XMultiServiceFactory > & rxSMgr,
-                            const PackageUri& rURI )
+sal_Bool Content::hasData( ContentProvider* pProvider,
+                           const PackageUri& rURI,
+                           Reference< XHierarchicalNameAccess > & rxPackage )
 {
-    Reference< XHierarchicalNameAccess > xNameAccess;
-
-    OUString aPackageName = rURI.getPackage();
-    if ( !aPackageName.getLength() )
-    {
-        VOS_ENSURE( sal_False, "Content::getPackage - Invalid URL!" );
-        return xNameAccess;
-    }
-
-    try
-    {
-        Sequence< Any > aArguments( 1 );
-        aArguments[ 0 ] <<= aPackageName;
-
-        Reference< XInterface > xIfc
-            = rxSMgr->createInstanceWithArguments(
-                OUString::createFromAscii( "com.sun.star.package.Package" ),
-                aArguments );
-
-        if ( xIfc.is() )
-        {
-            xNameAccess
-                = Reference< XHierarchicalNameAccess >( xIfc, UNO_QUERY );
-
-            VOS_ENSURE( xNameAccess.is(),
-                        "Content::getPackage - "
-                        "Got no hierarchical name access!" );
-        }
-    }
-    catch ( RuntimeException & )
-    {
-        throw;
-    }
-    catch ( Exception & )
-    {
-        // createInstanceWithArguemts
-    }
-
-    return xNameAccess;
-}
-
-//=========================================================================
-// static
-sal_Bool Content::hasData( const Reference< XMultiServiceFactory >& rxSMgr,
-                           const PackageUri& rURI )
-{
-    Reference< XHierarchicalNameAccess > xNA = getPackage( rxSMgr, rURI );
-    if ( !xNA.is() )
+    rxPackage = pProvider->createPackage( rURI.getPackage() );
+    if ( !rxPackage.is() )
         return sal_False;
 
-    return xNA->hasByHierarchicalName( rURI.getPath() );
+    return rxPackage->hasByHierarchicalName( rURI.getPath() );
+}
+
+//=========================================================================
+sal_Bool Content::hasData( const PackageUri& rURI )
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    Reference< XHierarchicalNameAccess > xPackage;
+    if ( rURI.getPackage() == m_aUri.getPackage() )
+    {
+        xPackage = getPackage();
+        if ( !xPackage.is() )
+            return sal_False;
+
+        return xPackage->hasByHierarchicalName( rURI.getPath() );
+    }
+
+    return hasData( m_pProvider, rURI, xPackage );
 }
 
 //=========================================================================
 //static
-sal_Bool Content::loadData( const Reference< XMultiServiceFactory >& rxSMgr,
+sal_Bool Content::loadData( ContentProvider* pProvider,
                             const PackageUri& rURI,
                             ContentProperties& rProps,
                             Reference< XHierarchicalNameAccess > & rxPackage )
 {
-    rxPackage = getPackage( rxSMgr, rURI );
+    rxPackage = pProvider->createPackage( rURI.getPackage() );
     if ( !rxPackage.is() )
         return sal_False;
 
@@ -1855,7 +1845,7 @@ sal_Bool Content::renameData( const Reference< XContentIdentifier >& xOldId,
                                const Reference< XContentIdentifier >& xNewId )
 {
     PackageUri aURI( xOldId->getContentIdentifier() );
-    Reference< XHierarchicalNameAccess > xNA = getPackage( m_xSMgr, aURI );
+    Reference< XHierarchicalNameAccess > xNA = getPackage( aURI );
     if ( !xNA.is() )
         return sal_False;
 
