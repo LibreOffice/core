@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LogWriter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:48 $
+ *  last change:$Date: 2005-02-02 13:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,5 +81,22 @@ public interface LogWriter {
      */
 
     public boolean summary(share.DescEntry entry);
+
+
+    /**
+     * Returns the <CODE>Watcher</CODE> which is associated with this logger
+     * @see share.Watcher
+     * @return the associated <CODE>Watcher</CODE>
+     */
+    public Object getWatcher();
+
+    /**
+     * Set a <CODE>Watcher</CODE> to the <CODE>LogWriter</CODE>
+     * This is usefull if a test starts a new office instance by itself. In this cases
+     * the <CODE>LogWritter</CODE> could retrigger the <CODE>Watcher</CODE>
+     * @see share.Watcher
+     * @param watcher the new <CODE>Watcher</CODE>
+     */
+    public void setWatcher(Object watcher);
 
 }
