@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:43:34 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#include <vcl/i18nhelp.hxx>
+
 #include <ctrltool.hxx>
 #include <stdmenu.hxx>
 
@@ -110,7 +112,9 @@ void FontNameMenu::Fill( const FontList* pList )
     Clear();
 
     // Fonts eintragen
-    International   aIntn = Application::GetAppInternational();
+
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
     USHORT          nFontCount = pList->GetFontNameCount();
     for ( USHORT i = 0; i < nFontCount; i++ )
     {
@@ -122,7 +126,7 @@ void FontNameMenu::Fill( const FontList* pList )
         while ( j )
         {
             XubString aText = GetItemText( GetItemId( j-1 ) );
-            if ( aIntn.Compare( rName, aText ) == COMPARE_GREATER )
+            if ( rI18nHelper.CompareString( rName, aText ) > 0 )
                 break;
             j--;
         }
@@ -409,13 +413,9 @@ void FontStyleMenu::SetCurStyle( const XubString& rStyle )
 
 // ========================================================================
 
-FontSizeMenu::FontSizeMenu() :
-    maIntn( Application::GetAppInternational() )
+FontSizeMenu::FontSizeMenu()
 {
     mpHeightAry = NULL;
-
-    maIntn.SetNumTrailingZeros( FALSE );
-    maIntn.SetNumDigits( 1 );
 
     SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 }
@@ -473,7 +473,7 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     USHORT nPos = 0;
 
     // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames( maIntn.GetLanguage() );
+    FontSizeNames aFontSizeNames( Application::GetSettings().GetUILanguage() );
     mpHeightAry = new long[nSizeCount+aFontSizeNames.Count()];
     if ( !aFontSizeNames.IsEmpty() )
     {
@@ -509,12 +509,13 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
     }
 
     // then insert numerical font size values
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
     pTempAry = pAry;
     while ( *pTempAry )
     {
         mpHeightAry[nPos] = *pTempAry;
         nPos++; // Id is nPos+1
-        InsertItem( nPos, maIntn.GetNum( *pTempAry ), MIB_RADIOCHECK | MIB_AUTOCHECK );
+        InsertItem( nPos, rI18nHelper.GetNum( *pTempAry, 1, TRUE, FALSE ), MIB_RADIOCHECK | MIB_AUTOCHECK );
         pTempAry++;
     }
 
@@ -528,7 +529,7 @@ void FontSizeMenu::SetCurHeight( long nHeight )
     mnCurHeight = nHeight;
 
     // check menue item
-    XubString   aHeight = maIntn.GetNum( nHeight );
+    XubString   aHeight = Application::GetSettings().GetUILocaleI18nHelper().GetNum( nHeight, 1, TRUE, FALSE  );
     USHORT      nChecked = 0;
     USHORT      nItemCount = GetItemCount();
     for( USHORT i = 0; i < nItemCount; i++ )

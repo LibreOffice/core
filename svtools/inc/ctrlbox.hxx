@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-03-22 06:39:25 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ class LineListBox : public ListBox
 {
     ImpLineList*    pLineList;
     VirtualDevice   aVirDev;
-    International   aIntn;
+    International   OLDMEMBER_TO_BE_REMOVED;
     Size            aTxtSize;
     Color           aColor;
     FieldUnit       eUnit;

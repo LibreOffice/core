@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-03-28 08:29:03 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ static ImplFSNameItem aImplTraditionalChinese[] =
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
     if ( eLanguage == LANGUAGE_DONTKNOW )
-        eLanguage = Application::GetSettings().GetInternational().GetLanguage();
+        eLanguage = Application::GetSettings().GetUILanguage();
     if ( eLanguage == LANGUAGE_SYSTEM )
         eLanguage = ::GetSystemLanguage();
 

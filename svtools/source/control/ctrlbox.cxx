@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-08-01 19:21:13 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <svtools.hrc>
 #include <ctrlbox.hxx>
 #include <ctrltool.hxx>
+
+#include <vcl/i18nhelp.hxx>
 
 #define IMGTEXTSPACE    2
 #define EXTRAFONTSIZE   5
@@ -374,7 +376,8 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
         rStr.AssignAscii( " mm" );
     }
 
-    rStr.Insert( aIntn.GetNum( nLine1+nLine2+nDistance, 2 ), 0 );
+    String aNum( GetSettings().GetLocaleI18nHelper().GetNum( nLine1+nLine2+nDistance, 2 ) );
+    rStr.Insert( aNum, 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -395,7 +398,6 @@ void LineListBox::ImplInit()
 
 LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
     ListBox( pParent, nWinStyle ),
-    aIntn( Application::GetAppInternational() ),
     aColor( COL_BLACK )
 {
     ImplInit();
@@ -405,7 +407,6 @@ LineListBox::LineListBox( Window* pParent, WinBits nWinStyle ) :
 
 LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
     ListBox( pParent, rResId ),
-    aIntn( Application::GetAppInternational() ),
     aColor( COL_BLACK )
 {
     ImplInit();

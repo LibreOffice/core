@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 15:42:35 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ public:
 class FontSizeMenu : public PopupMenu
 {
 private:
-    International   maIntn;
+    International   OLDMEMBER_TO_BE_REMOVED;
     long*           mpHeightAry;
     long            mnCurHeight;
     Link            maSelectHdl;

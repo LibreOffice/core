@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-08-24 14:31:49 $
+ *  last change: $Author: mt $ $Date: 2001-08-28 10:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #ifndef _POLY_HXX
 #include <vcl/poly.hxx>
 #endif
+
+#include <vcl/i18nhelp.hxx>
 
 #define _SV_RULER_CXX
 #define private public
@@ -626,9 +628,9 @@ void Ruler::ImplDrawArrows( long nCenter )
     BOOL            bDrawUnit;
     long            nTxtWidth;
     long            nTxtHeight2 = GetTextHeight()/2;
-    International   aIntn = Application::GetAppInternational();
 
-    aIntn.SetNumTrailingZeros( FALSE );
+    const vcl::I18nHelper& rI18nHelper = GetSettings().GetLocaleI18nHelper();
+
     maVirDev.SetLineColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
     for ( i = 0; i < mpData->nArrows; i++ )
     {
@@ -648,7 +650,7 @@ void Ruler::ImplDrawArrows( long nCenter )
             nLogWidth = (nLogWidth / aImplRulerUnitTab[mnUnitIndex].n100THMM) * 1000;
         else
             nLogWidth = (nLogWidth*1000) / aImplRulerUnitTab[mnUnitIndex].n100THMM;
-        aStr = aIntn.GetNum( nLogWidth, aImplRulerUnitTab[mnUnitIndex].nUnitDigits );
+        aStr = rI18nHelper.GetNum( nLogWidth, aImplRulerUnitTab[mnUnitIndex].nUnitDigits, TRUE, FALSE );
 
         // Einheit an den String haengen
         aStr2 = aStr;
