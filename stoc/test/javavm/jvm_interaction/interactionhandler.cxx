@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-24 12:35:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 using namespace com::sun::star::task;
-
-#if defined(WNT)
-#define LIBJEN    "jen.dll"
-#elif defined(UNX)
-#define LIBJEN    "libjen.so"
-#endif
 
 #define OUSTR( x ) OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
