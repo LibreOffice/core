@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:38 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 11:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,102 +132,90 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
     if( aURL.GetProtocol() == INET_PROT_FILE )
     {
-        PDFWriter       aWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
-        OutputDevice*   pOut = aWriter.GetReferenceDevice();
+        Reference< XRenderable > xRenderable( mxSrcDoc, UNO_QUERY );
 
-        if( pOut )
+        if( xRenderable.is() )
         {
-            Reference< XRenderable > xRenderable( mxSrcDoc, UNO_QUERY );
+            PDFWriter*  pPDFWriter = NULL;
+            sal_Int32   nPageCount = xRenderable->getRendererCount();
 
-            if( xRenderable.is() )
+            if( nPageCount )
             {
-                Any aAny;
+                const Range         aRange( 1, nPageCount );
+                MultiSelection      aSel;
+                FilterConfigItem    aFilterOptions( const_cast< Sequence< PropertyValue >* >( &rFilterData ) );
+                OUString            aPages( aFilterOptions.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ), OUString() ) );
+                sal_Int32           nCompressMode( aFilterOptions.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 ) );
+                sal_Bool            bSelectionOnly = sal_False;
 
                 try
                 {
-                    Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer() );
-                    awt::Size                   aPageSize;
-                    MapUnit                     eMapUnit = MAP_RELATIVE;
-                    sal_Int32                   nPageCount, nNextPage = 0;
-                    sal_Int16                   nMapUnit = -1;
-
-                    for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
+                    if( !aPages.getLength() )
                     {
-                        if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
-                            aRenderer[ nProperty].Value >>= aPageSize;
-                        else if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSizeMeasureUnit" ) ) )
-                            aRenderer[ nProperty ].Value >>= nMapUnit;
-                        else if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) ) )
-                            aRenderer[ nProperty ].Value >>= nPageCount;
+                        aSel.SetTotalRange( aRange );
+                        aSel.Select( aRange );
+                    }
+                    else if( aPages.equalsAscii( "Selection"  ) )
+                    {
+                        aSel.SetTotalRange( aRange );
+                        aSel.Select( aRange );
+                        bSelectionOnly = sal_True;
+                    }
+                    else
+                    {
+                        aSel = MultiSelection( aPages );
+                        aSel.SetTotalRange( aRange );
                     }
 
-                    switch( nMapUnit )
+                    for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
                     {
-                        case util::MeasureUnit::MM_100TH:       eMapUnit = MAP_100TH_MM;    break;
-                        case util::MeasureUnit::MM_10TH:        eMapUnit = MAP_10TH_MM;     break;
-                        case util::MeasureUnit::MM:             eMapUnit = MAP_MM;          break;
-                        case util::MeasureUnit::CM:             eMapUnit = MAP_CM;          break;
-                        case util::MeasureUnit::INCH_1000TH:    eMapUnit = MAP_1000TH_INCH; break;
-                        case util::MeasureUnit::INCH_100TH:     eMapUnit = MAP_100TH_INCH;  break;
-                        case util::MeasureUnit::INCH_10TH:      eMapUnit = MAP_10TH_INCH;   break;
-                        case util::MeasureUnit::INCH:           eMapUnit = MAP_INCH;        break;
-                        case util::MeasureUnit::POINT:          eMapUnit = MAP_POINT;       break;
-                        case util::MeasureUnit::TWIP:           eMapUnit = MAP_TWIP;        break;
-                        case util::MeasureUnit::PERCENT:        eMapUnit = MAP_RELATIVE;    break;
+                        Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1 ) );
+                        awt::Size                   aPageSize;
+                        sal_Bool                    bProcess = sal_True;
 
-                        default:
-                            DBG_ERROR( "unknown MeasureUnit" );
-                        break;
-                    }
-
-                    if( ( MAP_RELATIVE != eMapUnit ) && ( aPageSize.Width > 0 ) &&( aPageSize.Height > 0 ) )
-                    {
-                        FilterConfigItem    aFilterOptions( const_cast< Sequence< PropertyValue >* >( &rFilterData ) );
-                        OUString            aPages( aFilterOptions.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ), OUString() ) );
-                        sal_Int32           nCompressMode( aFilterOptions.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 ) );
-                        const Range         aRange( 1, nPageCount );
-                        MultiSelection      aSel;
-
-                        if( !aPages.getLength() )
+                        for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                         {
-                            aSel.SetTotalRange( aRange );
-                            aSel.Select( aRange );
-                        }
-                        else
-                        {
-                            aSel = MultiSelection( aPages );
-                            aSel.SetTotalRange( aRange );
+                            if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
+                                aRenderer[ nProperty].Value >>= aPageSize;
+                            else if( bSelectionOnly && aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) ) )
+                                aRenderer[ nProperty].Value >>= bProcess;
                         }
 
-                        for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
+                        if( bProcess && ( aPageSize.Width > 0 ) && ( aPageSize.Height > 0 ) )
                         {
                             GDIMetaFile                 aMtf;
-                            const MapMode               aMapMode( eMapUnit );
+                            OutputDevice*               pOut = NULL;
+                            const MapMode               aMapMode( MAP_100TH_MM );
                             const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
                             VCLXDevice*                 pXDevice = new VCLXDevice;
-                            Sequence< PropertyValue >   aRenderOptions( 2 );
+                            Sequence< PropertyValue >   aRenderOptions( 1 );
 
-                            pOut->EnableOutput( FALSE );
-                            pOut->SetMapMode( aMapMode );
-                            pXDevice->SetOutputDevice( pOut );
+                            if( !pPDFWriter )
+                                pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
 
-                            aMtf.SetPrefSize( aMtfSize );
-                            aMtf.SetPrefMapMode( aMapMode );
-                            aMtf.Record( pOut );
+                            pOut = pPDFWriter->GetReferenceDevice();
 
-                            aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-                            aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+                            if( pOut )
+                            {
+                                pOut->EnableOutput( FALSE );
+                                pOut->SetMapMode( aMapMode );
+                                pXDevice->SetOutputDevice( pOut );
 
-                            aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageNumber" ) );
-                            aRenderOptions[ 1 ].Value <<= static_cast< sal_Int32 >( nSel );
+                                aMtf.SetPrefSize( aMtfSize );
+                                aMtf.SetPrefMapMode( aMapMode );
+                                aMtf.Record( pOut );
 
-                            xRenderable->render( aRenderOptions );
+                                aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+                                aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
-                            aMtf.Stop();
-                            aMtf.WindStart();
+                                xRenderable->render( nSel - 1, aRenderOptions );
 
-                            if( aMtf.GetActionCount() )
-                                bRet = ImplExportPage( aWriter, aMtf, nCompressMode ) || bRet;
+                                aMtf.Stop();
+                                aMtf.WindStart();
+
+                                if( aMtf.GetActionCount() )
+                                    bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
+                            }
                         }
                     }
                 }
@@ -235,8 +223,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 {
                 }
 
-                if( bRet )
-                    aWriter.Emit();
+                if( bRet && pPDFWriter )
+                    pPDFWriter->Emit();
+
+                delete pPDFWriter;
             }
         }
     }

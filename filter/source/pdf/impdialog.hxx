@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ public:
                                         ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData );
                                         ~ImpPDFDialog();
 
-    void                                Init( const OUString& rPageSelectionRange );
+    void                                Init( sal_Bool bEnableSelection );
 
     Sequence< PropertyValue >           GetFilterData();
 };

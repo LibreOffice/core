@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:36 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,20 +207,21 @@ Dialog* PDFDialog::createDialog( Window* pParent )
     if( mpResMgr )
     {
         Reference< XRenderable >    xRenderable( mxSrcDoc, UNO_QUERY );
-        OUString                    aPageSelectionRange;
+        sal_Bool                    bSelection = sal_False;
 
         if( xRenderable.is() )
         {
-            Any aAny;
-
             try
             {
-                Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer() );
-
-                for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
+                for( sal_Int32 i = 0, nPageCount = xRenderable->getRendererCount(); ( i < nPageCount ) && !bSelection; ++i )
                 {
-                    if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ) )
-                        aRenderer[ nProperty].Value >>= aPageSelectionRange;
+                    Sequence< PropertyValue > aRenderer( xRenderable->getRenderer( i ) );
+
+                    for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); ( nProperty < nPropertyCount ) && !bSelection; ++nProperty )
+                    {
+                        if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) ) )
+                            aRenderer[ nProperty].Value >>= bSelection;
+                    }
                 }
             }
             catch( RuntimeException )
@@ -229,7 +230,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
         }
 
         ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData );
-        pDlg->Init( aPageSelectionRange );
+        pDlg->Init( bSelection );
         pRet = pDlg;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-19 14:59:34 $
+ *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,13 @@ ImpPDFDialog::~ImpPDFDialog()
 
 // -----------------------------------------------------------------------------
 
-void ImpPDFDialog::Init( const OUString& rPageSelectionRange )
+void ImpPDFDialog::Init( sal_Bool bEnableSelection )
 {
     const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
 
     maRbAll.Check();
     TogglePagesHdl( NULL );
-    maRbSelection.Enable( ( maPageSelectionRange = rPageSelectionRange ).getLength() > 0 );
+    maRbSelection.Enable( bEnableSelection );
 
     switch( nCompressMode )
     {
@@ -136,7 +136,7 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
     if( maRbPages.IsChecked() )
         aRet[ aRet.getLength() - 1 ].Value <<= OUString( maEdPages.GetText() );
     else if( maRbSelection.IsChecked() )
-        aRet[ aRet.getLength() - 1 ].Value <<= OUString( maPageSelectionRange );
+        aRet[ aRet.getLength() - 1 ].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
 
     return aRet;
 }
