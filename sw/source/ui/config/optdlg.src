@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-20 21:15:24 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,7 +571,7 @@ TabPage TP_CONTENT_OPT
         Text[ russian ] = "Πθρσνκθ θ ύλεμενςϋ σοπΰβλενθÿ";
         Text[ polish ] = "Rysunki i pola kontrolne";
         Text[ japanese ] = "}`•`‰ζ‚ΖΊέΔΫ°Ω(~W)";
-        Text[ chinese_traditional ] = "ΓΈΉΟ©M±±¨ξ¶µ(~W)";
+        Text[ chinese_traditional ] = "ΓΈΉΟ©M±±»s¶µ(~W)";
         Text[ arabic ] = "ΡΣζγΗΚ ζΪδΗΥΡ ΚΝίγ";
         Text[ greek ] = "Σχέδια ~και Πεδία ελέγχου";
         Text[ korean ] = "±ΧΈ®±βΏΝ ΔΑΖ®·Ρ(~W)";
@@ -821,13 +821,13 @@ TabPage TP_CONTENT_OPT
         Text [ dutch ] = "Maateenheid";
         Text [ spanish ] = "Unidad de medida";
         Text [ english_us ] = "Measurement unit";
-        Text[ chinese_simplified ] = "³ί΄ηµ¥Ξ»";
+        Text[ chinese_simplified ] = "¶¨ΑΏµ¥Ξ»";
         Text[ russian ] = "Εδθνθφΰ θημεπενθÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PΚ";
         Text [ norwegian ] = "Metriske Enheter" ;
         Text [ finnish ] = "Mittayksikφt" ;
-        Text[ chinese_traditional ] = "¤Ψ¤o³ζ¦μ";
+        Text[ chinese_traditional ] = "©w¶q³ζ¦μ";
         Text[ arabic ] = "ζΝΟΙ ΗαήνΗΣ";
         Text[ greek ] = "~Μονάδα μέτρησης";
         Text[ korean ] = "Δ΅Όφ ΄άΐ§";
@@ -995,7 +995,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
         Text[ polish ] = "Pola kon~trolne";
         Text[ japanese ] = "ΊέΔΫ-Ω(~S)";
-        Text[ chinese_traditional ] = "±±¨ξ¶µ(~S)";
+        Text[ chinese_traditional ] = "±±»s¶µ(~S)";
         Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
         Text[ greek ] = "Πεδία ελέγχου";
         Text[ korean ] = "ΔΑΖ®·Ρ(~S)";
@@ -2875,11 +2875,11 @@ TabPage TP_OPTSHDWCRSR
         Text [ dutch ] = "~Spaties" ;
         Text [ spanish ] = "Esp~acios" ;
         Text [ english_us ] = "Spac~es" ;
-        Text[ chinese_simplified ] = "ΏΥ°ΧΧΦ·ϋ(~E)";
+        Text[ chinese_simplified ] = "ΏΥΈρΧΦ·ϋ(~E)";
         Text[ russian ] = "Οπξαελϋ";
         Text[ polish ] = "Spa~cje";
         Text[ japanese ] = "½Νί°½(~E)";
-        Text[ chinese_traditional ] = "ªΕ¥Υ¦r¤Έ(~E)";
+        Text[ chinese_traditional ] = "ªΕ®ζ¦r¤Έ(~E)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ";
         Text[ greek ] = "Χα~ρακτήρας κενού";
         Text[ korean ] = "°ψΉι(~E)";
@@ -2904,11 +2904,11 @@ TabPage TP_OPTSHDWCRSR
         Text [ dutch ] = "~Beveiligde spatie" ;
         Text [ spanish ] = "Espacios proteg~idos" ;
         Text [ english_us ] = "Non-breaking s~paces" ;
-        Text[ chinese_simplified ] = "Κά±£»¤µΔΏΥ°ΧΧΦ·ϋ(~P)";
+        Text[ chinese_simplified ] = "Κά±£»¤µΔΏΥΈρΧΦ·ϋ(~P)";
         Text[ russian ] = "Ηΰωθωεννϋε οπξαελϋ";
         Text[ polish ] = "Spacje bez podzia³u";
         Text[ japanese ] = "•Ϋμ½Νί°½(~P)";
-        Text[ chinese_traditional ] = "¨ό«OΕ@ªΊªΕ¥Υ¦r¤Έ(~P)";
+        Text[ chinese_traditional ] = "¨ό«OΕ@ªΊªΕ®ζ¦r¤Έ(~P)";
         Text[ arabic ] = "ΓΝΡέ γΣΗέΙ γΝγνΙ";
         Text[ greek ] = "Προ~στατευόμενοι χαρακτήρες κενών";
         Text[ korean ] = "°ψΉι ΊΈΘ£(~P)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
