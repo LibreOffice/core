@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:35:39 $
+ *  last change: $Author: oj $ $Date: 2002-07-26 10:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ using namespace ::com::sun::star::sdbc;
 #define CONTROL_SPACING_X   18  // 6
 #define CONTROL_SPACING_Y   5
 #define CONTROL_HEIGHT      20
-#define CONTROL_WIDTH_1     140 // 100
+#define CONTROL_WIDTH_1     160 // 100
 #define CONTROL_WIDTH_2     100 // 60
 #define CONTROL_WIDTH_3     250
 #define CONTROL_WIDTH_4     (CONTROL_WIDTH_3 - CONTROL_HEIGHT - 5)
