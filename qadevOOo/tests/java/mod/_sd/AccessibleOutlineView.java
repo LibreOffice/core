@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-04-28 12:30:35 $
+ *  last change:$Date: 2003-05-27 13:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
@@ -107,7 +108,8 @@ public class AccessibleOutlineView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow (Param.getMSF(),aModel);
+        XWindow xWindow = at.getCurrentWindow (
+                        (XMultiServiceFactory)Param.getMSF(),aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
@@ -163,7 +165,8 @@ public class AccessibleOutlineView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a impress document" );
@@ -186,7 +189,8 @@ public class AccessibleOutlineView extends TestCase {
                 UnoRuntime.queryInterface( XDispatchProvider.class, oObj );
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+                ((XMultiServiceFactory)Param.getMSF()).
+                createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
