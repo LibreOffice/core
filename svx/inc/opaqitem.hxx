@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opaqitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-05 09:48:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <svtools/eitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvXMLUnitConverter;
 #ifdef _USE_NAMESPACE
 namespace rtl
@@ -85,7 +89,7 @@ namespace rtl
 Dieses Item beschreibt eine logische Variable "Undurchsichtig ja oder nein".
 */
 
-class SvxOpaqueItem : public SfxBoolItem
+class SVX_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 {
 public:
     TYPEINFO();
