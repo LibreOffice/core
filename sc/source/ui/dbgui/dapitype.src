@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:32:05 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,27 +123,27 @@ ModalDialog RID_SCDLG_DAPITYPE
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        Text = "~In StarOffice angemeldete Datenquelle" ;
+        Text = "~In %PRODUCTNAME angemeldete Datenquelle" ;
         Text [ ENGLISH ] = "Database source" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Data source registered in StarOffice";
-        Text[ portuguese ] = "~Fonte de dados ligada ao StarOffice";
-        Text[ russian ] = "~Èñòî÷íèê äàííûõ, çàğåã. â StarOffice";
-        Text[ greek ] = "Óôï StarOffice äçëùìİíï áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
-        Text[ dutch ] = "~In StarOffice aangemelde gegevensbron";
-        Text[ french ] = "Source de données sous StarOffice";
-        Text[ spanish ] = "F~uente de datos registrada en StarOffice";
-        Text[ italian ] = "Sorgente dati registrata ~in StarOffice";
-        Text[ danish ] = "Datakilde som er registreret i StarOffice";
-        Text[ swedish ] = "Datakälla som är registrerad i StarOffice";
-        Text[ polish ] = "Zarejestr. ~w StarOffice Ÿród³o danych";
+        Text[ english_us ] = "~Data source registered in %PRODUCTNAME";
+        Text[ portuguese ] = "~Fonte de dados ligada ao %PRODUCTNAME";
+        Text[ russian ] = "~Èñòî÷íèê äàííûõ, çàğåã. â %PRODUCTNAME";
+        Text[ greek ] = "Óôï %PRODUCTNAME äçëùìİíï áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
+        Text[ dutch ] = "~In %PRODUCTNAME aangemelde gegevensbron";
+        Text[ french ] = "Source de données sous %PRODUCTNAME";
+        Text[ spanish ] = "F~uente de datos registrada en %PRODUCTNAME";
+        Text[ italian ] = "Sorgente dati registrata ~in %PRODUCTNAME";
+        Text[ danish ] = "Datakilde som er registreret i %PRODUCTNAME";
+        Text[ swedish ] = "Datakälla som är registrerad i %PRODUCTNAME";
+        Text[ polish ] = "Zarejestr. ~w %PRODUCTNAME Ÿród³o danych";
         Text[ portuguese_brazilian ] = "Database source";
-        Text[ japanese ] = "StarOffice ‚É“o˜^‚³‚ê‚½ÃŞ°À¿°½(~I)";
+        Text[ japanese ] = "%PRODUCTNAME ‚É“o˜^‚³‚ê‚½ÃŞ°À¿°½(~I)";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
-        Text[ chinese_simplified ] = "ÔÚ StarOffice ÖĞµÇ¼ÇµÄÊı¾İÔ´(~I)";
-        Text[ chinese_traditional ] = "StarOffice ¤w¸gµn°Oªº¼ÆÕu·½(~I)";
-        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí StarOffice";
-        Text[ turkish ] = "~StarOffice'de kayıtlı veri kaynağı";
+        Text[ chinese_simplified ] = "ÔÚ %PRODUCTNAME ÖĞµÇ¼ÇµÄÊı¾İÔ´(~I)";
+        Text[ chinese_traditional ] = "%PRODUCTNAME ¤w¸gµn°Oªº¼ÆÕu·½(~I)";
+        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí %PRODUCTNAME";
+        Text[ turkish ] = "~%PRODUCTNAME'de kayıtlı veri kaynağı";
         Text[ language_user1 ] = " ";
     };
     RadioButton BTN_EXTERNAL
