@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:57:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2000-12-08 17:57:27 $ $Revision: 1.5 $
+// $Author: kz $ $Date: 2001-01-26 20:56:49 $ $Revision: 1.6 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -585,7 +585,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ japanese ] = "ÒÓ";
         Text[ korean ] = "¸Ş¸ğ";
         Text[ chinese_simplified ] = "±¸×¢";
-        Text[ chinese_traditional ] = "µ§°O";
+        Text[ chinese_traditional ] = "³Æµù";
         Text[ arabic ] = "ãáÇÍÙÉ";
         Text[ turkish ] = "Not";
     };
@@ -616,7 +616,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ japanese ] = "’ß";
         Text[ korean ] = "ÁÖ¼®";
         Text[ chinese_simplified ] = "ËµÃ÷";
-        Text[ chinese_traditional ] = "³Æª`";
+        Text[ chinese_traditional ] = "³Æµù";
         Text[ arabic ] = "ÊÚáíŞ ÊæÖíÍí";
         Text[ turkish ] = "Açıklama";
         Text[ language_user1 ] = " ";
@@ -1268,7 +1268,7 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ japanese ] = "ÃŞ°À¿°½‚Ì‘I‘ğ";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
     Text[ chinese_simplified ] = "Ñ¡ÔñÊı¾İÔ´";
-    Text[ chinese_traditional ] = "¿ï¾Ü¼ÆÕu·½";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ê®Æ¨Ó·½";
     Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Veri kaynağı seçimi";
     Text[ language_user1 ] = " ";
