@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:03:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,10 +756,13 @@ const SwPropNameTab aPropNameTab = {
 /* 0674 UNO_NAME_POSITION_LAYOUT_DIR*/ {MAP_CHAR_LEN("PositionLayoutDir")}
 };
 
+const SwPropNameLen& SwGetPropName( USHORT nId )
+{
+    return GetPropName( nId );
+}
 const SwPropNameLen& GetPropName( USHORT nId )
 {
     DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );
     return aPropNameTab[ nId - SW_PROPNAME_BEGIN];
 }
-
