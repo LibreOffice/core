@@ -38,9 +38,18 @@ xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xml:lang="en-US">
 
 <!-- int -->
     <Integer cfg:type="int">0</Integer>
+    <IntegerNullWithXsi cfg:type="int" xsi:null="true">10</IntegerNullWithXsi>
+    <IntegerNull cfg:type="int"/>
+
     <IntList cfg:type="int" cfg:derivedBy="list">224 226 222 223 5</IntList>
 
 <!-- short -->
     <Short cfg:type="short">100</Short>
+
+    <Inner>
+        <Inner2>
+            <IntList cfg:type="int" cfg:derivedBy="list">224 226 222 223 5</IntList>
+        </Inner2>
+    </Inner>
 
 </org.openoffice.test>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpletest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-03 11:56:30 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,9 @@ using namespace ::com::sun::star::io;
 // -----------------------------------------------------------------------------
 // ---------------------------------- defines ----------------------------------
 // -----------------------------------------------------------------------------
+#ifndef ASCII
 #define ASCII(x) OUString::createFromAscii(x)
+#endif
 
 ostream& operator << (ostream& out, rtl::OUString const& aStr)
 {
@@ -622,6 +624,8 @@ void stringTest()
 #include <hash_map>
 
 
+namespace test {
+
 struct eqstr
 {
     bool operator()(const rtl::OUString &s1, const rtl::OUString &s2) const
@@ -668,4 +672,50 @@ void hash_test()
     cout << "june      -> " << months[ASCII("june")] << endl;
     cout << "november  -> " << months[ASCII("november")] << endl;
 }
+}
+
+
+// -----------------------------------------------------------------------------
+// Fri Nov 10 15:10:45 2000
+// -----------------------------------------------------------------------------
+
+#include <vos/ref.hxx>
+
+class Options : public vos::OReference
+{
+    int m_aValue;
+public:
+    int getValue() {return m_aValue;}
+    void setValue(int _aValue) {m_aValue = _aValue;}
+
+
+};
+
+class A
+{
+    vos::ORef<Options> m_aOptions;
+public:
+
+    vos::ORef<Options> getOptions() {return m_aOptions;}
+    void setOptions(vos::ORef<Options>& _aOptions) {
+        m_aOptions = _aOptions;
+    }
+};
+
+void testRefs()
+{
+    vos::ORef<Options> aO = new Options;
+    aO->setValue(10);
+
+    A a,b;
+    a.setOptions(aO);
+    b.setOptions(aO);
+    cout << "Options from a : " << a.getOptions()->getValue() << endl;
+    cout << "Options from b : " << b.getOptions()->getValue() << endl;
+
+    aO->setValue(20);
+    cout << "Options from a : " << a.getOptions()->getValue() << endl;
+    cout << "Options from b : " << b.getOptions()->getValue() << endl;
+}
+
 } // namespace configmgr

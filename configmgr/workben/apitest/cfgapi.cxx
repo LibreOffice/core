@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-10 15:17:36 $
+ *  last change: $Author: lla $ $Date: 2000-11-13 13:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,23 +311,49 @@ int _cdecl main( int argc, char * argv[] )
         }
         cout << "Service factory created !\n---------------------------------------------------------------" << endl;
 
-        OUString sUser =   enterValue("    Enter User: ", "lars", false);
-        cout << endl;
-        OUString sPasswd = enterValue("Enter Password: ", "", true);
-        cout << endl;
-        // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
-        rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/local/611/SRC611/configmgr/workben/local_io",false);
-        // rtl::OUString sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
-        cout << endl;
-
         Sequence< Any > aCPArgs;
-        aCPArgs = createSequence(sUser, sPasswd);
+
+        OUString sServerType = enterValue("Enter Servertype: ", "local", false);
+        cout << endl;
+
+
+        rtl::OUString sFilePath;
+        rtl::OUString sUser;
+
+        if (!sServerType.equalsIgnoreCase(ASCII("local")))
+        {
+            sFilePath = enterValue("Enter Server: ", "lautrec-3108:19205",false);
+            cout << endl;
+
+            sUser =   enterValue("    Enter User: ", "lars", false);
+            cout << endl;
+
+            OUString sPasswd = enterValue("Enter Password: ", "", true);
+            cout << endl;
+
+            aCPArgs = createSequence(sUser, sPasswd);
+
+            aCPArgs.realloc(aCPArgs.getLength() + 1);
+            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sFilePath);
+
+            OUString sTimeout = ASCII("10000");
+            aCPArgs.realloc(aCPArgs.getLength() + 1);
+            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("timeout"), sTimeout);
+
+        }
+        else
+        {
+            sFilePath = enterValue("Enter Filepath: ", "f:/local/611/SRC611/configmgr/workben/local_io",false);
+            // sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
+            // sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
+            cout << endl;
+
+            aCPArgs.realloc(aCPArgs.getLength() + 1);
+            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("rootpath"), sFilePath);
+        }
 
         aCPArgs.realloc(aCPArgs.getLength() + 1);
-        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("rootpath"), sFilePath);
-
-        aCPArgs.realloc(aCPArgs.getLength() + 1);
-        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), ASCII("local"));
+        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), sServerType);
 
         Reference< XMultiServiceFactory > xCfgProvider(
             xORB->createInstanceWithArguments(
@@ -340,6 +366,9 @@ int _cdecl main( int argc, char * argv[] )
             cerr << "Could not create the configuration provider !\n\n";
             return 3;
         }
+
+
+
 
 //      char aPath[300] =           "Root/ApplProfile/StarPortal/";
 //      int const nStart = sizeof(  "Root/ApplProfile/StarPortal/"  ) - 1;
@@ -355,6 +384,7 @@ int _cdecl main( int argc, char * argv[] )
 
         Sequence< Any > aArgs;
         aArgs = createSequence(sUser, ASCII(""));
+
         aArgs.realloc(aArgs.getLength() + 1);
         aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
         aArgs.realloc(aArgs.getLength() + 1);
@@ -465,6 +495,7 @@ void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceF
 bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
 {
     cout << "\n[ Q ] -> <Quit>";
+    cout << "\n[ S ] -> <SetValue> ";
     cout << endl;
 
     cout << "\n:> " << flush;
