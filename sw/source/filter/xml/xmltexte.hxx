@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 10:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@ protected:
     virtual void exportStyleContent(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::style::XStyle > & rStyle );
+
+    virtual void exportTextAutoStyles();
 
     virtual void exportTable(
         const ::com::sun::star::uno::Reference <
