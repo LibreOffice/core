@@ -5,6 +5,7 @@ mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\sync
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\awt
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\auth
@@ -114,6 +115,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
 ..\drafts\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\frame\*.idl
 ..\drafts\com\sun\star\accessibility\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility\*.idl
+..\drafts\com\sun\star\awt\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\awt\*.idl
 ..\drafts\com\sun\star\configuration\backend\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend\*.idl
 ..\drafts\com\sun\star\auth\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\auth\*.idl
 ..\drafts\com\sun\star\i18n\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\i18n\*.idl
