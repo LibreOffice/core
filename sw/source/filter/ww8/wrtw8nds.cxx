@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:43:39 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,35 +905,46 @@ void WW8_SwAttrIter::OutSwFmtINetFmt(const SwFmtINetFmt& rINet, bool bStart)
 
 void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
 {
+    bool bBookMarkOnly = false;
     INetURLObject aURL(rUrl);
-    String sURL( aURL.GetURLNoMark(INetURLObject::DECODE_UNAMBIGUOUS) );
-    String sMark( aURL.GetMark(INetURLObject::DECODE_UNAMBIGUOUS) );
+    String sURL;
+    String sMark;
 
-    sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS);
-    sURL.Insert(CREATE_CONST_ASC("HYPERLINK \""), 0);
-    sURL += '\"';
+    if (rUrl.Len() > 1 && rUrl.GetChar(0) == INET_MARK_TOKEN)
+        sMark = rUrl.Copy(1);
+    else
+    {
+        sURL = aURL.GetURLNoMark(INetURLObject::DECODE_UNAMBIGUOUS);
+        sMark = aURL.GetMark(INetURLObject::DECODE_UNAMBIGUOUS);
+
+        sURL = INetURLObject::AbsToRel(sURL, INetURLObject::WAS_ENCODED,
+            INetURLObject::DECODE_UNAMBIGUOUS);
+    }
+
+    if (sMark.Len() && !sURL.Len())
+        bBookMarkOnly = true;
+
+    if (bBookMarkOnly)
+        sURL.APPEND_CONST_ASC("HYPERLINK");
+    else
+    {
+        sURL.Insert(CREATE_CONST_ASC("HYPERLINK \""), 0);
+        sURL += '\"';
+    }
 
     if (sMark.Len())
         (( sURL.APPEND_CONST_ASC(" \\l \"") ) += sMark) += '\"';
 
     if (rTarget.Len())
-            (sURL.APPEND_CONST_ASC(" \\n ")) += rTarget;
+        (sURL.APPEND_CONST_ASC(" \\n ")) += rTarget;
 
-
-    rWrt.OutField( 0, 88, sURL,
-                WRITEFIELD_START | WRITEFIELD_CMD_START );
+    rWrt.OutField( 0, 88, sURL, WRITEFIELD_START | WRITEFIELD_CMD_START );
 
     // write the refence to the "picture" structure
     ULONG nDataStt = rWrt.pDataStrm->Tell();
     rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell() );
 
-//I'm leaving this as a define for now for easy removal of this code
-//C.
-#define WRITE_HYPERLINK_IN_DATA_STREAM
-
-#ifdef WRITE_HYPERLINK_IN_DATA_STREAM
-//WinWord 2000 doesn't write this - so its a temp solution by W97
+//  WinWord 2000 doesn't write this - so its a temp solution by W97 ?
     rWrt.WriteChar( 0x01 );
 
     static BYTE aArr1[] = {
@@ -946,20 +957,15 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
     BYTE* pDataAdr = aArr1 + 2;
     Set_UInt32( pDataAdr, nDataStt );
 
-    rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                                sizeof( aArr1 ), aArr1 );
-#endif
+    rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), sizeof( aArr1 ), aArr1 );
 
     rWrt.OutField( 0, 88, sURL, WRITEFIELD_CMD_END );
 
-
-#ifdef WRITE_HYPERLINK_IN_DATA_STREAM
     // now write the picture structur
     sURL = aURL.GetURLNoMark();
 
-    bool bAbsolute = true;  //all links end up in the data stream as
-                            //absolute references.
-    INetProtocol aProto = aURL.GetProtocol();
+    //all links end up in the data stream as absolute references.
+    bool bAbsolute = !bBookMarkOnly;
 
     static BYTE __READONLY_DATA aURLData1[] = {
         0,0,0,0,        // len of struct
@@ -983,12 +989,13 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
     rWrt.pDataStrm->Write( &nAnchor, 1 );
     rWrt.pDataStrm->Write( MAGIC_A, sizeof(MAGIC_A) );
     SwWW8Writer::WriteLong( *rWrt.pDataStrm, 0x00000002);
-    UINT32 nFlag=0x01;
+    UINT32 nFlag = bBookMarkOnly ? 0 : 0x01;
     if (bAbsolute) nFlag |= 0x02;
     if( sMark.Len() ) nFlag |= 0x08;
     SwWW8Writer::WriteLong( *rWrt.pDataStrm, nFlag );
 
-    if (aProto == INET_PROT_FILE)
+    INetProtocol eProto = aURL.GetProtocol();
+    if (eProto == INET_PROT_FILE)
     {
 // version 1 (for a document)
 
@@ -1017,7 +1024,7 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
         SwWW8Writer::WriteShort( *rWrt.pDataStrm, 3 );
         SwWW8Writer::WriteString16(*rWrt.pDataStrm, sURL, false);
     }
-    else
+    else if (eProto != INET_PROT_NOT_VALID)
     {
         // version 2 (simple url)
         // an write some data to the data stream, but dont ask
@@ -1034,14 +1041,13 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
         SwWW8Writer::WriteString16( *rWrt.pDataStrm, sURL, true);
     }
 
-    if( sMark.Len() )
+    if (sMark.Len())
     {
         SwWW8Writer::WriteLong( *rWrt.pDataStrm, sMark.Len()+1 );
         SwWW8Writer::WriteString16( *rWrt.pDataStrm, sMark, true);
     }
     SwWW8Writer::WriteLong( *rWrt.pDataStrm, nDataStt,
         rWrt.pDataStrm->Tell() - nDataStt );
-#endif
 }
 
 void WW8_AttrIter::EndURL()
