@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-14 15:29:55 $
+ *  last change: $Author: dbo $ $Date: 2002-11-14 16:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ void get_java_env( Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () )
         JavaVM * vm;
         jni_env->GetJavaVM( &vm );
         ::JavaVMContext * jvm_context = new JavaVMContext( vm );
-        JVM_registration_guard guard( jvm_context );
+        JVM_registration_guard jvm_guard( jvm_context );
         uno_getEnvironment( (uno_Environment **)java_env, java_env_name.pData, jvm_context );
     }
 }
@@ -159,7 +159,7 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         if (! java_env.is())
             throw RuntimeException( OUSTR("cannot get java env!"), Reference< XInterface >() );
         // register before doing any complex uno that may call java (beware of detaching!)
-        JVM_registration_guard( java_env.get() );
+        JVM_registration_guard jvm_guard( java_env.get() );
 
         // bootstrap uno
         Reference< XComponentContext > xContext;
