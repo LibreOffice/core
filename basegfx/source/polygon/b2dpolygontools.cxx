@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:37:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
+
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
@@ -73,10 +77,6 @@
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
-
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/numeric/ftools.hxx>
 #endif
 
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
@@ -569,8 +569,14 @@ namespace basegfx
         {
             B2DPoint aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
+            const sal_uInt32 nPointCountMinusOne(nPointCount - 1L);
 
-            if(nPointCount > 1L)
+            if( 1L == nPointCount )
+            {
+                // only one point (i.e. no edge) - simply take that point
+                aRetval = rCandidate.getB2DPoint(0);
+            }
+            else if(nPointCount > 1L)
             {
                 sal_uInt32 nIndex(0L);
                 bool bIndexDone(false);
@@ -613,7 +619,7 @@ namespace basegfx
                     {
                         // crop to polygon end
                         fDistance = fZero;
-                        nIndex = nPointCount - 1L;
+                        nIndex = nPointCountMinusOne;
                         bIndexDone = true;
                     }
                 }
@@ -626,7 +632,15 @@ namespace basegfx
                         // get length of next edge
                         fEdgeLength = getEdgeLength(rCandidate, nIndex);
 
-                        if(fTools::moreOrEqual(fDistance, fEdgeLength))
+                        // edge found must be on the half-open range
+                        // [0,fEdgeLength).
+                        // Note that in theory, we cannot move beyond
+                        // the last polygon point, since fDistance>=fLength
+                        // is checked above. Unfortunately, with floating-
+                        // point calculations, this case might happen.
+                        // Handled by nIndex check below
+                        if( nIndex < nPointCountMinusOne &&
+                            fDistance >= fEdgeLength )
                         {
                             // go to next edge
                             fDistance -= fEdgeLength;
@@ -653,7 +667,11 @@ namespace basegfx
 
                     if(!fTools::equalZero(fEdgeLength))
                     {
-                        fRelative = fDistance / fEdgeLength;
+                        // clamp fRelative to [0,1] range. Borderline cases
+                        // can happen, since this is floating point arithmetic.
+                        fRelative = ::std::max(0.0,
+                                               ::std::min(1.0,
+                                                          fDistance / fEdgeLength) );
                     }
 
                     // add calculated average value to the return value
@@ -1321,6 +1339,57 @@ namespace basegfx
 
             return false;
         }
+
+        B2DPolygon createPolygonFromRect( const B2DRectangle& rRect )
+        {
+            B2DPolygon aRet;
+
+            const double aX1( rRect.getMinX() );
+            const double aX2( rRect.getMaxX() );
+            const double aY1( rRect.getMinY() );
+            const double aY2( rRect.getMaxY() );
+
+            aRet.append( B2DPoint( aX1, aY1 ) );
+            aRet.append( B2DPoint( aX2, aY1 ) );
+            aRet.append( B2DPoint( aX2, aY2 ) );
+            aRet.append( B2DPoint( aX1, aY2 ) );
+            aRet.setClosed( true );
+
+            return aRet;
+        }
+
+        B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double nRadius )
+        {
+            B2DPolygon aRet;
+
+            const double aX( rCenter.getX() );
+            const double aY( rCenter.getY() );
+
+            const double nKappa( (M_SQRT2-1.0)*4.0/3.0 );
+            const double l( nRadius * nKappa );
+
+            aRet.append( B2DPoint( aX, aY-nRadius ) );
+            aRet.append( B2DPoint( aX+nRadius, aY ) );
+            aRet.append( B2DPoint( aX, aY+nRadius ) );
+            aRet.append( B2DPoint( aX-nRadius, aY ) );
+
+            aRet.setControlPointA( 0, B2DPoint( aX+l, aY-nRadius ) );
+            aRet.setControlPointB( 0, B2DPoint( aX+nRadius, aY-l ) );
+
+            aRet.setControlPointA( 1, B2DPoint( aX+nRadius, aY+l ) );
+            aRet.setControlPointB( 1, B2DPoint( aX+l, aY+nRadius ) );
+
+            aRet.setControlPointA( 2, B2DPoint( aX-l, aY+nRadius ) );
+            aRet.setControlPointB( 2, B2DPoint( aX-nRadius, aY+l ) );
+
+            aRet.setControlPointA( 3, B2DPoint( aX-nRadius, aY-l ) );
+            aRet.setControlPointB( 3, B2DPoint( aX-l, aY-nRadius ) );
+
+            aRet.setClosed( true );
+
+            return aRet;
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 
