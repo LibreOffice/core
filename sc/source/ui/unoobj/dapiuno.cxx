@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 19:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1411,7 +1411,8 @@ ScDataPilotFieldObj::ScDataPilotFieldObj( ScDataPilotDescriptorBase* pPar,
     pParent( pPar ),
     nField( nF ),
     nSourceType( nST ),
-    nSourcePos( nSP )
+    nSourcePos( nSP ),
+    nLastFunc( sheet::GeneralFunction_NONE )
 {
     pParent->acquire();
 }
@@ -1613,6 +1614,10 @@ void ScDataPilotFieldObj::setOrientation(sheet::DataPilotFieldOrientation eNew)
         //  SC_FIELDORIENT_ALL, DATA_PILOT_HIDDEN: nichts
     }
 
+    //  if Function was set for this object, use that value;
+    //  default otherwise (0 for SubTotals, SUM for data)
+    USHORT nNewBit = ScDataPilotConversion::FunctionBit( (sheet::GeneralFunction)nLastFunc );
+
     //  in neues Array eintragen
 
     switch (eNew)
@@ -1623,7 +1628,7 @@ void ScDataPilotFieldObj::setOrientation(sheet::DataPilotFieldOrientation eNew)
                 lcl_RemoveField( aParam.aColArr, aParam.nColCount, nField );    // nicht doppelt
                 lcl_RemoveField( aParam.aRowArr, aParam.nRowCount, nField );
                 aParam.aColArr[aParam.nColCount].nCol = nField;
-                aParam.aColArr[aParam.nColCount].nFuncMask = 0;
+                aParam.aColArr[aParam.nColCount].nFuncMask = nNewBit;
                 nSourceType = DATA_PILOT_COLUMN;
                 nSourcePos  = aParam.nColCount;
                 ++aParam.nColCount;
@@ -1635,7 +1640,7 @@ void ScDataPilotFieldObj::setOrientation(sheet::DataPilotFieldOrientation eNew)
                 lcl_RemoveField( aParam.aColArr, aParam.nColCount, nField );    // nicht doppelt
                 lcl_RemoveField( aParam.aRowArr, aParam.nRowCount, nField );
                 aParam.aRowArr[aParam.nRowCount].nCol = nField;
-                aParam.aRowArr[aParam.nRowCount].nFuncMask = 0;
+                aParam.aRowArr[aParam.nRowCount].nFuncMask = nNewBit;
                 nSourceType = DATA_PILOT_ROW;
                 nSourcePos  = aParam.nRowCount;
                 ++aParam.nRowCount;
@@ -1646,11 +1651,17 @@ void ScDataPilotFieldObj::setOrientation(sheet::DataPilotFieldOrientation eNew)
             {
                 //! ggf. mit bestehendem Eintrag zusammenfassen (Funktionen verodern) ???
                 aParam.aDataArr[aParam.nDataCount].nCol = nField;
-                aParam.aDataArr[aParam.nDataCount].nFuncMask = PIVOT_FUNC_SUM;
+                if ( nNewBit == 0 )
+                    nNewBit = PIVOT_FUNC_SUM;
+                aParam.aDataArr[aParam.nDataCount].nFuncMask = nNewBit;
                 nSourceType = DATA_PILOT_DATA;
                 nSourcePos  = aParam.nDataCount;
                 ++aParam.nDataCount;
             }
+            break;
+        default:            // PAGE or HIDDEN
+            nSourceType = eNew;
+            nSourcePos  = 0;
             break;
     }
 
@@ -1689,6 +1700,9 @@ sheet::GeneralFunction ScDataPilotFieldObj::getFunction(void) const
                     eRet = ScDataPilotConversion::FirstFunc( nFuncBit );
             }
             break;
+        default:
+            // if Function has been set for this object, return that value
+            eRet = (sheet::GeneralFunction) nLastFunc;
     }
     return eRet;
 }
@@ -1730,6 +1744,8 @@ void ScDataPilotFieldObj::setFunction(sheet::GeneralFunction eNewFunc)
     }
 
     pParent->SetParam( aParam, aQuery, aSrcArea );
+
+    nLastFunc = eNewFunc;       // to allow setting Function before Orientation
 }
 
 
