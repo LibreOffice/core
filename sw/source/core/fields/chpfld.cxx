@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:37:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
         // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
         sNumber = pDoc->GetOutlineNumRule()->MakeNumString( rNum, sal_False );
 
-        if( NO_NUM > rNum.GetLevel() && !( NO_NUMLEVEL & rNum.GetLevel() ) )
+        if( rNum.IsShowNum() )
         {
             const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get( rNum.GetLevel() );
             sPost = rNFmt.GetSuffix();
