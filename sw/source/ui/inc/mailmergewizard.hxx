@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergewizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:22:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 17:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ protected:
 // roadmap feature ??
 //    virtual sal_Bool            prepareLeaveCurrentState( CommitPageReason _eReason );
     virtual String                  getStateDisplayName( WizardState _nState );
-    virtual void                    StateChanged( StateChangedType nStateChange );
 
 public:
     SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem);
