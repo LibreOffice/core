@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:16:21 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,9 +561,12 @@ public:
                                                                            // no seeking is produced
     ULONG                       ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
                                                                            // no seeking is produced
+#if 0
     ULONG                       CopySourceToTemporary( ULONG aLength ); // same as ReadSourceWriteToTemporary( aLength )
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
+#endif
+
     ULONG                       CopySourceToTemporary();                // same as ReadSourceWriteToTemporary()
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
@@ -1057,6 +1060,7 @@ ULONG UCBStorageStream_Impl::CopySourceToTemporary()
 
 }
 
+#if 0
 ULONG UCBStorageStream_Impl::CopySourceToTemporary( ULONG aLength )
 {
     // current position of the temporary stream is not changed
@@ -1073,6 +1077,7 @@ ULONG UCBStorageStream_Impl::CopySourceToTemporary( ULONG aLength )
     return aResult;
 
 }
+#endif
 
 // UCBStorageStream_Impl must have a SvStream interface, because it then can be used as underlying stream
 // of an OLEStorage; so every write access caused by storage operations marks the UCBStorageStream as modified
