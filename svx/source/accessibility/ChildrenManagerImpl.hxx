@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:37:22 $
+ *  last change: $Author: af $ $Date: 2002-04-22 08:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,15 +104,26 @@ class CMShapeIterator;
 
 /** This class contains the actual implementation of the children manager.
 
-    <p>It maintains a set of shapes that is made up of single shapes stored
-    in <member>maShapes</member> and lists of shapes
-    <member>maShapeLists</member>.  These lists can be manipulated with the
-    <member>AddShapeList</member>, <member>RemoveShape</member>,
-    <member>RemoveShapeList</member> methods.  The actual set of children
-    accessible through the <member>GetChildrenCount</member> and
-    <member>GetChild</member> methods is the subset of shapes that lie
-    completely or partially inside the visible area obtained from the view
-    forwarder in the shape tree info.</p>
+    <p>It maintains a set of visible accessible shapes in
+    <member>maVisibleChildren</member>.  The objects in this list stem from
+    two sources.  The first is a list of UNO shapes like the list of shapes
+    in a draw page.  A reference to this list is held in
+    <member>maShapeList</member>.  Accessible objects for these shapes are
+    created on demand.  The list can be replaced by calls to the
+    <member>SetShapeList</member> method.  The second source is a list of
+    already accessible objects.  It can be modified by calls to the
+    <member>AddAccessibleShape</member> and
+    <member>ClearAccessibleShapeList</member> methods.</p>
+
+    <p>Each call of the <member>Update</member> method leads to a
+    re-calculation of the visible shapes which then can be queried with the
+    <member>GetChildCount</member> and <member>GetChild</member> methods.
+    Events are send informing all listeners about the removed shapes which are
+    not visible anymore and about the added shapes.</p>
+
+    <p> The visible area which is used to determine the visibility of the
+    shapes is taken from the view forwarder.  Thus, to signal a change of
+    the visible area call <member>ViewForwarderChanged</member>.</p>
 
     @see ChildrenManager
 */
@@ -145,10 +156,10 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         AccessibleContextBase& rContext);
 
-    /** If there still are managed children these are marked as DEFUNC and
+    /** If there still are managed children these are disposed and
         released.
     */
-    ~ChildrenManagerImpl (void) SAL_THROW (());
+    ~ChildrenManagerImpl (void);
 
     /** Do that part of the initialization that you can not or should not do
         in the constructor like registering at broadcasters.
@@ -228,11 +239,30 @@ public:
     */
     void Update (bool bCreateNewObjectsOnDemand = true);
 
+    /** Set the list of UNO shapes to the given list.  This removes the old
+        list and does not add to it.  The list of accessible shapes that is
+        build up by calls to <member>AddAccessibleShape</member> is not
+        modified.  Neither is the list of visible children.  Accessible
+        objects are created on demand.
+        @param xShapeList
+            The list of UNO shapes that replaces the old list.
+    */
     void SetShapeList (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShapes>& xShapeList);
 
+    /** Add a accessible shape.  This does not modify the list of UNO shapes
+        or the list of visible shapes.  Accessible shapes are, at the
+        moment, not tested against the visible area but are always appended
+        to the list of visible children.
+        @param pShape
+            The new shape that is added to the list of accessible shapes.
+    */
     void AddAccessibleShape (AccessibleShape* pShape);
 
+    /** Clear the list of accessible shapes.  It can be rebuild with calls
+        to the <member>AddAccessibleShape</member> method.  Other lists are
+        not modified.
+    */
     void ClearAccessibleShapeList (void);
 
     /** Take a new event shape tree info.  Call this method to inform the
@@ -256,14 +286,25 @@ public:
         notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
+
     //=====  IAccessibleViewForwarderListener  ================================
+
+    /** Informs this children manager and its children about a change of one
+        (or more) aspect of the view forwarder.
+        @param aChangeType
+            A change type of <const>VISIBLE_AREA</const> leads to a call to
+            the <member>Update</memeber> which creates accessible objects of
+            new shapes immediately.  Other change types are passed to the
+            visible accessible children without calling
+            <member>Update</memeber>.
+        @param pViewForwarder
+            The modified view forwarder.  Use this one from now on.
+    */
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder);
 
 
 protected:
-    friend class CMShapeIterator;
-
     /// Mutex guarding objects of this class.
     mutable ::vos::OMutex maMutex;
 
@@ -297,7 +338,8 @@ protected:
     std::vector<AccessibleShape*> maAccessibleShapes;
 
     /** Rectangle that describes the visible area in which a shape has to lie
-        at least partly, to be accessible through this class.
+        at least partly, to be accessible through this class.  Used to
+        detect changes of the visible area after changes of the view forwarder.
     */
     Rectangle maVisibleArea;
 
@@ -338,36 +380,45 @@ private:
 
     /** Create a list of visible shapes from the list of UNO shapes
         <member>maShapeList</member> and the list of accessible objects.
-        @param raDescriptorList
+        @param raChildList
             For every visible shape from the two sources mentioned above one
             descriptor is added to this list.
     */
-    void CreateListOfVisibleShapes (ChildDescriptorListType& raDescriptorList);
+    void CreateListOfVisibleShapes (ChildDescriptorListType& raChildList);
 
     /** From the internal list of (former) visible shapes remove those that
         are not member of the given list.  Send appropriate events for every
         such shape.
-        @param raDescriptorList
-            The new list of visible children againt which the internal one
+        @param raChildList
+            The new list of visible children against which the internal one
             is compared.
     */
     void RemoveNonVisibleChildren (ChildDescriptorListType& raChildList);
 
     /** Merge the information that is already known about the visible shapes
         from the current list into the new list.
+        @param raChildList
+            Information is merged from the current list of visible children
+            to this list.
     */
     void MergeAccessibilityInformation (ChildDescriptorListType& raChildList);
 
     /** If the visible area has changed then send events that signal a
         change of their bounding boxes for all shapes that are members of
         both the current and the new list of visible shapes.
+        @param raChildList
+            Events are sent to all entries of this list that already contain
+            an accessible object.
     */
     void SendVisibleAreaEvents (ChildDescriptorListType& raChildList);
 
     /** If children have to be created immediately and not on demand the
         create the missing accessible objects now.
+        @param raDescriptorList
+            Create an accessible object for every member of this list where
+            that obejct does not already exist.
     */
-    void CreateAccessibilityObjects (ChildDescriptorListType& raNewChildList);
+    void CreateAccessibilityObjects (ChildDescriptorListType& raChildList);
 };
 
 
@@ -392,8 +443,21 @@ public:
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
 
-    AccessibleShape* mpAccessibleShape;
+    /** Return a pointer to the implementation object of the accessible
+        shape of this descriptor.
+        @return
+            The result is NULL if either the UNO reference to the accessible
+            shape is empty or it can not be transformed into a pointer to
+            the desired class.
+    */
+    AccessibleShape* GetAccessibleShape (void) const;
 
+    /**  This flag is set during the visibility calculation and indicates
+         that at one time in this process an event is sent that informs the
+         listners of the creation of a new accessible object.  This flags is
+         not reset afterwards.  Don't use it unless you know exactly what
+         you are doing.
+    */
     bool mbCreateEventPending;
 
     /** Create a new descriptor for the specified shape with empty reference
