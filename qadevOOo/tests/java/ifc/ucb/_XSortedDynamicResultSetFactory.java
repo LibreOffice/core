@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSortedDynamicResultSetFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:34 $
+ *  last change:$Date: 2003-02-06 09:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.ucb.XSortedDynamicResultSetFactory;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Testing <code>com.sun.star.ucb.XSortedDynamicResultSetFactory</code>
@@ -152,7 +155,8 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
                 (OpenMode.ALL, 10000, null, new Property[] {prop},
                  new NumberedSortingInfo[0])) ;
 
-            dynResSet = (XDynamicResultSet) cmdProc.execute(cmd, 0, null) ;
+            dynResSet = (XDynamicResultSet) AnyConverter.toObject(
+                new Type(XDynamicResultSet.class),cmdProc.execute(cmd, 0, null));
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
         }
