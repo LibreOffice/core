@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileunx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:47:42 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ static const __store_errcode_mapping_st __store_errcode_map[] =
 #endif /* EDEADLOCK */
     { EBADF,     store_E_InvalidHandle    },
     { EINVAL,    store_E_InvalidParameter },
+    { ENOSPC,    store_E_OutOfSpace       },
 };
 
 /*
@@ -159,7 +160,7 @@ inline sal_uInt8* __store_mmap (HSTORE h, sal_uInt32 k, sal_uInt32 n)
  */
 inline void __store_munmap (sal_uInt8 *p, sal_uInt32 n)
 {
-    ::munmap ((char *)p, (size_t)n);
+    (void)::munmap ((char *)p, (size_t)n);
 }
 
 /*
@@ -231,7 +232,7 @@ inline storeError __store_fopen (
             result = ERROR_FROM_NATIVE(errno);
 
         // Close file handle.
-        ::close (rhFile); rhFile = 0;
+        (void)::close (rhFile); rhFile = 0;
 
         // Finish.
         return (result);
@@ -261,7 +262,7 @@ inline storeError __store_fopen (
             result = ERROR_FROM_NATIVE(errno);
 
         // Close file handle.
-        ::close (rhFile); rhFile = 0;
+        (void)::close (rhFile); rhFile = 0;
 
         // Finish.
         return (result);
@@ -274,7 +275,7 @@ inline storeError __store_fopen (
     {
         // Set close-on-exec flag.
         nFlags |= FD_CLOEXEC;
-        ::fcntl (rhFile, F_SETFD, nFlags);
+        (void)::fcntl (rhFile, F_SETFD, nFlags);
     }
     return store_E_None;
 }
@@ -381,15 +382,18 @@ inline storeError __store_ftrunc (HSTORE h, sal_uInt32 n)
 /*
  * __store_fsync.
  */
-inline void __store_fsync (HSTORE h)
+inline storeError __store_fsync (HSTORE h)
 {
-    ::fsync (h);
+    if (::fsync (h) == -1)
+        return ERROR_FROM_NATIVE(errno);
+    else
+        return store_E_None;
 }
 
 /*
  * __store_fclose.
  */
-inline void __store_fclose (HSTORE h)
+inline storeError __store_fclose (HSTORE h)
 {
 #ifdef SOLARIS /* see comment in __store_fopen() */
 
@@ -400,7 +404,7 @@ inline void __store_fclose (HSTORE h)
     share.f_deny = 0;
     share.f_id = 0;
 
-    ::fcntl (h, F_UNSHARE, &share);
+    (void)::fcntl (h, F_UNSHARE, &share);
 
 #else  /* POSIX */
 
@@ -412,12 +416,15 @@ inline void __store_fclose (HSTORE h)
     lock.l_start  = 0;
     lock.l_len    = 0;
 
-    ::fcntl (h, F_SETLK, &lock);
+    (void)::fcntl (h, F_SETLK, &lock);
 
 #endif /* SOLARIS || POSIX */
 
     // Close file handle.
-    ::close (h);
+    if (::close (h) == -1)
+        return ERROR_FROM_NATIVE(errno);
+    else
+        return store_E_None;
 }
 
 #endif /* INCLUDED_STORE_FILEUNX_HXX */
