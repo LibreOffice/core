@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-28 15:20:20 $
+ *  last change: $Author: mt $ $Date: 2002-08-28 15:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2050,6 +2050,9 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
                 nSomeExtraSpace--;
         }
     }
+
+    // Now the text width contains the extra width...
+    pLine->SetTextWidth( pLine->GetTextWidth() + nRemainingSpace );
 }
 
 void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray )
