@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:00:09 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,8 +301,12 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             pPage->rSh.SttCrsrMove();
             pPage->rSh.Push();
             pPage->rSh.ClearMark();
-            pPage->rSh.MovePara(fnParaCurr,fnParaStart);
-
+            //CHINA001 pPage->rSh.MovePara(fnParaCurr,fnParaStart);
+            SwWhichPara pSwuifnParaCurr = SwuiGetfnParaCurr();
+            SwPosPara pSwuifnParaStart = SwuiGetfnParaStart();
+            if (!pSwuifnParaCurr) DBG_ASSERT(0, "get the SwuiGetfnParaCurr failed ");//CHINA001
+            if (!pSwuifnParaStart) DBG_ASSERT(0, "get the SwuiGetfnParaStart failed ");//CHINA001
+            pPage->rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
             // normal
             GetFontSettings( *pPage, aFont, RES_CHRATR_FONT );
 
