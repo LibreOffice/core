@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-01 17:13:48 $
+ *  last change: $Author: aw $ $Date: 2001-07-05 13:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,9 @@ BOOL SdDrawDocShell::Save()
         else
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
 
+        // #86834# Call UpdateDocInfoForSave() before export
+        UpdateDocInfoForSave();
+
         bRet = pFilter ? pFilter->Export() : FALSE;
         delete pFilter;
     }
@@ -591,6 +594,10 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
         {
             SfxMedium aMedium( pStore );
             pFilter = new SdXMLFilter( aMedium, *this, sal_True );
+
+            // #86834# Call UpdateDocInfoForSave() before export
+            UpdateDocInfoForSave();
+
             bRet = pFilter->Export();
         }
         else
@@ -607,6 +614,10 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
 
             SfxMedium aMedium( pStore );
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
+
+            // #86834# Call UpdateDocInfoForSave() before export
+            UpdateDocInfoForSave();
+
             bRet = pFilter->Export();
         }
 
