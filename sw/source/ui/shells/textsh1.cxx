@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:49:33 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
@@ -263,6 +262,18 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+#ifndef SW_WORDCOUNTDIALOG_HXX
+#include <wordcountdialog.hxx>
+#endif
+#ifndef _DOCSTAT_HXX
+#include <docstat.hxx>
+#endif
+#ifndef _SWWAIT_HXX
+#include <swwait.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #include <svx/acorrcfg.hxx>
@@ -1180,6 +1191,24 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
         }
         rReq.Ignore ();
+    }
+    break;
+    case FN_WORDCOUNT_DIALOG:
+    {
+        SwWrtShell &rSh = GetShell();
+        SwDocStat aCurr;
+        SwDocStat aDocStat( rSh.GetDoc()->GetDocStat() );
+        {
+            SwWait aWait( *GetView().GetDocShell(), TRUE );
+            rSh.StartAction();
+            rSh.CountWords( aCurr );
+            rSh.UpdateDocStat( aDocStat );
+            rSh.EndAction();
+        }
+        SwWordCountDialog* pDialog = new SwWordCountDialog(GetView().GetWindow());
+        pDialog->SetValues(aCurr, aDocStat );
+        pDialog->Execute();
+        delete pDialog;
     }
     break;
     default:
