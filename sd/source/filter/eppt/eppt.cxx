@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 11:21:33 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 13:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1431,6 +1431,8 @@ sal_Bool PPTWriter::ImplCreateTitleMasterPage( int nPageNum )
 
 sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
 {
+    ::com::sun::star::uno::Any aAny;
+
     if ( !ImplGetPageByIndex( nPageNum, NORMAL ) )
         return FALSE;
 
@@ -1439,17 +1441,17 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
     nMasterID |= ImplGetMasterIndex( NORMAL );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
-    sal_Bool bHasBackground = ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
+    sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Background" ) ) );
     if ( bHasBackground )
-        bHasBackground = ( mAny >>= aXBackgroundPropSet );
+        bHasBackground = ( aAny >>= aXBackgroundPropSet );
     sal_uInt16 nMode = 3;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
     if ( !bHasBackground )
         nMode |= 4;
 
     mnLayout = 20;              // Default: blank Slide
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ) )
     {
-        mnLayout = *( (sal_uInt16*)mAny.getValue() );
+        mnLayout = *( (sal_uInt16*)aAny.getValue() );
         if ( mnLayout > 20 )
             mnLayout = 20;
     }
@@ -1463,10 +1465,16 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
             << nMode
             << (sal_uInt16)0;                       // padword
 
+
     mnDiaMode = 0;
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
+    sal_Bool bVisible = sal_True;
+    ::com::sun::star::presentation::FadeEffect eFe = ::com::sun::star::presentation::FadeEffect_NONE;
+
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Visible" ) ) ) )
+        aAny >>= bVisible;
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Change" ) ) ) )
     {
-        switch ( *(INT32*)mAny.getValue() )
+        switch ( *(INT32*)aAny.getValue() )
         {
             case 1 :        // automatisch
                 mnDiaMode++;
@@ -1477,129 +1485,130 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
             break;
         }
     }
-    if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) ) ) )
+        aAny >>= eFe;
+
+    sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == FALSE )
+                                    || ( mnDiaMode == 2 )
+                                    || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
+    if ( bNeedsSSSlideInfoAtom )
     {
-        ::com::sun::star::presentation::FadeEffect aFe;
-        mAny >>= aFe;
+        sal_uInt8   nDirection = 0;
+        sal_uInt8   nTransitionType = 0;
+        sal_uInt16  nBuildFlags = 1;        // advange by mouseclick
+        sal_uInt8   nSoundRef = 0;
+        INT32       nSlideTime = 0;         // muss noch !!!
+        sal_uInt8   nSpeed = 1;
 
-        if ( ( aFe != ::com::sun::star::presentation::FadeEffect_NONE ) || ( mnDiaMode == 2 ) )
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
         {
-            sal_uInt8   nDirection = 0;
-            sal_uInt8   nTransitionType = 0;
-            sal_uInt16  nBuildFlags = 1;                                // advange by mouseclick
-            sal_uInt8   nSoundRef = 0;
-            INT32   nSlideTime = 0;                                 // muss noch !!!
-
-            sal_uInt8   nSpeed = 1;
-            if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) ) ) )
-            {
-                ::com::sun::star::presentation::AnimationSpeed aAs;
-                mAny >>= aAs;
-                nSpeed = (sal_uInt8)aAs;
-            }
-            switch ( aFe )
-            {
-                default :
-                case ::com::sun::star::presentation::FadeEffect_RANDOM :
-                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES :
-                    nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_COVER;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_DISSOLVE :
-                    nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_WIPE;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
-                    nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
-                    nDirection += 4;
-                    nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
-                    nTransitionType = PPT_TRANSITION_TYPE_PULL;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER :
-                    nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
-                break;
-
-                case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
-                    nDirection++;
-                case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
-                    nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
-                break;
-                case ::com::sun::star::presentation::FadeEffect_NONE :
-                    nDirection = 2;
-                break;
-            }
-            if ( mnDiaMode == 2 )                                       // automatic ?
-                nBuildFlags |= 0x400;
-
-            if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
-            {
-                nSlideTime = *(INT32*)mAny.getValue() << 10;                        // in ticks
-            }
-            mp_EscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
-            *mpStrm << (sal_uInt32)nSlideTime                               // standtime in ticks
-                    << (sal_uInt32)0
-                    << (sal_uInt8)nDirection
-                    << (sal_uInt8)nTransitionType
-                    << (sal_uInt16)nBuildFlags
-                    << (sal_uInt8)nSpeed
-                    << (sal_uInt8)nSoundRef << (sal_uInt8)0 << (sal_uInt8)0;
+            ::com::sun::star::presentation::AnimationSpeed aAs;
+            aAny >>= aAs;
+            nSpeed = (sal_uInt8)aAs;
         }
+        switch ( eFe )
+        {
+            default :
+            case ::com::sun::star::presentation::FadeEffect_RANDOM :
+                nTransitionType = PPT_TRANSITION_TYPE_RANDOM;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_STRIPES :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_VERTICAL_STRIPES :
+                nTransitionType = PPT_TRANSITION_TYPE_BLINDS;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_MOVE_FROM_RIGHT :
+                nTransitionType = PPT_TRANSITION_TYPE_COVER;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_DISSOLVE :
+                nTransitionType = PPT_TRANSITION_TYPE_DISSOLVE;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_RIGHT :
+                nTransitionType = PPT_TRANSITION_TYPE_WIPE;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_VERTICAL_LINES :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_HORIZONTAL_LINES :
+                nTransitionType = PPT_TRANSITION_TYPE_RANDOM_BARS;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERLEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_UPPERRIGHT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERLEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_LOWERRIGHT :
+                nDirection += 4;
+                nTransitionType = PPT_TRANSITION_TYPE_STRIPS;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_LEFT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_BOTTOM :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_ROLL_FROM_RIGHT :
+                nTransitionType = PPT_TRANSITION_TYPE_PULL;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_FADE_TO_CENTER :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_FADE_FROM_CENTER :
+                nTransitionType = PPT_TRANSITION_TYPE_ZOOM;
+            break;
+
+            case ::com::sun::star::presentation::FadeEffect_CLOSE_HORIZONTAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_OPEN_HORIZONTAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_CLOSE_VERTICAL :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_OPEN_VERTICAL :
+                nTransitionType = PPT_TRANSITION_TYPE_SPLIT;
+            break;
+            case ::com::sun::star::presentation::FadeEffect_NONE :
+                nDirection = 2;
+            break;
+        }
+        if ( mnDiaMode == 2 )                                   // automatic ?
+            nBuildFlags |= 0x400;
+        if ( bVisible == FALSE )
+            nBuildFlags |= 4;
+
+        if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
+            nSlideTime = *(INT32*)aAny.getValue() << 10;        // in ticks
+
+
+        mp_EscherEx->AddAtom( 16, EPP_SSSlideInfoAtom );
+        *mpStrm << (sal_uInt32)nSlideTime                       // standtime in ticks
+                << (sal_uInt32)0
+                << (sal_uInt8)nDirection
+                << (sal_uInt8)nTransitionType
+                << (sal_uInt16)nBuildFlags
+                << (sal_uInt8)nSpeed
+                << (sal_uInt8)nSoundRef << (sal_uInt8)0 << (sal_uInt8)0;
     }
 
     SolverContainer aSolverContainer;
-
     mp_EscherEx->OpenContainer( EPP_PPDrawing );
     mp_EscherEx->OpenContainer( _Escher_DgContainer );
     mp_EscherEx->EnterGroup();
