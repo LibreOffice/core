@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:31:23 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,11 +297,11 @@ TabPage TP_DROPCAPS
         Text [ dutch ] = "A~fstand tot tekst" ;
         Text [ spanish ] = "~Distancia hasta el texto" ;
         Text [ english_us ] = "Space to text" ;
-        Text[ chinese_simplified ] = "ÖÁÕıÎÄµÄ¾àÀë(~D)";
+        Text[ chinese_simplified ] = "ÖÁÎÄ×ÖµÄ¾àÀë(~D)";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
         Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ü‚Å‚ÌŠÔŠu(~D)";
-        Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÖÃ(~D)";
+        Text[ chinese_traditional ] = "¦Ü¤å¦rªº¶ZÖÃ(~D)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Á~ğüóôáóç áğü ôï êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®¿¡¡¡´ëÇÑ¡¡°£°İ";
@@ -468,6 +468,7 @@ TabPage TP_DROPCAPS
     };
 };
  // ********************************************************************** EOF
+
 
 
 
