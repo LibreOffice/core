@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:33:27 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,10 +418,30 @@ void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
     } while ( pTmp != pVSh );
 }
 
+void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
+{
+    ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    ViewShell *pVSh = GetShell();
+    ViewShell *pTmp = pVSh;
+    do
+    {
+        if( pTmp->Imp()->IsAccessible() )
+            pTmp->Imp()->GetAccessibleMap().InvalidateFrmContent( pFrm );
+        pTmp = (ViewShell *)pTmp->GetNext();
+    } while ( pTmp != pVSh );
+}
+
+
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()
 {
     ASSERT( !pAccMap, "accessible map exists" )
     pAccMap = new SwAccessibleMap( GetShell() );
     return pAccMap;
+}
+
+void SwViewImp::FireAccessibleEvents()
+{
+    if( IsAccessible() )
+        GetAccessibleMap().FireEvents();
 }
 #endif
