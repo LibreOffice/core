@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 08:55:55 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ RCFILES=verinfo.rc
 
 # --- Linken der Applikation ---------------------------------------
 
-.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
 # #74158# linux needs sal/vos/tools at end of link list, solaris needs it first,
 # winXX is handled like solaris for now
 APP1_STDPRE=
@@ -151,7 +151,7 @@ APP1OBJS +=	$(OBJ)$/icon_resource_sun.obj
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
 APP1STDLIBS+= -lXext -lSM -lICE
 .ENDIF
 .ENDIF
@@ -231,16 +231,6 @@ APP5STDLIBS=			\
     $(SALLIB)			\
     $(TKLIB)            \
     $(SVTOOLLIB)
-
-#	$(APP1_STDPRE)		\
-#	$(SVLLIB)			\
-#	$(SVMEMLIB)			\
-#	$(VCLLIB)			\
-#    $(APP1_STDPOST)		\
-#	$(UNOTOOLSLIB)		\
-#	$(UCBHELPERLIB)		\
-#	$(COMPHELPERLIB)	\
-#	$(SALHELPERLIB)		\
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
