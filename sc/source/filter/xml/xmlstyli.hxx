@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-05 13:43:01 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 08:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public:
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
     virtual ~XMLTableStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -188,8 +188,10 @@ public:
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    void FillPropertySet(const ::com::sun::star::uno::Reference<
+    virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & rPropSet );
+
+    virtual void SetDefaults();
 
     virtual void Finish( sal_Bool bOverwrite );
 };
@@ -225,6 +227,12 @@ protected:
             sal_uInt16 nPrefix,
             const ::rtl::OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 //  virtual SvXMLImportPropertyMapper *GetImpPropMapper();
 
