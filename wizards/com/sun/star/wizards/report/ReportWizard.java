@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:33:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ import com.sun.star.uno.XNamingService;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
+import com.sun.star.ucb.XSimpleFileAccess;
 
 import com.sun.star.sheet.*;
 import com.sun.star.document.*;
@@ -1960,9 +1961,18 @@ public class ReportWizard {
         WorkPath = Tools.getOfficePath(xMSF, "Work","");
         ContentFiles = Tools.getFolderTitles(xMSF, "cnt", ReportPath);
         LayoutFiles = Tools.getFolderTitles(xMSF,"stl", ReportPath);
+        XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+        XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
+        boolean bcntexists = xSimpleFileAccess.exists(ReportPath + "/cnt-default.stw");
+        boolean bstlexists = xSimpleFileAccess.exists(ReportPath + "/stl-default.stw");
+        if ((bcntexists == false) || (bstlexists == false))
+            throw  new Tools.NoValidPathException(xMSF);
         return true;
         }
         catch (Tools.NoValidPathException nopathexception){
+        return false;
+        }
+        catch (Exception exception){
         return false;
         }}
     }
