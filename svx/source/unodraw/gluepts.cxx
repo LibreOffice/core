@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-04 08:29:17 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,20 +282,20 @@ void SvxUnoGluePointAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) 
         {
             mpObject = NULL;
         }
-        else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
-        {
-            SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
-            while( pObjList )
-            {
-                if( pSdrHint->GetObjList() == pObjList )
-                {
-                    mpObject = NULL;
-                    break;
-                }
-
-                pObjList = pObjList->GetUpList();
-            }
-        }
+        // #110094#-9
+        //else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
+        //{
+        //  SdrObjList* pObjList = mpObject ? mpObject->GetObjList() : NULL;
+        //  while( pObjList )
+        //  {
+        //      if( pSdrHint->GetObjList() == pObjList )
+        //      {
+        //          mpObject = NULL;
+        //          break;
+        //      }
+        //      pObjList = pObjList->GetUpList();
+        //  }
+        //}
     }
 }
 
@@ -315,7 +315,10 @@ sal_Int32 SAL_CALL SvxUnoGluePointAccess::insert( const uno::Any& aElement ) thr
                 SdrGluePoint aSdrGlue;
                 convert( aUnoGlue, aSdrGlue );
                 USHORT nId = pList->Insert( aSdrGlue );
-                mpObject->SendRepaintBroadcast();
+
+                // only repaint, no objectchange
+                mpObject->ActionChanged();
+                // mpObject->BroadcastObjectChange();
 
                 return (sal_Int32)((*pList)[nId].GetId() + NON_USER_DEFINED_GLUE_POINTS);
             }
@@ -342,7 +345,11 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIdentifier( sal_Int32 Identifier ) 
             if( (*pList)[i].GetId() == nId )
             {
                 pList->Delete( i );
-                mpObject->SendRepaintBroadcast();
+
+                // only repaint, no objectchange
+                mpObject->ActionChanged();
+                // mpObject->BroadcastObjectChange();
+
                 return;
             }
         }
@@ -372,7 +379,11 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIdentifer( sal_Int32 Identifier, c
                 // change the glue point
                 SdrGluePoint& rTempPoint = (*pList)[i];
                 convert( aGluePoint, rTempPoint );
-                mpObject->SendRepaintBroadcast();
+
+                // only repaint, no objectchange
+                mpObject->ActionChanged();
+                // mpObject->BroadcastObjectChange();
+
                 return;
             }
         }
@@ -455,7 +466,11 @@ void SAL_CALL SvxUnoGluePointAccess::insertByIndex( sal_Int32 Index, const uno::
             {
                 convert( aUnoGlue, aSdrGlue );
                 pList->Insert( aSdrGlue );
-                mpObject->SendRepaintBroadcast();
+
+                // only repaint, no objectchange
+                mpObject->ActionChanged();
+                // mpObject->BroadcastObjectChange();
+
                 return;
             }
 
@@ -478,7 +493,11 @@ void SAL_CALL SvxUnoGluePointAccess::removeByIndex( sal_Int32 Index )
             if( Index >= 0 && Index < pList->GetCount() )
             {
                 pList->Delete( (USHORT)Index );
-                mpObject->SendRepaintBroadcast();
+
+                // only repaint, no objectchange
+                mpObject->ActionChanged();
+                // mpObject->BroadcastObjectChange();
+
                 return;
             }
         }
@@ -504,7 +523,10 @@ void SAL_CALL SvxUnoGluePointAccess::replaceByIndex( sal_Int32 Index, const uno:
         {
             SdrGluePoint& rGlue = (*pList)[(USHORT)Index];
             convert( aUnoGlue, rGlue );
-            mpObject->SendRepaintBroadcast();
+
+            // only repaint, no objectchange
+            mpObject->ActionChanged();
+            // mpObject->BroadcastObjectChange();
         }
     }
 
