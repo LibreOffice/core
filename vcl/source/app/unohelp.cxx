@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 17:49:32 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,7 @@ struct VCLRegServiceInfo
 
 static VCLRegServiceInfo aVCLComponentsArray[] =
 {
-#if SUPD >= 625
     {"i18n", sal_True},
-#else
-    {"int", sal_True},
-#endif
 #ifdef UNX
 #ifdef MACOSX
     {"dtransaqua", sal_True},
@@ -126,6 +122,7 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {"sysdtrans", sal_False},
 #endif
     {"dtrans", sal_False},
+    {"dnd", sal_False},
     {NULL, sal_False}
 };
 
