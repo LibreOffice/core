@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2002-05-17 13:26:24 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 13:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1514,7 +1514,7 @@ void XPolygon::Rotate20()
         memcpy (pTemp, pImpXPolygon->pPointAry, nIndex0 * sizeof (Point));
         memcpy (pImpXPolygon->pPointAry, &pImpXPolygon->pPointAry [nIndex0], (nPntCnt - nIndex0) * sizeof (Point));
         memcpy (&pImpXPolygon->pPointAry [nIndex0], pTemp, nIndex0 * sizeof (Point));
-        delete pTemp;
+        delete[] pTemp;
     }
 }
 
