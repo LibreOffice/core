@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:34:58 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ russian ] = "Áåãóùàÿ ñòğîêà";
                 Text[ polish ] = "Animacje tekstu";
                 Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
-                Text[ chinese_traditional ] = "¬¡°Ê¤å¦r";
+                Text[ chinese_traditional ] = "²¾°Ê¤å¦r";
                 Text[ greek ] = "Êéíïıìåíï êåßìåíï";
                 Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
                 Text[ arabic ] = "äÕ ãÊÍÑß";
