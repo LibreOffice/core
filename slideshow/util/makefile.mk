@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:24:56 $
+#   last change: $Author: kz $ $Date: 2005-01-21 17:09:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,8 @@ CDEFS+= -DVERBOSE
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/transitions.lib	\
+    $(SLB)$/activities.lib	\
+    $(SLB)$/animationnodes.lib	\
     $(SLB)$/engine.lib		\
     $(SLB)$/api.lib
 
