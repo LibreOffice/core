@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:49:44 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@
 #include "styleuno.hxx"
 #include "rangeseq.hxx"
 #include "unowids.hxx"
+#include "errorcodes.hxx"
 
 #ifndef __SGI_STL_LIST
 #include <list>
