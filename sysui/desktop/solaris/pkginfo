@@ -1,10 +1,13 @@
-PKG=openofficeorg-gnome
-NAME=%PRODUCTNAME Solaris
+PKG=openofficeorg-desktop-integratn
+NAME=%PRODUCTNAME Solaris desktop integration
 CATEGORY=application
-BASEDIR=/usr
+BASEDIR=/
 VENDOR=OpenOffice.org
 HOTLINE=Please contact your local service provider
 EMAIL=
 MAXINST=1000
 SUNW_PKGTYPE=usr
 SUNW_PKGVERS=1.0
+CLASSES=none build
+OFFICE_PATH=
+LEGACY_GNOME="false"
