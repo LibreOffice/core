@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,18 @@
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
 #include <com/sun/star/sdbc/XDriverManager.hpp>
 #endif
+#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
+#include <typelib/typedescription.hxx>
+#endif
 
 #ifndef _SVTOOLS_CMDPARSE_HXX
 #include <svtools/cmdparse.hxx>
 #endif
-#ifndef _UTL_STREAM_WRAPPER_HXX_
-#include <unotools/streamwrap.hxx>
+//#ifndef _UTL_STREAM_WRAPPER_HXX_
+//#include <unotools/streamwrap.hxx>
+//#endif
+#ifndef __SGI_STL_SET
+#include <stl/set>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -353,166 +359,6 @@ void ODatabaseSource::disposing()
     m_aConnections.clear();
 }
 
-// helper
-//------------------------------------------------------------------------------
-Sequence< PropertyValue > ODatabaseSource::toConnectionProperties(const String& rConnectStr)
-{
-    CommandParser aOptionsParser(rConnectStr, ';', '=', sal_True);
-    sal_Int32 nCount = aOptionsParser.OptionCount();
-
-    Sequence< PropertyValue > aPropertySequence(nCount);
-    PropertyValue* pArray = aPropertySequence.getArray();
-
-    // filter the sequence (no pwd and no properties describing the connection type)
-    sal_Int32 nPwdPos(-1);
-    for (sal_Int32 i = 0, j = 0; i < nCount; i++)
-    {
-        String          aKey(aOptionsParser.OptionName(i));
-        ::rtl::OUString aValue(aOptionsParser.OptionString(i));
-
-        if ((aKey.EqualsIgnoreCaseAscii("TYP")) ||
-            (aKey.EqualsIgnoreCaseAscii("PWD")) ||
-            (aKey.EqualsIgnoreCaseAscii("DSN")) ||
-            (aKey.EqualsIgnoreCaseAscii("URL")))
-            continue;
-        pArray[j] = PropertyValue(aKey, -1, makeAny(aValue), PropertyState_DIRECT_VALUE);
-        ++j;
-    }
-
-    // shrink the sequence if necessary
-    if (j < i)
-        aPropertySequence.realloc(j);
-
-    return aPropertySequence;
-}
-
-//------------------------------------------------------------------------------
-::rtl::OUString ODatabaseSource::toConnectionURL(const String& rConnectStr)
-{
-    CommandParser aOptionsParser(rConnectStr, ';', '=', sal_True);
-
-    ::rtl::OUString sReturnURL;
-
-    // retrieve the type
-    String aType = aOptionsParser.OptionString(String::CreateFromAscii("TYP"));
-    if (aType.EqualsIgnoreCaseAscii("TYP"))
-        sReturnURL = aOptionsParser.OptionString(String::CreateFromAscii("URL"));
-    else if (aType.Len())
-    {
-        String aUrl;
-        aUrl.AssignAscii("sdbc:");
-        if (aType.CompareIgnoreCaseToAscii("ADABAS"))
-            aUrl.AppendAscii("AdabasD");
-        else if (aType.CompareIgnoreCaseToAscii("DBF"))
-            aUrl.AppendAscii("dBase");
-        else if (aType.CompareIgnoreCaseToAscii("TXT"))
-            aUrl.AppendAscii("Text");
-        else
-            aUrl.AppendAscii("Type");
-        aUrl += ':';
-        aUrl += aOptionsParser.OptionString(String::CreateFromAscii("DSN"));
-
-        sReturnURL = aUrl;
-    }
-
-    return sReturnURL;
-}
-
-//------------------------------------------------------------------------------
-String ODatabaseSource::toConnectionStr(const rtl::OUString& rUrl, const String& rConnectStr) throw (SQLException)
-{
-    String sURL(rUrl);
-    xub_StrLen nPos = 0;
-    String aType = sURL.GetToken(0, ':', nPos);
-    String aConnectStr;
-    String aInfo;
-
-    if (rConnectStr.Len())
-    {
-        static const char* pOptions = "TYP;URL;DSN";
-        static String sOptions = String::CreateFromAscii(pOptions);
-        CommandParser aOptionsParser(rConnectStr, ';', '=', sal_True);
-        aOptionsParser.Compose(aInfo, sOptions);
-    }
-
-    /* currently available drivers
-    // Jdbc
-    jdbc:oracle:Test
-
-    // Sdbc
-    sdbc:Text
-    sdbc:ODBC:
-    sdbc:AdabasD:
-    sdbc:dBase:
-    sdbc:DAO:
-    sdbc:ADO:
-    sdbc:DB2:
-    sdbc:StarBase: */
-
-    if (aType.EqualsIgnoreCaseAscii("jdbc"))
-    {
-        // take the url as it is
-        aConnectStr.AppendAscii("TYP=JDBC;");
-        aConnectStr.AppendAscii("URL=");
-        aConnectStr += sURL;
-        aConnectStr += ';';
-        aConnectStr += aInfo;
-    }
-    else if (aType.EqualsIgnoreCaseAscii("sdbc"))
-    {
-        aType = sURL.GetToken(0, ':', nPos);
-
-        if (aType.EqualsIgnoreCaseAscii("AdabasD") )
-            aConnectStr.AppendAscii("TYP=Adabas;");
-        else if (aType.EqualsIgnoreCaseAscii("ODBC"))
-            aConnectStr.AppendAscii("TYP=ODBC;");
-        else if (aType.EqualsIgnoreCaseAscii("dBase"))
-            aConnectStr.AppendAscii("TYP=DBF;");
-        else if (aType.EqualsIgnoreCaseAscii("ADO"))
-            aConnectStr.AppendAscii("TYP=ADO;");
-        else if (aType.EqualsIgnoreCaseAscii("Text"))
-            aConnectStr.AppendAscii("TYP=TXT;");
-        else
-            throw SQLException();   // TODO : perhaps an error message ...
-
-        aConnectStr.AppendAscii("DSN=");
-        aConnectStr += sURL.Copy(nPos);
-        aConnectStr += ';';
-        aConnectStr += aInfo;
-    }
-    else
-        throw SQLException();   // TODO : perhaps an error message ...
-
-    aConnectStr.EraseLeadingChars(';');
-    aConnectStr.EraseTrailingChars(';');
-    return aConnectStr;
-}
-
-//------------------------------------------------------------------------------
-String ODatabaseSource::toConnectionStr(const Sequence< PropertyValue >& aProperties)
-{
-    const PropertyValue* pArray = aProperties.getConstArray();
-    sal_Int32 nCount = aProperties.getLength();
-    String aConnectStr;
-    for (sal_Int32 i = 0; i < nCount; i++)
-    {
-        String aKey(pArray[i].Name);
-        rtl::OUString aValue;
-        pArray[i].Value >>= aValue;
-        String aStrValue(aValue);
-
-        // sdb specific token
-        if (aKey.EqualsIgnoreCaseAscii( "User"))
-            aKey.AssignAscii("UID");
-        if (aKey.EqualsIgnoreCaseAscii("Password"))
-            aKey.AssignAscii("PWD");
-
-        (((aConnectStr += aKey) += '=') += aStrValue) += ';';
-    }
-    aConnectStr.EraseTrailingChars(';');
-    return aConnectStr;
-}
-
 //------------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::OUString& _rUid, const ::rtl::OUString& _rPwd)
 {
@@ -634,7 +480,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
                 // don't wan't to check the properties, it's seems more expensiv than just to set the same props again
 
             rConvertedValue = rValue;
-            getFastPropertyValue(rOldValue, nHandle);
+            rOldValue <<= m_aInfo;
         }   break;
         default:
             DBG_ERROR("unknown Property");
@@ -666,12 +512,8 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
             rValue >>= m_sConnectURL;
             break;
         case PROPERTY_ID_INFO:
-        {
-            Sequence<PropertyValue> aValues;
-            rValue >>= aValues;
-            m_sConnectURL = toConnectionURL(toConnectionStr(m_sConnectURL, toConnectionStr(aValues)));
-        }
-        break;
+            rValue >>= m_aInfo;
+            break;
 
     }
 }
@@ -700,7 +542,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
             rValue = bool2any(m_bReadOnly);
             break;
         case PROPERTY_ID_INFO:
-            rValue <<= toConnectionProperties(toConnectionStr(m_sConnectURL));
+            rValue <<= m_aInfo;
             break;
         case PROPERTY_ID_URL:
             rValue <<= m_sConnectURL;
@@ -853,9 +695,77 @@ void ODatabaseSource::initializeFromConfiguration()
     readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLEFILTER, m_aTableFilter);
     readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLETYEFILTER, m_aTableTypeFilter);
     readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_LOGINTIMEOUT, m_nLoginTimeout);
-    sal_Bool bTemp;
+
+    sal_Bool bTemp; // temporary, needed because m_bPasswordRequired is part of a bit field and we need to transport it as a reference
     readValue(m_xConfigurationNode, CONFIGKEY_DBLINK_PASSWORDREQUIRED, bTemp);
     m_bPasswordRequired = bTemp;
+
+    // the property sequence in m_aInfo
+    Reference< XRegistryKey > xInfoKey;
+    if (openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_INFO, xInfoKey, sal_False))
+    {
+        ORegistryLevelEnumeration aEnumInfos(xInfoKey);
+        m_aInfo.realloc(aEnumInfos.size());
+        PropertyValue* pInfos = m_aInfo.getArray();
+
+        // loop the sub keys
+        Reference< XRegistryKey > xCurrent;
+        sal_Bool bValid;
+        while (aEnumInfos.hasMoreElements())
+        {
+            xCurrent = aEnumInfos.nextElement();
+            RegistryValueType eType(RegistryValueType_NOT_DEFINED);
+            bValid = sal_True;
+            try
+            {
+                // dependent on the type, read and store the values
+                eType = xCurrent->getValueType();
+                pInfos->Name = getShortKeyName(xCurrent);
+                switch (eType)
+                {
+                    case RegistryValueType_STRING:
+                        pInfos->Value <<= xCurrent->getStringValue();
+                        break;
+                    case RegistryValueType_LONG:
+                    {
+                        // temporary HACK: we may have an additional type information (see flushToConfiguration)
+                        sal_Int32 nValue = xCurrent->getLongValue();
+                        ::rtl::OUString sTypeInformation;
+                        Reference< XRegistryKey > xValueKey;
+                        if (readValue(xCurrent, ::rtl::OUString::createFromAscii("TypeInformation"), sTypeInformation))
+                        {
+                            if (sTypeInformation.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("boolean")))
+                            {
+                                pInfos->Value = ::cppu::bool2any((sal_Bool)nValue);
+                                break;
+                            }
+                            DBG_ERROR("ODatabaseSource::initializeFromConfiguration: unknown type information!");
+                        }
+                        pInfos->Value <<= nValue;
+                    }
+                    break;
+                    case RegistryValueType_STRINGLIST:
+                        pInfos->Value <<= xCurrent->getStringListValue();
+                        break;
+                    case RegistryValueType_LONGLIST:
+                        pInfos->Value <<= xCurrent->getLongListValue();
+                        break;
+                    default:
+                        DBG_ERROR("ODatabaseSource::initializeFromConfiguration: encountered an unsupported data type!");
+                        bValid = sal_False;
+                        break;
+                }
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("ODatabaseSource::initializeFromConfiguration: error reading the infos!");
+                bValid = sal_False;
+            }
+            if (bValid)
+                ++pInfos;
+        }
+        m_aInfo.realloc(pInfos - m_aInfo.getArray());
+    }
 
     initializeDocuments();
 }
@@ -867,6 +777,20 @@ void ODatabaseSource::flushDocuments()
     m_aReports.flush();
     m_aCommandDefinitions.flush();
 }
+
+
+//..............................................................................
+// (could have been a template, but SUNPRO5 does not like explicit template arguments in
+// function calls (like doSomething< ::rtl::OUString >(aArgument)))
+#define WRITE(typeclass, runtimetype, keytype)  \
+    case TypeClass_##typeclass: \
+    {   \
+        runtimetype value;  \
+        pInfoValues->Value >>= value;   \
+        writeValue(xInfoKey, pInfoValues->Name, static_cast< keytype >(value)); \
+        aUsedKeys.insert(pInfoValues->Name);    \
+    }   \
+    break;  \
 
 //------------------------------------------------------------------------------
 void ODatabaseSource::flushToConfiguration()
@@ -883,6 +807,79 @@ void ODatabaseSource::flushToConfiguration()
     writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_TABLETYEFILTER, m_aTableTypeFilter);
     writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_LOGINTIMEOUT, m_nLoginTimeout);
     writeValue(m_xConfigurationNode, CONFIGKEY_DBLINK_PASSWORDREQUIRED, m_bPasswordRequired);
+
+    // write the additional info tags
+    Reference< XRegistryKey > xInfoKey;
+    if (openKey(m_xConfigurationNode, CONFIGKEY_DBLINK_INFO, xInfoKey, sal_True))
+    {
+        ::std::set< rtl::OUString > aUsedKeys;
+
+        // stage one: write all currently set info values
+        const PropertyValue* pInfoValues = m_aInfo.getConstArray();
+        for (sal_Int32 i=0; i<m_aInfo.getLength(); ++i, ++pInfoValues)
+        {
+            switch (pInfoValues->Value.getValueType().getTypeClass())
+            {
+                WRITE(STRING, ::rtl::OUString, ::rtl::OUString);
+                WRITE(UNSIGNED_SHORT, sal_uInt16, sal_Int16);
+                WRITE(UNSIGNED_LONG, sal_uInt32, sal_Int32);
+                WRITE(SHORT, sal_Int16, sal_Int16);
+                WRITE(LONG, sal_Int32, sal_Int32);
+            case TypeClass_BOOLEAN:
+            {
+                // a temporary HACK as long as we're not configuration based: we write the bool value as long,
+                // and a special sub key indicating that it is in fact a bool, not a long
+                Reference< XRegistryKey > xValueKey;
+                Reference< XRegistryKey > xIndicator;
+                if (openKey(xInfoKey, pInfoValues->Name, xValueKey, sal_True) && writeValue(xValueKey, ::rtl::OUString::createFromAscii("TypeInformation"), ::rtl::OUString::createFromAscii("boolean")))
+                {
+                    writeValue(xInfoKey, pInfoValues->Name, ::cppu::any2bool(pInfoValues->Value));
+                    aUsedKeys.insert(pInfoValues->Name);
+                }
+                else
+                    DBG_ERROR("ODatabaseSource::flushToConfiguration: failed to write a boolean!");
+            }
+            break;
+            case TypeClass_SEQUENCE:
+            {
+                // determine the element type
+                TypeDescription aTD(pInfoValues->Value.getValueType());
+                typelib_IndirectTypeDescription* pSequenceTD =
+                    reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
+                DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODatabaseSource::flushToConfiguration: invalid sequence type!");
+
+                Type aElementType(pSequenceTD->pType);
+                switch (aElementType.getTypeClass())
+                {
+                    WRITE(STRING, Sequence< ::rtl::OUString >, Sequence< ::rtl::OUString >);
+                    WRITE(LONG, Sequence< sal_Int32 >, Sequence< sal_Int32 >);
+                    default:
+                        DBG_ERROR("ODatabaseSource::flushToConfiguration: unsupported property type!");
+                        // TODO: we could save all other sequences, too, by extracting the single elements and
+                        // write them separately
+                }
+            }
+            break;
+            default:
+                DBG_ERROR("ODatabaseSource::flushToConfiguration: unsupported property type!");
+                // TODO: maybe we could write structs, too. We a usual registry this would be possible,
+                // but the configuration we're going to write into would not support this ...
+                // Except we would define templates for all structs known in UNO ... would be possible, but
+                // maybe to expensive.
+                break;
+            }
+        }
+
+        // stage two: delete all info values which may be present in the registry, but not used by the current values
+        ORegistryLevelEnumeration aEnumInfos(xInfoKey);
+        while (aEnumInfos.hasMoreElements())
+        {
+            ::rtl::OUString sExistentKey = getShortKeyName(aEnumInfos.nextElement());
+            if (aUsedKeys.end() == aUsedKeys.find(sExistentKey))
+                // the key was not inserted by ourself in the previous stage -> delete it
+                deleteKey(xInfoKey, sExistentKey);
+        }
+    }
 
     flushDocuments();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 11:19:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,8 @@ protected:
     sal_Int32                                           m_nLoginTimeout;
     sal_Bool                                            m_bReadOnly : 1;
     sal_Bool                                            m_bPasswordRequired : 1;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                                                        m_aInfo;
 // </properties>
 
 protected:
@@ -275,11 +277,6 @@ protected:
 // helper
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
-
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > toConnectionProperties(const String& rConnectStr);
-    static rtl::OUString toConnectionURL(const String& rConnectStr);
-    static String toConnectionStr(const rtl::OUString& rUrl, const String& rConnectStr = String()) throw (::com::sun::star::sdbc::SQLException);
-    static String toConnectionStr(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties);
 
     /** open a connection for the current settings. this is the simple connection we get from the driver
         manager, so it acn be used as a master for a "high level" sdb connection.
