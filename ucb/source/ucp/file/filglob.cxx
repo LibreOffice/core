@@ -62,8 +62,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
 #endif
-#ifndef _RTL_USTRING_H_
-#include "rtl/ustring.h"
+#ifndef _RTL_USTRBUF_HXX_
+#include "rtl/ustrbuf.hxx"
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
@@ -262,23 +262,38 @@ namespace fileaccess {
 //----------------------------------------------------------------------------
 
 
-    sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString&    aRelPath, rtl::OUString& aAbsPath )
+    sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath,
+                                        rtl::OUString&       aAbsPath )
     {
-        sal_Int32   nIndex = 6;
-
-        std::vector< rtl::OUString >    aTokenStack;
-
         // should no longer happen
-        OSL_ASSERT( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "//./" ), 4 ) );
+        OSL_ASSERT( 0 != aRelPath.compareToAscii( "//./" , 4 ) );
 
-        if ( 0 != aRelPath.compareTo( rtl::OUString::createFromAscii( "file://" ), 7 ) )
+        if ( 0 != aRelPath.compareToAscii( "file://" , 7 ) )
             return sal_False;
 
-        aRelPath.getToken( 0, '/', nIndex );
+        // The 'upward' ('/../') pattern.
+        static const sal_Unicode pattern[5] =
+        {
+            '/', '.', '.', '/', 0
+        };
 
+        // Ensure 'relative path' contains 'pattern'.
+        if (rtl_ustr_indexOfStr_WithLength (
+            aRelPath.getStr(), aRelPath.getLength(), pattern, 4) < 0)
+        {
+            // Path already absolute.
+            aAbsPath = aRelPath;
+            return sal_True;
+        }
+
+        // Tokenize 'relative path'.
+        std::vector< rtl::OUString > aTokenStack;
+        sal_Int32                    nIndex = 6;
+
+        aRelPath.getToken( 0, '/', nIndex );
         while ( nIndex >= 0 )
         {
-            rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
+            rtl::OUString aToken (aRelPath.getToken( 0, '/', nIndex ));
 
             if ( aToken.compareToAscii( ".." ) == 0 )
                 aTokenStack.pop_back();
@@ -286,15 +301,18 @@ namespace fileaccess {
                 aTokenStack.push_back( aToken );
         }
 
+        // Reassemble as 'absolute path'.
+        rtl::OUStringBuffer aBuffer (aRelPath.getLength());
+        aBuffer.appendAscii ("file:/", 6);
 
-        std::vector< rtl::OUString >::iterator it;
-        aAbsPath = rtl::OUString::createFromAscii("file:/");
-
-        for ( it = aTokenStack.begin(); it != aTokenStack.end(); it++ )
+        std::vector< rtl::OUString >::const_iterator it;
+        for (it = aTokenStack.begin(); it != aTokenStack.end(); ++it)
         {
-            aAbsPath += rtl::OUString::createFromAscii( "/" );
-            aAbsPath += *it;
+            aBuffer.append (sal_Unicode('/'));
+            aBuffer.append (*it);
         }
+
+        aAbsPath = aBuffer.makeStringAndClear();
 
         return sal_True;
     }
