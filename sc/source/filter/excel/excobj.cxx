@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,13 +168,14 @@ void ImportExcel::Obj()
     short nReserved = bBiff5 ? 6 : 2;
     aIn.Ignore( nReserved );
 
-    sal_uInt16 nTab = GetScTab();
+    ScDocument& rDoc = GetDoc();
+    sal_uInt16 nScTab = GetScTab();
 
-    Point aUL(  XclTools::CalcX( nTab, nCol1, nColOff1, HMM_PER_TWIPS, pD ),
-                XclTools::CalcY( nTab, nRow1, nRowOff1, HMM_PER_TWIPS, pD ) );
+    Point aUL(  XclTools::CalcX( rDoc, nScTab, nCol1, nColOff1, HMM_PER_TWIPS ),
+                XclTools::CalcY( rDoc, nScTab, nRow1, nRowOff1, HMM_PER_TWIPS ) );
 
-    Point aLR(  XclTools::CalcX( nTab, nCol2, nColOff2, HMM_PER_TWIPS, pD ),
-                XclTools::CalcY( nTab, nRow2, nRowOff2, HMM_PER_TWIPS, pD ) );
+    Point aLR(  XclTools::CalcX( rDoc, nScTab, nCol2, nColOff2, HMM_PER_TWIPS ),
+                XclTools::CalcY( rDoc, nScTab, nRow2, nRowOff2, HMM_PER_TWIPS ) );
 
     SfxItemSet aSet
         ( pD->GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );
@@ -193,7 +194,7 @@ void ImportExcel::Obj()
 
         pObj->NbcSetLogicRect(Rectangle( aUL, aLR ) );
         pObj->SetLayer( SC_LAYER_FRONT );
-        pD->GetDrawLayer()->GetPage( nTab )->InsertObject( pObj );
+        pD->GetDrawLayer()->GetPage( nScTab )->InsertObject( pObj );
         if( bBiff5 && aIn.GetRecLeft() )
         {
             BYTE nNameLen;
