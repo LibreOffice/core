@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer, a1Sequence, a2Sequence, a4Sequence;
-    sal_Bool bSpannable, bNextWriteIsAtomic;
+    sal_Bool bSpannable;
     sal_Int8 * const p1Sequence, * const p2Sequence, * const p4Sequence, * pBuffer;
     sal_Int32 nBufferSize, nCurrentBufferPos;
 
@@ -106,8 +106,6 @@ public:
     ByteChucker& operator << (sal_uInt8 nuInt8);
     ByteChucker& operator << (sal_uInt16 nuInt16);
     ByteChucker& operator << (sal_uInt32 nuInt32);
-    void setSpannable ( sal_Bool bNewSpannable );
-    inline sal_Bool isSpannable () { return bSpannable; }
 };
 
 #endif
