@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:59:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,8 @@
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svtools/svstdarr.hxx>
+
+#include <sot/storage.hxx>
 
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -368,6 +370,15 @@ SvStream& Writer::OutULong( SvStream& rStrm, ULONG nVal )
 
 ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
 {
+    if ( IsStgWriter() )
+    {
+        SotStorageRef aRef = new SotStorage( rStrm );
+        ULONG nResult = Write( rPaM, *aRef, pFName );
+        if ( nResult == ERRCODE_NONE )
+            aRef->Commit();
+        return nResult;
+    }
+
     pStrm = &rStrm;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
@@ -387,9 +398,13 @@ ULONG Writer::Write( SwPaM& rPaM, SvStream& rStrm, const String* pFName )
 
 ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
 {
-    return IsStgWriter()
-                ? Write( rPam, *rMed.GetStorage(), pFileName )
-                : Write( rPam, *rMed.GetOutStream(), pFileName );
+    // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
+    // The microsoft format can write to storage but the storage will be based on the stream.
+    return Write( rPam, *rMed.GetOutStream(), pFileName );
+
+    // return IsStgWriter()
+    //            ? Write( rPam, rMed.GetStorage(), pFileName )
+    //          : Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
 ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
@@ -398,6 +413,11 @@ ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
     return ERR_SWG_WRITE_ERROR;
 }
 
+ULONG Writer::Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* )
+{
+    ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
+    return ERR_SWG_WRITE_ERROR;
+}
 
 BOOL Writer::CopyLocalFileToINet( String& rFileNm )
 {
@@ -635,6 +655,28 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 {
     pStrm = 0;
     pStg = &rStg;
+    pDoc = rPaM.GetDoc();
+    pOrigFileName = pFName;
+    pImpl = new Writer_Impl( *pDoc );
+
+    // PaM kopieren, damit er veraendert werden kann
+    pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
+    // zum Vergleich auf den akt. Pam sichern
+    pOrigPam = &rPaM;
+
+    ULONG nRet = WriteStorage();
+
+    pStg = NULL;
+    ResetWriter();
+
+    return nRet;
+}
+
+ULONG StgWriter::Write( SwPaM& rPaM, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String* pFName )
+{
+    pStrm = 0;
+    pStg = 0;
+    xStg = rStg;
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
     pImpl = new Writer_Impl( *pDoc );
