@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-24 09:53:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1464,7 +1464,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
         if (pState->mnState & SAL_FRAMESTATE_MAXIMIZED)
         {
             nShowState_ = SHOWSTATE_NORMAL;
-            if( ! (pState->mnMask & (SAL_FRAMESTATE_MAXIMIZED_HORZ|SAL_FRAMESTATE_MAXIMIZED_VERT) ) )
+            if( ! (pState->mnState & (SAL_FRAMESTATE_MAXIMIZED_HORZ|SAL_FRAMESTATE_MAXIMIZED_VERT) ) )
                 Maximize();
             else
             {
