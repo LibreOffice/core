@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:59:06 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 07:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1100,14 +1100,12 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
-    // set defunc state
+    // set defunc state (its not required to broadcast a state changed
+    // event if the object is diposed afterwards)
     {
         vos::OGuard aGuard( aMutex );
         bIsDefuncState = sal_True;
     }
-
-    // broadcast state change
-    FireStateChangedEvent( AccessibleStateType::DEFUNC, sal_True );
 
     // broadcast dispose event
     {
