@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-13 21:55:39 $
+ *  last change: $Author: khong $ $Date: 2002-05-14 17:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
 IMPL_CREATEINSTANCE( BreakIterator_th )
 IMPL_CREATEINSTANCE( BreakIterator_hi )
+IMPL_CREATEINSTANCE( BreakIterator_ar )
+IMPL_CREATEINSTANCE( BreakIterator_he )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_ICU )
@@ -429,6 +431,12 @@ static const struct InstancesArray {
      {  "com.sun.star.i18n.BreakIterator_hi",
         "com.sun.star.i18n.BreakIterator_hi",
         &BreakIterator_hi_CreateInstance },
+     {  "com.sun.star.i18n.BreakIterator_ar",
+        "com.sun.star.i18n.BreakIterator_ar",
+        &BreakIterator_ar_CreateInstance },
+     {  "com.sun.star.i18n.BreakIterator_he",
+        "com.sun.star.i18n.BreakIterator_he",
+        &BreakIterator_he_CreateInstance },
        {       "com.sun.star.i18n.Collator",
                 "com.sun.star.i18n.Collator",
                 &CollatorImpl_CreateInstance },

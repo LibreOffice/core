@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_ctl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-03 19:09:09 $
+ *  last change: $Author: khong $ $Date: 2002-05-14 17:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,22 @@ protected:
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
     virtual void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
+};
+
+class BreakIterator_ar : public BreakIterator_Unicode
+{
+public:
+    virtual sal_Int32 SAL_CALL previousCharacters(const rtl::OUString& text, sal_Int32 start,
+        const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
+};
+
+class BreakIterator_he : public BreakIterator_Unicode
+{
+public:
+    virtual sal_Int32 SAL_CALL previousCharacters(const rtl::OUString& text, sal_Int32 start,
+        const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
+        sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }

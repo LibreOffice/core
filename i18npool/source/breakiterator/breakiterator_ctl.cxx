@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_ctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-03 19:07:33 $
+ *  last change: $Author: khong $ $Date: 2002-05-14 18:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,38 @@ void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& text, sal_Int32 pos)
     throw(RuntimeException)
 {
     throw RuntimeException();
+}
+
+sal_Int32 SAL_CALL BreakIterator_ar::previousCharacters( const OUString& Text,
+    sal_Int32 nStartPos, const lang::Locale& rLocale,
+    sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
+    throw(RuntimeException)
+{
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+        nStartPos = BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+    } else { // for BS to delete one char.
+        nDone = (nStartPos > nCount) ? nCount : nStartPos;
+        nStartPos -= nDone;
+    }
+
+    return nStartPos;
+}
+
+sal_Int32 SAL_CALL BreakIterator_he::previousCharacters( const OUString& Text,
+    sal_Int32 nStartPos, const lang::Locale& rLocale,
+    sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
+    throw(RuntimeException)
+{
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+        nStartPos = BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
+                    nCharacterIteratorMode, nCount, nDone);
+    } else { // for BS to delete one char.
+        nDone = (nStartPos > nCount) ? nCount : nStartPos;
+        nStartPos -= nDone;
+    }
+
+    return nStartPos;
 }
 
 // Make sure line is broken on cell boundary if we implement cell iterator.
