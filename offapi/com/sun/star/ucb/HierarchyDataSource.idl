@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyDataSource.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:00:34 $
+ *  last change: $Author: kso $ $Date: 2001-07-04 08:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,13 +118,9 @@ service HierarchyDataSource
         element of the data. The view that is selected consists of the named
         element and all its decendants. A path consists of segments that are
         separated by a single slash ('/'). There is neither a leading nor a
-        trailing slash allowed. A path segment may contain any character,
-        accept the slash. The implementation is responsible for encoding any
-        clashing incoming names and for decoding any outgoing encoded names.
-
-          The <b>root</b> of the hierarchy data always has an
-        empty path. Refer to <type>HierarchyDataReadAccess</type> for more
-        informtion on hierarchical names.
+        trailing slash allowed. The <b>root</b> of the hierarchy data always
+        has an empty path. Refer to <type>HierarchyDataReadAccess</type> for
+        more informtion on hierarchical names.
 
         <p>Other arguments can be used to control the behavior of the view.
         These are different for different implementations. Whether and how they
