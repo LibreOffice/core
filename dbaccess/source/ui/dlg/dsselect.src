@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-26 20:30:45 $
+ *  last change: $Author: vg $ $Date: 2001-10-22 20:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text [ spanish ] = "Fuente de datos" ;
     Text [ english_us ] = "Data Source" ;
     Text[ chinese_simplified ] = "ж•°жЌ®жєђ";
-    Text[ russian ] = "Исходные данные";
+    Text[ russian ] = "Источник данных";
     Text[ polish ] = "Џrуdіo danych";
     Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂпЅїпЅ°пЅЅ";
     Text[ chinese_traditional ] = "иі‡ж–™жєђ";
@@ -106,7 +106,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "Choose a data source:";
         Text [ english_us ] = "Choose a data source:";
         Text[ portuguese ] = "Seleccionar fonte de dados:";
-        Text[ russian ] = "Выберите источник данных:";
+        Text[ russian ] = "Выберите исходные данные:";
         Text[ greek ] = "ЕрйлЭофе мйб рспЭлехуз дедпмЭнщн:";
         Text[ dutch ] = "Kies een gegevensbron:";
         Text[ french ] = "Choisissez une source de donnйes :";
@@ -122,7 +122,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "йЃёж“‡иі‡ж–™жєђпјљ";
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "ЗОКС гХПС ИнЗдЗК:";
-        Text[ catalan ] = "Seleccione una fuente de datos:";
+        Text[ catalan ] = "Trieu una font de dades:";
         Text[ finnish ] = "Valitse tietolдhde:";
     };
     ListBox LB_DATASOURCE
@@ -181,7 +181,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ korean ] = "кґЂл¦¬...";
         Text[ turkish ] = "Yцnet...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Administrar...";
+        Text[ catalan ] = "Organitza...";
         Text[ finnish ] = "Jдrjestд";
     };
     String STR_LOCAL_DATASOURCES
@@ -200,7 +200,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ spanish ] = "fuentes de datos locales" ;
         Text [ english_us ] = "local data sources" ;
         Text[ chinese_simplified ] = "е±ЂйѓЁзљ„ж•°жЌ®жєђ";
-        Text[ russian ] = "локальный источник данных";
+        Text[ russian ] = "локальные исходные данные";
         Text[ polish ] = "lokalne џrуdіa danych";
         Text[ japanese ] = "пѕ›пЅ°пЅ¶пѕ™пѕѓпѕћпЅ°пѕЂпЅїпЅ°пЅЅ";
         Text[ chinese_traditional ] = "е±ЂйѓЁзљ„иі‡ж–™жєђ";
@@ -208,7 +208,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ greek ] = "фпрйкЭт рспелеэуейт дедпмЭнщн";
         Text[ korean ] = "лЎњм»¬ лЌ°мќґн„° м†ЊмЉ¤";
         Text[ turkish ] = "Yerel veri kaynaklarэ";
-        Text[ catalan ] = "fuentes de datos locales";
+        Text[ catalan ] = "fonts locals de dades";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
@@ -216,7 +216,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
         Text[ portuguese ] = "Ou foi impossнvel carregar a biblioteca #lib# do programa ou esta estб com defeito. A configuraзгo da fonte de dados ODBC nгo estб disponнvel.";
-        Text[ russian ] = "Библиотека программы #lib# не загружается или она повреждена. Выбор источника данных ODBC не доступен.";
+        Text[ russian ] = "Библиотека программы #lib# не загружается или она повреждена. Выбор исходных данных ODBC недоступен.";
         Text[ greek ] = "З вйвлйпиЮкз фпх рспгсЬммбфпт #lib# ден Юфбн дхнбфьн нб цпсфщиеЯ Ю еЯнбй елбффщмбфйкЮ. З дйбмьсцщуз фщн рспелеэуещн фщн дедпмЭнщн фпх ODBC ден ? ";
         Text[ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
         Text[ french ] = "La bibliothиque de programme #lib# n'a pas pu кtre chargйe ou est dйfectueuse. La configuration de la source de donnйes ODBC n'est pas disponible.";
@@ -232,15 +232,18 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ chinese_traditional ] = "з„Ўжі•иј‰е…ҐзЁ‹ејЏеє« #lib# ж€–е·Із¶“жђЌеќЏгЂ‚з„Ўжі•иЁ­е®љ ODBC иі‡ж–™жєђгЂ‚";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "ЕгЗ Где КЪРС КНгнб гЯКИЙ ЗбИСдЗгМ #lib#Ў Гж ГдеЗ гЪШжИЙ. КЯжнд гХЗПС ИнЗдЗК ODBC ЫнС гКжЭС.";
-        Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quizбs estй daсada. La configuraciуn de fuente de datos ODBC no estб disponible.";
+        Text[ catalan ] = "No s'ha pogut carregar la biblioteca de programes #lib# o estа corrompuda. La configuraciу de la font de dades ODBC no estа disponible.";
         Text[ finnish ] = "Ohjelmakirjaston lib lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietolдhteiden kokoonpano ei ole kдytettдvissд.";
     };
-    Text[ catalan ] = "Fuente de datos";
+    Text[ catalan ] = "Font de dades";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/09/26 20:30:45  kz
+ *  Merge SRC638: 09/26/01 - 22:30:02
+ *
  *  Revision 1.24  2001/08/29 14:16:21  kz
  *  Merge SRC638: 29.08.01 - 16:15:47
  *
@@ -316,6 +319,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
