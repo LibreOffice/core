@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-08 09:05:47 $
+ *  last change: $Author: ab $ $Date: 2002-11-18 08:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,19 +594,19 @@ RTLFUNC(Array)
 // Das Array ist immer vom Typ Variant
 RTLFUNC(DimArray)
 {
-    SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
+    SbxDimArray * pArray = new SbxDimArray( SbxVARIANT );
     USHORT nArrayDims = rPar.Count() - 1;
     if( nArrayDims > 0 )
     {
         for( USHORT i = 0; i < nArrayDims ; i++ )
         {
-            INT16 ub = rPar.Get(i+1)->GetInteger();
+            INT32 ub = rPar.Get(i+1)->GetLong();
             if( ub < 0 )
             {
                 StarBASIC::Error( SbERR_OUT_OF_RANGE );
                 ub = 0;
             }
-            pArray->AddDim( 0, ub );
+            pArray->AddDim32( 0, ub );
         }
     }
     // Array zurueckliefern

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2002-09-30 08:54:11 $
+ *  last change: $Author: ab $ $Date: 2002-11-18 08:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,14 +838,14 @@ void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
 
         // Dimensionen auswerten
         short nDims = pArray->GetDims();
-        USHORT nTotalSize = 0;
+        UINT32 nTotalSize = 0;
 
         // es muss ein eindimensionales Array sein
-        short nLower, nUpper, nSize;
-        USHORT i;
+        INT32 nLower, nUpper, nSize;
+        UINT32 i;
         for( i = 0 ; i < nDims ; i++ )
         {
-            pArray->GetDim( i+1, nLower, nUpper );
+            pArray->GetDim32( i+1, nLower, nUpper );
             nSize = nUpper - nLower + 1;
             if( i == 0 )
                 nTotalSize = nSize;
@@ -869,7 +869,7 @@ void SbiRuntime::StepDCREATE( USHORT nOp1, USHORT nOp2 )
                 pObj->SetName( aName );
                 // Das Objekt muss BASIC rufen koennen
                 pObj->SetParent( &rBasic );
-                pArray->SbxArray::Put( pObj, i );
+                pArray->SbxArray::Put32( pObj, i );
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ab $ $Date: 2002-10-17 14:30:00 $
+ *  last change: $Author: ab $ $Date: 2002-11-18 08:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3480,12 +3480,12 @@ RTLFUNC(LBound)
     SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
     if( pArr )
     {
-        short nLower, nUpper;
+        INT32 nLower, nUpper;
         short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
-        if( !pArr->GetDim( nDim, nLower, nUpper ) )
+        if( !pArr->GetDim32( nDim, nLower, nUpper ) )
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         else
-            rPar.Get(0)->PutInteger( (INT16)nLower );
+            rPar.Get(0)->PutLong( nLower );
     }
     else
         StarBASIC::Error( SbERR_MUST_HAVE_DIMS );
@@ -3504,12 +3504,12 @@ RTLFUNC(UBound)
     SbxDimArray* pArr = PTR_CAST(SbxDimArray,pParObj);
     if( pArr )
     {
-        short nLower, nUpper;
+        INT32 nLower, nUpper;
         short nDim = (nParCount == 3) ? (short)rPar.Get(2)->GetInteger() : 1;
-        if( !pArr->GetDim( nDim, nLower, nUpper ) )
+        if( !pArr->GetDim32( nDim, nLower, nUpper ) )
             StarBASIC::Error( SbERR_OUT_OF_RANGE );
         else
-            rPar.Get(0)->PutInteger( (INT16)nUpper );
+            rPar.Get(0)->PutLong( nUpper );
     }
     else
         StarBASIC::Error( SbERR_MUST_HAVE_DIMS );

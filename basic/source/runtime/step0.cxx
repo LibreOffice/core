@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-15 07:34:08 $
+ *  last change: $Author: ab $ $Date: 2002-11-18 08:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,11 +391,11 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
         {
             for( USHORT i = 1; i < pDims->Count(); )
             {
-                INT16 lb = pDims->Get( i++ )->GetInteger();
-                INT16 ub = pDims->Get( i++ )->GetInteger();
+                INT32 lb = pDims->Get( i++ )->GetLong();
+                INT32 ub = pDims->Get( i++ )->GetLong();
                 if( ub < lb )
                     Error( SbERR_OUT_OF_RANGE ), ub = lb;
-                pArray->AddDim( lb, ub );
+                pArray->AddDim32( lb, ub );
             }
         }
         else
@@ -426,9 +426,9 @@ void SbiRuntime::StepREDIM()
 
 // Helper function for StepREDIMP
 void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMaxDimIndex,
-    short nActualDim, short* pActualIndices, short* pLowerBounds, short* pUpperBounds )
+    short nActualDim, sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
 {
-    short& ri = pActualIndices[nActualDim];
+    sal_Int32& ri = pActualIndices[nActualDim];
     for( ri = pLowerBounds[nActualDim] ; ri <= pUpperBounds[nActualDim] ; ri++ )
     {
         if( nActualDim < nMaxDimIndex )
@@ -438,8 +438,8 @@ void implCopyDimArray( SbxDimArray* pNewArray, SbxDimArray* pOldArray, short nMa
         }
         else
         {
-            SbxVariable* pSource = pOldArray->Get( pActualIndices );
-            SbxVariable* pDest   = pNewArray->Get( pActualIndices );
+            SbxVariable* pSource = pOldArray->Get32( pActualIndices );
+            SbxVariable* pDest   = pNewArray->Get32( pActualIndices );
             if( pSource && pDest )
                 *pDest = *pSource;
         }
@@ -469,9 +469,9 @@ void SbiRuntime::StepREDIMP()
             BOOL bRangeError = FALSE;
 
             // Store dims to use them for copying later
-            short* pLowerBounds = new short[nDims];
-            short* pUpperBounds = new short[nDims];
-            short* pActualIndices = new short[nDims];
+            sal_Int32* pLowerBounds = new sal_Int32[nDims];
+            sal_Int32* pUpperBounds = new sal_Int32[nDims];
+            sal_Int32* pActualIndices = new sal_Int32[nDims];
             if( nDimsOld != nDimsNew )
             {
                 bRangeError = TRUE;
@@ -481,10 +481,10 @@ void SbiRuntime::StepREDIMP()
                 // Compare bounds
                 for( short i = 1 ; i <= nDims ; i++ )
                 {
-                    short lBoundNew, uBoundNew;
-                    short lBoundOld, uBoundOld;
-                    pNewArray->GetDim( i, lBoundNew, uBoundNew );
-                    pOldArray->GetDim( i, lBoundOld, uBoundOld );
+                    sal_Int32 lBoundNew, uBoundNew;
+                    sal_Int32 lBoundOld, uBoundOld;
+                    pNewArray->GetDim32( i, lBoundNew, uBoundNew );
+                    pOldArray->GetDim32( i, lBoundOld, uBoundOld );
 
                     /* #69094 Allow all dimensions to be changed
                        although Visual Basic is not able to do so.
