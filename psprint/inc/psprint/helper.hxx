@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:52:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,21 @@ namespace osl { class File; }
 namespace psp {
 typedef int fontID;
 
-const ::rtl::OUString& getPrinterPath();
+const rtl::OUString& getPrinterPath();
 void getPrinterPathList( std::list< rtl::OUString >& rPathList, const char* pSubDir );
-const ::rtl::OUString& getFontPath();
+const rtl::OUString& getFontPath();
 
-bool convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile );
+bool convertPfbToPfa( osl::File& rInFile, osl::File& rOutFile );
+
+// normalized path (equivalent to realpath)
+void normPath( rtl::OString& rPath );
+
+// splits rOrgPath into dirname and basename
+// rOrgPath will be subject to normPath
+void splitPath( rtl::OString& rOrgPath, rtl::OString& rDir, rtl::OString& rBase );
 
 enum whichOfficePath { NetPath, UserPath };
 const rtl::OUString& getOfficePath( enum whichOfficePath ePath );
-
 } // namespace
 
 #endif // _PSPRINT_HELPER_HXX_
