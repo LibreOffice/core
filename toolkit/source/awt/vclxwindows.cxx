@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:03:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ IMPL_XTYPEPROVIDER_START( VCLXButton )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
 }
 
 void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -587,9 +587,9 @@ IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
 }
 
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -830,9 +830,9 @@ IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleRadioButton( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleRadioButton( this );
 }
 
 void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -1521,7 +1521,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::CreateAccessibleContext()
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -1531,9 +1531,9 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
 
     if ( bIsDropDownBox )
-        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownListBox( this );
+        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownListBox( this );
     else
-        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleListBox( this );
+        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleListBox( this );
 }
 
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
@@ -1916,9 +1916,9 @@ IMPL_XTYPEPROVIDER_START( VCLXFixedText )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
 }
 
 void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
@@ -2030,9 +2030,9 @@ IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleScrollBar( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleScrollBar( this );
 }
 
 // ::com::sun::star::lang::XComponent
@@ -2393,9 +2393,9 @@ IMPL_XTYPEPROVIDER_START( VCLXEdit )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleEdit( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleEdit( this );
 }
 
 void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -2722,7 +2722,7 @@ IMPL_XTYPEPROVIDER_START( VCLXComboBox )
     VCLXEdit::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -2732,9 +2732,9 @@ IMPL_XTYPEPROVIDER_END
         bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
 
     if ( bIsDropDownBox )
-        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownComboBox( this );
+        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownComboBox( this );
     else
-        return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComboBox( this );
+        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComboBox( this );
 }
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -4485,8 +4485,8 @@ VCLXToolBox::~VCLXToolBox()
 {
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleToolBox( this );
+    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleToolBox( this );
 }
 
