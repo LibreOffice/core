@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:47:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,42 +74,16 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text = "Hangul/Hanja Konvertierung";
-    Text [ english_us ] = "Hangul/Hanja Conversion";
+    Text [ de ] = "Hangul/Hanja Konvertierung";
+    Text [ en-US ] = "Hangul/Hanja Conversion";
 
     PushButton PB_FIND
     {
         Pos = MAP_APPFONT( 192, 23 );
         Size = MAP_APPFONT( 30, 14 );
 
-        Text = "Suchen";
-        Text [ english_us ] = "~Find";
-        Text[ french ] = "Rechercher";
-        Text[ spanish ] = "~Buscar";
-        Text[ italian ] = "~Cerca";
-        Text[ swedish ] = "~S�k";
-        Text[ japanese ] = "検索(~F)";
-        Text[ korean ] = "시작(~F)";
-        Text[ chinese_simplified ] = "搜寻(~F)";
-        Text[ chinese_traditional ] = "尋找(~F)";
-        Text[ portuguese ] = "~Localizar";
-        Text[ russian ] = "�����";
-        Text[ greek ] = "A������~��";
-        Text[ dutch ] = "~Zoeken";
-        Text[ finnish ] = "~Etsi";
-        Text[ czech ] = "Najít";
-        Text[ danish ] = "~S�g";
-        Text[ polish ] = "Szukaj";
-        Text[ portuguese_brazilian ] = "Pesquisar";
-        Text[ turkish ] = "~Ara";
-        Text[ arabic ] = "���";
-        Text[ hebrew ] = "‮חיפוש‬";
-        Text[ catalan ] = "~Cerca";
-        Text[ thai ] = "~หา";
-        Text[ slovak ] = "~Nájsť";
-        Text[ hindi ] = "~अन्वेषण";
-        Text[ hungarian ] = "~Keresés";
-        Text[ slovenian ] = "~Najdi";
+        Text [ de ] = "Suchen";
+        Text [ en-US ] = "~Find";
     };
 
     ListBox LB_SUGGESTIONS
@@ -124,34 +98,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 6, 81 );
         Size = MAP_APPFONT( 42, 8 );
 
-        Text = "Format";
-        Text [ english_us ] = "Format";
-        Text[ french ] = "Format";
-        Text[ spanish ] = "F~ormato";
-        Text[ italian ] = "F~ormato";
-        Text[ swedish ] = "Format";
-        Text[ japanese ] = "書式";
-        Text[ korean ] = "입력 형식";
-        Text[ chinese_simplified ] = "格式";
-        Text[ chinese_traditional ] = "格式";
-        Text[ portuguese ] = "F~ormato";
-        Text[ russian ] = "������";
-        Text[ greek ] = "�~����";
-        Text[ dutch ] = "~Formaat";
-        Text[ finnish ] = "Muoto";
-        Text[ portuguese_brazilian ] = "Formato";
-        Text[ turkish ] = "F~ormat";
-        Text[ arabic ] = "�������";
-        Text[ hebrew ] = "‮עיצוב‬";
-        Text[ thai ] = "รูปแบบ";
-        Text[ slovak ] = "Formát";
-        Text[ czech ] = "Formát";
-        Text[ danish ] = "Format";
-        Text[ catalan ] = "Format";
-        Text[ hindi ] = "रचना";
-        Text[ polish ] = "Format";
-        Text[ hungarian ] = "Formátum";
-        Text[ slovenian ] = "Oblika";
+        Text [ de ] = "Format";
+        Text [ en-US ] = "Format";
     };
 
     RadioButton RB_SIMPLE_CONVERSION
@@ -161,34 +109,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
         Group = TRUE;
 
-        Text = "Hangul/Hanja";
-        Text [ english_us ] = "~Hangul/Hanja";
-        Text[ french ] = "Hangul/Hanja";
-        Text[ spanish ] = "~Hangul/Hanja";
-        Text[ italian ] = "~Hangul/Hanja";
-        Text[ swedish ] = "~Hangul/Hanja";
-        Text[ japanese ] = "ハングルまたはハンジャ(~H)";
-        Text[ korean ] = "한글/한자(~H)";
-        Text[ chinese_simplified ] = "韩文/汉字(~H)";
-        Text[ chinese_traditional ] = "韓文/漢字(~H)";
-        Text[ slovak ] = "~Hangul/Hanja";
-        Text[ portuguese_brazilian ] = "Hangul/Hanja";
-        Text[ greek ] = "~Hangul/Hanja";
-        Text[ dutch ] = "~Hangul/Hanja";
-        Text[ finnish ] = "~Hangul/Hanja";
-        Text[ czech ] = "~Hangul/Hanja";
-        Text[ danish ] = "~Hangul/Hanja";
-        Text[ arabic ] = "~Hangul/Hanja";
-        Text[ hebrew ] = "~Hangul/Hanja";
-        Text[ catalan ] = "~Hangul/Hanja";
-        Text[ hindi ] = "~Hangul/Hanja";
-        Text[ portuguese ] = "~Hangul/Hanja";
-        Text[ russian ] = "~Hangul/Hanja";
-        Text[ polish ] = "~Hangul/Hanja";
-        Text[ turkish ] = "~Hangul/Hanja";
-        Text[ thai ] = "~Hangul/Hanja";
-        Text[ hungarian ] = "~Hangul/handzsa";
-        Text[ slovenian ] = "~Hangulski/Hanja";
+        Text [ de ] = "Hangul/Hanja";
+        Text [ en-US ] = "~Hangul/Hanja";
     };
 
     RadioButton RB_HANJA_HANGUL_BRACKETED
@@ -196,34 +118,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 109, 81 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text = "Hanja (Hangul)";
-        Text [ english_us ] = "Hanja (Han~gul)";
-        Text[ french ] = "Hanja (Hangul)";
-        Text[ spanish ] = "Hanja (Han~gul)";
-        Text[ italian ] = "Hanja (Han~gul)";
-        Text[ swedish ] = "Hanja (Han~gul)";
-        Text[ japanese ] = "ハンジャ（ハングル）(~G)";
-        Text[ korean ] = "漢字(한글)(~G)";
-        Text[ chinese_simplified ] = "汉字(韩文)(~G)";
-        Text[ chinese_traditional ] = "漢字(韓文)(~G)";
-        Text[ slovak ] = "Hanja (Han~gul)";
-        Text[ portuguese_brazilian ] = "Hanja (Hangul)";
-        Text[ greek ] = "Hanja (Han~gul)";
-        Text[ dutch ] = "Hanja (Han~gul)";
-        Text[ finnish ] = "Hanja (Han~gul)";
-        Text[ czech ] = "Hanja (Han~gul)";
-        Text[ danish ] = "Hanja (Han~gul)";
-        Text[ arabic ] = "Hanja (Han~gul)";
-        Text[ hebrew ] = "Hanja (Han~gul)";
-        Text[ catalan ] = "Hanja (Han~gul)";
-        Text[ hindi ] = "Hanja (Han~gul)";
-        Text[ portuguese ] = "Hanja (Han~gul)";
-        Text[ russian ] = "Hanja (Han~gul)";
-        Text[ polish ] = "Hanja (Han~gul)";
-        Text[ turkish ] = "Hanja (Han~gul)";
-        Text[ thai ] = "Hanja (Han~gul)";
-        Text[ hungarian ] = "Handzsa (ha~ngul)";
-        Text[ slovenian ] = "Hanja (Han~gulski)";
+        Text [ de ] = "Hanja (Hangul)";
+        Text [ en-US ] = "Hanja (Han~gul)";
     };
 
     RadioButton RB_HANGUL_HANJA_BRACKETED
@@ -231,34 +127,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 167, 81 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text = "Hangul (Hanja)";
-        Text [ english_us ] = "Hang~ul (Hanja)";
-        Text[ french ] = "Hangul (Hanja)";
-        Text[ spanish ] = "Hang~ul (Hanja)";
-        Text[ italian ] = "Hang~ul (Hanja)";
-        Text[ swedish ] = "H~angul (Hanja)";
-        Text[ japanese ] = "ハングル（ハンジャ）(~U)";
-        Text[ korean ] = "한글(漢字)(~U)";
-        Text[ chinese_simplified ] = "韩文(汉字)(~U)";
-        Text[ chinese_traditional ] = "韓文(漢字)(~U)";
-        Text[ slovak ] = "Hang~ul (Hanja)";
-        Text[ portuguese_brazilian ] = "Hangul (Hanja)";
-        Text[ greek ] = "Hang~ul (Hanja)";
-        Text[ dutch ] = "Hang~ul (Hanja)";
-        Text[ finnish ] = "Hang~ul (Hanja)";
-        Text[ czech ] = "Hang~ul (Hanja)";
-        Text[ danish ] = "Hang~ul (Hanja)";
-        Text[ arabic ] = "Hang~ul (Hanja)";
-        Text[ hebrew ] = "Hang~ul (Hanja)";
-        Text[ catalan ] = "Hang~ul (Hanja)";
-        Text[ hindi ] = "Hang~ul (Hanja)";
-        Text[ portuguese ] = "Hang~ul (Hanja)";
-        Text[ russian ] = "Hang~ul (Hanja)";
-        Text[ polish ] = "Hang~ul (Hanja)";
-        Text[ turkish ] = "Hang~ul (Hanja)";
-        Text[ thai ] = "Hang~ul (Hanja)";
-        Text[ hungarian ] = "Hang~ul (handzsa)";
-        Text[ slovenian ] = "Hang~ulski (Hanja)";
+        Text [ de ] = "Hangul (Hanja)";
+        Text [ en-US ] = "Hang~ul (Hanja)";
     };
 
     RadioButton RB_HANGUL_HANJA_ABOVE
@@ -267,34 +137,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text = "Hangul";
-        Text [ english_us ] = "Hangu~l";
-        Text[ french ] = "Hangul";
-        Text[ spanish ] = "Hangu~l";
-        Text[ italian ] = "Hangu~l";
-        Text[ swedish ] = "Hangu~l";
-        Text[ japanese ] = "ハングル(~L)";
-        Text[ korean ] = "한글(~L)";
-        Text[ chinese_simplified ] = "韩文(~L)";
-        Text[ chinese_traditional ] = "韓文(~L)";
-        Text[ slovak ] = "Hangu~l";
-        Text[ portuguese_brazilian ] = "Hangul";
-        Text[ greek ] = "Hangu~l";
-        Text[ dutch ] = "Hangu~l";
-        Text[ finnish ] = "Hangu~l";
-        Text[ czech ] = "Hangu~l";
-        Text[ danish ] = "Hangu~l";
-        Text[ arabic ] = "Hangu~l";
-        Text[ hebrew ] = "Hangu~l";
-        Text[ catalan ] = "Hangu~l";
-        Text[ hindi ] = "Hangu~l";
-        Text[ portuguese ] = "Hangu~l";
-        Text[ russian ] = "Hangu~l";
-        Text[ polish ] = "Hangu~l";
-        Text[ turkish ] = "Hangu~l";
-        Text[ thai ] = "Hangu~l";
-        Text[ hungarian ] = "Hangu~l";
-        Text[ slovenian ] = "Hangu~lski";
+        Text [ de ] = "Hangul";
+        Text [ en-US ] = "Hangu~l";
     };
 
     RadioButton RB_HANGUL_HANJA_BELOW
@@ -303,34 +147,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text = "Hangul";
-        Text [ english_us ] = "Hang~ul";
-        Text[ french ] = "Hangul";
-        Text[ spanish ] = "Hang~ul";
-        Text[ italian ] = "Hang~ul";
-        Text[ swedish ] = "Hang~ul";
-        Text[ japanese ] = "ハングル(~U)";
-        Text[ korean ] = "한글(~U)";
-        Text[ chinese_simplified ] = "韩文(~U)";
-        Text[ chinese_traditional ] = "韓文(~U)";
-        Text[ slovak ] = "Hang~ul";
-        Text[ portuguese_brazilian ] = "Hangul";
-        Text[ greek ] = "Hang~ul";
-        Text[ dutch ] = "Hang~ul";
-        Text[ finnish ] = "Hang~ul";
-        Text[ czech ] = "Hang~ul";
-        Text[ danish ] = "Hang~ul";
-        Text[ arabic ] = "Hang~ul";
-        Text[ hebrew ] = "Hang~ul";
-        Text[ catalan ] = "Hang~ul";
-        Text[ hindi ] = "Hang~ul";
-        Text[ portuguese ] = "Hang~ul";
-        Text[ russian ] = "Hang~ul";
-        Text[ polish ] = "Hang~ul";
-        Text[ turkish ] = "Hang~ul";
-        Text[ thai ] = "Hang~ul";
-        Text[ hungarian ] = "Hang~ul";
-        Text[ slovenian ] = "Hang~ulski";
+        Text [ de ] = "Hangul";
+        Text [ en-US ] = "Hang~ul";
     };
 
     RadioButton RB_HANJA_HANGUL_ABOVE
@@ -339,34 +157,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text = "Hanja";
-        Text [ english_us ] = "Han~ja";
-        Text[ french ] = "Hanja";
-        Text[ spanish ] = "Han~ja";
-        Text[ italian ] = "Han~ja";
-        Text[ swedish ] = "Han~ja";
-        Text[ japanese ] = "ハングル(~J)";
-        Text[ korean ] = "漢字(~J)";
-        Text[ chinese_simplified ] = "汉字(~J)";
-        Text[ chinese_traditional ] = "漢字(~J)";
-        Text[ slovak ] = "Han~ja";
-        Text[ portuguese_brazilian ] = "Hanja";
-        Text[ greek ] = "Han~ja";
-        Text[ dutch ] = "Han~ja";
-        Text[ finnish ] = "Han~ja";
-        Text[ czech ] = "Han~ja";
-        Text[ danish ] = "Han~ja";
-        Text[ arabic ] = "Han~ja";
-        Text[ hebrew ] = "Han~ja";
-        Text[ catalan ] = "Han~ja";
-        Text[ hindi ] = "Han~ja";
-        Text[ portuguese ] = "Han~ja";
-        Text[ russian ] = "Han~ja";
-        Text[ polish ] = "Han~ja";
-        Text[ turkish ] = "Han~ja";
-        Text[ thai ] = "Han~ja";
-        Text[ hungarian ] = "Han~dzsa";
-        Text[ slovenian ] = "Han~ja";
+        Text [ de ] = "Hanja";
+        Text [ en-US ] = "Han~ja";
     };
 
     RadioButton RB_HANJA_HANGUL_BELOW
@@ -375,34 +167,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text = "Hanja";
-        Text [ english_us ] = "Ha~nja";
-        Text[ french ] = "Hanja";
-        Text[ spanish ] = "Ha~nja";
-        Text[ italian ] = "Ha~nja";
-        Text[ swedish ] = "Ha~nja";
-        Text[ japanese ] = "ハンジャ(~N)";
-        Text[ korean ] = "漢字(~N)";
-        Text[ chinese_simplified ] = "汉字(~N)";
-        Text[ chinese_traditional ] = "漢字(~N)";
-        Text[ slovak ] = "Ha~nja";
-        Text[ portuguese_brazilian ] = "Hanja";
-        Text[ greek ] = "Ha~nja";
-        Text[ dutch ] = "Ha~nja";
-        Text[ finnish ] = "Ha~nja";
-        Text[ czech ] = "Ha~nja";
-        Text[ danish ] = "Ha~nja";
-        Text[ arabic ] = "Ha~nja";
-        Text[ hebrew ] = "Ha~nja";
-        Text[ catalan ] = "Ha~nja";
-        Text[ hindi ] = "Ha~nja";
-        Text[ portuguese ] = "Ha~nja";
-        Text[ russian ] = "Ha~nja";
-        Text[ polish ] = "Ha~nja";
-        Text[ turkish ] = "Ha~nja";
-        Text[ thai ] = "Ha~nja";
-        Text[ hungarian ] = "Ha~ndzsa";
-        Text[ slovenian ] = "Ha~nja";
+        Text [ de ] = "Hanja";
+        Text [ en-US ] = "Ha~nja";
     };
 
     FixedText FT_CONVERSION
@@ -410,34 +176,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 6, 134 );
         Size = MAP_APPFONT( 42, 8 );
 
-        Text = "Konvertierung";
-        Text [ english_us ] = "Conversion";
-        Text[ french ] = "Conversion";
-        Text[ spanish ] = "Conversi�n";
-        Text[ italian ] = "Conversione";
-        Text[ swedish ] = "Konvertering";
-        Text[ japanese ] = "変換";
-        Text[ korean ] = "변환";
-        Text[ chinese_simplified ] = "转换";
-        Text[ chinese_traditional ] = "轉換";
-        Text[ slovak ] = "Konverzia";
-        Text[ portuguese_brazilian ] = "Convers�o";
-        Text[ greek ] = "Conversion";
-        Text[ dutch ] = "Conversie";
-        Text[ finnish ] = "Conversion";
-        Text[ czech ] = "Konverze";
-        Text[ danish ] = "Konvertering";
-        Text[ arabic ] = "Conversion";
-        Text[ hebrew ] = "Conversion";
-        Text[ catalan ] = "Conversion";
-        Text[ hindi ] = "Conversion";
-        Text[ portuguese ] = "Conversion";
-        Text[ russian ] = "Conversion";
-        Text[ polish ] = "Conversion";
-        Text[ turkish ] = "Conversion";
-        Text[ thai ] = "Conversion";
-        Text[ hungarian ] = "Átalakítás";
-        Text[ slovenian ] = "Pretvorba";
+        Text [ de ] = "Konvertierung";
+        Text [ en-US ] = "Conversion";
     };
 
     CheckBox CB_HANGUL_ONLY
@@ -445,34 +185,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 51, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text = "Nur Hangul";
-        Text [ english_us ] = "Hangul ~only";
-        Text[ french ] = "Uniquement Hangul";
-        Text[ spanish ] = "~S�lo Hangul";
-        Text[ italian ] = "Solo Hangul";
-        Text[ swedish ] = "~Bara Hangul";
-        Text[ japanese ] = "ハングルのみ(~O)";
-        Text[ korean ] = "한글만(~O)";
-        Text[ chinese_simplified ] = "仅汉字(~O)";
-        Text[ chinese_traditional ] = "僅漢字(~O)";
-        Text[ slovak ] = "~Len Hangul";
-        Text[ portuguese_brazilian ] = "Somente Hangul";
-        Text[ greek ] = "Hangul ~only";
-        Text[ dutch ] = "Alleen Hangul";
-        Text[ finnish ] = "Hangul ~only";
-        Text[ czech ] = "Pouze Hangul";
-        Text[ danish ] = "Kun Hangul";
-        Text[ arabic ] = "Hangul ~only";
-        Text[ hebrew ] = "Hangul ~only";
-        Text[ catalan ] = "Hangul ~only";
-        Text[ hindi ] = "Hangul ~only";
-        Text[ portuguese ] = "Hangul ~only";
-        Text[ russian ] = "Hangul ~only";
-        Text[ polish ] = "Hangul ~only";
-        Text[ turkish ] = "Hangul ~only";
-        Text[ thai ] = "Hangul ~only";
-        Text[ hungarian ] = "~Csak hangul";
-        Text[ slovenian ] = "Sam~o Hangulski";
+        Text [ de ] = "Nur Hangul";
+        Text [ en-US ] = "Hangul ~only";
     };
 
     CheckBox CB_HANJA_ONLY
@@ -480,34 +194,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 109, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text = "Nur Hanja";
-        Text [ english_us ] = "Hanja onl~y";
-        Text[ french ] = "Uniquement Hanja";
-        Text[ spanish ] = "~S�lo Hanja";
-        Text[ italian ] = "Solo Hanja";
-        Text[ swedish ] = "Ba~ra Hanja";
-        Text[ japanese ] = "ハンジャのみ(~Y)";
-        Text[ korean ] = "한자만(~Y)";
-        Text[ chinese_simplified ] = "仅汉字(~Y)";
-        Text[ chinese_traditional ] = "僅漢字(~Y)";
-        Text[ slovak ] = "Len ~Hanja";
-        Text[ portuguese_brazilian ] = "Somente Hanja";
-        Text[ greek ] = "Hanja onl~y";
-        Text[ dutch ] = "Alleen Hanja";
-        Text[ finnish ] = "Hanja onl~y";
-        Text[ czech ] = "Pouze Hanja";
-        Text[ danish ] = "Kun Hanja";
-        Text[ arabic ] = "Hanja onl~y";
-        Text[ hebrew ] = "Hanja onl~y";
-        Text[ catalan ] = "Hanja onl~y";
-        Text[ hindi ] = "Hanja onl~y";
-        Text[ portuguese ] = "Hanja onl~y";
-        Text[ russian ] = "Hanja onl~y";
-        Text[ polish ] = "Hanja onl~y";
-        Text[ turkish ] = "Hanja onl~y";
-        Text[ thai ] = "Hanja onl~y";
-        Text[ hungarian ] = "C~sak handzsa";
-        Text[ slovenian ] = "Sa~mo Hanja";
+        Text [ de ] = "Nur Hanja";
+        Text [ en-US ] = "Hanja onl~y";
     };
 
     // this element is only for determining where our radio button group ends (in both directions)
@@ -523,125 +211,21 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
         WordBreak = TRUE;
 
-        Text = "Einzelne Zeichen ersetzen";
-        Text [ english_us ] = "Replace b~y character";
-        Text[ french ] = "Remplacement caract�re par caract�re";
-        Text[ spanish ] = "~Sustituir caracteres uno por uno";
-        Text[ italian ] = "Sostituisci singoli caratteri";
-        Text[ swedish ] = "Ers�tt ~enstaka tecken";
-        Text[ japanese ] = "１文字ずつ置換(~Y)";
-        Text[ korean ] = "한 글자씩 변환(~Y)";
-        Text[ chinese_simplified ] = "替换单个字(~Y)";
-        Text[ chinese_traditional ] = "替換單個字(~Y)";
-        Text[ slovak ] = "Nah~radiť po znakoch";
-        Text[ portuguese_brazilian ] = "Substitui��o caracter por caracter";
-        Text[ greek ] = "Replace b~y character";
-        Text[ dutch ] = "Vervangen per karakter";
-        Text[ finnish ] = "Replace b~y character";
-        Text[ czech ] = "Nahradit po znacích";
-        Text[ danish ] = "Erstat med tegn";
-        Text[ arabic ] = "Replace b~y character";
-        Text[ hebrew ] = "Replace b~y character";
-        Text[ catalan ] = "Replace b~y character";
-        Text[ hindi ] = "Replace b~y character";
-        Text[ portuguese ] = "Replace b~y character";
-        Text[ russian ] = "Replace b~y character";
-        Text[ polish ] = "Replace b~y character";
-        Text[ turkish ] = "Replace b~y character";
-        Text[ thai ] = "Replace b~y character";
-        Text[ hungarian ] = "Csere ~karakterenként";
-        Text[ slovenian ] = "Zamenjaj ~z znakom";
+        Text [ de ] = "Einzelne Zeichen ersetzen";
+        Text [ en-US ] = "Replace b~y character";
     };
 
     String STR_HANGUL
     {
-        Text = "Hangul";
-        Text [ english_us ] = "Hangul";
-        Text[ french ] = "Hangul";
-        Text[ spanish ] = "Hangul";
-        Text[ italian ] = "Hangul";
-        Text[ swedish ] = "Hangul";
-        Text[ japanese ] = "ハングル";
-        Text[ korean ] = "한글";
-        Text[ chinese_simplified ] = "韩文";
-        Text[ chinese_traditional ] = "韓文";
-        Text[ russian ] = "������";
-        Text[ hebrew ] = "‮הנגול‬";
-        Text[ thai ] = "ภาษาฮังกุล";
-        Text[ slovak ] = "Hangul";
-        Text[ portuguese_brazilian ] = "Hangul";
-        Text[ greek ] = "Hangul";
-        Text[ dutch ] = "Hangul";
-        Text[ finnish ] = "Hangul";
-        Text[ czech ] = "Hangul";
-        Text[ danish ] = "Hangul";
-        Text[ arabic ] = "Hangul";
-        Text[ catalan ] = "Hangul";
-        Text[ hindi ] = "हानगल";
-        Text[ portuguese ] = "Hangul";
-        Text[ polish ] = "Hangul";
-        Text[ turkish ] = "Hangul";
-        Text[ hungarian ] = "Hangul";
-        Text[ slovenian ] = "Hangulski";
+        Text [ de ] = "Hangul";
+        Text [ en-US ] = "Hangul";
     };
 
     String STR_HANJA
     {
-        Text = "Hanja";
-        Text [ english_us ] = "Hanja";
-        Text[ french ] = "Hanja";
-        Text[ spanish ] = "Hanja";
-        Text[ italian ] = "Hanja";
-        Text[ swedish ] = "Hanja";
-        Text[ japanese ] = "ハンジャ";
-        Text[ korean ] = "漢字";
-        Text[ chinese_simplified ] = "汉字";
-        Text[ chinese_traditional ] = "漢字";
-        Text[ slovak ] = "Hanja";
-        Text[ portuguese_brazilian ] = "Hanja";
-        Text[ greek ] = "Hanja";
-        Text[ dutch ] = "Hanja";
-        Text[ finnish ] = "Hanja";
-        Text[ czech ] = "Hanja";
-        Text[ danish ] = "Hanja";
-        Text[ arabic ] = "Hanja";
-        Text[ hebrew ] = "Hanja";
-        Text[ catalan ] = "Hanja";
-        Text[ hindi ] = "Hanja";
-        Text[ portuguese ] = "Hanja";
-        Text[ russian ] = "Hanja";
-        Text[ polish ] = "Hanja";
-        Text[ turkish ] = "Hanja";
-        Text[ thai ] = "Hanja";
-        Text[ hungarian ] = "Handzsa";
-        Text[ slovenian ] = "Hanja";
+        Text [ de ] = "Hanja";
+        Text [ en-US ] = "Hanja";
     };
-    Text[ french ] = "Conversion Hangul/Hanja";
-    Text[ spanish ] = "Conversi�n de Hangul/Hanja";
-    Text[ italian ] = "Conversione Hangul/Hanja";
-    Text[ swedish ] = "Hangul/Hanja-konvertering";
-    Text[ japanese ] = "ハングルまたはハンジャに変換";
-    Text[ korean ] = "한글/한자 변환";
-    Text[ chinese_simplified ] = "韩文/汉字 转换";
-    Text[ chinese_traditional ] = "韓文/漢字 轉換";
-    Text[ slovak ] = "Hangul/Hanja Konverzia";
-    Text[ portuguese_brazilian ] = "Convers�o Hangul/Hanja";
-    Text[ greek ] = "Hangul/Hanja Conversion";
-    Text[ dutch ] = "Hangul/Hanja conversie";
-    Text[ finnish ] = "Hangul/Hanja Conversion";
-    Text[ czech ] = "Konverze Hangul/Hanja";
-    Text[ danish ] = "Hangul/Hanja-konvertering";
-    Text[ arabic ] = "Hangul/Hanja Conversion";
-    Text[ hebrew ] = "Hangul/Hanja Conversion";
-    Text[ catalan ] = "Hangul/Hanja Conversion";
-    Text[ hindi ] = "Hangul/Hanja Conversion";
-    Text[ portuguese ] = "Hangul/Hanja Conversion";
-    Text[ russian ] = "Hangul/Hanja Conversion";
-    Text[ polish ] = "Hangul/Hanja Conversion";
-    Text[ turkish ] = "Hangul/Hanja Conversion";
-    Text[ thai ] = "Hangul/Hanja Conversion";
-    Text[ hungarian ] = "Hangul/handzsa átalakítás";
-    Text[ slovenian ] = "Pretvorba med Hangul/Hanja...";
 };
 
 ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
@@ -652,8 +236,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     HelpId = HID_HANGULHANJA_OPT_DLG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( HHO_DLGWIDTH , HHx_DLGHIGHT ) ;
-    Text = "Hangul/Hanja Options" ;
-    Text [ ENGLISH ] = "Hangul/Hanja Options" ;
+    Text[ de ] = "Hangul/Hanja Options" ;
+    Text [ en-US ] = "Hangul/Hanja Options" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
@@ -661,9 +245,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1 , HHO_ROW_1 ) ;
         Size = MAP_APPFONT ( HHO_COL_2 - HHO_COL_1, 8 ) ;
-        Text = "User-defined dictionaries";
-        Text [English] = "User-defined dictionaries";
-        Text[ english_us ] = "User-defined dictionaries";
+        Text [ de ] = "User-defined dictionaries";
+        Text[ en-US ] = "User-defined dictionaries";
     };
     Control LB_DICTS
     {
@@ -677,82 +260,72 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1 , HHO_ROW_8 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_1, 8 ) ;
-        Text = "Options";
-        Text [English] = "Options";
-        Text[ english_us ] = "Options";
+        Text [ de ] = "Options";
+        Text[ en-US ] = "Options";
     };
     CheckBox CB_IGNOREPOST
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_9 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text = "Ignore post-positional word" ;
-        Text [ ENGLISH ] = "Ignore post-positional word" ;
-        Text[ english_us ] = "Ignore post-positional word";
+        Text [ de ] = "Ignore post-positional word" ;
+        Text[ en-US ] = "Ignore post-positional word";
     };
     CheckBox CB_AUTOCLOSE
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_10 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text = "Close Conversion dialog automatically after replacement" ;
-        Text [ ENGLISH ] = "Close Conversion dialog automatically after replacement" ;
-        Text[ english_us ] = "Close Conversion dialog automatically after replacement";
+        Text [ de ] = "Close Conversion dialog automatically after replacement" ;
+        Text [ en-US ] = "Close Conversion dialog automatically after replacement";
     };
     CheckBox CB_SHOWRECENTLYFIRST
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_11 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text = "Show entries recently used first" ;
-        Text [ ENGLISH ] = "Show entries recently used first" ;
-        Text[ english_us ] = "Show entries recently used first";
+        Text [ de ] = "Show entries recently used first" ;
+        Text [ en-US ] = "Show entries recently used first";
     };
     CheckBox CB_AUTOREPLACEUNIQUE
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_12 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text = "Replace all unique entries automatically" ;
-        Text [ ENGLISH ] = "Replace all unique entries automatically" ;
-        Text[ english_us ] = "Replace all unique entries automatically";
+        Text [ de ] = "Replace all unique entries automatically" ;
+        Text [ en-US ] = "Replace all unique entries automatically";
     };
     PushButton PB_HHO_NEW
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_2 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text = "New" ;
-        Text [ ENGLISH ] = "New" ;
-        Text[ english_us ] = "New";
+        Text [ de ] = "New" ;
+        Text [ en-US ] = "New";
     };
     PushButton PB_HHO_EDIT
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_4 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text = "Edit..." ;
-        Text [ ENGLISH ] = "Edit..." ;
-        Text[ english_us ] = "Edit...";
+        Text [ de ] = "Edit..." ;
+        Text [ en-US ] = "Edit...";
     };
     PushButton PB_HHO_DELETE
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_6 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text = "Delete" ;
-        Text [ ENGLISH ] = "Delete" ;
-        Text[ english_us ] = "Delete";
+        Text [ de ] = "Delete" ;
+        Text [ en-US ] = "Delete";
     };
     OKButton PB_HHO_OK
     {
         DefButton = TRUE;
         Pos = MAP_APPFONT ( HHO_COL_5 , HHO_ROW_a1 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_5 , 14 ) ;
-        Text = "Ok" ;
-        Text [ ENGLISH ] = "Ok" ;
-        Text[ english_us ] = "Ok";
+        Text [ de ] = "Ok" ;
+        Text [ en-US ] = "Ok";
     };
     CancelButton PB_HHO_CANCEL
     {
         Pos = MAP_APPFONT ( HHO_COL_5 , HHO_ROW_a3 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_5 , 14 ) ;
-        Text = "Cancel" ;
-        Text [ ENGLISH ] = "Cancel" ;
-        Text[ english_us ] = "Cancel";
+        Text [ de ] = "Cancel" ;
+        Text [ en-US ] = "Cancel";
     };
     HelpButton PB_HHO_HELP
     {
@@ -771,26 +344,23 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
     Size = MAP_APPFONT ( 213 , 66 ) ;
     Moveable = TRUE ;
 
-    Text = "Benutzerw�rterbuch anlegen" ;
-    Text [ ENGLISH ] = "New dictionary" ;
-    Text [ english_us ] = "New Dictionary" ;
+    Text [ de ] = "Benutzerw�rterbuch anlegen" ;
+    Text [ en-US ] = "New Dictionary" ;
 
     FixedLine FL_NEWDICT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 145 , 8 ) ;
-        Text = "W�rterbuch" ;
-        Text [ ENGLISH ] = "Dictionary" ;
-        Text [ english_us ] = "Dictionary" ;
+        Text [ de ] = "W�rterbuch" ;
+        Text [ en-US ] = "Dictionary" ;
     };
     FixedText FT_DICTNAME
     {
         Pos = MAP_APPFONT ( 11 , 15 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         LeftLabel = TRUE ;
-        Text = "~Name" ;
-        Text [ ENGLISH ] = "~Name" ;
-        Text [ english_us ] = "~Name" ;
+        Text [ de ] = "~Name" ;
+        Text [ en-US ] = "~Name" ;
     };
     Edit ED_DICTNAME
     {
@@ -827,24 +397,22 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     HelpId = HID_HANGULHANJA_EDIT_DLG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( HHE_DLGWIDTH , HHx_DLGHIGHT ) ;
-    Text = "Edit Custom Dictionary" ;
-    Text [ ENGLISH ] = "Edit Custom Dictionary" ;
+    Text[ de ] = "Edit Custom Dictionary" ;
+    Text [ en-US ] = "Edit Custom Dictionary" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
     String STR_EDITHINT
     {
-        Text = "[Text hier eingeben]";
-        Text [English] = "[Enter text here]";
-        Text[ english_us ] = "[Enter text here]";
+        Text [ de ] = "[Text hier eingeben]";
+        Text [ en-US ] = "[Enter text here]";
     };
     FixedText FT_BOOK
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_2 ) ;
         Size = MAP_APPFONT ( HHE_COL_2 - HHE_COL_1, 8 ) ;
-        Text = "Book";
-        Text [English] = "Book";
-        Text[ english_us ] = "Book";
+        Text [ de ] = "Book";
+        Text [ en-US ] = "Book";
     };
     ListBox LB_BOOK
     {
@@ -857,9 +425,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_4 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1, 8 ) ;
-        Text = "Original";
-        Text [English] = "Original";
-        Text[ english_us ] = "Original";
+        Text [ de ] = "Original";
+        Text [ en-US ] = "Original";
     };
     ComboBox LB_ORIGINAL
     {
@@ -872,17 +439,15 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_1, HHE_ROW_8 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1 , 12 ) ;
-        Text = "Replace by character" ;
-        Text [ ENGLISH ] = "Replace by character" ;
-        Text[ english_us ] = "Replace by character";
+        Text [ de ] = "Replace by character" ;
+        Text [ en-US ] = "Replace by character";
     };
     FixedText FT_SUGGESTIONS
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_10 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1, 8 ) ;
-        Text = "Suggestions (max. 8)";
-        Text [English] = "Suggestions (max. 8)";
-        Text[ english_us ] = "Suggestions (max. 8)";
+        Text [ de ] = "Suggestions (max. 8)";
+        Text [ en-US ] = "Suggestions (max. 8)";
     };
     Edit ED_1
     {
@@ -923,17 +488,15 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a1 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text = "New" ;
-        Text [ ENGLISH ] = "New" ;
-        Text[ english_us ] = "New";
+        Text [ de ] = "New" ;
+        Text [ en-US ] = "New";
     };
     PushButton PB_HHE_DELETE
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text = "New" ;
-        Text [ ENGLISH ] = "Delete" ;
-        Text[ english_us ] = "Delete";
+        Text [ de ] = "New" ;
+        Text [ en-US ] = "Delete";
     };
     HelpButton PB_HHE_HELP
     {
@@ -944,9 +507,8 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_13 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text = "Schliessen" ;
-        Text [ ENGLISH ] = "Close" ;
-        Text[ english_us ] = "Close";
+        Text [ de ] = "Schliessen" ;
+        Text [ en-US ] = "Close";
     };
 };
 
