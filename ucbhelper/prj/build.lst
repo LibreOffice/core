@@ -1,4 +1,4 @@
-uh	ucbhelper : offuh sal vos cppu cppuhelper NULL
+uh	ucbhelper : offuh sal vos cppu cppuhelper comphelper NULL
 uh	ucbhelper   			usr1	-	all	uh_mkout NULL
 uh	ucbhelper\unotypes		nmake	-	all	uh_unotypes NULL
 uh	ucbhelper\source\client		nmake	-	all	uh_client uh_unotypes NULL
