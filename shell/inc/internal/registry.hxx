@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:53:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ std::string ClsidToString(const CLSID& clsid);
 
 /** Get the content of a specific key.
 */
-bool QueryRegistryKey(HKEY RootKey, const char* KeyName, char szProductType[], DWORD dwBufLen);
+bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen);
 
 
 #endif
