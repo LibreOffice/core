@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:29:51 $
+ *  last change: $Author: er $ $Date: 2001-01-10 18:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5104,9 +5104,16 @@ void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fAnz = GetDouble();
-        if( fAnz < 1.0 || fAnz > MAXSTRLEN )
+        double fAnz = SolarMath::ApproxFloor(GetDouble());
+        if ( fAnz < 0.0 )
             SetIllegalParameter();
+        else if ( fAnz > MAXSTRLEN )
+        {
+            SetError( errStringOverflow );
+            PushInt(0);
+        }
+        else if ( fAnz == 0.0 )
+            PushString( NULL );
         else
         {
             short n = (short) fAnz;
