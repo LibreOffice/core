@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-12 11:05:23 $
+ *  last change: $Author: dbo $ $Date: 2001-10-12 15:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,13 +287,32 @@ sal_Bool SAL_CALL uno_assignData(
 
 #ifdef _DEBUG
 
+#include <stdio.h>
+
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #elif defined(SAL_OS2)
 #   pragma pack(8)
 #endif
 
+#define BINTEST_VERIFY( c ) \
+    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
+#ifdef DEBUG
+#define BINTEST_VERIFYSIZE( s, n ) \
+    fprintf( stderr, "> sizeof( " #s " ) = %d\n", sizeof(s) ); \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof( " #s " ) = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#else
+#define BINTEST_VERIFYSIZE( s, n ) \
+    if (sizeof(s) != n) { fprintf( stderr, "### sizeof( " #s " ) = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
+#endif
+
 #define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
+
+#if ( __GNUC__ == 3 && __GNUC_MINOR__ == 0 )
+#define CPPU_ALIGN( x ) __attribute__ ((aligned (x)))
+#else
+#define CPPU_ALIGN( x )
+#endif
 
 struct C
 {
@@ -301,7 +320,21 @@ struct C
 };
 struct C2 : public C
 {
-    sal_Int32 e;
+    sal_Int32 e CPPU_ALIGN(2);
+};
+struct C3 : public C2
+{
+    double d CPPU_ALIGN(4);
+};
+struct C4 : public C3
+{
+    C3 c3 CPPU_ALIGN(8);
+    sal_Bool b;
+};
+struct C5
+{
+    C4 c4;
+    sal_Bool b;
 };
 
 struct D
@@ -326,17 +359,22 @@ struct M
 
 struct N : public M
 {
+    sal_Int16   p CPPU_ALIGN(4);
+};
+struct N2
+{
+    M m;
     sal_Int16   p;
 };
 
 struct O : public M
 {
-    double  p;
+    double  p CPPU_ALIGN(4);
 };
 
 struct P : public N
 {
-    double  p;
+    double  p CPPU_ALIGN(4);
 };
 
 struct empty
@@ -355,104 +393,51 @@ public:
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
     // sequence
-    if ((SAL_SEQUENCE_HEADER_SIZE % 8) != 0)
-    {
-        OSL_ENSURE( 0, "### sal sequence header size not aligned to 8?!" );
-        abort();
-    }
+    BINTEST_VERIFY( (SAL_SEQUENCE_HEADER_SIZE % 8) == 0 );
     // enum
-    if( sizeof( TypeClass ) != sizeof( sal_Int32 ) )
-    {
-        OSL_ENSURE( 0, "### enum not 32bit?!" );
-        abort();
-    }
+    BINTEST_VERIFY( sizeof( TypeClass ) == sizeof( sal_Int32 ) );
     // any
-    if (sizeof(void *) < sizeof(sal_Int32))
-    {
-        OSL_ENSURE( 0, "### size of pointer less than 32bit?!" );
-        abort();
-    }
-    if( sizeof( Any ) != sizeof( uno_Any ) )
-    {
-        OSL_ENSURE( 0, "### Any inheritance adds space to uno_Any?!" );
-        abort();
-    }
-    if( sizeof( Any ) != sizeof( void * ) * 3 )
-    {
-        OSL_ENSURE( 0, "### sizeof( Any ) != sizeof( void * ) * 3 ?!" );
-        abort();
-    }
-    if( (sal_Int32)&((Any *) 16)->pType != 16 )
-    {
-        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pType != 16 ?!" );
-        abort();
-    }
-    if( (sal_Int32)&((Any *) 16)->pData != 16 + sizeof( void * ) )
-    {
-        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pData != 16 + sizeof( void * ) ?!" );
-        abort();
-    }
-    if( (sal_Int32)&((Any *) 16)->pReserved != 16 + (2* sizeof( void * )) )
-    {
-        OSL_ENSURE( 0, "### (sal_Int32)&((Any *) 16)->pReserved != 16 + (2* sizeof( void * )) ?!" );
-        abort();
-    }
+    BINTEST_VERIFY( sizeof(void *) >= sizeof(sal_Int32) );
+    BINTEST_VERIFY( sizeof( Any ) == sizeof( uno_Any ) );
+    BINTEST_VERIFY( sizeof( Any ) == sizeof( void * ) * 3 );
+    BINTEST_VERIFY( OFFSET_OF( Any, pType ) == 0 );
+    BINTEST_VERIFY( OFFSET_OF( Any, pData ) == 4 );
+    BINTEST_VERIFY( OFFSET_OF( Any, pReserved ) == 8 );
     // interface
-    if( sizeof( Reference< XInterface > ) != sizeof( XInterface * ) )
-    {
-        OSL_ENSURE( 0, "### unexpected size of interface reference?!" );
-        abort();
-    }
+    BINTEST_VERIFY( sizeof( Reference< XInterface > ) == sizeof( XInterface * ) );
     // string
-    if( sizeof( OUString ) != sizeof( rtl_uString * ) )
-    {
-        OSL_ENSURE( 0, "### unexpected size of string?!" );
-        abort();
-    }
+    BINTEST_VERIFY( sizeof( OUString ) == sizeof( rtl_uString * ) );
     // struct
-    if( sizeof( M ) != 8 || sizeof( N ) != 12 || sizeof( O ) != 16 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
-    if( sizeof( D ) != 8 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
-    if( OFFSET_OF( D, e ) != 4 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
-    if( OFFSET_OF( E, d ) != 4 || OFFSET_OF( E, e ) != 8 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
-    if( sizeof(C) != 2 || sizeof(C2) != 8 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
-    if( OFFSET_OF( C2, e ) != 4 )
-    {
-        OSL_ENSURE( 0, "### unexpected struct alignment?!" );
-        abort();
-    }
+    BINTEST_VERIFYSIZE( M, 8 );
+    BINTEST_VERIFY( OFFSET_OF( M, o ) == 4 );
+    BINTEST_VERIFYSIZE( N, 12 );
+    BINTEST_VERIFY( OFFSET_OF( N, p ) == 8 );
+    BINTEST_VERIFYSIZE( N2, 12 );
+    BINTEST_VERIFY( OFFSET_OF( N2, p ) == 8 );
+    BINTEST_VERIFYSIZE( O, 16 );
+    BINTEST_VERIFYSIZE( D, 8 );
+    BINTEST_VERIFY( OFFSET_OF( D, e ) == 4 );
+    BINTEST_VERIFY( OFFSET_OF( E, d ) == 4 );
+    BINTEST_VERIFY( OFFSET_OF( E, e ) == 8 );
+    BINTEST_VERIFYSIZE( C, 2 );
+    BINTEST_VERIFYSIZE( C2, 8 );
+    BINTEST_VERIFY( OFFSET_OF( C2, e ) == 4 );
+
+    BINTEST_VERIFYSIZE( C3, 16 );
+    BINTEST_VERIFY( OFFSET_OF( C3, d ) == 8 );
+    BINTEST_VERIFYSIZE( C4, 40 );
+    BINTEST_VERIFY( OFFSET_OF( C4, c3 ) == 16 );
+    BINTEST_VERIFY( OFFSET_OF( C4, b ) == 32 );
+
+    BINTEST_VERIFYSIZE( C5, 48 );
+    BINTEST_VERIFY( OFFSET_OF( C5, c4 ) == 0 );
+    BINTEST_VERIFY( OFFSET_OF( C5, b ) == 40 );
+
 #ifdef SAL_W32
-    if( sizeof( P ) != 24 )
-    {
-        OSL_ENSURE( 0, "### [win] unexpected struct alignment?!" );
-        abort();
-    }
+    BINTEST_VERIFYSIZE( P, 24 );
 #endif
 #ifndef __GNUC__
-    if( sizeof( second ) != sizeof( int ) )
-    {
-        OSL_ENSURE( 0, "### unexpected struct size?!" );
-        abort();
-    }
+    BINTEST_VERIFYSIZE( second, sizeof( int ) );
 #endif
 }
 
