@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:26:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
+#ifndef SC_XIESCHER_HXX
+#include "xiescher.hxx"
+#endif
 
 #include "excimp8.hxx"
 #include "excform.hxx"
@@ -194,14 +197,12 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData ):
     pExtNameBuff = new NameBuffer( pExcRoot );          //#94039# prevent empty rootdata
     pExtNameBuff->SetBase( 1 );
 
-    pOutlineListBuffer = new OutlineListBuffer( );
+    pOutlineListBuffer = new XclImpOutlineListBuffer( );
 
     // ab Biff8
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc( aIn );
 
     bTabTruncated = FALSE;
-
-    pExcRoot->bChartTab = FALSE;
 
     // Excel-Dokument per Default auf 31.12.1899, entspricht Excel-Einstellungen mit 1.1.1900
     ScDocOptions aOpt = pD->GetDocOptions();
@@ -1392,25 +1393,11 @@ void ImportExcel::Bof5( void )
 
     switch( nSubType )
     {
-        case 0x0005:                        // Workbook-Globals?
-            eDatei = Biff5W;
-            break;
-        case 0x0006:                        // Visual Basic?
-            eDatei = Biff5V;
-            break;
-        case 0x0010:                        // Worksheet?
-            eDatei = Biff5;
-            break;
-        case 0x0020:                        // Chart?
-            eDatei = Biff5C;
-            break;
-        case 0x0040:                        // Excel4 Macro?
-            eDatei = Biff5M4;
-//          eHaupt = Biff4;                 // !!!!!!!!! RICHTIG? !!!!!!!!!!!!
-            break;
-        case 0x0100:                        // Workbook?
-            eDatei = Biff5W;
-            break;
+        case 0x0005:    eDatei = Biff5W;    break;  // workbook globals
+        case 0x0006:    eDatei = Biff5V;    break;  // VB module
+        case 0x0010:    eDatei = Biff5;     break;  // worksheet
+        case 0x0020:    eDatei = Biff5C;    break;  // chart
+        case 0x0040:    eDatei = Biff5M4;   break;  // macro sheet
         default:
             pExcRoot->eDateiTyp = BiffX;
             return;
@@ -1443,7 +1430,7 @@ void ImportExcel::NeueTabelle( void )
 
     InitializeTable( nTab );
 
-    pOutlineListBuffer->Append(new OutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
+    pOutlineListBuffer->Append(new XclImpOutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
 
     pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
     pColOutlineBuff = pOutlineListBuffer->Last()->GetColOutline();
@@ -1481,25 +1468,42 @@ void ImportExcel::PostDocLoad( void )
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
     // Apply any Outlines for each sheet
-    for(OutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
+    for(XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
         pBuffer->Apply(pD);
 
 
     // visible area if embedded OLE
     if( ScModelObj* pDocObj = GetDocModelObj() )
     {
-        // visible area if embedded
-        const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();
-        const ScRange& rOleSize = rDocSett.maOleSize;
-        if( rOleSize.aStart.Col() >= 0 )
+        if( SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject() )
         {
-            if( SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject() )
+            // visible area if embedded
+            const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();
+            SCTAB nDisplScTab = rDocSett.mnDisplTab;
+
+            // first try if there was an OLESIZE record
+            ScRange aScOleSize = rDocSett.maOleSize;
+
+            /*  #i44077# If a new OLE object is inserted from file, there
+                is no OLESIZE record in the Excel file. Calculate used area
+                from file contents (used cells and drawing objects). */
+            if( !aScOleSize.IsValid() )
+            {
+                // used area of displayed sheet (cell contents)
+                if( const ScExtTabSettings* pTabSett = GetExtDocOptions().GetTabSettings( nDisplScTab ) )
+                    aScOleSize = pTabSett->maUsedArea;
+                // add all valid drawing objects (object manager only available in BIFF8)
+                if( GetBiff() == EXC_BIFF8 )
+                    GetObjectManager().ExtendUsedArea( aScOleSize, nDisplScTab );
+            }
+
+            // valid size found - set it at the document
+            if( aScOleSize.IsValid() )
             {
                 pEmbObj->SetVisArea( GetDoc().GetMMRect(
-                    rOleSize.aStart.Col(), rOleSize.aStart.Row(),
-                    rOleSize.aEnd.Col(), rOleSize.aEnd.Row(),
-                    rDocSett.mnDisplTab ) );
-                GetDoc().SetVisibleTab( rDocSett.mnDisplTab );
+                    aScOleSize.aStart.Col(), aScOleSize.aStart.Row(),
+                    aScOleSize.aEnd.Col(), aScOleSize.aEnd.Row(), nDisplScTab ) );
+                GetDoc().SetVisibleTab( nDisplScTab );
             }
         }
 
@@ -1580,21 +1584,21 @@ void ImportExcel::PostDocLoad( void )
     }
 }
 
-OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
+XclImpOutlineDataBuffer::XclImpOutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
     nTab (nTabNo),
-    pColOutlineBuff( new OutlineBuffer (MAXCOLCOUNT) ),
-    pRowOutlineBuff( new OutlineBuffer (MAXROWCOUNT) ),
-    pColRowBuff( new ColRowSettings( rRootData ) )
+    pColOutlineBuff( new XclImpOutlineBuffer (MAXCOLCOUNT) ),
+    pRowOutlineBuff( new XclImpOutlineBuffer (MAXROWCOUNT) ),
+    pColRowBuff( new XclImpColRowSettings( rRootData ) )
 {
     pColRowBuff->SetDefWidth( STD_COL_WIDTH );
     pColRowBuff->SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
 }
 
-OutlineDataBuffer::~OutlineDataBuffer()
+XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
 {
 }
 
-void OutlineDataBuffer::Apply(ScDocument* pD)
+void XclImpOutlineDataBuffer::Apply(ScDocument* pD)
 {
     pColOutlineBuff->SetOutlineArray( pD->GetOutlineTable( nTab, TRUE )->GetColArray() );
     pColOutlineBuff->MakeScOutline();
