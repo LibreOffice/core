@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:37 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,14 @@ namespace configmgr
                             configuration::TreeRef const& _aBaseTreeRef,
                             configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
-        bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeData const& aChange,  Factory& rFactory);
+        bool resolveUnoObjects(UnoChange& aUnoChange,
+                               configuration::NodeChangeData const& aChange,
+                               const memory::Accessor& aAccessor,
+                               Factory& rFactory);
         // resolve non-uno elements to Uno Objects inplace
-        bool resolveToUno(configuration::NodeChangeData& aChange, Factory& rFactory);
+        bool resolveToUno(configuration::NodeChangeData& aChange,
+                          const memory::Accessor& aAccessor,
+                          Factory& rFactory);
 
     // building events
         /// find the sending api object
