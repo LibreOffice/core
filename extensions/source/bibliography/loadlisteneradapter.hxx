@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadlisteneradapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:32:20 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 13:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,6 @@ namespace bib
         sal_Bool                            m_bListening    : 1;
         sal_Bool                            m_bAutoRelease  : 1;
 
-        virtual ~OComponentAdapterBase();
-
         // impl method for dispose - virtual, 'cause you at least need to remove the listener from the broadcaster
         virtual void disposing() = 0;
 
@@ -137,6 +135,8 @@ namespace bib
 
         // to be called by derivees which started listening at the component
         virtual void    startComponentListening() = 0;
+
+        virtual ~OComponentAdapterBase();
 
     public:
         OComponentAdapterBase(
@@ -233,6 +233,9 @@ namespace bib
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/10/22 07:32:20  fs
+ *  initial checkin - UNO-to-nonUNO bridge for (load)listeners
+ *
  *
  *  Revision 1.0 17.10.01 12:15:24  fs
  ************************************************************************/
