@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:50:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "sal/main.h"
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
 #include "uno/environment.hxx"
@@ -266,7 +267,7 @@ static void test_proxyfac(
         xNew, OUString( RTL_CONSTASCII_USTRINGPARAM("master") ), xProxyFac );
 }
 
-int SAL_CALL main( int argc, char * argv[] )
+SAL_IMPLEMENT_MAIN()
 {
     bool success = true;
 
