@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:36:24 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,17 +253,6 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     pSheetDesc->aQueryParam.nRow2 = pSheetDesc->aSourceRange.aEnd.Row();;
     pSheetDesc->aQueryParam.bHasHeader = TRUE;
     USHORT nCount = pSheetDesc->aQueryParam.GetEntryCount();
-    for (USHORT i=0; (i<nCount) && (pSheetDesc->aQueryParam.GetEntry(i).bDoQuery); i++)
-    {
-        ScQueryEntry& rEntry = pSheetDesc->aQueryParam.GetEntry(i);
-        if (rEntry.bQueryByString)
-        {
-            ULONG nIndex = 0;
-            rEntry.bQueryByString =
-                        !(pDoc->GetFormatTable()->
-                            IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
-        }
-    }
 
     InvalidateSource();     // new source must be created
 }

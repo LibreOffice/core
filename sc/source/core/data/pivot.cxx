@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:36:25 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,20 +523,6 @@ void ScPivot::SetQuery(const ScQueryParam& rQuery)
 {
     aQuery = rQuery;
 
-    USHORT nCount = aQuery.GetEntryCount();
-    for (USHORT i=0; (i<nCount) && (aQuery.GetEntry(i).bDoQuery); i++)
-    {
-        ScQueryEntry& rEntry = aQuery.GetEntry(i);
-
-        //#97084#; only try to convert string into number if bQueryByString
-        if (rEntry.bQueryByString)
-        {
-            ULONG nIndex = 0;
-            rEntry.bQueryByString =
-                        !(pDoc->GetFormatTable()->
-                            IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
-        }
-    }
     bValidArea = FALSE;
 }
 
