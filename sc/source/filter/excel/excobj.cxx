@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
+#ifndef SC_XLESCHER_HXX
+#include "xlescher.hxx"
+#endif
 #ifndef SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
 #endif
@@ -151,47 +154,39 @@ using namespace com::sun::star;
 
 void ImportExcel::Obj()
 {
+    ScDocument& rDoc = GetDoc();
+    sal_uInt16 nScTab = GetScTab();
+
     UINT32 nObj;
     UINT16 nType, nId, nFlags;
-    // Zeilen, Spalten, Offsets (in 1/1024 Zeile/Spalte)
-    UINT16 nCol1, nColOff1, nRow1, nRowOff1;
-    UINT16 nCol2, nColOff2, nRow2, nRowOff2;
     UINT16 nMacroLen;
+    XclEscherAnchor aAnchor( nScTab );
 
-    aIn >> nObj >> nType >> nId >> nFlags
-        >> nCol1 >> nColOff1 >> nRow1 >> nRowOff1
-        >> nCol2 >> nColOff2 >> nRow2 >> nRowOff2
-        >> nMacroLen;
+    aIn >> nObj >> nType >> nId >> nFlags >> aAnchor >> nMacroLen;
     BOOL bBiff5 = BOOL( pExcRoot->eHauptDateiTyp == Biff5 );
     short nReserved = bBiff5 ? 6 : 2;
     aIn.Ignore( nReserved );
 
-    ScDocument& rDoc = GetDoc();
-    sal_uInt16 nScTab = GetScTab();
+    Rectangle aRect( aAnchor.GetRect( rDoc, MAP_100TH_MM ) );
+    Point aTL( aRect.TopLeft() );
+    Point aBR( aRect.BottomRight() );
 
-    Point aUL(  XclTools::CalcX( rDoc, nScTab, nCol1, nColOff1, HMM_PER_TWIPS ),
-                XclTools::CalcY( rDoc, nScTab, nRow1, nRowOff1, HMM_PER_TWIPS ) );
-
-    Point aLR(  XclTools::CalcX( rDoc, nScTab, nCol2, nColOff2, HMM_PER_TWIPS ),
-                XclTools::CalcY( rDoc, nScTab, nRow2, nRowOff2, HMM_PER_TWIPS ) );
-
-    SfxItemSet aSet
-        ( pD->GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );
+    SfxItemSet aSet( rDoc.GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );
     SdrObject* pObj = NULL;
     switch( nType )
     {
-        case 0x01:  pObj = LineObj( aSet, aUL, aLR ); break;
-        case 0x02:  pObj = RectObj( aSet, aUL, aLR ); break;
-        case 0x05:  pObj = BeginChartObj( aSet, aUL, aLR ); break;
+        case 0x01:  pObj = LineObj( aSet, aTL, aBR ); break;
+        case 0x02:  pObj = RectObj( aSet, aTL, aBR ); break;
+        case 0x05:  pObj = BeginChartObj( aSet, aTL, aBR ); break;
     }
     if( pObj )
     {
         pObj->ClearMergedItem();
         pObj->SetMergedItemSetAndBroadcast(aSet);
 
-        pObj->NbcSetLogicRect(Rectangle( aUL, aLR ) );
+        pObj->NbcSetLogicRect( aRect );
         pObj->SetLayer( SC_LAYER_FRONT );
-        pD->GetDrawLayer()->GetPage( nScTab )->InsertObject( pObj );
+        rDoc.GetDrawLayer()->GetPage( nScTab )->InsertObject( pObj );
         if( bBiff5 && aIn.GetRecLeft() )
         {
             BYTE nNameLen;
