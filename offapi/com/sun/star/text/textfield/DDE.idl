@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDE.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,8 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of text field that visualizes a DDE connection.
 
         @see com::sun::star::text::TextFieldMaster::DDE
+
+    @since #107627#
 */
 service DDE
 {
