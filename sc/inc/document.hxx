@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:23:49 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ class StrCollection;
 class TypedStrCollection;
 class ScChangeTrack;
 class ScFieldEditEngine;
+class ScNoteEditEngine;
 struct ScConsolidateParam;
 class ScDPObject;
 class ScDPCollection;
@@ -278,6 +279,8 @@ private:
     vos::ORef<ScPoolHelper> xPoolHelper;
 
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
+    ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
+    SfxItemPool*    pNoteItemPool; // SfxItemPool to be used if pDrawLayer not created.
     SfxObjectShell*     pShell;
     SfxPrinter*         pPrinter;
     ScDrawLayer*        pDrawLayer;                     // SdrModel
@@ -1606,6 +1609,8 @@ public:
     SfxItemPool*        GetEditPool() const;
     SfxItemPool*        GetEnginePool() const;
     ScFieldEditEngine&  GetEditEngine();
+    ScNoteEditEngine&   GetNoteEngine();
+    SfxItemPool&            GetNoteItemPool();
 
     void            AddToImpExpLog( const ScImpExpLogMsg& rMsg );
     void            AddToImpExpLog( ScImpExpLogMsg* pMsg );
