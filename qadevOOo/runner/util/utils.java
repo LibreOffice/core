@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:35:58 $
+ *  last change:$Date: 2003-02-26 10:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,12 @@ public class utils {
         }
         fullDocPath = fullDocPath.replace('\\','/');
         String prefix = "";
-        if (fullDocPath.startsWith("/")) prefix="file://";
+        if (fullDocPath.startsWith("//")) {
+            prefix="file:";
+        } else {
+            if (fullDocPath.startsWith("/")) prefix="file://";
                                     else prefix="file:///";
+        }
         String fulldocURL = prefix+fullDocPath;
         return fulldocURL;
     }
