@@ -2419,3 +2419,5 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ??0OFILESortIndex@file@connectivity@@QAE@QBW4OKeyType@12@ABV?$vector@FV?$allocator@F@_STL@@@_STL@@JG@Z
 ?get_allocator@?$vector@FV?$allocator@F@_STL@@@_STL@@QBE?AV?$allocator@F@2@XZ
 ?scanParameter@OPreparedStatement@file@connectivity@@IAEXPAVOSQLParseNode@3@AAV?$vector@PAVOSQLParseNode@connectivity@@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@@Z
+??1DbgXtorObj@@QAE@XZ
+?DbgName_OResultSet@@YAPAUDbgDataType@@XZ
