@@ -82,7 +82,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
     // ____________
 
-    public void after_disabled()
+    public void after()
     {
         XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(
             XCloseable.class, mxChartModel );
