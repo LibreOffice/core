@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-07 15:47:26 $
+ *  last change: $Author: obr $ $Date: 2002-05-10 06:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             mpFrame->GetClientSize( mnOutWidth, mnOutHeight );
 
 #ifndef REMOTE_APPSERVER
-#if defined WNT
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
@@ -795,7 +794,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 }
             }
         }
-#endif
 #endif
 
     }
