@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2001-02-02 13:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ namespace framework{
     @implements     -
     @base           OMutexMember
 
-    @devstatus      deprecated
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
 class ServiceManager    :   public OMutexMember                     // Struct for right initalization of mutex member!
@@ -153,7 +153,7 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
             @descr      Here is a good place to destroy the global manager instance!
-                        But we don't do it in these implementation.
+                        But we don't do it in these implementation yet.
 
             @seealso    -
 
@@ -170,16 +170,19 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
             @descr      This method create a new manager only at first call. We confiscate this with a static
                         pointer, which will be initialized only, if it NULL!
                         Then you can call this method everytime to get a reference to the manager.
+                        Uno support a "applicat.rdb" and a user named rdb-file which are merged.
+                        Use "sUserRegsitry" to specify the name of this file.
+                        If no value is given - we use automaticly userXX.rdb of our normal soffice-process!
 
             @seealso    -
 
-            @param      -
+            @param      "sRegistryFile", file name of user registry
             @return     A reference to the global servicemanager. It can be NULL!
 
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > getManager();
+        REFERENCE< XMULTISERVICEFACTORY > getManager( const OUSTRING& sRegistryFile );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -199,14 +202,14 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
 
             @seealso    method getManager()
 
-            @param      -
+            @param      "sRegistryFile", file name of user registry.
             @return     A reference to a new initialized servicemanager with a valid registry.
                         It can be NULL, if an error occured.
 
             @onerror    Return a NULL-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > impl_createManager();
+        REFERENCE< XMULTISERVICEFACTORY > impl_createManager( const OUSTRING& sRegistryFile );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
