@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:21:39 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include "cppuhelper/weak.hxx"
 
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/frame/XFramesSupplier.hpp"
+#include "com/sun/star/container/XEnumerationAccess.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
@@ -492,116 +492,69 @@ OfficeDocumentsManager::createDocumentEventNotifier(
 //=========================================================================
 void OfficeDocumentsManager::buildDocumentsList()
 {
-    uno::Reference< uno::XInterface > xIfc;
-    try
+    OSL_ENSURE( m_xDocEvtNotifier.is(),
+                "OfficeDocumentsManager::buildDocumentsList - "
+                "No document event notifier!" );
+
+    uno::Reference< container::XEnumerationAccess > xEnumAccess(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW );
+
+    uno::Reference< container::XEnumeration > xEnum
+        = xEnumAccess->createEnumeration();
+
+    osl::MutexGuard aGuard( m_aMtx );
+
+    while ( xEnum->hasMoreElements() )
     {
-        xIfc = m_xSMgr->createInstance(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) );
-    }
-    catch ( uno::Exception const & )
-    {
-        // handled below.
-    }
+        uno::Any aValue = xEnum->nextElement();
+        // container::NoSuchElementException
+        // lang::WrappedTargetException
 
-    OSL_ENSURE( xIfc.is(), "Could not instanciate com.sun.star.frame.Desktop" );
-
-    if ( !xIfc.is() )
-        return;
-
-    uno::Reference< frame::XFramesSupplier > xFS( xIfc, uno::UNO_QUERY );
-
-    OSL_ENSURE( xFS.is(), "com.sun.star.frame.Desktop does not implement "
-                          "interface com.sun.star.frame.XFramesSupplier!" );
-
-    if ( !xFS.is() )
-        return;
-
-    uno::Reference< container::XIndexAccess > xFrames
-        = uno::Reference< container::XIndexAccess >(
-            xFS->getFrames(), uno::UNO_QUERY );
-
-    if ( xFrames.is() )
-    {
-        osl::MutexGuard aGuard( m_aMtx );
-
-        sal_Int32 nCount = xFrames->getCount();
-        for ( sal_Int32 n = 0; n < nCount; ++n )
+        try
         {
-            try
+            uno::Reference< frame::XModel > xModel;
+            aValue >>= xModel;
+
+            if ( xModel.is() )
             {
-                uno::Reference< frame::XFrame > xFrame(
-                    xFrames->getByIndex( n ), uno::UNO_QUERY );
-
-                if ( xFrame.is() )
+                if ( isOfficeDocument( xModel ) )
                 {
-                    uno::Reference< frame::XController > xController
-                        = xFrame->getController();
-
-                    if ( xController.is() )
+                    DocumentList::const_iterator it = m_aDocs.begin();
+                    while ( it != m_aDocs.end() )
                     {
-                        uno::Reference< frame::XModel > xModel
-                            = xController->getModel();
-                        if ( xModel.is() )
+                        if ( (*it).second.xModel == xModel )
                         {
-                            if ( isOfficeDocument( xModel ) )
-                            {
-                                DocumentList::const_iterator it
-                                    = m_aDocs.begin();
-                                while ( it != m_aDocs.end() )
-                                {
-                                    if ( (*it).second.xModel == xModel )
-                                    {
-                                        // already known.
-                                        break;
-                                    }
-                                    ++it;
-                                }
-
-                                if ( it == m_aDocs.end() )
-                                {
-                                    // new document
-                                    rtl::OUString aDocId
-                                        = getDocumentId( xModel );
-                                    rtl::OUString aTitle
-                                        = getDocumentTitle( xModel );
-
-                                    uno::Reference<
-                                        document::XStorageBasedDocument >
-                                            xDoc( xModel, uno::UNO_QUERY );
-                                    OSL_ENSURE( xDoc.is(),
-                                        "Got no "
-                                        "document::XStorageBasedDocument!" );
-
-                                    uno::Reference< embed::XStorage > xStorage
-                                        = xDoc->getDocumentStorage();
-                                    OSL_ENSURE( xDoc.is(),
-                                        "Got no document storage!" );
-
-                                    m_aDocs[ aDocId ]
-                                        = StorageInfo(
-                                            aTitle, xStorage, xModel );
-                                }
-                            }
+                            // already known.
+                            break;
                         }
+                        ++it;
+                    }
+
+                    if ( it == m_aDocs.end() )
+                    {
+                        // new document
+                        rtl::OUString aDocId = getDocumentId( xModel );
+                        rtl::OUString aTitle = getDocumentTitle( xModel );
+
+                        uno::Reference< document::XStorageBasedDocument >
+                                xDoc( xModel, uno::UNO_QUERY );
+                        OSL_ENSURE( xDoc.is(),
+                            "Got no document::XStorageBasedDocument!" );
+
+                        uno::Reference< embed::XStorage > xStorage
+                            = xDoc->getDocumentStorage();
+                        OSL_ENSURE( xDoc.is(), "Got no document storage!" );
+
+                        m_aDocs[ aDocId ]
+                            = StorageInfo( aTitle, xStorage, xModel );
                     }
                 }
             }
-            catch ( lang::IndexOutOfBoundsException const & )
-            {
-                // getByIndex
-            }
-            catch ( lang::WrappedTargetException const & )
-            {
-                // getByIndex
-            }
-            catch ( lang::DisposedException const & )
-            {
-                // Note: Due to race conditions the XIndexAccess can
-                //       return docs that already have been closed
-                //       => take care about DisposedExceptions when
-                //          accessing xFrame!
-            }
+        }
+        catch ( lang::DisposedException const & )
+        {
+            // Note: Due to race conditions the XEnumeration can
+            //       contains docs that already have been closed
         }
     }
 }
