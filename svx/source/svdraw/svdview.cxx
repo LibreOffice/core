@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-19 16:00:14 $
+ *  last change: $Author: aw $ $Date: 2001-06-11 11:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,45 +244,10 @@ BOOL SdrView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         PickAnything(rMEvt,SDRMOUSEMOVE,aVEvt);
         if (DoMouseEvent(aVEvt)) bRet=TRUE;
     }
-    if (pActualOutDev!=NULL && pActualOutDev->GetOutDevType()==OUTDEV_WINDOW &&
-        IsSnapEnabled() && IsOPntSnap() && HasMarkablePoints() && !IsAction()) {
-        // 8.3.1997: Mauszeiger im Punktemodus Fangen
-        // waere eigentlich besser in der SnapView aufgehoben.
-        // Geht aber gerade nicht, weil inkompatibel.
-        Window* pWin=(Window*)pActualOutDev;
-        Point aLogPos(pWin->PixelToLogic(rMEvt.GetPosPixel()));
-        BOOL bHlplSnapMerk=bHlplSnap; bHlplSnap=FALSE;
-        BOOL bBordSnapMerk=bBordSnap; bBordSnap=FALSE;
-        BOOL bOFrmSnapMerk=bOFrmSnap; bOFrmSnap=FALSE;
-        BOOL bGridSnapMerk=bGridSnap; bGridSnap=FALSE;
-        Size aMagnSizMerk(aMagnSiz);
-        USHORT nHdlPixSiz=aHdl.GetHdlSize();
-        Size aHdlSiz(pWin->PixelToLogic(Size(nHdlPixSiz,nHdlPixSiz)));
-        aMagnSiz.Width() +=aHdlSiz.Width() ;
-        aMagnSiz.Height()+=aHdlSiz.Height();
-        Point aNewPos(aLogPos);
-        USHORT nIsSnap=SnapPos(aNewPos,NULL);
-        bHlplSnap=bHlplSnapMerk;
-        bBordSnap=bBordSnapMerk;
-        bOFrmSnap=bOFrmSnapMerk;
-        bGridSnap=bGridSnapMerk;
-        aMagnSiz=aMagnSizMerk;
-        if (nIsSnap!=SDRSNAP_NOTSNAPPED) {
-            long dx=aLogPos.X()-aNewPos.X(); dx=Abs(dx);
-            long dy=aLogPos.Y()-aNewPos.Y(); dy=Abs(dy);
-            if (dx>aHdlSiz.Width()/2 || dy>aHdlSiz.Height()/2) {
-                Point aPixPos(pWin->LogicToPixel(aNewPos));
-#ifdef VCL
-                // #45175#: Pointer::SetPosPixel() ist unter VCL fehlerhaft
-                //          bzw. faellt auch bald weg
-                if (pWin!=NULL) pWin->SetPointerPosPixel(aPixPos);
-#else
-                aPixPos=pWin->OutputToScreenPixel(aPixPos);
-                Pointer::SetPosPixel(aPixPos);
-#endif
-            }
-        }
-    }
+
+    // #87792# Removed code which did let the mouse snap on object
+    // points
+
     return bRet;
 }
 
