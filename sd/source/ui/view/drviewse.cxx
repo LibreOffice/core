@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:13:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,9 @@
 #endif
 
 #include "Window.hxx"
+
+#include <memory>
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -849,8 +852,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     pFrameView->SetPreviousViewShellType(GetShellType());
 
-                    mpSlideShow = new Slideshow( this, pDrView, GetDoc() );
-                    mpSlideShow->startShow();
+                    std::auto_ptr<Slideshow> pSlideShow(
+                        new Slideshow( this, pDrView, GetDoc() ) );
+                    pSlideShow->setRehearseTimings(
+                        nSId == SID_REHEARSE_TIMINGS );
+                    if (pSlideShow->startShow())
+                        mpSlideShow = pSlideShow.release();
                 }
             }
 
