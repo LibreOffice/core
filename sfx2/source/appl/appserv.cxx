@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:25:51 $
+ *  last change: $Author: kz $ $Date: 2004-12-03 14:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #endif
@@ -101,6 +104,16 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEEXCEPTION_HPP_
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
@@ -227,6 +240,7 @@
 #include "sfxdlg.hxx"
 #include "dialogs.hrc"
 #include "sorgitm.hxx"
+#include "sfxhelp.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -235,6 +249,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::system;
+using namespace ::com::sun::star::lang;
 
 #define SFX_KEY_MULTIQUICKSEARCH    "ExplorerMultiQuickSearch"
 
@@ -474,7 +490,46 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             if ( pHelp )
             {
                 ULONG nHelpId = ( rReq.GetSlot() == SID_HELP_SUPPORTPAGE ) ? 66056 : 0;
-                pHelp->Start( nHelpId, NULL ); // show start or support page
+                // --> PB 2004-11-25 #118595# HACK!!! only for SO8 Beta
+                rtl::OUString sProduct;
+                utl::ConfigManager::GetDirectConfigProperty( utl::ConfigManager::PRODUCTNAME ) >>= sProduct;
+                if ( nHelpId > 0 &&
+                    ( sProduct.equalsAscii( "StarOffice" ) || sProduct.equalsAscii( "StarSuite" ) ) )
+                {
+                    Reference< XSystemShellExecute > xSystemShellExecute(
+                        ::comphelper::getProcessServiceFactory()->createInstance(
+                            DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), UNO_QUERY );
+                    if ( xSystemShellExecute.is() )
+                    {
+                        try
+                        {
+                            xSystemShellExecute->execute(
+                                DEFINE_CONST_UNICODE("http://www.support-central.de/betaforum"),
+                                ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                        }
+                        catch (IllegalArgumentException&)
+                        {
+                            DBG_ERRORFILE( "xSystemShellExecute->execute(): illegal arguments" );
+                        }
+                        catch (SystemShellExecuteException&)
+                        {
+                            DBG_ERRORFILE( "xSystemShellExecute->execute(): general error" );
+                        }
+                    }
+                }
+                // <--
+                else if ( 66056 == nHelpId )
+                {
+                    // show Support page with new URL
+                    String sHelpURL = SfxHelp::CreateHelpURL( nHelpId, String() );
+                    String sParams = sHelpURL.Copy( sHelpURL.Search( '?' ) );
+                    sHelpURL = String::CreateFromAscii("vnd.sun.star.help://shared/text/shared/05/00000001.xhp");
+                    sHelpURL += sParams;
+                    sHelpURL += String::CreateFromAscii("&UseDB=no");
+                    pHelp->Start( sHelpURL, NULL );
+                }
+                else
+                    pHelp->Start( nHelpId, NULL ); // show start page
                 bDone = TRUE;
             }
             break;
