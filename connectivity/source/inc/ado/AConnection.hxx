@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:29 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ namespace connectivity
     {
         class WpADOConnection;
         class ODriver;
-        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo>   OTypeInfoMap;
+        typedef ::std::multimap<sal_Int32, ::connectivity::OTypeInfo*>  OTypeInfoMap;
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef _CONNECTIVITY_ADO_COLUMNS_HXX_
 #include "ado/AColumns.hxx"
 #endif
-#ifndef CONNECTIVITY_CONNECTION_HXX
-#include "TConnection.hxx"
+#ifndef _CONNECTIVITY_ADO_ACONNECTION_HXX_
+#include "ado/AConnection.hxx"
 #endif
 
 using namespace connectivity::ado;
@@ -160,6 +160,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                     ::rtl::OUString aVal;
                     rValue >>= aVal;
                     m_aKey.put_Name(aVal);
+                    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
                 }
                 break;
             case PROPERTY_ID_TYPE:
@@ -167,6 +168,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
                     m_aKey.put_Type(Map2KeyRule(nVal));
+                    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
                 }
                 break;
             case PROPERTY_ID_REFERENCEDTABLE:
@@ -174,6 +176,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                     ::rtl::OUString aVal;
                     rValue >>= aVal;
                     m_aKey.put_RelatedTable(aVal);
+                    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
                 }
                 break;
             case PROPERTY_ID_UPDATERULE:
@@ -181,6 +184,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
                     m_aKey.put_UpdateRule(Map2Rule(nVal));
+                    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
                 }
                 break;
             case PROPERTY_ID_DELETERULE:
@@ -188,6 +192,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
                     m_aKey.put_DeleteRule(Map2Rule(nVal));
+                    ADOS::ThrowException(*m_pConnection->getConnection(),*this);
                 }
                 break;
         }

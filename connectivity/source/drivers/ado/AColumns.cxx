@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:05:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,9 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     OAdoColumn* pColumn = NULL;
     if(getImplementation(pColumn,descriptor) && pColumn != NULL)
     {
-        if(!m_aCollection.Append(pColumn->getColumnImpl()))
+        WpADOColumn aColumn = pColumn->getColumnImpl();
+        DataTypeEnum eType = aColumn.get_Type();
+        if ( !m_aCollection.Append(aColumn) )
             ADOS::ThrowException(*m_pConnection->getConnection(),*this);
     }
     else

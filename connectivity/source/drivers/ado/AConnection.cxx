@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,31 +492,28 @@ void OConnection::buildTypeInfo() throw( SQLException)
     // Loop on the result set until we reach end of file
     while (xRs->next())
     {
-        OTypeInfo aInfo;
-        aInfo.aTypeName         = xRow->getString (1);
-        aInfo.aLiteralPrefix    = xRow->getString (4);
-        aInfo.aLiteralSuffix    = xRow->getString (5);
-        aInfo.aCreateParams     = xRow->getString (6);
-        aInfo.aLocalTypeName    = xRow->getString (13);
-
-        aInfo.nPrecision        = xRow->getInt (3);
-        aInfo.nMaximumScale     = xRow->getShort (15);
-        aInfo.nMinimumScale     = xRow->getShort (14);
-        aInfo.nType             = xRow->getShort (2);
-        aInfo.nSearchType       = xRow->getShort (9);
-        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt (18);
-
-        aInfo.bCurrency         = xRow->getBoolean (11);
-        aInfo.bAutoIncrement    = xRow->getBoolean (12);
-        aInfo.bNullable         = xRow->getInt (7) == ColumnValue::NULLABLE;
-        aInfo.bCaseSensitive    = xRow->getBoolean (8);
-        aInfo.bUnsigned         = xRow->getBoolean (10);
-
+        OTypeInfo* aInfo = new OTypeInfo();
+        aInfo->aTypeName            = xRow->getString (1);
+        aInfo->nType                = xRow->getShort (2);
+        aInfo->nPrecision       = xRow->getInt (3);
+        aInfo->aLiteralPrefix   = xRow->getString (4);
+        aInfo->aLiteralSuffix   = xRow->getString (5);
+        aInfo->aCreateParams        = xRow->getString (6);
+        aInfo->bNullable            = xRow->getInt (7) == ColumnValue::NULLABLE;
+        aInfo->bCaseSensitive   = xRow->getBoolean (8);
+        aInfo->nSearchType      = xRow->getShort (9);
+        aInfo->bUnsigned            = xRow->getBoolean (10);
+        aInfo->bCurrency            = xRow->getBoolean (11);
+        aInfo->bAutoIncrement   = xRow->getBoolean (12);
+        aInfo->aLocalTypeName   = xRow->getString (13);
+        aInfo->nMinimumScale        = xRow->getShort (14);
+        aInfo->nMaximumScale        = xRow->getShort (15);
+        aInfo->nNumPrecRadix        = (sal_Int16)xRow->getInt (18);
         // Now that we have the type info, save it
         // in the Hashtable if we don't already have an
         // entry for this SQL type.
 
-        m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo.nType,aInfo));
+        m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->nType,aInfo));
     }
 
     // Close the result set/statement.
