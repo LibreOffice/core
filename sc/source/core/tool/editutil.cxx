@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:35:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,8 +177,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
     //  asian vertical is always edited top-aligned
-    BOOL bAsianVertical = (SvxCellOrientation)((const SvxOrientationItem&)
-            pPattern->GetItem(ATTR_ORIENTATION)).GetValue() == SVX_ORIENTATION_STACKED &&
+    BOOL bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
