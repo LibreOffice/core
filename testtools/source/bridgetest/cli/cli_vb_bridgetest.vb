@@ -2,9 +2,9 @@
  '
  '  $RCSfile: cli_vb_bridgetest.vb,v $
  '
- '  $Revision: 1.2 $
+ '  $Revision: 1.3 $
  '
- '  last change: $Author: obo $ $Date: 2003-09-04 09:17:21 $
+ '  last change: $Author: rt $ $Date: 2004-07-12 13:02:49 $
  '
  '  The Contents of this file are made available subject to the terms of
  '  either of the following licenses
@@ -69,7 +69,8 @@ imports uno
 imports uno.util
 imports unoidl.com.sun.star.lang
 imports unoidl.com.sun.star.uno
-imports unoidl.com.sun.star.test.bridge
+'imports unoidl.com.sun.star.test.bridge
+imports unoidl.test.testtools.bridgetest
 imports System.Windows.Forms
 imports System.Diagnostics
 imports System.Reflection
@@ -868,6 +869,7 @@ Public Class BridgeTest
                 Throw New RuntimeException( _
                     "missing argument for bridgetest!", Me )
             End If
+           
             Dim test_obj As Object = _
                 m_xContext.getServiceManager().createInstanceWithContext( _
                     args( 0 ), m_xContext )
