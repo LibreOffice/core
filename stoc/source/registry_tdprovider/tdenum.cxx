@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdenum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ Sequence< OUString > EnumTypeDescriptionImpl::getEnumNames()
             pEnumNames[nFields] = aReader.getFieldName( nFields );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pEnumNames)
         {
             aGuard.clear();
@@ -148,7 +148,7 @@ Sequence< sal_Int32 > EnumTypeDescriptionImpl::getEnumValues()
             pEnumValues[nFields] = getRTValueAsInt32( aReader.getFieldConstValue( nFields ) );
         }
 
-        ClearableMutexGuard aGuard( _aMutex );
+        ClearableMutexGuard aGuard( getMutex() );
         if (_pEnumValues)
         {
             aGuard.clear();
