@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:13:18 $
+ *  last change: $Author: ka $ $Date: 2001-02-14 13:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,22 +564,25 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
 
     if( bRet )
     {
-        OfficeApplication*  pApplication = OFF_APP();
-        SfxMedium           aMedium( pStore );
-        SdFilter*           pFilter = NULL;
-
-        if( pApplication )
-        {
-            OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
-
-            if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
-                nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
-        }
+        SdFilter*   pFilter = NULL;
+        SfxMedium   aMedium( pStore );
 
         if( pStore->GetVersion() >= SOFFICE_FILEFORMAT_60 )
             pFilter = new SdXMLFilter( aMedium, *this, sal_True );
         else
+        {
+            OfficeApplication*  pApplication = OFF_APP();
+
+            if( pApplication )
+            {
+                OfaFilterOptions* pBasOpt = pApplication->GetFilterOptions();
+
+                if( pBasOpt && pBasOpt->IsLoadPPointBasicStorage() )
+                    nVBWarning = SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( *this );
+            }
+
             pFilter = new SdBINFilter( aMedium, *this, sal_True );
+        }
 
         bRet = pFilter ? pFilter->Export() : FALSE;
         delete pFilter;
