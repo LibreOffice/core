@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:22:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <comphelper/optionalvalue.hxx>
 #endif
 
-#include <unoviewcontainer.hxx>
 #include <animatableshape.hxx>
 #include <rgbcolor.hxx>
 #include <slide.hxx>
@@ -130,9 +129,6 @@ namespace presentation
                 @param rLeavingBitmap
                 Bitmap of the slide which 'leaves' the screen.
 
-                @param rSlideSize
-                Size of the entering slide in user coordinate space
-
                 @param nTransitionType
                 Type of the transition (see XTransitionFilter)
 
@@ -151,8 +147,6 @@ namespace presentation
             static SlideChangeAnimationSharedPtr createSlideTransition(
                 const SlideSharedPtr&                           rLeavingSlide,
                 const SlideSharedPtr&                           rEnteringSlide,
-                const UnoViewContainer&                         rViews,
-                const ::basegfx::B2DSize&                       rSlideSize,
                 sal_Int16                                       nTransitionType,
                 sal_Int16                                       nTransitionSubType,
                 bool                                            bTransitionDirection,
