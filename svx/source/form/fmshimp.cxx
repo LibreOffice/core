@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 10:05:56 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 13:03:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,10 +195,6 @@
 
 #ifndef _SVDITER_HXX //autogen
 #include <svditer.hxx>
-#endif
-
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <sfx2/inimgr.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -619,9 +615,9 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
 
-    String sUseWizards(SFX_INIMANAGER()->Get(SFX_GROUP_DATABASE, String::CreateFromAscii("UseWizards")));
-    m_bUseWizards = (!sUseWizards.Len() || (sUseWizards.CompareToAscii("1") == COMPARE_EQUAL));
-        // wenn kein Ini-Eintrag oder =1
+    m_bUseWizards = sal_False;
+        // defaulted for now. As soon as we have new wizards we need to store this information in the configuration
+        // (previously, it was located in the soffice.ini, which left us as storage of configuration data ...)
 
     // we are a DispatchInterceptor, so we want to be inserted into the frame's dispatch chain, thus having
     // a chance for frame-spanning communication (via UNO, not slots)
@@ -3593,8 +3589,8 @@ void FmXFormShell::CollectFormContexts(const ::com::sun::star::uno::Reference< :
 void FmXFormShell::SetWizardUsing(sal_Bool bUseThem)
 {
     OSL_ENSHURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    // gleich an die INI weiterreichen
-    SFX_INIMANAGER()->Set( (bUseThem ? '1' : '0'), SFX_GROUP_DATABASE, String::CreateFromAscii("UseWizards"));
+    OSL_ENSHURE(sal_False, "FmXFormShell: missing implementation here!");
+    // TODO: make this persistent as soon as the setting is stored in the configuration
     m_bUseWizards = bUseThem;
 }
 
