@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:24:27 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include <utility>
 #include <memory>
 #include <vector>
+
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
 
 //------------------------------------------------------------------------
 // deklarations
@@ -194,6 +198,8 @@ public:
 
     virtual sal_Bool SAL_CALL getShowState( )
         throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL cancel( );
 
 protected:
     sal_Int16 SAL_CALL getFocused( );

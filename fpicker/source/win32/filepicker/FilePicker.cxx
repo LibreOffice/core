@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-04 11:11:48 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::util::XCancellable;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -108,7 +109,7 @@ using ::com::sun::star::uno::Sequence;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
 
-using ::cppu::WeakComponentImplHelper7;
+using ::cppu::WeakComponentImplHelper8;
 using ::rtl::OUString;
 using ::osl::MutexGuard;
 
@@ -138,12 +139,13 @@ namespace
 //-----------------------------------------------------------------------------------------
 
 CFilePicker::CFilePicker( const Reference< XMultiServiceFactory >& xServiceMgr ) :
-    WeakComponentImplHelper7<
+    WeakComponentImplHelper8<
         XFilterManager,
         XFilePickerControlAccess,
         XFilePickerNotifier,
         XFilePreview,
         XInitialization,
+        XCancellable,
         XEventListener,
         XServiceInfo >( m_rbHelperMtx )
 {
@@ -745,6 +747,18 @@ void SAL_CALL CFilePicker::initialize( const Sequence< Any >& aArguments )
             0,
             winResTemplateId,
             hInstance ) );
+}
+
+//------------------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------------------
+
+void SAL_CALL CFilePicker::cancel( )
+{
+    OSL_ASSERT( m_pImpl.get( ) );
+
+    MutexGuard aGuard( m_aMutex );
+    m_pImpl->cancel( );
 }
 
 // -------------------------------------------------

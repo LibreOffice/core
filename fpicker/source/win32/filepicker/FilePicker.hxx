@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-02 08:09:14 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 //_______________________________________________________________________________________________________________________
 
 
-#ifndef _CPPUHELPER_COMPBASE7_HXX_
-#include <cppuhelper/compbase7.hxx>
+#ifndef _CPPUHELPER_COMPBASE8_HXX_
+#include <cppuhelper/compbase8.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -97,6 +97,10 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
+#include <com/sun/star/util/XCancellable.hpp>
 #endif
 
 #ifndef _WINFILEOPENIMPL_HXX_
@@ -129,12 +133,13 @@ protected:
 
 class CFilePicker :
     public CFilePickerDummy,
-    public cppu::WeakComponentImplHelper7<
+    public cppu::WeakComponentImplHelper8<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::lang::XInitialization,
+        ::com::sun::star::util::XCancellable,
         ::com::sun::star::lang::XEventListener,
         ::com::sun::star::lang::XServiceInfo >
 {
@@ -237,6 +242,12 @@ public:
 
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XCancellable
+    //------------------------------------------------
+
+    virtual void SAL_CALL cancel( );
 
     //------------------------------------------------
     // XEventListener

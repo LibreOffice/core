@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-16 06:05:21 $
+ *  last change: $Author: tra $ $Date: 2001-10-09 06:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,6 +531,24 @@ sal_Bool SAL_CALL CWinFileOpenImpl::getShowState( )
         return m_DIBPreview->isVisible( );
 
     return sal_False;
+}
+
+//-----------------------------------------------------------------------------------------
+//
+//-----------------------------------------------------------------------------------------
+
+void SAL_CALL CWinFileOpenImpl::cancel( )
+{
+    if ( IsWindow( m_hwndFileOpenDlg ) )
+    {
+        // simulate a mouse click to the
+        // cancel button
+        PostMessageA(
+            m_hwndFileOpenDlg,
+            WM_COMMAND,
+            MAKEWPARAM( IDCANCEL, BN_CLICKED ),
+            (LPARAM)GetDlgItem( m_hwndFileOpenDlg, IDCANCEL ) );
+    }
 }
 
 //-----------------------------------------------------------------------------------------
