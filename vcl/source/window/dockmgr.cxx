@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:19:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1468,11 +1468,11 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
 
                 // reduce the border width for seamless NWF painting
                 // (especially for the toolbar gradient on Windows XP)
-                AllSettings aSettings( pWin->GetSettings() );
+                /*AllSettings aSettings( pWin->GetSettings() );
                 StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
                 aStyleSettings.SetBorderSize( 0 );
                 aSettings.SetStyleSettings( aStyleSettings );
-                pWin->SetSettings( aSettings );
+                pWin->SetSettings( aSettings );*/
 
                 mpFloatWin      = pWin;
 
