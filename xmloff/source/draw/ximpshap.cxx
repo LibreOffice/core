@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:26:58 $
+ *  last change: $Author: bm $ $Date: 2001-02-27 12:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1676,7 +1676,8 @@ void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
                 uno::Any aAny;
 
-                const OUString aCLSID( RTL_CONSTASCII_USTRINGPARAM("BF884321-85DD-11D1-89d0-008029e4b0b1"));
+                const OUString aCLSID( RTL_CONSTASCII_USTRINGPARAM("12DCAE26-281F-416F-a234-c3086127382e"));
+
                 aAny <<= aCLSID;
                 xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID") ), aAny );
 
