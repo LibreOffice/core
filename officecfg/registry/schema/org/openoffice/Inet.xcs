@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:28:09 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,13 @@
 				<desc xml:lang="it">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="sv">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="pl">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="pt-BR">Specifies the search type, i.e. nexus or exact search.</desc>
-				<desc xml:lang="ja">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="pt-BR">Especifica o tipo de pesquisa, i.e. nexo ou pesquisa exata.</desc>
+				<desc xml:lang="ja">検索の種類 (連鎖検索または正確な検索) を指定します。</desc>
 				<desc xml:lang="ko">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="tr">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="th">Specifies the search type, i.e. nexus or exact search.</desc>
 				<desc xml:lang="hi-IN">Specifies the search type, i.e. nexus or exact search.</desc>
+				<desc xml:lang="x-comment">Specifies the search type, i.e. nexus or exact search.</desc>
 			</info>
 			<group oor:name="And">
 				<info>
@@ -116,12 +117,13 @@
 					<desc xml:lang="it">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="sv">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="pl">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="pt-BR">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
-					<desc xml:lang="ja">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;E&apos; (todas as palavras devem ser encontradas).</desc>
+					<desc xml:lang="ja">&apos;AND&apos; 検索 (すべての単語が一致する必要があります) の検索オプションを指定します。</desc>
 					<desc xml:lang="ko">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="tr">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="th">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
+					<desc xml:lang="x-comment">Specifies the search options for &apos;AND&apos; searches (all words must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -143,12 +145,13 @@
 						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ja">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
+						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
 						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -171,12 +174,13 @@
 						<desc xml:lang="it">Specifies the suffix.</desc>
 						<desc xml:lang="sv">Specifies the suffix.</desc>
 						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Specifies the suffix.</desc>
-						<desc xml:lang="ja">Specifies the suffix.</desc>
+						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
+						<desc xml:lang="ja">サフィックスを指定します。</desc>
 						<desc xml:lang="ko">Specifies the suffix.</desc>
 						<desc xml:lang="tr">Specifies the suffix.</desc>
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
+						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -199,12 +203,13 @@
 						<desc xml:lang="it">Specifies the separator</desc>
 						<desc xml:lang="sv">Specifies the separator</desc>
 						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Specifies the separator</desc>
-						<desc xml:lang="ja">Specifies the separator</desc>
+						<desc xml:lang="pt-BR">Especifica o separador</desc>
+						<desc xml:lang="ja">区切り記号を指定します。</desc>
 						<desc xml:lang="ko">Specifies the separator</desc>
 						<desc xml:lang="tr">Specifies the separator</desc>
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
+						<desc xml:lang="x-comment">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -227,12 +232,13 @@
 						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ja">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
+						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
 						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -261,6 +267,8 @@
 								<desc xml:lang="tr">Yok</desc>
 								<desc xml:lang="th">ไม่มี</desc>
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
+								<desc xml:lang="x-comment">None</desc>
+								<desc xml:lang="sk">Žiadne</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -289,6 +297,8 @@
 								<desc xml:lang="tr">Büyük</desc>
 								<desc xml:lang="th">ด้านบน</desc>
 								<desc xml:lang="hi-IN">अप्पर</desc>
+								<desc xml:lang="x-comment">Upper</desc>
+								<desc xml:lang="sk">Horný</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -317,6 +327,8 @@
 								<desc xml:lang="tr">Küçük</desc>
 								<desc xml:lang="th">ด้านล่าง</desc>
 								<desc xml:lang="hi-IN">लोवर</desc>
+								<desc xml:lang="x-comment">Lower</desc>
+								<desc xml:lang="sk">Spodný</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -342,12 +354,13 @@
 					<desc xml:lang="it">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="sv">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="pl">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="pt-BR">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
-					<desc xml:lang="ja">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;OU&apos; (Pelo menos uma palavras deve ser encontrada).</desc>
+					<desc xml:lang="ja">&apos;OR&apos; 検索 (少なくとも １ つの単語が一致する必要があります) の検索オプションを指定します。</desc>
 					<desc xml:lang="ko">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="tr">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="th">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
+					<desc xml:lang="x-comment">Specifies the search options for &apos;OR&apos; searches (at least one word must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -369,12 +382,13 @@
 						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ja">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
+						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
 						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -397,12 +411,13 @@
 						<desc xml:lang="it">Specifies the suffix.</desc>
 						<desc xml:lang="sv">Specifies the suffix.</desc>
 						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Specifies the suffix.</desc>
-						<desc xml:lang="ja">Specifies the suffix.</desc>
+						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
+						<desc xml:lang="ja">サフィックスを指定します。</desc>
 						<desc xml:lang="ko">Specifies the suffix.</desc>
 						<desc xml:lang="tr">Specifies the suffix.</desc>
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
+						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -425,12 +440,13 @@
 						<desc xml:lang="it">Specifies the separator</desc>
 						<desc xml:lang="sv">Specifies the separator</desc>
 						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Specifies the separator</desc>
-						<desc xml:lang="ja">Specifies the separator</desc>
+						<desc xml:lang="pt-BR">Especifica o separador</desc>
+						<desc xml:lang="ja">区切り記号を指定します。</desc>
 						<desc xml:lang="ko">Specifies the separator</desc>
 						<desc xml:lang="tr">Specifies the separator</desc>
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
+						<desc xml:lang="x-comment">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -453,12 +469,13 @@
 						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ja">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
+						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
 						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -487,6 +504,8 @@
 								<desc xml:lang="tr">Yok</desc>
 								<desc xml:lang="th">ไม่มี</desc>
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
+								<desc xml:lang="x-comment">None</desc>
+								<desc xml:lang="sk">Žiadne</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -515,6 +534,8 @@
 								<desc xml:lang="tr">Büyük</desc>
 								<desc xml:lang="th">ด้านบน</desc>
 								<desc xml:lang="hi-IN">अप्पर</desc>
+								<desc xml:lang="x-comment">Upper</desc>
+								<desc xml:lang="sk">Horný</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -543,6 +564,8 @@
 								<desc xml:lang="tr">Küçük</desc>
 								<desc xml:lang="th">ด้านล่าง</desc>
 								<desc xml:lang="hi-IN">लोवर</desc>
+								<desc xml:lang="x-comment">Lower</desc>
+								<desc xml:lang="sk">Spodný</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -568,12 +591,13 @@
 					<desc xml:lang="it">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="sv">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="pl">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="pt-BR">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
-					<desc xml:lang="ja">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc xml:lang="pt-BR">Especifica as opções para pesquisas &apos;Exatas&apos; (O texto completo deve ser encontrado).</desc>
+					<desc xml:lang="ja">&apos;Exact&apos; 検索 (テキスト全体が一致する必要があります) の検索オプションを指定します。</desc>
 					<desc xml:lang="ko">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="tr">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="th">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 					<desc xml:lang="hi-IN">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
+					<desc xml:lang="x-comment">Specifies the search options for &apos;Exact&apos; searches (the whole text must be found).</desc>
 				</info>
 				<prop oor:name="ooInetPrefix" oor:type="xs:string">
 					<info>
@@ -595,12 +619,13 @@
 						<desc xml:lang="it">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="sv">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="pl">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="pt-BR">Specifies the search expression, i.e. URL and query command.</desc>
-						<desc xml:lang="ja">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="pt-BR">Especifica a expressão da pesquisa, i.e. comando URLs e consultas </desc>
+						<desc xml:lang="ja">検索式 (つまり URL およびクエリーコマンド) を指定します。</desc>
 						<desc xml:lang="ko">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="tr">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="th">Specifies the search expression, i.e. URL and query command.</desc>
 						<desc xml:lang="hi-IN">Specifies the search expression, i.e. URL and query command.</desc>
+						<desc xml:lang="x-comment">Specifies the search expression, i.e. URL and query command.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSuffix" oor:type="xs:string">
@@ -623,12 +648,13 @@
 						<desc xml:lang="it">Specifies the suffix.</desc>
 						<desc xml:lang="sv">Specifies the suffix.</desc>
 						<desc xml:lang="pl">Specifies the suffix.</desc>
-						<desc xml:lang="pt-BR">Specifies the suffix.</desc>
-						<desc xml:lang="ja">Specifies the suffix.</desc>
+						<desc xml:lang="pt-BR">Especifica o sufixo. </desc>
+						<desc xml:lang="ja">サフィックスを指定します。</desc>
 						<desc xml:lang="ko">Specifies the suffix.</desc>
 						<desc xml:lang="tr">Specifies the suffix.</desc>
 						<desc xml:lang="th">Specifies the suffix.</desc>
 						<desc xml:lang="hi-IN">Specifies the suffix.</desc>
+						<desc xml:lang="x-comment">Specifies the suffix.</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetSeparator" oor:type="xs:string">
@@ -651,12 +677,13 @@
 						<desc xml:lang="it">Specifies the separator</desc>
 						<desc xml:lang="sv">Specifies the separator</desc>
 						<desc xml:lang="pl">Specifies the separator</desc>
-						<desc xml:lang="pt-BR">Specifies the separator</desc>
-						<desc xml:lang="ja">Specifies the separator</desc>
+						<desc xml:lang="pt-BR">Especifica o separador</desc>
+						<desc xml:lang="ja">区切り記号を指定します。</desc>
 						<desc xml:lang="ko">Specifies the separator</desc>
 						<desc xml:lang="tr">Specifies the separator</desc>
 						<desc xml:lang="th">Specifies the separator</desc>
 						<desc xml:lang="hi-IN">Specifies the separator</desc>
+						<desc xml:lang="x-comment">Specifies the separator</desc>
 					</info>
 				</prop>
 				<prop oor:name="ooInetCaseMatch" oor:type="xs:int">
@@ -679,12 +706,13 @@
 						<desc xml:lang="it">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="sv">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="pl">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="pt-BR">Specifies if upper and lower case spelling should be considered.</desc>
-						<desc xml:lang="ja">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="pt-BR">Especifica se a pesquisa considerará maiúsculas e minúsculas</desc>
+						<desc xml:lang="ja">大文字および小文字のスペルを考慮するかどうか指定します。</desc>
 						<desc xml:lang="ko">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="tr">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="th">Specifies if upper and lower case spelling should be considered.</desc>
 						<desc xml:lang="hi-IN">Specifies if upper and lower case spelling should be considered.</desc>
+						<desc xml:lang="x-comment">Specifies if upper and lower case spelling should be considered.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
@@ -713,6 +741,8 @@
 								<desc xml:lang="tr">Yok</desc>
 								<desc xml:lang="th">ไม่มี</desc>
 								<desc xml:lang="hi-IN">कोई नहीं</desc>
+								<desc xml:lang="x-comment">None</desc>
+								<desc xml:lang="sk">Žiadne</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
@@ -741,6 +771,8 @@
 								<desc xml:lang="tr">Büyük</desc>
 								<desc xml:lang="th">ด้านบน</desc>
 								<desc xml:lang="hi-IN">अप्पर</desc>
+								<desc xml:lang="x-comment">Upper</desc>
+								<desc xml:lang="sk">Horný</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
@@ -769,6 +801,8 @@
 								<desc xml:lang="tr">Küçük</desc>
 								<desc xml:lang="th">ด้านล่าง</desc>
 								<desc xml:lang="hi-IN">लोवर</desc>
+								<desc xml:lang="x-comment">Lower</desc>
+								<desc xml:lang="sk">Spodný</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -797,12 +831,13 @@
 				<desc xml:lang="it">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="sv">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="pl">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="pt-BR">Contains Internet-related configurations (servers, proxies, etc.).</desc>
-				<desc xml:lang="ja">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc xml:lang="pt-BR">Contém configurações relacionadas com a Internet (servidores, proxies, etc...).</desc>
+				<desc xml:lang="ja">インターネット関連の構成 (サーバー、プロキシなど) が含まれます。</desc>
 				<desc xml:lang="ko">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="tr">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="th">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 				<desc xml:lang="hi-IN">Contains Internet-related configurations (servers, proxies, etc.).</desc>
+				<desc xml:lang="x-comment">Contains Internet-related configurations (servers, proxies, etc.).</desc>
 			</info>
 			<prop oor:name="ooInetDNSServer" oor:type="xs:string">
 				<!-- OldPath: Inet/DNS -->
@@ -829,12 +864,13 @@
 					<desc xml:lang="it">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="sv">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="pl">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="pt-BR">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
-					<desc xml:lang="ja">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="pt-BR">Especifica o endereço IP do servidor DNS. Se o string for vazio, o servidor DNS será especificado automaticamente.</desc>
+					<desc xml:lang="ja">DNS サーバーの IP アドレスを指定します。空の文字列を指定した場合、DNS サーバーが自動的に指定されます。</desc>
 					<desc xml:lang="ko">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="tr">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="th">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 					<desc xml:lang="hi-IN">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
+					<desc xml:lang="x-comment">Specifies the IP address of the DNS server.  If the string is empty, the DNS server will be specified automatically.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -863,12 +899,13 @@
 					<desc xml:lang="it">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="sv">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="pl">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="pt-BR">Enumerates the names of servers that do not require any proxies.</desc>
-					<desc xml:lang="ja">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc xml:lang="pt-BR">Enumera os nomes de servidores que não necessitam de proxy.</desc>
+					<desc xml:lang="ja">プロキシを必要としないサーバーの名前を指定します。</desc>
 					<desc xml:lang="ko">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="tr">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="th">Enumerates the names of servers that do not require any proxies.</desc>
 					<desc xml:lang="hi-IN">Enumerates the names of servers that do not require any proxies.</desc>
+					<desc xml:lang="x-comment">Enumerates the names of servers that do not require any proxies.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -897,12 +934,13 @@
 					<desc xml:lang="it">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="sv">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="pl">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="pt-BR">Specifies the type of proxy selection.</desc>
-					<desc xml:lang="ja">Specifies the type of proxy selection.</desc>
+					<desc xml:lang="pt-BR">Especifica o tipo de seleção de proxy. </desc>
+					<desc xml:lang="ja">プロキシ選択の種類を指定します。</desc>
 					<desc xml:lang="ko">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="tr">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="th">Specifies the type of proxy selection.</desc>
 					<desc xml:lang="hi-IN">Specifies the type of proxy selection.</desc>
+					<desc xml:lang="x-comment">Specifies the type of proxy selection.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -914,7 +952,7 @@
 							<desc xml:lang="fi">No proxies</desc>
 							<desc xml:lang="cs">No proxies</desc>
 							<desc xml:lang="da">No proxies</desc>
-							<desc xml:lang="zh-CN">No proxies</desc>
+							<desc xml:lang="zh-CN">不用代理</desc>
 							<desc xml:lang="zh-TW">No proxies</desc>
 							<desc xml:lang="ar">No proxies</desc>
 							<desc xml:lang="he">No proxies</desc>
@@ -925,12 +963,13 @@
 							<desc xml:lang="it">No proxies</desc>
 							<desc xml:lang="sv">No proxies</desc>
 							<desc xml:lang="pl">No proxies</desc>
-							<desc xml:lang="pt-BR">No proxies</desc>
-							<desc xml:lang="ja">No proxies</desc>
+							<desc xml:lang="pt-BR">Sem proxies</desc>
+							<desc xml:lang="ja">プロキシなし</desc>
 							<desc xml:lang="ko">No proxies</desc>
 							<desc xml:lang="tr">No proxies</desc>
 							<desc xml:lang="th">No proxies</desc>
 							<desc xml:lang="hi-IN">No proxies</desc>
+							<desc xml:lang="x-comment">No proxies</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -942,7 +981,7 @@
 							<desc xml:lang="fi">Automatic proxy configuration</desc>
 							<desc xml:lang="cs">Automatic proxy configuration</desc>
 							<desc xml:lang="da">Automatic proxy configuration</desc>
-							<desc xml:lang="zh-CN">Automatic proxy configuration</desc>
+							<desc xml:lang="zh-CN">自动配置代理</desc>
 							<desc xml:lang="zh-TW">Automatic proxy configuration</desc>
 							<desc xml:lang="ar">Automatic proxy configuration</desc>
 							<desc xml:lang="he">Automatic proxy configuration</desc>
@@ -953,12 +992,13 @@
 							<desc xml:lang="it">Automatic proxy configuration</desc>
 							<desc xml:lang="sv">Automatic proxy configuration</desc>
 							<desc xml:lang="pl">Automatic proxy configuration</desc>
-							<desc xml:lang="pt-BR">Automatic proxy configuration</desc>
-							<desc xml:lang="ja">Automatic proxy configuration</desc>
+							<desc xml:lang="pt-BR">Configuração automática do proxy</desc>
+							<desc xml:lang="ja">自動でプロキシを設定</desc>
 							<desc xml:lang="ko">Automatic proxy configuration</desc>
 							<desc xml:lang="tr">Automatic proxy configuration</desc>
 							<desc xml:lang="th">Automatic proxy configuration</desc>
 							<desc xml:lang="hi-IN">Automatic proxy configuration</desc>
+							<desc xml:lang="x-comment">Automatic proxy configuration</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -970,7 +1010,7 @@
 							<desc xml:lang="fi">Manual proxy configuration</desc>
 							<desc xml:lang="cs">Manual proxy configuration</desc>
 							<desc xml:lang="da">Manual proxy configuration</desc>
-							<desc xml:lang="zh-CN">Manual proxy configuration</desc>
+							<desc xml:lang="zh-CN">手工配置代理</desc>
 							<desc xml:lang="zh-TW">Manual proxy configuration</desc>
 							<desc xml:lang="ar">Manual proxy configuration</desc>
 							<desc xml:lang="he">Manual proxy configuration</desc>
@@ -981,12 +1021,13 @@
 							<desc xml:lang="it">Manual proxy configuration</desc>
 							<desc xml:lang="sv">Manual proxy configuration</desc>
 							<desc xml:lang="pl">Manual proxy configuration</desc>
-							<desc xml:lang="pt-BR">Manual proxy configuration</desc>
-							<desc xml:lang="ja">Manual proxy configuration</desc>
+							<desc xml:lang="pt-BR">Configuração manual do proxy</desc>
+							<desc xml:lang="ja">手動でプロキシを設定</desc>
 							<desc xml:lang="ko">Manual proxy configuration</desc>
 							<desc xml:lang="tr">Manual proxy configuration</desc>
 							<desc xml:lang="th">Manual proxy configuration</desc>
 							<desc xml:lang="hi-IN">Manual proxy configuration</desc>
+							<desc xml:lang="x-comment">Manual proxy configuration</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1015,12 +1056,13 @@
 					<desc xml:lang="it">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="sv">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="pl">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the FTP proxy server.</desc>
-					<desc xml:lang="ja">Specifies the name of the FTP proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para FTP.</desc>
+					<desc xml:lang="ja">FTP プロキシサーバーの名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="tr">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="th">Specifies the name of the FTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the FTP proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the name of the FTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1049,12 +1091,13 @@
 					<desc xml:lang="it">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="sv">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="pl">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the port of the FTP proxy server.</desc>
-					<desc xml:lang="ja">Specifies the port of the FTP proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para FTP.</desc>
+					<desc xml:lang="ja">FTP プロキシサーバーのポートを指定します。</desc>
 					<desc xml:lang="ko">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="tr">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="th">Specifies the port of the FTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the FTP proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the port of the FTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1066,7 +1109,7 @@
 							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
@@ -1077,12 +1120,13 @@
 							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1094,7 +1138,7 @@
 							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
@@ -1105,12 +1149,13 @@
 							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1139,12 +1184,13 @@
 					<desc xml:lang="it">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="sv">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="pl">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the HTTP proxy server.</desc>
-					<desc xml:lang="ja">Specifies the name of the HTTP proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para HTTP.</desc>
+					<desc xml:lang="ja">HTTP プロキシサーバーの名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="tr">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="th">Specifies the name of the HTTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the HTTP proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the name of the HTTP proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1173,12 +1219,13 @@
 					<desc xml:lang="it">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="sv">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="pl">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the port of the HTTP proxy server.</desc>
-					<desc xml:lang="ja">Specifies the port of the HTTP proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para HTTP.</desc>
+					<desc xml:lang="ja">HTTP プロキシサーバーのポートを指定します。</desc>
 					<desc xml:lang="ko">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="tr">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="th">Specifies the port of the HTTP proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the HTTP proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the port of the HTTP proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1190,7 +1237,7 @@
 							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
@@ -1201,12 +1248,13 @@
 							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1218,7 +1266,7 @@
 							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
@@ -1229,12 +1277,13 @@
 							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1264,12 +1313,13 @@
 					<desc xml:lang="it">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="sv">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="pl">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the name of the Socks proxy server.</desc>
-					<desc xml:lang="ja">Specifies the name of the Socks proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica o nome do servidor proxy para Socks.</desc>
+					<desc xml:lang="ja">Socks プロキシサーバーの名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="tr">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="th">Specifies the name of the Socks proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the Socks proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the name of the Socks proxy server.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1299,12 +1349,13 @@
 					<desc xml:lang="it">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="sv">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="pl">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="pt-BR">Specifies the port of the Socks proxy server.</desc>
-					<desc xml:lang="ja">Specifies the port of the Socks proxy server.</desc>
+					<desc xml:lang="pt-BR">Especifica a porta do servidor proxy para Socks.</desc>
+					<desc xml:lang="ja">Socks プロキシサーバーのポートを指定します。</desc>
 					<desc xml:lang="ko">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="tr">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="th">Specifies the port of the Socks proxy server.</desc>
 					<desc xml:lang="hi-IN">Specifies the port of the Socks proxy server.</desc>
+					<desc xml:lang="x-comment">Specifies the port of the Socks proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
@@ -1316,7 +1367,7 @@
 							<desc xml:lang="fi">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最少数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the minimum allowed port number.</desc>
@@ -1327,12 +1378,13 @@
 							<desc xml:lang="it">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número mínimo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最小ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the minimum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the minimum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the minimum allowed port number.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="65535">
@@ -1344,7 +1396,7 @@
 							<desc xml:lang="fi">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="cs">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="da">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="zh-CN">指定允许的端口最多数目。</desc>
 							<desc xml:lang="zh-TW">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="ar">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="he">Specifies the maximum allowed port number.</desc>
@@ -1355,12 +1407,13 @@
 							<desc xml:lang="it">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="sv">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="pl">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum allowed port number.</desc>
-							<desc xml:lang="ja">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="pt-BR">Especifica o número máximo permitido para a porta.</desc>
+							<desc xml:lang="ja">許可する最大ポート番号を指定します。</desc>
 							<desc xml:lang="ko">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="tr">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="th">Specifies the maximum allowed port number.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum allowed port number.</desc>
+							<desc xml:lang="x-comment">Specifies the maximum allowed port number.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1388,16 +1441,18 @@
 				<desc xml:lang="it">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="sv">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="pl">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="pt-BR">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
-				<desc xml:lang="ja">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc xml:lang="pt-BR">Servidor para a configuração de motores de busca. Um grupo padrão de motores de busca (localizados) incluindo suas configurações deverá ser gravado pelo Setup. </desc>
+				<desc xml:lang="ja">検索エンジンの構成として適用されます。設定を含む (ローカライズ済みの) 検索エンジンの標準グループをセットアップによって書き込む必要があります。</desc>
 				<desc xml:lang="ko">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="tr">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="th">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 				<desc xml:lang="hi-IN">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
+				<desc xml:lang="x-comment">Serves for the configuration of search engines. A default group of (localized) search engines including their configuration should be written by the setup.</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
