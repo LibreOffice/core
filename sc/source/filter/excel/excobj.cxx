@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:32:33 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 //------------------------------------------------------------------------
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCOMPONENT_HPP_
 #include <com/sun/star/form/XFormComponent.hpp>
 #endif
@@ -80,6 +83,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <stdio.h>
 
@@ -103,8 +107,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/outliner.hxx>
 #include <sfx2/objsh.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <svtools/itemset.hxx>
@@ -118,8 +121,6 @@
 #ifndef _SVDOGRAF_HXX //autogen wg. SdrGrafObj
 #include <svx/svdograf.hxx>
 #endif
-
-#include <sfx2/interno.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"
@@ -462,40 +463,31 @@ void ImportExcel::EndAllChartObjects( void )
     {
         if( p->nRow1 <= p->nRow2 && p->nCol1 <= p->nCol2 )
         {
-            SvInPlaceObjectRef  aIPObj;
             //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
             //! Warnung am Storage setzen?
             if ( SvtModuleOptions().IsChart() )
             {
-                aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-            }
-            if( aIPObj.Is() )
-            {
-                pSh->InsertObject(aIPObj, String());
-                //          String aName = aIPObj->GetName()->GetName();
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                ::rtl::OUString aName;
+                uno::Reference < embed::XEmbeddedObject > xObj = pSh->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
 
-                String          aName;
-                SvInfoObject*   pInfoObj = pSh->Find( aIPObj );
-
-                if( pInfoObj )
-                    aName = pInfoObj->GetObjName();
-                else
-                    DBG_ERROR( "IP-Object not found :-/" );
-
-
-                Size            aSize = aIPObj->GetVisArea().GetSize();
+                awt::Size aSz = xObj->getVisualAreaSize( nAspect );
+                Size aSize( aSz.Width, aSz.Height );
                 if( aSize.Height() == 0 || aSize.Width() == 0 )
                 {
+                    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                     aSize.Width() = 5000;
                     aSize.Height() = 5000;
                     aSize = Window::LogicToLogic
-                                ( aSize, MapMode( MAP_100TH_MM ), MapMode( aIPObj->GetMapUnit() ) );
-                    aIPObj->SetVisAreaSize( aSize );
+                                ( aSize, MapMode( MAP_100TH_MM ), MapMode( aUnit ) );
+                    aSz.Width = aSize.Width();
+                    aSz.Height = aSize.Height();
+                    xObj->setVisualAreaSize( nAspect, aSz );
                 }
 
                 pD->LimitChartArea( p->nTab1, p->nCol1, p->nRow1, p->nCol2, p->nRow2 );
 
-                SdrOle2Obj*     pSdrObj = new SdrOle2Obj( aIPObj, aName, p->aRect );
+                SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, p->aRect );
 
                 pSdrObj->ClearMergedItem();
                 pSdrObj->SetMergedItemSetAndBroadcast(*p->pAttrs);
@@ -510,7 +502,8 @@ void ImportExcel::EndAllChartObjects( void )
                                 ( pD, p->nTab1, p->nCol1, p->nRow1, p->nCol2, p->nRow2, aName );
 
                 SchMemChart*    pMemChart = aChartObj.CreateMemChart();
-                SchDLL::Update( aIPObj, pMemChart );
+                SchDLL::Update( xObj, pMemChart );
+                pSdrObj->GetNewReplacement();
                 delete pMemChart;
             }
         }
