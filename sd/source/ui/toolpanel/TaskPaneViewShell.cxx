@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:14:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ void TaskPaneViewShell::ArrangeGUIElements (void)
 
     // Place the task pane.
     if (mpTaskPane.get() != NULL)
-        mpTaskPane->SetPosSizePixel (aOrigin, aSize);
+        mpTaskPane->SetPosSizePixel (Point(0,0), aSize);
 }
 
 
@@ -354,7 +354,7 @@ IMPL_LINK(TaskPaneViewShell, ToolboxClickHandler, ToolBox*, pToolBox)
 
         Point aMenuPosition = pToolBox->GetItemRect(mnMenuId).BottomLeft();
         aMenuPosition += pToolBox->GetPosPixel();
-        pMenu->Execute (GetActiveWindow(), aMenuPosition);
+        pMenu->Execute (pDockingWindow, aMenuPosition);
     }
 
     return 0;
