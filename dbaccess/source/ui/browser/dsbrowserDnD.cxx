@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 14:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 06:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,8 @@ namespace dbaui
                                     }
                                 case OCopyTableWizard::WIZARD_APPEND_DATA:
                                     {
-                                        xTable = aWizard.createTable();
+                                        if(!xTable.is())
+                                            xTable = aWizard.createTable();
                                         if(!xTable.is())
                                             break;
 
@@ -1085,6 +1086,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.24  2001/07/26 14:12:01  oj
+ *  #90291# check if table should be appended
+ *
  *  Revision 1.23  2001/07/19 09:27:12  oj
  *  #86186# check parsetree for joins
  *
