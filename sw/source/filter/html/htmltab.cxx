@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:48:25 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:11:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //#define TEST_RESIZE
 
 
@@ -2554,6 +2553,11 @@ inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 nWidth,
 void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nWidth, sal_Bool bRelWidth,
                            SvxAdjust eAdjust, SwVertOrient eVertOri )
 {
+    // --> OD, MIB 2004-11-08 #i35143# - no columns, if rows already exist.
+    if ( nRows > 0 )
+        return;
+    // <--
+
     sal_uInt16 i;
 
     if( !nSpan )
