@@ -19,6 +19,14 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\%__SRC%\misc\org.openoffice.Office.Math.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Math.xml
 ..\%__SRC%\misc\org.openoffice.Office.Writer.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Writer.xml
 ..\%__SRC%\misc\org.openoffice.Office.WriterWeb.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.WriterWeb.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Calc.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Calc.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Chart.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Chart.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Common.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Common.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Draw.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Draw.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Impress.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Impress.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Math.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Math.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.Writer.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.Writer.xml
+..\%__SRC%\misc\org.openoffice.Office.Filter.WriterWeb.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.WriterWeb.xml
 ..\%__SRC%\misc\org.openoffice.Inet.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Inet.xml
 ..\%__SRC%\misc\org.openoffice.ucb.Hierarchy.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.ucb.Hierarchy.xml
 ..\%__SRC%\misc\org.openoffice.Setup.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Setup.xml
