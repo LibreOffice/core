@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-15 10:12:48 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 14:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         TestElement []      testElements,
         TestDataElements testDataElements )
     {
-#if DEBUG
-//         Debug.WriteLine( "##### " + GetType().FullName + ".setValues:" + any );
-        Console.WriteLine( "##### " + GetType().FullName + ".setValues:" + any );
-#endif
+         Debug.WriteLine( "##### " + GetType().FullName + ".setValues:" + any );
+
         _bool             = bBool;
         _char             = cChar;
         _byte             = nByte;
@@ -187,11 +185,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         /*INOUT*/ref TestElement[]    io_testElements,
         /*INOUT*/ref TestDataElements io_testDataElements )
     {
-#if DEBUG
-//         Debug.WriteLine( "##### " + GetType().FullName + ".setValues2:" + io_any );
-        Console.WriteLine( "##### " + GetType().FullName + ".setValues2:" + io_any );
-#endif
-
+        Debug.WriteLine( "##### " + GetType().FullName + ".setValues2:" + io_any );
+        
         _bool             = io_bool;
         _char             = io_char;
         _byte             = io_byte;
@@ -236,11 +231,8 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         /*OUT*/out TestElement[]    o_testElements,
         /*OUT*/out TestDataElements o_testDataElements )
     {
-#if DEBUG
-//         Debug.WriteLine( "##### " + GetType().FullName + ".getValues" );
-        Console.WriteLine( "##### " + GetType().FullName + ".getValues" );
-#endif
-
+        Debug.WriteLine( "##### " + GetType().FullName + ".getValues" );
+        
         o_bool             = _bool;
         o_char             = _char;
         o_byte             = _byte;
@@ -336,17 +328,12 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     public uno.Any Any
     {
         get {
-#if DEBUG
-//         Debug.WriteLine( "##### " + GetType().FullName + ".Any" );
-            Console.WriteLine( "##### " + GetType().FullName + ".Any" );
-#endif
+
+            Debug.WriteLine( "##### " + GetType().FullName + ".Any" );
             return _any;
         }
         set {
-#if DEBUG
-//         Debug.WriteLine( "##### " + GetType().FullName + ".Any:" + value );
-            Console.WriteLine( "##### " + GetType().FullName + ".Any:" + value );
-#endif
+            Debug.WriteLine( "##### " + GetType().FullName + ".Any:" + value );
             _any = value;
         }
     }
@@ -636,7 +623,7 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
     {
         return arg;
     }
-
+  
     public  void  transportPolyHyper(/*[in][out]*/ ref TestPolyStruct arg)
     {
     }
@@ -647,6 +634,11 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         arg2 = arg1;
     }
 
+    public TestPolyStruct getNullPolyBadEnum()
+    {
+        return new TestPolyStruct(unoidl.test.testtools.bridgetest.TestBadEnum.M);
+    }
+    
     public TestPolyStruct getNullPolyLong()
     {
         return new TestPolyStruct();
