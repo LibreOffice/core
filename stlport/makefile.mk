@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-14 15:40:29 $
+#   last change: $Author: hr $ $Date: 2002-01-14 15:45:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,6 @@ TARGET=so_stlport
 TARFILE_NAME=STLport-4.5
 PATCH_FILE_NAME=STLport-4.5.patch
 
-.IF "$(GUI)"=="WNT"
-TAR_EXCLUDES=*/SC5/*
-.ENDIF          # "$(GUI)"=="WNT"
-
 ADDITIONAL_FILES=src$/gcc-3.0.mak
 
 
@@ -104,12 +100,6 @@ BUILD_ACTION=make
 BUILD_ACTION=make
 BUILD_FLAGS=-f sunpro.mak
 .ENDIF
-
-.IF "$(COM)"=="C52"
-OUT2INC= \
-    stlport$/*.SUNWCCh
-
-.ENDIF          # "$(COM)"=="C52"
 
 OUTDIR2INC= \
     stlport
