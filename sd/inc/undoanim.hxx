@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoanim.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:39:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SD_UNDO_ANIM_HXX
 #define _SD_UNDO_ANIM_HXX
 
+#ifndef _SVDUNDO_HXX
+#include <svx/svdundo.hxx>
+#endif
+
 #include "sdundo.hxx"
 
 class SdPage;
@@ -71,7 +75,7 @@ namespace sd
 
 struct UndoAnimationImpl;
 
-class UndoAnimation : public SdUndoAction
+class UndoAnimation : public SdrUndoAction
 {
 public:
     UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage );
