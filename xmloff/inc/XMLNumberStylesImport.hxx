@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStylesImport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:19:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,12 @@ private:
 
     sal_Bool    mbTimeStyle;
     sal_Bool    mbAutomatic;
-    sal_uInt8   mnElements[8];
+    sal_uInt8   mnElements[16];
     sal_Int16   mnIndex;
 
     sal_Int32   mnKey;
 
-    sal_Bool compareStyle( const SdXMLFixedDataStyle* pStyle ) const;
+    bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
 protected:
     void add( rtl::OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, rtl::OUString& rText );
