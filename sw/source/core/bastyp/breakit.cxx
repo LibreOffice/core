@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-07 10:01:03 $
+ *  last change: $Author: jp $ $Date: 2001-09-24 15:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,26 +65,31 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _SVX_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
+
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-
-#include <svx/unolingu.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -121,3 +126,26 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
     pForbidden = new ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
+USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
+                                        xub_StrLen nPos ) const
+{
+    USHORT nScript = ScriptType::WEAK;
+    if( xBreak.is() && rTxt.Len() )
+    {
+        if( nPos && nPos == rTxt.Len() )
+            --nPos;
+        nScript = xBreak->getScriptType( rTxt, nPos );
+        sal_Int32 nChgPos;
+        if( ScriptType::WEAK == nScript && nPos &&
+            0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
+            nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
+
+        if( ScriptType::WEAK == nScript && rTxt.Len() >
+            ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
+            0 <= nChgPos )
+            nScript = xBreak->getScriptType( rTxt, nChgPos );
+    }
+    if( ScriptType::WEAK == nScript )
+        nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+    return nScript;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-07 10:00:15 $
+ *  last change: $Author: jp $ $Date: 2001-09-24 15:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _BREAKIT_HXX
 #define _BREAKIT_HXX
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
 #endif
@@ -81,6 +84,8 @@
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
 #endif
+
+class String;
 
 class SwBreakIt
 {
@@ -109,6 +114,8 @@ public:
             _GetForbidden( aLang );
         return *pForbidden;
     }
+
+    USHORT GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
 };
 
 extern SwBreakIt* pBreakIt;
