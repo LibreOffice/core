@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -864,7 +864,14 @@ FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 //---------------------------------------------------------------------------------------
 SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
     :FmGridHeader(pParent, nWinBits)
+    ,DragSourceHelper(this)
 {
+}
+
+//---------------------------------------------------------------------------------------
+void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    ImplStartColumnDrag( _rPosPixel );
 }
 
 //---------------------------------------------------------------------------------------
@@ -933,14 +940,7 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(const Point& _rMousePos)
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::Command( const CommandEvent& rEvt )
 {
-    sal_Bool bHandled = sal_False;
-    if (COMMAND_STARTDRAG == rEvt.GetCommand())
-    {
-        bHandled = ImplStartColumnDrag(rEvt.GetMousePosPixel());
-    }
-
-    if (!bHandled)
-        FmGridHeader::Command(rEvt);
+    FmGridHeader::Command(rEvt);
 }
 
 //---------------------------------------------------------------------------------------
@@ -1610,85 +1610,91 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
         FmGridControl::MouseButtonDown(rMEvt);
 }
 
+//---------------------------------------------------------------------------------------
+void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
+{
+    sal_Bool bHandled = sal_False;
+
+    do
+    {
+        // determine if dragging is allowed
+        // (Yes, this is controller (not view) functionality. But collecting and evaluating all the
+        // informations necessary via UNO would be quite difficult (if not impossible) so
+        // my laziness says 'do it here' ...)
+        long nRow = GetRowAtYPosPixel(_rPosPixel.Y());
+        sal_uInt16 nColPos = GetColumnAtXPosPixel(_rPosPixel.X());
+        sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
+            // 'the handle column' and 'no valid column' will both result in a view position of -1 !
+
+        sal_Bool bCurrentRowVirtual = IsCurrentAppending() && IsModified();
+        // the current row doesn't really exist : the user's appendign a new one and already has entered some data,
+        // so the row contains data which has no counter part within the data source
+
+        long nCorrectRowCount = GetRowCount();
+        if (GetOptions() & OPT_INSERT)
+            --nCorrectRowCount; // there is a empty row for inserting records
+        if (bCurrentRowVirtual)
+            --nCorrectRowCount;
+
+        if ((nColPos == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount))
+            break;
+
+        sal_Bool bHitHandle = (nColPos == 0);
+
+        // check which kind of dragging has to be initiated
+        if  (   bHitHandle                          //  the handle column
+            &&  (   GetSelectRowCount()             //  at least one row is selected
+                ||  (   (nRow >= 0)                 //  a row below the header
+                    &&  !bCurrentRowVirtual         //  we aren't appending a new record
+                    &&  (nRow != GetCurrentPos())   //  a row which is not the current one
+                    )
+                )
+            )
+        {   // => start dragging the row
+            if (GetDataWindow().IsMouseCaptured())
+                GetDataWindow().ReleaseMouse();
+
+            getMouseEvent().Clear();
+            DoRowDrag(nRow);
+
+            bHandled = sal_True;
+        }
+        else if (   (nRow < 0)                      // the header
+                &&  (!bHitHandle)                   // non-handle column
+                &&  (nViewPos < GetViewColCount())  // valid (existing) column
+                )
+        {   // => start dragging the column
+            if (GetDataWindow().IsMouseCaptured())
+                GetDataWindow().ReleaseMouse();
+
+            getMouseEvent().Clear();
+            DoColumnDrag(nViewPos);
+
+            bHandled = sal_True;
+        }
+        else if (   !bHitHandle     // non-handle column
+                &&  (nRow >= 0)     // non-header row
+                )
+        {   // => start dragging the field content
+            if (GetDataWindow().IsMouseCaptured())
+                GetDataWindow().ReleaseMouse();
+
+            getMouseEvent().Clear();
+            DoFieldDrag(nViewPos, nRow);
+
+            bHandled = sal_True;
+        }
+    }
+    while (sal_False);
+
+    if (!bHandled)
+        FmGridControl::StartDrag(_nAction, _rPosPixel);
+}
+
 //------------------------------------------------------------------------------
 void SbaGridControl::Command(const CommandEvent& rEvt)
 {
-    sal_Bool bHandled = sal_False;
-    switch (rEvt.GetCommand())
-    {
-        case COMMAND_STARTDRAG:
-            // determine if dragging is allowed
-            // (Yes, this is controller (not view) functionality. But collecting and evaluating all the
-            // informations necessary via UNO would be quite difficult (if not impossible) so
-            // my laziness says 'do it here' ...)
-            long nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
-            sal_uInt16 nColPos = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-            sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? (sal_uInt16)-1 : nColPos-1;
-                // 'the handle column' and 'no valid column' will both result in a view position of -1 !
-
-            sal_Bool bCurrentRowVirtual = IsCurrentAppending() && IsModified();
-            // the current row doesn't really exist : the user's appendign a new one and already has entered some data,
-            // so the row contains data which has no counter part within the data source
-
-            long nCorrectRowCount = GetRowCount();
-            if (GetOptions() & OPT_INSERT)
-                --nCorrectRowCount; // there is a empty row for inserting records
-            if (bCurrentRowVirtual)
-                --nCorrectRowCount;
-
-            if ((nColPos == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount))
-                break;
-
-            sal_Bool bHitHandle = (nColPos == 0);
-
-            // check which kind of dragging has to be initiated
-            if  (   bHitHandle                          //  the handle column
-                &&  (   GetSelectRowCount()             //  at least one row is selected
-                    ||  (   (nRow >= 0)                 //  a row below the header
-                        &&  !bCurrentRowVirtual         //  we aren't appending a new record
-                        &&  (nRow != GetCurrentPos())   //  a row which is not the current one
-                        )
-                    )
-                )
-            {   // => start dragging the row
-                if (GetDataWindow().IsMouseCaptured())
-                    GetDataWindow().ReleaseMouse();
-
-                getMouseEvent().Clear();
-                DoRowDrag(nRow);
-
-                bHandled = sal_True;
-            }
-            else if (   (nRow < 0)                      // the header
-                    &&  (!bHitHandle)                   // non-handle column
-                    &&  (nViewPos < GetViewColCount())  // valid (existing) column
-                    )
-            {   // => start dragging the column
-                if (GetDataWindow().IsMouseCaptured())
-                    GetDataWindow().ReleaseMouse();
-
-                getMouseEvent().Clear();
-                DoColumnDrag(nViewPos);
-
-                bHandled = sal_True;
-            }
-            else if (   !bHitHandle     // non-handle column
-                    &&  (nRow >= 0)     // non-header row
-                    )
-            {   // => start dragging the field content
-                if (GetDataWindow().IsMouseCaptured())
-                    GetDataWindow().ReleaseMouse();
-
-                getMouseEvent().Clear();
-                DoFieldDrag(nViewPos, nRow);
-
-                bHandled = sal_True;
-            }
-            break;
-    }
-
-    if (!bHandled)
-        FmGridControl::Command(rEvt);
+    FmGridControl::Command(rEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -1713,11 +1719,6 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
 
 
-//  XubString sDBAlias = EnsureDBLink(m_aDbEnv, GetFormDatabase(xDataSource), sal_True /* allow ui */, sal_True /* really need an alias */ );
-//  if (!sDBAlias.Len())
-//      // the user did not allow us to create an alias
-//      return;
-
     XubString sObjectKind = (nDataType == CommandType::TABLE) ? XubString('0') : XubString('1');
 
     // If the data source is an SQL-statement and simple enough (means "select <field list> from <table> where ....")
@@ -1733,7 +1734,6 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
         {
             DBG_ERROR("SbaGridControl::DoColumnDrag : could not ask for the escape processing property ! ignoring this ...");
         }
-        ;
     }
     if (bTryToParse)
     {

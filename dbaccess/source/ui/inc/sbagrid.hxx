@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 10:48:48 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,9 @@ namespace dbaui
     // SbaGridHeader
     //==================================================================
 
-    class SbaGridHeader : public FmGridHeader
+    class SbaGridHeader
+                :public FmGridHeader
+                ,public DragSourceHelper
     {
     public:
         SbaGridHeader(BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG);
@@ -228,11 +230,14 @@ namespace dbaui
         virtual void    PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
     private:
+        // DragSourceHelper overridables
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+
         // Window overridables
-        void MouseButtonDown( const MouseEvent& rMEvt );
+        virtual void MouseButtonDown( const MouseEvent& rMEvt );
+
 
         void ImplSelect(sal_uInt16 nId);
-
         sal_Bool ImplStartColumnDrag(const Point& _rMousePos);
     };
 
@@ -298,6 +303,9 @@ namespace dbaui
         HeaderBar* GetHeaderBar() const { return FmGridControl::GetHeaderBar(); }
 
     protected:
+        // DragSourceHelper overridables
+        virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
+
         // Window overridables
         virtual void Command(const CommandEvent& rEvt);
 
