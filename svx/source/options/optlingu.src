@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:39:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "√ˆ≥¨";
         Text[ turkish ] = "Close";
         Text[ arabic ] = "≈€·«ﬁ";
+        Text[ catalan ] = "Cerrar";
     };
     HelpButton PB_HELP
     {
@@ -132,6 +133,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "øÔ∂µ";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "«·ŒÌ«—« ";
+        Text[ catalan ] = "Opciones";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
@@ -158,6 +160,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "ªy®•";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "«··€…";
+        Text[ catalan ] = "Idioma";
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
@@ -199,6 +202,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "…¨•˝´◊ +";
         Text[ turkish ] = "Prio +";
         Text[ arabic ] = "√›÷·Ì… +";
+        Text[ catalan ] = "Prio +";
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
@@ -225,6 +229,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "…¨•˝´◊ -";
         Text[ turkish ] = "Prio -";
         Text[ arabic ] = "√›÷·Ì… -";
+        Text[ catalan ] = "Prio -";
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
@@ -251,6 +256,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "™¶^(~B)";
         Text[ turkish ] = "Back";
         Text[ arabic ] = "«·”«»ﬁ";
+        Text[ catalan ] = "~Regresar";
     };
 
     FixedLine GB_EDIT_MODULES_DICS
@@ -277,6 +283,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "¶€≠q¶r®Â";
         Text[ turkish ] = "Personal dictionaries";
         Text[ arabic ] = "ﬁÊ«„Ì” «·„” Œœ„";
+        Text[ catalan ] = "Diccionarios de usuario";
     };
     Control CLB_EDIT_MODULES_DICS
     {
@@ -310,6 +317,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "∑s™∫¶r®Â(~N)...";
         Text[ turkish ] = "New";
         Text[ arabic ] = "ÃœÌœ...";
+        Text[ catalan ] = "~Nuevo...";
     };
     PushButton PB_EDIT_MODULES_PRIO_EDIT_DIC
     {
@@ -336,6 +344,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "ΩsøË(~E)...";
         Text[ turkish ] = "Edit";
         Text[ arabic ] = " Õ—Ì—...";
+        Text[ catalan ] = "~Editar...";
     };
     PushButton PB_EDIT_MODULES_PRIO_DEL_DIC
     {
@@ -362,6 +371,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "ßR∞£(~T)";
         Text[ turkish ] = "Delete";
         Text[ arabic ] = "Õ–›";
+        Text[ catalan ] = "~Eliminar";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -394,6 +404,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "¿À¨d´˜ºg";
         Text[ turkish ] = "Spelling";
         Text[ arabic ] = " œﬁÌﬁ ≈„·«∆Ì";
+        Text[ catalan ] = "OrtografÌa";
     };
     String ST_HYPH
     {
@@ -417,6 +428,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "≥s¶r≤≈";
         Text[ turkish ] = "Hyphenation";
         Text[ arabic ] = "›’· «·„ﬁ«ÿ⁄";
+        Text[ catalan ] = "SeparaciÛn sil·bica";
     };
     String ST_THES
     {
@@ -440,6 +452,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ chinese_traditional ] = "µ¸®Â";
         Text[ turkish ] = "Thesaurus";
         Text[ arabic ] = "ﬁ«„Ê” «·„—«œ›« ";
+        Text[ catalan ] = "SinÛnimos";
     };
     Text[ english_us ] = "Edit Modules";
     Text[ portuguese ] = "Editar mÛdulos";
@@ -459,6 +472,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     Text[ chinese_traditional ] = "ΩsøËº“∂Ù";
     Text[ turkish ] = "Edit modules";
     Text[ arabic ] = " Õ—Ì— «·ÊÕœ«  «·‰„ÿÌ…";
+    Text[ catalan ] = "Editar mÛdulos";
 };
 
 // RID_SVXDLG_LNG_ED_NUM_PREBREAK -------------------------------------------
@@ -542,6 +556,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ chinese_traditional ] = "≥s¶r∏π§ß´e™∫¶r•¿";
         Text[ turkish ] = "Characters before linebreak";
         Text[ arabic ] = "√Õ—› ﬁ»· «·›«’·";
+        Text[ catalan ] = "Car·cter antes de salto";
     };
     String STR_NUM_POST_BREAK_DLG
     {
@@ -565,6 +580,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ chinese_traditional ] = "≥s¶r∏π§ß´·™∫¶r•¿";
         Text[ turkish ] = "Characters after linebreak";
         Text[ arabic ] = "√Õ—› »⁄œ «·›«’·";
+        Text[ catalan ] = "Car·cter despuÈs de salto";
     };
     String STR_NUM_MIN_WORDLEN_DLG
     {
@@ -588,7 +604,9 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ chinese_traditional ] = "≥Ãµu™∫¶rµ¸";
         Text[ turkish ] = "Minimal wordlength";
         Text[ arabic ] = "«·ÿÊ· «·√œ‰Ï ··ﬂ·„…";
+        Text[ catalan ] = "TamÒana minÌmo de palabra";
     };
+    Text[ catalan ] = "SeparaciÛn sil·bica";
 };
 
 // RID_SFXPAGE_LINGU --------------------------------------------------------
@@ -605,7 +623,7 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Linguistik" ;
         Text [ ENGLISH ] = "Linguistic" ;
-        Text[ english_us ] = "Writing Aids";
+        Text[ english_us ] = "Writing aids";
         Text[ portuguese ] = "LinguÌstica";
         Text[ russian ] = "ÀËÌ„‚ËÒÚËÍ‡";
         Text[ greek ] = "√Î˘ÛÛÔÎÔ„ﬂ·";
@@ -623,6 +641,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "ªy®•≥W´h";
         Text[ turkish ] = "Linguistic";
         Text[ arabic ] = "≈⁄œ«œ «··€…";
+        Text[ catalan ] = "LinguÌstica";
     };
     FixedText FT_LINGU_MODULES
     {
@@ -649,6 +668,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¥£®—®œ•Œ™∫ªy®•º“∂Ù°G";
         Text[ turkish ] = "Available language modules:";
         Text[ arabic ] = "ÊÕœ«  «··€… «·‰„ÿÌ… «·„ Ê›—…:";
+        Text[ catalan ] = "~MÛdulos disponibles de idioma:";
     };
     Control CLB_LINGU_MODULES
     {
@@ -682,6 +702,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "ΩsøË(~E)...";
         Text[ turkish ] = "~Edit...";
         Text[ arabic ] = " Õ—Ì—...";
+        Text[ catalan ] = "~Editar...";
     };
     FixedText FT_LINGU_OPTIONS
     {
@@ -708,6 +729,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "øÔ∂µ°G";
         Text[ turkish ] = "Options:";
         Text[ arabic ] = "«·ŒÌ«—« :";
+        Text[ catalan ] = "Opciones:";
     };
     Control CLB_LINGU_OPTIONS
     {
@@ -741,6 +763,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "ΩsøË(~D)...";
         Text[ turkish ] = "E~dit...";
         Text[ arabic ] = " Õ—Ì—...";
+        Text[ catalan ] = "E~ditar...";
     };
 
     String STR_CAPITAL_WORDS
@@ -765,6 +788,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¿À¨d§jºg¶r•¿";
         Text[ turkish ] = "Check uppercase words";
         Text[ arabic ] = " œﬁÌﬁ «·ﬂ·„«  «·„ﬂ Ê»… »√Õ—› ﬂ»Ì—…";
+        Text[ catalan ] = "Revisar palabras en may˙scula";
     };
     String STR_WORDS_WITH_DIGITS
     {
@@ -788,6 +812,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¿À¨d±aΩs∏π™∫¶r";
         Text[ turkish ] = "Check words with numbers ";
         Text[ arabic ] = " œﬁÌﬁ «·ﬂ·„«  «· Ì  Õ ÊÌ ⁄·Ï √—ﬁ«„";
+        Text[ catalan ] = "Revisar palabras con n˙meros";
     };
     String STR_CAPITALIZATION
     {
@@ -811,6 +836,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¿À¨d¶r•¿§j§pºg";
         Text[ turkish ] = "Check capitalization words";
         Text[ arabic ] = " œﬁÌﬁ «·ﬂ «»… »√Õ—› ﬂ»Ì—… √Ê ’€Ì—…";
+        Text[ catalan ] = "Revisar may˙sculas";
     };
     String STR_SPELL_SPECIAL
     {
@@ -834,6 +860,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¿À¨dØSÆÌ∞œ∞Ï";
         Text[ turkish ] = "Proof special regions";
         Text[ arabic ] = " œﬁÌﬁ «·„‰«ÿﬁ «·Œ«’…";
+        Text[ catalan ] = "Revisar ·reas especiales";
     };
     String STR_ALL_LANGUAGES
     {
@@ -857,6 +884,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¿À¨d©“¶≥™∫ªy®•";
         Text[ turkish ] = "Spell in all languages";
         Text[ arabic ] = "«· œﬁÌﬁ ›Ì ﬂ· «··€« ";
+        Text[ catalan ] = "Revisar en todos los idiomas";
     };
     String STR_SPELL_AUTO
     {
@@ -880,6 +908,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¶€∞ ¿À¨d";
         Text[ turkish ] = "Online Checking";
         Text[ arabic ] = " œﬁÌﬁ  ·ﬁ«∆Ì";
+        Text[ catalan ] = "RevisiÛn autom·tica";
     };
     String STR_HIDE_MARKINGS
     {
@@ -903,6 +932,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¡Ù§J¨ı¶‚¶±Ωu";
         Text[ turkish ] = "Hide the marking";
         Text[ arabic ] = "⁄œ„  ÕœÌœ «·√Œÿ«¡";
+        Text[ catalan ] = "Ocultar identificador";
     };
     String STR_OLD_GERMAN
     {
@@ -926,6 +956,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¬¬¶°ºwªy´˜ºg¿À¨d";
         Text[ turkish ] = "Pre reform german spelling";
         Text[ arabic ] = " œﬁÌﬁ ≈„·«∆Ì √·„«‰Ì ﬁœÌ„";
+        Text[ catalan ] = "Antigua ortografÌa alemana";
     };
     String STR_NUM_MIN_WORDLEN
     {
@@ -949,6 +980,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "•Œ©Û≥s¶r≤≈™∫≥Ãµu™∫¶rµ¸™¯´◊°G";
         Text[ turkish ] = "Minimal wordlength for hyphenation: ";
         Text[ arabic ] = "«·ÿÊ· «·√œ‰Ï ··ﬂ·„… ⁄‰œ ›’· «·„ﬁ«ÿ⁄: ";
+        Text[ catalan ] = "TamaÒo mÌnimo de palabra para separaciÛn sil·bica: ";
     };
     String STR_NUM_PRE_BREAK
     {
@@ -972,6 +1004,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "≥s¶r≤≈§ß´e™∫¶r§∏°G";
         Text[ turkish ] = "Characters before hyphenation";
         Text[ arabic ] = "√Õ—› ﬁ»· ›«’· «·√”ÿ—: ";
+        Text[ catalan ] = "Caracteres antes de salto de fila: ";
     };
     String STR_NUM_POST_BREAK
     {
@@ -995,6 +1028,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "≥s¶r≤≈§ß´·™∫¶r§∏°G";
         Text[ turkish ] = "Characters behind hyphenation";
         Text[ arabic ] = "√Õ—› »⁄œ ›«’· «·√”ÿ—: ";
+        Text[ catalan ] = "Caracteres despuÈs de salto de lÌnea: ";
     };
     String STR_HYPH_AUTO
     {
@@ -1018,6 +1052,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "¶€∞ §¿∂}";
         Text[ turkish ] = "Hyphenation without interaction";
         Text[ arabic ] = "›’· «·„ﬁ«ÿ⁄ »œÊ‰ «” ›”«—";
+        Text[ catalan ] = "Separar sin preguntar";
     };
     String STR_HYPH_SPECIAL
     {
@@ -1041,6 +1076,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ chinese_traditional ] = "§¿∂}ØSÆÌ∞œ∞Ï";
         Text[ turkish ] = "Hyphenate special regions";
         Text[ arabic ] = "›’· «·„ﬁ«ÿ⁄ «·Œ«’…";
+        Text[ catalan ] = "Separar ·reas especiales";
     };
 
     Bitmap BMP_CHKBUT_UNCHECKED
@@ -1084,6 +1120,7 @@ QueryBox RID_SFXQB_DELDICT
     Message[ greek ] = "»›ÎÂÙÂ Ì· ‰È·„Ò·ˆÂﬂ ÙÔ ÎÂÓÈÍ¸;";
     Message[ korean ] = "ªÁ¿¸¿ª ªË¡¶«œΩ√∞⁄Ω¿¥œ±Ó?";
     Message[ turkish ] = "Sˆzl¸¸ silmek istiyor musunuz?";
+    Message[ catalan ] = "øDesea eliminar el diccionario?";
 };
  // RID_SFXQB_DEL_IGNORELIST ----------------------------------------------
 QueryBox RID_SFXQB_DEL_IGNORELIST
@@ -1113,5 +1150,6 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ greek ] = "»›ÎÂÙÂ Ì· ‰È·„Ò·ˆÂﬂ Á ÎﬂÛÙ· ·Ò‹‚ÎÂ¯ÁÚ;";
     Message[ korean ] = "π´Ω√∏Ò∑œ¿ª ªË¡¶«œΩ√∞⁄Ω¿¥œ±Ó?";
     Message[ turkish ] = "\"Yok say\" listesini silmek istiyor musunuz?";
+    Message[ catalan ] = "øDesea eliminar la lista Ignorar?";
 };
  // ******************************************************************* EOF
