@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:39:25 $
+ *  last change: $Author: hr $ $Date: 2002-08-20 12:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@
 
 class ZipPackageFolder;
 
+#ifdef MACOSX
+class ZipPackageEntry : public com::sun::star::container::XNamed,
+                                                public com::sun::star::container::XChild,
+                                                public com::sun::star::lang::XUnoTunnel,
+                                                public com::sun::star::beans::XPropertySet,
+                                                public com::sun::star::lang::XServiceInfo
+#else
 class ZipPackageEntry : public cppu::WeakImplHelper5
 <
     com::sun::star::container::XNamed,
@@ -96,6 +103,7 @@ class ZipPackageEntry : public cppu::WeakImplHelper5
     com::sun::star::beans::XPropertySet,
     com::sun::star::lang::XServiceInfo
 >
+#endif
 {
 protected:
     bool mbIsFolder:1;
@@ -118,6 +126,15 @@ public:
     {
         xParent.clear();
     }
+#ifdef MACOSX
+        // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
+        throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual void SAL_CALL acquire(  )
+        throw() = 0;
+    virtual void SAL_CALL release(  )
+        throw() = 0;
+#endif
     // XNamed
     virtual ::rtl::OUString SAL_CALL getName(  )
         throw(::com::sun::star::uno::RuntimeException);
