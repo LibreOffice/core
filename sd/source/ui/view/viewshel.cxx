@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:10:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1437,8 +1437,9 @@ void SdViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
         {
             // prepare list
             List aStringList;
+            sal_uInt16 a;
 
-            for(sal_uInt16 a(0); a < nCount; a++)
+            for( a = 0; a < nCount; a++)
             {
                 // generate one String in list per undo step
                 String* pInsertString = new String(pUndoManager->GetUndoActionComment(a));
@@ -1471,8 +1472,9 @@ void SdViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
         {
             // prepare list
             List aStringList;
+            sal_uInt16 a;
 
-            for(sal_uInt16 a(0); a < nCount; a++)
+            for( a = 0; a < nCount; a++)
             {
                 // generate one String in list per undo step
                 String* pInsertString = new String(pUndoManager->GetRedoActionComment(a));
