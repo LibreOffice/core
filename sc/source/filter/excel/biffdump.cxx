@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
+ *  last change: $Author: dr $ $Date: 2001-12-14 10:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5699,6 +5699,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x40:
             case 0x60:
                 STARTTOKENCLASS( "Array" );
+                pIn->Ignore( 7 );
                 aStack.PushOperand( "ConstArray" );
             break;
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
