@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:33:51 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,15 @@
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include "com/sun/star/uno/XInterface.hpp"
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include "com/sun/star/container/XEnumeration.hpp"
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include "com/sun/star/container/XContainerQuery.hpp"
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#endif
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
 #endif
@@ -306,6 +315,9 @@
 #endif
 #ifndef _UNOTOOLS_CONFIGMGR_HXX
 #include <unotools/configmgr.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
+#include <comphelper/sequenceashashmap.hxx>
 #endif
 
 #ifndef INCLUDED_ALGORITHM
@@ -1899,7 +1911,7 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
         return;
     }
 
-    star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+    star::uno::Reference< star::container::XContainerQuery > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
     if (!xFilterContainer.is())
     {
         xAbort->select();
@@ -1907,7 +1919,6 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
     }
 
     uui::FilterNameList                                 lNames        ;
-    uui::FilterNamePair                                 aPair         ;
     star::uno::Sequence< rtl::OUString >                lFilters      ;
     sal_Int32                                           nFilterCount  = 0;
     sal_Int32                                           nPropCount    = 0;
@@ -1924,52 +1935,29 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
     //          - we show it sorted by her UIName's
     //          - We don't use the order flag or prefer default filters. (Because this list shows all filters and the user should find his filter vry easy by his UIName ...)
     //          - We use "_query_all" here ... but we filter graphic filters out by using DocumentService property later!
-    if ( !(xFilterContainer->getByName(::rtl::OUString::createFromAscii("_query_all:sort_prop=uiname:iflags=1:eflags=143360")) >>= lFilters) )
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xFilters = xFilterContainer->createSubSetEnumerationByQuery(::rtl::OUString::createFromAscii("_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+    while (xFilters->hasMoreElements())
     {
-        xAbort->select();
-        return;
-    }
-
-    nFilterCount = lFilters.getLength();
-    for (sal_Int32 f=0; f<nFilterCount; ++f)
-    {
-        // ignore it - if we can't unpack set of properties or we found an empty internal name!
-        if ( lFilters[f].getLength()<1 || !(xFilterContainer->getByName(lFilters[f])>>=lProps) )
-            continue;
-
-        // step over the properties of the filter
-        // search for "UIName" and "DocumentService"
-        // break the loop if both values could be found
-        bTakeIt       = sal_False;           // indicates if we use this filter after this loop of not
-        nHandledProps = 0;                   // used to break loop if two properties could be readed
-        nPropCount    = lProps.getLength();
-        for(sal_Int32 p=0; p<nPropCount && nHandledProps<2; ++p )
+        try
         {
-            if( lProps[p].Name.compareToAscii("UIName") == 0 )
+            ::comphelper::SequenceAsHashMap lProps(xFilters->nextElement());
+            uui::FilterNamePair             aPair;
+
+            aPair.sInternal = lProps.getUnpackedValueOrDefault(rtl::OUString::createFromAscii("Name"), ::rtl::OUString());
+            aPair.sUI       = lProps.getUnpackedValueOrDefault(rtl::OUString::createFromAscii("UIName"), ::rtl::OUString());
+            if (
+                (!aPair.sInternal.Len()) ||
+                (!aPair.sUI.Len()      )
+               )
             {
-                bTakeIt = ( (lProps[p].Value>>=sUIName) && (sUIName.getLength()>0) );
-                if (!bTakeIt)
-                    break;
-                ++nHandledProps;
+               continue;
             }
-            else
-            if( lProps[p].Name.compareToAscii("DocumentService") == 0 )
-            {
-                ::rtl::OUString sService;
-                bTakeIt = ( (lProps[p].Value>>=sService) && (sService.getLength()>0) );
-                if (!bTakeIt)
-                    break;
-                ++nHandledProps;
-            }
+            lNames.push_back( aPair );
         }
-
-        // now we should have a valid filter for showing ... or not :-)
-        if (!bTakeIt)
-            continue;
-
-        aPair.sInternal = lFilters[f];
-        aPair.sUI       = sUIName    ;
-        lNames.push_back( aPair );
+        catch(const ::com::sun::star::uno::RuntimeException&)
+            { throw; }
+        catch(const ::com::sun::star::uno::Exception&)
+            { continue; }
     }
 
     // no list available for showing
@@ -2032,7 +2020,14 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
             sal_Int32                                         nStep         ;
             uui::FilterNamePair                               aPair         ;
 
-            aPackedSet   = xFilterContainer->getByName( rRequest.SelectedFilter );
+            try
+            {
+                aPackedSet = xFilterContainer->getByName( rRequest.SelectedFilter );
+            }
+            catch(const ::com::sun::star::container::NoSuchElementException&)
+            {
+                aPackedSet.clear();
+            }
             aPackedSet >>= lProps;
             nCount       = lProps.getLength();
             for( nStep=0; nStep<nCount; ++nStep )
@@ -2048,7 +2043,14 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
                 }
             }
 
-            aPackedSet   = xFilterContainer->getByName( rRequest.DetectedFilter );
+            try
+            {
+                aPackedSet = xFilterContainer->getByName( rRequest.DetectedFilter );
+            }
+            catch(const ::com::sun::star::container::NoSuchElementException&)
+            {
+                aPackedSet.clear();
+            }
             aPackedSet >>= lProps;
             nCount       = lProps.getLength();
             for( nStep=0; nStep<nCount; ++nStep )
@@ -2168,7 +2170,7 @@ UUIInteractionHandler::handleFilterOptionsRequest(
             }
 
             star::uno::Sequence < star::beans::PropertyValue > aProps;
-            if( xFilterCFG->getByName( aFilterName ) >>= aProps )
+            if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
                {
                    sal_Int32 nPropertyCount = aProps.getLength();
                    for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
