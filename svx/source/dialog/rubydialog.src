@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:36:54 $
+ *  last change: $Author: os $ $Date: 2001-06-01 10:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ ModelessDialog RID_SVXDLG_RUBY
     SVLook = TRUE ;
     HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 207 , 195 ) ;
+    Size = MAP_APPFONT ( 227 , 195 ) ;
     Text = "Phonetisches Leitzeichen" ;
     Text [ ENGLISH ] = "Ruby" ;
     Moveable = TRUE ;
@@ -102,63 +102,112 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ catalan ] = "Reconocimiento autom·tico";
         Text[ finnish ] = "Automatische Erkennung";
     };
-    Window HB_HEADER
+    FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 195 , 20 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text = "~Basistext";
+        Text [English] = "Basis text";
+        Text[ english_us ] = "Base text";
+        Text[ portuguese ] = "Texto-base";
+        Text[ russian ] = "ŒÒÌÓ‚ÌÓÈ ÚÂÍÒÚ";
+        Text[ greek ] = "¬·ÛÈÍ¸ ÍÂﬂÏÂÌÔ";
+        Text[ dutch ] = "Basistekst";
+        Text[ french ] = "Texte de base";
+        Text[ spanish ] = "Texto base";
+        Text[ italian ] = "Testo base";
+        Text[ danish ] = "Basis text";
+        Text[ swedish ] = "Bastext";
+        Text[ polish ] = "Tekst podstawowy";
+        Text[ portuguese_brazilian ] = "Basis text";
+        Text[ japanese ] = "ëŒè€ï∂éöóÒ";
+        Text[ korean ] = "±‚∫ª ≈ÿΩ∫∆Æ";
+        Text[ chinese_simplified ] = "÷˜Œƒ◊÷";
+        Text[ chinese_traditional ] = "•D§Â¶r";
+        Text[ turkish ] = "Basis text";
+        Text[ arabic ] = "«·‰’ «·√”«”Ì";
+        Text[ catalan ] = "Texto base";
+        Text[ finnish ] = "Basistext";
+    };
+    FixedText FT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 109 , 17 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text = "~Ruby-Text";
+        Text [English] = "Ruby text";
+        Text[ english_us ] = "Ruby text";
+        Text[ portuguese ] = "Texto Ruby";
+        Text[ russian ] = "“‡ÌÒÎËÚÂ‡ˆËˇ";
+        Text[ greek ] = " ÂﬂÏÂÌÔ Ruby";
+        Text[ dutch ] = "Ruby-tekst";
+        Text[ french ] = "Texte Ruby";
+        Text[ spanish ] = "Texto ruby";
+        Text[ italian ] = "Testo ruby";
+        Text[ danish ] = "Ruby text";
+        Text[ swedish ] = "Ruby-text";
+        Text[ polish ] = "Transliteracja";
+        Text[ portuguese_brazilian ] = "Ruby text";
+        Text[ japanese ] = "ŸÀﬁï∂éö";
+        Text[ korean ] = "∑Á∫Ò ≈ÿΩ∫∆Æ";
+        Text[ chinese_simplified ] = "∆¥“ÙªÚ◊¢“Ù∑˚∫≈";
+        Text[ chinese_traditional ] = "™`≠µ≤≈∏π";
+        Text[ turkish ] = "Ruby text";
+        Text[ arabic ] = "‰’ \"—Ê»Ì\"";
+        Text[ catalan ] = "Texto ruby";
+        Text[ finnish ] = "Ruby-Text";
     };
     Edit ED_LEFT_1
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Hide = False;
         Border = TRUE;
     };
     Edit ED_RIGHT_1
     {
-        Pos = MAP_APPFONT ( 99 , 30 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 109 , 30 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_2
     {
         Pos = MAP_APPFONT ( 6 ,  42) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_2
     {
-        Pos = MAP_APPFONT ( 99 , 42 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 109 , 42 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_3
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_3
     {
-        Pos = MAP_APPFONT ( 99 , 54 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 109 , 54 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_LEFT_4
     {
         Pos = MAP_APPFONT ( 6 , 66 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     Edit ED_RIGHT_4
     {
-        Pos = MAP_APPFONT ( 99 , 66 ) ;
-        Size = MAP_APPFONT ( 92 , 12 ) ;
+        Pos = MAP_APPFONT ( 109 , 66 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
         Border = TRUE;
     };
     ScrollBar SB_SCROLL
     {
-        Pos = MAP_APPFONT ( 193 , 30 ) ;
+        Pos = MAP_APPFONT ( 213 , 30 ) ;
         Size = MAP_APPFONT ( 8 , 48 ) ;
         VScroll = TRUE ;
         Drag = TRUE ;
@@ -166,8 +215,8 @@ ModelessDialog RID_SVXDLG_RUBY
     FixedText FT_ADJUST
     {
         Pos = MAP_APPFONT ( 6 , 82 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Ausrichtung" ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Text = "~Ausrichtung" ;
         Text [ ENGLISH ] = "Adjust" ;
         Text[ english_us ] = "Alignment";
         Text[ portuguese ] = "Alinhamento";
@@ -193,7 +242,7 @@ ModelessDialog RID_SVXDLG_RUBY
     ListBox LB_ADJUST
     {
         Pos = MAP_APPFONT ( 6 , 93) ;
-        Size = MAP_APPFONT ( 40 , 60 ) ;
+        Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
         StringList =
@@ -381,11 +430,35 @@ ModelessDialog RID_SVXDLG_RUBY
          "1 2 1" ;
     };
     };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 43 , 82 ) ;
+        Size = MAP_APPFONT ( 35 , 8 ) ;
+        Text = "~Position" ;
+        Text [ ENGLISH ] = "Position" ;
+    };
+    ListBox LB_POSITION
+    {
+        Pos = MAP_APPFONT ( 43 , 93) ;
+        Size = MAP_APPFONT ( 35 , 60 ) ;
+        DropDown = TRUE;
+        Border = TRUE;
+        StringList =
+        {
+            "Oben" ;
+            "Unten" ;
+        };
+        StringList [English] =
+        {
+            "Top" ;
+            "Bottom" ;
+        };
+    };
     FixedText FT_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 49 , 82 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Zeichenvorlage f¸r Ruby-Text" ;
+        Pos = MAP_APPFONT ( 80 , 82 ) ;
+        Size = MAP_APPFONT ( 89 , 8 ) ;
+        Text = "~Zeichenvorlage f¸r Ruby-Text" ;
         Text [ ENGLISH ] = "Character style for ruby text" ;
         Text[ english_us ] = "Character Style for ruby text";
         Text[ portuguese ] = "Estilo de caracteres para texto Ruby";
@@ -410,104 +483,17 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     ListBox LB_CHAR_STYLE
     {
-        Pos = MAP_APPFONT ( 49 , 93) ;
-        Size = MAP_APPFONT ( 99 , 60 ) ;
+        Pos = MAP_APPFONT ( 80 , 93) ;
+        Size = MAP_APPFONT ( 89 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList =
-        {
-            < "<Keine>" ; > ;
-        };
-        stringlist [ english_us ] =
-        {
-            < "<None>" ; > ;
-        };
-    StringList [ language_user1 ] =
-    {
-             < "<Keine>" ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-             < "<Nenhum>" ; > ;
-    };
-    StringList [ russian ] =
-    {
-             < "<¡ÂÁ>" ; > ;
-    };
-    StringList [ greek ] =
-    {
-             < "<Í·Ì›Ì·>" ; > ;
-    };
-    StringList [ dutch ] =
-    {
-             < "<geen>" ; > ;
-    };
-    StringList [ french ] =
-    {
-             < "<Aucun>" ; > ;
-    };
-    StringList [ spanish ] =
-    {
-             < "<ninguno>" ; > ;
-    };
-    StringList [ italian ] =
-    {
-             < "<nessuno>" ; > ;
-    };
-    StringList [ danish ] =
-    {
-             < "<ingen>" ; > ;
-    };
-    StringList [ swedish ] =
-    {
-             < "<Ingen>" ; > ;
-    };
-    StringList [ polish ] =
-    {
-             < "<Brak>" ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-             < "<Keine>" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-             < "<Ç»Çµ>" ; > ;
-    };
-    StringList [ korean ] =
-    {
-             < "<æ¯¿Ω>" ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-             < "<Œﬁ>" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-             < "<µL>" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-             < "<yok>" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-             < "<»œÊ‰>" ; > ;
-    };
-    StringList [ catalan ] =
-    {
-             < "<ninguno>" ; > ;
-    };
-    StringList [ finnish ] =
-    {
-             < "<Ei mit‰‰n>" ; > ;
-    };
+        Sort = TRUE;
     };
     PushButton PB_STYLIST
     {
-        Pos = MAP_APPFONT ( 151 , 92 ) ;
+        Pos = MAP_APPFONT ( 171 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Stylist" ;
+        Text = "~Stylist" ;
         Text [ ENGLISH ] = "Stylist" ;
         Text[ english_us ] = "Stylist";
         Text[ portuguese ] = "Estilista";
@@ -560,13 +546,13 @@ ModelessDialog RID_SVXDLG_RUBY
     Window WIN_PREVIEW
     {
         Pos = MAP_APPFONT ( 6 , 121 ) ;
-        Size = MAP_APPFONT ( 195 , 50 ) ;
+        Size = MAP_APPFONT ( 215 , 50 ) ;
     };
     OKButton PB_APPLY
     {
-        Pos = MAP_APPFONT ( 45 , 175 ) ;
+        Pos = MAP_APPFONT ( 65 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "‹bernehmen" ;
+        Text = "~‹bernehmen" ;
         Text [ ENGLISH ] = "Apply" ;
         Text[ english_us ] = "Apply";
         Text[ portuguese ] = "Aplicar";
@@ -591,9 +577,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     PushButton PB_CLOSE
     {
-        Pos = MAP_APPFONT (  98, 175 ) ;
+        Pos = MAP_APPFONT (  118, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Schlieﬂen" ;
+        Text = "Sch~lieﬂen" ;
         Text [ ENGLISH ] = "Close" ;
         Text[ english_us ] = "Close";
         Text[ portuguese ] = "Fechar";
@@ -618,58 +604,8 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     HelpButton PB_HELP
     {
-        Pos = MAP_APPFONT ( 151 , 175 ) ;
+        Pos = MAP_APPFONT ( 171 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String ST_BASE
-    {
-        Text = "Basistext";
-        Text [English] = "Basis text";
-        Text[ english_us ] = "Base text";
-        Text[ portuguese ] = "Texto-base";
-        Text[ russian ] = "ŒÒÌÓ‚ÌÓÈ ÚÂÍÒÚ";
-        Text[ greek ] = "¬·ÛÈÍ¸ ÍÂﬂÏÂÌÔ";
-        Text[ dutch ] = "Basistekst";
-        Text[ french ] = "Texte de base";
-        Text[ spanish ] = "Texto base";
-        Text[ italian ] = "Testo base";
-        Text[ danish ] = "Basis text";
-        Text[ swedish ] = "Bastext";
-        Text[ polish ] = "Tekst podstawowy";
-        Text[ portuguese_brazilian ] = "Basis text";
-        Text[ japanese ] = "ëŒè€ï∂éöóÒ";
-        Text[ korean ] = "±‚∫ª ≈ÿΩ∫∆Æ";
-        Text[ chinese_simplified ] = "÷˜Œƒ◊÷";
-        Text[ chinese_traditional ] = "•D§Â¶r";
-        Text[ turkish ] = "Basis text";
-        Text[ arabic ] = "«·‰’ «·√”«”Ì";
-        Text[ catalan ] = "Texto base";
-        Text[ finnish ] = "Basistext";
-    };
-    String ST_RUBY
-    {
-        Text = "Ruby-Text";
-        Text [English] = "Ruby text";
-        Text[ english_us ] = "Ruby text";
-        Text[ portuguese ] = "Texto Ruby";
-        Text[ russian ] = "“‡ÌÒÎËÚÂ‡ˆËˇ";
-        Text[ greek ] = " ÂﬂÏÂÌÔ Ruby";
-        Text[ dutch ] = "Ruby-tekst";
-        Text[ french ] = "Texte Ruby";
-        Text[ spanish ] = "Texto ruby";
-        Text[ italian ] = "Testo ruby";
-        Text[ danish ] = "Ruby text";
-        Text[ swedish ] = "Ruby-text";
-        Text[ polish ] = "Transliteracja";
-        Text[ portuguese_brazilian ] = "Ruby text";
-        Text[ japanese ] = "ŸÀﬁï∂éö";
-        Text[ korean ] = "∑Á∫Ò ≈ÿΩ∫∆Æ";
-        Text[ chinese_simplified ] = "∆¥“ÙªÚ◊¢“Ù∑˚∫≈";
-        Text[ chinese_traditional ] = "™`≠µ≤≈∏π";
-        Text[ turkish ] = "Ruby text";
-        Text[ arabic ] = "‰’ \"—Ê»Ì\"";
-        Text[ catalan ] = "Texto ruby";
-        Text[ finnish ] = "Ruby-Text";
     };
     Text[ english_us ] = "Ruby";
     Text[ portuguese ] = "Ruby";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-04-17 13:35:37 $
+ *  last change: $Author: os $ $Date: 2001-06-01 10:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,10 @@ static const sal_Char cRubyBaseText[] = "RubyBaseText";
 static const sal_Char cRubyText[] = "RubyText";
 static const sal_Char cCharacterStyles[] = "CharacterStyles";
 static const sal_Char cRubyAdjust[] = "RubyAdjust";
+static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
 static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
+static const sal_Char cPhoneticSymbols[] = "Phonetic Symbols";
 /* -----------------------------09.01.01 17:24--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -164,7 +166,8 @@ struct SvxRubyData_Impl
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, pParent, rResId ),
-    aHeaderHB(this,             ResId(HB_HEADER  )),
+    aLeftFT(this,               ResId(FT_LEFT )),
+    aRightFT(this,              ResId(FT_RIGHT  )),
     aLeft1ED(this,              ResId(ED_LEFT_1  )),
     aRight1ED(this,             ResId(ED_RIGHT_1 )),
     aLeft2ED(this,              ResId(ED_LEFT_2  )),
@@ -177,6 +180,8 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aAutoDetectionCB(this,      ResId(CB_AUTO_DETECT    )),
     aAdjustFT(this,             ResId(FT_ADJUST     )),
     aAdjustLB(this,             ResId(LB_ADJUST     )),
+    aPositionFT(this,           ResId(FT_POSITION     )),
+    aPositionLB(this,           ResId(LB_POSITION     )),
     aCharStyleFT(this,          ResId(FT_CHAR_STYLE     )),
     aCharStyleLB(this,          ResId(LB_CHAR_STYLE     )),
     aStylistPB(this,            ResId(PB_STYLIST        )),
@@ -185,8 +190,6 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aApplyPB(this,              ResId(PB_APPLY          )),
     aClosePB(this,              ResId(PB_CLOSE          )),
     aHelpPB(this,               ResId(PB_HELP           )),
-    sBaseText(ResId(ST_BASE)),
-    sRubyText(ResId(ST_RUBY)),
     pBindings(pBind),
     nLastPos(0),
     nCurrentEdit(0),
@@ -203,10 +206,9 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aApplyPB.SetClickHdl(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
     aClosePB.SetClickHdl(LINK(this, SvxRubyDialog, CloseHdl_Impl));
     aStylistPB.SetClickHdl(LINK(this, SvxRubyDialog, StylistHdl_Impl));
-    aHeaderHB.SetDragHdl( LINK(this, SvxRubyDialog, DragHdl_Impl));
-    aHeaderHB.SetEndDragHdl( LINK(this, SvxRubyDialog, DragHdl_Impl));
     aAutoDetectionCB.SetClickHdl(LINK(this, SvxRubyDialog, AutomaticHdl_Impl));
     aAdjustLB.SetSelectHdl(LINK(this, SvxRubyDialog, AdjustHdl_Impl));
+    aPositionLB.SetSelectHdl(LINK(this, SvxRubyDialog, PositionHdl_Impl));
     aCharStyleLB.SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
     Link aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
@@ -217,15 +219,6 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     for(USHORT i = 0; i < 8; i++)
         aEditArr[i]->SetModifyHdl(aEditLk);
-
-    long nWidth = aHeaderHB.GetSizePixel().Width();
-    aHeaderHB.InsertItem( 1, sBaseText, nWidth/2 );
-    aHeaderHB.InsertItem( 2, sRubyText, nWidth/2 );
-    aHeaderHB.SetStyle(aHeaderHB.GetStyle()|WB_STDHEADERBAR|WB_TABSTOP|WB_BORDER);
-     Size aHBSize(aHeaderHB.GetSizePixel());
-    aHBSize.Height() = aHeaderHB.CalcWindowSizePixel().Height();
-    aHeaderHB.SetSizePixel(aHBSize);
-    aHeaderHB.Show();
 }
 /* -----------------------------09.01.01 17:17--------------------------------
 
@@ -240,7 +233,7 @@ SvxRubyDialog::~SvxRubyDialog()
  ---------------------------------------------------------------------------*/
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for(USHORT i = 1; i < aCharStyleLB.GetEntryCount(); i++)
+    for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
     {
         void* pData = aCharStyleLB.GetEntryData(i);
         delete (OUString*)pData;
@@ -407,6 +400,7 @@ void SvxRubyDialog::Update()
     SetModified(FALSE);
 
     sal_Int16 nAdjust = -1;
+    sal_Int16 nPosition = -1;
     OUString sCharStyleName, sTmp;
     sal_Bool bCharStyleEqual = sal_True;
     for(sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
@@ -425,6 +419,15 @@ void SvxRubyDialog::Update()
                 else if(nAdjust != nTmp)
                     nAdjust = -2;
             }
+            if(nPosition > -2 &&
+                pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyIsAbove)))
+            {
+                sal_Bool bTmp = *(sal_Bool*)pProps[nProp].Value.getValue();
+                if(!nRuby)
+                    nPosition = bTmp ? 0 : 1;
+                else  if(!nPosition && !bTmp || nPosition == 1 && bTmp  )
+                    nPosition = -2;
+            }
             if(bCharStyleEqual &&
                 pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyCharStyleName)))
             {
@@ -440,10 +443,22 @@ void SvxRubyDialog::Update()
         aAdjustLB.SelectEntryPos(nAdjust);
     else
         aAdjustLB.SetNoSelection();
+    if(nPosition > -1)
+        aPositionLB.SelectEntryPos(nPosition ? 1 : 0);
+    if(bCharStyleEqual && !sCharStyleName.getLength())
+        sCharStyleName = C2U(cPhoneticSymbols);
     if(sCharStyleName.getLength())
-        aCharStyleLB.SelectEntry(sCharStyleName);
-    else if(bCharStyleEqual)
-        aCharStyleLB.SelectEntryPos(0);
+    {
+        for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
+        {
+            const OUString* pCoreName = (const OUString*)aCharStyleLB.GetEntryData(i);
+            if(pCoreName && sCharStyleName == *pCoreName)
+            {
+                aCharStyleLB.SelectEntryPos(i);
+                break;
+            }
+        }
+    }
     else
         aCharStyleLB.SetNoSelection();
 
@@ -541,6 +556,27 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
     aPreviewWin.Invalidate();
     return 0;
 }
+/* -----------------------------01.06.01 10:24--------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
+{
+    sal_Bool bAbove = !pBox->GetSelectEntryPos();
+    const Type& rType = ::getBooleanCppuType();
+    for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
+    {
+        Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
+        PropertyValue* pProps = rProps.getArray();
+        for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
+        {
+            if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyIsAbove)))
+                pProps[nProp].Value.setValue(&bAbove, rType);
+        }
+        SetModified(TRUE);
+    }
+    aPreviewWin.Invalidate();
+    return 0;
+}
 /* -----------------------------01.02.01 10:06--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -596,19 +632,6 @@ void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
     rRight.SetPosSizePixel(aRightPos, aRightSz);
 
 }
-//-----------------------------------------------------------------------------
-IMPL_LINK(SvxRubyDialog, DragHdl_Impl, HeaderBar*, pHead)
-{
-    SetUpdateMode(FALSE);
-    Size aLeftSz(aLeft1ED.GetSizePixel());
-    long nOffset = pHead->GetItemSize( 1 ) - aLeftSz.Width();
-    lcl_MoveBox(nOffset, aLeft1ED, aRight1ED);
-    lcl_MoveBox(nOffset, aLeft2ED, aRight2ED);
-    lcl_MoveBox(nOffset, aLeft3ED, aRight3ED);
-    lcl_MoveBox(nOffset, aLeft4ED, aRight4ED);
-    SetUpdateMode(TRUE);
-    return 0;
-}
 /* -----------------------------16.02.01 08:09--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -654,6 +677,15 @@ void RubyPreview::Paint( const Rectangle& rRect )
 
     long nYRuby = aWinSize.Height() / 4 - nTextHeight / 2;
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
+
+    //use above also if no selection is set
+    BOOL bAbove = rParentDlg.aPositionLB.GetSelectEntryPos() != 1;
+    if(!bAbove)
+    {
+        long nTmp = nYRuby;
+        nYRuby = nYBase;
+        nYBase = nTmp;
+    }
     long nYOutput, nOutTextWidth;
     String sOutputText;
 

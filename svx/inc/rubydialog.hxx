@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-16 14:46:51 $
+ *  last change: $Author: os $ $Date: 2001-06-01 10:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
-#ifndef _HEADBAR_HXX
-#include <svtools/headbar.hxx>
-#endif
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -125,8 +122,9 @@ class SvxRubyDialog : public SfxModelessDialog
 {
     friend class RubyPreview;
 
-    HeaderBar           aHeaderHB;
+    FixedText               aLeftFT;
     RubyEdit                aLeft1ED;
+    FixedText               aRightFT;
     RubyEdit                aRight1ED;
     RubyEdit                aLeft2ED;
     RubyEdit                aRight2ED;
@@ -143,6 +141,9 @@ class SvxRubyDialog : public SfxModelessDialog
     FixedText           aAdjustFT;
     ListBox             aAdjustLB;
 
+    FixedText           aPositionFT;
+    ListBox             aPositionLB;
+
     FixedText           aCharStyleFT;
     ListBox             aCharStyleLB;
     PushButton          aStylistPB;
@@ -154,9 +155,6 @@ class SvxRubyDialog : public SfxModelessDialog
     PushButton          aClosePB;
     HelpButton          aHelpPB;
 
-    String              sBaseText;
-    String              sRubyText;
-
     long                nLastPos;
     long                nCurrentEdit;
     BOOL                bModified;
@@ -167,9 +165,9 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK(ApplyHdl_Impl, PushButton*);
     DECL_LINK(CloseHdl_Impl, PushButton*);
     DECL_LINK(StylistHdl_Impl, PushButton*);
-    DECL_LINK(DragHdl_Impl, HeaderBar*);
     DECL_LINK(AutomaticHdl_Impl, CheckBox*);
     DECL_LINK(ScrollHdl_Impl, ScrollBar*);
+    DECL_LINK(PositionHdl_Impl, ListBox*);
     DECL_LINK(AdjustHdl_Impl, ListBox*);
     DECL_LINK(CharStyleHdl_Impl, ListBox*);
     DECL_LINK(EditModifyHdl_Impl, Edit*);
@@ -189,7 +187,8 @@ class SvxRubyDialog : public SfxModelessDialog
 
     void EnableControls(sal_Bool bEnable)
         {
-            aHeaderHB.Enable(bEnable);
+            aLeftFT.Enable(bEnable);
+            aRightFT.Enable(bEnable);
             aLeft1ED.Enable(bEnable);
             aRight1ED.Enable(bEnable);
             aLeft2ED.Enable(bEnable);

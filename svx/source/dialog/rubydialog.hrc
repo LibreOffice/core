@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:41:31 $
+ *  last change: $Author: os $ $Date: 2001-06-01 10:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,10 @@
 #define ED_RIGHT_4              17
 #define HB_HEADER               18
 #define SB_SCROLL               19
-#define ST_BASE                 20
-#define ST_RUBY                 21
+#define FT_LEFT                 20
+#define FT_RIGHT                21
 #define FT_ADJUST               22
 #define LB_ADJUST               23
+#define FT_POSITION             24
+#define LB_POSITION             25
 
