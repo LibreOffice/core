@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:51 $
+ *  last change: $Author: mib $ $Date: 2001-10-22 14:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,159 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_C_QUOT, "QUOT" );
 
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_COPY, "COPY" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_REG, "REG" );
+
+//HTML4
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_alefsym, "alefsym" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Alpha, "Alpha" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_alpha, "alpha" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_and, "and" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ang, "ang" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_asymp, "asymp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_bdquo, "bdquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Beta, "Beta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_beta, "beta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_bull, "bull" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_cap, "cap" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_chi, "chi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_circ, "circ" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_clubs, "clubs" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_cong, "cong" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_crarr, "crarr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_cup, "cup" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_dagger, "dagger" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Dagger, "Dagger" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_darr, "darr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_dArr, "dArr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Delta, "Delta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_delta, "delta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_diams, "diams" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_empty, "empty" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_emsp, "emsp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ensp, "ensp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Epsilon, "Epsilon" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_epsilon, "epsilon" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_equiv, "equiv" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Eta, "Eta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_eta, "eta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_euro, "euro" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_exist, "exist" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_fnof, "fnof" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_forall, "forall" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_frasl, "frasl" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Gamma, "Gamma" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_gamma, "gamma" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ge, "ge" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_harr, "harr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_hArr, "hArr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_hearts, "hearts" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_hellip, "hellip" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_image, "image" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_infin, "infin" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_int, "int" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Iota, "Iota" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_iota, "iota" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_isin, "isin" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Kappa, "Kappa" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_kappa, "kappa" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Lambda, "Lambda" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lambda, "lambda" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lang, "lang" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_larr, "larr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lArr, "lArr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lceil, "lceil" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ldquo, "ldquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_le, "le" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lfloor, "lfloor" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lowast, "lowast" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_loz, "loz" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lrm, "lrm" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lsaquo, "lsaquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_lsquo, "lsquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_mdash, "mdash" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_minus, "minus" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Mu, "Mu" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_mu, "mu" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_nabla, "nabla" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ndash, "ndash" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ne, "ne" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_ni, "ni" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_notin, "notin" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_nsub, "nsub" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Nu, "Nu" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_nu, "nu" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_OElig, "OElig" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_oelig, "oelig" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_oline, "oline" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Omega, "Omega" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_omega, "omega" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Omicron, "Omicron" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_omicron, "omicron" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_oplus, "oplus" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_or, "or" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_otimes, "otimes" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_part, "part" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_permil, "permil" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_perp, "perp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Phi, "Phi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_phi, "phi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Pi, "Pi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_pi, "pi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_piv, "piv" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_prime, "prime" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Prime, "Prime" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_prod, "prod" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_prop, "prop" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Psi, "Psi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_psi, "psi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_radic, "radic" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rang, "rang" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rarr, "rarr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rArr, "rArr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rceil, "rceil" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rdquo, "rdquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_real, "real" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rfloor, "rfloor" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Rho, "Rho" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rho, "rho" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rlm, "rlm" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rsaquo, "rsaquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_rsquo, "rsquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sbquo, "sbquo" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Scaron, "Scaron" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_scaron, "scaron" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sdot, "sdot" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Sigma, "Sigma" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sigma, "sigma" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sigmaf, "sigmaf" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sim, "sim" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_spades, "spades" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sub, "sub" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sube, "sube" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sum, "sum" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_sup, "sup" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_supe, "supe" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Tau, "Tau" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_tau, "tau" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_there4, "there4" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Theta, "Theta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_theta, "theta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_thetasym, "thetasym" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_thinsp, "thinsp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_tilde, "tilde" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_trade, "trade" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_uarr, "uarr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_uArr, "uArr" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_upsih, "upsih" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Upsilon, "Upsilon" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_upsilon, "upsilon" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_weierp, "weierp" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Xi, "Xi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_xi, "xi" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Yuml, "Yuml" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_Zeta, "Zeta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_zeta, "zeta" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_zwj, "zwj" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sHTML_S_zwnj, "zwnj" );
 
 // HTML Attribut-Token (=Optionen)
 
