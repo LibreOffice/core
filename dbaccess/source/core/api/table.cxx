@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:05:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 07:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,8 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
             aOwnTypes.push_back(*pBegin);
     }
 
-    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+    return Sequence< Type >(pTypes, aOwnTypes.size());
 }
 // XRename,
 //------------------------------------------------------------------------------
