@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:05:08 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2393,7 +2393,7 @@ String STR_INSERT_URLTXT
 {
     Text = "Hyperlink einfügen" ;
     Text [ ENGLISH ] = "insert Hyperlink" ;
-    Text[ english_us ] = "insert Hyperlink";
+    Text[ english_us ] = "Insert Hyperlink";
     Text[ portuguese ] = "Inserir hiperligação";
     Text[ russian ] = "Âñòàâèòü ãèïåğññûëêó";
     Text[ dutch ] = "Hyperlink invoegen";
