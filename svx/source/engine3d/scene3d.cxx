@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:37:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,7 +1369,7 @@ void E3dScene::FillLightGroup()
                         // ambientes licht, auf globales aufaddieren
                         B3dColor aCol(pLight->GetColor().GetColor());
                         aCol *= pLight->GetIntensity();
-                        aCol += (B3dColor &)aLightGroup.GetGlobalAmbientLight();
+                        aCol += (const B3dColor &)aLightGroup.GetGlobalAmbientLight();
                         aLightGroup.SetGlobalAmbientLight(aCol);
                     }
                 }
