@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 08:31:24 $
+ *  last change: $Author: pl $ $Date: 2002-09-04 15:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,7 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 // appends a double. PDF does not accept exponential format, only fixed point
 static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision = 5 )
 {
-    ByteString aStr( ByteString::CreateFromDouble( ( (sal_Int64)( fValue * 10000.0 ) ) * 0.0001 ) );
-    rBuffer.append( aStr );
-/*
-    if( fValue < 0 )
+    if( fValue < 0.0 )
     {
         rBuffer.append( '-' );
         fValue=-fValue;
@@ -142,7 +139,6 @@ static void appendDouble( double fValue, OStringBuffer& rBuffer, int nPrecision 
             rBuffer.append( nInt );
         }
     }
-*/
 }
 
 
@@ -2482,6 +2478,9 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
+
     OStringBuffer aLine;
     m_aPages.back().appendPoint( rStart, aLine );
     aLine.append( " m " );
@@ -2495,6 +2494,9 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
 {
     MARK( "drawLine with LineInfo" );
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
 
 #if 1
     if( rInfo.GetStyle() == LINE_SOLID && rInfo.GetWidth() < 2 )
@@ -2545,6 +2547,9 @@ void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_I
 
     MARK( "drawWaveLine" );
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
 
     OStringBuffer aLine( 512 );
     aLine.append( "q " );
@@ -2934,6 +2939,10 @@ void PDFWriterImpl::drawPolygon( const Polygon& rPoly )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
+
     int nPoints = rPoly.GetSize();
     OStringBuffer aLine( 20 * nPoints );
     m_aPages.back().appendPolygon( rPoly, aLine );
@@ -2953,6 +2962,10 @@ void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly )
     MARK( "drawPolyPolygon" );
 
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
 
     int nPolygons = rPolyPoly.Count();
 
@@ -2974,6 +2987,10 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
     MARK( "drawTransparent" );
 
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
 
     if( m_eVersion < PDFWriter::PDF_1_4 )
     {
@@ -3012,6 +3029,10 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
+
     OStringBuffer aLine( 40 );
     m_aPages.back().appendRect( rRect, aLine );
 
@@ -3034,6 +3055,10 @@ void PDFWriterImpl::drawRectangle( const Rectangle& rRect, sal_uInt32 nHorzRound
         drawRectangle( rRect );
 
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
 
     if( nHorzRound > (sal_uInt32)rRect.GetWidth()/2 )
         nHorzRound = rRect.GetWidth()/2;
@@ -3119,6 +3144,10 @@ void PDFWriterImpl::drawEllipse( const Rectangle& rRect )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
+
     Point aPoints[12];
     const double kappa = 0.5522847498;
     const sal_uInt32 kx = (sal_uInt32)((kappa*(double)rRect.GetWidth()/2.0)+0.5);
@@ -3197,6 +3226,10 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     MARK( "drawArc" );
 
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
 
     // calculate start and stop angles
     double fStartAngle = calcAngle( rRect, rStart );
@@ -3279,6 +3312,9 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
+
     int nPoints = rPoly.GetSize();
     OStringBuffer aLine( 20 * nPoints );
     m_aPages.back().appendPolygon( rPoly, aLine, false );
@@ -3293,6 +3329,9 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
+        return;
+
     OStringBuffer aLine;
     aLine.append( "q " );
     m_aPages.back().appendLineInfo( rInfo,aLine );
@@ -3306,6 +3345,9 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
     MARK( "drawPixel" );
 
     Color aColor = ( rColor == Color( COL_TRANSPARENT ) ? m_aGraphicsStack.front().m_aLineColor : rColor );
+
+    if( aColor == Color( COL_TRANSPARENT ) )
+        return;
 
     // pixels are drawn in line color, so have to set
     // the nonstroking color to line color
@@ -3328,6 +3370,9 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
 
     updateGraphicsState();
 
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) && ! pColors )
+        return;
+
     int nPoints = rPoints.GetSize();
     OStringBuffer aLine( nPoints*40 );
     aLine.append( "q " );
@@ -3341,6 +3386,9 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     {
         if( pColors )
         {
+            if( pColors[i] == Color( COL_TRANSPARENT ) )
+                continue;
+
             appendNonStrokingColor( pColors[i], aLine );
             aLine.append( ' ' );
         }
@@ -3941,9 +3989,13 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
 {
     MARK( "drawHatch" );
 
-    sal_Int32 nHatch = createHatch( rHatch );
-
     updateGraphicsState();
+
+    if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
+        m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
+        return;
+
+    sal_Int32 nHatch = createHatch( rHatch );
 
     OStringBuffer aLine( 256 );
     aLine.append( "q /Pattern cs /P" );
