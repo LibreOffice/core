@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:57:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,7 @@ void SdrOle2Obj::SetPersistName( const String& rPersistName )
         Disconnect();
 
     mpImpl->aPersistName = rPersistName;
+    mpImpl->mbLoadingOLEObjectFailed = false;
 
     Connect();
 
