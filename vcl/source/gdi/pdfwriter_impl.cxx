@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2002-10-09 13:29:29 $
+ *  last change: $Author: pl $ $Date: 2002-10-10 15:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,16 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
         rBuffer.append( '.' );
         rBuffer.append( nDecimal );
     }
+}
+
+void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical )
+{
+    Size aSize = OutputDevice::LogicToLogic( Size( 1000, 1000 ),
+                                             m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                                             m_pWriter->m_aMapMode );
+
+    fLength *= (double)(bVertical ? aSize.Height() : aSize.Width()) / 10000.0;
+    appendDouble( fLength, rBuffer );
 }
 
 void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffer& rBuffer )
@@ -2243,13 +2253,40 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUn
     }
 }
 
-void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText, bool bTextLines )
+void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines )
 {
+    if( m_aCurrentPDFState.m_aFont.IsShadow() )
+    {
+        Font aSaveFont = m_aCurrentPDFState.m_aFont;
+        Font& rFont = m_aCurrentPDFState.m_aFont;
+        if( rFont.GetColor() == Color( COL_BLACK ) || rFont.GetColor().GetLuminance() < 8 )
+            rFont.SetColor( Color( COL_LIGHTGRAY ) );
+        else
+            rFont.SetColor( Color( COL_BLACK ) );
+        rFont.SetShadow( FALSE );
+
+        long nOff = 1 + ((m_pReferenceDevice->mpFontEntry->mnLineHeight-24)/24);
+        if( rFont.IsOutline() )
+            nOff++;
+        rLayout.DrawBase() += Point( nOff, nOff );
+        drawLayout( rLayout, rText, false );
+        rLayout.DrawBase() -= Point( nOff, nOff );
+        m_aCurrentPDFState.m_aFont = aSaveFont;
+    }
+
     OStringBuffer aLine( 512 );
 
     // setup text colors (if necessary)
     bool bPop = false;
-    if( m_aCurrentPDFState.m_aFillColor != m_aCurrentPDFState.m_aFont.GetColor() )
+    if( m_aCurrentPDFState.m_aFont.IsOutline() &&
+        m_aCurrentPDFState.m_aLineColor != m_aCurrentPDFState.m_aFont.GetColor() )
+    {
+        bPop = true;
+        aLine.append( "q " );
+        appendStrokingColor( m_aCurrentPDFState.m_aFont.GetColor(), aLine );
+        aLine.append( "\r\n" );
+    }
+    else if( m_aCurrentPDFState.m_aFillColor != m_aCurrentPDFState.m_aFont.GetColor() )
     {
         bPop = true;
         aLine.append( "q " );
@@ -2259,6 +2296,14 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText, b
 
     // begin text object
     aLine.append( "BT\r\n" );
+    // outline attribute ?
+    if( m_aCurrentPDFState.m_aFont.IsOutline() )
+    {
+        aLine.append( "1 Tr " );
+        double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
+        m_aPages.back().appendMappedLength( fW, aLine );
+        aLine.append ( " w\r\n" );
+    }
 
     const int nMaxGlyphs = 256;
 

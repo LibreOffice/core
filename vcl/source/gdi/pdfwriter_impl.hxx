@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-08 19:38:58 $
+ *  last change: $Author: pl $ $Date: 2002-10-10 15:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ public:
         // can be important if the source MapMode is not
         // symmetrical) to page length and appends it to the buffer
         void appendMappedLength( sal_Int32 nLength, rtl::OStringBuffer& rBuffer, bool bVertical = true );
+        // the same for double values
+        void appendMappedLength( double fLength, rtl::OStringBuffer& rBuffer, bool bVertical = true );
         // appends LineInfo
         void appendLineInfo( const LineInfo& rInfo, rtl::OStringBuffer& rBuffer );
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
@@ -393,7 +395,7 @@ private:
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
-    void drawLayout( const SalLayout& rLayout, const String& rText, bool bTextLines );
+    void drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines );
 
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
