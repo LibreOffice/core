@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:34:14 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_COPY
     Text [ italian ] = "Duplicato" ;
     Text [ portuguese_brazilian ] = "Duplicar" ;
     Text [ portuguese ] = "Duplicar" ;
-    Text [ finnish ] = "Monista" ;
+    Text [ finnish ] = "Kopioi" ;
     Text [ danish ] = "Dupliker" ;
     Text [ french ] = "Dupliquer" ;
     Text [ swedish ] = "Duplicera" ;
@@ -133,6 +133,7 @@ ModalDialog DLG_COPY
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Werte von Selektion aufnehmen";
         QuickHelpText[ catalan ] = "Valores seleccionados";
+        QuickHelpText[ finnish ] = "Valinnan arvot!";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -176,6 +177,7 @@ ModalDialog DLG_COPY
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
+        Text[ finnish ] = "~Oletusarvo";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -212,6 +214,7 @@ ModalDialog DLG_COPY
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "grados";
+        CustomUnitText[ finnish ] = " asteet";
     };
     FixedText FT_COPIES
     {
@@ -223,7 +226,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Numero di ~copie" ;
         Text [ portuguese_brazilian ] = "Número de ~Cópias" ;
         Text [ portuguese ] = "Número de ~cópias" ;
-        Text [ finnish ] = "K~opioita" ;
+        Text [ finnish ] = "~Kopioiden määrä" ;
         Text [ danish ] = "Antal kopier" ;
         Text [ french ] = "Nombre de co~pies" ;
         Text [ swedish ] = "Antal ~kopior" ;
@@ -437,7 +440,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "~Altezza" ;
         Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "Al~tura" ;
-        Text [ finnish ] = "Ko~rkeus" ;
+        Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "Højde" ;
         Text [ french ] = "~Hauteur" ;
         Text [ swedish ] = "Höj~d" ;
@@ -466,7 +469,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Spostamento" ;
         Text [ portuguese_brazilian ] = "Movimento" ;
         Text [ portuguese ] = "Deslocamento" ;
-        Text [ finnish ] = "Liike" ;
+        Text [ finnish ] = "Sijoitus" ;
         Text [ danish ] = "Flytning" ;
         Text [ french ] = "Déplacement" ;
         Text [ swedish ] = "Placering" ;
@@ -543,6 +546,7 @@ ModalDialog DLG_COPY
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores";
+        Text[ finnish ] = "Värit";
     };
     ListBox LB_START_COLOR
     {
@@ -583,6 +587,7 @@ ModalDialog DLG_COPY
         Text[ turkish ] = "Ýlk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Comienzo";
+        Text[ finnish ] = "~Aloita";
     };
     ListBox LB_END_COLOR
     {
@@ -623,6 +628,7 @@ ModalDialog DLG_COPY
         Text[ turkish ] = "Son";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Terminar";
+        Text[ finnish ] = "~Loppu";
     };
     Text[ chinese_simplified ] = "¸´ÖÆ¼þ";
     Text[ russian ] = "Äóáëèðîâàòü";
