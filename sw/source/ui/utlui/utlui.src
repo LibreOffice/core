@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:27:30 $
+ *  last change: $Author: rt $ $Date: 2001-04-12 07:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ japanese ] = "’u·Γ°ΜήΩ‚Μg—p";
         Text[ chinese_traditional ] = "¨Ο¥Ξ¥N΄ΐªν";
         Text[ arabic ] = "ΗΣΚΞΟΗγ ήΗΖγΙ ΗαΗΣΚΘΟΗα";
-        Text[ greek ] = "Εφαρμογή πίνακα αντικατάστασης";
+        Text[ greek ] = "Εφαρμογή του πίνακα αντικατάστασης";
         Text[ korean ] = "΄λΓΌ Η¥ ΐϋΏλ";
         Text[ turkish ] = "Deπiώtirme tablosunu kullan";
         Text[ language_user1 ] = " ";
