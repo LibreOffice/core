@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:39:22 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/embed/XTransactedObject.hpp"
 #include "com/sun/star/io/XActiveDataSink.hpp"
+#include "com/sun/star/io/XActiveDataStreamer.hpp"
 #include "com/sun/star/lang/IllegalAccessException.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "com/sun/star/ucb/ContentInfoAttribute.hpp"
@@ -1027,10 +1028,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     xRow->appendObject(
                         rProp,
                         uno::makeAny(
-                            pProvider->queryStorage(
-                                // Storage must not be writable; otherwise UCP
-                                // would loose control over the resource!
-                                rContentId, READ_ONLY ) ) );
+                            pProvider->queryStorageClone( rContentId ) ) );
                 else
                     xRow->appendVoid( rProp );
             }
@@ -1127,10 +1125,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                 const uno::Reference< embed::XStorage > * >( 0 ) ),
                           beans::PropertyAttribute::BOUND
                             | beans::PropertyAttribute::READONLY ),
-                uno::makeAny(
-                    // Storage must not be writable; otherwise UCP
-                    // would loose control over the resource!
-                    pProvider->queryStorage( rContentId, READ_ONLY ) ) );
+                uno::makeAny( pProvider->queryStorageClone( rContentId ) ) );
 
         // DocumentModel is only supported by documents.
         if ( eType == DOCUMENT )
@@ -1495,22 +1490,21 @@ uno::Any Content::open(
         }
 
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
-        uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
-        if ( xOut.is() )
+
+        uno::Reference< io::XActiveDataStreamer > xDataStreamer(
+                                        rArg.Sink, uno::UNO_QUERY );
+        if ( xDataStreamer.is() )
         {
-            // PUSH: write data into xOut
-
-
             // May throw CommandFailedException, DocumentPasswordRequest!
-            uno::Reference< io::XInputStream > xIn = getInputStream( xEnv );
-            if ( !xIn.is() )
+            uno::Reference< io::XStream > xStream = getStream( xEnv );
+            if ( !xStream.is() )
             {
                 // No interaction if we are not persistent!
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Uri")),
+                                 rtl::OUString(
+                                     RTL_CONSTASCII_USTRINGPARAM("Uri")),
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1520,47 +1514,23 @@ uno::Any Content::open(
                     uno::Sequence< uno::Any >(&aProps, 1),
                     m_eState == PERSISTENT
                         ? xEnv
-                        : uno::Reference< star::ucb::XCommandEnvironment >(),
-                    rtl::OUString::createFromAscii( "Got no data stream!" ),
+                        : uno::Reference<
+                              star::ucb::XCommandEnvironment >(),
+                    rtl::OUString::createFromAscii(
+                        "Got no data stream!" ),
                     this );
                 // Unreachable
             }
 
-            try
-            {
-                uno::Sequence< sal_Int8 > aBuffer;
-                sal_Int32  nRead = xIn->readSomeBytes( aBuffer, 65536 );
-
-                while ( nRead > 0 )
-                {
-                    aBuffer.realloc( nRead );
-                    xOut->writeBytes( aBuffer );
-                    aBuffer.realloc( 0 );
-                    nRead = xIn->readSomeBytes( aBuffer, 65536 );
-                }
-
-                xOut->closeOutput();
-            }
-            catch ( io::NotConnectedException const & )
-            {
-                // closeOutput, readSomeBytes, writeBytes
-            }
-            catch ( io::BufferSizeExceededException const & )
-            {
-                // closeOutput, readSomeBytes, writeBytes
-            }
-            catch ( io::IOException const & )
-            {
-                // closeOutput, readSomeBytes, writeBytes
-            }
+            // Done.
+            xDataStreamer->setStream( xStream );
         }
         else
         {
-            uno::Reference< io::XActiveDataSink > xDataSink(
-                                            rArg.Sink, uno::UNO_QUERY );
-            if ( xDataSink.is() )
+            uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
+            if ( xOut.is() )
             {
-                // PULL: wait for client read
+                // PUSH: write data into xOut
 
                 // May throw CommandFailedException, DocumentPasswordRequest!
                 uno::Reference< io::XInputStream > xIn = getInputStream( xEnv );
@@ -1570,8 +1540,8 @@ uno::Any Content::open(
                     uno::Any aProps
                         = uno::makeAny(
                                  beans::PropertyValue(
-                                     rtl::OUString(
-                                         RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                       "Uri")),
                                      -1,
                                      uno::makeAny(m_xIdentifier->
                                                       getContentIdentifier()),
@@ -1581,30 +1551,89 @@ uno::Any Content::open(
                         uno::Sequence< uno::Any >(&aProps, 1),
                         m_eState == PERSISTENT
                             ? xEnv
-                            : uno::Reference<
-                                  star::ucb::XCommandEnvironment >(),
-                        rtl::OUString::createFromAscii(
-                            "Got no data stream!" ),
+                            : uno::Reference< star::ucb::XCommandEnvironment >(),
+                        rtl::OUString::createFromAscii( "Got no data stream!" ),
                         this );
                     // Unreachable
                 }
 
-                // Done.
-                xDataSink->setInputStream( xIn );
+                try
+                {
+                    uno::Sequence< sal_Int8 > aBuffer;
+                    sal_Int32  nRead = xIn->readSomeBytes( aBuffer, 65536 );
+
+                    while ( nRead > 0 )
+                    {
+                        aBuffer.realloc( nRead );
+                        xOut->writeBytes( aBuffer );
+                        aBuffer.realloc( 0 );
+                        nRead = xIn->readSomeBytes( aBuffer, 65536 );
+                    }
+
+                    xOut->closeOutput();
+                }
+                catch ( io::NotConnectedException const & )
+                {
+                    // closeOutput, readSomeBytes, writeBytes
+                }
+                catch ( io::BufferSizeExceededException const & )
+                {
+                    // closeOutput, readSomeBytes, writeBytes
+                }
+                catch ( io::IOException const & )
+                {
+                    // closeOutput, readSomeBytes, writeBytes
+                }
             }
             else
             {
-                // Note: aOpenCommand.Sink may contain an XStream
-                //       implementation. Support for this type of
-                //       sink is optional...
-                ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        star::ucb::UnsupportedDataSinkException(
-                                rtl::OUString(),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                rArg.Sink ) ),
-                    xEnv );
-                // Unreachable
+                uno::Reference< io::XActiveDataSink > xDataSink(
+                                                rArg.Sink, uno::UNO_QUERY );
+                if ( xDataSink.is() )
+                {
+                    // PULL: wait for client read
+
+                    // May throw CommandFailedException, DocumentPasswordRequest!
+                    uno::Reference< io::XInputStream > xIn = getInputStream( xEnv );
+                    if ( !xIn.is() )
+                    {
+                        // No interaction if we are not persistent!
+                        uno::Any aProps
+                            = uno::makeAny(
+                                     beans::PropertyValue(
+                                         rtl::OUString(
+                                             RTL_CONSTASCII_USTRINGPARAM("Uri")),
+                                         -1,
+                                         uno::makeAny(m_xIdentifier->
+                                                          getContentIdentifier()),
+                                         beans::PropertyState_DIRECT_VALUE));
+                        ucbhelper::cancelCommandExecution(
+                            star::ucb::IOErrorCode_CANT_READ,
+                            uno::Sequence< uno::Any >(&aProps, 1),
+                            m_eState == PERSISTENT
+                                ? xEnv
+                                : uno::Reference<
+                                      star::ucb::XCommandEnvironment >(),
+                            rtl::OUString::createFromAscii(
+                                "Got no data stream!" ),
+                            this );
+                        // Unreachable
+                    }
+
+                    // Done.
+                    xDataSink->setInputStream( xIn );
+                }
+                else
+                {
+                    ucbhelper::cancelCommandExecution(
+                        uno::makeAny(
+                            star::ucb::UnsupportedDataSinkException(
+                                    rtl::OUString(),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    rArg.Sink ) ),
+                        xEnv );
+                    // Unreachable
+                }
             }
         }
     }
@@ -2247,7 +2276,7 @@ bool Content::loadData( ContentProvider* pProvider,
 //=========================================================================
 
 #ifdef STORAGE_CREATION_WORKAROUND
-static uno::Reference< io::XOutputStream > lcl_getOutputStream(
+static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const rtl::OUString & rUri,
                 ContentProvider * pProvider,
                 const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
@@ -2335,7 +2364,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                 "temporary_limitation_of_the_storage_api_implementation" );
 
             // May throw CommandFailedException, DocumentPasswordRequest!
-            xOut = lcl_getOutputStream(
+            xOut = lcl_getTruncatedOutputStream(
                     aDummyStreamUri.makeStringAndClear(), m_pProvider, xEnv );
 
             OSL_ENSURE( xOut.is(), "No target data stream!" );
@@ -2364,7 +2393,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
         if ( xData.is() )
         {
             // May throw CommandFailedException, DocumentPasswordRequest!
-            xOut = getOutputStream( xEnv );
+            xOut = getTruncatedOutputStream( xEnv );
 
             OSL_ENSURE( xOut.is(), "No target data stream!" );
 
@@ -2729,7 +2758,7 @@ static rtl::OUString obtainPassword(
 
 //=========================================================================
 uno::Reference< io::XInputStream > Content::getInputStream(
-                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
@@ -2761,7 +2790,7 @@ uno::Reference< io::XInputStream > Content::getInputStream(
 }
 
 //=========================================================================
-static uno::Reference< io::XOutputStream > lcl_getOutputStream(
+static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const rtl::OUString & rUri,
                 ContentProvider * pProvider,
                 const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
@@ -2775,7 +2804,8 @@ static uno::Reference< io::XOutputStream > lcl_getOutputStream(
         try
         {
             return uno::Reference< io::XOutputStream >(
-                pProvider->queryOutputStream( rUri, aPassword ) );
+                pProvider->queryOutputStream(
+                    rUri, aPassword, true /* truncate */ ) );
         }
         catch ( packages::WrongPasswordException const & )
         {
@@ -2792,17 +2822,51 @@ static uno::Reference< io::XOutputStream > lcl_getOutputStream(
 }
 
 //=========================================================================
-uno::Reference< io::XOutputStream > Content::getOutputStream(
-                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
+uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
     throw ( star::ucb::CommandFailedException,
             task::DocumentPasswordRequest )
 {
     OSL_ENSURE( m_aProps.getType() == STREAM,
-                "Content::getOutputStream - content is no stream!" );
+                "Content::getTruncatedOutputStream - content is no stream!" );
 
-    return lcl_getOutputStream( Uri( m_xIdentifier->getContentIdentifier() )
-                                    .getUri(),
-                                m_pProvider,
-                                xEnv );
+    return lcl_getTruncatedOutputStream(
+            Uri( m_xIdentifier->getContentIdentifier() ).getUri(),
+            m_pProvider,
+            xEnv );
+}
+
+//=========================================================================
+uno::Reference< io::XStream > Content::getStream(
+        const uno::Reference< star::ucb::XCommandEnvironment > & xEnv ) const
+    throw ( star::ucb::CommandFailedException,
+            task::DocumentPasswordRequest )
+{
+    OSL_ENSURE( m_aProps.getType() == STREAM,
+                "Content::getStream - content is no stream!" );
+
+    rtl::OUString aUri( Uri( m_xIdentifier->getContentIdentifier() ).getUri() );
+    rtl::OUString aPassword;
+    bool bPasswordRequested = false;
+    for ( ;; )
+    {
+        try
+        {
+            return uno::Reference< io::XStream >(
+                m_pProvider->queryStream(
+                    aUri, aPassword, false /* no truncate */ ) );
+        }
+        catch ( packages::WrongPasswordException const & )
+        {
+            // Obtain (new) password.
+            aPassword
+                = obtainPassword( aUri, /* @@@ find better title */
+                                  bPasswordRequested
+                                   ? task::PasswordRequestMode_PASSWORD_REENTER
+                                   : task::PasswordRequestMode_PASSWORD_ENTER,
+                                   xEnv );
+            bPasswordRequested = true;
+        }
+    }
 }
 
