@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageAlign.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 //=============================================================================
 
-/** specifies alignment of an image.
+/** specifies the alignment of an image.
  */
 constants ImageAlign
 {
@@ -95,6 +95,7 @@ constants ImageAlign
     /** specifies to align bottom.
      */
     const short BOTTOM = 3;
+
 };
 
 //=============================================================================
