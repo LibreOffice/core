@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:05:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 
 #include <sch/memchrt.hxx>
 #include <sch/schdll.hxx>
-#include <sch/schdll0.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
@@ -155,7 +154,7 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 )
             {
                 SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( aIPObj.Is() && SchModuleDummy::HasID( aIPObj->GetStorage()->GetClassName() ) )
+                if ( aIPObj.Is() && SotExchange::IsChart( aIPObj->GetStorage()->GetClassName() ) )
                 {
                     SchMemChart* pOldData = SchDLL::GetChartData(aIPObj);
                     if ( pOldData )
