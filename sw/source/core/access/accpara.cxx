@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:09:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
