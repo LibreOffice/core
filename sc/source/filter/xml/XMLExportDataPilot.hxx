@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:12:02 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 11:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class ScXMLExportDataPilot
     ScDocument*         pDoc;
 
     rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
-                                    const sal_Bool bIsString, const double dVal) const;
+                                    const sal_Bool bIsString, const double dVal, const String& sVal) const;
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 08:46:51 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 11:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,16 +136,27 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 }
 
 rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOperator, const sal_Bool bUseRegularExpressions,
-    const sal_Bool bIsString, const double dVal) const
+    const sal_Bool bIsString, const double dVal, const String& sVal) const
 {
     switch (aFilterOperator)
     {
         case SC_EQUAL :
         {
+            rtl::OUString sReturn;
             if (bUseRegularExpressions)
-                return GetXMLToken(XML_MATCH);
+                sReturn = GetXMLToken(XML_MATCH);
             else
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+                sReturn = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
+
+            if (!bIsString && sVal == EMPTY_STRING)
+            {
+                if (dVal == SC_EMPTYFIELDS)
+                    sReturn = GetXMLToken(XML_EMPTY);
+                else if (dVal == SC_NONEMPTYFIELDS)
+                    sReturn = GetXMLToken(XML_NOEMPTY);
+            }
+
+            return sReturn;
         }
         break;
         case SC_NOT_EQUAL :
@@ -181,15 +192,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
             return GetXMLToken(XML_TOP_VALUES);
             break;
         default:
-        {
-            if (bIsString)
-            {
-                if (dVal == SC_EMPTYFIELDS)
-                    return GetXMLToken(XML_EMPTY);
-                else if (dVal == SC_NONEMPTYFIELDS)
-                    return GetXMLToken(XML_NOEMPTY);
-            }
-        }
+            DBG_ERROR("This FilterOperator is not supported.")
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
@@ -201,15 +204,15 @@ void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, sal
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     if (aQueryEntry.bQueryByString)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
-        rtl::OUStringBuffer sBuffer;
-        rExport.GetMM100UnitConverter().convertDouble(sBuffer, aQueryEntry.nVal);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, sBuffer.makeStringAndClear());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, *aQueryEntry.pStr);
     }
     else
+    {
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rtl::OUString(*aQueryEntry.pStr));
+    }
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getDPOperatorXML(aQueryEntry.eOp, bUseRegularExpressions,
-        aQueryEntry.bQueryByString, aQueryEntry.nVal));
+        aQueryEntry.bQueryByString, aQueryEntry.nVal, *aQueryEntry.pStr));
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, sal_True, sal_True);
 }
 
