@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:30:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "¶r§∏∂°πj";
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = " ﬁ‰Ì‰ √Õ—›";
+        Text[ catalan ] = "Kerning";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -122,6 +123,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "∂»•Œ©Û¶Ë§Â(~W)";
         Text[ turkish ] = "Western characters only";
         Text[ arabic ] = "√Õ—› €—»Ì… ›ﬁÿ";
+        Text[ catalan ] = "Solo caracteres del alfabeto occidental";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -147,6 +149,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "¶Ë§Â©Mº–¬I≤≈∏π(~T)";
         Text[ turkish ] = "Western text and punctuation";
         Text[ arabic ] = "‰’ €—»Ì Ê⁄·«„«   ‰ﬁÌÿ";
+        Text[ catalan ] = "Texto y puntuaciÛn occidentales";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -172,6 +175,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "¶r§∏∂°πj";
         Text[ turkish ] = "Character distance";
         Text[ arabic ] = " »«⁄œ «·√Õ—›";
+        Text[ catalan ] = "Character distance";
     };
     RadioButton RB_NO_COMP
     {
@@ -197,6 +201,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "§£¿£¡Y(~N)";
         Text[ turkish ] = "No compression";
         Text[ arabic ] = "»œÊ‰ ÷€ÿ";
+        Text[ catalan ] = "Sin compresiÛn";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -222,6 +227,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "∂»¿£¡Yº–¬I≤≈∏π(~C)";
         Text[ turkish ] = "Compress punctuation only";
         Text[ arabic ] = "÷€ÿ ⁄·«„«  «· ‰ﬁÌÿ ›ﬁÿ";
+        Text[ catalan ] = "Comprimir solo puntuaciÛn";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -234,7 +240,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ russian ] = "”Ê‡Ú¸ ÔÛÌÍÚÛ‡ˆË˛ Ë Í‡ÌÛ";
         Text[ greek ] = "”ıÏﬂÂÛÁ ÛÁÏÂﬂ˘Ì ÛÙﬂÓÁÚ Í·È ~È·˘Ì›ÊÈÍÁÚ Kana";
         Text[ dutch ] = "Interpunctie en ~Japanse Kana comprimeren";
-        Text[ french ] = "Compression pour la ponctuation les kana japonais";
+        Text[ french ] = "Compression pour la ponctuation et les kana japonais";
         Text[ spanish ] = "Comprimir puntuaciÛn y Kana japonÈs";
         Text[ italian ] = "Comprimi interpunzioni e kana giapponese";
         Text[ danish ] = "Compress punctuation and japanese Kana";
@@ -247,6 +253,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "∂»¿£¡Yº–¬I≤≈∏π©M§È§Â∞≤¶W(~P)";
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
+        Text[ catalan ] = "Comprimir puntuaciÛn y Kana japonÈs";
     };
     FixedLine GB_START_END
     {
@@ -272,6 +279,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "∂}¿Y¶r§∏©Mµ≤ß¿¶r§∏";
         Text[ turkish ] = "Start and end characters";
         Text[ arabic ] = "√Õ—› «·»œ«Ì… Ê«·‰Â«Ì…";
+        Text[ catalan ] = "Start and end characters";
     };
     FixedText FT_LANGUAGE
     {
@@ -297,6 +305,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "ªy®•(~L)";
         Text[ turkish ] = "Language";
         Text[ arabic ] = "«··€…";
+        Text[ catalan ] = "Idioma";
     };
     ListBox LB_LANGUAGE
     {
@@ -329,6 +338,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "º–∑«(~D)";
         Text[ turkish ] = "Standard";
         Text[ arabic ] = "ﬁÌ«”Ì";
+        Text[ catalan ] = "Predeterminado";
     };
     FixedText FT_START
     {
@@ -355,6 +365,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "No start of line:";
         Text[ arabic ] = "»œÊ‰ »œ«Ì… «·”ÿ—:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
+        Text[ catalan ] = "Sin inicio de fila:";
     };
     Edit ED_START
     {
@@ -387,6 +398,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "No end of line:";
         Text[ arabic ] = "»œÊ‰ ‰Â«Ì… ”ÿ—:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
+        Text[ catalan ] = "Sin fin de lÌnea:";
     };
     Edit ED_END
     {
@@ -418,6 +430,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_traditional ] = "§£™˛±a®œ•Œ™Ã¶€≠q™∫¥´¶Ê≤≈∏π";
         Text[ turkish ] = "Without user-defined line break symbols";
         Text[ arabic ] = "»œÊ‰ ⁄·«„«  ›’· √”ÿ— „Œ’’…";
+        Text[ catalan ] = "Sin car·cter de cambio de fila definido por el usuario";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -437,5 +450,6 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ chinese_traditional ] = "•N≤z¶¯™Aæπ";
     Text[ turkish ] = "Proxy";
     Text[ arabic ] = "Proxy";
+    Text[ catalan ] = "Proxy";
 };
 
