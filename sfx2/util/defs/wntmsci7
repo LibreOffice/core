@@ -8223,3 +8223,4 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?GetFilterNameWithPrefix@SfxFilter@@QBE?AVString@@XZ
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2558827599@@YAXABVSbxVariableRef@@PAX@Z
 ?compareToAscii@OUString@rtl@@QBEJPBDJ@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx220541098@@YAXABVSbxVariableRef@@PAX@Z
