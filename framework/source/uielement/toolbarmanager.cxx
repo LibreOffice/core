@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:05:15 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     idx++; // will become 0 if '/' not found: use full string
     OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
     aHelpIdAsString += rResourceName.copy( idx );
-    m_pToolBar->SetHelpIdAsString( aHelpIdAsString );
+    m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
 }
 
 ToolBarManager::~ToolBarManager()
@@ -432,7 +432,7 @@ void ToolBarManager::RefreshImages()
 
     m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
     ::Size aSize = m_pToolBar->CalcWindowSizePixel();
-    m_pToolBar->SetSizePixel( aSize );
+    m_pToolBar->SetOutputSizePixel( aSize );
 }
 
 void ToolBarManager::UpdateImageOrientation()
@@ -1737,7 +1737,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         // Resize toolbar, layout manager is resize listener and will calc
         // the layout automatically.
         ::Size aSize( m_pToolBar->CalcWindowSizePixel() );
-        m_pToolBar->SetSizePixel( aSize );
+        m_pToolBar->SetOutputSizePixel( aSize );
     }
 
     return 1;
