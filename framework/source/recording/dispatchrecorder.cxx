@@ -177,6 +177,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     aScriptBuffer.appendAscii("dim document   as object\n");
     aScriptBuffer.appendAscii("dim dispatcher as object\n");
     aScriptBuffer.appendAscii("dim parser     as object\n");
+    aScriptBuffer.appendAscii("dim disp     as object\n");
     aScriptBuffer.appendAscii("dim url        as new com.sun.star.util.URL\n");
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
     aScriptBuffer.appendAscii("rem get access to the document\n");
