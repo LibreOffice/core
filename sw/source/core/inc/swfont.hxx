@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:12:10 $
+ *  last change: $Author: fme $ $Date: 2001-11-28 17:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,6 +756,7 @@ inline void SwFont::SetProportion( const BYTE nNewPropr )
     {
         bFntChg = TRUE;
         bOrgChg = TRUE;
+
         aSub[0].SetProportion( nNewPropr );
         aSub[1].SetProportion( nNewPropr );
         aSub[2].SetProportion( nNewPropr );
@@ -772,6 +773,11 @@ inline void SwFont::SetEscapement( const short nNewEsc )
 {
     if( nNewEsc != aSub[0].GetEscapement() )
     {
+        // these have to be set, otherwise nOrgHeight and nOrgAscent will not
+        // be calculated
+        bFntChg = TRUE;
+        bOrgChg = TRUE;
+
         aSub[0].SetEscapement( nNewEsc );
         aSub[1].SetEscapement( nNewEsc );
         aSub[2].SetEscapement( nNewEsc );
