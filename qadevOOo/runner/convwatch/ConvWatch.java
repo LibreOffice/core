@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConvWatch.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:56:01 $
+ *  last change: $Date: 2005-02-24 17:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ public class ConvWatch
 
             if (! FileHelper.exists(_sAbsoluteInputFile))
             {
-                throw new ConvWatchCancelException("Input file: " + _sAbsoluteReferenceFile + " does not exist.");
+                throw new ConvWatchCancelException("createPostscriptStartCheck: Input file: " + _sAbsoluteInputFile + " does not exist.");
             }
 
             if (_sAbsoluteReferenceFile == null)
@@ -148,13 +148,13 @@ public class ConvWatch
                 if (nIdx == -1)
                 {
                     // must be a directory
-                    throw new ConvWatchCancelException("Given reference directory: '" + _sAbsoluteReferenceFile + "' does not exist.");
+                    throw new ConvWatchCancelException("createPostscriptStartCheck: Given reference directory: '" + _sAbsoluteReferenceFile + "' does not exist.");
                 }
             }
 
             if (! FileHelper.exists(_sAbsoluteReferenceFile))
             {
-                throw new ConvWatchCancelException("Given reference file: " + _sAbsoluteReferenceFile + " does not exist.");
+                throw new ConvWatchCancelException("createPostscriptStartCheck: Given reference file: " + _sAbsoluteReferenceFile + " does not exist.");
             }
 
             FileHelper.makeDirectories("", _sOutputPath);
@@ -192,7 +192,7 @@ public class ConvWatch
 
             if (! FileHelper.exists(sAbsolutePrintFile))
             {
-                throw new ConvWatchCancelException("Printed file " + sAbsolutePrintFile + " does not exist.");
+                throw new ConvWatchCancelException("createPostscriptStartCheck: Printed file " + sAbsolutePrintFile + " does not exist.");
             }
 
             PRNCompare a = new PRNCompare();
@@ -389,7 +389,7 @@ public class ConvWatch
                 String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
                 if (! FileHelper.exists(sNewDiffName))
                 {
-                    System.out.println("Old diff file: '" + sNewDiffName + "' does not exist." );
+                    System.out.println("checkDiffDiff: Old diff file: '" + sNewDiffName + "' does not exist." );
                     continue;
                 }
                 // String sNewDiffName = _sAbsoluteDiffPath + fs + sDiffBasename;
