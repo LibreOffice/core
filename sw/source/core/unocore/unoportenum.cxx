@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:48:57 $
+ *  last change: $Author: dvo $ $Date: 2001-01-08 11:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                                 const xub_StrLen nCurrentIndex,
                                 SwTextPortionType& ePortionType,
                                 const xub_StrLen& nFirstFrameIndex,
-                                SwXBookmarkPortionArr& aBkmArr)
+                                SwXBookmarkPortionArr& aBkmArr,
+                                SwXRedlinePortionArr& aRedArr )
 {
     Reference<XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -596,6 +597,11 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             DBG_ASSERT(aBkmArr.GetObject(0)->nIndex > nCurrentIndex,
                 "forgotten bookmark(s)")
             nMovePos = aBkmArr.GetObject(0)->nIndex;
+        }
+        // break portions up for redlines
+        if (aRedArr.Count() && aRedArr.GetObject(0)->GetIndexPos() < nMovePos)
+        {
+            nMovePos = aRedArr.GetObject(0)->GetIndexPos();
         }
         // liegt die Endposition nach dem naechsten Rahmen, dann aufbrechen
         if(nFirstFrameIndex != STRING_MAXLEN && nMovePos > nFirstFrameIndex)
@@ -836,7 +842,8 @@ void SwXTextPortionEnumeration::CreatePortions()
                                 nCurrentIndex,
                                 ePortionType,
                                 nFirstFrameIndex,
-                                aBkmArr);
+                                aBkmArr,
+                                aRedArr);
 
                         }
                         else if(USHRT_MAX != nFirstFrameIndex)
@@ -845,7 +852,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                         }
                         else
                         {
-                            lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
+//                          lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
                             sal_Int32 nNextIndex = lcl_GetNextIndex(aBkmArr, aRedArr);
                             if(nNextIndex < 0)
                                 sal_Bool bMove = pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
@@ -891,7 +898,8 @@ void SwXTextPortionEnumeration::CreatePortions()
                             pUnoCrsr->GetCntntNode()->Len(),
                             ePortionType,
                             STRING_MAXLEN,
-                            aBkmArr);
+                            aBkmArr,
+                            aRedArr);
                         if(xRef.is())
                             aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                     }
