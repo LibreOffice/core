@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-04 09:08:07 $
+ *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,21 +80,30 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
+#define WM_REGISTERDRAGDROP WM_USER + 1
+#define WM_REVOKEDRAGDROP WM_USER + 2
 //--> TRA
-
 extern Reference< XTransferable > g_XTransferable;
 
 //<-- TRA
 
+
+DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
+
 DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
-                        m_hWnd( NULL),
-                        m_serviceFactory( sf),
-                        WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
-                        m_bActive(sal_True),
-                        m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK),
-                        m_nListenerDropAction( ACTION_NONE),
-                        m_oleThreadId( 0),
-                        m_pDropTarget( NULL)
+    m_hWnd( NULL),
+    m_serviceFactory( sf),
+    WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
+    m_bActive(sal_True),
+    m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK),
+    m_nCurrentDropAction( ACTION_NONE),
+    m_oleThreadId( 0),
+    m_pDropTarget( NULL),
+    m_threadIdWindow(0),
+    m_threadIdTarget(0),
+    m_hOleThread(0),
+    m_nLastDropAction()
+
 
 {
 }
@@ -118,8 +127,10 @@ DropTarget::~DropTarget()
 // the IDropTarget object will live on. MEMORY LEAK
 void SAL_CALL DropTarget::disposing()
 {
-    HRESULT hr;
-    hr= RevokeDragDrop( m_hWnd);
+    // Call RevokeDragDrop and wait for the OLE thread to die;
+    PostThreadMessage( m_threadIdTarget, WM_REVOKEDRAGDROP, (WPARAM)this, 0);
+    WaitForSingleObject( m_hOleThread, INFINITE);
+    CloseHandle( m_hOleThread);
     //OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
     m_hWnd= NULL;
     if( m_pDropTarget)
@@ -145,37 +156,63 @@ void SAL_CALL DropTarget::release()
 void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException)
 {
-    // We have to make sure that this thread is OleInitialize d, so that
-    // we can register the window as drop target.
+    // The window must be registered for Dnd by RegisterDragDrop. We must ensure
+    // that RegisterDragDrop is called from an STA ( OleInitialize) thread.
+    // As long as the window is registered we need to receive OLE messages in
+    // an OLE thread. That is to say, if DropTarget::initialize was called from an
+    // MTA thread then we create an OLE thread in which the window is registered.
+    // The thread will stay alive until aver RevokeDragDrop has been called.
     HRESULT hr= OleInitialize( NULL);
 
-    sal_Bool bOleInit= sal_True;
-    switch( hr )
+    // Current thread is MTA
+    if( hr == RPC_E_CHANGED_MODE )
     {
-    case S_OK: // The thread was not OleInitialize d before
-        m_oleThreadId= CoGetCurrentProcess(); // get a unique thread id;
-        break;
-    case RPC_E_CHANGED_MODE:// The thread probably runs in an MTA
-        bOleInit= sal_False;
-        break;
-    }
-
-    OSL_ASSERT( bOleInit);
-
-
-    // Get the window handle from aArgument. It is needed for RegisterDragDrop.
-    if( aArguments.getLength() > 0)
-    {
-        m_hWnd= *(HWND*)aArguments[0].getValue();
-        OSL_ASSERT( IsWindow( m_hWnd) );
-
-        if( bOleInit)
+        OSL_ENSURE( ! m_threadIdTarget,"initialize was called twice");
+        if( aArguments.getLength() > 0)
         {
+            m_hWnd= *(HWND*)aArguments[0].getValue();
+            OSL_ASSERT( IsWindow( m_hWnd) );
+            // create the IDropTargetImplementation
+            m_pDropTarget= new IDropTargetImpl( *static_cast<DropTarget*>( this) );
+            m_pDropTarget->AddRef();
+
+
+            // Obtain the id of the thread that created the window
+            m_threadIdWindow= GetWindowThreadProcessId( m_hWnd, NULL);
+            // The event is set by the thread that we will create momentarily.
+            // It indicates that the thread is ready to receive messages.
+            HANDLE m_evtThreadReady= CreateEvent( NULL, FALSE, FALSE, NULL);
+
+            m_hOleThread= CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)DndTargetOleSTAFunc,
+                                            &m_evtThreadReady, 0, &m_threadIdTarget);
+            WaitForSingleObject( m_evtThreadReady, INFINITE);
+            CloseHandle( m_evtThreadReady);
+            PostThreadMessage( m_threadIdTarget, WM_REGISTERDRAGDROP, (WPARAM)this, 0);
+        }
+
+    }
+    else if( hr == S_OK || hr == S_FALSE)
+    {
+        // current thread is STA
+        // If OleInitialize has been called by the caller then we must not call
+        // OleUninitialize
+        if( hr == S_OK)
+        {
+            // caller did not call OleInitialize, so we call OleUninitialize
+            // remember the thread that will call OleUninitialize
+            m_oleThreadId= CoGetCurrentProcess(); // get a unique thread id
+        }
+
+        // Get the window handle from aArgument. It is needed for RegisterDragDrop.
+        if( aArguments.getLength() > 0)
+        {
+            m_hWnd= *(HWND*)aArguments[0].getValue();
+            OSL_ASSERT( IsWindow( m_hWnd) );
             // create the IDropTargetImplementation
             m_pDropTarget= new IDropTargetImpl( *static_cast<DropTarget*>( this) );
             m_pDropTarget->AddRef();
             // CoLockObjectExternal is prescribed by the protocol. It bumps up the ref count
-               if( SUCCEEDED( CoLockObjectExternal( m_pDropTarget, TRUE, FALSE)))
+            if( SUCCEEDED( CoLockObjectExternal( m_pDropTarget, TRUE, FALSE)))
             {
                 if( FAILED( RegisterDragDrop( m_hWnd,  m_pDropTarget) ) )
                 {
@@ -187,8 +224,69 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             }
         }
     }
-
+    else
+        throw Exception();
 }
+
+// This function is called as extra thread from DragSource::startDrag.
+// The function carries out a drag and drop operation by calling
+// DoDragDrop. The thread also notifies all XSourceListener.
+DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
+{
+    HRESULT hr= OleInitialize( NULL);
+    if( SUCCEEDED( hr) )
+    {
+        MSG msg;
+        // force the creation of a message queue
+        PeekMessage( &msg, (HWND)NULL, 0, 0, PM_NOREMOVE);
+        // Signal the creator ( DropTarget::initialize) that the thread is
+        // ready to receive messages.
+        SetEvent( *(HANDLE*) pParams);
+        // Thread id is needed for attaching this message queue to the one of the
+        // thread where the window was created.
+        DWORD threadId= GetCurrentThreadId();
+        // We force the creation of a thread message queue. This is necessary
+        // for a later call to AttachThreadInput
+        while( GetMessage(&msg, (HWND)NULL, 0, 0) )
+        {
+            if( msg.message == WM_REGISTERDRAGDROP)
+            {
+                DropTarget *pTarget= (DropTarget*)msg.wParam;
+                // This thread is attached to the thread that created the window. Hence
+                // this thread also receives all mouse and keyboard messages which are
+                // needed
+                BOOL bSuccess= AttachThreadInput( threadId , pTarget->m_threadIdWindow, TRUE );
+
+                if( SUCCEEDED( CoLockObjectExternal(pTarget-> m_pDropTarget, TRUE, FALSE)))
+                {
+                    if( FAILED( RegisterDragDrop( pTarget-> m_hWnd, pTarget-> m_pDropTarget) ) )
+                    {
+                        // do clean up if drag and drop is not possible
+                        CoLockObjectExternal( pTarget->m_pDropTarget, FALSE, FALSE);
+                        pTarget->m_pDropTarget->Release();
+                        pTarget->m_hWnd= NULL;
+                    }
+                }
+            }
+            else if( msg.message == WM_REVOKEDRAGDROP)
+            {
+                DropTarget *pTarget= (DropTarget*)msg.wParam;
+                RevokeDragDrop( pTarget-> m_hWnd);
+                // Detach this thread from the window thread
+                BOOL bSuccess= AttachThreadInput( threadId, pTarget->m_threadIdWindow, FALSE);
+                break;
+            }
+            TranslateMessage(  &msg);
+            DispatchMessage( &msg);
+        }
+        OleUninitialize();
+    }
+    return 0;
+}
+
+
+
+
 
 
 // XDropTarget ----------------------------------------------------------------
@@ -240,8 +338,9 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
     if( m_bActive )
     {
         // Intersection of pdwEffect and the allowed actions ( setDefaultActions)
-        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
-        m_userAction= m_nListenerDropAction;
+        m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
+//      m_userAction= m_nCurrentDropAction;
+        m_nLastDropAction= m_nCurrentDropAction;
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );
@@ -260,11 +359,11 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
 
         //<-- TRA
 
-        if( m_nListenerDropAction != ACTION_NONE)
+        if( m_nCurrentDropAction != ACTION_NONE)
         {
             DropTargetDragEnterEvent e;
             e.SupportedDataFlavors= m_currentData->getTransferDataFlavors();
-            e.DropAction= m_nListenerDropAction;
+            e.DropAction= m_nCurrentDropAction;
             e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this),UNO_QUERY);
             e.Context= m_currentDragContext;
             POINT point={ pt.x, pt.y};
@@ -274,14 +373,15 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
             e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
             fire_dragEnter( e);
-            // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
-            // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
-            // in pdwEffect.
+            // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
+            // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
+            // in pdwEffect. The listener notification is asynchron, that is we cannot expext that the listener
+            // has already reacted to the notification.
             // If there is more then one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
             // On drop the target should present the user a dialog from which the user may change the action.
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
-            *pdwEffect= dndActionsToSingleDropEffect( m_nListenerDropAction & allowedActions);
+            *pdwEffect= dndActionsToSingleDropEffect( m_nLastDropAction & allowedActions);
         }
         else
         {
@@ -302,12 +402,12 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
     {
 
         // A listener can change this value during fire_dragOver
-        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
+        m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
 
-        if( m_nListenerDropAction)
+        if( m_nCurrentDropAction)
         {
             DropTargetDragEvent e;
-            e.DropAction= m_nListenerDropAction;
+            e.DropAction= m_nCurrentDropAction;
             e.Source= Reference<XInterface>(static_cast<XDropTarget*>(this),UNO_QUERY);
             e.Context= m_currentDragContext;
             POINT point={ pt.x, pt.y};
@@ -317,25 +417,28 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
             // if grfKeyState has changed since the last DragOver then fire events.
-            // A listener might change m_nListenerDropAction by calling the
+            // A listener might change m_nCurrentDropAction by calling the
             // XDropTargetDragContext::acceptDrag function. But this is not important
             // because in the afterwards fired dragOver event the action reflects
             // grgKeyState again.
-            sal_Int8 tmpAction= m_nListenerDropAction;
-            if( m_nListenerDropAction != m_userAction)
+            sal_Int8 tmpAction= m_nLastDropAction;
+            if( m_nLastDropAction != m_nCurrentDropAction)
                 fire_dropActionChanged( e);
-            m_nListenerDropAction= tmpAction;
 
             // The Event contains a XDropTargetDragContext implementation.
             fire_dragOver( e);
-            // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
-            // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
-            // in pdwEffect.
+            // Check if the action derived from grfKeyState (m_nCurrentDropAction) or the action set
+            // by the listener (m_nCurrentDropAction) is allowed by the source. Only a allowed action is set
+            // in pdwEffect. The listener notification is asynchron, that is we cannot expext that the listener
+            // has already reacted to the notification.
             // If there is more then one valid action which is the case when ALT or RIGHT MOUSE BUTTON is pressed
             // then getDropEffect returns DROPEFFECT_MOVE which is the default value if no other modifier is pressed.
             // On drop the target should present the user a dialog from which the user may change the action.
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
-            *pdwEffect= dndActionsToSingleDropEffect( m_nListenerDropAction & allowedActions);
+            // set the last action to the current if listener has not changed the value yet
+            if( tmpAction == m_nLastDropAction)
+                m_nLastDropAction= m_nCurrentDropAction;
+            *pdwEffect= dndActionsToSingleDropEffect( m_nLastDropAction & allowedActions);
         }
         else
         {
@@ -356,6 +459,7 @@ HRESULT DropTarget::DragLeave( void)
         m_currentData=0;
         m_currentDragContext= 0;
         m_currentDropContext= 0;
+        m_nLastDropAction= -1;
 
         if( m_nDefaultActions != ACTION_NONE)
         {
@@ -381,12 +485,12 @@ HRESULT DropTarget::Drop( IDataObject  *pDataObj,
 
         m_bDropComplete= sal_False;
 
-        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
+        m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
         m_currentDropContext= static_cast<XDropTargetDropContext*>( new TargetDropContext( static_cast<DropTarget*>(this ))  );
-        if( m_nListenerDropAction)
+        if( m_nCurrentDropAction)
         {
             DropTargetDropEvent e;
-            e.DropAction= m_nListenerDropAction;
+            e.DropAction= m_nCurrentDropAction;
             e.Source= Reference<XInterface>( static_cast<XDropTarget*>(this), UNO_QUERY);
             e.Context= m_currentDropContext;
             POINT point={ pt.x, pt.y};
@@ -397,11 +501,11 @@ HRESULT DropTarget::Drop( IDataObject  *pDataObj,
             e.Transferable= m_currentData;
             fire_drop( e);
 
-            //if fire_drop returns than a listener might have modified m_nListenerDropAction
+            //if fire_drop returns than a listener might have modified m_nCurrentDropAction
             if( m_bDropComplete == sal_True)
             {
                 sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
-                *pdwEffect= dndActionsToSingleDropEffect( m_nListenerDropAction & allowedActions);
+                *pdwEffect= dndActionsToSingleDropEffect( m_nCurrentDropAction & allowedActions);
             }
             else
                 *pdwEffect= DROPEFFECT_NONE;
@@ -502,7 +606,7 @@ void DropTarget::_acceptDrop(sal_Int8 dropOperation, const Reference<XDropTarget
 {
     if( context == m_currentDropContext)
     {
-        m_nListenerDropAction= dropOperation;
+        m_nCurrentDropAction= dropOperation;
     }
 }
 
@@ -510,7 +614,7 @@ void DropTarget::_rejectDrop( const Reference<XDropTargetDropContext>& context)
 {
     if( context == m_currentDropContext)
     {
-        m_nListenerDropAction= ACTION_NONE;
+        m_nCurrentDropAction= ACTION_NONE;
     }
 }
 
@@ -532,7 +636,8 @@ void DropTarget::_acceptDrag( sal_Int8 dragOperation, const Reference<XDropTarge
 {
     if( context == m_currentDragContext)
     {
-        m_nListenerDropAction= dragOperation;
+//      m_nCurrentDropAction= dragOperation;
+        m_nLastDropAction= dragOperation;
     }
 }
 
@@ -540,7 +645,8 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
 {
     if(context == m_currentDragContext)
     {
-        m_nListenerDropAction= ACTION_NONE;
+//      m_nCurrentDropAction= ACTION_NONE;
+        m_nLastDropAction= ACTION_NONE;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
+ *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,21 @@ class DropTarget: public MutexDummy,
 
 {
 private:
+    friend DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
     // The native window which acts as drop target.
     // It is set in initialize. In case RegisterDragDrop fails it is set
     // to NULL
     HWND m_hWnd; // set by initialize
+    // Holds the thread id of the thread which created the window that is the
+    // drop target. Only used when DropTarget::initialize is called from an MTA
+    // thread
+    DWORD m_threadIdWindow;
+    // This is the thread id of the OLE thread that is created in DropTarget::initialize
+    // when the calling thread is an MTA
+    DWORD m_threadIdTarget;
+    // The handle of the thread that is created in DropTarget::initialize
+    // when the calling thread is an MTA
+    HANDLE m_hOleThread;
     // The thread id of the thread which called initialize. When the service dies
     // than m_oleThreadId is used to determine if the service successfully called
     // OleInitialize. If so then OleUninitialize has to be called.
@@ -128,11 +139,14 @@ private:
     // This value is set when a XDropTargetListener calls accept or reject on
     // the XDropTargetDropContext or  XDropTargetDragContext.
     // The values are from the DNDConstants group.
-    sal_Int8 m_nListenerDropAction;
+    sal_Int8 m_nCurrentDropAction;
+    // This value is manipulated by the XDropTargetListener
+    sal_Int8 m_nLastDropAction;
+
     Reference<XTransferable> m_currentData;
     // The current action is used to determine if the USER
     // action has changed (dropActionChanged)
-    sal_Int8 m_userAction;
+//  sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     sal_Bool m_bDropComplete;
     // converts IDataObject objects to XTransferable objects.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
+ *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
 {
     // The actions supported by the drag source
     m_sourceActions= sourceActions;
-    // We need the to know which mouse button triggered the operation.
+    // We need to know which mouse button triggered the operation.
     // If it was the left one, then the drop occurs when that button
     // has been released and if it was the right one then the drop
     // occurs when the right button has been released. If the event is not
