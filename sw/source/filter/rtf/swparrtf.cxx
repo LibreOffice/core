@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:52:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
 /*  */
 
 // Aufruf fuer die allg. Reader-Schnittstelle
-ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
+ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const String &)
 {
     if( !pStrm )
     {
@@ -287,7 +287,7 @@ ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
     }
 
     ULONG nRet = 0;
-    SvParserRef xParser = new SwRTFParser( &rDoc, rPam, *pStrm,!bInsertMode );
+    SvParserRef xParser = new SwRTFParser( &rDoc, rPam, *pStrm, rBaseURL, !bInsertMode );
     SvParserState eState = xParser->CallParser();
     if( SVPAR_PENDING != eState && SVPAR_ACCEPTED != eState )
     {
@@ -301,7 +301,7 @@ ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
     return nRet;
 }
 
-SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,
     int bReadNewDoc)
     : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
     maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
@@ -311,7 +311,9 @@ SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pGrfAttrSet(0), pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
     pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
     nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
-    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0), pAuthorInfos(0)
+    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0),
+    sBaseURL( rBaseURL ),
+    pAuthorInfos(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
