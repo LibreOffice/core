@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlelement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 13:43:42 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ namespace xmloff
             case IMAGE_FRAME: return "image-frame";
             case HIDDEN: return "hidden";
             case GRID: return "grid";
+            case VALUERANGE: return "value-range";
 
             default: return "generic-control";
         }
@@ -104,6 +105,12 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3.210.1  2003/10/22 13:17:41  fs
+ *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
+ *
+ *  Revision 1.3  2001/02/13 13:43:42  fs
+ *  text-area -> textarea
+ *
  *  Revision 1.2  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *
