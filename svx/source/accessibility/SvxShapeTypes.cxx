@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:33:17 $
+ *  last change: $Author: rt $ $Date: 2004-12-03 14:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_POLY_LINE_PATH:
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
+        // --> OD 2004-11-29 #i37790# - default accessiblility shape for
+        // com::sun::star::drawing::CustomShape
+        case DRAWING_CUSTOM:
+        // <--
             return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_CONTROL:
@@ -215,14 +219,20 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
 //BFS01    ShapeTypeDescriptor (   DRAWING_3D_POLYGON,
 //BFS01        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.Shape3DPolygonObject"),
 //BFS01        CreateSvxAccessibleShape )
+    // --> OD 2004-11-29 #i37790# - default accessiblility shape for
+    // com::sun::star::drawing::CustomShape
+    ShapeTypeDescriptor (   DRAWING_CUSTOM,
+        ::rtl::OUString::createFromAscii ("com.sun.star.drawing.CustomShape"),
+        CreateSvxAccessibleShape )
+    // <--
 };
 
 
 void RegisterDrawShapeTypes (void)
 {
-    ShapeTypeHandler::Instance().AddShapeTypeList (
-        /*BFS01 DRAWING_3D_POLYGON*/DRAWING_3D_EXTRUDE - DRAWING_RECTANGLE + 1,
-        aSvxShapeTypeList);
+    // --> OD 2004-11-26 #i37790#
+    ShapeTypeHandler::Instance().AddShapeTypeList ( DRAWING_END, aSvxShapeTypeList);
+    // <--
 }
 
 
