@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:37:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,43 +467,43 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORoadmap::IsRoadmapItemEnabled( ItemId _nItemId ) const
+    sal_Bool ORoadmap::IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex  ) const
     {
-        const HyperLabel* _pLabelItem = GetByID( _nItemId );
+        const HyperLabel* _pLabelItem = GetByID( _nItemId, _nStartIndex  );
         return _pLabelItem ? _pLabelItem->IsEnabled() : sal_False;
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable )
+    void ORoadmap::EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nItemId );
+        HyperLabel* CurHyperLabel = GetByID( _nItemId, _nStartIndex );
         if ( CurHyperLabel != NULL )
             CurHyperLabel->Enable( _bEnable );
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString _sLabel )
+    void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, ::rtl::OUString _sLabel, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nID );
+        HyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
         if ( CurHyperLabel != NULL )
             CurHyperLabel->SetLabelAndSize( ConcatenateRMItemLabel( CurHyperLabel->GetIndex(), _sLabel ), m_pImpl->aHyperLabelPixelSize );
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::ChangeRoadmapItemID( ItemId _nID, ItemId _NewID )
+    void ORoadmap::ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex )
     {
-        HyperLabel* CurHyperLabel = GetByID( _nID );
+        HyperLabel* CurHyperLabel = GetByID( _nID, _nStartIndex );
         if ( CurHyperLabel != NULL )
             CurHyperLabel->SetID( _NewID );
     }
 
     //---------------------------------------------------------------------
-    HyperLabel* ORoadmap::GetByID( ItemId _nID)
+    HyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex)
     {
         HyperLabel* CurHyperLabel;
         ItemId nLocID = 0;
         HL_Vector &LocHyperLabels = m_pImpl->getHyperLabels();
-        for ( HL_Vector::iterator i = LocHyperLabels.begin(); i< LocHyperLabels.end(); i++)
+        for ( HL_Vector::iterator i = LocHyperLabels.begin()+ _nStartIndex; i< LocHyperLabels.end(); i++)
         {
             CurHyperLabel = *i;
             nLocID = CurHyperLabel->GetID();
@@ -514,9 +514,9 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    const HyperLabel* ORoadmap::GetByID( ItemId _nID ) const
+    const HyperLabel* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex  ) const
     {
-        return const_cast< ORoadmap* >( this )->GetByID( _nID );
+        return const_cast< ORoadmap* >( this )->GetByID( _nID, _nStartIndex );
     }
 
     //---------------------------------------------------------------------
