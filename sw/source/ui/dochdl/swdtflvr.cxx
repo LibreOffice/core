@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-09 10:11:39 $
+ *  last change: $Author: hr $ $Date: 2001-08-15 10:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1732,14 +1732,14 @@ PASTEOLE_SETREADSW3:
               ( nFmt == nId ? xStore.Is()
                             : ( xStore.Clear(),
                                   rData.GetSotStorageStream( nFmt, xStrm )) ))
-#if SUPD>=640
+#if SUPD>=641
             || ( rData.GetTransferableObjectDescriptor(
                 ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE), aObjDesc ))
 #endif
             )
     {
         SvInPlaceObjectRef xIPObj;
-#if SUPD>=640
+#if SUPD>=641
         if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE == nFmtId )
         {
             xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
@@ -2776,7 +2776,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
 
     ULONG nFormat = pDlg->Execute( &rSh.GetView().GetEditWin(), aFormats,
                                     aDesc
-#if SUPD>=640
+#if SUPD>=641
                                     , rData
 #endif
                                      );
