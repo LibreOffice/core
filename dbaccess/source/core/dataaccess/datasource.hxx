@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:59:18 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 16:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,8 @@ public:
 
 // com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw( );
+    virtual void SAL_CALL release() throw( );
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
