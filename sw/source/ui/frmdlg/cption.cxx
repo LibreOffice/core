@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-02-05 10:05:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -562,7 +559,10 @@ long SwCaptionDialog::SwCptComboBox::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvent = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pEvent->GetKeyCode();
-        if(rKeyCode != KEY_BACKSPACE && rKeyCode != KEY_RETURN)
+        USHORT nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
+
+        if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
+                && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
         {
             String sKey( pEvent->GetCharCode() ), sName( GetText() );
             Selection aSel( GetSelection() );
