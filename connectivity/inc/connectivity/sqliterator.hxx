@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:54:11 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,8 @@ namespace connectivity
 
     class OSQLParseTreeIterator
     {
+    public:
+
     private:
         ::com::sun::star::sdbc::SQLWarning  m_aWarning;         // conatins the error while iterating through the statement
         const OSQLParseNode*                m_pParseTree;       // aktueller ParseTree
@@ -149,6 +151,7 @@ namespace connectivity
         OSQLStatementType                   m_eStatementType;   // Art des Statements
         OSQLTables                          m_aTables;          // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
         ::vos::ORef<OSQLColumns>            m_aSelectColumns;   // alle Spalten aus dem Select-Clause
+        ::vos::ORef<OSQLColumns>            m_aParameters;      // all parameters
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
@@ -320,6 +323,7 @@ namespace connectivity
         const OSQLTables& getTables() const { return m_aTables;};
 
         ::vos::ORef<OSQLColumns> getSelectColumns() const { return m_aSelectColumns;}
+        ::vos::ORef<OSQLColumns> getParameters()    const { return m_aParameters; }
         // gibt den Aliasnamen der Column zur"uck, Leer falls nicht vorhanden
         ::rtl::OUString getColumnAlias(const OSQLParseNode* pDerivedColumn) const;
         // gibt den Columnnamen und die Tablerange (falls vorhanden) zur"uck

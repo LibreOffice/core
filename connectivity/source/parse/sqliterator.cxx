@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:52:34 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 11:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ OSQLParseTreeIterator::OSQLParseTreeIterator()
     , m_xDatabaseMetaData(NULL)
     ,m_pParser(NULL)
 {
-    m_aSelectColumns = new OSQLColumns();
+    m_aSelectColumns    = new OSQLColumns();
+    m_aParameters       = new OSQLColumns();
 }
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTables ,
@@ -125,6 +126,7 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTa
     ,m_pParser(_pParser)
 {
     m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
+    m_aParameters    = new OSQLColumns();
     setParseTree(pRoot);
 }
 //-----------------------------------------------------------------------------
@@ -147,6 +149,7 @@ void OSQLParseTreeIterator::dispose()
 {
     m_aTables.clear();
     m_aSelectColumns->clear();
+    m_aParameters->clear();
     m_xTables           = NULL;
     m_xDatabaseMetaData = NULL;
 }
@@ -156,6 +159,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
     m_aTables.clear();
 
     m_aSelectColumns->clear();
+    m_aParameters->clear();
 
     m_pParseTree = pNewParseTree;
     if (!m_pParseTree)
@@ -1013,6 +1017,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
             {
                 // Name = "?", da kein Parametername verfuegbar (z. B. bei Native SQL)
                 rValue = ::rtl::OUString::createFromAscii("?");
+                rValue = aColumnName;
                 aName  = ::rtl::OUString::createFromAscii("?");
             }
             else if (SQL_ISPUNCTUATION(pMark,":"))
@@ -1029,6 +1034,40 @@ void OSQLParseTreeIterator::traverseOnePredicate(
             {
                 OSL_ASSERT("OSQLParseTreeIterator: Fehler im Parse Tree");
             }
+            // found a parameter
+            OSQLColumns::const_iterator aIter = ::connectivity::find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aColumnName,m_aCaseEqual);
+            if(aIter != m_aSelectColumns->end())
+            {
+                OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
+                pNewColumn->setName(rValue);
+                m_aParameters->push_back(pNewColumn);
+            }
+            else // search in the tables for the right one
+            {
+                OSQLTables::const_iterator aTableIter = m_aTables.end();
+                if(aTableRange.getLength())
+                    aTableIter = m_aTables.find(aTableRange);
+                if(aTableIter == m_aTables.end())
+                    aTableIter = m_aTables.begin();
+
+                for(;aTableIter != m_aTables.end();++aTableIter)
+                {
+                    if(aTableIter->second.is())
+                    {
+                        Reference<XNameAccess> xColumns = aTableIter->second->getColumns();
+                        if(xColumns.is() && xColumns->hasByName(aColumnName))
+                        {
+                            Reference<XPropertySet> xColumn;
+                            xColumns->getByName(aColumnName) >>= xColumn;
+                            OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
+                            pNewColumn->setName(rValue);
+                            m_aParameters->push_back(pNewColumn);
+                            break;
+                        }
+                    }
+                }
+            }
+
         }
         else if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
             getColumnRange(pParseNode,aName,rValue);
@@ -1519,5 +1558,6 @@ void OSQLParseTreeIterator::appendWarning(const ::rtl::OUString& _sErrMsg)
             m_aWarning = SQLWarning(_sErrMsg,NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
     }
 }
+// -----------------------------------------------------------------------------
 
 
