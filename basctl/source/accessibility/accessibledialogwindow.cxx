@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibledialogwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:19:31 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,7 @@ void AccessibleDialogWindow::clearAccessibleSelection(  ) throw (RuntimeExceptio
 
 // -----------------------------------------------------------------------------
 
-void AccessibleDialogWindow::selectAllAccessible(  ) throw (RuntimeException)
+void AccessibleDialogWindow::selectAllAccessibleChildren(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
