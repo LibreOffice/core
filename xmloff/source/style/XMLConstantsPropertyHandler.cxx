@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConstantsPropertyHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 10:37:07 $
+ *  last change: $Author: cl $ $Date: 2002-08-05 13:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
@@ -112,12 +116,39 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
 {
     OUStringBuffer aOut;
 
-    sal_Int16 nEnum;
-    rValue >>= nEnum;
+    sal_Bool bRet = false;
 
-    sal_Bool bRet = rUnitConverter.convertEnum( aOut, nEnum, pMap, eDefault );
+    sal_Int32 nEnum;
 
-    rStrExpValue = aOut.makeStringAndClear();
+    if( rValue.hasValue() && (rValue.getValueTypeClass() == TypeClass_ENUM))
+    {
+        nEnum = *((sal_Int32*)rValue.getValue());
+        bRet = true;
+    }
+    else
+    {
+        bRet = (rValue >>= nEnum );
+    }
+
+    if( bRet )
+    {
+        if( (nEnum >= 0) && (nEnum <= 0xffff) )
+        {
+            sal_uInt16 nConst = static_cast<sal_uInt16>( nEnum );
+
+            bRet = rUnitConverter.convertEnum( aOut, nConst, pMap, eDefault );
+
+            rStrExpValue = aOut.makeStringAndClear();
+        }
+        else
+        {
+            DBG_ERROR("XMLConstantsPropertyHandler::exportXML() constant is out of range for implementation using sal_uInt16");
+        }
+    }
+    else
+    {
+        DBG_ERROR("XMLConstantsPropertyHandler::exportXML() could not convert any to sal_Int32");
+    }
 
     return bRet;
 }
