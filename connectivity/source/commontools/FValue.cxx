@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:14:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,54 +131,98 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     if(&_rRH == this)
         return *this;
 
-    free();
+    if(m_eTypeKind != _rRH.m_eTypeKind)
+        free();
 
     m_bBound    = _rRH.m_bBound;
-    m_bNull     = _rRH.m_bNull;
     m_eTypeKind = _rRH.m_eTypeKind;
-    if(!m_bNull)
+
+    if(m_bNull && !_rRH.m_bNull)
     {
         switch(_rRH.m_eTypeKind)
         {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-            m_aValue.m_pString = _rRH.m_aValue.m_pString;
-            rtl_uString_acquire(m_aValue.m_pString);
-            break;
-        case DataType::DOUBLE:
-        case DataType::FLOAT:
-        case DataType::REAL:
-            m_aValue.m_pValue   = new double(*(double*)_rRH.m_aValue.m_pValue);
-            break;
-        case DataType::DATE:
-            m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
-            break;
-        case DataType::TIME:
-            m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
-            break;
-        case DataType::TIMESTAMP:
-            m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-        case DataType::LONGVARCHAR:
-            m_aValue.m_pValue   = new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
-            break;
-        case DataType::BIT:
-            m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
-            break;
-        case DataType::TINYINT:
-        case DataType::SMALLINT:
-        case DataType::INTEGER:
-            m_aValue.m_nInt32 = _rRH.m_aValue.m_nInt32;
-            break;
-        default:
-            OSL_ASSERT("Invalid type!");
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                m_aValue.m_pString = _rRH.m_aValue.m_pString;
+                rtl_uString_acquire(m_aValue.m_pString);
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                m_aValue.m_pValue   = new double(*(double*)_rRH.m_aValue.m_pValue);
+                break;
+            case DataType::DATE:
+                m_aValue.m_pValue   = new Date(*(Date*)_rRH.m_aValue.m_pValue);
+                break;
+            case DataType::TIME:
+                m_aValue.m_pValue   = new Time(*(Time*)_rRH.m_aValue.m_pValue);
+                break;
+            case DataType::TIMESTAMP:
+                m_aValue.m_pValue   = new DateTime(*(DateTime*)_rRH.m_aValue.m_pValue);
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::LONGVARCHAR:
+                m_aValue.m_pValue   = new Sequence<sal_Int8>(*(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue);
+                break;
+            case DataType::BIT:
+                m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+                m_aValue.m_nInt32 = _rRH.m_aValue.m_nInt32;
+                break;
+            default:
+                OSL_ASSERT("Invalid type!");
         }
     }
+    else if(!_rRH.m_bNull)
+    {
+        switch(_rRH.m_eTypeKind)
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                (*this) = ::rtl::OUString(_rRH.m_aValue.m_pString);
+                break;
+            case DataType::DOUBLE:
+            case DataType::FLOAT:
+            case DataType::REAL:
+                (*this) = *(double*)_rRH.m_aValue.m_pValue;
+                break;
+            case DataType::DATE:
+                (*this) = *(Date*)_rRH.m_aValue.m_pValue;
+            case DataType::TIME:
+                (*this) = *(Time*)_rRH.m_aValue.m_pValue;
+                break;
+            case DataType::TIMESTAMP:
+                (*this) = *(DateTime*)_rRH.m_aValue.m_pValue;
+                break;
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::LONGVARCHAR:
+                (*this) = *(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue;
+                break;
+            case DataType::BIT:
+                m_aValue.m_bBool    = _rRH.m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+                m_aValue.m_nInt32 = _rRH.m_aValue.m_nInt32;
+                break;
+            default:
+                OSL_ASSERT("Invalid type!");
+        }
+    }
+
+    m_bNull     = _rRH.m_bNull;
 
     return *this;
 }
@@ -186,7 +230,8 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::DATE)
+        free();
     if(m_bNull)
     {
         m_aValue.m_pValue = new Date(_rRH);
@@ -201,7 +246,8 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::TIME)
+        free();
     if(m_bNull)
     {
         m_aValue.m_pValue = new Time(_rRH);
@@ -216,7 +262,8 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::TIMESTAMP)
+        free();
     if(m_bNull)
     {
         m_aValue.m_pValue = new DateTime(_rRH);
@@ -233,12 +280,15 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const ::rtl::OUString& _rRH)
 {
-    free();
-    m_bNull = sal_False;
+    if(m_eTypeKind != DataType::VARCHAR || m_aValue.m_pString != _rRH.pData)
+    {
+        free();
+        m_bNull = sal_False;
 
-    m_aValue.m_pString = _rRH.pData;
-    rtl_uString_acquire(m_aValue.m_pString);
-    m_eTypeKind = DataType::VARCHAR;
+        m_aValue.m_pString = _rRH.pData;
+        rtl_uString_acquire(m_aValue.m_pString);
+        m_eTypeKind = DataType::VARCHAR;
+    }
 
     return *this;
 }
@@ -246,7 +296,8 @@ ORowSetValue& ORowSetValue::operator=(const ::rtl::OUString& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::DOUBLE)
+        free();
     if(m_bNull)
     {
         m_aValue.m_pValue = new double(_rRH);
@@ -262,7 +313,8 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::TINYINT)
+        free();
     m_bNull = sal_False;
     m_aValue.m_nInt8 = _rRH;
     m_eTypeKind = DataType::TINYINT;
@@ -272,7 +324,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::SMALLINT)
+        free();
     m_bNull = sal_False;
     m_aValue.m_nInt16 = _rRH;
     m_eTypeKind = DataType::SMALLINT;
@@ -282,7 +335,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::INTEGER)
+        free();
     m_bNull = sal_False;
     m_aValue.m_nInt32 = _rRH;
     m_eTypeKind = DataType::INTEGER;
@@ -292,7 +346,8 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 
 ORowSetValue& ORowSetValue::operator=(const sal_Bool _rRH)
 {
-    free();
+    if(m_eTypeKind != DataType::BIT)
+        free();
     m_bNull = sal_False;
     m_aValue.m_bBool = _rRH;
     m_eTypeKind = DataType::BIT;
@@ -320,7 +375,6 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
     if(m_bNull)
     {
         m_aValue.m_pValue = new Sequence<sal_Int8>(_rRH);
-
     }
     else
         *(Sequence<sal_Int8>*)m_aValue.m_pValue = _rRH;

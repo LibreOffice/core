@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ namespace connectivity
             OOperand() : m_eDBType(::com::sun::star::sdbc::DataType::OTHER){}
 
         public:
-            virtual ORowSetValue getValue() const = 0;
+            virtual const ORowSetValue& getValue() const = 0;
             virtual void setValue(const ORowSetValue& _rVal) = 0;
 
             virtual sal_Int32 getDBType() const {return m_eDBType;}
@@ -145,7 +145,7 @@ namespace connectivity
             OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
             sal_uInt16 getRowPos() const {return m_nRowPos;}
-            virtual ORowSetValue getValue() const;
+            virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
             void bindValue(OValueRow _pRow);                        // Bindung an den Wert, den der Operand repräsentiert
 
@@ -197,7 +197,7 @@ namespace connectivity
 
             OOperandValue(sal_Int32 eDbType) :OOperand(eDbType){}
         public:
-            virtual ORowSetValue getValue() const;
+            virtual const ORowSetValue& getValue() const;
             virtual void setValue(const ORowSetValue& _rVal);
 
             TYPEINFO();

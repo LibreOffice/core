@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,26 +690,31 @@ BOOL ODbaseIndex::CreateImpl()
     {
         sal_Int32 nRowsLeft = xSet->getRow();
         xSet->beforeFirst();
+        sal_Int32 nPos = 0;
 
+        ONDXKey aKey(ORowSetValue(), nType, 0);
+        ONDXKey aInsertKey(ORowSetValue(), nType, 0);
         // Erzeugen der Indexstruktur
         while (xSet->next())
         {
             //  ODbRow& rRow = *pCursor->GetRow();
+            ORowSetValue aValue(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)));
             // ueberpruefen auf doppelten eintrag
             if (m_IsUnique && m_nCurNode != NODE_NOTFOUND)
             {
-                ONDXKey aKey(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, 0);
+                aKey.setValue(aValue);
                 if (aKey == (*m_aCurLeaf)[m_nCurNode].GetKey())
                 {
-
                     closeImpl();
                     if(UCBContentHelper::Exists(sFile))
                         UCBContentHelper::Kill(sFile);
                     throw SQLException(::rtl::OUString::createFromAscii("Can not create index values are not unique!"),*this,SQLSTATE_GENERAL,1000,Any());
                 }
             }
-            ONDXKey aKey2(m_aHeader.db_keytype ? ORowSetValue(xRow->getDouble(1)) : ORowSetValue(xRow->getString(1)), nType, xSet->getRow());
-            ONDXNode aNewNode(aKey2);
+            aInsertKey.setValue(aValue);
+            aInsertKey.setRecord(++nPos);
+
+            ONDXNode aNewNode(aInsertKey);
             if (!m_aCurLeaf->Insert(aNewNode, --nRowsLeft))
                 break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,11 @@ namespace connectivity
             inline ONDXKey& operator= (const ONDXKey& rKey);
             virtual void setValue(const ORowSetValue& _rVal);
 
-            virtual ORowSetValue getValue() const;
+            virtual const ORowSetValue& getValue() const;
 
-            UINT32 GetRecord() const {return nRecord;}
-            void   ResetRecord() {nRecord = 0;}
+            UINT32 GetRecord() const        { return nRecord;   }
+            void setRecord(UINT32 _nRec)    { nRecord = _nRec;  }
+            void   ResetRecord()            { nRecord = 0;      }
 
             BOOL operator == (const ONDXKey& rKey) const;
             BOOL operator != (const ONDXKey& rKey) const;
@@ -289,8 +290,8 @@ namespace connectivity
             // Ist ein Index angegeben, kann gegebenfalls die Seite nachgeladen werden
             ONDXPagePtr&    GetChild(ODbaseIndex* pIndex = NULL, ONDXPage* = NULL);
 
-            const ONDXKey& GetKey() const {return aKey;}
-            ONDXKey&         GetKey() {return aKey;}
+            const ONDXKey& GetKey() const   { return aKey;}
+            ONDXKey&       GetKey()         { return aKey;}
 
             // Setzen des Childs, ueber Referenz, um die PagePos zu erhalten
             void            SetChild(ONDXPagePtr aCh = ONDXPagePtr(), ONDXPage* = NULL);
@@ -349,6 +350,8 @@ namespace connectivity
 
         inline BOOL ONDXKey::operator == (const ONDXKey& rKey) const
         {
+            if(&rKey == this)
+                return sal_True;
             return Compare(rKey) == COMPARE_EQUAL;
         }
         inline BOOL ONDXKey::operator != (const ONDXKey& rKey) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void OOperandRow::setValue(const ORowSetValue& _rVal)
     (*m_pRow)[m_nRowPos] = _rVal;
 }
 //------------------------------------------------------------------
-ORowSetValue OOperandRow::getValue() const
+const ORowSetValue& OOperandRow::getValue() const
 {
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
     return (*m_pRow)[m_nRowPos];
@@ -232,7 +232,7 @@ void OOperandParam::describe(const Reference< XPropertySet>& rColumn, ::vos::ORe
 }
 
 //------------------------------------------------------------------
-ORowSetValue OOperandValue::getValue() const
+const ORowSetValue& OOperandValue::getValue() const
 {
     return m_aValue;
 }
@@ -328,8 +328,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 //------------------------------------------------------------------
 sal_Bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
-    ORowSetValue aRet(pOperand->getValue());
-    return aRet.isNull();
+    return pOperand->getValue().isNull();
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 12:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,7 @@ void ONDXKey::setValue(const ORowSetValue& _rVal)
     xValue = _rVal;
 }
 // -----------------------------------------------------------------------------
-ORowSetValue ONDXKey::getValue() const
+const ORowSetValue& ONDXKey::getValue() const
 {
     return xValue;
 }
