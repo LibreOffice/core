@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:04:49 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:56:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,19 +68,22 @@
 #include <svx/msocximex.hxx>
 #endif
 
-#ifndef SC_XLROOT_HXX
-#include "xlroot.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
+#endif
+#ifndef SC_XEROOT_HXX
+#include "xeroot.hxx"
 #endif
 
-// 1 = Compile with OCX export.
-#define EXC_INCL_EXP_OCX 0
+// 0 = Export TBX form controls, 1 = Export OCX form controls.
+#define EXC_EXP_OCX_CTRL 0
 
 // OCX controls ===============================================================
 
 /** Converter base class for import and export of OXC controls.
     @descr  The purpose of this class is to manage all the draw pages occuring in a
     spreadsheet document. Derived classes implement import or export of the controls. */
-class XclOcxConverter : protected SvxMSConvertOCXControls, public XclRoot
+class XclOcxConverter : protected SvxMSConvertOCXControls
 {
 protected:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  XFormComponentRef;
@@ -99,6 +102,7 @@ private:
     virtual const XDrawPageRef& GetDrawPage();
 
 private:
+    ScDocument&                 mrDoc;          /// The Calc document.
     sal_uInt16                  mnCurrTab;      /// Stores sheet index of an object for GetDrawPage().
     sal_uInt16                  mnCachedTab;    /// Sheet index of cached draw page.
 };
@@ -107,21 +111,21 @@ private:
 // ----------------------------------------------------------------------------
 
 class XclImpEscherOle;
-class XclImpEscherCtrl;
+class XclImpEscherTbxCtrl;
 
 /** Converter for import of OXC controls. */
-class XclImpOcxConverter : public XclOcxConverter
+class XclImpOcxConverter : public XclOcxConverter, protected XclImpRoot
 {
 public:
-    explicit                    XclImpOcxConverter( const XclRoot& rRoot );
+    explicit                    XclImpOcxConverter( const XclImpRoot& rRoot );
 
     /** Reads the control formatting data for the passed object and creates the SdrUnoObj.
         @return  true = SdrUnoObj successfully created. */
     bool                        CreateSdrUnoObj( XclImpEscherOle& rOleObj );
 
-    /** Creates the SdrUnoObj for the passed old-fashioned control object.
+    /** Creates the SdrUnoObj for the passed TBX form control object.
         @return  true = SdrUnoObj successfully created. */
-    bool                        CreateSdrUnoObj( XclImpEscherCtrl& rCtrlObj );
+    bool                        CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl );
 
 private:
     /** Inserts the passed control rxFComp into the document. */
@@ -138,26 +142,31 @@ private:
 
 // ----------------------------------------------------------------------------
 
-#if EXC_INCL_EXP_OCX
-
 class SdrObject;
-class XclExpObjControl;
+#if EXC_EXP_OCX_CTRL
+class XclExpObjOcxCtrl;
+#else
+class XclExpObjTbxCtrl;
+#endif
 
 /** Converter for export of OXC controls. */
-class XclExpOcxConverter : public XclOcxConverter
+class XclExpOcxConverter : public XclOcxConverter, protected XclExpRoot
 {
 public:
-    explicit                    XclExpOcxConverter( const XclRoot& rRoot );
+    explicit                    XclExpOcxConverter( const XclExpRoot& rRoot );
 
-    /** Creates an OBJ record for the passed form control object.
+#if EXC_EXP_OCX_CTRL
+    /** Creates an OCX form control OBJ record from the passed form control.
         @descr  Writes the form control data to the 'Ctls' stream. */
-    XclExpObjControl*           CreateObjRec( const XShapeRef& rxShape );
+    XclExpObjOcxCtrl*           CreateCtrlObj( const XShapeRef& rxShape );
+#else
+    /** Creates a TBX form control OBJ record from the passed form control. */
+    XclExpObjTbxCtrl*           CreateCtrlObj( const XShapeRef& rxShape );
+#endif
 
 private:
     SvStorageStreamRef          mxStrm;         /// The 'Ctls' stream.
 };
-
-#endif
 
 // ============================================================================
 
