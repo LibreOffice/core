@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-12-05 16:08:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2036,14 +2036,14 @@ void ScColumn::CalcAll()
             ScBaseCell* pCell = pItems[i].pCell;
             if (pCell->GetCellType() == CELLTYPE_FORMULA)
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 // nach F9 ctrl-F9: ueberprueft die Berechnung per FormulaTree
                 ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
                 double nOldVal, nNewVal;
                 nOldVal = pFCell->GetValue();
 #endif
                 ((ScFormulaCell*)pCell)->Interpret();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if ( pFCell->GetCode()->IsRecalcModeNormal() )
                     nNewVal = pFCell->GetValue();
                 else
