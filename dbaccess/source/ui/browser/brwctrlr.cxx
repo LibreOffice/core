@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 07:21:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 10:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,15 +316,12 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_aAsynClose(LINK(this, SbaXDataBrowserController, OnAsyncClose))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
-    ,m_aSystemClipboard( TransferableDataHelper::CreateFromSystemClipboard() )
 {
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController : could not create the url transformer !");
-
-    m_aSystemClipboard.StartClipboardListening( );
 }
 
 //------------------------------------------------------------------------------
@@ -395,6 +392,10 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     m_pView = new UnoDataBrowserView(pParent,m_xMultiServiceFacatory);
     if (!getBrowserView())
         return sal_False;
+
+    // now that we have a view we can create the clipboard listener
+    m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard();
+    m_aSystemClipboard.StartClipboardListening( );
 
     // late construction
     sal_Bool bSuccess = sal_False;
