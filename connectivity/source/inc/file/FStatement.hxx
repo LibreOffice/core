@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ namespace connectivity
             ::cppu::OBroadcastHelper& rBHelper;
             DECLARE_CTY_ACQUIRE(OStatement_BASE);
             OStatement_Base(OConnection* _pConnection );
+
+            OConnection* getOwnConnection() const { return m_pConnection;}
 
             using OStatement_BASE::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
             // OComponentHelper

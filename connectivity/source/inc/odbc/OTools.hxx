@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:27 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _RTL_TEXTENC_H
+#include <rtl/textenc.h>
+#endif
 
 namespace connectivity
 {
@@ -98,11 +101,13 @@ namespace connectivity
         {
         public:
             static void ThrowException( SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,
-                                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,sal_Bool _bNoFound=sal_True)
-                                                                                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,sal_Bool _bNoFound=sal_True,
+                                        rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252)
+                                        throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static void GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,
-                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface)
+                                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                                                rtl_TextEncoding _nTextEncoding)
                                                                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static void GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Int32 &_rValue,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -142,7 +147,8 @@ namespace connectivity
                               sal_Int32 jdbcType,SQLSMALLINT& fCType,SQLSMALLINT& fSqlType,
                               SQLUINTEGER& nColumnSize,SQLSMALLINT& nDecimalDigits);
             static ::rtl::OUString getStringValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                                rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             static  ::com::sun::star::uno::Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -166,7 +172,7 @@ namespace connectivity
         }
 
         //-----------------------------------------------------------------------------
-        template < class T > void bindData(SWORD fSqlType,sal_Bool _bUseWChar,void *&_pData,SDWORD*& pLen,const T* _pValue)
+        template < class T > void bindData(SWORD fSqlType,sal_Bool _bUseWChar,void *&_pData,SDWORD*& pLen,const T* _pValue,rtl_TextEncoding _nTextEncoding)
         {
             SDWORD  nMaxLen = 0;
 
@@ -184,7 +190,7 @@ namespace connectivity
                     }
                     else
                     {
-                        ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,osl_getThreadTextEncoding()));
+                        ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                         *pLen = SQL_NTS;
                         memcpy(_pData,aString.getStr(),aString.getLength());
                         ((sal_Int8*)_pData)[aString.getLength()] = '\0';
@@ -251,9 +257,7 @@ namespace connectivity
                         nLen = sizeof(sal_Unicode) * ((::rtl::OUString*)_pValue)->getLength();
                     else
                     {
-                        ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,
-                            osl_getThreadTextEncoding()
-                            ));
+                        ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                         nLen = aString.getLength();
                     }
                     *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -277,7 +281,8 @@ namespace connectivity
         template < class T > sal_Bool bindParameter(    SQLHANDLE _hStmt,sal_Int32 nPos, sal_Int8* pDataBuffer,
                                                     sal_Int8* pLenBuffer,SQLSMALLINT _nJDBCtype,
                                                     sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,const T* _pValue,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface)
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                                    rtl_TextEncoding _nTextEncoding)
                                                      throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             SQLRETURN nRetcode;
@@ -292,7 +297,7 @@ namespace connectivity
 
             OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fSqlType,fCType,nColumnSize,nDecimalDigits);
 
-            bindData< T >(fSqlType,_bUseWChar,pData,pLen,_pValue);
+            bindData< T >(fSqlType,_bUseWChar,pData,pLen,_pValue,_nTextEncoding);
             if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
                 memcpy(pData,&nPos,sizeof(nPos));
 
@@ -317,7 +322,8 @@ namespace connectivity
         template <class T> void bindValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,
                                                    SQLSMALLINT _nType,SQLSMALLINT _nMaxLen,SQLSMALLINT _nScale,
                                                    const T* _pValue,void* _pData,SQLINTEGER *pLen,
-                                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                                          const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                                          rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             SQLRETURN nRetcode;
             SWORD   fSqlType;
@@ -453,7 +459,7 @@ namespace connectivity
         //              }
         //              else
                         {
-                            ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,osl_getThreadTextEncoding()));
+                            ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
                             *pLen = SQL_NTS;
                             *((::rtl::OString*)_pData) = aString;
                             _nMaxLen = aString.getLength();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:11:59 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
+#endif
 
 using namespace connectivity::odbc;
 using namespace connectivity::dbtools;
@@ -142,7 +145,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     SWORD cbConnStrOut;
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
-    ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,osl_getThreadTextEncoding()));
+    ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,getTextEncoding()));
     memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 
@@ -180,7 +183,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     try
     {
         ::rtl::OUString aVal;
-        OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this);
+        OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
         bReadOnly = !aVal.compareToAscii("Y");
     }
     catch(...)
@@ -232,6 +235,21 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         {
             pBegin->Value >>= aPWD;
             aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+        }
+        else if(0 == pBegin->Name.compareToAscii("CharSet"))
+        {
+            ::rtl::OUString sIanaName;
+            pBegin->Value >>= sIanaName;
+
+            ::dbtools::OCharsetMap aLookupIanaName;
+            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+            if (aLookup != aLookupIanaName.end())
+                m_nTextEncoding = (*aLookup).getEncoding();
+            else
+                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                m_nTextEncoding = getTextEncoding();
+
         }
     }
 
@@ -286,11 +304,11 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OString aSql(::rtl::OUStringToOString(sql.getStr(),osl_getThreadTextEncoding()));
+    ::rtl::OString aSql(::rtl::OUStringToOString(sql.getStr(),getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
     OTools::ThrowException(N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,2048,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
-    return ::rtl::OUString(pOut,nOutLen,osl_getThreadTextEncoding());
+    return ::rtl::OUString(pOut,nOutLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
@@ -376,7 +394,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
         throw DisposedException();
 
     ::rtl::OUString aValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this);
+    OTools::GetInfo(m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aValue,*this,getTextEncoding());
     return aValue == ::rtl::OUString::createFromAscii("Y");
 }
 // --------------------------------------------------------------------------------
@@ -386,7 +404,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     if (OConnection_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    ::rtl::OString aCat(::rtl::OUStringToOString(catalog.getStr(),osl_getThreadTextEncoding()));
+    ::rtl::OString aCat(::rtl::OUStringToOString(catalog.getStr(),getTextEncoding()));
     OTools::ThrowException(
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)aCat.getStr(),SQL_NTS),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
@@ -404,7 +422,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
         N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,1024,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 
-    return ::rtl::OUString(pCat,nValueLen,osl_getThreadTextEncoding());
+    return ::rtl::OUString(pCat,nValueLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)

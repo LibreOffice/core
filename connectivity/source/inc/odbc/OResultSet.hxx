@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:24:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReferenceHelper  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
+            rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             SQLRETURN                                   m_nCurrentFetchState;
@@ -203,7 +204,7 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
-            OResultSet( SQLHANDLE _pStatementHandle);
+            OResultSet( SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
             ~OResultSet();
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:34:15 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ namespace connectivity
             ::com::sun::star::uno::WeakReferenceHelper                                  m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
+            rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
             SQLRETURN                                   m_nCurrentFetchState;
@@ -189,7 +190,7 @@ namespace connectivity
         public:
             DECLARE_CTY_DEFAULTS(ODatabaseMetaDataResultSet_BASE);
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            ODatabaseMetaDataResultSet( SQLHANDLE _pStatementHandle);
+            ODatabaseMetaDataResultSet( SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding);
             ~ODatabaseMetaDataResultSet();
 
             // ::cppu::OComponentHelper

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
 // -------------------------------------------------------------------------
-void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,const Reference< XInterface >& _xInterface,sal_Bool _bNoFound) throw(SQLException, RuntimeException)
+void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT _nHandleType,const Reference< XInterface >& _xInterface,sal_Bool _bNoFound,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     switch(_rRetCode)
     {
@@ -127,9 +127,9 @@ void OTools::ThrowException(SQLRETURN _rRetCode,SQLHANDLE _pContext,SQLSMALLINT 
     OSL_ENSHURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
     // Zum Return Code von SQLError siehe ODBC 2.0 Programmer's Reference Seite 287ff
-    throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,RTL_TEXTENCODING_MS_1252),
+    throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
                                     _xInterface,
-                                    ::rtl::OUString((char *)szSqlState,5,RTL_TEXTENCODING_MS_1252),
+                                    ::rtl::OUString((char *)szSqlState,5,_nTextEncoding),
                                     pfNativeError,
                                     Any()
                                 );
@@ -192,7 +192,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString OTools::getStringValue(SQLHANDLE _aStatementHandle,sal_Int32 columnIndex,SWORD  _fSqlType,sal_Bool &_bWasNull,
-                const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+                const Reference< XInterface >& _xInterface,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aData;
     switch(_fSqlType)
@@ -273,7 +273,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 
             SQLINTEGER nLen = pcbValue != SQL_NO_TOTAL ? std::min(pcbValue, nMaxLen) : nMaxLen;
             aCharArray[nLen] = 0;
-            aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, osl_getThreadTextEncoding());
+            aData = ::rtl::OUString((const sal_Char*)aCharArray,nLen, _nTextEncoding);
 
             // Es handelt sich um Binaerdaten, um einen String, der fuer
             // StarView zu lang ist oder der Treiber kann die Laenge der
@@ -300,7 +300,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
                                     _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
                 aCharArray[nLen] = 0;
 
-                aData += ::rtl::OUString((const sal_Char*)aCharArray,nLen,osl_getThreadTextEncoding());
+                aData += ::rtl::OUString((const sal_Char*)aCharArray,nLen,_nTextEncoding);
             }
 
             // delete all blanks
@@ -311,7 +311,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
     return aData;
 }
 // -------------------------------------------------------------------------
-void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,const Reference< XInterface >& _xInterface,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     char aValue[512];
     SQLSMALLINT nValueLen;
@@ -319,7 +319,7 @@ void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUS
         N3SQLGetInfo(_aConnectionHandle,_nInfo,aValue,sizeof aValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 
-    _rValue = ::rtl::OUString(aValue,nValueLen,RTL_TEXTENCODING_MS_1252);
+    _rValue = ::rtl::OUString(aValue,nValueLen,_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,sal_Int32 &_rValue,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 14:49:50 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
                                 parameterIndex,                         \
                                 bindBuf,getLengthBuf(parameterIndex),   \
                                 _jt,                                    \
-                                sal_False,sal_False,&x,(Reference <XInterface>)*this)
+                                sal_False,sal_False,&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding())
 
 
 
@@ -1159,7 +1159,7 @@ void OPreparedStatement::setChar(sal_Int32 parameterIndex,
                                 const ::rtl::OUString& x)
                                 throw(SQLException)
 {
-    //  ::rtl::OString x1(::rtl::OUStringToOString(x,osl_getThreadTextEncoding()));
+    //  ::rtl::OString x1(::rtl::OUStringToOString(x,getConnection()->getTextEncoding()));
 
     if( !parameterIndex || parameterIndex > numParams)
         throw SQLException(STAT_INVALID_INDEX,*this,::rtl::OUString::createFromAscii("07009"),0,Any());
@@ -1215,7 +1215,7 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
                                 parameterIndex,
                                 bindBuf,getLengthBuf(parameterIndex),
                                 SQLtype,
-                                sal_False,sal_False,&x,(Reference <XInterface>)*this);
+                                sal_False,sal_False,&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding());
 
 
     //  N3SQLBindInParameterBinary (m_aStatementHandle, parameterIndex,
@@ -1259,7 +1259,7 @@ void OPreparedStatement::prepareStatement()
 {
     m_bPrepared = sal_True;
     OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
-    ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,osl_getThreadTextEncoding()));
+    ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
     SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
     OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     initBoundParam();

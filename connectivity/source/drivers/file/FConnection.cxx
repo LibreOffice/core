@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-08 08:34:17 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)
-                         ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
     ModuleContext::AddRef();
 }

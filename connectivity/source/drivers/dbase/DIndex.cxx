@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-01 11:36:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,8 +397,8 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 
     // Text convertierung
     ByteString aText(rIndex.m_aHeader.db_name);
-    //  aText.Convert(rIndex.GetDBFConnection()->GetCharacterSet(), gsl_getSystemTextEncoding());
-    //  aText.Convert(rIndex.GetDBFConnection()->GetCharacterSet(), gsl_getSystemTextEncoding());
+    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
+    //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
 
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
@@ -410,7 +410,7 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
 {
     rStream.Seek(0);
     ByteString aText(rIndex.m_aHeader.db_name);
-    //  aText.Convert(gsl_getSystemTextEncoding(), rIndex.GetDBFConnection()->GetCharacterSet());
+    //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
     sal_Int32 nWrites = rStream.Write(&rIndex.m_aHeader,512);
     OSL_ENSHURE(nWrites == 512,"Write not successful: Wrong header size for dbase index!");
@@ -428,9 +428,6 @@ void ODbaseIndex::createINFEntry()
 {
     // inf Datei abgleichen
     String aNDX;
-    //  Dir* pDir = m_pTable->getConnection()->getDir();
-    //  String aPath = pDir->GetName();
-    //  aPath += m_Name.getStr();
     INetURLObject aEntry(getEntry());
     aEntry.setExtension(String::CreateFromAscii("ndx"));
 
@@ -457,7 +454,7 @@ void ODbaseIndex::createINFEntry()
             }
         }
     }
-    aInfFile.WriteKey(aNewEntry,ByteString(aEntry.GetName(),gsl_getSystemTextEncoding()));
+    aInfFile.WriteKey(aNewEntry,ByteString(aEntry.GetName(),m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
 BOOL ODbaseIndex::DropImpl()
@@ -504,7 +501,7 @@ BOOL ODbaseIndex::DropImpl()
         //...wenn ja, Indexliste der Tabelle hinzufuegen
         if (aEntry.IsCaseSensitive() ? aKeyName.Copy(0,3) == "NDX" : aKeyName.Copy(0,3).EqualsIgnoreCaseAscii("NDX"))
         {
-            aEntryToComp.setName(String(aInfFile.ReadKey(aKeyName),gsl_getSystemTextEncoding()));
+            aEntryToComp.setName(String(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()));
             aEntryToComp.setExtension(String::CreateFromAscii("ndx"));
             if (aEntryToComp == aIndexEntry)
             {
@@ -630,7 +627,7 @@ BOOL ODbaseIndex::CreateImpl()
     m_aHeader.db_keytype = (nType == DataType::VARCHAR || nType == DataType::CHAR) ? 0 : 1;
     m_aHeader.db_keylen  = (m_aHeader.db_keytype) ? 8 : (USHORT)getINT32(xCol->getFastPropertyValue(PROPERTY_ID_PRECISION));
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
-    ByteString aCol(aName,gsl_getSystemTextEncoding());
+    ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
     strcpy(m_aHeader.db_name,aCol.GetBuffer());
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-19 11:55:55 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ void ONDXPage::PrintPage()
         }
         else
         {
-            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(getString(rKey.getValue()).getStr(), gsl_getSystemTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
+            DBG_TRACE3("SDB: [%d,%s,%d]",rKey.GetRecord(), (const char* )ByteString(getString(rKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding()).GetBuffer(),rNode.GetChild().GetPagePos());
         }
     }
     DBG_TRACE("SDB: -----------------------------------------------\n");
@@ -930,13 +930,13 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
             //  ODBFConnection *pCon = rIndex.GetDBFConnection();
             if (NULL)
             {
-                ByteString aText(getString(aKey.getValue()).getStr(), gsl_getSystemTextEncoding());//pCon->GetCharacterSet());
+                ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
                 strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
             }
             else
             {
                 DBG_ERROR("No Connection");
-                ByteString aText(getString(aKey.getValue()).getStr(), gsl_getSystemTextEncoding());
+                ByteString aText(getString(aKey.getValue()).getStr(), rIndex.m_pTable->getConnection()->getTextEncoding());
                 strncpy(aNodeData.aData,aText.GetBuffer(),min(rIndex.getHeader().db_keylen, aText.Len()));
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 15:50:18 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,12 +117,13 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(SQLHANDLE _pStatementHandle) :   ODatabaseMetaDataResultSet_BASE(m_aMutex)
+ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(SQLHANDLE _pStatementHandle,rtl_TextEncoding _nTextEncoding) :   ODatabaseMetaDataResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
                         ,m_aStatement(NULL)
                         ,m_xMetaData(NULL)
                         ,m_aStatementHandle(_pStatementHandle)
                         ,m_bEOF(sal_False)
+                        ,m_nTextEncoding(_nTextEncoding)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
@@ -245,7 +246,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             {
-                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this);
+                ::rtl::OUString aRet = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
                 return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
             }
             break;
@@ -415,7 +416,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this);
+    ::rtl::OUString aVal = OTools::getStringValue(m_aStatementHandle,columnIndex,getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
 
     return aVal;
 }
@@ -848,12 +849,12 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     else
         pSchemaPat = NULL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schemaPattern,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr();
 
 
     const char  *pCOL = NULL;
@@ -861,7 +862,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     const ::rtl::OUString* pEnd = pBegin + types.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        aCOL += ::rtl::OUStringToOString(*pBegin,osl_getThreadTextEncoding());
+        aCOL += ::rtl::OUStringToOString(*pBegin,m_nTextEncoding);
         aCOL += ",";
     }
     if(aCOL.getLength())
@@ -939,13 +940,13 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schema,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(table,osl_getThreadTextEncoding()).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr(),
+                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumnPrivileges(m_aStatementHandle,
@@ -971,13 +972,13 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schemaPattern,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,osl_getThreadTextEncoding()).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding).getStr(),
+                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLColumns(m_aStatementHandle,
@@ -1034,13 +1035,13 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schemaPattern,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,osl_getThreadTextEncoding()).getStr(),
-                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr(),
+                *pCOL = aCOL = ::rtl::OUStringToOString(columnNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedureColumns(m_aStatementHandle,
@@ -1066,12 +1067,12 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schemaPattern,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(procedureNamePattern,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLProcedures(m_aStatementHandle,
@@ -1094,12 +1095,12 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schema,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = aPKN = ::rtl::OUStringToOString(table,osl_getThreadTextEncoding()).getStr();
+                *pPKN = aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding).getStr();
 
 
     SQLRETURN nRetcode = N3SQLSpecialColumns(m_aStatementHandle,_bRowVer ? SQL_ROWVER : SQL_BEST_ROWID,
@@ -1131,15 +1132,15 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
     m_bFreeHandle = sal_True;
 
     ::rtl::OString aPKQ,aPKO,aPKN, aFKQ, aFKO, aFKN;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aFKQ = ::rtl::OUStringToOString(connectivity::getString(catalog2),osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aFKQ = ::rtl::OUStringToOString(connectivity::getString(catalog2),m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
-                *pPKO = schema ? ::rtl::OUStringToOString(*schema,osl_getThreadTextEncoding()).getStr() : NULL,
-                *pPKN = table   ? (aPKN = ::rtl::OUStringToOString(*table,osl_getThreadTextEncoding())).getStr(): NULL,
+                *pPKO = schema ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
+                *pPKN = table   ? (aPKN = ::rtl::OUStringToOString(*table,m_nTextEncoding)).getStr(): NULL,
                 *pFKQ = catalog2.hasValue() && aFKQ.getLength() ? aFKQ.getStr() : NULL,
-                *pFKO = schema2 ? (aFKO = ::rtl::OUStringToOString(*schema2,osl_getThreadTextEncoding())).getStr() : NULL,
-                *pFKN = table2  ? (aFKN = ::rtl::OUStringToOString(*table2,osl_getThreadTextEncoding())).getStr() : NULL;
+                *pFKO = schema2 ? (aFKO = ::rtl::OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
+                *pFKN = table2  ? (aFKN = ::rtl::OUStringToOString(*table2,m_nTextEncoding)).getStr() : NULL;
 
 
     SQLRETURN nRetcode = N3SQLForeignKeys(m_aStatementHandle,
@@ -1178,12 +1179,12 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schema,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = (aPKN = ::rtl::OUStringToOString(table,osl_getThreadTextEncoding())).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLPrimaryKeys(m_aStatementHandle,
@@ -1206,12 +1207,12 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schemaPattern,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,osl_getThreadTextEncoding())).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(tableNamePattern,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLTablePrivileges(m_aStatementHandle,
@@ -1235,12 +1236,12 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),osl_getThreadTextEncoding());
-    aPKO = ::rtl::OUStringToOString(schema,osl_getThreadTextEncoding());
+    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = pSchemaPat ? aPKO.getStr() : NULL,
-                *pPKN = (aPKN = ::rtl::OUStringToOString(table,osl_getThreadTextEncoding())).getStr();
+                *pPKN = (aPKN = ::rtl::OUStringToOString(table,m_nTextEncoding)).getStr();
 
 
     SQLRETURN nRetcode = N3SQLStatistics(m_aStatementHandle,

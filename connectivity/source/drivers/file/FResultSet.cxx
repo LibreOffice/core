@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 07:06:23 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
                         ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
                         ,m_nFetchDirection(FetchDirection::FORWARD)
+                        ,m_nTextEncoding(pStmt->getOwnConnection()->getTextEncoding())
 {
     osl_incrementInterlockedCount( &m_refCount );
 
@@ -1620,7 +1621,7 @@ CharSet OFILESortIndex::eCurrentCharSet;
 //------------------------------------------------------------------
 OFILESortIndex::OFILESortIndex(const OKeyType eKeyType2[],  // Genau 3 Eintraege!
                            const BOOL bAscending2[],        // Genau 3 Eintraege!
-                           INT32 nMaxNumberOfRows, CharSet eSet)    // Obere Schranke fuer die Anzahl indizierbarer Zeilen
+                           INT32 nMaxNumberOfRows, rtl_TextEncoding eSet)   // Obere Schranke fuer die Anzahl indizierbarer Zeilen
     : nMaxCount(nMaxNumberOfRows),
       nCount(0),
       bFrozen(FALSE), eCharSet(eSet)
@@ -2146,7 +2147,7 @@ BOOL OResultSet::OpenImpl()
 
                     m_pSortIndex = new OFILESortIndex(eKeyType,
                                                       bOrderbyAscending,
-                                                      nMaxRowCount,RTL_TEXTENCODING_MS_1252);
+                                                      nMaxRowCount,m_nTextEncoding);
 
                     sal_Bool bOK = sal_True;
                     if (m_pEvaluationKeySet)

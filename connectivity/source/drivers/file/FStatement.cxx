@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 10:41:26 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    //  ::rtl::OString aSql(::rtl::OUStringToOString(sql,osl_getThreadTextEncoding()));
-        Reference< XResultSet > xRS = executeQuery(sql);
+    Reference< XResultSet > xRS = executeQuery(sql);
 
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
 }

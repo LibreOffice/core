@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:24:53 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ namespace connectivity
 
             // other methods
             SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }
+            OConnection* getOwnConnection() const { return m_pConnection;}
         };
 
         class OStatement_BASE2 : public OStatement_Base,

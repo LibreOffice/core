@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,10 @@
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include "connectivity/sqliterator.hxx"
 #endif
-//  namespace ucb { class Content } }
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
+
 
 namespace connectivity
 {
@@ -126,6 +129,7 @@ namespace connectivity
                                                     > OConnection_BASE;
 
         class OConnection : public OConnection_BASE,
+                            public connectivity::OMetaConnection,
                             public connectivity::OSubComponent<OConnection>
         {
             friend class connectivity::OSubComponent<OConnection>;
@@ -154,7 +158,6 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >    m_xDir; // directory
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>              m_xContent;
 
-            rtl_TextEncoding            m_nTextEncoding;
             sal_Bool                    m_bClosed;
             sal_Bool                    m_bAutoCommit;
             sal_Bool                    m_bReadOnly;
@@ -210,8 +213,6 @@ namespace connectivity
             String getExtension() const { return m_aFilenameExtension;}
 
             OFileDriver*        getDriver() const { return m_pDriver; }
-            rtl_TextEncoding    getTextEncoding() const { return m_nTextEncoding; }
-
         };
     }
 }

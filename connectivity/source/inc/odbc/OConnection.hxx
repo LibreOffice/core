@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:00:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
+#endif
 #ifndef _CONNECTIVITY_OTYPEINFO_HXX_
 #include "OTypeInfo.hxx"
 #endif
@@ -113,6 +116,7 @@ namespace connectivity
                                             > OConnection_BASE;
 
         class OConnection : public OConnection_BASE,
+                            public connectivity::OMetaConnection,
                             public connectivity::OSubComponent<OConnection>
         {
             friend class connectivity::OSubComponent<OConnection>;

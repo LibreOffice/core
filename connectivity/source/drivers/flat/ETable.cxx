@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:33:09 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-double toDouble(const ByteString& rString);
+double toDouble(const ByteString& rString,rtl_TextEncoding _nrTextEncoding);
 //------------------------------------------------------------------
 xub_StrLen OFlatString::GetTokenCount( sal_uInt8 cTok, sal_uInt8 cStrDel ) const
 {
@@ -321,7 +321,7 @@ void OFlatTable::fillColumns()
         if (pConnection->isHeaderLine())
         {
             aColumnName = aHeaderLine.GetToken(i,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter());
-            aColumnName.Convert(pConnection->getTextEncoding(),gsl_getSystemTextEncoding());
+            aColumnName.Convert(pConnection->getTextEncoding(),pConnection->getTextEncoding());
         }
         else
         {
@@ -918,7 +918,7 @@ sal_Bool OFlatTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,s
                     else
                         aStrConverted += aStr.GetChar(j) ;
                 }
-                double nVal = toDouble(aStrConverted);
+                double nVal = toDouble(aStrConverted,pConnection->getTextEncoding());
                 (*_rRow)[i] = nVal;
             } break;
             default:
@@ -965,7 +965,7 @@ void OFlatTable::AllocBuffer()
 {
 }
 //------------------------------------------------------------------
-double toDouble(const ByteString& rString)
+double toDouble(const ByteString& rString,rtl_TextEncoding _nTextEncoding)
 {
     static International aInter(LANGUAGE_ENGLISH);
     static int nErrno=0;
@@ -979,7 +979,7 @@ double toDouble(const ByteString& rString)
         aInter.SetNumDecimalSep('.');
         bInitialized = TRUE;
     }
-    return SolarMath::StringToDouble(UniString(rString,gsl_getSystemTextEncoding()).GetBuffer(),aInter,nErrno);
+    return SolarMath::StringToDouble(UniString(rString,_nTextEncoding).GetBuffer(),aInter,nErrno);
 }
 
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-23 08:19:48 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    ::rtl::OString aSql(::rtl::OUStringToOString(sql,osl_getThreadTextEncoding()));
+    ::rtl::OString aSql(::rtl::OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
     sal_Bool hasResultSet = sal_False;
     SQLWarning aWarning;
@@ -542,9 +542,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     sal_Int32 nLen = 0;
     for(::std::list< ::rtl::OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
     {
-        aBatchSql += ::rtl::OUStringToOString(*i,
-                        osl_getThreadTextEncoding()
-            );
+        aBatchSql += ::rtl::OUStringToOString(*i,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";
     }
 
@@ -932,7 +930,7 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
         throw DisposedException();
 
     OSL_ENSHURE(m_aStatementHandle,"StatementHandle is null!");
-    ::rtl::OString aName(::rtl::OUStringToOString(_par0,osl_getThreadTextEncoding()));
+    ::rtl::OString aName(::rtl::OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
     THROW_SQL(N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),aName.getLength()));
 }
 // -------------------------------------------------------------------------

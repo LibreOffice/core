@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:21:52 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
+#endif
+
 
 using namespace connectivity::adabas;
 using namespace connectivity;
@@ -137,6 +141,20 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
             pBegin->Value >>= aUID;
         else if(!pBegin->Name.compareToAscii("password"))
             pBegin->Value >>= aPWD;
+        else if(0 == pBegin->Name.compareToAscii("CharSet"))
+        {
+            ::rtl::OUString sIanaName;
+            pBegin->Value >>= sIanaName;
+
+            ::dbtools::OCharsetMap aLookupIanaName;
+            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+            if (aLookup != aLookupIanaName.end())
+                m_nTextEncoding = (*aLookup).getEncoding();
+            else
+                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
+                m_nTextEncoding = osl_getThreadTextEncoding();
+        }
     }
 
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, aUID,aPWD);
@@ -159,9 +177,9 @@ SQLRETURN OAdabasConnection::OpenConnection(const ::rtl::OUString& aConnectStr,s
     memset(szUID,'\0',20);
     memset(szPWD,'\0',20);
 
-    ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,osl_getThreadTextEncoding()));
-    ::rtl::OString aUID(::rtl::OUStringToOString(_uid,osl_getThreadTextEncoding()));
-    ::rtl::OString aPWD(::rtl::OUStringToOString(_pwd,osl_getThreadTextEncoding()));
+    ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,getTextEncoding()));
+    ::rtl::OString aUID(::rtl::OUStringToOString(_uid,getTextEncoding()));
+    ::rtl::OString aPWD(::rtl::OUStringToOString(_pwd,getTextEncoding()));
     memcpy(szDSN, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
     memcpy(szUID, (SDB_ODBC_CHAR*) aUID.getStr(), ::std::min<sal_Int32>((sal_Int32)20,aUID.getLength()));
     memcpy(szPWD, (SDB_ODBC_CHAR*) aPWD.getStr(), ::std::min<sal_Int32>((sal_Int32)20,aPWD.getLength()));

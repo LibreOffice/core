@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 10:25:04 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,11 @@ namespace connectivity
                                         // Zeiger auf Array der Groesse [nMaxCount]
 
             BOOL bFrozen;
-            CharSet eCharSet;
+            rtl_TextEncoding eCharSet;
 
         public: // nur fuer OFILECompare:
             static OFILESortIndex *pCurrentIndex;                   // Waehrend der Ausfuehrung von qsort ist hier der Zeiger
-            static CharSet eCurrentCharSet;
+            static rtl_TextEncoding eCurrentCharSet;
                                                                     // auf den gerade zur Sortierung verwendeten Index hinterlegt
                                                                     // (wird von der Vergleichsfunktion OFILEKeyCompare verwendet).
             OKeyType eKeyType[SQL_ORDERBYKEYS];
@@ -194,7 +194,7 @@ namespace connectivity
             OFILESortIndex(const OKeyType eKeyType[],           // Art des Schluessels: numerisch/String/nicht sortieren (Genau 3 Eintraege!)
                              const BOOL bAscending[],               // TRUE = Aufsteigend sortieren (Genau 3 Eintraege!)
                              INT32 nMaxNumberOfRows,
-                             CharSet eSet);
+                             rtl_TextEncoding eSet);
 
             ~OFILESortIndex();
 
@@ -289,6 +289,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColNames; // table columns
 
             ::rtl::OUString                                     m_aTableRange;
+            rtl_TextEncoding                                    m_nTextEncoding;
             sal_Int32                                           m_nRowPos;
             sal_Int32                                           m_nFilePos;
             sal_Int32                                           m_nLastVisitedPos;
