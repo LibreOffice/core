@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mt $ $Date: 2001-05-28 09:03:37 $
+#   last change: $Author: mt $ $Date: 2001-06-01 10:44:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,10 @@ IDLFILES=\
     FocusChangeReason.idl\
     FocusEvent.idl\
     FontDescriptor.idl\
+    FontEmphasisMark.idl\
     FontFamily.idl\
     FontPitch.idl\
+    FontRelief.idl\
     FontSlant.idl\
     FontStrikeout.idl\
     FontType.idl\
