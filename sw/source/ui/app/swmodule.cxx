@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:49:24 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:55:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pColorConfig(0),
     pAccessibilityOptions(0),
     pCTLOptions(0),
+    pUserOptions(0),
+    pUndoOptions(0),
     pClipboard(0),
     pDragDrop(0),
     pXSelection(0),
