@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:11:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCUSTOMSPRITE_HPP_
-#include <drafts/com/sun/star/rendering/XCustomSprite.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCUSTOMSPRITE_HPP_
+#include <com/sun/star/rendering/XCustomSprite.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
@@ -102,8 +102,8 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper3< ::drafts::com::sun::star::rendering::XCustomSprite,
-                                               ::drafts::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XCustomSprite,
+                                               ::com::sun::star::rendering::XBitmapCanvas,
                                                 ::com::sun::star::lang::XServiceInfo >                                  CanvasCustomSpriteBase_Base;
     typedef ::canvas::internal::BitmapCanvasBase< CanvasCustomSpriteBase_Base, CanvasHelper, tools::LocalGuard >    CanvasCustomSprite_Base;
 
@@ -113,7 +113,7 @@ namespace vclcanvas
                                public CanvasCustomSprite_Base
     {
     public:
-        CanvasCustomSprite( const ::drafts::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
                             const WindowGraphicDevice::ImplRef&                     rDevice,
                             const SpriteCanvas::ImplRef&                            rSpriteCanvas );
 
@@ -131,17 +131,23 @@ namespace vclcanvas
 
         virtual void SAL_CALL disposing();
 
+        // XCanvas: selectively override base's method here, for opacity tracking
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
+            drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
+                        const ::com::sun::star::rendering::ViewState&                                   viewState,
+                        const ::com::sun::star::rendering::RenderState&                                 renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
         // XSprite
         virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL move( const ::drafts::com::sun::star::geometry::RealPoint2D& aNewPos, const ::drafts::com::sun::star::rendering::ViewState& viewState, const ::drafts::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL transform( const ::drafts::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL move( const ::com::sun::star::geometry::RealPoint2D& aNewPos, const ::com::sun::star::rendering::ViewState& viewState, const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL transform( const ::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setPriority( double nPriority ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL show(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL hide(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XCustomSprite
-        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvas > SAL_CALL
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL
             getContentCanvas(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
@@ -175,9 +181,18 @@ namespace vclcanvas
         ::basegfx::B2DPoint                                         maPosition;
         Size                                                        maSize;
         ::com::sun::star::uno::Reference<
-              ::drafts::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
+              ::com::sun::star::rendering::XPolyPolygon2D > mxClipPoly;
         double                                                      mfAlpha;
         bool                                                        mbActive;
+
+        /** OutDev render speedup.
+
+            When true, this flag denotes that the current
+            mpBackBufferMask content is fully opaque, thus, that blits
+            to the screen can use a plain Bitmap instead of the
+            BitmapEx.
+         */
+        mutable bool                                                mbIsContentFullyOpaque;
     };
 }
 
