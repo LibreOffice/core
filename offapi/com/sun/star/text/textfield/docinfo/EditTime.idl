@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditTime.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:17:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star {
     duration the document has been edited.
     @see com::sun::star::text::TextField
 */
-service EditTime
+published service EditTime
 {
     service  com::sun::star::text::TextField;
     /** contains the current content of the text field.
