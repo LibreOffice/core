@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:06:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,15 +366,15 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         /*  Import: only read functions supported in the current BIFF version.
             Function tables from later BIFF versions may overwrite single
             functions from earlier tables. */
-        if( eBiff >= xlBiff2 )
+        if( eBiff >= EXC_BIFF2 )
             FillXclFuncMap( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
-        if( eBiff >= xlBiff3 )
+        if( eBiff >= EXC_BIFF3 )
             FillXclFuncMap( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
-        if( eBiff >= xlBiff4 )
+        if( eBiff >= EXC_BIFF4 )
             FillXclFuncMap( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
-        if( eBiff >= xlBiff5 )
+        if( eBiff >= EXC_BIFF5 )
             FillXclFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
-        if( eBiff >= xlBiff8 )
+        if( eBiff >= EXC_BIFF8 )
             FillXclFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
         // external functions (i.e. add-in functions)
         FillXclFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
@@ -384,18 +384,18 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
         /*  Export: only write functions supported in the current BIFF version.
             Function tables from later BIFF versions may overwrite single
             functions from earlier tables. */
-        if( eBiff >= xlBiff2 )
+        if( eBiff >= EXC_BIFF2 )
             FillScFuncMap( saFuncTable_2, STATIC_TABLE_END( saFuncTable_2 ) );
-        if( eBiff >= xlBiff3 )
+        if( eBiff >= EXC_BIFF3 )
             FillScFuncMap( saFuncTable_3, STATIC_TABLE_END( saFuncTable_3 ) );
-        if( eBiff >= xlBiff4 )
+        if( eBiff >= EXC_BIFF4 )
             FillScFuncMap( saFuncTable_4, STATIC_TABLE_END( saFuncTable_4 ) );
-        if( eBiff >= xlBiff5 )
+        if( eBiff >= EXC_BIFF5 )
             FillScFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
-        if( eBiff >= xlBiff8 )
+        if( eBiff >= EXC_BIFF8 )
             FillScFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
         // external functions (i.e. add-in functions)
-        if( eBiff >= xlBiff5 )
+        if( eBiff >= EXC_BIFF5 )
             FillScFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
     }
 }
