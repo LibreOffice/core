@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:28:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1956,11 +1956,11 @@ X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent
     pEventData[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
 #else
     pEventData[0] = (sal_uInt32)((long)pExtTextEvent);
-    pEventData[1] = NULL;
+    pEventData[1] = 0;
 #endif
     pEventData[2] = (sal_uInt32)nExtTextEventType;
-    pEventData[3] = NULL;
-    pEventData[4] = NULL;
+    pEventData[3] = 0;
+    pEventData[4] = 0;
 
     GetDisplay()->SendEvent (nEventAtom, pEventData, nFocusWindow);
 }
