@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:27:06 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,45 @@ class SwDrawView : public FmFormView
     SwViewImp      &rImp;               //Die View gehoert immer zu einer Shell
 
     const SwFrm *CalcAnchor();
+
+    /** determine maximal order number for a 'child' object of given 'parent' object
+
+        OD 2004-08-20 #110810#
+        The maximal order number will be determined on the current object
+        order hierarchy. It's the order number of the 'child' object with the
+        highest order number. The calculation can be influenced by parameter
+        <_pExclChildObj> - this 'child' object won't be considered.
+
+        @param <_rParentObj>
+        input parameter - 'parent' object, for which the maximal order number
+        for its 'childs' will be determined.
+
+        @param <_pExclChildObj>
+        optional input parameter - 'child' object, which will not be considered
+        on the calculation of the maximal order number
+
+        @author OD
+    */
+    sal_uInt32 _GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
+                                   const SdrObject* _pExclChildObj = 0L ) const;
+
+    /** method to move 'repeated' objects of the given moved object to the
+        according level
+
+        OD 2004-08-23 #110810#
+
+        @param <_rMovedAnchoredObj>
+        input parameter - moved object, for which the 'repeated' ones have also
+        to be moved.
+
+        @param <_rMovedChildsObjs>
+        input parameter - data collection of moved 'child' objects - the 'repeated'
+        ones of these 'childs' will also been moved.
+
+        @author OD
+    */
+    void _MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
+                            const std::vector<SdrObject*>& _rMovedChildObjs ) const;
 
 protected:
     // add custom handles (used by other apps, e.g. AnchorPos)
