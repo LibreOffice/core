@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:07:51 $
+ *  last change: $Author: jp $ $Date: 2001-08-20 11:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,8 @@ FASTBOOL SwPaM::HasReadonlySel() const
                         const SwFmtCntnt& rCntnt = pFmt->GetCntnt(FALSE);
                         ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                         ULONG nIdx = rCntnt.GetCntntIdx()->GetIndex();
-                        if( nSttIdx <= nIdx && nEndIdx >= nIdx )
+                        if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
+                            rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
                         {
 /*                          // ist es keine gelinkte Section, dann kann sie auch
                             // nicht mitselektiert werden
