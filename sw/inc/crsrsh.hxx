@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:29:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,10 @@ protected:
     void PaMCorrAbs(const SwNodeIndex &rStartNode, const SwNodeIndex &rEndNode,
                     const SwPosition &rNewPos );
 
+    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    FASTBOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
+    // <--
+
 public:
     TYPEINFO();
     SwCrsrShell( SwDoc& rDoc, Window *pWin,
@@ -695,9 +699,12 @@ public:
     FASTBOOL GotoTblBox( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
-    FASTBOOL SelTblRow();
-    FASTBOOL SelTblCol();
+    FASTBOOL SelTblRow() { return _SelTblRowOrCol( true  ); }
+    FASTBOOL SelTblCol() { return _SelTblRowOrCol( false ); }
     FASTBOOL SelTblBox();
+    // --> FME 2004-07-30 #i32329# Enhanced table selection
+    FASTBOOL SelTbl();
+    // <--
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
     FASTBOOL GotoNextNum();
@@ -786,25 +793,31 @@ public:
     USHORT GetCrsrCnt( BOOL bAll = TRUE ) const;
 
     // Char Travelling - Methoden (in crstrvl1.cxx)
-    FASTBOOL IsStartWord()const;
-    FASTBOOL IsEndWord() const;
-    FASTBOOL IsInWord() const;
     FASTBOOL GoStartWord();
     FASTBOOL GoEndWord();
     FASTBOOL GoNextWord();
     FASTBOOL GoPrevWord();
     FASTBOOL GoNextSentence();
     FASTBOOL GoPrevSentence();
+    FASTBOOL GoStartSentence();
+    FASTBOOL GoEndSentence();
+    FASTBOOL GoStartPara();
+
     FASTBOOL SelectWord( const Point* pPt = 0 );
 
     // Abfrage vom CrsrTravelling Status
     CrsrMoveState GetMoveState() const { return eMvState; }
 
     // Position vom akt. Cursor erfragen
-    FASTBOOL IsStartOfDoc() const;
-    FASTBOOL IsEndOfDoc() const;
+    FASTBOOL IsStartWord()const;
+    FASTBOOL IsEndWord() const;
+    FASTBOOL IsInWord() const;
+    FASTBOOL IsStartSentence() const;
+    FASTBOOL IsEndSentence() const;
     FASTBOOL IsSttPara() const;
     FASTBOOL IsEndPara() const;
+    FASTBOOL IsStartOfDoc() const;
+    FASTBOOL IsEndOfDoc() const;
     FASTBOOL IsAtLeftMargin()   const       { return IsAtLRMargin( TRUE ); }
     FASTBOOL IsAtRightMargin(BOOL bAPI = FALSE) const   { return IsAtLRMargin( FALSE, bAPI ); }
 
