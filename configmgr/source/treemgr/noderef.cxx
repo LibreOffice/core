@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: lla $ $Date: 2000-11-09 14:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ NodeRef Tree::getChild(NodeRef const& aNode, Name const& aName) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_PRECOND(this->hasChild(aNode,aName),"ERROR: Configuration: Invalid node request.");
+    // OSL_PRECOND(this->hasChild(aNode,aName),"ERROR: Configuration: Invalid node request.");
     OSL_ENSURE(aNode.m_nDepth > 0, "WARNING: Configuration: Requesting node beyond available depth" );
 
     NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
