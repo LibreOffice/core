@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-12 08:53:56 $
+ *  last change: $Author: obr $ $Date: 2002-07-31 12:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,25 +106,54 @@
     </node>
   </node>
   <node oor:name="ExternalApps">
+    <!-- Responsible: OBR -->
+    <info>
+      <desc xml:lang="en-US">Specifies external helper applications / protocol handlers</desc>
+    </info>
     <prop oor:name="http" oor:op="replace" oor:type="xs:string">
+      <info>
+        <desc xml:lang="en-US">The handler application for http</desc>
+      </info>
       <value/>
     </prop>
     <prop oor:name="https" oor:op="replace" oor:type="xs:string">
+      <info>
+        <desc xml:lang="en-US">The handler application for https</desc>
+      </info>
       <value/>
     </prop>
     <prop oor:name="ftp" oor:op="replace" oor:type="xs:string">
+      <info>
+        <desc xml:lang="en-US">The handler application for ftp</desc>
+      </info>
       <value/>
     </prop>
     <prop oor:name="file" oor:op="replace" oor:type="xs:string">
+      <info>
+        <desc xml:lang="en-US">The handler application for file protocol</desc>
+      </info>
       <value/>
     </prop>
     <prop oor:name="mailto" oor:op="replace" oor:type="xs:string">
+      <info>
+        <desc xml:lang="en-US">The handler application for mailto urls</desc>
+      </info>
       <value/>
     </prop>
   </node>
   <node oor:name="ExternalMailer">
+    <!-- Responsible: OBR -->
+    <info>
+      <desc xml:lang="en-US">Specifies an external mail application to be used for Send as email</desc>
+    </info>
     <node oor:name="Profiles">
+      <info>
+        <desc xml:lang="en-US">Enumeration of known application profiles</desc>
+      </info>
       <node oor:name="Netscape 6.x" oor:op="replace">
+        <info>
+          <desc xml:lang="en-US">The Netscape 6.x profile</desc>
+        </info>
         <node oor:name="FormatStrings">
           <prop oor:name="base">
             <value>-compose "%s"</value>
