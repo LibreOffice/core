@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
                 const sal_Int32 nCol, const sal_Int32 nRow,
                 com::sun::star::table::CellRangeAddress& aCellAddress) const;
     void DoMerge(const com::sun::star::table::CellAddress& aCellPos,
-                 const sal_Int32 nCols, const sal_Int32 nRows) const;
+                 const sal_Int32 nCols, const sal_Int32 nRows);
 
     void SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet);
     void SetCellProperties(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,26 +217,15 @@ void ScXMLTableContext::EndElement()
     ScDocument* pDoc = GetScImport().GetDocument();
     if (sPrintRanges.getLength())
     {
-        sal_Int16 nTable = GetScImport().GetTables().GetCurrentSheet();
-        uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
-        if( xSpreadDoc.is() )
+        uno::Reference< sheet::XSpreadsheet > xTable = GetScImport().GetTables().GetCurrentXSheet();
+        if( xTable.is() )
         {
-            uno::Reference< sheet::XSpreadsheets > xSheets = xSpreadDoc->getSheets();
-            uno::Reference< container::XIndexAccess > xIndex( xSheets, uno::UNO_QUERY );
-            if( xIndex.is() )
+            uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
+            if( xPrintAreas.is() )
             {
-                uno::Reference< sheet::XSpreadsheet > xTable;
-                uno::Any aTable = xIndex->getByIndex( nTable );
-                if( aTable >>= xTable )
-                {
-                    uno::Reference< sheet::XPrintAreas > xPrintAreas( xTable, uno::UNO_QUERY );
-                    if( xPrintAreas.is() )
-                    {
-                        uno::Sequence< table::CellRangeAddress > aRangeList;
-                        ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
-                        xPrintAreas->setPrintAreas( aRangeList );
-                    }
-                }
+                uno::Sequence< table::CellRangeAddress > aRangeList;
+                ScXMLConverter::GetRangeListFromString( aRangeList, sPrintRanges, pDoc );
+                xPrintAreas->setPrintAreas( aRangeList );
             }
         }
     }

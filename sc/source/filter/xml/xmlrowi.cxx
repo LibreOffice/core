@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-10 17:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,83 +197,69 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableRowContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     sal_Int32 nCurrentRow = rXMLImport.GetTables().GetCurrentRow();
-    uno::Reference <sheet::XSpreadsheetDocument> xSheetsDocument (rXMLImport.GetModel(), uno::UNO_QUERY);
-    if(xSheetsDocument.is())
+    uno::Reference<sheet::XSpreadsheet> xSheet = rXMLImport.GetTables().GetCurrentXSheet();
+    if(xSheet.is())
     {
-        uno::Reference<sheet::XSpreadsheets> xSheets = xSheetsDocument->getSheets();
-        if (xSheets.is())
+        uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
+        if (xColumnRowRange.is())
         {
-            uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
-            if (xIndex.is())
+            uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
+            if (xTableRows.is())
             {
-                uno::Any aSheet = xIndex->getByIndex(nSheet);
-                uno::Reference<sheet::XSpreadsheet> xSheet;
-                if(aSheet >>= xSheet)
+                uno::Any aRow;
+                if (nCurrentRow <= MAXROW)
+                    aRow = xTableRows->getByIndex(nCurrentRow);
+                else
+                    aRow = xTableRows->getByIndex(MAXROW);
+                uno::Reference<table::XCellRange> xTableRow;
+                if (aRow >>= xTableRow)
                 {
-                    uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
-                    if (xColumnRowRange.is())
+                    uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
+                    if (xRowProperties.is())
                     {
-                        uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
-                        if (xTableRows.is())
+                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                            XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
+                        if (pStyle)
                         {
-                            uno::Any aRow;
-                            if (nCurrentRow <= MAXROW)
-                                aRow = xTableRows->getByIndex(nCurrentRow);
-                            else
-                                aRow = xTableRows->getByIndex(MAXROW);
-                            uno::Reference<table::XCellRange> xTableRow;
-                            if (aRow >>= xTableRow)
-                            {
-                                uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
-                                if (xRowProperties.is())
-                                {
-                                    XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
-                                    XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                        XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
-                                    if (pStyle)
-                                    {
-                                        pStyle->FillPropertySet(xRowProperties);
-                                    }
-                                    uno::Any aVisibleAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
-                                    uno::Any aFilteredAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
-                                    if (sVisibility.compareToAscii(sXML_collapse) == 0)
-                                    {
-                                        sal_Bool bValue = sal_False;
-                                        aVisibleAny <<= bValue;
-                                        aFilteredAny <<= bValue;
-                                    }
-                                    else if (sVisibility.compareToAscii(sXML_filter) == 0)
-                                    {
-                                        sal_Bool bValue = sal_False;
-                                        aVisibleAny <<= bValue;
-                                        bValue = sal_True;
-                                        aFilteredAny <<= bValue;
-                                    }
-                                    else
-                                    {
-                                        sal_Bool bValue = sal_True;
-                                        aVisibleAny <<= bValue;
-                                        bValue = sal_False;
-                                        aFilteredAny <<= bValue;
-                                    }
-                                    /*uno::Any aAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OPTIMALHEIGHT)));
-                                    if (sOptimalHeight.compareToAscii(sXML_true) != 0)
-                                    {
-                                        sal_Bool bValue = sal_False;
-                                        aAny <<= bValue;
-                                    }
-                                    else
-                                    {
-                                        sal_Bool bValue = sal_True;
-                                        aAny <<= bValue;
-                                    }*/
-                                    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), aVisibleAny);
-                                    xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), aFilteredAny);
-                                }
-                            }
+                            pStyle->FillPropertySet(xRowProperties);
                         }
+                        uno::Any aVisibleAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
+                        uno::Any aFilteredAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
+                        if (sVisibility.compareToAscii(sXML_collapse) == 0)
+                        {
+                            sal_Bool bValue = sal_False;
+                            aVisibleAny <<= bValue;
+                            aFilteredAny <<= bValue;
+                        }
+                        else if (sVisibility.compareToAscii(sXML_filter) == 0)
+                        {
+                            sal_Bool bValue = sal_False;
+                            aVisibleAny <<= bValue;
+                            bValue = sal_True;
+                            aFilteredAny <<= bValue;
+                        }
+                        else
+                        {
+                            sal_Bool bValue = sal_True;
+                            aVisibleAny <<= bValue;
+                            bValue = sal_False;
+                            aFilteredAny <<= bValue;
+                        }
+                        /*uno::Any aAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OPTIMALHEIGHT)));
+                        if (sOptimalHeight.compareToAscii(sXML_true) != 0)
+                        {
+                            sal_Bool bValue = sal_False;
+                            aAny <<= bValue;
+                        }
+                        else
+                        {
+                            sal_Bool bValue = sal_True;
+                            aAny <<= bValue;
+                        }*/
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), aVisibleAny);
+                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), aFilteredAny);
                     }
                 }
             }
@@ -371,44 +357,30 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableRowsContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
     if (bHeader)
     {
         nHeaderEndRow = rXMLImport.GetTables().GetCurrentRow();
         if (nHeaderStartRow <= nHeaderEndRow)
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSheetsDocument (rXMLImport.GetModel(), uno::UNO_QUERY);
-            if(xSheetsDocument.is())
+            uno::Reference<sheet::XSpreadsheet> xSheet = rXMLImport.GetTables().GetCurrentXSheet();
+            if(xSheet.is())
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSheetsDocument->getSheets();
-                if (xSheets.is())
+                uno::Reference <sheet::XPrintAreas> xPrintAreas (xSheet, uno::UNO_QUERY);
+                if (xPrintAreas.is())
                 {
-                    uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
-                    if (xIndex.is())
+                    if (!xPrintAreas->getPrintTitleRows())
                     {
-                        uno::Any aSheet = xIndex->getByIndex(nSheet);
-                        uno::Reference<sheet::XSpreadsheet> xSheet;
-                        if(aSheet >>= xSheet)
-                        {
-                            uno::Reference <sheet::XPrintAreas> xPrintAreas (xSheet, uno::UNO_QUERY);
-                            if (xPrintAreas.is())
-                            {
-                                if (!xPrintAreas->getPrintTitleRows())
-                                {
-                                    xPrintAreas->setPrintTitleRows(sal_True);
-                                    table::CellRangeAddress aRowHeaderRange;
-                                    aRowHeaderRange.StartRow = nHeaderStartRow;
-                                    aRowHeaderRange.EndRow = nHeaderEndRow;
-                                    xPrintAreas->setTitleRows(aRowHeaderRange);
-                                }
-                                else
-                                {
-                                    table::CellRangeAddress aRowHeaderRange = xPrintAreas->getTitleRows();
-                                    aRowHeaderRange.EndRow = nHeaderEndRow;
-                                    xPrintAreas->setTitleRows(aRowHeaderRange);
-                                }
-                            }
-                        }
+                        xPrintAreas->setPrintTitleRows(sal_True);
+                        table::CellRangeAddress aRowHeaderRange;
+                        aRowHeaderRange.StartRow = nHeaderStartRow;
+                        aRowHeaderRange.EndRow = nHeaderEndRow;
+                        xPrintAreas->setTitleRows(aRowHeaderRange);
+                    }
+                    else
+                    {
+                        table::CellRangeAddress aRowHeaderRange = xPrintAreas->getTitleRows();
+                        aRowHeaderRange.EndRow = nHeaderEndRow;
+                        xPrintAreas->setTitleRows(aRowHeaderRange);
                     }
                 }
             }
@@ -417,6 +389,7 @@ void ScXMLTableRowsContext::EndElement()
     else if (bGroup)
     {
         nGroupEndRow = rXMLImport.GetTables().GetCurrentRow();
+        sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
         if (nGroupStartRow <= nGroupEndRow)
         {
             ScDocument* pDoc = GetScImport().GetDocument();
