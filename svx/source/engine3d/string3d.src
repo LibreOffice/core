@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:21:45 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ russian ] = "Ρξηδΰςό ξαϊεκς βπΰωενθÿ";
     Text[ polish ] = "Utwσrz 3-W obiekt obrotowy";
     Text[ japanese ] = "3D ‰ρ“]‘ΜµΜήΌήªΈΔ‚Μμ¬";
-    Text[ chinese_traditional ] = "«Ψ¥ί 3 Ίϋ±ΫΒΰΕι";
+    Text[ chinese_traditional ] = "«Ψ¥ί 3D ±ΫΒΰΕι";
     Text[ arabic ] = "ΕδΤΗΑ ίΗΖδ ΗΣΚΟΗΡΙ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Δημιουργία περιστρεφόμενου αντικειμένου 3Δ";
     Text[ korean ] = "3D ΘΈΐό°³ΓΌ ΈΈµι±β";
@@ -228,7 +228,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ russian ] = "Βπΰωΰςό ξαϊεκς";
     Text[ polish ] = "Obrσζ obiekt 3-W";
     Text[ japanese ] = "3D ‘ΜµΜήΌήªΈΔ‚Μ‰ρ“]";
-    Text[ chinese_traditional ] = "±ΫΒΰ 3 Ίϋª«¥σ";
+    Text[ chinese_traditional ] = "±ΫΒΰ 3D ª«¥σ";
     Text[ arabic ] = "ΗΣΚΟΗΡΙ ίΗΖδ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Περιστροφή αντικειμένου 3Δ";
     Text[ korean ] = "3D °³ΓΌ ΘΈΐό";
@@ -304,7 +304,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ russian ] = "Πΰηαθςό 3-Μ-Ξαϊεκς";
     Text[ polish ] = "Rozdziel obiekt 3-W";
     Text[ japanese ] = "3D ‘ΜµΜήΌήªΈΔ‚Μ•ª„";
-    Text[ chinese_traditional ] = "¤ΐ¶} 3 Ίϋª«¥σ";
+    Text[ chinese_traditional ] = "¤ΐ¶} 3D ª«¥σ";
     Text[ arabic ] = "ΚήΣνγ ίΗΖδ ΛαΗΛν ΗαΓΘΪΗΟ";
     Text[ greek ] = "Διάσπαση αντικειμένου 3Δ";
     Text[ korean ] = "3D °³ΓΌ ΊΠΗÒ";
@@ -328,7 +328,7 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ russian ] = "ΐςπθασςϋ 3-Μ";
     Text[ polish ] = "Atrybuty 3-W";
     Text[ japanese ] = "3D ‘Μ‚Μ‘®«";
-    Text[ chinese_traditional ] = "3 ΊϋΔέ©Κ";
+    Text[ chinese_traditional ] = "3D Δέ©Κ";
     Text[ arabic ] = "ΣγΗΚ ΛαΗΛνΙ ΗαΓΘΪΗΟ";
     Text[ greek ] = "Ιδιότητες 3Δ";
     Text[ korean ] = "3D ΌΣΌΊ";
