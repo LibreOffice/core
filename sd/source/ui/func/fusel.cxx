@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-11 13:53:00 $
+ *  last change: $Author: ka $ $Date: 2001-05-28 10:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
-
 #include <svtools/urihelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 
@@ -1325,19 +1325,20 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_PROGRAM:
                 {
-                    // Execute application
-                    String aStrApplication = pInfo->aBookmark;
-                    INetURLObject aURL( ::URIHelper::SmartRelToAbs( aStrApplication, FALSE,
-                                                                    INetURLObject::WAS_ENCODED,
-                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
-                    NAMESPACE_VOS(OProcess)         aApp( aURL.GetMainURL() );
-                    NAMESPACE_VOS(OArgumentList)    aParameters;
+                    INetURLObject  aURL( ::URIHelper::SmartRelToAbs( pInfo->aBookmark, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS ) );
+                    String         aFileName;
 
-                    aApp.execute( (NAMESPACE_VOS(OProcess)::TProcessOption)
-                                  (NAMESPACE_VOS(OProcess)::TOption_SearchPath |
-                                  NAMESPACE_VOS(OProcess)::TOption_Detached),
-                                  aParameters );
-                       bAnimated = TRUE;
+                   if( ( INET_PROT_FILE == aURL.GetProtocol() ) &&
+                       ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL(), aFileName ) )
+                   {
+                       ::vos::OProcess                 aApp( aFileName );
+                       ::vos::OArgumentList            aParameters;
+                       ::vos::OProcess::TProcessError  eError = aApp.execute( (::vos::OProcess::TProcessOption) ( ::vos::OProcess::TOption_SearchPath |
+                                                                                                                  ::vos::OProcess::TOption_Detached ),
+                                                                              aParameters );
+                   }
+
+                    bAnimated = TRUE;
                 }
                 break;
 
