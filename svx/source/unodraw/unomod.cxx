@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
+ *  last change: $Author: cl $ $Date: 2001-02-01 19:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
         {
             nId = ID_AUTHORFIELD;
+        }
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Measure") ) )
+        {
+            nId = ID_MEASUREFIELD;
         }
 
         if( nId != ID_NOTFOUND )
