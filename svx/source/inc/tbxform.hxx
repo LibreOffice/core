@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:04:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,17 +119,17 @@ protected:
 class SvxFmConfigWin : public SfxPopupWindow
 {
 private:
-    SfxToolBoxManager aTbx;
-    Link aSelectLink;
+//  SfxToolBoxManager aTbx;
+//  Link aSelectLink;
 
     DECL_LINK( TbxSelectHdl, ToolBox* );
 
 public:
-    SvxFmConfigWin( USHORT nId, ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBindings );
+    SvxFmConfigWin( USHORT nId, ResId aRIdWin, ResId aRIdTbx );
     ~SvxFmConfigWin();
 
-    void            StartSelection()
-                        { aTbx.GetToolBox().StartSelection(); }
+//  void            StartSelection()
+//                      { aTbx.GetToolBox().StartSelection(); }
     void            Update();
     virtual void    PopupModeEnd();
 };
@@ -144,7 +144,7 @@ private:
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlConfig( USHORT nId, ToolBox& rTbx, SfxBindings& );
+    SvxFmTbxCtlConfig( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlConfig() {}
 
     virtual void                Select( USHORT nModifier );
@@ -161,7 +161,7 @@ class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlAbsRec( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxCtlAbsRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlAbsRec();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -176,7 +176,7 @@ class SvxFmTbxCtlRecText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecText( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxCtlRecText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecText();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -188,7 +188,7 @@ class SvxFmTbxCtlRecFromText : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecFromText( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxCtlRecFromText( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecFromText();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -202,7 +202,7 @@ class SvxFmTbxCtlRecTotal : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFmTbxCtlRecTotal( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxCtlRecTotal( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxFmTbxCtlRecTotal();
 
     virtual Window* CreateItemWindow( Window* pParent );
@@ -233,7 +233,7 @@ class SvxFmTbxNextRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxNextRec( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxNextRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 };
 
 //========================================================================
@@ -241,7 +241,7 @@ class SvxFmTbxPrevRec : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxFmTbxPrevRec( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxFmTbxPrevRec( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
 };
 
 
