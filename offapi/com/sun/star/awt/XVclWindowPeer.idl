@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVclWindowPeer.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:38:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     @deprecated
  */
-interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
+published interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 {
     //-------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVclContainerPeer.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:06:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
     @deprecated
  */
-interface XVclContainerPeer: com::sun::star::uno::XInterface
+published interface XVclContainerPeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
