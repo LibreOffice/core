@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:52:17 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ russian ] = "Ρξηδΰβΰςό βρεγδΰ πεηεπβνσώ κξοθώ";
         Text[ polish ] = "Zawsze ~utwσrz kopiκ zapasowΉ";
         Text[ japanese ] = "νΚή―Έ±―ΜίΊΛί°‚Μμ¬(~W)";
-        Text[ chinese_traditional ] = "Α`¬O«Ψ¥ί¦w¥ώ³Ζ¥σ(~B)";
+        Text[ chinese_traditional ] = "Α`¬O²£¥Ν¦w¥ώ³Ζ¥χ(~B)";
         Text[ arabic ] = "Ϊγα δΣΞΙ ΗΝΚνΗΨνΙ ΟζγΗπ";
         Text[ greek ] = "Πάντα δημιουργία αντιγράφου α~σφαλείας";
         Text[ korean ] = "ΗΧ»σ ΉιΎχ ΊΉ»ηΗΟ±β(~W)";
@@ -571,7 +571,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ russian ] = "Ξςμενθςό";
         Text[ polish ] = "Cofnij";
         Text[ japanese ] = "³‚Ι–ί‚·";
-        Text[ chinese_traditional ] = "ΊM®ψ©R¥O";
+        Text[ chinese_traditional ] = "΄_­μ";
         Text[ arabic ] = "ΚΡΗΜΪ";
         Text[ greek ] = "Αναίρεση";
         Text[ korean ] = "½ΗΗΰ ΓλΌÒ";
