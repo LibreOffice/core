@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:17:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1891,41 +1891,21 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text = "Tabelle nicht ~trennen" ;
-        Text [ ENGLISH ] = "dont split" ;
+        Text = "Trennung der Ta~belle an Seiten- und Spaltenenden zulassen" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Do not split table" ;
-        Text [ portuguese_brazilian ] = "~N„o dividir a tabela" ;
-        Text [ swedish ] = "Dela inte ~tabell" ;
-        Text [ danish ] = "Opdel ~ikke tabel" ;
-        Text [ italian ] = "Non separare la tabella" ;
-        Text [ spanish ] = "~No dividir tabla" ;
-        Text [ french ] = "Ne pas ~scinder le tableau" ;
-        Text [ dutch ] = "~Tabel niet splitsen" ;
-        Text [ portuguese ] = "~N„o dividir tabela" ;
-        Text[ chinese_simplified ] = "‰∏çÂàÜÈöîË°®Ê†º(~D)";
-        Text[ russian ] = "ÕÂ ‡Á·Ë‚‡Ú¸ Ú‡·ÎËˆÛ";
-        Text[ polish ] = "~Nie dziel tabeli";
-        Text[ japanese ] = "Ë°®„ÇíÂàÜÂâ≤„Åó„Å™„ÅÑ(~D)";
-        Text[ chinese_traditional ] = "‰∏çÂàÜÈñãË°®Ê†º(~D)";
-        Text[ arabic ] = "⁄œ„ ›’· «·ÃœÊ·";
-        Text[ greek ] = "Õ· ÏÁ ‰È·ÈÒÂËÂﬂ Ô ﬂÌ·Í·Ú";
-        Text[ korean ] = "Ìëú ÎÇòÎàÑÏßÄ ÏïäÏùå(~D)";
-        Text[ turkish ] = "~Tabloyu bˆlme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N~o divideixis la taula";
-        Text[ finnish ] = "~ƒl‰ jaa taulukkoa";
-        Text[ thai ] = "‡πÑ~‡∏°‡πà‡πÅ‡∏¢‡∏Å‡∏ï‡∏≤‡∏£‡∏≤‡∏á";
-        Text[ czech ] = "Nedƒõlit tabulku";
-        Text[ hebrew ] = "Tabelle nicht ~trennen";
-        Text[ hindi ] = "~‡§∏‡§æ‡§∞‡§£‡•Ä ‡§ï‡•ã ‡§Æ‡§§ ‡§Ö‡§≤‡§ó‡§æ‡§®‡§æ";
-        Text[ slovak ] = "Ne~deli≈• tabuƒæku";
-        Text[ hungarian ] = "~Ne ossza fel a t√°bl√°zatot";
-        Text[ slovenian ] = "~Ne razdeli tabele";
+        Text [ english_us ] = "Allow ~table to split across pages and columns" ;
+    };
+    TriStateBox CB_SPLIT_ROW
+    {
+        Pos = MAP_APPFONT ( 16 , 71 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Zeilenumb~ruch an Seiten- und Spaltenenden zulassen" ;
+        Text [ english_us ] = "Allow row to break a~cross pages and columns" ;
     };
     CheckBox CB_KEEP
     {
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "Mit folgendem Absatz ~zusammenhalten" ;
         Text [ ENGLISH ] = "~keep with next" ;
@@ -1961,7 +1941,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     CheckBox CB_HEADLINE
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "‹berschrift ~wiederholen" ;
         Text [ ENGLISH ] = "R~epeat Headline" ;
@@ -1998,7 +1978,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     FixedLine FL_VERT_ORIENT
     {
-        Pos = MAP_APPFONT ( 6 , 102 ) ;
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 251 , 8 ) ;
         Text = "Vertikale Ausrichtung" ;
         Text [ ENGLISH ] = "Vertical Alignment" ;
@@ -2033,7 +2013,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_TOP
     {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "Top" ;
@@ -2068,7 +2048,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_CENTER
     {
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "~Mitte" ;
         Text [ ENGLISH ] = "Middle" ;
@@ -2103,7 +2083,7 @@ TabPage TP_TABLE_TEXTFLOW
     };
     RadioButton RB_VERT_BOTTOM
     {
-        Pos = MAP_APPFONT ( 12 , 141 ) ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
         Text = "Unt~en" ;
         Text [ ENGLISH ] = "Bottom" ;
