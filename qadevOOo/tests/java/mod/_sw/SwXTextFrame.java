@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextFrame.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:51:22 $
+ *  last change:$Date: 2003-09-08 12:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,18 @@
  *
  *
  ************************************************************************/
-
 package mod._sw;
 
-import com.sun.star.awt.Size;
-import com.sun.star.lang.XMultiServiceFactory;
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
@@ -73,12 +78,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFrame;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
+
 
 /**
  *
@@ -86,98 +86,108 @@ import util.SOfficeFactory;
  * @see com.sun.star.text.XText
  *
  */
-
 public class SwXTextFrame extends TestCase {
     XTextDocument xTextDoc;
 
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
         }
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
         xTextDoc.dispose();
     }
 
     /**
      *    creating a Testenvironment for the interfaces to be tested
      */
-    public synchronized TestEnvironment createTestEnvironment
-            (TestParameters Param, PrintWriter log) {
-
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                              PrintWriter log) {
         XInterface oObj = null;
-        XInterface oObjI = null;
         XTextFrame oFrame1 = null;
+        XTextFrame oFrame2 = null;
         XPropertySet oPropSet = null;
-        XPropertySetInfo oPropSetInfo = null;
         XText oText = null;
         XTextCursor oCursor = null;
 
+
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
+
 
         // creating Frames
-        log.println( "creating Frames" );
+        log.println("creating Frames");
 
-        Size oSize = new Size();
 
         Object instance = null;
 
         try {
             oFrame1 = SOF.createTextFrame(xTextDoc, 500, 500);
-            oPropSet = (XPropertySet)UnoRuntime.queryInterface(
-                                                XPropertySet.class, oFrame1 );
+            oFrame2 = SOF.createTextFrame(xTextDoc, 1500, 1500);
+            oPropSet = (XPropertySet) UnoRuntime.queryInterface(
+                               XPropertySet.class, oFrame1);
+
 
             // AnchorTypes: 0 = paragraph, 1 = as char, 2 = page,
             // 3 = frame/paragraph 4= at char
             oPropSet.setPropertyValue("AnchorType",
-                TextContentAnchorType.AS_CHARACTER);
+                                      TextContentAnchorType.AS_CHARACTER);
             oText = xTextDoc.getText();
             oCursor = oText.createTextCursor();
 
-            log.println( "inserting Frame1" );
-            XTextContent the_content = (XTextContent) UnoRuntime.queryInterface
-                (XTextContent.class, oFrame1);
-            oText.insertTextContent(oCursor,the_content, true);
+            log.println("inserting Frame1");
+
+            XTextContent the_content = (XTextContent) UnoRuntime.queryInterface(
+                                               XTextContent.class, oFrame1);
+            oText.insertTextContent(oCursor, the_content, true);
+
+            log.println("inserting Frame2");
+            the_content = (XTextContent) UnoRuntime.queryInterface(
+                                  XTextContent.class, oFrame2);
+            oText.insertTextContent(oCursor, the_content, true);
+
             XText oFrameText = oFrame1.getText();
-            oFrameText.insertString(oFrameText.getStart(),"The FrameText",true);
+            oFrameText.insertString(oFrameText.getStart(), "The FrameText",
+                                    true);
 
-            instance = SOF.createInstance(xTextDoc,"com.sun.star.text.TextFrame");
-
-        } catch (Exception Ex ) {
+            instance = SOF.createInstance(xTextDoc,
+                                          "com.sun.star.text.TextFrame");
+        } catch (Exception Ex) {
             Ex.printStackTrace(log);
             throw new StatusException("Couldn't insert TextFrame ", Ex);
         }
 
         oObj = oFrame1;
 
-        log.println( "creating a new environment for TextFrame object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for TextFrame object");
 
-        tEnv.addObjRelation("CONTENT", (XTextContent)
-                        UnoRuntime.queryInterface(XTextContent.class,instance));
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        tEnv.addObjRelation("CONTENT",
+                            (XTextContent) UnoRuntime.queryInterface(
+                                    XTextContent.class, instance));
         tEnv.addObjRelation("RANGE", xTextDoc.getText().createTextCursor());
 
-        log.println( "adding ObjRelation for XShape "
-            +"(get/setPosition won't work there)" );
+        log.println("adding ObjRelation for XShape " +
+                    "(get/setPosition won't work there)");
         tEnv.addObjRelation("NoPos", "SwXTextFrame");
-        tEnv.addObjRelation("NoSetSize","SwXTextFrame");
+        tEnv.addObjRelation("NoSetSize", "SwXTextFrame");
+
+        tEnv.addObjRelation("TextFrame", oFrame2);
+
         return tEnv;
     } // finish method getTestEnvironment
-
-
-}    // finish class SwXTextFrame
-
+} // finish class SwXTextFrame
