@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:27:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,12 @@ void XMLTextParagraphExport::exportStyleAttributes(
     OUString sName;
     Any aAny;
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
-    Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
+    Reference< XPropertySetInfo > xPropSetInfo(
+            xPropSet->getPropertySetInfo());
     if( xPropSetInfo->hasPropertyByName( sCategory ) )
     {
-        aAny = xPropSet->getPropertyValue( sCategory );
         sal_Int16 nCategory;
-        aAny >>= nCategory;
+        xPropSet->getPropertyValue( sCategory ) >>= nCategory;
         enum XMLTokenEnum eValue = XML_TOKEN_INVALID;
         if( -1 != nCategory )
         {
@@ -178,8 +177,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
         if( PropertyState_DIRECT_VALUE ==
                 xPropState->getPropertyState( sPageDescName  ) )
         {
-            aAny = xPropSet->getPropertyValue( sPageDescName );
-            aAny >>= sName;
+            xPropSet->getPropertyValue( sPageDescName ) >>= sName;
             if( sName.getLength() > 0 )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,
@@ -219,30 +217,26 @@ void XMLTextParagraphExport::exportTextStyles( sal_Bool bUsed, sal_Bool bProg )
     if (xFactory.is())
     {
         OUString sTextDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.text.Defaults" ) );
-        Reference < XInterface > xInt = xFactory->createInstance ( sTextDefaults );
-        if ( xInt.is() )
+        Reference < XPropertySet > xPropSet (xFactory->createInstance ( sTextDefaults ), UNO_QUERY);
+        if (xPropSet.is())
         {
-            Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
-            if (xPropSet.is())
-            {
-                exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaPropMapper());
+            exportDefaultStyle( xPropSet, GetXMLToken(XML_PARAGRAPH), GetParaPropMapper());
 
-                exportDefaultStyle(
-                    xPropSet,
-                    GetXMLToken(XML_TABLE),
-                    new XMLTextExportPropertySetMapper(
-                        new XMLTextPropertySetMapper(
-                            TEXT_PROP_MAP_TABLE_DEFAULTS ),
-                        GetExport() ) );
+            exportDefaultStyle(
+                xPropSet,
+                GetXMLToken(XML_TABLE),
+                new XMLTextExportPropertySetMapper(
+                    new XMLTextPropertySetMapper(
+                        TEXT_PROP_MAP_TABLE_DEFAULTS ),
+                    GetExport() ) );
 
-                exportDefaultStyle(
-                    xPropSet,
-                    GetXMLToken(XML_TABLE_ROW),
-                    new XMLTextExportPropertySetMapper(
-                        new XMLTextPropertySetMapper(
-                            TEXT_PROP_MAP_TABLE_ROW_DEFAULTS ),
-                        GetExport() ) );
-            }
+            exportDefaultStyle(
+                xPropSet,
+                GetXMLToken(XML_TABLE_ROW),
+                new XMLTextExportPropertySetMapper(
+                    new XMLTextPropertySetMapper(
+                        TEXT_PROP_MAP_TABLE_ROW_DEFAULTS ),
+                    GetExport() ) );
         }
     }
     exportStyleFamily( "ParagraphStyles", GetXMLToken(XML_PARAGRAPH), GetParaPropMapper(),
