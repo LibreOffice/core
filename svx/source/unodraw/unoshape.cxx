@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 20:33:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-23 19:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,8 +1030,26 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         if( pMap == NULL || ( pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
             throw beans::UnknownPropertyException();
 
+        pModel->SetChanged();
+
         switch( pMap->nWID )
         {
+        case OWN_ATTR_ZORDER:
+        {
+            sal_Int32 nNewOrdNum;
+            if(rVal >>= nNewOrdNum)
+            {
+                SdrPage * pPage = pObj->GetPage();
+                if( pPage )
+                {
+                    SdrObject* pCheck =
+                        pPage->SetObjectOrdNum( pObj->GetOrdNum(), (ULONG)nNewOrdNum );
+                    DBG_ASSERT( pCheck == pObj, "GetOrdNum() failed!" );
+                    return;
+                }
+            }
+            break;
+        }
         case OWN_ATTR_FRAMERECT:
         {
             awt::Rectangle aUnoRect;
@@ -1275,7 +1293,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         }
 
-        pModel->SetChanged();
+        throw lang::IllegalArgumentException();
     }
     else
     {
@@ -1312,6 +1330,11 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
+            case OWN_ATTR_ZORDER:
+            {
+                aAny <<= (sal_Int32)pObj->GetOrdNum();
+                break;
+            }
             case OWN_ATTR_BITMAP:
             {
                 aAny = GetBitmap();
