@@ -1,0 +1,277 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgepng.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:11:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dlgepng.hrc"
+ModalDialog DLG_EXPORT_EPNG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 169 , 64 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "PNG Optionen" ;
+    Text [ ENGLISH ] = "PNG options" ;
+    Text [ english_us ] = "PNG Options" ;
+    Text [ italian ] = "Opzioni PNG" ;
+    Text [ spanish ] = "Opciones PNG" ;
+    Text [ french ] = "Options PNG" ;
+    Text [ dutch ] = "PNG-opties" ;
+    Text [ swedish ] = "PNG-alternativ" ;
+    Text [ danish ] = "PNG indstillinger" ;
+    Text [ portuguese_brazilian ] = "Opções PNG" ;
+    Text [ portuguese ] = "Opções PNG" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 113 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 113 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 113 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine GRP_COMPRESSION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text[ italian ] = "Modo";
+        Text[ portuguese_brazilian ] = "Modo";
+        Text[ portuguese ] = "Modo";
+        Text[ danish ] = "Tilstand";
+        Text[ french ] = "Mode";
+        Text[ swedish ] = "Läge";
+        Text[ dutch ] = "Modus";
+        Text[ spanish ] = "Modo";
+        Text[ english_us ] = "Mode";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
+        Text[ russian ] = "Ğåæèì";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "ãƒ¢ãƒ¼ãƒ‰";
+        Text[ chinese_traditional ] = "æ¨¡å¼";
+        Text[ arabic ] = "ÇáæÖÚ";
+        Text[ dutch ] = "Modus";
+        Text[ chinese_simplified ] = "æ¨¡å¼";
+        Text[ greek ] = "ÊáôÜóôáóç ëåéôïõñãßáò";
+        Text[ korean ] = "ëª¨ë“œ";
+        Text[ turkish ] = "Modu";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mode";
+        Text[ finnish ] = "Tila";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”";
+        Text[ czech ] = "ReÅ¾im";
+        Text[ hebrew ] = "â€®××¦×‘ ×¢×‘×•×“×”â€¬";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤¾à¤°";
+        Text[ slovak ] = "ReÅ¾im";
+        Text[ hungarian ] = "MÃ³d";
+        Text[ slovenian ] = "NaÄin";
+    };
+    FixedText FI_COMPRESSION
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text = "~Kompression 0..9";
+        Text [ ENGLISH ] = "~compression 0..9" ;
+        Text[ italian ] = "~Compressione 0..9";
+        Text[ portuguese_brazilian ] = "~Compressão 0..9";
+        Text[ portuguese ] = "~Compressão 0..9";
+        Text[ danish ] = "~Komprimering 0..9";
+        Text[ french ] = "~Compression 0..9";
+        Text[ swedish ] = "~Kompression 0..9";
+        Text[ dutch ] = "~Compressie 0..9";
+        Text[ spanish ] = "~Compresión 0..9";
+        Text[ english_us ] = "~Compression 0..9";
+        Text[ chinese_simplified ] = "å‹ç¼© 0..9(~C)";
+        Text[ russian ] = "Ñæàòèå 0..9";
+        Text[ polish ] = "~Kompresja 0..9";
+        Text[ japanese ] = "åœ§ç¸® 0..9(~C)";
+        Text[ chinese_traditional ] = "å£“ç¸® 0..9(~C)";
+        Text[ arabic ] = "ÖÛØ 0..9";
+        Text[ dutch ] = "~Compressie 0..9";
+        Text[ chinese_simplified ] = "å‹ç¼© 0..9(~C)";
+        Text[ greek ] = "Óõìğßåóç 0..9";
+        Text[ korean ] = "ì••ì¶• 0..9(~C)";
+        Text[ turkish ] = "Sıkıştıştırma 0..9";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Compressió 0..9";
+        Text[ finnish ] = "~Pakkausaste 0 - 9";
+        Text[ thai ] = "~à¸à¸²à¸£à¸šà¸µà¸šà¸­à¸±à¸” 0..9";
+        Text[ czech ] = "Komprese 0 aÅ¾ 9";
+        Text[ hebrew ] = "â€®×“×—×™×¡×” 0..9â€¬";
+        Text[ hindi ] = "~à¤¦à¤¬à¤¾à¤µ 0..9";
+        Text[ slovak ] = "~Kompresia 0..9";
+        Text[ hungarian ] = "~TÃ¶mÃ¶rÃ­tÃ©s 0..9";
+        Text[ slovenian ] = "~Stiskanje 0..9";
+    };
+    NumericField NUM_COMPRESSION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9 ;
+        First = 0 ;
+        Last = 9 ;
+        StrictFormat = TRUE ;
+        Repeat = TRUE ;
+    };
+    CheckBox CBX_INTERLACED
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Interlaced" ;
+        Text [ ENGLISH ] = "~Interlaced" ;
+        Text [ english_us ] = "~Interlaced" ;
+        Text [ portuguese_brazilian ] = "~Entrelaçado" ;
+        Text [ swedish ] = "~Interlaced" ;
+        Text [ danish ] = "~Sammenflettet" ;
+        Text [ italian ] = "~Interlaced" ;
+        Text [ spanish ] = "~Entrelazado" ;
+        Text [ french ] = "~Entrelacé" ;
+        Text [ dutch ] = "~Interlaced" ;
+        Text [ portuguese ] = "~Entrelaçado" ;
+        Text[ chinese_simplified ] = "äº¤é”™(~I)";
+        Text[ russian ] = "~Ñ ÷åğåäîâàíèåì";
+        Text[ polish ] = "~Z przeplotem";
+        Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ¬ãƒ¼ã‚¹æ–¹å¼(~I)";
+        Text[ chinese_traditional ] = "äº¤éŒ¯(~I)";
+        Text[ arabic ] = "ãÊÔÇÈß";
+        Text[ dutch ] = "~Interlaced";
+        Text[ chinese_simplified ] = "äº¤é”™(~I)";
+        Text[ greek ] = "Ğåğëåãìİíç";
+        Text[ korean ] = "ì¸í„°ë ˆì´ìŠ¤(~I)";
+        Text[ turkish ] = "~Karıştırılmış";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Entrellaçat";
+        Text[ finnish ] = "~Lomitettu";
+        Text[ thai ] = "~à¸›à¸£à¸°à¸ªà¸²à¸™à¸à¸±à¸™";
+        Text[ czech ] = "ProklÃ¡danÃ½";
+        Text[ hebrew ] = "â€®×’×¨×¤×™×§×” ××©×•×œ×‘×ª (Interlaced)â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤²à¤¾ à¤¹à¥à¤†";
+        Text[ slovak ] = "P~rekladanÃ½";
+        Text[ hungarian ] = "~VÃ¡ltottsoros";
+        Text[ slovenian ] = "~Prepleteno";
+    };
+    Text[ chinese_simplified ] = "PNG é€‰é¡¹";
+    Text[ russian ] = "Ïàğàìåòğû PNG";
+    Text[ polish ] = "Opcje PNG ";
+    Text[ japanese ] = "PNG ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+    Text[ chinese_traditional ] = "PNGé¸é …";
+    Text[ arabic ] = "PNG ÎíÇÑÇÊ";
+    Text[ dutch ] = "PNG-opties";
+    Text[ chinese_simplified ] = "PNG é€‰é¡¹";
+    Text[ greek ] = "Åğéëïãİò PNG";
+    Text[ korean ] = "PNG ì˜µì…˜";
+    Text[ turkish ] = "PNG seçenekleri";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opcions PNG";
+    Text[ finnish ] = "PNG-vientiasetukset";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PNG ";
+    Text[ czech ] = "Volby pro formÃ¡t PNG";
+    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª PNGâ€¬";
+    Text[ hindi ] = "PNG à¤µà¤¿à¤•à¤²à¥à¤ª";
+    Text[ slovak ] = "Nastavenia pre PNG formÃ¡t";
+    Text[ hungarian ] = "PNG-beÃ¡llÃ­tÃ¡sok";
+    Text[ slovenian ] = "MoÅ¾nosti za PNG";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
