@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2595,6 +2595,22 @@ Bitmap E3dCompoundObject::GetHatchBitmap(const SfxItemSet& rSet)
     pXOut->SetFillAttr( aFillSet );
 
     Size aLogicalSize = pVD->PixelToLogic(aVDSize);
+
+    // #109483#
+    // If nDistance was 0 (the init value from the API), nDistanceX/Y
+    // may be zero, too, which is not a valid value for a fraction. The
+    // best value then is 1 since this simply takes the logical size as
+    // scaling. A distance of 0 in a hatch makes no sense anyways.
+    if(!nDistanceX)
+    {
+        nDistanceX = 1;
+    }
+
+    if(!nDistanceY)
+    {
+        nDistanceY = 1;
+    }
+
     Fraction aFractionX(aLogicalSize.Width(), nDistanceX);
     Fraction aFractionY(aLogicalSize.Height(), nDistanceY);
     aMapMode.SetScaleX(aFractionX);
