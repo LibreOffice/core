@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2002-05-22 12:51:00 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:54:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,16 +73,19 @@ TARGET  = JavaTestComponent
 # Files --------------------------------------------------------
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
 
-JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
+CUSTOMMANIFESTFILE= manifest
+
+JARTARGET = $(TARGET).jar
+
+JAVAFILES= \
+    TestComponent.java
 
 
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/TestComponent.class 	
+JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
-JARCLASSDIRS= .
-JARTARGET		= $(TARGET).jar
-JARCOMPRESS= TRUE
-CUSTOMMANIFESTFILE= .$/manifest
+
+
+
 
 # --- Targets ------------------------------------------------------
 
