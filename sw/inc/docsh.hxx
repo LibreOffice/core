@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ public:
     virtual void      SetVisArea( const Rectangle &rRect );
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual Printer  *GetDocumentPrinter();
+    virtual OutputDevice* GetDocumentRefDev();
     virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter );
     virtual ULONG     GetMiscStatus() const;
 
