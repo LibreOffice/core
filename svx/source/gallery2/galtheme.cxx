@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
+ *  last change: $Author: ka $ $Date: 2001-01-31 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,14 +902,17 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
         {
             SvMemoryStream  aMemStm( 65535, 65535 );
             RLECodec        aCodec( *xOStm );
+            FmFormModel*    pFormModel = (FmFormModel*) &rModel;
+
 
             aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
-            ( (FmFormModel&) rModel ).SetStreamingSdrModel( TRUE );
-            ( (FmFormModel&) rModel ).PreSave();
-            rModel.GetItemPool().Store( aMemStm );
-            aMemStm << rModel;
-            ( (FmFormModel&) rModel ).PostSave();
-            ( (FmFormModel&) rModel ).SetStreamingSdrModel( FALSE );
+            pFormModel->SetStreamingSdrModel( TRUE );
+            pFormModel->PreSave();
+            pFormModel->GetItemPool().SetFileFormatVersion( aMemStm.GetVersion() );
+            pFormModel->GetItemPool().Store( aMemStm );
+            aMemStm << *pFormModel;
+            pFormModel->PostSave();
+            pFormModel->SetStreamingSdrModel( FALSE );
             aMemStm.Seek( 0L );
 
             xOStm->SetBufferSize( STREAMBUF_SIZE );
