@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:42:09 $
+ *  last change: $Author: mt $ $Date: 2001-03-16 14:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
-    : cppu::WeakComponentImplHelper2< ::com::sun::star::awt::XToolkit,
+    : cppu::WeakComponentImplHelper3< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XSystemChildFactory,
     ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
 {
     hSvToolsLib = NULL;
@@ -964,6 +964,58 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     }
 
     return pNewWindow;
+}
+
+// ::com::sun::star::awt::XSystemChildFactory
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > VCLXToolkit::createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 nSystemType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Window* pChildWindow = NULL;
+    if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
+    {
+        sal_Int8 MyProcessId[16];
+        rtl_getGlobalProcessId( (sal_uInt8*)MyProcessId );
+
+        const sal_Int8* pOtherProcessId = ProcessId.getConstArray();
+
+        sal_Bool bSameProcess = sal_True;
+        for ( int n = 0; bSameProcess && ( n < 16 ); n++ )
+            bSameProcess = ( MyProcessId[n] == pOtherProcessId[n] );
+
+        if ( bSameProcess )
+        {
+#if defined UNX
+            sal_Int32 x11_id;
+            if ( Parent >>= x11_id )
+            {
+                printf("x11_id = %ld\n", x11_id);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.aWindow = x11_id;
+                pChildWindow = new WorkWindow( &aParentData );
+            }
+#elif defined WNT
+            sal_Int32 hWnd;
+            if ( Parent >>= hWnd)
+            {
+                printf("hWnd = %ld\n", hWnd);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.hWnd = (HWND)hWnd;
+                pChildWindow = new WorkWindow( &aParentData );
+            }
+#endif
+        }
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer;
+    if ( pChildWindow )
+    {
+        VCLXWindow* pPeer = new VCLXWindow;
+        pPeer->SetWindow( pChildWindow );
+        xPeer = pPeer;
+    }
+
+    return xPeer;
 }
 
 
