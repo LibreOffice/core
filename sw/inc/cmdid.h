@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-01-11 12:32:20 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 14:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,13 +719,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_DEC_INDENT_OFFSET                (FN_FORMAT2 + 151)
 
 #define FN_TABLE_MERGE_TABLE                (FN_FORMAT2 + 152)
-
-#define FN_TRANSLITERATE_UPPER              (FN_FORMAT2 + 153)
-#define FN_TRANSLITERATE_LOWER              (FN_FORMAT2 + 154)
-#define FN_TRANSLITERATE_HALFWIDTH          (FN_FORMAT2 + 155)
-#define FN_TRANSLITERATE_FULLWIDTH          (FN_FORMAT2 + 156)
-#define FN_TRANSLITERATE_HIRAGANA           (FN_FORMAT2 + 157)
-#define FN_TRANSLITERATE_KATAGANA           (FN_FORMAT2 + 158)
 
 /*--------------------------------------------------------------------
     Bereich: Extras

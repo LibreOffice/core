@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-01-04 17:22:20 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 14:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,24 +892,24 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 
         switch( rReq.GetSlot() )
         {
-        case FN_TRANSLITERATE_UPPER:
+        case SID_TRANSLITERATE_UPPER:
             nMode = TransliterationModules_LOWERCASE_UPPERCASE;
             break;
-        case FN_TRANSLITERATE_LOWER:
+        case SID_TRANSLITERATE_LOWER:
             nMode = TransliterationModules_UPPERCASE_LOWERCASE;
             break;
 
-        case FN_TRANSLITERATE_HALFWIDTH:
+        case SID_TRANSLITERATE_HALFWIDTH:
             nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
             break;
-        case FN_TRANSLITERATE_FULLWIDTH:
+        case SID_TRANSLITERATE_FULLWIDTH:
             nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
             break;
 
-        case FN_TRANSLITERATE_HIRAGANA:
+        case SID_TRANSLITERATE_HIRAGANA:
             nMode = TransliterationModules_KATAKANA_HIRAGANA;
             break;
-        case FN_TRANSLITERATE_KATAGANA:
+        case SID_TRANSLITERATE_KATAGANA:
             nMode = TransliterationModules_HIRAGANA_KATAKANA;
             break;
 
@@ -1028,6 +1028,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/04 17:22:20  hr
+    #65293#: typo
+
     Revision 1.4  2000/12/21 13:01:55  jp
     new: transliteration
 

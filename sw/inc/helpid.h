@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 09:06:54 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 14:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,8 +456,6 @@
 #define HID_DLG_PASSWD_SECTION      (HID_BASE + 672)
 #define HID_MD_COPY_TO_CLIPBOARD    (HID_BASE + 673)
 #define HID_MD_GLOS_IMPORT          (HID_BASE + 674)
-
-#define HID_MN_SUB_TRANSLITERATE    (HID_BASE + 675)
 
 // Weiter Help-IDs **********************************************************
 

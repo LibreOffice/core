@@ -2,7 +2,7 @@
 
     $Workfile:   _textsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.5 2001-01-10 16:14:47 os Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_textsh.sdi,v 1.6 2001-02-27 14:35:36 jp Exp $
 
     Beschreibung:   Basis-interfaces fuer Text
 
@@ -1184,38 +1184,37 @@ interface BaseText : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-
-    FN_TRANSLITERATE_UPPER
+    SID_TRANSLITERATE_UPPER
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_TRANSLITERATE_LOWER
+    SID_TRANSLITERATE_LOWER
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_TRANSLITERATE_HALFWIDTH
+    SID_TRANSLITERATE_HALFWIDTH
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_TRANSLITERATE_FULLWIDTH
+    SID_TRANSLITERATE_FULLWIDTH
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_TRANSLITERATE_HIRAGANA
+    SID_TRANSLITERATE_HIRAGANA
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    FN_TRANSLITERATE_KATAGANA
+    SID_TRANSLITERATE_KATAGANA
     [
         ExecMethod = ExecTransliteration;
         StateMethod = NoState ;
@@ -1229,6 +1228,9 @@ interface BaseText : Selection
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/10 16:14:47  os
+    Ruby dialog
+
     Revision 1.4  2000/12/21 13:02:28  jp
     new: transliteration
 
