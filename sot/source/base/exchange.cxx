@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-17 15:20:25 $
+ *  last change: $Author: mba $ $Date: 2001-01-29 12:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,16 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*104 SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR*/ { "UniformResourceLocator", "UniformResourceLocator", &::getCppuType( (const ::rtl::OUString*) 0 ) },
 /*105 SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50*/   { "StarChartDocument 5.0", "StarChartDocument 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*106 SOT_FORMATSTR_ID_GRAPHOBJ*/               { "Graphic Object", "Graphic Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*107 SOT_FORMATSTR_ID_DUMMY3*/                 { "SO_DUMMYFORMAT_3", "SO_DUMMYFORMAT_3", &::getCppuType( (const ::rtl::OUString*) 0 ) },
-/*108 SOT_FORMATSTR_ID_DUMMY4*/                 { "SO_DUMMYFORMAT_4", "SO_DUMMYFORMAT_4", &::getCppuType( (const ::rtl::OUString*) 0 ) }
+/*107 SOT_FORMATSTR_ID_STARWRITER_60*/          { "application/vnd.sun.xml.writer", "Writer 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*108 SOT_FORMATSTR_ID_STARWRITERWEB_60*/       { "application/vnd.sun.xml.writer.web", "Writer/Web 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*109 SOT_FORMATSTR_ID_STARWRITERGLOB_60*/      { "application/vnd.sun.xml.writer.global", "Writer/Global 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*110 SOT_FORMATSTR_ID_STARWDRAW_60*/           { "application/vnd.sun.xml.draw", "Draw 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*111 SOT_FORMATSTR_ID_STARIMPRESS_60*/         { "application/vnd.sun.xml.impress", "Impress 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*112 SOT_FORMATSTR_ID_STARCALC_60*/            { "application/vnd.sun.xml.calc", "Calc 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*113 SOT_FORMATSTR_ID_STARCHART_60*/           { "application/vnd.sun.xml.chart", "Chart 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*114 SOT_FORMATSTR_ID_STARMATH_60*/            { "application/vnd.sun.xml.math", "Math 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*115 SOT_FORMATSTR_ID_DUMMY3*/                 { "SO_DUMMYFORMAT_3", "SO_DUMMYFORMAT_3", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*116 SOT_FORMATSTR_ID_DUMMY4*/                 { "SO_DUMMYFORMAT_4", "SO_DUMMYFORMAT_4", &::getCppuType( (const ::rtl::OUString*) 0 ) }
 };
 
 //-----------------------------------------------------------------------
