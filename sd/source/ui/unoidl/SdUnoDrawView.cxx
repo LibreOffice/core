@@ -491,6 +491,7 @@ IPropertyArrayHelper & SdUnoDrawView::getInfoHelper()
 //----------------------------------------------------------------------
 
 Reference < beans::XPropertySetInfo >  SdUnoDrawView::getPropertySetInfo()
+        throw ( ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -500,14 +501,14 @@ Reference < beans::XPropertySetInfo >  SdUnoDrawView::getPropertySetInfo()
 
 //----------------------------------------------------------------------
 
-// Return sal_True, value changed
+// Return sal_True, value change
 sal_Bool SdUnoDrawView::convertFastPropertyValue
 (
     Any & rConvertedValue,
     Any & rOldValue,
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( com::sun::star::lang::IllegalArgumentException)
 {
     switch( nHandle )
     {
@@ -555,7 +556,7 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
 (
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( com::sun::star::uno::Exception)
 {
     switch( nHandle )
     {

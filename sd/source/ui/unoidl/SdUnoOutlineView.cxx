@@ -1,4 +1,3 @@
-
 #include "SdUnoOutlineView.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -411,7 +410,7 @@ IPropertyArrayHelper & SdUnoOutlineView::getInfoHelper()
 
 //----------------------------------------------------------------------
 
-Reference < beans::XPropertySetInfo >  SdUnoOutlineView::getPropertySetInfo()
+Reference < beans::XPropertySetInfo >  SdUnoOutlineView::getPropertySetInfo() throw ( ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -428,7 +427,7 @@ sal_Bool SdUnoOutlineView::convertFastPropertyValue
     Any & rOldValue,
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( com::sun::star::lang::IllegalArgumentException)
 {
     switch( nHandle )
     {
@@ -446,7 +445,7 @@ void SdUnoOutlineView::setFastPropertyValue_NoBroadcast
 (
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( ::com::sun::star::uno::Exception)
 {
 /*
     switch( nHandle )

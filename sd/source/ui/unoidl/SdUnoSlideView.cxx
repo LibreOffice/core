@@ -412,6 +412,7 @@ IPropertyArrayHelper & SdUnoSlideView::getInfoHelper()
 //----------------------------------------------------------------------
 
 Reference < beans::XPropertySetInfo >  SdUnoSlideView::getPropertySetInfo()
+        throw ( ::com::sun::star::uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -428,7 +429,7 @@ sal_Bool SdUnoSlideView::convertFastPropertyValue
     Any & rOldValue,
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( ::com::sun::star::lang::IllegalArgumentException)
 {
     switch( nHandle )
     {
@@ -446,7 +447,7 @@ void SdUnoSlideView::setFastPropertyValue_NoBroadcast
 (
     sal_Int32 nHandle,
     const Any& rValue
-)
+) throw ( ::com::sun::star::uno::Exception)
 {
 /*
     switch( nHandle )
