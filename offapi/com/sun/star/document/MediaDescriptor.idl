@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-17 14:09:34 $
+ *  last change: $Author: as $ $Date: 2002-07-23 13:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,147 +73,439 @@
 #include <com/sun/star/util/URL.idl>
 #endif
 
+#ifndef __com_sun_star_task_XInteractionHandler_idl__
+#include <com/sun/star/task/XInteractionHandler.idl>
+#endif
+
+#ifndef __com_sun_star_task_XStatusIndicator_idl__
+#include <com/sun/star/task/XStatusIndicator.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module document {
 
 //=============================================================================
-
 /** describes properties of a document, regarding the relationship
     between the loaded document and the resource the document is
     loaded from / stored to.
 
-    <p>This service may be represented by a
-    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>. </p>
+    <p>
+    This service may be represented by a
+    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    Such descriptors will be passed to different functions, included into possible
+    load/save proccesses. Every member of such process can use this descriptor
+    and may change it if to actualize the informations about the document.
+    So this descriptor should be used as an in/out parameter.
+    </p>
+
+    <p>
+    Note:<br>
+    It's not allowed to hold member of this descriptor by references longer the they
+    will be used (especialy a possible stream). It's allowed to use it directly
+    or by copying it only.
+    </p>
 
     @see com::sun::star::beans::PropertyValue
  */
 service MediaDescriptor
 {
     //-------------------------------------------------------------------------
-    /** document is a template.
+    /** document is a template
+
+        <p>
+        Loading a component of type "template" creates a new untitled document
+        by default, but setting the "AsTemplate" property to <FALSE/> loads the
+        template document for editing. Setting "AsTemplate" to <TRUE/> creates a
+        new untitled document out of the loaded document, even if it has not
+        a "template" type.
+        </p>
      */
     [property] boolean AsTemplate;
 
     //-------------------------------------------------------------------------
-    /** identifier of used character set.
+    /** the author of the document
+
+        <p>
+        Only for storing versions in components supporting versioning:
+        author of version.
+        </p>
+     */
+    [property] string Author;
+
+    //-------------------------------------------------------------------------
+    /** identifier of used character set
+
+        <p>
+        Defines the character set for document formats that contain single
+        byte characters (if necessary).
+        </p>
      */
     [property] string CharacterSet;
 
     //-------------------------------------------------------------------------
-    /** internal filter name.
+    /** description of document
+
+        <p>
+        Only for storing versions in components supporting versioning:
+        comment (description) for stored version.
+        </p>
+     */
+    [property] string Comment;
+
+    //-------------------------------------------------------------------------
+    /** pack specific properties of caller
+
+        <p>
+        This is a parameter that can be used for any properties specific
+        for a special component type. Format of that depends from real
+        type of adressed component.
+        </p>
+     */
+    [property] any ComponentData;
+
+    //-------------------------------------------------------------------------
+    /** same as <member>MediaDescriptor::URL</member>
+
+        <p>
+        It will be supported for compatibility reasons only.
+        </p>
+
+        @deprecated
+     */
+    [property] string FileName;
+
+    //-------------------------------------------------------------------------
+    /** internal filter name
+
+        <p>
+        Name of a filter that should be used for loading or storing the component.
+        Names must match the names of the <type>TypeDetection</type> configuration,
+        invalid names are ignored. If a name is specified on loading,
+        it still will be verified by a filter detection, but in case of doubt
+        it will be preferred.
+        </p>
      */
     [property] string FilterName;
 
     //-------------------------------------------------------------------------
-    /** name of target frame.
+    /** same as <member>MediaDescriptor::FilterOptions</member>
+
+        <p>
+        It will be supported for compatibility reasons only.
+        </p>
+
+        @deprecated
      */
-    [property] string FrameName;
+    [property] string FilterFlags;
 
     //-------------------------------------------------------------------------
-    /** load document, invisible.
+    /** additional properties for filter
+
+        <p>
+        Some filters need additional parameters; use only together with property
+        <member>MediaDescriptor::FilterName</member>. Details must be documented
+        by the filter. This is an old format for some filters. If a string is not
+        enough, filters can use the property <member>MediaDescriptor::FilterData</member>.
+        </p>
+     */
+    [property] string FilterOptions;
+
+        //-------------------------------------------------------------------------
+    /** additional properties for filter
+
+        <p>
+        This is a parameter that can be used for any properties specific
+        for a special filter type. It should be used if
+        <member>MediaDescriptor::FilterOptions</member> isn't enough.
+        </p>
+     */
+    [property] any FilterData;
+
+    //-------------------------------------------------------------------------
+    /** load document invisible
+
+        <p>
+        Defines if the loaded component is made visible. If this property is not
+        specified, the component is made visible by default.
+        </p>
      */
     [property] boolean Hidden;
 
     //-------------------------------------------------------------------------
-    /** content of document.
+    /** content of document
+
+        <p>
+        If used when loading a document: reading must be done using this stream.
+        If no stream is provided, the loader will create a stream by itself using
+        the other properties. It is not allowed to keep a reference to this
+        InputStream after loading the component, and it would be useless, because
+        in general an InputStream is usable for readong only once, except when it
+        also implements the <type scope="com::sun::star::io">XSeekable</type> interface.
+        </p>
      */
     [property] com::sun::star::io::XInputStream InputStream;
 
     //-------------------------------------------------------------------------
-    /** specifies the name of a mark within the document where the first
-        view is to position itself.
+    /** handle exceptional situations
 
-        <p>This is the same as the text behind a '#' in a http URL. But
+        <p>
+        Object implementing the <type scope="com::sun::star::task">Interactionhandler</type>
+        service that is used to handle exceptional situations where proceeding with the task
+        is impossible without additional information or impossible at all.
+        The implemented api provides a default implementation for it that can handle many situations.
+        If no InteractionHandler is set, a suitable exception is thrown.
+        It is not allowed to keep a reference to this object, even not in the loaded
+        or stored components' copy of the MediaDescriptor provided by its arguments attribute.
+        </p>
+     */
+    [property] com::sun::star::task::XInteractionHandler InteractionHandler;
+
+    //-------------------------------------------------------------------------
+    /** jump to a marked position after loading
+
+        <p>
+        This is the same as the text behind a '#' in a http URL. But
         this syntax with a '#' is not specified in most URL schemas.
         </p>
      */
     [property] string JumpMark;
+
     //-------------------------------------------------------------------------
-    /** mime type.
+    /** specify mime type of content
+
+        <p>
+        Type of the medium to load, that must match to one of the types defined
+        in the <type>TypeDetection</type> configuration (otherwise it's ignored).
+        This bypasses the type detection of the <type>Desktop</type> environment,
+        so passing a wrong MediaType will cause failure of loading.
+        </p>
      */
     [property] string MediaType;
 
     //-------------------------------------------------------------------------
-    /** opens a new view for an already loaded document.
+    /** please use the corresponding parameters of this descriptor instead
+
+        <p>
+        String that summarizes some flags for loading. The string contains capital
+        letters for the flags:<br>
+        <table border=1>
+            <tr>
+                <td><strong>flag</strong></td>
+                <td><strong>value</strong></td>
+                <td><strong>replacement</strong></td>
+            </tr>
+            <tr>
+                <td><em>ReadOnly</em></td>
+                <td>R</td>
+                <td><member>MediaDescriptor::ReadOnly</member></td>
+            </tr>
+            <tr>
+                <td><em>Preview</em></td>
+                <td>B</td>
+                <td><member>MediaDescriptor::Preview</member></td>
+            </tr>
+            <tr>
+                <td><em>AsTemplate</em></td>
+                <td>T</td>
+                <td><member>MediaDescriptor::AsTemplate</member></td>
+            </tr>
+            <tr>
+                <td><em>Hidden</em></td>
+                <td>H</td>
+                <td><member>MediaDescriptor::Hidden</member></td>
+            </tr>
+        </table>
+        </p>
+
+        @deprecated
+     */
+    [property] string OpenFlags;
+
+    //-------------------------------------------------------------------------
+    /** opens a new view for an already loaded document
+
+        <p>
+        Setting this to <TRUE/> forces the component to create a new window on loading
+        in any case. If the component supports multiple views, a second view is
+        opened, if not, the component is loaded one more time. Otherwise the behavior
+        depends on the default window handling of the <type>Desktop</type> environment.
+        </p>
      */
     [property] boolean OpenNewView;
 
+
     //-------------------------------------------------------------------------
-    /** position and size of document window.
+    /** overwrite any existing file
+
+        <p>
+        For storing only: overwrite any existing file, default is <FALSE/>,
+        so an error occurs if the target file already exists.
+        </p>
      */
-    [property] com::sun::star::awt::Rectangle PosSize;
+    [property] boolean Overwrite;
+
+    //-------------------------------------------------------------------------
+    /** pasword for loading storing documents
+
+        <p>
+        It caontains a password for loading or storing a component (if necessary).
+        If no password is specified, loading of a password protected document
+        will fail, storing will be done without encryption.
+        </p>
+     */
+    [property] string Password;
 
     //-------------------------------------------------------------------------
     /** contains the data for HTTP post method as a sequence of bytes.
 
-        <p>An example would be the data from a web form. This property
-        is actually handled, not <member>MediaDescriptor::PostString</member>,
-        which is for convienience. </p>
+        <p>
+        Data to send to a location described by the media descriptor to get
+        a result in return that will be loaded as a component
+        (usually in webforms). Default is: no PostData.
+        </p>
      */
-    [property] sequence<byte> PostData;
+    [property] sequence< byte > PostData;
 
     //-------------------------------------------------------------------------
-    /** contains the data for HTTP post method as a sequence of bytes.
+    /** use <member>MediaDescriptor::PostData</member> instead of this
 
-        <p>For example, this is the data from a web form. This property
-        is actually only for convienience and the data will interally processed
-        as <member>MediaDescriptor::PostData</member>. </p>
+        <p>
+        Same as PostData, but the data is transferred as a string
+        (just for compatibility).
+        </p>
+
+        @deprecated
      */
     [property] string PostString;
 
     //-------------------------------------------------------------------------
-    /** show preview.
+    /** show preview
+
+        <p>
+        Setting this to <TRUE/> tells the a loaded component that it is loaded as
+        a preview, so it can optimize loading and viewing for this special purpose.
+        Default is <FALSE/>.
+        </p>
      */
     [property] boolean Preview;
 
     //-------------------------------------------------------------------------
-    /** open document readonly.
+    /** open document readonly
+
+        <p>
+        Tells whether a document should be loaded in a (logical) readonly or in
+        read/write mode. If opening in the desired mode is impossible, an error occurs.
+        By default the loaded content decides what to do: if its UCB content supports
+        a "readonly" property, the logical open mode depends on that, otherwise
+        it will be read/write. This is only a UI related property, opening a
+        document in read only mode will not prevent the component from being
+        modified by API calls, but all modifying functionality in the UI will
+        be disabled or removed.
+        </p>
      */
     [property] boolean ReadOnly;
 
     //-------------------------------------------------------------------------
-    /** name of document referrer.
+    /** name of document referrer
+
+        <p>
+        A URL describing the environment of the request; f.e. a referrer may be a
+        URL of a document, if a hyperlink inside this document is clicked to load
+        another document. The referrer may be evaluated by the addressed UCB content
+        or the loaded document. Without a referrer the processing of URLs that
+        needs security checks will be denied, f.e. "macro:" URLs.
+        <br>
+        Don't be confused about the wrong spelling; is kept for compatibility reasons.
+        </p>
      */
     [property] string Referer;
 
     //-------------------------------------------------------------------------
-    /** prevents dialogs to query for more information.
+    /** can be used for status informations
+
+        <p>
+        Object implementing the <type scope="com::sun::star::task">XStatusIndicator</type>
+        interface that can be used to give status information (text or progress) for the task.
+        The office provides a default implementation for it. It is not allowed to keep
+        a reference to this object, even not in the loaded or stored components'
+        copy of the MediaDescriptor provided by its arguments attribute.
+        </p>
      */
-    [property] boolean Silent;
+    [property] com::sun::star::task::XStatusIndicator StatusIndicator;
 
     //-------------------------------------------------------------------------
-    /** name of the template instead of the URL.
+    /** name of the template instead of the URL
 
-        <p>Use always in conjunction with
-        <member>MediaDescriptor::TemplateRegionName</member>. </p>
-
-        @deprecated
+        <p>
+        The logical name of a template to load. Together with the <member>MediaDescriptor::TemplateRegion</type>
+        property it can be used instead of the URL of the template. Use always in conjunction with
+        <member>MediaDescriptor::TemplateRegionName</member>.
+        </p>
      */
     [property] string TemplateName;
 
     //-------------------------------------------------------------------------
-    /** name of the region of the template.
+    /** name of the region of the template
 
-        <p>Use always in conjunction with
-        <member>MediaDescriptor::TemplateName</member>. </p>
-
-        @deprecated
+        <p>
+        Use always in conjunction with <member>MediaDescriptor::TemplateName</member>.
+        </p>
      */
     [property] string TemplateRegionName;
 
     //-------------------------------------------------------------------------
-    /** URL of the document.
+    /** regulate using of compressing
+
+        <p>
+        For storing: Setting this to <TRUE/> means, don't use a zip file to save
+        the document, use a folder instead (only usable for UCB contents, that
+        support folders). Default is <FALSE/>.
+        </p>
      */
-    [property] com::sun::star::util::URL URL;// FileName
+    [property] boolean Unpacked;
 
     //-------------------------------------------------------------------------
-    /** storage version.
+    /** URL of the document
+
+        <p>
+        The location of the component in URL syntax. It must be the full qualified URL and
+        must include f.e. an optional <member>MediaDescriptor::JumpMark</member> too.
+        </p>
+     */
+    [property] string URL;
+
+    //-------------------------------------------------------------------------
+    /** storage version
+
+        <p>
+        For components supporting versioning: the number of the version to be
+        loaded or saved. Default is zero and means: no version is created or
+        loaded, the "main" document is processed.
+        </p>
      */
     [property] short Version;
 
     //-------------------------------------------------------------------------
-    /** id of the initial view.
+    /** set special view state
+
+        <p>
+        Data to set a special view state after loading. The type depends on
+        the component and is usually retrieved from a <type scope="com::sun::star::frame">Controller</type>
+        object by its <type scope="com::sun::star::view">XViewDataSupplier</type>
+        interface. Default is: no ViewData.
+        </p>
+     */
+    [property] any ViewData;
+
+    //-------------------------------------------------------------------------
+    /** id of the initial view
+
+        <p>
+        For components supporting different views: a number to define the view
+        that should be constructed after loading. Default is: zero, and this
+        should be treated by the component as the default view.
+        </p>
      */
     [property] short ViewId;
 
