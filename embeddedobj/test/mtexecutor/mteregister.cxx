@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mteregister.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-18 10:41:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #endif
 
 #include "mainthreadexecutor.hxx"
+#include "bitmapcreator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -90,18 +91,29 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    if ( pServiceManager && aImplName.equals( MainThreadExecutor::impl_staticGetImplementationName() ) )
+    if ( pServiceManager )
     {
-        xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
-                                            MainThreadExecutor::impl_staticGetImplementationName(),
-                                            MainThreadExecutor::impl_staticCreateSelfInstance,
-                                            MainThreadExecutor::impl_staticGetSupportedServiceNames() );
-    }
+        if ( aImplName.equals( MainThreadExecutor::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                                MainThreadExecutor::impl_staticGetImplementationName(),
+                                                MainThreadExecutor::impl_staticCreateSelfInstance,
+                                                MainThreadExecutor::impl_staticGetSupportedServiceNames() );
+        }
+        else if ( aImplName.equals( VCLBitmapCreator::impl_staticGetImplementationName() ) )
+        {
+            xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
+                                                VCLBitmapCreator::impl_staticGetImplementationName(),
+                                                VCLBitmapCreator::impl_staticCreateSelfInstance,
+                                                VCLBitmapCreator::impl_staticGetSupportedServiceNames() );
 
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
+        }
+
+        if ( xFactory.is() )
+        {
+            xFactory->acquire();
+            pRet = xFactory.get();
+        }
     }
 
     return pRet;
@@ -116,13 +128,23 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
 
             uno::Reference< registry::XRegistryKey >  xNewKey;
+            uno::Sequence< ::rtl::OUString > rServices;
+            sal_Int32 ind = 0;
 
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         MainThreadExecutor::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
 
-            uno::Sequence< ::rtl::OUString > rServices = MainThreadExecutor::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
+            rServices = MainThreadExecutor::impl_staticGetSupportedServiceNames();
+            for( ind = 0; ind < rServices.getLength(); ind++ )
+                xNewKey->createKey( rServices.getConstArray()[ind] );
+
+            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
+                                        VCLBitmapCreator::impl_staticGetImplementationName() +
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+            rServices = VCLBitmapCreator::impl_staticGetSupportedServiceNames();
+            for( ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
             return sal_True;
