@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-14 14:32:39 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1735,12 +1735,13 @@ BOOL __EXPORT ScUndoPivot::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
-                            const ScDPObject* pOldObj, const ScDPObject* pNewObj ) :
+                            const ScDPObject* pOldObj, const ScDPObject* pNewObj, BOOL bMove ) :
     ScSimpleUndo( pNewDocShell ),
     pOldDPObject( NULL ),
     pNewDPObject( NULL ),
     pOldUndoDoc( pOldDoc ),
-    pNewUndoDoc( pNewDoc )
+    pNewUndoDoc( pNewDoc ),
+    bAllowMove( bMove )
 {
     if (pOldObj)
         pOldDPObject = new ScDPObject( *pOldObj );
@@ -1811,6 +1812,7 @@ void __EXPORT ScUndoDataPilot::Undo()
                 if (pData)
                     pDocObj->SetSaveData(*pData);
                 pDocObj->SetOutRange( pOldDPObject->GetOutRange() );
+                pOldDPObject->WriteTempDataTo( *pDocObj );
             }
             else
             {
@@ -1869,7 +1871,7 @@ void __EXPORT ScUndoDataPilot::Redo()
     }
 
     ScDBDocFunc aFunc( *pDocShell );
-    aFunc.DataPilotUpdate( pSourceObj, pNewDPObject, FALSE, FALSE );    // no new undo action
+    aFunc.DataPilotUpdate( pSourceObj, pNewDPObject, FALSE, FALSE, bAllowMove );    // no new undo action
 
     EndRedo();
 }
