@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef SFX_ITEMCONNECT_HXX
+#include <sfx2/itemconnect.hxx>
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -121,6 +124,7 @@ static USHORT pRanges[] =
 {
     SID_ATTR_BORDER_INNER,
     SID_ATTR_BORDER_SHADOW,
+    SID_ATTR_BORDER_CONNECT,
     0
 };
 
@@ -252,6 +256,8 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aEdShadowSize   ( this, ResId( ED_SHADOWSIZE ) ),
         aFtShadowColor  ( this, ResId( FT_SHADOWCOLOR ) ),
         aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
+        aPropertiesFL   ( this, ResId( FL_PROPERTIES ) ),
+        aMergeWithNextCB( this, ResId( CB_MERGEWITHNEXT ) ),
         aShadowImgLstH( ResId(ILH_SDW_BITMAPS)),
         aShadowImgLst( ResId(IL_SDW_BITMAPS)),
         aBorderImgLstH( ResId(ILH_PRE_BITMAPS)),
@@ -366,6 +372,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aLbShadowColor.CopyEntries( aLbLineColor );
     }
     FreeResource();
+
 }
 
 // -----------------------------------------------------------------------
@@ -845,6 +852,14 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
             }
         }
     }
+
+    USHORT nConnectWhich = GetWhich(SID_ATTR_BORDER_CONNECT);
+    if(aMergeWithNextCB.IsVisible() &&
+            SFX_ITEM_AVAILABLE <= rSet.GetItemState( nConnectWhich, TRUE ))
+    {
+        aMergeWithNextCB.Check(static_cast< const SfxBoolItem& >(rSet.Get(nConnectWhich)).GetValue());
+        aMergeWithNextCB.SaveValue();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -902,6 +917,17 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     SvxBorderLine         aCoreLine;
     SvxBorderLine*        pCoreLine;
     SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( rCoreAttrs, SID_ATTR_BORDER_OUTER );
+
+    if(aMergeWithNextCB.IsVisible() &&
+            aMergeWithNextCB.GetSavedValue() != aMergeWithNextCB.IsChecked())
+    {
+        //Writer needs it's own derived SfxBoolItem
+        SfxBoolItem* pBoolItem = static_cast< SfxBoolItem* >(
+                rOldSet.Get( GetWhich(SID_ATTR_BORDER_CONNECT)).Clone());
+        pBoolItem->SetValue(aMergeWithNextCB.IsChecked());
+        rCoreAttrs.Put(*pBoolItem);
+        delete pBoolItem;
+    }
 
     SfxMapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
     const SfxPoolItem* pOld = 0;
@@ -1549,6 +1575,11 @@ void    SvxBorderTabPage::SetSWMode(BYTE nSet)
 //#define SW_BORDER_MODE_TABLE  0x02
 //#define SW_BORDER_MODE_FRAME  0x04
     nSWMode = nSet;
+    if(SW_BORDER_MODE_PARA == nSet)
+    {
+        aPropertiesFL.Show();
+        aMergeWithNextCB.Show();
+    }
 }
 /* -----------------------------03.06.2002 10:15------------------------------
 
