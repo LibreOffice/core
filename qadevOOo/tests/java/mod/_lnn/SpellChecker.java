@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellChecker.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:58:57 $
+ *  last change:$Date: 2003-10-06 13:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.linguistic2.XLinguServiceManager;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
@@ -115,10 +117,13 @@ public class SpellChecker extends TestCase {
             (TestParameters tParam, PrintWriter log) {
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
+        Object LinguServiceManager = null;
 
         try {
             oObj = (XInterface)xMSF.createInstance
-                ("com.sun.star.linguistic2.SpellChecker");
+                ("com.sun.star.lingu2.SpellChecker");
+            LinguServiceManager = xMSF.createInstance
+                ("com.sun.star.linguistic2.LinguServiceManager");
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
@@ -127,6 +132,9 @@ public class SpellChecker extends TestCase {
         String Iname = util.utils.getImplName(oObj);
         log.println("Implementation Name: "+Iname);
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        XLinguServiceManager xLinguServiceManager = (XLinguServiceManager) UnoRuntime.queryInterface(XLinguServiceManager.class, LinguServiceManager);
+        tEnv.addObjRelation("AlternativeChecker",xLinguServiceManager.getSpellChecker());
 
         return tEnv;
     }
