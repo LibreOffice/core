@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:00:59 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Čára";
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
+                Text[ slovak ] = "Úsečka";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Oblast";
                 Text[ hebrew ] = "Fläche";
                 Text[ hindi ] = "विस्तीर्ण";
+                Text[ slovak ] = "Oblasť";
             };
             PageItem
             {
@@ -185,6 +187,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Stín";
                 Text[ hebrew ] = "‮הצללה‬";
                 Text[ hindi ] = "छाया";
+                Text[ slovak ] = "Tieň";
             };
             PageItem
             {
@@ -215,6 +218,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Průhlednost";
                 Text[ hebrew ] = "Transparenz";
                 Text[ hindi ] = "पारदर्शकता";
+                Text[ slovak ] = "Priehľadnosť";
             };
             PageItem
             {
@@ -248,6 +252,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -281,6 +286,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Efekty písma";
                 Text[ hebrew ] = "‮אפרים לגופנים‬";
                 Text[ hindi ] = "Font Effects";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -314,6 +320,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ czech ] = "Odsazení a proklad";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a riadkovanie";
             };
         };
     };
@@ -332,6 +339,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text[ czech ] = "Rozvržení prezentace";
     Text[ hebrew ] = "Präsentationslayout";
     Text[ hindi ] = "प्रस्तुति का अभिन्यास";
+    Text[ slovak ] = "Vzhľad prezentácie";
 };
 TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
 {
@@ -378,6 +386,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
                 Text[ czech ] = "Čára";
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
+                Text[ slovak ] = "Úsečka";
             };
         };
     };
@@ -427,6 +436,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text[ czech ] = "Oblast";
                 Text[ hebrew ] = "Fläche";
                 Text[ hindi ] = "विस्तीर्ण";
+                Text[ slovak ] = "Oblasť";
             };
         };
     };
@@ -476,6 +486,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "फ़ॉन्ट";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -509,6 +520,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Efekty písma";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "Font Effects";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -542,6 +554,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Odsazení a proklad";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a riadkovanie";
             };
             PageItem
             {
@@ -573,6 +586,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Odrážky";
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
+                Text[ slovak ] = "Odrážky";
             };
             PageItem
             {
@@ -604,6 +618,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Typ číslování";
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देना का क्रम";
+                Text[ slovak ] = "Typ číslovania";
             };
             PageItem
             {
@@ -635,6 +650,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Grafika";
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
+                Text[ slovak ] = "Obrázky";
             };
             PageItem
             {
@@ -666,10 +682,13 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ czech ] = "Přizpůsobit";
                 Text[ hebrew ] = "‮התאמה אישית‬";
                 Text[ hindi ] = "व्यवस्था करो";
+                Text[ slovak ] = "Prispôsobiť";
             };
         };
     };
 };
+
+
 
 
 
