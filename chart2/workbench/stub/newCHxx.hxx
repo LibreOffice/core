@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newCHxx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-10 19:40:24 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 09:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,8 @@
  ************************************************************************/
 
 #ifndef _CHART2__HXX
-#define _CHART2__HXX
+#define
+_CHART2__HXX
 
 //.............................................................................
 namespace chart
