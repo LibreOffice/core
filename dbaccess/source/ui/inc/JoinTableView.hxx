@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-26 07:52:37 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 11:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,22 @@ namespace dbaui
         */
         void childCountChanged(sal_Int32 _nOldCount);
 
+        /** returns if teh given window is visible.
+            @param  _rPoint
+                The Point to check
+            @param  _rSize
+                The Size to be check as well
+            @return
+                <TRUE/> if the area is visible otherwise <FALSE/>
+
+        */
+        BOOL isMovementAllowed(const Point& _rPoint,const Size& _rSize);
+
+        Size getRealOutputSize() const { return m_aOutputSize; }
+
+        virtual void EnsureVisible(const OTableWindow* _pWin);
+        virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);
+
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
@@ -302,8 +318,6 @@ namespace dbaui
         virtual void dragFinished( );
         // hier ist die Position (die sich waehrend des Sizings aendern kann) physisch, da waehrend des Sizens nicht gescrollt wird
         virtual void Command(const CommandEvent& rEvt);
-
-        virtual void EnsureVisible(const OTableWindow* _pWin);
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
                                              const ::rtl::OUString& _rWinName);
