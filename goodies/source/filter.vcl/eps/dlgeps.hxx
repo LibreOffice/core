@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 10:16:33 $
+ *  last change: $Author: sj $ $Date: 2002-08-15 09:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,6 @@ private:
     FixedLine           aGrpCompression;
     RadioButton         aRBCompressionLZW;
     RadioButton         aRBCompressionNone;
-    FixedLine           aGrpText;
-    ListBox             aLBTextMode;
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;

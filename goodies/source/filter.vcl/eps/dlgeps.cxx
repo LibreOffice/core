@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 10:16:32 $
+ *  last change: $Author: sj $ $Date: 2002-08-15 09:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,6 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
                 aGrpCompression     ( this, ResId( GRP_COMPRESSION ) ),
                 aRBCompressionLZW   ( this, ResId( RB_COMPRESSION_LZW ) ),
                 aRBCompressionNone  ( this, ResId( RB_COMPRESSION_NONE ) ),
-                aGrpText            ( this, ResId( GRP_TEXT ) ),
-                aLBTextMode         ( this, ResId( LB_TEXT_MODE ) ),
                 aBtnOK              ( this, ResId( BTN_OK ) ),
                 aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
                 aBtnHelp            ( this, ResId( BTN_HELP ) ),
@@ -111,11 +109,6 @@ DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
     sal_Int32   nVersion = pConfigItem->ReadInt32( sVersion, 2 );
     sal_Int32   nColor = pConfigItem->ReadInt32( sColorFormat, 0 );
     sal_Int32   nCompr = pConfigItem->ReadInt32( sCompressionMode, 2 );
-    sal_uInt16  nTextMode = (sal_Int16)pConfigItem->ReadInt32( sTextMode, 0 );
-
-    if ( nTextMode > 1 )
-        nTextMode = 0;
-    aLBTextMode.SelectEntryPos( nTextMode, sal_True );
 
     BOOL bCheck = FALSE;
     if ( nPreview & 1 )
@@ -201,9 +194,6 @@ IMPL_LINK( DlgExportEPS, OK, void *, EMPTYARG )
         nCheck++;
     String sCompressionMode( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) );
     pConfigItem->WriteInt32( sCompressionMode, nCheck );
-
-    String sTextMode( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) );
-    pConfigItem->WriteInt32( sTextMode, aLBTextMode.GetSelectEntryPos() );
 
     rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:08:22 $
+ *  last change: $Author: sj $ $Date: 2002-08-15 09:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_EPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230, 185 ) ;
+    Size = MAP_APPFONT ( 230, 161 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "EPS Export Optionen" ;
@@ -458,157 +458,6 @@ ModalDialog DLG_EXPORT_EPS
         Text[ turkish ] = "Yok";
         Text[ finnish ] = "Ei mit‰‰n";
         Text[ catalan ] = "Cap";
-    };
-
-    FixedLine  GRP_TEXT
-    {
-        Pos = MAP_APPFONT ( 6 , 154 ) ;
-        Size = MAP_APPFONT ( 162, 8 ) ;
-        Text = "Text Einstellungen";
-        Text [ ENGLISH ] = "TextMode";
-        Text[ english_us ] = "Text settings";
-        Text[ portuguese ] = "ConfiguraÁ„o de texto";
-        Text[ russian ] = "Õ‡ÒÚÓÈÍË ÚÂÍÒÚ‡";
-        Text[ greek ] = "—ıËÏﬂÛÂÈÚ ÍÂÈÏ›ÌÔı";
-        Text[ dutch ] = "Tekstinstellingen";
-        Text[ french ] = "ParamËtres de texte";
-        Text[ spanish ] = "ConfiguraciÛn de texto";
-        Text[ italian ] = "Impostazioni testo";
-        Text[ danish ] = "TextMode";
-        Text[ swedish ] = "Textinst‰llningar";
-        Text[ polish ] = "Ustawienia tekstu";
-        Text[ portuguese_brazilian ] = "TextMode";
-        Text[ japanese ] = "ÊñáÂ≠óË®≠ÂÆö";
-        Text[ korean ] = "ÌÖçÏä§Ìä∏ ÏÑ§Ï†ï";
-        Text[ chinese_simplified ] = "ËÆæÂÆöÊñáÂ≠ó";
-        Text[ chinese_traditional ] = "Ë®≠ÂÆöÊñáÂ≠ó";
-        Text[ turkish ] = "TextMode";
-        Text[ arabic ] = "TextMode";
-        Text[ catalan ] = "Par‡metres de text";
-        Text[ finnish ] = "Tekstin asetukset";
-    };
-    ListBox LB_TEXT_MODE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT( 12, 165 );
-        Size = MAP_APPFONT( 150, 48 );
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "always export glyph outlines" ; > ;
-            < "newer export glyph outlines " ; > ;
-        };
-        StringList [ language_user1 ] =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "Always export glyph outlines" ; > ;
-            < "Never export glyph outlines" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Exportar sempre Glyph Outlines" ; > ;
-            < "Nunca exportar Glyph Outlines" ; > ;
-        };
-        StringList [ russian ] =
-        {
-            < "¬ÒÂ„‰‡ ˝ÍÒÔÓÚËÓ‚‡Ú¸ Glyph Outlines" ; > ;
-            < "ÕËÍÓ„‰‡ ÌÂ ˝ÍÒÔÓÚËÓ‚‡Ú¸ Glyph Outlines" ; > ;
-        };
-        StringList [ greek ] =
-        {
-            < "–‹ÌÙ· ÂÓ·„˘„ﬁ Ù˘Ì Glyph Outlines" ; > ;
-            < "–ÔÙ› ÂÓ·„˘„ﬁ Ù˘Ì Glyph Outlines" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Glyph Outlines altijd exporteren" ; > ;
-            < "Glyph Outlines nooit exporteren" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Toujours exporter les contours glyphes" ; > ;
-            < "Ne jamais exporter les contours glyphes" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Exportar siempre Glyph Outlines" ; > ;
-            < "No exportar nunca Glyph Outlines" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Esporta sempre Glyph Outlines" ; > ;
-            < "Non esportare mai Glyph Outlines" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Exportera alltid glyfkonturer" ; > ;
-            < "Exportera aldrig glyfkonturer" ; > ;
-        };
-        StringList [ polish ] =
-        {
-            < "Eksportuj zawsze kontury glifÛw (glyph outlines)" ; > ;
-            < "Nie nigdy eksportuj konturÛw glifÛw (glyph outlines)" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ japanese ] =
-        {
-            < "„Ç∞„É™„Éï„Éª„Ç¢„Ç¶„Éà„É©„Ç§„É≥„ÅØÂ∏∏„Å´„Ç®„ÇØ„Çπ„Éù„Éº„Éà„Åô„Çã" ; > ;
-            < "„Ç∞„É™„Éï„Éª„Ç¢„Ç¶„Éà„É©„Ç§„É≥„ÅØÁµ∂ÂØæ„Å´„Ç®„ÇØ„Çπ„Éù„Éº„Éà„Åó„Å™„ÅÑ" ; > ;
-        };
-        StringList [ korean ] =
-        {
-            < "Í∏ÄÎ¶¨ÌîÑ ÏïÑÏõÉÎùºÏù∏ Ìï≠ÏÉÅ ÎÇ¥Î≥¥ÎÇ¥Í∏∞" ; > ;
-            < "Í∏ÄÎ¶¨ÌîÑ ÏïÑÏõÉ ÎùºÏù∏ Ï†àÎåÄ ÎÇ¥Î≥¥ÎÇ¥ÏßÄ ÏïäÍ∏∞" ; > ;
-        };
-        StringList [ chinese_simplified ] =
-        {
-            < "Ëá™Âä®ËæìÂá∫Â≠ó‰ΩìËΩÆÂªì" ; > ;
-            < "Ê∞∏‰∏çËæìÂá∫Â≠ó‰ΩìËΩÆÂªì" ; > ;
-        };
-        StringList [ chinese_traditional ] =
-        {
-            < "Ëá™ÂãïÂåØÂá∫Â≠óÂûãËº™Âªì" ; > ;
-            < "Ê∞∏‰∏çÂåØÂá∫Â≠óÂûãËº™Âªì" ; > ;
-        };
-        StringList [ turkish ] =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ arabic ] =
-        {
-            < "Glyph Outlines immer exportieren" ; > ;
-            < "Glyph Outlines niemals exportieren" ; > ;
-        };
-        StringList [ catalan ] =
-        {
-            < "Exporta sempre els contorns dels gravats" ; > ;
-            < "No exportis mai els contorns dels gravats" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-             < "Vie symbolien j‰sennys aina" ; > ;
-            < "ƒl‰ vie symbolien j‰sennyst‰ koskaan" ; > ;
-        };
     };
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ portuguese_brazilian ] = "EPS Export Optionen";
