@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 13:14:53 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:04:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -210,6 +210,7 @@ if (-d "$StartDir") {
 
     #check java docu, it is only a first and simple check
     # improvement required
+if ($ENV["SOLAR_JAVA"] ne "") {
     print "check java docu: ";
     if (-d "$StartDir/docs/java/ref") {
     if (! -e "$StartDir/docs/java/ref/index.html") {
@@ -242,6 +243,7 @@ if (-d "$StartDir") {
     $return++;
     }
     print "\n";
+}
 
     #check examples, it is only a first and simple check
     # improvement required
