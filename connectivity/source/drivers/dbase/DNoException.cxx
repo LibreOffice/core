@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:47:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,11 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
                 nLength -= STRING_MAXLEN;
             }
-            if ( nLength )
+            if ( nLength > 0 )
             {
                 ByteString aBStr;
-                aBStr.Expand(nLength);
-                m_pMemoStream->Read(aBStr.AllocBuffer(nLength),nLength);
+                aBStr.Expand(static_cast<xub_StrLen>(nLength));
+                m_pMemoStream->Read(aBStr.AllocBuffer(static_cast<xub_StrLen>(nLength)),nLength);
                 //  aBStr.ReleaseBufferAccess();
 
                 aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
@@ -711,12 +711,14 @@ void ONDXPage::PrintPage()
     DBG_TRACE("SDB: -----------------------------------------------\n");
     if (!IsLeaf())
     {
+#if OSL_DEBUG_LEVEL > 1
         GetChild(&rIndex)->PrintPage();
         for (USHORT i = 0; i < nCount; i++)
         {
             ONDXNode rNode = (*this)[i];
             rNode.GetChild(&rIndex,this)->PrintPage();
         }
+#endif
     }
     DBG_TRACE("SDB: ===============================================\n");
 }
