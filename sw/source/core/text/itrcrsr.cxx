@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:11:19 $
+ *  last change: $Author: ama $ $Date: 2000-10-20 14:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,6 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                                SwCrsrMoveState* pCMS, const long nMax )
 {
-    BOOL bDropIt = TRUE; //pCMS && pCMS->bDropIt;
     CharCrsrToLine(nOfst);
 
     // Adjustierung ggf. nachholen
@@ -486,8 +485,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         xub_StrLen nOldLen = pPor->GetLen();
                         pPor->SetLen( nOfst - aInf.GetIdx() );
                         aInf.SetLen( pPor->GetLen() );
-                        if( nX || ( !pPor->InNumberGrp() &&
-                            ( bDropIt || !pPor->IsDropPortion() ) ) )
+                        if( nX || !pPor->InNumberGrp() )
                         {
                             SeekAndChg( aInf );
                             const sal_Bool bOldOnWin = aInf.OnWin();
@@ -508,7 +506,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         if( pPor )
         {
             // Bei manchen Portions gibts es kein links (Number, DropCap)
-            if( pPor->InNumberGrp() || ( pPor->IsDropPortion() && !bDropIt ) )
+            if( pPor->InNumberGrp() )
             {
                 nX += pPor->Width();
                 if( pPor->GetPortion() && pPor->GetPortion()->IsMarginPortion() )
@@ -604,9 +602,18 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             {
                 if( pCMS->bFieldInfo && pPor->InFldGrp() && pPor->Width() )
                     pOrig->Width( pPor->Width() );
-                if( pPor->IsDropPortion() && bDropIt )
-                    pOrig->Height( ((SwDropPortion*)pPor)->GetDropHeight() +
-                                   ((SwDropPortion*)pPor)->GetDropDescent());
+                if( pPor->IsDropPortion() )
+                {
+                    nPorAscent = ((SwDropPortion*)pPor)->GetDropHeight();
+                    nPorHeight = nPorAscent;
+                    pOrig->Height( nPorHeight +
+                        ((SwDropPortion*)pPor)->GetDropDescent() );
+                    if( nTmpHeight < pOrig->Height() )
+                    {
+                        nTmpAscent = nPorAscent;
+                        nTmpHeight = pOrig->Height();
+                    }
+                }
             }
         }
         // Es darf nicht vorzeitig returnt werden.
@@ -886,6 +893,8 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             SwTxtSizeInfo aSizeInf( GetInfo(), rText, nCurrStart );
             ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
             SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
+            SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
+                    ((SwDropPortion*)pPor)->GetFnt() : NULL );
 //          nLength = aSizeInf.GetCrsrOfst( nX, nSpaceAdd );
             nLength = aSizeInf.GetFont()->_GetCrsrOfst( aSizeInf.GetVsh(),
                                     aSizeInf.GetOut(),

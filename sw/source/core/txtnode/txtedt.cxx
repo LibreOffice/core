@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2000-10-20 14:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,7 +799,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             SwRect aTmp;
             aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
             SwCrsrMoveState aTmpState( MV_NONE );
-            aTmpState.bDropIt = TRUE;
             GetCharRect( aTmp, aPos, &aTmpState );
             BOOL bSameFrame = TRUE;
             SwTxtFrm* pStartFrm = this;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:24 $
+ *  last change: $Author: ama $ $Date: 2000-10-20 14:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,11 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
             if( !aLine.Prev() )
                 break;
         }
+
+        if( aLine.GetDropLines() >= aLine.GetLineNr() && 1 != aLine.GetLineNr()
+            && rPoint.X() < aLine.FirstLeft() + aLine.GetDropLeft() )
+            while( aLine.GetLineNr() > 1 )
+                aLine.Prev();
 
         xub_StrLen nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 

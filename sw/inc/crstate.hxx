@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-20 14:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@ struct SwCrsrMoveState
                                 // GetCntntPos laufen.
     BOOL bFillRet       :1;     // wird nur im FillModus temp. genutzt
     BOOL bSetInReadOnly :1;     // ReadOnlyBereiche duerfen betreten werden
-    BOOL bDropIt        :1;     // dropportions allowed
 
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
@@ -133,8 +132,7 @@ struct SwCrsrMoveState
         bPosCorr( FALSE ),
         bFtnNoInfo( FALSE ),
         bExactOnly( FALSE ),
-        bSetInReadOnly( FALSE ),
-        bDropIt( FALSE )
+        bSetInReadOnly( FALSE )
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
@@ -145,8 +143,7 @@ struct SwCrsrMoveState
         bPosCorr( FALSE ),
         bFtnNoInfo( FALSE ),
         bExactOnly( FALSE ),
-        bSetInReadOnly( FALSE ),
-        bDropIt( FALSE )
+        bSetInReadOnly( FALSE )
     {}
 };
 

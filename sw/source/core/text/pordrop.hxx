@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pordrop.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-10-20 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ public:
     inline KSHORT GetDropHeight() const { return nDropHeight; }
     inline KSHORT GetDropDescent() const { return nDropDescent; }
     inline KSHORT GetDropLeft() const { return Width() + nFix; }
+    inline SwFont* GetFnt() { return pFnt; }
 
     static void DeleteDropCapCache();
 
