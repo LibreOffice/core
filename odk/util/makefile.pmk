@@ -64,6 +64,9 @@ DESTDIRLIB=$(DESTDIR)$/solia$/lib
 .ELIF "$(OS)"=="LINUX"
 DESTDIRBIN=$(DESTDIR)$/linux$/bin
 DESTDIRLIB=$(DESTDIR)$/linux$/lib
+.ELIF "$(OS)"=="IRIX"
+DESTDIRBIN=$(DESTDIR)$/irix$/bin
+DESTDIRLIB=$(DESTDIR)$/irix$/lib
 .ELIF "$(OS)"=="WNT"
 DESTDIRBIN=$(DESTDIR)$/windows$/bin
 DESTDIRLIB=$(DESTDIR)$/windows$/lib
