@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-05 14:29:36 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 08:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,12 +212,40 @@
 #include <svtools/saveopt.hxx>
 #include <svtools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
-#include <svtools/menuoptions.hxx>
 #include <svtools/pathoptions.hxx>
+#include <svtools/viewoptions.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <svtools/historyoptions.hxx>
+#include <svtools/menuoptions.hxx>
+#include <svtools/addxmltostorageoptions.hxx>
+#include <svtools/miscopt.hxx>
+#include <svtools/useroptions.hxx>
+#include <svtools/startoptions.hxx>
+#include <svtools/securityoptions.hxx>
+#include <svtools/localisationoptions.hxx>
+#include <svtools/inetoptions.hxx>
+#include <svtools/fontoptions.hxx>
+#include <svtools/internaloptions.hxx>
 #include <svtools/workingsetoptions.hxx>
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
+
+static SvtSaveOptions *pSaveOptions = NULL;
+static SvtUndoOptions *pUndoOptions = NULL;
+static SvtHelpOptions *pHelpOptions = NULL;
+static SvtModuleOptions *pModuleOptions = NULL;
+static SvtHistoryOptions *pHistoryOptions = NULL;
+static SvtMenuOptions *pMenuOptions = NULL;
+static SvtAddXMLToStorageOptions *pXMLOptions = NULL;
+static SvtMiscOptions *pMiscOptions = NULL;
+static SvtUserOptions *pUserOptions = NULL;
+static SvtStartOptions *pStartOptions = NULL;
+static SvtSecurityOptions *pSecurityOptions = NULL;
+static SvtLocalisationOptions *pLocalisationOptions = NULL;
+static SvtInetOptions *pInetOptions = NULL;
+static SvtFontOptions *pFontOptions = NULL;
+static SvtInternalOptions *pInternalOptions = NULL;
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
@@ -271,6 +299,23 @@ SfxApplication::SfxApplication()
     , pImageMgr( 0 )
     , nInterfaces( 0 )
 {
+    pSaveOptions = new SvtSaveOptions;
+    pUndoOptions = new SvtUndoOptions;
+    pHelpOptions = new SvtHelpOptions;
+    pModuleOptions = new SvtModuleOptions;
+    pHistoryOptions = new SvtHistoryOptions;
+    pMenuOptions = new SvtMenuOptions;
+    pXMLOptions = new SvtAddXMLToStorageOptions;
+    pMiscOptions = new SvtMiscOptions;
+    pUserOptions = new SvtUserOptions;
+    pStartOptions = new SvtStartOptions;
+    pSecurityOptions = new SvtSecurityOptions;
+    pLocalisationOptions = new SvtLocalisationOptions;
+    pInetOptions = new SvtInetOptions;
+    pFontOptions = new SvtFontOptions;
+    pInternalOptions = new SvtInternalOptions;
+    SvtViewOptions::AcquireOptions();
+
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
     pImp->pEmptyMenu = 0;
@@ -297,10 +342,6 @@ SfxApplication::SfxApplication()
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pApp->PreInit();
 
-    pAppData_Impl->pSaveOptions = new SvtSaveOptions;
-    pAppData_Impl->pUndoOptions = new SvtUndoOptions;
-    pAppData_Impl->pHelpOptions = new SvtHelpOptions;
-
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
     InitializeDde();
@@ -320,9 +361,23 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
-    DELETEZ( pAppData_Impl->pSaveOptions );
-    DELETEZ( pAppData_Impl->pUndoOptions );
-    DELETEZ( pAppData_Impl->pHelpOptions );
+    SvtViewOptions::ReleaseOptions();
+    delete pSaveOptions;
+    delete pUndoOptions;
+    delete pHelpOptions;
+    delete pModuleOptions;
+    delete pHistoryOptions;
+    delete pMenuOptions;
+    delete pXMLOptions;
+    delete pMiscOptions;
+    delete pUserOptions;
+    delete pStartOptions;
+    delete pSecurityOptions;
+    delete pLocalisationOptions;
+    delete pInetOptions;
+    delete pFontOptions;
+    delete pInternalOptions;
+
     if ( !bDowning )
         Deinitialize();
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
