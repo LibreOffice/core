@@ -372,6 +372,8 @@ sub convert_licenstring
         $oneline =~ s/\"/\\\"/g;    # masquerading the "
         $oneline =~ s/\'/\\\'/g;    # masquerading the '
 
+        $oneline =~ s/\$\{/\{/g;    # replacement of variables, only {PRODUCTNAME}, not ${PRODUCTNAME}
+
         my $ulfstring = $onelanguage . " = " . "\"" . $oneline . "\"\n";
         push(@licensearray, $ulfstring);
     }
@@ -612,6 +614,64 @@ sub find_component_line
 }
 
 ##########################################################
+# Removing one package from the xml file
+##########################################################
+
+sub remove_package
+{
+    my ($xmlfile, $packagename) = @_;
+
+    my $searchstring = $packagename;
+    if ( $searchstring =~ /\-(\S+?)\s*$/ ) { $searchstring = $1; } # "SUNW%PRODUCTNAME-mailcap" -> "mailcap"
+
+    my $packagestring = "";
+    my $namestring = "";
+
+    if ( $installer::globals::issolarispkgbuild )
+    {
+        $packagestring = "\<pkgunit";
+        $namestring = "pkgName";
+    }
+    elsif ( $installer::globals::islinuxrpmbuild )
+    {
+        $packagestring = "\<rpmunit";
+        $namestring = "rpmUniqueName";
+    }
+
+    for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
+    {
+        if ( ${$xmlfile}[$i] =~ /^\s*\Q$packagestring\E/ )
+        {
+            # this is a package, but is it the correct one?
+
+            my $do_delete = 0;
+            my $linecounter = 1;
+            my $startline = $i+1;
+            my $line = ${$xmlfile}[$startline];
+            if (($line =~ /^\s*\Q$namestring\E\s*\=/) && ($line =~ /\-\Q$searchstring\E/)) { $do_delete = 1; }
+
+            my $endcounter = 0;
+
+            while ((!( $line =~ /\/\>/ )) && ( $startline <= $#{$xmlfile} ))
+            {
+                $linecounter++;
+                $startline++;
+                $line = ${$xmlfile}[$startline];
+                if (($line =~ /^\s*\Q$namestring\E\s*\=/) && ($line =~ /\-\Q$searchstring\E/)) { $do_delete = 1; }
+            }
+
+            $linecounter = $linecounter + 1;
+
+            if ( $do_delete )
+            {
+                splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
+                last;
+            }
+        }
+    }
+}
+
+##########################################################
 # Removing one component from the xml file
 ##########################################################
 
@@ -742,6 +802,24 @@ sub duplicate_languagepack_in_xmlfile
     # including the unitcopy into the xml file
     include_component_at_specific_line($xmlfile, $unitcopy, $startline);
     $startline = $startline + $#{$unitcopy} + 1;
+}
+
+#######################################################
+# Removing empty packages from xml file. The names
+# are stored in @installer::globals::emptypackages
+#######################################################
+
+sub remove_empty_packages_in_xmlfile
+{
+    my ($xmlfile) = @_;
+
+    for ( my $i = 0; $i <= $#installer::globals::emptypackages; $i++ )
+    {
+        my $packagename = $installer::globals::emptypackages[$i];
+        remove_package($xmlfile, $packagename);
+        my $infoline = "Removing package $packagename from xml file.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 #######################################################
@@ -1272,6 +1350,7 @@ sub create_java_installer
     # reading, editing and saving the xmlfile
 
     my $xmlfile = installer::files::read_file($xmlfilename);
+    remove_empty_packages_in_xmlfile($xmlfile);
     prepare_language_pack_in_xmlfile($xmlfile);
     add_lowercasevariables_to_allvariableshashref($allvariableshashref);
     substitute_variables($xmlfile, $allvariableshashref);
