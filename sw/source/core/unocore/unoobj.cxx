@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 11:02:26 $
+ *  last change: $Author: os $ $Date: 2000-11-01 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #endif
 #ifndef _PAGEFRM_HXX //autogen
 #include <pagefrm.hxx>
+#endif
+#ifndef _DOCTXM_HXX
+#include <doctxm.hxx>
 #endif
 #ifndef _TOX_HXX
 #include <tox.hxx>
@@ -1265,9 +1268,14 @@ sal_Bool lcl_getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                                     *rPam.Start() );
             if( pBase )
             {
-                uno::Reference< XDocumentIndex >  aRef = new SwXDocumentIndex(
-                        (const SwTOXBaseSection*)pBase, rPam.GetDoc() );
-                DBG_ERROR("kein Test auf mehrfache Erzeugung!")
+                SwSectionFmt* pFmt = ((SwTOXBaseSection*)pBase)->GetFmt();
+                SwClientIter aIter(*pFmt);
+                SwXDocumentIndex* pxIdx = (SwXDocumentIndex*)aIter.First(TYPE(SwXDocumentIndex));
+                uno::Reference< XDocumentIndex >  aRef;
+                if(pxIdx)
+                    aRef = pxIdx;
+                else
+                    aRef = new SwXDocumentIndex((const SwTOXBaseSection*)pBase, rPam.GetDoc() );
                 rAny.setValue(&aRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
             }
             else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 11:03:32 $
+ *  last change: $Author: os $ $Date: 2000-11-01 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ Sequence< OUString > SwXDocumentIndex::getSupportedServiceNames(void) throw( Run
 /*-- 14.12.98 09:35:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+TYPEINIT1(SwXDocumentIndex, SwClient)
 SwXDocumentIndex::SwXDocumentIndex(const SwTOXBaseSection* pB, SwDoc* pDc) :
     m_pDoc(pDc),
     aLstnrCntnr( (text::XTextContent*)this),
