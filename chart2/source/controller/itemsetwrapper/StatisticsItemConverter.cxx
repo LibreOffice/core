@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:11 $
+ *  last change: $Author: bm $ $Date: 2003-12-19 15:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,91 +104,7 @@ using namespace ::drafts::com::sun::star;
 
 namespace
 {
-bool lcl_HasMeanValueLine( const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
-{
-    bool bResult = false;
 
-    if( !xRegCnt.is())
-        return bResult;
-
-    try
-    {
-        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-            xRegCnt->getRegressionCurves());
-        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
-        {
-            uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
-            if( xServName.is() &&
-                xServName->getServiceName().equals(
-                    C2U( "com.sun.star.chart2.MeanValueRegressionCurve" )))
-            {
-                bResult = true;
-                break;
-            }
-        }
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-
-    return bResult;
-}
-
-void lcl_RemoveMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
-{
-    if( !xRegCnt.is())
-        return;
-    OSL_ASSERT( lcl_HasMeanValueLine( xRegCnt ));
-
-    try
-    {
-        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-            xRegCnt->getRegressionCurves());
-        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
-        {
-            uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
-            if( xServName.is() &&
-                xServName->getServiceName().equals(
-                    C2U( "com.sun.star.chart2.MeanValueRegressionCurve" )))
-            {
-                // note: assume that there is only one mean-value curve
-                xRegCnt->removeRegressionCurve( aCurves[i] );
-                // attention: the iterator i has become invalid now
-                break;
-            }
-        }
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-void lcl_AddMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt,
-                           const uno::Reference< beans::XPropertySet > & xSeriesProp,
-                           const uno::Reference< frame::XModel > & xModel )
-{
-    if( !xRegCnt.is())
-        return;
-    OSL_ASSERT( ! lcl_HasMeanValueLine( xRegCnt ));
-
-    // todo: use a valid context
-    uno::Reference< chart2::XRegressionCurve > xCurve(
-        ::chart::RegressionCurveHelper::createMeanValueLine(
-            uno::Reference< uno::XComponentContext >() ));
-    xRegCnt->addRegressionCurve( xCurve );
-
-    if( xSeriesProp.is())
-    {
-        uno::Reference< beans::XPropertySet > xProp( xCurve, uno::UNO_QUERY );
-        if( xProp.is())
-        {
-            xProp->setPropertyValue( C2U( "LineColor" ),
-                                     xSeriesProp->getPropertyValue( C2U( "Color" )));
-        }
-    }
-}
 
 uno::Reference< beans::XPropertySet > lcl_GetYErrorBar(
     const uno::Reference< beans::XPropertySet > & xProp )
@@ -206,66 +122,6 @@ uno::Reference< beans::XPropertySet > lcl_GetYErrorBar(
         }
 
     return xResult;
-}
-
-bool lcl_getRegressType( const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt,
-                         SvxChartRegress & rOutRegress )
-{
-    bool bResult = false;
-
-    if( xRegCnt.is())
-    {
-        try
-        {
-            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-                xRegCnt->getRegressionCurves());
-            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
-            {
-                uno::Reference< lang::XServiceName > xServName( aCurves[i], uno::UNO_QUERY );
-                if( xServName.is())
-                {
-                    ::rtl::OUString aServiceName( xServName->getServiceName() );
-
-                    // note: take first regression curve that matches any known
-                    // type (except mean-value line)
-                    if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.LinearRegressionCurve" )))
-                    {
-                        rOutRegress = CHREGRESS_LINEAR;
-                        bResult = true;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.LogarithmicRegressionCurve" )))
-                    {
-                        rOutRegress = CHREGRESS_LOG;
-                        bResult = true;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.ExponentialRegressionCurve" )))
-                    {
-                        rOutRegress = CHREGRESS_EXP;
-                        bResult = true;
-                        break;
-                    }
-                    else if( aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.chart2.PotentialRegressionCurve" )))
-                    {
-                        rOutRegress = CHREGRESS_POWER;
-                        bResult = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
-
-    return bResult;
 }
 
 uno::Reference< chart2::XRegressionCurve > lcl_createRegressionCurve(
@@ -438,6 +294,16 @@ StatisticsItemConverter::StatisticsItemConverter(
         ItemConverter( rPropertySet, rItemPool ),
         m_xModel( xModel )
 {
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_NONE ) ==
+                static_cast< int >( CHREGRESS_NONE ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_LINEAR ) ==
+                static_cast< int >( CHREGRESS_LINEAR ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_LOG ) ==
+                static_cast< int >( CHREGRESS_LOG ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_EXP ) ==
+                static_cast< int >( CHREGRESS_EXP ));
+    OSL_ASSERT( static_cast< int >( RegressionCurveHelper::REGRESSION_TYPE_POWER ) ==
+                static_cast< int >( CHREGRESS_POWER ));
 }
 
 StatisticsItemConverter::~StatisticsItemConverter()
@@ -467,7 +333,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         {
             uno::Reference< chart2::XRegressionCurveContainer > xRegCnt(
                 GetPropertySet(), uno::UNO_QUERY );
-            bool bOldHasMeanValueLine = lcl_HasMeanValueLine( xRegCnt );
+            bool bOldHasMeanValueLine = RegressionCurveHelper::hasMeanValueLine( xRegCnt );
 
             bool bNewHasMeanValueLine =
                 reinterpret_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
@@ -475,9 +341,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( bOldHasMeanValueLine != bNewHasMeanValueLine )
             {
                 if( ! bNewHasMeanValueLine )
-                    lcl_RemoveMeanValueLine( xRegCnt );
+                    RegressionCurveHelper::removeMeanValueLine( xRegCnt );
                 else
-                    lcl_AddMeanValueLine( xRegCnt, GetPropertySet(), m_xModel );
+                    RegressionCurveHelper::addMeanValueLine(
+                        xRegCnt, uno::Reference< uno::XComponentContext >(), GetPropertySet() );
                 bChanged = true;
             }
         }
@@ -634,9 +501,10 @@ bool StatisticsItemConverter::ApplySpecialItem(
             }
             else
             {
-                SvxChartRegress eOldRegress;;
-                if( ! lcl_getRegressType( xRegCnt, eOldRegress ) ||
-                    eOldRegress != eRegress )
+                SvxChartRegress eOldRegress(
+                    static_cast< SvxChartRegress >(
+                        RegressionCurveHelper::getRegressType( xRegCnt )));
+                if( eOldRegress != eRegress )
                 {
                     uno::Reference< beans::XPropertySet > xFormerProp(
                         lcl_removeAllKnownRegressionCurves( xRegCnt ).second );
@@ -690,7 +558,7 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_AVERAGE:
             rOutItemSet.Put(
                 SfxBoolItem( nWhichId,
-                             lcl_HasMeanValueLine(
+                             RegressionCurveHelper::hasMeanValueLine(
                                  uno::Reference< chart2::XRegressionCurveContainer >(
                                      GetPropertySet(), uno::UNO_QUERY ))));
             break;
@@ -782,9 +650,10 @@ void StatisticsItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_REGRESSTYPE:
         {
-            SvxChartRegress eRegress = CHREGRESS_NONE;
-            lcl_getRegressType( uno::Reference< chart2::XRegressionCurveContainer >(
-                                    GetPropertySet(), uno::UNO_QUERY ), eRegress );
+            SvxChartRegress eRegress = static_cast< SvxChartRegress >(
+                RegressionCurveHelper::getRegressType(
+                    uno::Reference< chart2::XRegressionCurveContainer >(
+                        GetPropertySet(), uno::UNO_QUERY ) ));
             rOutItemSet.Put( SvxChartRegressItem( eRegress ));
         }
         break;
