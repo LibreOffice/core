@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:53:31 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ italian ] = "Salva" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "Guardar" ;
-        Text [ finnish ] = "Speichern" ;
+        Text [ finnish ] = "Tallenna" ;
         Text [ danish ] = "Gem" ;
         Text [ french ] = "Options d'enregistrement" ;
         Text [ swedish ] = "Spara" ;
@@ -306,7 +306,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "”˜ÂÙÈÍﬁ ·ÔËﬁÍÂıÛÁ Ù˘Ì URL";
         Text[ korean ] = "URL ªÛ¥Î¿˚ ¿˙¿Â";
         Text[ turkish ] = "URL gˆreceli kay˝t yeri";
-        Text[ finnish ] = "URLs relativ speichern";
+        Text[ finnish ] = "URL-osoitteen viitelinkin aloituskohta";
         Text[ catalan ] = "Guardar URLs relativamente";
     };
     CheckBox BTN_RELATIVE_FSYS
@@ -385,7 +385,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ portuguese_brazilian ] = "Standard file format";
         Text[ japanese ] = "ïWèÄÃß≤Ÿå`éÆ";
         Text[ korean ] = "Standard file format";
-        Text[ chinese_simplified ] = "Standard file format";
+        Text[ chinese_simplified ] = "±Í◊ºŒƒº˛∏Ò Ω";
         Text[ chinese_traditional ] = "º–∑«¿…Æ◊ÆÊ¶°";
         Text[ turkish ] = "Standard file format";
         Text[ arabic ] = "Standard file format";
@@ -398,23 +398,23 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Dokumenttyp" ;
         Text [ English ] = "Document type" ;
-        Text[ english_us ] = "Document";
+        Text[ english_us ] = "Document type";
         Text[ portuguese ] = "Documento";
-        Text[ russian ] = "ƒÓÍÛÏÂÌÚ";
+        Text[ russian ] = "“ËÔ ‰ÓÍÛÏÂÌÚ‡";
         Text[ greek ] = "Document";
         Text[ dutch ] = "Document";
         Text[ french ] = "Document";
-        Text[ spanish ] = "Documento";
+        Text[ spanish ] = "Tipo de documento";
         Text[ finnish ] = "Dokument";
         Text[ italian ] = "Documento";
         Text[ danish ] = "Document";
         Text[ swedish ] = "Dokumenttyp";
-        Text[ polish ] = "Dokument";
+        Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "ƒﬁ∑≠“›ƒ";
+        Text[ japanese ] = "ƒﬁ∑≠“›ƒÇÃéÌóﬁ";
         Text[ korean ] = "Document";
-        Text[ chinese_simplified ] = "Document";
-        Text[ chinese_traditional ] = "§Â•Û";
+        Text[ chinese_simplified ] = "Œƒµµ¿‡–Õ";
+        Text[ chinese_traditional ] = "§Â•Û√˛´¨";
         Text[ turkish ] = "Document";
         Text[ arabic ] = "Document";
         Text[ catalan ] = "Document";
@@ -425,23 +425,23 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Immer speichern als" ;
         Text [ English ] = "Always save as" ;
-        Text[ english_us ] = "File formats";
+        Text[ english_us ] = "Always save as";
         Text[ portuguese ] = "Formatos de ficheiro";
-        Text[ russian ] = "‘ÓÏ‡Ú˚ Ù‡ÈÎ‡";
+        Text[ russian ] = "¬ÒÂ„‰‡ ÒÓı‡ÌˇÚ¸ Í‡Í";
         Text[ greek ] = "File formats";
         Text[ dutch ] = "Bestandsformaten";
         Text[ french ] = "Formats de fichier";
-        Text[ spanish ] = "Formatos de archivo";
+        Text[ spanish ] = "Guardar siempre como";
         Text[ finnish ] = "Dateiformate";
         Text[ italian ] = "Formati file";
         Text[ danish ] = "File formats";
         Text[ swedish ] = "Spara alltid som";
-        Text[ polish ] = "Formaty pliku";
+        Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
-        Text[ japanese ] = "Ãß≤Ÿå`éÆ";
+        Text[ japanese ] = "èÌÇ…éüÇÃå`éÆÇ≈ï€ë∂";
         Text[ korean ] = "File formats";
-        Text[ chinese_simplified ] = "File formats";
-        Text[ chinese_traditional ] = "¿…Æ◊ÆÊ¶°";
+        Text[ chinese_simplified ] = "◊‹ «¡Ì¥ÊŒ™";
+        Text[ chinese_traditional ] = "¡`¨O•t¶s¨∞";
         Text[ turkish ] = "File formats";
         Text[ arabic ] = "File formats";
         Text[ catalan ] = "File formats";
@@ -471,191 +471,191 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ language_user1 ] =
     {
-            < "Textdokument" ;           APP_MATH      ; > ;
-        < "HTML-Dokument" ;           APP_MATH      ; > ;
-        < "Tabellendokument" ;           APP_MATH      ; > ;
-        < "Pr‰sentation" ;           APP_MATH      ; > ;
-        < "Zeichnung" ;           APP_MATH      ; > ;
+            < "Textdokument" ;     APP_WRITER    ; > ;
+        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "Tabellendokument" ; APP_CALC      ; > ;
+        < "Pr‰sentation" ;     APP_IMPRESS   ; > ;
+        < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
     StringList [ english_us ] =
     {
-            < "Text document" ;           APP_MATH      ; > ;
-        < "HTML document" ;           APP_MATH      ; > ;
-        < "Spreadsheet" ;           APP_MATH      ; > ;
-        < "Presentation" ;           APP_MATH      ; > ;
-        < "Drawing" ;           APP_MATH      ; > ;
+            < "Text document" ;     APP_WRITER    ; > ;
+        < "HTML document" ;    APP_WRITER_WEB;  > ;
+        < "Spreadsheet" ; APP_CALC      ; > ;
+        < "Presentation" ;     APP_IMPRESS   ; > ;
+        < "Drawing" ;        APP_DRAW      ; > ;
         < "Formula" ;           APP_MATH      ; > ;
     };
     StringList [ portuguese ] =
     {
-            < "Documento de texto" ;           APP_MATH      ; > ;
-        < "Documento HTML" ;           APP_MATH      ; > ;
-        < "Folha de c·lculo" ;           APP_MATH      ; > ;
-        < "ApresentaÁ„o" ;           APP_MATH      ; > ;
-        < "Desenho" ;           APP_MATH      ; > ;
+            < "Documento de texto" ;     APP_WRITER    ; > ;
+        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
+        < "Folha de c·lculo" ; APP_CALC      ; > ;
+        < "ApresentaÁ„o" ;     APP_IMPRESS   ; > ;
+        < "Desenho" ;        APP_DRAW      ; > ;
         < "FÛrmula" ;           APP_MATH      ; > ;
     };
     StringList [ russian ] =
     {
-            < "“ÂÍÒÚÓ‚˚È ‰ÓÍÛÏÂÌÚ" ;           APP_MATH      ; > ;
-        < "ƒÓÍÛÏÂÌÚ HTML" ;           APP_MATH      ; > ;
-        < "ƒÓÍÛÏÂÌÚ ˝ÎÂÍÚÓÌÌÓÈ Ú‡·ÎËˆ˚" ;           APP_MATH      ; > ;
-        < "œÂÁÂÌÚ‡ˆËˇ" ;           APP_MATH      ; > ;
-        < "–ËÒÛÌÓÍ" ;           APP_MATH      ; > ;
+            < "“ÂÍÒÚÓ‚˚È ‰ÓÍÛÏÂÌÚ" ;     APP_WRITER    ; > ;
+        < "ƒÓÍÛÏÂÌÚ HTML" ;    APP_WRITER_WEB;  > ;
+        < "ƒÓÍÛÏÂÌÚ ˝ÎÂÍÚÓÌÌÓÈ Ú‡·ÎËˆ˚" ; APP_CALC      ; > ;
+        < "œÂÁÂÌÚ‡ˆËˇ" ;     APP_IMPRESS   ; > ;
+        < "–ËÒÛÌÓÍ" ;        APP_DRAW      ; > ;
         < "‘ÓÏÛÎ‡" ;           APP_MATH      ; > ;
     };
     StringList [ greek ] =
     {
-            < "∏„„Ò·ˆÔ ÍÂÈÏ›ÌÔı" ;           APP_MATH      ; > ;
-        < "∏„„Ò·ˆÔ HTML" ;           APP_MATH      ; > ;
-        < "∏„„Ò·ˆÔ ﬂÌ·Í·" ;           APP_MATH      ; > ;
-        < "–·ÒÔıÛﬂ·ÛÁ" ;           APP_MATH      ; > ;
-        < "”˜›‰ÈÔ" ;           APP_MATH      ; > ;
+            < "∏„„Ò·ˆÔ ÍÂÈÏ›ÌÔı" ;     APP_WRITER    ; > ;
+        < "∏„„Ò·ˆÔ HTML" ;    APP_WRITER_WEB;  > ;
+        < "∏„„Ò·ˆÔ ﬂÌ·Í·" ; APP_CALC      ; > ;
+        < "–·ÒÔıÛﬂ·ÛÁ" ;     APP_IMPRESS   ; > ;
+        < "”˜›‰ÈÔ" ;        APP_DRAW      ; > ;
         < "‘˝ÔÚ" ;           APP_MATH      ; > ;
     };
     StringList [ dutch ] =
     {
-            < "Tekstdocument" ;           APP_MATH      ; > ;
-        < "HTML-document" ;           APP_MATH      ; > ;
-        < "Werkbladdocument" ;           APP_MATH      ; > ;
-        < "Presentatie" ;           APP_MATH      ; > ;
-        < "Tekening" ;           APP_MATH      ; > ;
+            < "Tekstdocument" ;     APP_WRITER    ; > ;
+        < "HTML-document" ;    APP_WRITER_WEB;  > ;
+        < "Werkbladdocument" ; APP_CALC      ; > ;
+        < "Presentatie" ;     APP_IMPRESS   ; > ;
+        < "Tekening" ;        APP_DRAW      ; > ;
         < "Formule" ;           APP_MATH      ; > ;
     };
     StringList [ french ] =
     {
-            < "Document texte" ;           APP_MATH      ; > ;
-        < "Document HTML" ;           APP_MATH      ; > ;
-        < "Classeur" ;           APP_MATH      ; > ;
-        < "PrÈsentation" ;           APP_MATH      ; > ;
-        < "Dessin" ;           APP_MATH      ; > ;
+            < "Document texte" ;     APP_WRITER    ; > ;
+        < "Document HTML" ;    APP_WRITER_WEB;  > ;
+        < "Classeur" ; APP_CALC      ; > ;
+        < "PrÈsentation" ;     APP_IMPRESS   ; > ;
+        < "Dessin" ;        APP_DRAW      ; > ;
         < "Formule" ;           APP_MATH      ; > ;
     };
     StringList [ spanish ] =
     {
-            < "Documento de texto" ;           APP_MATH      ; > ;
-        < "Documento HTML" ;           APP_MATH      ; > ;
-        < "Hoja de c·lculo" ;           APP_MATH      ; > ;
-        < "PresentaciÛn" ;           APP_MATH      ; > ;
-        < "Dibujo" ;           APP_MATH      ; > ;
+            < "Documento de texto" ;     APP_WRITER    ; > ;
+        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
+        < "Hoja de c·lculo" ; APP_CALC      ; > ;
+        < "PresentaciÛn" ;     APP_IMPRESS   ; > ;
+        < "Dibujo" ;        APP_DRAW      ; > ;
         < "FÛrmula" ;           APP_MATH      ; > ;
     };
     StringList [ finnish ] =
     {
-            < "Textdokument" ;           APP_MATH      ; > ;
-        < "HTML-Dokument" ;           APP_MATH      ; > ;
-        < "Tabellendokument" ;           APP_MATH      ; > ;
-        < "Pr‰sentation" ;           APP_MATH      ; > ;
-        < "Zeichnung" ;           APP_MATH      ; > ;
-        < "Formel" ;           APP_MATH      ; > ;
+            < "Tekstiasiakirja" ;     APP_WRITER    ; > ;
+        < "HTML-asiakirja" ;    APP_WRITER_WEB;  > ;
+        < "Laskentataulukko" ; APP_CALC      ; > ;
+        < "Esitys" ;     APP_IMPRESS   ; > ;
+        < "Piirros" ;        APP_DRAW      ; > ;
+        < "Kaava" ;           APP_MATH      ; > ;
     };
     StringList [ italian ] =
     {
-            < "Documento di testo" ;           APP_MATH      ; > ;
-        < "Documento HTML" ;           APP_MATH      ; > ;
-        < "Foglio elettronico" ;           APP_MATH      ; > ;
-        < "Presentazione" ;           APP_MATH      ; > ;
-        < "Disegno" ;           APP_MATH      ; > ;
+            < "Documento di testo" ;     APP_WRITER    ; > ;
+        < "Documento HTML" ;    APP_WRITER_WEB;  > ;
+        < "Foglio elettronico" ; APP_CALC      ; > ;
+        < "Presentazione" ;     APP_IMPRESS   ; > ;
+        < "Disegno" ;        APP_DRAW      ; > ;
         < "Formula" ;           APP_MATH      ; > ;
     };
     StringList [ danish ] =
     {
-            < "Tekstdokument" ;           APP_MATH      ; > ;
-        < "HTML-Dokument" ;           APP_MATH      ; > ;
-        < "Regneark" ;           APP_MATH      ; > ;
-        < "PrÊsentation" ;           APP_MATH      ; > ;
-        < "Tegning" ;           APP_MATH      ; > ;
+            < "Tekstdokument" ;     APP_WRITER    ; > ;
+        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "Regneark" ; APP_CALC      ; > ;
+        < "PrÊsentation" ;     APP_IMPRESS   ; > ;
+        < "Tegning" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
     StringList [ swedish ] =
     {
-            < "Textdokument" ;           APP_MATH      ; > ;
-        < "HTML-dokument" ;           APP_MATH      ; > ;
-        < "Tabelldokument" ;           APP_MATH      ; > ;
-        < "Presentation" ;           APP_MATH      ; > ;
-        < "Teckning" ;           APP_MATH      ; > ;
+            < "Textdokument" ;     APP_WRITER    ; > ;
+        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
+        < "Tabelldokument" ; APP_CALC      ; > ;
+        < "Presentation" ;     APP_IMPRESS   ; > ;
+        < "Teckning" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
     StringList [ polish ] =
     {
-            < "Dokument tekstowy" ;           APP_MATH      ; > ;
-        < "Dokument HTML" ;           APP_MATH      ; > ;
-        < "Arkusz kalkulacyjny" ;           APP_MATH      ; > ;
-        < "Prezentacja" ;           APP_MATH      ; > ;
-        < "Rysunek" ;           APP_MATH      ; > ;
+            < "Dokument tekstowy" ;     APP_WRITER    ; > ;
+        < "Dokument HTML" ;    APP_WRITER_WEB;  > ;
+        < "Arkusz kalkulacyjny" ; APP_CALC      ; > ;
+        < "Prezentacja" ;     APP_IMPRESS   ; > ;
+        < "Rysunek" ;        APP_DRAW      ; > ;
         < "Formu≥a" ;           APP_MATH      ; > ;
     };
     StringList [ portuguese_brazilian ] =
     {
-            < "Textdokument" ;           APP_MATH      ; > ;
-        < "HTML-Dokument" ;           APP_MATH      ; > ;
-        < "Tabellendokument" ;           APP_MATH      ; > ;
-        < "Pr‰sentation" ;           APP_MATH      ; > ;
-        < "Zeichnung" ;           APP_MATH      ; > ;
+            < "Textdokument" ;     APP_WRITER    ; > ;
+        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "Tabellendokument" ; APP_CALC      ; > ;
+        < "Pr‰sentation" ;     APP_IMPRESS   ; > ;
+        < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
     StringList [ japanese ] =
     {
-            < "ï∂èëƒﬁ∑≠“›ƒ" ;           APP_MATH      ; > ;
-        < "HTML å`éÆƒﬁ∑≠“›ƒ" ;           APP_MATH      ; > ;
-        < "ï\\åvéZƒﬁ∑≠“›ƒ" ;           APP_MATH      ; > ;
-        < "Ãﬂ⁄æﬁ›√∞ºÆ›" ;           APP_MATH      ; > ;
-        < "ê}å`ï`âÊ" ;           APP_MATH      ; > ;
+            < "ï∂èëƒﬁ∑≠“›ƒ" ;     APP_WRITER    ; > ;
+        < "HTML å`éÆƒﬁ∑≠“›ƒ" ;    APP_WRITER_WEB;  > ;
+        < "ï\\åvéZƒﬁ∑≠“›ƒ" ; APP_CALC      ; > ;
+        < "Ãﬂ⁄æﬁ›√∞ºÆ›" ;     APP_IMPRESS   ; > ;
+        < "ê}å`ï`âÊ" ;        APP_DRAW      ; > ;
         < "êîéÆ" ;           APP_MATH      ; > ;
     };
     StringList [ korean ] =
     {
-            < "≈ÿΩ∫∆Æ°°πÆº≠" ;           APP_MATH      ; > ;
-        < "HTML πÆº≠" ;           APP_MATH      ; > ;
-        < "Ω∫«¡∑πµÂΩ√∆Æt" ;           APP_MATH      ; > ;
-        < "«¡∏Æ¡®≈◊¿Ãº«" ;           APP_MATH      ; > ;
-        < "±◊∏Æ±‚" ;           APP_MATH      ; > ;
+            < "≈ÿΩ∫∆Æ°°πÆº≠" ;     APP_WRITER    ; > ;
+        < "HTML πÆº≠" ;    APP_WRITER_WEB;  > ;
+        < "Ω∫«¡∑πµÂΩ√∆Æt" ; APP_CALC      ; > ;
+        < "«¡∏Æ¡®≈◊¿Ãº«" ;     APP_IMPRESS   ; > ;
+        < "±◊∏Æ±‚" ;        APP_DRAW      ; > ;
         < "FORMULA" ;           APP_MATH      ; > ;
     };
     StringList [ chinese_simplified ] =
     {
-            < "Œƒ◊÷Œƒµµ" ;           APP_MATH      ; > ;
-        < "HTML Œƒµµ" ;           APP_MATH      ; > ;
-        < "π§◊˜±ÌŒƒµµ" ;           APP_MATH      ; > ;
-        < "—› æŒƒ∏Â" ;           APP_MATH      ; > ;
-        < "ªÊÕº" ;           APP_MATH      ; > ;
-        < "FORMULA" ;           APP_MATH      ; > ;
+            < "Œƒ±æŒƒµµ" ;     APP_WRITER    ; > ;
+        < "HTML Œƒµµ" ;    APP_WRITER_WEB;  > ;
+        < "π§◊˜±ÌŒƒµµ" ; APP_CALC      ; > ;
+        < "—› æŒƒ∏Â" ;     APP_IMPRESS   ; > ;
+        < "ªÊÕº" ;        APP_DRAW      ; > ;
+        < "π´ Ω" ;           APP_MATH      ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "§Â¶r§Â•Û" ;           APP_MATH      ; > ;
-        < "HTML §Â•Û" ;           APP_MATH      ; > ;
-        < "§uß@™Ì§Â•Û" ;           APP_MATH      ; > ;
-        < "¬≤≥¯" ;           APP_MATH      ; > ;
-        < "√∏πœ" ;           APP_MATH      ; > ;
+            < "§Â¶r§Â•Û" ;     APP_WRITER    ; > ;
+        < "HTML §Â•Û" ;    APP_WRITER_WEB;  > ;
+        < "§uß@™Ì§Â•Û" ; APP_CALC      ; > ;
+        < "¬≤≥¯" ;     APP_IMPRESS   ; > ;
+        < "√∏πœ" ;        APP_DRAW      ; > ;
         < "§Ω¶°" ;           APP_MATH      ; > ;
     };
     StringList [ turkish ] =
     {
-            < "Metin belgesi" ;           APP_MATH      ; > ;
-        < "HTML belgesi" ;           APP_MATH      ; > ;
-        < "Hesap tablosu" ;           APP_MATH      ; > ;
-        < "Sunu" ;           APP_MATH      ; > ;
-        < "«izim" ;           APP_MATH      ; > ;
+            < "Metin belgesi" ;     APP_WRITER    ; > ;
+        < "HTML belgesi" ;    APP_WRITER_WEB;  > ;
+        < "Hesap tablosu" ; APP_CALC      ; > ;
+        < "Sunu" ;     APP_IMPRESS   ; > ;
+        < "«izim" ;        APP_DRAW      ; > ;
         < "Form¸l" ;           APP_MATH      ; > ;
     };
     StringList [ arabic ] =
     {
-            < "„” ‰œ ‰’" ;           APP_MATH      ; > ;
-        < "HTML „” ‰œ" ;           APP_MATH      ; > ;
-        < "„” ‰œ ÃœÊ·" ;           APP_MATH      ; > ;
-        < "⁄—÷  ﬁœÌ„Ì" ;           APP_MATH      ; > ;
-        < "—”„" ;           APP_MATH      ; > ;
+            < "„” ‰œ ‰’" ;     APP_WRITER    ; > ;
+        < "HTML „” ‰œ" ;    APP_WRITER_WEB;  > ;
+        < "„” ‰œ ÃœÊ·" ; APP_CALC      ; > ;
+        < "⁄—÷  ﬁœÌ„Ì" ;     APP_IMPRESS   ; > ;
+        < "—”„" ;        APP_DRAW      ; > ;
         < "’Ì€…" ;           APP_MATH      ; > ;
     };
     StringList [ catalan ] =
     {
-            < "Textdokument" ;           APP_MATH      ; > ;
-        < "HTML-Dokument" ;           APP_MATH      ; > ;
-        < "Tabellendokument" ;           APP_MATH      ; > ;
-        < "Pr‰sentation" ;           APP_MATH      ; > ;
-        < "Zeichnung" ;           APP_MATH      ; > ;
+            < "Textdokument" ;     APP_WRITER    ; > ;
+        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
+        < "Tabellendokument" ; APP_CALC      ; > ;
+        < "Pr‰sentation" ;     APP_IMPRESS   ; > ;
+        < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
     };
     };
