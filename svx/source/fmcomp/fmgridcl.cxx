@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:08:23 $
+ *  last change: $Author: fs $ $Date: 2002-10-08 15:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1755,87 +1755,98 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
 }
 
 //------------------------------------------------------------------------------
-void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::container::XIndexAccess >& xFields)
+void FmGridControl::InitColumnByField(
+    DbGridColumn* _pColumn, const Reference< XPropertySet >& _rxColumnModel,
+    const Reference< XNameAccess >& _rxFieldsByNames, const Reference< XIndexAccess >& _rxFieldsByIndex )
 {
-    if (!xFields.is())
+    DBG_ASSERT( _rxFieldsByNames == _rxFieldsByIndex, "FmGridControl::InitColumnByField: invalid container interfaces!" );
+
+    // lookup the column which belongs to the control source
+    ::rtl::OUString sFieldName;
+    _rxColumnModel->getPropertyValue( FM_PROP_CONTROLSOURCE ) >>= sFieldName;
+
+    Reference< XPropertySet > xField;
+    if ( sFieldName.getLength() && _rxFieldsByNames->hasByName( sFieldName ) )
+        _rxFieldsByNames->getByName( sFieldName ) >>= xField;
+
+    // determine the position of this column
+    sal_Int32 nFieldPos = -1;
+    if ( xField.is() )
+    {
+        Reference< XPropertySet > xCheck;
+        sal_Int32 nFieldCount = _rxFieldsByIndex->getCount();
+        for ( sal_Int32 i = 0; i < nFieldCount; ++i)
+        {
+            _rxFieldsByIndex->getByIndex( i ) >>= xCheck;
+            if ( xField.get() == xCheck.get() )
+            {
+                nFieldPos = i;
+                break;
+            }
+        }
+    }
+
+    if ( xField.is() && ( nFieldPos >= 0 ) )
+    {
+        // some data types are not allowed
+        sal_Int32 nDataType = DataType::OTHER;
+        xField->getPropertyValue( FM_PROP_FIELDTYPE ) >>= nDataType;
+
+        sal_Bool bIllegalType = sal_False;
+        switch ( nDataType )
+        {
+            case DataType::LONGVARBINARY:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::OTHER:
+                bIllegalType = sal_True;
+                break;
+        }
+
+        if ( bIllegalType )
+        {
+            _pColumn->SetObject( (sal_Int16)nFieldPos );
+            return;
+        }
+
+        // handle readonly columns
+        sal_Bool bReadOnly = sal_True;
+        xField->getPropertyValue( FM_PROP_ISREADONLY ) >>= bReadOnly;
+        _pColumn->SetReadOnly( bReadOnly );
+    }
+
+    // the control type is determined by the ColumnServiceName
+    static ::rtl::OUString s_sPropColumnServiceName( RTL_CONSTASCII_USTRINGPARAM( "ColumnServiceName" ) );
+    if ( !::comphelper::hasProperty( s_sPropColumnServiceName, _rxColumnModel ) )
+        return;
+
+    _pColumn->setModel( _rxColumnModel );
+
+    ::rtl::OUString sColumnServiceName;
+    _rxColumnModel->getPropertyValue( s_sPropColumnServiceName ) >>= sColumnServiceName;
+
+    sal_Int32 nTypeId = getColumnTypeByModelName( sColumnServiceName );
+    _pColumn->CreateControl( nFieldPos, xField, nTypeId );
+}
+
+//------------------------------------------------------------------------------
+void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::container::XIndexAccess >& _rxFields)
+{
+    if ( !_rxFields.is() )
         return;
 
     // Spalten initialisieren
-    Reference< ::com::sun::star::container::XIndexContainer >  xColumns(GetPeer()->getColumns());
-    Reference< ::com::sun::star::container::XNameAccess >  xFieldsAsNames(xFields, UNO_QUERY);
-    sal_Int32 nFieldCount = xFields->getCount();
+    Reference< XIndexContainer > xColumns( GetPeer()->getColumns() );
+    Reference< XNameAccess > xFieldsAsNames( _rxFields, UNO_QUERY );
 
     // Einfuegen muﬂ sich an den Column Positionen orientieren
-    ::rtl::OUString aFieldName;
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
-        DbGridColumn*   pCol = GetColumns().GetObject(i);
-        Reference< ::com::sun::star::beans::XPropertySet > xCol;
-        ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
-        DbCellControl*  pCellControl  = NULL;
+        DbGridColumn* pCol = GetColumns().GetObject(i);
+        Reference< XPropertySet > xColumnModel;
+        ::cppu::extractInterface( xColumnModel, xColumns->getByIndex( i ) );
 
-        // suchen des Feldes, das zur Controlsource gehoert
-        xCol->getPropertyValue(FM_PROP_CONTROLSOURCE) >>= aFieldName;
-        Reference< ::com::sun::star::beans::XPropertySet >  xField;
-
-        if (aFieldName.getLength() && xFieldsAsNames->hasByName(aFieldName))
-        {
-            ::cppu::extractInterface(xField, xFieldsAsNames->getByName(aFieldName));
-        }
-
-        // feststellen der Feldposition
-        sal_Int32 nFieldPos = -1;
-        if (xField.is())
-        {
-            Reference< ::com::sun::star::beans::XPropertySet > xCheck;
-            for (sal_Int32 i = 0; i < nFieldCount; i++)
-            {
-                ::cppu::extractInterface(xCheck, xFields->getByIndex(i));
-                if (xField == xCheck)
-                {
-                    nFieldPos = i;
-                    break;
-                }
-            }
-        }
-
-        if (xField.is() && nFieldPos >= 0)
-        {
-            // Datenfelder mit folgenden Datentypen kˆnnen nicht verwendet werden
-            sal_Int32 nDataType;
-            xField->getPropertyValue(FM_PROP_FIELDTYPE) >>= nDataType;
-            sal_Bool bIllegalType(sal_False);
-            switch (nDataType)
-            {
-                case DataType::LONGVARBINARY:
-                case DataType::BINARY:
-                case DataType::VARBINARY:
-                case DataType::OTHER:
-                    bIllegalType = sal_True;
-            }
-
-            if (bIllegalType)
-            {
-                pCol->SetObject((sal_Int16)nFieldPos);
-                continue;
-            }
-            else
-            {
-                // Feststellen ob ReadOnly
-                sal_Bool bReadOnly = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISREADONLY));
-                pCol->SetReadOnly(bReadOnly);
-            }
-        }
-
-        // anhand des ServiceNamens wird das Control bestimmt
-        ::rtl::OUString sPropColumnServiceName = ::rtl::OUString::createFromAscii("ColumnServiceName");
-        if (!::comphelper::hasProperty(sPropColumnServiceName, xCol))
-            return;
-
-        pCol->setModel(xCol);
-
-        sal_Int32 nTypeId = getColumnTypeByModelName(::comphelper::getString(xCol->getPropertyValue(sPropColumnServiceName)));
-        pCol->CreateControl(nFieldPos, xField, nTypeId);
+        InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
     }
 }
 
