@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:07 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,39 +165,45 @@ struct IndicatorInfo
     public:
         //---------------------------------------------------------------------------------------------------------
         // Initialize struct with new indicator and set default values for ranges and values
-        IndicatorInfo( const css::uno::Reference< css::task::XStatusIndicator >& xNewIndicator )
+        IndicatorInfo( const css::uno::Reference< css::task::XStatusIndicator >& xNewIndicator,
+                       const ::rtl::OUString&                                    sText        ,
+                             sal_Int32                                           nRange       )
         {
-            xIndicator = xNewIndicator    ;
-            sText      = ::rtl::OUString();
-            nRange     = 0                ;
-            nOldValue  = 0                ;
-            nNewValue  = 0                ;
+            m_xIndicator = xNewIndicator;
+            m_sText      = sText        ;
+            m_nRange     = nRange       ;
+            m_nValue     = 0            ;
         }
 
         //---------------------------------------------------------------------------------------------------------
         // Don't forget to free used references!
         ~IndicatorInfo()
         {
-            xIndicator = css::uno::Reference< css::task::XStatusIndicator >();
-            sText      = ::rtl::OUString()                                   ;
-            nRange     = 0                                                   ;
-            nOldValue  = 0                                                   ;
-            nNewValue  = 0                                                   ;
+            m_xIndicator = css::uno::Reference< css::task::XStatusIndicator >();
+            reset();
+        }
+
+        //---------------------------------------------------------------------------------------------------------
+        // Reset all values of these indicator.
+        void reset()
+        {
+            m_sText  = ::rtl::OUString();
+            m_nRange = 0                ;
+            m_nValue = 0                ;
         }
 
         //---------------------------------------------------------------------------------------------------------
         // Used by status indicator only, if other values of struct are unknown!
-        sal_Bool operator==( const css::uno::Reference< css::task::XStatusIndicator >& rIndicator )
+        sal_Bool operator==( const css::uno::Reference< css::task::XStatusIndicator >& xIndicator )
         {
-            return( xIndicator == rIndicator );
+            return( m_xIndicator == xIndicator );
         }
 
     public:
-        css::uno::Reference< css::task::XStatusIndicator >      xIndicator  ;
-        ::rtl::OUString                                         sText       ;
-        sal_Int32                                               nRange      ;
-        sal_Int32                                               nOldValue   ;
-        sal_Int32                                               nNewValue   ;
+        css::uno::Reference< css::task::XStatusIndicator >      m_xIndicator  ;
+        ::rtl::OUString                                         m_sText       ;
+        sal_Int32                                               m_nRange      ;
+        sal_Int32                                               m_nValue      ;
 };
 
 typedef ::std::vector< IndicatorInfo > IndicatorStack;

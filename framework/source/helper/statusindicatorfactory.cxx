@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:10 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,18 +261,6 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
     // If we release all our references, they will die automaticly!
     StatusIndicator* pIndicator = new StatusIndicator( this );
     css::uno::Reference< css::task::XStatusIndicator > xIndicator( static_cast< ::cppu::OWeakObject* >(pIndicator), css::uno::UNO_QUERY );
-    if( xIndicator.is() == sal_True )
-    {
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
-        ResetableGuard aLock( m_aLock );
-
-        IndicatorInfo aInfo( xIndicator );
-        m_aStack.push_back ( aInfo      );
-        m_xActiveIndicator = xIndicator;
-
-        aLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
-    }
 
     return xIndicator;
 }
@@ -455,35 +443,50 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
 
-    // Forward operation to shared indicator window ...  but if child the most active one only!
-    if(
-        ( xChild.is() == sal_True           ) &&
-        ( xChild      == m_xActiveIndicator )
-      )
+    IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+    if( pItem != m_aStack.end() )
     {
-        try
-        {
-            m_xIndicatorWindow->setVisible( sal_True      );
-            m_xSharedIndicator->start     ( sText, nRange );
-
-            IndicatorStack::iterator aSearchedItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
-            if( aSearchedItem != m_aStack.end() )
-            {
-                aSearchedItem->nRange    = nRange;
-                aSearchedItem->nOldValue = 0     ;
-                aSearchedItem->nNewValue = 0     ;
-            }
-        }
-        catch( css::uno::RuntimeException& )
-        {
-        }
+        m_aStack.erase( pItem );
     }
-    // Force repainting of dialog! Most active one has changed and should be shown.
+    IndicatorInfo aInfo( xChild, sText, nRange );
+    m_aStack.push_back ( aInfo                 );
+
+    m_xActiveIndicator = xChild;
+
+    try
+    {
+        m_xParentWindow->setVisible   ( sal_True      );
+        m_xIndicatorWindow->setVisible( sal_True      );
+        m_xSharedIndicator->start     ( sText, nRange );
+
+    }
+    catch( css::uno::RuntimeException& )
+    {
+    }
+
     aLock.unlock();
     Application::Yield();
 }
 
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @interface  -
+    @short      public helper methods!
+    @descr      Any child indicator will die and finish his work. Delete it from stack everytime.
+                We mustn't know it any longer.
+                But if child is the most active one - we must search another one from stack.
+                If we found anyone - take his values into the shared dialog ...
+                if no other one could be found - disable shared dialog!
+
+    @seealso    class StatusIndicator
+
+    @param      "xChild", child indicator object, which whish to show his information in shared status indicator
+    @parem      "sText" , new text for showing in dialog
+    @parem      "nValue", new progress value for showing in dialog
+    @return     -
+
+    @onerror    We do nothing!
+    @threadsafe yes
+*//*-*************************************************************************************************************/
 void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusIndicator >& xChild )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -493,25 +496,23 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
 
-    // Erase every child from stack, if he will die.
-    // It doesn't depend from position in stack!!!
-    m_aStack.erase( ::std::find( m_aStack.begin(), m_aStack.end(), xChild ) );
+    IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+    if( pItem != m_aStack.end() )
+    {
+        m_aStack.erase( pItem );
+    }
 
-    // Forward operation to shared indicator window, if child the most active one!
     if( xChild == m_xActiveIndicator )
     {
         try
         {
             m_xSharedIndicator->end();
 
-            // Don't forget to search new most active one too.
-            // If we found anyone - get his values from info stack and set it on dialog.
-            // Otherwise no further childs are available: Hide the dialog and wait for better times :-)
             IndicatorStack::reverse_iterator pInfo = m_aStack.rbegin();
             if( pInfo != m_aStack.rend() )
             {
-                m_xActiveIndicator        = pInfo->xIndicator;
-                m_xSharedIndicator->start ( pInfo->sText, pInfo->nRange );
+                m_xActiveIndicator        = pInfo->m_xIndicator;
+                m_xSharedIndicator->start ( pInfo->m_sText, pInfo->m_nRange );
             }
             else
             {
@@ -523,12 +524,35 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
         {
         }
     }
-    // Force repainting of dialog! Most active one has changed and should be shown.
+
     aLock.unlock();
     Application::Yield();
 }
 
-//*****************************************************************************************************************
+/*-************************************************************************************************************//**
+    @interface  -
+    @short      public helper methods!
+    @descr      Any child can try to show his information at our one shared dialog control.
+                But only the most active one could do that realy. The other ones don't recognize, that
+                her values are supressed! We select it automaticly. But her values are safed for later using.
+                If the current active object will gone - we must use next indicator from stack and use his values!
+
+    @attention  It doesn't matter, if child is the most active one or not. We must
+                actualize his text value. Because; if he will be the next active one (if current one will gone)
+                we must know right value for "Text" to show it on our status window!!!
+                Normal we mustn't check result of ::std::find. These child MUST exist in stack. Otherwise our code is wrong!!!
+
+
+    @seealso    class StatusIndicator
+
+    @param      "xChild", child indicator object, which whish to show his information in shared status indicator
+    @parem      "sText" , new text for showing in dialog
+    @parem      "nValue", new progress value for showing in dialog
+    @return     -
+
+    @onerror    We do nothing!
+    @threadsafe yes
+*//*-*************************************************************************************************************/
 void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatusIndicator >& xChild )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -537,6 +561,9 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
+
+    IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+    pItem->reset();
 
     if( xChild == m_xActiveIndicator )
     {
@@ -548,7 +575,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
         {
         }
     }
-    // Force repainting of dialog! Most active one has changed and should be shown.
+
     aLock.unlock();
     Application::Yield();
 }
@@ -564,6 +591,9 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
 
+    IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+    pItem->m_sText = sText;
+
     if( xChild == m_xActiveIndicator )
     {
         try
@@ -574,7 +604,7 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
         {
         }
     }
-    // Force repainting of dialog! Most active one has changed and should be shown.
+
     aLock.unlock();
     Application::Yield();
 }
@@ -590,6 +620,9 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
 
+    IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
+    pItem->m_nValue = nValue;
+
     if( xChild == m_xActiveIndicator )
     {
         try
@@ -600,7 +633,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
         {
         }
     }
-    // Force repainting of dialog! Most active one has changed and should be shown.
+
     aLock.unlock();
     Application::Yield();
 }
