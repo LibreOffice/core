@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-05 09:51:22 $
+ *  last change: $Author: mav $ $Date: 2002-08-07 13:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,8 +1000,10 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
                 if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
                 {
+                    sal_Bool bForceUCB = ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) );
+
                     CreateLocalTempFile();
-                    aStorage = new SvStorage( aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                    aStorage = new SvStorage( bForceUCB, aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                 }
                 else
                 {
@@ -2387,6 +2389,13 @@ void SfxMedium::SetDontCreateCancellable( )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()
 {
+    if ( !pImp->xInputStream.is() )
+    {
+        // if pInStream is already opened then we have problem
+        // probably GetInStream should allways open pInStream based on xInputStream
+        GetMedium_Impl();
+    }
+
     return pImp->xInputStream;
 }
 
