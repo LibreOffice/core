@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 04:51:19 $
+ *  last change: $Author: khong $ $Date: 2002-06-18 22:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,26 +62,40 @@
 #include <indexentrysupplier_asian.hxx>
 #include <data/indexdata_alphanumeric.h>
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::rtl;
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
-rtl::OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const rtl::OUString & rIndexEntry,
+OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const sal_Unicode ch,
     const sal_Unicode CJK_idxStr[], const sal_uInt16 idx1[], const sal_uInt16 idx2[])
-    throw (com::sun::star::uno::RuntimeException) {
-    sal_uInt16 ch = *(rIndexEntry.getStr()), first = idx1[ ch >> 8 ];
+    throw (RuntimeException)
+{
+    sal_uInt16 first = idx1[ ch >> 8 ];
     return first == 0xFFFF ?
         // using alphanumeric index for non-define stirng
-        rtl::OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
-        rtl::OUString(&CJK_idxStr[idx2[ first + (ch & 0xff) ]]);
+        OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
+        OUString(&CJK_idxStr[idx2[ first + (ch & 0xff) ]]);
 }
 
-rtl::OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const rtl::OUString & rIndexEntry,
-    const sal_uInt16 idx1[], const sal_Unicode idx2[])
-    throw (com::sun::star::uno::RuntimeException) {
-    sal_uInt16 ch = *(rIndexEntry.getStr()), first = idx1[ ch >> 8 ];
+OUString SAL_CALL IndexEntrySupplier_CJK::getIndexString( const sal_Unicode ch,
+    const sal_uInt16 idx1[], const sal_Unicode idx2[]) throw (RuntimeException)
+{
+    sal_uInt16 first = idx1[ ch >> 8 ];
     return first == 0xFFFF ?
         // using alphanumeric index for non-define stirng
-        rtl::OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
-        rtl::OUString(&idx2[ first + (ch & 0xff) ], 1);
+        OUString(&idxStr[(ch & 0xFF00) ? 0 : ch], 1) :
+        OUString(&idx2[ first + (ch & 0xff) ], 1);
+}
+
+// for CJK we only need to compare index entry, which contains key information in first characters implicitly.
+sal_Int16 SAL_CALL IndexEntrySupplier_CJK::compareIndexKey(
+    const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
+    const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
+    throw (RuntimeException)
+{
+    return 0;
 }
 
 } } } }

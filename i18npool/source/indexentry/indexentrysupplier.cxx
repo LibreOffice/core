@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:06:09 $
+ *  last change: $Author: khong $ $Date: 2002-06-18 22:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,146 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
+static const sal_Unicode under = sal_Unicode('_');
+
+static const struct {
+    const char* pLocale;
+    const char* pAlgorithms;
+    sal_Int16 pAlgorithmCount;
+} aLocaleList[] = {
+    { "ar",  "alphanumeric", 1 },
+    { "bg",  "alphanumeric", 1 },
+    { "ca",  "alphanumeric", 1 },
+    { "cs",  "alphanumeric", 1 },
+    { "da",  "alphanumeric", 1 },
+    { "de",  "alphanumeric", 1 },
+    { "el",  "alphanumeric", 1 },
+    { "en",  "alphanumeric", 1 },
+    { "es",  "alphanumeric", 1 },
+    { "fi",  "alphanumeric", 1 },
+    { "fr",  "alphanumeric", 1 },
+    { "he",  "alphanumeric", 1 },
+    { "hi",  "alphanumeric", 1 },
+    { "hu",  "alphanumeric", 1 },
+    { "is",  "alphanumeric", 1 },
+    { "it",  "alphanumeric", 1 },
+    { "ja",  "phonetic", 1 },
+    { "ko",  "dict", 1 },
+    { "nb",  "alphanumeric", 1 },
+    { "nl",  "alphanumeric", 1 },
+    { "nn",  "alphanumeric", 1 },
+    { "no",  "alphanumeric", 1 },
+    { "pl",  "alphanumeric", 1 },
+    { "pt",  "alphanumeric", 1 },
+    { "ru",  "alphanumeric", 1 },
+    { "sv",  "alphanumeric", 1 },
+    { "tr",  "alphanumeric", 1 },
+    { "th",  "alphanumeric", 1 },
+    { "zh_CN",  "pinyin stroke radical", 3 },
+    { "zh_TW",  "stroke radical zhuyin pinyin", 4 },
+};
+
+static const sal_Int16 nbOfLocales = sizeof(aLocaleList) / sizeof(aLocaleList[0]);
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 IndexEntrySupplier::IndexEntrySupplier( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier";
+}
+
+
+Sequence < Locale > SAL_CALL IndexEntrySupplier::getLocaleList() throw (RuntimeException)
+{
+    Sequence < Locale > localeList(nbOfLocales);
+
+    for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
+        OUString name = OUString::createFromAscii( aLocaleList[i].pLocale );
+        sal_Int32 index = 0;
+        localeList[i].Language = name.getToken(0, under, index);
+        if (index >= 0) {
+        localeList[i].Country = name.getToken(0, under, index);
+        if (index >= 0)
+            localeList[i].Variant = name.getToken(0, under, index);
+        }
+    }
+
+    return localeList;
+}
+
+Sequence < OUString > SAL_CALL IndexEntrySupplier::getAlgorithmList( const Locale& rLocale ) throw (RuntimeException)
+{
+    Sequence < OUString > algorithmList;
+
+    for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
+        OUString name = OUString::createFromAscii( aLocaleList[i].pLocale );
+        sal_Int32 index = 0;
+
+        if (rLocale.Language.equals(name.getToken(0, under, index))) {
+        if (index >= 0 && rLocale.Language.compareToAscii("zh") == 0) {
+
+            OUString country = name.getToken(0, under, index);
+
+            // make sure Simplified and Traditional Chinese use right list.
+            if ((country.compareToAscii("TW") == 0 &&
+                rLocale.Country.compareToAscii("TW") != 0 &&
+                rLocale.Country.compareToAscii("HK") != 0 &&
+                rLocale.Country.compareToAscii("MO") != 0)
+            || (country.compareToAscii("CN") == 0 &&
+                rLocale.Country.getLength() > 0 &&
+                rLocale.Country.compareToAscii("CN") != 0 &&
+                rLocale.Country.compareToAscii("SG") != 0)) {
+            continue;
+            }
+        }
+
+        OUString algorithms = OUString::createFromAscii( aLocaleList[i].pAlgorithms );
+
+        algorithmList.realloc(aLocaleList[i].pAlgorithmCount);
+        index = 0;
+        for (sal_Int16 j=0; j<aLocaleList[i].pAlgorithmCount; j++)
+            algorithmList[j] = algorithms.getToken(0, sal_Unicode(' '), index);
+
+        break;
+        }
+    }
+    return algorithmList;
+}
+
+sal_Bool SAL_CALL IndexEntrySupplier::loadAlgorithm( const Locale& rLocale, const OUString& SortAlgorithm,
+    sal_Int32 collatorOptions ) throw (RuntimeException)
+{
+    if (getLocaleSpecificIndexEntrySupplier(rLocale, SortAlgorithm).is())
+        return xIES->loadAlgorithm(rLocale, SortAlgorithm, collatorOptions);
+    return sal_False;
+}
+
+sal_Bool SAL_CALL IndexEntrySupplier::usePhoneticEntry( const Locale& rLocale ) throw (RuntimeException)
+{
+    // First implementation only turns the feature on for Japanese language.
+    return rLocale.Language.compareToAscii("ja") == 0;
+}
+
+OUString SAL_CALL IndexEntrySupplier::getPhoneticCandidate( const OUString& rIndexEntry,
+    const Locale& rLocale ) throw (RuntimeException)
+{
+    // TODO: the phonetic candidate will be provided by language engine for CJK.
+    return OUString();
+}
+
+OUString SAL_CALL IndexEntrySupplier::getIndexKey( const OUString& rIndexEntry,
+    const OUString& rPhoneticEntry, const Locale& rLocale ) throw (RuntimeException)
+{
+    return xIES->getIndexKey(rIndexEntry, rPhoneticEntry, rLocale);
+}
+
+sal_Int16 SAL_CALL IndexEntrySupplier::compareIndexEntry(
+    const OUString& rIndexEntry1, const OUString& rPhoneticEntry1, const Locale& rLocale1,
+    const OUString& rIndexEntry2, const OUString& rPhoneticEntry2, const Locale& rLocale2 )
+    throw (com::sun::star::uno::RuntimeException)
+{
+    return xIES->compareIndexEntry(rIndexEntry1, rPhoneticEntry1, rLocale1,
+                    rIndexEntry2, rPhoneticEntry2, rLocale2);
 }
 
 OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexEntry,
@@ -84,7 +219,7 @@ OUString SAL_CALL IndexEntrySupplier::getIndexCharacter( const OUString& rIndexE
             getIndexCharacter( rIndexEntry, rLocale, rSortAlgorithm );
 }
 
-static inline sal_Bool operator == (const Locale& l1, const Locale& l2) {
+sal_Bool SAL_CALL operator == (const Locale& l1, const Locale& l2) {
     return l1.Language == l2.Language && l1.Country == l2.Country && l1.Variant == l2.Variant;
 }
 
@@ -94,13 +229,13 @@ sal_Bool SAL_CALL IndexEntrySupplier::createLocaleSpecificIndexEntrySupplier(con
         OUString::createFromAscii("com.sun.star.i18n.IndexEntrySupplier_") + name);
 
     if ( xI.is() ) {
-        xI->queryInterface( ::getCppuType((const Reference< XIndexEntrySupplier>*)0) ) >>= xIES;
+        xI->queryInterface( ::getCppuType((const Reference< drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) ) >>= xIES;
         return xIES.is();
     }
     return sal_False;
 }
 
-Reference < XIndexEntrySupplier > SAL_CALL
+Reference < drafts::com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL
 IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, const OUString& rSortAlgorithm) throw (RuntimeException)
 {
     if (xIES.is() && rLocale == aLocale && rSortAlgorithm == aSortAlgorithm)
@@ -109,7 +244,6 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
         aLocale = rLocale;
         aSortAlgorithm = rSortAlgorithm;
 
-        static sal_Unicode under = (sal_Unicode)'_';
         static OUString tw(OUString::createFromAscii("TW"));
         static OUString unicode(OUString::createFromAscii("Unicode"));
 
