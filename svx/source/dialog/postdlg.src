@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 13:11:20 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Συντάκτης";
         Text[ korean ] = "ΐΫΌΊΐΪ";
         Text[ turkish ] = "Yazan";
+        Text[ catalan ] = "Autor";
     };
     FixedText FT_LASTEDIT
     {
@@ -146,6 +147,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Κείμενο";
         Text[ korean ] = "ΕΨ½ΊΖ®(~T)";
         Text[ turkish ] = "~Metin";
+        Text[ catalan ] = "Te~xto";
     };
     MultiLineEdit ED_EDIT
     {
@@ -183,6 +185,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Περιεχόμενα";
         Text[ korean ] = "³»Ώλ";
         Text[ turkish ] = "έηerik";
+        Text[ catalan ] = "Contenido";
     };
     OKButton BTN_POST_OK
     {
@@ -238,6 +241,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Συντάκτης";
         Text[ korean ] = "ΐΫΌΊΐΪ(~A)";
         Text[ turkish ] = "~Yazan";
+        Text[ catalan ] = "~Autor";
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
@@ -264,6 +268,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Επεξεργασία σημείωσης";
         Text[ korean ] = "ΈήΈπ ΖνΑύ";
         Text[ turkish ] = "Notu dόzenle";
+        Text[ catalan ] = "Editar nota";
     };
     String STR_NOTIZ_INSERT
     {
@@ -291,6 +296,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ greek ] = "Εισαγωγή σημείωσης";
         Text[ korean ] = "ΈήΈπ »πΐΤ";
         Text[ turkish ] = "Not ekle";
+        Text[ catalan ] = "Insertar nota";
     };
     Text[ chinese_simplified ] = "±ΈΧ’";
     Text[ russian ] = "Οξμεςκΰ";
@@ -301,5 +307,6 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ greek ] = "Σημείωση";
     Text[ korean ] = "ΈήΈπ";
     Text[ turkish ] = "Not";
+    Text[ catalan ] = "Nota";
 };
  // ********************************************************************** EOF
