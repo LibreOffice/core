@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:43:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,12 +482,11 @@ namespace
             {
                 Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
 
-                ::rtl::OUString aCatalog,aSchema,aTable,sComposedName;
-                ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
-                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
+                sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USECATALOGINSELECT,sal_True);
+                sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_USESCHEMAINSELECT,sal_True);
+                ::rtl::OUString aTableListStr = ::dbtools::quoteTableName(xMetaData,aDBName,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
 
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-                ::rtl::OUString aTableListStr(sComposedName);
                 if ( isAppendTableAliasEnabled(_xConnection) )
                 {
                     aTableListStr += ::rtl::OUString(' ');
@@ -1200,7 +1199,7 @@ namespace
 
                     if(aJoin.getLength())
                     {
-                        sal_Bool bUseEscape = ::dbaui::isDataSourcePropertyEnabled(_xConnection,PROPERTY_OUTERJOINESCAPE,sal_True);
+                        sal_Bool bUseEscape = ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_OUTERJOINESCAPE,sal_True);
                         ::rtl::OUString aStr;
                         if ( bUseEscape )
                             aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
@@ -1913,7 +1912,7 @@ namespace
                             for(;aIter != aMap.end();++aIter)
                             {
                                 OSQLTable xTable = aIter->second;
-                                ::dbaui::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),sComposedName,sal_False);
+                                sComposedName = ::dbtools::composeTableName(xMetaData,Reference<XPropertySet>(xTable,UNO_QUERY),sal_False,::dbtools::eInDataManipulation);
                                 sAlias = aIter->first;
                                 if(aKeyComp(sComposedName,aIter->first))
                                 {
@@ -2064,6 +2063,13 @@ namespace
                         ::rtl::OUString aColumnAlias(pController->getParseIterator().getColumnAlias(pColumnRef)); // kann leer sein
                         pColumnRef = pColumnRef->getChild(0);
                         OTableFieldDescRef aInfo = new OTableFieldDesc();
+
+                        if (
+                                pColumnRef->count() == 3 &&
+                                SQL_ISPUNCTUATION(pColumnRef->getChild(0),"(") &&
+                                SQL_ISPUNCTUATION(pColumnRef->getChild(2),")")
+                            )
+                            pColumnRef = pColumnRef->getChild(1);
 
                         if (SQL_ISRULE(pColumnRef,column_ref))
                         {
