@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:30:39 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ FloatingWindow RID_TBXCONTROLS
         Text[ turkish ] = "Komut alanlarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Campos de control";
+        Text[ finnish ] = "Ohjaimet";
     };
     Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
     Text[ russian ] = "Ýëåìåíòû óïðàâëåíèÿ";
@@ -116,6 +117,7 @@ FloatingWindow RID_TBXCONTROLS
     Text[ turkish ] = "Komut alanlarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campos de control";
+    Text[ finnish ] = "Ohjaimet";
 };
 ToolBox RID_TOOLBOX
 {
@@ -151,6 +153,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Komut düðmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón de comando";
+            Text[ finnish ] = "Komentopainike";
         };
         ToolBoxItem
         {
@@ -179,6 +182,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Seçme kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Casilla de verificación";
+            Text[ finnish ] = "Valintaruutu";
         };
         ToolBoxItem
         {
@@ -207,6 +211,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Etiket";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Etiqueta";
+            Text[ finnish ] = "Nimiö";
         };
         ToolBoxItem
         {
@@ -235,6 +240,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Liste kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Listado";
+            Text[ finnish ] = "Luetteloruutu";
         };
         ToolBoxItem
         {
@@ -263,6 +269,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Yatay kaydýrma çubuðu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "BarraDesplazHoriz.";
+            Text[ finnish ] = "Vaakavierityspalkki";
         };
         ToolBoxItem
         {
@@ -291,6 +298,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "FrameControl";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "FrameControl";
+            Text[ finnish ] = "Kehysohjain";
         };
         ToolBoxItem
         {
@@ -320,6 +328,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "URL düðmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón URL";
+            Text[ finnish ] = "URL-painike";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
@@ -332,7 +341,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Proprietà" ;
             Text [ portuguese_brazilian ] = "Paginar" ;
             Text [ portuguese ] = "Propriedades" ;
-            Text [ finnish ] = "Selain" ;
+            Text [ finnish ] = "Ominaisuudet" ;
             Text [ danish ] = "Egenskaber" ;
             Text [ french ] = "Propriétés" ;
             Text [ swedish ] = "Egenskaper" ;
@@ -377,6 +386,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Gizli komut alanlarýný görüntüle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mostrar elementos de control invisibles";
+            Text[ finnish ] = "Näytä piilotetut ohjaimet";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -406,6 +416,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Deðer kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón de selección";
+            Text[ finnish ] = "Askelluspainike";
         };
         ToolBoxItem
         {
@@ -434,6 +445,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Seçenek düðmesi";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Botón de opción";
+            Text[ finnish ] = "Valintanappi";
         };
         ToolBoxItem
         {
@@ -462,6 +474,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Metin kutusu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cuadro de texto";
+            Text[ finnish ] = "Tekstikehys";
         };
         ToolBoxItem
         {
@@ -491,6 +504,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Kombinasyon alaný";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Cuadro combinado";
+            Text[ finnish ] = "Yhdistelmäruutu";
         };
         ToolBoxItem
         {
@@ -519,6 +533,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Dikey kaydýrma çubuðu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Barra de desplazamiento vert.";
+            Text[ finnish ] = "Pystyvierityspalkki";
         };
         ToolBoxItem
         {
@@ -547,6 +562,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Önizleme";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Previsualización";
+            Text[ finnish ] = "Esikatselu";
         };
         ToolBoxItem
         {
@@ -559,7 +575,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Seleziona" ;
             Text [ portuguese_brazilian ] = "Selecionar" ;
             Text [ portuguese ] = "Seleccionar" ;
-            Text [ finnish ] = "Valitse " ;
+            Text [ finnish ] = "Valitse" ;
             Text [ danish ] = "Marker" ;
             Text [ french ] = "Sélection" ;
             Text [ swedish ] = "Urval" ;
@@ -589,7 +605,7 @@ ToolBox RID_TOOLBOX
             Text [ italian ] = "Attiva modo testo" ;
             Text [ portuguese_brazilian ] = "Ativar modoteste" ;
             Text [ portuguese ] = "Activar modo Teste" ;
-            Text [ finnish ] = "Valitse testaustila" ;
+            Text [ finnish ] = "Aktivoi testitila" ;
             Text [ danish ] = "Aktiver testtilstand" ;
             Text [ french ] = "Activer le mode Test" ;
             Text [ swedish ] = "Aktivera testläge" ;
@@ -634,6 +650,7 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "Biçim diyaloðunu görüntüle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Mostrar diálogo para formularios";
+            Text[ finnish ] = "Näytä lomakevalintaikkuna";
         };
     };
 };
