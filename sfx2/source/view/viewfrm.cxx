@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 07:16:47 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 07:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3393,7 +3393,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 GetBindings().SetRecorder_Impl( xRecorder );
 
                 SetChildWindow( SID_RECORDING_FLOATWINDOW, FALSE );
-                if ( rReq.GetSlot() == SID_RECORDING_FLOATWINDOW )
+                if ( rReq.GetSlot() != SID_RECORDMACRO )
                     GetBindings().Invalidate( SID_RECORDMACRO );
             }
             else if ( rReq.GetSlot() == SID_RECORDMACRO )
