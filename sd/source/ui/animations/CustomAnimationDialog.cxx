@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:14:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,7 +1421,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             else
             {
                 nPos++;
-                if( nMasterRel == 0 )
+                if( nMasterRel == 2 )
                     nPos++;
             }
         }
@@ -1673,7 +1673,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         sal_Int32 nOldMasterRel = nMasterRel + 1;
 
         if( mpSet->getPropertyState( nHandleMasterRel ) != STLPropertyState_AMBIGUOUS)
-            pSet->getPropertyValue( nHandleMasterRel ) >>= nOldMasterRel;
+            mpSet->getPropertyValue( nHandleMasterRel ) >>= nOldMasterRel;
 
         if( nMasterRel != nOldMasterRel )
             pSet->setPropertyValue( nHandleMasterRel, makeAny( (sal_Int32) nMasterRel ) );
@@ -2497,7 +2497,7 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( (sal_Int32)-1 ) );
 
     pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( (sal_Bool)sal_False ) );
-    pSet->setPropertyDefaultValue( nHandleMasterRel, makeAny( (sal_Int32)0 ) );
+    pSet->setPropertyDefaultValue( nHandleMasterRel, makeAny( (sal_Int32)2 ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
     pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( (sal_Int16)0 ) );
     pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( (double)0.0 ) );
