@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2001-03-20 10:30:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-30 15:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,10 +493,10 @@ sal_Bool SAL_CALL ImplRemoteYieldMutex::tryToAcquire()
     {
         mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
-        return True;
+        return sal_True;
     }
     else
-        return False;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
