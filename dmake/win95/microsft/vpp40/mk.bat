@@ -1,4 +1,7 @@
 if "%1" != "" goto link 
+del /FY objects
+del config.h
+del dmake.exe
 md objects
 cl -c %c_flg -I. -Iwin95 -Iwin95\microsft -Iwin95\microsft\vpp40 /nologo -Od -GF -Ge -Foobjects\infer.obj infer.c
 cl -c %c_flg -I. -Iwin95 -Iwin95\microsft -Iwin95\microsft\vpp40 /nologo -Od -GF -Ge -Foobjects\make.obj make.c
