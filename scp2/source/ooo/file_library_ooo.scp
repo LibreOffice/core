@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.90 $
+*  $Revision: 1.91 $
 *
-*  last change: $Author: obo $ $Date: 2005-03-15 09:23:14 $
+*  last change: $Author: obo $ $Date: 2005-03-15 13:06:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -699,6 +699,8 @@ STD_LIB_FILE( gid_File_Lib_Fwi , fwi)
 STD_UNO_LIB_FILE( gid_File_Lib_Fwk , fwk)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Fwl , fwl)
+
+STD_UNO_LIB_FILE( gid_File_Lib_Fwm , fwm)
 
 #if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) || defined(SYSTEM_STDLIBS))
 #if defined( _gcc3 )
