@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-27 08:47:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-05 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DELETERULE, "DeleteRule");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REFERENCEDTABLE, "ReferencedTable");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REFERENCEDCOLUMN, "ReferencedColumn");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PARENTWINDOW, "ParentWindow");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SQLEXCEPTION, "SQLException");
 
 //============================================================
 //= service names
