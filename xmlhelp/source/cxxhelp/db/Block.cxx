@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Block.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 11:54:54 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ Block::Block( const DBEnv* dbenv )
     isLeaf_( true ),
     free_( 0 ),
     num_( 0 ),
+    dataL_( dbenv->getDataLen() ),
     data_( new sal_Int8[ dbenv->getDataLen() ] )
 {
 }
@@ -138,7 +139,8 @@ sal_Int32 Block::getInteger( sal_Int32 i ) const throw( excep::IllegalIndexExcep
     throw excep::IllegalIndexException(
                        rtl::OUString::createFromAscii( "Block::setInteger -> index out of range" ) );
 
-  return ::getInteger_( &data_[i] );
+    sal_Int32 ret = ::getInteger_( &data_[i] );
+  return ret;
 }
 
 

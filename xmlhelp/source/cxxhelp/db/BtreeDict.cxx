@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 11:54:54 $
+ *  last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,11 +262,11 @@ namespace xmlsearch {
             }
 
 
-            void setBlockNumbers( sal_Int32* blocks )
-            {
-                for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
-                    blocks[ entryID(e) ] = getNum();
-            }
+            void setBlockNumbers( sal_Int32* blocks );
+//              {
+//                  for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
+//                      blocks[ entryID(e) ] = getNum();
+//              }
 
 
 #ifdef ABIDEBUG
@@ -328,6 +328,12 @@ namespace xmlsearch {
 
 
 
+        void DictBlock::setBlockNumbers( sal_Int32* blocks )
+        {
+            for( sal_Int32 e = firstEntry(); e < getFree() ; e = nextEntry(e) )
+                blocks[ entryID(e) ] = getNum();
+        }
+
 
 
 
@@ -344,33 +350,35 @@ using namespace xmlsearch::util;
 
 
 class BlockProcessorImpl
-  : public BlockProcessor
+    : public BlockProcessor
 {
 public:
 
-  BlockProcessorImpl( BtreeDict* bla )
-    : bla_( bla )
-  {
-  }
+    BlockProcessorImpl( BtreeDict* bla )
+        : bla_( bla )
+    {
+    }
 
 
-  ~BlockProcessorImpl()
-  {
-  }
+    ~BlockProcessorImpl()
+    {
+    }
 
 
-  void process( Block* block ) const
-  {
-    dynamic_cast<DictBlock*>(block)->setBlockNumbers( bla_->get_blocks() );
-  }
-
+    void process( Block* block ) const;
 
 private:
 
-  BtreeDict* bla_;
+    BtreeDict* bla_;
 };
 
 
+
+void BlockProcessorImpl::process( Block* block ) const
+{
+    DictBlock* bla = dynamic_cast<DictBlock*>( block );
+    bla->setBlockNumbers( bla_->get_blocks() );
+}
 
 
 
@@ -393,7 +401,8 @@ BtreeDict::~BtreeDict()
 
 const DictBlock* BtreeDict::accessBlock( sal_Int32 id ) const
 {
-  return dynamic_cast< const DictBlock* >( blockManager_.accessBlock( id ) );
+    const Block* bl = blockManager_.accessBlock( id );
+    return dynamic_cast< const DictBlock* >( bl );
 }
 
 
@@ -609,43 +618,3 @@ void DBEnvImpl::write( sal_Int32 blNum,xmlsearch::db::Block* block )
 
 
 
-
-void bla()
-{
-    BtreeDict source( new DBEnvImpl() );
-
-    std::vector< sal_Int32 > bla = source.withPrefix( rtl::OUString::createFromAscii( "text" ) );
-    for( sal_uInt32 i = 0; i < bla.size(); ++i )
-        ; // cout << bla[i] << endl;
-
-    //  source.test();
-}
-
-
-
-
-#ifdef ABIDEBUG
-
-#include <qe/QueryProcessor.hxx>
-
-
-void blu()
-{
-  rtl::OUString indexDir = rtl::OUString::createFromAscii( "//./home/ab106281/work/index" );
-  qe::QueryProcessor proc( indexDir );
-
-  vector< rtl::OUString > bla(1);
-
-  bla[ 0 ] = rtl::OUString::createFromAscii( "text" );
-  rtl::OUString scope = rtl::OUString::createFromAscii( "headingheading" );
-  sal_Int32 nHits = 100;
-
-  qe::QueryStatement statement( nHits,
-                bla,
-                scope );
-
-  proc.processQuery( statement );
-}
-
-
-#endif

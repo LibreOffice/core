@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-08 11:54:54 $
+#   last change: $Author: abi $ $Date: 2001-05-10 15:25:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,20 +70,19 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
+
+.IF "$(GUI)"=="WNT"
+CFLAGS+=/GR
+.ENDIF
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
 
 SLOFILES=\
         $(SLO)$/Block.obj           \
         $(SLO)$/BlockManager.obj    \
         $(SLO)$/BtreeDict.obj       \
         $(SLO)$/Schema.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
