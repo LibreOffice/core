@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
+ *  last change: $Author: mtg $ $Date: 2001-11-27 18:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,16 +73,16 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP
 #include <com/sun/star/text/XTextDocument.hpp>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _COMPHELPER_SETTINGSHELPER_HXX_
+#include <comphelper/SettingsHelper.hxx>
 #endif
 
 class SwXTextDocument;
 class SwDocShell;
 class SwDoc;
 
-class SwXDocumentSettings : public comphelper::MasterPropertySet,
-                            public cppu::OWeakObject
+
+class SwXDocumentSettings : public comphelper::MasterHelperNoState
 {
 protected:
     com::sun::star::uno::Reference< com::sun::star::text::XTextDocument >       mxModel;
@@ -109,13 +109,6 @@ public:
     virtual ~SwXDocumentSettings()
         throw();
 
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw ();
-    virtual void SAL_CALL release(  )
-        throw ();
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  )
         throw(com::sun::star::uno::RuntimeException);

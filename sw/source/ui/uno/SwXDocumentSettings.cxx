@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:33:23 $
+ *  last change: $Author: mtg $ $Date: 2001-11-27 18:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #ifdef PRECOMPILED
-#include "core_pch.hxx"
+#include "ui_pch.hxx"
 #endif
 #pragma hdrstop
 
@@ -121,7 +121,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
 
 using namespace rtl;
 using namespace comphelper;
@@ -212,8 +211,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
-: MasterPropertySet ( lcl_createSettingsInfo (),
-                      &Application::GetSolarMutex () )
+: MasterHelperNoState ( lcl_createSettingsInfo (), &Application::GetSolarMutex () )
 , mxModel ( pModel )
 , mpModel ( pModel )
 , mpDocSh ( NULL )
@@ -227,29 +225,6 @@ SwXDocumentSettings::~SwXDocumentSettings()
     throw()
 {
 }
-Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-        return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my own interfaces
-                                        static_cast< XPropertySet*      > ( this )  ,
-                                        static_cast< XPropertyState*        > ( this )  ,
-                                        static_cast< XMultiPropertySet*     > ( this ) );
-}
-void SwXDocumentSettings::acquire ()
-    throw ()
-{
-    OWeakObject::acquire();
-}
-void SwXDocumentSettings::release ()
-    throw ()
-{
-    OWeakObject::release();
-}
-
 void SwXDocumentSettings::_preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
+ *  last change: $Author: mtg $ $Date: 2001-11-27 18:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     {
         ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
-        *pxViewSettings = new SwXViewSettings(sal_False, 0);
+        *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( sal_False, 0 ) );
     }
     return *pxViewSettings;
 }
@@ -322,7 +322,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     {
         ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
-        *pxPrintSettings = new SwXPrintSettings( PRINT_SETTINGS_MODULE );
+        *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }
     return *pxPrintSettings;
 }
@@ -357,12 +357,11 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
 /******************************************************************
  * SwXPrintSettings
  ******************************************************************/
-
 /*-- 17.12.98 12:54:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
-: ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
+: ChainableHelperNoState ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
 , meType(eType)
 , mpPrtOpt ( NULL )
 , mpDoc ( pDoc )
@@ -374,29 +373,6 @@ SwXPrintSettings::SwXPrintSettings(SwXPrintSettingsType eType, SwDoc* pDoc)
 SwXPrintSettings::~SwXPrintSettings()
     throw()
 {
-}
-
-Any SAL_CALL SwXPrintSettings::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-        return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my own interfaces
-                                        static_cast< XServiceInfo*      > ( this )  ,
-                                        static_cast< XPropertySet*      > ( this )  ,
-                                        static_cast< XMultiPropertySet*     > ( this ) );
-}
-void SwXPrintSettings::acquire ()
-    throw ()
-{
-    OWeakObject::acquire();
-}
-void SwXPrintSettings::release ()
-    throw ()
-{
-    OWeakObject::release();
 }
 
 void SwXPrintSettings::_preSetValues ()
@@ -662,7 +638,7 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( Run
 
   -----------------------------------------------------------------------*/
 SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
-: ChainablePropertySet ( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
+: ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
 , pView(pVw)
 , bWeb(bWebView)
 , bObjectValid(sal_True)
@@ -681,28 +657,6 @@ SwXViewSettings::~SwXViewSettings()
     throw()
 {
 
-}
-Any SAL_CALL SwXViewSettings::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-        return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // my own interfaces
-                                        static_cast< XServiceInfo*      > ( this )  ,
-                                        static_cast< XPropertySet*      > ( this )  ,
-                                        static_cast< XMultiPropertySet*     > ( this ) );
-}
-void SwXViewSettings::acquire ()
-    throw ()
-{
-    OWeakObject::acquire();
-}
-void SwXViewSettings::release ()
-    throw ()
-{
-    OWeakObject::release();
 }
 void SwXViewSettings::_preSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
