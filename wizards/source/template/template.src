@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:15:03 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ String STYLES + 1
     Text[ polish ] = "B³¹d podczas tymczasowego zapisywania aktualnych dokumentów! Nastêpuj¹cej akcji nie mo¿na cofn¹æ.";
     Text[ portuguese_brazilian ] = "Error while temporarily saving the document! The following action cannot be undone.";
     Text[ japanese ] = "•\\¦’†‚ÌÄŞ·­ÒİÄ‚ğ¸Ø¯ÌßÎŞ°ÄŞ‚É•Û‘¶‚·‚éÛ‚É´×°”­¶! Ÿ‚Ì±¸¼®İ‚ÍŒ³‚É–ß‚¹‚Ü‚¹‚ñB";
-    Text[ korean ] = "ÇöÀç ¹®¼­¸¦ Áß°£ ÀúÀåÇÏ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù! ´ÙÀ½ ÀÛ¾÷À» ½ÇÇà Ãë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "ÇöÀç ¹®¼­¸¦ Áß°£ ÀúÀåÇÏ´Â µ¿¾È ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù!  ¿¬¼ÓµÇ´Â ÀÛ¾÷À» ½ÇÇàÃë¼ÒÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ chinese_simplified ] = "ÔÚ´æÅÌµ±Ç°ÎÄµµÊ±·¢Éú´íÎó£¡ÎŞ·¨È¡ÏûÏÂÁĞ²Ù×÷¡£";
     Text[ chinese_traditional ] = "¼È¦s¤å¥óµo¥Í¿ù»~¡IµLªk«ì´_¥H¤Uªº¾Ş§@¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
