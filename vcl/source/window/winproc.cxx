@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-08 15:22:57 $
+ *  last change: $Author: ssa $ $Date: 2002-09-11 16:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,11 +494,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         if( pChild->ImplHasMirroredGraphics() && !pChild->IsRTLEnabled() )
         {
             // - RTL - re-mirror frame pos at pChild
-
-            //((SalGraphicsLayout*)pChild->mpGraphics)->mirror( aMousePos.X(), pChild );
-            long lc_x = aMousePos.X() - pChild->mnOutOffX;  // normalize
-            lc_x = pChild->mnOutWidth - 1 - lc_x;           // mirror
-            aMousePos.X() = lc_x + pChild->mnOutOffX;       // re-normalize
+            pChild->ImplReMirror( aMousePos );
         }
 #endif
         // no mouse messages to system object windows
@@ -1481,7 +1477,7 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
     }
 
     // system paint events must be checked for re-mirroring
-    //pWindow->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
+    pWindow->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
 
     // trigger paint for all windows that live in the new paint region
     Region aRegion( rBoundRect );
