@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: csaba $ $Date: 2000-12-07 18:55:34 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 17:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,11 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
+#endif
+#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#define RID_DBACCESS_START 100
 #endif
 
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
@@ -108,6 +108,7 @@
 #define BORDER_WIDTH    6   // default distance control - dialog
 
 using namespace dbtools;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
 
@@ -285,15 +286,13 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
 {
     // Changed as per BugID 79541 Branding/Configuration
     ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-    UNOANY MyAny = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
-    UNOOUSTRING aProductName ;
+    Any aProductName = pMgr->GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME);
+    ::rtl::OUString sProductName;
+    aProductName >>= sProductName;
 
-    MyAny >>= aProductName;
-
-    String aMyString = String::CreateFromAscii("%PRODUCTNAME Base");
-    aMyString.SearchAndReplaceAscii("%PRODUCTNAME", aProductName );
-
-    SetText(aMyString);
+    String aTitle = sProductName;
+    aTitle.AppendAscii(" Base");
+    SetText(aTitle);
     SetSizePixel(LogicToPixel(Size(220, 30),MAP_APPFONT));
 
     m_aInfoImage.SetPosSizePixel(LogicToPixel(Point(6, 6),MAP_APPFONT),
@@ -569,6 +568,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/07 18:55:34  csaba
+ *  79541 Branding/Configuration Change
+ *
  *  Revision 1.3  2000/10/18 09:11:18  obo
  *  Syntax error with linux compiler
  *
