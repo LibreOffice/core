@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2000-12-08 08:25:14 $
+#   last change: $Author: jbu $ $Date: 2000-12-08 11:07:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,14 @@ ENABLE_EXCEPTIONS=TRUE
 OBJFILES=	$(OBJ)$/testcomponent.obj \
         $(OBJ)$/testconnection.obj
 
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+
+# output directory (one dir for each project)
+UNOUCROUT=$(OUT)$/inc
+
+UNOTYPES =	com.sun.star.connection.XConnector \
+        com.sun.star.connection.XAcceptor 
 
 #
 # std testcomponent

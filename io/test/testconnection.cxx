@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 08:25:14 $
+ *  last change: $Author: jbu $ $Date: 2000-12-08 11:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,13 +209,16 @@ void testConnection( const OUString &sConnectionDescription  ,
 
 
 #ifdef UNX
-#define REG_PREFIX      L"lib"
-#define DLL_POSTFIX     L".so"
+#define REG_PREFIX      "lib"
+#define DLL_POSTFIX     ".so"
 #else
-#define REG_PREFIX      L""
-#define DLL_POSTFIX     L".dll"
+#define REG_PREFIX      ""
+#define DLL_POSTFIX     ".dll"
 #endif
 
+#ifdef SOLARIS
+    extern "C" ChangeGlobalInit();
+#endif
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
@@ -224,50 +227,51 @@ int __cdecl main( int argc, char * argv[] )
 #endif
 {
 #ifdef SOLARIS
-    extern "C" ChangeGlobalInit();
     ChangeGlobalInit();
 #endif
     Reference< XMultiServiceFactory > xMgr(
         createRegistryServiceFactory( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")) ) );
 
     Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstance( L"com.sun.star.registry.ImplementationRegistration" ), UNO_QUERY );
+        xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
     OSL_ENSHURE( xImplReg.is(), "### no impl reg!" );
 
-    OUString aLibName( REG_PREFIX );
-    aLibName += L"connectr";
+    OUString aLibName = OUString::createFromAscii( REG_PREFIX );
+    aLibName += OUString::createFromAscii("connectr");
 #ifndef OS2
-    aLibName += DLL_POSTFIX;
+    aLibName += OUString::createFromAscii(DLL_POSTFIX);
 #endif
     xImplReg->registerImplementation(
-        L"com.sun.star.loader.SharedLibrary", aLibName, Reference< XSimpleRegistry >() );
+        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
-    aLibName = OUString( REG_PREFIX );
-    aLibName += L"acceptor";
+    aLibName = OUString::createFromAscii( REG_PREFIX );
+    aLibName += OUString::createFromAscii("acceptor");
 #ifndef OS2
-    aLibName += DLL_POSTFIX;
+    aLibName += OUString::createFromAscii(DLL_POSTFIX);
 #endif
     xImplReg->registerImplementation(
-        L"com.sun.star.loader.SharedLibrary", aLibName, Reference< XSimpleRegistry >() );
+        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
     Reference < XAcceptor >  rAcceptor(
-        xMgr->createInstance( L"com.sun.star.connection.Acceptor" ) , UNO_QUERY );
+        xMgr->createInstance(
+            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
 
     Reference < XAcceptor >  rAcceptorPipe(
-        xMgr->createInstance( L"com.sun.star.connection.Acceptor" ) , UNO_QUERY );
+        xMgr->createInstance(
+            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
 
     Reference < XConnector >  rConnector(
-        xMgr->createInstance( L"com.sun.star.connection.Connector" ) , UNO_QUERY );
+        xMgr->createInstance( OUString::createFromAscii("com.sun.star.connection.Connector") ) , UNO_QUERY );
 
 
     printf( "Testing sockets" );
     fflush( stdout );
-    testConnection( L"socket,host=localhost,port=2001", rAcceptor , rConnector );
+    testConnection( OUString::createFromAscii("socket,host=localhost,port=2001"), rAcceptor , rConnector );
     printf( " Done\n" );
 
     printf( "Testing pipe" );
     fflush( stdout );
-    testConnection( L"pipe,name=bla" , rAcceptorPipe , rConnector );
+    testConnection( OUString::createFromAscii("pipe,name=bla") , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 08:23:36 $
+ *  last change: $Author: jbu $ $Date: 2000-12-08 11:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void ODataStreamTest::testInvariant(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( L"com.sun.star.io.DataInputStream" == TestName ) {
+    if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ) {
         Reference < XConnectable > connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSink > active( TestObject , UNO_QUERY );
         Reference < XInputStream >  input( TestObject , UNO_QUERY );
@@ -166,7 +166,7 @@ void ODataStreamTest::testInvariant(
 
 
     }
-    else if( L"com.sun.star.io.DataInputStream" == TestName ) {
+    else if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ) {
         Reference < XConnectable >  connect( TestObject , UNO_QUERY );
         Reference < XActiveDataSource > active( TestObject , UNO_QUERY );
         Reference < XOutputStream > output( TestObject , UNO_QUERY );
@@ -184,7 +184,7 @@ void ODataStreamTest::testInvariant(
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( L"bla bluzb" ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString::createFromAscii("bla bluzb") ) , "XServiceInfo test failed" );
     }
 
 }
@@ -197,8 +197,8 @@ sal_Int32 ODataStreamTest::test(
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( L"com.sun.star.io.DataInputStream" == TestName ||
-        L"com.sun.star.io.DataOutputStream" == TestName )  {
+    if( OUString::createFromAscii("com.sun.star.io.DataInputStream") == TestName ||
+        OUString::createFromAscii("com.sun.star.io.DataOutputStream") == TestName )  {
 
         try
         {
@@ -323,11 +323,11 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     rOutput->writeHyper( 0x123456789abcdef );
     ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdef , "int64 read/write mismatch" );
 
-    rOutput->writeUTF( L"Live long and prosper !" );
-    ERROR_ASSERT( rInput->readUTF() == L"Live long and prosper !" ,
+    rOutput->writeUTF( OUString::createFromAscii("Live long and prosper !") );
+    ERROR_ASSERT( rInput->readUTF() == OUString::createFromAscii("Live long and prosper !") ,
                     "UTF read/write mismatch" );
 
-    Sequence<wchar_t> wc(0x10001);
+    Sequence<sal_Unicode> wc(0x10001);
     for( int i = 0 ; i < 0x10000  ; i ++ ) {
         wc.getArray()[i] = L'c';
     }
@@ -488,7 +488,7 @@ public:
     double  m_d;
     sal_Bool    m_b;
     sal_Int8    m_byte;
-    wchar_t m_c;
+    sal_Unicode m_c;
     OUString    m_s;
     Reference< XPersistObject > m_ref;
     OUString m_sServiceName;
@@ -511,28 +511,28 @@ void MyPersistObject::setPropertyValue(
             WrappedTargetException,
             RuntimeException)
 {
-    if( L"long" == aPropertyName  ) {
+    if( 0 == aPropertyName.compareToAscii("long")  ) {
         aValue >>= m_l;
     }
-    else if ( L"float" == aPropertyName ) {
+    else if ( 0 == aPropertyName.compareToAscii("float") ) {
         aValue >>= m_f;
     }
-    else if( L"double" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("double") ) {
         aValue >>= m_d;
     }
-    else if( L"bool" == aPropertyName ) {
+    else if( 0  == aPropertyName.compareToAscii("bool") ) {
         aValue >>= m_b;
     }
-    else if( L"byte" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("byte" ) ) {
         aValue >>= m_byte;
     }
-    else if( L"char" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("char") ) {
         aValue >>= m_c;
     }
-    else if( L"string" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("string") ) {
         aValue >>= m_s;
     }
-    else if( L"object" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("object") ) {
         if( aValue.getValueType() == getCppuType( (Reference< XPersistObject> *)0 ) )
         {
             aValue >>= m_ref;
@@ -551,28 +551,28 @@ Any MyPersistObject::getPropertyValue(const OUString& aPropertyName)
             RuntimeException)
 {
     Any aValue;
-    if( L"long" == aPropertyName  ) {
+    if( 0 == aPropertyName.compareToAscii("long" )  ) {
         aValue <<= m_l;
     }
-    else if ( L"float" == aPropertyName ) {
+    else if ( 0 == aPropertyName.compareToAscii("float") ) {
         aValue <<= m_f;
     }
-    else if( L"double" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("double") ) {
         aValue <<= m_d;
     }
-    else if( L"bool" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("bool") ) {
         aValue <<= m_b;
     }
-    else if( L"byte" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("byte") ) {
         aValue <<= m_byte;
     }
-    else if( L"char" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("char" ) ) {
         aValue <<= m_c;
     }
-    else if( L"string" == aPropertyName ) {
+    else if( 0 == aPropertyName.compareToAscii("string") ) {
         aValue <<= m_s;
     }
-    else if( L"object" == aPropertyName )
+    else if( 0 == aPropertyName.compareToAscii("object" ) )
     {
         aValue <<= m_ref;
     }
@@ -740,7 +740,7 @@ void OObjectStreamTest::testInvariant( const OUString& TestName,
     if( info.is() )
     {
         ERROR_ASSERT( info->supportsService( TestName ), "XServiceInfo test failed" );
-        ERROR_ASSERT( ! info->supportsService( L"bla bluzb" ) , "XServiceInfo test failed" );
+        ERROR_ASSERT( ! info->supportsService( OUString::createFromAscii("bla bluzb") ) , "XServiceInfo test failed" );
     }
 
 }
@@ -751,8 +751,8 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
     throw ( IllegalArgumentException,
             RuntimeException)
 {
-    if( L"com.sun.star.io.ObjectInputStream" == TestName ||
-        L"com.sun.star.io.ObjectOutputStream" == TestName )  {
+    if( 0 == TestName.compareToAscii("com.sun.star.io.ObjectInputStream") ||
+        0 == TestName.compareToAscii("com.sun.star.io.ObjectOutputStream" ) )  {
 
         try
         {
@@ -858,8 +858,8 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
 {
     sal_Bool b = sal_True;
 
-    if( r1->getPropertyValue( L"long" ).getValueType() == getCppuVoidType() ||
-        r2->getPropertyValue( L"long" ).getValueType() == getCppuVoidType() ) {
+    if( r1->getPropertyValue( OUString::createFromAscii("long") ).getValueType() == getCppuVoidType() ||
+        r2->getPropertyValue( OUString::createFromAscii("long") ).getValueType() == getCppuVoidType() ) {
 
         // one of the objects is not the correct propertyset !
         return sal_False;
@@ -1011,8 +1011,8 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         ERROR_ASSERT( compareMyPropertySet( rProp , rPropRead ) , "objects has not been read properly !" );
 
         // destroy selfreferences
-        rProp->setPropertyValue( L"object", Any() );
-        rPropRead->setPropertyValue( L"object", Any() );
+        rProp->setPropertyValue( OUString::createFromAscii("object"), Any() );
+        rPropRead->setPropertyValue( OUString::createFromAscii("object"), Any() );
     }
 
     {
@@ -1023,7 +1023,7 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
         // buffering and marks work correctly
         for( int i = 0 ; i < 2000 ; i ++ ) {
 
-            Reference < XInterface > x = m_rFactory->createInstance(L"test.com.sun.star.io.PersistTest");
+            Reference < XInterface > x = m_rFactory->createInstance(OUString::createFromAscii("test.com.sun.star.io.PersistTest"));
             Reference< XPersistObject >  persistRef( x , UNO_QUERY );
 
             Reference < XPropertySet >  rProp( persistRef , UNO_QUERY );
@@ -1058,13 +1058,13 @@ void OObjectStreamTest::testObject(     const Reference<  XObjectOutputStream > 
             any <<= str;
             rProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("string")) , any );
 
-            x = m_rFactory->createInstance(L"test.com.sun.star.io.PersistTest");
+            x = m_rFactory->createInstance(OUString::createFromAscii("test.com.sun.star.io.PersistTest"));
             Reference <XPersistObject > persist2ndRef( x , UNO_QUERY );
 
             // Note : persist2ndRef contains coincident values, but also coincident values must be
             // saved properly !
             any <<= persist2ndRef;
-            rProp->setPropertyValue( L"object" , any );
+            rProp->setPropertyValue( OUString::createFromAscii("object") , any );
 
             // simply test, if markable operations and object operations do not interfere
             sal_Int32 nMark = markableOut->createMark();

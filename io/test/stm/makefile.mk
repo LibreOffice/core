@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:24:19 $
+#   last change: $Author: jbu $ $Date: 2000-12-08 11:07:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,14 +71,35 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 # --- Files --------------------------------------------------------
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # output directory (one dir for each project)
 UNOUCROUT=$(OUT)$/inc
 
 UNOTYPES =	com.sun.star.test.XSimpleTest \
-        com.sun.star.beans.XPropertySet
+        com.sun.star.beans.XPropertySet \
+        com.sun.star.io.UnexpectedEOFException	\
+        com.sun.star.io.WrongFormatException	\
+        com.sun.star.io.XActiveDataControl	\
+        com.sun.star.io.XActiveDataSink	\
+        com.sun.star.io.XActiveDataSource	\
+        com.sun.star.io.XConnectable	\
+        com.sun.star.io.XMarkableStream	\
+        com.sun.star.io.XObjectInputStream	\
+        com.sun.star.io.XObjectOutputStream	\
+        com.sun.star.lang.IllegalArgumentException	\
+        com.sun.star.lang.XComponent	\
+        com.sun.star.lang.XMultiServiceFactory	\
+        com.sun.star.lang.XServiceInfo	\
+        com.sun.star.lang.XSingleServiceFactory	\
+        com.sun.star.lang.XTypeProvider	\
+        com.sun.star.registry.XImplementationRegistration	\
+        com.sun.star.registry.XRegistryKey	\
+        com.sun.star.test.XSimpleTest	\
+        com.sun.star.uno.TypeClass	\
+        com.sun.star.uno.XAggregation	\
+        com.sun.star.uno.XWeak
 
 SLOFILES=	 \
         $(SLO)$/testfactreg.obj \
