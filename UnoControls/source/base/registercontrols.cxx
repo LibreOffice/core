@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:53:07 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,6 @@ using namespace ::com::sun::star::registry                      ;
     AS_DBG_OUT ( "\tCREATEFACTORY_SINGLE():\t[end]\n" )
 
 //******************************************************************************************************************************
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
@@ -241,18 +240,8 @@ using namespace ::com::sun::star::registry                      ;
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE():\timplementationname found\n" )                    \
         CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
     }
-#else /* MACOSX */
-#define IF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE(CLASS)                                                               \
-                                                                                                                        \
-    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
-    {                                                                                                                   \
-        AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_ONEINSTANCE():\timplementationname found\n" )                    \
-        CREATEFACTORY_ONEINSTANCE ( CLASS )                                                                         \
-    }
-#endif /* MACOSX */
 
 //******************************************************************************************************************************
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
                                                                                                                         \
     if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
@@ -260,15 +249,6 @@ using namespace ::com::sun::star::registry                      ;
         AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_SINGLE():\timplementationname found\n" )                         \
         CREATEFACTORY_SINGLE ( CLASS )                                                                              \
     }
-#else  /* MACOSX */
-#define IF_NAME_CREATECOMPONENTFACTORY_SINGLE(CLASS)                                                                    \
-                                                                                                                        \
-    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )     \
-    {                                                                                                                   \
-        AS_DBG_OUT ( "\tIF_NAME_CREATECOMPONENTFACTORY_SINGLE():\timplementationname found\n" )                         \
-        CREATEFACTORY_SINGLE ( CLASS )                                                                              \
-    }
-#endif  /* MACOSX */
 
 //______________________________________________________________________________________________________________
 //  declare functions to create a new instance of service
