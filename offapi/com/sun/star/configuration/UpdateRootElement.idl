@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UpdateRootElement.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ module com { module sun { module star { module configuration {
  and information about the hierarchy as a whole as well as its root.
 
  <!-- Dennis: "by name" ??? -->
+ <!-- Developer: See the description in GroupAccess,GroupElement, HierarchyAccess. -->
 
  <p>Extends <type>AccessRootElement</type> by adding support for
  collecting changes and applying them to a backend store as a single batch.

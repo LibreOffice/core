@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationAccess.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,11 @@ module com { module sun { module star { module configuration {
 /** provides (read) access to a fragment of the configuration hierarchy.
 
  <!-- Dennis: Why is "read" in () -->
+ <!-- Developer: I'm not completely sure wheteher to drop the parentheses or the word "read".
+      This service provides access to ... PERIOD.
+      But this access may be read only. This service only guarantees the ability to read data.
+      It does not preclude write access, though.
+ -->
 
  <p>Values that are direct or indirect descendants of a root element can be
  retrieved and, if themselves objects, navigated. Other interfaces provide
@@ -104,12 +109,13 @@ module com { module sun { module star { module configuration {
  Changes to values in the hierarchy can be monitored by event listeners.
  </p>
 
- <p>Descendants of this service also implement this service
- (and so on recursively).
+ <p>Descendants of this service also implement this service.
  </p>
 
  <!-- Dennis: Can the above sentence be changed to read: Descendants of this service also
  implement this service recursively. -->
+ <!-- Developer: Dropped 'recursively' altogether. 'Descendants' (as opposed to 'children')
+      really says it all. -->
 
  <p>Ultimately the configuration holds values. These values are organized into
  a hierarchy using structural elements. The structure is defined in advance in
@@ -128,10 +134,11 @@ module com { module sun { module star { module configuration {
         the elements is the same for all elements. In the case of elements
         that are themselves hierarchy objects, the <em>type</em> includes
         the structure of the hierarchy fragment they contain. Such types
-        are defined in the configuration schema as <p>templates</p>.
+        are defined in the configuration schema as <em>templates</em>.
         </dd>
 
  <!-- Dennis: Is <p> the correct tag around "templates"? -->
+ <!-- Developer: No. -->
 
     <dt>Groups</dt>
         <dd>are static collections of heterogeneous elements. The names and
@@ -155,13 +162,13 @@ module com { module sun { module star { module configuration {
     </li>
  </ul>
 
- <p>Several types of simple <em>Values</em> can be used in the configuration.
+ <p>Several types of simple <em>values</em> can be used in the configuration.
  In addition to the basic (scalar) types, sequences of the basic types are
  supported. The basic types are:
  </p>
 
  <!-- Dennis: Should "Values" be in caps? -->
- <!-- Dennis: Why is "scalar" in ()? -->
+ <!-- Developer: Not sure. Probably the emphasis is enough. -->
 
  <ul>
     <li><strong>string</strong> can hold a human-readable text.
@@ -198,6 +205,9 @@ module com { module sun { module star { module configuration {
  </ul>
 
  <!-- Dennis: Is the <atom> suppose to have visual effect? -->
+ <!-- Developer: It is one of our custom tags (for UNO builtin types).
+      It should have an effect in the generated output. Maybe a problem in your preview ?
+      I filed a bug report for the generator. -->
 
  <p>Within templates an additional type <strong>any</strong> can occur. When
  such a template is used to create a new <type>SetElement</type>, the type
@@ -206,12 +216,15 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>If the schema marks a value as <em>nullable</em> (which is indicated by
- attribute <const scope="com::sun::star::beans>PropertyAttribute::MAYBEVOID</const>
+ attribute <const scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const>
  ), its contents may be <NULL/>.
  </p>
 
  <!-- Dennis: Should the data between the <const> appear in the HTML. It is not. -->
  <!-- Dennis: Some of the text is not appearing -->
+ <!-- Developer: There was a closing quote missing on the scope attribute.
+       I wonder why this wasn't discovered by the generator.
+       All text is there now. -->
 
  <p>The configuration should support explicit access to default values
  (implementing <type scope="com::sun::star::beans">XPropertyState</type>
@@ -250,6 +263,12 @@ service ConfigurationAccess
      </p>
 
  <!-- Dennis: Is there a better way to say "An implementation actually implements"? -->
+ <!-- Developer: Not sure. The intent is:
+      An implementation of the service being described here (...ConfigurationAccess)
+      implements the service named here (....HierarchyAccess)
+      by implementing a specialization of ...HierarchyAccess.
+      Which one is chosen out of several existing ones depends on the Element role.
+I haven't found a less awkward way to say that concisely. -->
 
      <p>Implementations shall implement exactly one of:</p>
      <ul>
@@ -268,26 +287,26 @@ service ConfigurationAccess
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Set</em>.
-     <BR/>This is an alternative to <type>GroupAccess</type>.
+     <BR />This is an alternative to <type>GroupAccess</type>.
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 
  <!-- <BR/> is displaying -->
+ <!-- Developer: There was a missing space needed for non-XHTML browsers.>
     */
     /*[optional]*/ service SetAccess;
 
     /** specializes <type>HierarchyAccess</type>,
      if this element is a <em>Group</em>.
-     <BR/>This is an alternative to <type>SetAccess</type>.
-
- <!-- <BR/> is displaying -->
+     <BR />This is an alternative to <type>SetAccess</type>.
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
     /*[optional]*/ service GroupAccess;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is the <em>Root</em> of the whole hierarchy.
-     <BR/>This is an alternative to <type>SetElement</type>
+     <BR />This is an alternative to <type>SetElement</type>
      or <type>GroupElement</type>.
-
- <!-- <BR/> is displaying -->
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 
 
      @see ConfigurationProvider
@@ -298,19 +317,17 @@ service ConfigurationAccess
 
     /** specializes <type>HierarchyElement</type>,
      if this element may be contained in a <em>Set</em>.
-     <BR/>This is an alternative to <type>AccessRootElement</type>
+     <BR />This is an alternative to <type>AccessRootElement</type>
      or <type>GroupElement</type>.
-
- <!-- <BR/> is displaying -->
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
     /*[optional]*/ service SetElement;
 
     /** specializes <type>HierarchyElement</type>,
      if this element is a child of a <em>Group</em>.
-     <BR/>This is an alternative to <type>AccessRootElement</type>
+     <BR />This is an alternative to <type>AccessRootElement</type>
      or <type>SetElement</type>.
-
- <!-- <BR/> is displaying -->
+ <!-- Developer:  The changed text here should be in sync with the similar one in ConfigurationUpdateAccess -->
 */
     /*[optional]*/ service GroupElement;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupUpdate.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ module com { module sun { module star { module configuration {
  and nested trees as part of a (by name) hierarchy.
 
  <!-- Dennis: alphabetical hierarchy? -->
+ <!-- Developer: No. See the description in GroupAccess,GroupElement. -->
 
  <p>Allows replacing values with new values.
  </p>
@@ -91,12 +92,13 @@ service GroupUpdate
 /** is the basic service providing read access to a group element of the
  hierarchy.
 
- <p>Any child and descendant objects shall again support modifying access,
+ <p>Any child and descendant objects support modifying access as well,
  unless they represent a read-only tree element as indicated by
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>.
  </p>
 
  <!-- Dennis: What is meant by "shall again"? -->
+ <!-- Developer: "must/will ... as well" -->
 */
     service GroupAccess;
 

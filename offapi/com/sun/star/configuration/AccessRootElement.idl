@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessRootElement.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ module com { module sun { module star { module configuration {
  </p>
 
 <!-- Dennis: Why is hierarchy in quotes? -->
+<!-- Developer: The quoted one refers to the word 'hierarchy', not to the thing that word designates. -->
 
  <p>Generally it is not possible to navigate the 'surroundings', if any, of this
  element, so <type scope="com::sun::star::container">XChild</type> is not
@@ -109,6 +110,12 @@ module com { module sun { module star { module configuration {
  </p>
 
 <!-- Dennis: Why is surroundings in quotes? -->
+<!-- Developer: For no really good reason. I'm not sure if 'surroundings' is the best word here.
+     We just never use this term in our documentation. 'context' is an alternative, but it also
+     is not exactly what I mean. The intent is:
+     "You cannot navigate to ancestors or siblings of this node in the real (full) hierarchy
+      (if they exist at all - which you can't determine given just this object)."
+-->
 
  @see com::sun::star::configuration::UpdateRootElement
     Implementations that support modifying data in the hierarchy

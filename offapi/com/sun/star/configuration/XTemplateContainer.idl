@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateContainer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:17 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
             </p>
 
  <!-- Dennis: is the "@returns" a valid structure? -->
+ <!-- Developer: Yes. Means the same as @return. -->
      */
     string getElementTemplateName();
 
@@ -113,6 +114,9 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 16:41:17  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2001/03/01 01:19:50  arellano
     Edited by Dennis
 

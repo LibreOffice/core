@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SetAccess.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ module com { module sun { module star { module configuration {
  trees within a (by name) hierarchy.
 
  <!-- Dennis: (by name) ??? -->
+ <!-- Developer: See the description in GroupAccess,GroupElement, HierarchyAccess. -->
 
  <p>Also provides information about the template for elements.
  Allows normalizing externally generated names.
@@ -90,6 +91,9 @@ module com { module sun { module star { module configuration {
  <p><em>Sets</em> here are dynamic containers within the hierarchy.</p>
 
  <!-- Dennis: is the word "here" necessary because "Sets" elsewhere are not dynamic containers -->
+ <!-- Developer: sets are always containers, probably dynamic ones. They are not necessarily
+      parts of a hierarchy. In the configuration package 'set' has a very specific somewhat
+      peculiar meaning. The 'here' is supposed to emphasize that there is such a special meaning.  -->
 
  <p>The number and names of contained elements are not fixed in advance,
  but all elements have to be of one predetermined type.

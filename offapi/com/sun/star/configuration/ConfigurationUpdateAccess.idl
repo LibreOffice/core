@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationUpdateAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,17 @@ module com { module sun { module star { module configuration {
  </p>
 
  <p>Descendants of this service also implement this service
- (and so on recursively), unless they are marked <em>read-only</em> in the
+ unless they are marked <em>read-only</em> in the
  schema (which is indicated by attribute
  <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>),
  in which case they only need implement <type>ConfigurationAccess</type>.
  </p>
 
  <!-- Dennis: data in <const> not displaying. -->
+ <!-- Developer: The current version is OK in the generated output. Preview problem ? -->
  <!-- Dennis: "(and so on recursively)" needs to be rewritten. -->
  <!-- Dennis: only the @see is being displayed beyond this point. -->
+ <!-- Developer: The current version is OK in the generated output. Preview problem ? -->
 
  <p>The classification of implementations that is described for
  <type>ConfigurationAccess</type> applies to implementations of this service
@@ -147,10 +149,16 @@ service ConfigurationUpdateAccess
     /** specializes <type>SetAccess</type> to support modifying the element.
 
      <p>Implemented, if this element is a <em>Set</em>.
-     <BR/>[Alternatively to <type>GroupUpdate</type>]
+     Otherwise service <type>GroupUpdate</type> is provided.
      </p>
 
  <!-- Dennis: Should the last sentence read: "This is an alternative to <type>GroupUpdate</type>" -->
+ <!-- Developer: There are several similar services (here: SetUpdate and GroupUpdate). Exactly one
+      of these alternatives is available.
+     How can I express that more concisely ? I tried to rephrase it.
+     I think your version is slightly misleading.
+     We should use the same phrase here as in ConfigurationAccess. You already introduced
+     "This is an alternative .." there -->
     */
     /*[optional]*/ service SetUpdate;
 
@@ -158,22 +166,26 @@ service ConfigurationUpdateAccess
      data.
 
      <p>Implemented, if this element is a <em>Group</em>.
-     <BR/>[Alternatively to <type>SetUpdate</type>]
+     Otherwise service <type>SetUpdate</type> is provided.
      </p>
 
- <!-- Dennis: Same comment as above -->*/
+ <!-- Dennis: Same comment as above -->
+ <!-- Developer: Same answer as above -->*/
     /*[optional]*/ service GroupUpdate;
 
     /** specializes <type>AccessRootElement</type> to support transaction-like
      control over a batch of changes accumulated within the tree (fragment).
 
  <!-- Dennis: Why is "fragment" in ()? -->
+ <!-- Developer: I sometimes use 'tree' (or 'hierarchy') where 'tree fragment' ('hierarchy fragment')
+      would be more concise. The parenthesized 'fragment' is to remind of this. -->
 
      <p>Implemented, if this element is the <em>Root</em> of the whole hierarchy.
-     <BR/>[Alternatively to <type>SetElement</type> or <type>GroupElement</type>]
+     Otherwise either <type>SetElement</type> or <type>GroupElement</type> is provided.
      </p>
 
  <!-- Dennis: BR is displaying -->
+ <!-- Developer: In the preview or in the generated HTML ? -->
 
      @see ConfigurationProvider
         Instances obtained from a <type>ConfigurationProvider</type> will

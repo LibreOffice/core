@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyHierarchy.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: arellano $ $Date: 2001-03-01 01:19:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@ module com { module sun { module star { module configuration {
  </p>
 
  <!-- Dennis: is the phrase "(and so on recursively)" necessary? -->
+ <!-- Developer: Yes. Unless the recursive nature of this is mentioned
+      we don't have a description of a hierarchical set of potentially
+      unlimited depth. Not having the phrase (or a replacement for it)
+      here, would IMHO suggest a 'hierarchy' of only two levels.  -->
 
  <p>Properties of an implementation that are objects themselves will often
  implement <type scope="com::sun::star::beans">XProperty</type> to allow

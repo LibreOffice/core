@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurationProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-12 12:56:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,18 @@ module com { module sun { module star { module configuration {
 /** manages one, or more, complete sets of configuration data and serves as a
  factory for objects that provide access to a subset of the configuration.
 
- <p>An implementation is usually obtained from a (global)
+ <p>An implementation is usually obtained from a
  <type scope="com::sun::star::lang">ServiceManager</type>. The default
- <code>"com.sun.star.configuration.ConfigurationProvider"</code> object, that is
+ <code>com.sun.star.configuration.ConfigurationProvider</code> object, that is
  instantiated without using extra arguments, is a one instance service.
  </p>
 
  <!-- Dennis: Why is "global" in ()? -->
- <!-- Dennis: The <code> tag is doing nothing. -->*/
+ <!-- Dennis: The <code> tag is doing nothing. -->
+ <!-- Developer: IMHO it should select a fixed width font (like with <pre>).
+      It does in the generated output. Maybe a preview problem ?
+      The quotes were wrong, though. -->
+ */
 service ConfigurationProvider
 {
 /** allows creating access objects for specific views such as subsets and fragments
@@ -98,6 +102,7 @@ service ConfigurationProvider
  </p>
 
  <!-- Dennis: the <code> is doing nothing -->
+ <!-- Developer: It does in the generated output. -->
 
  <p>Using the first of these requests a read-only view of the configuration.
  The object that is created implements service <type>ConfigurationAccess</type>.
@@ -106,19 +111,21 @@ service ConfigurationProvider
  </p>
 
  <!-- Dennis: The first sentence of the previous para appears to have a missing verb -->
+ <!-- Developer: The verb is 'requests'. -->
 
  <p>Using the second form requests an updatable view of the configuration.
  The object that is created should implement service
  <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
  which includes controlling updates for the whole view, it implements
  service <type>UpdateRootElement</type>.
- <BR/>If the root element of the view is marked read-only (as indicated
+ <BR />If the root element of the view is marked read-only (as indicated
  by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
  the implementation may either raise an exception or return a (read-only)
  <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
  </p>
 
  <!-- Dennis: <BR/> is doing nothing in the HTML -->
+ <!-- Developer: Missing space before the closing slash -->
 
  <p>The arguments passed to
  <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
@@ -130,6 +137,7 @@ service ConfigurationProvider
  </p>
 
  <!-- Dennis: Is the member suppose to have a formatting effect on the HTML? -->
+ <!-- Developer: Should create a hyperlink ! Preview problem or syntax ? -->
 
  <p>What combinations of arguments are supported depends on the service name.
  </p>
@@ -155,23 +163,24 @@ service ConfigurationProvider
     <li>
        <strong>Selecting data into a view:</strong>
        <dl>
-         <dd><code>"nodepath"</code> : <atom>string</atom></dd>
-         <dt>specifies the location of the view root in the configuration.</dt>
-         <dd><code>"depth"</code> : <atom>short</atom></dd>
-         <dt>specifies that elements of the hierarchy that are more than the given
+         <dt><code>"nodepath"</code> : <atom>string</atom></dt>
+         <dd>specifies the location of the view root in the configuration.</dd>
+         <dt><code>"depth"</code> : <atom>short</atom></dt>
+         <dd>specifies that elements of the hierarchy that are more than the given
           number of nesting levels away from the root need not be included in the
           view.
-         </dt>
-         <dd><code>"locale"</code> : <type scope="com::sun::star::lang">Locale</type></dd>
-         <dt>specifies the locale for which localized values should be
+         </dd>
+         <dt><code>"locale"</code> : <type scope="com::sun::star::lang">Locale</type></dt>
+         <dd>specifies the locale for which localized values should be
           retrieved.
-         </dt>
+         </dd>
        </dl>
 
  <!-- Dennis: <dt> and <dd> tags are being generated out of order -->
+ <!-- Developer: I had them wrong  -->
 
        <p><strong>Example:</strong> In the hierarchy
-<BR/><pre>
+<BR /><pre>
  A - B1 - C1
    |
    - B2 - C2 (localized: de, en, fr, ..)
@@ -191,10 +200,10 @@ service ConfigurationProvider
    - B4 - C6 - D4 - E3
 
 </pre>
-         <BR/>selecting a view with <code>nodepath = "/A/B2"</code>,
+         <BR />selecting a view with <code>nodepath = "/A/B2"</code>,
          <code>depth = 2</code> and <code>locale = &lt;Locale for en_US&gt;</code>
          would result in the tree fragment
-<BR/><pre>
+<BR /><pre>
 (A-) B2 - C2 (en)
         |
         - C3 - D1
@@ -213,26 +222,28 @@ service ConfigurationProvider
        <strong>Controlling cache behavior:</strong> (with providers that
         cache configuration data)
        <dl>
-         <dd><code>"lazywrite"</code> : <atom>boolean</atom></dd>
-         <dt>controls how updates are handled in the cache. If <TRUE/>, the
+         <dt><code>"lazywrite"</code> : <atom>boolean</atom></dt>
+         <dd>controls how updates are handled in the cache. If <TRUE/>, the
           cache may operate in <em>write-back</em> mode, where updates at
           first only affect the cache and are written to persistent storage
           at some later time. If <FALSE/>, the cache must operate in
           <em>write-through</em> mode, where updates are written to persistent
           storage at once - that is before
-          <member scope="com::sun::star::util">XChangesBatch::commitChanges</member>
+          <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
           returns.
-         </dt>
+         </dd>
 
  <!-- Dennis: the data in the member is not being displayed. -->
+ <!-- Developer: added missing parentheses - does this fix it ? Now seen in the generated HTML.
+        BTW: It seems that <dt> and <dd> tags were in the wrong order here again -->
 
-         <dd><code>"nocache"</code> : <atom>boolean</atom></dd>
-         <dt>specifies that data for the view is not taken from the cache, but
+         <dt><code>"nocache"</code> : <atom>boolean</atom></dt>
+         <dd>specifies that data for the view is not taken from the cache, but
           read directly from storage. This may entail future changes that
           become visible in the cache are not reflected in this view and that
           changes done through this view are not reflected in the cache.
-          <BR/><strong>Use with caution !</strong>
-         </dt>
+          <BR /><strong>Use with caution !</strong>
+         </dd>
        </dl>
     </li>
  </ul>
