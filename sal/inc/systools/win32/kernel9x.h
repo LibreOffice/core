@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-07 09:20:42 $
+ *  last change: $Author: hro $ $Date: 2001-06-26 16:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,10 @@ extern "C" {
 
 #ifdef GetEnvironmentVariableW
 #undef GetEnvironmentVariableW
+#endif
+
+#ifdef GetDriveTypeW
+#undef GetDriveTypeW
 #endif
 
 //------------------------------------------------------------------------
@@ -309,6 +313,10 @@ KERNEL9X_API DWORD ( WINAPI * lpfnGetEnvironmentVariableW )(
 );
 
 
+KERNEL9X_API UINT ( WINAPI * lpfnGetDriveTypeW )(
+    LPCWSTR lpRootPathName  // root directory
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -335,6 +343,7 @@ KERNEL9X_API DWORD ( WINAPI * lpfnGetEnvironmentVariableW )(
 #define CreateProcessW              lpfnCreateProcessW
 #define CreateProcessAsUserW        lpfnCreateProcessAsUserW
 #define GetEnvironmentVariableW     lpfnGetEnvironmentVariableW
+#define GetDriveTypeW               lpfnGetDriveTypeW
 
 #ifdef __cplusplus
 }
