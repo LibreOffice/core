@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: os $ $Date: 2001-06-28 09:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,7 +1154,8 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
         USHORT nYStart = 4;
         USHORT nYStep = (aSize.Height() - 6)/ MAXLEVEL;
 //      USHORT nLineHeight = nYStep * 8 / 10;
-        aStdFont = System::GetStandardFont(STDFONT_SWISS);
+        aStdFont = OutputDevice::GetDefaultFont(
+                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;
