@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 19:18:10 $
+ *  last change: $Author: er $ $Date: 2002-01-18 16:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
                 xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
                 bFound = (BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd));
                 // change results to definition before 614:
-                nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                ++nStart;
+                --nEnd;
             }
             else
             {
@@ -259,8 +258,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, USHORT nCol, USHORT n
                         xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
                         bRepeat = ((BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd)));
                         // change results to definition before 614:
-                        nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                        ++nStart;
+                        --nEnd;
                     }
                     else
                     {
