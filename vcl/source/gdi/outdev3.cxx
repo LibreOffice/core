@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 20:48:36 $
+ *  last change: $Author: hdu $ $Date: 2000-11-16 13:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2315,37 +2315,8 @@ void OutputDevice::ImplInitFont()
 
     if ( mbInitFont )
     {
-#ifndef REMOTE_APPSERVER
         mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
         mbInitFont = FALSE;
-#else
-        ImplFontEntry*  pFontEntry = mpFontEntry;
-        RemoteFont      aFont;
-
-        if ( pFontEntry->maFontSelData.mpFontData )
-        {
-            aFont.maName        = pFontEntry->maFontSelData.mpFontData->maName;
-            aFont.maStyleName   = pFontEntry->maFontSelData.mpFontData->maStyleName;
-        }
-        else
-        {
-            aFont.maName        = pFontEntry->maFontSelData.maName;
-            aFont.maStyleName   = pFontEntry->maFontSelData.maStyleName;
-        }
-        aFont.mnWidth       = pFontEntry->maFontSelData.mnWidth;
-        aFont.mnHeight      = pFontEntry->maFontSelData.mnHeight;
-        aFont.meFamily      = pFontEntry->maFontSelData.meFamily;
-        aFont.meCharSet     = pFontEntry->maFontSelData.meCharSet;
-        aFont.meWidthType   = pFontEntry->maFontSelData.meWidthType;
-        aFont.meWeight      = pFontEntry->maFontSelData.meWeight;
-        aFont.meItalic      = pFontEntry->maFontSelData.meItalic;
-        aFont.mePitch       = pFontEntry->maFontSelData.mePitch;
-        aFont.mnOrientation = pFontEntry->maFontSelData.mnOrientation;
-        aFont.mbVertical    = pFontEntry->maFontSelData.mbVertical;
-        mpGraphics->SetFont( aFont );
-        pFontEntry->mnSetFontFlags = 0;
-        mbInitFont = FALSE;
-#endif
     }
 }
 
