@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:33:09 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ Resource RID_LOCALIZED_NAMES
     ItemList [ korean ] =
     {
              < "그리스어" ; > ;
-        < "특수한" ; > ;
+        < "전용" ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -1040,8 +1040,8 @@ Resource RID_LOCALIZED_NAMES
         < "ZETA" ; > ;
         < "eta" ; > ;
         < "ETA" ; > ;
-        < "teta" ; > ;
-        < "TETA" ; > ;
+        < "theta" ; > ;
+        < "THETA" ; > ;
         < "iota" ; > ;
         < "IOTA" ; > ;
         < "cappa" ; > ;
@@ -1052,8 +1052,8 @@ Resource RID_LOCALIZED_NAMES
         < "MI" ; > ;
         < "ni" ; > ;
         < "NI" ; > ;
-        < "xi" ; > ;
-        < "XI" ; > ;
+        < "csi" ; > ;
+        < "CSI" ; > ;
         < "omicron" ; > ;
         < "OMICRON" ; > ;
         < "pi.greco" ; > ;
@@ -1206,8 +1206,8 @@ Resource RID_LOCALIZED_NAMES
         < "YPSILON" ; > ;
         < "fi" ; > ;
         < "FI" ; > ;
-        < "chi" ; > ;
-        < "CHI" ; > ;
+        < "ki" ; > ;
+        < "KI" ; > ;
         < "psi" ; > ;
         < "PSI" ; > ;
         < "omega" ; > ;
@@ -1218,13 +1218,13 @@ Resource RID_LOCALIZED_NAMES
         < "varro" ; > ;
         < "varsigma" ; > ;
         < "varfi" ; > ;
-        < "element" ; > ;
-        < "inget element" ; > ;
-        < "mindre �n" ; > ;
-        < "st�rre �n" ; > ;
-        < "inte lika med" ; > ;
+        < "tillh�r" ; > ;
+        < "tillh�rinte" ; > ;
+        < "mycketmindre�n" ; > ;
+        < "mycketst�rre�n" ; > ;
+        < "intelikamed" ; > ;
         < "identisk" ; > ;
-        < "g�r mot" ; > ;
+        < "g�rmot" ; > ;
         < "o�ndlig" ; > ;
         < "vinkel" ; > ;
         < "promille" ; > ;
@@ -1496,16 +1496,16 @@ Resource RID_LOCALIZED_NAMES
         < "varphi" ; > ;
         < "요소" ; > ;
         < "요소 없음" ; > ;
-        < "더 작음" ; > ;
-        < "더 큼" ; > ;
-        < "다음과 같지 않음" ; > ;
-        < "EXACT" ; > ;
-        < "진행" ; > ;
-        < "무한대" ; > ;
-        < "각도" ; > ;
-        < "1000분율" ; > ;
-        < "AND" ; > ;
-        < "OR" ; > ;
+        < "에 비해 작음" ; > ;
+        < "에 비해 큼" ; > ;
+        < "같지 않음" ; > ;
+        < "일치" ; > ;
+        < "경향" ; > ;
+        < "무한" ; > ;
+        < "각" ; > ;
+        < "1000분의 1" ; > ;
+        < "그리고" ; > ;
+        < "또는" ; > ;
     };
     ItemList [ chinese_simplified ] =
     {
@@ -1923,6 +1923,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
