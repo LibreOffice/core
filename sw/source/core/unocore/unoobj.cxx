@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 10:08:51 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ void lcl_InsertFile(SwUnoCrsr* pUnoCrsr,
         }
     if ( !pFilter )
     {
-        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, sal_True, 0, 0 );
+        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, 0, 0 );
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
         ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, sal_False );
         if ( nErr || !pFilter)
@@ -582,7 +582,7 @@ void lcl_InsertFile(SwUnoCrsr* pUnoCrsr,
     }
     else
     {
-        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, sal_True,
+        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True,
                     pFilter, 0);
         if(rFilterOption.Len())
         {
