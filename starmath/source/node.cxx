@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:07:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2414,9 +2414,9 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     aText = GetToken().aText;
     GetFont() = rFormat.GetFont(GetFontDesc());
 
-    if (GetFont().GetItalic() == ITALIC_NORMAL)
+    if (GetFont().GetItalic() > ITALIC_NONE)
         Attributes() |= ATTR_ITALIC;
-    if (GetFont().GetWeight() == WEIGHT_BOLD)
+    if (GetFont().GetWeight() > WEIGHT_NORMAL)
         Attributes() |= ATTR_BOLD;
 
 };
@@ -2863,7 +2863,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     //! see also SmFontStyles::GetStyleName
     if (GetFont().GetWeight() > WEIGHT_NORMAL)
         SetAttribut(ATTR_BOLD);
-    if (GetFont().GetItalic() != ITALIC_NONE)
+    if (GetFont().GetItalic() > ITALIC_NONE)
         SetAttribut(ATTR_ITALIC);
 
     Flags() |= FLG_FONT;
