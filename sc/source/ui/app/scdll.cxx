@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:12:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
+#include <avmedia/mediaplayer.hxx>
+#include <avmedia/mediatoolbox.hxx>
 #include <comphelper/types.hxx>
 
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
@@ -114,6 +116,7 @@
 #include "oleobjsh.hxx"
 #include "chartsh.hxx"
 #include "graphsh.hxx"
+#include "mediash.hxx"
 #include "pgbrksh.hxx"
 
 #include "docpool.hxx"
@@ -269,6 +272,7 @@ void ScDLL::Init()
     ScOleObjectShell    ::RegisterInterface(pMod);
     ScChartShell        ::RegisterInterface(pMod);
     ScGraphicShell      ::RegisterInterface(pMod);
+    ScMediaShell        ::RegisterInterface(pMod);
     ScPageBreakShell    ::RegisterInterface(pMod);
 
     //  eigene Controller
@@ -313,6 +317,9 @@ void ScDLL::Init()
     SvxVertTextTbxCtrl::RegisterControl(SID_TEXTDIRECTION_TOP_TO_BOTTOM,    pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
+
+    //Media Controller
+    ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
@@ -365,6 +372,7 @@ void ScDLL::Init()
     SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
+    ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
