@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:00:22 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #include "dialmgr.hxx"
 #endif
 
+#include "unoapi.hxx"
 #include "unotext.hxx"
 #include "unoshprp.hxx"
 #include "svdobj.hxx"
