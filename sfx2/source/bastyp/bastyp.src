@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 14:58:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ spanish ] = "El tamaño del archivo %1 excederá al del disponible en el disco.\n¿Desea continuar?\n";
     Text[ chinese_simplified ] = "ÎÄ¼ş %1 ËùĞè¿Õ¼ä´óÓÚÏÖÓĞµÄ¿ÉÓÃ¿Õ¼ä¡£\nÄúÒª¼ÌĞøÂğ£¿\n";
     Text[ russian ] = "Îáúåì ôàéëà %1 áîëüøå, ÷åì îáúåì äîñòóïíîãî íà äèñêå ìåñòà.\nÂñå ğàâíî ïğîäîëæàòü?\n";
-    Text[ polish ] = "Plik %1 przewy¿sza ilo?æ miejsca na dysku.\nKontynuowaæ ?\n";
+    Text[ polish ] = "Plik %1 przewy¿sza iloœæ miejsca na dysku.\nKontynuowaæ ?\n";
     Text[ japanese ] = "Ì§²Ù %1‚Í‹ó‚«ÃŞ½¸—e—Ê—Ìˆæ‚ğ‰z‚¦‚Ä‚¢‚Ü‚·¡\n‘±s‚µ‚Ü‚·‚©?\n";
     Text[ chinese_traditional ] = "ÀÉ®× %1 ©Ò»İªÅ¶¡¤j©ó²{¦sªº¥i¥ÎªÅ¶¡¡C\n­nÄ~Äò¡S\n";
     Text[ arabic ] = "Óæİ íÕÈÍ Çáãáİ %1 ÃßÈÑ ãä ÇáãÓÇÍÉ ÇáãÊÇÍÉ Úáì ÇáŞÑÕ.\nåá ÊÑíÏ ÇáãÊÇÈÚÉ¿\n";
@@ -353,7 +353,7 @@ String STR_DOWNLOAD_SOURCE
     Text [ portuguese_brazilian ] = "Quelle" ;
     Text [ chinese_simplified ] = "Ô´";
     Text [ russian ] = "Èñòî÷íèê";
-    Text [ polish ] = "?ród³o";
+    Text [ polish ] = "ród³o";
     Text [ japanese ] = "¿°½";
     Text [ chinese_traditional ] = "¸ê®Æ¨Ó·½";
     Text [ arabic ] = "ÇáãÕÏÑ";
@@ -481,7 +481,7 @@ Resource RID_DLSTATUS2
         Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta ..." ;
         Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò»ØÓ¦...";
         Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
-        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowied?...";
+        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
         Text[ japanese ] = "Ú‘±æ:$(HOST)B‰“š‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·...";
         Text[ chinese_traditional ] = "³s½u¨ì¡G$(HOST)¡C¥¿¦bµ¥­Ôµª´_...";
         Text[ arabic ] = "ÇáÇÊÕÇá ÈÜ: $(HOST). İí ÇäÊÙÇÑ ÇáÑÏ...";
@@ -585,4 +585,5 @@ String STR_HTML_GENERATOR
     Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION (%1)" ;
     Text[ language_user1 ] = "pb: no translation";
 };
+
 
