@@ -3307,10 +3307,8 @@ done
       COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
       echo "$as_me:$LINENO: checking the SUN Workshop C compiler version" >&5
 echo $ECHO_N "checking the SUN Workshop C compiler version... $ECHO_C" >&6
-            _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $7 }'`
-      if test "$_workshop_version" = "C"; then
-         _workshop_version=`$CC -V 2>&1 | $AWK '/^cc/ { print $8 }'`
-      fi
+            _workshop_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C /`
+      _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
       _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'`
       if test "$_workshop_major" != "5"; then
          { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.0 or 5.2 of the Sun Workshop C compiler" >&5
@@ -8465,6 +8463,7 @@ fi
 
 fi
 
+   CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
 for ac_header in X11/Xaw/Label.h
 do
