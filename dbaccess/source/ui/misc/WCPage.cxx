@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-08 08:24:53 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 12:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
             }
             catch(const SQLException& e)
             {
-                ::dbaui::showError(SQLExceptionInfo(e),pParent,m_pParent->m_xFactory);
+                ::dbaui::showError(SQLExceptionInfo(e),pParent->GetParent(),m_pParent->m_xFactory);
             }
         }
 
