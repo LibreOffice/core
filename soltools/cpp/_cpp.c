@@ -17,7 +17,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.3 $ $Date: 2003-03-18 12:47:33 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.4 $ $Date: 2004-04-21 13:24:16 $";
 
 int
 #ifdef _WIN32
@@ -116,7 +116,7 @@ void
             error(ERROR, "Unidentifiable control line");
         return;                         /* else empty line */
     }
-    if ((np = lookup(tp, 0)) == NULL || (np->flag & ISKW) == 0 && !skipping)
+    if ((np = lookup(tp, 0)) == NULL || ((np->flag & ISKW) == 0 && !skipping))
     {
         error(WARNING, "Unknown preprocessor control %t", tp);
         return;
@@ -354,7 +354,7 @@ void
 
                 case 't':
                     tp = va_arg(ap, Token *);
-                    fprintf(stderr, "%.*s", tp->len, tp->t);
+                    fprintf(stderr, "%.*s", (int)tp->len, tp->t);
                     break;
 
                 case 'r':
@@ -363,7 +363,7 @@ void
                     {
                         if (tp > trp->tp && tp->wslen)
                             fputc(' ', stderr);
-                        fprintf(stderr, "%.*s", tp->len, tp->t);
+                        fprintf(stderr, "%.*s", (int)tp->len, tp->t);
                     }
                     break;
 
