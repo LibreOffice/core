@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:26:30 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,19 @@
  *
  ************************************************************************/
 
-#ifndef _BIFFDUMP_HXX
-#define _BIFFDUMP_HXX
+#ifndef SC_BIFFDUMP_HXX
+#define SC_BIFFDUMP_HXX
 
 #if OSL_DEBUG_LEVEL > 1
-#define DEBUGGING________
-#endif
 
-#ifdef DEBUGGING
+// ============================================================================
 
+// 1 = Compile with BIFF dumper.
+#define EXC_INCL_DUMPER 0
+
+// ============================================================================
+
+#if EXC_INCL_DUMPER
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -564,6 +568,9 @@ inline BOOL Biff8RecDumper::IsPrintable( const UINT8 n )
 
 
 #endif
-
+#else
+// never use the dumper in product builds
+#define EXC_INCL_DUMPER 0
+#endif
 #endif
 
