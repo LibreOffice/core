@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnectionData.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:05:37 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,15 @@ namespace dbaui
         String m_aDestWinName;
         String m_aConnName;
 
-        ::std::vector<OConnectionLineData*> m_vConnLineData;
+        OConnectionLineDataVec m_vConnLineData;
 
         void    Init();
         void    Init(const String& rSourceWinName, const String& rDestWinName, const String& rConnName = String() );
             // Das erste Init baut darauf, dass die 3 String-Members schon korrekt gesetzt sind und aConnLineDataList leer ist.
             // Das zweite stellt genau diesen Zustand her
 
-        virtual OConnectionLineData* CreateLineDataObj();
-        virtual OConnectionLineData* CreateLineDataObj( const OConnectionLineData& rConnLineData );
+        virtual OConnectionLineDataRef CreateLineDataObj();
+        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
     public:
         TYPEINFO();
@@ -124,7 +124,7 @@ namespace dbaui
         void ResetConnLines( BOOL bUseDefaults = TRUE );
             // loescht die Liste der ConnLines, bei bUseDefaults == TRUE werden danach MAX_CONN_COUNT neue Dummy-Linien eingefuegt
 
-        ::std::vector<OConnectionLineData*>* GetConnLineDataList(){ return &m_vConnLineData; }
+        OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 
         String GetSourceWinName() const { return m_aSourceWinName; }
         String GetDestWinName() const { return m_aDestWinName; }

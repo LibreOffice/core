@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,16 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
+#endif
+#ifndef INCLUDED_VECTOR
+#define INCLUDED_VECTOR
+#include <vector>
+#endif
+#ifndef DBAUI_REFFUNCTOR_HXX
+#include "RefFunctor.hxx"
+#endif
 
 namespace dbaui
 {
@@ -84,16 +94,18 @@ namespace dbaui
         the class OConnectionLineData contains the data of a connection
         e.g. the source and the destanation field
     **/
-    class OConnectionLineData
+    class OConnectionLineData : public ::vos::OReference
     {
         ::rtl::OUString m_aSourceFieldName;
         ::rtl::OUString m_aDestFieldName;
 
+    protected:
+        virtual ~OConnectionLineData();
     public:
         OConnectionLineData();
         OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
-        virtual ~OConnectionLineData();
+
 
         // eine Kopie der eigenen Instanz liefern (das ist mir irgendwie angenehmer als ein virtueller Zuweisungsoperator)
         virtual void CopyFrom(const OConnectionLineData& rSource);
@@ -122,6 +134,9 @@ namespace dbaui
         virtual OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
 
+    //------------------------------------------------------------------
+    typedef ::vos::ORef< OConnectionLineData >      OConnectionLineDataRef;
+    typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
 }
 #endif // DBAUI_CONNECTIONLINEDATA_HXX
 

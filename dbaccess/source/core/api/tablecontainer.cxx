@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,17 +156,24 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
                                  ::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
+                                 sal_Bool _bCase,
                                  IWarningsContainer* _pWarningsContainer)
-    :OCollection(_rParent,_xCon->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,::std::vector< ::rtl::OUString>())
+    :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
     ,m_bConstructed(sal_False)
     ,m_xConnection(_xCon)
-    ,m_xMetaData(_xCon->getMetaData())
     ,m_aCommitLocation(_rCommitLocation)
     ,m_aTablesConfig(_rTablesConfig)
     ,m_pWarningsContainer(_pWarningsContainer)
 {
     DBG_CTOR(OTableContainer, NULL);
     m_aTablesConfig.setEscape(m_aTablesConfig.isSetNode());
+    try
+    {
+        m_xMetaData = _xCon->getMetaData();
+    }
+    catch(SQLException&)
+    {
+    }
 }
 
 //------------------------------------------------------------------------------

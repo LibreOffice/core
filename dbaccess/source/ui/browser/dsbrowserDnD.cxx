@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,8 +969,6 @@ namespace dbaui
                     OSL_ENSURE(0,"Exception catched!");
                 }
                 break;
-            default:
-                OSL_ENSURE(0,"Try to rename wrong entry!");
         }
         return nRet;
     }
@@ -1188,6 +1186,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/09/25 13:24:38  oj
+ *  #91719# implementing the XRename handling
+ *
  *  Revision 1.28  2001/09/20 12:56:17  oj
  *  #92232# fixes for BIGINT type and new property HELPTEXT
  *

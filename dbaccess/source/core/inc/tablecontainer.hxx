@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:13:02 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ namespace dbaccess
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+            sal_Bool _bCase,
             IWarningsContainer* _pWarningsContainer = NULL
             );
         ~OTableContainer();

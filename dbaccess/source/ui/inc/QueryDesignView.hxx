@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
 #endif
+#ifndef DBAUI_CONNECTIONLINEDATA_HXX
+#include "ConnectionLineData.hxx"
+#endif
 
 namespace connectivity
 {
@@ -97,7 +100,6 @@ namespace dbaui
     class OSelectionBrowseBox;
     class OTableConnection;
     class OQueryTableConnectionData;
-    class OConnectionLineData;
     class OQueryContainerWindow;
 
     class OQueryDesignView : public OQueryView
@@ -163,7 +165,7 @@ namespace dbaui
         ::rtl::OUString     BuildJoin(OQueryTableWindow* pLh, const ::rtl::OUString &rRh, OQueryTableConnectionData* pData);
         ::rtl::OUString     BuildJoin(const ::rtl::OUString& rLh, const ::rtl::OUString& rRh, OQueryTableConnectionData* pData);
 
-        ::rtl::OUString     BuildJoinCriteria(::std::vector<OConnectionLineData*>* pLineDataList,OQueryTableConnectionData* pData);
+        ::rtl::OUString     BuildJoinCriteria(OConnectionLineDataVec* pLineDataList,OQueryTableConnectionData* pData);
 
         void        GetNextJoin(OQueryTableConnection* pEntryConn,::rtl::OUString &aJoin,OQueryTableWindow* pEntryTabTo);
         void        JoinCycle(OQueryTableConnection* pEntryConn,::rtl::OUString &rJoin,OQueryTableWindow* pEntryTabTo);

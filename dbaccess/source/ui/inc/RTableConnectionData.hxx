@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ namespace dbaui
         void removeListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxComponent);
 
     protected:
-        virtual OConnectionLineData* CreateLineDataObj();
-        virtual OConnectionLineData* CreateLineDataObj( const OConnectionLineData& rConnLineData );
+        virtual OConnectionLineDataRef CreateLineDataObj();
+        virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
     public:
         ORelationTableConnectionData();

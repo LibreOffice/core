@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,12 +171,19 @@ void ORelationControl::Init(ORelationTableConnectionData* _pConnData)
     if (bFirstCall)
     {
         //////////////////////////////////////////////////////////////////////
-        // Spalten einfuegen
+        // insert columns
         ::rtl::OUString sSrcComposedName,sDestComposedName;
-        if(m_xSourceDef.is())
-            ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),m_xSourceDef,sSrcComposedName,sal_False);
-        if(m_xDestDef.is())
-            ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),m_xDestDef,sDestComposedName,sal_False);
+        try
+        {
+            if(m_xSourceDef.is())
+                ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),m_xSourceDef,sSrcComposedName,sal_False);
+            if(m_xDestDef.is())
+                ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),m_xDestDef,sDestComposedName,sal_False);
+        }
+        catch(SQLException&)
+        {
+            OSL_ASSERT(!"SQLException catched while compose table name!");
+        }
         InsertDataColumn( 1, sSrcComposedName, 100);
         InsertDataColumn( 2, sDestComposedName, 100);
             // wenn es die Defs noch nicht gibt, dann muessen sie noch mit SetSource-/-DestDef gesetzt werden !
@@ -266,7 +273,7 @@ BOOL ORelationControl::SaveModified()
 {
     DBG_CHKTHIS(ORelationControl,NULL);
     OSL_ENSURE((sal_Int32)m_pConnData->GetConnLineDataList()->size() > GetCurRow(),"Invalid Index!");
-    OConnectionLineData* pConnLineData = (*m_pConnData->GetConnLineDataList())[GetCurRow()];
+    OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[GetCurRow()];
     switch( GetCurColumnId() )
     {
     case SOURCE_COLUMN:
@@ -286,9 +293,9 @@ String ORelationControl::GetCellText( long nRow, USHORT nColId )
 {
     DBG_CHKTHIS(ORelationControl,NULL);
     OSL_ENSURE((sal_Int32)m_pConnData->GetConnLineDataList()->size() > nRow,"Invalid Index!");
-    OConnectionLineData* pConnLineData = (*m_pConnData->GetConnLineDataList())[nRow];
+    OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[nRow];
 
-    if( !pConnLineData )
+    if( !pConnLineData.isValid() )
         return String();
 
     switch( nColId )
@@ -313,19 +320,7 @@ void ORelationControl::InitController( CellControllerRef& rController, long nRow
         case SOURCE_COLUMN:
             //////////////////////////////////////////////////////////////
             // Auffuellen der ComboBox
-            m_pListCell->Clear();
-            if( m_xSourceDef.is() )
-            {
-                Reference<XColumnsSupplier> xSup(m_xSourceDef,UNO_QUERY);
-                Reference<XNameAccess> xColumns = xSup->getColumns();
-                Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                const ::rtl::OUString* pBegin = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                    m_pListCell->InsertEntry( *pBegin );
-                m_pListCell->InsertEntry(String(), 0);
-            }
-
+            fillListBox(m_xSourceDef);
             //////////////////////////////////////////////////////////////
             // Setzen des Edits
             aText = GetCellText( nRow, nColumnId );
@@ -338,18 +333,7 @@ void ORelationControl::InitController( CellControllerRef& rController, long nRow
         case DEST_COLUMN:
             //////////////////////////////////////////////////////////////
             // Auffuellen der ComboBox
-            m_pListCell->Clear();
-            if( m_xDestDef.is() )
-            {
-                Reference<XColumnsSupplier> xSup(m_xDestDef,UNO_QUERY);
-                Reference<XNameAccess> xColumns = xSup->getColumns();
-                Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                const ::rtl::OUString* pBegin = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
-                    m_pListCell->InsertEntry( *pBegin );
-                m_pListCell->InsertEntry(String(), 0);
-            }
+            fillListBox(m_xDestDef);
 
             //////////////////////////////////////////////////////////////
             // Setzen des Edits
@@ -397,9 +381,29 @@ void ORelationControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, US
     if( rDev.IsClipRegion() )
         rDev.SetClipRegion();
 }
-
-
-
+// -----------------------------------------------------------------------------
+void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest)
+{
+    m_pListCell->Clear();
+    try
+    {
+        if( _xDest.is() )
+        {
+            Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
+            Reference<XNameAccess> xColumns = xSup->getColumns();
+            Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+            const ::rtl::OUString* pBegin = aNames.getConstArray();
+            const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+            for(;pBegin != pEnd;++pBegin)
+                m_pListCell->InsertEntry( *pBegin );
+            m_pListCell->InsertEntry(String(), 0);
+        }
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"Exception catched while compse tablename!");
+    }
+}
 //------------------------------------------------------------------------
 void ORelationControl::SetSourceDef(const Reference< XPropertySet>& xNewSource)
 {
@@ -417,18 +421,29 @@ void ORelationControl::SetDef(const Reference< XPropertySet>& xDest,sal_Int32 _n
 
     // Spaltenname setzen
     ::rtl::OUString sComposedName;
-    if(xDest.is())
-        ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),xDest,sComposedName,sal_False);
+    try
+    {
+        if(xDest.is())
+            ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),xDest,sComposedName,sal_False);
 
-    SetColumnTitle((USHORT)_nPos, sComposedName);
+        SetColumnTitle((USHORT)_nPos, sComposedName);
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"Exception catched while compse tablename!");
+    }
 
     // beide (!) Spalten loeschen
-    ::std::vector<OConnectionLineData*>* pLines = m_pConnData->GetConnLineDataList();
-    if(_nPos == 1)
-        ::std::for_each(pLines->begin(),pLines->end(),::std::mem_fun(&OConnectionLineData::clearSourceFieldName));
-    else
-        ::std::for_each(pLines->begin(),pLines->end(),::std::mem_fun(&OConnectionLineData::clearDestFieldName));
-
+    OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
+    ::std::for_each(pLines->begin(),pLines->end(),
+                        OUnaryRefFunctor<OConnectionLineData>(
+                            _nPos == 1
+                                ?
+                            ::std::mem_fun(&OConnectionLineData::clearSourceFieldName)
+                                :
+                            ::std::mem_fun(&OConnectionLineData::clearDestFieldName)
+                            )
+                        );
     // neu zeichnen
     Invalidate();
 
@@ -625,8 +640,8 @@ void ORelationDialog::NotifyCellChange()
     // den Ok-Button en- oder disablen, je nachdem, ob ich eine gueltige Situation habe
     BOOL bValid = TRUE;
     USHORT nEmptyRows = 0;
-    ::std::vector<OConnectionLineData*>* pLines = m_pConnData->GetConnLineDataList();
-    ::std::vector<OConnectionLineData*>::iterator aIter = pLines->begin();
+    OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
+    OConnectionLineDataVec::iterator aIter = pLines->begin();
     for(;aIter != pLines->end();++aIter)
     {
         if (((*aIter)->GetDestFieldName().getLength() != 0) != ((*aIter)->GetSourceFieldName().getLength() != 0))
@@ -687,13 +702,13 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, pButton )
     m_pConnData->SetDestWinName(m_lmbRightTable.GetSelectEntry());
 
     // noch ein wenig Normalisierung auf den LineDatas : leere Lines vom Anfang an das Ende verschieben
-    ::std::vector<OConnectionLineData*>* pLines = m_pConnData->GetConnLineDataList();
+    OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
     sal_Int32 nCount = pLines->size();
     for(sal_Int32 i=0;i<nCount;)
     {
         if(!(*pLines)[i]->GetSourceFieldName().getLength() && !(*pLines)[i]->GetDestFieldName().getLength())
         {
-            OConnectionLineData* pData = (*pLines)[i];
+            OConnectionLineDataRef pData = (*pLines)[i];
             pLines->erase(pLines->begin()+i);
             pLines->push_back(pData);
             --nCount;
@@ -815,7 +830,5 @@ short ORelationDialog::Execute()
     return nResult;
 }
 // -----------------------------------------------------------------------------
-
-
 
 

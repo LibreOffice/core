@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,4 +128,6 @@ void OConnectionLineData::Reset()
 {
     m_aDestFieldName = m_aSourceFieldName = ::rtl::OUString();
 }
+// -----------------------------------------------------------------------------
+
 

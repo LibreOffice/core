@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 09:59:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,14 +146,21 @@ DBG_NAME(OViewContainer)
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
+                                 sal_Bool _bCase,
                                  IWarningsContainer* _pWarningsContainer)
-    :OCollection(_rParent,_xCon->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,::std::vector< ::rtl::OUString>())
+    :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
     ,m_bConstructed(sal_False)
     ,m_xConnection(_xCon)
-    ,m_xMetaData(_xCon->getMetaData())
     ,m_pWarningsContainer(_pWarningsContainer)
 {
     DBG_CTOR(OViewContainer, NULL);
+    try
+    {
+        m_xMetaData = _xCon->getMetaData();
+    }
+    catch(SQLException&)
+    {
+    }
 }
 
 //------------------------------------------------------------------------------

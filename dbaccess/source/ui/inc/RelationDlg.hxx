@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:35:24 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xDestDef;
 
         void SetDef(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xDest,sal_Int32 _nPos);
+        void fillListBox(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDest);
     public:
         ORelationControl( ORelationDialog* pParent );
         virtual ~ORelationControl();

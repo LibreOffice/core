@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 09:48:57 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1837,7 +1837,15 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         {
             if(!m_xActiveConnection.is())
                 throw SQLException(DBACORE_RESSTRING(RID_STR_CONNECTION_INVALID),*this,SQLSTATE_GENERAL,1000,Any() );
-            m_pTables = new OTableContainer(OConfigurationNode(),OConfigurationTreeRoot(),*this,m_aMutex,m_xActiveConnection);
+            sal_Bool bCase = sal_True;
+            try
+            {
+                bCase = m_xActiveConnection->getMetaData()->storesMixedCaseQuotedIdentifiers();
+            }
+            catch(SQLException&)
+            {
+            }
+            m_pTables = new OTableContainer(OConfigurationNode(),OConfigurationTreeRoot(),*this,m_aMutex,m_xActiveConnection,bCase);
             _rxRetTables = m_pTables;
             Sequence< ::rtl::OUString> aTableFilter(1);
             aTableFilter[0] = ::rtl::OUString::createFromAscii("%");

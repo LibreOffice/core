@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-19 10:01:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ namespace dbaccess
         OViewContainer( ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+                        sal_Bool _bCase,
                         IWarningsContainer* _pWarningsContainer = NULL
                         );
         ~OViewContainer();

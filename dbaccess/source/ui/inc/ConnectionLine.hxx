@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace dbaui
     class OConnectionLine
     {
         OTableConnection*       m_pTabConn;
-        OConnectionLineData*    m_pData;
+        OConnectionLineDataRef  m_pData;
 
         SvLBoxEntry*            m_pSourceEntry;
         SvLBoxEntry*            m_pDestEntry;
@@ -108,7 +108,7 @@ namespace dbaui
     public:
         OConnectionLine( OTableConnection* pConn, const String& rSourceFieldName = String(),
                          const String& rDestFieldName = String() );
-        OConnectionLine( OTableConnection* pConn, OConnectionLineData* pLineData );
+        OConnectionLine( OTableConnection* pConn, OConnectionLineDataRef pLineData );
         OConnectionLine( const OConnectionLine& rLine );
         virtual ~OConnectionLine();
 
@@ -129,7 +129,7 @@ namespace dbaui
         Rectangle           GetSourceTextPos() const;
         Rectangle           GetDestTextPos() const;
 
-        OConnectionLineData*    GetData() const { return m_pData; }
+        OConnectionLineDataRef  GetData() const { return m_pData; }
     };
     /// unary_function Functor object for class OConnectionLine returntype is void
     /// draws a connectionline object on outputdevice

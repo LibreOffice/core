@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ const long HIT_SENSITIVE_RADIUS = 5;
 //========================================================================
 DBG_NAME(OConnectionLine);
 //------------------------------------------------------------------------
-OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineData* _pLineData )
+OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
      ,m_pData( _pLineData )
      ,m_pSourceEntry( NULL )
@@ -446,7 +446,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 //------------------------------------------------------------------------
 BOOL OConnectionLine::IsValid()
 {
-    return m_pData && m_pData->IsValid();
+    return m_pData.isValid() && m_pData->IsValid();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
