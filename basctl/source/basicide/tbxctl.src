@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:38:39 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 22:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ ToolBox RID_TOOLBOX
             Text [ portuguese_brazilian ] = "FrameControl" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
             Text[ chinese_simplified ] = "¿ò¿ØÖÆ";
-            Text[ russian ] = "İëåìåíò óïğàâëåíèÿ êàäğà";
+            Text[ russian ] = "FrameControl";
             Text[ polish ] = "FrameControl";
             Text[ japanese ] = "ÌÚ°ÑºİÄÛ°Ù";
             Text[ chinese_traditional ] = "°T®Ø±±¨î¶µ";
@@ -581,8 +581,8 @@ ToolBox RID_TOOLBOX
             Text[ chinese_simplified ] = "¼¤»îÊÔÑéÄ£Ê½";
             Text[ russian ] = "Àêòèâèğîâàòü ğåæèì òåñòà";
             Text[ polish ] = "Uaktywnij tryb sprawdzania";
-            Text[ japanese ] = "Ã½ÄÓ°ÄŞ‚ğ±¸Ã¨ÌŞ";
-            Text[ chinese_traditional ] = "¿E¬¡¸ÕÅç¼Ò¦¡";
+            Text[ japanese ] = "Ã½ÄÓ°ÄŞ‚ğ±¸Ã¨ÌŞ‚É‚·‚é";
+            Text[ chinese_traditional ] = "±Ò°Ê¸ÕÅç¼Ò¦¡";
             Text[ arabic ] = "ÊäÔíØ æÖÚ ÇáÇÎÊÈÇÑ";
             Text[ greek ] = "Åíåñãïğïßçóç êáôÜóôáóçò äïêéìŞò";
             Text[ korean ] = "Å×½ºÆ®¸ğµå È°¼ºÈ­";
