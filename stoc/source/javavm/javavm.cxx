@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-10 17:05:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@ int main( int argc, char * argv[])
 #include <stack>
 #include <string.h>
 #include <time.h>
+#include <memory>
+
+#define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 // Properties of the javavm can be put
 // as a komma separated list in this
@@ -473,77 +476,23 @@ void getDefaultLocaleFromConfig(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
-/* When the setup is started from an installation (not the first installation)
-and Java is used then this function fails, because the ConfigurationRegistry service
-is not available to the setup. That is, the javarc cannot be read and values from
-environment variables are used to initialize the JavaVM service. The javaldx, therefore,
-must not use the javarc either. Otherwise the LD_LIBRARY_PATH (set by javaldx) would be
-for a different java as the one the runtime lib is from. The runtime lib is set in
-the setup (environment variable OO_JAVA_PROPERTIES).
-*/
 void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
                             const css::uno::Reference<css::uno::XComponentContext> &xCtx) throw(css::uno::Exception)
 {
-    css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationRegistry")),
-        xCtx);
-    if(!xConfRegistry.is())
-        throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")),
-                               0);
-    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
-
-    if(!xConfRegistry_simple.is())
-        throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: couldn't get ConfigurationRegistry")),
-                               0);
-    xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")), sal_True, sal_False);
-
-    css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
-
-    css::uno::Reference<css::registry::XRegistryKey> key_InstallPath = xRegistryRootKey->openKey(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstallPath")));
-    if(!key_InstallPath.is())
-        throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find key: " \
-                                     "Office/InstallPath in org.openoffice.UserProfile")),
-                                                     0);
-    rtl::OUString rcPath = key_InstallPath->getStringValue();
-    key_InstallPath->closeKey();
-    xRegistryRootKey->closeKey();
-
-
-    rtl::OUString urlrcPath;
-    if( osl::File::E_None != osl::File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
-        throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: could not convert a system path to URL")),
-                               0);
-
-    urlrcPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/config/" INI_FILE));
-
-    // TODO change pIniFile, pIni2 from plain pointers to auto_ptrs or stack
-    // variables; at least pIniFile is sometimes not deleted
-
-    osl::File *pIniFile= new osl::File(urlrcPath);
+    rtl::OUString usInstallDir;
+    rtl::Bootstrap::get(OUSTR("UserInstallation"),
+                   usInstallDir,
+                   OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}"));
+    rtl::OUString urlrcPath= usInstallDir + OUSTR("/user/config/" INI_FILE);
+    std::auto_ptr<osl::File>  pIniFile(new osl::File(urlrcPath));
     if( pIniFile->open(OpenFlag_Read) != osl::File::E_None)
     {
-        // Probably network installation. A workstation installation does not need to have its own javarc.
-        // Then we use the one from the network insallation ( <install-di>/share/config/javarc)
-        xConfRegistry_simple->open(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")), sal_True, sal_False);
-        css::uno::Reference<css::registry::XRegistryKey> xRegistryCommonRootKey = xConfRegistry_simple->getRootKey();
-
-        css::uno::Reference<css::registry::XRegistryKey> key_NetInstallPath = xRegistryCommonRootKey->openKey(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path/Current/OfficeInstall")));
-        if(!key_NetInstallPath.is()) throw css::uno::RuntimeException(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("javavm.cxx: can not find key: Office/InstallPath in org.openoffice.UserProfile")),
-            0);
-        rcPath = key_NetInstallPath->getStringValue();
-        // convert to file url
-        if( osl_File_E_None != osl::File::getFileURLFromSystemPath( rcPath, urlrcPath ) )
-        {
-            urlrcPath = rcPath;
-        }
-        urlrcPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/share/config/" INI_FILE));
-
-        key_NetInstallPath->closeKey();
-        osl::File *pIni2= new osl::File(urlrcPath);
+        rtl::Bootstrap::get(OUSTR("BaseInstallation"),
+               usInstallDir,
+               OUSTR("${$SYSBINDIR/" SAL_CONFIGFILE("bootstrap") ":BaseInstallation}"));
+        urlrcPath= usInstallDir + OUSTR("/share/config/" INI_FILE);
+        std::auto_ptr<osl::File> pIni2(new osl::File(urlrcPath));
         if(pIni2->open(OpenFlag_Read) != osl::File::E_None)
         {
             throw css::java::JavaNotConfiguredException (
@@ -553,6 +502,8 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
         else
             pIniFile= pIni2;
     }
+
+    // The javarc is encoded as UTF-8
 
     //Find the Java Section
     rtl::OString sJavaSection("[Java]");
@@ -574,31 +525,26 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
             break;
     }
 
-    // TODO encoding of ini file???
-
     //Read each line from the Java section
     if(bSectionFound)
     {
         while(1)
         {
             rtl::ByteSequence seq;
-            sal_Bool bEOF;
-            rtl::OUString usProp;
             if(pIniFile->readLine(seq) == osl::File::E_None)
             {
                 //check if another Section starts
-                rtl::OString line((sal_Char*)seq.getArray(), seq.getLength());
-                if(line.indexOf('[') == 0)
+                rtl::OUString line((sal_Char*)seq.getArray(), seq.getLength(),
+                                   RTL_TEXTENCODING_UTF8);
+                sal_Unicode const * pIndex = line.getStr();
+                sal_Unicode const * pEnd = pIndex + line.getLength();
+                if (pIndex == pEnd || *pIndex == '[')
                     break;
                 //check if there is '=' after the first word
-                bool bOk= false;
-                const sal_Char *pIndex= line.getStr();
                 //check for jvm options, e.g. -Xdebug, -D, ..
                 if( *pIndex != '-')
                 {
                     //no jvm option, check for property, e.g RuntimeLib=XXX
-                    sal_Int32 len= line.getLength();
-                    const sal_Char *pEnd= pIndex + len;
                     // the line must not start with characters for commenting ';' ' ', etc.
                     if( *pIndex == ';'
                         || *pIndex == '/'
@@ -617,10 +563,9 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
                         goto nextLine;   // no '=' found
                 }
                 // Ok, store the line
-                line.trim();
-                usProp= rtl::OStringToOUString(line, osl_getThreadTextEncoding());
-                pjvm->pushProp(usProp);
+                pjvm->pushProp(line.trim());
             nextLine:
+                sal_Bool bEOF = true;
                 pIniFile->isEndOfFile(&bEOF);
                 if(bEOF)
                     break;
@@ -628,9 +573,8 @@ void getJavaPropsFromConfig(stoc_javavm::JVM * pjvm,
             else
                 break;
         }
-        pIniFile->close();
-        delete pIniFile;
     }
+    pIniFile->close();
 }
 
 void getJavaPropsFromEnvironment(stoc_javavm::JVM * pjvm) throw() {
@@ -638,15 +582,19 @@ void getJavaPropsFromEnvironment(stoc_javavm::JVM * pjvm) throw() {
     const char * pClassPath = getenv("CLASSPATH");
     if( pClassPath )
     {
-        pjvm->addSystemClasspath( rtl::OUString::createFromAscii(pClassPath) );
+        pjvm->addSystemClasspath(rtl::OUString(pClassPath, strlen(pClassPath),
+                                               osl_getThreadTextEncoding()));
     }
-    pjvm->setRuntimeLib(rtl::OUString::createFromAscii(DEF_JAVALIB));
+    pjvm->setRuntimeLib(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DEF_JAVALIB)));
     pjvm->setEnabled(1);
 
     // See if properties have been set and parse them
     const char * pOOjavaProperties = getenv(PROPERTIES_ENV);
     if(pOOjavaProperties) {
-        rtl::OUString properties(rtl::OUString::createFromAscii(pOOjavaProperties));
+        rtl::OUString properties(rtl::OUString(pOOjavaProperties,
+                                               strlen(pOOjavaProperties),
+                                               osl_getThreadTextEncoding()));
 
         sal_Int32 index;
         sal_Int32 lastIndex = 0;
@@ -754,6 +702,8 @@ const rtl::Bootstrap & getBootstrapHandle()
 
 rtl::OUString retrieveComponentClassPath( const sal_Char *pVariableName )
 {
+    // java_classpath file is encoded as ASCII
+
     rtl::OUString ret;
     rtl::OUStringBuffer buf( 128 );
     buf.appendAscii( "$" ).appendAscii( pVariableName );
@@ -796,7 +746,7 @@ rtl::OUString retrieveComponentClassPath( const sal_Char *pVariableName )
                                     while( nIndex < nSize && p[nIndex] == ' ' ) nIndex ++;
                                     sal_Int32 nStart = nIndex;
                                     while( nIndex < nSize && p[nIndex] != ' ' ) nIndex ++;
-                                    rtl::OUString relativeUrl( &(p[nStart]), nIndex-nStart, RTL_TEXTENCODING_ASCII_US); // TODO encoding???
+                                    rtl::OUString relativeUrl( &(p[nStart]), nIndex-nStart, RTL_TEXTENCODING_ASCII_US);
                                     relativeUrl = relativeUrl.trim();
                                     if (0 < relativeUrl.getLength())
                                     {
@@ -1674,7 +1624,7 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
         javaHome += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/jre"));
     }
 
-    rtl::OString osJavaHome = rtl::OUStringToOString(javaHome, osl_getThreadTextEncoding()); // TODO encoding???
+    rtl::OString osJavaHome = rtl::OUStringToOString(javaHome, osl_getThreadTextEncoding());
     putenv(strdup(osJavaHome.getStr()));
 #endif
 
@@ -1709,6 +1659,8 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
 
     sal_uInt16 cprops= jvm.getProperties().size();
 
+    // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
+    // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
     JavaVMInitArgs vm_args;
 
     // we have "addOpt" additional properties to those kept in the JVM struct
@@ -1717,7 +1669,6 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
     rtl::OString sClassPath= rtl::OString("-Djava.class.path=")
         + rtl::OUStringToOString(jvm.getClassPath(),
                                  osl_getThreadTextEncoding());
-        // TODO encoding???
     options[0].optionString= (char*)sClassPath.getStr();
     options[0].extraInfo= NULL;
 
@@ -1741,9 +1692,9 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
     rtl::OString sJavaOption("-");
     for( sal_uInt16 x= 0; x< cprops; x++)
     {
-        rtl::OString sOption(rtl::OUStringToOString(jvm.getProperties()[x],
-                                                    RTL_TEXTENCODING_ASCII_US));
-            // TODO encoding???
+        rtl::OString sOption(rtl::OUStringToOString(
+                                 jvm.getProperties()[x],
+                                 osl_getThreadTextEncoding()));
         if (!sOption.matchIgnoreAsciiCase(sJavaOption, 0))
             arProps[x]= rtl::OString("-D") + sOption;
         else

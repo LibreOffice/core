@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-05 12:01:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,16 +325,20 @@ class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo 
 
 public:
     TypeConverter_Impl();
-    ~TypeConverter_Impl();
+    virtual ~TypeConverter_Impl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( RuntimeException );
-    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
+        throw( RuntimeException );
+    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
+        throw( RuntimeException );
 
     // XTypeConverter
-    virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType ) throw( IllegalArgumentException, CannotConvertException, RuntimeException);
-    virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) throw( IllegalArgumentException, CannotConvertException, RuntimeException);
+    virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType )
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException);
+    virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType )
+        throw( IllegalArgumentException, CannotConvertException, RuntimeException);
 };
 
 TypeConverter_Impl::TypeConverter_Impl()
@@ -379,9 +383,6 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
 
     switch (aDestinationClass)
     {
-    // ANY
-//      case TypeClass_ANY: // any sollte schon vorher entschachtelt sein...
-//          break;
     // ENUM
     case TypeClass_ENUM:
         nRet = *(sal_Int32 *)rAny.getValue();
@@ -486,7 +487,6 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("VALUE is out of range!") ),
         Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
-    return 0; // dummy
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -498,9 +498,6 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
 
     switch (aDestinationClass)
     {
-    // ANY
-//      case TypeClass_ANY: // any sollte schon vorher entschachtelt sein...
-//          break;
     // ENUM
     case TypeClass_ENUM:
         fRet = *(sal_Int32 *)rAny.getValue();
@@ -571,7 +568,6 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("VALUE is out of range!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
-    return 0.0; // dummy
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -599,7 +595,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
     // --- to STRUCT, UNION, EXCEPTION ----------------------------------------------------------
     case TypeClass_STRUCT:
-//      case TypeClass_UNION: // todo
+//      case TypeClass_UNION: // xxx todo
     case TypeClass_EXCEPTION:
     {
         // same types or destination type is derived source type?
@@ -613,13 +609,22 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             throw CannotConvertException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("value is not of same or derived type!") ),
-                Reference< XInterface >(), aDestinationClass, FailReason::SOURCE_IS_NO_DERIVED_TYPE, 0 );
+                Reference< XInterface >(), aDestinationClass,
+                FailReason::SOURCE_IS_NO_DERIVED_TYPE, 0 );
         }
         break;
     }
     // --- to INTERFACE -------------------------------------------------------------------------
     case TypeClass_INTERFACE:
     {
+        if (! rVal.hasValue())
+        {
+            // void -> interface (null)
+            void * null_ref = 0;
+            aRet.setValue( &null_ref, aDestType );
+            break;
+        }
+
         if (rVal.getValueTypeClass() != TypeClass_INTERFACE ||
             !*(XInterface * const *)rVal.getValue())
         {
@@ -627,7 +632,8 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
                 OUString( RTL_CONSTASCII_USTRINGPARAM("value is no interface!") ),
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
-        if (! (aRet = (*(XInterface * const *)rVal.getValue())->queryInterface( aDestType )).hasValue())
+        if (! (aRet = (*(XInterface * const *)rVal.getValue())->queryInterface(
+                   aDestType )).hasValue())
         {
             throw CannotConvertException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("value has no such interface!") ),
@@ -640,16 +646,19 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
     {
         if (aSourceClass==TypeClass_SEQUENCE)
         {
-            // wenn beide Sequences vom gleichen Typ sind
             if( aSourceType == aDestType )
                 return rVal;
 
             TypeDescription aSourceTD( aSourceType );
             TypeDescription aDestTD( aDestType );
             typelib_TypeDescription * pSourceElementTD = 0;
-            TYPELIB_DANGER_GET( &pSourceElementTD, ((typelib_IndirectTypeDescription *)aSourceTD.get())->pType );
+            TYPELIB_DANGER_GET(
+                &pSourceElementTD,
+                ((typelib_IndirectTypeDescription *)aSourceTD.get())->pType );
             typelib_TypeDescription * pDestElementTD = 0;
-            TYPELIB_DANGER_GET( &pDestElementTD, ((typelib_IndirectTypeDescription *)aDestTD.get())->pType );
+            TYPELIB_DANGER_GET(
+                &pDestElementTD,
+                ((typelib_IndirectTypeDescription *)aDestTD.get())->pType );
 
             sal_uInt32 nPos = (*(const uno_Sequence * const *)rVal.getValue())->nElements;
             uno_Sequence * pRet = 0;
@@ -658,14 +667,16 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             uno_destructData( &pRet, aDestTD.get(), cpp_release ); // decr ref count
 
             char * pDestElements = (*(uno_Sequence * const *)aRet.getValue())->elements;
-            const char * pSourceElements = (*(const uno_Sequence * const *)rVal.getValue())->elements;
+            const char * pSourceElements =
+                (*(const uno_Sequence * const *)rVal.getValue())->elements;
 
             while (nPos--)
             {
                 char * pDestPos = pDestElements + (nPos * pDestElementTD->nSize);
                 const char * pSourcePos = pSourceElements + (nPos * pSourceElementTD->nSize);
 
-                Any aElement( convertTo( Any( pSourcePos, pSourceElementTD ), pDestElementTD->pWeakRef ) );
+                Any aElement(
+                    convertTo( Any( pSourcePos, pSourceElementTD ), pDestElementTD->pWeakRef ) );
 
                 sal_Bool bSucc = uno_assignData(
                     pDestPos, pDestElementTD,
@@ -690,7 +701,8 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
             {
-                if (((const OUString *)rVal.getValue())->equalsIgnoreAsciiCase( ((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos] ))
+                if (((const OUString *)rVal.getValue())->equalsIgnoreAsciiCase(
+                        ((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos] ))
                     break;
             }
         }
@@ -708,12 +720,15 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
         if (nPos >= 0)
         {
-            aRet.setValue( &((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos], aEnumTD.get() );
+            aRet.setValue(
+                &((typelib_EnumTypeDescription *)aEnumTD.get())->pEnumValues[nPos],
+                aEnumTD.get() );
         }
         else
         {
             throw CannotConvertException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("value cannot be converted to demanded ENUM!") ),
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("value cannot be converted to demanded ENUM!") ),
                 Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
         }
         break;
@@ -723,21 +738,20 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         // else simple type conversion possible?
         try
         {
-            aRet = convertToSimpleType( rVal, aDestinationClass );  // CannotConvertException darf durchfliegen
+            aRet = convertToSimpleType( rVal, aDestinationClass );
         }
         catch (IllegalArgumentException &)
         {
-            // ...FailReason::INVALID fliegt
+            // ...FailReason::INVALID is thrown
         }
     }
 
-    if (aRet.getValueTypeClass() != TypeClass_VOID)
+    if (aRet.hasValue())
         return aRet;
 
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("conversion not possible!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
-    return Any(); // dummy
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -758,7 +772,9 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     case TypeClass_ENUM:
     case TypeClass_UNKNOWN:
     case TypeClass_MODULE:
-        throw IllegalArgumentException();
+        throw IllegalArgumentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("destination type is not simple!") ),
+            Reference< XInterface >(), (sal_Int16) 1 );
     }
 
     Type aSourceType = rVal.getValueType();
@@ -885,7 +901,9 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             }
             if (nPos >= 0)
             {
-                aRet.setValue( &((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos], ::getCppuType( (const OUString *)0 ) );
+                aRet.setValue(
+                    &((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos],
+                    ::getCppuType( (const OUString *)0 ) );
             }
             else
             {
@@ -931,33 +949,21 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         }
     }
 
-    if (aRet.getValueTypeClass() != TypeClass_VOID)
+    if (aRet.hasValue())
         return aRet;
 
     throw CannotConvertException(
         OUString( RTL_CONSTASCII_USTRINGPARAM("conversion not possible!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
-    return Any(); // dummy
 }
 
 //*************************************************************************
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-    const Reference< XComponentContext > & rSMgr )
+    const Reference< XComponentContext > & )
     throw( RuntimeException )
 {
-    Reference< XInterface > rRet;
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        static WeakReference < XInterface > rwInstance;
-        rRet = rwInstance;
-
-        if( ! rRet.is() )
-        {
-            rRet = (OWeakObject *)new TypeConverter_Impl();
-            rwInstance = rRet;
-        }
-    }
-    return rRet;
+    static Reference< XInterface > s_ref( (OWeakObject *) new TypeConverter_Impl() );
+    return s_ref;
 }
 
 }

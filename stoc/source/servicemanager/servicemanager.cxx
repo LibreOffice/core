@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-15 14:09:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,6 +661,9 @@ public:
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException);
+    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(
+        const OUString& aServiceName, Reference< XComponentContext > const & xContext )
+        throw(::com::sun::star::uno::RuntimeException);
 
     // XComponent
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
@@ -683,10 +686,12 @@ public:
 
 protected:
     inline void check_undisposed() const SAL_THROW( (lang::DisposedException) );
+    virtual void SAL_CALL disposing();
 
     sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
-    virtual Sequence< Reference< XInterface > > queryServiceFactories(const OUString& aServiceName);
+    virtual Sequence< Reference< XInterface > > queryServiceFactories(
+        const OUString& aServiceName, Reference< XComponentContext > const & xContext );
 
     Reference< XComponentContext >  m_xContext;
 
@@ -809,7 +814,7 @@ public:
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
     virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw (RuntimeException)
-        { return getRoot()->createContentEnumeration( aServiceName ); }
+        { return getRoot()->createContentEnumeration( aServiceName, m_xContext ); }
 
     // XPropertySet
     Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException)
@@ -1077,7 +1082,10 @@ void OServiceManager::dispose()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
         return;
     t_OServiceManager_impl::dispose();
+}
 
+void OServiceManager::disposing()
+{
     // dispose all factories
     HashSet_Ref aImpls;
     {
@@ -1287,7 +1295,8 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     }
 #endif
 
-    Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
+    Sequence< Reference< XInterface > > factories(
+        queryServiceFactories( rServiceSpecifier, xContext ) );
     Reference< XInterface > const * p = factories.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
     {
@@ -1348,7 +1357,8 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     }
 #endif
 
-    Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
+    Sequence< Reference< XInterface > > factories(
+        queryServiceFactories( rServiceSpecifier, xContext ) );
     Reference< XInterface > const * p = factories.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
     {
@@ -1456,7 +1466,7 @@ Sequence< OUString > OServiceManager::getSupportedServiceNames()
 
 
 Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
-    const OUString& aServiceName )
+    const OUString& aServiceName, Reference< XComponentContext > const & xContext )
 {
     Sequence< Reference< XInterface > > ret;
 
@@ -1493,16 +1503,23 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
 }
 
 // XContentEnumerationAccess
-Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUString& aServiceName)
+Reference<XEnumeration > OServiceManager::createContentEnumeration(
+    const OUString& aServiceName, Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
     Sequence< Reference< XInterface > > factories(
-        OServiceManager::queryServiceFactories( aServiceName ) );
+        OServiceManager::queryServiceFactories( aServiceName, xContext ) );
     if (factories.getLength())
         return new ServiceEnumeration_Impl( factories );
     else
         return Reference< XEnumeration >();
+}
+Reference<XEnumeration > OServiceManager::createContentEnumeration(
+    const OUString& aServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return createContentEnumeration( aServiceName, m_xContext );
 }
 
 // XEnumeration
@@ -1696,6 +1713,9 @@ public:
     // XContentEnumerationAccess
     //Sequence< OUString >          getAvailableServiceNames() throw( (Exception) );
     Reference<XEnumeration > SAL_CALL createContentEnumeration(const OUString& aServiceName) throw(::com::sun::star::uno::RuntimeException);
+    virtual Reference<XEnumeration > SAL_CALL createContentEnumeration(
+        const OUString& aServiceName, Reference< XComponentContext > const & xContext )
+        throw(::com::sun::star::uno::RuntimeException);
 
     // XComponent
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
@@ -1708,12 +1728,15 @@ public:
 
 protected:
     //OServiceManager
-    Sequence< Reference< XInterface > > queryServiceFactories(const OUString& aServiceName);
+    Sequence< Reference< XInterface > > queryServiceFactories(
+        const OUString& aServiceName, Reference< XComponentContext > const & xContext );
 private:
     Reference<XRegistryKey >        getRootKey();
-    Reference<XInterface > loadWithImplementationName( const OUString & rImplName );
+    Reference<XInterface > loadWithImplementationName(
+        const OUString & rImplName, Reference< XComponentContext > const & xContext );
     Sequence<OUString>          getFromServiceName(const OUString& serviceName);
-    Reference<XInterface > loadWithServiceName( const OUString & rImplName );
+    Reference<XInterface > loadWithServiceName(
+        const OUString & rImplName, Reference< XComponentContext > const & xContext );
     void                        fillAllNamesFromRegistry( HashSet_OWString & );
 
     sal_Bool                    m_searchedRegistry;
@@ -1792,7 +1815,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
  * Create a service provider from the registry with an implementation name
  */
 Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
-    const OUString& name )
+    const OUString& name, Reference< XComponentContext > const & xContext )
 {
     Reference<XInterface > ret;
 
@@ -1807,7 +1830,10 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 
         if( xImpKey.is() )
         {
-            ret = createSingleRegistryFactory( this, name, xImpKey );
+            ret = createSingleRegistryFactory(
+                Reference< lang::XMultiServiceFactory >(
+                    xContext->getServiceManager(), UNO_QUERY_THROW ),
+                name, xImpKey );
             insert( makeAny( ret ) );
             // Remember this factory as loaded in contrast to inserted ( XSet::insert)
             // factories. Those loaded factories in this set are candidates for being
@@ -1838,12 +1864,13 @@ Sequence<OUString> ORegistryServiceManager::getFromServiceName(
  * Create a service provider from the registry
  */
 Reference<XInterface > ORegistryServiceManager::loadWithServiceName(
-    const OUString& serviceName )
+    const OUString& serviceName, Reference< XComponentContext > const & xContext )
 {
     Sequence<OUString> implEntries = getFromServiceName( serviceName );
     for (sal_Int32 i = 0; i < implEntries.getLength(); i++)
     {
-        Reference< XInterface > x( loadWithImplementationName( implEntries.getConstArray()[i] ) );
+        Reference< XInterface > x(
+            loadWithImplementationName( implEntries.getConstArray()[i], xContext ) );
         if (x.is())
             return x;
     }
@@ -1922,10 +1949,10 @@ Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
 
 // OServiceManager
 Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactories(
-    const OUString& aServiceName )
+    const OUString& aServiceName, Reference< XComponentContext > const & xContext )
 {
     Sequence< Reference< XInterface > > ret(
-        OServiceManager::queryServiceFactories( aServiceName ) );
+        OServiceManager::queryServiceFactories( aServiceName, xContext ) );
     if (ret.getLength())
     {
         return ret;
@@ -1933,15 +1960,16 @@ Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactori
     else
     {
         MutexGuard aGuard( m_mutex );
-        Reference< XInterface > x( loadWithServiceName( aServiceName ) );
+        Reference< XInterface > x( loadWithServiceName( aServiceName, xContext ) );
         if (! x.is())
-            x = loadWithImplementationName( aServiceName );
+            x = loadWithImplementationName( aServiceName, xContext );
         return Sequence< Reference< XInterface > >( &x, 1 );
     }
 }
 
 // XContentEnumerationAccess
-Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(const OUString& aServiceName)
+Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
+    const OUString& aServiceName, Reference< XComponentContext > const & xContext )
     throw(::com::sun::star::uno::RuntimeException)
 {
     check_undisposed();
@@ -1956,11 +1984,17 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(const
         aImplName = aImpls.getConstArray()[i];
         if ( !haveFactoryWithThisImplementation(aImplName) )
         {
-            loadWithImplementationName( aImplName );
+            loadWithImplementationName( aImplName, xContext );
         }
     }
     // call the superclass to enumerate all contents
-    return OServiceManager::createContentEnumeration( aServiceName );
+    return OServiceManager::createContentEnumeration( aServiceName, xContext );
+}
+Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(
+    const OUString& aServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    return createContentEnumeration( aServiceName, m_xContext );
 }
 
 // OServiceManager

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,18 +582,34 @@ Any Invocation_Impl::getValue( const OUString& PropertyName )
 {
     if (_xDirect.is())
         return _xDirect->getValue( PropertyName );
-    // PropertySet
-    if( _xIntrospectionAccess.is() && _xPropertySet.is()
-        && _xIntrospectionAccess->hasProperty( PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
+    try
     {
-        return _xPropertySet->getPropertyValue( PropertyName );
+        // PropertySet
+        if( _xIntrospectionAccess.is() && _xPropertySet.is()
+            && _xIntrospectionAccess->hasProperty
+            ( PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
+        {
+            return _xPropertySet->getPropertyValue( PropertyName );
+        }
+        // NameAccess
+        if( _xNameAccess.is() && _xNameAccess->hasByName( PropertyName ) )
+            return _xNameAccess->getByName( PropertyName );
     }
-    // NameAccess
-    if( _xNameAccess.is() && _xNameAccess->hasByName( PropertyName ) )
-        return _xNameAccess->getByName( PropertyName );
+    catch (UnknownPropertyException &)
+    {
+        throw;
+    }
+    catch (RuntimeException &)
+    {
+        throw;
+    }
+    catch (Exception &)
+    {
+    }
 
-    throw UnknownPropertyException();
-    return Any();   // dummy
+    throw UnknownPropertyException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get value ") ) + PropertyName,
+        Reference< XInterface >() );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -604,43 +620,74 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         _xDirect->setValue( PropertyName, Value );
     else
     {
-        // Properties
-
-      if( _xIntrospectionAccess.is() && _xPropertySet.is()
-            && _xIntrospectionAccess->hasProperty( PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
+        try
         {
-                 Property aProp = _xIntrospectionAccess->getProperty( PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
-            Reference < XIdlClass > r = TypeToIdlClass( aProp.Type, xCoreReflection );
-            if( r->isAssignableFrom(
-                                   TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
-                _xPropertySet->setPropertyValue( PropertyName, Value );
-            else if( xTypeConverter.is() )
-                _xPropertySet->setPropertyValue( PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
-            else
-                throw CannotConvertException();
-        }
-        // NameContainer
-        else
+            // Properties
+            if( _xIntrospectionAccess.is() && _xPropertySet.is()
+                && _xIntrospectionAccess->hasProperty(
+                    PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS ) )
+            {
+                Property aProp = _xIntrospectionAccess->getProperty(
+                    PropertyName, PropertyConcept::ALL ^ PropertyConcept::DANGEROUS );
+                Reference < XIdlClass > r = TypeToIdlClass( aProp.Type, xCoreReflection );
+                if( r->isAssignableFrom( TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
+                    _xPropertySet->setPropertyValue( PropertyName, Value );
+                else if( xTypeConverter.is() )
+                    _xPropertySet->setPropertyValue(
+                        PropertyName, xTypeConverter->convertTo( Value, aProp.Type ) );
+                else
+                    throw RuntimeException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("no type converter service!") ),
+                        Reference< XInterface >() );
+            }
+            // NameContainer
+            else if( _xNameContainer.is() )
+            {
+                Any aConv;
+                Reference < XIdlClass > r =
+                    TypeToIdlClass( _xNameContainer->getElementType(), xCoreReflection );
+                if( r->isAssignableFrom(TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
+                    aConv = Value;
+                else if( xTypeConverter.is() )
+                    aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
+                else
+                    throw RuntimeException(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("no type converter service!") ),
+                        Reference< XInterface >() );
 
-        if( _xNameContainer.is() )
+                // bei Vorhandensein ersetzen, ansonsten einfuegen
+                if (_xNameContainer->hasByName( PropertyName ))
+                    _xNameContainer->replaceByName( PropertyName, aConv );
+                else
+                    _xNameContainer->insertByName( PropertyName, aConv );
+            }
+            else
+                throw UnknownPropertyException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("no introspection nor name container!") ),
+                    Reference< XInterface >() );
+        }
+        catch (UnknownPropertyException &)
         {
-            Any aConv;
-            Reference < XIdlClass > r = TypeToIdlClass( _xNameContainer->getElementType(), xCoreReflection );
-            if( r->isAssignableFrom(TypeToIdlClass( Value.getValueType(), xCoreReflection ) ) )
-                aConv = Value;
-            else if( xTypeConverter.is() )
-                aConv = xTypeConverter->convertTo( Value, _xNameContainer->getElementType() );
-            else
-                throw CannotConvertException();
-
-            // bei Vorhandensein ersetzen, ansonsten einfuegen
-            if (_xNameContainer->hasByName( PropertyName ))
-                _xNameContainer->replaceByName( PropertyName, aConv );
-            else
-                _xNameContainer->insertByName( PropertyName, aConv );
+            throw;
         }
-        else
-            throw UnknownPropertyException();
+        catch (CannotConvertException &)
+        {
+            throw;
+        }
+        catch (InvocationTargetException &)
+        {
+            throw;
+        }
+        catch (RuntimeException &)
+        {
+            throw;
+        }
+        catch (Exception & exc)
+        {
+            throw InvocationTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured in setValue(): ") ) +
+                exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
+        }
     }
 }
 
@@ -662,11 +709,15 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         Sequence<ParamInfo> aFParams        = xMethod->getParameterInfos();
         const ParamInfo* pFParams           = aFParams.getConstArray();
         sal_uInt32 nFParamsLen              = aFParams.getLength();
+        if (nFParamsLen != InParams.getLength())
+        {
+            throw IllegalArgumentException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("incorrect number of parameters passed invoking function ") ) + FunctionName,
+                (OWeakObject *) this, (sal_Int16) 1 );
+        }
 
         // IN Parameter
         const Any* pInParams                = InParams.getConstArray();
-        sal_uInt32 nInParamsLen             = InParams.getLength();
-        OSL_ENSURE( nInParamsLen == nFParamsLen, "### new convention used for XInvocation::invoke!" );
 
         // Introspection Invoke Parameter
         Sequence<Any> aInvokeParams( nFParamsLen );
@@ -689,11 +740,6 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                 // is IN/INOUT parameter?
                 if (rFParam.aMode != ParamMode_OUT)
                 {
-//                      // IN parameter available?
-//                      if (nInIndex >= nInParamsLen)
-//                          throw CannotConvertException();
-                    //TODO: Parameter? throw( CannotConvertException( OUString( RTL_CONSTASCII_USTRINGPARAM(not enough IN parameters available!")), Reference<XInterface>(), rDestType->getTypeClass(), FailReason::NO_DEFAULT_AVAILABLE, nInIndex ) );
-
                     if (rDestType->isAssignableFrom( TypeToIdlClass( pInParams[nPos].getValueType(), xCoreReflection ) ))
                     {
                         pInvokeParams[nPos] = pInParams[nPos];

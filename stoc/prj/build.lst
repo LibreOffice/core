@@ -17,4 +17,3 @@ tc	stoc\source\proxy_factory				nmake	-	all	tc_proxyfact NULL
 tc	stoc\source\typeconv					nmake	-	all	tc_tcv tc_nservice NULL
 tc	stoc\source\javavm						nmake	-	all	tc_jvm NULL
 tc	stoc\source\javaloader					nmake	-	all	tc_jvload NULL
-tc	stoc\source\logging					    nmake	-	all	tc_logu NULL

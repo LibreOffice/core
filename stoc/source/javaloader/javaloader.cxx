@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 10:51:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,7 @@ namespace stoc_javaloader {
         catch(RuntimeException & runtimeException) {
             OString message = OUStringToOString(runtimeException.Message, RTL_TEXTENCODING_ASCII_US);
             osl_trace("javaloader - could not init javaloader cause of %s", message.getStr());
+            throw;
         }
 
         return xRet;

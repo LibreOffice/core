@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 16:41:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,8 +444,10 @@ inline sal_Bool extract(
     IdlReflectionServiceImpl * pRefl )
 {
     rDest.clear();
-    if (rObj.hasValue() && pTo)
+    if (0 != pTo)
     {
+        if (! rObj.hasValue())
+            return sal_True;
         if (rObj.getValueTypeClass() == TypeClass_INTERFACE)
         {
             return ::uno_type_assignData(

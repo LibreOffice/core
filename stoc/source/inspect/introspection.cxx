@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-07 14:54:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2915,10 +2915,22 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                                 {
                                     // Eintragen
                                     rMethodNameMap[ aMethName ] = iAllExportedMethod;
-                                }
 
-                                // Tabelle fuer XExactName pflegen
-                                rLowerToExactNameMap[ toLower( aMethName ) ] = aMethName;
+                                    // Tabelle fuer XExactName pflegen
+                                    rLowerToExactNameMap[ toLower( aMethName ) ] = aMethName;
+                                }
+                                else
+                                {
+                                    sal_Int32 iHashResult = (*aIt).second;
+
+                                    Reference<XIdlMethod> xExistingMethod = pDestMethods[ iHashResult ];
+
+                                    Reference< XIdlClass > xExistingMethClass =
+                                        xExistingMethod->getDeclaringClass();
+                                    Reference< XIdlClass > xNewMethClass = rxMethod->getDeclaringClass();
+                                    if( xExistingMethClass->equals( xNewMethClass ) )
+                                        continue;
+                                }
 
                                 pDestMethods[ iAllExportedMethod ] = rxMethod;
 
@@ -2977,7 +2989,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                             bXInterfaceIsInvalid = sal_True;
 
                         delete[] pMethodTypes;
-                        delete pLocalMethodConcepts;
+                        delete[] pLocalMethodConcepts;
                     }
 
                     // Super-Klasse(n) vorhanden? Dann dort fortsetzen

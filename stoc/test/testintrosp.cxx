@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-19 14:16:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         {
             float f;
             aValue >>= f;
-            sprintf( pBuffer, "%f", f );
+            snprintf( pBuffer, sizeof( pBuffer ), "%f", f );
             aRetStr = OUString( pBuffer, strlen( pBuffer ), RTL_TEXTENCODING_ASCII_US );
             break;
         }
@@ -209,7 +209,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         {
             double d;
             aValue >>= d;
-            sprintf( pBuffer, "%f", d );
+            snprintf( pBuffer, sizeof( pBuffer ), "%f", d );
             aRetStr = OUString( pBuffer, strlen( pBuffer ), RTL_TEXTENCODING_ASCII_US );
             break;
         }

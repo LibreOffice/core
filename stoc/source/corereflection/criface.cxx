@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 12:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
     return Any(); // dummy
 }
 //__________________________________________________________________________________________________
-void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
+void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     if (getTypeDescr()->bReadOnly)
@@ -363,96 +363,10 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
         (XWeak *)(OWeakObject *)this, 0 );
 }
 //__________________________________________________________________________________________________
-void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
+void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
-    if (getTypeDescr()->bReadOnly)
-    {
-        throw IllegalAccessException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("cannot set readonly attribute!") ),
-            (XWeak *)(OWeakObject *)this );
-    }
-
-    uno_Interface * pUnoI = getReflection()->mapToUno(
-        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
-    OSL_ENSURE( pUnoI, "### illegal destination object given!" );
-    if (pUnoI)
-    {
-        TypeDescription aTD( getTypeDescr()->pAttributeTypeRef );
-        typelib_TypeDescription * pTD = aTD.get();
-
-        // construct uno value to be set
-        void * pArgs[1];
-        void * pArg = pArgs[0] = alloca( pTD->nSize );
-
-        sal_Bool bAssign;
-        if (pTD->eTypeClass == typelib_TypeClass_ANY)
-        {
-            uno_copyAndConvertData( pArg, SAL_CONST_CAST( Any *, &rValue ),
-                                    pTD, getReflection()->getCpp2Uno().get() );
-            bAssign = sal_True;
-        }
-        else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
-        {
-            uno_copyAndConvertData( pArg, SAL_CONST_CAST( void *, rValue.getValue() ),
-                                    pTD, getReflection()->getCpp2Uno().get() );
-            bAssign = sal_True;
-        }
-        else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
-        {
-            Reference< XInterface > xObj;
-            if (bAssign = extract( rValue, (typelib_InterfaceTypeDescription *)pTD,
-                                   xObj, getReflection() ))
-            {
-                *(void **)pArg = getReflection()->getCpp2Uno().mapInterface(
-                    xObj.get(), (typelib_InterfaceTypeDescription *)pTD );
-            }
-        }
-        else
-        {
-            typelib_TypeDescription * pValueTD = 0;
-            TYPELIB_DANGER_GET( &pValueTD, rValue.getValueTypeRef() );
-            // construct temp uno val to do proper assignment: todo opt
-            void * pTemp = alloca( pValueTD->nSize );
-            uno_copyAndConvertData(
-                pTemp, (void *)rValue.getValue(), pValueTD, getReflection()->getCpp2Uno().get() );
-            uno_constructData(
-                pArg, pTD );
-            // assignment does simple conversion
-            bAssign = uno_assignData(
-                pArg, pTD, pTemp, pValueTD, 0, 0, 0 );
-            uno_destructData(
-                pTemp, pValueTD, 0 );
-            TYPELIB_DANGER_RELEASE( pValueTD );
-        }
-
-        if (bAssign)
-        {
-            uno_Any aExc;
-            uno_Any * pExc = &aExc;
-            (*pUnoI->pDispatcher)( pUnoI, (typelib_TypeDescription *)getTypeDescr(), 0, pArgs, &pExc );
-            (*pUnoI->release)( pUnoI );
-
-            uno_destructData( pArg, pTD, 0 );
-            if (pExc)
-            {
-                // DBO TODO: throw original exception generically
-                uno_any_destruct( pExc, 0 );
-                throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during get of attribute!") ),
-                    *(const Reference< XInterface > *)rObj.getValue() );
-            }
-            return;
-        }
-        (*pUnoI->release)( pUnoI );
-
-        throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
-            *(const Reference< XInterface > *)rObj.getValue(), 1 );
-    }
-    throw IllegalArgumentException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal destination object given!") ),
-        (XWeak *)(OWeakObject *)this, 0 );
+    IdlAttributeFieldImpl::set( const_cast< Any & >( rObj ), rValue );
 }
 
 
@@ -781,7 +695,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             if (pParams[nPos].bIn)
             {
                 sal_Bool bAssign;
-                if (typelib_typedescriptionreference_equals( pCppArgs[nPos].getValueTypeRef(), pTD->pWeakRef ))
+                if (typelib_typedescriptionreference_equals(
+                        pCppArgs[nPos].getValueTypeRef(), pTD->pWeakRef ))
                 {
                     uno_type_copyAndConvertData(
                         ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
@@ -795,8 +710,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                         pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = sal_True;
                 }
-                else if (pCppArgs[nPos].getValueTypeClass() == TypeClass_INTERFACE &&
-                         pTD->eTypeClass == typelib_TypeClass_INTERFACE)
+                else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
                 {
                     Reference< XInterface > xDest;
                     if (bAssign = extract( pCppArgs[nPos], (typelib_InterfaceTypeDescription *)pTD,

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: dbo $ $Date: 2002-11-13 11:00:23 $
+#   last change: $Author: hr $ $Date: 2003-03-27 12:01:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -262,6 +262,7 @@ $(BIN)$/stoctest.rdb: $(ALLIDLFILES)
     +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(SOLARBINDIR)$/udkapi.rdb
+    +regcomp -register -r $@ -c corefl
     touch $@
 
 $(MISC)$/test_types_generated.flag : $(BIN)$/stoctest.rdb  makefile.mk
