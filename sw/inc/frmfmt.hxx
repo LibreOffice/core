@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: od $ $Date: 2002-08-28 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,19 @@ public:
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+
+    /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
+
+        OD 22.08.2002 - overloading virtual method and its default implementation,
+        because format of fly frame provides transparent backgrounds.
+        Method determines, if background of fly frame has to be drawn transparent.
+
+        @author OD
+
+        @return true, if background color is transparent, but not "no fill"
+        or a existing background graphic is transparent.
+    */
+    virtual const sal_Bool IsBackgroundTransparent() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };
