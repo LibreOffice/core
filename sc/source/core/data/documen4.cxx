@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:31:14 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "patattr.hxx"
 #include "chgtrack.hxx"
 #include "progress.hxx"
+#include "compiler.hxx"
 
 // -----------------------------------------------------------------------
 
