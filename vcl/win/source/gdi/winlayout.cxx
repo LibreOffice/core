@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-03 16:21:40 $
+ *  last change: $Author: hdu $ $Date: 2002-04-05 13:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,8 @@ protected:
     void            Justify( long nNewWidth );
     void            ApplyDXArray( const long* pDXArray );
 
+    bool            GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex ) const;
+
 private:
     HDC             mhDC;
     mutable SCRIPT_CACHE maScriptCache;
@@ -620,6 +622,58 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
+bool UniscribeLayout::GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex ) const
+{
+    SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
+    int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
+
+    if( (mnFirstCharIndex >= nCharIndexLimit) || (mnEndCharIndex <= rScriptItem.iCharPos) )
+        return false;
+
+    // default: subrange is complete range
+    nMinIndex = 0;
+    nEndIndex = mpGlyphCounts[ nItem ];
+
+    // find glyph subrange if the script item is not used in tuto
+    if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
+    {
+        // get glyph range from char range by looking at cluster boundries
+        nMinIndex = mnGlyphCapacity;
+        int nMaxIndex = 0;
+
+        int i = mnFirstCharIndex;
+        if( i < rScriptItem.iCharPos )
+            i = rScriptItem.iCharPos;
+        if( nCharIndexLimit > mnEndCharIndex )
+            nCharIndexLimit = mnEndCharIndex;
+        for(; i < nCharIndexLimit; ++i )
+        {
+            int n = mpLogClusters[ i ];
+            if( nMinIndex > n )
+                nMinIndex = n;
+            if( nMaxIndex < n )
+                nMaxIndex = n;
+        }
+
+        // account for multiple glyphs at rightmost character
+        // test only needed when rightmost glyph isn't referenced
+        if( nMaxIndex + 1 < mpGlyphCounts[ nItem ] )
+        {
+            int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
+            for( int i = 0; i < nCharCount; ++i )
+            {
+                int n = mpLogClusters[ rScriptItem.iCharPos + i ];
+                if( (n < nEndIndex) && (n > nMaxIndex) )
+                    nEndIndex = n;
+            }
+        }
+    }
+
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
 void UniscribeLayout::Draw() const
 {
     Point aRelPos = Point(0,0);
@@ -627,73 +681,32 @@ void UniscribeLayout::Draw() const
     int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        // default: all characters in range => all glyphs in range
-        int nStartIndex = 0;
-        int nMaxIndex = mpGlyphCounts[ nItem ] - 1;
-
-        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
-
-        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
+        // display if there is something to display
+        int nStartIndex, nEndIndex;
+        if( GetItemSubrange( nItem, nStartIndex, nEndIndex ) )
         {
-            // get glyph range from char range by looking at cluster boundries
-            nStartIndex = mnGlyphCapacity;
-            nMaxIndex = 0;
-
-            int i = mnFirstCharIndex;
-            if( i < rScriptItem.iCharPos )
-                i = rScriptItem.iCharPos;
-            if( nCharIndexLimit > mnEndCharIndex )
-                nCharIndexLimit = mnEndCharIndex;
-            for(; i < nCharIndexLimit; ++i )
-            {
-                int n = mpLogClusters[ i ];
-                if( nStartIndex > n )
-                    nStartIndex = n;
-                if( nMaxIndex < n )
-                    nMaxIndex = n;
-            }
-
             // adjust draw position relative to cluster start
+            SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
+            int i = mnFirstCharIndex;
             if( !rScriptItem.a.fRTL )
             {
-                i = mnFirstCharIndex;
                 while( (--i >= rScriptItem.iCharPos) && (nStartIndex == mpLogClusters[i]) )
                     aRelPos -= Point( mpCharWidths[i], 0 );
             }
             else
             {
-                i = mnFirstCharIndex;
+                int nMaxIndex = mpLogClusters[ i ];
                 while( (--i >= rScriptItem.iCharPos) && (nMaxIndex == mpLogClusters[i]) )
                     aRelPos += Point( mpCharWidths[i], 0 );
             }
-        }
-
-        // display if there is something to display
-        int nEndIndex = nMaxIndex + 1;
-        if( nStartIndex < nEndIndex )
-        {
-            // account for multiple glyphs at rightmost character
-            // test only needed when rightmost glyph isn't referenced
-            if( nEndIndex < mpGlyphCounts[ nItem ] )
-            {
-                nEndIndex = mpGlyphCounts[ nItem ];
-                int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
-                for( int i = 0; i < nCharCount; ++i )
-                {
-                    int n = mpLogClusters[ rScriptItem.iCharPos + i ];
-                    if( (n < nEndIndex) && (n > nMaxIndex) )
-                        nEndIndex = n;
-                }
-            }
-
-            // now draw the matching glyphs in this item
-            nStartIndex += nGlyphsProcessed;
-            nEndIndex += nGlyphsProcessed;
 
             int* pJustifications = mpJustifications;
             if( pJustifications )
                 pJustifications += nStartIndex;
+
+            // now draw the matching glyphs in this item
+            nStartIndex += nGlyphsProcessed;
+            nEndIndex += nGlyphsProcessed;
 
             Point aPos = GetDrawPosition( aRelPos );
             HRESULT nRC = (*pScriptTextOut)( mhDC, &maScriptCache,
@@ -704,7 +717,7 @@ void UniscribeLayout::Draw() const
                 pJustifications,
                 mpGlyphOffsets + nStartIndex );
 
-            for( int i = nStartIndex; i < nEndIndex; ++i )
+            for( i = nStartIndex; i < nEndIndex; ++i )
                 aRelPos += Point( mpGlyphAdvances[ i ], 0 );
         }
 
@@ -716,86 +729,48 @@ void UniscribeLayout::Draw() const
 
 bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
-    long nWidth = 0;
+    Point aRelPos = Point(0,0);
 
     int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        // default: all characters in range => all glyphs in range
-        int nStartIndex = 0;
-        int nMaxIndex = mpGlyphCounts[ nItem ] - 1;
-
-        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
-
-        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
+        // display if there is something to display
+        int nStartIndex, nEndIndex;
+        if( GetItemSubrange( nItem, nStartIndex, nEndIndex ) )
         {
-            // get glyph range from char range by looking at cluster boundries
-            nStartIndex = mnGlyphCapacity;
-            nMaxIndex = 0;
-
-            int i = mnFirstCharIndex;
-            if( i < rScriptItem.iCharPos )
-                i = rScriptItem.iCharPos;
-            if( nCharIndexLimit > mnEndCharIndex )
-                nCharIndexLimit = mnEndCharIndex;
-            for(; i < nCharIndexLimit; ++i )
-            {
-                int n = mpLogClusters[ i ];
-                if( nStartIndex > n )
-                    nStartIndex = n;
-                if( nMaxIndex < n )
-                    nMaxIndex = n;
-            }
+            SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
 
             // adjust draw position relative to cluster start
+            int i = mnFirstCharIndex;
             if( !rScriptItem.a.fRTL )
             {
-                i = mnFirstCharIndex;
                 while( (--i >= rScriptItem.iCharPos) && (nStartIndex == mpLogClusters[i]) )
-                    nWidth -= mpCharWidths[i];
+                    aRelPos -= Point( mpCharWidths[i], 0 );
             }
             else
             {
-                // TODO: implement adjustment for RTL case
-            }
-        }
-
-        // display if there is something to display
-        int nEndIndex = nMaxIndex + 1;
-        if( nStartIndex < nEndIndex )
-        {
-            // account for multiple glyphs at rightmost character
-            // test only needed when rightmost glyph isn't referenced
-            if( nEndIndex < mpGlyphCounts[ nItem ] )
-            {
-                nEndIndex = mpGlyphCounts[ nItem ];
-                int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
-                for( int i = 0; i < nCharCount; ++i )
-                {
-                    int n = mpLogClusters[ rScriptItem.iCharPos + i ];
-                    if( (n < nEndIndex) && (n > nMaxIndex) )
-                        nEndIndex = n;
-                }
+                int nMaxIndex = mpLogClusters[ nEndIndex - 1 ];
+                while( (--i >= rScriptItem.iCharPos) && (nMaxIndex == mpLogClusters[i]) )
+                    aRelPos += Point( mpCharWidths[i], 0 );
             }
 
             // now we know the matching glyphs in this item
             nStartIndex += nGlyphsProcessed;
             nEndIndex += nGlyphsProcessed;
-        }
 
-        for( int i = nStartIndex; i < nEndIndex; ++i )
-        {
-            // get outline of individual glyph
-            PolyPolygon aGlyphOutline;
-            if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
-                return false;
+            for( i = nStartIndex; i < nEndIndex; ++i )
+            {
+                // get outline of individual glyph
+                PolyPolygon aGlyphOutline;
+                if( !rSalGraphics.GetGlyphOutline( mpOutGlyphs[i], aGlyphOutline ) )
+                    return false;
 
-            // insert outline at correct position
-            aGlyphOutline.Move( nWidth, 0 );
-            nWidth += mpGlyphAdvances[i];
-            for( int j = 0; j < aGlyphOutline.Count(); ++j )
-                rPolyPoly.Insert( aGlyphOutline[j] );
+                // insert outline at correct position
+                aGlyphOutline.Move( aRelPos.X(), aRelPos.Y() );
+                aRelPos += Point( mpGlyphAdvances[ i ], 0 );
+                for( int j = 0; j < aGlyphOutline.Count(); ++j )
+                    rPolyPoly.Insert( aGlyphOutline[j] );
+            }
         }
     }
 
@@ -840,9 +815,9 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
 
 Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 {
-    int nStartIndex = mnGlyphCapacity;
+    int nStartIndex = mnGlyphCapacity;  // mark as untouched
     int nGlyphIndex = 0;
-    int nEndIndex = 0;
+    int nEndIndex = -1;                 // mark as untouched
 
     int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
@@ -854,54 +829,30 @@ Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
         SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
         int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
 
-        if( (rScriptItem.iCharPos < mnFirstCharIndex) || (mnEndCharIndex < nCharIndexLimit) )
-        {
+        if( (rScriptItem.iCharPos <= nCharIndex) && (nCharIndex < nCharIndexLimit) )
             nGlyphIndex = mpLogClusters[ nCharIndex - rScriptItem.iCharPos ] + nGlyphsProcessed;
 
-            // get glyph range from char range by looking at cluster boundries
-            int nMaxIndex = 0;
+        // display if there is something to display
+        int nMinIndex, nMaxIndex;
+        if( GetItemSubrange( nItem, nMinIndex, nMaxIndex ) )
+        {
+            nMinIndex += nGlyphsProcessed;
+            if( nStartIndex > nMinIndex )
+                nStartIndex = nMinIndex;
 
-            int i = mnFirstCharIndex;
-            if( i < rScriptItem.iCharPos )
-                i = rScriptItem.iCharPos;
-            if( nCharIndexLimit > mnEndCharIndex )
-                nCharIndexLimit = mnEndCharIndex;
-            for(; i < nCharIndexLimit; ++i )
-            {
-                int n = mpLogClusters[ i ] + nGlyphsProcessed;
-                if( nStartIndex > n )
-                    nStartIndex = n;
-                if( nMaxIndex < n )
-                    nMaxIndex = n;
-            }
-
-            if( bRTL )
-            {
-                // display if there is something to display
-                nEndIndex = nMaxIndex + 1;
-                if( nStartIndex < nEndIndex )
-                {
-                    // account for multiple glyphs at rightmost character
-                    // test only needed when rightmost glyph isn't referenced
-                    nEndIndex -= nGlyphsProcessed;
-                    if( nEndIndex < mpGlyphCounts[ nItem ] )
-                    {
-                        nEndIndex = mpGlyphCounts[ nItem ];
-                        int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
-                        for( int i = 0; i < nCharCount; ++i )
-                        {
-                            int n = mpLogClusters[ rScriptItem.iCharPos + i ];
-                            if( (n < nEndIndex) && (n > nMaxIndex) )
-                                nEndIndex = n;
-                        }
-                    }
-                    nEndIndex += nGlyphsProcessed;
-                }
-            }
+            nMaxIndex += nGlyphsProcessed;
+            if( nEndIndex < nMaxIndex )
+                nEndIndex = nMaxIndex;
         }
 
         nGlyphsProcessed += nGlyphCount;
     }
+
+    // set StartIndex and EndIndex to defaults when not touched
+    if( nStartIndex >= mnGlyphCapacity )
+        nStartIndex = 0;
+    if( nEndIndex < 0 )
+        nEndIndex = nGlyphsProcessed;
 
     long nXPos = 0;
 
@@ -923,17 +874,29 @@ Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 
 void UniscribeLayout::ApplyDXArray( const long* pDXArray )
 {
+    // increase char widths in string range to desired values
+    bool bModified = false;
     int nOldWidth = 0;
     for( int i = mnFirstCharIndex, j = 0; i < mnEndCharIndex; ++i, ++j )
     {
-        mpCharWidths[i] = pDXArray[j] - nOldWidth;
+        int nNewCharWidth = pDXArray[j] - nOldWidth;
+        if( mpCharWidths[i] != nNewCharWidth )
+        {
+            mpCharWidths[i] = nNewCharWidth;
+            bModified = true;
+        }
         nOldWidth = pDXArray[j];
     }
 
+    if( !bModified )
+        return;
+
+    // initialize justifications array
     mpJustifications = new int[ mnGlyphCapacity ];
     for( i = 0; i < mnGlyphCapacity; ++i )
         mpJustifications[ i ] = mpGlyphAdvances[ i ];
 
+    // apply new widths to script items
     int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
@@ -942,14 +905,14 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
             continue;
 
         SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-        int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
 
-        if( mnEndCharIndex > rScriptItem.iCharPos
-        &&  mnFirstCharIndex < (rScriptItem.iCharPos + nCharCount) )
+        if( (mnEndCharIndex > rScriptItem.iCharPos) && (mnFirstCharIndex < nCharIndexLimit) )
         {
             HRESULT nRC = (*pScriptApplyLogicalWidth)(
                 mpCharWidths + rScriptItem.iCharPos,
-                nCharCount, nGlyphCount,
+                nCharIndexLimit - rScriptItem.iCharPos,
+                nGlyphCount,
                 mpLogClusters + rScriptItem.iCharPos,
                 mpVisualAttrs + nGlyphsProcessed,
                 mpGlyphAdvances + nGlyphsProcessed,
@@ -975,10 +938,12 @@ void UniscribeLayout::Justify( long nNewWidth )
         return;
     double fStretch = (double)nNewWidth / nOldWidth;
 
+    // initialize justifications array
     mpJustifications = new int[ mnGlyphCapacity ];
     for( i = 0; i < mnGlyphCapacity; ++i )
         mpJustifications[ i ] = mpGlyphAdvances[ i ];
 
+    // justify stretched script items
     int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
@@ -987,14 +952,13 @@ void UniscribeLayout::Justify( long nNewWidth )
             continue;
 
         SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-        int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
 
-        if( mnEndCharIndex > rScriptItem.iCharPos
-        &&  mnFirstCharIndex < (rScriptItem.iCharPos + nCharCount) )
+        if( (mnEndCharIndex > rScriptItem.iCharPos) &&  (mnFirstCharIndex < nCharIndexLimit) )
         {
             long nItemWidth = 0;
-            for( i = 0; i < nCharCount; ++i )
-                nItemWidth += mpCharWidths[ i+rScriptItem.iCharPos ];
+            for( i = rScriptItem.iCharPos; i < nCharIndexLimit; ++i )
+                nItemWidth += mpCharWidths[ i ];
 
             SCRIPT_FONTPROPERTIES aFontProperties;
             int nMinKashida = 1;
