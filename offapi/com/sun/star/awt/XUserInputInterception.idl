@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUserInputInterception.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:07:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module awt {
 
     @since #107627#
  */
-interface XUserInputInterception : ::com::sun::star::uno::XInterface
+published interface XUserInputInterception : ::com::sun::star::uno::XInterface
 {
     /** Add a new listener that is called on <type
         scope="::com::sun::star::awt">KeyEvent</type>s.  Every listener is
