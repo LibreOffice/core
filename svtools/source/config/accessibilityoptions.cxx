@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-26 15:51:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,14 @@
 #include "smplhint.hxx"
 #endif
 
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
+
+#define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
 
@@ -127,6 +132,7 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void    Commit();
 
+    void        SetVCLSettings();
     sal_Bool    GetAutoDetectSystemHC( )
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bAutoDetectSystemHC ); }
     sal_Bool    GetIsForPagePreviews() const
@@ -267,6 +273,23 @@ void SvtAccessibilityOptions_Impl::Load()
 }
 // -----------------------------------------------------------------------
 
+void SvtAccessibilityOptions_Impl::SetVCLSettings()
+{
+    AllSettings aAllSettings = Application::GetSettings();
+    HelpSettings aHelpSettings = aAllSettings.GetHelpSettings();
+    aHelpSettings.SetTipTimeout( GetIsHelpTipsDisappear() ? GetHelpTipSeconds() * 1000 : HELP_TIP_TIMEOUT);
+    aAllSettings.SetHelpSettings(aHelpSettings);
+    if(aAllSettings.GetStyleSettings().GetUseSystemUIFonts() != GetIsSystemFont() )
+    {
+        StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
+        aStyleSettings.SetUseSystemUIFonts( GetIsSystemFont()  );
+        aAllSettings.SetStyleSettings(aStyleSettings);
+        Application::MergeSystemSettings( aAllSettings );
+    }
+
+    Application::SetSettings(aAllSettings);
+}
+
 void SvtAccessibilityOptions_Impl::Commit()
 {
     ClearModified();
@@ -299,6 +322,7 @@ void SvtAccessibilityOptions_Impl::Commit()
     {
         SfxSimpleHint aHint = SfxSimpleHint( SFX_HINT_ACCESSIBILITY_CHANGED );
         Broadcast(aHint);
+        SetVCLSettings();
     }
 }
 
@@ -358,6 +382,11 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
 void SvtAccessibilityOptions::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     Broadcast( rHint );
+    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    {
+        if ( ((SfxSimpleHint&)rHint).GetId()  == SFX_HINT_ACCESSIBILITY_CHANGED )
+            SetVCLSettings();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -475,5 +504,9 @@ void SvtAccessibilityOptions::SetSelectionInReadonly(sal_Bool bSet)
     sm_pSingleImplConfig->SetSelectionInReadonly(bSet);
 }
 
+void SvtAccessibilityOptions::SetVCLSettings()
+{
+    sm_pSingleImplConfig->SetVCLSettings();
+}
 // -----------------------------------------------------------------------
 
