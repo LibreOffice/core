@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-01 16:10:05 $
+ *  last change: $Author: jb $ $Date: 2002-11-22 14:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,20 +389,9 @@ void SchemaParser::endProperty()
     {
         ElementInfo const & aInfo = this->getActiveNodeInfo();
 
-        // HACK: If type is string we use an empty string as default value
-        // ('Normal' behavior would yield 'no default' aka NULL)
-        if (getActivePropertyType().getTypeClass() == uno::TypeClass_STRING)
-        {
-            m_xHandler->addPropertyWithDefault( aInfo.name,
-                                                aInfo.flags,
-                                                uno::makeAny(OUString()) );
-        }
-        else
-        {
-            m_xHandler->addProperty(aInfo.name,
-                                    aInfo.flags,
-                                    getActivePropertyType());
-        }
+        m_xHandler->addProperty(aInfo.name,
+                                aInfo.flags,
+                                getActivePropertyType());
     }
 
     BasicParser::endProperty();
@@ -422,6 +411,7 @@ void SchemaParser::startValueData(const uno::Reference< sax::XAttributeList >& x
 void SchemaParser::endValueData()
 {
     uno::Any aValue = this->getCurrentValue();
+    OSL_ENSURE(aValue.hasValue(),"configmgr::SchemaParser Warning: Found deprecated explicit NIL value in schema data.");
 
     ElementInfo const & aInfo = this->getActiveNodeInfo();
 

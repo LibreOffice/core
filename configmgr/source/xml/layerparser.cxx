@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-01 16:10:05 $
+ *  last change: $Author: jb $ $Date: 2002-11-22 14:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,15 +316,7 @@ void LayerParser::endProperty()
         if (this->isInUnhandledProperty())
         {
             // No value tag is treated as NULL
-            uno::Any value;
-
-            // HACK: except for strings (where an empty strings is used instead)
-            if (getActivePropertyType().getTypeClass() == uno::TypeClass_STRING)
-            {
-                value <<= rtl::OUString() ;
-            }
-
-            addOrReplaceCurrentProperty(value) ;
+            addOrReplaceCurrentProperty( uno::Any() ) ;
         }
         m_bNewProp = false;
     }
