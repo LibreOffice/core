@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:58:53 $
+ *  last change: $Author: nn $ $Date: 2000-11-30 20:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/forbiddenruleitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/rotmodit.hxx>
@@ -397,6 +398,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
     BOOL            bOutline;
     BOOL            bShadow;
+    BOOL            bForbidden;
     LanguageType    eLang, eCjkLang, eCtlLang;
 
     //! additional parameter to control if language is needed?
@@ -465,6 +467,10 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
             pItem = &rMySet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
 
+        if ( pCondSet->GetItemState( ATTR_FORBIDDEN_RULES, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_FORBIDDEN_RULES );
+        bForbidden = ((const SvxForbiddenRuleItem*)pItem)->GetValue();
+
         if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_LANGUAGE );
         eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
@@ -507,6 +513,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_FONT_CONTOUR )).GetValue();
         bShadow = ((const SvxShadowedItem&)
                         rMySet.Get( ATTR_FONT_SHADOWED )).GetValue();
+        bForbidden = ((const SvxForbiddenRuleItem&)
+                        rMySet.Get( ATTR_FORBIDDEN_RULES )).GetValue();
         eLang = ((const SvxLanguageItem&)
                         rMySet.Get( ATTR_FONT_LANGUAGE )).GetLanguage();
         eCjkLang = ((const SvxLanguageItem&)
@@ -540,6 +548,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxPostureItem   ( eCtlItalic,   EE_CHAR_ITALIC_CTL ) );
     pEditSet->Put( SvxContourItem   ( bOutline,     EE_CHAR_OUTLINE ) );
     pEditSet->Put( SvxShadowedItem  ( bShadow,      EE_CHAR_SHADOW ) );
+    pEditSet->Put( SfxBoolItem      ( EE_PARA_FORBIDDENRULES, bForbidden ) );
     pEditSet->Put( SvxLanguageItem  ( eLang,        EE_CHAR_LANGUAGE ) );
     pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
