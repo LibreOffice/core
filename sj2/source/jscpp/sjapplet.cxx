@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:00:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 
 #include <cstdarg>
+#ifdef SOLAR_JAVA
 #include <jnihelp.hxx>
+#endif // SOLAR_JAVA
 
 #include <sjapplet.hxx>
 
@@ -79,11 +81,15 @@
 
 using namespace ::rtl;
 using namespace ::utl;
+#ifdef SOLAR_JAVA
 using namespace ::sj2;
+#endif // SOLAR_JAVA
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+#ifdef SOLAR_JAVA
 using namespace ::com::sun::star::java;
+#endif // SOLAR_JAVA
 
 SjApplet2::SjApplet2()
   : _pImpl(new SjApplet2_Impl())
@@ -346,7 +352,7 @@ SjINetSettings::SjINetSettings()
 /*
  * Java init function to invoke Java runtime using JNI invocation API.
  */
-
+#ifdef SOLAR_JAVA
 void JRE_PropertyChanged( JNIEnv * env, const SvCommandList & rCmdList )
 {
     jclass pClass = env->FindClass("java/util/Properties");
@@ -389,6 +395,7 @@ void JRE_PropertyChanged( JNIEnv * env, const SvCommandList & rCmdList )
     env->DeleteLocalRef( pProps );
     env->DeleteLocalRef( pClass );
 }
+#endif // SOLAR_JAVA
 
 // Settings are detected by the JavaVM service
 // This function is not necessary anymore
