@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInteractionHandler.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:04 $
+ *  last change:$Date: 2003-05-27 12:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@ public class _XInteractionHandler extends MultiMethodTest {
 
         /*
 
-        final XMultiServiceFactory msf = tParam.getMSF() ;
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        final XMultiServiceFactory msf = (XMultiServiceFactory)tParam.getMSF() ;
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         XComponent textDoc = null ;
         try {
             textDoc = SOF.createTextDoc( null );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _MailMerge.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-26 13:29:34 $
+ *  last change:$Date: 2003-05-27 12:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.text;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiPropertyTest;
 
 public class _MailMerge extends MultiPropertyTest {
@@ -71,9 +72,9 @@ public class _MailMerge extends MultiPropertyTest {
      */
     protected PropertyTester URLTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
-            if (oldValue.equals(util.utils.getOfficeTemp(tParam.getMSF())))
+            if (oldValue.equals(util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())))
                 return util.utils.getFullTestURL(""); else
-                return util.utils.getOfficeTemp(tParam.getMSF());
+                return util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         }
     } ;
 

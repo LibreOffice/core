@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPagePrintable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:14 $
+ *  last change:$Date: 2003-05-27 12:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.text;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XPagePrintable;
 import lib.MultiMethodTest;
 import util.utils;
@@ -156,14 +157,14 @@ public class _XPagePrintable extends MultiMethodTest {
             PropertyValue[] PrintOptions = new PropertyValue[1];
             PropertyValue firstProp = new PropertyValue();
             firstProp.Name = "FileName";
-            log.println("Printing to :"+utils.getOfficeTemp(tParam.getMSF())+
+            log.println("Printing to :"+utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+
                 "XPagePrintable.prt");
-            firstProp.Value = utils.getOfficeTemp(tParam.getMSF())+
+            firstProp.Value = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF())+
                 "XPagePrintable.prt";
             firstProp.State = com.sun.star.beans.PropertyState.DEFAULT_VALUE;
             PrintOptions[0] = firstProp;
             java.io.File aFile = new java.io.File(utils.getOfficeTempDir(
-                tParam.getMSF())+"XPagePrintable.prt");
+                (XMultiServiceFactory)tParam.getMSF())+"XPagePrintable.prt");
             if (aFile.exists()) aFile.delete() ;
             oObj.printPages(PrintOptions);
             res = aFile.exists();
