@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:07:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,56 +67,17 @@ ModelessDialog RID_SCDLG_SOLVER
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 64 ) ;
-    Text = "Zielwertsuche" ;
-    Text [ ENGLISH ] = "Solver" ;
-    Text [ norwegian ] = "+++ Problemløser Solver" ;
-    Text [ italian ] = "Ricerca valore destinazione" ;
-    Text [ portuguese_brazilian ] = "Atingir Meta" ;
-    Text [ portuguese ] = "Resolver" ;
-    Text [ finnish ] = "Tavoitteen haku" ;
-    Text [ danish ] = "Målsøgning" ;
-    Text [ french ] = "Recherche de valeur cible" ;
-    Text [ swedish ] = "Målvärdessökning" ;
-    Text [ dutch ] = "Doelwaarde zoeken" ;
-    Text [ spanish ] = "Buscar valor destino" ;
-    Text [ english_us ] = "Goal Seek" ;
+    Text [ de ] = "Zielwertsuche" ;
+    Text [ en-US ] = "Goal Seek" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     FixedText FT_FORMULACELL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Formelzelle" ;
-        Text [ ENGLISH ] = "~Formula cell" ;
-        Text [ norwegian ] = "~formelcelle" ;
-        Text [ italian ] = "~Cella formula" ;
-        Text [ portuguese_brazilian ] = "Célula de ~fórmula" ;
-        Text [ portuguese ] = "Célula de ~fórmula" ;
-        Text [ finnish ] = "~Kaavasolu" ;
-        Text [ danish ] = "~Formelcelle" ;
-        Text [ french ] = "Cellule de formule" ;
-        Text [ swedish ] = "~Formelcell" ;
-        Text [ dutch ] = "~Formulecel" ;
-        Text [ spanish ] = "Celda de ~fórmula" ;
-        Text [ english_us ] = "~Formula cell" ;
-        Text[ chinese_simplified ] = "å…¬å¼å•å…ƒæ ¼(~F)";
-        Text[ russian ] = "ß÷åéêà ñ ôîğìóëîé";
-        Text[ polish ] = "Komórka ~formu³y";
-        Text[ japanese ] = "æ•°å¼ã‚»ãƒ«(~F)";
-        Text[ chinese_traditional ] = "å…¬å¼å„²å­˜æ ¼(~F)";
-        Text[ arabic ] = "ÎáíÉ ÕíÛÉ";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "Êåëß ôığïõ";
-        Text[ korean ] = "ìˆ˜ì‹ ì…€(~F)";
-        Text[ turkish ] = "~Formül hücresi";
-        Text[ catalan ] = "Cel.la de ~fórmula";
-        Text[ thai ] = "à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™~à¸ªà¸¹à¸•à¸£";
-        Text[ czech ] = "BuÅˆka se vzorcem";
-        Text[ hebrew ] = "~Formelzelle";
-        Text[ hindi ] = "~à¤¸à¥‚à¤¤à¥à¤° à¤•à¤¾ à¤•à¥‹à¤·à¥à¤ ";
-        Text[ slovak ] = "Bun~ka so vzorcom";
-        Text[ hungarian ] = "~KÃ©pletcella";
-        Text[ slovenian ] = "Celica s ~formulo";
+        Text [ de ] = "~Formelzelle" ;
+        Text [ en-US ] = "~Formula cell" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_FORMULACELL
     {
@@ -127,76 +88,21 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_FORMULACELL
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 145 , 14 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "encolher" ;
-        QuickHelpText [ swedish ] = "Förminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "Réduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "ç¸®å°";
-        QuickHelpText[ chinese_simplified ] = "ç¼©å°";
-        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
-        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
-        QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "ì¶•ì†Œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "ZmenÅ¡it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
-        QuickHelpText[ slovak ] = "ZmenÅ¡iÅ¥";
-        QuickHelpText[ hungarian ] = "ZsugorÃ­tÃ¡s";
-        QuickHelpText[ slovenian ] = "SkrÄi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_TARGETVAL
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Zielwert" ;
-        Text [ ENGLISH ] = "Target ~value" ;
-        Text [ norwegian ] = "~målverdi " ;
-        Text [ italian ] = "Valore di destin." ;
-        Text [ portuguese_brazilian ] = "~Valor de destino" ;
-        Text [ portuguese ] = "~Valor de destino" ;
-        Text [ finnish ] = "Kohde~arvo" ;
-        Text [ danish ] = "Målværdi" ;
-        Text [ french ] = "Valeur ~cible" ;
-        Text [ swedish ] = "~Målvärde" ;
-        Text [ dutch ] = "~Doelwaarde" ;
-        Text [ spanish ] = "Valor ~destino" ;
-        Text [ english_us ] = "Target ~value" ;
-        Text[ chinese_simplified ] = "ç›®æ ‡å€¼(~V)";
-        Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Wartoœæ ~docelowa";
-        Text[ japanese ] = "ç›®æ¨™å€¤(~V)";
-        Text[ chinese_traditional ] = "ç›®æ¨™å€¼(~V)";
-        Text[ arabic ] = "ÇáŞíãÉ ÇáåÏİ";
-        Text[ greek ] = "ÔéìŞ ~ğñïïñéóìïı";
-        Text[ korean ] = "ëª©í‘œê°’(~V)";
-        Text[ turkish ] = "~Hedef değer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor de l'objectiu";
-        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢";
-        Text[ czech ] = "CÃ­lovÃ¡ hodnota";
-        Text[ hebrew ] = "~Zielwert";
-        Text[ hindi ] = "à¤²à¤•à¥à¤·à¥à¤¯ à¤•à¤¾ ~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "CieÄ¾o~vÃ¡ hodnota";
-        Text[ hungarian ] = "K~eresett Ã©rtÃ©k";
-        Text[ slovenian ] = "Ciljna ~vrednost";
+        Text [ de ] = "~Zielwert" ;
+        Text [ en-US ] = "Target ~value" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_TARGETVAL
     {
@@ -209,37 +115,9 @@ ModelessDialog RID_SCDLG_SOLVER
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Variable Zelle" ;
-        Text [ ENGLISH ] = "~Variable cell" ;
-        Text [ norwegian ] = "~cellevariabel l" ;
-        Text [ italian ] = "Cella ~variabile" ;
-        Text [ portuguese_brazilian ] = "~Célula variável" ;
-        Text [ portuguese ] = "Célula ~variável" ;
-        Text [ finnish ] = "Muuttuja~solu" ;
-        Text [ danish ] = "~Variabelcelle" ;
-        Text [ french ] = "Cellule variable" ;
-        Text [ swedish ] = "~Variabel cell" ;
-        Text [ dutch ] = "~Variabele cel" ;
-        Text [ spanish ] = "Celda ~variable" ;
-        Text [ english_us ] = "Variable ~cell" ;
-        Text[ chinese_simplified ] = "å¯å˜çš„å•å…ƒæ ¼(~C)";
-        Text[ russian ] = "Èçìåíÿåìàÿ ÿ÷åéêà";
-        Text[ polish ] = "Komórka ze zmi~enn¹ ";
-        Text[ japanese ] = "å¤‰åŒ–ã•ã›ã‚‹ã‚»ãƒ«(~C)";
-        Text[ chinese_traditional ] = "å¯è®Šçš„å„²å­˜æ ¼(~C)";
-        Text[ arabic ] = "ÎáíÉ ãÊÛíÑÉ";
-        Text[ greek ] = "ìåôáâëçôü êåëß";
-        Text[ korean ] = "ë³€ê²½ ê°€ëŠ¥ ì…€(~C)";
-        Text[ turkish ] = "~Değişken hücre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cel.la de variable";
-        Text[ thai ] = "à¹€~à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸•à¸±à¸§à¹à¸›à¸£";
-        Text[ czech ] = "PromÄ›nnÃ¡ buÅˆka";
-        Text[ hebrew ] = "~Variable Zelle";
-        Text[ hindi ] = "à¤µà¥‡à¤°à¤¿à¤à¤¬à¤² ~à¤•à¥‹à¤·à¥à¤ ";
-        Text[ slovak ] = "~Bunka s premennou";
-        Text[ hungarian ] = "VÃ¡ltozÃ³ ~cella";
-        Text[ slovenian ] = "Spremenljiva ~celica";
+        Text [ de ] = "~Variable Zelle" ;
+        Text [ en-US ] = "Variable ~cell" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_VARCELL
     {
@@ -250,76 +128,21 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_VARCELL
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 145 , 46 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Encolher" ;
-        QuickHelpText [ swedish ] = "Förminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "Réduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "ç¸®å°";
-        QuickHelpText[ chinese_simplified ] = "ç¼©å°";
-        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
-        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
-        QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "ìµœì†Œ/ìµœëŒ€";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "ZmenÅ¡it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
-        QuickHelpText[ slovak ] = "ZmenÅ¡iÅ¥";
-        QuickHelpText[ hungarian ] = "ZsugorÃ­tÃ¡s";
-        QuickHelpText[ slovenian ] = "SkrÄi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedLine FL_VARIABLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text = "Vorgaben" ;
-        Text [ ENGLISH ] = "Variables" ;
-        Text [ norwegian ] = "Variabler" ;
-        Text [ italian ] = "Preimpostazioni" ;
-        Text [ portuguese_brazilian ] = "Definições" ;
-        Text [ portuguese ] = "Predefinições" ;
-        Text [ finnish ] = "Oletusasetukset" ;
-        Text [ danish ] = "Standardindstillinger" ;
-        Text [ french ] = "Définitions" ;
-        Text [ swedish ] = "Förinställningar" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ spanish ] = "Configuración predeterminada" ;
-        Text [ english_us ] = "Default settings" ;
-        Text[ chinese_simplified ] = "é¢„ç½®";
-        Text[ russian ] = "Íàñòğîéêè";
-        Text[ polish ] = "Ustawienia domyœlne";
-        Text[ japanese ] = "æ—¢å®šå€¤";
-        Text[ chinese_traditional ] = "é è¨­";
-        Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇİÊÑÇÖíÉ";
-        Text[ greek ] = "Ğñïåğéëïãİò";
-        Text[ korean ] = "ê¸°ë³¸ ì„¤ì •";
-        Text[ turkish ] = "Öntanımlı ayaralar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Variables";
-        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-        Text[ czech ] = "VÃ½chozÃ­ nastavenÃ­";
-        Text[ hebrew ] = "Vorgaben";
-        Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£";
-        Text[ slovak ] = "VÃ½chodzie nastavenia";
-        Text[ hungarian ] = "AlapbeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "Privzete nastavitve";
+        Text [ de ] = "Vorgaben" ;
+        Text [ en-US ] = "Default settings" ;
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -343,157 +166,28 @@ ModelessDialog RID_SCDLG_SOLVER
     String STR_INVALIDVAL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Unzulässiger Zielwert! : Unzulõssiger Zielwert! */
-        Text = "Unzulässiger Zielwert!" ;
-        Text [ ENGLISH ] = "Invalid target value!" ;
-        Text [ norwegian ] = "Ugyldig målverdi!" ;
-        Text [ italian ] = "Valore di destinazione non valido!" ;
-        Text [ portuguese_brazilian ] = "O valor de destino é inválido!" ;
-        Text [ portuguese ] = "Valor de destino incorreto!" ;
-        Text [ finnish ] = "Virheellinen kohdearvo" ;
-        Text [ danish ] = "Ugyldig målværdi!" ;
-        Text [ french ] = "La valeur cible est incorrecte !" ;
-        Text [ swedish ] = "Ogiltigt målvärde!" ;
-        Text [ dutch ] = "Ongeldige doelwaarde!" ;
-        Text [ spanish ] = "¡Valor de destino no válido!" ;
-        Text [ english_us ] = "Invalid target value." ;
-        Text[ chinese_simplified ] = "ç›®æ ‡æ•°å€¼æ— æ•ˆï¼";
-        Text[ russian ] = "Íåäîïóñòèìîå çíà÷åíèå.";
-        Text[ polish ] = "Nieprawid³owa wartoœæ docelowa.";
-        Text[ japanese ] = "ã“ã®ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå€¤ã¯ç„¡åŠ¹ã§ã™ã€‚";
-        Text[ chinese_traditional ] = "ç›®æ¨™æ•¸å€¼ç„¡æ•ˆï¼";
-        Text[ arabic ] = "ŞíãÉ åÏİ ÛíÑ ÕÇáÍÉ!";
-        Text[ greek ] = "Ìç İãêõñç ôéìŞ ğñïïñéóìïı!";
-        Text[ korean ] = "í—ˆìš©ë˜ì§€ ì•ŠëŠ” ëª©í‘œê°’";
-        Text[ turkish ] = "Geçerli olmayan hedef değer!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El valor de l'objectiu no és vàlid.";
-        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
-        Text[ czech ] = "NeplatnÃ¡ cÃ­lovÃ¡ hodnota.";
-        Text[ hebrew ] = "UnzulÃ¤ssiger Zielwert";
-        Text[ hindi ] = "à¤²à¤•à¥à¤·à¥à¤¯ à¤•à¤¾ à¤®à¥‚à¤²à¥à¤¯ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "NeplatnÃ¡ cieÄ¾ovÃ¡ hodnota.";
-        Text[ hungarian ] = "Ã‰rvÃ©nytelen cÃ©lÃ©rtÃ©k.";
-        Text[ slovenian ] = "Neveljavna ciljna vrednost.";
+        Text [ de ] = "Unzulässiger Zielwert!" ;
+        Text [ en-US ] = "Invalid target value." ;
+        Text [ x-comment ] = " ";
     };
     String STR_INVALIDVAR
     {
-        Text = "Undefinierter Name als variable Zelle!" ;
-        Text [ ENGLISH ] = "Undefined name for variable cell!" ;
-        Text [ norwegian ] = "Udefinert navn for cellevariabel!" ;
-        Text [ italian ] = "Nome non definito per la cella-variabile!" ;
-        Text [ portuguese_brazilian ] = "Nome indefinido para célula variável!" ;
-        Text [ portuguese ] = "Nome indefinido para célula variável!" ;
-        Text [ finnish ] = "Määrittämätön nimi muuttujasoluna" ;
-        Text [ danish ] = "Udefineret navn på variabelcelle." ;
-        Text [ french ] = "Le nom pour la cellule variable n'a pas été défini !" ;
-        Text [ swedish ] = "Odefinierat namn som variabel cell!" ;
-        Text [ dutch ] = "Niet-gedefinieerde naam voor variabele cel!" ;
-        Text [ spanish ] = "¡Nombre no definido como celda de variable!" ;
-        Text [ english_us ] = "Undefined name for variable cell." ;
-        Text[ chinese_simplified ] = "æœªå®šä¹‰çš„åç§°å½“ä½œå¯å˜é‡çš„å•å…ƒæ ¼ï¼";
-        Text[ russian ] = "Íåîïğåäåëåííîå èìÿ äëÿ èçìåíÿåìîé ÿ÷åéêè.";
-        Text[ polish ] = "Niezdefiniowana nazwa dla komórki zmiennej.";
-        Text[ japanese ] = "å¤‰åŒ–ã•ã›ã‚‹ã‚»ãƒ«ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-        Text[ chinese_traditional ] = "æœªå®šç¾©çš„åç¨±è¢«ç•¶ä½œè®Šæ•¸çš„å„²å­˜æ ¼ï¼";
-        Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ãÊÛíÑÉ!";
-        Text[ greek ] = "Áüñéóôï üíïìá ùò ìåôáâëçôü êåëß!";
-        Text[ korean ] = "ê°€ë³€ ì…€ì´ ì§€ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Tanımlanmamış hücresi için tanımlanmamış ad!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El nom per a la cel.la de variable no està definit.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸”à¸Šà¸·à¹ˆà¸­à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸•à¸±à¸§à¹à¸›à¸£";
-        Text[ czech ] = "NedefinovanÃ© jmÃ©no pro promÄ›nnou buÅˆku.";
-        Text[ hebrew ] = "Undefinierter Name als variable Zelle";
-        Text[ hindi ] = "à¤µà¥‡à¤°à¤¿à¤à¤¬à¤² à¤•à¥‹à¤·à¥à¤  à¤•à¥‡à¤²à¤¿à¤ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¨à¤¾à¤® à¥¤";
-        Text[ slovak ] = "NedefinovanÃ½ nÃ¡zov pre bunku s premennou.";
-        Text[ hungarian ] = "A vÃ¡ltozÃ³t tartalmazÃ³ cella neve nem definiÃ¡lt.";
-        Text[ slovenian ] = "Nedefinirano ime za spremenljivo celico.";
+        Text [ de ] = "Undefinierter Name als variable Zelle!" ;
+        Text [ en-US ] = "Undefined name for variable cell." ;
+        Text [ x-comment ] = " ";
     };
     String STR_INVALIDFORM
     {
-        Text = "Undefinierter Name als Formelzelle!" ;
-        Text [ ENGLISH ] = "Undefined name for formula cell!" ;
-        Text [ norwegian ] = "Udefinert navn for formelcelle!" ;
-        Text [ italian ] = "Nome non definito per la cella-formula!" ;
-        Text [ portuguese_brazilian ] = "Nome indefinido para célula de fórmula!" ;
-        Text [ portuguese ] = "Nome indefinido para célula fórmula!" ;
-        Text [ finnish ] = "Määrittämätön nimi kaavasoluna" ;
-        Text [ danish ] = "Udefineret navn som formelcelle." ;
-        Text [ french ] = "Le nom de la cellule de formule n'a pas été défini !" ;
-        Text [ swedish ] = "Odefinierat namn som formelcell!" ;
-        Text [ dutch ] = "Niet-gedefinieerde naam voor formulecel!" ;
-        Text [ spanish ] = "¡Nombre no definido como celda de fórmula!" ;
-        Text [ english_us ] = "Undefined name as formula cell." ;
-        Text[ chinese_simplified ] = "æœªå®šä¹‰çš„åç§°å½“ä½œå…¬å¼å•å…ƒæ ¼ï¼";
-        Text[ russian ] = "Íåîïğåäåëåííîå èìÿ äëÿ ÿ÷åéêè ôîğìóëû.";
-        Text[ polish ] = "Niezdefiniowana nazwa dla komórki formu³y";
-        Text[ japanese ] = "æ•°å¼ã‚»ãƒ«ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-        Text[ chinese_traditional ] = "æœªå®šç¾©çš„åç¨±è¢«ç•¶ä½œå…¬å¼å„²å­˜æ ¼ï¼";
-        Text[ arabic ] = "ÇÓã ÛíÑ ãõÚÑøİ ßÎáíÉ ÕíÛÉ!";
-        Text[ greek ] = "Áüñéóôï üíïìá ùò êåëß ôığïõ!";
-        Text[ korean ] = "ìˆ˜ì‹ ì…€ë¡œì„œ ì •ì˜ë˜ì§€ ì•Šì€ ì´ë¦„.";
-        Text[ turkish ] = "Formül hücresi için tanımlanmamış ad!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "El nom de la cel.la de fórmula no està definit.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸à¸³à¸«à¸™à¸”à¸Šà¸·à¹ˆà¸­à¹€à¸‹à¸¥à¸¥à¹Œà¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¸ªà¸¹à¸•à¸£";
-        Text[ czech ] = "NedefinovanÃ© jmÃ©no buÅˆky se vzorcem.";
-        Text[ hebrew ] = "Undefinierter Name als Formelzelle";
-        Text[ hindi ] = "à¤¸à¥‚à¤¤à¥à¤° à¤•à¥‹à¤·à¥à¤  à¤•à¥‡à¤²à¤¿à¤ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¨à¤¾à¤® à¥¤";
-        Text[ slovak ] = "NedefinovanÃ½ nÃ¡zov pre bunku so vzorcom.";
-        Text[ hungarian ] = "A kÃ©pletet tartalmazÃ³ cella neve nem definiÃ¡lt.";
-        Text[ slovenian ] = "Nedefinirano ime za celico s formulo.";
+        Text [ de ] = "Undefinierter Name als Formelzelle!" ;
+        Text [ en-US ] = "Undefined name as formula cell." ;
+        Text [ x-comment ] = " ";
     };
     String STR_NOFORMULA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zelle muß eine Formel enthalten! : Zelle mu˜ eine Formel enthalten! */
-        Text = "Zelle muss eine Formel enthalten!" ;
-        Text [ ENGLISH ] = "No formula cell!" ;
-        Text [ norwegian ] = "Ingen formelcelle!" ;
-        Text [ italian ] = "La cella deve contenere una formula!" ;
-        Text [ portuguese_brazilian ] = "A célula deve conter uma fórmula !" ;
-        Text [ portuguese ] = "A célula tem de conter uma fórmula!" ;
-        Text [ finnish ] = "Solussa on oltava kaava." ;
-        Text [ danish ] = "Cellen skal indeholde en formel." ;
-        Text [ french ] = "La cellule doit contenir une formule !" ;
-        Text [ swedish ] = "Cell måste innehålla en formel!" ;
-        Text [ dutch ] = "Cel moet een formule bevatten" ;
-        Text [ spanish ] = "¡La celda debe contener una fórmula!" ;
-        Text [ english_us ] = "Cell must contain a formula." ;
-        Text[ chinese_simplified ] = "å•å…ƒæ ¼å†…å¿…é¡»å«æœ‰ä¸€ä¸ªå…¬å¼ï¼";
-        Text[ russian ] = "ß÷åéêà äîëæíà ñîäåğæàòü ôîğìóëó.";
-        Text[ polish ] = "Komórka musi zawieraæ formu³ê.";
-        Text[ japanese ] = "ã‚»ãƒ«ã«æ•°å¼ãŒå«ã¾ã‚Œã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-        Text[ chinese_traditional ] = "å„²å­˜æ ¼å¿…é ˆå«æœ‰ä¸€å€‹å…¬å¼ï¼";
-        Text[ arabic ] = "íÌÈ Ãä ÊÍÊæí ÇáÎáíÉ Úáì ÕíÛÉ.";
-        Text[ greek ] = "Ôï êåëß ğñİğåé íá ğåñéİ÷åé İíáí ôığï!";
-        Text[ korean ] = "ì…€ì—ëŠ” ìˆ˜ì‹ì´ í¬í•¨ë˜ì–´ì•¼ë§Œ í•©ë‹ˆë‹¤.";
-        Text[ turkish ] = "Hücre, formül içermeli!";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "La cel.la ha de contenir una fórmula.";
-        Text[ thai ] = "à¹€à¸‹à¸¥à¸¥à¹Œà¸•à¹‰à¸­à¸‡à¸¡à¸µà¸ªà¸¹à¸•à¸£";
-        Text[ czech ] = "BuÅˆka musÃ­ obsahovat vzorec!";
-        Text[ hebrew ] = "Zelle muss eine Formel enthalten";
-        Text[ hindi ] = "à¤•à¥‹à¤·à¥à¤  à¤®à¥‡à¤‚ à¤¸à¥‚à¤¤à¥à¤° à¤•à¤¾ à¤°à¤¹à¤¨à¤¾ à¤œà¤¼à¤°à¥‚à¤°à¥€ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "Bunka musÃ­ obsahovaÅ¥ vzorec.";
-        Text[ hungarian ] = "A cellÃ¡nak kÃ©pletet kell tartalmaznia.";
-        Text[ slovenian ] = "Celica mora vsebovati formulo.";
+        Text [ de ] = "Zelle muss eine Formel enthalten!" ;
+        Text [ en-US ] = "Cell must contain a formula." ;
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "å•å˜é‡æ±‚è§£";
-    Text[ russian ] = "Ïîäáîğ ïàğàìåòğà";
-    Text[ polish ] = "Szukaj wyniku";
-    Text[ japanese ] = "ã‚´ãƒ¼ãƒ«ã‚·ãƒ¼ã‚¯";
-    Text[ chinese_traditional ] = "ç›®æ¨™æœå°‹";
-    Text[ arabic ] = "ÇáÈÍË Úä ÇáŞíãÉ ÇáåÏİ";
-    Text[ greek ] = "ÁíáæŞôçóç óôü÷ïõ";
-    Text[ korean ] = "ëª©í‘œê°’ ì°¾ê¸°";
-    Text[ turkish ] = "Hedef değer ara";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cerca de l'objectiu";
-    Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¸„à¹ˆà¸²à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "HledÃ¡nÃ­ Å™eÅ¡enÃ­";
-    Text[ hebrew ] = "Zielwertsuche";
-    Text[ hindi ] = "à¤—à¥‹à¤² à¤¸à¥€à¤•";
-    Text[ slovak ] = "VyhÄ¾adanie cieÄ¾a";
-    Text[ hungarian ] = "CÃ©lÃ©rtÃ©kkeresÃ©s";
-    Text[ slovenian ] = "Iskanje cilja";
+    Text [ x-comment ] = " ";
 };
