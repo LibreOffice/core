@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-29 12:04:21 $
+ *  last change: $Author: thb $ $Date: 2001-06-11 07:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,24 +704,49 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
 
         if (ePageKind == PK_NOTES)
         {
-            aNotesBtn.Check(TRUE);
+            // SdDrawViewShell buttons
             aLayerBtn.Disable();
+
+            // SdViewShell buttons
+            aDrawBtn.Check(FALSE);
+            aOutlineBtn.Check(FALSE);
+            aSlideBtn.Check(FALSE);
+            aHandoutBtn.Check(FALSE);
+            aPresentationBtn.Check(FALSE);
+            aNotesBtn.Check(TRUE);
+
             SetHelpId( SID_NOTESMODE );
             pWindow->SetHelpId( SID_NOTESMODE );
             pWindow->SetUniqueId( SID_NOTESMODE );
         }
         else if (ePageKind == PK_HANDOUT)
         {
-            aHandoutBtn.Check(TRUE);
+            // SdDrawViewShell buttons
             aPageBtn.Disable();
             aLayerBtn.Disable();
+
+            // SdViewShell buttons
+            aDrawBtn.Check(FALSE);
+            aOutlineBtn.Check(FALSE);
+            aSlideBtn.Check(FALSE);
+            aPresentationBtn.Check(FALSE);
+            aNotesBtn.Check(FALSE);
+            aHandoutBtn.Check(TRUE);
+
             SetHelpId( SID_HANDOUTMODE );
             pWindow->SetHelpId( SID_HANDOUTMODE );
             pWindow->SetUniqueId( SID_HANDOUTMODE );
         }
         else
         {
+            // SdViewShell buttons
+            aOutlineBtn.Check(FALSE);
+            aSlideBtn.Check(FALSE);
+            aPresentationBtn.Check(FALSE);
+            aNotesBtn.Check(FALSE);
+            aHandoutBtn.Check(FALSE);
             aDrawBtn.Check(TRUE);
+
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
             pWindow->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
             pWindow->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
