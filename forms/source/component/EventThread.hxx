@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 13:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ namespace frm
 // ***************************************************************************************************
 // ***************************************************************************************************
 
+typedef ::vos::OThread  OComponentEventThread_TBASE;
 class OComponentEventThread
-            :public ::vos::OThread
+            :public OComponentEventThread_TBASE
             ,public ::com::sun::star::lang::XEventListener
             ,public ::cppu::OWeakObject
 {
@@ -117,6 +118,9 @@ protected:
 
     // XThread
     virtual void SAL_CALL run();
+
+    virtual void SAL_CALL kill();
+    virtual void SAL_CALL onTerminated();
 
     // Die folgende Methode wird gerufen um das Event unter Beruecksichtigung
     // seines Typs zu duplizieren.
@@ -152,6 +156,10 @@ public:
 /* resolve ambiguity : both OWeakObject and OObject have these memory operators */
     void * SAL_CALL operator new( size_t size ) throw() { return OThread::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { OThread::operator delete(p); }
+
+private:
+    void    implStarted( );
+    void    implTerminated( );
 };
 
 //.........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventThread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 13:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 
-
+DBG_NAME( OComponentEventThread );
 OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImpl ) :
     m_pCompImpl( pCompImpl )
 {
+    DBG_CTOR( OComponentEventThread, NULL );
+
     increment(m_refCount);
 
     // Eine Referenz des Controls halten
@@ -98,6 +100,8 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
 
 OComponentEventThread::~OComponentEventThread()
 {
+    DBG_DTOR( OComponentEventThread, NULL );
+
     DBG_ASSERT( m_aEvents.size() == 0,
         "OComponentEventThread::~OComponentEventThread: Kein dispose gerufen?" );
     while (m_aEvents.size())
@@ -170,8 +174,46 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
     m_aCond.set();
 }
 
+//---------------------------------------------------------------------
+//--- 22.08.01 15:48:15 -----------------------------------------------
+
+void OComponentEventThread::implStarted( )
+{
+    acquire( );
+}
+
+//---------------------------------------------------------------------
+//--- 22.08.01 15:48:16 -----------------------------------------------
+
+void OComponentEventThread::implTerminated( )
+{
+    release( );
+}
+
+//---------------------------------------------------------------------
+//--- 22.08.01 15:47:31 -----------------------------------------------
+
+void SAL_CALL OComponentEventThread::kill()
+{
+    OComponentEventThread_TBASE::kill();
+
+    implTerminated( );
+}
+
+//---------------------------------------------------------------------
+//--- 22.08.01 15:47:33 -----------------------------------------------
+
+void SAL_CALL OComponentEventThread::onTerminated()
+{
+    OComponentEventThread_TBASE::onTerminated();
+
+    implTerminated( );
+}
+
 void OComponentEventThread::run()
 {
+    implStarted( );
+
     // uns selbst festhalten, damit wir nicht geloescht werden,
     // wenn zwischendrinne mal ein dispose gerufen wird.
     InterfaceRef xThis(static_cast<XWeak*>(this));
