@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 15:10:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ void EMFWriter::ImplCheckTextAttr()
 
         ImplBeginRecord( WIN_EMR_EXTCREATEFONTINDIRECTW );
         (*mpStm) << mnTextHandle;
-        ImplWriteExtent( rFont.GetSize().Height() );
+        ImplWriteExtent( -rFont.GetSize().Height() );
         ImplWriteExtent( rFont.GetSize().Width() );
         (*mpStm) << (INT32) rFont.GetOrientation() << (INT32) rFont.GetOrientation();
 
