@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,9 +817,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     rSet.Put( SfxStringItem( nWhich, aLocaleWrapper.getDate( Date() ) ) );
                     break;
                 }
-
-                case SID_CONFIGTOOLBOX:
-                    break;
 
                 case SID_HELPTIPS:
                 {
