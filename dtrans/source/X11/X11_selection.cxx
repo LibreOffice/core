@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-14 10:30:53 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 10:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,9 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
             m_nXdndActionLink   = getAtom( OUString::createFromAscii( "XdndActionLink" ) );
             m_nXdndActionAsk    = getAtom( OUString::createFromAscii( "XdndActionAsk" ) );
             m_nXdndActionPrivate= getAtom( OUString::createFromAscii( "XdndActionPrivate" ) );
+
+            // initialize map with member none
+            m_aAtomToString[ 0 ]= OUString::createFromAscii( "None" );
 
             // create a (invisible) message window
             m_aWindow = XCreateSimpleWindow( m_pDisplay, DefaultRootWindow( m_pDisplay ),
