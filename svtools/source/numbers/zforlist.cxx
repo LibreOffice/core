@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-10-20 18:42:32 $
+ *  last change: $Author: er $ $Date: 2000-10-22 17:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 /***********************Funktionen SvNumberFormatter**************************/
 
 SvNumberFormatter::SvNumberFormatter(
-            Reference< XMultiServiceFactory > xSMgr,
+            const Reference< XMultiServiceFactory >& xSMgr,
             LanguageType eLang )
         :
         xServiceManager( xSMgr )
