@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.79 $
+*  $Revision: 1.80 $
 *
-*  last change: $Author: obo $ $Date: 2005-01-24 12:24:19 $
+*  last change: $Author: obo $ $Date: 2005-01-25 09:40:50 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -640,10 +640,11 @@ End
 #ifndef MACOSX
 File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libfps_gnome,UNXSUFFIX));
+    Regmergefile = "fps-gnome-ucd.txt";
 End
 #endif
 #endif
