@@ -193,6 +193,15 @@
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
 </SearchOptions>
 </LC_SEARCH>
+<LC_INDEX>
+<IndexKey unoid="phonetic (alphanumeric first) (grouped by syllable)" default="true" phonetic="true"/>
+<IndexKey unoid="phonetic (alphanumeric first) (grouped by consonant)" default="false" phonetic="true"/>
+<IndexKey unoid="phonetic (alphanumeric last) (grouped by syllable)" default="false" phonetic="true"/>
+<IndexKey unoid="phonetic (alphanumeric last) (grouped by consonant)" default="false" phonetic="true"/>
+<UnicodeScript>70</UnicodeScript>
+<FollowPageWord>p.</FollowPageWord>
+<FollowPageWord>pp.</FollowPageWord>
+</LC_INDEX>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek ref="en_US_gregorian"/>
