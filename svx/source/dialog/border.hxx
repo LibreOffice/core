@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:50:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@ private:
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
     CheckBox            aMergeWithNextCB;
+    // --> collapsing table borders FME 2005-05-27 #i29550#
+    CheckBox            aMergeAdjacentBordersCB;
+    // <--
 
     ImageList           aShadowImgLstH;
     ImageList           aShadowImgLst;
