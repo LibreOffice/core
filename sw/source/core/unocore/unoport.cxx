@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-07 17:16:09 $
+ *  last change: $Author: os $ $Date: 2000-12-19 09:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _UNOPORT_HXX
+#include <unoport.hxx>
+#endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
@@ -97,6 +100,9 @@
 #endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
+#endif
+#ifndef _FRMFMT_HXX //autogen
+#include <frmfmt.hxx>
 #endif
 
 using namespace ::com::sun::star;
