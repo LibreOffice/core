@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 14:20:22 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@ void SwFlyFreeFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
+#ifdef VERTICAL_LAYOUT
+       SWRECTFN( this )
+#endif
         const SwFmtFrmSize *pSz;
         {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
 
@@ -204,14 +207,21 @@ void SwFlyFreeFrm::MakeAll()
                 const long nOldWidth = Frm().Width();
                 const Size aTmp( CalcRel( *pSz ) );
                 const SwTwips nMin = MINFLY + rAttrs.CalcLeftLine()+rAttrs.CalcRightLine();
+#ifdef VERTICAL_LAYOUT
+                long nDiff = bVert ? aTmp.Height() : aTmp.Width();
+                if( nDiff < nMin )
+                    nDiff = nMin;
+                nDiff -= (aFrm.*fnRect->fnGetWidth)();
+                if( nDiff )
+                {
+                    (aFrm.*fnRect->fnAddRight)( nDiff );
+                    bValidPos = FALSE;
+                }
+#else
                 aFrm.Width( Max( aTmp.Width(), nMin ) );
                 if ( nOldWidth != Frm().Width() )
-                {
                     bValidPos = FALSE;  //Clipping kann notwendig sein.
-//MA 03. Mar. 97: Wozu das? Stoert bei #37008#
-//                  if ( aFrm.Width() > nOldWidth )
-//                      aFrm.Height( aTmp.Height() );
-                }
+#endif
             }
 
             if ( !bValidPrtArea )
@@ -226,9 +236,15 @@ void SwFlyFreeFrm::MakeAll()
 
             if ( !bValidPos )
             {
+#ifdef VERTICAL_LAYOUT
+                const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
+                MakeFlyPos();
+                if( aOldPos == (Frm().*fnRect->fnGetPos)() )
+#else
                 const Point aOldPos( Frm().Pos() );
                 MakeFlyPos();
                 if( aOldPos == Frm().Pos() )
+#endif
                 {
                     if( !bValidPos && GetAnchor()->IsInSct() &&
                         !GetAnchor()->FindSctFrm()->IsValid() )
@@ -243,8 +259,18 @@ void SwFlyFreeFrm::MakeAll()
     }
     Unlock();
 
+#ifdef VERTICAL_LAYOUT
+#ifndef PRODUCT
+    SWRECTFN( this )
+    ASSERT( bHeightClipped || ( (Frm().*fnRect->fnGetHeight)() > 0 &&
+            (Prt().*fnRect->fnGetHeight)() > 0),
+            "SwFlyFreeFrm::Format(), flipping Fly." );
+
+#endif
+#else
     ASSERT( bHeightClipped || (Frm().Height() > 0 && Prt().Height() > 0),
             "SwFlyFreeFrm::Format(), flipping Fly." );
+#endif
 }
 
 /*************************************************************************
@@ -260,8 +286,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 {
     //Jetzt ist es ggf. an der Zeit geignete Massnahmen zu ergreifen wenn
     //der Fly nicht in seine Umgebung passt.
-    //Zuerst gibt der Fly seine Position auf. Dananch wird er zunaechst
-    //Formatiert. Erst wenn er auch durch die Aufgabe der Position nicht
+    //Zuerst gibt der Fly seine Position auf. Danach wird er zunaechst
+    //formatiert. Erst wenn er auch durch die Aufgabe der Position nicht
     //passt wird die Breite oder Hoehe aufgegeben - der Rahmen wird soweit
     //wie notwendig zusammengequetscht.
 
@@ -286,7 +312,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             SwFrm* pHeader = FindFooterOrHeader();
             // In a header, correction of the position is no good idea.
             // If the fly moves, some paragraphs has to be formatted, this
-            // could cause a change of the heigth of the headerframe,
+            // could cause a change of the height of the headerframe,
             // now the flyframe can change its position and so on ...
             if( !pHeader || !pHeader->IsHeaderFrm() )
             {
@@ -810,27 +836,43 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             pClip->Calc();
 
             rRect = pClip->Frm();
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pClip )
+#endif
 
             //Vertikales clipping: Top und Bottom, ggf. an PrtArea
             const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
             if( rV.GetVertOrient() != VERT_NONE &&
                 rV.GetRelationOrient() == PRTAREA )
             {
+#ifdef VERTICAL_LAYOUT
+                (rRect.*fnRect->fnSetTop)( (pClip->*fnRect->fnGetPrtTop)() );
+                (rRect.*fnRect->fnSetBottom)( (pClip->*fnRect->fnGetPrtBottom)() );
+#else
                 rRect.Top( pClip->Frm().Top() + pClip->Prt().Top() );
                 rRect.Bottom( pClip->Frm().Top() + pClip->Prt().Bottom() );
+#endif
             }
             //Horizontales clipping: Left und Right, ggf. an PrtArea
             const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
             if( rH.GetHoriOrient() != HORI_NONE &&
                 rH.GetRelationOrient() == PRTAREA )
             {
+#ifdef VERTICAL_LAYOUT
+                (rRect.*fnRect->fnSetLeft)( (pClip->*fnRect->fnGetPrtLeft)() );
+                (rRect.*fnRect->fnSetRight)((pClip->*fnRect->fnGetPrtRight)());
+#else
                 rRect.Left( pClip->Frm().Left() + pClip->Prt().Left() );
                 rRect.Right( pClip->Frm().Left() + pClip->Prt().Right() );
+#endif
             }
         }
         else if( pFly->IsFlyAtCntFrm() )
         {
             const SwFrm *pClip = pFly->GetAnchor();
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pClip )
+#endif
             const SwLayoutFrm *pUp = pClip->GetUpper();
             const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
             USHORT nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
@@ -909,8 +951,13 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     if ( pUp->GetUpper() != (pPg = pFly->FindPageFrm()) )
                         pUp = pPg->FindBodyCont();
                     rRect = pUp->GetUpper()->Frm();
+#ifdef VERTICAL_LAYOUT
+                    (rRect.*fnRect->fnSetTop)( (pUp->*fnRect->fnGetPrtTop)() );
+                    (rRect.*fnRect->fnSetBottom)((pUp->*fnRect->fnGetPrtBottom)());
+#else
                     rRect.Pos().Y() = pUp->Frm().Top() + pUp->Prt().Top();
                     rRect.SSize().Height() = pUp->Prt().Height();
+#endif
                 }
                 else
                 {
@@ -944,15 +991,26 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     rRect.Pos() += pUp->Frm().Pos();
                     if ( pUp->GetType() & (FRM_HEADER | FRM_FOOTER) )
                     {
+#ifdef VERTICAL_LAYOUT
+                        (rRect.*fnRect->fnSetLeftAndWidth)(
+                            (pUp->GetUpper()->Frm().*fnRect->fnGetLeft)(),
+                            (pUp->GetUpper()->Frm().*fnRect->fnGetWidth)() );
+#else
                         rRect.Left ( pUp->GetUpper()->Frm().Left() );
                         rRect.Width( pUp->GetUpper()->Frm().Width());
+#endif
                     }
                     else if ( pUp->IsCellFrm() )                //MA_FLY_HEIGHT
                     {
                         const SwFrm *pTab = pUp->FindTabFrm();
+#ifdef VERTICAL_LAYOUT
+                        (rRect.*fnRect->fnSetBottom)(
+                                    (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
+#else
                         long nBottom = pTab->GetUpper()->Frm().Top() +
                                        pTab->GetUpper()->Prt().Bottom();
                         rRect.Bottom( nBottom );
+#endif
                     }
                 }
             }
@@ -969,6 +1027,9 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         {
             const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
             pUp->Calc();
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pFly->GetAnchor() )
+#endif
             while( pUp->IsColumnFrm() || pUp->IsSctFrm() || pUp->IsColBodyFrm())
                 pUp = pUp->GetUpper();
             rRect = pUp->Frm();
@@ -979,16 +1040,43 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 if ( pUp->IsCellFrm() )
                 {
                     const SwFrm *pTab = pUp->FindTabFrm();
+#ifdef VERTICAL_LAYOUT
+                    (rRect.*fnRect->fnSetBottom)(
+                                    (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
+#else
                     long nBottom = pTab->GetUpper()->Frm().Top() +
                                    pTab->GetUpper()->Prt().Bottom();
                     rRect.Bottom( nBottom );
+#endif
                 }
             }
+#ifdef VERTICAL_LAYOUT
+            long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
+            long nTop;
+#else
             rRect.Height( (rRect.Height()*9)/10 );
+#endif
             const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))->GetFmt();
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
+#ifdef VERTICAL_LAYOUT
+                nTop = (*fnRect->fnYDiff)(
+                        ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y(), nHeight );
+                long nWidth = (pFly->Frm().*fnRect->fnGetWidth)();
+                (rRect.*fnRect->fnSetLeftAndWidth)(
+                            ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(), nWidth );
+                nHeight = 2*nHeight - rUL.GetLower() - rUL.GetUpper();
+            }
+            else
+            {
+                nTop = (*fnRect->fnYDiff)( (pFly->Frm().*fnRect->fnGetBottom)(),
+                                            nHeight -rUL.GetLower() );
+                nHeight = 2*nHeight - (pFly->Frm().*fnRect->fnGetHeight)()
+                          - rUL.GetLower() - rUL.GetUpper();
+            }
+            (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
+#else
                 rRect.Width( pFly->Frm().Width() );
                 rRect.Pos( ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(),
                     ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y() -rRect.Height() );
@@ -1001,6 +1089,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 rRect.Height( 2*rRect.Height() - pFly->Frm().Height()
                               - rUL.GetLower() - rUL.GetUpper() );
             }
+#endif
         }
     }
     else
@@ -1020,12 +1109,34 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             pUp->Calc();
             rRect = pUp->Prt();
             rRect += pUp->Frm().Pos();
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pFrm )
+            long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
+            long nTop;
+#else
             rRect.Height( (rRect.Height()*9)/10 );
+#endif
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             SwRect aSnapRect( pSdrObj->GetSnapRect() );
             long nTmpH = 0;
             if( bMove )
             {
+#ifdef VERTICAL_LAYOUT
+                nTop = (*fnRect->fnYDiff)(pSdrObj->GetAnchorPos().Y(), nHeight);
+                long nWidth = (aSnapRect.*fnRect->fnGetWidth)();
+                (rRect.*fnRect->fnSetLeftAndWidth)(
+                            pSdrObj->GetAnchorPos().X(), nWidth );
+            }
+            else
+            {
+                nTop = (*fnRect->fnYDiff)( aSnapRect.Top(), nHeight
+                                           - rUL.GetLower() - nTmpH );
+                nTmpH = bVert ? pSdrObj->GetBoundRect().GetWidth() :
+                                pSdrObj->GetBoundRect().GetHeight();
+            }
+            nHeight = 2*nHeight - nTmpH - rUL.GetLower() - rUL.GetUpper();
+            (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
+#else
                 rRect.Width( aSnapRect.Width() );
                 rRect.Pos( pSdrObj->GetAnchorPos().X(),
                            pSdrObj->GetAnchorPos().Y() - rRect.Height() );
@@ -1038,6 +1149,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             rRect.Height( 2*rRect.Height() - nTmpH
                           - rUL.GetLower() - rUL.GetUpper() );
+#endif
         }
         else
             bRet = FALSE;
