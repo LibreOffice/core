@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:25:54 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -678,6 +677,9 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pContact->GetMaster(),
                                         bCopyIsMove && this == pSrcDoc ) );
+        // --> OD 2004-11-22 #i35635#
+        pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
+        // <--
 
         if( pDest->GetAnchor() == rNewAnchor )
         {
