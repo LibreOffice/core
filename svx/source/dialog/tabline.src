@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:38:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Vlastnosti čáry";
         Text[ hebrew ] = "Linieneigenschaften";
         Text[ hindi ] = "रेखा विशेषतायें";
+        Text[ slovak ] = "Vlastnosti čiary";
     };
     FixedText FT_LINE_STYLE
     {
@@ -159,6 +160,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Styl";
         Text[ hebrew ] = "~Stil";
         Text[ hindi ] = "~शैली";
+        Text[ slovak ] = "Š~týl";
     };
     ListBox LB_LINE_STYLE
     {
@@ -201,6 +203,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Barva";
         Text[ hebrew ] = "~Farbe";
         Text[ hindi ] = "रं~ग";
+        Text[ slovak ] = "Fa~rba";
     };
     ListBox LB_COLOR
     {
@@ -243,6 +246,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौडाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField MTR_FLD_LINE_WIDTH
     {
@@ -292,6 +296,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Průhlednost";
         Text[ hebrew ] = "~Transparenz";
         Text[ hindi ] = "~पारदर्शकता";
+        Text[ slovak ] = "~Priehľadnosť";
     };
     MetricField MTR_LINE_TRANSPARENT
     {
@@ -346,6 +351,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Styly šipky";
         Text[ hebrew ] = "Linienenden";
         Text[ hindi ] = "तीर शैलियाँ";
+        Text[ slovak ] = "Štýly šípky";
     };
     FixedText FT_LINE_ENDS_STYLE
     {
@@ -379,6 +385,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Styl";
         Text[ hebrew ] = "St~il";
         Text[ hindi ] = "शै~ली";
+        Text[ slovak ] = "Š~týl";
     };
     ListBox LB_START_STYLE
     {
@@ -430,6 +437,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौ~ड़ाई";
+        Text[ slovak ] = "Ší~rka";
     };
     MetricField MTR_FLD_START_WIDTH
     {
@@ -498,6 +506,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Střed";
         Text[ hebrew ] = "~zentriert";
         Text[ hindi ] = "मध्य~भाग";
+        Text[ slovak ] = "~Stred";
     };
     TriStateBox TSB_CENTER_END
     {
@@ -532,6 +541,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Střed";
         Text[ hebrew ] = "z~entriert";
         Text[ hindi ] = "मध्यभा~ग";
+        Text[ slovak ] = "Str~ed";
     };
     CheckBox CBX_SYNCHRONIZE
     {
@@ -566,6 +576,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Synchronizovat zakončení";
         Text[ hebrew ] = "En~den synchronisieren";
         Text[ hindi ] = "अंतों का समीकर~ण";
+        Text[ slovak ] = "Synchroni~zovať zakončenia";
     };
     Control CTL_PREVIEW
     {
@@ -608,6 +619,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Ikona";
         Text[ hebrew ] = "Symbol";
         Text[ hindi ] = "अइकॉन";
+        Text[ slovak ] = "Ikona";
     };
 
     MenuButton MB_SYMBOL_BITMAP
@@ -652,6 +664,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ czech ] = "Bez symbolu";
                     Text[ hebrew ] = "Kein Symbol";
                     Text[ hindi ] = "कोई संकेत नहीं";
+                    Text[ slovak ] = "Bez symbolu";
                 };
                 MenuItem
                 {
@@ -683,6 +696,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ czech ] = "Automaticky";
                     Text[ hebrew ] = "‮אוטומטי‬";
                     Text[ hindi ] = "स्वचालित";
+                    Text[ slovak ] = "Automaticky";
                 };
                 MenuItem
                 {
@@ -714,6 +728,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ czech ] = "Ze souboru...";
                     Text[ hebrew ] = "‮מקובץ...‬";
                     Text[ hindi ] = "फाइल से...";
+                    Text[ slovak ] = "Zo súboru...";
                 };
                 MenuItem
                 {
@@ -745,6 +760,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ czech ] = "Galerie";
                     Text[ hebrew ] = "‮גלריה‬";
                     Text[ hindi ] = "गेलरी";
+                    Text[ slovak ] = "Galéria";
                 };
                 MenuItem
                 {
@@ -776,6 +792,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ czech ] = "Symboly";
                     Text[ hebrew ] = "Symbole";
                     Text[ hindi ] = "संकेत";
+                    Text[ slovak ] = "Symboly";
                 };
             };
         };
@@ -804,6 +821,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Vybrat...";
         Text[ hebrew ] = "Aus~wahl...";
         Text[ hindi ] = "चुनो...";
+        Text[ slovak ] = "Vybrať...";
     };
     FixedText FT_SYMBOL_WIDTH
     {
@@ -837,6 +855,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField MF_SYMBOL_WIDTH
     {
@@ -889,6 +908,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     MetricField MF_SYMBOL_HEIGHT
     {
@@ -941,6 +961,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ czech ] = "Zachovat poměr";
         Text[ hebrew ] = "Abg~leich";
         Text[ hindi ] = "अनुपात रखो";
+        Text[ slovak ] = "Zachovať pomer";
     };
     Text[ turkish ] = "�izgi";
     Text[ language_user1 ] = " ";
@@ -949,6 +970,7 @@ TabPage RID_SVXPAGE_LINE
     Text[ czech ] = "Čáry";
     Text[ hebrew ] = "Linie";
     Text[ hindi ] = "रेखाएँ";
+    Text[ slovak ] = "Riadky";
 };
 
 // Defining LineStyles --------------------
@@ -1004,6 +1026,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_TYPE
     {
@@ -1037,6 +1060,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_TYPE_1
     {
@@ -1088,7 +1112,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         StringList [ french ] =
         {
             < "Point" ; Default ; > ;
-            < "Tiret" ; Default ; > ;
+            < "Trait" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -1185,6 +1209,11 @@ TabPage RID_SVXPAGE_LINE_DEF
          < "बिन्दु" ; Default ; > ;
         < "डॉश" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bodka" ; Default ; > ;
+        < "Čiarka" ; Default ; > ;
+    };
     };
     ListBox LB_TYPE_2
     {
@@ -1236,7 +1265,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         StringList [ french ] =
         {
             < "Point" ; Default ; > ;
-            < "Tiret" ; Default ; > ;
+            < "Trait" ; Default ; > ;
         };
         StringList [ swedish ] =
         {
@@ -1333,6 +1362,11 @@ TabPage RID_SVXPAGE_LINE_DEF
          < "बिन्दु" ; Default ; > ;
         < "डॉश" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Bodka" ; Default ; > ;
+        < "Čiarka" ; Default ; > ;
+    };
     };
     FixedText FT_NUMBER
     {
@@ -1366,6 +1400,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Číslo";
         Text[ hebrew ] = "~Anzahl";
         Text[ hindi ] = "~संख्या";
+        Text[ slovak ] = "Čí~slo";
     };
     NumericField NUM_FLD_1
     {
@@ -1427,6 +1462,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Délka";
         Text[ hebrew ] = "Län~ge";
         Text[ hindi ] = "~लम्बाई";
+        Text[ slovak ] = "~Dĺžka";
     };
     MetricField MTR_FLD_LENGTH_1
     {
@@ -1500,6 +1536,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~अंतर देना";
+        Text[ slovak ] = "~Rozostup";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -1552,6 +1589,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Přizpůsobit šířce čáry";
         Text[ hebrew ] = "A~n Linienbreite anpassen";
         Text[ hindi ] = "रेखा के चौड़ाई केलिए ~योग्य";
+        Text[ slovak ] = "~Prispôsobiť šírke čiary";
     };
 
     // ----------------------------------------
@@ -1588,6 +1626,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Styl čáry";
         Text[ hebrew ] = "‮סגנון קו‬";
         Text[ hindi ] = "रेखा शैली";
+        Text[ slovak ] = "Štýl čiary";
     };
     ListBox LB_LINESTYLES
     {
@@ -1631,6 +1670,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_MODIFY
     {
@@ -1665,6 +1705,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Změnit...";
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
+        Text[ slovak ] = "Z~meniť...";
     };
     PushButton BTN_DELETE
     {
@@ -1699,6 +1740,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה...‬";
         Text[ hindi ] = "~मिटाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     ImageButton BTN_LOAD
     {
@@ -1742,6 +1784,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ czech ] = "Načíst styly čar";
         QuickHelpText[ hebrew ] = "Linienstiltabelle laden";
         QuickHelpText[ hindi ] = "तीर शैलियों को लोड़ करो";
+        QuickHelpText[ slovak ] = "Načítať štýly čiar";
     };
     ImageButton BTN_SAVE
     {
@@ -1756,7 +1799,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText [ portuguese ] = "Guarda a tabela de estilos de linhas" ;
         QuickHelpText [ finnish ] = "Tallenna viivatyylit" ;
         QuickHelpText [ danish ] = "Gem piltyper" ;
-        QuickHelpText [ french ] = "Sauvegarder la palette des styles de ligne" ;
+        QuickHelpText [ french ] = "Enregistrer la palette des styles de ligne" ;
         QuickHelpText [ swedish ] = "Spara linjestiltabell" ;
         QuickHelpText [ dutch ] = "Lijst lijntypen opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de estilos de l�neas" ;
@@ -1785,6 +1828,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ czech ] = "Uložit styly čar";
         QuickHelpText[ hebrew ] = "Linienstiltabelle sichern";
         QuickHelpText[ hindi ] = "रेखा शैलियों को संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť štýly čiar";
     };
     Control CTL_PREVIEW
     {
@@ -1808,6 +1852,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     Text[ czech ] = "Definovat styly čar";
     Text[ hebrew ] = "Linienstile definieren";
     Text[ hindi ] = "रेखा शैलियों को परिभाषा दो";
+    Text[ slovak ] = "Definovať štýly čiar";
 };
 
 // Defining LineEnds --------------------
@@ -1863,6 +1908,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Organizovat styly šipek";
         Text[ hebrew ] = "Linienenden verwalten";
         Text[ hindi ] = "तीर शैलियों को व्यवस्था करो";
+        Text[ slovak ] = "Organizovať štýly šípiek";
     };
     FixedText FI_TIP
     {
@@ -1897,6 +1943,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Přidat zvolený objekt k vytvoření nových stylů šipky.";
         Text[ hebrew ] = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes.";
         Text[ hindi ] = "नया तीर शैलियों को उत्पन्न करने केलिए चुने हुए वस्तु को जोड़ो ।";
+        Text[ slovak ] = "Pridať zvolený objekt k vytvoreniu nových štýlov šípiek.";
     };
 
     FixedText FT_LINE_END_STYLE
@@ -1931,6 +1978,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Styl šipky";
         Text[ hebrew ] = "Linien~endenstil";
         Text[ hindi ] = "तीर शैली";
+        Text[ slovak ] = "Štýl šípky";
     };
     Edit EDT_NAME
     {
@@ -1971,6 +2019,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Titulek";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~शार्षक";
+        Text[ slovak ] = "~Nadpis";
     };
     ListBox LB_LINEENDS
     {
@@ -2014,6 +2063,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Přidat...";
         Text[ hebrew ] = "‮הוספה...‬";
         Text[ hindi ] = "~जोड़ो...";
+        Text[ slovak ] = "Prid~ať...";
     };
     PushButton BTN_MODIFY
     {
@@ -2048,6 +2098,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Změnit...";
         Text[ hebrew ] = "‮שינוי...‬";
         Text[ hindi ] = "~सुधारो...";
+        Text[ slovak ] = "Z~meniť...";
     };
     PushButton BTN_DELETE
     {
@@ -2082,6 +2133,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ czech ] = "Smazat...";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ...";
+        Text[ slovak ] = "~Zmazať...";
     };
     ImageButton BTN_LOAD
     {
@@ -2125,6 +2177,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ czech ] = "Načíst styly šipek";
         QuickHelpText[ hebrew ] = "Linienendentabelle laden";
         QuickHelpText[ hindi ] = "तीर शैलियों को लोड़ करो";
+        QuickHelpText[ slovak ] = "Načítať štýly šípiek";
     };
     ImageButton BTN_SAVE
     {
@@ -2139,7 +2192,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText [ portuguese ] = "Guarda estilos de setas" ;
         QuickHelpText [ finnish ] = "Tallenna nuolityylit" ;
         QuickHelpText [ danish ] = "Gem piltyper" ;
-        QuickHelpText [ french ] = "Sauvegarder la palette des extr�mit�s de ligne" ;
+        QuickHelpText [ french ] = "�nregistrer la palette des extr�mit�s de ligne" ;
         QuickHelpText [ swedish ] = "Spara linjesluttabell" ;
         QuickHelpText [ dutch ] = "Lijst lijnuiteinden opslaan" ;
         QuickHelpText [ spanish ] = "Guardar tabla de finales de l�nea" ;
@@ -2168,6 +2221,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ czech ] = "Uložit styly šipek";
         QuickHelpText[ hebrew ] = "Linienendentabelle sichern";
         QuickHelpText[ hindi ] = "रेखा शैलियों को संचित करो";
+        QuickHelpText[ slovak ] = "Uložiť štýly šípiek";
     };
 
     Control CTL_PREVIEW
@@ -2192,6 +2246,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Text[ czech ] = "Kótovací šipky";
     Text[ hebrew ] = "Linienenden definieren";
     Text[ hindi ] = "तीर की चोटी";
+    Text[ slovak ] = "Kótovacie šípky";
 };
  // RID_SVXDLG_LINE ----------------------------------------------------------
 TabDialog RID_SVXDLG_LINE
@@ -2252,6 +2307,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ czech ] = "Čára";
                 Text[ hebrew ] = "Linie";
                 Text[ hindi ] = "रेखा";
+                Text[ slovak ] = "Čiara";
             };
             PageItem
             {
@@ -2285,6 +2341,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ czech ] = "Styly čar";
                 Text[ hebrew ] = "Linienstile";
                 Text[ hindi ] = "रेखा शैलियाँ";
+                Text[ slovak ] = "Štýly čiar";
             };
             PageItem
             {
@@ -2318,6 +2375,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ czech ] = "Styly šipek";
                 Text[ hebrew ] = "Linienenden";
                 Text[ hindi ] = "तीर शैलियाँ";
+                Text[ slovak ] = "Štýly šípiek";
             };
         };
     };
@@ -2336,7 +2394,10 @@ TabDialog RID_SVXDLG_LINE
     Text[ czech ] = "Čára";
     Text[ hebrew ] = "Linie";
     Text[ hindi ] = "रेखा";
+    Text[ slovak ] = "Čiara";
 };
+
+
 
 
 
