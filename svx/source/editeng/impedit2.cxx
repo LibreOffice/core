@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:51:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
 
 #include <unicode/ubidi.h>
 
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 // moved from editundo.hxx
 const EPaM& EditUndoRemoveChars::GetEPaM() { return aEPaM; }
 String& EditUndoRemoveChars::GetStr() { return aText; }
