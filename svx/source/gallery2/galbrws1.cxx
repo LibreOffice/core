@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 16:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,39 +313,43 @@ void GalleryBrowser1::ShowContextMenu()
 
 IMPL_LINK( GalleryBrowser1, ShowContextMenuHdl, void*, p )
 {
-    PopupMenu           aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
-    GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
-    BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
-    static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
+    GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), *this );
 
-
-    if( pTheme->IsReadOnly() )
+    if( pTheme )
     {
-        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
-    }
-    else if( pTheme->IsImported() )
-    {
-        bUpdateAllowed = FALSE;
-        bRenameAllowed = bRemoveAllowed = TRUE;
-    }
-    else if( pTheme->IsDefault() )
-    {
-        bUpdateAllowed = bRenameAllowed = TRUE;
-        bRemoveAllowed = FALSE;
-    }
-    else
-        bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
+        PopupMenu           aMenu( GAL_RESID( RID_SVXMN_GALLERY1 ) );
+        BOOL                bUpdateAllowed, bRenameAllowed, bRemoveAllowed;
+        static const BOOL   bIdDialog = ( getenv( "GALLERY_ENABLE_ID_DIALOG" ) != NULL );
 
-    aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed );
-    aMenu.EnableItem( MN_RENAME, bRenameAllowed );
-    aMenu.EnableItem( MN_DELETE, bRemoveAllowed );
-    aMenu.EnableItem( MN_ASSIGN_ID, bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() );
 
-    mpGallery->ReleaseTheme( pTheme, *this );
+        if( pTheme->IsReadOnly() )
+        {
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = FALSE;
+        }
+        else if( pTheme->IsImported() )
+        {
+            bUpdateAllowed = FALSE;
+            bRenameAllowed = bRemoveAllowed = TRUE;
+        }
+        else if( pTheme->IsDefault() )
+        {
+            bUpdateAllowed = bRenameAllowed = TRUE;
+            bRemoveAllowed = FALSE;
+        }
+        else
+            bUpdateAllowed = bRenameAllowed = bRemoveAllowed = TRUE;
 
-    aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
-    aMenu.RemoveDisabledEntries();
-    aMenu.Execute( this, GetPointerPosPixel() );
+        aMenu.EnableItem( MN_ACTUALIZE, bUpdateAllowed );
+        aMenu.EnableItem( MN_RENAME, bRenameAllowed );
+        aMenu.EnableItem( MN_DELETE, bRemoveAllowed );
+        aMenu.EnableItem( MN_ASSIGN_ID, bIdDialog && !pTheme->IsReadOnly() && !pTheme->IsImported() );
+
+        mpGallery->ReleaseTheme( pTheme, *this );
+
+        aMenu.SetSelectHdl( LINK( this, GalleryBrowser1, PopupMenuHdl ) );
+        aMenu.RemoveDisabledEntries();
+        aMenu.Execute( this, GetPointerPosPixel() );
+    }
 
     return 0L;
 }
