@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:31:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,7 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
 // -----------------------------------------------------------------------
 void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) throw( RuntimeException )
 {
+    ::osl::MutexGuard aGuard(m_aMutex);
     stopFrameListening( );
 
     m_xCurrentFrame = xFrame;
@@ -391,6 +392,8 @@ void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) thro
     loadMenu(xFrame);
     if ( m_xCurrentFrame.is() )
         updateTitle();
+    if ( getView() )
+        getView()->attachFrame(xFrame);
 }
 // -----------------------------------------------------------------------------
 void OGenericUnoController::updateTitle()
