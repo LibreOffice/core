@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:09:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,38 +320,6 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         createElement();
 
-    };
-
-    //=====================================================================
-    //= OControlWrapperImport
-    //=====================================================================
-    /** helper class importing a &lt;form:column&gt; or &lt;form:control&gt; element.
-    */
-    class OControlWrapperImport : public SvXMLImportContext
-    {
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >
-                                m_xOwnAttributes;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                m_xParentContainer;
-        IFormsImportContext&    m_rFormImport;
-        IEventAttacherManager&  m_rEventManager;
-
-    public:
-        OControlWrapperImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer);
-
-        // SvXMLImportContext overridables
-        virtual SvXMLImportContext* CreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-
-    protected:
-        virtual OControlImport* implCreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-            OControlElement::ElementType _eType);
     };
 
     // TODO:
