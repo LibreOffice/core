@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
+ *  last change: $Author: mba $ $Date: 2001-01-19 09:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,8 @@ SfxObjectShell::~SfxObjectShell()
     // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
     // erlaubt
     SfxObjectShell::Close();
+    if ( pImp->xModel.is() )
+        pImp->xModel->dispose();
 
     DELETEX(pMedium);
     DELETEX(pImp->pEventConfig);
@@ -300,9 +302,6 @@ sal_Bool SfxObjectShell::Close()
 */
         Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
         //pImp->bClosing = sal_False;
-
-        if ( pImp->xModel.is() )
-            pImp->xModel->dispose();
     }
 
     return sal_True;
