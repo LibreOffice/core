@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:04:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,11 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bAllChildsVisible(TRUE),
     bIsFullScreen( FALSE ),
     bShowStatusBar( TRUE ),
-    bLocked( FALSE )
+    bLocked( FALSE ),
+    m_aStatusBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" )),
+    m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )),
+    m_aTbxTypeName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" )),
+    m_aProgressBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ))
 {
     DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "Keine Bindings!");
@@ -636,34 +640,28 @@ void SfxWorkWindow::DeleteControllers_Impl()
     {
         try
         {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-        aValue >>= xLayoutManager;
+            Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+            aValue >>= xLayoutManager;
         }
         catch ( Exception& )
         {
         }
     }
 
-    // StatusBar l"oschen
     if ( xLayoutManager.is() )
     {
-        rtl::OUString aStatusBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
-        xLayoutManager->destroyElement( aStatusBarResStr );
+        xLayoutManager->reset();
+
+        // StatusBar l"oschen
         ResetStatusBar_Impl();
 
         // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
-        rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
         for ( USHORT i = 0; i < aObjBarList.size(); i++ )
         {
             // Nicht jede Position mu\s belegt sein
             USHORT nId = aObjBarList[i].nId;
             if ( nId )
-            {
-                rtl::OUString aTbxId( aTbxType );
-                aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
-                xLayoutManager->destroyElement( aTbxId );
                 aObjBarList[i].nId = 0;
-            }
         }
     }
 
@@ -1118,54 +1116,19 @@ void SfxWorkWindow::HideChilds_Impl()
 void SfxWorkWindow::ResetObjectBars_Impl()
 {
     USHORT n;
-/*
-    for ( n = 0; n < SFX_OBJECTBAR_MAX; ++n )
-    {
-        aObjBars[n].nId = 0;
-        aObjBarLists[n].aArr.Remove(0, aObjBarLists[n].aArr.Count() );
-        aObjBarLists[n].nAct = 0;
-    }
-*/
     for ( n = 0; n < aObjBarList.size(); n++ )
         aObjBarList[n].bDestroy = sal_True;
 
     for ( n = 0; n < pChildWins->Count(); ++n )
         (*pChildWins)[n]->nId = 0;
-
-//  if ( pParent )
-//      pParent->ResetObjectBars_Impl();
 }
 
 void SfxWorkWindow::NextObjectBar_Impl( USHORT nPos )
 {
-/*
-    USHORT nCount = aObjBarLists[nPos].aArr.Count();
-    if ( nCount > 1 )
-    {
-        if ( ++(aObjBarLists[nPos].nAct) == nCount )
-            aObjBarLists[nPos].nAct = 0;
-
-        aObjBars[nPos] = aObjBarLists[nPos].Actual();
-        UpdateObjectBars_Impl();
-    }
-*/
 }
 
 USHORT SfxWorkWindow::HasNextObjectBar_Impl( USHORT nPos, String *pStr )
 {
-/*
-    USHORT nCount = aObjBarLists[nPos].aArr.Count();
-    if ( nCount > 1 )
-    {
-        USHORT nAct = aObjBarLists[nPos].nAct;
-        if ( ++nAct == nCount )
-            nAct = 0;
-        const SfxObjectBar_Impl& rObjbar = aObjBarLists[nPos].aArr[nAct];
-        if ( pStr )
-            *pStr = rObjbar.aName;
-        return rObjbar.nId;
-    }
-*/
     return 0;
 }
 
@@ -1184,10 +1147,9 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, const ResId& rResId,
         return;
     }
 
-    SfxObjectBar_Impl aObjBar; // = aObjBars[nRealPos];
+    SfxObjectBar_Impl aObjBar;
     aObjBar.pIFace = pIFace;
-    aObjBar.nId = rResId.GetId();
-//  rObjBar.pResMgr = rResId.GetResMgr();
+    aObjBar.nId = USHORT( rResId.GetId() );
     aObjBar.nPos = nRealPos;
     aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
     if (pName)
@@ -1195,19 +1157,16 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, const ResId& rResId,
     else
         aObjBar.aName.Erase();
 
-//  SfxObjectBarArr_Impl& rArr = aObjBarLists[nRealPos].aArr;
     for ( USHORT n=0; n<aObjBarList.size(); n++ )
     {
         if ( aObjBarList[n].nId == aObjBar.nId )
         {
             aObjBarList[n] = aObjBar;
-//          aObjBarLists[nRealPos].nAct = n;
             return;
         }
     }
 
     aObjBarList.push_back( aObjBar );
-//  rArr.Insert( rObjBar, 0 );
 }
 
 //------------------------------------------------------------------------
@@ -1233,7 +1192,6 @@ FASTBOOL SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
     }
 
     return FALSE;
-//    return 0 != aObjBars[nPos & SFX_POSITION_MASK].nId;
 }
 
 //------------------------------------------------------------------------
@@ -1259,19 +1217,6 @@ BOOL SfxWorkWindow::IsVisible_Impl( USHORT nMode ) const
 
 Window* SfxWorkWindow::GetObjectBar_Impl( USHORT nPos, ResId& rResId )
 {
-/*
-    USHORT nRealPos = nPos & SFX_POSITION_MASK;
-    DBG_ASSERT( nRealPos < SFX_OBJECTBAR_MAX,
-                "object bar position overflow" );
-
-    if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
-        return pParent->GetObjectBar_Impl( nPos, rResId );
-
-    rResId = ResId(aObjBars[nPos & SFX_POSITION_MASK].nId);
-    rResId.SetResMgr(aObjBars[nPos & SFX_POSITION_MASK].pResMgr);
-
-    return &aObjBars[nPos].pTbx->GetToolBox();
-*/
     return NULL;
 }
 
@@ -1333,22 +1278,21 @@ Reference< ::com::sun::star::task::XStatusIndicator > SfxWorkWindow::GetStatusIn
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
-    }
 
-    if ( xLayoutManager.is() )
-    {
-        rtl::OUString aProgressBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/progressbar/progressbar" ));
-        xLayoutManager->createElement( aProgressBarResStr );
-        xLayoutManager->showElement( aProgressBarResStr );
-
-        Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
-            xLayoutManager->getElement( aProgressBarResStr );
-        if ( xProgressBar.is() )
+        if ( xLayoutManager.is() )
         {
-            xStatusIndicator = Reference< ::com::sun::star::task::XStatusIndicator >(
-                xProgressBar->getRealInterface(), UNO_QUERY );
+            xLayoutManager->createElement( m_aProgressBarResName );
+            xLayoutManager->showElement( m_aProgressBarResName );
+
+            Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
+                xLayoutManager->getElement( m_aProgressBarResName );
+            if ( xProgressBar.is() )
+            {
+                xStatusIndicator = Reference< ::com::sun::star::task::XStatusIndicator >(
+                    xProgressBar->getRealInterface(), UNO_QUERY );
+            }
         }
     }
 
@@ -1377,7 +1321,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
     }
 
@@ -1386,7 +1330,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     // "uber alle Toolboxen iterieren
     xLayoutManager->lock();
-    rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
     for ( n = 0; n < aObjBarList.size(); ++n )
     {
         USHORT      nId      = aObjBarList[n].nId;
@@ -1403,35 +1346,31 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         FASTBOOL bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
         if ( bDestroy )
         {
-            rtl::OUString aTbxId( aTbxType );
+            rtl::OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             xLayoutManager->destroyElement( aTbxId );
         }
         else if ( nId != 0 && ( ( bModesMatching && !bIsFullScreen ) ||
                                 ( bIsFullScreen && bFullScreenTbx ) ) )
         {
-            rtl::OUString aTbxId( aTbxType );
+            rtl::OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
-            {
                 xLayoutManager->destroyElement( aTbxId );
-            }
             else
-            {
-                xLayoutManager->createElement( aTbxId );
                 xLayoutManager->requestElement( aTbxId );
-            }
         }
         else if ( nId != 0 )
         {
             // ggf. Toolbox an dieser Position l"oschen
-            rtl::OUString aTbxId( aTbxType );
+            rtl::OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             xLayoutManager->destroyElement( aTbxId );
         }
     }
+
+    UpdateStatusBar_Impl();
     xLayoutManager->unlock();
-    xLayoutManager->doLayout();
 
     UpdateChildWindows_Impl();
 
@@ -1442,8 +1381,6 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         if (p->GetWindowCount())
             p->Lock(FALSE);
     }
-
-    UpdateStatusBar_Impl();
 }
 
 void SfxWorkWindow::UpdateChildWindows_Impl()
@@ -1670,9 +1607,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBindings& rBindings )
 {
     if ( rResId.GetId() && bShowStatusBar && IsVisible_Impl() )
-    {
-        aStatBar.nId = rResId.GetId();
-    }
+        aStatBar.nId = USHORT( rResId.GetId() );
 }
 
 #define SFX_ITEMTYPE_STATBAR 4
@@ -1710,12 +1645,11 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 {
     Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
     Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
-    Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+    Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
     aValue >>= xLayoutManager;
 
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
-    rtl::OUString aStatusBarType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
     if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
          ( aStatBar.bOn && !bIsFullScreen || aStatBar.bTemp ) )
     {
@@ -1723,8 +1657,8 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         // dieser "ubernimmt die aktuelle Statusleiste;
         if ( xLayoutManager.is() )
         {
-            xLayoutManager->createElement( aStatusBarType );
-            xLayoutManager->requestElement( aStatusBarType );
+            xLayoutManager->createElement( m_aStatusBarResName );
+            xLayoutManager->requestElement( m_aStatusBarResName );
         }
     }
     else
@@ -1733,7 +1667,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         // Der Manager erzeugt die Statusleiste nur, er zerst"ort sie
         // nicht !
         if ( xLayoutManager.is() )
-            xLayoutManager->destroyElement( aStatusBarType );
+            xLayoutManager->destroyElement( m_aStatusBarResName );
     }
 }
 
@@ -1772,32 +1706,6 @@ BOOL SfxWorkWindow::IsVisible_Impl()
 //------------------------------------------------------------------------
 void SfxWorkWindow::HidePopups_Impl(BOOL bHide, BOOL bParent, USHORT nId )
 {
-    if ( nId && pChilds->Count() )
-    {
-/*
-        Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
-        aValue >>= xLayoutManager;
-
-        rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
-        for ( USHORT n = 0; n < aObjBarList.size(); ++n )
-        {
-            rtl::OUString aTbxId( aTbxType );
-            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
-            if ( nId &&
-                 xLayoutManager->getElement( aTbxId ).is() &&
-                 xLayoutManager->isElementFloating( aTbxId ))
-            {
-                if ( bHide )
-                    xLayoutManager->hideElement( aTbxId );
-                else
-                    xLayoutManager->showElement( aTbxId );
-            }
-        }
-*/
-    }
-
     for ( USHORT n = 0; n < pChildWins->Count(); ++n )
     {
         SfxChildWindow *pCW = (*pChildWins)[n]->pWin;
@@ -1837,25 +1745,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     if ( eChild == SFX_CHILDWIN_OBJECTBAR )
     {
         return;
-/*
-        // configure toolbar
-        USHORT n;
-        for (n=0; n<SFX_OBJECTBAR_MAX; n++)
-        {
-            if (aObjBars[n].nId == nId && aObjBars[n].pTbx)
-                break;
-        }
-
-//        DBG_ASSERT( pParent || n<SFX_OBJECTBAR_MAX, "Unknown toolbox!" );
-        if (n>=SFX_OBJECTBAR_MAX)
-        {
-            if (pParent)
-                pParent->ConfigChild_Impl( eChild, eConfig, nId );
-            return;
-        }
-
-        pWin = pBox = (SfxToolbox*) &aObjBars[n].pTbx->GetToolBox();
-*/
     }
     else
     {
