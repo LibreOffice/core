@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:07:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ public:
           void     SetDrawPage( SdrPage* pNew ){ pDrawPage = pNew; }
 
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
-                               const SwCrsrMoveState* = 0 ) const;
+                               SwCrsrMoveState* = 0 ) const;
     virtual void  Paint( const SwRect& ) const;
     virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
