@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 11:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@ XubString OutlinerEditEng::GetUndoComment( USHORT nUndoId ) const
     {
         case OLUNDO_DEPTH:
             return XubString( EditResId( RID_OUTLUNDO_DEPTH ));
-
-        case OLUNDO_HEIGHT:
-            return XubString( EditResId(RID_OUTLUNDO_HEIGHT ));
 
         case OLUNDO_EXPAND:
             return XubString( EditResId( RID_OUTLUNDO_EXPAND ));
