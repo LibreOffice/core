@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:05:59 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,11 @@ public:
         If no local name is found, tries to find a matching global name.
         @return  Pointer to the defined name or 0 on error. */
     const XclImpName*           FindName( const String& rXclName, SCTAB  nScTab = SCNOTAB ) const;
+
+    /** Get the name used in Calc using the index of the internal defined names in document.
+        @param nXtiIndex  The index of the internal defined names.
+        @return  Pointer to the defined name or 0 on error. */
+    const XclImpName*           GetNameFromIndex( sal_uInt16 nXtiIndex) const;
 
 private:
     typedef ScfDelList< XclImpName > XclImpNameList;
