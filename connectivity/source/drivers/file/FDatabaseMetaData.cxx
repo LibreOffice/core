@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-24 14:44:34 $
+ *  last change: $Author: oj $ $Date: 2002-11-01 11:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         aName = xRow->getString(1);
         aURL.SetSmartProtocol(INET_PROT_FILE);
-        aURL.SetSmartURL(aName);
+        String sUrl = m_pConnection->getURL() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + aName;
+        aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();
 
         ODatabaseMetaDataResultSet::ORow aRow(3);
