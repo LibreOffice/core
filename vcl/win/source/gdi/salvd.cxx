@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:56:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SV_SALVD_H
 #include <salvd.h>
 #endif
+#ifndef _SV_SYSDATA_HXX
+#include <sysdata.hxx>
+#endif
 
 // =======================================================================
 
@@ -98,15 +101,30 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long nDX, long nDY,
-                                                       USHORT nBitCount )
+                                                       USHORT nBitCount,
+                                                       const SystemGraphicsData* pData )
 {
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
 
-    HDC     hDC     = CreateCompatibleDC( pGraphics->mhDC );
-    HBITMAP hBmp    = ImplCreateVirDevBitmap( pGraphics->mhDC,
-                                              nDX, nDY, nBitCount );
+    HDC     hDC = NULL;
+    HBITMAP hBmp = NULL;
+    BOOL    bOk = FALSE;
 
-    if ( hDC && hBmp )
+    if( pData )
+    {
+        hDC = pData->hDC;
+        hBmp = NULL;
+        bOk = (hDC != NULL);
+    }
+    else
+    {
+        hDC     = CreateCompatibleDC( pGraphics->mhDC );
+        hBmp    = ImplCreateVirDevBitmap( pGraphics->mhDC,
+                                        nDX, nDY, nBitCount );
+        bOk = ( (hDC != NULL) && (hBmp != NULL) );
+    }
+
+    if ( bOk )
     {
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
         SalData*                pSalData = GetSalData();
@@ -125,12 +143,16 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         }
         ImplSalInitGraphics( pVirGraphics );
 
-        pVDev->mhDC     = hDC;
+        pVDev->mhDC         = hDC;
         pVDev->mhBmp        = hBmp;
-        pVDev->mhDefBmp = SelectBitmap( hDC, hBmp );
+        if( hBmp )
+            pVDev->mhDefBmp = SelectBitmap( hDC, hBmp );
+        else
+            pVDev->mhDefBmp = NULL;
         pVDev->mpGraphics   = pVirGraphics;
         pVDev->mnBitCount   = nBitCount;
         pVDev->mbGraphics   = FALSE;
+        pVDev->mbForeignDC  = (pData != NULL);
 
         // insert VirDev in VirDevList
         pVDev->mpNext = pSalData->mpFirstVD;
@@ -140,7 +162,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
     else
     {
-        if ( hDC )
+        if ( hDC && !pData )
             DeleteDC( hDC );
         if ( hBmp )
             DeleteBitmap( hBmp );
@@ -171,9 +193,12 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     if ( mpGraphics->mhDefPal )
         SelectPalette( mpGraphics->mhDC, mpGraphics->mhDefPal, TRUE );
     ImplSalDeInitGraphics( mpGraphics );
-    SelectBitmap( mpGraphics->mhDC, mhDefBmp );
-    DeleteDC( mpGraphics->mhDC );
-    DeleteBitmap( mhBmp );
+    if( mhDefBmp )
+        SelectBitmap( mpGraphics->mhDC, mhDefBmp );
+    if( !mbForeignDC )
+        DeleteDC( mpGraphics->mhDC );
+    if( mhBmp )
+        DeleteBitmap( mhBmp );
     delete mpGraphics;
 
     // remove VirDev from VirDevList
@@ -213,15 +238,20 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 BOOL WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    HBITMAP hNewBmp = ImplCreateVirDevBitmap( mhDC, nDX, nDY,
-                                              mnBitCount );
-    if ( hNewBmp )
-    {
-        SelectBitmap( mhDC, hNewBmp );
-        DeleteBitmap( mhBmp );
-        mhBmp = hNewBmp;
-        return TRUE;
-    }
+    if( mbForeignDC || !mhBmp )
+        return TRUE;    // ???
     else
-        return FALSE;
+    {
+        HBITMAP hNewBmp = ImplCreateVirDevBitmap( mhDC, nDX, nDY,
+                                              mnBitCount );
+        if ( hNewBmp )
+        {
+            SelectBitmap( mhDC, hNewBmp );
+            DeleteBitmap( mhBmp );
+            mhBmp = hNewBmp;
+            return TRUE;
+        }
+        else
+            return FALSE;
+    }
 }
