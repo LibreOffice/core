@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 14:09:21 $
+ *  last change: $Author: sab $ $Date: 2001-05-10 15:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         /** property map for export info set */
         comphelper::PropertyMapEntry aExportInfoMap[] =
         {
-            { MAP_LEN( "NumberStyles" ), 0, SEQTYPE(::getCppuType((uno::Reference<container::XNameAccess> *)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+            { MAP_LEN( "NumberStyles" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { NULL, 0, 0, NULL, 0, 0 }
         };
         uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
@@ -471,10 +471,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     /** property map for export info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
     {
-        { MAP_LEN( "ProgressRange" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressMax" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "ProgressCurrent" ), 0, SEQTYPE(::getCppuType((sal_Int32*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "WrittenNumberStyles" ), 0, SEQTYPE(::getCppuType((uno::Sequence<sal_Int32>*)0)), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressRange" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressMax" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_LEN( "WrittenNumberStyles" ), 0, &::getCppuType((uno::Sequence<sal_Int32>*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
