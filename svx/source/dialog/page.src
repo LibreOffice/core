@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,7 +1772,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
         < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
         < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Tabloïd" ; PAPERSIZE_TABLOID ; > ;
         < "Utilisateur" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
@@ -2409,7 +2409,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
         < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
         < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Tabloïd" ; PAPERSIZE_TABLOID ; > ;
         < "Utilisateur" ; PAPERSIZE_USER ; > ;
         < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
         < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
