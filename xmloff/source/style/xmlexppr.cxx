@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-20 14:53:32 $
+ *  last change: $Author: dr $ $Date: 2000-10-20 16:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                     MID_FLAG_MERGE_ATTRIBUTE ) != 0 )
         {
             aValue = rAttrList.getValueByName( sName );
-            bRemove = aValue.getLength() != 0;
+            bRemove = sal_True; //aValue.getLength() != 0;
         }
 
         if( maPropMapper->exportXML( aValue, rProperty, rUnitConverter ) )
