@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.75 $
- *  last change: $Author: pl $ $Date: 2002-08-29 15:21:03 $
+ *  $Revision: 1.76 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,14 +107,6 @@
 #include <svapp.hxx>
 #include <settings.hxx>
 #include <tools/lang.hxx>
-
-// Glyph Flags
-#define GF_NONE     0
-#define GF_ROTMASK  3
-#define GF_ROTL     +1
-#define GF_ROTR     +3
-#define GF_UNHINTED +4
-#define GF_GSUB     +8
 
 // -----------------------------------------------------------------------
 
@@ -476,10 +468,11 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 // =======================================================================
 
 FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
-:   ServerFont(rFSD),
-    mpFontInfo(pFI),
-    maFaceFT(NULL),
-    maRecodeConverter(NULL)
+:   ServerFont( rFSD ),
+    mpFontInfo( pFI ),
+    maFaceFT( NULL ),
+    maRecodeConverter( NULL ),
+    mpLayoutEngine( NULL )
 {
     if( !pFI->MapFile() )
         return;
@@ -578,6 +571,9 @@ bool FreetypeServerFont::TestFont() const
 
 FreetypeServerFont::~FreetypeServerFont()
 {
+    if( mpLayoutEngine )
+        delete mpLayoutEngine;
+
     if( maRecodeConverter )
         rtl_destroyUnicodeToTextConverter( maRecodeConverter );
 
@@ -644,7 +640,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
-int SetVerticalFlags( sal_Unicode nChar )
+int GetVerticalFlags( sal_Unicode nChar )
 {
     if( (nChar >= 0x1100 && nChar <= 0x11f9)   // Hangul Jamo
         || (nChar >= 0x3000 && nChar <= 0xfaff)
@@ -667,15 +663,10 @@ int SetVerticalFlags( sal_Unicode nChar )
     return GF_NONE;
 }
 
-static inline void SetGlyphFlags( int& nGlyphIndex, int nFlags )
-{
-    nGlyphIndex |= (nFlags << 24);
-}
-
 static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
 {
-    nGlyphFlags = (nGlyphIndex >> 24);
-    nGlyphIndex &= 0x00ffffff;
+    nGlyphFlags = nGlyphIndex & GF_FLAGMASK;
+    nGlyphIndex &= GF_IDXMASK;
 }
 
 int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGlyphFT ) const
@@ -804,7 +795,7 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
         // TODO: rethink when GSUB is used for non-vertical case
         GlyphSubstitution::const_iterator it = maGlyphSubstitution.find( nGlyphIndex );
         if( it == maGlyphSubstitution.end() )
-          nGlyphFlags |= SetVerticalFlags( aChar );
+          nGlyphFlags |= GetVerticalFlags( aChar );
         else
         {
             // for vertical GSUB also compensate for nOrientation=2700
@@ -823,7 +814,7 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) co
 #endif
 
     if( nGlyphIndex !=0 )
-        SetGlyphFlags( nGlyphIndex, nGlyphFlags );
+        nGlyphIndex |= nGlyphFlags;
 
     return nGlyphIndex;
 }
