@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:33:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2414,6 +2414,15 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
             default:
                 ASSERT( FALSE, "Ungueltige orientation fuer Table." );
         }
+
+        // --> OD 2004-07-15 #i26250# - extend bottom printing area, if table
+        // is last content inside a table cell.
+        if ( GetFmt()->GetDoc()->IsAddParaSpacingToTableCells() &&
+             GetUpper()->IsInTab() && !GetIndNext() )
+        {
+            nLower += pAttrs->GetULSpace().GetLower();
+        }
+        // <--
         (this->*fnRect->fnSetYMargins)( nUpper, nLower );
         if( (nMax - MINLAY) < (nLeftSpacing + nRightSpacing) )
             (this->*fnRect->fnSetXMargins)( 0, 0 );
@@ -2909,7 +2918,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
             return rReformat = TRUE;
         else if ( !bLockBackMove && nSpace > 0 )
         {
-            const SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
+            SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
             return nTmpHeight < nSpace;
         }
     }
@@ -3594,6 +3603,8 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
             BFIXHEIGHT = bFix;
         }
     }
+
+    // last row will fill the space in its upper.
     if ( !GetNext() )
     {
         //Der letzte fuellt den verbleibenden Raum im Upper aus.
@@ -4465,11 +4476,24 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                         // We look for the minimum of all first line heights;
                         SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
                         const SwFrm* pFrm = pPrevCell->Lower();
+                        const SwFrm* pLast = pFrm;
                         while ( pFrm )
                         {
                             nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+                            pLast = pFrm;
                             pFrm = pFrm->GetNext();
                         }
+
+                        // --> FME, OD 2004-07-15 #i26831#, #i26520#
+                        // The additional lower space of the current last.
+                        if ( pLast )
+                        {
+                            nReal += SwFlowFrm::CastFlowFrm(pLast)->CalcAddLowerSpaceAsLastInTableCell();
+                        }
+                        // Don't forget the upper space and lower space,
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace( NULL, pLast);
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
+                        // <--
 
                         if ( nReal > 0 )
                             nTmpHeight -= nReal;
@@ -4481,6 +4505,11 @@ SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
                         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
                         const SwBorderAttrs &rAttrs = *aAccess.Get();
                         nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+                        // --> OD 2004-07-16 #i26250#
+                        // Don't forget the upper space and lower space,
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcUpperSpace();
+                        nTmpHeight += SwFlowFrm::CastFlowFrm(pTmp)->CalcLowerSpace();
+                        // <--
                     }
                 }
 
