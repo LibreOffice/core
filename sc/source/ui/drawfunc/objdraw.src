@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:52:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
         Text[ hebrew ] = "‮ברירת מגדל‬";\
         Text[ hindi ] = "~अनुपस्थिति";\
         Text[ slovak ] = "Výcho~dzie";\
+        Text[ hungarian ] = "~Alapértelmezett";\
+        Text[ slovenian ] = "~Privzeto";\
     };
 
  // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
@@ -114,7 +116,7 @@
         Text [ portuguese_brazilian ] = "Es~tilo" ; \
         Text [ portuguese ] = "Estil~o" ; \
         Text [ finnish ] = "T~yyli" ; \
-        Text [ danish ] = "Typografi" ; \
+        Text [ danish ] = "~Typografi" ; \
         Text [ french ] = "St~yle" ; \
         Text [ swedish ] = "Sti~l" ; \
         Text [ dutch ] = "~Opmaak" ; \
@@ -163,7 +165,7 @@
                     Text [ portuguese_brazilian ] = "So~brescrito" ; \
                     Text [ portuguese ] = "~Superior � linha" ; \
                     Text [ finnish ] = "~Yl�indeksi" ; \
-                    Text [ danish ] = "H�vet" ; \
+                    Text [ danish ] = "~H�vet skrift" ; \
                     Text [ french ] = "~Exposant" ; \
                     Text [ swedish ] = "~Upph�jt" ; \
                     Text [ dutch ] = "Su~perscript" ; \
@@ -185,6 +187,8 @@
                     Text[ hebrew ] = "~Hochstellen";\
                     Text[ hindi ] = "~सूपरस्क्रिप्ट्";\
                     Text[ slovak ] = "Ho~rný index";\
+                    Text[ hungarian ] = "~Felső index";\
+                    Text[ slovenian ] = "Nadpi~sano";\
                 };\
                 MenuItem\
                 {\
@@ -197,7 +201,7 @@
                     Text [ portuguese_brazilian ] = "Su~bscrito" ; \
                     Text [ portuguese ] = "~Inferior � linha" ; \
                     Text [ finnish ] = "~Alaindeksi" ; \
-                    Text [ danish ] = "S�nket" ; \
+                    Text [ danish ] = "S�~nket skrift" ; \
                     Text [ french ] = "~Indice" ; \
                     Text [ swedish ] = "~Neds�nkt" ; \
                     Text [ dutch ] = "Su~bscript" ; \
@@ -219,6 +223,8 @@
                     Text[ hebrew ] = "~Tiefstellen";\
                     Text[ hindi ] = "स~बस्क्रिप्ट्";\
                     Text[ slovak ] = "Do~lný index";\
+                    Text[ hungarian ] = "~Alsó index";\
+                    Text[ slovenian ] = "P~odpisano";\
                 };\
             };\
         };\
@@ -238,6 +244,8 @@
         Text[ hebrew ] = "Sti~l";\
         Text[ hindi ] = "~शैली";\
         Text[ slovak ] = "Š~týl";\
+        Text[ hungarian ] = "~Stílus";\
+        Text[ slovenian ] = "~Slog";\
     };\
     MenuItem\
     {\
@@ -250,7 +258,7 @@
         Text [ portuguese_brazilian ] = "~Alinhamento" ; \
         Text [ portuguese ] = "~Alinhamento" ; \
         Text [ finnish ] = "~Tasaus" ; \
-        Text [ danish ] = "Justering" ; \
+        Text [ danish ] = "~Justering" ; \
         Text [ french ] = "~Alignement" ; \
         Text [ swedish ] = "~Justering" ; \
         Text [ dutch ] = "~Uitlijning" ; \
@@ -297,6 +305,8 @@
                     Text[ hebrew ] = "~Links";\
                     Text[ hindi ] = "~बायाँ";\
                     Text[ slovak ] = "~Vľavo";\
+                    Text[ hungarian ] = "~Balra igazított";\
+                    Text[ slovenian ] = "~Levo";\
                 };\
                 MenuItem\
                 {\
@@ -310,7 +320,7 @@
                     Text [ portuguese_brazilian ] = "� ~Direita" ; \
                     Text [ portuguese ] = "~Direita" ; \
                     Text [ finnish ] = "~Oikea" ; \
-                    Text [ danish ] = "H~�jre" ; \
+                    Text [ danish ] = "~H�jre" ; \
                     Text [ french ] = "� ~droite" ; \
                     Text [ swedish ] = "H�ge~r" ; \
                     Text [ dutch ] = "Re~chts" ; \
@@ -333,6 +343,8 @@
                     Text[ hebrew ] = "~Rechts";\
                     Text[ hindi ] = "~दाहिना";\
                     Text[ slovak ] = "Vp~ravo";\
+                    Text[ hungarian ] = "~Jobbra igazított";\
+                    Text[ slovenian ] = "~Desno";\
                 };\
                 MenuItem\
                 {\
@@ -369,6 +381,8 @@
                     Text[ hebrew ] = "~Zentriert";\
                     Text[ hindi ] = "~केन्द्रित";\
                     Text[ slovak ] = "~Na stred";\
+                    Text[ hungarian ] = "Kö~zépre igazított";\
+                    Text[ slovenian ] = "Na ~sredini";\
                 };\
                 MenuItem\
                 {\
@@ -404,6 +418,8 @@
                     Text[ hebrew ] = "~Blocksatz";\
                     Text[ hindi ] = "व्यवस्था किया हुआ";\
                     Text[ slovak ] = "~Do bloku";\
+                    Text[ hungarian ] = "So~rkizárt";\
+                    Text[ slovenian ] = "O~bojestransko";\
                 };\
             };\
         };\
@@ -423,6 +439,8 @@
         Text[ hebrew ] = "‮ישור‬";\
         Text[ hindi ] = "~पंक्तिकरण";\
         Text[ slovak ] = "Z~arovnanie";\
+        Text[ hungarian ] = "~Igazítás";\
+        Text[ slovenian ] = "~Poravnava";\
     };\
     MenuItem\
     {\
@@ -479,6 +497,8 @@
         Text[ hebrew ] = "‮ריווח שורה‬";\
         Text[ hindi ] = "~रेखा अंतर देना";\
         Text[ slovak ] = "R~iadkovanie";\
+        Text[ hungarian ] = "~Sorköz";\
+        Text[ slovenian ] = "Razmik med ~vrsticami";\
     };
 
 #define MN_DRWTXT \
@@ -525,6 +545,8 @@
         Text[ hebrew ] = "~Text...";\
         Text[ hindi ] = "टे~क्स्ट्...";\
         Text[ slovak ] = "Te~xt...";\
+        Text[ hungarian ] = "~Szöveg...";\
+        Text[ slovenian ] = "Be~sedilo...";\
     };
 
 #define MN_ORIGINALSIZE \
@@ -540,7 +562,7 @@
         Text [ portuguese_brazilian ] = "Tamanho ~Original" ; \
         Text [ portuguese ] = "Tamanho original" ; \
         Text [ finnish ] = "~Alkuper�inen koko" ; \
-        Text [ danish ] = "Oprindelig st�rrelse" ; \
+        Text [ danish ] = "~Oprindelig st�rrelse" ; \
         Text [ french ] = "Taille d'origine" ; \
         Text [ swedish ] = "Ori~ginalstorlek" ; \
         Text [ dutch ] = "Originele ~grootte" ; \
@@ -562,6 +584,8 @@
         Text[ hebrew ] = "Original~größe";\
         Text[ hindi ] = "~यथार्थ परिमाण";\
         Text[ slovak ] = "Pôv~odná veľkosť";\
+        Text[ hungarian ] = "~Eredeti méret";\
+        Text[ slovenian ] = "~Izvirna velikost";\
     };
 
 #define MN_RENAME_OBJECT \
@@ -580,7 +604,7 @@
         Text[ spanish ] = "~Nombrar objeto...";\
         Text[ finnish ] = "~Nime� objekti...";\
         Text[ italian ] = "~Nome oggetto...";\
-        Text[ danish ] = "Navngiv ob~jekt...";\
+        Text[ danish ] = "~Navngiv objekt...";\
         Text[ swedish ] = "Namnge ob~jekt...";\
         Text[ polish ] = "Nazwij obiek~t...";\
         Text[ portuguese_brazilian ] = "~Nomear Objeto...";\
@@ -596,6 +620,8 @@
         Text[ hebrew ] = "Ob~jekt benennen...";\
         Text[ hindi ] = "~Name Object...";\
         Text[ slovak ] = "~Názov objektu...";\
+        Text[ hungarian ] = "Objektum ~neve...";\
+        Text[ slovenian ] = "Po~imenuj predmet";\
     };
 
 #define MN_MIRRORSUB \
@@ -653,6 +679,8 @@
                     Text[ hebrew ] = "~Vertikal";\
                     Text[ hindi ] = "~लंबरूप प्रकार से";\
                     Text[ slovak ] = "~Zvisle";\
+                    Text[ hungarian ] = "~Függőleges";\
+                    Text[ slovenian ] = "~Navpično";\
                 };\
                 MenuItem\
                 {\
@@ -687,6 +715,8 @@
                     Text[ hebrew ] = "~Horizontal";\
                     Text[ hindi ] = "~समतल";\
                     Text[ slovak ] = "~Vodorovne";\
+                    Text[ hungarian ] = "~Vízszintes";\
+                    Text[ slovenian ] = "~Vodoravno";\
                 };\
             };\
         };\
@@ -706,6 +736,8 @@
         Text[ hebrew ] = "Sp~iegeln";\
         Text[ hindi ] = "~प्लिप";\
         Text[ slovak ] = "~Prevrátiť";\
+        Text[ hungarian ] = "~Tükrözés";\
+        Text[ slovenian ] = "O~brni";\
     };
 
 #define MN_ARRANGESUB \
@@ -720,7 +752,7 @@
         Text [ portuguese_brazilian ] = "~Organizar" ; \
         Text [ portuguese ] = "~Dispo��o" ; \
         Text [ finnish ] = "~J�rjest�" ; \
-        Text [ danish ] = "Pl~acering" ; \
+        Text [ danish ] = "~Arranger" ; \
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "Pl~acering" ; \
         Text [ dutch ] = "~Positie" ; \
@@ -746,7 +778,7 @@
                     Text [ portuguese_brazilian ] = "A~van�ar" ; \
                     Text [ portuguese ] = "~Trazer para a frente" ; \
                     Text [ finnish ] = "Siirr� ~eteenp�in" ; \
-                    Text [ danish ] = "F~lyt fremad" ; \
+                    Text [ danish ] = "~Flyt fremad" ; \
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~�ngre fram" ; \
                     Text [ dutch ] = "Verder naar ~voren" ; \
@@ -768,6 +800,8 @@
                     Text[ hebrew ] = "W~eiter nach vorn";\
                     Text[ hindi ] = "~आगे की ओर लाओ";\
                     Text[ slovak ] = "Preniesť ~bližšie";\
+                    Text[ hungarian ] = "Elő~rébb hozás";\
+                    Text[ slovenian ] = "Postavi ~naprej";\
                 };\
                 MenuItem\
                 {\
@@ -803,6 +837,8 @@
                     Text[ hebrew ] = "Weiter ~nach hinten";\
                     Text[ hindi ] = "पी~छे की ओर भेजो";\
                     Text[ slovak ] = "P~reniesť ďalej";\
+                    Text[ hungarian ] = "Hátrébb ~küldés";\
+                    Text[ slovenian ] = "Pošlji na~zaj";\
                 };\
                 MenuItem\
                 {\
@@ -835,6 +871,8 @@
         Text[ hebrew ] = "‮סידור‬";\
         Text[ hindi ] = "~क्रम में रखो";\
         Text[ slovak ] = "Uspori~adať";\
+        Text[ hungarian ] = "~Elrendezés";\
+        Text[ slovenian ] = "~Razporedi";\
     };
 
 #define MN_ANCHORSUB \
@@ -865,7 +903,7 @@
                     Text [ spanish ] = "A la ~p�gina" ; \
                     Text [ french ] = "� la ~page" ; \
                     Text [ swedish ] = "Vid ~sidan" ; \
-                    Text [ danish ] = "Til ~siden" ; \
+                    Text [ danish ] = "Til ~side" ; \
                     Text [ portuguese_brazilian ] = "Na P�gin~a" ; \
                     Text [ portuguese ] = "~Na p�gina" ; \
                     Text[ chinese_simplified ] = "在页面上(~A)";\
@@ -885,6 +923,8 @@
                     Text[ hebrew ] = "An der ~Seite";\
                     Text[ hindi ] = "पृ~ष्ठ केलिए";\
                     Text[ slovak ] = "K stránk~e";\
+                    Text[ hungarian ] = "~Oldalra";\
+                    Text[ slovenian ] = "Na str~an";\
                 };\
                 MenuItem\
                 {\
@@ -898,7 +938,7 @@
                     Text [ spanish ] = "A la ~celda" ; \
                     Text [ french ] = "� la ~cellule" ; \
                     Text [ swedish ] = "Vid ~cellen" ; \
-                    Text [ danish ] = "Til cellen" ; \
+                    Text [ danish ] = "Til ~celle" ; \
                     Text [ portuguese ] = "~C�lula" ; \
                     Text [ portuguese_brazilian ] = "Na ~C�lula" ; \
                     Text[ chinese_simplified ] = "在单元格上(~C)";\
@@ -918,6 +958,8 @@
                     Text[ hebrew ] = "An der ~Zelle";\
                     Text[ hindi ] = "~कोष्ठ केलिए";\
                     Text[ slovak ] = "K ~bunke";\
+                    Text[ hungarian ] = "~Cellára";\
+                    Text[ slovenian ] = "Na ~celico";\
                 };\
             };\
         };\
@@ -942,6 +984,8 @@
         Text[ hebrew ] = "~Verankerung";\
         Text[ hindi ] = "ऐ~न्कर";\
         Text[ slovak ] = "~Ukotviť";\
+        Text[ hungarian ] = "~Horgony";\
+        Text[ slovenian ] = "Zas~idraj";\
     };
 
 #define MN_ALIGNSUB \
@@ -1012,6 +1056,8 @@
         Text[ hebrew ] = "Aus~richtung";\
         Text[ hindi ] = "पं~क्तिकरण";\
         Text[ slovak ] = "~Zarovnanie";\
+        Text[ hungarian ] = "~Igazítás";\
+        Text[ slovenian ] = "Po~ravnava";\
     };
 
  //
@@ -1051,6 +1097,8 @@ String RID_DRAW_OBJECTBAR
     Text[ hebrew ] = "Zeichenobjektleiste";
     Text[ hindi ] = "रेखाचित्र वस्तु पट्टी";
     Text[ slovak ] = "Panel nástrojov kreslenia";
+    Text[ hungarian ] = "Rajzobjektum eszköztár";
+    Text[ slovenian ] = "Vrstica za risane predmete";
 };
 ToolBox RID_DRAW_OBJECTBAR
 {
@@ -1230,6 +1278,8 @@ String RID_TEXT_TOOLBOX
     Text[ hebrew ] = "Textobjektleiste";
     Text[ hindi ] = "टेक्स्ट् वस्तु पट्टी";
     Text[ slovak ] = "Panel textu";
+    Text[ hungarian ] = "Szövegobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za besedilo";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -1761,6 +1811,8 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ hebrew ] = "Grafikobjektleiste";
     Text[ hindi ] = "सुचित्र वस्तु पट्टी";
     Text[ slovak ] = "Panel obrázkov";
+    Text[ hungarian ] = "Képobjektum eszköztár";
+    Text[ slovenian ] = "Predmetna vrstica za grafiko";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
 {
@@ -2027,6 +2079,8 @@ String RID_POPUP_DRAW
     Text[ hebrew ] = "Popup-Menü für Zeichenobjekte";
     Text[ hindi ] = "रेखाचित्र वस्तुओं केलिए पाप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu pre kresby";
+    Text[ hungarian ] = "Legördülő menü rajzobjektumokhoz";
+    Text[ slovenian ] = "Pojavni meni za risane predmete";
 };
  //
  //     Popup-Menue fuer (allgemeine) Zeichenobjekte
@@ -2171,7 +2225,7 @@ Menu RID_POPUP_CHART
             Text [ french ] = "M~odifier la plage de donn�es..." ;
             Text [ dutch ] = "~Gegevensbereik wijzigen..." ;
             Text [ swedish ] = "�ndra ~dataomr�de..." ;
-            Text [ danish ] = "Rediger dataomr�de..." ;
+            Text [ danish ] = "~Modificer dataomr�de..." ;
             Text [ portuguese_brazilian ] = "~Modificar Intervalo de Dados..." ;
             Text [ portuguese ] = "~Modificar �rea de dados..." ;
             Text[ chinese_simplified ] = "更改数据区域(~M)...";
@@ -2191,6 +2245,8 @@ Menu RID_POPUP_CHART
             Text[ hebrew ] = "~Datenbereich ändern...";
             Text[ hindi ] = "ड़ॉटा फैलाव को ~सुधारो...";
             Text[ slovak ] = "~Upraviť dátovú oblasť...";
+            Text[ hungarian ] = "Adattartomány ~módosítása...";
+            Text[ slovenian ] = "~Spremeni obseg podatkov...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -2234,6 +2290,8 @@ String RID_POPUP_DRAWTEXT
     Text[ hebrew ] = "Popup-Menü für Text-Objekte";
     Text[ hindi ] = "टेक्स्ट् वस्तुओं केलिए पाप्-अप् मेनु";
     Text[ slovak ] = "Rozbaľovacie menu pre textové objekty";
+    Text[ hungarian ] = "Legördülő menü szövegobjektumokhoz";
+    Text[ slovenian ] = "Pojavni meni za predmete besedila";
 };
 
 Menu RID_POPUP_DRAWTEXT
@@ -2264,6 +2322,10 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
+
+
+
+
 
 
 
