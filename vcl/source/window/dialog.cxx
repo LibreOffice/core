@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     nStyle |= WB_SYSTEMWINDOW;
 
 
+    // parent is NULL: get the default Dialog parent
     if ( !pParent )
     {
         pParent = Application::GetDefDialogParent();
@@ -355,6 +356,9 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             }
         }
     }
+    // DIALOG_NO_PARENT: explicitly don't have a parent for this Dialog
+    else if( pParent == DIALOG_NO_PARENT )
+        pParent = NULL;
 
 /*
     // Now, all Dialogs are per default system windows !!!
