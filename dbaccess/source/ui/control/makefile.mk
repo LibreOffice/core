@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-06-20 06:59:05 $
+#   last change: $Author: fs $ $Date: 2001-08-23 14:47:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=uicontrols
 
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
@@ -81,16 +79,21 @@ SRCFILES =	\
         tabletree.src		\
         marktree.src
 
+# ... exception files .........................
+
+EXCEPTIONSFILES=\
+        $(SLO)$/tabletree.obj			\
+        $(SLO)$/TableGrantCtrl.obj		\
+        $(SLO)$/FieldDescControl.obj
+
 # ... object files ............................
 
 SLOFILES=	\
-        $(SLO)$/TableGrantCtrl.obj		\
+        $(EXCEPTIONSFILES)				\
         $(SLO)$/SqlNameEdit.obj			\
-        $(SLO)$/FieldDescControl.obj	\
         $(SLO)$/listviewitems.obj		\
         $(SLO)$/undosqledit.obj			\
         $(SLO)$/sqledit.obj				\
-        $(SLO)$/tabletree.obj			\
         $(SLO)$/marktree.obj			\
         $(SLO)$/curledit.obj
 
