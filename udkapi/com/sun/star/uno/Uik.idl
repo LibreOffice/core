@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Uik.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:37:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
     This struct is deprecated.  Uiks are not used anymore.
     @deprecated
 */
-struct Uik
+published struct Uik
 {
     /** specifies a 4 byte data block.
      */
