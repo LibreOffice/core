@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-01 10:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ FltError ImportExcel::Read( void )
     BOOL bDebugging = TRUE;
     if( bDebugging )
     {
-        Biff8RecDumper  aDumper( *pExcRoot );
+        Biff8RecDumper  aDumper( *pExcRoot, FALSE );
 
         if( aDumper.Dump( aIn ) )
             return eERR_OK;
@@ -1025,7 +1025,7 @@ FltError ImportExcel8::Read( void )
     BOOL bDebugging = TRUE;
     if( bDebugging )
     {
-        Biff8RecDumper  aDumper( *pExcRoot );
+        Biff8RecDumper  aDumper( *pExcRoot, TRUE );
 
         if( aDumper.Dump( aIn ) )
             return eERR_OK;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-07 14:04:13 $
+ *  last change: $Author: dr $ $Date: 2001-11-01 10:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ protected:
     BOOL                        bWarnings;
     BOOL                        bClearFile;
     BOOL                        bBlankLine;
+    BOOL                        bBIFF8;
 
     UINT32                      nFieldCnt;
     UINT32                      nItemCnt;
@@ -279,7 +280,7 @@ protected:
     inline const DUMP_ERR*      FirstErr( void );
     inline const DUMP_ERR*      NextErr( void );
 public:
-                                Biff8RecDumper( RootData& rRootData );
+                                Biff8RecDumper( RootData& rRootData, BOOL bBIFF8 );
                                 ~Biff8RecDumper();
     BOOL                        Dump( XclImpStream& rIn );
                                 // = TRUE -> nicht weiter laden

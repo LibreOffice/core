@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-31 10:50:41 $
+ *  last change: $Author: dr $ $Date: 2001-11-01 10:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,7 +977,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 
     if( HasModeNameOnly( nR ) )
         ;
-    else if( HasModeHex( nR ) || (pExcRoot->eGlobalDateiTyp < Biff8) )
+    else if( HasModeHex( nR ) || !bBIFF8 )
         ContDump( nL );
     else if( nMaxBodyLines && nL )
     {
@@ -6752,7 +6752,9 @@ void Biff8RecDumper::AddError( const UINT32 n, const ByteString& rT, const ByteS
 }
 
 
-Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
+Biff8RecDumper::Biff8RecDumper( RootData& rRootData, BOOL _bBIFF8 ) :
+    ExcRoot( &rRootData ),
+    bBIFF8( _bBIFF8 )
 {
     nXFCount = 0;
     nFontIndex = 0;
