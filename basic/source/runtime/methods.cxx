@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 13:37:14 $
+ *  last change: $Author: ab $ $Date: 2001-05-31 11:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1961,7 +1961,7 @@ RTLFUNC(IsMissing)
 
 // #80200 HACK to provide minimum wildcard functionality (finally solution in UCB)
 // Function looks for wildcards, removes them and always returns the pure path
-String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bool bUNC )
+String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bool bHasUno )
 {
     pRTLData->bNameCheck = sal_False;
     pRTLData->sExtension = String();
@@ -1970,20 +1970,36 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
 
     String aFileParam = rFileParam;
     String aPathStr;
-    if( bUNC )
-    {
-        aPathStr = getFullPathUNC( aFileParam );
-    }
-    else
-    {
-        aPathStr = getFullPath( aFileParam );
-    }
+    aPathStr = getFullPath( aFileParam );
 
     // #85023 If it's now recognized as folder everything
     // is fine and we don't have to check for wildcards
-    Reference< XSimpleFileAccess > xSFI = getFileAccess();
-    if( xSFI->isFolder( aPathStr ) )
-        return aPathStr;
+    if( bHasUno )
+    {
+        Reference< XSimpleFileAccess > xSFI = getFileAccess();
+        if( xSFI->isFolder( aPathStr ) )
+            return aPathStr;
+    }
+    else
+    {
+        if( aPathStr.Len() )
+        {
+            DirectoryItem aItem;
+            FileBase::RC nRet = DirectoryItem::get( aPathStr, aItem );
+            if( nRet == FileBase::E_None )
+            {
+                FileStatus aFileStatus( FileStatusMask_Type );
+                nRet = aItem.getFileStatus( aFileStatus );
+                if( nRet == FileBase::E_None )
+                {
+                    FileStatus::Type aType = aFileStatus.getFileType();
+                    sal_Bool bFolder = (aType == FileStatus::Directory);
+                    if( bFolder )
+                        return aPathStr;
+                }
+            }
+        }
+    }
 
     sal_Char cWild = '*';
     sal_Char cDelim1 = (sal_Char)'/';
@@ -2008,10 +2024,7 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData, sal_Bo
     if( !aPathStr.Len() || aPathStr.SearchBackward( cWild ) != STRING_NOTFOUND )
     {
         // Try again to get a valid URL/UNC-path with only the path
-        if( bUNC )
-            aPathStr = getFullPathUNC( aFileParam );
-        else
-            aPathStr = getFullPath( aFileParam );
+        aPathStr = getFullPath( aFileParam );
 
         // Is there a pure file name left? Otherwise the path is
         // invalid anyway because it was not accepted by OSL before
@@ -2137,7 +2150,7 @@ RTLFUNC(Dir)
                     String aFileParam = rPar.Get(1)->GetString();
 
                     // #80200 HACK to provide minimum wildcard functionality
-                    String aFileURLStr = implSetupWildcard( aFileParam, pRTLData, sal_False );
+                    String aFileURLStr = implSetupWildcard( aFileParam, pRTLData, sal_True );
 
                     try
                     {
@@ -2367,8 +2380,7 @@ RTLFUNC(Dir)
                 String aFileParam = rPar.Get(1)->GetString();
 
                 // #80200 HACK to provide minimum wildcard functionality
-                Reference< XSimpleFileAccess > xSFI;
-                String aDirUNCStr = implSetupWildcard( aFileParam, pRTLData, sal_True );
+                String aDirUNCStr = implSetupWildcard( aFileParam, pRTLData, sal_False );
 
                 USHORT nFlags = 0;
                 if ( nParCount > 2 )
