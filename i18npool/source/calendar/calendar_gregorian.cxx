@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-05 23:02:26 $
+ *  last change: $Author: er $ $Date: 2002-09-06 14:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,34 +328,34 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 
 // NativeNumberMode has different meaning between Number and Calendar for Asian locales.
 // Here is the mapping table
-// calendar(q/y/m/d)    zh_CN       zh_TW       ja      ko
-// NatNum1      NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7
-// NatNum2      NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8
-// NatNum3      NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
-// NatNum4                              NatNum9/9/11/11
+// calendar(q/y/m/d)    zh_CN           zh_TW           ja              ko
+// NatNum1              NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7   NatNum1/1/7/7
+// NatNum2              NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8   NatNum2/2/8/8
+// NatNum3              NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3   NatNum3/3/3/3
+// NatNum4                                                              NatNum9/9/11/11
 
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
-    sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
 {
     sal_Bool isShort = nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
-                nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
-                nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
-                nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
+        nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
 
     if (aLocale.Language.equalsAscii("zh") || aLocale.Language.equalsAscii("ja") ||
-        aLocale.Language.equalsAscii("ko")) {
+            aLocale.Language.equalsAscii("ko")) {
         switch (nNativeNumberMode) {
-        case NativeNumberMode::NATNUM1:
-            return isShort ? NativeNumberMode::NATNUM1 : NativeNumberMode::NATNUM7;
-        case NativeNumberMode::NATNUM2:
-            return isShort ? NativeNumberMode::NATNUM2 : NativeNumberMode::NATNUM8;
-        case NativeNumberMode::NATNUM3:
-            return NativeNumberMode::NATNUM3;
-        case NativeNumberMode::NATNUM4:
-            if (aLocale.Language.equalsAscii("ko"))
-            return isShort ? NativeNumberMode::NATNUM9 : NativeNumberMode::NATNUM11;
-            // fall through
-        default: return 0;
+            case NativeNumberMode::NATNUM1:
+                return isShort ? NativeNumberMode::NATNUM1 : NativeNumberMode::NATNUM7;
+            case NativeNumberMode::NATNUM2:
+                return isShort ? NativeNumberMode::NATNUM2 : NativeNumberMode::NATNUM8;
+            case NativeNumberMode::NATNUM3:
+                return NativeNumberMode::NATNUM3;
+            case NativeNumberMode::NATNUM4:
+                if (aLocale.Language.equalsAscii("ko"))
+                    return isShort ? NativeNumberMode::NATNUM9 : NativeNumberMode::NATNUM11;
+                // fall through
+            default: return 0;
         }
     }
     return nNativeNumberMode;
@@ -366,93 +366,101 @@ static sal_Int32 SAL_CALL DisplayCode2FieldIndex(sal_Int32 nCalendarDisplayCode)
     switch( nCalendarDisplayCode ) {
         case CalendarDisplayCode::SHORT_DAY:
         case CalendarDisplayCode::LONG_DAY:
-        return CalendarFieldIndex::DAY_OF_MONTH;
+            return CalendarFieldIndex::DAY_OF_MONTH;
         case CalendarDisplayCode::SHORT_DAY_NAME:
         case CalendarDisplayCode::LONG_DAY_NAME:
-        return CalendarFieldIndex::DAY_OF_WEEK;
+            return CalendarFieldIndex::DAY_OF_WEEK;
         case CalendarDisplayCode::SHORT_QUARTER:
         case CalendarDisplayCode::LONG_QUARTER:
         case CalendarDisplayCode::SHORT_MONTH:
         case CalendarDisplayCode::LONG_MONTH:
         case CalendarDisplayCode::SHORT_MONTH_NAME:
         case CalendarDisplayCode::LONG_MONTH_NAME:
-        return CalendarFieldIndex::MONTH;
+            return CalendarFieldIndex::MONTH;
         case CalendarDisplayCode::SHORT_YEAR:
         case CalendarDisplayCode::LONG_YEAR:
-        return CalendarFieldIndex::YEAR;
+            return CalendarFieldIndex::YEAR;
         case CalendarDisplayCode::SHORT_ERA:
         case CalendarDisplayCode::LONG_ERA:
-        return CalendarFieldIndex::ERA;
+            return CalendarFieldIndex::ERA;
         case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
         case CalendarDisplayCode::LONG_YEAR_AND_ERA:
-        return CalendarFieldIndex::YEAR;
+            return CalendarFieldIndex::YEAR;
         default:
-        return 0;
+            return 0;
     }
 }
 
 // Methods in XExtendedCalendar
 OUString SAL_CALL
 Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
-    throw (RuntimeException)
+        throw (RuntimeException)
 {
     sal_Int16 value = getValue(DisplayCode2FieldIndex(nCalendarDisplayCode));
     OUString aOUStr;
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
-        nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER) {
-    Sequence< OUString> xR = LocaleData().getReservedWord(aLocale);
-    sal_Int16 quarter = value / 4;
-    quarter += (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER) ?
+            nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER) {
+        Sequence< OUString> xR = LocaleData().getReservedWord(aLocale);
+        sal_Int16 quarter = value / 3;
+        // Since this base class method may be called by derived calendar
+        // classes where a year consists of more than 12 months we need a check
+        // to not run out of bounds of reserved quarter words. Perhaps a more
+        // clean way (instead of dividing by 3) would be to first get the
+        // number of months, divide by 4 and then use that result to divide the
+        // actual month value.
+        if ( quarter > 3 )
+            quarter = 3;
+        quarter += (nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER) ?
             reservedWords::QUARTER1_ABBREVIATION : reservedWords::QUARTER1_WORD;
-    aOUStr = xR[quarter];
+        aOUStr = xR[quarter];
     } else {
-    sal_Char aStr[10];
-    switch( nCalendarDisplayCode ) {
-        case CalendarDisplayCode::SHORT_MONTH:
-        value += 1;     // month is zero based
-        // fall thru
-        case CalendarDisplayCode::SHORT_DAY:
-        case CalendarDisplayCode::LONG_YEAR:
-        sprintf(aStr, "%d", value);
-        break;
-        case CalendarDisplayCode::LONG_MONTH:
-        value += 1;     // month is zero based
-        sprintf(aStr, "%02d", value);
-        break;
-        case CalendarDisplayCode::SHORT_YEAR:
-        // take last 2 digits
-        value %= 100;
-        // fall through
-        case CalendarDisplayCode::LONG_DAY:
-        sprintf(aStr, "%02d", value);
-        break;
+        sal_Char aStr[10];
+        switch( nCalendarDisplayCode ) {
+            case CalendarDisplayCode::SHORT_MONTH:
+                value += 1;     // month is zero based
+                // fall thru
+            case CalendarDisplayCode::SHORT_DAY:
+            case CalendarDisplayCode::LONG_YEAR:
+                sprintf(aStr, "%d", value);
+                break;
+            case CalendarDisplayCode::LONG_MONTH:
+                value += 1;     // month is zero based
+                sprintf(aStr, "%02d", value);
+                break;
+            case CalendarDisplayCode::SHORT_YEAR:
+                // take last 2 digits
+                value %= 100;
+                // fall through
+            case CalendarDisplayCode::LONG_DAY:
+                sprintf(aStr, "%02d", value);
+                break;
 
-        case CalendarDisplayCode::SHORT_DAY_NAME:
-        return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
-        case CalendarDisplayCode::LONG_DAY_NAME:
-        return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
-        case CalendarDisplayCode::SHORT_MONTH_NAME:
-        return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
-        case CalendarDisplayCode::LONG_MONTH_NAME:
-        return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
-        case CalendarDisplayCode::SHORT_ERA:
-        return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
-        case CalendarDisplayCode::LONG_ERA:
-        return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
+            case CalendarDisplayCode::SHORT_DAY_NAME:
+                return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
+            case CalendarDisplayCode::LONG_DAY_NAME:
+                return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
+            case CalendarDisplayCode::SHORT_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
+            case CalendarDisplayCode::LONG_MONTH_NAME:
+                return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
+            case CalendarDisplayCode::SHORT_ERA:
+                return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
+            case CalendarDisplayCode::LONG_ERA:
+                return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
 
-        case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
-        return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
+            case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
+                return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
+                    getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
 
-        case CalendarDisplayCode::LONG_YEAR_AND_ERA:
-        return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
+            case CalendarDisplayCode::LONG_YEAR_AND_ERA:
+                return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
+                    getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
 
-        default:
-        throw ERROR;
-    }
-    aOUStr = OUString::createFromAscii(aStr);
+            default:
+                throw ERROR;
+        }
+        aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
         sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode);
@@ -469,14 +477,14 @@ Calendar_buddhist::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 n
 {
     // make year and era in different order for year before and after 0.
     if ((nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA ||
-        nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR_AND_ERA) &&
-        getValue(CalendarFieldIndex::ERA) == 0) {
+                nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR_AND_ERA) &&
+            getValue(CalendarFieldIndex::ERA) == 0) {
         if (nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR_AND_ERA)
-        return  getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode );
+            return  getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode ) +
+                getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode );
         else
-        return  getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode );
+            return  getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode ) +
+                getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode );
     }
     return Calendar_gregorian::getDisplayString(nCalendarDisplayCode, nNativeNumberMode);
 }
