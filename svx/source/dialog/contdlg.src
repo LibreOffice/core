@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,21 +509,21 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text [ norwegian ] = "Angre " ;
                 Text [ italian ] = "Annulla " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
-                Text [ portuguese ] = "Anular " ;
+                Text [ portuguese ] = "Anular  " ;
                 Text [ finnish ] = "Kumoa " ;
-                Text [ danish ] = "Fortryd " ;
+                Text [ danish ] = "Fortryd" ;
                 Text [ french ] = "Annuler " ;
-                Text [ swedish ] = "Ångra " ;
-                Text [ dutch ] = "Ongedaan. " ;
+                Text [ swedish ] = "Ångra  " ;
+                Text [ dutch ] = "Ongedaan " ;
                 Text [ spanish ] = "Deshacer " ;
                 Text [ english_us ] = "Undo " ;
-                Text[ chinese_simplified ] = "³·ÏûÃüÁî ";
+                Text[ chinese_simplified ] = "³·ÏûÃüÁî";
                 Text[ russian ] = "Îòìåíèòü  ";
                 Text[ polish ] = "Cofnij ";
-                Text[ japanese ] = "Œ³‚É–ß‚· ";
-                Text[ chinese_traditional ] = "´_­ì ";
+                Text[ japanese ] = "Œ³‚É–ß‚·";
+                Text[ chinese_traditional ] = "´_­ì";
                 Text[ arabic ] = "ÊÑÇÌÚ ";
-                Text[ greek ] = "Áíáßñåóç ";
+                Text[ greek ] = "Áíáßñåóç";
                 Text[ korean ] = "½ÇÇà Ãë¼Ò ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
@@ -542,21 +542,21 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text = "Wiederherstellen " ;
                 Text [ English ] = "Redo " ;
                 Text [ english_us ] = "Redo " ;
-                Text [ portuguese ] = "Restaurar " ;
+                Text [ portuguese ] = "Restaurar  " ;
                 Text [ portuguese_brazilian ] = "Wiederholen" ;
-                Text [ swedish ] = "Upprepa " ;
-                Text [ danish ] = "Gendan " ;
+                Text [ swedish ] = "Återställ " ;
+                Text [ danish ] = "Gendan" ;
                 Text [ italian ] = "Ripristina " ;
                 Text [ spanish ] = "Restaurar " ;
                 Text [ french ] = "Restaurer " ;
                 Text [ dutch ] = "Herstellen " ;
-                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî ";
+                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
                 Text[ russian ] = "Âåğíóòü  ";
                 Text[ polish ] = "Przywróæ ";
-                Text[ japanese ] = "‚â‚è’¼‚µ ";
-                Text[ chinese_traditional ] = "«ì´_ºM®ø©R¥O ";
+                Text[ japanese ] = "‚â‚è’¼‚µ";
+                Text[ chinese_traditional ] = "«ì´_ºM®ø©R¥O";
                 Text[ arabic ] = "ÅÚÇÏÉ ";
-                Text[ greek ] = "ÅğáíáöïñÜ ";
+                Text[ greek ] = "ÅğáíáöïñÜ";
                 Text[ korean ] = "´Ù½ÃÇÏ±â ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
