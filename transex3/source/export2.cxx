@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:50 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ResData::~ResData()
 
 /*****************************************************************************/
 ByteString Export::sLanguages;
+ByteString Export::sForcedLanguages;
 ByteString Export::sIsoCode99;
 /*****************************************************************************/
 
@@ -139,6 +140,7 @@ CharSet Export::GetCharSet( USHORT nLangId )
 USHORT Export::GetLangByIsoLang( const ByteString &rIsoLang )
 /*****************************************************************************/
 {
+    // removeme
     ByteString sLang( rIsoLang );
     sLang.ToUpperAscii();
     return 0xFFFF;
@@ -154,8 +156,13 @@ std::vector<ByteString> Export::GetLanguages(){
 /*****************************************************************************/
     return aLanguages;
 }
-
-std::vector<ByteString> Export::aLanguages = std::vector<ByteString>();
+/*****************************************************************************/
+std::vector<ByteString> Export::GetForcedLanguages(){
+/*****************************************************************************/
+    return aForcedLanguages;
+}
+std::vector<ByteString> Export::aLanguages       = std::vector<ByteString>();
+std::vector<ByteString> Export::aForcedLanguages = std::vector<ByteString>();
 
 /*****************************************************************************/
 ByteString Export::GetIsoLangByIndex( USHORT nIndex )
@@ -273,9 +280,22 @@ void Export::InitLanguages( bool bMergeMode ){
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aLanguages.push_back( sTmp );
     }
+    InitForcedLanguages( bMergeMode );
     isInitialized = true;
 }
-
+/*****************************************************************************/
+void Export::InitForcedLanguages( bool bMergeMode ){
+/*****************************************************************************/
+    ByteString sTmp;
+    ByteStringBoolHashMap aEnvLangs;
+    for ( USHORT x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
+        sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
+        sTmp.EraseLeadingAndTrailingChars();
+        if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
+        else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
+            aForcedLanguages.push_back( sTmp );
+    }
+}
 
 /*****************************************************************************/
 ByteString Export::GetFallbackLanguage( const ByteString nLanguage )
