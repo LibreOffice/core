@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 12:24:27 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 14:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, USHORT nDepth
     {
         BOOL bUpdate = pEditEngine->GetUpdateMode();
         pEditEngine->SetUpdateMode( FALSE );
-        bBlockInsCallback = TRUE;
+        ImplBlockInsertionCallbacks( TRUE );
         pPara = new Paragraph( nDepth );
         pParaList->Insert( pPara, nAbsPos );
         pEditEngine->InsertParagraph( (USHORT)nAbsPos, String() );
@@ -215,7 +215,7 @@ Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, USHORT nDepth
         ParagraphInsertedHdl();
         pPara->nFlags |= PARAFLAG_HOLDDEPTH;
         SetText( rText, pPara );
-        bBlockInsCallback = FALSE;
+        ImplBlockInsertionCallbacks( FALSE );
         pEditEngine->SetUpdateMode( bUpdate );
     }
     bFirstParaIsEmpty = FALSE;
@@ -442,7 +442,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
 
     BOOL bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( FALSE );
-    bBlockInsCallback = TRUE;
+    ImplBlockInsertionCallbacks( TRUE );
 
     USHORT nPara = (USHORT)pParaList->GetAbsPos( pPara );
 
@@ -516,8 +516,8 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
     }
 
     DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"SetText failed!")
-    bBlockInsCallback = FALSE;
     bFirstParaIsEmpty = FALSE;
+    ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
@@ -649,9 +649,8 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
 
     Init( rPObj.GetOutlinerMode() );
 
-    bBlockInsCallback = TRUE;
+    ImplBlockInsertionCallbacks( TRUE );
     pEditEngine->SetText( *(rPObj.pText) );
-    bBlockInsCallback = FALSE;
     bFirstParaIsEmpty = FALSE;
 
     pParaList->Clear( TRUE );
@@ -667,6 +666,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     ImplCheckParagraphs( 0, (USHORT) (pParaList->GetParagraphCount()-1) );
 
     EnableUndo( bUndo );
+    ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
 
     DBG_ASSERT( pParaList->GetParagraphCount()==rPObj.Count(),"SetText failed")
@@ -683,7 +683,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     BOOL bUpdate = pEditEngine->GetUpdateMode();
     pEditEngine->SetUpdateMode( FALSE );
 
-    bBlockInsCallback = TRUE;
+    ImplBlockInsertionCallbacks( TRUE );
     ULONG nPara;
     if( bFirstParaIsEmpty )
     {
@@ -696,7 +696,6 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
         nPara = pParaList->GetParagraphCount();
         pEditEngine->InsertParagraph( EE_PARA_APPEND, *(rPObj.pText) );
     }
-    bBlockInsCallback = FALSE;
     bFirstParaIsEmpty = FALSE;
 
     for( USHORT n = 0; n < rPObj.nCount; n++ )
@@ -711,6 +710,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
 
     ImplCheckParagraphs( (USHORT)nPara, (USHORT) (pParaList->GetParagraphCount()-1) );
 
+    ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
@@ -1027,7 +1027,7 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
     if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
     {
         aColor = pFmt->GetBulletColor();
-        if ( aColor == COL_AUTO )
+        if ( ( aColor == COL_AUTO ) || ( IsForceAutoColor() ) )
             aColor = pEditEngine->GetAutoColor();
     }
     aBulletFont.SetColor( aColor );
@@ -1238,9 +1238,8 @@ ULONG Outliner::Read( SvStream& rInput, USHORT eFormat, SvKeyValueIterator* pHTT
 
     Clear();
 
-    bBlockInsCallback = TRUE;
+    ImplBlockInsertionCallbacks( TRUE );
     ULONG nRet = pEditEngine->Read( rInput, (EETextFormat)eFormat, pHTTPHeaderAttrs );
-    bBlockInsCallback = FALSE;
 
     bFirstParaIsEmpty = FALSE;
 
@@ -1274,6 +1273,7 @@ ULONG Outliner::Read( SvStream& rInput, USHORT eFormat, SvKeyValueIterator* pHTT
         ParagraphInsertedHdl();
     }
 
+    ImplBlockInsertionCallbacks( FALSE );
     pEditEngine->SetUpdateMode( bUpdate );
     EnableUndo( bOldUndo );
 
@@ -2152,13 +2152,12 @@ void Outliner::Clear()
 
     if( !bFirstParaIsEmpty )
     {
-        bBlockInsCallback = TRUE;
+        ImplBlockInsertionCallbacks( TRUE );
         pEditEngine->Clear();
-        bBlockInsCallback = FALSE;
-
         pParaList->Clear( TRUE );
         pParaList->Insert( new Paragraph( nMinDepth ), LIST_APPEND );
         bFirstParaIsEmpty = TRUE;
+        ImplBlockInsertionCallbacks( FALSE );
     }
     else
     {
@@ -2195,3 +2194,46 @@ void Outliner::SetLevelDependendStyleSheet( USHORT nPara )
     ImplSetLevelDependendStyleSheet( nPara );
     pEditEngine->SetParaAttribs( nPara, aOldAttrs );
 }
+
+SV_IMPL_PTRARR( NotifyList, EENotify* );
+
+void Outliner::ImplBlockInsertionCallbacks( BOOL b )
+{
+    DBG_ASSERT( b != bBlockInsCallback, "ImplBlockInsertionCallbacks ?!" );
+    if ( b != bBlockInsCallback )
+    {
+        bBlockInsCallback = b;
+        if ( !bBlockInsCallback )
+        {
+            // Call blocked notify events...
+            USHORT nCount = pEditEngine->aNotifyCache.Count();
+            if ( nCount )
+            {
+                for ( USHORT n = 0; n < nCount; n++ )
+                {
+                    EENotify* pNotify = pEditEngine->aNotifyCache[n];
+                    pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
+                }
+                pEditEngine->aNotifyCache.DeleteAndDestroy( 0, nCount );
+            }
+        }
+    }
+}
+
+
+IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
+{
+    if ( !bBlockInsCallback )
+    {
+        pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
+    }
+    else
+    {
+        EENotify* pNewNotify = new EENotify( *pNotify );
+        pEditEngine->aNotifyCache.Insert( pNewNotify, pEditEngine->aNotifyCache.Count() );
+    }
+
+    return 0;
+}
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 12:24:27 $
+ *  last change: $Author: mt $ $Date: 2002-05-27 14:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <editeng.hxx>
 #endif
 
+SV_DECL_PTRARR_DEL( NotifyList, EENotify*, 1, 1 );
 
 class OutlinerEditEng : public EditEngine
 {
@@ -94,6 +95,10 @@ public:
     virtual XubString   CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
 
     virtual Rectangle   GetBulletArea( USHORT nPara );
+
+    // belongs into class Outliner, move there before incompatible update!
+    Link                aOutlinerNotifyHdl;
+    NotifyList          aNotifyCache;
 };
 
 #endif
