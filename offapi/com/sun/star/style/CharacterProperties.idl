@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:17:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,49 +354,59 @@ service CharacterProperties
     //-------------------------------------------------------------------------
     /** contains the URL of a hyperlink (if set).
      */
-    [property, optional] string HyperLinkURL;
+    [optional, property] string HyperLinkURL;
 
     //-------------------------------------------------------------------------
     /** contains the name of the target for a hyperlink (if set).
      */
-    [property, optional] string HyperLinkTarget;
+    [optional, property] string HyperLinkTarget;
 
     //-------------------------------------------------------------------------
     /** contains the name of the hyperlink (if set).
      */
-    [property, optional] string HyperLinkName;
+    [optional, property] string HyperLinkName;
 
-        //-------------------------------------------------------------------------
-        /** This is the additional height used for subscript or superscript
-            characters in units of percent.
-            For subscript characters the value is negative and for
-            superscript characters positive.
-         */
-        [optional, property] byte CharEscapementHeight;
+    //--------------------------------------------------------------------
+    /** contains the character style name for visited hyperlinks.
+     */
+    [optional, property] string VisitedCharStyleName;
 
-        //-------------------------------------------------------------------------
-        /** determines if the word can be hyphenated at the character.
-         */
-        [optional, property] boolean CharNoHyphenation;
+    //--------------------------------------------------------------------
+    /** contains the character style name for unvisited hyperlinks.
+     */
+    [optional, property] string UnvisitedCharStyleName;
 
-        //-------------------------------------------------------------------------
-        /** gives the color of the underline for that character.
-         */
-        [property] long CharUnderlineColor;
+    //-------------------------------------------------------------------------
+    /** This is the additional height used for subscript or superscript
+        characters in units of percent.
+        For subscript characters the value is negative and for
+        superscript characters positive.
+     */
+    [optional, property] byte CharEscapementHeight;
 
-        //-------------------------------------------------------------------------
-        /** specifies if the CharUnderlineColor is used for an underline.
-         */
-        [property] boolean CharUnderlineHasColor;
+    //-------------------------------------------------------------------------
+    /** determines if the word can be hyphenated at the character.
+     */
+    [optional, property] boolean CharNoHyphenation;
 
-        //-------------------------------------------------------------------------
-        /** specifies the names of the all styles applied to the font.
-            <p> It is not guaranteed that the order in the sequence reflects
-            the order of the evaluation of the character style attributes.</p>
+    //-------------------------------------------------------------------------
+    /** gives the color of the underline for that character.
+     */
+    [property] long CharUnderlineColor;
 
-        @since #107627#
-         */
-        [optional, property] sequence<string> CharStyleNames;
+    //-------------------------------------------------------------------------
+    /** specifies if the CharUnderlineColor is used for an underline.
+     */
+    [property] boolean CharUnderlineHasColor;
+
+    //-------------------------------------------------------------------------
+    /** specifies the names of the all styles applied to the font.
+        <p> It is not guaranteed that the order in the sequence reflects
+        the order of the evaluation of the character style attributes.</p>
+
+    @since #107627#
+     */
+    [optional, property] sequence<string> CharStyleNames;
 };
 
 //=============================================================================
