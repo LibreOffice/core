@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-07-24 11:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             {
                 bPreview = ((const SfxBoolItem&) (rReq.GetArgs()->Get(SID_PREVIEW_WIN))).GetValue();
                 GetViewFrame()->SetChildWindow(SdPreviewChildWindow::GetChildWindowId(),
-                                          bPreview);
+                                          bPreview,false);
             }
             else
             {
