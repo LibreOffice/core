@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:28:09 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog DLG_EXPORT_EPBM
         Text = "Datei Format" ;
         Text [ ENGLISH ] = "file format" ;
         Text[ italian ] = "Formato file";
-        Text[ portuguese_brazilian ] = "Datei Format";
+        Text[ portuguese_brazilian ] = "Formato do arquivo";
         Text[ portuguese ] = "Formato do ficheiro";
         Text[ danish ] = "Filformat";
         Text[ french ] = "Format de fichier";
@@ -114,11 +114,14 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ chinese_simplified ] = "文件格式";
         Text[ greek ] = "����� �������";
         Text[ korean ] = "파일 형식";
-        Text[ turkish ] = "Dosya format�";
+        Text[ turkish ] = "Dosya bi�emi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Format del fitxer";
         Text[ finnish ] = "Tiedostomuoto";
         Text[ thai ] = "รูปแบบแฟ้ม";
+        Text[ czech ] = "Formát souboru";
+        Text[ hebrew ] = "‮צורת תוכן קובץ‬";
+        Text[ hindi ] = "फाइल रचना";
     };
     RadioButton RB_RAW
     {
@@ -128,7 +131,7 @@ ModalDialog DLG_EXPORT_EPBM
         Text [ ENGLISH ] = "~raw" ;
         TabStop = TRUE ;
         Text[ italian ] = "~Binario";
-        Text[ portuguese_brazilian ] = "~Bin?r";
+        Text[ portuguese_brazilian ] = "~Bin�rio";
         Text[ portuguese ] = "~Bin�rio";
         Text[ danish ] = "~Bin�r";
         Text[ french ] = "~Binaire";
@@ -138,7 +141,7 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ english_us ] = "~Binary";
         Text[ chinese_simplified ] = "二元(~B)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Binarny";
+        Text[ polish ] = "~Binarny";
         Text[ japanese ] = "バイナリ(~B)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "二元(~B)";
@@ -147,10 +150,13 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ chinese_simplified ] = "二元(~B)";
         Text[ greek ] = "�������";
         Text[ korean ] = "바이너리(~B)";
-        Text[ turkish ] = "�kili";
+        Text[ turkish ] = "~�kili";
         Text[ catalan ] = "~Binari";
         Text[ finnish ] = "~Binaari";
         Text[ thai ] = "เ~ลขฐานสอง";
+        Text[ czech ] = "Binární";
+        Text[ hebrew ] = "‮בינרי‬";
+        Text[ hindi ] = "~बैनरी";
     };
     RadioButton RB_ASCII
     {
@@ -160,7 +166,7 @@ ModalDialog DLG_EXPORT_EPBM
         Text [ ENGLISH ] = "~text" ;
         TabStop = TRUE ;
         Text[ italian ] = "~Testo";
-        Text[ portuguese_brazilian ] = "~Text";
+        Text[ portuguese_brazilian ] = "~Texto";
         Text[ portuguese ] = "~Texto";
         Text[ danish ] = "~Tekst";
         Text[ french ] = "Texte";
@@ -170,7 +176,7 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ english_us ] = "~Text";
         Text[ chinese_simplified ] = "文字(~T)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Tekst";
+        Text[ polish ] = "~Tekstowy";
         Text[ japanese ] = "テキスト(~T)";
         Text[ chinese_traditional ] = "文字(~T)";
         Text[ arabic ] = "����";
@@ -178,14 +184,17 @@ ModalDialog DLG_EXPORT_EPBM
         Text[ chinese_simplified ] = "文字(~T)";
         Text[ greek ] = "�������";
         Text[ korean ] = "텍스트(~T)";
-        Text[ turkish ] = "Metin";
+        Text[ turkish ] = "~Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Text";
         Text[ finnish ] = "~Teksti";
         Text[ thai ] = "~ข้อความ";
+        Text[ czech ] = "Textový";
+        Text[ hebrew ] = "‮טקסט‬";
+        Text[ hindi ] = "~टेक्स्ट्";
     };
     Text[ italian ] = "Opzioni PBM";
-    Text[ portuguese_brazilian ] = "PBM Optionen";
+    Text[ portuguese_brazilian ] = "Op��es PBM";
     Text[ portuguese ] = "Op��es PBM";
     Text[ danish ] = "PBM indstillinger";
     Text[ french ] = "Options PBM";
@@ -207,7 +216,20 @@ ModalDialog DLG_EXPORT_EPBM
     Text[ catalan ] = "Opcions PBM";
     Text[ finnish ] = "PBM-vientiasetukset";
     Text[ thai ] = "ตัวเลือก PBM ";
+    Text[ czech ] = "Volby pro formát PBM";
+    Text[ hebrew ] = "‮אפשרויות PBM‬";
+    Text[ hindi ] = "PBM विकल्प";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 
