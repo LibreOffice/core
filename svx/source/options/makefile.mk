@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: fs $ $Date: 2002-09-03 08:15:46 $
+#   last change: $Author: obo $ $Date: 2002-09-05 13:44:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,52 +67,15 @@ PROJECTPCHSOURCE=$(PRJ)$/util\svxpch
 
 PRJNAME=svx
 TARGET=options
-AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)"=="MAC"
-CFLAGS+=-D DG_DLL
-.ELSE
 CFLAGS+=-DDG_DLL
-.ENDIF
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
-
-#IMGLST_SRS=$(SRS)$/options.srs
-#BMP_IN=$(PRJ)$/win/res
-
-CXXFILES = \
-        asiancfg.cxx		\
-        colorcfg.cxx        \
-        optasian.cxx		\
-        optcolor.cxx        \
-        optpath.cxx     \
-        optdict.cxx		\
-        optitems.cxx	\
-        optgenrl.cxx	\
-        optaccessibility.cxx \
-        optsave.cxx		\
-        adritem.cxx		\
-        optlingu.cxx    \
-        optgrid.cxx		\
-        optinet2.cxx	\
-        ldapdlg.cxx		\
-        multipat.cxx	\
-        multifil.cxx	\
-        optextbr.cxx    \
-        srchcfg.cxx
-
-.IF "$(BUILD_SOSL)" == ""
-    CXXFILES += optsso.cxx
-.ENDIF
 
 SRCFILES =  \
         optasian.src	\
@@ -128,10 +91,6 @@ SRCFILES =  \
         optinet2.src	\
         multipat.src    \
         optextbr.src
-
-.IF "$(BUILD_SOSL)" == ""
-    SRCFILES += optsso.src
-.ENDIF
 
 EXCEPTIONSFILES= \
         $(SLO)$/multifil.obj    \
@@ -157,7 +116,11 @@ SLOFILES=	$(EXCEPTIONSFILES) \
         $(SLO)$/srchcfg.obj
 
 .IF "$(BUILD_SOSL)" == ""
-    SLOFILES += $(SLO)$/optsso.obj
+SRCFILES += optsso.src
+
+SLOFILES += $(SLO)$/optsso.obj
+
+EXCEPTIONSFILES += $(SLO)$/optsso.obj
 .ENDIF
 
 SVXLIGHTOBJFILES= \
@@ -166,11 +129,6 @@ SVXLIGHTOBJFILES= \
 .IF "$(GUI)"=="WIN"
 SLOFILES+=	\
         $(SLO)$/optdll.obj
-.ENDIF
-.ENDIF
-
-.IF "$(BUILD_SOSL)" == ""
-    EXCEPTIONSFILES += $(SLO)$/optsso.obj
 .ENDIF
 
 # --- Targets -------------------------------------------------------
