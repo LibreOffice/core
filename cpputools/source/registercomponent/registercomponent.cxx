@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-22 12:54:28 $
+ *  last change: $Author: jbu $ $Date: 2002-07-17 07:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ void DoIt::operator() (const OUString & url) throw()
         catch(CannotRegisterImplementationException & cannotRegisterImplementationException) {
             OString aMessage(OUStringToOString(cannotRegisterImplementationException.Message, RTL_TEXTENCODING_ASCII_US));
             fprintf(stderr, "register component '%s' in registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
-            fprintf(stderr, "CannotRegisterImplementationException: %s\n", aMessage.getStr());
+            fprintf(stderr, "error (CannotRegisterImplementationException): %s\n", aMessage.getStr());
 
             ++ (*_exitCode);
         }
@@ -520,7 +520,7 @@ void DoIt::operator() (const OUString & url) throw()
         {
             OString aMessage(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
             fprintf(stderr, "register component '%s' in registry '%s' failed!\n", sUrl.getStr(), _sRegName.getStr());
-            fprintf(stderr, "RuntimeException: %s\n", aMessage.getStr());
+            fprintf(stderr, "error (RuntimeException): %s\n", aMessage.getStr());
 
             ++ (*_exitCode);
         }
