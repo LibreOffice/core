@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 10:42:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-27 09:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ namespace svx
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("svxform.ColumnDescriptorTransfer"));
+            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.ColumnDescriptorTransfer\""));
             OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OColumnTransferable::getDescriptorFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -391,6 +391,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/18 10:42:09  fs
+ *  added connection to the ctor
+ *
  *  Revision 1.3  2001/04/11 12:40:59  fs
  *  added a data access descriptor format
  *
