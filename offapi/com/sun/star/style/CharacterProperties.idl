@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:13 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,10 @@ service CharacterProperties
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::style::CharacterProperties::CharEscapement
-    /** optional property which contains the relative value of the character
-        height in subscription or superscription.
+    /** specifies the percentage of raisement/lowerment of superscript/subscript
+        characters.
+
+        <p>Negative values lower the character.
 
         @optional
      */
@@ -376,7 +378,12 @@ service CharacterProperties
     [optional, property] boolean CharRotationIsFitToLine;
     //-------------------------------------------------------------------------
     /** determins the percentage value of scaling of characters.
+
+        <p>This is used for superscript/subscript
+
         @optional
+
+        @see CharacterProperties::CharEscapement
      */
     [optional, property] short CharScaleWidth;
 
@@ -422,6 +429,8 @@ service CharacterProperties
         /** specifies the names of the all styles applied to the font.
             <p> It is not guaranteed that the order in the sequence reflects
             the order of the evaluation of the character style attributes.</p>
+
+        @since #107627#
          */
         [optional, property] sequence<string> CharStyleNames;
 };
