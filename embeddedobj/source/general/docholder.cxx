@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:52:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,11 +260,11 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
             m_pInterceptor = new Interceptor( this );
             m_pInterceptor->acquire();
 
-            xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
-
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )
                 xInterception->registerDispatchProviderInterceptor( m_xOutplaceInterceptor );
+
+            xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
         }
 
         uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xFrame, uno::UNO_QUERY );
