@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:19:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,17 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
                 aCommand.EqualsAscii("SelectAll") || aCommand.Copy(0,4).EqualsAscii("Bib/")||
                 aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
                 aCommand.EqualsAscii("CloseDoc"))
-
+        if( pDatMan->HasActiveConnection() ||
+            (!aCommand.EqualsAscii("Bib/standardFilter") &&
+            !aCommand.EqualsAscii("Bib/DeleteRecord") &&
+            !aCommand.EqualsAscii("Bib/InsertRecord") &&
+            !aCommand.EqualsAscii("Bib/query") &&
+            !aCommand.EqualsAscii("Bib/autoFilter") &&
+            !aCommand.EqualsAscii("Bib/standardFilter") &&
+            !aCommand.EqualsAscii("Bib/removeFilter") ))
+        {
             return (frame::XDispatch*) this;
+        }
     }
 
     return uno::Reference< frame::XDispatch > ();
@@ -523,7 +532,7 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 BibStatusDispatch *pObj = aStatusListeners[n];
-                if ( pObj->aURL.Path == C2U("Bib/removeFilter") )
+                if ( pObj->aURL.Path == C2U("Bib/removeFilter") && pDatMan->getParser().is())
                 {
                     FeatureStateEvent  aEvent;
                     aEvent.FeatureURL = pObj->aURL;
@@ -575,11 +584,13 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
                 sal_uInt32 nCount = 0;
                 xSet->getPropertyValue(C2U("RowCount")) >>= nCount;
                 // naechste position festellen
-                sal_Bool bLeft = xCursor->isLast() && nCount > 1;
-                sal_Bool bRight= !xCursor->isLast();
                 sal_Bool bSuccess = sal_False;
+                sal_Bool bLeft = sal_False;
+                sal_Bool bRight = sal_False;
                 try
                 {
+                    bLeft = xCursor->isLast() && nCount > 1;
+                    bRight= !xCursor->isLast();
                     // ask for confirmation
                     Reference< frame::XController > xCtrl = pImp->pController;
                     Reference< form::XConfirmDeleteListener >  xConfirm(pDatMan->GetFormController(),UNO_QUERY);
@@ -776,7 +787,6 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
     rtl::OUString aDBTableName;
     aValue >>= aDBTableName;
 
-    m_xDatMan->unload();
 
     if(aArgs.getLength() > 1)
     {
@@ -787,9 +797,13 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
         aDBTableName = pDatMan->getActiveDataTable();
     }
     else
+    {
+        m_xDatMan->unload();
         pDatMan->setActiveDataTable(aDBTableName);
+        pDatMan->updateGridModel();
+        m_xDatMan->load();
+    }
 
-    pDatMan->updateGridModel();
 
     sal_uInt16 nCount = aStatusListeners.Count();
     FeatureStateEvent  aEvent;
@@ -830,7 +844,6 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             break;
 
     }
-    m_xDatMan->load();
 }
 
 void BibFrameController_Impl::activate()
