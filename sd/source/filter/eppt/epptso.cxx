@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-07 18:30:49 $
+ *  last change: $Author: sj $ $Date: 2001-02-09 10:54:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3235,13 +3235,13 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         break;
         case ::com::sun::star::presentation::AnimationEffect_CLOSE_VERTICAL :
         {
-            nFlyDirection = 3;
+            nFlyDirection = 1;
             nFlyMethod = 13;
         }
         break;
         case ::com::sun::star::presentation::AnimationEffect_CLOSE_HORIZONTAL :
         {
-            nFlyDirection = 1;
+            nFlyDirection = 3;
             nFlyMethod = 13;
         }
         break;
