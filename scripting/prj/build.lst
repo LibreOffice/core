@@ -4,5 +4,4 @@ tc	scripting\source\storage				nmake	-	all	tc_scriptingstorage NULL
 tc	scripting\source\runtimemgr				nmake	-	all	tc_scriptingruntimemgr NULL
 tc	scripting\source\protocolhandler				nmake	-	all	tc_scriptingprotocolhandler NULL
 tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider NULL
-tc	scripting\source\scripturi				nmake	-	all	tc_scriptingscripturi NULL
 tc	scripting\java						nmake	-	all	tc_scriptingjava NULL
