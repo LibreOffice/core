@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,6 +1208,39 @@ void ExcCondFormList::Apply( void )
 
 
 
+void XclImpTabIdBuffer::Append( UINT16 nTabId )
+{
+    DBG_ASSERT( nTabId, "XclImpTabIdBuffer::Append - zero value not allowed" );
+    if( nTabId )
+        UINT16List::Append( nTabId );
+}
+
+void XclImpTabIdBuffer::Fill( SvStream& rStrm, UINT16 nCount )
+{
+    Clear();
+    UINT16 nTabId;
+    for( UINT16 nIndex = 0; nIndex < nCount; nIndex++ )
+    {
+        rStrm >> nTabId;
+        Append( nTabId );
+    }
+}
+
+UINT16 XclImpTabIdBuffer::GetIndex( UINT16 nTabId, UINT16 nMaxTabId ) const
+{
+    UINT16 nReturn = 0;
+    for( UINT32 nIndex = 0; nIndex < Count(); nIndex++ )
+    {
+        UINT16 nValue = Get( nIndex );
+        if( nValue == nTabId )
+            return nReturn;
+        if( nValue <= nMaxTabId )
+            nReturn++;
+    }
+    return 0;
+}
+
+
 
 ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc,
                             SvStorage* pPivotCache ) :
@@ -1217,6 +1250,7 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
     pExcRoot->pXtiBuffer = new XtiBuffer;
     pExcRoot->pSupbookBuffer = new SupbookBuffer;
+    pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, rStream, nTab );
 
@@ -1246,9 +1280,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
 ImportExcel8::~ImportExcel8()
 {
-    delete pExcRoot->pXtiBuffer;
-    delete pExcRoot->pSupbookBuffer;
-
     if( pActTxo )
         delete pActTxo;
 
@@ -2438,6 +2469,14 @@ void ImportExcel8::Label( void )
         bTabTruncated = TRUE;
 
     pLastFormCell = NULL;
+}
+
+
+void ImportExcel8::Tabid( void )
+{
+    DBG_ASSERT( pExcRoot->pImpTabIdBuffer, "ImportExcel8::Tabid - missing tab id buffer" );
+    if( pExcRoot->pImpTabIdBuffer )
+        pExcRoot->pImpTabIdBuffer->Fill( aIn, (UINT16)(nBytesLeft >> 1) );
 }
 
 

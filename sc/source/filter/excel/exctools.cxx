@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,7 @@ RootData::RootData( void )
     pXtiBuffer = NULL;
     pSupbookBuffer = NULL;
     pCurrSupbook = NULL;
+    pImpTabIdBuffer = NULL;
 
     pRootStorage = pPivotCacheStorage = /*pCtrlStorage = */NULL;
     pImpPivotCacheList = NULL;
@@ -344,6 +345,13 @@ RootData::~RootData()
         delete pEdEngHF;
     if( pExtSheetCntAndRecs )
         delete pExtSheetCntAndRecs;
+
+    if( pXtiBuffer )
+        delete pXtiBuffer;
+    if( pSupbookBuffer )
+        delete pSupbookBuffer;
+    if( pImpTabIdBuffer )
+        delete pImpTabIdBuffer;
 
     if( pImpPivotCacheList )
         delete pImpPivotCacheList;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-17 13:41:11 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@
 
 #include "biffdump.hxx"
 #include "fontbuff.hxx"
+
+#ifndef _SC_XCLIMPCHANGETRACK_HXX
+#include "XclImpChangeTrack.hxx"
+#endif
 
 #ifdef DBG_UTIL
 ByteString& AddRecordName( UINT16 nOpcode, ByteString& rRet );
@@ -1165,6 +1169,7 @@ FltError ImportExcel8::Read( void )
                         nNextRecord = Msodrawinggroup( nLaengeRec );
                         break;
                     case 0xFC:  nNextRecord = Sst();break;// SST        [      8 ]
+                    case 0x013D: Tabid(); break;        // TABID        [      8 ] // for change tracking
                     case 0x01AE: Supbook(); break;      // SUPBOOK      [      8 ]
                     case 0x01BA: Codename( TRUE ); break;
                     case 0x0218: Name(); break;         // NAME         [      8 ]
@@ -1570,7 +1575,9 @@ aIn.Seek( nNextRecord );
     // building pivot tables
     aPivotTabList.Apply();
 
-    //
+    // import change tracking data
+    XclImpChangeTrack aImpChTr( pExcRoot );
+    aImpChTr.Apply();
 
     pExcRoot->pProgress = NULL;
     delete pPrgrsBar;

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+#   last change: $Author: dr $ $Date: 2000-11-28 11:18:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ CXXFILES = \
         xcl97exp.cxx	\
         xcl97rch.cxx	\
         xcl97rec.cxx	\
-        xcl97piv.cxx
+        xcl97piv.cxx	\
+        XclImpChangeTrack.cxx
 
 
 SLOFILES =	\
@@ -95,7 +96,8 @@ SLOFILES =	\
         $(SLO)$/xcl97exp.obj	\
         $(SLO)$/xcl97rch.obj	\
         $(SLO)$/xcl97rec.obj	\
-        $(SLO)$/xcl97piv.obj
+        $(SLO)$/xcl97piv.obj	\
+        $(SLO)$/XclImpChangeTrack.obj
 
 
 EXCEPTIONSFILES = \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:25 $
+ *  last change: $Author: dr $ $Date: 2000-11-28 11:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include "root.hxx"
 #include "excform.hxx"
 
+#ifndef _FLTTOOLS_HXX
+#include "flttools.hxx"
+#endif
 
 
 // ------------------------------------------------------------------ 0x06
@@ -184,7 +187,19 @@ ExcelToSc8::~ExcelToSc8()
 }
 
 
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT )
+{
+    return Convert( rpTokArray, rLeft, eFT, NULL );
+}
+
+
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, UINT16List& rChTrackList )
+{
+    return Convert( rpTokArray, rLeft, FT_CellFormula, &rChTrackList );
+}
+
+
+ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, INT32& rLeft, const FORMULA_TYPE eFT, UINT16List* pChTrackList )
 {
     BYTE                    nOp, nLen, nByte;
     UINT16                  nUINT16, nIndexToFunc;
@@ -210,16 +225,18 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
 
     bExternName = FALSE;
 
-    nBytesLeft = rRestbytes;
+    nBytesLeft = rLeft;
+    if( pChTrackList )
+        pChTrackList->Clear();
 
     if( eStatus != ConvOK )
         return eStatus;
 
-    if( rRestbytes == 0 )
+    if( rLeft == 0 )
     {
         aPool.Store( _STRINGCONST( "-/-" ) );
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        rpTokArray = aPool[ aStack.Get() ];
         return ConvOK;
     }
 
@@ -795,11 +812,15 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                         {
                             nTabFirst = pSbE->GetScTabNum( pXti->nFirst );
                             nTabLast = pSbE->GetScTabNum( pXti->nLast );
+                            if( pChTrackList )
+                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
                         }
                         else
                         {
                             nTabFirst = pXti->nFirst;
                             nTabLast = pXti->nLast;
+                            if( pChTrackList )
+                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
                         }
                         BOOL    b3D = ( nTabFirst != aEingPos.Tab() ) || bRangeName;
 
@@ -810,14 +831,14 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                         ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
 
                         switch ( nOp )
-                    {
+                        {
                             case 0x5C:
                             case 0x7C:
                             case 0x3C: // Deleted 3-D Cell Reference    [    277]
                                 // no information which part is deleted, set both
                                 aSRD.SetColDeleted( TRUE );
                                 aSRD.SetRowDeleted( TRUE );
-                    }
+                        }
                         if ( nTabFirst > MAXTAB )
                             aSRD.SetTabDeleted( TRUE );
 
@@ -864,11 +885,21 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                         {
                             nTabFirst = pSbE->GetScTabNum( pXti->nFirst );
                             nTabLast = pSbE->GetScTabNum( pXti->nLast );
+                            if( pChTrackList )
+                            {
+                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
+                                pChTrackList->Append( EXC_CHTR_3DREF_EXT );
+                            }
                         }
                         else
                         {
                             nTabFirst = pXti->nFirst;
                             nTabLast = pXti->nLast;
+                            if( pChTrackList )
+                            {
+                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
+                                pChTrackList->Append( EXC_CHTR_3DREF_INT );
+                            }
                         }
 
                         SingleRefData   &rR1 = aCRD.Ref1;
@@ -890,7 +921,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                             SetComplRow( aCRD );
 
                         switch ( nOp )
-                    {
+                        {
                             case 0x5D:
                             case 0x7D:
                             case 0x3D: // Deleted 3-D Area Reference    [    277]
@@ -899,7 +930,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
                                 rR1.SetRowDeleted( TRUE );
                                 rR2.SetColDeleted( TRUE );
                                 rR2.SetRowDeleted( TRUE );
-                    }
+                        }
                         if ( nTabFirst > MAXTAB )
                             rR1.SetTabDeleted( TRUE );
                         if ( nTabLast > MAXTAB )
@@ -930,42 +961,41 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& pErgebnis, INT32& rRestbytes, 
     {
         aPool << ocBad;
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrNi;
     }
     else if( nBytesLeft != 0 )
     {
         aPool << ocBad;
         aPool >> aStack;
-        pErgebnis = aPool[ aStack.Get() ];
+        rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrCount;
     }
     else if( bExternName )
     {
-        rRestbytes = nBytesLeft;
+        rLeft = nBytesLeft;
 
-        pErgebnis = aPool[ aStack.Get() ];
+        rpTokArray = aPool[ aStack.Get() ];
         eRet = ConvErrExternal;
     }
     else if( bArrayFormula )
     {
-        rRestbytes = nBytesLeft;
+        rLeft = nBytesLeft;
 
-        pErgebnis = NULL;
+        rpTokArray = NULL;
         eRet = ConvOK;
     }
     else
     {
-        rRestbytes = nBytesLeft;
+        rLeft = nBytesLeft;
 
-        pErgebnis = aPool[ aStack.Get() ];
+        rpTokArray = aPool[ aStack.Get() ];
 
         eRet = ConvOK;
     }
 
     return eRet;
 }
-
 
 
 ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, INT32 &rRestbytes, const FORMULA_TYPE eFT )
