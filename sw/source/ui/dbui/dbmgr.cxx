@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 14:38:05 $
+ *  last change: $Author: os $ $Date: 2001-01-10 16:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2003,8 +2003,8 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             }
             else
             {
-                pFound->bEndOfDB = !pMergeData->xResultSet->next();
-                ++pMergeData->nSelectionIndex;
+                pFound->bEndOfDB = !pFound->xResultSet->next();
+                ++pFound->nSelectionIndex;
             }
         }
         catch (Exception&)
