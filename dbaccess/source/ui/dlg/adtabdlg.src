@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,4 +278,5 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir tablas";
 };
+
 
