@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-15 10:17:27 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 07:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,7 +1604,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 xStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
                 xStrm->Write( (void*)sData.GetBuffer(),
-                              ( sData.Len() + 1 ) * sizeof( sal_Unicode ));
+                              ULONG( sData.Len() + 1 ) * sizeof( sal_Unicode ));
                 xStrm->Seek( 0 );
                 pStream = &xStrm;
 
@@ -1732,25 +1732,18 @@ PASTEOLE_SETREADSW3:
               ( nFmt == nId ? xStore.Is()
                             : ( xStore.Clear(),
                                   rData.GetSotStorageStream( nFmt, xStrm )) ))
-#if SUPD>=641
             || ( rData.GetTransferableObjectDescriptor(
                 ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE), aObjDesc ))
-#endif
             )
     {
         SvInPlaceObjectRef xIPObj;
-#if SUPD>=641
-        if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE == nFmtId )
+        if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE == nFmt )
         {
             xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-            xIPObj = ((SvFactory*)SvInPlaceObject::ClassFactory())
-                        ->CreateAndInit(  rData.GetTransferable()/*&rObj*/,
-                                        xStore,
-                                        FALSE, /* Linking; irgendwann ??*/
-                                        FALSE /*bStorFilled*/ );
+            xIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())
+                        ->CreateAndInit(  rData.GetTransferable(), xStore);
         }
         else
-#endif
         {
             if( !xStore.Is() )
                 xStore = new SvStorage( *xStrm );
@@ -2764,22 +2757,10 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
 
     for( USHORT* pIds = aIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
-        {
-            String sStr;
-            switch( *pIds )
-            {
-            case FORMAT_STRING: sStr = SW_RES( STR_TEXTFORMAT );    break;
-            case FORMAT_RTF:    sStr = SW_RES( STR_RTFFORMAT );     break;
-            }
-            pDlg->Insert( *pIds, sStr );
-        }
+            pDlg->Insert( *pIds, aEmptyStr );
 
     ULONG nFormat = pDlg->Execute( &rSh.GetView().GetEditWin(), aFormats,
-                                    aDesc
-#if SUPD>=641
-                                    , rData
-#endif
-                                     );
+                                    aDesc, rData );
 
     if( nFormat )
         nRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
@@ -2851,15 +2832,7 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
 
     for( USHORT* pIds = aIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))
-        {
-            String sStr;
-            switch( *pIds )
-            {
-            case FORMAT_STRING: sStr = SW_RES( STR_TEXTFORMAT );    break;
-            case FORMAT_RTF:    sStr = SW_RES( STR_RTFFORMAT );     break;
-            }
-            rToFill.AddClipbrdFormat( *pIds, sStr );
-        }
+            rToFill.AddClipbrdFormat( *pIds, aEmptyStr );
 }
 
 void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
