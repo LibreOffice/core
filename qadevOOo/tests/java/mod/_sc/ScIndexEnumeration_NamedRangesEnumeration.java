@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_NamedRangesEnumeration.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:12:15 $
+ *  last change:$Date: 2004-01-05 19:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
