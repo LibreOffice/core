@@ -12,8 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.49 $ )
-clear;
+AC_REVISION( $Revision: 1.50 $ )
 AC_PREREQ(2.13)
 AC_INIT()
 echo "$@" >config.parms
@@ -355,6 +354,9 @@ if test "$GCC" = "yes"; then
 
 dnl Set the include paths
    _gcc_include_path=`$CC -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include 
+   if test "$_gcc_include_path" = "/usr/libexec/(null)/include"; then
+	_gcc_include_path="/usr/include"
+   fi
 fi  
 
 dnl ===================================================================
@@ -378,18 +380,18 @@ else
     _make_middle=`echo $_make_version | $AWK -F. '{ print $2; }'` 
     _make_minor=`echo $_make_version | $AWK -F. '{ print $3; }'` 
     if test "$_make_major" -gt "3" ; then
-       AC_MSG_RESULT([checked (make $_make_version)])
+       AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
     else
        if test "$_make_middle" -gt "79" ; then
-          AC_MSG_RESULT([checked (make $_make_version)])
+          AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
        else
           if test "$_make_minor" -ge "1" ; then
-             AC_MSG_RESULT([checked (make $_make_version)])
+             AC_MSG_RESULT([checked ($GNUMAKE $_make_version)])
           else
              if test "$_os" = "Darwin"; then
-                 AC_MSG_WARN([failed (make $_make_version need 3.79.1+)])
+                 AC_MSG_WARN([failed ($GNUMAKE $_make_version need 3.79.1+)])
 			 else
-                 AC_MSG_ERROR([failed (make $_make_version need 3.79.1+)])
+                 AC_MSG_ERROR([failed ($GNUMAKE $_make_version need 3.79.1+)])
 			 fi
           fi
        fi
@@ -557,6 +559,9 @@ dnl Set the gxx include directories
 dnl ===================================================================
 if test "$GXX" = "yes"; then
    _gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -1`
+   if test "$_gxx_include_path" = "/usr/libexec/(null)/include"; then
+       _gxx_include_path="/usr/include"
+   fi
 dnl This is the original code...
 dnl _gxx_include_path=`$CXX -print-search-dirs | grep instal |$AWK '{ print \$2 }'`/include 
 fi
@@ -844,7 +849,7 @@ AC_MSG_CHECKING([the installed JDK])
 if test "$JAVA"; then
    _correct_jdk_exists="false"
    dnl java -version sends output to stderr!
-   _jdk=`$JAVA -J-version 2>&1 | $AWK -F'"' '{ print \$2 }'`
+   _jdk=`$JAVA -J-version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[-A-Za-z]*//`
 
    _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 

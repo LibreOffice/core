@@ -10,8 +10,8 @@
 #---------------------------------------------------------------------------
 # Description:
 # set_soenv generates a file that contains all necessary 
-# environment variables for the build proces of OpenOffice.org
-# on Linux, NetBSD, Solaris, Windows NT and Macosx.
+# environment variables for the build proces of OpenOffice
+# on Linux, NetBSD, Solaris, Windows NT and Mac OS X/Darwin.
 # This script prompts the installer to enter:
 #   1. (if necessary) The directory where the jdk is located (JAVA_HOME).
 #   2. (if necessary) The directory where the Microsoft C/C++ compiler is located (COMPATH).
@@ -42,10 +42,10 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $bootfile, $newline, $comment, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
+my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
      $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGWIN32, $USE_SHELL,
      $WScomp, $GNUcomp, $platform, $cygwinver, $machine_type, $empty, $no_jdk, $no_ant, $no_stl, $no_tcsh, $no_cl, $no_gcc, $no_gcc_home, $no_gcc_include, 
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $exportvars, $win_format_var, $perl_os);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME,
      $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, $COMPATH_ROOT, 
      $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
-     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, $PSDK_HOME,
+     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, $PSDK_HOME, $USE_NEW_SDK, $NO_HIDS,
      $BISON_HAIRY, $BISON_SIMPLE, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG );
 #
@@ -122,7 +122,7 @@ $Tru64          = "OSF1";           # return of uname command of Tru64
 $Irix           = "IRIX";           # return of uname command of Irix on a 32 bit platform
 $Irix64         = "IRIX64";         # return of uname command of Irix on a 64 bit platform
 $Winnt          = "WINNT";          # return of uname command on Windows NT
-$Macosx         = "Darwin";         # return of uname command on Macosx
+$Macosx         = "Darwin";         # return of uname command on Mac OS X/Darwin
 $empty          = "";               # used as argument
 $no_jdk         = "NO_JAVA_HOME";   # possible argument
 $no_ant         = "NO_ANT_HOME";    # possible argument
@@ -245,7 +245,8 @@ if ($machine_type eq "i86pc")
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $DLLSUFFIX      = "si";
-      $OUTPATH        = "unxsoli3";
+      $OUTPATH        = "unxsoli4";
+      $COMEX          = 4;
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
 	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."motif21";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
@@ -254,9 +255,11 @@ if ($machine_type eq "i86pc")
 else
 {     $outfile        = "SolarisSparcEnv.Set"; 
       $CPU            = "S";
+      $COMEX            = 4;
       $CPUNAME        = "SPARC";
       $DLLSUFFIX      = "ss";
-      $OUTPATH        = "unxsols3";
+      $OUTPATH        = "unxsols4";
+	  $COMEX          = 4;
 	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
 	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."motif21";
 	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
@@ -503,6 +506,8 @@ elsif ( $platform eq "$Winnt" )
 { 
       $COMPATH        = PosixFormat('@COMPATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
+      $USE_NEW_SDK    = "TRUE";
+      $NO_HIDS        = "TRUE";
       $CPUNAME        = "INTEL";
       $CPU            = "I";
       $GUI            = "WNT";
@@ -519,7 +524,7 @@ elsif ( $platform eq "$Winnt" )
       $MULTITHREAD_OBJ = "TRUE";
   if ( $MINGWIN32 eq "yes" )
   {   print "Setting Windows NT cygwin mingwin32 specific values... ";
-      $outfile        = "winenv"; 
+      $outfile        = "winmingw.set"; 
       $COM            = "GCC";
       # Change path to lower case.
       $COMPATH        = lc $COMPATH;
@@ -549,7 +554,7 @@ elsif ( $platform eq "$Winnt" )
   }
   else
   {   print "Setting Windows NT specific values... ";
-      $outfile        = "winenv.bat"; 
+      $outfile        = "winenv.set"; 
       $COM            = "MSC";
       # Change path to lower case.
       $COMPATH        = lc $COMPATH;
@@ -563,7 +568,7 @@ elsif ( $platform eq "$Winnt" )
   }
 }
 elsif ( $platform eq "$Macosx" ) 
-{     print "Setting Macosx specific values... ";
+{     print "Setting Mac OS X/Darwin specific values... ";
       $outfile        = "MacosxEnv.Set"; 
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -581,23 +586,10 @@ elsif ( $platform eq "$Macosx" )
       $OS             = "MACOSX";
       $PATH_SEPERATOR = $ps;
       $PROSWITCH      = "-DPRODUCT";
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
       # GUIBASE is set below; may be "aqua" or "unx".
 }
-if ($platform eq $Winnt)
-{  
-   if ( $USE_SHELL eq "4nt" ) {     # USE_SHELL equal 4nt means: use 4NT
-	$comment        = "rem";         # Windows script comment character
-   }
-   else {
-        $comment	= "#";
-   }
-}
-else
-{  $comment        = "#";           # UNIX script comment character
-}
+$comment4nt     = "rem";         # Windows 4nt script comment character
+$comment        = "#";           # UNIX script comment character
 print "done\n";
 
 #
@@ -761,6 +753,15 @@ else
 {  undef $outfile_sh;
 }
 
+# Generate output file for 4nt?
+if ($USE_SHELL eq "4nt")
+{  $outfile_bat = $outfile;
+   $outfile_bat =~ s/set$/bat/i;
+}
+else
+{  undef $outfile_bat;
+}
+
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB;
 	$L_STLPORT_LIB		= $L.'$STLPORT4'.$LIB;
@@ -805,7 +806,7 @@ $XLIB                 = PosixFormat('@XLIB@'); # X11 libraries
 $XINC                 = PosixFormat('@XINC@'); # X11 includes
 
 
-# Macosx only variables.
+# Mac OS X/Darwin only variables.
 if ( $platform eq "$Macosx" )
 {  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
@@ -870,10 +871,10 @@ $STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
-$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar";
+$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
 # Location of the JDK supported standard classes.zip file.
 # see above for why the change
-$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar";
+$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
 # Paths to run time shared libraries.
 if ($platform eq "$Solaris") 
 {  $LD_LIBRARY_PATH   = $cur_dir.
@@ -901,6 +902,9 @@ elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$Tr
 elsif ($platform eq "$FreeBSD")
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
+                        $ps.$JRELIBDIR.
+                        $ps.$JRETOOLKITDIR.
+                        $ps.$JRETHREADDIR.
                         $ps.$par_dir.$LIB.
 			$ps_STLPORT_LIB.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
@@ -916,12 +920,8 @@ elsif ($platform eq "$Irix" || $platform eq "$Irix64")
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
 }
 elsif ($platform eq $Macosx)
-{  $LD_LIBRARY_PATH   = '$SOLARENV'.$ds.'$INPATH'.$LIB.
-                        $ps_STLPORT_LIB.
-                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
-                        $ps.$JRELIBDIR.
-                        $ps.$JRETOOLKITDIR.
-                        $ps.$JRETHREADDIR;
+{  $LD_LIBRARY_PATH   = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $ps_STLPORT_LIB;
 }
 # Compiler directives.
 if ($platform eq "$Solaris") 
@@ -991,8 +991,8 @@ elsif ($platform eq "$Winnt")
 {  $SOLARINCLUDES     = $I.$SOLARVER.$INC.
                         $I.$SOLARENV.$ds.$INPATH.$INC.
                         $I.$SOLARENV.$INC.
-                        $I.'$COMPATH'.$ds."include".
-                        $I."'".$PSDK_HOME.$INCLUDE."'"; # This must be the last
+                        $I."'".$PSDK_HOME.$INCLUDE."'".
+                        $I.'$COMPATH'.$ds."include";
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINCLUDES     = $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
@@ -1011,16 +1011,16 @@ if ($platform eq "$Winnt")
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$INC.
                         $ps.$SOLARENV.$ds.$OUTPATH.$INC.
                         $ps.$SOLARENV.$INC.
-                        $ps.'$COMPATH'.$INCLUDE.
-                        $ps.'$PSDK_HOME'.$INCLUDE; # This must be the last.
+                        $ps.'$PSDK_HOME'.$INCLUDE.
+                        $ps.'$COMPATH'.$INCLUDE;
 
    $WIN_LIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
                         $ps.$SOLARVER.$ds.$UPD.$LIB.
                         $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
                         $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
                         $ps.$JAVA_HOME.$LIB.
-                        $ps.'$COMPATH'.$LIB.
-                        $ps.'$PSDK_HOME'.$LIB;
+                        $ps.'$PSDK_HOME'.$LIB.
+                        $ps.'$COMPATH'.$LIB;
 
    if ( $JAVA_HOME ne "" )
    {
@@ -1060,6 +1060,10 @@ elsif (($platform eq "$Linux") or ($platform eq "$NetBSD")
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
+   if ( $JAVA_HOME ne "" )
+   {
+      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
+   }
 
    if ( $JAVA_HOME ne "" )
    {
@@ -1207,12 +1211,7 @@ elsif ($platform eq "$Winnt")
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
 } 
 elsif ($platform eq "$Macosx") 
-{  $SOLARLIB          = $L.$par_dir.$LIB.
-                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
-                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
-                        $L.$JRELIBDIR.
-                        $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR.
+{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
                         $L_STLPORT_LIB.
                         $L.$USR_LIB;
 # [ed] 6/15/02 Add in X11 libraries onto the library path
@@ -1299,8 +1298,8 @@ elsif ($platform eq "$Winnt")
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
                         $I.'$JAVA_HOME'.$ds."include".
-                        $I.'$COMPATH'.$ds."include".
-                        $I."'".$PSDK_HOME.$INCLUDE."'"; # This must be the last.
+                        $I."'".$PSDK_HOME.$INCLUDE."'".
+                        $I.'$COMPATH'.$ds."include";
 }
 elsif ($platform eq "$Macosx")
 {  $SOLARINC         .= $STLPORT_stlport.
@@ -1320,20 +1319,11 @@ print "done\n";
 #
 print "Setting the aliases... ";
 # 1. alias for a full product make. 
-if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" ))
-{  $dmake           = '`*dmake`';
-$mkout           = '`perl %SOLARENV\bin\mkout.pl`';
-$deliver         = '`perl %SOLARENV\bin\deliver.pl`';
-$build           = '`perl %SOLARENV\bin\build.pl`';
-$zipdep          = '`perl %SOLARENV\bin\zipdep.pl`';
-}
-else
-{
+# ToFile will take care for the right 4nt format
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
 	$build           = '"perl $SOLARENV/bin/build.pl"';
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
-}
 # 3. alias for a full product make
 $nmake           = '"dmake"';
 print "done\n";
@@ -1351,14 +1341,21 @@ if(defined($outfile_sh))
    die "Cannot open $outfile_sh: $!\n";
 }
 
+if(defined($outfile_bat))
+{  # Create bat environment file
+   open( OUT_BAT, ">$outfile_bat" ) ||
+   die "Cannot open $outfile_bat: $!\n";
+}
+
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( *OUT, $UPD, $platform, "(t)csh" );
-CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh" ) if defined($outfile_sh);
+CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
+CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" ) if defined($outfile_sh);
+CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 #
 # Writing the platform independent constant values to file.
 # (c = comment, e = environment variable, a = alias )
@@ -1587,14 +1584,6 @@ EOF
     ToFile( "ENVCDEFS", $macosxCdefs, "e");
 }
 
-# [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
-# There may be a better way to do this, like splitting unxmacxp into two, but
-# hopefully this hack will work for now...
-
-if ( $GUIBASE eq "aqua" ) {
-ToFile( "ENVCDEFS",			"-DQUARTZ",			"e" );
-}
-
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
 #
 # Writing the platform dependent constant values to file.
@@ -1640,6 +1629,8 @@ ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform eq "$Winnt" )
 {  ToFile( "CYGWIN",            $CYGWIN,            "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
+   ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
+   ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 }
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
@@ -1748,9 +1739,6 @@ ToFile( "USE_SHELL",         $USE_SHELL,         "e" );
 # Writing the aliases to file.
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Aliases.",          $empty,             "c" );
-if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" ))
-{ ToFile( "alias dmake",       $dmake,             "a" );
-}
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
@@ -1775,6 +1763,9 @@ if(defined($outfile_sh))
 {  print OUT_SH "export $exportvars $newline";
    print OUT_SH "unset $unsetvarssh $newline";
 }
+if(defined($outfile_bat))
+{  print OUT_BAT $unsetvarsbat;
+}
 
 #
 #---------------------------
@@ -1784,6 +1775,9 @@ if(defined($outfile_sh))
 close( OUT ) || print "Can't close $outfile: $!";
 if( defined($outfile_sh))
 {  close( OUT_SH ) || print "Can't close $outfile_sh: $!";
+}
+if( defined($outfile_bat))
+{  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
 }
 #
 #------------------------------
@@ -1834,6 +1828,14 @@ if(defined($outfile_sh))
     {  `mv -f $outfile_sh $tmp`;
     }
 }
+if(defined($outfile_bat))
+{
+    $tmp = $SRC_ROOT.$ds.$outfile_bat;
+    if (rename( $outfile_bat, $tmp ) ne 1)
+    {  `mv -f $outfile_bat $tmp`;
+    }
+}
+
 #
 #--------------------------------------------------------
 # XII. Message at the end.
@@ -1871,9 +1873,10 @@ print "*********************************************************".
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
-if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-{  print OUT "#!$SHELL\n";
+if ( $USE_SHELL eq "4nt" )
+{  $SHELL="tcsh";
 }
+print OUT "#!$SHELL\n";
 close( OUT ) || print "Can't close $bootfile: $!";
 open( OUT, ">>$bootfile" ) ||
    die "Cannot open $bootfile: $!\n";
@@ -1893,7 +1896,9 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-print "You may now run $tmp in $SRC_ROOT\n";
+if ($platform ne "$Winnt") {
+	print "You may now run $tmp in $SRC_ROOT\n";
+}
 #
 #-----------------
 # XII. Functions.
@@ -1973,12 +1978,14 @@ sub CheckPathExist
 #                2. UPD (string)
 #                3. Platform (string)
 #                4. name of shell for this file
+#                5. comment to use for this file
 # Return value:  void
 #------------------------------------------------------------
 sub CreateFileHeader 
 {  my $timestamp = `date`;
    chomp( $timestamp );
    my $filehandle = $_[0];
+   my $comment = $_[4];
    print { $filehandle } "$comment #################################################################"; 
    print { $filehandle } $newline;
    print { $filehandle } "$comment OpenOffice.org $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
@@ -2003,42 +2010,37 @@ sub ToFile
    {  # Write an environment variable to file.
       if (defined $_[ 1 ])
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
-         if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-         {   
-             print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";          # to tcsh file
-             if(defined($outfile_sh))
-             {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";            # to sh file
-                $exportvars .= " $_[ 0 ]";                             # add to export list for sh file
-             }
+         print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";          # to tcsh file
+         if(defined($outfile_sh))
+         {  print OUT_SH "$_[ 0 ]=\"$_[ 1 ]\"$newline";            # to sh file
+            $exportvars .= " $_[ 0 ]";                             # add to export list for sh file
          }
-         else
+         if(defined($outfile_bat))
          {   $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             print OUT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
-             print OUT "$set $_[ 0 ]=$win_format_var $newline";
+             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
+             print OUT_BAT "$set $_[ 0 ]=$win_format_var $newline";
          }
       }
       else
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
-         if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-         {  
-            $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # for tcsh file
-            $unsetvarssh .= " $_[ 0 ]";                                        # for sh file
-         }
-         else
-         {  $unsetvars .= "$unset $_[ 0 ] >& NUL$newline";
+         $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # for tcsh file
+         $unsetvarssh .= " $_[ 0 ]";                                        # for sh file
+         if(defined($outfile_bat))
+         {  $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
          }
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";     # to stdout
-      if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
-      {  
-         print OUT "$_[ 0 ] $_[ 1 ] $newline";                            # to tcsh file
-         print OUT_SH "$_[ 0 ]=$_[ 1 ] $newline" if defined($outfile_sh); # to sh file
-      }
-      else
-      {  print OUT "$_[ 0 ]=$_[ 1 ] $newline";
+      print OUT "$_[ 0 ] $_[ 1 ] $newline";                            # to tcsh file
+      print OUT_SH "$_[ 0 ]=$_[ 1 ] $newline" if defined($outfile_sh); # to sh file
+      if(defined($outfile_bat)) # create the correct 4nt alias format
+      {  my $aliastmp = $_[ 1 ];
+         $aliastmp =~ s/\$/\%/g;
+         $aliastmp =~ s!/!\\!g;
+         $aliastmp =~ s!"!!g;
+         print OUT_BAT "$_[ 0 ]=".'`'.$aliastmp.'`'.$newline;
       }
    }
    elsif ( $_[ 2 ] eq "c" ) 
@@ -2059,32 +2061,38 @@ sub ToFile
           print OUT_SH "$comment $_[ 0 ] $newline"; 
           print OUT_SH "$comment $newline";     
       }
+      if(defined($outfile_bat))
+      {
+          print OUT_BAT "$newline";
+          print OUT_BAT "$comment4nt $newline";
+          print OUT_BAT "$comment4nt $_[ 0 ] $newline"; 
+          print OUT_BAT "$comment4nt $newline";     
+      }
    }
    elsif ( $_[ 2 ] eq "n" ) 
    {  #Write a newline to a file
       print OUT "$newline";
       print OUT_SH "$newline" if defined($outfile_sh);
+      print OUT_BAT "$newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "x" )
    {
       #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ] $newline";
+      #Only useful for 4nt
+      print OUT_BAT "$_[ 0 ] $newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "j" )
    {
       if ((defined $_[ 1 ]) and ( $platform eq "$Winnt" )) 
       {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
-         if ( $USE_SHELL ne "4nt" )
+         $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
+         $win_format_var =~ s/\\/\\\\/g;
+         print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
+         if (defined($outfile_bat))
          {
              $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             $win_format_var =~ s/\\/\\\\/g;
-             print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
-         }
-         else
-         {
-             $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             print OUT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
-             print OUT "$set $_[ 0 ]=$win_format_var $newline";
+             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
+             print OUT_BAT "$set $_[ 0 ]=$win_format_var $newline";
          }
       }
       else
