@@ -11,7 +11,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com.sun.star.sdbc.Driver</supported-service>
+        <supported-service>com.sun.star.sdbcx.Driver</supported-service>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
     <project-build-dependency>cppu</project-build-dependency>
