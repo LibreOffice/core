@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:18:50 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 14:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 
                 // we first collect the names and construct the OTable objects later, as the ctor of the table may need
                 // another result set from the connection, and some drivers support only one statement per connection
-                ::std::vector< ::rtl::OUString > aCatalogs, aSchemas, aNames, aTypes, aDescs, aComposedNames;
 
                 String sWCCompare;
                 sal_Bool bFilterMatch;
@@ -342,69 +341,13 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 
                     if (bFilterMatch)
                     {   // the table name is allowed (not filtered out)
-                        aCatalogs.push_back(sCatalog);
-                        aSchemas.push_back(sSchema);
-                        aNames.push_back(sName);
-                        aTypes.push_back(xCurrentRow->getString(4));
-                        aDescs.push_back(xCurrentRow->getString(5));
-                        aComposedNames.push_back(sComposedName);
+                        m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(sComposedName, NULL)).first);
                     }
                 }
 
                 // dispose the tables result set, in case the connection can handle only one concurrent statement
                 // (the table object creation will need it's own statements)
                 disposeComponent(xTables);
-
-                const ::rtl::OUString* pCatalogs = aCatalogs.begin();
-                const ::rtl::OUString* pSchemas = aSchemas.begin();
-                const ::rtl::OUString* pNames = aNames.begin();
-                const ::rtl::OUString* pTypes = aTypes.begin();
-                const ::rtl::OUString* pDescs = aDescs.begin();
-                const ::rtl::OUString* pComposedNames = aComposedNames.begin();
-
-                const ::rtl::OUString* pCatalogsEnd = aCatalogs.end();
-
-                for (; pCatalogs < pCatalogsEnd; ++pCatalogs, ++pSchemas, ++pNames, ++pTypes, ++pDescs, ++pComposedNames)
-                {
-                    Reference<XNamed> xTable;
-                    OConfigurationNode aTableConfig;
-                    if(m_aTablesConfig.isValid())
-                    {
-                        if(m_aTablesConfig.hasByName(*pComposedNames))
-                            aTableConfig = m_aTablesConfig.openNode(*pComposedNames);
-                        else
-                        {
-                            aTableConfig = m_aTablesConfig.createNode(*pComposedNames);
-                            m_aCommitLocation.commit();
-                        }
-                    }
-                    try
-                    {   // the ctor is allowed to throw an exception
-                        xTable = new ODBTable(aTableConfig,m_xMetaData, NULL, *pCatalogs, *pSchemas, *pNames, *pTypes, *pDescs);
-                    }
-                    catch(SQLException& e)
-                    {
-                        if (m_pWarningsContainer)
-                        {
-                            SQLContext aContext;
-                            String sMessage(::dba::ResourceManager::loadString(RID_STR_TRIED_OPEN_TABLE));
-                            composeTableName(m_xMetaData, *pCatalogs, *pSchemas, *pNames, sComposedName, sal_False);
-                            sMessage.SearchAndReplaceAscii("$name$", sComposedName);
-                            aContext.Message = sMessage;
-
-                            aContext.NextException <<= e;
-                            m_pWarningsContainer->appendWarning(aContext);
-                        }
-                    }
-                    if (xTable.is())
-                        m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pComposedNames, xTable)).first);
-                    else if(m_aTablesConfig.isValid())
-                    {
-                        m_aTablesConfig.removeNode(*pComposedNames);
-                        m_aCommitLocation.commit();
-                    }
-
-                }
             }
             else
                 DBG_ERROR("OTableContainer::construct : did not get a XRow from the tables result set !");
@@ -500,7 +443,6 @@ void OTableContainer::impl_refresh() throw(RuntimeException)
 // -----------------------------------------------------------------------------
 Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
 {
-    OSL_ENSURE(m_xMasterTables.is(),"getByName: m_xMasterTables must be set!");
     Reference<XPropertySet> xProp;
     if(m_xMasterTables.is() && m_xMasterTables->hasByName(_rName))
         m_xMasterTables->getByName(_rName) >>= xProp;
@@ -583,8 +525,14 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
     // append the new table with a create stmt
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
-    if( aIter != m_aNameMap.end() || (m_xMasterTables.is() && m_xMasterTables->hasByName(aName)))
+    if( aIter != m_aNameMap.end())
         throw ElementExistException(aName,*this);
+    else if(m_xMasterTables.is() && m_xMasterTables->hasByName(aName))
+    {
+        String sMessage(::dba::ResourceManager::loadString(RID_STR_TABLE_IS_FILTERED));
+        sMessage.SearchAndReplaceAscii("$name$", aName);
+        throw SQLException(sMessage,*this,SQLSTATE_GENERAL,1000,Any());
+    }
 
     Reference<XAppend> xAppend(m_xMasterTables,UNO_QUERY);
     if(xAppend.is())
