@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:45:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,11 @@
 #include "tabview.hxx"
 #endif
 
-#ifndef _SVSTDARR_SHORTS
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
 
+#ifndef _SVSTDARR_SHORTS
 #define _SVSTDARR_SHORTS
 #include <svtools/svstdarr.hxx>
 
@@ -104,7 +107,25 @@ class SvxHyperlinkItem;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
-// ---------------------------------------------------------------------------
+//==================================================================
+
+struct ChineseTranslationParams
+{
+    Font            aTargetFont;
+    sal_Int32       nOptions;
+    LanguageType    nSourceLang;
+    LanguageType    nTargetLang;
+
+    ChineseTranslationParams( LanguageType nSL, LanguageType nTL, const Font &rTF , sal_Int32 nOpt ) :
+        nSourceLang( nSL ),
+        nTargetLang( nTL ),
+        aTargetFont( rTF ),
+        nOptions( nOpt )
+    {
+    }
+};
+
+//==================================================================
 
 class ScViewFunc : public ScTabView
 {
@@ -327,11 +348,12 @@ public:
     void            SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
     void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
+    void            DoChineseTranslation( const ChineseTranslationParams &rParams, BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
     DECL_LINK( SpellError, void * );
 
     /** Generic implementation of sheet conversion functions. */
-    void            DoSheetConversion( ScConversionType eConvType, BOOL bRecord );
+    void            DoSheetConversion( ScConversionType eConvType, BOOL bRecord, const ChineseTranslationParams *pChParams = NULL);
 
     void            SetPrintRanges( BOOL bEntireSheet,
                                     const String* pPrint,
