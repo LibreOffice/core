@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:11:11 $
+#   last change: $Author: hjs $ $Date: 2004-06-04 12:02:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,12 @@ JAVA_RUNTIME=-ljava_g
 CXX=CC
 CC=cc
 
-CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE) -g0
+CFLAGS=$(PREENVCFLAGS) -c -temp=/tmp $(INCLUDE)
 CFLAGSCC=-xCC
 CFLAGSCXX=-features=no%altspell,no%localfor -library=no%Cstd
+
+# flags to enable build with symbols; required for crashdump feature
+CFLAGSENABLESYMBOLS=-g0 -xs
 
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
