@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:56:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,4 +537,11 @@ rtl::OUString OEvoabDriver::translateFileErrorMessage( oslFileError nFileErr)
             sFileErr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" File operation failed: other reason!"));
     }
     return sFileErr;
+}
+// -----------------------------------------------------------------------------
+Sequence< DriverPropertyInfo > SAL_CALL OEvoabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+{
+    if ( !acceptsURL(url) )
+        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
+    return Sequence< DriverPropertyInfo >();
 }
