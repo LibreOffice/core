@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:46:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ static const ResIdToResName pToolBarResToName[] =
     { 25005,    "textobjectbar"        },      //calc
     { 25047,    "formsobjectbar"       },
     { 25053,    "drawobjectbar"        },
-    { 25054,    "grapicobjectbar"      },
+    { 25054,    "graphicobjectbar"     },
     { 25001,    "formatobjectbar"      },
     { 25006,    "previewbar"           },
     { 25035,    "toolbar"              },      //calc
