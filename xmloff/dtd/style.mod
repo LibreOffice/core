@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.15 2000-12-05 15:16:17 dvo Exp $
+	$Id: style.mod,v 1.16 2000-12-08 10:02:01 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -162,11 +162,11 @@
 <!ATTLIST style:properties style:font-charset-complex %textEncoding; #IMPLIED>
 
 <!ATTLIST style:properties fo:font-size %positiveLengthOrPercentage; #IMPLIED>
-<!ATTLIST style:properties fo:font-size-rel %length; #IMPLIED>
-<!ATTLIST style:properties fo:font-size-asian %positiveLengthOrPercentage; #IMPLIED>
-<!ATTLIST style:properties fo:font-size-rel-asian %length; #IMPLIED>
-<!ATTLIST style:properties fo:font-size-complex %positiveLengthOrPercentage; #IMPLIED>
-<!ATTLIST style:properties fo:font-size-rel-complex %length; #IMPLIED>
+<!ATTLIST style:properties style:font-size-rel %length; #IMPLIED>
+<!ATTLIST style:properties style:font-size-asian %positiveLengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties style:font-size-rel-asian %length; #IMPLIED>
+<!ATTLIST style:properties style:font-size-complex %positiveLengthOrPercentage; #IMPLIED>
+<!ATTLIST style:properties style:font-size-rel-complex %length; #IMPLIED>
 <!ENTITY % normalOrLength "CDATA">
 <!ATTLIST style:properties fo:letter-spacing %normalOrLength; #IMPLIED>
 <!ATTLIST style:properties fo:language %languageOnly; #IMPLIED>
