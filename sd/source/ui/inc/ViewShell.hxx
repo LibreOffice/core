@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:07:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ class DrawController;
 class FrameView;
 class FuPoor;
 class FuSearch;
-class FuSlideShow;
+class Slideshow;
 class LayerTabBar;
 class ObjectBarManager;
 class View;
@@ -332,24 +332,13 @@ public:
     void SetCurrentFunction (FuPoor* pFunction);
     void SetOldFunction (FuPoor* pFunction);
 
-    FuSlideShow* GetSlideShow() const { return pFuSlideShow; }
-    /** Set the slide show function to the given function.
-    */
-    void SetSlideShowFunction (FuSlideShow* pFunction);
+    Slideshow* GetSlideShow() const { return mpSlideShow; }
+    void SetSlideShow(Slideshow* pSlideShow );
 
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
                             BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
                             BOOL bBackgroundFullSize );
-
-    void    UpdateSlideChangeWindow();
-
-    /** Assign the slide change effect that is currently selected in the
-        slide change dialog to the selected slides or master pages.
-        @param eEditMode
-            This defines whether to assign to slides or master pages.
-    */
-    void AssignFromSlideChangeWindow (EditMode eEditMode);
 
     void    SetStartShowWithDialog( BOOL bIn = TRUE ) { bStartShowWithDialog = bIn; }
     BOOL    IsStartShowWithDialog() const { return bStartShowWithDialog; }
@@ -579,7 +568,7 @@ protected:
     FuPoor*      pFuActual;
     FuPoor*      pFuOld;
     FuSearch*    pFuSearch;
-    FuSlideShow* pFuSlideShow;
+    Slideshow*  mpSlideShow;
     ZoomList*    pZoomList;
 
     Point       aViewPos;
