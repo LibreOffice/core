@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-08 15:44:55 $
+ *  last change: $Author: aw $ $Date: 2001-08-13 15:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,6 +1163,13 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             {
                 Point aVclPoint( aPnt.X, aPnt.Y );
 
+                // #90763# position is relative to top left, make it absolute
+                XPolyPolygon aEmptyPolygon;
+                Matrix3D aMatrix3D;
+                pObj->TRGetBaseGeometry(aMatrix3D, aEmptyPolygon);
+                aVclPoint.X() += FRound(aMatrix3D[0][2]);
+                aVclPoint.Y() += FRound(aMatrix3D[1][2]);
+
                 // #88657# metric of pool maybe twips (writer)
                 ForceMetricToItemPoolMetric(aVclPoint);
 
@@ -1715,15 +1722,22 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
         {
             case OWN_ATTR_CAPTION_POINT:
             {
-                Point aVclPnt = ((SdrCaptionObj*)pObj)->GetTailPos();
+                Point aVclPoint = ((SdrCaptionObj*)pObj)->GetTailPos();
 
                 // #88491# make pos relative to anchor
-                aVclPnt -= pObj->GetAnchorPos();
+                aVclPoint -= pObj->GetAnchorPos();
 
                 // #88657# metric of pool maybe twips (writer)
-                ForceMetricTo100th_mm(aVclPnt);
+                ForceMetricTo100th_mm(aVclPoint);
 
-                awt::Point aPnt( aVclPnt.X(), aVclPnt.Y() );
+                // #90763# pos is absolute, make it relative to top left
+                Matrix3D aMatrix3D;
+                XPolyPolygon aPolyPolygon;
+                pObj->TRGetBaseGeometry( aMatrix3D, aPolyPolygon );
+                aVclPoint.X() -= FRound(aMatrix3D[0][2]);
+                aVclPoint.Y() -= FRound(aMatrix3D[1][2]);
+
+                awt::Point aPnt( aVclPoint.X(), aVclPoint.Y() );
                 aAny <<= aPnt;
                 break;
             }
