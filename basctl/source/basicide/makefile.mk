@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:46:35 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:30:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,8 @@ SLOFILES =  \
             $(SLO)$/moduldlg.obj	\
             $(SLO)$/moduldl2.obj	\
             $(SLO)$/objdlg.obj	\
+                $(SLO)$/unomodel.obj	\
+                $(SLO)$/register.obj	\
             $(SLO)$/tbxctl.obj	\
             $(SLO)$/basidectrlr.obj
 
@@ -125,16 +127,12 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/macrodlg.obj	\
                 $(SLO)$/moduldlg.obj	\
                 $(SLO)$/moduldl2.obj	\
+                $(SLO)$/unomodel.obj	\
+                $(SLO)$/register.obj	\
                 $(SLO)$/basidectrlr.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
-
-LIB2TARGET =    $(SLB)$/ybctl.lib
-LIB2ARCHIV =    $(LB)$/libybctl.a
-LIB2OBJFILES  =    $(SLO)$/basiclib.obj
-
-DEPOBJFILES = $(SLO)$/basiclib.obj
 
 .INCLUDE :  target.mk
 
