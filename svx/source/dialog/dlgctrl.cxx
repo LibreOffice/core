@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 10:58:35 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1703,9 +1703,12 @@ void LineLB::Fill( const XDashList* pList )
     for( long i = 0; i < nCount; i++ )
     {
         pEntry = pList->Get( i );
-        Bitmap* pBitmap = pList->GetBitmap( i );
+        Bitmap* pBitmap = const_cast<XDashList*>(pList)->CreateBitmapForUI( i );
         if( pBitmap )
+        {
             InsertEntry( pEntry->GetName(), *pBitmap );
+            delete pBitmap;
+        }
         else
             InsertEntry( pEntry->GetName() );
     }
@@ -1776,7 +1779,7 @@ void LineEndLB::Fill( const XLineEndList* pList, BOOL bStart )
     for( long i = 0; i < nCount; i++ )
     {
         pEntry = pList->Get( i );
-        Bitmap* pBitmap = pList->GetBitmap( i );
+        Bitmap* pBitmap = const_cast<XLineEndList*>(pList)->CreateBitmapForUI( i );
         if( pBitmap )
         {
             Size aBmpSize( pBitmap->GetSizePixel() );
@@ -1785,6 +1788,8 @@ void LineEndLB::Fill( const XLineEndList* pList, BOOL bStart )
             InsertEntry( pEntry->GetName(),
                 aVD.GetBitmap( bStart ? Point() : Point( aBmpSize.Width() / 2, 0 ),
                     Size( aBmpSize.Width() / 2, aBmpSize.Height() ) ) );
+
+            delete pBitmap;
         }
         else
             InsertEntry( pEntry->GetName() );

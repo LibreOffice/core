@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:52:30 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "tabline.hxx"
 #include "dlgname.hxx"
 #include "dialmgr.hxx"
+#include "dlgutil.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -744,4 +745,17 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
     return( 0L );
 }
 
+void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SfxTabPage::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+        USHORT nOldSelect = aLbLineEnds.GetSelectEntryPos();
+        aLbLineEnds.Clear();
+        aLbLineEnds.Fill( pLineEndList );
+        aLbLineEnds.SelectEntryPos( nOldSelect );
+    }
+}
 

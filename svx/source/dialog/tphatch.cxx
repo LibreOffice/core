@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ SvxHatchTabPage::SvxHatchTabPage
 
     pColorTab = NULL;
     pHatchingList = NULL;
+
+
+    aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
 
 // -----------------------------------------------------------------------
@@ -917,4 +920,12 @@ void SvxHatchTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     }
 }
 
+
+void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+        aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+    SvxTabPage::DataChanged( rDCEvt );
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 13:21:15 $
+ *  last change: $Author: cl $ $Date: 2002-06-04 12:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ SvxLineTabPage::SvxLineTabPage
     aCbxSynchronize     ( this, ResId( CBX_SYNCHRONIZE ) ),
     aFlLineEnds         ( this, ResId( FL_LINE_ENDS ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
+        aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
     //#58425# Symbole auf einer Linie (z.B. StarChart) ->
     aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
     aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
@@ -357,26 +357,50 @@ SvxLineTabPage::~SvxLineTabPage()
 }
 void SvxLineTabPage::Construct()
 {
-    ResMgr* pMgr = DIALOG_MGR();
     // Farbtabelle
     aLbColor.Fill( pColorTab );
+    FillListboxes();
+}
+
+void SvxLineTabPage::FillListboxes()
+{
+    aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+
+    ResMgr* pMgr = DIALOG_MGR();
+
     // Linienstile
+    USHORT nOldSelect = aLbLineStyle.GetSelectEntryPos();
+    aLbLineStyle.Clear();
     aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, pMgr ) ) );
+    aLbLineStyle.SelectEntryPos( nOldSelect );
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
-    Color aColorOld ( 0xFF, 0xFF, 0xFF );
-    Color aColorNew = rStyles.GetWindowColor();
-    aBitmap.Replace ( aColorOld, aColorNew );
+    Color aSourceColors[2];
+    Color aDestColors[2];
+
+    aSourceColors[0] = Color( COL_WHITE );
+    aSourceColors[1] = Color( COL_BLACK );
+
+    aDestColors[0] = rStyles.GetFieldColor();
+    aDestColors[1] = rStyles.GetFieldTextColor();
+
+    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
     Image aSolidLine ( aBitmap );
     aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_SOLID, pMgr ) ), aSolidLine );
     aLbLineStyle.Fill( pDashList );
     // LinienEndenStile
     String sNone( ResId( RID_SVXSTR_NONE, pMgr ) );
+    nOldSelect = aLbStartStyle.GetSelectEntryPos();
+    aLbStartStyle.Clear();
     aLbStartStyle.InsertEntry( sNone );
     aLbStartStyle.Fill( pLineEndList );
+    aLbStartStyle.SelectEntryPos( nOldSelect );
+    nOldSelect = aLbEndStyle.GetSelectEntryPos();
+    aLbEndStyle.Clear();
     aLbEndStyle.InsertEntry( sNone );
     aLbEndStyle.Fill( pLineEndList, FALSE );
+    aLbEndStyle.SelectEntryPos( nOldSelect );
 }
 
 // -----------------------------------------------------------------------
@@ -1819,4 +1843,14 @@ IMPL_LINK( SvxLineTabPage, RatioHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
+
+void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    SvxTabPage::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        FillListboxes();
+    }
+}
 
