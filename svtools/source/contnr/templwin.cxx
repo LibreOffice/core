@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-12 13:13:49 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 12:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,8 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aFileViewTB.SetClickHdl( aLink );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, FALSE );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PREV, FALSE );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
+
     aFileViewTB.Show();
 
     aFrameWinTB.SetClickHdl( aLink );
@@ -1000,6 +1002,7 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, pCtrl )
         aURL = pIconWin->GetCursorPosIconURL();
     pFileWin->OpenRoot( aURL );
     pIconWin->InvalidateIconControl();
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, FALSE );
     return 0;
 }
 
@@ -1048,9 +1051,10 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
 {
     aSelectHdl.Call( this );
     String aURL = pFileWin->GetSelectedFile();
-    sal_Bool bIsFolder = ( aURL.Len() == 0 || ::utl::UCBContentHelper::IsFolder( aURL ) );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, !bIsFolder );
-    if ( !bIsFolder && INetURLObject( aURL ).GetProtocol() != INET_PROT_PRIVATE )
+    sal_Bool bIsFile = ( aURL.Len() != 0 && !::utl::UCBContentHelper::IsFolder( aURL ) &&
+                         INetURLObject( aURL ).GetProtocol() != INET_PROT_PRIVATE );
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, bIsFile );
+    if ( bIsFile )
         pFrameWin->OpenFile( aURL, sal_True, sal_False, sal_False );
     return 0;
 }
@@ -1127,7 +1131,9 @@ void SvtTemplateWindow::DoAction( USHORT nAction )
 
         case TI_DOCTEMPLATE_PRINT :
         {
-            PrintFile( pFileWin->GetSelectedFile() );
+            String sPrintFile( pFileWin->GetSelectedFile() );
+            if ( sPrintFile.Len() > 0 )
+                PrintFile( sPrintFile );
             break;
         }
 
