@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:45:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1632,7 +1632,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "Textramar";
         Text[ polish ] = "Ramki tekstu";
         Text[ portuguese_brazilian ] = "Text frames";
-        Text[ japanese ] = "Ã·½Ä˜g(~X)";
+        Text[ japanese ] = "Ã·½ÄÎÞ¯¸½(~X)";
         Text[ korean ] = "ÅØ½ºÆ® ÇÁ·¹ÀÓ(~X)";
         Text[ chinese_simplified ] = "ÎÄ±¾¿ò(~X)";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~X)";
