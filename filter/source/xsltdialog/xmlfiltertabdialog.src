@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:23:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ TabDialog DLG_XML_FILTER_TABDIALOG
                 Text[ catalan ] = "Continguts";
                 Text[ thai ] = "ทั่วไป";
                 Text[ slovak ] = "Všeobecné";
+                Text[ danish ] = "General";
+                Text[ hindi ] = "सामान्य";
+                Text[ turkish ] = "General";
             };
             PageItem RID_XML_FILTER_TABPAGE_XSLT
             {
@@ -119,6 +122,20 @@ TabDialog DLG_XML_FILTER_TABDIALOG
                 Text[ chinese_traditional ] = "轉換";
                 Text[ slovak ] = "Transformácia";
                 Text[ portuguese_brazilian ] = "Transforma��o";
+                Text[ greek ] = "Transformation";
+                Text[ dutch ] = "Transformation";
+                Text[ finnish ] = "Transformation";
+                Text[ czech ] = "Transformace";
+                Text[ danish ] = "Transformation";
+                Text[ arabic ] = "Transformation";
+                Text[ hebrew ] = "Transformation";
+                Text[ catalan ] = "Transformation";
+                Text[ hindi ] = "Transformation";
+                Text[ portuguese ] = "Transformation";
+                Text[ russian ] = "Transformation";
+                Text[ polish ] = "Transformation";
+                Text[ turkish ] = "Transformation";
+                Text[ thai ] = "Transformation";
             };
         };
     };
@@ -132,7 +149,23 @@ TabDialog DLG_XML_FILTER_TABDIALOG
     Text[ chinese_traditional ] = "XML 篩選器: %s";
     Text[ slovak ] = "XML Filter: %s";
     Text[ portuguese_brazilian ] = "Filtro XML: %s";
+    Text[ greek ] = "XML Filter: %s";
+    Text[ dutch ] = "XML Filter: %s";
+    Text[ finnish ] = "XML Filter: %s";
+    Text[ czech ] = "XML filtr: %s";
+    Text[ danish ] = "XML Filter: %s";
+    Text[ arabic ] = "XML Filter: %s";
+    Text[ hebrew ] = "XML Filter: %s";
+    Text[ catalan ] = "XML Filter: %s";
+    Text[ hindi ] = "XML Filter: %s";
+    Text[ portuguese ] = "XML Filter: %s";
+    Text[ russian ] = "XML Filter: %s";
+    Text[ polish ] = "XML Filter: %s";
+    Text[ turkish ] = "XML Filter: %s";
+    Text[ thai ] = "XML Filter: %s";
 };
+
+
 
 
 
