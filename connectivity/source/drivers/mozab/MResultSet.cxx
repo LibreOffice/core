@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:24:52 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 18:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 
 #include <rtl/string.hxx>
 #include <vector>
+#include <algorithm>
 
 #include "MResultSet.hxx"
 #include "MResultSetMetaData.hxx"
@@ -1711,7 +1712,8 @@ void OResultSet::fillRowData()
     // We need a unique id for caching mechanism so should fetch card:URI
     m_aQuery.setAttributes( m_aAttributeStrings );
 
-    m_aQuery.setAddressbook( m_pTable->getName() );
+    rtl::OUString aStr(  m_pTable->getName() );
+    m_aQuery.setAddressbook( aStr );
 
     sal_Int32 rv = m_aQuery.executeQuery(xConnection->isOutlookExpress());
     if ( rv == -1 ) {
