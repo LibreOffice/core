@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 23:04:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,8 +380,8 @@ ImpSvNumFor::~ImpSvNumFor()
 {
     for (USHORT i = 0; i < nAnzStrings; i++)
         aI.sStrArray[i].Erase();
-    __DELETE(nAnzStrings) aI.sStrArray;
-    __DELETE(nAnzStrings) aI.nTypeArray;
+    delete [] aI.sStrArray;
+    delete [] aI.nTypeArray;
 }
 
 void ImpSvNumFor::Enlarge(USHORT nAnz)
