@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:03:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,7 @@ SwDoc::SwDoc() :
                                     OUTLINE_RULE );
     // #115901#
     pNumRuleTbl->Insert(pOutlineRule, pNumRuleTbl->Count());
+    aNumRuleMap[pOutlineRule->GetName()] = pOutlineRule;
 
     new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
@@ -929,6 +930,8 @@ void SwDoc::ClearDoc()
                                       SwNumRule::GetOutlineRuleName() ),
                                   OUTLINE_RULE );
     pNumRuleTbl->Insert( pOutlineRule, pNumRuleTbl->Count() );
+
+    aNumRuleMap[pOutlineRule->GetName()] = pOutlineRule;
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
