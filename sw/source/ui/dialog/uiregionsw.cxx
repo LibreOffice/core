@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:02:49 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #define ITEMID_SIZE 0
@@ -109,6 +109,8 @@
 #ifndef _SVX_HTMLCFG_HXX
 #include <svx/htmlcfg.hxx>
 #endif
+
+#include <comphelper/storagehelper.hxx>
 
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -248,15 +250,15 @@ void SectRepr::SetFile( const String& rFile )
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 ));
     String sOldFileName( aSection.GetLinkFileName() );
-    String sSub( sOldFileName.GetToken( 2, so3::cTokenSeperator ) );
+    String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeperator ) );
 
     if( rFile.Len() || sSub.Len() )
     {
-        sNewFile += so3::cTokenSeperator;
+        sNewFile += sfx2::cTokenSeperator;
         if( rFile.Len() ) // Filter nur mit FileName
-            sNewFile += sOldFileName.GetToken( 1, so3::cTokenSeperator );
+            sNewFile += sOldFileName.GetToken( 1, sfx2::cTokenSeperator );
 
-        sNewFile += so3::cTokenSeperator;
+        sNewFile += sfx2::cTokenSeperator;
         sNewFile += sSub;
     }
 
@@ -273,14 +275,14 @@ void SectRepr::SetFilter( const String& rFilter )
 {
     String sNewFile;
     String sOldFileName( aSection.GetLinkFileName() );
-    String sFile( sOldFileName.GetToken( 0, so3::cTokenSeperator ) );
-    String sSub( sOldFileName.GetToken( 2, so3::cTokenSeperator ) );
+    String sFile( sOldFileName.GetToken( 0, sfx2::cTokenSeperator ) );
+    String sSub( sOldFileName.GetToken( 2, sfx2::cTokenSeperator ) );
 
     if( sFile.Len() )
-        (((( sNewFile = sFile ) += so3::cTokenSeperator ) += rFilter )
-                                += so3::cTokenSeperator ) += sSub;
+        (((( sNewFile = sFile ) += sfx2::cTokenSeperator ) += rFilter )
+                                += sfx2::cTokenSeperator ) += sSub;
     else if( sSub.Len() )
-        (( sNewFile = so3::cTokenSeperator ) += so3::cTokenSeperator ) += sSub;
+        (( sNewFile = sfx2::cTokenSeperator ) += sfx2::cTokenSeperator ) += sSub;
 
     aSection.SetLinkFileName( sNewFile );
 
@@ -292,12 +294,12 @@ void SectRepr::SetSubRegion(const String& rSubRegion)
 {
     String sNewFile;
     String sOldFileName( aSection.GetLinkFileName() );
-    String sFilter( sOldFileName.GetToken( 1, so3::cTokenSeperator ) );
-    sOldFileName = sOldFileName.GetToken( 0, so3::cTokenSeperator );
+    String sFilter( sOldFileName.GetToken( 1, sfx2::cTokenSeperator ) );
+    sOldFileName = sOldFileName.GetToken( 0, sfx2::cTokenSeperator );
 
     if( rSubRegion.Len() || sOldFileName.Len() )
-        (((( sNewFile = sOldFileName ) += so3::cTokenSeperator ) += sFilter )
-                                       += so3::cTokenSeperator ) += rSubRegion;
+        (((( sNewFile = sOldFileName ) += sfx2::cTokenSeperator ) += sFilter )
+                                       += sfx2::cTokenSeperator ) += rSubRegion;
 
     aSection.SetLinkFileName( sNewFile );
 
@@ -316,13 +318,13 @@ String SectRepr::GetFile() const
 #ifdef DDE_AVAILABLE
         if( DDE_LINK_SECTION == aSection.GetType() )
         {
-            USHORT n = sLinkFile.SearchAndReplace( so3::cTokenSeperator, ' ' );
-            sLinkFile.SearchAndReplace( so3::cTokenSeperator, ' ',  n );
+            USHORT n = sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
+            sLinkFile.SearchAndReplace( sfx2::cTokenSeperator, ' ',  n );
         }
         else
 #endif
             sLinkFile = INetURLObject::decode( sLinkFile.GetToken( 0,
-                                               so3::cTokenSeperator ),
+                                               sfx2::cTokenSeperator ),
                                         INET_HEX_ESCAPE,
                                            INetURLObject::DECODE_UNAMBIGUOUS,
                                         RTL_TEXTENCODING_UTF8 );
@@ -335,7 +337,7 @@ String SectRepr::GetSubRegion() const
 {
     String sLinkFile( aSection.GetLinkFileName() );
     if( sLinkFile.Len() )
-        sLinkFile = sLinkFile.GetToken( 2, so3::cTokenSeperator );
+        sLinkFile = sLinkFile.GetToken( 2, sfx2::cTokenSeperator );
     return sLinkFile;
 }
 
@@ -1241,8 +1243,8 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
             while( STRING_NOTFOUND != (nPos = sLink.SearchAscii( "  ", nPos )) )
                 sLink.Erase( nPos--, 1 );
 
-            nPos = sLink.SearchAndReplace( ' ', so3::cTokenSeperator );
-            sLink.SearchAndReplace( ' ', so3::cTokenSeperator, nPos );
+            nPos = sLink.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+            sLink.SearchAndReplace( ' ', sfx2::cTokenSeperator, nPos );
 
             pSectRepr->GetSection().SetLinkFileName( sLink );
             pSectRepr->GetSection().SetType( DDE_LINK_SECTION );
@@ -1428,10 +1430,12 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
 static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
-    SvStorage* pStg;
-    if( rMedium.IsStorage() && 0 != (pStg = rMedium.GetStorage() ) )
+    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
         SvStringsDtor aArr( 10, 10 );
+        //TODO/LATER: conform that code can be removed
+/*
         switch( pStg->GetFormat() )
         {
         case SOT_FORMATSTR_ID_STARWRITER_50:
@@ -1454,6 +1458,11 @@ static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBo
             SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
             break;
         }
+*/
+        sal_uInt32 nFormat = SotStorage::GetFormatID( xStg );
+        if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 )
+            ReadXML->GetSectionList( rMedium, (SvStrings&) aArr );
+
         for( USHORT n = 0; n < aArr.Count(); ++n )
             rBox.InsertEntry( *aArr[ n ] );
     }
@@ -1558,9 +1567,9 @@ short   SwInsertSectionTabDialog::Ok()
         aRequest.AppendItem(SfxBoolItem(FN_PARAM_REGION_PROTECT, pToInsertSection->IsProtect()));
 
         String sLinkFileName( pToInsertSection->GetLinkFileName() );
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, so3::cTokenSeperator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.GetToken( 1, so3::cTokenSeperator )));
-        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, so3::cTokenSeperator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_1, sLinkFileName.GetToken( 0, sfx2::cTokenSeperator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_2, sLinkFileName.GetToken( 1, sfx2::cTokenSeperator )));
+        aRequest.AppendItem(SfxStringItem( FN_PARAM_3, sLinkFileName.GetToken( 2, sfx2::cTokenSeperator )));
         aRequest.Done();
     }
     return nRet;
@@ -1693,8 +1702,8 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
             while( STRING_NOTFOUND != (nPos = aLinkFile.SearchAscii( "  ", nPos )) )
                 aLinkFile.Erase( nPos--, 1 );
 
-            nPos = aLinkFile.SearchAndReplace( ' ', so3::cTokenSeperator );
-            aLinkFile.SearchAndReplace( ' ', so3::cTokenSeperator, nPos );
+            nPos = aLinkFile.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+            aLinkFile.SearchAndReplace( ' ', sfx2::cTokenSeperator, nPos );
         }
         else
         {
@@ -1704,9 +1713,9 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
                 aSection.SetLinkFilePassWd( sFilePasswd );
             }
 
-            aLinkFile += so3::cTokenSeperator;
+            aLinkFile += sfx2::cTokenSeperator;
             aLinkFile += sFilterName;
-            aLinkFile += so3::cTokenSeperator;
+            aLinkFile += sfx2::cTokenSeperator;
             aLinkFile += sSubRegion;
         }
 
