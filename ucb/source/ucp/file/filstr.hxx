@@ -22,6 +22,9 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
@@ -52,6 +55,7 @@ namespace fileaccess {
     class XStream_impl
         : public cppu::OWeakObject,
           public com::sun::star::lang::XTypeProvider,
+          public com::sun::star::lang::XServiceInfo,
           public com::sun::star::io::XStream,
           public com::sun::star::io::XSeekable,
           public com::sun::star::io::XInputStream,
@@ -96,6 +100,20 @@ namespace fileaccess {
         // XTypeProvider
 
         XTYPEPROVIDER_DECL()
+
+
+        // XServiceInfo
+        virtual rtl::OUString SAL_CALL
+        getImplementationName()
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+        supportsService( const rtl::OUString& ServiceName )
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( com::sun::star::uno::RuntimeException );
 
 
         // XStream

@@ -69,6 +69,50 @@ sal_Int32 SAL_CALL XInputStream_impl::getMinorError()
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////////////
+//  XServiceInfo
+//////////////////////////////////////////////////////////////////////////////////////////
+
+rtl::OUString SAL_CALL
+XInputStream_impl::getImplementationName()
+    throw(uno::RuntimeException)
+{
+    return rtl::OUString();
+}
+
+
+
+sal_Bool SAL_CALL
+XInputStream_impl::supportsService( const rtl::OUString& ServiceName )
+    throw(uno::RuntimeException)
+{
+    return false;
+}
+
+
+
+uno::Sequence< rtl::OUString > SAL_CALL
+XInputStream_impl::getSupportedServiceNames()
+    throw( uno::RuntimeException )
+{
+    uno::Sequence< rtl::OUString > ret( 0 );
+    return ret;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//  XTypeProvider
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+XTYPEPROVIDER_IMPL_4( XInputStream_impl,
+                      lang::XTypeProvider,
+                      lang::XServiceInfo,
+                      io::XSeekable,
+                      io::XInputStream )
+
+
+
 uno::Any SAL_CALL
 XInputStream_impl::queryInterface(
     const uno::Type& rType )
@@ -76,6 +120,8 @@ XInputStream_impl::queryInterface(
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( io::XInputStream*,this ),
+                                          SAL_STATIC_CAST( lang::XTypeProvider*,this ),
+                                          SAL_STATIC_CAST( lang::XServiceInfo*,this ),
                                           SAL_STATIC_CAST( io::XSeekable*,this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }

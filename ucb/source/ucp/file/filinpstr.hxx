@@ -10,8 +10,17 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
@@ -33,6 +42,8 @@ namespace fileaccess {
 
     class XInputStream_impl
         : public cppu::OWeakObject,
+          public com::sun::star::lang::XTypeProvider,
+          public com::sun::star::lang::XServiceInfo,
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XSeekable
     {
@@ -48,6 +59,24 @@ namespace fileaccess {
 
         sal_Int32 SAL_CALL CtorSuccess();
         sal_Int32 SAL_CALL getMinorError();
+
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
+
+        // XServiceInfo
+        virtual rtl::OUString SAL_CALL
+        getImplementationName()
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+        supportsService( const rtl::OUString& ServiceName )
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
+            throw( com::sun::star::uno::RuntimeException );
 
 
         virtual com::sun::star::uno::Any SAL_CALL

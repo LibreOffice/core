@@ -39,6 +39,7 @@ XStream_impl::queryInterface(
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( lang::XTypeProvider*,this ),
+                                          SAL_STATIC_CAST( lang::XServiceInfo*,this ),
                                           SAL_STATIC_CAST( io::XStream*,this ),
                                           SAL_STATIC_CAST( io::XInputStream*,this ),
                                           SAL_STATIC_CAST( io::XOutputStream*,this ),
@@ -67,12 +68,44 @@ XStream_impl::release(
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
+//  XServiceInfo
+//////////////////////////////////////////////////////////////////////////////////////////
+
+rtl::OUString SAL_CALL
+XStream_impl::getImplementationName()
+    throw( uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii("bla");
+}
+
+
+
+sal_Bool SAL_CALL
+XStream_impl::supportsService( const rtl::OUString& ServiceName )
+    throw( uno::RuntimeException)
+{
+    return false;
+}
+
+
+
+uno::Sequence< rtl::OUString > SAL_CALL
+XStream_impl::getSupportedServiceNames()
+    throw( uno::RuntimeException )
+{
+    uno::Sequence< rtl::OUString > ret( 0 );
+    return ret;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 //  XTypeProvider
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-XTYPEPROVIDER_IMPL_6( XStream_impl,
+XTYPEPROVIDER_IMPL_7( XStream_impl,
                       lang::XTypeProvider,
+                      lang::XServiceInfo,
                       io::XStream,
                       io::XSeekable,
                       io::XInputStream,
