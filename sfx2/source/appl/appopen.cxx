@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:01:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,8 @@
 #include <svtools/docpasswdrequest.hxx>
 
 #include <vos/mutex.hxx>
+
+#include <rtl/logfile.hxx>
 
 #ifndef GCC
 #pragma hdrstop
@@ -1510,6 +1512,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
+            RTL_LOGFILE_CONTEXT( aLog2, "PERFORMANCE - SfxApplication::OpenDocExec_Impl" );
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }
