@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treesegment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:27:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,17 @@ void TreeSegment::setName(Name const & _aNewName)
         sharable::freeString(aUpdater.allocator(),aOldName);
     }
 }
+// -----------------------------------------------------------------------------
+void TreeSegment::markRemovable()
+{
+    OSL_ENSURE(is(), "Operation requires a valid tree");
 
+    if (is())
+    {
+        memory::UpdateAccessor aUpdater( this->getSegment() );
+        getTreeDataForUpdate(aUpdater)->header.state |= State::flag_removable;
+    }
+}
 // -----------------------------------------------------------------------------
 TreeAddress TreeSegment::getBaseAddress() const
 {
