@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:13:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,6 +262,16 @@ namespace xmloff
             in a spreadsheet document
         */
         void exportCellBindingAttributes( bool _bIncludeListLinkageType );
+
+        /** exports the attribute(s) which bind this control to XForms */
+        void exportXFormsBindAttributes();
+
+        /** exports the attribute(s) which bind the list of a list
+            control to XForms */
+        void exportXFormsListAttributes();
+
+        /** exports the attribute(s) for an XForms submission */
+        void exportXFormsSubmissionAttributes();
 
         /** exports the attribute which descrives a cell range which acts as list source for
             a list-like control
