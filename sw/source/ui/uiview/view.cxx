@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:05:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,6 +1048,11 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     }
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
 
+    // --> OD 2005-02-11 #i38810# - assure that modified state of document
+    // isn't reset, if document is already modified.
+    const bool bIsDocModified = pWrtShell->GetDoc()->IsModified();
+    // <--
+
     // JP 05.02.99: Bug 61495 - damit unter anderem das HLineal im
     //              ReadonlyFall nicht angezeigt wird
     aUsrPref.SetReadonly( pWrtShell->GetViewOptions()->IsReadonly() );
@@ -1162,9 +1167,15 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     // der folgende Ausdruck funktioniert auch, wenn sich das aendert
     //JP 27.07.98: wenn per Undo nicht mehr die Modifizierung aufhebar ist,
     //              so setze das Modified NICHT zurueck.
-    if( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
-        (!pFirst || pFirst == pVFrame ) )
+    // --> OD 2005-02-11 #i38810# - no reset of modified state, if document
+    // was already modified.
+    if ( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
+         ( !pFirst || pFirst == pVFrame ) &&
+         !bIsDocModified )
+    // <--
+    {
         pWrtShell->ResetModified();
+    }
 
     bNoInterrupt = bOld;
 
