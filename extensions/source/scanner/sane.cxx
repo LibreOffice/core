@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:18:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ void Sane::ReloadOptions()
     if( pZero->size > sizeof( SANE_Word ) )
         fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
     if( mppOptions )
-        delete mppOptions;
+        delete [] mppOptions;
     mppOptions = (const SANE_Option_Descriptor**)new SANE_Option_Descriptor*[ mnOptions ];
     mppOptions[ 0 ] = (SANE_Option_Descriptor*)pZero;
     for( int i = 1; i < mnOptions; i++ )
@@ -360,7 +360,7 @@ void Sane::Close()
     if( maHandle )
     {
         p_close( maHandle );
-        delete mppOptions;
+        delete [] mppOptions;
         mppOptions = 0;
         maHandle = 0;
         mnDevice = -1;
@@ -414,7 +414,7 @@ BOOL Sane::GetOptionValue( int n, ByteString& rRet )
         bSuccess = TRUE;
         rRet = pRet;
     }
-    delete pRet;
+    delete [] pRet;
     return bSuccess;
 }
 
@@ -436,7 +436,7 @@ BOOL Sane::GetOptionValue( int n, double& rRet, int nElement )
         else
             rRet = SANE_UNFIX( pRet[nElement] );
     }
-    delete pRet;
+    delete [] pRet;
     return bSuccess;
 }
 
@@ -450,7 +450,7 @@ BOOL Sane::GetOptionValue( int n, double* pSet )
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_GET_VALUE, pFixedSet );
     if( nStatus != SANE_STATUS_GOOD )
     {
-        delete pFixedSet;
+        delete [] pFixedSet;
         return FALSE;
     }
     for( int i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
@@ -460,7 +460,7 @@ BOOL Sane::GetOptionValue( int n, double* pSet )
         else
             pSet[i] = (double) pFixedSet[i];
     }
-    delete pFixedSet;
+    delete [] pFixedSet;
     return TRUE;
 }
 
@@ -505,7 +505,7 @@ BOOL Sane::SetOptionValue( int n, double fSet, int nElement )
                 (SANE_Word)fSet : SANE_FIX( fSet );
             nStatus = ControlOption(  n, SANE_ACTION_SET_VALUE, pSet );
         }
-        delete pSet;
+        delete [] pSet;
     }
     else
     {
@@ -526,7 +526,7 @@ BOOL Sane::SetOptionValue( int n, double* pSet )
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return FALSE;
     SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
-    for( int i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
+    for( int i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
             pFixedSet[i] = SANE_FIX( pSet[i] );
@@ -534,7 +534,7 @@ BOOL Sane::SetOptionValue( int n, double* pSet )
             pFixedSet[i] = (SANE_Word)pSet[i];
     }
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, pFixedSet );
-    delete pFixedSet;
+    delete [] pFixedSet;
     if( nStatus != SANE_STATUS_GOOD )
         return FALSE;
     return TRUE;
@@ -809,10 +809,10 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                 aConverter << (UINT16) 1;
                 aConverter.Seek( 54 );
                 // write color table
-                aConverter << (UINT32)0;
                 aConverter << (UINT16)0xffff;
                 aConverter << (UINT8)0xff;
                 aConverter << (UINT8)0;
+                aConverter << (UINT32)0;
                 aConverter.Seek( 64 );
             }
             else if( eType == FrameStyle_Gray )
@@ -917,7 +917,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
         CheckConsistency( "sane_cancel" );
     }
     if( pBuffer )
-        delete pBuffer;
+        delete [] pBuffer;
 
     ReloadOptions();
 
@@ -987,7 +987,7 @@ int Sane::GetRange( int n, double*& rpDouble )
                 SANE_UNFIX( mppOptions[n]->constraint.word_list[i+1] ) :
                 (double)mppOptions[n]->constraint.word_list[i+1];
         }
-        dbg_msg( "worlist [ %lg ... %lg ]\n",
+        dbg_msg( "wordlist [ %lg ... %lg ]\n",
                  rpDouble[ 0 ], rpDouble[ nItems-1 ] );
         return nItems;
     }
