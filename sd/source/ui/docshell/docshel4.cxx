@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:46:12 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 11:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,6 +603,8 @@ BOOL SdDrawDocShell::Save()
 
     if( bRet )
     {
+        pDoc->PrepareStore();
+
         SvStorage* pStor = GetStorage();
         SvStorageStreamRef aPoolStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
         aPoolStm->SetVersion(pStor->GetVersion());
@@ -741,6 +743,7 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
 
     if (bRet)
     {
+        pDoc->PrepareStore();
         SvStorageStreamRef aStm = pStor->OpenStream(pSfxStyleSheets, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
         aStm->SetVersion(pStor->GetVersion());
 
