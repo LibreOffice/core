@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-27 07:47:20 $
+ *  last change: $Author: pb $ $Date: 2001-08-27 13:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,7 +898,8 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
             while ( nPos != STRING_NOTFOUND )
             {
                 aNewSearchText += aSearchText.Copy( 0, nPos );
-                aNewSearchText += '*';
+                if ( aNewSearchText.GetChar( aNewSearchText.Len() - 1 ) != '*' )
+                    aNewSearchText += '*';
                 aNewSearchText += ' ';
                 aSearchText.Erase( 0, nPos + 1 );
                 aSearchText.EraseTrailingChars();
@@ -906,7 +907,8 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
                 if ( STRING_NOTFOUND == nPos )
                 {
                     aNewSearchText += aSearchText;
-                    aNewSearchText += '*';
+                    if ( aNewSearchText.GetChar( aNewSearchText.Len() - 1 ) != '*' )
+                        aNewSearchText += '*';
                 }
             }
             aSearchURL += aNewSearchText;
@@ -914,7 +916,8 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         else
         {
             aSearchURL += aSearchText;
-            aSearchURL += '*';
+            if ( aSearchURL.GetChar( aSearchURL.Len() - 1 ) != '*' )
+                aSearchURL += '*';
         }
     }
     AppendConfigToken_Impl( aSearchURL, sal_False );
