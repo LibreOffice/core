@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContainerFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:14:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import java.awt.Container;
  * This interface reprecents an AWT container factory.
  *
  * @see OfficeBean
+ * @deprecated
  */
 
 public interface ContainerFactory
