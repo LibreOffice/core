@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:00:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,10 +242,13 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         // get symbol
         ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "GetSpecialCharsForEdit" ) );
         pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getSymbol( handleMod, aSymbol.pData );
+        DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
     }
 
     if ( pfunc_getSpecialCharsForEdit )
         return (*pfunc_getSpecialCharsForEdit)( pParent, rFont );
+    else
+        return String();
 }
 
 //====================================================================
