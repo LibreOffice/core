@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
+ *  last change: $Author: od $ $Date: 2002-09-25 13:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ class SwNoTxtFrm: public SwCntntFrm
 
     void Format ( const SwBorderAttrs *pAttrs = 0 );
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
-    void PaintPicture( OutputDevice*, const SwRect&, const SwRect& ) const;
+    /// OD 25.09.2002 #99739# - delete unused 3rd parameter
+    void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
     virtual void MakeAll();
 public:
