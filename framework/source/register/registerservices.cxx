@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:58:03 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,10 +171,6 @@
 #include <uielement/fontsizemenucontroller.hxx>
 #endif
 
-#ifndef __FRAMEWORK_UIELEMENT_FORMATMENUCONTROLLER_HXX_
-#include <uielement/formatmenucontroller.hxx>
-#endif
-
 #ifndef __FRAMEWORK_UIELEMENT_OBJECTMENUCONTROLLER_HXX_
 #include <uielement/objectmenucontroller.hxx>
 #endif
@@ -239,6 +235,10 @@
 #include <uielement/toolbarsmenucontroller.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_RECENTFILESMENUCONTROLLER_HXX_
+#include <uielement/recentfilesmenucontroller.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
@@ -260,12 +260,11 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::PopupMenuControllerFactory              )
                         COMPONENTINFO( ::framework::FontMenuController                      )
                         COMPONENTINFO( ::framework::FontSizeMenuController                  )
-                        COMPONENTINFO( ::framework::FormatMenuController                    )
                         COMPONENTINFO( ::framework::ObjectMenuController                    )
                         COMPONENTINFO( ::framework::HeaderMenuController                    )
                         COMPONENTINFO( ::framework::FooterMenuController                    )
                         COMPONENTINFO( ::framework::ControlMenuController                   )
-                        COMPONENTINFO( ::framework::MacrosMenuController                   )
+                        COMPONENTINFO( ::framework::MacrosMenuController                    )
                         COMPONENTINFO( ::framework::UICommandDescription                    )
                         COMPONENTINFO( ::framework::ModuleManager                           )
                         COMPONENTINFO( ::framework::UIConfigurationManager                  )
@@ -278,6 +277,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::ToolbarsMenuController                  )
                         COMPONENTINFO( ::framework::ToolbarControllerFactory                )
                         COMPONENTINFO( ::framework::ToolbarsMenuController                  )
+                        COMPONENTINFO( ::framework::RecentFilesMenuController               )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -299,12 +299,11 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::PopupMenuControllerFactory              )   else
                         IFFACTORY( ::framework::FontMenuController                      )   else
                         IFFACTORY( ::framework::FontSizeMenuController                  )   else
-                        IFFACTORY( ::framework::FormatMenuController                    )   else
                         IFFACTORY( ::framework::ObjectMenuController                    )   else
                         IFFACTORY( ::framework::HeaderMenuController                    )   else
                         IFFACTORY( ::framework::FooterMenuController                    )   else
                         IFFACTORY( ::framework::ControlMenuController                   )   else
-                        IFFACTORY( ::framework::MacrosMenuController                   )   else
+                        IFFACTORY( ::framework::MacrosMenuController                    )   else
                         IFFACTORY( ::framework::UICommandDescription                    )   else
                         IFFACTORY( ::framework::ModuleManager                           )   else
                         IFFACTORY( ::framework::UIConfigurationManager                  )   else
@@ -316,6 +315,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::WindowStateConfiguration                )   else
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::ToolbarControllerFactory                )   else
-                        IFFACTORY( ::framework::ToolbarsMenuController                  )
+                        IFFACTORY( ::framework::ToolbarsMenuController                  )   else
+                        IFFACTORY( ::framework::RecentFilesMenuController               )
                     )
 
