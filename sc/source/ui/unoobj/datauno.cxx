@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 10:33:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 09:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1609,19 +1609,6 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
         ScRange aDBRange;
         pData->GetArea(aDBRange);
         USHORT nFieldStart = aParam.bByRow ? aDBRange.aStart.Col() : aDBRange.aStart.Row();
-        USHORT nCount = aParam.GetEntryCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScQueryEntry& rEntry = aParam.GetEntry(i);
-            if (rEntry.bDoQuery)
-            {
-                rEntry.nField += nFieldStart;
-                //  Im Dialog wird immer der String angezeigt -> muss zum Wert passen
-                if ( !rEntry.bQueryByString )
-                    pDocShell->GetDocument()->GetFormatTable()->
-                        GetInputLineString( rEntry.nVal, 0, *rEntry.pStr );
-            }
-        }
 
         ScDBData aNewData( *pData );
         aNewData.SetQueryParam(aParam);
