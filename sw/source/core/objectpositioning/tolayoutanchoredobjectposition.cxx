@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:35:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,21 +103,13 @@ using namespace objectpositioning;
 
 SwToLayoutAnchoredObjectPosition::SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition( _rDrawObj ),
-      maRelPos ( Point() )
+      maRelPos( Point() ),
+      // --> OD 2004-06-17 #i26791#
+      maOffsetToFrmAnchorPos( Point() )
 {}
 
 SwToLayoutAnchoredObjectPosition::~SwToLayoutAnchoredObjectPosition()
 {}
-
-SwFlyLayFrm* SwToLayoutAnchoredObjectPosition::GetFlyLayFrmOfObj() const
-{
-    ASSERT( !IsObjFly() || ( GetFrmOfObj() && GetFrmOfObj()->ISA(SwFlyLayFrm) ),
-            "SwToLayoutAnchoredObjectPosition::GetFlyLayFrmOfObj() - missing frame for object or wrong frame type" );
-
-    SwFlyLayFrm* pRetFlyLayFrm =
-        const_cast<SwFlyLayFrm*>(static_cast<const SwFlyLayFrm*>(GetFrmOfObj()));
-    return pRetFlyLayFrm;
-}
 
 /** calculate position for object position type TO_LAYOUT
 
@@ -125,7 +117,7 @@ SwFlyLayFrm* SwToLayoutAnchoredObjectPosition::GetFlyLayFrmOfObj() const
 */
 void SwToLayoutAnchoredObjectPosition::CalcPosition()
 {
-    const SwRect aObjBoundRect( GetObject().GetCurrentBoundRect() );
+    const SwRect aObjBoundRect( GetAnchoredObj().GetObjRect() );
 
     SWRECTFN( (&GetAnchorFrm()) );
 
@@ -155,9 +147,12 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         {
             eVertOrient = VERT_TOP;
         }
+        // --> OD 2004-06-17 #i26791# - get vertical offset to frame anchor position.
+        SwTwips nVertOffsetToFrmAnchorPos( 0L );
         SwTwips nRelPosY =
                 _GetVertRelPos( GetAnchorFrm(), GetAnchorFrm(), eVertOrient,
-                                aVert.GetRelationOrient(), aVert.GetPos(), rLR, rUL );
+                                aVert.GetRelationOrient(), aVert.GetPos(),
+                                rLR, rUL, nVertOffsetToFrmAnchorPos );
 
 
         // ??? Why saving calculated relative position
@@ -170,14 +165,18 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
 
         // determine absolute 'vertical' position, depending on layout-direction
+        // --> OD 2004-06-17 #i26791# - determine offset to 'vertical' frame
+        // anchor position, depending on layout-direction
         if( bVert )
         {
             ASSERT( !bRev, "<SwToLayoutAnchoredObjectPosition::CalcPosition()> - reverse layout set." );
             aRelPos.X() = -nRelPosY - aObjBoundRect.Width();
+            maOffsetToFrmAnchorPos.X() = nVertOffsetToFrmAnchorPos;
         }
         else
         {
             aRelPos.Y() = nRelPosY;
+            maOffsetToFrmAnchorPos.Y() = nVertOffsetToFrmAnchorPos;
         }
 
         // if in online-layout the bottom of to-page anchored object is beyond
@@ -210,7 +209,8 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 
         // determine alignment values:
         // <nWidth>: 'width' of the alignment area
-        // <nOffset>: offset of alignment area, relative to 'left' of anchor frame
+        // <nOffset>: offset of alignment area, relative to 'left' of
+        //            frame anchor position
         SwTwips nWidth, nOffset;
         {
             bool bDummy; // in this context irrelevant output parameter
@@ -253,10 +253,18 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         }
 
         // determine absolute 'horizontal' position, depending on layout-direction
-        if( bVert )
+        // --> OD 2004-06-17 #i26791# - determine offset to 'horizontal' frame
+        // anchor position, depending on layout-direction
+        if ( bVert )
+        {
             aRelPos.Y() = nRelPosX;
+            maOffsetToFrmAnchorPos.Y() = nOffset;
+        }
         else
+        {
             aRelPos.X() = nRelPosX;
+            maOffsetToFrmAnchorPos.X() = nOffset;
+        }
 
         // ??? Why saving calculated relative position
         // keep the calculated relative horizontal position
@@ -290,4 +298,15 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
 Point SwToLayoutAnchoredObjectPosition::GetRelPos() const
 {
     return maRelPos;
+}
+
+/** determined offset to frame anchor position
+
+    --> OD 2004-06-17 #i26791#
+
+    @author OD
+*/
+Point SwToLayoutAnchoredObjectPosition::GetOffsetToFrmAnchorPos() const
+{
+    return maOffsetToFrmAnchorPos;
 }
