@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:58:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,8 @@ namespace configmgr
             void raiseParseException( uno::Any const & _aTargetException, sal_Char const * _pMsg = NULL)
                     CFG_THROW2 (sax::SAXException, uno::RuntimeException);
             void raiseParseException( sal_Char const * _pMsg )
+                    CFG_THROW2 (sax::SAXException, uno::RuntimeException);
+            void raiseParseException( OUString const & aMsg )
                     CFG_THROW2 (sax::SAXException, uno::RuntimeException);
         };
 // -----------------------------------------------------------------------------
