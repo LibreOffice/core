@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:28 $
+ *  last change: $Author: dbo $ $Date: 2001-06-11 08:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,11 +226,18 @@ public:
      */
     virtual sal_Int32 SAL_CALL fillHandles(
         /*out*/sal_Int32 * pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames );
+
+protected:
+    /** reserved for future use. do not use.
+     */
+    void * m_pReserved;
+
 private:
     void init( sal_Bool bSorted ) SAL_THROW( () );
 
     /** The sequence generstet from the pProperties array. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aInfos;
+
     /**
        True, If the values of the handles are sorted in the same way as the names
        and the highest handle value is getCount() -1, otherwise false.
@@ -566,6 +573,11 @@ protected:
        the Uik XVetoableChangeListener::getSmartUik().
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
+
+    /** reserved for future use. do not use.
+     */
+    void * m_pReserved;
+
 private:
     OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW( () );
     OPropertySetHelper &    operator = ( const OPropertySetHelper & ) SAL_THROW( () );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-28 13:22:46 $
+ *  last change: $Author: dbo $ $Date: 2001-06-11 08:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@ protected:
        object does not affect the
      */
     OWeakConnectionPoint * m_pWeakConnectionPoint;
+
+    /** reserved for future use. do not use.
+     */
+    void * m_pReserved;
+
 public:
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
