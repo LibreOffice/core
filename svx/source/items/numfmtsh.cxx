@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-09 18:09:39 $
+ *  last change: $Author: er $ $Date: 2001-06-10 21:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,10 +1058,30 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     NfWSStringsDtor aWSStringsDtor;
     sal_uInt16 nDefault;
     if ( pTmpCurrencyEntry && nCurCategory != NUMBERFORMAT_ALL )
+    {
         nSelPos = nDefault = pFormatter->GetCurrencyFormatStrings(
             aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
+        if ( !bTmpBanking )
+            pFormatter->GetCurrencyFormatStrings(
+                aWSStringsDtor, *pTmpCurrencyEntry, TRUE );
+    }
     else
         nDefault = 0;
+    if ( !bTmpBanking && nCurCategory != NUMBERFORMAT_ALL )
+    {   // append formats for all currencies defined in the current I18N locale
+        const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
+        sal_uInt16 nCurrCount = rCurrencyTable.Count();
+        LanguageType eLang = SvNumberFormatter::GetProperLanguage( eCurLanguage );
+        for ( sal_uInt16 i=0; i < nCurrCount; ++i )
+        {
+            const NfCurrencyEntry* pCurr = rCurrencyTable[i];
+            if ( pCurr->GetLanguage() == eLang && pTmpCurrencyEntry != pCurr )
+            {
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, FALSE );
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, TRUE );
+            }
+        }
+    }
 
     sal_uInt16 i,nPos;
     sal_uInt16 nOldListCount = rList.Count();
@@ -1542,7 +1562,7 @@ short SvxNumberFormatShell::GetListPos4Entry( const String& rFmtString )
 void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubString& rStrEurope, sal_uInt16* pPos)
 {
 
-    const NfCurrencyEntry* pTmpCurrencyEntry=pFormatter->MatchSystemCurrency();
+    const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
     sal_Bool bFlag=(pTmpCurrencyEntry==NULL);
 
@@ -1550,7 +1570,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
 
     if(pPos!=NULL)
     {
-        const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+        const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCount=rCurrencyTable.Count();
 
         *pPos=0;
@@ -1582,12 +1602,12 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
 {
     aCurCurrencyList.Remove(0,aCurCurrencyList.Count());
 
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     SvxLanguageTable* pLanguageTable=new SvxLanguageTable;
 
-    sal_uInt16 nStart=2;
+    sal_uInt16 nStart=1;
     sal_uInt16 i,j;
 
     XubString aString(rCurrencyTable[0]->GetSymbol());
@@ -1604,18 +1624,10 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
         pStr = new XubString(aString);
         rList.Insert( pStr,rList.Count());
         aCurCurrencyList.Insert((sal_uInt16)0,aCurCurrencyList.Count());
-        nStart=3;
+        ++nStart;
     }
 
-    aString = rCurrencyTable[1]->GetSymbol();
-    aString += sal_Unicode(' ');
-    aString += rStrEurope;
-
-    pStr = new XubString(aString);
-    rList.Insert( pStr,rList.Count());
-    aCurCurrencyList.Insert((sal_uInt16)1,aCurCurrencyList.Count());
-
-    for(i=2;i<nCount;i++)
+    for(i=1;i<nCount;i++)
     {
         XubString aString(rCurrencyTable[i]->GetSymbol());
         aString += sal_Unicode(' ');
@@ -1633,14 +1645,9 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
         aCurCurrencyList.Insert(i,j);
     }
 
-    pStr = new XubString(rCurrencyTable[1]->GetBankSymbol());
-    rList.Insert( pStr,rList.Count());
-    aCurCurrencyList.Insert(1,aCurCurrencyList.Count());
+    sal_uInt16 nCont = rList.Count();
 
-    sal_uInt16 nCont=nCount+1;
-    if(bFlag)nCont++;
-
-    for(i=2;i<nCount;i++)
+    for(i=1;i<nCount;i++)
     {
         sal_Bool bTest=sal_True;
         pStr = new XubString(rCurrencyTable[i]->GetBankSymbol());
@@ -1660,6 +1667,8 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
             aCurCurrencyList.Insert(i,j);
         }
     }
+
+    delete pLanguageTable;
 }
 
 void SvxNumberFormatShell::GetCurrencyFormats(SvStrings& aListDtor)
@@ -1679,7 +1688,7 @@ void SvxNumberFormatShell::GetCurrencyFormats(SvStrings& aListDtor)
 
 sal_Bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
 {
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     return (nPos>nCount);
@@ -1687,7 +1696,7 @@ sal_Bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
 
 void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt16 nPos)
 {
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     bBankingSymbol=(nPos>=nCount);
@@ -1739,7 +1748,7 @@ sal_Bool SvxNumberFormatShell::IsTmpCurrencyFormat( const String& rFmtString )
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
 {
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     sal_Bool bTestBanking=sal_False;
@@ -1766,7 +1775,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
 {
     sal_uInt16 nPos=(sal_uInt16) -1;
 
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     const SvNumberformat* pFormat;
@@ -1777,7 +1786,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
             pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
     {   // eventually match with format locale
         const NfCurrencyEntry* pTmpCurrencyEntry =
-            pFormatter->GetCurrencyEntry( bTestBanking, aSymbol, aExtension,
+            SvNumberFormatter::GetCurrencyEntry( bTestBanking, aSymbol, aExtension,
             pFormat->GetLanguage() );
         if ( pTmpCurrencyEntry )
         {
@@ -1820,7 +1829,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,sal_Bool bTmpBanking)
 {
-    const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+    const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
     sal_Bool bTestBanking=sal_False;
@@ -1852,7 +1861,7 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
 
     if(nPos!=(sal_uInt16)-1)
     {
-        const NfCurrencyTable& rCurrencyTable=pFormatter->GetTheCurrencyTable();
+        const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCount=rCurrencyTable.Count();
 
         if(nPos<nCount)
