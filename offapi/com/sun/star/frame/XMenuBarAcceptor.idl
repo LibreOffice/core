@@ -9,15 +9,27 @@
 #include <com/sun/star/awt/XMenuBar.idl>
 #endif
 
+/** @deprecated
+
+    @since OOo 2.0.0
+*/
+
 module com { module sun { module star { module frame {
 
 interface XMenuBarAcceptor : com::sun::star::uno::XInterface
 {
-    /* Update menu bar according to the current frame mode */
-    /* F.e. if the frame is in the inplace editing mode we have to
-       merge our own menu into the container applications menu */
+    //-------------------------------------------------------------------------
+    /* update menu bar according to the current frame mode. This is used in
+       inplace editing mode where we have to merge our own menu into the
+       container applications menu.
+
+       @param xMenuBar
+            the menu bar that should be merged with current one.
+    */
     void updateMenuBar( [inout] com::sun::star::awt::XMenuBar xMenuBar );
 
-}; }; }; }; };
+};
+
+}; }; }; };
 
 #endif
