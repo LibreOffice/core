@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-04 12:54:08 $
+ *  last change: $Author: nn $ $Date: 2000-10-04 16:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const rtl::OUString& 
         else if ( aNameStr.EqualsAscii( SC_FAMILYNAME_PAGE ) )
             return new ScStyleFamilyObj( pDocShell, SFX_STYLE_FAMILY_PAGE );
     }
-    DBG_ERROR("getStyleFamilyByType: keine DocShell oder falscher Typ");
+    // no assertion - called directly from getByName
     return NULL;
 }
 
