@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:50:15 $
+ *  last change: $Author: kz $ $Date: 2002-01-14 21:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text[ polish ] = "Select archives";
     Text[ portuguese_brazilian ] = "Select archives";
     Text[ japanese ] = "アーカイブの選択";
-    Text[ korean ] = "Select archives";
+    Text[ korean ] = "저장 위치 선택";
     Text[ chinese_simplified ] = "选择备件";
     Text[ chinese_traditional ] = "選擇備件";
     Text[ turkish ] = "Select archives";
@@ -338,7 +338,7 @@ String RID_SVXSTR_ARCHIVE_HEADLINE
     Text[ polish ] = "Archives";
     Text[ portuguese_brazilian ] = "Archives";
     Text[ japanese ] = "アーカイブ";
-    Text[ korean ] = "Archives";
+    Text[ korean ] = "저장 위치";
     Text[ chinese_simplified ] = "备件";
     Text[ chinese_traditional ] = "備件";
     Text[ turkish ] = "Archives";
@@ -373,5 +373,6 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ catalan ] = "El archivo %1 ya existe.";
     Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
 };
+
 
 
