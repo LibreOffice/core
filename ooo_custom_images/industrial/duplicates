@@ -20,4 +20,6 @@ zoomout, zoomminus
 hyphenate, hyphenation
 thesaurus, thesuarusdialog
 alignvcenter, alignverticalcenter
-
+dsbinsertcolumns, <insert-fields?>
+dsbinsertcontent, <update-fields?>
+dsbformletter, <mail-merge?>
