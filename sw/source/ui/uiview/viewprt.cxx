@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-17 09:32:40 $
+ *  last change: $Author: os $ $Date: 2001-06-25 13:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,17 +263,16 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
 void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts, BOOL* pPrtProspect,
                   BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
 {
-    if(!pData)
-        pData = SW_MOD()->GetPrtOptions(bWeb);
-    const SwAddPrinterItem* pAddPrinterAttr;
+    SwAddPrinterItem* pAddPrinterAttr;
     if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
         FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
     {
-        SfxItemSet aSet(pPrt->GetOptions());
-        aSet.Put(SwAddPrinterItem(FN_PARAM_ADDPRINTER, *pData));
-        pPrt->SetOptions(aSet);
+        pData = pAddPrinterAttr;
     }
-
+    else if(!pData)
+    {
+        pData = SW_MOD()->GetPrtOptions(bWeb);
+    }
     rOpts = *pData;
     if( pPrtProspect )
         *pPrtProspect = pData->bPrintProspect;
