@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Relay.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:20:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,10 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.connection.AlreadyAcceptingException;
 import com.sun.star.connection.ConnectionSetupException;
+import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.lang.WrappedTargetRuntimeException;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
@@ -91,27 +91,20 @@ public final class Relay implements XRelay, XSource {
         } catch (Exception e) {
             throw new com.sun.star.uno.RuntimeException(e.toString(), this);
         }
-        XMultiComponentFactory factory = context.getServiceManager();
-        final XBridgeFactory bridgeFactory;
-        final XAcceptor acceptor;
+        final XAcceptor acceptor = Acceptor.create(context);
+        final XBridgeFactory factory;
         try {
-            bridgeFactory = (XBridgeFactory) UnoRuntime.queryInterface(
+            factory = (XBridgeFactory) UnoRuntime.queryInterface(
                 XBridgeFactory.class,
-                factory.createInstanceWithContext(
+                context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));
-            acceptor = (XAcceptor) UnoRuntime.queryInterface(
-                XAcceptor.class,
-                factory.createInstanceWithContext(
-                    "com.sun.star.connection.Acceptor", context));
-        } catch (RuntimeException e) {
-            throw e;
         } catch (com.sun.star.uno.Exception e) {
             throw new WrappedTargetRuntimeException(e.toString(), this, e);
         }
         new Thread() {
             public void run() {
                 try {
-                    bridgeFactory.createBridge(
+                    factory.createBridge(
                         "", "urp",
                         acceptor.accept("socket,host=localhost,port=3831"),
                         new XInstanceProvider() {
