@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:27 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,28 @@ void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
                 m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: types does not match");
         }
     }
-    // TODO: validation for localized properties
+    else if (ISubtree *localisedSet = m_pProperty->asISubtree()) {
+        // We're dealing with localised data.
+        uno::Type valueType = parseTemplateName(
+                                    localisedSet->getElementTemplateName()) ;
+
+        if (valueType != _aType) {
+            if (valueType.getTypeClass() == uno::TypeClass_ANY) {
+                if (_aType == uno::Type()) {
+                    // VOID value
+                    m_aContext.raiseIllegalTypeException(
+                        "Layer merging: VOID value for localised ANY type") ;
+                }
+                // TODO Could we have to set the localised data type?
+            }
+            else if (_aType == uno::Type() && m_pConverter) {
+                m_pConverter->m_bConvertData = sal_True ;
+            }
+            else {
+                m_aContext.raiseIllegalTypeException("Layer merging: property value does not match localised type") ;
+            }
+        }
+    }
 
 }
 // -----------------------------------------------------------------------------
@@ -329,28 +350,23 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
             else
                 OSL_ENSURE(false,"Layer merging: Localized subnode is not a value");
         }
-        else if (_aValue.hasValue())
-        {
-            node::Attributes aAttributes = pLocalizedCont->getAttributes();
-            aAttributes.bLocalized = false;
+        else {
+            node::Attributes attributes = pLocalizedCont->getAttributes() ;
+            uno::Type valueType = parseTemplateName(
+                                    pLocalizedCont->getElementTemplateName()) ;
 
-            std::auto_ptr<ValueNode> aLocValue =
-                m_aFactory.getNodeFactory().createValueNode(m_aLocale,_aValue,aAttributes);
+            attributes.bLocalized = false ;
+            OSL_ENSURE(valueType != uno::Type(),
+                                "Cannot determine type for localised value") ;
+            std::auto_ptr<ValueNode> localisedValue =
+                m_aFactory.getNodeFactory().createNullValueNode(m_aLocale,
+                                                                valueType,
+                                                                attributes) ;
 
-            pLocalizedCont->addChild( base_ptr(aLocValue) );
-        }
-        else // TODO !!
-        {
-            node::Attributes aAttributes = pLocalizedCont->getAttributes();
-            aAttributes.bLocalized = false;
-
-            uno::Type aValueType = parseTemplateName(pLocalizedCont->getElementTemplateName());
-            OSL_ENSURE(uno::Type() != aValueType, "Cannot determine type for localized NULL value");
-
-            std::auto_ptr<ValueNode> aLocValue =
-                m_aFactory.getNodeFactory().createNullValueNode(m_aLocale,aValueType,aAttributes);
-
-            pLocalizedCont->addChild( base_ptr(aLocValue) );
+            if (_aValue.hasValue()) {
+                setValueAndCheck(*localisedValue, _aValue) ;
+            }
+            pLocalizedCont->addChild(base_ptr(localisedValue)) ;
         }
     }
 
