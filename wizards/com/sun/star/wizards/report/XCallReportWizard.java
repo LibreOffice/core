@@ -1,4 +1,4 @@
-package com.sun.star.wizards;
+package com.sun.star.wizards.report;
 
 public interface XCallReportWizard extends com.sun.star.uno.XInterface
 {
