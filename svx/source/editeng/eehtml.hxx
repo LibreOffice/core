@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ class EditHTMLParser : public SfxHTMLParser
 {
 private:
     EditSelection           aCurSel;
+    String                  aBaseURL;
     ImpEditEngine*          pImpEditEngine;
     AnchorInfo*             pCurAnchor;
 
@@ -123,7 +124,7 @@ protected:
     virtual void            NextToken( int nToken );
 
 public:
-                            EditHTMLParser( SvStream& rIn, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc = TRUE );
+                            EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs, int bReadNewDoc = TRUE );
                             ~EditHTMLParser();
 
     virtual SvParserState   CallParser( ImpEditEngine* pImpEE, const EditPaM& rPaM );
