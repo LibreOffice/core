@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-03-05 13:26:00 $
+#   last change: $Author: toconnor $ $Date: 2003-05-16 13:48:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,8 @@
     <pathelement location="${solar.jar}/sandbox.jar"/>
   </path>
   <path id="scriptexampleclasspath">
-    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/ -->
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
@@ -99,6 +100,11 @@
     <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
   </path>
 
+  <path id="debuggerclasspath">
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <pathelement location="${out}/class/jsruntime/skip_registration/js.jar"/>
+    <pathelement location="${install.dir}/bsh-1.2b7.jar"/>
+  </path>
   <!-- ===================== Set up build conditionals ========================= -->
   <target name="product.test">
       <condition property="noproext">
@@ -131,6 +137,33 @@
   </target>
   <!-- ===================== Build the examples ========================= -->
   <target name="buildexamples">
+
+    <mkdir dir="${out}/class/examples/java/debugger"/>
+    <javac srcdir="${prj}/examples/java/debugger"
+           destdir="${out}/class/examples/java/debugger"
+              includes="*.java"
+           classpathref="debuggerclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <copy todir="${out}/class/examples/java/debugger">
+        <fileset dir="${prj}/examples/java/debugger">
+            <include name="**/*.java"/>
+            <include name="*.xml"/>
+        </fileset>
+    </copy>
+
+    <jar jarfile="${out}/class/examples/java/debugger/debugger.jar"
+        basedir="${out}/class/examples/java/debugger" includes="*.class">
+        <manifest>
+            <attribute name="Built-By" value="Sun Microsystems"/>
+            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
+        </manifest>
+    </jar>
+
+    <delete>
+        <fileset dir="${out}/class/examples/java/debugger" includes="*.class"/>
+    </delete>
+
     <mkdir dir="${out}/class/examples/java/Highlight"/>
     <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/Highlight/"
               includes="**/Highlight*.java" classpathref="idlclasspath"
@@ -270,6 +303,33 @@
     </zip>
   </target>
 
+  <!-- ================== Build JavaScript UNO package ===================== -->
+  <target name="buildjsuno">
+    <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
+    <mkdir dir="${out}/class/jsruntime"/>
+    <copy file="${out}/class/ScriptRuntimeForRhino.jar"
+        todir="${out}/class/jsruntime/"/>
+    <mkdir dir="${out}/class/jsruntime/skip_registration"/>
+    <copy file="${install.dir}/js.jar"
+        todir="${out}/class/jsruntime/skip_registration"/>
+
+    <mkdir dir="${out}/class/examples/java/debugger"/>
+
+    <javac srcdir="${prj}/examples/java/debugger"
+           destdir="${out}/class/examples/java/debugger"
+              includes="rhino/Main.java" classpathref="debuggerclasspath"
+       debug="${debug}" optimize="${optimize}" deprecation="on"/>
+
+    <jar jarfile="${out}/class/jsruntime/skip_registration/js.jar" update="yes"
+        basedir="${out}/class/examples/java/debugger" includes="org/**"/>
+
+    <delete dir="${out}/class/examples/java/debugger/org"/>
+
+    <zip zipfile="${out}/class/sframeworkinstall/sframework/jsruntime.zip"
+        basedir="${out}/class/jsruntime">
+    </zip>
+  </target>
+
   <!-- =================== Build BeanShell UNO package ===================== -->
   <target name="buildbshuno">
     <mkdir dir="${out}/class/bshruntime"/>
@@ -318,7 +378,7 @@
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,buildunopackage,buildbshuno">
+  <target name="jar" depends="buildunopackage,buildbshuno,buildjsuno,compileinstaller,packagedialogsandexamples,packageide">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}">
         <manifest>

@@ -52,7 +52,7 @@ public class Register{
 
     }
     public static boolean register(String path, JLabel statusLabel) {
-        String[] packages = {"ooscriptframe.zip", "bshruntime.zip"};
+        String[] packages = {"ooscriptframe.zip", "bshruntime.zip", "jsruntime.zip"};
 
     try {
         String s=null;
