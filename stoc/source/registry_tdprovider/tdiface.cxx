@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdiface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
 #endif
+
+#include <set>
 
 namespace stoc_rdbtdp
 {
@@ -516,15 +518,56 @@ Reference<XTypeDescription > InterfaceAttributeImpl::getType()
 //##################################################################################################
 //##################################################################################################
 
+namespace {
+
+class BaseOffset {
+public:
+    BaseOffset(Reference< XInterfaceTypeDescription2 > const & desc);
+
+    sal_Int32 get() const { return offset; }
+
+private:
+    void calculateBases(Reference< XInterfaceTypeDescription2 > const & desc);
+
+    void calculate(Reference< XInterfaceTypeDescription2 > const & desc);
+
+    std::set< rtl::OUString > set;
+    sal_Int32 offset;
+};
+
+BaseOffset::BaseOffset(Reference< XInterfaceTypeDescription2 > const & desc) {
+    offset = 0;
+    calculateBases(desc);
+}
+
+void BaseOffset::calculateBases(
+    Reference< XInterfaceTypeDescription2 > const & desc)
+{
+    Sequence< Reference < XInterfaceTypeDescription2 > > bases(
+        desc->getBaseTypes());
+    for (sal_Int32 i = 0; i < bases.getLength(); ++i) {
+        calculate(bases[i]);
+    }
+}
+
+void BaseOffset::calculate(Reference< XInterfaceTypeDescription2 > const & desc)
+{
+    if (set.insert(desc->getName()).second) {
+        calculateBases(desc);
+        offset += desc->getMembers().getLength();
+    }
+}
+
+}
 
 //__________________________________________________________________________________________________
 InterfaceTypeDescriptionImpl::InterfaceTypeDescriptionImpl(
     const Reference< XHierarchicalNameAccess > & xTDMgr,
-    const OUString & rName, const OUString & rBaseType,
+    const OUString & rName, const Sequence< OUString > & rBaseTypes,
     const RTUik & rUik, const Sequence< sal_Int8 > & rBytes )
     : _xTDMgr( xTDMgr )
     , _aName( rName )
-    , _aBaseType( rBaseType )
+    , _aBaseTypes( rBaseTypes )
     , _aBytes( rBytes )
     , _pAttributes( 0 )
     , _pMethods( 0 )
@@ -559,33 +602,15 @@ OUString InterfaceTypeDescriptionImpl::getName()
     return _aName;
 }
 
-// XInterfaceTypeDescription
+// XInterfaceTypeDescription2
 //__________________________________________________________________________________________________
 Reference< XTypeDescription > InterfaceTypeDescriptionImpl::getBaseType()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (!_xBaseTD.is() && _aBaseType.getLength())
-    {
-        try
-        {
-            Reference< XTypeDescription > xBaseTD;
-            if (_xTDMgr->getByHierarchicalName( _aBaseType ) >>= xBaseTD)
-            {
-                MutexGuard aGuard( _aMutex );
-                if (! _xBaseTD.is())
-                {
-                    _xBaseTD = xBaseTD;
-                }
-                return _xBaseTD;
-            }
-        }
-        catch (NoSuchElementException &)
-        {
-        }
-        // never try again, if no base td was found
-        _aBaseType = OUString();
-    }
-    return _xBaseTD;
+    Sequence< Reference< XInterfaceTypeDescription2 > > aBaseTypes(
+        getBaseTypes());
+    return aBaseTypes.getLength() >= 1
+        ? Reference< XTypeDescription >(aBaseTypes[0], UNO_QUERY) : 0;
 }
 //__________________________________________________________________________________________________
 Uik SAL_CALL InterfaceTypeDescriptionImpl::getUik()
@@ -612,21 +637,7 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
 
         OUString aInterfaceName( getName() );
 
-        // base offsets
-        sal_Int32 nBaseOffset = 0;
-
-        Reference< XTypeDescription > xBase( getBaseType(), UNO_QUERY );
-        while (xBase.is())
-        {
-            Reference< XInterfaceTypeDescription > xBaseInterface( xBase, UNO_QUERY );
-            Sequence< Reference< XInterfaceMemberTypeDescription > > aBaseMembers( xBaseInterface->getMembers() );
-            if (aBaseMembers.getLength())
-            {
-                nBaseOffset = aBaseMembers[aBaseMembers.getLength()-1]->getPosition() +1;
-                break;
-            }
-            xBase = xBaseInterface->getBaseType();
-        }
+        sal_Int32 nBaseOffset = BaseOffset(this).get();
 
         // all methods
         while (nMethods--)
@@ -703,6 +714,44 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
     }
 
     return aMembers;
+}
+//__________________________________________________________________________________________________
+Sequence< Reference< XInterfaceTypeDescription2 > > InterfaceTypeDescriptionImpl::getBaseTypes()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    if (_xBaseTDs.getLength() == 0 && _aBaseTypes.getLength() != 0)
+    {
+        try
+        {
+            Sequence< Reference< XInterfaceTypeDescription2 > > xBaseTDs(
+                _aBaseTypes.getLength());
+            bool bSuccess = true;
+            for (sal_Int32 i = 0; i < _aBaseTypes.getLength(); ++i)
+            {
+                if (!(_xTDMgr->getByHierarchicalName( _aBaseTypes[i] )
+                      >>= xBaseTDs[i]))
+                {
+                    bSuccess = false;
+                    break;
+                }
+            }
+            if (bSuccess)
+            {
+                MutexGuard aGuard( _aMutex );
+                if (_xBaseTDs.getLength() == 0)
+                {
+                    _xBaseTDs = xBaseTDs;
+                }
+                return _xBaseTDs;
+            }
+        }
+        catch (NoSuchElementException &)
+        {
+        }
+        // never try again, if no base tds were found
+        _aBaseTypes.realloc(0);
+    }
+    return _xBaseTDs;
 }
 
 }
