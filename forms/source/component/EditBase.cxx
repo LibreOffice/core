@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 14:07:19 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 13:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ OEditBaseModel::OEditBaseModel(
             const ::rtl::OUString& rUnoControlModelName,
             const ::rtl::OUString& rDefault,
             const sal_Bool _bSetDelegator)
-     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, _bSetDelegator )
+     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSetDelegator )
      ,m_bFilterProposal(sal_False)
      ,m_bEmptyIsNull(sal_True)
      ,m_nLastReadVersion(0)
