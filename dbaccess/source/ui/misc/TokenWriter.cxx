@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:06:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ void OHTMLImportExport::WriteHeader()
 
     IncIndent(1); TAG_ON_LF( sHTML_head );
 
-    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), &rInfo, sIndent );
+    SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), String(), &rInfo, sIndent );
     OUT_LF();
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( sHTML_head );
 }
