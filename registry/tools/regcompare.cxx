@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-10-18 14:29:50 $
+ *  last change: $Author: jsc $ $Date: 2001-12-04 16:50:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,7 +1516,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
 
             bEqual = (rtl_compareMemory(value1, value2, size1) == 0 );
 
-            if ( !bEqual && valueType1 == RG_VALUETYPE_BINARY && valueType1 == RG_VALUETYPE_BINARY )
+            if ( !bEqual && valueType1 == RG_VALUETYPE_BINARY && valueType2 == RG_VALUETYPE_BINARY )
             {
                 RegistryTypeReader reader1(getRegistryTypeReaderLoader(),
                                            (sal_uInt8*)value1, size1, sal_False);
