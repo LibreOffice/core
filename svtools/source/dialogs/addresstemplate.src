@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:14:57 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 14:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english ] = "Salutation";
         Text [ english_us ] = "Salutation";
         Text[ portuguese ] = "Tratamento";
-    Text[ russian ] = "Ξαπΰωενθε";
+    Text[ russian ] = "Οπθβεςρςβθε";
     Text[ greek ] = "Προσφώνηση";
     Text[ dutch ] = "Aanhef";
     Text[ french ] = "Formule finale";
@@ -711,7 +711,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ portuguese_brazilian ] = "Salutation";
     Text[ japanese ] = "ζ¨ζ‹¶ζ–‡";
     Text[ korean ] = "νΈμΉ­";
-    Text[ chinese_simplified ] = "η§°ε‘Ό";
+    Text[ chinese_simplified ] = "ι—®ε€™θ―­";
     Text[ chinese_traditional ] = "ε•ε€™θª";
     Text[ turkish ] = "Salutation";
     Text[ arabic ] = "ΗαΚΝνΙ";
@@ -1171,6 +1171,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ finnish ] = "Kutsu";
         };
 };
+
 
 
 
