@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-07-05 11:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,6 @@ EditorWindow::EditorWindow( Window* pParent ) :
     pProgress = 0;
     nCurTextWidth = 0;
     SetBackground( Wallpaper( COL_WHITE ) );
-    EnableDrop();
     SetPointer( Pointer( POINTER_TEXT ) );
 }
 
