@@ -2,9 +2,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:55:19 $
+#   last change: $Author: mmaher $ $Date: 2001-10-11 10:05:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -203,6 +203,24 @@ DBASE_MICRO=0
 DBASE_CPP=1
 
 DBASE=$(DBASE_TARGET_TARGET)_$(CMPEXT)
+
+
+
+# ----------------------------MOZAB settings-----------------------------------#
+# target
+MOZAB_TARGET=mozab
+
+# the major 
+MOZAB_MAJOR=2
+# the minor 
+MOZAB_MINOR=0
+# the micro 
+MOZAB_MICRO=0
+
+# this is a c++ compatible library 
+MOZAB_CPP=1
+
+MOZAB=$(MOZAB_TARGET_TARGET)_$(CMPEXT)
 
 
 
