@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,15 +75,16 @@ class ScXMLTableRowCellContext;
 class ScXMLTextPContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
-    SvXMLImportContext *pTextPContext;
-    ScXMLTableRowCellContext* pCellContext;
-    rtl::OUString   sLName;
-    rtl::OUStringBuffer sOUText;
-    USHORT          nPrefix;
-    sal_Bool        bIsOwn : 1;
+    SvXMLImportContext*         pTextPContext;
+    ScXMLTableRowCellContext*   pCellContext;
+    rtl::OUString               sLName;
+    rtl::OUStringBuffer         sOUText;
+    USHORT                      nPrefix;
+    sal_Bool                    bIsOwn : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
 public:
     ScXMLTextPContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
@@ -101,6 +102,8 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 
     virtual void EndElement();
+
+    void AddSpaces(sal_Int32 nSpaceCount);
 };
 
 #endif

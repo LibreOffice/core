@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 11:08:59 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,11 +170,11 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    void SetString(const rtl::OUString& sOUTempText) {
+    void SetString(const rtl::OUString& rOUTempText) {
         if (pOUTextContent)
             delete pOUTextContent;
-        pOUTextContent = new ::rtl::OUString(sOUTempText); }
-    void SetCursorOnTextImport();
+        pOUTextContent = new ::rtl::OUString(rOUTempText); }
+    void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
     void SetDetectiveObj( const ::com::sun::star::table::CellAddress& rPosition );

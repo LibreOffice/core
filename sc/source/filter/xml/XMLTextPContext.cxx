@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,69 @@
 #include "xmlcelli.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCURSOR_HPP_
 #include <com/sun/star/text/XTextCursor.hpp>
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
+
+class ScXMLTextTContext : public SvXMLImportContext
+{
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+public:
+    ScXMLTextTContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLTextPContext* pTextPContext);
+
+    virtual ~ScXMLTextTContext();
+};
+
+
+ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
+                                      USHORT nPrfx,
+                                      const ::rtl::OUString& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLTextPContext* pTextPContext) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    if (pTextPContext)
+    {
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        rtl::OUString aLocalName;
+        rtl::OUString sValue;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                                xAttrList->getNameByIndex( i ), &aLocalName );
+            sValue = xAttrList->getValueByIndex( i );
+
+            if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
+                pTextPContext->AddSpaces(sValue.toInt32());
+        }
+    }
+}
+
+ScXMLTextTContext::~ScXMLTextTContext()
+{
+}
 
 //------------------------------------------------------------------
 
@@ -109,25 +167,33 @@ ScXMLTextPContext::~ScXMLTextPContext()
         delete pTextPContext;
 }
 
+void ScXMLTextPContext::AddSpaces(sal_Int32 nSpaceCount)
+{
+    sal_Char* pChars = new sal_Char[nSpaceCount];
+    memset(pChars, ' ', nSpaceCount);
+    sOUText.appendAscii(pChars, nSpaceCount);
+}
+
 SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList )
 {
-    sal_Bool bWasContext (sal_True);
-    if (!pTextPContext)
-    {
-        bWasContext = sal_False;
-        pCellContext->SetCursorOnTextImport();
-        pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
-                                GetScImport(), nPrefix, sLName, xAttrList);
-    }
     SvXMLImportContext *pContext = NULL;
-    if (pTextPContext)
+    if (!pTextPContext &&
+        (nTempPrefix == XML_NAMESPACE_TEXT) &&
+        IsXMLToken(rLName, XML_S))
+        pContext = new ScXMLTextTContext( GetScImport(), nTempPrefix, rLName, xTempAttrList, this);
+    else
     {
-        if (!bWasContext)
-            pTextPContext->Characters(sOUText.makeStringAndClear());
-        pContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
+        if (!pTextPContext)
+        {
+            pCellContext->SetCursorOnTextImport(sOUText.makeStringAndClear());
+            pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
+                                    GetScImport(), nPrefix, sLName, xAttrList);
+        }
+        if (pTextPContext)
+            pContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
     }
 
     if( !pContext )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:16:47 $
+ *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = rXMLImport.GetTableRowCellAttrTokenMap();
     rtl::OUString aLocalName;
     rtl::OUString sValue;
     rtl::OUString* pStyleName = NULL;
@@ -380,7 +379,7 @@ void ScXMLTableRowCellContext::UnlockSolarMutex()
     }
 }
 
-void ScXMLTableRowCellContext::SetCursorOnTextImport()
+void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
 {
     com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
     uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
@@ -401,7 +400,11 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport()
             {
                 uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
                 if (xTextCursor.is())
+                {
+                    xTextCursor->setString(rOUTempText);
+                    xTextCursor->gotoEnd(sal_False);
                     rXMLImport.GetTextImport()->SetCursor(xTextCursor);
+                }
             }
         }
     }
@@ -435,15 +438,16 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                 {
                     if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
                     {
-                        SetCursorOnTextImport();
-                        rXMLImport.SetRemoveLastChar(sal_True);
-                        uno::Reference<text::XTextCursor> xTextCursor = rXMLImport.GetTextImport()->GetCursor();
                         if (pOUTextContent)
                         {
-                            xTextCursor->setString(*pOUTextContent);
+                            SetCursorOnTextImport(*pOUTextContent);
                             delete pOUTextContent;
                             pOUTextContent = NULL;
                         }
+                        else
+                            SetCursorOnTextImport(rtl::OUString());
+                        rXMLImport.SetRemoveLastChar(sal_True);
+                        uno::Reference<text::XTextCursor> xTextCursor = rXMLImport.GetTextImport()->GetCursor();
                         uno::Reference < text::XText > xText (xTextCursor->getText());
                         uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
                         if (xText.is() && xTextRange.is())
