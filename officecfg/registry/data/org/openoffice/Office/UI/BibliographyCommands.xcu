@@ -7,155 +7,30 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Spaltenzuordnung...</value>
                     <value xml:lang="en-US">~Column Arrangement...</value>
-                    <value xml:lang="ar">تعيين الأعمدة...</value>
-                    <value xml:lang="no">~Column Arrangement...</value>
-                    <value xml:lang="ca">Disposició de les ~columnes...</value>
-                    <value xml:lang="zh-TW">編排欄(~C)...</value>
-                    <value xml:lang="cs">Uspořádání sloupců...</value>
-                    <value xml:lang="da">~Kolonnetildeling...</value>
-                    <value xml:lang="el">Αντιστοίχιση ~στήλης...</value>
-                    <value xml:lang="es">~Disposición de columnas...</value>
-                    <value xml:lang="fi">~Sarakejärjestys...</value>
-                    <value xml:lang="fr">~Assignation de colonnes...</value>
-                    <value xml:lang="he">~Spaltenzuordnung...</value>
-                    <value xml:lang="it">A~ssegnazione colonne...</value>
-                    <value xml:lang="ja">列の分類(~C)...</value>
-                    <value xml:lang="ko">열 배치(~C)...</value>
-                    <value xml:lang="nl">~Kolomindeling...</value>
-                    <value xml:lang="pl">~Rozmieszczenie kolumn...</value>
-                    <value xml:lang="pt-BR">~Disposição das Colunas...</value>
-                    <value xml:lang="ru">~Расположение столбцов...</value>
-                    <value xml:lang="sk">Usporia~danie stĺpcov...</value>
-                    <value xml:lang="sv">~Kolumntilldelning...</value>
-                    <value xml:lang="th">จัดเรียง~คอลัมน์...</value>
-                    <value xml:lang="tr">~Sütun düzeni...</value>
-                    <value xml:lang="hi">~स्तंभ को क्रम में रखना...</value>
-                    <value xml:lang="zh-CN">编排列(~C)...</value>
-                    <value xml:lang="pt">~Dispor colunas...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/standardFilter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Filtern...</value>
                     <value xml:lang="en-US">~Filter...</value>
-                    <value xml:lang="ar">تصفية...</value>
-                    <value xml:lang="no">~Filter...</value>
-                    <value xml:lang="ca">~Filtre...</value>
-                    <value xml:lang="zh-TW">篩選(~F)...</value>
-                    <value xml:lang="cs">Filtr...</value>
-                    <value xml:lang="da">~Filter...</value>
-                    <value xml:lang="el">~Φιλτράρισμα...</value>
-                    <value xml:lang="es">~Filtrar...</value>
-                    <value xml:lang="fi">~Suodatin</value>
-                    <value xml:lang="fr">~Filtrer...</value>
-                    <value xml:lang="he">‮סינון...‬</value>
-                    <value xml:lang="it">~Filtra...</value>
-                    <value xml:lang="ja">フィルタ(~F)...</value>
-                    <value xml:lang="ko">필터(~F)...</value>
-                    <value xml:lang="nl">~Filteren...</value>
-                    <value xml:lang="pl">Filtruj...</value>
-                    <value xml:lang="pt-BR">Filtrar...</value>
-                    <value xml:lang="ru">Фильтр...</value>
-                    <value xml:lang="sk">~Filter...</value>
-                    <value xml:lang="sv">~Filtrera...</value>
-                    <value xml:lang="th">~ตัวกรอง...</value>
-                    <value xml:lang="tr">~Süzgeç...</value>
-                    <value xml:lang="hi">~फिल्टर...</value>
-                    <value xml:lang="zh-CN">筛选(~F)...</value>
-                    <value xml:lang="pt">~Filtrar...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/DeleteRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Datensatz löschen</value>
                     <value xml:lang="en-US">Delete ~Record</value>
-                    <value xml:lang="ar">Delete ~Record</value>
-                    <value xml:lang="no">Delete ~Record</value>
-                    <value xml:lang="ca">Delete ~Record</value>
-                    <value xml:lang="zh-TW">刪除資料條目(~R)</value>
-                    <value xml:lang="cs">Smazat záznam</value>
-                    <value xml:lang="da">Slet ~datapost</value>
-                    <value xml:lang="el">Delete ~Record</value>
-                    <value xml:lang="es">Borrar ~registro</value>
-                    <value xml:lang="fi">Delete ~Record</value>
-                    <value xml:lang="fr">Supprimer l'en~registrement</value>
-                    <value xml:lang="he">~Datensatz löschen</value>
-                    <value xml:lang="it">Elimina record di dati</value>
-                    <value xml:lang="ja">レコードの削除(~R)</value>
-                    <value xml:lang="ko">레코드 삭제(~R)</value>
-                    <value xml:lang="nl">Delete ~Record</value>
-                    <value xml:lang="pl">Delete ~Record</value>
-                    <value xml:lang="pt-BR">Excluir ~registro</value>
-                    <value xml:lang="ru">Delete ~Record</value>
-                    <value xml:lang="sk">Zmazať ~záznam</value>
-                    <value xml:lang="sv">Radera data~post</value>
-                    <value xml:lang="th">Delete ~Record</value>
-                    <value xml:lang="tr">~Tutanağı Sil</value>
-                    <value xml:lang="hi">Delete ~Record</value>
-                    <value xml:lang="zh-CN">删除数据条目(~R)</value>
-                    <value xml:lang="pt">Delete ~Record</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/InsertRecord" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Datensatz</value>
                     <value xml:lang="en-US">~Record</value>
-                    <value xml:lang="ar">~Record</value>
-                    <value xml:lang="no">~Record</value>
-                    <value xml:lang="ca">~Record</value>
-                    <value xml:lang="zh-TW">資料條目(~R)</value>
-                    <value xml:lang="cs">Záznam</value>
-                    <value xml:lang="da">~Registrer</value>
-                    <value xml:lang="el">~Record</value>
-                    <value xml:lang="es">~Registro</value>
-                    <value xml:lang="fi">~Record</value>
-                    <value xml:lang="fr">En~registrement</value>
-                    <value xml:lang="he">‮רשומה‬</value>
-                    <value xml:lang="it">Record di dati</value>
-                    <value xml:lang="ja">レコード(~R)</value>
-                    <value xml:lang="ko">~레코드</value>
-                    <value xml:lang="nl">~Record</value>
-                    <value xml:lang="pl">~Record</value>
-                    <value xml:lang="pt-BR">~Registro</value>
-                    <value xml:lang="ru">~Record</value>
-                    <value xml:lang="sk">~Záznam</value>
-                    <value xml:lang="sv">D~atapost</value>
-                    <value xml:lang="th">~Record</value>
-                    <value xml:lang="tr">~Tutanak</value>
-                    <value xml:lang="hi">~Record</value>
-                    <value xml:lang="zh-CN">数据条目(~R)</value>
-                    <value xml:lang="pt">~Record</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/sdbsource" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Datenquelle auswählen...</value>
                     <value xml:lang="en-US">~Choose Data Source...</value>
-                    <value xml:lang="ar">مصدر البيانات...</value>
-                    <value xml:lang="no">~Choose Data Source...</value>
-                    <value xml:lang="ca">Font de les ~dades...</value>
-                    <value xml:lang="zh-TW">選擇資料源(~C)...</value>
-                    <value xml:lang="cs">Zdroj dat...</value>
-                    <value xml:lang="da">~Vælg datakilde...</value>
-                    <value xml:lang="el">Προέλευση ~δεδομένων...</value>
-                    <value xml:lang="es">~Seleccionar fuente de datos...</value>
-                    <value xml:lang="fi">~Tietolähde...</value>
-                    <value xml:lang="fr">~Sélection de la source de données...</value>
-                    <value xml:lang="he">~Datenquelle auswählen...</value>
-                    <value xml:lang="it">~Seleziona sorgente dati...</value>
-                    <value xml:lang="ja">データソースの選択(~C)...</value>
-                    <value xml:lang="ko">데이터 원본 선택(~C)...</value>
-                    <value xml:lang="nl">~Gegevensbron...</value>
-                    <value xml:lang="pl">Źródło ~danych...</value>
-                    <value xml:lang="pt-BR">~Fonte de Dados...</value>
-                    <value xml:lang="ru">~Источник данных...</value>
-                    <value xml:lang="sk">Z~droj dát...</value>
-                    <value xml:lang="sv">Välj ut ~datakälla...</value>
-                    <value xml:lang="th">แหล่ง~ข้อมูล...</value>
-                    <value xml:lang="tr">~Veri Kaynağını Seç...</value>
-                    <value xml:lang="hi">~ड़ॉटा मूल...</value>
-                    <value xml:lang="zh-CN">选择数据源...</value>
-                    <value xml:lang="pt">~Fonte de dados...</value>
                 </prop>
             </node>
             <node oor:name=".uno:Bib/source" oor:op="replace">
