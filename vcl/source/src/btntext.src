@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:17:20 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 08:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ String SV_BUTTONTEXT_YES
     TEXT[ turkish ] = "~Evet";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Sí";
-    TEXT[ finnish ] = "~Kyllä";
+    TEXT[ finnish ] = "~Kyll?";
 };
 
 String SV_BUTTONTEXT_NO
@@ -207,7 +207,7 @@ String SV_BUTTONTEXT_RETRY
     TEXT[ turkish ] = "Y~inele";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Reintentar";
-    TEXT[ finnish ] = "~Yritä uudelleen";
+    TEXT[ finnish ] = "~Yrit? uudelleen";
 };
 
 String SV_BUTTONTEXT_HELP
@@ -265,7 +265,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ turkish ] = "A~yrýntýlar";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Opciones";
-    TEXT[ finnish ] = "~Lisää";
+    TEXT[ finnish ] = "~Lis??";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
@@ -302,6 +302,7 @@ YES         ~Kyllä
 NO          ~Ei
 RETRY       ~Yritäuudelleen
 */
+
 
 
 
