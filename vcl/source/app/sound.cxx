@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:31:47 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,16 +73,11 @@
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SALSOUND_HXX
 #include <salsound.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
-#endif
-#else
-#include <rmwindow.hxx>
-#include <rmsound.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -109,7 +104,7 @@
 #include <salinst.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // ----------------------
 // - SalSound-Callback  -
