@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scroll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:14 $
+ *  last change: $Author: ssa $ $Date: 2002-09-17 09:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ SwScrollbar::SwScrollbar( Window *pWin, int bHoriz ) :
     bVisible(FALSE),
     bSizeSet(FALSE)
 {
+    // SSA: --- RTL --- no mirroring for horizontal scrollbars
+    if( bHoriz )
+        EnableRTL( FALSE );
 }
 
 
