@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-13 12:00:17 $
+ *  last change: $Author: dl $ $Date: 2001-06-22 11:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,86 +267,6 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, USHORT nIndex)
                  eObjKind==PRESOBJ_OUTLINE && eSdrObjKind == OBJ_OUTLINETEXT))
             {
                 nObjFound++;    // Uebereinstimmendes Objekt gefunden
-            }
-
-            nIdx++;
-        }
-
-        if (nObjFound == nIndex)
-        {
-            // Gewuenschtes Objekt auf der Seite gefunden
-            pObjFound = pObj;
-        }
-    }
-
-    return(pObjFound);
-}
-
-
-
-/*************************************************************************
-|*
-|* Pruefen, ob ein bestimmtes Praesentationobjekt existiert
-|* USHORT nIndex: Index des Objekttypes
-|*  1.Objekt des Types -> Index = 1
-|*  2.Objekt des Types -> Index = 2 usw.
-|*
-\************************************************************************/
-
-SdrObject* SdPage::GetPresObject(PresObjKind eObjKind, BOOL bVertical, USHORT nIndex)
-{
-    USHORT nObjFound = 0;          // Index des gewuenschten Objekttypes
-    SdrObject* pObj = NULL;
-    SdrObject* pObjFound = NULL;
-    USHORT nIdx = 0;
-    USHORT nCnt = (USHORT) aPresObjList.Count();
-
-    while (nIdx < nCnt && nObjFound != nIndex)
-    {
-        /**************************************************************
-        * Ist das Objekt in der Praesentationsobjektliste vorhanden?
-        **************************************************************/
-        pObj = (SdrObject*) aPresObjList.GetObject(nIdx);
-
-        if (pObj)
-        {
-            if (eObjKind == GetPresObjKind(pObj) )
-            {
-                OutlinerParaObject* pPara = pObj->GetOutlinerParaObject();
-                if( !pPara ||  pPara->IsVertical() == bVertical )
-                    nObjFound++;    // Uebereinstimmendes Objekt gefunden
-            }
-        }
-
-        nIdx++;
-    }
-
-    if (nObjFound == nIndex)
-    {
-        // Gewuenschstes Objekt in PresObjList gefunden
-        pObjFound = pObj;
-    }
-    else if (eObjKind==PRESOBJ_TITLE || eObjKind==PRESOBJ_OUTLINE)
-    {
-        /**************************************************************
-        * Ist das Objekt auf der Seite vorhanden?
-        **************************************************************/
-        nObjFound = 0;
-        nIdx = 0;
-        nCnt = (USHORT) GetObjCount();
-
-        while (nIdx < nCnt && nObjFound != nIndex)
-        {
-            pObj = GetObj(nIdx);
-            SdrObjKind eSdrObjKind = (SdrObjKind) pObj->GetObjIdentifier();
-
-            if (pObj->GetObjInventor() == SdrInventor &&
-                (eObjKind==PRESOBJ_TITLE   && eSdrObjKind == OBJ_TITLETEXT ||
-                 eObjKind==PRESOBJ_OUTLINE && eSdrObjKind == OBJ_OUTLINETEXT))
-            {
-                OutlinerParaObject* pPara = pObj->GetOutlinerParaObject();
-                if( !pPara || pPara->IsVertical() == bVertical )
-                    nObjFound++;    // Uebereinstimmendes Objekt gefunden
             }
 
             nIdx++;
@@ -1226,7 +1146,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             * Notwendig fuer Objekte aus dem Gliederungsmodus
             ******************************************************************/
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
 
             if ( pObj && pObj->GetUserCall() )
             {
@@ -1238,7 +1158,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
                 aObjList.Insert(pObj, LIST_APPEND);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
 
             if ( pObj && pObj->GetUserCall() )
             {
@@ -1254,11 +1174,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_NOTES:
         {
             nObjKind[0] = PRESOBJ_PAGE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_NOTES;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1266,11 +1186,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_TITLE:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_TEXT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1278,11 +1198,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_ENUM:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1290,11 +1210,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_CHART:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_CHART;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1308,17 +1228,17 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             USHORT nIndex = 1;
             if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[2], nIndex);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1332,15 +1252,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_CHART;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1348,11 +1268,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_ORG:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_ORGCHART;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1366,15 +1286,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1388,15 +1308,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_CHART;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1404,11 +1324,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_TAB:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_TABLE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1422,15 +1342,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1444,15 +1364,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1460,11 +1380,11 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_OBJ:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
         }
         break;
@@ -1487,21 +1407,21 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect1 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             USHORT nIndex = 1;
             if ( InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[3] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[3], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[3], nIndex);
             InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
         }
         break;
@@ -1515,15 +1435,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1537,15 +1457,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1568,21 +1488,21 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect3 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             USHORT nIndex = 1;
             if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[2], nIndex);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
 
             nObjKind[3] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[3], FALSE);
+            pObj = GetPresObj(nObjKind[3]);
             InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
         }
         break;
@@ -1603,21 +1523,21 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect3 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             USHORT nIndex = 1;
             if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[2], nIndex);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
 
             nObjKind[3] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[3], FALSE);
+            pObj = GetPresObj(nObjKind[3]);
             InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList);
         }
         break;
@@ -1631,15 +1551,15 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1663,27 +1583,27 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect4 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             USHORT nIndex = 1;
             if ( InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[2] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[2], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[2], nIndex);
             if ( InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[3] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[3], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[3], nIndex);
             if ( InsertPresObj(pObj, nObjKind[3], FALSE, aRect3, bInit, aObjList) )
                 nIndex++;
 
             nObjKind[4] = PRESOBJ_OBJECT;
-            pObj = GetPresObject(nObjKind[4], FALSE, nIndex);
+            pObj = GetPresObj(nObjKind[4], nIndex);
             InsertPresObj(pObj, nObjKind[4], FALSE, aRect4, bInit, aObjList);
         }
         break;
@@ -1691,7 +1611,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_ONLY_TITLE:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
         }
         break;
@@ -1702,9 +1622,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect0.SetSize( aSize );
             aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj = GetPresObj(nObjKind[0]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -1717,9 +1637,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect1.SetPos( aTitleRect.TopLeft() );
             aRect1.SetSize( aSize );
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -1733,7 +1653,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aSize.Height() = long ( aRect0.GetSize().Height() * 0.47 );
             aRect2.SetSize( aSize );
             nObjKind[2] = PRESOBJ_CHART;
-            pObj = GetPresObject(nObjKind[2], FALSE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], FALSE, aRect2, bInit, aObjList);
         }
         break;
@@ -1744,9 +1664,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect0.SetSize( aSize );
             aRect0.SetPos( aTitleRect.TopRight() - Point( aSize.Width(), 0 ) );
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], TRUE, aRect0, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[0], TRUE);
+            pObj = GetPresObj(nObjKind[0]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -1759,9 +1679,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect1.SetPos( aTitleRect.TopLeft() );
             aRect1.SetSize( aSize );
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -1773,13 +1693,13 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
         case AUTOLAYOUT_TITLE_VERTICAL_OUTLINE:
         {
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], TRUE, aRect1, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[1], TRUE);
+            pObj = GetPresObj(nObjKind[1]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -1797,17 +1717,17 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
             aRect2 = Rectangle (aLayoutPos, aLayoutSize);
 
             nObjKind[0] = PRESOBJ_TITLE;
-            pObj = GetPresObject(nObjKind[0], FALSE);
+            pObj = GetPresObj(nObjKind[0]);
             InsertPresObj(pObj, nObjKind[0], FALSE, aRect0, bInit, aObjList);
 
             nObjKind[1] = PRESOBJ_GRAPHIC;
-            pObj = GetPresObject(nObjKind[1], FALSE);
+            pObj = GetPresObj(nObjKind[1]);
             InsertPresObj(pObj, nObjKind[1], FALSE, aRect1, bInit, aObjList);
 
             nObjKind[2] = PRESOBJ_OUTLINE;
-            pObj = GetPresObject(nObjKind[2], TRUE);
+            pObj = GetPresObj(nObjKind[2]);
             InsertPresObj(pObj, nObjKind[2], TRUE, aRect2, bInit, aObjList);
-            pObj = GetPresObject(nObjKind[2], TRUE);
+            pObj = GetPresObj(nObjKind[2]);
             if ( pObj )
             {
                 pObj->SetItem( SdrTextAutoGrowWidthItem(TRUE) );
@@ -2413,39 +2333,45 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
 
         pObj->SetUserCall(this);
 
-        if ( pObj->ISA(SdrTextObj) && !bMaster )
+        if ( pObj->ISA(SdrTextObj) )
         {
-            if ( ((SdrTextObj*) pObj)->IsAutoGrowHeight() )
+            if( ((SdrTextObj*) pObj)->IsVerticalWriting() != bVertical )
+                ((SdrTextObj*) pObj)->SetVerticalWriting( bVertical );
+
+            if( !bMaster )
             {
-                // switch off AutoGrowHeight, set new MinHeight
-                SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
-                aTempAttr.Put( aMinHeight );
-                aTempAttr.Put( SdrTextAutoGrowHeightItem(FALSE) );
-                pObj->SetItemSet(aTempAttr);
-                pObj->SetLogicRect(aRect);
+                if ( ((SdrTextObj*) pObj)->IsAutoGrowHeight() )
+                {
+                    // switch off AutoGrowHeight, set new MinHeight
+                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
+                    aTempAttr.Put( aMinHeight );
+                    aTempAttr.Put( SdrTextAutoGrowHeightItem(FALSE) );
+                    pObj->SetItemSet(aTempAttr);
+                    pObj->SetLogicRect(aRect);
 
-                // switch on AutoGrowHeight
-                SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                aAttr.Put( SdrTextAutoGrowHeightItem(TRUE) );
+                    // switch on AutoGrowHeight
+                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    aAttr.Put( SdrTextAutoGrowHeightItem(TRUE) );
 
-                pObj->SetItemSet(aAttr);
-            }
+                    pObj->SetItemSet(aAttr);
+                }
 
-            if ( ((SdrTextObj*) pObj)->IsAutoGrowWidth() )
-            {
-                // switch off AutoGrowWidth , set new MinWidth
-                SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
-                aTempAttr.Put( aMinWidth );
-                aTempAttr.Put( SdrTextAutoGrowWidthItem(FALSE) );
-                pObj->SetItemSet(aTempAttr);
-                pObj->SetLogicRect(aRect);
+                if ( ((SdrTextObj*) pObj)->IsAutoGrowWidth() )
+                {
+                    // switch off AutoGrowWidth , set new MinWidth
+                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
+                    aTempAttr.Put( aMinWidth );
+                    aTempAttr.Put( SdrTextAutoGrowWidthItem(FALSE) );
+                    pObj->SetItemSet(aTempAttr);
+                    pObj->SetLogicRect(aRect);
 
-                // switch on AutoGrowWidth
-                SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
-                aAttr.Put( SdrTextAutoGrowWidthItem(TRUE) );
-                pObj->SetItemSet(aAttr);
+                    // switch on AutoGrowWidth
+                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    aAttr.Put( SdrTextAutoGrowWidthItem(TRUE) );
+                    pObj->SetItemSet(aAttr);
+                }
             }
         }
     }

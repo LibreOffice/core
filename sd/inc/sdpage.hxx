@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 11:04:15 $
+ *  last change: $Author: dl $ $Date: 2001-06-22 11:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,6 @@ public:
     List*           GetPresObjList() { return &aPresObjList; }
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      GetPresObj(PresObjKind eObjKind, USHORT nIndex = 1);
-    SdrObject*      GetPresObject(PresObjKind eObjKind, BOOL bVertical, USHORT nIndex = 1);
     PresObjKind     GetPresObjKind(SdrObject* pObj);
     String          GetPresObjText(PresObjKind eObjKind);
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind);
