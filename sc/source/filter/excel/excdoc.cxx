@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 13:59:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,6 @@
 #endif
 
 
-NameBuffer*     ExcDocument::pTabNames = NULL;
-
-
-
 static String lcl_GetVbaTabName( SCTAB n )
 {
     String  aRet( RTL_CONSTASCII_USTRINGPARAM( "__VBA__" ) );
@@ -183,27 +179,33 @@ BOOL DefRowXFs::ChangeXF( SCROW nRow, sal_uInt32& rnXFId )
 
 
 
-ExcRowBlock* ExcTable::pRowBlock = NULL;
 
 ExcTable::ExcTable( RootData* pRD ) :
     ExcRoot( pRD ),
     nScTab( 0 ),
     nExcTab( EXC_NOTAB ),
-    pDefRowXFs( NULL )
-{   }
+    pRowBlock( NULL ),
+    pDefRowXFs( NULL ),
+    pTabNames( new NameBuffer( 0, 16 ) )
+{
+}
 
 
 ExcTable::ExcTable( RootData* pRD, SCTAB nScTable ) :
     ExcRoot( pRD ),
     nScTab( nScTable ),
     nExcTab( pRD->pER->GetTabInfo().GetXclTab( nScTable ) ),
-    pDefRowXFs( NULL )
-{   }
+    pRowBlock( NULL ),
+    pDefRowXFs( NULL ),
+    pTabNames( new NameBuffer( 0, 16 ) )
+{
+}
 
 
 ExcTable::~ExcTable()
 {
     Clear();
+    delete pTabNames;
 }
 
 
@@ -295,7 +297,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         if( rTabInfo.IsExportTab( nC ) )
         {
             rDoc.GetName( nC, aTmpString );
-            *ExcDocument::pTabNames << aTmpString;
+            *pTabNames << aTmpString;
         }
 
     if ( rR.eDateiTyp < Biff8 )
@@ -1028,28 +1030,15 @@ ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
     aHeader( rRoot.mpRD ),
     pExpChangeTrack( NULL )
 {
-    pTabNames = new NameBuffer( 0, 16 );
-
-    pPrgrsBar = new ScProgress(
+    mpRD->pPrgrsBar = new ScProgress(
         GetDocShell(), ScGlobal::GetRscString(STR_SAVE_DOC),
         ( UINT32 ) GetDoc().GetCellCount() * 2 );
-    ExcCell::SetPrgrsBar( *pPrgrsBar );
 }
 
 
 ExcDocument::~ExcDocument()
 {
     maTableList.Clear();    //! for the following assertion
-    DBG_ASSERT( ExcCell::_nRefCount == 0, "*ExcDocument::~ExcDocument(): Ein'n hab'n wir noch!" );
-
-    delete pTabNames;
-#ifdef DBG_UTIL
-    pTabNames = NULL;
-#endif
-
-    delete pPrgrsBar;
-    ExcCell::ClearPrgrsBar();
-
     delete pExpChangeTrack;
 }
 
