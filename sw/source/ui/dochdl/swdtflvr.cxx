@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-04 11:23:32 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 13:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,6 +825,7 @@ int SwTransferable::Copy( BOOL bIsCut )
         pWrtShell->Copy( pClpDocFac->GetDoc() );
 
         AddFormat( SOT_FORMATSTR_ID_SVXB );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         const Graphic &rGrf = pWrtShell->GetGraphic();
         if( rGrf.IsSupportedGraphic() )
         {
