@@ -1,4 +1,6 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
-..\%__SRC%\bin\pdffilter*.res %_DEST%\bin%_EXT%\pdffilter*.res
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+..\%__SRC%\bin\*.xsl %_DEST%\bin%_EXT%\*.xsl
+..\%__SRC%\bin\*.stw %_DEST%\bin%_EXT%\*.stw
