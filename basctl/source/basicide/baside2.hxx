@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
+ *  last change: $Author: tbe $ $Date: 2002-04-17 08:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,11 +285,10 @@ public:
 class WatchWindow : public BasicDockingWindow
 {
 private:
+    String              aWatchStr;
+    ExtendedEdit        aXEdit;
+    ImageButton         aRemoveWatchButton;
     WatchTreeListBox    aTreeListBox;
-
-    String          aWatchStr;
-    ExtendedEdit    aXEdit;
-    ImageButton     aRemoveWatchButton;
 
 protected:
     virtual void    Resize();

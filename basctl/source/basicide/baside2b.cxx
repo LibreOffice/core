@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:33:30 $
+ *  last change: $Author: tbe $ $Date: 2002-04-17 08:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <iderdll2.hxx>
 
 #include <vcl/system.hxx>
+
+#ifndef _SV_TASKPANELIST_HXX
+#include <vcl/taskpanelist.hxx>
+#endif
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -1295,7 +1299,7 @@ BOOL __EXPORT BreakPointWindow::QueryDrop( const DropEvent& rEvt )
 
 WatchWindow::WatchWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
-    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL ),
+    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP ),
     aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
     aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) )
@@ -1327,12 +1331,16 @@ WatchWindow::WatchWindow( Window* pParent ) :
     aRemoveWatchButton.Show();
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
+
+    // make watch window keyboard accessible
+    GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
 
 
 __EXPORT WatchWindow::~WatchWindow()
 {
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
@@ -1463,7 +1471,7 @@ void WatchWindow::UpdateWatches()
 StackWindow::StackWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
     aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
-    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL ),
+    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
 
@@ -1481,12 +1489,16 @@ StackWindow::StackWindow( Window* pParent ) :
     aGotoCallButton.SetSizePixel( aSz );
 //  aGotoCallButton.Show(); // wird vom Basic noch nicht unterstuetzt!
     aGotoCallButton.Hide();
+
+    // make stack window keyboard accessible
+    GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
 }
 
 
 
 __EXPORT StackWindow::~StackWindow()
 {
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
