@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.35 $
+*  $Revision: 1.36 $
 *
-*  last change: $Author: obo $ $Date: 2004-09-14 08:13:53 $
+*  last change: $Author: obo $ $Date: 2004-09-14 11:32:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -698,7 +698,12 @@ UNO_JAR_FILE( gid_File_Jar_Query, query )
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Commonwizards, commonwizards )
+File gid_File_Jar_Commonwizards
+    TXT_FILE_BODY;
+    Name = JARFILENAME(commonwizards);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
 #endif
 
 #ifdef SOLAR_JAVA
