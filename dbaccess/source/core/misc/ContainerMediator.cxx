@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContainerMediator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:15:47 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,16 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
 {
     DBG_CTOR(OContainerMediator,NULL);
     osl_incrementInterlockedCount(&m_refCount);
+    try
     {
         m_xContainer->addContainerListener(this);
         Reference< XContainer > xContainer(m_xSettings, UNO_QUERY);
         if ( xContainer.is() )
             xContainer->addContainerListener(this);
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -103,12 +108,17 @@ OContainerMediator::~OContainerMediator()
 {
     DBG_DTOR(OContainerMediator,NULL);
     osl_incrementInterlockedCount(&m_refCount);
+    try
     {
         if ( m_xContainer.is() )
             m_xContainer->removeContainerListener(this);
         Reference< XContainer > xContainer(m_xSettings, UNO_QUERY);
         if ( xContainer.is() )
             xContainer->removeContainerListener(this);
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OContainerMediator::~OContainerMediator: caught an exception!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -124,7 +134,7 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
         if ( aFind != m_aForwardList.end() )
         {
             Reference< XPropertySet> xDest(_rEvent.Element,UNO_QUERY);
-            aFind->second->setDefinition(xDest);
+            aFind->second.first->setDefinition(xDest);
         }
     }
 }
@@ -225,7 +235,8 @@ void OContainerMediator::notifyElementCreated(const ::rtl::OUString& _sName,cons
         }
 
         OPropertyForward* pForward = new OPropertyForward(_xDest,m_xSettings,_sName,aPropertyList);
-        m_aForwardList.insert( PropertyForwardList::value_type(_sName,pForward));
+        Reference<XInterface> xTemp = *pForward;
+        m_aForwardList.insert( PropertyForwardList::value_type(_sName,TPropertyForward(pForward,xTemp)));
     }
     else
     {
