@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 18:08:18 $
+ *  last change: $Author: hjs $ $Date: 2002-02-08 13:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2900,7 +2900,7 @@ void SwXOLEListener::modified( const EventObject& rEvent )
         }
     }
     if(!pNd)
-        throw(RuntimeException());
+        throw RuntimeException();
     if( !pNd->GetOLEObj().IsOleRef() ||
             !pNd->GetOLEObj().GetOleRef()->GetProtocol().IsInPlaceActive() )
     {
