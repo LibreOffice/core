@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ namespace com {
             namespace lang {
                 class XMultiServiceFactory;
                 class XComponent;
+                class WrappedTargetException;
                 struct Locale;
             }
             namespace sdbc {
@@ -165,16 +166,13 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
             ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) ) = 0;
 
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
-            ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ) = 0;
-
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
                 sal_Bool _bSetAsActiveConnection
-            ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ) = 0;
+            ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+                                , ::com::sun::star::lang::WrappedTargetException
+                                , ::com::sun::star::uno::RuntimeException ) ) = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
