@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,18 @@ TabPage TP_COLUMN
         Text[ danish ] = "~Kolonner";
         Text[ swedish ] = "~Kolumner";
         Text[ polish ] = "Kolumny";
-        Text[ portuguese_brazilian ] = "~N?m.";
+        Text[ portuguese_brazilian ] = "Colunas";
         Text[ japanese ] = "段数";
         Text[ korean ] = "단";
         Text[ chinese_simplified ] = "列";
         Text[ chinese_traditional ] = "欄";
-        Text[ turkish ] = "S~ay�";
+        Text[ turkish ] = "S�tunlar";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Quantitat";
         Text[ thai ] = "คอลัมน์";
+        Text[ czech ] = "Sloupce";
+        Text[ hebrew ] = "‮טורים‬";
+        Text[ hindi ] = "स्तंभें";
     };
     NumericField ED_NUMBER
     {
@@ -152,17 +155,20 @@ TabPage TP_COLUMN
         Text[ italian ] = "Distribuisci in modo uniforme il contenuto di tutte le colonne.";
         Text[ danish ] = "Fordel indholdet j�vnt over alle k~olonner";
         Text[ swedish ] = "F�rdela inneh�ll j�mnt �ver ~alla kolumner";
-        Text[ polish ] = "Roz�� zawarto�� r�wnomiernie we wszystkich kolumnach";
-        Text[ portuguese_brazilian ] = "Balance columns";
+        Text[ polish ] = "R~oz�� zawarto�� r�wnomiernie we wszystkich kolumnach";
+        Text[ portuguese_brazilian ] = "Distribui��o uniforme do conte�do em todas as colunas";
         Text[ japanese ] = "内容を各段に均等配分する";
         Text[ korean ] = "내용을 각 단에 균등하게 배치";
         Text[ chinese_simplified ] = "对称调整栏宽";
         Text[ chinese_traditional ] = "對稱調整欄寬";
         Text[ arabic ] = "����� ��������� ��� �� ������� ��������";
-        Text[ turkish ] = "S~�tunlar� dengele";
+        Text[ turkish ] = "��eri�i s~�tunlara dengeli olarak da��t�n";
         Text[ catalan ] = "Distribueix el contingut uniformement a totes les columnes";
         Text[ finnish ] = "Jaa sis�lt� tasaisesti kaikkiin sarakkeisiin";
         Text[ thai ] = "แจกแจงเนื้อหาเดียวกันไปยังคอลัมน์ทั้งหมด";
+        Text[ czech ] = "Rovnoměrně rozděl obsah mezi všechny sloupce";
+        Text[ hebrew ] = "~Inhalt über alle Spalten gleichmäßig verteilen";
+        Text[ hindi ] = "सब स्तंभों में विषयों को समान रीति से वितरण करो";
     };
     FixedLine FL_COLUMNS
     {
@@ -182,16 +188,19 @@ TabPage TP_COLUMN
         Text[ italian ] = "Preimpostazioni";
         Text[ danish ] = "Forudindstillinger";
         Text[ swedish ] = "F�rinst�llningar";
-        Text[ polish ] = "Ustawienia domy�lne";
-        Text[ portuguese_brazilian ] = "Colunas";
+        Text[ polish ] = "Ustawienia";
+        Text[ portuguese_brazilian ] = "Defini��es";
         Text[ japanese ] = "プリセット";
         Text[ korean ] = "설정";
         Text[ chinese_simplified ] = "预置";
         Text[ chinese_traditional ] = "預設";
-        Text[ turkish ] = "S�tun";
+        Text[ turkish ] = "Ayarlar";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "Columnes";
         Text[ thai ] = "กำหนด";
+        Text[ czech ] = "Nastavení";
+        Text[ hebrew ] = "‮הגדרות‬";
+        Text[ hindi ] = "निर्धारण";
     };
     FixedText FT_COLUMN
     {
@@ -212,15 +221,18 @@ TabPage TP_COLUMN
         Text[ danish ] = "Kolonne";
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
-        Text[ portuguese_brazilian ] = "Column";
+        Text[ portuguese_brazilian ] = "Coluna";
         Text[ japanese ] = "段番号";
         Text[ korean ] = "단 번호";
         Text[ chinese_simplified ] = "列";
         Text[ chinese_traditional ] = "欄";
-        Text[ turkish ] = "Column";
-        Text[ arabic ] = "Column";
+        Text[ turkish ] = "S�tun";
+        Text[ arabic ] = "����";
         Text[ catalan ] = "Columna";
         Text[ thai ] = "คอลัมน์";
+        Text[ czech ] = "Sloupec";
+        Text[ hebrew ] = "Spalte";
+        Text[ hindi ] = "स्तंभ";
     };
     Window WN_BSP
     {
@@ -279,10 +291,10 @@ TabPage TP_COLUMN
         Text [ swedish ] = "Bredd" ;
         Text [ danish ] = "Bredde" ;
         Text [ portuguese ] = "Largura" ;
-        Text [ portuguese_brazilian ] = "Breite" ;
+        Text [ portuguese_brazilian ] = "Largura" ;
         Text[ chinese_simplified ] = "宽度";
         Text[ russian ] = "������";
-        Text[ polish ] = "Szer.";
+        Text[ polish ] = "Szeroko��";
         Text[ japanese ] = "幅";
         Text[ chinese_traditional ] = "寬度";
         Text[ arabic ] = "�����";
@@ -295,6 +307,9 @@ TabPage TP_COLUMN
         Text[ catalan ] = "Amplada";
         Text[ finnish ] = "Leveys";
         Text[ thai ] = "ความกว้าง";
+        Text[ czech ] = "Šířka";
+        Text[ hebrew ] = "‮רוחב‬";
+        Text[ hindi ] = "चौड़ाई";
     };
     MetricField ED_1
     {
@@ -365,7 +380,7 @@ TabPage TP_COLUMN
         Text [ swedish ] = "Avst�nd" ;
         Text [ danish ] = "Afstand" ;
         Text [ portuguese ] = "Espa�amento" ;
-        Text [ portuguese_brazilian ] = "Abstand" ;
+        Text [ portuguese_brazilian ] = "Afastamento" ;
         Text[ chinese_simplified ] = "间隔";
         Text[ russian ] = "��������";
         Text[ polish ] = "Odst�p";
@@ -381,6 +396,9 @@ TabPage TP_COLUMN
         Text[ catalan ] = "Espaiat";
         Text[ finnish ] = "V�lit";
         Text[ thai ] = "ระยะห่าง";
+        Text[ czech ] = "Vzdálenost";
+        Text[ hebrew ] = "‮ריווח‬";
+        Text[ hindi ] = "अंतर देना";
     };
     MetricField ED_DIST1
     {
@@ -426,7 +444,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Automatic ~width" ;
         Text [ norwegian ] = "Automatic ~width" ;
         Text [ italian ] = "~Larghezza autom." ;
-        Text [ portuguese_brazilian ] = "Autom?tica ~largura" ;
+        Text [ portuguese_brazilian ] = "Largura ~Autom�tica" ;
         Text [ portuguese ] = "~Largura autom�tica" ;
         Text [ finnish ] = "Automaattinen ~leveys" ;
         Text [ danish ] = "Automatisk bredde" ;
@@ -438,7 +456,7 @@ TabPage TP_COLUMN
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "自动调整宽度(~W)";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Automatyczna szeroko��";
+        Text[ polish ] = "~Szeroko�� automatyczna";
         Text[ japanese ] = "幅自動調整(~W)";
         Text[ chinese_traditional ] = "自動調整寬度(~W)";
         Text[ arabic ] = "��� ������";
@@ -450,6 +468,9 @@ TabPage TP_COLUMN
         Text[ turkish ] = "O~tomatik geni�lik";
         Text[ catalan ] = "Llargada ~autom�tica";
         Text[ thai ] = "ความ~กว้างอัตโนมัติ";
+        Text[ czech ] = "Automatická šířka";
+        Text[ hebrew ] = "A~utomatische Breite";
+        Text[ hindi ] = "स्वचालित ~ढंग से चौड़ाई";
     };
     FixedLine FL_LAYOUT
     {
@@ -470,15 +491,18 @@ TabPage TP_COLUMN
         Text[ danish ] = "Bredde og afstand";
         Text[ swedish ] = "Bredd och avst�nd";
         Text[ polish ] = "Szeroko�� i odst�p";
-        Text[ portuguese_brazilian ] = "Largura da coluna";
+        Text[ portuguese_brazilian ] = "Largura e afastamento";
         Text[ japanese ] = "幅と間隔";
         Text[ korean ] = "너비 및 간격";
         Text[ chinese_simplified ] = "栏宽和间隔";
         Text[ chinese_traditional ] = "欄寬及間隔";
-        Text[ turkish ] = "S�tun geni�li�i";
+        Text[ turkish ] = "Geni�lik ve bo�luk";
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "Amplada de la columna";
         Text[ thai ] = "ความกว้างและระยะห่าง";
+        Text[ czech ] = "Šířka a vzdálenosti";
+        Text[ hebrew ] = "Breite und Abstand";
+        Text[ hindi ] = "चौड़ाई और अंतर देना";
     };
 
     FixedText FT_STYLE
@@ -489,7 +513,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "~Style" ;
         Text [ norwegian ] = "~Style" ;
         Text [ italian ] = "~Stile" ;
-        Text [ portuguese_brazilian ] = "~Estilo" ;
+        Text [ portuguese_brazilian ] = "~Linha" ;
         Text [ portuguese ] = "~Estilo" ;
         Text [ finnish ] = "~Viiva" ;
         Text [ danish ] = "T~ype" ;
@@ -501,7 +525,7 @@ TabPage TP_COLUMN
         Left = TRUE ;
         Text[ chinese_simplified ] = "类型(~L)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Typ";
+        Text[ polish ] = "~Linia";
         Text[ japanese ] = "種類(~L)";
         Text[ chinese_traditional ] = "類型(~L)";
         Text[ arabic ] = "�����";
@@ -510,9 +534,12 @@ TabPage TP_COLUMN
         Text[ greek ] = "��~���";
         Text[ korean ] = "종류(~L)";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "T~�r";
+        Text[ turkish ] = "~Sat�r";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~บรรทัด";
+        Text[ czech ] = "Čára";
+        Text[ hebrew ] = "A~rt";
+        Text[ hindi ] = "~रेखा";
     };
     ListBox LB_STYLE
     {
@@ -618,7 +645,7 @@ TabPage TP_COLUMN
         };
         StringList [ turkish ] =
         {
-             < "Yok" ; Default ; > ;
+             < "Hi�biri" ; Default ; > ;
         };
         StringList [ catalan ] =
         {
@@ -627,6 +654,18 @@ TabPage TP_COLUMN
     StringList [ thai ] =
     {
          < "ไม่มี" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "žádná" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮ללא‬" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "कोई नहीं" ; Default ; > ;
     };
     };
     FixedText FT_HEIGHT
@@ -637,7 +676,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Hei~ght" ;
         Text [ norwegian ] = "Hei~ght" ;
         Text [ italian ] = "Altezza" ;
-        Text [ portuguese_brazilian ] = "Altu~ra" ;
+        Text [ portuguese_brazilian ] = "Al~tura" ;
         Text [ portuguese ] = "Altu~ra" ;
         Text [ finnish ] = "Korkeus" ;
         Text [ danish ] = "H�~jde" ;
@@ -649,7 +688,7 @@ TabPage TP_COLUMN
         Left = TRUE ;
         Text[ chinese_simplified ] = "高度(~E)";
         Text[ russian ] = "������";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "W~ysoko��";
         Text[ japanese ] = "高さ(~E)";
         Text[ chinese_traditional ] = "高度(~E)";
         Text[ arabic ] = "��������";
@@ -658,9 +697,12 @@ TabPage TP_COLUMN
         Text[ greek ] = "����";
         Text[ korean ] = "높이(~E)";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "~Y�ks.";
+        Text[ turkish ] = "~Y�kseklik";
         Text[ catalan ] = "A~l�ada";
         Text[ thai ] = "ความสู~ง";
+        Text[ czech ] = "Výška";
+        Text[ hebrew ] = "‮גובה‬";
+        Text[ hindi ] = "~ऊँचाई";
     };
     MetricField ED_HEIGHT
     {
@@ -688,7 +730,7 @@ TabPage TP_COLUMN
         Left = TRUE ;
         Text [ portuguese ] = "~Posi��o" ;
         Text [ english_us ] = "~Position" ;
-        Text [ portuguese_brazilian ] = "~Position" ;
+        Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
@@ -697,7 +739,7 @@ TabPage TP_COLUMN
         Text [ dutch ] = "~Positie" ;
         Text[ chinese_simplified ] = "位置(~P)";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Pozycja";
+        Text[ polish ] = "Pozy~cja";
         Text[ japanese ] = "位置(~P)";
         Text[ chinese_traditional ] = "位置(~P)";
         Text[ arabic ] = "������";
@@ -710,6 +752,9 @@ TabPage TP_COLUMN
         Text[ catalan ] = "~Posici�";
         Text[ finnish ] = "~Sijainti";
         Text[ thai ] = "~ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "~स्थान";
     };
     ListBox LB_POSITION
     {
@@ -743,9 +788,9 @@ TabPage TP_COLUMN
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Base" ; Default ; > ;
+            < "Em cima" ; Default ; > ;
+            < "Centralizado" ; Default ; > ;
+            < "Em baixo" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -809,9 +854,9 @@ TabPage TP_COLUMN
         };
         StringList [ polish ] =
         {
-            < "Na g�rze" ; Default ; > ;
-            < "Do �rodka" ; Default ; > ;
-            < "Na dole" ; Default ; > ;
+            < "U g�ry" ; Default ; > ;
+            < "Po�rodku" ; Default ; > ;
+            < "U do�u" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -864,7 +909,7 @@ TabPage TP_COLUMN
         StringList [ turkish ] =
         {
             < "�st" ; Default ; > ;
-            < "Orta" ; Default ; > ;
+            < "Ortalanm��" ; Default ; > ;
             < "Alt" ; Default ; > ;
         };
         StringList [ catalan ] =
@@ -879,6 +924,24 @@ TabPage TP_COLUMN
         < "ตรงกลาง" ; Default ; > ;
         < "ด้านล่าง" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Nahoře" ; Default ; > ;
+        < "Uprostřed" ; Default ; > ;
+        < "Dole" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Oben" ; Default ; > ;
+        < "Zentriert" ; Default ; > ;
+        < "Unten" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "ऊपर" ; Default ; > ;
+        < "केन्द्रित" ; Default ; > ;
+        < "नीचे" ; Default ; > ;
+    };
     };
     FixedLine FL_LINETYPE
     {
@@ -888,7 +951,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Lines between" ;
         Text [ norwegian ] = "Lines between" ;
         Text [ italian ] = "Linea di separazione" ;
-        Text [ portuguese_brazilian ] = "Linhas entre" ;
+        Text [ portuguese_brazilian ] = "Linha separadora" ;
         Text [ portuguese ] = "Linha de separa��o" ;
         Text [ finnish ] = "Erotinviiva" ;
         Text [ danish ] = "Skillelinje" ;
@@ -908,9 +971,12 @@ TabPage TP_COLUMN
         Text[ greek ] = "������������ ������";
         Text[ korean ] = "구분선";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "Ay�rma �izgisi";
+        Text[ turkish ] = "Ayra� �izgisi";
         Text[ catalan ] = "L�nia de separaci�";
         Text[ thai ] = "ตัวแยกบรรทัด";
+        Text[ czech ] = "Oddělovací čára";
+        Text[ hebrew ] = "Trennlinie";
+        Text[ hindi ] = "अलगानेवाला रेखा";
     };
     FixedLine  FL_VERT
     {
@@ -927,26 +993,29 @@ TabPage TP_COLUMN
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
         Text[ english_us ] = "Properties";
-        Text[ portuguese ] = "Properties";
-        Text[ russian ] = "Properties";
-        Text[ greek ] = "Properties";
-        Text[ dutch ] = "Properties";
+        Text[ portuguese ] = "Propriedades";
+        Text[ russian ] = "��������";
+        Text[ greek ] = "���������";
+        Text[ dutch ] = "Eigenschappen";
         Text[ french ] = "Propri�t�s";
         Text[ spanish ] = "Propiedades";
-        Text[ finnish ] = "Properties";
+        Text[ finnish ] = "Ominaisuudet";
         Text[ italian ] = "Propriet�";
-        Text[ danish ] = "Properties";
+        Text[ danish ] = "Egenskaber";
         Text[ swedish ] = "Egenskaper";
-        Text[ polish ] = "Properties";
+        Text[ polish ] = "W�a�ciwo�ci";
         Text[ japanese ] = "属性";
         Text[ korean ] = "등록 정보";
         Text[ chinese_simplified ] = "属性";
         Text[ chinese_traditional ] = "屬性";
-        Text[ turkish ] = "Properties";
-        Text[ arabic ] = "Properties";
+        Text[ turkish ] = "�zellikler";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "คุณสมบัติ";
         Text[ portuguese_brazilian ] = "Propriedades";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "‮מאפינים‬";
+        Text[ hindi ] = "Properties";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -957,22 +1026,28 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Text ~direction" ;
         Text[ english_us ] = "Text ~direction";
         Text[ portuguese ] = "Text ~direction";
-        Text[ russian ] = "Text ~direction";
+        Text[ russian ] = "����������� ������";
         Text[ greek ] = "Text ~direction";
-        Text[ dutch ] = "Text ~direction";
+        Text[ dutch ] = "~Tekstverloop";
         Text[ french ] = "Orientation du texte";
         Text[ spanish ] = "~Direcci�n de escritura";
-        Text[ finnish ] = "Text ~direction";
+        Text[ finnish ] = "~Tekstin suunta";
         Text[ italian ] = "Testo";
-        Text[ danish ] = "Text ~direction";
+        Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "Text~riktning";
         Text[ polish ] = "Text ~direction";
         Text[ japanese ] = "文字方向";
         Text[ korean ] = "텍스트 방향";
         Text[ chinese_simplified ] = "文字方向";
         Text[ chinese_traditional ] = "文字方向";
-        Text[ turkish ] = "Text ~direction";
+        Text[ turkish ] = "Metin ~y�nlendirmesi";
         Text[ arabic ] = "Text ~direction";
+        Text[ czech ] = "Směr textu";
+        Text[ hebrew ] = "‮כיוון טקסט‬";
+        Text[ catalan ] = "Text ~direction";
+        Text[ portuguese_brazilian ] = "Text ~direction";
+        Text[ thai ] = "Text ~direction";
+        Text[ hindi ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -1053,6 +1128,96 @@ TabPage TP_COLUMN
         < "De derecha a izquierda" ; 1; > ;
         < "Utilizar la configuraci�n del objeto superior. " ; 4; > ;
         };
+    StringList [ turkish ] =
+    {
+         < "Soldan sa�a" ; 0; > ;
+        < "Sa�dan sola" ; 1; > ;
+        < "Super ordinat nesne ayarlar�n� kullan" ; 4; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "Zleva doprava" ; 0; > ;
+        < "Zprava doleva" ; 1; > ;
+        < "Použít nastavení nadřazeného objektu" ; 4; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮משמאל-לימין‬" ; 0; > ;
+        < "‮מימין-לשמאל‬" ; 1; > ;
+        < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "Left-to-right" ; 0; > ;
+        < "Right-to-left" ; 1; > ;
+        < "Use superordinate object settings" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "栏";
     Text[ russian ] = "�������";
@@ -1065,9 +1230,12 @@ TabPage TP_COLUMN
     Text[ greek ] = "������";
     Text[ korean ] = "단";
     Text[ language_user1 ] = " ";
-    Text[ turkish ] = "S�tun";
+    Text[ turkish ] = "S�tunlar";
     Text[ catalan ] = "Columnes";
     Text[ thai ] = "คอลัมน์";
+    Text[ czech ] = "Sloupce";
+    Text[ hebrew ] = "‮טורים‬";
+    Text[ hindi ] = "स्तंभें";
 };
 
 ModalDialog DLG_COLUMN
@@ -1114,18 +1282,21 @@ ModalDialog DLG_COLUMN
         Text[ russian ] = "��������� �:";
         Text[ italian ] = "~Applica a";
         Text[ danish ] = "~Anvend p�";
-        Text[ polish ] = "Zastosuj w";
-        Text[ portuguese_brazilian ] = "~Apply to:";
+        Text[ polish ] = "~Zastosuj do";
+        Text[ portuguese_brazilian ] = "~Aplicar em";
         Text[ japanese ] = "設定対象(~A):";
         Text[ korean ] = "적용 대상(~A)";
         Text[ chinese_simplified ] = "采用到(~A)";
         Text[ chinese_traditional ] = "套用到(~A)";
         Text[ arabic ] = "����� ���:";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "~Uygulanaca�� yer:";
+        Text[ turkish ] = "~Uygula";
         Text[ catalan ] = "~Aplica a:";
         Text[ finnish ] = "~K�yt�:";
         Text[ thai ] = "ใ~ช้กับ";
+        Text[ czech ] = "Použít na";
+        Text[ hebrew ] = "~Anwenden auf";
+        Text[ hindi ] = "में ~लागू करो";
     };
     ListBox LB_APPLY_TO
     {
@@ -1239,19 +1410,19 @@ ModalDialog DLG_COLUMN
         };
         StringList [ polish ] =
         {
-            < "Selekcja" ;              LISTBOX_SELECTION; > ;
-            < "Aktualny obszar" ;   LISTBOX_SECTION     ; > ;
-            < "Zaznaczone obszary" ;  LISTBOX_SECTIONS  ; > ;
+            < "Zaznaczenie" ;           LISTBOX_SELECTION; > ;
+            < "Bie��ca sekcja" ;    LISTBOX_SECTION     ; > ;
+            < "Zaznaczona sekcja" ;  LISTBOX_SECTIONS   ; > ;
             < "Ramka" ;                 LISTBOX_FRAME       ; > ;
             < "Styl strony: " ;         LISTBOX_PAGE        ; > ;
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Selektion" ;             LISTBOX_SELECTION; > ;
-            < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
-            < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
-            < "Rahmen" ;                LISTBOX_FRAME       ; > ;
-            < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
+            < "Sele��o" ;           LISTBOX_SELECTION; > ;
+            < "Se��o Atual" ;   LISTBOX_SECTION     ; > ;
+            < "Se��o selecionada" ;  LISTBOX_SECTIONS   ; > ;
+            < "Moldura" ;               LISTBOX_FRAME       ; > ;
+            < "Estilo da P�gina:" ;         LISTBOX_PAGE        ; > ;
         };
         StringList [ japanese ] =
         {
@@ -1296,7 +1467,7 @@ ModalDialog DLG_COLUMN
         StringList [ turkish ] =
         {
             < "Se�im" ;             LISTBOX_SELECTION; > ;
-            < "Y�r�rl�kteki b�l�m" ;    LISTBOX_SECTION     ; > ;
+            < "Y�r�rl�kteki se�im" ;    LISTBOX_SECTION     ; > ;
             < "Se�ilen b�l�m" ;  LISTBOX_SECTIONS   ; > ;
             < "�er�eve" ;               LISTBOX_FRAME       ; > ;
             < "Sayfa bi�imi: " ;        LISTBOX_PAGE        ; > ;
@@ -1325,6 +1496,30 @@ ModalDialog DLG_COLUMN
         < "กรอบ" ;                  LISTBOX_FRAME       ; > ;
         < "ลักษณะหน้า: " ;          LISTBOX_PAGE        ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Výběr" ;              LISTBOX_SELECTION; > ;
+        < "Aktuální oblast" ;     LISTBOX_SECTION     ; > ;
+        < "Vybrané oblasti" ;  LISTBOX_SECTIONS    ; > ;
+        < "Rámec" ;                LISTBOX_FRAME       ; > ;
+        < "Styl stránky:" ;        LISTBOX_PAGE        ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮מבחר‬" ;           LISTBOX_SELECTION; > ;
+        < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
+        < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+        < "‮מסגרת‬" ;                  LISTBOX_FRAME       ; > ;
+        < "‮סגנון:‬" ;         LISTBOX_PAGE        ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "चुनाव" ;              LISTBOX_SELECTION; > ;
+        < "वर्तमान विभाग" ;     LISTBOX_SECTION     ; > ;
+        < "चुने हुए विभाग" ;  LISTBOX_SECTIONS  ; > ;
+        < "फ्रेम " ;                  LISTBOX_FRAME       ; > ;
+        < "पृष्ठ शैली: " ;        LISTBOX_PAGE        ; > ;
+    };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";
@@ -1337,18 +1532,30 @@ ModalDialog DLG_COLUMN
     Text[ italian ] = "Colonne";
     Text[ danish ] = "Kolonner";
     Text[ polish ] = "Kolumny";
-    Text[ portuguese_brazilian ] = "Columns";
+    Text[ portuguese_brazilian ] = "Colunas";
     Text[ japanese ] = "段組み";
     Text[ korean ] = "단";
     Text[ chinese_simplified ] = "栏";
     Text[ chinese_traditional ] = "欄";
     Text[ arabic ] = "�����";
     Text[ language_user1 ] = " ";
-    Text[ turkish ] = "S�tun";
+    Text[ turkish ] = "S�tunlar";
     Text[ catalan ] = "Columnes";
     Text[ finnish ] = "Palstat";
     Text[ thai ] = "คอลัมน์";
+    Text[ czech ] = "Sloupce";
+    Text[ hebrew ] = "‮טורים‬";
+    Text[ hindi ] = "स्तंभें";
 };
+
+
+
+
+
+
+
+
+
 
 
 
