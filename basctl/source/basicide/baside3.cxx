@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:48:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ void DialogWindow::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
         SetBackground( rStyleSettings.GetFieldColor() );
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > DialogWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > DialogWindow::CreateAccessible()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
+    return (::com::sun::star::accessibility::XAccessible*) new AccessibleDialogWindow( this );
 }
