@@ -34,7 +34,7 @@ class Context:
         global g_types
         if not g_types:
             g_types = typeOfXTypeProvider, uno.getTypeByName( \
-                "drafts.com.sun.star.script.provider.XScriptContext" )
+                "com.sun.star.script.provider.XScriptContext" )
         return g_types
 
     def getImplementationId(self):
@@ -174,7 +174,7 @@ class PScript:
         if not g_types:
             g_types = typeOfXTypeProvider,typeOfXServiceInfo, \
                 uno.getTypeByName( \
-                    "drafts.com.sun.star.script.provider.XScript")
+                    "com.sun.star.script.provider.XScript")
         return g_types
 
     def getImplementationId(self):
