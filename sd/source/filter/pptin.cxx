@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 16:26:53 $
+ *  last change: $Author: sj $ $Date: 2001-10-23 11:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,86 @@ BOOL SdPPTImport::Import()
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress, VT_EMPTY ) )
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
+
+                                        if ( pHyperlink->aSubAdress.Len() ) // get the converted subadress
+                                        {
+                                            sal_uInt32 nPageNumber;
+                                            String aString( pHyperlink->aSubAdress );
+                                            ByteString aStringAry[ 3 ];
+                                            sal_uInt16 i, nTokenCount = aString.GetTokenCount( ',' );
+                                            if ( nTokenCount > 3 )
+                                                nTokenCount = 3;
+                                            for ( i = 0; i < nTokenCount; i++ )
+                                                aStringAry[ i ] = ByteString( aString.GetToken( i, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8 );
+
+                                            sal_Bool bSucceeded = sal_False;
+
+                                            // first pass, searching for a SlideId
+                                            for ( i = 0; i < nTokenCount; i++ )
+                                            {
+                                                if ( aStringAry[ i ].IsNumericAscii() )
+                                                {
+                                                    sal_Int32 nNumber = aStringAry[ i ].ToInt32();
+                                                    if ( nNumber & ~0xff )
+                                                    {
+                                                        PptSlidePersistList* pPageList = GetPageList( PPT_SLIDEPAGE );
+                                                        if ( pPageList )
+                                                        {
+                                                            sal_uInt16 nPage = pPageList->FindPage( nNumber );
+                                                            if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                                                            {
+                                                                nPageNumber = nPage;
+                                                                bSucceeded = sal_True;
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if ( !bSucceeded )
+                                            {   // second pass, searching for a SlideName
+                                                for ( i = 0; i < nTokenCount; i++ )
+                                                {
+                                                    String aToken( aString.GetToken( i, (sal_Unicode)',' ) );
+                                                    for ( void* pPtr = aSlideNameList.First(); pPtr; pPtr = aSlideNameList.Next() )
+                                                    {
+                                                        if ( *(String*)pPtr == aToken )
+                                                        {
+                                                            nPageNumber = aSlideNameList.GetCurPos();
+                                                            bSucceeded = sal_True;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if ( !bSucceeded )
+                                            {   // third pass, searching for a slide number
+                                                for ( i = 0; i < nTokenCount; i++ )
+                                                {
+                                                    if ( aStringAry[ i ].IsNumericAscii() )
+                                                    {
+                                                        sal_Int32 nNumber = aStringAry[ i ].ToInt32();
+                                                        if ( ( nNumber & ~0xff ) == 0 )
+                                                        {
+                                                            nPageNumber = (sal_uInt32)nNumber - 1;
+                                                            bSucceeded = sal_True;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            if ( bSucceeded )
+                                            {
+                                                if ( nPageNumber >= aSlideNameList.Count() )
+                                                {
+                                                    pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
+                                                    pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
+                                                    pHyperlink->aConvSubString.Append( pDoc->CreatePageNumValue( (sal_Int32)nPageNumber + 1 ) );
+                                                }
+                                                else
+                                                    pHyperlink->aConvSubString = *(String*)aSlideNameList.GetObject( nPageNumber );
+                                            }
+                                        }
                                         aHyperList.Insert( pHyperlink, LIST_APPEND );
                                     }
                                     if ( i != nPropCount )
@@ -2059,90 +2139,10 @@ void SdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInf
                     break;
                     case 7:                                         // hyperlink auf eine Seite
                     {
-                        if ( pPtr->aSubAdress.Len() )
+                        if ( pPtr->aConvSubString.Len() )
                         {
-                            UINT32 nPageNumber = 0;
-                            String aString( pPtr->aSubAdress );
-                            String aStringAry[ 3 ];
-
-                            USHORT nTokenCount = aString.GetTokenCount( ',' );
-                            if ( nTokenCount > 3 )
-                                nTokenCount = 3;
-                            USHORT nIndex, nLtT = 0;
-                            for ( USHORT i = 0; i < nTokenCount; i++ )
-                            {
-                                nIndex = aString.Search( sal_Unicode(','), nLtT );
-                                if ( nIndex == STRING_NOTFOUND )
-                                {
-                                    if ( nLtT < aString.Len() )
-                                        aStringAry[ i ] = UniString( aString, nLtT, aString.Len() - nLtT );
-                                    break;
-                                }
-                                if ( nLtT < nIndex )
-                                    aStringAry[ i ] = UniString( aString, nLtT, nIndex - nLtT );
-                                nLtT = nIndex + 1;
-                            }
-                            BOOL bPageByName = FALSE;
-                            for ( INT32 j = nTokenCount - 1; !bPageByName && ( j >= 0 ); j-- )
-                            {
-                                const String* pString = &aStringAry[ i ];
-                                for ( void* pPtr = aSlideNameList.First(); pPtr; pPtr = aSlideNameList.Next() )
-                                {
-                                    if ( *(String*)pPtr == *pString )
-                                    {
-                                        nPageNumber = aSlideNameList.GetCurPos() + 1;
-                                        bPageByName = TRUE;
-                                        break;
-                                    }
-                                }
-                            }
-                            if ( !bPageByName )
-                            {
-                                for ( i = 0; i < nTokenCount; i++ )
-                                {
-                                    if ( ByteString( aStringAry[ i ], gsl_getSystemTextEncoding() ).IsNumericAscii() )
-                                    {
-                                        for ( sal_uInt16 j = 0; j < aStringAry[ i ].Len(); j++ )
-                                        {
-                                            nPageNumber *= 10;
-                                            nPageNumber += aString.GetChar( j ) - '0';
-                                        }
-                                        if ( nPageNumber &~ 0xff )      // then we assume that this is the pageID,
-                                        {
-                                            PptSlidePersistList* pPageList = GetPageList( PPT_SLIDEPAGE );
-                                            if ( pPageList )
-                                            {
-                                                USHORT nPage = pPageList->FindPage( nPageNumber );
-                                                if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                                                    nPageNumber = nPage + 1;
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-                            if ( nPageNumber && ( nPageNumber > aSlideNameList.Count() ) )
-                            {
-                                SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
-                                if ( pPage )
-                                {
-                                    String aName( pPage->GetName() );
-                                    USHORT nLen = aName.Len();
-                                    while( --nLen && ( ( aName.GetChar( nLen ) >= '0' ) && ( aName.GetChar( nLen ) <= '9' ) ) )
-                                        aName.Erase( nLen );
-                                    if ( aName.Len() )
-                                    {
-                                        pInfo->aBookmark = aName;
-                                        pInfo->aBookmark += String::CreateFromInt32( (sal_Int32)nPageNumber );  // sal_uInt32 -> sal_Int32 !
-                                        pInfo->eClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                pInfo->aBookmark = *(String*)aSlideNameList.GetObject( nPageNumber - 1 );
-                                pInfo->eClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
-                            }
+                            pInfo->aBookmark = pPtr->aConvSubString;
+                            pInfo->eClickAction = ::com::sun::star::presentation::ClickAction_BOOKMARK;
                         }
                     }
                     break;
