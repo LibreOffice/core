@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:31:03 $
+ *  last change: $Author: sab $ $Date: 2001-12-06 19:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,6 @@ FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
 {
     aIndexes.push_back(nIndex);
 }
-
 
 typedef std::list<FilterPropertyInfo_Impl> FilterPropertyInfoList_Impl;
 
@@ -723,9 +722,12 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
                 (*pCache)[aKey] = pFilterInfo;
             }
             else
-            {
                 bDelInfo = sal_True;
-            }
+        }
+        else
+        {
+            OSL_ENSURE(sal_False, "here is no TypeProvider or the ImplId is wrong");
+            bDelInfo = sal_True;
         }
     }
 
