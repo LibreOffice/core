@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-17 12:43:20 $
+ *  last change: $Author: dbo $ $Date: 2001-10-18 11:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,24 @@ namespace cppu
 */
 ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW( () );
 
+//--------------------------------------------------------------------------------------------------
+static inline void checkInterface( Type const & rType )
+    SAL_THROW( (RuntimeException) )
+{
+    if (TypeClass_INTERFACE != rType.getTypeClass())
+    {
+        OUStringBuffer buf( 64 );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("querying for interface \"") );
+        buf.append( rType.getTypeName() );
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": no interface type!") );
+        OUString msg( buf.makeStringAndClear() );
+#ifdef _DEBUG
+        OString str( OUStringToOString( msg, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, str.getStr() );
+#endif
+        throw RuntimeException( msg, Reference< XInterface >() );
+    }
+}
 //--------------------------------------------------------------------------------------------------
 static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW( () )
 {
@@ -229,7 +247,7 @@ Any SAL_CALL ImplHelper_query(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     void * p;
@@ -254,7 +272,7 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
     Type const & rType, class_data * cd, void * that )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     void * p = __queryDeepNoXInterface( pTDR, cd, that );
@@ -323,7 +341,7 @@ Any SAL_CALL WeakImplHelper_query(
     Type const & rType, class_data * cd, void * that, OWeakObject * pBase )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     // shortcut XInterface to OWeakObject
@@ -356,7 +374,7 @@ Any SAL_CALL WeakAggImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, OWeakAggObject * pBase )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     // shortcut XInterface to OWeakAggObject
@@ -390,7 +408,7 @@ Any SAL_CALL WeakComponentImplHelper_query(
     Type const & rType, class_data * cd, void * that, WeakComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     // shortcut XInterface to WeakComponentImplHelperBase
@@ -424,7 +442,7 @@ Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     Type const & rType, class_data * cd, void * that, WeakAggComponentImplHelperBase * pBase )
     SAL_THROW( (RuntimeException) )
 {
-    OSL_ENSURE( rType.getTypeClass() == TypeClass_INTERFACE, "### not querying for interface!" );
+    checkInterface( rType );
     typelib_TypeDescriptionReference * pTDR = rType.getTypeLibType();
 
     // shortcut XInterface to WeakAggComponentImplHelperBase
