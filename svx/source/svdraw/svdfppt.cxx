@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:54:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,7 +1448,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             if ( rPersistEntry.nDrawingDgId != 0xffffffff )
             {
                 UINT32 nSec = ( rObjData.nShapeId >> 10 ) - 1;
-                if ( nSec < mnIdClusters )
+                if ( mpFidcls && ( nSec < mnIdClusters ) )
                     mpFidcls[ nSec ].dgid = rPersistEntry.nDrawingDgId; // insert the correct drawing id;
             }
         }
@@ -1958,9 +1958,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                 }
             }
 #endif
-            if ( !aZCodec.EndCompression() )
-                delete pDest;
-            else
+            if ( aZCodec.EndCompression() )
             {
                 Storage* pObjStor = new Storage( *pDest, TRUE );
                 if ( pObjStor )
@@ -2034,6 +2032,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                     }
                 }
             }
+            delete pDest;
         }
     }
     rStCtrl.Seek( nOldPos );
