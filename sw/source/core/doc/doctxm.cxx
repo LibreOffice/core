@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:35:27 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 15:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1945,7 +1945,10 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     }
                     else
                         nRightMargin = aNdRect.Width();
-                    aTStops.Insert( SvxTabStop( nRightMargin,SVX_TAB_ADJUST_RIGHT,
+                    //left margin of paragraph style
+                    const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
+                    nRightMargin -= rLRSpace.GetLeft();
+                    aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT,
                                                 cDfltDecimalChar,
                                                 aToken.cTabFillChar ));
                 }
