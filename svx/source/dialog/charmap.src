@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:37:55 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2226,7 +2226,7 @@ String RID_SUBSETSTR_SINHALA
         Text[ chinese_simplified ] = "Œ˝¿º”Ô";
         Text[ chinese_traditional ] = "ø¸ƒıªy";
         Text[ turkish ] = "Sinhala";
-        Text[ arabic ] = "Sinhala";
+        Text[ arabic ] = "”Ì‰Â«·«";
     };
 String RID_SUBSETSTR_TIBETAN
 {
@@ -2387,7 +2387,7 @@ String RID_SUBSETSTR_THAANA
         Text[ chinese_simplified ] = "¬Ì∂˚¥˙∑Ú”Ô";
         Text[ chinese_traditional ] = "∞®∫∏•N§“ªy";
         Text[ turkish ] = "Thaana";
-        Text[ arabic ] = "Thaana";
+        Text[ arabic ] = " «‰«";
     };
 String RID_SUBSETSTR_ETHIOPIC
 {
