@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:01:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-#pragma hdrstop
-
-// ============================================================================
 
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
@@ -193,7 +186,12 @@ void XclImpSst::ReadSst( XclImpStream& rStrm )
     }
 }
 
-ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt32 nXFIndex ) const
+const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
+{
+    return maStringList.GetObject( nSstIndex );
+}
+
+ScBaseCell* XclImpSst::CreateCell( sal_uInt32 nSstIndex, sal_uInt16 nXFIndex ) const
 {
     const XclImpString* pString = GetString( nSstIndex );
     if( !pString )
@@ -210,7 +208,7 @@ namespace {
     @param b16Bit  true = 16-bit characters, false = 8-bit characters. */
 void lclAppendString32( String& rString, XclImpStream& rStrm, sal_uInt32 nChars, bool b16Bit )
 {
-    sal_uInt16 nReadChars = static_cast< sal_uInt16 >( ::std::min( nChars, 0xFFFFUL ) );
+    sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
     rString.Append( rStrm.ReadRawUniString( nReadChars, b16Bit ) );
     // ignore remaining chars
     sal_uInt32 nIgnore = nChars - nReadChars;
@@ -281,9 +279,9 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, SCCOL nScCol, SC
 
         SvxURLField aUrlField( rURL, aOrigText, SVXURLFORMAT_APPDEFAULT );
         rEE.QuickInsertField( SvxFieldItem( aUrlField ), ESelection( 0xFFFF, 0xFFFF ) );
-        ::std::auto_ptr< EditTextObject > pTextObj( rEE.CreateTextObject() );
+        ::std::auto_ptr< EditTextObject > xTextObj( rEE.CreateTextObject() );
 
-        ScEditCell* pCell = new ScEditCell( pTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
+        ScEditCell* pCell = new ScEditCell( xTextObj.get(), &rDoc, rEE.GetEditTextObjectPool() );
         rDoc.PutCell( aPos, pCell );
     }
 }
@@ -311,9 +309,9 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadHlink - unknown header GUID" );
 
     sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
-    ::std::auto_ptr< String > pLongName;    // link / file name
-    ::std::auto_ptr< String > pShortName;   // 8.3-representation of file name
-    ::std::auto_ptr< String > pTextMark;    // text mark
+    ::std::auto_ptr< String > xLongName;    // link / file name
+    ::std::auto_ptr< String > xShortName;   // 8.3-representation of file name
+    ::std::auto_ptr< String > xTextMark;    // text mark
 
     // description (ignore)
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
@@ -329,9 +327,9 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     // UNC path
     if( ::get_flag( nFlags, EXC_HLINK_UNC ) )
     {
-        pLongName.reset( new String );
-        lclAppendString32( *pLongName, rStrm, true );
-        lclGetAbsPath( *pLongName, 0, pDocShell );
+        xLongName.reset( new String );
+        lclAppendString32( *xLongName, rStrm, true );
+        lclGetAbsPath( *xLongName, 0, pDocShell );
     }
     // file link or URL
     else if( ::get_flag( nFlags, EXC_HLINK_BODY ) )
@@ -341,8 +339,8 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         if( aGuid == XclTools::maGuidFileMoniker )
         {
             rStrm >> nLevel;
-            pShortName.reset( new String );
-            lclAppendString32( *pShortName, rStrm, false );
+            xShortName.reset( new String );
+            lclAppendString32( *xShortName, rStrm, false );
             rStrm.Ignore( 24 );
 
             sal_uInt32 nStrLen;
@@ -352,22 +350,22 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
                 rStrm >> nStrLen;
                 nStrLen /= 2;       // it's byte count here...
                 rStrm.Ignore( 2 );
-                pLongName.reset( new String );
-                lclAppendString32( *pLongName, rStrm, nStrLen, true );
-                lclGetAbsPath( *pLongName, nLevel, pDocShell );
+                xLongName.reset( new String );
+                lclAppendString32( *xLongName, rStrm, nStrLen, true );
+                lclGetAbsPath( *xLongName, nLevel, pDocShell );
             }
             else
-                lclGetAbsPath( *pShortName, nLevel, pDocShell );
+                lclGetAbsPath( *xShortName, nLevel, pDocShell );
         }
         else if( aGuid == XclTools::maGuidUrlMoniker )
         {
             sal_uInt32 nStrLen;
             rStrm >> nStrLen;
             nStrLen /= 2;       // it's byte count here...
-            pLongName.reset( new String );
-            lclAppendString32( *pLongName, rStrm, nStrLen, true );
+            xLongName.reset( new String );
+            lclAppendString32( *xLongName, rStrm, nStrLen, true );
             if( !::get_flag( nFlags, EXC_HLINK_ABS ) )
-                lclGetAbsPath( *pLongName, 0, pDocShell );
+                lclGetAbsPath( *xLongName, 0, pDocShell );
         }
         else
             DBG_ERRORFILE( "XclImpHyperlink::ReadHlink - unknown content GUID" );
@@ -376,27 +374,27 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     // text mark
     if( ::get_flag( nFlags, EXC_HLINK_MARK ) )
     {
-        pTextMark.reset( new String );
-        lclAppendString32( *pTextMark, rStrm, true );
+        xTextMark.reset( new String );
+        lclAppendString32( *xTextMark, rStrm, true );
     }
 
     rStrm.SetNulSubstChar();    // back to default
 
     DBG_ASSERT( !rStrm.GetRecLeft(), "XclImpHyperlink::ReadHlink - record size mismatch" );
 
-    if( !pLongName.get() && pShortName.get() )
-        pLongName = pShortName;
-    else if( !pLongName.get() && pTextMark.get() )
-        pLongName.reset( new String );
+    if( !xLongName.get() && xShortName.get() )
+        xLongName = xShortName;
+    else if( !xLongName.get() && xTextMark.get() )
+        xLongName.reset( new String );
 
-    if( pLongName.get() )
+    if( xLongName.get() )
     {
-        if( pTextMark.get() )
+        if( xTextMark.get() )
         {
-            if( !pLongName->Len() )
-                pTextMark->SearchAndReplaceAll( '!', '.' );
-            *pLongName += '#';
-            *pLongName += *pTextMark;
+            if( !xLongName->Len() )
+                xTextMark->SearchAndReplaceAll( '!', '.' );
+            *xLongName += '#';
+            *xLongName += *xTextMark;
         }
 
         SCTAB nScTab = rRoot.GetCurrScTab();
@@ -410,7 +408,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             aRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
             for( SCCOL nScCol = nScCol1; nScCol <= nScCol2 ; ++nScCol )
                 for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
-                    lclInsertUrl( rRoot, *pLongName, nScCol, nScRow );
+                    lclInsertUrl( rRoot, *xLongName, nScCol, nScRow );
         }
     }
 }
@@ -592,21 +590,21 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     const ScAddress& rPos = maRanges.GetObject( 0 )->aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetFmlaConverter();
 
-    ::std::auto_ptr< ScTokenArray > pTokArr1;
+    ::std::auto_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 )
     {
-        const ScTokenArray* pTokArr = NULL;
+        const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, nFmlaSize1, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
-            pTokArr1.reset( pTokArr->Clone() );
+            xTokArr1.reset( pTokArr->Clone() );
     }
 
     ::std::auto_ptr< ScTokenArray > pTokArr2;
     if( nFmlaSize2 )
     {
-        const ScTokenArray* pTokArr = NULL;
+        const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, nFmlaSize2, FT_RangeName );
         // formula converter owns pTokArr -> create a copy of the token array
@@ -616,24 +614,24 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** create the Calc conditional formatting ***
 
-    if( !mpScCondFormat.get() )
+    if( !mxScCondFmt.get() )
     {
         ULONG nKey = 0;
-        mpScCondFormat.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
+        mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
     }
 
-    ScCondFormatEntry aEntry( eMode, pTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
-    mpScCondFormat->AddEntry( aEntry );
+    ScCondFormatEntry aEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
+    mxScCondFmt->AddEntry( aEntry );
     ++mnCondIndex;
 }
 
 void XclImpCondFormat::Apply()
 {
-    if( mpScCondFormat.get() )
+    if( mxScCondFmt.get() )
     {
         ScDocument& rDoc = GetDoc();
 
-        ULONG nKey = rDoc.AddCondFormat( *mpScCondFormat );
+        ULONG nKey = rDoc.AddCondFormat( *mxScCondFmt );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 
@@ -723,32 +721,32 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         // first formula
         // string list is single tStr token with NUL separators -> replace them with LF
         rStrm.SetNulSubstChar( '\n' );
-        ::std::auto_ptr< ScTokenArray > pTokArr1;
+        ::std::auto_ptr< ScTokenArray > xTokArr1;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
         if( nLen )
         {
-            const ScTokenArray* pTokArr = NULL;
+            const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
-                pTokArr1.reset( pTokArr->Clone() );
+                xTokArr1.reset( pTokArr->Clone() );
         }
         rStrm.SetNulSubstChar();    // back to default
 
         // second formula
-        ::std::auto_ptr< ScTokenArray > pTokArr2;
+        ::std::auto_ptr< ScTokenArray > xTokArr2;
         rStrm >> nLen;
         rStrm.Ignore( 2 );
         if( nLen )
         {
-            const ScTokenArray* pTokArr = NULL;
+            const ScTokenArray* pTokArr = 0;
             rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, nLen, FT_RangeName );
             // formula converter owns pTokArr -> create a copy of the token array
             if( pTokArr )
-                pTokArr2.reset( pTokArr->Clone() );
+                xTokArr2.reset( pTokArr->Clone() );
         }
 
         // read all cell ranges
@@ -760,7 +758,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
         {
             bool bIsValid = true;   // valid settings in flags field
 
-            ScValidationMode eValMode;
+            ScValidationMode eValMode = SC_VALID_ANY;
             switch( nFlags & EXC_DV_MODE_MASK )
             {
                 case EXC_DV_MODE_ANY:       eValMode = SC_VALID_ANY;        break;
@@ -775,7 +773,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
             }
             rRoot.GetTracer().TraceDVType(eValMode == SC_VALID_CUSTOM);
 
-            ScConditionMode eCondMode;
+            ScConditionMode eCondMode = SC_COND_BETWEEN;
             switch( nFlags & EXC_DV_COND_MASK )
             {
                 case EXC_DV_COND_BETWEEN:   eCondMode = SC_COND_BETWEEN;    break;
@@ -794,10 +792,10 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
             if( bIsValid && pRange )
             {
                 // process string list of a list validity (convert to list of string tokens)
-                if( pTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
-                    XclTokenArrayHelper::ConvertStringToList( *pTokArr1, '\n' );
+                if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
+                    XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n' );
 
-                ScValidationData aValidData( eValMode, eCondMode, pTokArr1.get(), pTokArr2.get(), &rDoc, pRange->aStart );
+                ScValidationData aValidData( eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, pRange->aStart );
 
                 aValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
                 aValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
@@ -824,7 +822,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                     aValidData.ResetError();
 
                 // set the handle ID
-                sal_uInt32 nHandle = rDoc.AddValidationEntry( aValidData );
+                ULONG nHandle = rDoc.AddValidationEntry( aValidData );
                 ScPatternAttr aPattern( rDoc.GetPool() );
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
@@ -919,6 +917,11 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const String& rFilterName )
 }
 
 // ----------------------------------------------------------------------------
+
+XclImpWebQueryBuffer::XclImpWebQueryBuffer( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
 
 void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
 {
@@ -1078,7 +1081,7 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     };
     rStrm.SetDecrypter( xDecr );
 
-    return xDecr.get() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+    return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
 // ============================================================================
