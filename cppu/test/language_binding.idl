@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language_binding.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+ *  last change: $Author: dbo $ $Date: 2001-03-21 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ typedef TestDataElements TestData;
  *
  * @author Daniel Boelzle
  */
-[ uik(46833373-3462-11d3-87A400A0-24494732), ident("XLBTest", 1.0) ]
 interface XLBTestBase : com::sun::star::uno::XInterface
 {
     /**
@@ -183,7 +182,6 @@ interface XLBTestBase : com::sun::star::uno::XInterface
  *
  * @author Daniel Boelzle
  */
-[ uik(44C34C20-3478-11d3-87A400A0-24494732), ident("XLanguageBindingTest", 1.0) ]
 interface XLanguageBindingTest : test::XLBTestBase
 {
     /**

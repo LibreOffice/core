@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputest.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:53 $
+ *  last change: $Author: dbo $ $Date: 2001-03-21 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,6 @@ struct Base2 : Base1
     double  p2;
 };
 
-[ uik(46121273-3462-11d3-87A400A0-24494732), ident("SimpleInterface", 1.0) ]
 interface XSimpleInterface : com::sun::star::uno::XInterface
 {
     void method();

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-19 14:46:32 $
+#   last change: $Author: dbo $ $Date: 2001-03-21 11:35:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,7 +157,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
 # 		-Tcom.sun.star.uno.XCurrentContext \
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    +idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
     +regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     +regmerge $@ / $(UNOUCRRDB)
     touch $@
