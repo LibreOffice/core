@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementwrapperbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:34:49 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XUPDATABLE_HPP_
+#include <com/sun/star/util/XUpdatable.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -125,6 +133,7 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
                              public ::drafts::com::sun::star::ui::XUIElement    ,
                              public ::com::sun::star::lang::XInitialization     ,
                              public ::com::sun::star::lang::XComponent          ,
+                             public ::com::sun::star::util::XUpdatable          ,
                              protected ThreadHelpBase                           ,
                              public ::cppu::OBroadcastHelper                    ,
                              public ::cppu::OPropertySetHelper                  ,
@@ -151,6 +160,9 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+        // XUpdatable
+        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
@@ -173,11 +185,12 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
 
         static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
-        ::cppu::OMultiTypeInterfaceContainerHelper  m_aListenerContainer;   /// container for ALL Listener
-        rtl::OUString                               m_aResourceURL;
-        sal_Int16                                   m_nType;
-        sal_Bool                                    m_bInitialized : 1,
-                                                    m_bDisposed;
+        ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListenerContainer;   /// container for ALL Listener
+        rtl::OUString                                                       m_aResourceURL;
+        com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame > m_xWeakFrame;
+        sal_Int16                                                           m_nType;
+        sal_Bool                                                            m_bInitialized : 1,
+                                                                            m_bDisposed;
 };
 
 } // namespace framework
