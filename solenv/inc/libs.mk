@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2001-08-20 11:20:39 $
+#   last change: $Author: hjs $ $Date: 2001-10-26 13:14:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ LIBPRE=libr
 #
 
 GPC3RDLIB=-lgpc
-SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COM)
+SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
@@ -87,12 +87,12 @@ OSLLIB=
 RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COM)
+CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
-UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COM)
+UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 REGLIB=-lreg
 .INCLUDE .IGNORE : vos$/version.mk
-VOSLIB=-lvos$(VOS_MAJOR)$(COM)
+VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(UPD)$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
 STORELIB=-lstore
