@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 15:33:46 $
+ *  last change: $Author: bm $ $Date: 2001-02-05 17:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
 {
     HelpID = HID_AREA_TRANSPARENCE;
     Hide = TRUE;
-    Size = MAP_APPFONT(260 ,135);
+    Size = MAP_APPFONT(260 ,185);
     Text = "Transparenz" ;
     Text [ English ] = "Transparence";
 
@@ -795,10 +795,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
  // RID_SVXPAGE_AREA ------------------------------------------------------
 TabPage RID_SVXPAGE_AREA
 {
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpID = HID_AREA_AREA ;
     Hide = TRUE ;
-    /* ### ACHTUNG: Neuer Text in Resource? Fl‰che : Flıche */
-    /* ### ACHTUNG: Neuer Text in Resource? Fl‰che : Flıche */
     Text = "Fl‰che" ;
     Text [ English ] = "Object Fill" ;
     Text [ norwegian ] = "Object Fill" ;
@@ -812,7 +811,59 @@ TabPage RID_SVXPAGE_AREA
     Text [ dutch ] = "Vlak" ;
     Text [ spanish ] = "Relleno" ;
     Text [ english_us ] = "Area" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+
+    GroupBox GRP_FILL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 120 , 138 ) ;
+        Text = "Tabelle" ;
+        Text [ ENGLISH ] = "List" ;
+        Text [ dutch ] = "Tabel" ;
+        Text [ english_us ] = "Table" ;
+        Text [ italian ] = "Tabella" ;
+        Text [ spanish ] = "Tabla" ;
+        Text [ french ] = "Table" ;
+        Text [ swedish ] = "Tabell" ;
+        Text [ danish ] = "Tabel" ;
+        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese ] = "Tabela" ;
+        Text[ chinese_simplified ] = "±Ì∏Ò";
+        Text[ russian ] = "“‡·ÎËˆ‡";
+        Text[ polish ] = "Tabela";
+        Text[ japanese ] = "ï\\";
+        Text[ chinese_traditional ] = "™ÌÆÊ";
+        Text[ arabic ] = "«·ﬁ«∆„…";
+        Text[ greek ] = "–ﬂÌ·Í·Ú";
+        Text[ korean ] = "≈◊¿Ã∫Ì";
+        Text[ turkish ] = "Tablo";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DLG_TYPE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 108 , 52 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Unsichtbar" ; AREADLG_INVISIBLE ; > ;
+            < "Farbe" ; AREADLG_COLOR ; > ;
+            < "Farbverlauf" ; AREADLG_GRADIENT ; > ;
+            < "Schraffur" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+        StringList [ english_us ]  =
+        {
+            < "Invisible" ; AREADLG_INVISIBLE ; > ;
+            < "Color" ; AREADLG_COLOR ; > ;
+            < "Gradient" ; AREADLG_GRADIENT ; > ;
+            < "Hatching" ; AREADLG_HATCH ; > ;
+            < "Bitmap" ; AREADLG_BITMAP ; > ;
+        };
+    };
+/*
     RadioButton RBT_INVISIBLE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -844,7 +895,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_COLOR
     {
-        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "Far~be" ;
         Text [ ENGLISH ] = "C~olor" ;
@@ -872,7 +923,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_GRADIENT
     {
-        Pos = MAP_APPFONT ( 12 , 36 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
         Text = "Farb~verlauf" ;
         Text [ ENGLISH ] = "~Gradient" ;
@@ -900,7 +951,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_HATCHING
     {
-        Pos = MAP_APPFONT ( 70 , 25 ) ;
+        Pos = MAP_APPFONT ( 70 , 28 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Schraffur" ;
         Text [ ENGLISH ] = "H~atching" ;
@@ -928,7 +979,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_BITMAP
     {
-        Pos = MAP_APPFONT ( 70 , 36 ) ;
+        Pos = MAP_APPFONT ( 70 , 42 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "B~itmap" ;
         Text [ ENGLISH ] = "~Bitmap" ;
@@ -954,81 +1005,123 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "B~it e˛lem";
         Text[ language_user1 ] = " ";
     };
+*/
     ListBox LB_COLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
          // 54
-        Size = MAP_APPFONT ( 108 , 73 ) ;
+        Size = MAP_APPFONT ( 108 , 106 ) ;
          // 69
         TabStop = TRUE ;
     };
     ListBox LB_GRADIENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
          // 54
-        Size = MAP_APPFONT ( 108 , 73 ) ;
+        Size = MAP_APPFONT ( 108 , 106 ) ;
          // 69
         TabStop = TRUE ;
     };
     ListBox LB_HATCHING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
          // 54
-        Size = MAP_APPFONT ( 108 , 73 ) ;
+        Size = MAP_APPFONT ( 108 , 106 ) ;
          // 69
         TabStop = TRUE ;
     };
     ListBox LB_BITMAP
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
          // 54
-        Size = MAP_APPFONT ( 108 , 80 ) ;
+        Size = MAP_APPFONT ( 108 , 106 ) ;
         TabStop = TRUE ;
-        DropDown = TRUE ;
+    };
+
+    // ---------- preview ----------
+
+    Control CTL_COLOR_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 137 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 43 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 132 , 3 ) ;
+         // 88
+        Size = MAP_APPFONT ( 122 , 60 ) ;
+         // 41
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ norwegian ] = "Preview" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Examinar" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Esikatselu" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "AperÁu" ;
+        Text [ swedish ] = "Fˆrhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "PrevisualizaciÛn" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "«·„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+        Text[ language_user1 ] = " ";
     };
     Control CTL_BITMAP_PREVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 108 , 57 ) ;
+        Pos = MAP_APPFONT ( 137 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 43 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
-    GroupBox GRP_FILL
+
+    // ---------- for gradients ----------
+
+    GroupBox GRP_STEPCOUNT
     {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 126 ) ;
-        Text = "Tabelle" ;
-        Text [ ENGLISH ] = "List" ;
-        Text [ dutch ] = "Tabel" ;
-        Text [ english_us ] = "Table" ;
-        Text [ italian ] = "Tabella" ;
-        Text [ spanish ] = "Tabla" ;
-        Text [ french ] = "Table" ;
-        Text [ swedish ] = "Tabell" ;
-        Text [ danish ] = "Tabel" ;
-        Text [ portuguese_brazilian ] = "Tabelle" ;
-        Text [ portuguese ] = "Tabela" ;
-        Text[ chinese_simplified ] = "±Ì∏Ò";
-        Text[ russian ] = "“‡·ÎËˆ‡";
-        Text[ polish ] = "Tabela";
-        Text[ japanese ] = "ï\\";
-        Text[ chinese_traditional ] = "™ÌÆÊ";
-        Text[ arabic ] = "«·ﬁ«∆„…";
-        Text[ greek ] = "–ﬂÌ·Í·Ú";
-        Text[ korean ] = "≈◊¿Ã∫Ì";
-        Text[ turkish ] = "Tablo";
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 120 , 32 ) ;
+        Text = "Schrittweite" ;
+        Text [ ENGLISH ] = "Step count" ;
+        Text [ dutch ] = "Stapgrootte" ;
+        Text [ english_us ] = "Increments" ;
+        Text [ italian ] = "Incremento" ;
+        Text [ spanish ] = "Incremento" ;
+        Text [ french ] = "Pas de progression" ;
+        Text [ swedish ] = "Stegl‰ngd" ;
+        Text [ danish ] = "Trinvidde" ;
+        Text [ portuguese_brazilian ] = "Schrittweite" ;
+        Text [ portuguese ] = "Incremento" ;
+        Text[ chinese_simplified ] = "‘ˆ¡ø";
+        Text[ russian ] = "ÿËËÌ‡ ¯‡„‡";
+        Text[ polish ] = "Inkrement";
+        Text[ japanese ] = "Ω√ØÃﬂêî";
+        Text[ chinese_traditional ] = "∫•∂i";
+        Text[ arabic ] = "«· “«Ìœ";
+        Text[ greek ] = "¬ﬁÏ·";
+        Text[ korean ] = "¡ı∞°∫–";
+        Text[ turkish ] = "Ad˝m";
         Text[ language_user1 ] = " ";
     };
     TriStateBox TSB_STEPCOUNT
     {
-        Pos = MAP_APPFONT ( 138 , 15 ) ;
-        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~automatisch" ;
         Text [ ENGLISH ] = "~automatic" ;
         TabStop = TRUE ;
@@ -1055,9 +1148,8 @@ TabPage RID_SVXPAGE_AREA
     NumericField NUM_FLD_STEPCOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 198 , 14 ) ;
-         // 138, 31
-        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Pos = MAP_APPFONT ( 72 , 158 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
@@ -1067,39 +1159,38 @@ TabPage RID_SVXPAGE_AREA
         Last = 256 ;
         StrictFormat = TRUE ;
     };
-    GroupBox GRP_STEPCOUNT
-    {
-        Pos = MAP_APPFONT ( 132 , 3 ) ;
-        Size = MAP_APPFONT ( 122 , 29 ) ;
-         // 85
-        Text = "Schrittweite" ;
-        Text [ ENGLISH ] = "Step count" ;
-        Text [ dutch ] = "Stapgrootte" ;
-        Text [ english_us ] = "Increments" ;
-        Text [ italian ] = "Incremento" ;
-        Text [ spanish ] = "Incremento" ;
-        Text [ french ] = "Pas de progression" ;
-        Text [ swedish ] = "Stegl‰ngd" ;
-        Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Schrittweite" ;
-        Text [ portuguese ] = "Incremento" ;
-        Text[ chinese_simplified ] = "‘ˆ¡ø";
-        Text[ russian ] = "ÿËËÌ‡ ¯‡„‡";
-        Text[ polish ] = "Inkrement";
-        Text[ japanese ] = "Ω√ØÃﬂêî";
-        Text[ chinese_traditional ] = "∫•∂i";
-        Text[ arabic ] = "«· “«Ìœ";
-        Text[ greek ] = "¬ﬁÏ·";
-        Text[ korean ] = "¡ı∞°∫–";
-        Text[ turkish ] = "Ad˝m";
-        Text[ language_user1 ] = " ";
-    };
 
-    /* NEU */
+    // ---------- for hatches ----------
+
+    GroupBox GRP_HATCHBCKGRD
+    {
+        Pos = MAP_APPFONT ( 6 , 147 ) ;
+        Size = MAP_APPFONT ( 120 , 32 ) ;
+        Text = "Schraffur Hintergrund" ;
+        Text [ ENGLISH ] = "Hatch Background" ;
+        Text [ english_us ] = "Hatching background" ;
+        Text[ portuguese ] = "Fundo tracejado";
+        Text[ russian ] = "ÿÚËıÓ‚Í‡ ÙÓÌ‡";
+        Text[ greek ] = "÷¸ÌÙÔ „Ò·ÏÏÔÛÍÈ‹Ú";
+        Text[ dutch ] = "Arcering achtergrond";
+        Text[ french ] = "ArriËre-plan hachurÈ";
+        Text[ spanish ] = "Trama de fondo";
+        Text[ italian ] = "Sfondo tratteggio";
+        Text[ danish ] = "Skravering baggrund";
+        Text[ swedish ] = "Skraffering bakgrund";
+        Text[ polish ] = "Kreskowanie t≥a";
+        Text[ portuguese_brazilian ] = "Hatch Background";
+        Text[ japanese ] = " Ø¡›∏ﬁÇÃîwåi";
+        Text[ korean ] = "πË∞Ê «ÿƒ™";
+        Text[ chinese_simplified ] = "“ı”∞œﬂ±≥æ∞";
+        Text[ chinese_traditional ] = "≥±ºvΩu±¯≠I¥∫";
+        Text[ arabic ] = "Œ·›Ì… „‰ «·‰ﬁÊ‘";
+        Text[ turkish ] = "Artalan deseni";
+    };
     CheckBox CB_HATCHBCKGRD
     {
-        Pos = MAP_APPFONT ( 137 , 16 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         TabStop = TRUE ;
         Text = "Hintergrund~farbe" ;
         Text [ ENGLISH ] = "~Backgroundcolor" ;
@@ -1126,44 +1217,19 @@ TabPage RID_SVXPAGE_AREA
     ListBox LB_HATCHBCKGRDCOLOR
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 202 , 14 ) ;
-        Size = MAP_APPFONT ( 48 , 65 ) ;
+        Pos = MAP_APPFONT ( 72 , 158 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
     };
-    GroupBox GRP_HATCHBCKGRD
-    {
-        Pos = MAP_APPFONT ( 132 , 3 ) ;
-        Size = MAP_APPFONT ( 122 , 29 ) ;
-         // 85
-        Text = "Schraffur Hintergrund" ;
-        Text [ ENGLISH ] = "Hatch Background" ;
-        Text [ english_us ] = "Hatching background" ;
-        Text[ portuguese ] = "Fundo tracejado";
-        Text[ russian ] = "ÿÚËıÓ‚Í‡ ÙÓÌ‡";
-        Text[ greek ] = "÷¸ÌÙÔ „Ò·ÏÏÔÛÍÈ‹Ú";
-        Text[ dutch ] = "Arcering achtergrond";
-        Text[ french ] = "ArriËre-plan hachurÈ";
-        Text[ spanish ] = "Trama de fondo";
-        Text[ italian ] = "Sfondo tratteggio";
-        Text[ danish ] = "Skravering baggrund";
-        Text[ swedish ] = "Skraffering bakgrund";
-        Text[ polish ] = "Kreskowanie t≥a";
-        Text[ portuguese_brazilian ] = "Hatch Background";
-        Text[ japanese ] = " Ø¡›∏ﬁÇÃîwåi";
-        Text[ korean ] = "πË∞Ê «ÿƒ™";
-        Text[ chinese_simplified ] = "“ı”∞œﬂ±≥æ∞";
-        Text[ chinese_traditional ] = "≥±ºvΩu±¯≠I¥∫";
-        Text[ arabic ] = "Œ·›Ì… „‰ «·‰ﬁÊ‘";
-        Text[ turkish ] = "Artalan deseni";
-    };
-    /* ENDE NEU */
+
+    // ---------- for bitmaps ----------
 
     TriStateBox TSB_TILE
     {
-        Pos = MAP_APPFONT ( 132 , 6 ) ;
-        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "~Kacheln" ;
         Text [ ENGLISH ] = "~Tile" ;
         TabStop = TRUE ;
@@ -1189,9 +1255,8 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_STRETCH
     {
-        Pos = MAP_APPFONT ( 209 , 6 ) ;
-         //Pos = MAP_APPFONT( 132, 34 );
-        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Pos = MAP_APPFONT ( 66 , 160 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
         Text = "A~npassen" ;
         Text [ ENGLISH ] = "~Stretch" ;
         TabStop = TRUE ;
@@ -1217,7 +1282,7 @@ TabPage RID_SVXPAGE_AREA
     };
     TriStateBox TSB_SCALE
     {
-        Pos = MAP_APPFONT ( 138 , 33 ) ;
+        Pos = MAP_APPFONT ( 138 , 83 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Rel~ativ" ;
         Text [ ENGLISH ] = "Rel~ative" ;
@@ -1242,9 +1307,36 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Gˆre~celi";
         Text[ language_user1 ] = " ";
     };
+
+    GroupBox GRP_SIZE
+    {
+        Pos = MAP_APPFONT ( 132 , 68 ) ;
+        Size = MAP_APPFONT ( 122 , 42 ) ;
+        Text = "Grˆﬂe" ;
+        Text [ ENGLISH ] = "Size" ;
+        Text [ english_us ] = "Size" ;
+        Text [ italian ] = "Dimensione" ;
+        Text [ spanish ] = "TamaÒo" ;
+        Text [ french ] = "Taille" ;
+        Text [ dutch ] = "Grootte" ;
+        Text [ swedish ] = "Storlek" ;
+        Text [ danish ] = "St¯rrelse" ;
+        Text [ portuguese_brazilian ] = "Grˆﬂe" ;
+        Text [ portuguese ] = "Tamanho" ;
+        Text[ chinese_simplified ] = "¥Û–°";
+        Text[ russian ] = "–‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ª≤Ωﬁ";
+        Text[ chinese_traditional ] = "§j§p";
+        Text[ arabic ] = "«·ÕÃ„";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚";
+        Text[ turkish ] = "Boyutlar";
+        Text[ language_user1 ] = " ";
+    };
     TriStateBox TSB_ORIGINAL
     {
-        Pos = MAP_APPFONT ( 138 , 44 ) ;
+        Pos = MAP_APPFONT ( 138 , 94 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "~Original" ;
         Text [ ENGLISH ] = "Or~iginal" ;
@@ -1271,7 +1363,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_X_SIZE
     {
-        Pos = MAP_APPFONT ( 184 , 30 ) ;
+        Pos = MAP_APPFONT ( 184 , 80 ) ;
         Size = MAP_APPFONT ( 24 , 10 ) ;
         Text = "B~reite" ;
         Text [ ENGLISH ] = "~Width" ;
@@ -1298,7 +1390,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 28 ) ;
+        Pos = MAP_APPFONT ( 209 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1315,7 +1407,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_SIZE
     {
-        Pos = MAP_APPFONT ( 184 , 45 ) ;
+        Pos = MAP_APPFONT ( 184 , 95 ) ;
         Size = MAP_APPFONT ( 24 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? H~ˆhe : H~˜he */
         /* ### ACHTUNG: Neuer Text in Resource? H~ˆhe : H~˜he */
@@ -1344,7 +1436,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_SIZE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 43 ) ;
+        Pos = MAP_APPFONT ( 209 , 93 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1360,46 +1452,17 @@ TabPage RID_SVXPAGE_AREA
         SpinSize = 5 ;
         SpinSize = 5 ;
     };
-    GroupBox GRP_SIZE
-    {
-        Pos = MAP_APPFONT ( 132 , 18 ) ;
-        Size = MAP_APPFONT ( 122 , 42 ) ;
-         //Pos = MAP_APPFONT( 176, 3 );
-         //Size = MAP_APPFONT( 78, 43 );
-        /* ### ACHTUNG: Neuer Text in Resource? Grˆﬂe : Gr˜òe */
-        /* ### ACHTUNG: Neuer Text in Resource? Grˆﬂe : Gr˜òe */
-        Text = "Grˆﬂe" ;
-        Text [ ENGLISH ] = "Size" ;
-        Text [ english_us ] = "Size" ;
-        Text [ italian ] = "Dimensione" ;
-        Text [ spanish ] = "TamaÒo" ;
-        Text [ french ] = "Taille" ;
-        Text [ dutch ] = "Grootte" ;
-        Text [ swedish ] = "Storlek" ;
-        Text [ danish ] = "St¯rrelse" ;
-        Text [ portuguese_brazilian ] = "Grˆﬂe" ;
-        Text [ portuguese ] = "Tamanho" ;
-        Text[ chinese_simplified ] = "¥Û–°";
-        Text[ russian ] = "–‡ÁÏÂ";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ª≤Ωﬁ";
-        Text[ chinese_traditional ] = "§j§p";
-        Text[ arabic ] = "«·ÕÃ„";
-        Text[ greek ] = "Ã›„ÂËÔÚ";
-        Text[ korean ] = "≈©±‚";
-        Text[ turkish ] = "Boyutlar";
-        Text[ language_user1 ] = " ";
-    };
+
     Control CTL_POSITION
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 137 , 71 ) ;
+        Pos = MAP_APPFONT ( 137 , 121 ) ;
         Size = MAP_APPFONT ( 37 , 27 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_X_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 73 ) ;
+        Pos = MAP_APPFONT ( 179 , 123 ) ;
         Size = MAP_APPFONT ( 29 , 10 ) ;
         Text = "~X-Offset" ;
         Text [ ENGLISH ] = "~X offset" ;
@@ -1425,7 +1488,7 @@ TabPage RID_SVXPAGE_AREA
     };
     FixedText FT_Y_OFFSET
     {
-        Pos = MAP_APPFONT ( 179 , 88 ) ;
+        Pos = MAP_APPFONT ( 179 , 138 ) ;
         Size = MAP_APPFONT ( 29 , 10 ) ;
         Text = "~Y-Offset" ;
         Text [ ENGLISH ] = "~Y offset" ;
@@ -1452,7 +1515,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_X_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 71 ) ;
+        Pos = MAP_APPFONT ( 209 , 121 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1467,7 +1530,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_Y_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 86 ) ;
+        Pos = MAP_APPFONT ( 209 , 136 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1481,7 +1544,7 @@ TabPage RID_SVXPAGE_AREA
     };
     GroupBox GRP_POSITION
     {
-        Pos = MAP_APPFONT ( 132 , 61 ) ;
+        Pos = MAP_APPFONT ( 132 , 111 ) ;
         Size = MAP_APPFONT ( 122 , 42 ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
@@ -1508,7 +1571,7 @@ TabPage RID_SVXPAGE_AREA
     MetricField MTR_FLD_OFFSET
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 209 , 113 ) ;
+        Pos = MAP_APPFONT ( 209 , 163 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1522,7 +1585,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_ROW
     {
-        Pos = MAP_APPFONT ( 137 , 115 ) ;
+        Pos = MAP_APPFONT ( 137 , 165 ) ;
         Size = MAP_APPFONT ( 32 , 10 ) ;
         Text = "Z~eile" ;
         Text [ English ] = "R~ow" ;
@@ -1548,7 +1611,7 @@ TabPage RID_SVXPAGE_AREA
     };
     RadioButton RBT_COLUMN
     {
-        Pos = MAP_APPFONT ( 170 , 115 ) ;
+        Pos = MAP_APPFONT ( 170 , 165 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text = "S~palte" ;
         Text [ English ] = "~Column" ;
@@ -1574,7 +1637,7 @@ TabPage RID_SVXPAGE_AREA
     };
     GroupBox GRP_OFFSET
     {
-        Pos = MAP_APPFONT ( 132 , 104 ) ;
+        Pos = MAP_APPFONT ( 132 , 154 ) ;
         Size = MAP_APPFONT ( 122 , 25 ) ;
         Text = "Verschiebung" ;
         Text [ English ] = "Offset" ;
@@ -1598,45 +1661,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ turkish ] = "Kayd˝rma";
         Text[ language_user1 ] = " ";
     };
-    Control CTL_COLOR_PREVIEW
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 137 , 45 ) ;
-         // 98
-        Size = MAP_APPFONT ( 112 , 79 ) ;
-         // 26
-        TabStop = TRUE ;
-    };
-    GroupBox GRP_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 132 , 35 ) ;
-         // 88
-        Size = MAP_APPFONT ( 122 , 94 ) ;
-         // 41
-        Text = "Vorschau" ;
-        Text [ ENGLISH ] = "Preview" ;
-        Text [ norwegian ] = "Preview" ;
-        Text [ italian ] = "Anteprima" ;
-        Text [ portuguese_brazilian ] = "Examinar" ;
-        Text [ portuguese ] = "Previsualizar" ;
-        Text [ finnish ] = "Esikatselu" ;
-        Text [ danish ] = "Eksempel" ;
-        Text [ french ] = "AperÁu" ;
-        Text [ swedish ] = "Fˆrhandsvisning" ;
-        Text [ dutch ] = "Voorbeeld" ;
-        Text [ spanish ] = "PrevisualizaciÛn" ;
-        Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "‘§ ”";
-        Text[ russian ] = "œÓÒÏÓÚ";
-        Text[ polish ] = "Podglπd";
-        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
-        Text[ chinese_traditional ] = "πwƒ˝";
-        Text[ arabic ] = "«·„⁄«Ì‰…";
-        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
-        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
-        Text[ turkish ] = "÷nizleme";
-        Text[ language_user1 ] = " ";
-    };
+
     Text[ chinese_simplified ] = "∆Ω√Ê";
     Text[ russian ] = "«‡ÎË‚Í‡";
     Text[ polish ] = "Obszar";
@@ -1653,7 +1678,7 @@ TabPage RID_SVXPAGE_SHADOW
 {
     HelpID = HID_AREA_SHADOW ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Schatten" ;
     Text [ English ] = "Shadow" ;
     Text [ english_us ] = "Shadow" ;
@@ -1955,7 +1980,7 @@ TabPage RID_SVXPAGE_HATCH
     Text [ dutch ] = "Arceringen" ;
     Text [ spanish ] = "Tramas" ;
     Text [ english_us ] = "Hatching" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_LINE_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
@@ -2621,7 +2646,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text [ dutch ] = "Bitmappatronen" ;
     Text [ spanish ] = "Modelos de bitmap" ;
     Text [ english_us ] = "Bitmap Patterns" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
@@ -3072,7 +3097,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text [ dutch ] = "Kleurverloop" ;
     Text [ spanish ] = "Gradientes de color" ;
     Text [ english_us ] = "Gradients" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_COLOR_FROM
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
@@ -3926,7 +3951,7 @@ TabPage RID_SVXPAGE_COLOR
     Text [ spanish ] = "Colores" ;
     Text [ english_us ] = "Colors" ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Control CTL_COLORTABLE
     {
         Border = TRUE ;
@@ -4538,7 +4563,6 @@ TabDialog RID_SVXDLG_AREA
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
-        Size = MAP_APPFONT ( 260 , 135 ) ;
         PageList =
         {
             PageItem
