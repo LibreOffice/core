@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:11:45 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -18563,7 +18563,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ finnish ] = "Liefert das Vorzeichen einer Zahl." ;
             Text [ danish ] = "Returnerer et tals fortegn." ;
             Text [ french ] = "Donne le signe d'un nombre." ;
-            Text [ swedish ] = "Returnerar förtecknet för ett tal." ;
+            Text [ swedish ] = "Returnerar tecknet för ett tal." ;
             Text [ dutch ] = "Berekent of een getal positief of negatief is." ;
             Text [ spanish ] = "Devuelve el signo de un número." ;
             Text [ english_us ] = "Returns the algebraic sign of a number." ;
@@ -18633,7 +18633,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ finnish ] = "Die Zahl, deren Vorzeichen bestimmt wird." ;
             Text [ danish ] = "Det tal hvis fortegn skal bestemmes." ;
             Text [ french ] = "Le nombre réel dont vous souhaitez déterminer le signe." ;
-            Text [ swedish ] = "Talet vars förtecken bestäms." ;
+            Text [ swedish ] = "Talet vars tecken bestäms." ;
             Text [ dutch ] = "Het getal waarvan het voorteken wordt bepaald." ;
             Text [ spanish ] = "es un número real cuyo signo desea saber." ;
             Text [ english_us ] = "The number for which the algebraic sign is to be determined." ;
