@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:08:29 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,11 +290,8 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     BOOL                bIgnoreLine = FALSE;
     BOOL                bIgnoreFill = FALSE;
 
-//-/    pObj1->TakeAttributes( aSet1, TRUE, FALSE );
-    aSet1.Put(pObj1->GetItemSet());
-
-//-/    pObj2->TakeAttributes( aSet2, TRUE, FALSE );
-    aSet2.Put(pObj2->GetItemSet());
+    aSet1.Put(pObj1->GetMergedItemSet());
+    aSet2.Put(pObj2->GetMergedItemSet());
 
     const XLineStyle eLineStyle1 = ITEMVALUE( aSet1, XATTR_LINESTYLE, XLineStyleItem );
     const XLineStyle eLineStyle2 = ITEMVALUE( aSet2, XATTR_LINESTYLE, XLineStyleItem );
@@ -364,10 +361,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
             if ( bLineWidth )
                 aSet.Put( XLineWidthItem( nStartLineWidth + (long) ( fFactor * fDelta + 0.5 ) ) );
 
-//-/            pNewObj->SetAttributes( aSet, FALSE );
-//-/            SdrBroadcastItemChange aItemChange(*pNewObj);
-            pNewObj->SetItemSetAndBroadcast(aSet);
-//-/            pNewObj->BroadcastItemChange(aItemChange);
+            pNewObj->SetMergedItemSetAndBroadcast(aSet);
 
             pObjList->InsertObject( pNewObj, LIST_APPEND );
         }
