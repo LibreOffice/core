@@ -214,7 +214,9 @@ public class AccessibilityTree
         }
         catch (Exception e)
         {
-            System.out.println ("caught exception while expanding tree path " + aPath + ": " + e);
+            System.out.println ("caught exception while expanding tree path "
+                + aPath + ": " + e);
+            e.printStackTrace ();
         }
 
         return aFirst;
