@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hdu $ $Date: 2002-08-07 13:10:34 $
+#   last change: $Author: sb $ $Date: 2002-08-13 13:08:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -328,5 +328,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo __CT>> $@
     @echo DNDEventDispatcher>> $@
     @echo DNDListenerContainer>> $@
-
-
+    @echo vcl\ >> $@
