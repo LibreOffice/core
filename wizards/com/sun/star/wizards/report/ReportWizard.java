@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-11 15:47:51 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 07:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ public class ReportWizard {
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             buseTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optUseTemplate", "State")).shortValue() == (short) 1;
                 CurReportDocument.breakLinkofTextSections();
-            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "swriter: writer_StarOffice_XML_Writer_Template",
+            bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component , StorePath, "writer_StarOffice_XML_Writer_Template",
                                    buseTemplate, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
             if (bDocisStored == true)
                 CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
@@ -1378,16 +1378,7 @@ public class ReportWizard {
                 bdisposeDialog = false;
                 Dataimport CurDataimport = new Dataimport();
                 CurUNOProgressDialog = CurDataimport.showProgressDisplay(xMSF, CurReportDocument, false);  // CurReportDocument.Frame.getComponentWindow().getPosSize().Width);
-                if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
-                CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
-                }
-                CurUNOProgressDialog.xComponent.dispose();
-            }
-            if (bcreateTemplate == false){
-                boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "swriter: StarOffice XML (Writer)",
-                                    false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
-                if (bcreateLink && bDocisStored)
-                CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
+                importReportData(xMSF, CurReportDocument, CurUNOProgressDialog, CurDataimport);
             }
             }
             break;
@@ -1405,6 +1396,32 @@ public class ReportWizard {
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
     }}
+
+
+    public void importReportData(final XMultiServiceFactory xMSF, final ReportDocument CurReportDocument, final UNODialogs CurUNOProgressDialog, final Dataimport CurDataimport){
+    Thread ProgressThread = new Thread(new Runnable() {
+
+    public void run(){
+    try{
+        if (CurReportDocument.CurDBMetaData.executeCommand(sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot)){
+        CurDataimport.insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
+        }
+        CurUNOProgressDialog.xComponent.dispose();
+        if (bcreateTemplate == false){
+        boolean bDocisStored = tools.storeDocument(xMSF, CurReportDocument.Component, StorePath, "StarOffice XML (Writer)",
+                            false, sMsgSavingImpossible + (char)13 + sMsgLinkCreationImpossible);
+        if (bcreateLink && bDocisStored)
+            CurReportDocument.CurDBMetaData.createDBLink(CurReportDocument.CurDBMetaData.DataSource, StorePath);
+        }
+    }
+    catch (ThreadDeath td){
+        System.out.println("could not stop thread");
+    }
+    CurUNOProgressDialog.xComponent.dispose();
+    }
+        });
+    ProgressThread.start();
+    }
 
 
     public static void getReportResources(XMultiServiceFactory xMSF, boolean bgetProgressResourcesOnly){

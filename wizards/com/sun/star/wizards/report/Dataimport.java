@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bc $ $Date: 2002-09-11 13:16:39 $
+ *  last change: $Author: bc $ $Date: 2002-09-13 07:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,9 @@ public class Dataimport extends ReportWizard{
                             new Object[] {new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop});
 
         CurUNOProgressDialog.calculateDialogPosition(xMSF, CurReportDocument.Frame.getComponentWindow().getPosSize(), CurReportDocument.xWindowPeer);
+
         CurUNOProgressDialog.xWindow.setVisible(true);
-//      setDialogVisible(CurUNOProgressDialog);
+
 
     return CurUNOProgressDialog;
     }
@@ -242,22 +243,29 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-
-    public void setDialogVisible(final UNODialogs CurUNOProgressDialog){
-
+    public void importReportData(final XMultiServiceFactory xMSF, final ReportDocument CurReportDocument, final UNODialogs CurUNOProgressDialog){
+/*    Thread ProgressThread = new Thread(new Runnable(CurUNOProgressDialog) {
+        private UNODialogs dialog;
+    public Runnable( UNODialogs x )
+    {
+        dialog = x;
+    }*/
     Thread ProgressThread = new Thread(new Runnable() {
+
     public void run(){
     try{
-        System.out.println("bin im Thread");
-        boolean bexists = (CurUNOProgressDialog.xWindow != null);
-        System.out.print("Dialog vorhanden: ");
-        System.out.println(bexists);
-        CurUNOProgressDialog.xWindow.setVisible(true);
-        System.out.println("bin immer noch im thread");
+        if (reconnectToDatabase(xMSF, CurReportDocument)){
+        CurReportDocument.getGroupFieldFortmats(xMSF, CurReportDocument.CurDBMetaData, sMsgTableNotExisting);
+        CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
+        CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
+        insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
+        }
     }
     catch (ThreadDeath td){
         System.out.println("could not stop thread");
-    }}
+    }
+    CurUNOProgressDialog.xComponent.dispose();
+    }
         });
     ProgressThread.start();
 //        try {
@@ -275,13 +283,7 @@ public class Dataimport extends ReportWizard{
         CurReportDocument = new ReportDocument(xMSF, false, true);
         int iWidth = CurReportDocument.Frame.getComponentWindow().getPosSize().Width;
         CurUNOProgressDialog = showProgressDisplay(xMSF, CurReportDocument, true);
-        if (reconnectToDatabase(xMSF, CurReportDocument)){
-        CurReportDocument.getGroupFieldFortmats(xMSF, CurReportDocument.CurDBMetaData, sMsgTableNotExisting);
-        CurUNOProgressDialog.modifyFontWeight("lblProgressDBConnection", com.sun.star.awt.FontWeight.NORMAL);
-        CurUNOProgressDialog.modifyFontWeight("lblProgressDataImport", com.sun.star.awt.FontWeight.BOLD);
-        insertDatabaseDatatoReportDocument(xMSF, CurReportDocument, CurUNOProgressDialog);
-        }
-        CurUNOProgressDialog.xComponent.dispose();
+        importReportData(xMSF, CurReportDocument, CurUNOProgressDialog);
     }
     catch(java.lang.Exception jexception ){
     jexception.printStackTrace(System.out);
