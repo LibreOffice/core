@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-23 13:37:29 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include "markdata.hxx"
 #include "rangenam.hxx"
 #include "arealink.hxx"
+#include "docoptio.hxx"
 
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
@@ -1332,6 +1333,30 @@ void ImportExcel8::RecString( void )
 
         pLastFormCell = NULL;
     }
+}
+
+
+void ImportExcel8::Calccount( void )
+{
+    ScDocOptions    aOpt = pD->GetDocOptions();
+    aOpt.SetIterCount( aIn.ReaduInt16() );
+    pD->SetDocOptions( aOpt );
+}
+
+
+void ImportExcel8::Delta( void )
+{
+    ScDocOptions    aOpt = pD->GetDocOptions();
+    aOpt.SetIterEps( aIn.ReadDouble() );
+    pD->SetDocOptions( aOpt );
+}
+
+
+void ImportExcel8::Iteration( void )
+{
+    ScDocOptions    aOpt = pD->GetDocOptions();
+    aOpt.SetIter( aIn.ReaduInt16() == 1 );
+    pD->SetDocOptions( aOpt );
 }
 
 

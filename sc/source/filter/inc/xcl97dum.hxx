@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,16 @@ public:
     virtual const BYTE*         GetData() const;
 };
 
+
+class XclRefmode : public ExcDummyRec
+{
+private:
+    static const BYTE       pMyData[];
+    static const ULONG      nMyLen;
+public:
+    virtual ULONG           GetLen( void ) const;
+    virtual const BYTE*     GetData( void ) const;
+};
 
 
 #endif // _XCL97DUM_HXX

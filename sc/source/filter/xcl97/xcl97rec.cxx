@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:27:26 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@
 #include "stlpool.hxx"
 #include "viewopti.hxx"
 #include "scextopt.hxx"
+#include "docoptio.hxx"
 
 // --- class XclSstList ----------------------------------------------
 
@@ -3185,4 +3186,84 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
         rStrm.EndRecord();
     }
 }
+
+
+
+void XclCalccount::SaveCont( XclExpStream& rStrm )
+{
+    rStrm << nCount;
+}
+
+
+XclCalccount::XclCalccount( const ScDocument& rDoc )
+{
+    nCount = rDoc.GetDocOptions().GetIterCount();
+}
+
+
+UINT16 XclCalccount::GetNum() const
+{
+    return 0x000C;
+}
+
+
+ULONG XclCalccount::GetLen() const
+{
+    return 2;
+}
+
+
+
+
+void XclIteration::SaveCont( XclExpStream& rStrm )
+{
+    rStrm << nIter;
+}
+
+
+XclIteration::XclIteration( const ScDocument& rDoc )
+{
+    nIter = rDoc.GetDocOptions().IsIter()? 1 : 0;
+}
+
+
+UINT16 XclIteration::GetNum() const
+{
+    return 0x0011;
+}
+
+
+ULONG XclIteration::GetLen() const
+{
+    return 2;
+}
+
+
+
+
+void XclDelta::SaveCont( XclExpStream& rStrm )
+{
+    rStrm << fDelta;
+}
+
+
+
+XclDelta::XclDelta( const ScDocument& rDoc )
+{
+    fDelta = rDoc.GetDocOptions().GetIterEps();
+}
+
+
+UINT16 XclDelta::GetNum() const
+{
+    return 0x0010;
+}
+
+
+ULONG XclDelta::GetLen() const
+{
+    return 8;
+}
+
+
 

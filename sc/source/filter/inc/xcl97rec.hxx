@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,5 +1367,56 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
 };
+
+
+
+
+class XclCalccount : public ExcRecord
+{
+private:
+    UINT16                      nCount;
+protected:
+    virtual void                SaveCont( XclExpStream& rStrm );
+public:
+                                XclCalccount( const ScDocument& );
+
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
+};
+
+
+
+
+class XclIteration : public ExcRecord
+{
+private:
+    UINT16                      nIter;
+protected:
+    virtual void                SaveCont( XclExpStream& rStrm );
+public:
+                                XclIteration( const ScDocument& );
+
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
+};
+
+
+
+
+class XclDelta : public ExcRecord
+{
+private:
+    double                      fDelta;
+protected:
+    virtual void                SaveCont( XclExpStream& rStrm );
+public:
+                                XclDelta( const ScDocument& );
+
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
+};
+
+
+
 
 #endif // _XCL97REC_HXX

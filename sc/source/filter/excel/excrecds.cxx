@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,8 +243,6 @@ const BYTE      ExcDummy_00::pMyData[] = {
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
 const ULONG ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
-//  ( UINT16 ) 0x00 + 0x02 + 0x00 + 0x00 + 0x00 + 0x20 +
-//  0x02 + 0x02 + 8 * 4;
 
 //-------------------------------------------------------- class ExcDummy_04x -
 const BYTE      ExcDummy_040::pMyData[] = {
@@ -258,14 +256,12 @@ const BYTE      ExcDummy_040::pMyData[] = {
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
 const ULONG ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
-//  ( UINT16 ) 0x02 + 0x02 + 0x02 + 0x12 + 0x02 + 0x02 + 6 * 4;
 
 const BYTE      ExcDummy_041::pMyData[] = {
     0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
 const ULONG ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
-//  ( UINT16 ) 0x02 + 0x02 + 2 * 4;
 
 //--------------------------------------------------------- class ExcDummy_01-
 // Default Font Records
@@ -332,7 +328,6 @@ const BYTE      ExcDummy_Fm::pMyData[] = {
     0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x40, 0x5f, 0x2d
 };
 const ULONG ExcDummy_Fm::nMyLen = sizeof( ExcDummy_Fm::pMyData );
-//  ( UINT16 ) 0x1c + 0x21 + 0x22 + 0x27 + 0x3c + 0x3c + 0x44 + 0x44 + 4 * 8;
 
 
 //--------------------------------------------------------- class ExcDummy_XF -
@@ -381,7 +376,6 @@ const BYTE      ExcDummy_XF::pMyData[] = {
     0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 const ULONG ExcDummy_XF::nMyLen = sizeof( ExcDummy_XF::pMyData );
-//      ( UINT16 ) ( 0x10 + 4 ) * 21;
 
 //------------------------------------------------------ class ExcDummy_Style -
 const BYTE      ExcDummy_Style::pMyData[] = {
@@ -393,7 +387,6 @@ const BYTE      ExcDummy_Style::pMyData[] = {
     0x93, 0x02, 0x04, 0x00, 0x14, 0x80, 0x07, 0xff
 };
 const ULONG ExcDummy_Style::nMyLen = sizeof( ExcDummy_Style::pMyData );
-//      ( UINT16 ) ( 0x04 + 4 ) * 6;
 
 //--------------------------------------------------------- class ExcDummy_02 -
 const BYTE      ExcDummy_02::pMyData[] = {
@@ -404,30 +397,12 @@ const BYTE      ExcDummy_02::pMyData[] = {
     0x10, 0x00, 0x08, 0x00, 0xfc, 0xa9, 0xf1, 0xd2, 0x4d,   // DELTA
     0x62, 0x50, 0x3f,
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00,                     // SAVERECALC
-//  0x2a, 0x00, 0x02, 0x00, 0x00, 0x00,                     // PRINTHEADERS
-//  0x2b, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRINTGRIDLINES
     0x82, 0x00, 0x02, 0x00, 0x01, 0x00,                     // GRIDSET
-//  0x80, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,   // GUTS
-//  0x00, 0x00, 0x00,
     0x25, 0x02, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00,         // DEFAULTROWHEIGHT
     0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00,         // COUNTRY
     0x81, 0x00, 0x02, 0x00, 0xc1, 0x04,                     // WSBOOL
-//  0x14, 0x00, 0x03, 0x00, 0x02, 0x26, 0x41,               // HEADER
-//  0x15, 0x00, 0x09, 0x00, 0x08, 0x53, 0x65, 0x69, 0x74,   // FOOTER
-//  0x65, 0x20, 0x26, 0x50,
-//  0x83, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HCENTER
-//  0x84, 0x00, 0x02, 0x00, 0x00, 0x00,                     // VCENTER
-//  0xa1, 0x00, 0x22, 0x00, 0x00, 0x00, 0x31, 0x00, 0x01,   // SETUP
-//  0x00, 0x01, 0x00, 0x01, 0x00, 0x44, 0x00, 0x72, 0x75,
-//  0x6e, 0x67, 0xc1, 0x8d, 0xb0, 0x82, 0xc1, 0x60, 0xe0,
-//  0x3f, 0xc1, 0x8d, 0xb0, 0x82, 0xc1, 0x60, 0xe0, 0x3f,
-//  0xf0, 0x00//,
-//  0x55, 0x00, 0x02, 0x00, 0x0a, 0x00                      // DEFCOLWIDTH
 };
 const ULONG ExcDummy_02::nMyLen = sizeof( ExcDummy_02::pMyData );
-//  ( UINT16 ) 0x02 + 0x02 + 0x02 + 0x02 +
-//  0x08 + 0x02 + 0x02 + 0x02 + 0x02 + 0x08 + 0x04 + 0x04 + 0x02 + /*0x03 +*/
-//  /*0x09 +*/ 0x02 + 0x02 + /*0x22 +*/ /*0x02 + */15 * 4;
 
 
 //---------------------------------------------------------
@@ -1849,7 +1824,7 @@ void ExcBlankMulblank::AddEntries(
 
     ScAddress   aCurrPos( rPos );
     UINT16      nCellXF = rRootData.pXFRecs->Find( pAttr );
-    UINT16      nOrgCount = nCount;
+    BOOL        bOrg = TRUE;
 
     while( nCount )
     {
@@ -1860,6 +1835,7 @@ void ExcBlankMulblank::AddEntries(
             Append( nMergeXF, nMergeCount );
             nCount -= nMergeCount;
             aCurrPos.IncCol( nMergeCount );
+            bOrg = FALSE;
         }
         else
         {
@@ -1878,7 +1854,7 @@ void ExcBlankMulblank::AddEntries(
         }
     }
 
-    if( nCount > MAXCOL && nCount == nOrgCount )
+    if( bOrg )
     {   // set format at row
         rExcTab.SetDefRowXF( nCellXF, rPos.Row() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:46:30 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,6 +1208,9 @@ FltError ImportExcel8::Read( void )
                         case 0x0006:
                         case 0x0206:
                         case 0x0406:    Formula25();            break;  // FORMULA      [ 2  5   ]
+                        case 0x000C:    Calccount();            break;  // CALCCOUNT
+                        case 0x0010:    Delta();                break;  // DELTA
+                        case 0x0011:    Iteration();            break;  // ITERATION
                         case 0x001C:    Note();                 break;  // NOTE         [ 2345   ]
                         case 0x005D:    if( bWithDrawLayer ) Obj(); break;  // OBJ      [ 2345   ]
                         case 0x007E:

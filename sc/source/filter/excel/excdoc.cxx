@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:24:42 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,10 @@ void ExcTable::FillAsTable( void )
     else
     {
         Add( new ExcBof8 );
-        // CALCMODE bis VCENTER
+        Add( new XclCalccount( rDoc ) );
+        Add( new XclRefmode() );
+        Add( new XclIteration( rDoc ) );
+        Add( new XclDelta( rDoc ) );
         Add( new ExcDummy8_02 );
     }
 
