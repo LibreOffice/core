@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgdatasupplier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ void DataSupplier::validate()
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
             aURL += rtl::OUString::createFromAscii( "/" );
 
-        aURL += aName;
+        aURL += PackageUri::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
     }
     else
@@ -538,7 +538,7 @@ void DataSupplier::validate()
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
             aURL += rtl::OUString::createFromAscii( "/" );
 
-        aURL += aName;
+        aURL += PackageUri::encodeSegment( aName );
     }
     return aURL;
 }
