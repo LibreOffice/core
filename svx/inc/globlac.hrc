@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globlac.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:39:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,101 +106,111 @@
 #define AI_SHOW_ITEMBROWSER         ACC_CODE( SID_SHOW_ITEMBROWSER, KEY_9, TRUE, TRUE, TRUE )
 
 #define AI_ATTR_PARA_ADJUST_BLOCK   AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_BLOCK;\
-                                        ACC_DEF_KEY(            KEY_B, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_J, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_F, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_J, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_J, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_J, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( polish,        KEY_J, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( russian,       KEY_J, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( pl ,       KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( ru ,       KEY_J, FALSE, TRUE, FALSE ) };
 
 #define AI_ATTR_PARA_ADJUST_CENTER  AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_CENTER;\
-                                        ACC_DEF_KEY(            KEY_E, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_E, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_E, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_E, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_C, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_J, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_C, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_J, FALSE, TRUE, FALSE ) };
 
 #define AI_ATTR_CHAR_WEIGHT         AcceleratorItem { Identifier = SID_ATTR_CHAR_WEIGHT;\
-                                        ACC_DEF_KEY(            KEY_F, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_B, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_G, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_N, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_G, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_B, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( danish,        KEY_F, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( polish,        KEY_B, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( russian,       KEY_B, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_N, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( da ,       KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( pl ,       KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( ru,        KEY_B, FALSE, TRUE, FALSE ) };
 
 #define AI_SEARCH_DLG               AcceleratorItem { Identifier = SID_SEARCH_DLG;\
-                                        ACC_DEF_KEY(            KEY_G, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_F, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_B, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_G, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_F, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_F, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_F, FALSE, TRUE, FALSE ) };
 
 #define AI_GROUP                    ACC_CODE( SID_GROUP, KEY_G, TRUE, TRUE, FALSE )
 #define AI_UNGROUP                  ACC_CODE( SID_UNGROUP, KEY_G, TRUE, TRUE, TRUE )
 
 // Weitersuchen ...
 #define AI_SET_SUPER_SCRIPT         AcceleratorItem { Identifier = SID_SET_SUPER_SCRIPT;\
-                                        ACC_DEF_KEY(            KEY_H, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_P, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_H, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_H, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_H, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_H, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_P, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( de ,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_P, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_H, FALSE, TRUE, FALSE ) };
 
 #define AI_ATTR_CHAR_POSTURE        AcceleratorItem { Identifier = SID_ATTR_CHAR_POSTURE;\
-                                        ACC_DEF_KEY(            KEY_K, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_K, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( danish,        KEY_K, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( polish,        KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( russian,       KEY_I, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( da ,       KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( pl ,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( ru ,       KEY_I, FALSE, TRUE, FALSE ) };
 
 #define AI_COMBINE                  ACC_CODE( SID_COMBINE, KEY_K, TRUE, TRUE, FALSE )
 #define AI_DISMANTLE                ACC_CODE( SID_DISMANTLE, KEY_K, TRUE, TRUE, TRUE )
 #define AI_ATTR_PARA_ADJUST_LEFT    AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_LEFT;\
-                                        ACC_DEF_KEY(            KEY_L, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_L, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_T, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_I, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_G, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_L, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_L, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_L, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_L, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_G, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_L, FALSE, TRUE, FALSE ) };
 
 #define AI_ATTR_PARA_ADJUST_RIGHT   AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_RIGHT;\
-                                        ACC_DEF_KEY(            KEY_R, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_R, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_R, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_D, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_D, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_R, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_D, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_D, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_R, FALSE, TRUE, FALSE ) };
 
 #define AI_SET_SUB_SCRIPT           AcceleratorItem { Identifier = SID_SET_SUB_SCRIPT;\
-                                        ACC_DEF_KEY(            KEY_T, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_B, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_B, TRUE,  TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_T, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_T, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_P, TRUE,  TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_B, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY(    de ,        KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_B, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_B, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_P, TRUE,  TRUE, FALSE ) };
 
 #define AI_ATTR_CHAR_UNDERLINE      AcceleratorItem { Identifier = SID_ATTR_CHAR_UNDERLINE;\
-                                        ACC_DEF_KEY(            KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( English_us,    KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Italian,       KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Spanish,       KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( French,        KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( Dutch,         KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( danish,        KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( polish,        KEY_U, FALSE, TRUE, FALSE ) \
-                                        ACC_KEY( russian,       KEY_U, FALSE, TRUE, FALSE ) };
+                                        ACC_DEF_KEY(        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( de ,           KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( en-US ,    KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( it ,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( es ,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( fr ,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( nl ,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( da,        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( pl,        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( ru ,       KEY_U, FALSE, TRUE, FALSE ) };
 
 #define AI_STYLE_CATALOG            ACC_CODE( SID_STYLE_CATALOG, KEY_F11, FALSE, TRUE, FALSE )
 #define AI_WIN_FULLSCREEN           ACC_CODE( SID_WIN_FULLSCREEN, KEY_J, TRUE, TRUE, FALSE )
