@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-19 10:14:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,26 @@ ModalDialog DLG_INS_ROW_COL
         Size = MAP_APPFONT ( 63 , 8 ) ;
         Text = "Position" ;
         Text[ ENGLISH ] = "Position" ;
+        Text[ english_us ] = "Position";
+        Text[ portuguese ] = "Posição";
+        Text[ russian ] = "Ïîëîæåíèå";
+        Text[ greek ] = "start_num";
+        Text[ dutch ] = "Functie";
+        Text[ french ] = "Fonction";
+        Text[ spanish ] = "Posición";
+        Text[ finnish ] = "Sijainti";
+        Text[ italian ] = "Posizione";
+        Text[ danish ] = "Stilling";
+        Text[ swedish ] = "Befattning";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "Position";
+        Text[ japanese ] = "ˆÊ’u";
+        Text[ korean ] = "Á÷À§";
+        Text[ chinese_simplified ] = "start_num";
+        Text[ chinese_traditional ] = "start_num";
+        Text[ turkish ] = "Ýþ unvaný";
+        Text[ arabic ] = "Start_num";
+        Text[ catalan ] = "Position";
     };
     FixedText FT_COUNT
     {
@@ -311,6 +331,7 @@ ModalDialog DLG_INS_ROW_COL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar";
 };
+
 
 
 
