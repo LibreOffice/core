@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2002-12-10 14:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,60 +139,4 @@ void SwView::ExecDlg(SfxRequest &rReq)
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.123  2000/09/18 16:06:13  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.122  2000/05/26 07:21:34  os
-    old SW Basic API Slots removed
-
-    Revision 1.121  2000/04/18 15:02:51  os
-    UNICODE
-
-    Revision 1.120  1998/01/28 15:02:52  OM
-    #45138# Seitennummern-Dlg entfernt
-
-
-      Rev 1.119   28 Jan 1998 16:02:52   OM
-   #45138# Seitennummern-Dlg entfernt
-
-      Rev 1.118   21 Nov 1997 15:00:18   MA
-   includes
-
-      Rev 1.117   03 Nov 1997 13:58:30   MA
-   precomp entfernt
-
-      Rev 1.116   01 Sep 1997 13:14:12   OS
-   DLL-Umstellung
-
-      Rev 1.115   15 Aug 1997 11:48:02   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.114   11 Aug 1997 10:20:24   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.113   08 Aug 1997 17:26:16   OM
-   Headerfile-Umstellung
-
-      Rev 1.112   08 Aug 1997 14:48:30   HJS
-   includes
-
-      Rev 1.111   10 Apr 1997 15:30:20   OS
-   CHANGE_PAGENUM: nicht nur Offset vergleichen, sondern auch log. Seitennummer
-
-      Rev 1.110   07 Apr 1997 18:57:40   MH
-   chg: header
-
-      Rev 1.109   11 Dec 1996 10:58:18   MA
-   Warnings
-
-      Rev 1.108   29 Jul 1996 15:47:20   MA
-   includes
-
-      Rev 1.107   14 Dec 1995 17:25:04   OS
-   -ExecDocStatDlg
-
-------------------------------------------------------------------------*/
 

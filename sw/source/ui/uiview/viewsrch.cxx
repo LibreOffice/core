@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-19 14:43:50 $
+ *  last change: $Author: os $ $Date: 2002-12-10 14:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,145 +869,5 @@ void SwView::StateSearch(SfxItemSet &rSet)
     }
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.11  2002/09/13 13:05:46  os
-    #100992# changed treatment of maximum undoable replace operations
-
-    Revision 1.10  2002/06/27 09:01:45  mba
-    #100714#: macro recording
-
-    Revision 1.9  2001/10/31 15:55:46  jp
-    Bug #93764#: ExechSearch - return correct WhichId range
-
-    Revision 1.8  2001/10/08 14:18:33  jp
-    Bug #92730#: FUNC_Search - clear replace string if only a search is active
-
-    Revision 1.7  2001/09/13 15:27:15  jp
-    #92075# update for new compiler
-
-    Revision 1.6  2001/03/27 21:43:57  jp
-    optimize SeachOption initialisation
-
-    Revision 1.5  2001/03/19 16:00:48  tl
-    use TransliterationModules_IGNORE_CASE now
-
-    Revision 1.4  2001/03/12 08:12:45  tl
-    SearcParam => SearchOptions and implied changes
-
-    Revision 1.3  2000/11/20 09:26:31  jp
-    must change: SearchText->TextSearch and use namespace
-
-    Revision 1.2  2000/10/20 14:52:05  jp
-    Bug #79645#: ExecSearch - RepeatSearch without SearchItem must create it's own item
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.57  2000/09/18 16:06:14  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.56  2000/09/08 08:12:54  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.55  2000/09/07 16:05:57  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.54  2000/05/26 07:21:35  os
-    old SW Basic API Slots removed
-
-    Revision 1.53  2000/05/24 13:13:59  hr
-    conflict between STLPORT and Workshop header
-
-    Revision 1.52  2000/05/23 19:42:38  jp
-    Bugfixes for Unicode
-
-    Revision 1.51  2000/05/23 07:59:19  jp
-    Changes for Unicode
-
-    Revision 1.50  2000/05/10 11:53:20  os
-    Basic API removed
-
-    Revision 1.49  2000/04/18 15:02:51  os
-    UNICODE
-
-    Revision 1.48  2000/03/08 17:23:27  os
-    GetAppWindow() - misuse as parent window eliminated
-
-    Revision 1.47  2000/02/15 18:44:18  jp
-    Bug #73058#: dont search charsetcolor-item
-
-    Revision 1.46  2000/02/11 14:59:44  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.45  1999/07/08 16:45:18  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.44   08 Jul 1999 18:45:18   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.43   25 Jan 1999 13:49:16   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.42   20 Oct 1998 11:58:54   OS
-   #58161# Zeichenhintergrund suchen
-
-      Rev 1.41   20 Aug 1998 07:41:54   OS
-   Rahmenselektion aufheben, wenn Text gefunden wurde #55310#
-
-      Rev 1.40   12 Aug 1998 18:46:10   HR
-   #54781#: GCC braucht Temporary
-
-      Rev 1.39   25 Jun 1998 10:19:28   OS
-   SearchAll liefert Count zurueck #51651#
-
-      Rev 1.38   24 Feb 1998 18:06:02   OS
-   Navigationstype bei FID_SEARCH_NOW setzen
-
-      Rev 1.37   24 Feb 1998 15:29:08   JP
-   Search..: SWPOSDOC entfernt, auf enums umgestellt
-
-      Rev 1.36   29 Nov 1997 16:48:34   MA
-   includes
-
-      Rev 1.35   21 Nov 1997 15:00:26   MA
-   includes
-
-      Rev 1.34   30 Sep 1997 16:58:52   TJ
-   include
-
-      Rev 1.33   29 Aug 1997 16:40:28   OS
-   Suchmethoden fuer Basic returnen immer etwas #43261#, DLL-Umstellung
-
-      Rev 1.32   07 Aug 1997 16:53:12   OS
-   auch ReplaceAll returnt BOOL  #42418#
-
-      Rev 1.31   05 Aug 1997 16:36:36   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.30   31 Jul 1997 14:59:44   MH
-   chg: header
-
-      Rev 1.29   30 Jul 1997 19:05:48   HJS
-   includes
-
-      Rev 1.28   23 Jul 1997 21:42:34   HJS
-   includes
-
-      Rev 1.27   12 Jul 1997 09:49:46   OS
-   keine Dialog fuer RepeatSearch aus der API mit nichtgesetzten SearchItem
-
-      Rev 1.26   11 Jul 1997 13:51:48   OS
-   Search, Replace und SearchAll returnen BOOL
-
-      Rev 1.25   30 Jun 1997 18:55:06   JP
-   Attributiert suchen: Attrset - Bereich erweitert
-
-      Rev 1.24   24 Jun 1997 10:15:02   OS
-   LR und ULSpace ohne _PARA_ #40922#
-
-------------------------------------------------------------------------*/
 
 
