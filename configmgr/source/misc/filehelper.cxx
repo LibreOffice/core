@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filehelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:24:48 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,19 @@ namespace configmgr
         }
     }
 
+    // -----------------------------------------------------------------------------
+    bool FileHelper::tryToRemoveFile(const rtl::OUString& _aURL, bool tryBackupFirst)
+    {
+        if (tryBackupFirst)
+        {
+            rtl::OUString aBakURL = _aURL.concat( ASCII(".bak") );
+            File::RC eBakError = File::move(_aURL,aBakURL);
+            if (eBakError == File::E_None)
+                return true;
+        }
+        File::RC eError = File::remove(_aURL);
+        return eError == File::E_None || eError == File::E_NOENT;
+    }
     // -----------------------------------------------------------------------------
     void FileHelper::replaceFile(
         const rtl::OUString& _aToURL, const rtl::OUString &_aFromURL) CFG_THROW1 (io::IOException)
