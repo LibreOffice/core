@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,9 +558,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             const SwTabFrm *pTable = pUnion->GetTable();
 
             SWRECTFN( pTable )
-#ifdef BIDI
             sal_Bool bRTL = pTable->IsRightToLeft();
-#endif
 
             if( !pTable->IsValid() && nLoopMax  )
             {
@@ -680,7 +678,6 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     nHeight = (rCF.pFrm->Frm().*fnRect->fnGetHeight)();
 
-#ifdef BIDI
                     nXPos = bRTL ?
                             (rCF.pFrm->Frm().*fnRect->fnGetLeft)() :
                             (rCF.pFrm->Frm().*fnRect->fnGetRight)();
@@ -694,17 +691,6 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                              (rCF.pFrm->Frm().*fnRect->fnGetWidth)();
                     ++nCellCnt;
                 }
-
-#else
-                    nXPos = (rCF.pFrm->Frm().*fnRect->fnGetRight)();
-                }
-                else if( nXPos == (rCF.pFrm->Frm().*fnRect->fnGetLeft)() &&
-                         nHeight == (rCF.pFrm->Frm().*fnRect->fnGetHeight)() )
-                {
-                    nXPos += (rCF.pFrm->Frm().*fnRect->fnGetWidth)();
-                    ++nCellCnt;
-                }
-#endif
                 else
                 {
                     bValidChartSel = FALSE;
@@ -1639,15 +1625,10 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     if ( !nWish )
         nWish = 1;
 
-#ifdef BIDI
     const sal_Bool bRTL = pCell->IsRightToLeft();
     SwTwips nRet = bRTL ?
         nAct - pCell->Frm().Width() :
         0;
-#else
-    SwTwips nRet = 0;
-#endif
-
 
     while ( pTmp )
     {
@@ -1655,11 +1636,7 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
         {
             pTmp = (SwLayoutFrm*)pTmp->GetPrev();
             long nTmp = pTmp->GetFmt()->GetFrmSize().GetWidth();
-#ifdef BIDI
             nRet += ( bRTL ? ( -1 ) : 1 ) * nTmp * nAct / nWish;
-#else
-            nRet += nTmp * nAct / nWish;
-#endif
         }
         pTmp = pTmp->GetUpper()->GetUpper();
         if ( pTmp && !pTmp->IsCellFrm() )
@@ -1781,10 +1758,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     SWRECTFN( pTab )
 
-#ifdef BIDI
     sal_Bool bRTL = pTab->IsRightToLeft();
-#endif
-
     const long nTmpWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
     const long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
     while ( pTab->IsFollow() )
@@ -1802,19 +1776,12 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     const SwLayoutFrm *pTmp = pTab->FirstCell();
 
-#ifdef BIDI
     while ( pTmp &&
             (!pTmp->IsCellFrm() ||
              ( ( ! bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
                            (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ||
                    bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
                            (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) )
-#else
-    while ( pTmp &&
-            (!pTmp->IsCellFrm() ||
-             ( (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
-               (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ) )
-#endif
         pTmp = pTmp->GetNextLayoutLeaf();
 
     if ( pTmp )
@@ -1851,12 +1818,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
 
-#ifdef BIDI
     while ( (   bRTL && (rpEnd->Frm().*fnRect->fnGetLeft)() < nEX ) ||
             ( ! bRTL && (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX ) )
-#else
-    while ( (rpEnd->Frm().*fnRect->fnGetLeft)() > nEX ) )
-#endif
     {
         const SwLayoutFrm* pTmp = rpEnd->GetPrevLayoutLeaf();
         if( !pTmp || !pTab->IsAnLower( pTmp ) )
@@ -1944,11 +1907,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             bExchange = TRUE;
         }
     }
-#ifdef VERTICAL_LAYOUT
     else
     {
         SWRECTFN( pTable )
-//        SWRECTFN( pStart )
         long nSttTop = (pStart->Frm().*fnRect->fnGetTop)();
         long nEndTop = (pEnd->Frm().*fnRect->fnGetTop)();
         if( nSttTop == nEndTop )
@@ -1960,12 +1921,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         else if( bVert == ( nSttTop < nEndTop ) )
             bExchange = TRUE;
     }
-#else
-    else if ( pStart->Frm().Top() > pEnd->Frm().Top() ||
-             (pStart->Frm().Top() == pEnd->Frm().Top() &&
-              pStart->Frm().Left() > pEnd->Frm().Left()) )
-        bExchange = TRUE;
-#endif
     if ( bExchange )
     {
         const SwLayoutFrm *pTmp = pStart;
@@ -1991,7 +1946,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     const long nWish = Max( 1L, pTable->GetFmt()->GetFrmSize().GetWidth() );
     while ( pTable )
     {
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( pTable )
         const long nOfst = (pTable->*fnRect->fnGetPrtLeft)();
         const long nPrtWidth = (pTable->Prt().*fnRect->fnGetWidth)();
@@ -2036,24 +1990,6 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             aSt = Point( nSt1, nSt2 );
             aEd = Point( nEd1, nEd2 );
         }
-#else
-        const long nOfst = pTable->Frm().Left() + pTable->Prt().Left();
-        long nSt = ::lcl_CalcWish( pStart, nWish, pTable->Prt().Width() ) + nOfst;
-        long nEd = ::lcl_CalcWish( pEnd,   nWish, pTable->Prt().Width() ) + nOfst;
-
-        if ( nSt <= nEd )
-            nEd += (long)((nEdSz * pTable->Prt().Width()) / nWish) - 1;
-        else
-            nSt += (long)((nStSz * pTable->Prt().Width()) / nWish) - 1;
-
-        Point aSt( nSt, pStart->Frm().Top() ),
-              aEd( nEd, pEnd->Frm().Bottom() );
-
-        if ( !pTable->IsAnLower( pStart ) )
-            aSt.Y() = pTable->Frm().Top();
-        if ( !pTable->IsAnLower( pEnd ) )
-            aEd.Y() = pTable->Frm().Bottom();
-#endif
 
         const Point aDiff( aEd - aSt );
         SwRect aUnion( aSt, Size( aDiff.X(), aDiff.Y() ) );
@@ -2071,11 +2007,32 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
                                       pTable->GetFirstNonHeadlineRow() :
                                       (const SwLayoutFrm*)pTable->Lower();
 
-            if ( pRow && pTable->IsFollow() && pRow->IsInFollowFlowRow() )
-                pRow = (SwLayoutFrm*)pRow->GetNext();
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
                 pRow = (SwLayoutFrm*)pRow->GetNext();
-            const SwLayoutFrm *pFirst = pRow ? pRow->FirstCell() : 0;
+
+            // --> FME 2004-07-26 #i31976#
+            // A follow flow row may contain emtpy cells. These are not
+            // considered by FirstCell(). Therefore we have to find
+            // the first cell manually:
+            const SwFrm* pTmpCell = 0;
+            if ( pTable->IsFollow() && pRow && pRow->IsInFollowFlowRow() )
+            {
+                const SwFrm* pTmpRow = pRow;
+                while ( pTmpRow && pTmpRow->IsRowFrm() )
+                {
+                    pTmpCell = static_cast<const SwRowFrm*>(pTmpRow)->Lower();
+                    pTmpRow  = static_cast<const SwCellFrm*>(pTmpCell)->Lower();
+                }
+                ASSERT( !pTmpCell || pTmpCell->IsCellFrm(), "Lower of rowframe != cellframe?!" )
+            }
+            // <--
+
+            const SwLayoutFrm* pFirst = pTmpCell ?
+                                        static_cast<const SwLayoutFrm*>(pTmpCell) :
+                                        pRow ?
+                                        pRow->FirstCell() :
+                                        0;
+
             while ( pFirst && !::IsFrmInTblSel( aUnion, pFirst ) )
             {
                 if ( pFirst->GetNext() )
