@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-10-10 12:56:52 $
+ *  last change: $Author: hdu $ $Date: 2001-10-10 13:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     // => load them dynamically when they are there
     void* pRenderLib = dlopen( "libXrender.so.1", RTLD_GLOBAL | RTLD_LAZY );
     if( !pRenderLib ) {
-        fprintf( stderr, "Display can do XRender, but no libXrender.so installed.\n"
+        fprintf( stderr, "Display can do XRender, but no libXrender.so.1 installed.\n"
             "Please install for improved display performance\n" );
         return;
     }
