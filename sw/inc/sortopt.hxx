@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ struct SwSortOptions
     SwSortOptions(const SwSortOptions& rOpt);
 
     BOOL            bTable;
-    char            nDeli;
+    sal_Unicode     cDeli;
     SwSortDirection eDirection;
     SwSortKeys      aKeys;
 };

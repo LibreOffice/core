@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-30 11:47:50 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ static BOOL   bAsc1  = TRUE;
 static BOOL   bAsc2  = TRUE;
 static BOOL   bAsc3  = TRUE;
 static BOOL   bCol   = FALSE;
-static char   nDeli  = '\t';
+static sal_Unicode    cDeli  = '\t';
 
 
 
@@ -236,11 +236,11 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aSortDn2RB.Check(!bAsc2);
     aSortUp3RB.Check(bAsc3);
     aSortDn3RB.Check(!bAsc3);
-    aDelimTabRB.Check(nDeli == '\t');
+    aDelimTabRB.Check(cDeli == '\t');
 
     if(!aDelimTabRB.IsChecked())
     {
-        aDelimEdt.SetText(nDeli);
+        aDelimEdt.SetText(cDeli);
         aDelimFreeRB.Check(TRUE);
         DelimHdl(&aDelimFreeRB);
     }
@@ -301,14 +301,14 @@ void SwSortDlg::Apply()
     }
     aOptions.eDirection =  aRowRB.IsChecked() ?
                         SRT_ROWS    : SRT_COLUMNS;
-    sal_Unicode nDeli = '\t';
+    sal_Unicode cDeli = '\t';
     if(!aDelimTabRB.IsChecked())
     {
         String aTmp(aDelimEdt.GetText());
         if( aTmp.Len() )
-            nDeli = aTmp.GetChar( 0 );
+            cDeli = aTmp.GetChar( 0 );
     }
-    aOptions.nDeli      =  nDeli;
+    aOptions.cDeli      =  cDeli;
     aOptions.bTable     =  rSh.IsTableMode();
 
     BOOL bRet;
@@ -379,6 +379,9 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/30 11:47:50  jp
+    Bug #80930#: handle the return value correct
+
     Revision 1.1.1.1  2000/09/18 17:14:45  hr
     initial import
 

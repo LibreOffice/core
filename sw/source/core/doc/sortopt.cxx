@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: os $ $Date: 2000-12-15 14:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
 
 SwSortOptions::SwSortOptions() :
     eDirection(SRT_ROWS),
-    nDeli(9),
+    cDeli(9),
     bTable(FALSE)
 {
 }
@@ -115,7 +115,7 @@ SwSortOptions::SwSortOptions() :
 
 SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
     eDirection(rOpt.eDirection),
-    nDeli(rOpt.nDeli),
+    cDeli(rOpt.cDeli),
     bTable(rOpt.bTable)
 {
     for(USHORT i=0; i < rOpt.aKeys.Count(); ++i)
