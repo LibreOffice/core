@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:04:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 15:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,6 +817,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     xNewObj->DoClose();
                     xNewObj = 0;
                 }
+
+                DELETEZ( pNewSet );
 
                 // TODO/LATER: failure of Reload must be handled
                 /*
@@ -3853,7 +3855,7 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
     sal_uInt16 nSID = rReq.GetSlot();
     sal_uInt16 nTbxID = 0;
     SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
-    BOOL bShow;
+    BOOL bShow = sal_False;
 
     if ( nSID == SID_TOGGLE_MENUBAR )
     {
