@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx3ditems.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 13:43:06 $
+ *  last change: $Author: aw $ $Date: 2000-11-24 16:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #endif
+
 
 //////////////////////////////////////////////////////////////////////////////
 
