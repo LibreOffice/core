@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:50:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,15 @@
 #include "rtl/ref.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
+#ifdef SOLAR_JAVA
 #include "jni.h"
+#else
+struct JNIEnv;
+struct JavaVM;
+struct JNIEnv;
+typedef int jint;
+typedef void* jobject;
+#endif
 
 namespace jvmaccess {
 
