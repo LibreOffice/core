@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:09:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 08:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX3_HPP_
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HPP_
+#include <com/sun/star/media/ZoomLevel.hpp>
 #endif
 
 #ifndef _XMLOFF_ANIM_HXX
@@ -1752,6 +1756,88 @@ void XMLShapeExport::ImpExportPluginShape(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
                 SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
             }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void XMLShapeExport::ImpExportMediaShape(
+    const uno::Reference< drawing::XShape >& xShape,
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+{
+    const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
+    if(xPropSet.is())
+    {
+        // Transformation
+        ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW,
+                                  XML_FRAME, bCreateNewline, sal_True );
+
+        // export media url
+        OUString aMediaURL;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ) ) >>= aMediaURL;
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference( aMediaURL ) );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+        rExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+
+        // export mime-type
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.star.media" ) ) );
+
+        // write plugin
+        SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), sal_True);
+
+        // export parameters
+        const OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM( "false" ) ), aTrueStr( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+
+        sal_Bool bLoop;
+        const OUString aLoopStr( RTL_CONSTASCII_USTRINGPARAM( "Loop" ) );
+        xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
+        delete( new SvXMLElementExport( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
+
+        sal_Bool bMute;
+        const OUString aMuteStr( RTL_CONSTASCII_USTRINGPARAM( "Mute" ) );
+        xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
+        delete( new SvXMLElementExport( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
+
+        sal_Int16 nVolumeDB;
+        const OUString aVolumeDBStr( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) );
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VolumeDB" ) ) ) >>= nVolumeDB;
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aVolumeDBStr );
+        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, OUString::valueOf( static_cast< sal_Int32 >( nVolumeDB ) ) );
+        delete( new SvXMLElementExport( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
+
+        media::ZoomLevel eZoom;
+        const OUString aZoomStr( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) );
+        OUString aZoomValue;
+        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Zoom" ) ) ) >>= eZoom;
+        switch( eZoom )
+        {
+            case( media::ZoomLevel_ZOOM_1_TO_4 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "25%" ) ); break;
+            case( media::ZoomLevel_ZOOM_1_TO_2 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "50%" ) ); break;
+            case( media::ZoomLevel_ORIGINAL ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "100%" ) ); break;
+            case( media::ZoomLevel_ZOOM_2_TO_1 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "200%" ) ); break;
+            case( media::ZoomLevel_ZOOM_4_TO_1 ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "400%" ) ); break;
+            case( media::ZoomLevel_FIT_TO_WINDOW ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fit" ) ); break;
+            case( media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fixedfit" ) ); break;
+            case( media::ZoomLevel_FULLSCREEN ): aZoomValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "fullscreen" ) ); break;
+
+            default:
+            break;
+        }
+
+        if( aZoomValue.getLength() )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aZoomStr );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
+            delete( new SvXMLElementExport( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True ) );
         }
     }
 }
