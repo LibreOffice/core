@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:34:19 $
+ *  last change: $Author: iha $ $Date: 2003-12-09 17:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,6 +888,7 @@ bool isFormatObjectSID( sal_Int32 nSlotID )
                 || (sal_Int32)SID_CHARMAP == nSlotID
                 || (sal_Int32)SID_TEXTEDIT == nSlotID
                 || isFormatObjectSID(nSlotID)
+                || (sal_Int32)SID_3D_VIEW == nSlotID
                 )
             {
                 return static_cast< frame::XDispatch* >( this );
@@ -1014,6 +1015,10 @@ tMakeSlotIdCommandMap m_aSlotIdCommandMap =
         else if( isFormatObjectSID(nSlotID) )
         {
             this->executeDispatch_FormatObject(nSlotID);
+        }
+        else if((sal_Int32)SID_3D_VIEW == nSlotID)
+        {
+            this->executeDispatch_RotateDiagram();
         }
     }
     else if(aCommand.equals("SaveAll"))
