@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:09:04 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 15:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     BOOL _WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMove );
     virtual void MakeAll();
 
-    const SwCntntFrm *ImplGetNextCntntFrm() const;
-    const SwCntntFrm *ImplGetPrevCntntFrm() const;
-
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
@@ -129,10 +126,6 @@ public:
     inline  BOOL    EndCurrPage( SwPaM * ) const;
     inline  BOOL    EndNextPage( SwPaM * ) const;
     inline  BOOL    EndPrevPage( SwPaM * ) const;
-    inline  SwCntntFrm *GetNextCntntFrm();
-    inline  SwCntntFrm *GetPrevCntntFrm();
-    inline  const SwCntntFrm *GetNextCntntFrm() const;
-    inline  const SwCntntFrm *GetPrevCntntFrm() const;
 
     //nMaxHeight liefert die benoetigte Hoehe,
     //bSplit sagt, obj der Absatz gesplittet werden muss.
@@ -148,36 +141,6 @@ inline SwCntntNode *SwCntntFrm::GetNode()
 inline const SwCntntNode *SwCntntFrm::GetNode() const
 {
     return (SwCntntNode*)GetDep();
-}
-
-inline const SwCntntFrm *SwCntntFrm::GetNextCntntFrm() const
-{
-    if ( GetNext() && GetNext()->IsCntntFrm() )
-        return (const SwCntntFrm*)GetNext();
-    else
-        return ImplGetNextCntntFrm();
-}
-inline const SwCntntFrm *SwCntntFrm::GetPrevCntntFrm() const
-{
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return (const SwCntntFrm*)GetPrev();
-    else
-        return ImplGetPrevCntntFrm();
-}
-//Um doppelte Implementierung zu sparen wird hier ein bischen gecasted.
-inline SwCntntFrm *SwCntntFrm::GetNextCntntFrm()
-{
-    if ( GetNext() && GetNext()->IsCntntFrm() )
-        return (SwCntntFrm*)GetNext();
-    else
-        return (SwCntntFrm*)(((const SwCntntFrm*)this)->ImplGetNextCntntFrm());
-}
-inline SwCntntFrm *SwCntntFrm::GetPrevCntntFrm()
-{
-    if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return (SwCntntFrm*)GetPrev();
-    else
-        return (SwCntntFrm*)(((const SwCntntFrm*)this)->ImplGetPrevCntntFrm());
 }
 
 inline const SwCntntFrm *SwCntntFrm::GetFollow() const

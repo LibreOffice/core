@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-19 14:32:14 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 15:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,10 @@ class SwFrm: public SwClient
     void SetDirFlags( BOOL bVert );
 
     SwFrm( SwFrm & );       //Kopieren ist nicht erlaubt.
+
+    SwCntntFrm* ImplGetNextCntntFrm() const;
+    SwCntntFrm* ImplGetPrevCntntFrm() const;
+
 protected:
     SwDrawObjs *pDrawObjs;  //Hier haengen die DrawObjs, kann 0 sein
 
@@ -780,6 +784,9 @@ public:
     inline BOOL SwFrm::IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 
+    inline  SwCntntFrm* GetNextCntntFrm() const;
+    inline  SwCntntFrm* GetPrevCntntFrm() const;
+
 #ifndef PRODUCT
     inline USHORT GetFrmId() const { return nFrmId; }
     inline USHORT GetLastFrmId() const { return nLastFrmId; }
@@ -1030,6 +1037,23 @@ inline const SwFrm *SwFrm::FindPrev() const
     else
         return ((SwFrm*)this)->_FindPrev();
 }
+
+
+inline SwCntntFrm *SwFrm::GetNextCntntFrm() const
+{
+    if ( GetNext() && GetNext()->IsCntntFrm() )
+        return (SwCntntFrm*)GetNext();
+    else
+        return ImplGetNextCntntFrm();
+}
+inline SwCntntFrm *SwFrm::GetPrevCntntFrm() const
+{
+    if ( GetPrev() && GetPrev()->IsCntntFrm() )
+        return (SwCntntFrm*)GetPrev();
+    else
+        return ImplGetPrevCntntFrm();
+}
+
 
 inline BOOL SwFrm::IsLayoutFrm() const
 {

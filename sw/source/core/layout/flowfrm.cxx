@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-08 14:48:32 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 15:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,20 @@ SwFlowFrm *SwFlowFrm::FindMaster()
     if ( rThis.IsCntntFrm() )
     {
         pCnt = (SwCntntFrm*)&rThis;
+        pCnt = pCnt->GetPrevCntntFrm();
+
         bCntnt = TRUE;
     }
     else if( rThis.IsTabFrm() )
-    {   pCnt = ((SwLayoutFrm&)rThis).ContainsCntnt();
+    {
+        pCnt = rThis.GetPrevCntntFrm();
+
+#ifndef PRODUCT
+        SwCntntFrm* pTmpCnt = ((SwLayoutFrm&)rThis).ContainsCntnt();
+        ASSERT( ! pTmpCnt || pTmpCnt->GetPrevCntntFrm() == pCnt,
+                "Two different results for the master of a table?" )
+#endif
+
         bCntnt = FALSE;
     }
     else
@@ -672,7 +682,6 @@ SwFlowFrm *SwFlowFrm::FindMaster()
         return ((SwSectionFrm&)rThis).FindSectionMaster();
     }
 
-    pCnt = pCnt->GetPrevCntntFrm();
     while ( pCnt )
     {
         if ( bCntnt )

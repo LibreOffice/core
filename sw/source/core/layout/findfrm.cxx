@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-11 16:06:26 $
+ *  last change: $Author: fme $ $Date: 2002-08-07 15:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1018,11 +1018,12 @@ BOOL SwFrm::IsMoveable() const
 
 // Achtung: Fixes in ImplGetNextCntntFrm() muessen moeglicherweise auch in
 // die weiter oben stehende Methode lcl_NextFrm(..) eingepflegt werden
-const SwCntntFrm *SwCntntFrm::ImplGetNextCntntFrm() const
+SwCntntFrm* SwFrm::ImplGetNextCntntFrm() const
 {
     const SwFrm *pFrm = this;
-    const SwCntntFrm *pCntntFrm = 0;
-    FASTBOOL bGoingUp = FALSE;
+    // #100926#
+    SwCntntFrm *pCntntFrm = 0;
+    FASTBOOL bGoingUp = ! IsCntntFrm();
     do {
         const SwFrm *p;
         FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
@@ -1039,11 +1040,12 @@ const SwCntntFrm *SwCntntFrm::ImplGetNextCntntFrm() const
 
 }
 
-const SwCntntFrm *SwCntntFrm::ImplGetPrevCntntFrm() const
+SwCntntFrm* SwFrm::ImplGetPrevCntntFrm() const
 {
     const SwFrm *pFrm = this;
-    const SwCntntFrm *pCntntFrm = 0;
-    FASTBOOL bGoingUp = FALSE;
+    SwCntntFrm *pCntntFrm = 0;
+    // #100926#
+    FASTBOOL bGoingUp = ! IsCntntFrm();
     do {
         const SwFrm *p;
         FASTBOOL bGoingBack = FALSE, bGoingDown = FALSE;
