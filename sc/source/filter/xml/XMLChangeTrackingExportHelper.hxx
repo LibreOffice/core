@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 14:51:12 $
+ *  last change: $Author: sab $ $Date: 2001-01-17 09:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,10 @@ class ScChangeTrackingExportHelper
 
     rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
 
-    void WriteChangeInfo(ScChangeAction* pAction);
+    void WriteBigRange(const ScChangeAction* pAction);
+    void WriteChangeInfo(const ScChangeAction* pAction);
+    void WriteDepending(const ScChangeAction* pDependAction);
+    void WriteDependings(ScChangeAction* pAction);
 
     void WriteEmptyCell();
     void WriteValueCell(const ScBaseCell* pCell);
