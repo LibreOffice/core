@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:11:52 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 10:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,7 @@ public:
     sal_Bool bStreamReady: 1;
     sal_Bool bIsStorage: 1;
     sal_Bool bUseInteractionHandler: 1;
+    sal_Bool bIsDiskSpannedJAR: 1;
 
     sal_uInt16       nPrio;
 
@@ -649,7 +650,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
     bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ), bUseInteractionHandler( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
-    bDontCreateCancellable( sal_False ), pTempDir( NULL ),
+    bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
 {
     aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
@@ -1099,43 +1100,51 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     if ( aStorage.Is() || bTriedStorage )
         return aStorage;
 
-    BOOL bResetSorage = FALSE;
-    SvStream *pStream = NULL;
-
     String aStorageName;
     if ( pImp->pTempFile )
     {
+        // open storage with the URL of the tempfile
         aStorageName = pImp->pTempFile->GetURL();
-        pStream = GetOutStream();
-    }
-    else
-    {
-        aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-        pStream = GetInStream();
-        if ( pStream )
-        {
-            pStream->GetLockBytes()->SetSynchronMode( sal_True );
-            if ( !pImp->aDoneLink.IsSet() )
-                DownLoad();
-        }
-    }
-
-    if( !pStream || ( GetError() != SVSTREAM_OK ) )
-        return aStorage;
-
-    bTriedStorage = sal_True;
-
-    if ( pImp->pTempFile && pOutStream )
-    {
-        DELETEZ( pOutStream );
+        CloseOutStream();
         aStorage = new SvStorage( bUCBStorage, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
     }
     else
     {
-        aStorage = new SvStorage( pStream, FALSE );
-        if ( !aStorage->GetName().Len() )
-            aStorage->SetName( aStorageName );
+        aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        GetInStream();
+        if ( pInStream )
+        {
+            pInStream->GetLockBytes()->SetSynchronMode( sal_True );
+            if( UCBStorage::IsDiskSpannedFile( pInStream ) )
+            {
+                // packed remote files can't be opened outside the storage, so they must be reopened
+                // inside the storage even if it is expensive
+                pImp->bIsDiskSpannedJAR = TRUE;
+                SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
+                CloseInStream();
+                aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                SetFilter( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat(), nMust, nDont ) );
+            }
+            else
+            {
+                // download the stream ( or at least start the download )
+                if ( !pImp->aDoneLink.IsSet() )
+                    DownLoad();
+
+                // create a storage on the stream
+                aStorage = new SvStorage( pInStream, FALSE );
+                if ( !aStorage->GetName().Len() )
+                    aStorage->SetName( aStorageName );
+            }
+        }
+        else
+            return aStorage;
     }
+
+    if( GetError() != SVSTREAM_OK )
+        return aStorage;
+
+    bTriedStorage = sal_True;
 
     if ( aStorage->GetError() == SVSTREAM_OK )
         GetVersionList();
@@ -1147,6 +1156,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
     SFX_ITEMSET_ARG( pSet, pVersion, SfxInt16Item, SID_VERSION, sal_False);
 
+    BOOL bResetStorage = FALSE;
     if ( pVersion )
     {
         // Alle verf"ugbaren Versionen einlesen
@@ -1212,28 +1222,28 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                     DELETEZ( pImp->pVersions );
                 }
                 else
-                    bResetSorage = TRUE;
+                    bResetStorage = TRUE;
             }
             else
-                bResetSorage = TRUE;
+                bResetStorage = TRUE;
         }
         else
-            bResetSorage = TRUE;
+            bResetStorage = TRUE;
     }
 
     if ( aStorage.Is() )
     {
         if( aStorage->GetError() != SVSTREAM_OK )
-            bResetSorage = TRUE;
+            bResetStorage = TRUE;
         else if ( GetFilter() )
             aStorage->SetVersion( GetFilter()->GetVersion() );
     }
 
-    if ( bResetSorage )
+    if ( bResetStorage )
     {
         aStorage.Clear();
-        if ( pStream )
-            pStream->Seek( 0L );
+        if ( pInStream )
+            pInStream->Seek( 0L );
     }
 
     pImp->bIsStorage = aStorage.Is();
@@ -2382,6 +2392,9 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
 {
     if ( !pImp->pVersions && GetStorage() )
     {
+        if ( pImp->bIsDiskSpannedJAR )
+            return NULL;
+
         SvStorageStreamRef aStream =
             GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
         if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )

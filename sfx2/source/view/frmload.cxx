@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:14:15 $
+ *  last change: $Author: mba $ $Date: 2001-08-21 10:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             // remember index of property to get access to it later
             nIndexOfFilterName = nProperty;
         }
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InpuStream")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
             nIndexOfReadOnlyFlag = nProperty;
@@ -572,11 +572,15 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         else
             aMedium.GetInStream();
 
+        // special filters that can or must (!) be detected inside the medium without further investigation
+        // f.e. disk spanned jar files
+        pFilter = aMedium.GetFilter();
+
         // remember input stream and put it into the descriptor later
         xStream = aMedium.GetInputStream();
         bReadOnly = aMedium.IsReadOnly();
 
-        if ( aMedium.GetErrorCode() == ERRCODE_NONE )
+        if ( aMedium.GetErrorCode() == ERRCODE_NONE && !aMedium.GetFilter() )
         {
             // check the filter detected so far ( if any )
             ErrCode nErr = ERRCODE_ABORT;
