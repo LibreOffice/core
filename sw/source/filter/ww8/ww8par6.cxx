@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:21:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3877,36 +3877,6 @@ void SwWW8ImplReader::AdjustStyleTabStops(long nLeft, SwWW8StyInf *pWWSty)
         if (sw::util::AdjustTabs(aTStop, nOldLeft, nLeft))
             pWWSty->pFmt->SetAttr(aTStop);
     }
-}
-
-bool lcl_HasExplicitLeft(const WW8RStyle *pStyles, bool bVer67)
-{
-    if (pStyles)
-    {
-        if (bVer67)
-            return pStyles->HasParaSprm(17);
-        else
-        {
-            return (
-                    pStyles->HasParaSprm(0x840F) ||
-                    pStyles->HasParaSprm(0x845E)
-                   );
-        }
-    }
-    return false;
-}
-
-bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
-{
-    WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : 0;
-    if (pPap)
-    {
-        if (bVer67)
-            return pPap->HasSprm(17);
-        else
-            return (pPap->HasSprm(0x840F) || pPap->HasSprm(0x845E));
-    }
-    return false;
 }
 
 // Sprm 16, 17
