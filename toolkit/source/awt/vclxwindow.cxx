@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 10:32:05 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,20 +174,24 @@ VCLXWindow::VCLXWindow()
 VCLXWindow::~VCLXWindow()
 {
     if ( GetWindow() )
+    {
         GetWindow()->SetWindowPeer( NULL, NULL );
+        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+    }
 }
 
 void VCLXWindow::SetWindow( Window* pWindow )
 {
     if ( GetWindow() )
-        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventHdl ) );
+        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
 
     SetOutputDevice( pWindow );
 
-    pWindow->AddEventListener( LINK( this, VCLXWindow, WindowEventHdl ) );
+    if ( GetWindow() )
+    GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
 }
 
-IMPL_LINK( VCLXWindow, WindowEventHdl, VclSimpleEvent*, pEvent )
+IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )

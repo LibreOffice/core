@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-15 09:00:24 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,14 +306,11 @@ private:
     ActionListenerMultiplexer   maActionListeners;
 
 protected:
-    DECL_LINK(      ClickHdl, Button* );
     void            ImplUpdateImage( sal_Bool bGetNewImage );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
 public:
                     VCLXButton();
-                    ~VCLXButton();
-
-    void            SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -408,13 +405,11 @@ private:
     ::rtl::OUString             maActionCommand;
 
 protected:
-    DECL_LINK(      ClickHdl, CheckBox* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
                     VCLXCheckBox();
-                    ~VCLXCheckBox();
-
-    void    SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -465,16 +460,12 @@ private:
     ::rtl::OUString             maActionCommand;
 
 protected:
-    DECL_LINK(      ClickHdl, RadioButton* );
-    DECL_LINK(      ToggleHdl, RadioButton* );
     void            ImplClickedOrToggled( BOOL bToggled );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
 
 public:
                     VCLXRadioButton();
-                    ~VCLXRadioButton();
-
-    void    SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -610,14 +601,11 @@ private:
     AdjustmentListenerMultiplexer maAdjustmentListeners;
 
 protected:
-    DECL_LINK(      ScrollHdl, ScrollBar* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
                     VCLXScrollBar();
-                    ~VCLXScrollBar();
-
-    void    SetWindow( Window* pWindow );
-
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
@@ -665,13 +653,12 @@ private:
     TextListenerMultiplexer maTextListeners;
 
 protected:
-    DECL_LINK(      ModifyHdl, Edit* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
                     VCLXEdit();
-                    ~VCLXEdit();
 
-    void    SetWindow( Window* pWindow );
     TextListenerMultiplexer&    GetTextListeners() { return maTextListeners; }
 
     // ::com::sun::star::uno::XInterface
@@ -730,14 +717,11 @@ private:
     ItemListenerMultiplexer     maItemListeners;
 
 protected:
-    DECL_LINK(          SelectHdl, ListBox* );
-    DECL_LINK(          DoubleClickHdl, ListBox* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
                         VCLXListBox();
-                        ~VCLXListBox();
-
-    void        SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -801,14 +785,11 @@ private:
     ItemListenerMultiplexer     maItemListeners;
 
 protected:
-    DECL_LINK(          SelectHdl, ComboBox* );
-    DECL_LINK(          DoubleClickHdl, ComboBox* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
                         VCLXComboBox();
-                        ~VCLXComboBox();
-
-    void        SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -860,16 +841,10 @@ private:
     SpinListenerMultiplexer maSpinListeners;
 
 protected:
-    DECL_LINK(      SpinUpHdl, SpinField* );
-    DECL_LINK(      SpinDownHdl, SpinField* );
-    DECL_LINK(      SpinFirstHdl, SpinField* );
-    DECL_LINK(      SpinLastHdl, SpinField* );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
 public:
                     VCLXSpinField();
-                    ~VCLXSpinField();
-
-    void            SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-15 09:00:58 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,6 @@ VCLXButton::VCLXButton() : maActionListeners( *this )
 {
 }
 
-VCLXButton::~VCLXButton()
-{
-    PushButton* pButton = (PushButton*) GetWindow();
-    if ( pButton )
-        pButton->SetClickHdl( Link() );
-}
-
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -105,21 +98,6 @@ IMPL_XTYPEPROVIDER_START( VCLXButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
-
-void VCLXButton::SetWindow( Window* pWindow )
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    PushButton* pPrevButton = (PushButton*) GetWindow();
-    if ( pPrevButton )
-        pPrevButton->SetClickHdl( Link() );
-
-    PushButton* pNewButton = (PushButton*) pWindow;
-    if ( pNewButton )
-        pNewButton->SetClickHdl( LINK( this, VCLXButton, ClickHdl ) );
-
-    VCLXWindow::SetWindow( pWindow );
-}
 
 void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -348,16 +326,15 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     return aProp;
 }
 
-IMPL_LINK( VCLXButton, ClickHdl, Button*, EMPTYARG )
+void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( GetWindow() && maActionListeners.getLength() )
+    if ( ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK ) && maActionListeners.getLength() )
     {
         ::com::sun::star::awt::ActionEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.ActionCommand = maActionCommand;
         maActionListeners.actionPerformed( aEvent );
     }
-    return 1;
 }
 
 //  ----------------------------------------------------
@@ -534,26 +511,6 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 //  ----------------------------------------------------
 VCLXCheckBox::VCLXCheckBox() : maItemListeners( *this ), maActionListeners( *this )
 {
-}
-
-VCLXCheckBox::~VCLXCheckBox()
-{
-    CheckBox* pBox = (CheckBox*) GetWindow();
-    if ( pBox )
-        pBox->SetClickHdl( Link() );
-}
-
-void VCLXCheckBox::SetWindow( Window* pWindow )
-{
-    CheckBox* pPrevCheckBox = (CheckBox*) GetWindow();
-    if ( pPrevCheckBox )
-        pPrevCheckBox->SetClickHdl( Link() );
-
-    CheckBox* pNewCheckBox = (CheckBox*) pWindow;
-    if ( pNewCheckBox )
-        pNewCheckBox->SetClickHdl( LINK( this, VCLXCheckBox, ClickHdl ) );
-
-    VCLXWindow::SetWindow( pWindow );
 }
 
 // ::com::sun::star::uno::XInterface
@@ -742,28 +699,30 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
     return aProp;
 }
 
-IMPL_LINK( VCLXCheckBox, ClickHdl, CheckBox*, EMPTYARG )
+void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    CheckBox* pCheckBox = (CheckBox*)GetWindow();
-    if ( pCheckBox )
+    if ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK )
     {
-        if ( maItemListeners.getLength() )
+        CheckBox* pCheckBox = (CheckBox*)GetWindow();
+        if ( pCheckBox )
         {
-            ::com::sun::star::awt::ItemEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.Highlighted = sal_False;
-            aEvent.Selected = pCheckBox->GetState();
-            maItemListeners.itemStateChanged( aEvent );
-        }
-        if ( maActionListeners.getLength() )
-        {
-            ::com::sun::star::awt::ActionEvent aEvent;
-            aEvent.Source = (::cppu::OWeakObject*)this;
-            aEvent.ActionCommand = maActionCommand;
-            maActionListeners.actionPerformed( aEvent );
+            if ( maItemListeners.getLength() )
+            {
+                ::com::sun::star::awt::ItemEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.Highlighted = sal_False;
+                aEvent.Selected = pCheckBox->GetState();
+                maItemListeners.itemStateChanged( aEvent );
+            }
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.ActionCommand = maActionCommand;
+                maActionListeners.actionPerformed( aEvent );
+            }
         }
     }
-    return 1;
 }
 
 //  ----------------------------------------------------
@@ -771,35 +730,6 @@ IMPL_LINK( VCLXCheckBox, ClickHdl, CheckBox*, EMPTYARG )
 //  ----------------------------------------------------
 VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners( *this )
 {
-}
-
-VCLXRadioButton::~VCLXRadioButton()
-{
-    RadioButton* pBox = (RadioButton*) GetWindow();
-    if ( pBox )
-    {
-        pBox->SetClickHdl( Link() );
-        pBox->SetToggleHdl( Link() );
-    }
-}
-
-void VCLXRadioButton::SetWindow( Window* pWindow )
-{
-    RadioButton* pPrevRadioButton = (RadioButton*) GetWindow();
-    if ( pPrevRadioButton )
-    {
-        pPrevRadioButton->SetClickHdl( Link() );
-        pPrevRadioButton->SetToggleHdl( Link() );
-    }
-
-    RadioButton* pNewRadioButton = (RadioButton*) pWindow;
-    if ( pNewRadioButton )
-    {
-        pNewRadioButton->SetClickHdl( LINK( this, VCLXRadioButton, ClickHdl ) );
-        pNewRadioButton->SetToggleHdl( LINK( this, VCLXRadioButton, ToggleHdl ) );
-    }
-
-    VCLXWindow::SetWindow( pWindow );
 }
 
 // ::com::sun::star::uno::XInterface
@@ -985,23 +915,23 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
     return AWTSize(aSz);
 }
 
-IMPL_LINK( VCLXRadioButton, ClickHdl, RadioButton*, EMPTYARG )
+void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    if ( GetWindow() && maActionListeners.getLength() )
+    if ( rVclWindowEvent.GetId() == VCLEVENT_BUTTON_CLICK )
     {
-        ::com::sun::star::awt::ActionEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.ActionCommand = maActionCommand;
-        maActionListeners.actionPerformed( aEvent );
+        if ( maActionListeners.getLength() )
+        {
+            ::com::sun::star::awt::ActionEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            aEvent.ActionCommand = maActionCommand;
+            maActionListeners.actionPerformed( aEvent );
+        }
+        ImplClickedOrToggled( FALSE );
     }
-    ImplClickedOrToggled( FALSE );
-    return 1;
-}
-
-IMPL_LINK( VCLXRadioButton, ToggleHdl, RadioButton*, EMPTYARG )
-{
-    ImplClickedOrToggled( TRUE );
-    return 1;
+    else if ( rVclWindowEvent.GetId() == VCLEVENT_RADIOBUTTON_TOGGLE )
+    {
+        ImplClickedOrToggled( TRUE );
+    }
 }
 
 void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
@@ -1025,42 +955,6 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
 //  ----------------------------------------------------
 VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 {
-}
-
-VCLXSpinField::~VCLXSpinField()
-{
-    SpinField* pSpinField = (SpinField*) GetWindow();
-    if ( pSpinField )
-    {
-        pSpinField->SetUpHdl( Link() );
-        pSpinField->SetDownHdl( Link() );
-        pSpinField->SetFirstHdl( Link() );
-        pSpinField->SetLastHdl( Link() );
-    }
-}
-
-void VCLXSpinField::SetWindow( Window* pWindow )
-{
-    SpinField* pPrevSpinField = (SpinField*) GetWindow();
-    if ( pPrevSpinField )
-    {
-        pPrevSpinField->SetUpHdl( Link() );
-        pPrevSpinField->SetDownHdl( Link() );
-        pPrevSpinField->SetFirstHdl( Link() );
-        pPrevSpinField->SetLastHdl( Link() );
-    }
-
-    SpinField* pNewSpinField = (SpinField*) pWindow;
-
-    if ( pNewSpinField )
-    {
-        pNewSpinField->SetUpHdl( LINK( this, VCLXSpinField, SpinUpHdl ) );
-        pNewSpinField->SetDownHdl( LINK( this, VCLXSpinField, SpinUpHdl ) );
-        pNewSpinField->SetFirstHdl( LINK( this, VCLXSpinField, SpinUpHdl ) );
-        pNewSpinField->SetLastHdl( LINK( this, VCLXSpinField, SpinUpHdl ) );
-    }
-
-    VCLXEdit::SetWindow( pWindow );
 }
 
 // ::com::sun::star::uno::XInterface
@@ -1142,54 +1036,30 @@ void VCLXSpinField::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno
     }
 }
 
-IMPL_LINK( VCLXSpinField, SpinUpHdl, SpinField*, EMPTYARG )
+void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    SpinField* pSpinField = (SpinField*)GetWindow();
-    if ( pSpinField && maSpinListeners.getLength() )
+    if ( ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_UP ) || ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_DOWN ) ||
+         ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_FIRST ) || ( rVclWindowEvent.GetId() == VCLEVENT_SPINFIELD_LAST ) )
     {
-        ::com::sun::star::awt::SpinEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        maSpinListeners.up( aEvent );
-    }
-    return 1;
-}
+        if ( maSpinListeners.getLength() )
+        {
+            ::com::sun::star::awt::SpinEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            switch ( rVclWindowEvent.GetId() )
+            {
+                case VCLEVENT_SPINFIELD_UP:     maSpinListeners.up( aEvent );
+                                                break;
+                case VCLEVENT_SPINFIELD_DOWN:   maSpinListeners.down( aEvent );
+                                                break;
+                case VCLEVENT_SPINFIELD_FIRST:  maSpinListeners.first( aEvent );
+                                                break;
+                case VCLEVENT_SPINFIELD_LAST:   maSpinListeners.last( aEvent );
+                                                break;
+            }
 
-IMPL_LINK( VCLXSpinField, SpinDownHdl, SpinField*, EMPTYARG )
-{
-    SpinField* pSpinField = (SpinField*)GetWindow();
-    if ( pSpinField && maSpinListeners.getLength() )
-    {
-        ::com::sun::star::awt::SpinEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        maSpinListeners.down( aEvent );
+        }
     }
-    return 1;
 }
-
-IMPL_LINK( VCLXSpinField, SpinFirstHdl, SpinField*, EMPTYARG )
-{
-    SpinField* pSpinField = (SpinField*)GetWindow();
-    if ( pSpinField && maSpinListeners.getLength() )
-    {
-        ::com::sun::star::awt::SpinEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        maSpinListeners.first( aEvent );
-    }
-    return 1;
-}
-
-IMPL_LINK( VCLXSpinField, SpinLastHdl, SpinField*, EMPTYARG )
-{
-    SpinField* pSpinField = (SpinField*)GetWindow();
-    if ( pSpinField && maSpinListeners.getLength() )
-    {
-        ::com::sun::star::awt::SpinEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        maSpinListeners.last( aEvent );
-    }
-    return 1;
-}
-
 
 
 //  ----------------------------------------------------
@@ -1199,35 +1069,6 @@ VCLXListBox::VCLXListBox()
     : maItemListeners( *this ),
       maActionListeners( *this )
 {
-}
-
-VCLXListBox::~VCLXListBox()
-{
-    ListBox* pBox = (ListBox*) GetWindow();
-    if ( pBox )
-    {
-        pBox->SetSelectHdl( Link() );
-        pBox->SetDoubleClickHdl( Link() );
-    }
-}
-
-void VCLXListBox::SetWindow( Window* pWindow )
-{
-    ListBox* pPrevListBox = (ListBox*) GetWindow();
-    if ( pPrevListBox )
-    {
-        pPrevListBox->SetSelectHdl( Link() );
-        pPrevListBox->SetDoubleClickHdl( Link() );
-    }
-
-    ListBox* pNewListBox = (ListBox*) pWindow;
-    if ( pNewListBox )
-    {
-        pNewListBox->SetSelectHdl( LINK( this, VCLXListBox, SelectHdl ) );
-        pNewListBox->SetDoubleClickHdl( LINK( this, VCLXListBox, DoubleClickHdl ) );
-    }
-
-    VCLXWindow::SetWindow( pWindow );
 }
 
 // ::com::sun::star::uno::XInterface
@@ -1488,16 +1329,19 @@ void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::R
         pBox->SetTopEntry( nEntry );
 }
 
-IMPL_LINK( VCLXListBox, SelectHdl, ListBox*, EMPTYARG )
+void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ListBox* pListBox = (ListBox*)GetWindow();
-    if ( pListBox )
+    if ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_SELECT )
     {
+        ListBox* pListBox = (ListBox*)GetWindow();
         sal_Bool bDropDown = ( pListBox->GetStyle() & WB_DROPDOWN ) ? sal_True : sal_False;
-        if ( bDropDown )
+        if ( bDropDown && maActionListeners.getLength() )
         {
             // Bei DropDown den ActionListener rufen...
-            DoubleClickHdl( pListBox );
+            ::com::sun::star::awt::ActionEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            aEvent.ActionCommand = pListBox->GetSelectEntry();
+            maActionListeners.actionPerformed( aEvent );
         }
 
         if ( maItemListeners.getLength() )
@@ -1513,20 +1357,13 @@ IMPL_LINK( VCLXListBox, SelectHdl, ListBox*, EMPTYARG )
             maItemListeners.itemStateChanged( aEvent );
         }
     }
-    return 1;
-}
-
-IMPL_LINK( VCLXListBox, DoubleClickHdl, ListBox*, EMPTYARG )
-{
-    ListBox* pListBox = (ListBox*)GetWindow();
-    if ( pListBox && maActionListeners.getLength() )
+    else if ( ( rVclWindowEvent.GetId() == VCLEVENT_LISTBOX_DOUBLECLICK ) && maActionListeners.getLength() )
     {
         ::com::sun::star::awt::ActionEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.ActionCommand = pListBox->GetSelectEntry();
+        aEvent.ActionCommand = ((ListBox*)GetWindow())->GetSelectEntry();
         maActionListeners.actionPerformed( aEvent );
     }
-    return 1;
 }
 
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
@@ -1988,13 +1825,6 @@ VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 {
 }
 
-VCLXScrollBar::~VCLXScrollBar()
-{
-    ScrollBar* pBox = (ScrollBar*) GetWindow();
-    if ( pBox )
-        pBox->SetScrollHdl( Link() );
-}
-
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXScrollBar::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2008,19 +1838,6 @@ IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XScrollBar>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
-
-void VCLXScrollBar::SetWindow( Window* pWindow )
-{
-    ScrollBar* pPrevScrollBar = (ScrollBar*) GetWindow();
-    if ( pPrevScrollBar )
-        pPrevScrollBar->SetScrollHdl( Link() );
-
-    ScrollBar* pNewScrollBar = (ScrollBar*) pWindow;
-    if ( pNewScrollBar )
-        pNewScrollBar->SetScrollHdl( LINK( this, VCLXScrollBar, ScrollHdl ) );
-
-    VCLXWindow::SetWindow( pWindow );
-}
 
 // ::com::sun::star::lang::XComponent
 void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -2315,11 +2132,12 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
     return aProp;
 }
 
-IMPL_LINK( VCLXScrollBar, ScrollHdl, ScrollBar*, EMPTYARG )
+void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
-    if ( pScrollBar && maAdjustmentListeners.getLength() )
+    if ( ( rVclWindowEvent.GetId() == VCLEVENT_SCROLLBAR_SCROLL ) && maAdjustmentListeners.getLength() )
     {
+        ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
+
         ::com::sun::star::awt::AdjustmentEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         aEvent.Value = pScrollBar->GetThumbPos();
@@ -2341,9 +2159,7 @@ IMPL_LINK( VCLXScrollBar, ScrollHdl, ScrollBar*, EMPTYARG )
 
         maAdjustmentListeners.adjustmentValueChanged( aEvent );
     }
-    return 1;
 }
-
 
 //  ----------------------------------------------------
 //  class VCLXEdit
@@ -2351,26 +2167,6 @@ IMPL_LINK( VCLXScrollBar, ScrollHdl, ScrollBar*, EMPTYARG )
 
 VCLXEdit::VCLXEdit() : maTextListeners( *this )
 {
-}
-
-VCLXEdit::~VCLXEdit()
-{
-    Edit* pBox = (Edit*) GetWindow();
-    if ( pBox )
-        pBox->SetModifyHdl( Link() );
-}
-
-void VCLXEdit::SetWindow( Window* pWindow )
-{
-    Edit* pPrevEdit = (Edit*) GetWindow();
-    if ( pPrevEdit )
-        pPrevEdit->SetModifyHdl( Link() );
-
-    Edit* pNewEdit = (Edit*) pWindow;
-    if ( pNewEdit )
-        pNewEdit->SetModifyHdl( LINK( this, VCLXEdit, ModifyHdl ) );
-
-    VCLXWindow::SetWindow( pWindow );
 }
 
 // ::com::sun::star::uno::XInterface
@@ -2424,7 +2220,12 @@ void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::u
 
         // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
         // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
-        ModifyHdl( NULL );
+        if ( GetTextListeners().getLength() )
+        {
+            ::com::sun::star::awt::TextEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            GetTextListeners().textChanged( aEvent );
+        }
     }
 }
 
@@ -2665,16 +2466,14 @@ void VCLXEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(:
         nCols = pEdit->GetMaxVisChars();
 }
 
-IMPL_LINK( VCLXEdit, ModifyHdl, Edit*, EMPTYARG )
+void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    Edit* pEdit = (Edit*)GetWindow();
-    if ( pEdit && GetTextListeners().getLength() )
+    if ( ( rVclWindowEvent.GetId() == VCLEVENT_EDIT_MODIFY ) && GetTextListeners().getLength() )
     {
         ::com::sun::star::awt::TextEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
         GetTextListeners().textChanged( aEvent );
     }
-    return 1;
 }
 
 //  ----------------------------------------------------
@@ -2684,16 +2483,6 @@ VCLXComboBox::VCLXComboBox()
     : maItemListeners( *this ),
       maActionListeners( *this )
 {
-}
-
-VCLXComboBox::~VCLXComboBox()
-{
-    ComboBox* pBox = (ComboBox*) GetWindow();
-    if ( pBox )
-    {
-        pBox->SetSelectHdl( Link() );
-        pBox->SetDoubleClickHdl( Link() );
-    }
 }
 
 // ::com::sun::star::uno::XInterface
@@ -2710,25 +2499,6 @@ IMPL_XTYPEPROVIDER_START( VCLXComboBox )
     VCLXEdit::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-
-void VCLXComboBox::SetWindow( Window* pWindow )
-{
-    ComboBox* pPrevComboBox = (ComboBox*) GetWindow();
-    if ( pPrevComboBox )
-    {
-        pPrevComboBox->SetSelectHdl( Link() );
-        pPrevComboBox->SetDoubleClickHdl( Link() );
-    }
-
-    ComboBox* pNewComboBox = (ComboBox*) pWindow;
-    if ( pNewComboBox )
-    {
-        pNewComboBox->SetSelectHdl( LINK( this, VCLXComboBox, SelectHdl ) );
-        pNewComboBox->SetDoubleClickHdl( LINK( this, VCLXComboBox, DoubleClickHdl ) );
-    }
-
-    VCLXEdit::SetWindow( pWindow );
-}
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2951,34 +2721,30 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
     return aProp;
 }
 
-IMPL_LINK( VCLXComboBox, SelectHdl, ComboBox*, EMPTYARG )
+void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ComboBox* pComboBox = (ComboBox*)GetWindow();
-    if ( pComboBox && !pComboBox->IsTravelSelect() && maItemListeners.getLength() )
+    if ( ( rVclWindowEvent.GetId() == VCLEVENT_COMBOBOX_SELECT ) && maItemListeners.getLength() )
     {
-        ::com::sun::star::awt::ItemEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.Highlighted = sal_False;
+        ComboBox* pComboBox = (ComboBox*)GetWindow();
+        if ( !pComboBox->IsTravelSelect() )
+        {
+            ::com::sun::star::awt::ItemEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            aEvent.Highlighted = sal_False;
 
-        // Bei Mehrfachselektion 0xFFFF, sonst die ID
-        aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
+            // Bei Mehrfachselektion 0xFFFF, sonst die ID
+            aEvent.Selected = pComboBox->GetEntryPos( pComboBox->GetText() );
 
-        maItemListeners.itemStateChanged( aEvent );
+            maItemListeners.itemStateChanged( aEvent );
+        }
     }
-    return 1;
-}
-
-IMPL_LINK( VCLXComboBox, DoubleClickHdl, ComboBox*, EMPTYARG )
-{
-    ComboBox* pComboBox = (ComboBox*)GetWindow();
-    if ( pComboBox && maActionListeners.getLength() )
+    else if ( ( rVclWindowEvent.GetId() == VCLEVENT_COMBOBOX_DOUBLECLICK ) && maActionListeners.getLength() )
     {
         ::com::sun::star::awt::ActionEvent aEvent;
         aEvent.Source = (::cppu::OWeakObject*)this;
 //      aEvent.ActionCommand = ...;
         maActionListeners.actionPerformed( aEvent );
     }
-    return 1;
 }
 
 ::com::sun::star::awt::Size VCLXComboBox::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)

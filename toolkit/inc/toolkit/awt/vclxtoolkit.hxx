@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 06:50:06 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

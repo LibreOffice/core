@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 10:32:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,75 @@
 
 #include <tools/debug.hxx>
 
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > CreateXWindow( Window* pWindow )
+{
+    switch ( pWindow->GetType() )
+    {
+        case WINDOW_IMAGERADIOBUTTON:
+        case WINDOW_IMAGEBUTTON:
+        case WINDOW_SPINBUTTON:
+        case WINDOW_MENUBUTTON:
+        case WINDOW_MOREBUTTON:
+        case WINDOW_PUSHBUTTON:
+        case WINDOW_HELPBUTTON:
+        case WINDOW_OKBUTTON:
+        case WINDOW_CANCELBUTTON:   return new VCLXButton;
+        case WINDOW_CHECKBOX:       return new VCLXCheckBox;
+        case WINDOW_COMBOBOX:       return new VCLXComboBox;
+        case WINDOW_SPINFIELD:
+        case WINDOW_NUMERICFIELD:
+        case WINDOW_CURRENCYFIELD:  return new VCLXNumericField;
+        case WINDOW_DATEFIELD:      return new VCLXDateField;
+        case WINDOW_EDIT:           return new VCLXEdit;
+        case WINDOW_MESSBOX:
+        case WINDOW_INFOBOX:
+        case WINDOW_WARNINGBOX:
+        case WINDOW_QUERYBOX:
+        case WINDOW_ERRORBOX:       return new VCLXMessageBox;
+        case WINDOW_FIXEDIMAGE:     return new VCLXImageControl;
+        case WINDOW_FIXEDTEXT:      return new VCLXFixedText;
+        case WINDOW_MULTILISTBOX:
+        case WINDOW_LISTBOX:        return new VCLXListBox;
+        case WINDOW_LONGCURRENCYFIELD:  return new VCLXCurrencyField;
+        case WINDOW_DIALOG:
+        case WINDOW_MODALDIALOG:
+        case WINDOW_MODELESSDIALOG: return new VCLXDialog;
+        case WINDOW_PATTERNFIELD:   return new VCLXPatternField;
+        case WINDOW_RADIOBUTTON:    return new VCLXRadioButton;
+        case WINDOW_SCROLLBAR:      return new VCLXScrollBar;
+        case WINDOW_TIMEFIELD:      return new VCLXTimeField;
+
+        case WINDOW_SYSWINDOW:
+        case WINDOW_WORKWINDOW:
+        case WINDOW_DOCKINGWINDOW:  return new VCLXTopWindow;
+
+        case WINDOW_WINDOW:
+        case WINDOW_FLOATINGWINDOW:
+        case WINDOW_TABPAGE:        return new VCLXContainer;
+
+        // case WINDOW_FIXEDLINE:
+        // case WINDOW_FIXEDBITMAP:
+        // case WINDOW_DATEBOX:
+        // case WINDOW_GROUPBOX:
+        // case WINDOW_LONGCURRENCYBOX:
+        // case WINDOW_METRICBOX:
+        // case WINDOW_SPLITTER:
+        // case WINDOW_METRICFIELD:
+        // case WINDOW_STATUSBAR:
+        // case WINDOW_TABDIALOG:
+        // case WINDOW_TABCONTROL:
+        // case WINDOW_NUMERICBOX:
+        // case WINDOW_TRISTATEBOX:
+        // case WINDOW_TIMEBOX:
+        // case WINDOW_TOOLBOX:
+        // case WINDOW_SPLITWINDOW:
+        // case WINDOW_SCROLLBARBOX:
+        // case WINDOW_PATTERNBOX:
+        // case WINDOW_CURRENCYBOX:
+        default:                    return new VCLXWindow;
+    }
+}
+
 //  ----------------------------------------------------
 //  class UnoWrapper
 //  ----------------------------------------------------
@@ -116,28 +185,7 @@ void UnoWrapper::Destroy()
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( !xPeer.is() && bCreate )
     {
-        ::com::sun::star::awt::XWindowPeer* pPeer = NULL;
-        // Basis-Component erzeugen...
-        WindowType eType = pWindow->GetType();
-        if ( ( eType == WINDOW_TABPAGE ) ||
-            ( eType == WINDOW_WINDOW ) ||
-            ( eType == WINDOW_FLOATINGWINDOW ) )
-        {
-            pPeer = new VCLXContainer;
-        }
-        else if ( ( eType == WINDOW_SYSWINDOW ) || ( eType == WINDOW_WORKWINDOW ) || eType == WINDOW_DOCKINGWINDOW )
-        {
-            pPeer = new VCLXTopWindow;
-        }
-        else if ( ( eType == WINDOW_DIALOG ) || ( eType == WINDOW_MODALDIALOG ) || ( eType == WINDOW_MODELESSDIALOG ) )
-        {
-            pPeer = new VCLXDialog;
-        }
-        else
-        {
-            pPeer = new VCLXWindow;
-        }
-        xPeer = pPeer;
+        xPeer = CreateXWindow( pWindow );
         SetWindowInterface( pWindow, xPeer );
     }
     return xPeer;

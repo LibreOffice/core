@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 10:31:24 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ private:
 
 protected:
     Size            ImplCalcWindowSize( const Size& rOutSz ) const;
-    DECL_LINK(      WindowEventHdl, VclSimpleEvent* );
+    DECL_LINK(      WindowEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 

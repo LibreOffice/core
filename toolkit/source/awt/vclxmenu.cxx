@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,11 @@ VCLXMenu::~VCLXMenu()
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
         delete pRef;
     }
-    delete mpMenu;
+    if ( mpMenu )
+    {
+        mpMenu->RemoveEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
+        delete mpMenu;
+    }
 }
 
 void VCLXMenu::ImplCreateMenu( sal_Bool bPopup )
@@ -98,59 +102,77 @@ void VCLXMenu::ImplCreateMenu( sal_Bool bPopup )
     else
         mpMenu = new MenuBar;
 
-    mpMenu->SetSelectHdl( LINK( this, VCLXMenu, SelectHdl ) );
-    mpMenu->SetHighlightHdl( LINK( this, VCLXMenu, HighlightHdl ) );
-    mpMenu->SetActivateHdl( LINK( this, VCLXMenu, ActivateHdl ) );
-    mpMenu->SetDeactivateHdl( LINK( this, VCLXMenu, DeactivateHdl ) );
+    mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
 }
 
-IMPL_LINK( VCLXMenu, SelectHdl, Menu*, EMPTYARG )
+IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
 {
-    if ( maMenuListeners.getLength() )
+    DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "Unknown Event!" );
+    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
     {
-        ::com::sun::star::awt::MenuEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.MenuId = mpMenu->GetCurItemId();
-        maMenuListeners.select( aEvent );
+        DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu() && mpMenu, "Menu???" );
+
+        VclMenuEvent* pMenuEvent = (VclMenuEvent*)pEvent;
+        if ( pMenuEvent->GetMenu() == mpMenu )  // Also called for the root menu
+        {
+            switch ( pMenuEvent->GetId() )
+            {
+                case VCLEVENT_MENU_SELECT:
+                {
+                    if ( maMenuListeners.getLength() )
+                    {
+                        ::com::sun::star::awt::MenuEvent aEvent;
+                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.MenuId = mpMenu->GetCurItemId();
+                        maMenuListeners.select( aEvent );
+                    }
+                }
+                break;
+                case VCLEVENT_OBJECT_DYING:
+                {
+                    mpMenu = NULL;
+                }
+                break;
+                case VCLEVENT_MENU_HIGHLIGHT:
+                {
+                    if ( maMenuListeners.getLength() )
+                    {
+                        ::com::sun::star::awt::MenuEvent aEvent;
+                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.MenuId = mpMenu->GetCurItemId();
+                        maMenuListeners.highlight( aEvent );
+                    }
+                }
+                break;
+                case VCLEVENT_MENU_ACTIVATE:
+                {
+                    if ( maMenuListeners.getLength() )
+                    {
+                        ::com::sun::star::awt::MenuEvent aEvent;
+                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.MenuId = mpMenu->GetCurItemId();
+                        maMenuListeners.activate( aEvent );
+                    }
+                }
+                break;
+                case VCLEVENT_MENU_DEACTIVATE:
+                {
+                    if ( maMenuListeners.getLength() )
+                    {
+                        ::com::sun::star::awt::MenuEvent aEvent;
+                        aEvent.Source = (::cppu::OWeakObject*)this;
+                        aEvent.MenuId = mpMenu->GetCurItemId();
+                        maMenuListeners.deactivate( aEvent );
+                    }
+                }
+                break;
+                default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
+           }
+       }
     }
-    return 1;
+    return 0;
 }
 
-IMPL_LINK( VCLXMenu, HighlightHdl, Menu*, EMPTYARG )
-{
-    if ( maMenuListeners.getLength() )
-    {
-        ::com::sun::star::awt::MenuEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.MenuId = mpMenu->GetCurItemId();
-        maMenuListeners.highlight( aEvent );
-    }
-    return 1;
-}
-
-IMPL_LINK( VCLXMenu, ActivateHdl, Menu*, EMPTYARG )
-{
-    if ( maMenuListeners.getLength() )
-    {
-        ::com::sun::star::awt::MenuEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.MenuId = mpMenu->GetCurItemId();
-        maMenuListeners.activate( aEvent );
-    }
-    return 1;
-}
-
-IMPL_LINK( VCLXMenu, DeactivateHdl, Menu*, EMPTYARG )
-{
-    if ( maMenuListeners.getLength() )
-    {
-        ::com::sun::star::awt::MenuEvent aEvent;
-        aEvent.Source = (::cppu::OWeakObject*)this;
-        aEvent.MenuId = mpMenu->GetCurItemId();
-        maMenuListeners.deactivate( aEvent );
-    }
-    return 1;
-}
 
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any VCLXMenu::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -193,14 +215,15 @@ void VCLXMenu::insertItem( sal_Int16 nItemId, const ::rtl::OUString& aText, sal_
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->InsertItem( nItemId, aText, (MenuItemBits)nItemStyle, nPos );
+    if ( mpMenu )
+        mpMenu->InsertItem( nItemId, aText, (MenuItemBits)nItemStyle, nPos );
 }
 
 void VCLXMenu::removeItem( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    if ( nCount )
+    if ( mpMenu && nCount )
     {
         sal_uInt16 nP = (sal_uInt16) Min( sal_uInt32(nPos+nCount), (sal_uInt32)mpMenu->GetItemCount() );
         for ( nP; nP; )
@@ -212,49 +235,54 @@ sal_Int16 VCLXMenu::getItemCount(  ) throw(::com::sun::star::uno::RuntimeExcepti
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->GetItemCount();
+    return mpMenu ? mpMenu->GetItemCount() : 0;
 }
 
 sal_Int16 VCLXMenu::getItemId( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->GetItemId( nPos );
+    return mpMenu ? mpMenu->GetItemId( nPos ) : 0;
 }
 
 sal_Int16 VCLXMenu::getItemPos( sal_Int16 nId ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->GetItemPos( nId );
+    return mpMenu ? mpMenu->GetItemPos( nId ) : 0;
 }
 
 void VCLXMenu::enableItem( sal_Int16 nItemId, sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->EnableItem( nItemId, bEnable );
+    if ( mpMenu )
+        mpMenu->EnableItem( nItemId, bEnable );
 }
 
 sal_Bool VCLXMenu::isItemEnabled( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->IsItemEnabled( nItemId );
+    return mpMenu ? mpMenu->IsItemEnabled( nItemId ) : sal_False;
 }
 
 void VCLXMenu::setItemText( sal_Int16 nItemId, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->SetItemText( nItemId, aText );
+    if ( mpMenu )
+        mpMenu->SetItemText( nItemId, aText );
 }
 
 ::rtl::OUString VCLXMenu::getItemText( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->GetItemText( nItemId );
+    ::rtl::OUString aItemText;
+    if ( mpMenu )
+        aItemText = mpMenu->GetItemText( nItemId );
+    return aItemText;
 }
 
 void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& rxPopupMenu ) throw(::com::sun::star::uno::RuntimeException)
@@ -264,7 +292,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     VCLXMenu* pVCLMenu = VCLXMenu::GetImplementation( rxPopupMenu );
     DBG_ASSERT( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu(), "setPopupMenu: Invalid Menu!" );
 
-    if ( pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )
+    if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )
     {
         // Selbst eine Ref halten!
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
@@ -280,7 +308,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >  aRef;
-    Menu* pMenu = mpMenu->GetPopupMenu( nItemId );
+    Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
         for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
@@ -303,35 +331,38 @@ void VCLXMenu::insertSeparator( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->InsertSeparator( nPos );
+    if ( mpMenu )
+        mpMenu->InsertSeparator( nPos );
 }
 
 void VCLXMenu::setDefaultItem( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->SetDefaultItem( nItemId );
+    if ( mpMenu )
+        mpMenu->SetDefaultItem( nItemId );
 }
 
 sal_Int16 VCLXMenu::getDefaultItem(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->GetDefaultItem();
+    return mpMenu ? mpMenu->GetDefaultItem() : 0;
 }
 
 void VCLXMenu::checkItem( sal_Int16 nItemId, sal_Bool bCheck ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    mpMenu->CheckItem( nItemId, bCheck );
+    if ( mpMenu )
+        mpMenu->CheckItem( nItemId, bCheck );
 }
 
 sal_Bool VCLXMenu::isItemChecked( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu->IsItemChecked( nItemId );
+    return mpMenu ? mpMenu->IsItemChecked( nItemId ) : sal_False;
 }
 
 sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rxWindowPeer, const ::com::sun::star::awt::Rectangle& rArea, sal_Int16 nFlags ) throw(::com::sun::star::uno::RuntimeException)
@@ -339,7 +370,7 @@ sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun:
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_Int16 nRet = 0;
-    if ( IsPopupMenu() )
+    if ( mpMenu && IsPopupMenu() )
         nRet = ((PopupMenu*)mpMenu)->Execute( VCLUnoHelper::GetWindow( rxWindowPeer ), VCLRectangle(rArea), nFlags );
     return nRet;
 }
