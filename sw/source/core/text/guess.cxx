@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 08:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,37 +435,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 
             if( nLeftPos )
             {
-#ifdef DEBUG
-                static BOOL bTest = FALSE;
-                if( bTest && bHyph && nHyphPos )
-                {
-//JP 25.10.00: "WordSelection" class is removed - use the breakiterator
-//                  WordSelection::ResetWordDelimiter();
-//                  xub_StrLen nWrdStart = WordSelection::GoStartWord( rInf.GetTxt(), nHyphPos );
-//                  xub_StrLen nLen = WordSelection::GoEndWord( rInf.GetTxt(), nWrdStart ) - nWrdStart;
-                    if( nLen )
-
-                    {
-                        XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
-                        MSHORT nMinTrail = 0;
-                        if( nWrdStart + nLen > nHyphPos )
-                            nMinTrail = nWrdStart + nLen - nHyphPos - 1;
-                        xHyphWord = ((SwTxtFormatInfo&)rInf).HyphWord( aSelTxt, nMinTrail );
-                        if( xHyphWord.is() )
-                            nHyphPos = xHyphWord->getHyphenationPos() + nWrdStart;
-                    }
-                }
-                else
-#endif
-                {
-                    xub_StrLen nX = nLeftPos;
-                    while( nX && IsDelim( rInf.GetChar( --nX ) ) )
-                        nLeftPos = nX;
-                }
+                xub_StrLen nX = nLeftPos;
+                while( nX && IsDelim( rInf.GetChar( --nX ) ) )
+                    nLeftPos = nX;
             }
         }
     }
-    // nLeftPos = GetPrevEnd( rInf, nRightPos ); OLD_ITERATOR
 
     if ( nLeftPos < rInf.GetIdx() )
         nLeftPos = rInf.GetIdx();
@@ -475,8 +450,6 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 
     nLeftWidth =
     rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() ).Width();
-    // OLD_ITERATOR
-    // rInf.GetTxtSize( rInf.GetIdx(), nLeftPos - rInf.GetIdx() + 1 ).Width();
 
     bHyph = bHyph && ( nHyphPos > nLeftPos );
 
