@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 12:53:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
