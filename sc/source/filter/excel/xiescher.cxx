@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,33 +960,16 @@ void XclImpEscherChart::Apply( ScfProgressBar& rProgress )
 
 // Escher object data =========================================================
 
-XclImpEscherAnchor::XclImpEscherAnchor( sal_uInt16 nScTab )
-{
-    memset( this, 0x00, sizeof( XclImpEscherAnchor ) );
-    mnScTab = nScTab;
-}
-
-SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor )
-{
-    return rStrm
-        >> rAnchor.mnLCol >> rAnchor.mnLX
-        >> rAnchor.mnTRow >> rAnchor.mnTY
-        >> rAnchor.mnRCol >> rAnchor.mnRX
-        >> rAnchor.mnBRow >> rAnchor.mnBY;
-}
-
-
-// ----------------------------------------------------------------------------
-
 XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
-    maAnchor( pEscherObj ? pEscherObj->GetTab() : 0 ),
-    mpEscherObj( pEscherObj )
+    maAnchor( 0 )
 {
+    SetObj( pEscherObj );
 }
 
 void XclImpObjData::SetObj( XclImpEscherObj* pEscherObj )
 {
     mpEscherObj.reset( pEscherObj );
+    maAnchor.mnScTab = pEscherObj ? pEscherObj->GetTab() : 0;
 }
 
 bool XclImpObjData::ContainsStrmPos( sal_uInt32 nStrmPos ) const
@@ -1054,7 +1037,7 @@ XclImpEscherObj* XclImpEscherObjList::GetObj( sal_uInt32 nStrmPos ) const
     return pObjData ? pObjData->GetObj() : NULL;
 }
 
-XclImpEscherAnchor* XclImpEscherObjList::GetAnchor( sal_uInt32 nStrmPos ) const
+XclEscherAnchor* XclImpEscherObjList::GetAnchor( sal_uInt32 nStrmPos ) const
 {
     XclImpObjData* pObjData = FindObjData( nStrmPos );
     return pObjData ? &pObjData->GetAnchor() : NULL;
@@ -1188,23 +1171,15 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& r
     rStrm.SeekRel( 2 );
     sal_uInt32 nFilePos = rStrm.Tell();
 
-    if( XclImpEscherAnchor* pAnchor = mrObjManager.GetEscherAnchorAcc( nFilePos ) )
+    if( XclEscherAnchor* pAnchor = mrObjManager.GetEscherAnchorAcc( nFilePos ) )
     {
         rStrm >> *pAnchor;
-
-        ScDocument& rDoc = GetDoc();
-        sal_uInt16 nScTab = pAnchor->mnScTab;
-
-        Rectangle& rRect = rObjData.aChildAnchor;
-        rRect.nLeft     = XclTools::CalcX( rDoc, nScTab, pAnchor->mnLCol, pAnchor->mnLX, HMM_PER_TWIPS );
-        rRect.nTop      = XclTools::CalcY( rDoc, nScTab, pAnchor->mnTRow, pAnchor->mnTY, HMM_PER_TWIPS );
-        rRect.nRight    = XclTools::CalcX( rDoc, nScTab, pAnchor->mnRCol, pAnchor->mnRX, HMM_PER_TWIPS );
-        rRect.nBottom   = XclTools::CalcY( rDoc, nScTab, pAnchor->mnBRow, pAnchor->mnBY, HMM_PER_TWIPS );
+        rObjData.aChildAnchor = pAnchor->GetRect( GetDoc(), MAP_100TH_MM );
         rObjData.bChildAnchor = sal_True;
 
         if( XclImpEscherObj* pEscherObj = mrObjManager.GetEscherObjAcc( nFilePos ) )
         {
-            pEscherObj->SetAnchor( rRect );
+            pEscherObj->SetAnchor( rObjData.aChildAnchor );
             if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, pEscherObj ) )
                 pOleObj->SetBlipId( GetPropertyValue( DFF_Prop_pib ) );
         }
@@ -1465,12 +1440,12 @@ XclImpEscherObj* XclImpObjectManager::GetLastEscherObjAcc()
     return maEscherObjList.GetLastObj();
 }
 
-const XclImpEscherAnchor* XclImpObjectManager::GetEscherAnchor( sal_uInt32 nStrmPos ) const
+const XclEscherAnchor* XclImpObjectManager::GetEscherAnchor( sal_uInt32 nStrmPos ) const
 {
     return maEscherObjList.GetAnchor( nStrmPos );
 }
 
-XclImpEscherAnchor* XclImpObjectManager::GetEscherAnchorAcc( sal_uInt32 nStrmPos )
+XclEscherAnchor* XclImpObjectManager::GetEscherAnchorAcc( sal_uInt32 nStrmPos )
 {
     return maEscherObjList.GetAnchor( nStrmPos );
 }
