@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,9 +1425,12 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
         {
             if ( ! ( pActualSlidePersist->aSlideAtom.nFlags & 1 ) ) // do not follow master objects ?
             {
-                SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers( 0 );
-                aVisibleLayers.Set( nBackgroundObjectsLayerID, FALSE );
-                pPage->SetMasterPageVisibleLayers( aVisibleLayers, 0 );
+                if ( pPage->GetMasterPageCount() )
+                {
+                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers( 0 );
+                    aVisibleLayers.Set( nBackgroundObjectsLayerID, FALSE );
+                    pPage->SetMasterPageVisibleLayers( aVisibleLayers, 0 );
+                }
             }
         }
         DffRecordHeader aPageRecHd;
