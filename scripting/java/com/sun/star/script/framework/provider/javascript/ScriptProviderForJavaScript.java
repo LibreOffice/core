@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJavaScript.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:12:49 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:05:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.frame.XModel;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.XTypeProvider;
@@ -90,6 +91,11 @@ import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.provider.XScriptContext;
 
+import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
+import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
+import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptContext;
 import com.sun.star.script.framework.provider.ClassLoaderFactory;
@@ -102,6 +108,7 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ImporterTopLevel;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.JavaScriptException;
+import org.mozilla.javascript.EcmaError;
 
 public class ScriptProviderForJavaScript
 {
@@ -114,18 +121,19 @@ public class ScriptProviderForJavaScript
 
         public XScript getScript( /*IN*/String scriptURI )
             throws com.sun.star.uno.RuntimeException,
-                   com.sun.star.lang.IllegalArgumentException
+                   ScriptFrameworkErrorException
         {
-            ScriptMetaData scriptData = getScriptData( scriptURI );
-            if ( scriptData == null )
+            ScriptMetaData scriptData = null;
+            try
             {
-                throw new com.sun.star.uno.RuntimeException(
-                    "Cannot find script for URI: " + scriptURI );
-            }
-            else
-            {
-                ScriptImpl script = new ScriptImpl( m_xContext, scriptData,m_xInvocationContext );
+                scriptData = getScriptData( scriptURI );
+                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xModel );
                 return script;
+            }
+            catch ( com.sun.star.uno.RuntimeException re )
+            {
+                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
+                    null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
             }
         }
 
@@ -211,13 +219,13 @@ class ScriptImpl implements XScript
     private ScriptMetaData metaData;
     private XComponentContext m_xContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
-    private Object m_oInvokeContext;
+    private XModel m_xModel;
 
-    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, XModel xModel ) throws com.sun.star.uno.RuntimeException
     {
         this.metaData = metaData;
         this.m_xContext = ctx;
-        this.m_oInvokeContext = oInvokeContext;
+        this.m_xModel = xModel;
         try
         {
             this.m_xMultiComponentFactory = m_xContext.getServiceManager();
@@ -248,16 +256,14 @@ class ScriptImpl implements XScript
          * @returns                 The value returned from the function
          *                          being invoked
          *
-         * @throws IllegalArgumentException If there is no matching script name
+         * @throws ScriptFrameworkErrorException If there is no matching script name
          *
-         * @throws CannotConvertException   If args do not match or cannot
-         *                                  be converted the those of the
-         *                                  invokee
          *
          * @throws InvocationTargetException If the running script throws
          *                                   an exception this information
          *                                   is captured and rethrown as
-         *                                   this exception type.
+         *                                   ScriptErrorRaisedException or
+         *                                   ScriptExceptionRaisedException
          */
 
         public Object invoke(
@@ -265,8 +271,7 @@ class ScriptImpl implements XScript
                                /*OUT*/short[][]  aOutParamIndex,
                                /*OUT*/Object[][]  aOutParam )
 
-        throws IllegalArgumentException, InvocationTargetException,
-               CannotConvertException
+        throws ScriptFrameworkErrorException, InvocationTargetException
         {
             // Initialise the out paramters - not used at the moment
             aOutParamIndex[0] = new short[0];
@@ -275,16 +280,31 @@ class ScriptImpl implements XScript
 
 
             ClassLoader cl = null;
+            URL sourceUrl = null;
             try {
                 cl = ClassLoaderFactory.getURLClassLoader( metaData );
+                sourceUrl = metaData.getSourceURL();
             }
-            catch (Exception e)
+            catch ( java.net.MalformedURLException mfu )
             {
-                throw new InvocationTargetException(e.getMessage());
+                throw new ScriptFrameworkErrorException(
+                    mfu.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
             }
+            catch ( com.sun.star.script.framework.provider.NoSuitableClassLoaderException nsc )
+            {
+                // Framework error
+                throw new ScriptFrameworkErrorException(
+                    nsc.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
+            }
+            Context ctxt = null;
 
-            try {
-                String editorURL = metaData.getSourceURL().toString();
+            try
+            {
+                String editorURL = sourceUrl.toString();
                 Object result = null;
                 String source = null;
                 ScriptEditorForJavaScript editor =
@@ -294,6 +314,15 @@ class ScriptImpl implements XScript
                 if (editor != null)
                 {
                     editorURL = editor.getURL();
+                    result = editor.execute();
+                    if ( result != null  &&
+                         result.getClass().getName().equals( "org.mozilla.javascript.Undefined" ) )
+                    {
+                        // Always return a string
+                        // TODO revisit
+                        return Context.toString( result );
+                    }
+
                 }
 
                 if (editor != null && editor.isModified() == true)
@@ -303,12 +332,16 @@ class ScriptImpl implements XScript
                 }
                 else
                 {
+                    metaData.loadSource();
                     source =  metaData.getSource();
 
                 }
 
                 if ( source == null || source.length() == 0 ) {
-                    throw new InvocationTargetException("Could not load script");
+                    throw new ScriptFrameworkErrorException(
+                        "Failed to read source data for script", null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
                 }
 
                 /* Set the context ClassLoader on the current thread to
@@ -321,43 +354,112 @@ class ScriptImpl implements XScript
                 }
 
                 // Initialize a Rhino Context object
-                Context ctxt = Context.enter();
+                ctxt = Context.enter();
 
                 /* The ImporterTopLevel ensures that importClass and
                    importPackage statements work in Javascript scripts
                    Make the XScriptContext available as a global variable
                    to the script
                  */
-                try {
-                    ImporterTopLevel scope = new ImporterTopLevel(ctxt);
+                ImporterTopLevel scope = new ImporterTopLevel(ctxt);
 
-                    Scriptable jsCtxt = Context.toObject(
-                        ScriptContext.createContext(
-                            m_oInvokeContext, m_xContext,
-                            m_xMultiComponentFactory), scope);
-                    scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
+                Scriptable jsCtxt = Context.toObject(
+                   ScriptContext.createContext(
+                       m_xModel, m_xContext,
+                       m_xMultiComponentFactory), scope);
+                scope.put("XSCRIPTCONTEXT", scope, jsCtxt);
 
-                    Scriptable jsArgs = Context.toObject(params, scope);
-                    scope.put("ARGUMENTS", scope, jsArgs);
+                Scriptable jsArgs = Context.toObject(params, scope);
+                scope.put("ARGUMENTS", scope, jsArgs);
 
-                    result = ctxt.evaluateString(scope,
-                        source, editorURL, 1, null);
+                result = ctxt.evaluateString(scope,
+                    source, editorURL, 1, null);
 
-                    result = ctxt.toString(result);
-                }
-                catch (JavaScriptException jse) {
-                    LogUtils.DEBUG( LogUtils.getTrace( jse ) );
-                    throw new InvocationTargetException(jse.getMessage());
-                }
-                finally {
-                    Context.exit();
-                }
-
+                result = ctxt.toString(result);
                 return result;
             }
+            catch (EcmaError ec) {
+                LogUtils.DEBUG( "Caught EcmaError exception for JavaScript type = " + ec.getClass() );
+                String message = ec.getMessage();
+                int lineNo = ec.getLineNumber();
+                LogUtils.DEBUG( "\t message  " + message );
+                LogUtils.DEBUG( "\t lineNum  " + lineNo );
+                ScriptErrorRaisedException se = new
+                    ScriptErrorRaisedException( message );
+                se.lineNum = lineNo;
+                se.scriptName = metaData.getLanguageName();
+                se.language = "JavaScript";
+                LogUtils.DEBUG( "ErrorRaised exception  "  );
+                LogUtils.DEBUG( "\t message  " + se.getMessage() );
+                LogUtils.DEBUG( "\t lineNum  " + se.lineNum );
+                LogUtils.DEBUG( "\t language  " + se.language );
+                LogUtils.DEBUG( "\t scriptName  " + se.scriptName );
+                raiseEditor( se.lineNum );
+                throw new InvocationTargetException( "JavaScript error " + metaData.getLanguageName(), null, se );
+
+            }
+            catch (JavaScriptException jse) {
+                LogUtils.DEBUG( "Caught JavaScriptException exception for JavaScript type = " + jse.getClass() );
+                String message = jse.getMessage();
+                //int lineNo = jse.getLineNumber();
+                Object wrap = jse.getValue();
+                LogUtils.DEBUG( "\t message  " + message );
+                LogUtils.DEBUG( "\t wrapped type " + wrap.getClass() );
+                LogUtils.DEBUG( "\t wrapped toString  " + wrap.toString() );
+                ScriptExceptionRaisedException se = new
+                    ScriptExceptionRaisedException( message );
+                se.lineNum = -1;
+                se.language = "JavaScript";
+                se.scriptName = metaData.getLanguageName();
+                se.exceptionType = wrap.getClass().getName();
+                se.language = metaData.getLanguage();
+                LogUtils.DEBUG( "ExceptionRaised exception  "  );
+                LogUtils.DEBUG( "\t message  " + se.getMessage() );
+                LogUtils.DEBUG( "\t lineNum  " + se.lineNum );
+                LogUtils.DEBUG( "\t language  " + se.language );
+                LogUtils.DEBUG( "\t scriptName  " + se.scriptName );
+                raiseEditor( se.lineNum );
+                throw new InvocationTargetException( "JavaScript uncaught exception" + metaData.getLanguageName(), null, se );
+            }
             catch (Exception ex) {
-                LogUtils.DEBUG( LogUtils.getTrace( ex ) );
-                throw new InvocationTargetException(ex.getMessage());
+                LogUtils.DEBUG("Caught Exception " + ex );
+                LogUtils.DEBUG("rethrowing as ScriptFramework error"  );
+                throw new ScriptFrameworkErrorException(
+                    ex.getMessage(), null,
+                    metaData.getLanguageName(), metaData.getLanguage(),
+                    ScriptFrameworkErrorType.UNKNOWN );
+            }
+            finally {
+                if ( ctxt != null )
+                {
+                    Context.exit();
+                }
+            }
+        }
+
+        private void raiseEditor( int lineNum )
+        {
+            ScriptEditorForJavaScript editor = null;
+            try
+            {
+                URL sourceUrl = metaData.getSourceURL();
+                editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
+                if ( editor == null )
+                {
+                    editor = ScriptEditorForJavaScript.getEditor();
+                    editor.edit(
+                        ScriptContext.createContext(m_xModel,
+                            m_xContext, m_xMultiComponentFactory), metaData );
+                    editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
+                }
+                if ( editor != null )
+                {
+                    System.out.println("** Have raised IDE for JavaScript, calling indicateErrorLine for line " + lineNum );
+                    editor.indicateErrorLine( lineNum );
+                }
+            }
+            catch( Exception ignore )
+            {
             }
         }
 }
