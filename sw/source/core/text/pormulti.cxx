@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 07:58:27 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 08:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2212,16 +2212,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if ( rInf.GetIdx() == rInf.GetLineStart() )
             {
                 // the ruby portion has to be split in two portions
-#ifdef VERTICAL_LAYOUT
-                const sal_Bool bRubyTop = rMulti.OnTop() || bHasGrid;
-                pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
-                    ((SwRubyPortion&)rMulti).GetAdjustment(), ! bRubyTop,
-                    ((SwRubyPortion&)rMulti).GetRubyOffset() );
-#else
                 pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
                     ((SwRubyPortion&)rMulti).GetAdjustment(), !rMulti.OnTop(),
                     ((SwRubyPortion&)rMulti).GetRubyOffset() );
-#endif
                 if( pNextSecond )
                 {
                     pTmp->GetRoot().SetNext( new SwLineLayout() );
@@ -2426,11 +2419,15 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         {
             sal_Bool bRubyTop;
             sal_Bool* pRubyPos = 0;
-            GETGRID( pFrm->FindPageFrm() )
-            if ( pGrid )
+
+            if ( GetInfo().SnapToGrid() )
             {
-                bRubyTop = ! pGrid->GetRubyTextBelow();
-                pRubyPos = &bRubyTop;
+                GETGRID( pFrm->FindPageFrm() )
+                if ( pGrid )
+                {
+                    bRubyTop = ! pGrid->GetRubyTextBelow();
+                    pRubyPos = &bRubyTop;
+                }
             }
 
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),

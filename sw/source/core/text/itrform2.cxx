@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 08:59:19 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 08:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,11 +1307,15 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 #ifdef VERTICAL_LAYOUT
                     sal_Bool bRubyTop;
                     sal_Bool* pRubyPos = 0;
-                    GETGRID( GetTxtFrm()->FindPageFrm() )
-                    if ( pGrid )
+
+                    if ( rInf.SnapToGrid() )
                     {
-                        bRubyTop = ! pGrid->GetRubyTextBelow();
-                        pRubyPos = &bRubyTop;
+                        GETGRID( GetTxtFrm()->FindPageFrm() )
+                        if ( pGrid )
+                        {
+                            bRubyTop = ! pGrid->GetRubyTextBelow();
+                            pRubyPos = &bRubyTop;
+                        }
                     }
 
                     pTmp = new SwRubyPortion( *pCreate, *rInf.GetFont(),
