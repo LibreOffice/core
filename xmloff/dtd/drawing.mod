@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.25 2001-01-03 11:09:57 mib Exp $
+	$Id: drawing.mod,v 1.26 2001-01-03 11:32:24 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -456,6 +456,40 @@
 <!ATTLIST draw:image %presentation-class; >
 <!ATTLIST draw:image %zindex;>
 <!ATTLIST draw:image draw:id %shapeId;>
+
+<!-- objects -->
+<!ELEMENT draw:object (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ATTLIST draw:object %draw-style-name;>
+<!ATTLIST draw:object draw:name %string; #IMPLIED>
+<!ATTLIST draw:object xlink:href %uriReference; #REQUIRED>
+<!ATTLIST draw:object xlink:type (simple) #FIXED "simple">
+<!ATTLIST draw:object xlink:show (embed) "embed">
+<!ATTLIST draw:object xlink:actuate (onLoad) "onLoad">
+<!ATTLIST draw:object %text-anchor;>
+<!ATTLIST draw:object %draw-position;>
+<!ATTLIST draw:object %draw-end-position; >
+<!ATTLIST draw:object svg:width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:object svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:object %presentation-class; >
+<!ATTLIST draw:object %zindex;>
+<!ATTLIST draw:object draw:id %shapeId;>
+
+<!ELEMENT draw:object-ole (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
+<!ATTLIST draw:object-ole %draw-style-name;>
+<!ATTLIST draw:object-ole draw:name %string; #IMPLIED>
+<!ATTLIST draw:object-ole xlink:href %uriReference; #REQUIRED>
+<!ATTLIST draw:object-ole xlink:type (simple) #FIXED "simple">
+<!ATTLIST draw:object-ole xlink:show (embed) "embed">
+<!ATTLIST draw:object-ole xlink:actuate (onLoad) "onLoad">
+<!ATTLIST draw:object-ole draw:class-id CDATA #REQUIRED>
+<!ATTLIST draw:object-ole %text-anchor;>
+<!ATTLIST draw:object-ole %draw-position;>
+<!ATTLIST draw:object-ole %draw-end-position; >
+<!ATTLIST draw:object-ole svg:width %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:object-ole svg:height %lengthOrPercentage; #IMPLIED>
+<!ATTLIST draw:object-ole %presentation-class; >
+<!ATTLIST draw:object-ole %zindex;>
+<!ATTLIST draw:object-ole draw:id %shapeId;>
 
 <!ELEMENT svg:desc (#PCDATA)>
 

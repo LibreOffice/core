@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:03:19 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,7 +1031,7 @@ XML_CONSTASCII_ACTION( sXML_object_index, "object-index" );
 XML_CONSTASCII_ACTION( sXML_object_index_entry_template, "object-index-entry-template" );
 XML_CONSTASCII_ACTION( sXML_object_index_source, "object-index-source" );
 XML_CONSTASCII_ACTION( sXML_object_name, "object-name");
-XML_CONSTASCII_ACTION( sXML_object_ole, "object_ole" );
+XML_CONSTASCII_ACTION( sXML_object_ole, "object-ole" );
 XML_CONSTASCII_ACTION( sXML_objects, "objects" );
 XML_CONSTASCII_ACTION( sXML_odd_page, "odd-page" );
 XML_CONSTASCII_ACTION( sXML_offset, "offset" );

@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.10 2001-01-03 09:55:08 mib Exp $
+	$Id: dtypes.mod,v 1.11 2001-01-03 11:32:24 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -157,8 +157,9 @@
 
 <!ENTITY % shape "draw:rect|draw:line|draw:polyline|draw:polygon|draw:path|
 				   draw:circle|draw:ellipse|draw:g|draw:page-thumbnail|
-				   draw:text-box|draw:image|draw:measure|draw:caption|
-				   draw:connector|chart:chart|dr3d:scene" >
+				   draw:text-box|draw:image|draw:object|draw:object-ole|
+				   draw:measure|draw:caption|draw:connector|chart:chart|
+				   dr3d:scene" >
 <!ENTITY % shapes "(%shape;)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">

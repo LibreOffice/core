@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:07:00 $
+ *  last change: $Author: mib $ $Date: 2001-01-03 11:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1786,7 +1786,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
                                        sXML_embed );
         GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                                       sXML_onRequest );
+                                       sXML_onLoad );
     }
 
     // draw:filter-name
@@ -1923,7 +1923,7 @@ void XMLTextParagraphExport::_exportTextEmbedded(
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show,
                                    sXML_embed );
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
-                                   sXML_onRequest );
+                                   sXML_onLoad );
 
     if( !xEmbeddedModel.is() )
         GetExport().AddAttribute(XML_NAMESPACE_DRAW, sXML_class_id, sClassId );
