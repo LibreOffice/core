@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-03 16:08:11 $
+ *  last change: $Author: ssa $ $Date: 2002-06-06 12:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4175,8 +4175,11 @@ Window::~Window()
     mbInDtor = TRUE;
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
-    if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
-        GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
+
+    // do not send child events for frames that were registered as native frames
+    if( !( mbFrame && (mnStyle & (WB_MOVEABLE | WB_CLOSEABLE | WB_SIZEABLE))))
+        if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
+            GetAccessibleParentWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CHILDDESTROYED, this );
 
     // shutdown drag and drop
     ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
@@ -5864,7 +5867,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpBorderWindow->Show( TRUE, nFlags );
         else if ( mbFrame )
         {
-            DBG_ASSERT( !mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
+            //DBG_ASSERT( !mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mbSuppressAccessibilityEvents = FALSE;
 
             mbPaintFrame = TRUE;
@@ -7505,7 +7508,8 @@ Reference< XClipboard > Window::GetSelection()
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
-    if ( /*!GetParent() &&*/ ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
+    // do not optimize hierarchy for the top level border win (ie, when there is no parent)
+    if ( GetParent() && ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
     //if( !ImplIsAccessibleCandidate() )
     {
         Window* pChild = GetAccessibleChildWindow( 0 );
@@ -7807,11 +7811,38 @@ String Window::GetAccessibleName() const
     }
     else
     {
-        Window *pLabel = GetLabeledBy();
-        if( pLabel )
-            aAccessibleName = pLabel->GetText();
-        else
-            aAccessibleName = GetText();
+        switch ( GetType() )
+        {
+            case WINDOW_IMAGERADIOBUTTON:
+            case WINDOW_RADIOBUTTON:
+            case WINDOW_TRISTATEBOX:
+            case WINDOW_CHECKBOX:
+
+            case WINDOW_MULTILINEEDIT:
+            case WINDOW_PATTERNFIELD:
+            case WINDOW_NUMERICFIELD:
+            case WINDOW_METRICFIELD:
+            case WINDOW_CURRENCYFIELD:
+            case WINDOW_LONGCURRENCYFIELD:
+            case WINDOW_EDIT:
+
+            case WINDOW_DATEBOX:
+            case WINDOW_TIMEBOX:
+            case WINDOW_DATEFIELD:
+            case WINDOW_TIMEFIELD:
+            case WINDOW_SPINFIELD:
+            {
+                Window *pLabel = GetLabeledBy();
+                if( pLabel )
+                    aAccessibleName = pLabel->GetText();
+                else
+                    aAccessibleName = GetText();
+            }
+            break;
+            default:
+                aAccessibleName = GetText();
+                break;
+        }
     }
 
     return aAccessibleName;
