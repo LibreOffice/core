@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:52:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 14:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+
+#include <functional>
 
 namespace dbaui
 {
