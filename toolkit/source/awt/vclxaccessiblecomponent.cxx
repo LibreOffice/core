@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-30 13:20:52 $
+ *  last change: $Author: ssa $ $Date: 2002-05-31 08:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,6 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
         {
             Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
-            DBG_ASSERT( pChildWindow, "VCLEVENT_WINDOW_SHOW - Window=?" );
             if( pChildWindow )
                 xAcc = pChildWindow->GetAccessible();
             if( xAcc.is() && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
@@ -211,7 +210,6 @@ void VCLXAccessibleComponent::ProcessWindowChildEvent( const VclWindowEvent& rVc
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
         {
             Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
-            DBG_ASSERT( pChildWindow, "VCLEVENT_WINDOW_HIDE - Window=?" );
             if( pChildWindow )
                 xAcc = pChildWindow->GetAccessible();
             if( xAcc.is() && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
