@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:12:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include <math.h>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
+#endif
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #ifndef _LIST_HXX
@@ -1849,6 +1853,8 @@ ToolBox::ToolBox( Window* pParent, WinBits nStyle ) :
 ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
     DockingWindow( WINDOW_TOOLBOX )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "vcl: ToolBox::ToolBox( Window* pParent, const ResId& rResId )" );
+
     rResId.SetRT( RSC_TOOLBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ImplInit( pParent, nStyle );
