@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-26 15:47:37 $
+ *  last change: $Author: as $ $Date: 2000-10-31 11:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,7 @@ SvtSecurityOptions::~SvtSecurityOptions()
 //*****************************************************************************************************************
 Sequence< OUString > SvtSecurityOptions::GetSecureURLs() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetSecureURLs();
 }
 
@@ -447,6 +448,7 @@ Sequence< OUString > SvtSecurityOptions::GetSecureURLs() const
 //*****************************************************************************************************************
 void SvtSecurityOptions::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
+    MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetSecureURLs( seqURLList );
 }
 
@@ -455,6 +457,7 @@ void SvtSecurityOptions::SetSecureURLs( const Sequence< OUString >& seqURLList )
 //*****************************************************************************************************************
 EBasicSecurityMode SvtSecurityOptions::GetBasicMode() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetBasicMode();
 }
 
@@ -463,6 +466,7 @@ EBasicSecurityMode SvtSecurityOptions::GetBasicMode() const
 //*****************************************************************************************************************
 void SvtSecurityOptions::SetBasicMode( EBasicSecurityMode eMode )
 {
+    MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetBasicMode( eMode );
 }
 

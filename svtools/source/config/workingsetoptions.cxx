@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workingsetoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-26 15:47:11 $
+ *  last change: $Author: as $ $Date: 2000-10-31 11:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ SvtWorkingSetOptions::~SvtWorkingSetOptions()
 //*****************************************************************************************************************
 Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetWindowList();
 }
 
@@ -405,6 +406,7 @@ Sequence< OUString > SvtWorkingSetOptions::GetWindowList() const
 //*****************************************************************************************************************
 void SvtWorkingSetOptions::SetWindowList( const Sequence< OUString >& seqWindowList )
 {
+    MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetWindowList( seqWindowList );
 }
 

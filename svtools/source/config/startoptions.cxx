@@ -2,9 +2,9 @@
  *
  *  $RCSfile: startoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-30 08:30:51 $
+ *  last change: $Author: as $ $Date: 2000-10-31 11:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,7 @@ SvtStartOptions::~SvtStartOptions()
 //*****************************************************************************************************************
 sal_Bool SvtStartOptions::ShowIntro() const
 {
+    MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->ShowIntro();
 }
 
