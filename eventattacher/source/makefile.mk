@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:22 $
+#   last change: $Author: hjs $ $Date: 2001-06-21 10:16:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ UNOTYPES= \
         com.sun.star.lang.XTypeProvider	\
         com.sun.star.lang.XMultiServiceFactory	\
         com.sun.star.lang.XSingleServiceFactory	\
+        com.sun.star.lang.XSingleComponentFactory	\
         com.sun.star.beans.XIntrospection	\
         com.sun.star.beans.MethodConcept	\
         com.sun.star.script.XEventAttacher	\
@@ -99,6 +100,7 @@ UNOTYPES= \
         com.sun.star.uno.TypeClass	\
         com.sun.star.uno.XInterface	\
         com.sun.star.uno.XWeak	\
+        com.sun.star.uno.XComponentContext	\
         com.sun.star.uno.XAggregation
 
 
