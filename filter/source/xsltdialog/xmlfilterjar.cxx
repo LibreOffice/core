@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilterjar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:25:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,16 +182,13 @@ static Reference< XInterface > addFolder( Reference< XInterface >& xRootFolder, 
 
 static void _addFile( Reference< XInterface >& xRootFolder, Reference< XSingleServiceFactory >& xFactory, Reference< XInputStream >& xInput, OUString aName ) throw( Exception )
 {
+
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
-    Reference< XNamed > xNamed( xSink, UNO_QUERY );
-    Reference< XChild > xChild( xSink, UNO_QUERY );
-
-    aName = encodeZipUri( aName );
-
-    if( xSink.is() && xNamed.is() && xChild.is() )
+    Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
+    if( xSink.is() && xTunnel.is())
     {
-        xChild->setParent( xRootFolder );
-        xNamed->setName( aName );
+        Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
+        xNameContainer->insertByName(aName = encodeZipUri( aName ), makeAny(xTunnel));
         xSink->setInputStream( xInput );
     }
 }
