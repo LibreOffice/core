@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+#   last change: $Author: tra $ $Date: 2000-09-29 11:11:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ TESTAPP=
 #TESTAPP=testpip2
 #TESTAPP=testproc
 #TESTAPP=tgetpwnam
+
 
 # --- Settings -----------------------------------------------------
 
