@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-26 07:16:33 $
+#   last change: $Author: dv $ $Date: 2001-07-27 13:40:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,8 @@ AUTOSEG=true
 .IF "$(header)" == ""
 GEN_HID=TRUE
 .ENDIF
+
+COMP1TYPELIST=		sfx
 
 # --- Settings -----------------------------------------------------
 
