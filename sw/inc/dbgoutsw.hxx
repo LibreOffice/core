@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:01:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 10:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class SwUndo;
 class SwUndos;
 class SwRect;
 class SwFrmFmt;
+class SwFrmFmts;
 class SwNodes;
 class SwRewriter;
 class SwNumRuleTbl;
