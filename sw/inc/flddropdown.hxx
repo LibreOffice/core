@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddropdown.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:49:26 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,30 +186,6 @@ public:
     virtual void SetPar2(const String & rStr);
 
     /**
-       Adds an item.
-
-       If the item to be added already exists in the field the
-       operation will fail.
-
-       @retval TRUE the new item was inserted successfully
-       @retval FALSE the insertion failed
-    */
-    BOOL AddItem(const String & rItem);
-
-    /**
-       Removes an item.
-
-       If the item rItem exists in the dropdown field, it will be
-       removed. If the selected item is removed the resulting
-       selection will be empty. If the item rItem does not exist in
-       the field the removal will fail.
-
-       @retval TRUE The removal was successful
-       @retval FALSE The removal failed.
-     */
-    BOOL RemoveItem(const String & rItem);
-
-    /**
        Sets the items of the dropdown box.
 
        After setting the items the selection will be empty.
@@ -233,13 +209,6 @@ public:
         @return the items of the dropdown box
     */
     Sequence<OUString> GetItemSequence() const;
-
-    /**
-       Returns the items of the dropdown box.
-
-       @return the items of the dropdown box
-    */
-    vector<String> GetItems() const;
 
     /**
        Returns the selected item.
