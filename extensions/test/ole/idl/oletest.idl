@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:17:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,12 @@
  *
  *
  ************************************************************************/
-//#include <stardiv/uno/interface.idl>
+
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/script/XInvocation.idl>
-//#include <stardiv/uno/beans/propset.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
 #include <com/sun/star/lang/XEventListener.idl>
+
 
 module oletest
 {
@@ -81,6 +81,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     sequence<string> methodString( [in] sequence<string> aSeq);
     sequence<char> methodChar( [in] sequence<char> aSeq);
     sequence<any> methodAny ( [in] sequence<any> aSeq);
+    sequence<type> methodType   ( [in] sequence<type> aSeq);
     sequence<com::sun::star::uno::XInterface> methodXInterface ( [in] sequence<com::sun::star::uno::XInterface> aSeq);
     sequence< sequence <long> > methodSequence( [in] sequence< sequence< long > > aSeq);
     sequence< sequence <sequence <long> > > methodSequence2( [in] sequence< sequence< sequence<long> > > aSeq);
@@ -98,9 +99,25 @@ interface XTestSequence: com::sun::star::uno::XInterface
     [attribute] sequence<string> AttrString;
     [attribute] sequence<char> AttrChar;
     [attribute] sequence<any> AttrAny;
+    [attribute] sequence<type> AttrType;
     [attribute] sequence< sequence<long> > AttrSequence;
     [attribute] sequence< sequence< sequence <long> > > AttrSequence2;
     [attribute] sequence< com::sun::star::uno::XInterface > AttrXInterface;
+
+    [attribute] byte AByte;
+    [attribute] float AFloat;
+    [attribute] double ADouble;
+    [attribute] boolean ABool;
+    [attribute] short AShort;
+    [attribute] unsigned short AUShort;
+    [attribute] long ALong;
+    [attribute] unsigned long AULong;
+    [attribute] string AString;
+    [attribute] char AChar;
+    [attribute] any AAny;
+    [attribute] type AType;
+    [attribute] com::sun::star::uno::XInterface  AXInterface;
+    [attribute] com::sun::star::script::XInvocation  AXInvocation;
 
     void testout_methodByte( [out] byte rOut );
     void testout_methodFloat( [out] float rOut);
@@ -115,6 +132,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testout_methodString( [out] string rOut);
     void testout_methodChar( [out] char rOut);
     void testout_methodAny  ( [out] any rOut);
+    void testout_methodType ( [out] type rOut);
     void testout_methodSequence( [out] sequence< long > rOut);
     void testout_methodSequence2( [out] sequence < sequence< long > > rOut);
     void testout_methodXInterface( [out] com::sun::star::uno::XInterface rOut);
@@ -137,6 +155,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testinout_methodString( [inout] string rOut);
     void testinout_methodChar( [inout] char rOut);
     void testinout_methodAny    ( [inout] any rOut);
+    void testinout_methodType   ( [inout] type rOut);
     void testinout_methodSequence( [inout] sequence< long > rOut);
     void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
     void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
@@ -179,12 +198,13 @@ interface XTestInParameters: com::sun::star::uno::XInterface
     string in_methodString( [in] string rIn);
     char in_methodChar( [in] char rIn);
     any in_methodAny    ( [in] any rIn);
+    type in_methodType  ( [in] type rIn);
     com::sun::star::uno::XInterface in_methodXInterface([in] com::sun::star::uno::XInterface rIn);
     com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
     SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
-    void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean bool, [in]short sh,
+    void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean abool, [in]short sh,
                        [in] unsigned short us, [in] long l, [in] unsigned long ul,
-                       [in] string s, [in] char c, [in] any a, [in] com::sun::star::script::XInvocation inv);
+                       [in] string s, [in] char c, [in] any a, [in] type t, [in] com::sun::star::script::XInvocation inv);
 };
 
 
