@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:24:19 $
+ *  last change: $Author: mba $ $Date: 2000-12-10 14:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,14 +208,21 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if  (
-            ( m_pController             !=  NULL                                                    )   &&
-            ( aEvent.Frame              ==  m_pController->getFrame()                               )   &&
-            ( aEvent.Action             ==  ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED    )   &&
+            ( m_pController !=  NULL ) &&
+            ( aEvent.Frame  ==  m_pController->getFrame() ) &&
             ( m_pController->GetViewShell_Impl() && m_pController->GetViewShell_Impl()->GetWindow() !=  NULL                                                    )
         )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+        if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+        }
+        else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            m_pController->GetViewShell_Impl()->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
+        }
     }
 }
 
@@ -535,7 +542,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
-                nId = aURL.Path.toInt32();
+                nId = (USHORT) aURL.Path.toInt32();
             }
 
             if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
