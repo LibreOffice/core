@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:54:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,7 +973,7 @@ void ScViewFunc::GetSelectionFrame( SvxBoxItem&     rLineOuter,
         rLineOuter = (const SvxBoxItem&)    (pAttrs->GetItem( ATTR_BORDER ));
         rLineInner = (const SvxBoxInfoItem&)(pAttrs->GetItem( ATTR_BORDER_INNER ));
         rLineInner.SetTable(FALSE);
-        rLineInner.SetDist((BOOL)FALSE);
+        rLineInner.SetDist(TRUE);
         rLineInner.SetMinDist(FALSE);
     }
 }
