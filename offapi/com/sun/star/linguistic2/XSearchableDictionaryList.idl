@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchableDictionaryList.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 17:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P> Only active dictionaries of a suitable language will be searched
     for the entry.
-    The language is suitable if it is the same as the dictionaries language or
+    The language is suitable if it is the same as the dictionary's language or
     the dictionary may hold entries of all langauges.
     <P>
 
@@ -96,7 +96,7 @@ interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryLi
     /** looks for an entry for a given word in the list of dictionaries.
 
         @returns
-            the dictionary entry that was found, </NULL> otherwise.
+            the dictionary entry that was found, <NULL/> otherwise.
 
         @param aWord
             the word (entry) to be looked for.
@@ -105,12 +105,12 @@ interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryLi
             the language of the word to be looked for.
 
         @param bSearchPosDic
-            </TRUE> if only postive dictionaries should be searched.
-            </FALSE> of only negative dictionaries should be searched.
+            <TRUE/> if only positive dictionaries should be searched.
+            <FALSE/> if only negative dictionaries should be searched.
 
         @param bSpellEntry
-            </TRUE> if entries for purposes of spellchecking are required.
-            </FALSE> if only entries for hyphenation purposes are required.
+            <TRUE/> if entries for purposes of spellchecking are required.
+            <FALSE/> if only entries for hyphenation purposes are required.
 
     */
     com::sun::star::linguistic2::XDictionaryEntry   queryDictionaryEntry(
