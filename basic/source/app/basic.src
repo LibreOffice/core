@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-23 22:01:02 $
+ *  last change: $Author: kz $ $Date: 2002-05-28 20:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3352,7 +3352,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ greek ] = "Font";
                 Text[ dutch ] = "Font";
                 Text[ french ] = "Font";
-                Text[ spanish ] = "Font";
+                Text[ spanish ] = "Fuente";
                 Text[ finnish ] = "Font";
                 Text[ italian ] = "Font";
                 Text[ danish ] = "Font";
@@ -3360,7 +3360,7 @@ ModelessDialog IDD_OPTIONS_DLG
                 Text[ polish ] = "Font";
                 Text[ portuguese_brazilian ] = "Font";
                 Text[ japanese ] = "Font";
-                Text[ korean ] = "Font";
+                Text[ korean ] = "글꼴";
                 Text[ chinese_simplified ] = "Font";
                 Text[ chinese_traditional ] = "Font";
                 Text[ turkish ] = "Font";
@@ -3903,7 +3903,7 @@ TabPage RID_TP_SPECIAL {
         Text[ greek ] = "Save before execute";
         Text[ dutch ] = "Save before execute";
         Text[ french ] = "Save before execute";
-        Text[ spanish ] = "Save before execute";
+        Text[ spanish ] = "Guardar antes de ejecutar";
         Text[ finnish ] = "Save before execute";
         Text[ italian ] = "Save before execute";
         Text[ danish ] = "Save before execute";
@@ -3911,8 +3911,8 @@ TabPage RID_TP_SPECIAL {
         Text[ polish ] = "Save before execute";
         Text[ portuguese_brazilian ] = "Save before execute";
         Text[ japanese ] = "Save before execute";
-        Text[ korean ] = "Save before execute";
-        Text[ chinese_simplified ] = "Save before execute";
+        Text[ korean ] = "실행하기 전 저장 ";
+        Text[ chinese_simplified ] = "Save before running";
         Text[ chinese_traditional ] = "Save before running";
         Text[ turkish ] = "Save before execute";
         Text[ arabic ] = "Save before execute";
@@ -3944,8 +3944,8 @@ TabPage RID_TP_FONT {
         Text[ polish ] = "Typ";
         Text[ portuguese_brazilian ] = "art";
         Text[ japanese ] = "種類";
-        Text[ korean ] = "종류";
-        Text[ chinese_simplified ] = "类型";
+        Text[ korean ] = "유형";
+        Text[ chinese_simplified ] = "Type";
         Text[ chinese_traditional ] = "Type";
         Text[ turkish ] = "T�r";
         Text[ arabic ] = "�����";
@@ -3976,8 +3976,8 @@ TabPage RID_TP_FONT {
         Text[ polish ] = "??????";
         Text[ portuguese_brazilian ] = "??????";
         Text[ japanese ] = "??????";
-        Text[ korean ] = "??????";
-        Text[ chinese_simplified ] = "??????";
+        Text[ korean ] = "활자체";
+        Text[ chinese_simplified ] = "Typeface";
         Text[ chinese_traditional ] = "Typeface";
         Text[ turkish ] = "??????";
         Text[ arabic ] = "??????";
@@ -3999,7 +3999,7 @@ TabPage RID_TP_FONT {
         Text[ greek ] = "Size";
         Text[ dutch ] = "Size";
         Text[ french ] = "Size";
-        Text[ spanish ] = "Size";
+        Text[ spanish ] = "Tama�o";
         Text[ finnish ] = "Size";
         Text[ italian ] = "Size";
         Text[ danish ] = "Size";
@@ -4007,7 +4007,7 @@ TabPage RID_TP_FONT {
         Text[ polish ] = "Size";
         Text[ portuguese_brazilian ] = "Size";
         Text[ japanese ] = "Size";
-        Text[ korean ] = "Size";
+        Text[ korean ] = "크기";
         Text[ chinese_simplified ] = "Size";
         Text[ chinese_traditional ] = "Size";
         Text[ turkish ] = "Size";
