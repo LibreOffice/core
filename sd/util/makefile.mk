@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 12:53:39 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:36:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,42 +69,14 @@ GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
-#IENV!:=$(IENV);..$/res
+# --- Resources ----------------------------------------------------
 
-.IF "$(GUI)"=="WIN"
-LINKFLAGS+=/PACKCODE:65500 /SEG:16000 /NOE /NOD /MAP
-MAPSYM=tmapsym
-.ENDIF
-
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:512 /PACKD:32768
-.ENDIF
-
-# --- Resourcen ----------------------------------------------------
-
-.IF "$(GUI)"=="WIN"
-RESLIBSPLIT1NAME=sd
-RESLIBSPLIT1SRSFILES= \
-     $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
-     $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
-.ELSE
 RESLIB1NAME=sd
 RESLIB1SRSFILES=\
      $(SRS)$/app.srs $(SRS)$/dlg.srs $(SRS)$/core.srs $(SRS)$/html.srs $(SRS)$/sdslots.srs \
      $(SRS)$/accessibility.srs $(SOLARRESDIR)$/sfx.srs
-.ENDIF
-
-#.IF "$(solarlang)" == "deut"
-#SRC1FILES=      ..$/source$/ui$/app$/appmain.src
-#SRS1NAME =      appmain
-#SRS1FILES=$(SRS)$/appmain.srs \
-#	 $(SOLARRESDIR)$/sfx.srs
-#RES1TARGET= sdappi
-#.ENDIF
 
 # --- StarDraw DLL
 
@@ -137,18 +109,12 @@ SHL1STDLIBS+= \
     $(VOSLIB) \
     $(SALLIB)
 
-.IF "$(GUI)" == "MAC"
-SHL1STDLIBS += \
-            $(SOLARBINDIR)$/SDB$(UPD)$(DLLPOSTFIX).DLL \
-            $(SOLARLIBDIR)$/plugctor.lib
-.ENDIF
-
 SHL1DEPN=   $(L)$/itools.lib
 SHL1LIBS=   $(LIB3TARGET)
 
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "WIN"
+.IF "$(GUI)" == "WNT"
 SHL1RES=    $(RCTARGET)
 .ENDIF
 
@@ -184,13 +150,8 @@ LIB4ARCHIV=$(LB)$/libsdlib.a
 LIB4OBJFILES=$(OBJ)$/sdlib.obj \
           $(OBJ)$/sdresid.obj
 .ELSE
-.IF "$(GUI)"=="MAC"
 LIB4OBJFILES=$(OBJ)$/sdlib.obj \
           $(OBJ)$/sdresid.obj
-.ELSE
-LIB4OBJFILES=$(OBJ)$/sdlib.obj \
-          $(OBJ)$/sdresid.obj
-.ENDIF
 .ENDIF
 
 
@@ -215,46 +176,8 @@ LIB5FILES=  \
 .IF "$(depend)" == ""
 
 # -------------------------------------------------------------------------
-# MAC
+# Windows 
 # -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISCX)$/$(APP1TARGET).def : makefile.mk
-
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-        delete -i $@.exp
-        $(LINK)  $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL1OBJS) $(SHL1LIBS) -f $@.exp · dev:null
-        duplicate -y $@.exp $@
-.ENDIF
-# -------------------------------------------------------------------------
-# Windows 3.1
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'SDRAW3 DLL'                                 >>$@
-    @echo EXETYPE     WINDOWS                                       >>$@
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL MOVEABLE DISCARDABLE               >>$@
-    @echo DATA        PRELOAD MOVEABLE SINGLE                       >>$@
-    @echo HEAPSIZE    0                                             >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo _CreateSdDrawDocShellDll @2                              >>$@
-    @echo _CreateSdGraphicDocShellDll @3                           >>$@
-    @echo _CreateObjSdDrawDocShellDll @4                           >>$@
-    @echo _CreateObjSdGraphicDocShellDll @5                        >>$@
-    @echo _InitSdDll @6                                            >>$@
-    @echo _DeInitSdDll @7                                          >>$@
-    @echo component_getImplementationEnvironment 				   >>$@
-    @echo component_writeInfo									   >>$@
-    @echo component_getFactory									   >>$@
-.ENDIF
 
 .IF "$(GUI)" == "WNT"
 
@@ -276,52 +199,6 @@ $(MISC)$/$(SHL1TARGET).def:
     @echo component_getFactory									   >>$@
 .ENDIF
 
-# -------------------------------------------------------------------------
-# Presentation Manager 2.0
-# -------------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-    @echo ================================================================
-    @echo building $@
-    @echo ----------------------------------------------------------------
-.IF "$(COM)"!="WTC"
-    echo  LIBRARY           INITINSTANCE TERMINSTANCE                       >$@
-    echo  DESCRIPTION   'SdDLL'                            >>$@
-    echo  PROTMODE                                                                             >>$@
-    @echo CODE        LOADONCALL                                  >>$@
-    @echo DATA                PRELOAD MULTIPLE NONSHARED                                      >>$@
-    @echo EXPORTS                                              >>$@
-.IF "$(COM)"!="ICC"
-    @echo _CreateSdDrawDocShellDll @2                              >>$@
-    @echo _CreateSdGraphicDocShellDll @3                           >>$@
-    @echo _CreateObjSdDrawDocShellDll @4                           >>$@
-    @echo _CreateObjSdGraphicDocShellDll @5                        >>$@
-    @echo _InitSdDll @6                                            >>$@
-    @echo _DeInitSdDll @7                                          >>$@
-.ELSE
-    @echo CreateSdDrawDocShellDll @2                              >>$@
-    @echo CreateSdGraphicDocShellDll @3                           >>$@
-    @echo CreateObjSdDrawDocShellDll @4                           >>$@
-    @echo CreateObjSdGraphicDocShellDll @5                        >>$@
-    @echo InitSdDll @6                                            >>$@
-    @echo DeInitSdDll @7                                          >>$@
-.ENDIF
-.ELSE
-    @echo option DESCRIPTION 'SdDLL'                            >$@
-    @echo name $(BIN)$/$(SHL1TARGET).dll                         >>$@
-    @echo CreateSdDrawDocShellDll_ @2      >>temp.def
-    @echo CreateSdGraphicDocShellDll_ @3   >>temp.def
-    @echo CreateObjSdDrawDocShellDll_ @4   >>temp.def
-    @echo CreateObjSdGraphicDocShellDll_ @5   >>temp.def
-    @echo InitSdDll_ @6                    >>temp.def
-    @echo DeInitSdDll_ @7                  >>temp.def
-    @gawk -f s:\util\exp.awk temp.def                               >>$@
-    del temp.def
-.ENDIF
-.ENDIF
-
 .ENDIF
 
 $(MISCX)$/$(SHL1TARGET).flt:
@@ -330,3 +207,4 @@ $(MISCX)$/$(SHL1TARGET).flt:
     @echo WEP>$@
     @echo LIBMAIN>>$@
     @echo LibMain>>$@
+
