@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:07:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,23 +74,21 @@
 class SvxTbxCtlDraw : public SfxToolBoxControl
 {
 private:
-    USHORT  nLastAction;
+    ::rtl::OUString     m_sToolboxName;
+
+    void                toggleToolbox();
 
 public:
+    SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    ~SvxTbxCtlDraw() {}
+
+    SFX_DECL_TOOLBOX_CONTROL();
+
     virtual void                Select( BOOL bMod1 = FALSE );
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
-    virtual SfxPopupWindow*     CreatePopupWindow();
-
-            SFX_DECL_TOOLBOX_CONTROL();
-
-            SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
-            ~SvxTbxCtlDraw() {}
-
-    void    SetLastAction( USHORT nAction ) { nLastAction = nAction; }
 };
-
 
 #endif
 
