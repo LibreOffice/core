@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:40:59 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,6 +1611,7 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle&
     UINT nGGOFlags = GGO_METRICS;
     if( bIsGlyphIndex )
         nGGOFlags |= GGO_GLYPH_INDEX;
+    nIndex &= GF_IDXMASK;
 
     GLYPHMETRICS aGM;
     DWORD nSize = GDI_ERROR;
@@ -1647,6 +1648,7 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
     UINT nGGOFlags = GGO_NATIVE;
     if( bIsGlyphIndex )
         nGGOFlags |= GGO_GLYPH_INDEX;
+    nIndex &= GF_IDXMASK;
 
     GLYPHMETRICS aGlyphMetrics;
     DWORD nSize1 = GDI_ERROR;
@@ -1809,8 +1811,6 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
 
 // -----------------------------------------------------------------------
 
-namespace {
-
 // TODO:  Replace this class with boost::scoped_array
 class ScopedCharArray
 {
@@ -1881,8 +1881,6 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
 {
     OSL_ENSURE(m_pFont == 0, "already open");
     return OpenTTFont(pBuffer, nLen, nFaceNum, &m_pFont);
-}
-
 }
 
 BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
