@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:34:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,8 +546,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
         }
         catch( Exception& e )
         {
-            OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
-                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            // OSL_TRACE("Exception getting root node: %s", PRTSTR(e.Message));
             // TODO exception handling
         }
 
@@ -648,7 +647,6 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                                     new SvxGroupInfo_Impl(SVX_CFGGROUP_SCRIPTCONTAINER,
                                         0, static_cast<void *>( theChild.get()));
 
-                                OSL_TRACE("adding child node %s",::rtl::OUStringToOString( uiName, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                                 Image aImage = GetImage( theChild, xContext, bIsRootNode,BMP_COLOR_NORMAL );
                                 SvLBoxEntry* pNewEntry =
                                     InsertEntry( uiName, NULL);
@@ -738,8 +736,6 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
                                 "ooSetupFactoryEmptyDocumentURL") ))
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
-                        OSL_TRACE("factory url for doc images is %s",
-                        ::rtl::OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                         break;
                     }
                 }
@@ -1236,7 +1232,7 @@ SvxScriptSelectorDialog::GetDocTitle(
     }
     catch ( Exception& e )
     {
-        OSL_TRACE("GetDocTitle() exception: %s", PRTSTR(e.Message));
+        // OSL_TRACE("GetDocTitle() exception: %s", PRTSTR(e.Message));
     }
     rTitle = aResult;
 }
