@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: khz $ $Date: 2000-11-21 11:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,18 +846,25 @@ public:
 
 
 
+/*
+    The FIB contains a "magic word" and pointers to the various other parts of
+    the file, as well as information about the length of the file.
+    The FIB starts at the beginning of the file.
+*/
 class WW8Fib
 {
 public:
     /*
-        von uns verlangte Programm-Version:
-        in Ctor wird geprueft, ob sie zu nFib passt
+        Program-Version asked for by us:
+        in Ctor we check if it matches the value of nFib
+
+        6 == "WinWord 6 or WinWord 95",
+        7 == "only WinWord 95"
+        8 == "WinWord 97 or newer"
     */
-    BYTE nVersion;  // 6 steht fuer "WinWord 6 oder WinWord 95",
-                                    // 7 steht fuer "nur WinWord 95"
-                                    // 8 steht fuer "nur WinWord 97"
+    BYTE nVersion;
     /*
-        Fehlerstatus
+        error status
     */
     ULONG nFibError;
     /*
@@ -884,9 +891,9 @@ public:
                                                     // circumstances a file may have table streams with
                                                     // both names. In that case, this flag must be used
                                                     // to decide which table stream is valid.
-    // UINT16 u1 :2;
+
     UINT16 fExtChar :1; // 1000 =1, when using extended character set in file
-    // UINT16 u2 :3;
+
 
     UINT16 nFibBack;    // 0xc
     INT16 lKey1;            // 0xe  file encrypted key, only valid if fEncrypted.
@@ -937,7 +944,7 @@ public:
     // Marke: "rglw" Beginning of the array of longs
     WW8_FC cbMac;           // 0x20 file offset of last byte written to file + 1.
 
-    // WW8_FC u4[4];            // 0x24
+    // WW8_FC u4[4];        // 0x24
     WW8_CP ccpText;         // 0x34 length of main document text stream
     WW8_CP ccpFtn;          // 0x38 length of footnote subdocument text stream
     WW8_CP ccpHdr;          // 0x3c length of header subdocument text stream
@@ -1529,12 +1536,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.2 2000-11-21 11:23:57 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.58  2000/09/18 16:05:02  willem.vandorp
       OpenOffice header added.
 
