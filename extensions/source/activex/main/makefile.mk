@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mav $ $Date: 2003-08-20 14:43:27 $
+#   last change: $Author: vg $ $Date: 2003-10-06 18:57:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,7 @@ SHL1STDLIBS=\
     urlmon.lib \
     Shlwapi.lib
 
-.IF "$(COMEX)"=="8"
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
     SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
 .ENDIF
 
