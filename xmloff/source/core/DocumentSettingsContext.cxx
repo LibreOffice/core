@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:47:26 $
+ *  last change: $Author: cl $ $Date: 2001-05-22 15:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,37 +543,6 @@ void XMLConfigItemContext::Characters( const ::rtl::OUString& rChars )
 }
 
 
-static awt::Rectangle ImplImportRectangle( const rtl::OUString& rValue )
-{
-    awt::Rectangle aRect( 0,0,0,0 );
-
-    rtl::OUStringBuffer sBuffer;
-    const sal_Unicode * pStr = rValue.getStr();
-
-    while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
-    aRect.X = sBuffer.makeStringAndClear().toInt32();
-
-    if( *pStr++ == ',' )
-    {
-        while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
-        aRect.Y = sBuffer.makeStringAndClear().toInt32();
-
-        if( *pStr++ == ',' )
-        {
-            while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
-            aRect.Width = sBuffer.makeStringAndClear().toInt32();
-
-            if( *pStr++ == ',' )
-            {
-                while( ( *pStr >= sal_Unicode('0') && *pStr <= sal_Unicode('9') ) || *pStr == sal_Unicode('-') ) sBuffer.append( *pStr++ );
-                aRect.Height = sBuffer.makeStringAndClear().toInt32();
-            }
-        }
-    }
-
-    return aRect;
-}
-
 void XMLConfigItemContext::EndElement()
 {
     if (pBaseContext)
@@ -617,10 +586,6 @@ void XMLConfigItemContext::EndElement()
             util::DateTime aDateTime;
             SvXMLUnitConverter::convertDateTime(aDateTime, sValue);
             rAny <<= aDateTime;
-        }
-        else if (sType.compareToAscii(sXML_rect) == 0)
-        {
-            rAny <<= ImplImportRectangle(sValue);
         }
         else if (sType.compareToAscii(sXML_base64Binary) == 0)
         {

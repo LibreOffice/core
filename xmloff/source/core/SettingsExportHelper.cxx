@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-16 11:48:04 $
+ *  last change: $Author: cl $ $Date: 2001-05-22 15:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,12 +219,6 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 uno::Sequence< formula::SymbolDescriptor > aProps;
                 rAny >>= aProps;
                 exportSymbolDescriptors(aProps, rName);
-            }
-            else if( aType.equals(getCppuType( (const awt::Rectangle *)0 ) ) )
-            {
-                awt::Rectangle aRect;
-                rAny >>= aRect;
-                exportRectangle( aRect, rName );
             }
             else
                 DBG_ERROR("this type is not implemented now");
@@ -527,26 +521,4 @@ void XMLSettingsExportHelper::exportSettings(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aProps.getLength(), "no properties to export");
     exportSequencePropertyValue(aProps, rName);
-}
-
-void XMLSettingsExportHelper::exportRectangle(
-                    const com::sun::star::awt::Rectangle& aValue,
-                    const rtl::OUString rName) const
-{
-    DBG_ASSERT(rName.getLength(), "no name");
-    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
-    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_rect);
-
-    rtl::OUStringBuffer sBuffer;
-
-    sBuffer.append( aValue.X );
-    sBuffer.append( sal_Unicode(',') );
-    sBuffer.append( aValue.Y );
-    sBuffer.append( sal_Unicode(',') );
-    sBuffer.append( aValue.Width );
-    sBuffer.append( sal_Unicode(',') );
-    sBuffer.append( aValue.Height );
-
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
-    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
