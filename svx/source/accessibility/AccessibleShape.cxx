@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-12 11:48:46 $
+ *  last change: $Author: af $ $Date: 2002-04-15 15:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ void AccessibleShape::Init (void)
 
     // Beware! Here we leave the paths of the UNO API and descend into the
     // depths of the core.  Necessary for makeing the edit engine accessible.
-
+    /*
     SdrView* pView = mrShapeTreeInfo.GetSdrView ();
     const Window* pWindow = mrShapeTreeInfo.GetWindow ();
     if (pView != NULL && pWindow != NULL)
@@ -178,7 +178,7 @@ void AccessibleShape::Init (void)
         mpText = new SvxAccessibleTextHelper (
             this,
             ::std::auto_ptr<SvxEditSource>(pEditSource));
-    }
+    }*/
 }
 
 
@@ -237,8 +237,15 @@ uno::Reference<XAccessible> SAL_CALL
             }
         if (mpText != NULL)
         {
-            if (nIndex < mpText->GetChildCount())
-                return mpText->GetChild (nIndex);
+            try
+            {
+                if (nIndex < mpText->GetChildCount())
+                    return mpText->GetChild (nIndex);
+            }
+            catch (::com::sun::star::lang::IndexOutOfBoundsException e)
+            {
+                return NULL;
+            }
         }
     }
 
@@ -258,16 +265,45 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     CheckDisposedState ();
     awt::Rectangle aBoundingBox;
 
-    awt::Point aPixelPosition (getLocationOnScreen());
-    awt::Size aPixelSize (getSize());
+    // Get the shape's bounding box in internal coordinates.  Use the
+    // property BoundRect.  Only if that is not supported ask the shape for
+    // its position and size directly.
+    Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
+    if (xSet.is())
+    {
+        try
+        {
+            uno::Any aValue = xSet->getPropertyValue (
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundRect")));
+            aValue >>= aBoundingBox;
+        }
+        catch (beans::UnknownPropertyException e)
+        {
+            // Fallback when there is no BoundRect Property.
+            OSL_TRACE ("unknown property BoundingBox");
+            ::awt::Point aPosition (mxShape->getPosition());
+            ::awt::Size aSize (mxShape->getSize());
+            aBoundingBox = awt::Rectangle (
+                aPosition.X, aPosition.Y,
+                aSize.Width, aSize.Height);
+        }
+    }
+
+    // Transform coordinates from internal to pixel.
+    ::Size aPixelSize = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+        ::Size (aBoundingBox.Width, aBoundingBox.Height));
+    ::Point aPixelPosition = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+        ::Point (aBoundingBox.X, aBoundingBox.Y));
+
+    // Clip the shape's bounding box with the bounding box of its parent.
     Reference<XAccessibleComponent> xParentComponent (getAccessibleParent(), uno::UNO_QUERY);
     if (xParentComponent.is())
     {
         ::Rectangle aBBox (
-            aPixelPosition.X,
-            aPixelPosition.Y,
-            aPixelPosition.X + aPixelSize.Width,
-            aPixelPosition.Y + aPixelSize.Height);
+            aPixelPosition.getX(),
+            aPixelPosition.getY(),
+            aPixelPosition.getX() + aPixelSize.getWidth(),
+            aPixelPosition.getY() + aPixelSize.getHeight());
         awt::Rectangle aParentBoundingBox (xParentComponent->getBounds());
         ::Rectangle aParentBBox (
             aParentBoundingBox.X,
@@ -283,10 +319,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     }
     else
         aBoundingBox = awt::Rectangle (
-            aPixelPosition.X,
-            aPixelPosition.Y,
-            aPixelSize.Width,
-            aPixelSize.Height);
+            aPixelPosition.getX(), aPixelPosition.getY(),
+            aPixelSize.getWidth(), aPixelSize.getHeight());
 
     return aBoundingBox;
 }
@@ -323,6 +357,9 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
+    awt::Rectangle aBoundingBox (getBounds());
+    return awt::Point (aBoundingBox.X, aBoundingBox.Y);
+    /*
     ::Point aPixelPoint;
     if (mxShape.is())
     {
@@ -332,6 +369,7 @@ awt::Point SAL_CALL AccessibleShape::getLocationOnScreen (void)
                 ::Point (aLogicalPoint.X, aLogicalPoint.Y));
     }
     return awt::Point (aPixelPoint.X(), aPixelPoint.Y());
+    */
 }
 
 
@@ -341,33 +379,8 @@ awt::Size SAL_CALL AccessibleShape::getSize (void)
     throw (uno::RuntimeException)
 {
     CheckDisposedState ();
-    ::Size aPixelSize;
-    if (mxShape.is())
-    {
-        /*
-        Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
-        if (xSet.is())
-        {
-            try
-            {
-                uno::Any aValue = xSet->getPropertyValue (
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BoundingBox")));
-                awt::Rectangle aBBox;
-                aValue >>= aBBox;
-                return awt::Size (aBBox.Width, aBBox.Height);
-            }
-            catch (beans::UnknownPropertyException e)
-            {
-            }
-        }
-        */
-        awt::Size aSize (mxShape->getSize());
-        if (mrShapeTreeInfo.GetViewForwarder() != NULL)
-            aPixelSize = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
-                ::Size (aSize.Width, aSize.Height));
-    }
-    return awt::Size (aPixelSize.Width(), aPixelSize.Height());
-
+    awt::Rectangle aBoundingBox (getBounds());
+    return awt::Size (aBoundingBox.Width, aBoundingBox.Height);
 }
 
 
@@ -544,9 +557,11 @@ uno::Sequence<uno::Type> SAL_CALL
 //=====  lang::XEventListener  ================================================
 
 void SAL_CALL
-    AccessibleShape::disposing (const ::com::sun::star::lang::EventObject& aEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+    AccessibleShape::disposing (const lang::EventObject& aEvent)
+    throw (uno::RuntimeException)
 {
+    try
+    {
     CheckDisposedState ();
     OSL_TRACE ("AccessibleShape::disposing");
 
@@ -556,12 +571,11 @@ void SAL_CALL
         SetState (AccessibleStateType::DEFUNC);
         mxShape = NULL;
     }
-
-    // Either the document window, the shape, or the controller has been
-    // disposed.  Each one leads at least to not being able to determine the
-    // accessible shapes coordinates.
-    // Best thing would be to dispose this object.  That is not possible
-    // because we are not the owner of ourselves.
+    }
+    catch (uno::RuntimeException e)
+    {
+        OSL_TRACE ("caught exception");
+    }
 }
 
 
