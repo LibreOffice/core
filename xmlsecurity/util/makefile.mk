@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 18:19:21 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:37:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,10 @@ USE_DEFFILE=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
+.IF "$(WITH_MOZILLA)" == "NO"
+@all:
+    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity..."
+.ENDIF
 
 # --- Allgemein ----------------------------------------------------
 NO_BSYMBOLIC=TRUE
