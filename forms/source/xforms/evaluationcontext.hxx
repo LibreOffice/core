@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evaluationcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:52:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _EVALUATIONCONTEXT_HXX
 
 #include <com/sun/star/xml/dom/XNode.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 
 namespace xforms
@@ -76,6 +77,7 @@ public:
     EvaluationContext()
         : mxContextNode(),
           mxModel(),
+          mxNamespaces(),
           mnContextPosition( 0 ),
           mnContextSize( 0 )
     { }
@@ -83,18 +85,20 @@ public:
     EvaluationContext(
         const com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode>& xContextNode,
         const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& xModel,
+        const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces,
         sal_Int32 nPosition,
         sal_Int32 nSize )
         : mxContextNode( xContextNode ),
           mxModel( xModel ),
+          mxNamespaces( xNamespaces ),
           mnContextPosition( nPosition ),
           mnContextSize( nSize )
     { }
 
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> mxContextNode;
     com::sun::star::uno::Reference<com::sun::star::xforms::XModel> mxModel;
-    // ???
-    // com::sun::star::uno::Reference<com::sun::star::xforms::XXFormsModelElement> mxContextNode;
+    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> mxNamespaces;
+
     sal_Int32 mnContextPosition;
     sal_Int32 mnContextSize;
 };

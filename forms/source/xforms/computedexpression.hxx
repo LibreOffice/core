@@ -2,9 +2,9 @@
  *
  *  $RCSfile: computedexpression.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:49:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@ class ComputedExpression
 {
     /// the expression string
     rtl::OUString msExpression;
-
-    /// the namespaces that are used to interpret the expression string
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> mxNamespaces;
 
     /// is msExpression empty?
     bool mbIsEmpty;

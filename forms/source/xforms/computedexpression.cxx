@@ -2,9 +2,9 @@
  *
  *  $RCSfile: computedexpression.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:49:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ namespace xforms
 
 ComputedExpression::ComputedExpression()
     : msExpression(),
-      mxNamespaces( new NameContainer<OUString>() ),
       mbIsEmpty( true ),
       mbIsSimple( true ),
       mxResult()
@@ -126,23 +125,6 @@ void ComputedExpression::setExpression( const OUString& rExpression )
     mbIsEmpty = _checkExpression( " *" );
     mbIsSimple = false;
     mxResult.clear();
-}
-
-
-Reference<XNameContainer> ComputedExpression::getNamespaces() const
-{
-    return mxNamespaces;
-}
-
-void ComputedExpression::setNamespaces(
-    const Reference<XNameContainer>& xNamespaces )
-{
-    OSL_ENSURE( xNamespaces.is(), "need namespaces" );
-    OSL_ENSURE( xNamespaces->getElementType() ==
-                getCppuType( static_cast<OUString*>( NULL ) ),
-                "namespaces must be string container" );
-
-    mxNamespaces = xNamespaces;
 }
 
 
@@ -272,16 +254,18 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     xXPath->registerExtensionInstance(aExtension);
 
     // register namespaces
-    OSL_ENSURE( mxNamespaces.is(), "no namespaces!" );
-    Sequence<OUString> aPrefixes = mxNamespaces->getElementNames();
-    sal_Int32 nCount = aPrefixes.getLength();
-    const OUString* pPrefixes = aPrefixes.getConstArray();
-    for( sal_Int32 i = 0; i < nCount; i++ )
+    if( aContext.mxNamespaces.is() )
     {
-        const OUString* pNamePrefix = &pPrefixes[i];
-        OUString sNameURL;
-        mxNamespaces->getByName( *pNamePrefix ) >>= sNameURL;
-        xXPath->registerNS( *pNamePrefix, sNameURL );
+        Sequence<OUString> aPrefixes =aContext.mxNamespaces->getElementNames();
+        sal_Int32 nCount = aPrefixes.getLength();
+        const OUString* pPrefixes = aPrefixes.getConstArray();
+        for( sal_Int32 i = 0; i < nCount; i++ )
+        {
+            const OUString* pNamePrefix = &pPrefixes[i];
+            OUString sNameURL;
+            aContext.mxNamespaces->getByName( *pNamePrefix ) >>= sNameURL;
+            xXPath->registerNS( *pNamePrefix, sNameURL );
+        }
     }
 
     // done, so return xXPath-object
