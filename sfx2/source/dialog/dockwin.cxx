@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 11:16:40 $
+ *  last change: $Author: mba $ $Date: 2002-03-27 11:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,10 +539,12 @@ void SfxDockingWindow::Resizing( Size& rSize )
 */
 
 {
+/*
     if(rSize.Width()   < pImp->aMinSize.Width())
         rSize.Width()  = pImp->aMinSize.Width();
     if(rSize.Height()  < pImp->aMinSize.Height())
         rSize.Height() = pImp->aMinSize.Height();
+*/
 }
 
 //-------------------------------------------------------------------------
@@ -1295,6 +1297,7 @@ void SfxDockingWindow::SetMinOutputSizePixel( const Size& rSize )
 
 {
     pImp->aMinSize = rSize;
+    DockingWindow::SetMinOutputSizePixel( rSize );
 }
 
 //-------------------------------------------------------------------------
