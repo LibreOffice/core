@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:34:44 $
+#   last change: $Author: vg $ $Date: 2003-12-17 20:23:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,9 +95,11 @@ SHL1VERSIONMAP=libpsp_linux.map
 
 SHL1STDLIBS=$(UNOTOOLSLIB)		\
             $(TOOLSLIB) 		\
-            $(JVMACCESSLIB)		\
             $(SALLIB)			\
             -lX11
+.IF "$(SOLAR_JAVA)"!=""
+SHL1STDLIBS+=$(JVMACCESSLIB)
+.ENDIF
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
