@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.7 $
+ #  $Revision: 1.8 $
  #
- #  last change: $Author: hr $ $Date: 2004-08-02 16:23:59 $
+ #  last change: $Author: pjunck $ $Date: 2004-10-27 13:10:35 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -90,6 +90,8 @@ SLOFILES=	\
         $(SLO)$/AdvancedSettingsDlg.obj	\
         $(SLO)$/unoDirectSql.obj	\
         $(SLO)$/DBTypeWizDlg.obj	\
+        $(SLO)$/DBTypeWizDlgSetup.obj	\
+        $(SLO)$/CallDBTypeWizDlgSetup.obj	\
         $(SLO)$/AdabasSettingsDlg.obj	\
         $(SLO)$/UserSettingsDlg.obj \
         $(SLO)$/ColumnModel.obj	\
