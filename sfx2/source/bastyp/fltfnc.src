@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:00:20 $
+ *  last change: $Author: rt $ $Date: 2000-11-09 12:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ japanese ] = "‚±‚Μw“Η‚ΝµΜΧ²έ Σ°Δή‚Ε‚Μέ’θ‚Ι]‚Α‚Δ“Η‚έζ‚η‚κ‚ά‚·B\n\nStarOffice‚Ν »έµέΧ²έ Σ°Δή‚Ι‚Θ‚Α‚Δ‚Ά‚ά‚·BStarOffice‚π΅ µΜΧ²έ Σ°Δή‚ΙΨ‚θ·‚¦‚ά‚·‚©?";
     Text[ chinese_traditional ] = "«φ·Σ³]©w¨Ο¥ΞªΜ¨Ο¥Ξ³s½uΎ\\ΕªΌÒ¦΅΅C\n\nStarOffice ²{¦b³B©σ½u¤Wª¬ΊA΅C±z­nΕύ StarOffice Βΰ¨μ³s½uΌÒ¦΅΅H";
     Text[ arabic ] = "νΜΘ Γδ νήΡΓ εΠΗ ΗαΗΤΚΡΗί΅ ΝΣΘ ΗαΕΪΟΗΟΗΚ΅ έν ζΦΪ ΗαΗδέΥΗα.\n\nStarOfficeΝΗανΗπ έν ζΦΪ ΗαΗΚΥΗα. εα ΚΡνΟ ΚΫννΡ StarOffice ΗαΒδ Εαμ ζΦΪ ΗαΗδέΥΗαΏ";
-    Text[ greek ] = "Έχει οριστεί η ανάγνωση αυτής της συνδρομής να γίνεται σε κατάσταση εκτός σύνδεσης.\n\nΤο StarOffice βρίσκεται όμως σε κατάσταση απ' ευθείας σύνδεσης. Θέλετε να γίνει η αλλαγή σε κατάσταση χωρίς σύνδεση τώρα;";
+    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο StarOffice βρίσκεται όμως σε κατάσταση 'Σύνδεση'. Θέλετε να αλλάξει σε κατάσταση 'Χωρίς σύνδεση' τώρα;";
     Text[ korean ] = "ΎΛΈ²½ΕΓ»ΐΊ ΏΐΗΑ¶σΐΞ ΈπµεΏ΅Ό­ΈΈ ΐΠ±β Ό³Α¤ΐΜ µΛ΄Ο΄Ω.\n\nStarOffice Ηφΐη ΏΒ¶σΐΞΈπµεΐΤ΄Ο΄Ω.Αφ±έ ΏΐΗΑ¶σΐΞ Έπµε·Ξ ΐόΘ―ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu όyelik, ηevrimdύώύ kipte okunmak όzere ayarlanmύώtύr.\n\nStarOffice ώu an ηevrimiηi kipinde. StarOffice, ηevrimdύώύ kipe geηsin mi?";
     Text[ language_user1 ] = " ";
@@ -166,7 +166,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text [ English ] = "The selected filter $(FILTER) is not included in your edition.\nOrdering informations can be found on our website.";
     Text[ english_us ] = "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.";
     Text[ portuguese ] = "O filtro seleccionado $(FILTER) nγo estα incluνdo na sua versγo.\nEncontrarα as informaηυes necessαrias para uma possνvel encomenda na nossa pαgina principal.";
-    Text[ russian ] = "Βϋαπΰννϋι τθλόςπ $(FILTER) νε ρξδεπζθςρÿ β βΰψει βεπρθθ.\nΘντξπμΰφθώ ξ βξημξζνξρςÿυ ηΰκΰηΰ βϋ νΰιδεςε νΰ νΰψει νΰχΰλόνξι ρςπΰνθφε.";
+    Text[ russian ] = "Βϋαπΰννϋι τθλόςπ $(FILTER) νε ρξδεπζθςρÿ β Βΰψει βεπρθθ.\nΘντξπμΰφθώ ξ βξημξζνξρςÿυ ηΰκΰηΰ Βϋ νΰιδεςε νΰ νΰψει νΰχΰλόνξι ρςπΰνθφε.";
     Text[ dutch ] = "De geselecteerde filter $(FILTER) komt in uw versie niet voor.\nVoor informatie over bestelmogelijkheden zie onze homepage.";
     Text[ french ] = "Le filtre $(FILTER) que vous avez sιlectionnι n'est pas inclus dans votre version.\nVous trouverez les renseignements nιcessaires ΰ une ιventuelle commande sur notre page d'accueil.";
     Text[ spanish ] = "El filtro seleccionado $(FILTER) no estα incluido en su ediciσn.\nEn nuestra pαgina de Internet encontrarα las informaciones para poder pedirlos.";
