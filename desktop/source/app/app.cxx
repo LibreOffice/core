@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 17:04:49 $
+ *  last change: $Author: cd $ $Date: 2001-11-05 07:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "officeacceptthread.hxx"
 #include "pluginacceptthread.hxx"
 #include "desktopresid.hxx"
+#include "dispatchwatcher.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -1206,6 +1207,7 @@ void Desktop::Main()
 
             Reference< XConnectionBroker >  xServiceManagerBroker;
             Reference< XConnectionBroker >  xPalmPilotManagerBroker;
+            Reference< XStatusListener >    xDispatchWatcherStatusListener;
 
             InitTestToolLib();
 
@@ -1268,6 +1270,9 @@ void Desktop::Main()
                                                             UNO_QUERY );
                 if ( xDesktop.is() )
                     xDesktop->addTerminateListener( new OfficeIPCThreadController );
+
+                // Create dispatch watcher service to control dispatches of "dangerous" slot: URLs
+                xDispatchWatcherStatusListener = DispatchWatcher::GetDispatchWatcher();
             }
 
             // Release solar mutex just before we wait for our client to connect
@@ -1687,7 +1692,15 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                     xDispatcher = xProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
 
                 if( xDispatcher.is() == sal_True )
+                {
+                    // Special case: Start template wizard!
+                    // We have to be listener to catch errors during dispatching this slot-URL.
+                    // Otherwise it would be possible to have an office running without an open
+                    // window!!
+                    if ( aName.CompareToAscii( "slot:5500" ) == COMPARE_EQUAL )
+                        xDispatcher->addStatusListener( DispatchWatcher::GetDispatchWatcher(), aURL );
                     xDispatcher->dispatch( aURL, aArgs );
+                }
             }
             else
             {

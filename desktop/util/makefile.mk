@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: pl $ $Date: 2001-10-30 17:52:39 $
+#   last change: $Author: cd $ $Date: 2001-11-05 07:18:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,7 +133,8 @@ APP1OBJS= \
             $(OBJ)$/oinstanceprovider.obj	\
             $(OBJ)$/opluginframefactory.obj	\
             $(OBJ)$/appsys.obj				\
-            $(OBJ)$/desktopresid.obj
+            $(OBJ)$/desktopresid.obj	\
+            $(OBJ)$/dispatchwatcher.obj
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 

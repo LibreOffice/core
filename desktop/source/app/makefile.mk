@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2001-10-16 17:16:54 $
+#   last change: $Author: cd $ $Date: 2001-11-05 07:17:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ OBJFILES = \
         $(OBJ)$/oinstanceprovider.obj	\
         $(OBJ)$/opluginframefactory.obj	\
         $(OBJ)$/appsys.obj				\
-        $(OBJ)$/desktopresid.obj
+        $(OBJ)$/desktopresid.obj		\
+        $(OBJ)$/dispatchwatcher.obj
 
 SRC1FILES=	desktop.src
 SRS1NAME=	desktop
