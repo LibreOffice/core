@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: os $ $Date: 2000-11-17 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,14 @@
 
 #include <math.h>
 
-#ifndef _DATE_HXX //autogen
-#include <tools/date.hxx>
-#endif
-#ifndef _TOOLS_TIME_HXX //autogen
-#include <tools/time.hxx>
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 #ifndef _UNOPRNMS_HXX
@@ -295,9 +295,7 @@ ULONG SwDateTimeField::GetTime(BOOL bUseOffset) const
 --------------------------------------------------*/
 BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) const
 {
-    if(rProperty.EqualsAscii(UNO_NAME_DATETIME))
-        rVal <<= GetValue();
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED ))
+    if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED ))
     {
         BOOL bTmp = IsFixed();
         rVal.setValue(&bTmp, ::getCppuBooleanType());
@@ -311,6 +309,24 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) cons
     }
     else if(rProperty.EqualsAscii(UNO_NAME_ADJUST))
         rVal <<= (sal_Int32)nOffset;
+    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
+    {
+        ULONG nDate = GetDate();
+        ULONG nTime = GetTime();
+        DateTime aDateTime;
+        aDateTime.SetDate(nDate);
+        aDateTime.SetTime(nTime);
+
+        util::DateTime DateTimeValue;
+        DateTimeValue.HundredthSeconds = aDateTime.Get100Sec();
+        DateTimeValue.Seconds = aDateTime.GetSec();
+        DateTimeValue.Minutes = aDateTime.GetMin();
+        DateTimeValue.Hours = aDateTime.GetHour();
+        DateTimeValue.Day = aDateTime.GetDay();
+        DateTimeValue.Month = aDateTime.GetMonth();
+        DateTimeValue.Year = aDateTime.GetYear();
+        rVal <<= DateTimeValue;
+    }
 
 #ifdef   DBG_UTIL
     else
@@ -323,11 +339,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, const String& rProperty ) cons
 --------------------------------------------------*/
 BOOL SwDateTimeField::PutValue( const uno::Any& rVal, const String& rProperty )
 {
-    if(rProperty.EqualsAscii(UNO_NAME_DATETIME))
-    {
-        SetValue(*(Double*)rVal.getValue());
-    }
-    else if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
+    if(rProperty.EqualsAscii(UNO_NAME_IS_FIXED))
     {
         BOOL bFix = *(sal_Bool*)rVal.getValue();
         if(bFix)
@@ -352,6 +364,21 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, const String& rProperty )
         sal_Int32 nVal;
         rVal >>= nVal;
         nOffset = nVal;
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_DATE_TIME_VALUE))
+    {
+        util::DateTime aDateTimeValue;
+        if(!(rVal >>= aDateTimeValue))
+            return FALSE;
+        DateTime aDateTime;
+        aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
+        aDateTime.SetSec(aDateTimeValue.Seconds);
+        aDateTime.SetMin(aDateTimeValue.Minutes);
+        aDateTime.SetHour(aDateTimeValue.Hours);
+        aDateTime.SetDay(aDateTimeValue.Day);
+        aDateTime.SetMonth(aDateTimeValue.Month);
+        aDateTime.SetYear(aDateTimeValue.Year);
+        SetDateTime(aDateTime.GetDate(), aDateTime.GetTime());
     }
 #ifdef   DBG_UTIL
     else
