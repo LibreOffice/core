@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:37:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,15 +118,21 @@
 // Page settings ==============================================================
 
 XclImpPageSettings::XclImpPageSettings( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    mbValidPaper( false )
+    XclImpRoot( rRoot )
 {
+    Initialize();
+}
+
+void XclImpPageSettings::Initialize()
+{
+    maData.SetDefaults();
+    mbValidPaper = false;
 }
 
 void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= xlBiff4 );
-    if( GetBiff() < xlBiff4 )
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF4 );
+    if( GetBiff() < EXC_BIFF4 )
         return;
 
     // BIFF4 - BIFF8
@@ -141,7 +147,7 @@ void XclImpPageSettings::ReadSetup( XclImpStream& rStrm )
     maData.mbManualStart = true;
 
     // new in BIFF5 - BIFF8
-    if( GetBiff() >= xlBiff5 )
+    if( GetBiff() >= EXC_BIFF5 )
     {
         rStrm   >> maData.mnHorPrintRes >> maData.mnVerPrintRes
                 >> maData.mfHeaderMargin >> maData.mfFooterMargin >> maData.mnCopies;
@@ -167,7 +173,7 @@ void XclImpPageSettings::ReadMargin( XclImpStream& rStrm )
 
 void XclImpPageSettings::ReadCenter( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= xlBiff3 );    // read it anyway
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );  // read it anyway
     bool bCenter = (rStrm.ReaduInt16() != 0);
     switch( rStrm.GetRecId() )
     {
@@ -181,7 +187,7 @@ void XclImpPageSettings::ReadHeaderFooter( XclImpStream& rStrm )
 {
     String aString;
     if( rStrm.GetRecLeft() )
-        aString = (GetBiff() < xlBiff8) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
+        aString = (GetBiff() <= EXC_BIFF5) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
 
     switch( rStrm.GetRecId() )
     {
@@ -203,7 +209,7 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
 
     if( pVec )
     {
-        bool bIgnore = (GetBiff() >= xlBiff8);  // ignore start/end columns or rows in BIFF8
+        bool bIgnore = GetBiff() == EXC_BIFF8;  // ignore start/end columns or rows in BIFF8
 
         sal_uInt16 nCount, nBreak;
         rStrm >> nCount;
@@ -319,7 +325,7 @@ void lclPutMarginItem( SfxItemSet& rItemSet, sal_uInt16 nRecId, double fMarginIn
 
 } // namespace
 
-void XclImpPageSettings::CreatePageStyle()
+void XclImpPageSettings::Finalize()
 {
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
@@ -476,9 +482,6 @@ void XclImpPageSettings::CreatePageStyle()
         rDoc.SetRowFlags( static_cast<SCROW>(*aIt), nScTab, rDoc.GetRowFlags( static_cast<SCROW>(*aIt), nScTab ) | CR_MANUALBREAK );
     for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); (aIt != aEnd) && (*aIt <= MAXCOL); ++aIt )
         rDoc.SetColFlags( static_cast<SCCOL>(*aIt), nScTab, rDoc.GetColFlags( static_cast<SCCOL>(*aIt), nScTab ) | CR_MANUALBREAK );
-
-    // set to defaults for next sheet
-    maData.SetDefaults();
 }
 
 // ============================================================================
