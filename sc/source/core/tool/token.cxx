@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-08 18:34:18 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,22 @@ BOOL ScToken::TextEqual( const ScToken& rToken ) const
 }
 
 
+BOOL ScToken::Is3DRef() const
+{
+    switch ( eType )
+    {
+        case svDoubleRef :
+            if ( GetSingleRef2().IsFlag3D() )
+                return TRUE;
+        //! fallthru
+        case svSingleRef :
+            if ( GetSingleRef().IsFlag3D() )
+                return TRUE;
+    }
+    return FALSE;
+}
+
+
 // virtual dummy methods
 
 BYTE ScToken::GetByte() const
@@ -599,6 +615,18 @@ ComplRefData& ScToken::GetDoubleRef()
 {
     DBG_ERRORFILE( "ScToken::GetDoubleRef: virtual dummy called" );
     return aDummyDoubleRef;
+}
+
+const SingleRefData& ScToken::GetSingleRef2() const
+{
+    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    return aDummySingleRef;
+}
+
+SingleRefData& ScToken::GetSingleRef2()
+{
+    DBG_ERRORFILE( "ScToken::GetSingleRef2: virtual dummy called" );
+    return aDummySingleRef;
 }
 
 void ScToken::CalcAbsIfRel( const ScAddress& rPos )
@@ -687,6 +715,8 @@ const SingleRefData&    ScDoubleRefToken::GetSingleRef() const  { return aDouble
 SingleRefData&          ScDoubleRefToken::GetSingleRef()        { return aDoubleRef.Ref1; }
 const ComplRefData&     ScDoubleRefToken::GetDoubleRef() const  { return aDoubleRef; }
 ComplRefData&           ScDoubleRefToken::GetDoubleRef()        { return aDoubleRef; }
+const SingleRefData&    ScDoubleRefToken::GetSingleRef2() const { return aDoubleRef.Ref2; }
+SingleRefData&          ScDoubleRefToken::GetSingleRef2()       { return aDoubleRef.Ref2; }
 void                    ScDoubleRefToken::CalcAbsIfRel( const ScAddress& rPos )
                             { aDoubleRef.CalcAbsIfRel( rPos ); }
 void                    ScDoubleRefToken::CalcRelFromAbs( const ScAddress& rPos )
@@ -1782,6 +1812,37 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
     }
 
     return FALSE;
+}
+
+
+void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
+        const ScAddress& rNewPos )
+{
+    for ( USHORT j=0; j<nLen; ++j )
+    {
+        switch ( pCode[j]->GetType() )
+        {
+            case svDoubleRef :
+            {
+                SingleRefData& rRef2 = pCode[j]->GetSingleRef2();
+                if ( rRef2.IsFlag3D() )
+                {
+                    rRef2.CalcAbsIfRel( rOldPos );
+                    rRef2.CalcRelFromAbs( rNewPos );
+                }
+            }
+            //! fallthru
+            case svSingleRef :
+            {
+                SingleRefData& rRef1 = pCode[j]->GetSingleRef();
+                if ( rRef1.IsFlag3D() )
+                {
+                    rRef1.CalcAbsIfRel( rOldPos );
+                    rRef1.CalcRelFromAbs( rNewPos );
+                }
+            }
+        }
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,11 +966,14 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             ScToken** ppToken1 = pCode1->GetArray();
             ScToken** ppToken2 = pCode2->GetArray();
             for (USHORT i=0; i<nLen; i++)
-                if ( !ppToken1[i]->TextEqual(*(ppToken2[i])) )
+            {
+                if ( !ppToken1[i]->TextEqual(*(ppToken2[i])) ||
+                        ppToken1[i]->Is3DRef() || ppToken2[i]->Is3DRef() )
                 {
                     bEqual = FALSE;
                     break;
                 }
+            }
 
             if (bEqual)             // gleiche Formeln nicht vertauschen
                 return;
@@ -998,7 +1001,8 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             pCell1->ForgetBroadcaster();
         if ( eType1 == CELLTYPE_FORMULA )
         {
-            pNew2 = ((ScFormulaCell*)pCell1)->Clone( pDocument, ScAddress( nCol, nRow2, nTab ) );
+            pNew2 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow2, nTab ),
+                *(const ScFormulaCell*)pCell1, 0x0001 );
 //          ScRange aRange( ScAddress( 0, nRow2, nTab ), ScAddress( MAXCOL, nRow2, nTab ) );
 //          ((ScFormulaCell*)pNew2)->UpdateReference(URM_MOVE, aRange, 0, dy, 0);
         }
@@ -1018,7 +1022,8 @@ void ScColumn::SwapRow(USHORT nRow1, USHORT nRow2)
             pCell2->ForgetBroadcaster();
         if ( eType2 == CELLTYPE_FORMULA )
         {
-            pNew1 = ((ScFormulaCell*)pCell2)->Clone( pDocument, ScAddress( nCol, nRow1, nTab ) );
+            pNew1 = new ScFormulaCell( pDocument, ScAddress( nCol, nRow1, nTab ),
+                *(const ScFormulaCell*)pCell2, 0x0001 );
 //          ScRange aRange( ScAddress( 0, nRow1, nTab ), ScAddress( MAXCOL, nRow1, nTab ) );
 //          ((ScFormulaCell*)pNew1)->UpdateReference(URM_MOVE, aRange, 0, -dy, 0);
         }

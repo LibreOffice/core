@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,10 @@ public:
     ScFormulaCell( ScDocument* pDoc, const ScAddress&,
                    const String& rFormula, BYTE bMatInd = 0 );
     // copy-ctor
+    // nCopyFlags:  0 := nothing special
+    //              0x0001 := readjust 3D references to point to old position even if relative
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                   const ScFormulaCell& rScFormulaCell );
+                   const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags = 0 );
     // lesender ctor
     ScFormulaCell( ScDocument* pDoc, const ScAddress&,
                    SvStream& rStream, ScMultipleReadHeader& rHdr );

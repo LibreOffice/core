@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-05 11:51:53 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
-                              const ScFormulaCell& rScFormulaCell ) :
+                              const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags ) :
     ScBaseCell( rScFormulaCell ),
     SfxListener(),
     aErgString( rScFormulaCell.aErgString ),
@@ -684,6 +684,10 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     else
         pMatrix = NULL;
     pCode = rScFormulaCell.pCode->Clone();
+
+    if ( nCopyFlags & 0x0001 )
+        pCode->ReadjustRelative3DReferences( rScFormulaCell.aPos, aPos );
+
     // evtl. Fehler zuruecksetzen und neu kompilieren
     //  nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
     //  Spezialfall Laenge=0: als Fehlerzelle erzeugt, dann auch Fehler behalten
@@ -697,6 +701,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     BOOL bClipMode = rScFormulaCell.pDocument->IsClipboard();
     if( !bCompile )
     {   // Name references with references and ColRowNames
+        pCode->Reset();
         for( ScToken* t = pCode->GetNextReferenceOrName(); t && !bCompile;
                       t = pCode->GetNextReferenceOrName() )
         {

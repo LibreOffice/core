@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-28 11:51:17 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ public:
     virtual SingleRefData&      GetSingleRef();
     virtual const ComplRefData& GetDoubleRef() const;
     virtual ComplRefData&       GetDoubleRef();
+    virtual const SingleRefData&    GetSingleRef2() const;
+    virtual SingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual ScMatrix*           GetMatrix() const;
@@ -167,6 +169,7 @@ public:
 
     virtual BOOL                operator==( const ScToken& rToken ) const;
             BOOL                TextEqual( const ScToken& rToken ) const;
+            BOOL                Is3DRef() const;    // reference with 3D flag set
 
     static  size_t              GetStrLenBytes( xub_StrLen nLen )
                                     { return nLen * sizeof(sal_Unicode); }
@@ -272,6 +275,8 @@ public:
     virtual SingleRefData&      GetSingleRef();
     virtual const ComplRefData& GetDoubleRef() const;
     virtual ComplRefData&       GetDoubleRef();
+    virtual const SingleRefData&    GetSingleRef2() const;
+    virtual SingleRefData&      GetSingleRef2();
     virtual void                CalcAbsIfRel( const ScAddress& );
     virtual void                CalcRelFromAbs( const ScAddress& );
     virtual BOOL                operator==( const ScToken& rToken ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-10-09 11:43:52 $
+ *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,11 @@ public:
 
     // Zuweisung mit Referenzen auf Tokens
     ScTokenArray& operator=( const ScTokenArray& );
+
+    // make 3D references point to old referenced position even if relative
+            void            ReadjustRelative3DReferences(
+                                const ScAddress& rOldPos,
+                                const ScAddress& rNewPos );
 };
 
 inline OpCode ScTokenArray::GetOuterFuncOpCode()
