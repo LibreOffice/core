@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:24:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLBodyContext_Impl();
 
+    TYPEINFO();
+
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
@@ -271,6 +273,8 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
 SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
 {
 }
+
+TYPEINIT1( SwXMLBodyContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
@@ -295,6 +299,8 @@ public:
                 const Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~SwXMLDocContext_Impl();
 
+    TYPEINFO();
+
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
@@ -310,6 +316,8 @@ SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
 SwXMLDocContext_Impl::~SwXMLDocContext_Impl()
 {
 }
+
+TYPEINIT1( SwXMLDocContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
