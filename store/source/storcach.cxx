@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storcach.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORCACH_CXX "$Revision: 1.2 $"
+#define _STORE_STORCACH_CXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -247,6 +247,8 @@ struct OStorePageCacheEntry
  * OStorePageCache debug internals.
  *
  *======================================================================*/
+#ifdef __STORE_CACHE_DEBUG
+
 /*
  * __store_check_entry.
  */
@@ -292,6 +294,8 @@ static sal_uInt16 __store_find_entry (
     return ((sal_uInt16)(-1));
 }
 
+#endif /* __STORE_CACHE_DEBUG */
+
 /*========================================================================
  *
  * OStorePageCache implementation.
@@ -324,7 +328,11 @@ OStorePageCache::OStorePageCache (sal_uInt16 nPages)
  */
 OStorePageCache::~OStorePageCache (void)
 {
+#ifdef DEBUG
     double x = hitRatio();
+    x = 0;
+#endif /* DEBUG */
+
     for (sal_uInt16 i = 0; i < m_nSize; i++)
         delete m_pData[i];
 }
@@ -386,11 +394,11 @@ void OStorePageCache::move (sal_uInt16 nSI, sal_uInt16 nDI)
     m_pData[nDI] = p;
     m_pData[nDI]->index(nDI);
 
-#if 0  /* DEBUG */
+#ifdef __STORE_CACHE_DEBUG
     OSL_POSTCOND(
         __store_check_entry(&m_pData[0], m_nUsed),
         "OStorePageCache::move(): check_entry() failed");
-#endif /* DEBUG */
+#endif /* __STORE_CACHE_DEBUG */
 }
 
 /*
@@ -403,11 +411,11 @@ storeError OStorePageCache::insert (
     OStorePageBIOS             &rBIOS,
     InsertMode                  eMode)
 {
-#if 0  /* DEBUG */
+#ifdef __STORE_CACHE_DEBUG
     OSL_PRECOND(
         __store_check_entry(&m_pData[0], m_nUsed),
         "OStorePageCache::insert(): check_entry() failed");
-#endif /* DEBUG */
+#endif /* __STORE_CACHE_DEBUG */
 
     entry::CompareResult result = entry::COMPARE_EQUAL;
     if (nDI < m_nUsed)
@@ -684,4 +692,3 @@ storeError OStorePageCache::flush (
     // Leave.
     STORE_METHOD_LEAVE(pMutex, store_E_None);
 }
-
