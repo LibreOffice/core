@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:31:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,12 +75,15 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SVX_CHARDLG_HXX //autogen
-#include <svx/chardlg.hxx>
-#endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
+//CHINA001 #ifndef _SVX_CHARDLG_HXX //autogen
+//CHINA001 #include <svx/chardlg.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
+#ifndef _SVX_FLSTITEM_HXX //CHINA001
+#include <svx/flstitem.hxx> //CHINA001
+#endif //CHINA001
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
@@ -153,6 +156,12 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxids.hrc> //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -181,14 +190,15 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
         aTmp += ')';
         SetText(aTmp);
     }
-
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
     //OS: Unter OS/2 darf die erste TabPage nie per RemoveTabPage entfernt werden
-    AddTabPage(TP_CHAR_STD, SvxCharNamePage::Create, 0);
-    AddTabPage(TP_CHAR_EXT, SvxCharEffectsPage::Create, 0);
-    AddTabPage(TP_CHAR_POS, SvxCharPositionPage::Create, 0);
-    AddTabPage(TP_CHAR_TWOLN, SvxCharTwoLinesPage::Create, 0);
+    AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );//CHINA001 AddTabPage(TP_CHAR_STD, SvxCharNamePage::Create, 0);
+    AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 ); //CHINA001 AddTabPage(TP_CHAR_EXT, SvxCharEffectsPage::Create, 0);
+    AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 ); //CHINA001 AddTabPage(TP_CHAR_POS, SvxCharPositionPage::Create, 0);
+    AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 ); //CHINA001 AddTabPage(TP_CHAR_TWOLN, SvxCharTwoLinesPage::Create, 0);
     AddTabPage(TP_CHAR_URL, SwCharURLPage::Create, 0);
-    AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    0);
 
     SvtCJKOptions aCJKOptions;
     if(bIsDrwTxtMode)
@@ -217,28 +227,44 @@ SwCharDlg::~SwCharDlg()
 
 void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
     switch( nId )
     {
         case TP_CHAR_STD:
-            ((SvxCharNamePage&)rPage).SetFontList( *( (SvxFontListItem*)
-               ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+            {
+            //CHINA001 ((SvxCharNamePage&)rPage).SetFontList( *( (SvxFontListItem*)
+               //CHINA001 ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+            SvxFontListItem aFontListItem( *( (SvxFontListItem*)
+               ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );  //CHINA001
+            aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST)); //CHINA001
                 if(!bIsDrwTxtMode)
-                    ((SvxCharNamePage&)rPage).SetPreviewBackgroundToCharacter();
+                    aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
+                    //CHINA001 ((SvxCharNamePage&)rPage).SetPreviewBackgroundToCharacter();
+            rPage.PageCreated(aSet); //CHINA001
+            }
             break;
         case TP_CHAR_EXT:
             if(bIsDrwTxtMode)
-                ((SvxCharEffectsPage&)rPage).DisableControls(DISABLE_CASEMAP);
+                //CHINA001 ((SvxCharEffectsPage&)rPage).DisableControls(DISABLE_CASEMAP);
+                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+
             else
             {
-                ((SvxCharEffectsPage&)rPage).SetPreviewBackgroundToCharacter();
-                ((SvxCharEffectsPage&)rPage).EnableFlash();
+                //CHINA001 ((SvxCharEffectsPage&)rPage).SetPreviewBackgroundToCharacter();
+                //CHINA001 ((SvxCharEffectsPage&)rPage).EnableFlash();
+                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH)); //CHINA001
             }
+            rPage.PageCreated(aSet); //CHINA001
             break;
         case TP_CHAR_POS:
-            ((SvxCharPositionPage&)rPage).SetPreviewBackgroundToCharacter();
+            //CHINA001 ((SvxCharPositionPage&)rPage).SetPreviewBackgroundToCharacter();
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
+            rPage.PageCreated(aSet); //CHINA001
         break;
         case TP_CHAR_TWOLN:
-            ((SvxCharTwoLinesPage&)rPage).SetPreviewBackgroundToCharacter();
+            //CHINA001 ((SvxCharTwoLinesPage&)rPage).SetPreviewBackgroundToCharacter();
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
+            rPage.PageCreated(aSet); //CHINA001
         break;
     }
 }
