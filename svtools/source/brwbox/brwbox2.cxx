@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:24:31 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 09:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,9 +905,9 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     const StyleSettings &rSettings = _rOut.GetSettings().GetStyleSettings();
     const Color &rHighlightTextColor = rSettings.GetHighlightTextColor();
     const Color &rHighlightFillColor = rSettings.GetHighlightColor();
-    const Color& aOldTextColor = _rOut.GetTextColor();
-    const Color& aOldFillColor = _rOut.GetFillColor();
-    const Color& aOldLineColor = _rOut.GetLineColor();
+    Color aOldTextColor = _rOut.GetTextColor();
+    Color aOldFillColor = _rOut.GetFillColor();
+    Color aOldLineColor = _rOut.GetLineColor();
     long nHLineX = 0 == pCols->GetObject(0)->GetId()
                     ? pCols->GetObject(0)->Width()
                     : 0;
@@ -1068,8 +1068,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
 
     // retouching
     _rOut.SetClipRegion();
-    Color aOldLineColorCpy = _rOut.GetLineColor();
-    Color aOldFillColorCpy = _rOut.GetFillColor();
+    aOldLineColor = _rOut.GetLineColor();
+    aOldFillColor = _rOut.GetFillColor();
     _rOut.SetFillColor( rSettings.GetFaceColor() );
     if ( pCols->Count() && ( pCols->GetObject(0)->GetId() == 0 ) && ( aPos.Y() <= _rRect.Bottom() ) )
     {
@@ -1081,7 +1081,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             Point( aOverallAreaPos.X() + pCols->GetObject(0)->Width() - 1,
                    _rRect.Bottom() + 1) ) );
     }
-    _rOut.SetFillColor( aOldFillColorCpy );
+    _rOut.SetFillColor( aOldFillColor );
 
     // draw vertical delimitational line between frozen and scrollable cols
     _rOut.SetLineColor( COL_BLACK );
@@ -1127,7 +1127,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         }
     }
 
-    _rOut.SetLineColor( aOldLineColorCpy );
+    _rOut.SetLineColor( aOldLineColor );
 }
 
 //-------------------------------------------------------------------
