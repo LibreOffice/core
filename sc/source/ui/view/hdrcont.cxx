@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-29 18:43:37 $
+ *  last change: $Author: ssa $ $Date: 2002-09-17 09:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
             nMarkEnd    ( 0 ),
             bMarkRange  ( FALSE )
 {
+    // --- RTL --- no default mirroring for this window, the spreadsheet itself
+    // is also not mirrored
+    EnableRTL ( FALSE );
+
     aNormFont = GetFont();
     aNormFont.SetTransparent( TRUE );       //! WEIGHT_NORMAL hart setzen ???
     aBoldFont = aNormFont;
