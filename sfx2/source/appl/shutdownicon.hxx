@@ -2,11 +2,26 @@
 #ifndef __SHUTDOWNICON_HXX__
 #define __SHUTDOWNICON_HXX__
 
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HDL_
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
@@ -14,25 +29,28 @@
 #ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+#ifndef _SFX_SFXUNO_HXX
+#include <sfx2/sfxuno.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 
 class ResMgr;
 
-class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
-                        public ::cppu::OWeakObject
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::frame::XTerminateListener, ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
+
+class ShutdownIcon :    public ShutdownIconServiceBase
 {
         ::osl::Mutex    m_aMutex;
         bool            m_bVeto;
         ResMgr          *m_pResMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
 
         static ShutdownIcon *pShutdownIcon; // one instance
-        ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop,
-                      ResMgr *aResMgr );
 
 #ifdef WNT
         void initSystray();
@@ -42,14 +60,16 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
 #endif
 
     public:
+        ShutdownIcon( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > aSMgr );
+
         virtual ~ShutdownIcon();
 
-        static void create( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop >& aDesktop,
-                            ResMgr *aResMgr );
-        static ShutdownIcon* getInstance();
+        SFX_DECL_XSERVICEINFO
 
-        static void destroy();
+
+        static ShutdownIcon* getInstance();
         static void terminateDesktop();
+        static void addTerminateListener();
 
         static void FileOpen();
         static void OpenURL( ::rtl::OUString& aURL );
@@ -58,19 +78,18 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
         static void SetAutostart( bool bActivate );
         static bool GetAutostart();
 
+        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
+                    GetWrapperFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSMgr );
+        static ::rtl::OUString  GetImplementationName_static();
+
         ::rtl::OUString GetResString( int id );
         ::rtl::OUString GetUrlDescription( const ::rtl::OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }
 
-        // XInterface
-        virtual void SAL_CALL acquire()
-            throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL release()
-            throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType )
-            throw( ::com::sun::star::uno::RuntimeException );
+        // Component Helper - force override
+        virtual void SAL_CALL disposing();
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )

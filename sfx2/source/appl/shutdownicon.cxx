@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-05 12:12:46 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
-
+#include <cmdlineargs.hxx>
 
 
 #ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
@@ -101,13 +101,35 @@ using namespace ::vos;
 using namespace ::rtl;
 using namespace ::sfx2;
 
-ShutdownIcon* ShutdownIcon::pShutdownIcon = NULL;
+SFX_IMPL_XSERVICEINFO( ShutdownIcon, "com.sun.star.office.Quickstart", "com.sun.star.comp.desktop.QuickstartWrapper" )  \
+SFX_IMPL_ONEINSTANCEFACTORY( ShutdownIcon );
 
-ShutdownIcon::ShutdownIcon( Reference< XDesktop >& aDesktop, ResMgr *aResMgr ) :
-    m_xDesktop( aDesktop ),
-    m_pResMgr( aResMgr ),
+ShutdownIcon* ShutdownIcon::pShutdownIcon = 0;
+
+ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
+    ShutdownIconServiceBase( m_aMutex ),
+    m_xServiceManager( aSMgr ),
+    m_pResMgr( 0 ),
     m_bVeto ( false )
 {
+    m_pResMgr = SFX_APP()->GetSfxResManager();
+
+    ::sfx2::CommandLineArgs aCommandLineArgs( ::vos::OExtCommandLine() );
+
+    if( Application::IsRemoteServer() || ( !aCommandLineArgs.IsQuickstart() && !GetAutostart() ) )
+        return;
+
+    m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
+                                                DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
+                                            UNO_QUERY );
+
+    if ( !m_xDesktop.is() )
+        return;
+
+    ShutdownIcon::pShutdownIcon = this;
+#ifdef WNT
+    initSystray();
+#endif
 }
 
 ShutdownIcon::~ShutdownIcon()
@@ -115,34 +137,6 @@ ShutdownIcon::~ShutdownIcon()
 #ifdef WNT
     deInitSystray();
 #endif
-    m_xDesktop = Reference < XDesktop > ();
-}
-
-
-void ShutdownIcon::create( Reference< XDesktop >& aDesktop, ResMgr* aResMgr )
-{
-    if( !pShutdownIcon )
-    {
-        pShutdownIcon = new ShutdownIcon( aDesktop, aResMgr );
-        pShutdownIcon->acquire();
-#ifdef WNT
-        pShutdownIcon->initSystray();
-#endif
-    }
-}
-
-void ShutdownIcon::destroy()
-{
-    if( pShutdownIcon )
-    {
-        pShutdownIcon->release();
-        pShutdownIcon = NULL;
-    }
-}
-
-ShutdownIcon* ShutdownIcon::getInstance()
-{
-    return pShutdownIcon;
 }
 
 // ---------------------------------------------------------------------------
@@ -282,6 +276,12 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 
 // ---------------------------------------------------------------------------
 
+void ShutdownIcon::addTerminateListener()
+{
+    if ( getInstance() && getInstance()->m_xDesktop.is() )
+        getInstance()->m_xDesktop->addTerminateListener( getInstance() );
+}
+
 void ShutdownIcon::terminateDesktop()
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
@@ -307,37 +307,19 @@ void ShutdownIcon::terminateDesktop()
     }
 }
 
+ShutdownIcon* ShutdownIcon::getInstance()
+{
+    OSL_ASSERT( pShutdownIcon );
+    return pShutdownIcon;
+}
+
+void SAL_CALL ShutdownIcon::disposing()
+{
+    m_xServiceManager = Reference< XMultiServiceFactory >();
+    m_xDesktop = Reference< XDesktop >();
+}
+
 // ---------------------------------------------------------------------------
-
-// XInterface
-void SAL_CALL ShutdownIcon::acquire()
-throw( ::com::sun::star::uno::RuntimeException )
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL ShutdownIcon::release()
-throw( ::com::sun::star::uno::RuntimeException )
-{
-    OWeakObject::release();
-}
-
-Any SAL_CALL ShutdownIcon::queryInterface( const Type & rType ) throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST(
-                ::com::sun::star::frame::XTerminateListener* , this ),
-                SAL_STATIC_CAST(
-                ::com::sun::star::lang::XEventListener*, this ));
-    if( a.hasValue() )
-    {
-        return a;
-    }
-
-    return OWeakObject::queryInterface( rType );
-}
-
 
 // XEventListener
 void SAL_CALL ShutdownIcon::disposing( const ::com::sun::star::lang::EventObject& Source )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-11 07:52:23 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ using namespace ::rtl;
 #include "unoctitm.hxx"
 #include "dispatch.hxx"
 #include "doctemplates.hxx"
+#include "shutdownicon.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -932,6 +933,15 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
 
+    // quickstart wrapper service
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ShutdownIcon::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
+
 #if 0
     if (pRegistryKey)
     {
@@ -982,6 +992,7 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
         IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
+        IF_NAME_CREATECOMPONENTFACTORY( ShutdownIcon )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )

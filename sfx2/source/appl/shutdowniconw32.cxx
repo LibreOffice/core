@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-05 12:12:46 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
                 // disable shutdown
                 ShutdownIcon::getInstance()->SetVeto( true );
+                ShutdownIcon::getInstance()->addTerminateListener();
             }
             return 0;
 

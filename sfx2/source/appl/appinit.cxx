@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-12 10:08:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     Registrations_Impl();
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+//    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
 
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_STARTAPP,        String(SfxResId(STR_EVENT_STARTAPP)),   aEventNames.GetString( 0 ) );
