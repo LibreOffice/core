@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hr $ $Date: 2004-11-09 11:21:44 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:34:39 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -49,11 +49,6 @@ include $(SETTINGS)/std.mk
 # Define non-platform/compiler specific settings
 OUT_COMP_CLASS = $(OUT_CLASS)/OOoBeanViewer
 
-JAR1_NAME=OOoBeanViewer
-JAR1_JAR_NAME = $(JAR1_NAME).jar
-JAR1_JAR = $(OUT_CLASS)/$(JAR1_JAR_NAME)
-JAR1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(JAR1_NAME).Manifest
-
 # normally the idl file should be stored in a directory tree fitting the module structure,
 # for the example we know the module structure
 PACKAGE = com/sun/star/comp/beans
@@ -78,39 +73,19 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS)/%.Manifest :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo Main-Class: OOoBeanViewer> $@
-	@echo Class-Path: sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar officebean.jar>> $@
-	@echo Name: OOoBeanViewer.class>> $@
-	@echo Java-Bean: True>> $@
-
 $(CLASSFILES) : $(JAVAFILES) 
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) OfficeIconColor16.jpg $(subst /,$(PS),$(OUT_COMP_CLASS))
-	$(COPY) OfficeIconColor32.jpg $(subst /,$(PS),$(OUT_COMP_CLASS))
-	$(COPY) OfficeIconMono16.jpg $(subst /,$(PS),$(OUT_COMP_CLASS))
-	$(COPY) OfficeIconMono32.jpg $(subst /,$(PS),$(OUT_COMP_CLASS))
-	jar cvfm $@ $< -C $(OUT_COMP_CLASS) .
-
-
-OOoBeanViewer: $(JAR1_JAR)
+OOoBeanViewer: $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute the example!
 	@echo -
 	@echo make OOoBeanViewer.run
-#	@echo ------
-#	@echo If you want to run the $(JAR1_JAR) file please set your
-#	@echo CLASSPATH = $(SDK_CLASSPATH)
-#	@echo Start the example with java -jar $(JAR1_JAR)
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(JAR1_JAR)
-	java -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
+%.run: $(CLASSFILES)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
 
 %.dbg: $(JAR1_JAR)
 	jdb -classpath "$(SDK_CLASSPATH)" $(subst /,.,$(PACKAGE)).$(basename $@)
@@ -118,5 +93,4 @@ OOoBeanViewer: $(JAR1_JAR)
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst /,$(PS),$(JAR1_JAR))
 
