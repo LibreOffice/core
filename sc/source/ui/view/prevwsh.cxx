@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-13 16:31:14 $
+ *  last change: $Author: ssa $ $Date: 2002-09-17 09:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@ void ScPreviewShell::Construct( Window* pParent )
 
     pHorScroll = new ScrollBar(pParent, WB_HSCROLL );
     pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
+
+    // SSA: --- RTL --- no mirroring for horizontal scrollbars
+    pHorScroll->EnableRTL( FALSE );
 
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
     pVerScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
