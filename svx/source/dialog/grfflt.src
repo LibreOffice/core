@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-10 15:50:29 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 11:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,15 +143,15 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text = "~Breite" ;
         Text[ ENGLISH ] = "~Width" ;
         Text[ norwegian ] = "~Bredde" ;
-        Text[ italian ] = "~Largh." ;
+        Text[ italian ] = "Larghezza" ;
         Text[ portuguese_brazilian ] = "~Largura" ;
         Text[ portuguese ] = "~Largura" ;
         Text[ finnish ] = "~Leveys" ;
         Text[ danish ] = "Bredde" ;
-        Text[ french ] = "~Largeur" ;
+        Text[ french ] = "Largeur" ;
         Text[ swedish ] = "~Bredd" ;
         Text[ dutch ] = "~Breedte" ;
-        Text[ spanish ] = "A~ncho" ;
+        Text[ spanish ] = "Ancho" ;
         Text[ english_us ] = "~Width" ;
         Text[ chinese_simplified ] = "å®½åº¦(~W)";
         Text[ russian ] = "~Øèðèíà";
@@ -191,7 +191,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text = "~Höhe" ;
         Text[ ENGLISH ] = "~Height" ;
         Text[ norwegian ] = "~H°yde" ;
-        Text[ italian ] = "~Altezza" ;
+        Text[ italian ] = "Altezza" ;
         Text[ portuguese_brazilian ] = "~Altura" ;
         Text[ portuguese ] = "~Altura" ;
         Text[ finnish ] = "K~orkeus" ;
