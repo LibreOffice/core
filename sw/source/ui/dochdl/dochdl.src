@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:51:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ Bitmap BMP_SW_TEAM_MUGSHOT
 
 String STR_SW_TEAM_NAMES
 {
-    TEXT = "Back row: Juergen Pingel, Caolan McNamara, Andreas Martens, Daniel Vogelheim, Thomas Lange, Michael Brauer, Frank Meies, Oliver Specht, Ulf Stroehler (QA). \nFront row: Stefan Baltzer (QA), Eric Savary (QA), Hasan Ilter (QA), Martin Gallwey, Michael Ruess (QA)";
+    TEXT = "Back row: Aidan Butler, Peter Burow, Caolán McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Düsterhöft, Henning Brinkmann,  Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
 
 
