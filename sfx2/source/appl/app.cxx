@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-19 16:07:12 $
+ *  last change: $Author: er $ $Date: 2001-06-21 18:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@
 #include <svtools/fontoptions.hxx>
 #include <svtools/internaloptions.hxx>
 #include <svtools/workingsetoptions.hxx>
+#include <svtools/syslocaleoptions.hxx>
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
@@ -248,6 +249,7 @@ static SvtLocalisationOptions *pLocalisationOptions = NULL;
 static SvtInetOptions *pInetOptions = NULL;
 static SvtFontOptions *pFontOptions = NULL;
 static SvtInternalOptions *pInternalOptions = NULL;
+static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
 
 SfxApplication* SfxApplication::GetOrCreate()
 {
@@ -316,6 +318,7 @@ SfxApplication::SfxApplication()
     pInetOptions = new SvtInetOptions;
     pFontOptions = new SvtFontOptions;
     pInternalOptions = new SvtInternalOptions;
+    pSysLocaleOptions = new SvtSysLocaleOptions;
     SvtViewOptions::AcquireOptions();
 
     pImp = new SfxApplication_Impl;
@@ -337,13 +340,17 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-    International aOldInter( Application::GetAppInternational() );
     String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
-    LanguageType eLanguage = (LanguageType) sLanguage.ToInt32();
-    if ( Application::IsRemoteServer() )
-        Application::SetAppInternational( International( eLanguage, eLanguage ) );
-    else
-        Application::SetAppInternational( International( eLanguage, aOldInter.GetFormatLanguage() ) );
+    LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
+    LanguageType eLanguage = pSysLocaleOptions->GetLocaleLanguageType();
+    AllSettings aSettings( Application::GetSettings() );
+    aSettings.SetUILanguage( eUILanguage );
+    aSettings.SetLanguage( eLanguage );
+    Application::SetSettings( aSettings );
+//!!!!!!!
+//! TODO: Establish a SvtListener at pSysLocaleOptions to be notified if locale
+//!       changes, and propagate the new LanguageType to application settings.
+//!!!!!!!
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
@@ -386,6 +393,7 @@ SfxApplication::~SfxApplication()
     delete pInetOptions;
     delete pFontOptions;
     delete pInternalOptions;
+    delete pSysLocaleOptions;
 
     if ( !bDowning )
         Deinitialize();
