@@ -11,6 +11,7 @@
 "OScrollBarModel";"com::sun::star::form::component::ScrollBar";"DefaultScrollValue"
 "OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"BlockIncrement"
 "OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"Border"
+"OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"BorderColor#optional"
 "OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"Enabled"
 "OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"HelpText"
 "OScrollBarModel";"com::sun::star::awt::UnoControlScrollBarModel";"HelpURL"

@@ -9,6 +9,7 @@
 "OSpinButtonModel";"com::sun::star::awt::UnoControlDialogElement#optional";"Tag"
 "OSpinButtonModel";"com::sun::star::awt::UnoControlDialogElement#optional";"Width"
 "OSpinButtonModel";"com::sun::star::awt::UnoControlSpinButtonModel";"Border"
+"OSpinButtonModel";"com::sun::star::awt::UnoControlSpinButtonModel";"BorderColor#optional"
 "OSpinButtonModel";"com::sun::star::awt::UnoControlSpinButtonModel";"Enabled"
 "OSpinButtonModel";"com::sun::star::awt::UnoControlSpinButtonModel";"HelpText"
 "OSpinButtonModel";"com::sun::star::awt::UnoControlSpinButtonModel";"HelpURL"
