@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-07 16:41:38 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,51 +136,49 @@ static OUString getDefaultLocalRegistry()
 
     sal_Bool bIsPortalUser = retrievePortalUserDir( &portalUserDir );
 
-    if ( bIsPortalUser && portalUserDir.getLength() )
+    if ( bIsPortalUser )
        {
-        FileBase::getFileURLFromSystemPath( portalUserDir , portalUserDir );
-
-        FileBase::getAbsoluteFileURL(
-            portalUserDir,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "user/" REGISTRY_LOCAL_NAME ) ),
-            userRegistryName );
-
-        // Directory creation is probably necessary for bootstrapping a new
-        // user in the portal environment (the ucb uses this function).
-        // This should be solved differently, as
-        // no one expects this function to create anything ...
-
-        OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
-        OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
-        FileBase::RC retRC = FileBase::E_None;
-
-        sal_Int32 nIndex = 3;
-        sPath += userRegistryName.getToken(2, '/', nIndex);
-        while( nIndex != -1 )
+        if(  portalUserDir.getLength() )
         {
-            sPath += sSeparator;
-            sPath += userRegistryName.getToken(0, '/', nIndex);
-            if( nIndex == -1 )
-                break;
-            Directory aDir( sPath );
-            if( aDir.open() == FileBase::E_NOENT )
+            FileBase::getFileURLFromSystemPath( portalUserDir , portalUserDir );
+            userRegistryName = portalUserDir;
+            userRegistryName += OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "/user/" REGISTRY_LOCAL_NAME ) );
+
+            // Directory creation is probably necessary for bootstrapping a new
+            // user in the portal environment (the ucb uses this function).
+            // This should be solved differently, as
+            // no one expects this function to create anything ...
+            OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+            OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
+            FileBase::RC retRC = FileBase::E_None;
+
+            sal_Int32 nIndex = 3;
+            sPath += userRegistryName.getToken(2, '/', nIndex);
+            while( nIndex != -1 )
             {
-                retRC = Directory::create(sPath);
-                if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                sPath += sSeparator;
+                sPath += userRegistryName.getToken(0, '/', nIndex);
+                if( nIndex == -1 )
+                    break;
+                Directory aDir( sPath );
+                if( aDir.open() == FileBase::E_NOENT )
                 {
-                    return OUString();
+                    retRC = Directory::create(sPath);
+                    if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
+                    {
+                        return OUString();
+                    }
                 }
             }
         }
     }
-    else
-       {
+    else /* bIsPortalUser */
+    {
         ::osl::Security aUserSecurity;
-        aUserSecurity.getConfigDir( uBuffer );
-        FileBase::getAbsoluteFileURL(
-            uBuffer,
-            OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIG_PATH_PREFIX REGISTRY_LOCAL_NAME ) ),
-            userRegistryName );
+        aUserSecurity.getConfigDir( userRegistryName );
+        userRegistryName += OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "/" CONFIG_PATH_PREFIX REGISTRY_LOCAL_NAME ) );
     }
 
     return userRegistryName;
