@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:55:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,7 +861,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                 if( nOfst < STRING_LEN )
                 {
                     sal_Bool bSplit = sal_False;
-                    sal_Bool bRepeat;
+                    USHORT nRepeat;
                     if( !bLongTab && rpFrm->IsTxtFrm() &&
                         SW_LAYCACHE_IO_REC_PARA == nType &&
                         nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
@@ -869,9 +869,9 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                     else if( rpFrm->IsTabFrm() && nRowCount < nOfst &&
                              ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )
                     {
-                        bRepeat = ((SwTabFrm*)rpFrm)->
-                                  GetTable()->IsHeadlineRepeat();
-                        bSplit = nOfst < nRows;
+                        nRepeat = ((SwTabFrm*)rpFrm)->
+                                  GetTable()->GetRowsToRepeat();
+                        bSplit = nOfst < nRows && nRowCount + nRepeat < nOfst;
                         bLongTab = bLongTab && bSplit;
                     }
                     if( bSplit )
@@ -887,15 +887,28 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                             SwTabFrm *pFoll = new SwTabFrm( *pTab );
 
                             SwFrm *pPrv;
-                            if( bRepeat )
+                            if( nRepeat > 0 )
                             {
                                 bDontCreateObjects = TRUE; //frmtool
-                                SwRowFrm *pHeadline = new SwRowFrm(
-                                        *pTab->GetTable()->GetTabLines()[0] );
-                                pHeadline->InsertBefore( pFoll, 0 );
+
+                                // Insert new headlines:
+                                USHORT nRowIdx = 0;
+                                SwRowFrm* pHeadline = 0;
+                                while( nRowIdx < nRepeat )
+                                {
+                                    ASSERT( pTab->GetTable()->GetTabLines()[ nRowIdx ], "Table ohne Zeilen?" );
+                                    pHeadline =
+                                        new SwRowFrm( *pTab->GetTable()->GetTabLines()[ nRowIdx ] );
+                                    pHeadline->SetRepeatedHeadline( true );
+                                    pHeadline->InsertBefore( pFoll, 0 );
+                                    pHeadline->RegistFlys();
+
+                                    ++nRowIdx;
+                                }
+
                                 bDontCreateObjects = FALSE;
-                                pPrv = pFoll->Lower();
-                                ++nRows;
+                                pPrv = pHeadline;
+                                nRows += nRepeat;
                             }
                             else
                                 pPrv = 0;
