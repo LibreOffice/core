@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:20 $
+#   last change: $Author: nn $ $Date: 2001-04-25 11:52:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ IDLFILES=\
     XIntroTest.idl\
     XMaterialHolder.idl\
     XMultiPropertySet.idl\
+    XMultiPropertyStates.idl\
     XMultiHierarchicalPropertySet.idl\
     XPropertiesChangeListener.idl\
     XPropertiesChangeNotifier.idl\
