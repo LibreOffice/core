@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 16:05:02 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
         DECL_PROP1_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY);
-        DECL_PROP2(PASSWORD,                    ::rtl::OUString,            BOUND, TRANSIENT);
+        DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
         DECL_PROP1_BOOL(SUPPRESSVERSIONCL,                                  BOUND);
         DECL_PROP1(TABLEFILTER,                 Sequence< ::rtl::OUString >,BOUND);
         DECL_PROP1(TABLETYPEFILTER,             Sequence< ::rtl::OUString >,BOUND);
@@ -621,6 +621,8 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
             break;
         case PROPERTY_ID_USER:
             rValue >>= m_sUser;
+            // if the user name changed, reset the password
+            m_aPassword = ::rtl::OUString();
             break;
         case PROPERTY_ID_PASSWORD:
             rValue >>= m_aPassword;
@@ -714,6 +716,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     }
 
     ::rtl::OUString sUser(m_sUser), sPassword(m_aPassword);
+    sal_Bool bNewPasswordGiven = sal_False;
 
     if (m_bPasswordRequired && (0 == sPassword.getLength()))
     {   // we need a password, but don't have one yet.
@@ -754,10 +757,28 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         sPassword = pAuthenticate->getPassword();
 
         if (pAuthenticate->getRememberPassword())
+        {
             m_aPassword = pAuthenticate->getPassword();
+            bNewPasswordGiven = sal_True;
+        }
     }
 
-    return getConnection(sUser, sPassword);
+    try
+    {
+        return getConnection(sUser, sPassword);
+    }
+    catch(Exception&)
+    {
+        if (bNewPasswordGiven)
+            // assume that we had an authentication problem. Without this we may, after an unsucessfull connect, while
+            // the user gave us a password an the order to remember it, never allow an password input again (at least
+            // not without restarting the session)
+            m_aPassword = ::rtl::OUString();
+        throw;
+    }
+
+    DBG_ERROR("ODatabaseSource::connectWithCompletion: reached the unreacable!");
+    return Reference< XConnection >();
 }
 
 //------------------------------------------------------------------------------
