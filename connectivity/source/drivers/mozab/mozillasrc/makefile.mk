@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-12-13 09:34:19 $
+#   last change: $Author: fs $ $Date: 2002-03-18 14:00:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,6 +155,13 @@ CFLAGSCXX += \
             -fno-rtti -Wall -Wconversion -Wpointer-arith \
             -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
             -Wno-long-long -pthread 
+CDEFS     += -DTRACING
+.ELIF "$(OS)" == "NETBSD"
+CFLAGS +=   -fPIC 
+CFLAGSCXX += \
+            -fno-rtti -Wall -Wconversion -Wpointer-arith \
+            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
+            -Wno-long-long 
 CDEFS     += -DTRACING
 .ENDIF
 .ENDIF
