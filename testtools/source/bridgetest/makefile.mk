@@ -72,7 +72,7 @@ SHL1STDLIBS= \
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-SHL1VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL1VERSIONMAP=component.map
 
 # ---- test object ----
 
@@ -89,12 +89,14 @@ SHL2STDLIBS= \
 SHL2LIBS=	$(LIB2TARGET)
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
-SHL2VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL2VERSIONMAP=component.map
 
 
 
 .IF "$(SOLAR_JAVA)" != ""
-JAVATARGETS=$(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX)
+JAVATARGETS=\
+    $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) \
+    $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
@@ -127,7 +129,7 @@ $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
 
 .IF "$(SOLAR_JAVA)" != ""
 # jar-files, which regcomp needs so that it can use java
-MY_JARS=unoil.jar java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
+MY_JARS=java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
 
 # CLASSPATH, which regcomp needs to be run
 MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
@@ -139,6 +141,17 @@ $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
         com.sun.star.comp.bridge.TestComponentMain \
         \""uno:socket,host=localhost,port=2002;urp;test"\" \
         > $@
+    $(GIVE_EXEC_RIGHTS) $@
+
+$(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
+    -rm -f $@
+.IF "$(GUI)"=="WNT"
+    +echo set CLASSPATH=$(MY_CLASSPATH) >> $@
+.ELSE
+    +echo setenv CLASSPATH $(MY_CLASSPATH) >> $@
+.ENDIF
+    +echo uno -ro uno_services.rdb -ro uno_types.rdb \
+       -s com.sun.star.test.bridge.BridgeTest -- com.sun.star.test.bridge.JavaTestObject >> $@
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
@@ -152,7 +165,18 @@ $(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
         -c $(MY_DLLPREFIX)acceptor$(MY_DLLPOSTFIX)		\
         -c $(MY_DLLPREFIX)brdgfctr$(MY_DLLPOSTFIX)		\
         -c $(MY_DLLPREFIX)remotebridge$(MY_DLLPOSTFIX)	\
-        -c $(MY_DLLPREFIX)uuresolver$(MY_DLLPOSTFIX)	
+        -c $(MY_DLLPREFIX)uuresolver$(MY_DLLPOSTFIX)
+.IF "$(SOLAR_JAVA)" != ""
+    regcomp -register -r uno_services.rdb \
+        -c $(MY_DLLPREFIX)javaloader$(MY_DLLPOSTFIX)	\
+        -c $(MY_DLLPREFIX)jen$(MY_DLLPOSTFIX)
+
+# currently no chance to construct absolute file url for testComponent.jar
+# 	regcomp -register -r uno_services.rdb -br $(SOLARBINDIR)$/udkapi.rdb \
+# 		-classpath $(MY_CLASSPATH)	\
+# 		-c file:///d:/udk304/testtools/wntmsci7/class/testComponent.jar
+.ENDIF
+
 
 $(DESTDIR)$/regcomp.exe : $(SOLARBINDIR)$/regcomp.exe
     -rm -f $@
