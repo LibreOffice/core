@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:14:47 $
+ *  last change: $Author: ama $ $Date: 2002-04-11 14:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ void lcl_DefaultPageFmt( SwFrmFmt &rFmt1, SwFrmFmt &rFmt2, SfxPrinter *pPrt,
         //Raender
         Size    aOutSize;
         Point   aOffst( pPrt->GetPageOffset() );
+        aOffst += pPrt->GetMapMode().GetOrigin();
 
         //Auf Default-Raender vorbereiten.
         //Raender haben eine defaultmaessige Mindestgroesse.
