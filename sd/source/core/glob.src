@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-20 11:02:30 $
+ *  last change: $Author: rt $ $Date: 2001-09-06 20:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ korean ] = "ë”ë¸”í´ë¦­ìœ¼ë¡œ ê·¸ë˜í”½ ì¶”ê°€";
     Text[ turkish ] = "Grafik eklemek için çift tıklayın";
     Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Lisää kuva kaksoisnapsauttamalla";
+    Text[ finnish ] = "Lis?? kuva kaksoisnapsauttamalla";
     Text[ catalan ] = "Pulse dos veces para añadir una imagen";
 };
 String STR_PRESOBJ_OBJECT
@@ -1050,20 +1050,20 @@ String STR_PREVIEWVIEWSHELL
     Text = "Vorschaufenster" ;
     Text [ ENGLISH ] = "Preview window" ;
     Text[ english_us ] = "Preview Window";
-    Text[ portuguese ] = "Preview window";
+    Text[ portuguese ] = "Janela Previsualizar";
     Text[ russian ] = "Îêíî ïğîñìîòğà";
     Text[ greek ] = "Preview window";
-    Text[ dutch ] = "Preview window";
+    Text[ dutch ] = "Voorbeeldvenster";
     Text[ french ] = "Fenêtre d'aperçu";
     Text[ spanish ] = "Ventana de previsualización";
     Text[ finnish ] = "Preview window";
     Text[ italian ] = "Anteprima";
     Text[ danish ] = "Preview window";
-    Text[ swedish ] = "Preview window";
-    Text[ polish ] = "Preview window";
+    Text[ swedish ] = "Förhandsvisningsfönster";
+    Text[ polish ] = "Okno podgl¹du";
     Text[ portuguese_brazilian ] = "Preview window";
     Text[ japanese ] = "ï¾Œï¾Ÿï¾šï¾‹ï¾ï½­ï½°ï½³ï½¨ï¾ï¾„ï¾ï½³";
-    Text[ korean ] = "Preview window";
+    Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸° ì°½";
     Text[ chinese_simplified ] = "é¢„è§ˆè§†çª—";
     Text[ chinese_traditional ] = "é è¦½è¦–çª—";
     Text[ turkish ] = "Preview window";
@@ -1560,7 +1560,7 @@ String STR_POOLSHEET_TEXT
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
-    Text[ japanese ] = "æ–‡å­—åˆ—";
+    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„";
     Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ arabic ] = "ÇáäÕ";
     Text[ dutch ] = "Tekst";
@@ -1935,7 +1935,7 @@ String STR_PSEUDOSHEET_SUBTITLE
     Text[ korean ] = "ë¶€ì œ";
     Text[ turkish ] = "Alt başlık";
     Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Aliotsikko";
+    Text[ finnish ] = "Alaotsikko";
     Text[ catalan ] = "Subtítulo";
 };
 String STR_PSEUDOSHEET_OUTLINE
@@ -2231,14 +2231,14 @@ Resource RID_SD_ERRHDL
         Text [ italian ] = "È stato trovato un errore di formato nel file alla posizione $(ARG1)(riga, colonna)" ;
         Text [ spanish ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)" ;
         Text [ french ] = "Erreur de format à la position $(ARG1)(ligne,colonne) du fichier" ;
-        Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(cel,kolom) in het bestand" ;
+        Text [ dutch ] = "Formaatfout ontdekt op positie $(ARG1)(rij,kolom) in het bestand" ;
         Text [ swedish ] = "Formatfel vid position $(ARG1)(rad,kolumn) upptäckt i filen" ;
         Text [ danish ] = "Der blev opdaget en formatfejl i filen på position $(ARG1)(række,spalte)" ;
         Text [ portuguese ] = "Descoberto erro de formato na posição $(ARG1)(linha, coluna) do ficheiro" ;
         Text [ portuguese_brazilian ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼é”™è¯¯ $(ARG1)(è¡Œï¼Œåˆ—)";
         Text[ russian ] = "Â ìåñòå $(ARG1)(ñòğîêà,ñòîëáåö) îáíàğóæåíà îøèáêà ôîğìàòà ôàéëà";
-        Text[ polish ] = "Znaleziono w pliku b³¹d formatu przy pozycji $(ARG1)(Wiersz, kolumna)";
+        Text[ polish ] = "Wykryto b³¹d w formacie pliku na pozycji $(ARG1)(wiersz, kolumna)";
         Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã® $(ARG1)(è¡Œã€åˆ—)ã«æ›¸å¼ï½´ï¾—ï½°ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
         Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼éŒ¯èª¤ $(ARG1)(è¡Œï¼Œåˆ—)";
         Text[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ İí ÇáãæÖÚ $(ARG1)(ÓØÑ¡ÚãæÏ) İí Çáãáİ";
@@ -2253,11 +2253,11 @@ Resource RID_SD_ERRHDL
     {
         Text = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
         Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
-        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)";
         Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição $(ARG2)(linha,coluna)";
         Text[ russian ] = "Â ÷àñòè äîêóìåíòà $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà, êîëîíêà)îáíàğóæåíà îøèáêà ôîğìàòà.";
         Text[ greek ] = "Åíôïğßóôçêå İíá óöÜëìá ìïñöïğïßçóçò ôïõ áñ÷åßïõ óôï ôìŞìá êåéìİíïõ $(ARG1) óôç èİóç $(ARG2)(ãñáììŞ, óôŞëç)";
-        Text[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ dutch ] = "Fout in formaat in sub-document $(ARG1) op positie $(ARG2)(rij,kolom)";
         Text[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         Text[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
         Text[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
@@ -2278,7 +2278,7 @@ Resource RID_SD_ERRHDL
     {
         Text = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt" ;
         Text [ English ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)" ;
-        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)";
+        Text[ english_us ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col)";
         Text[ portuguese ] = "Erro de formato no sub-documento $(ARG1) do ficheiro, na posição(ARG2)(linha,coluna)";
         Text[ russian ] = "Â ÷àñòè äîêóìåíòà $(ARG1) â ïîçèöèè $(ARG2)(ñòğîêà,êîëîíêà)îáíàğóæåíà îøèáêà ôîğìàòà.";
         Text[ greek ] = "Åíôïğßóôçêå óöÜëìá ìïñöïğïßçóçò óôï áñ÷åßï óôï ôìŞìá êåéìİíïõ $(ARG1) óôç èİóç $(ARG2)(ãñáììŞ,óôŞëç)";
@@ -2300,3 +2300,4 @@ Resource RID_SD_ERRHDL
         Text[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
