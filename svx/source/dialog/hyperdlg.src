@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ greek ] = "Προορισμός";
         Text[ dutch ] = "D~oel";
         Text[ french ] = "~Cible";
-        Text[ spanish ] = "D~estino";
+        Text[ spanish ] = "Destino";
         Text[ italian ] = "Destinazione";
         Text[ danish ] = "Mεl";
         Text[ swedish ] = "Mε~l";
@@ -348,12 +348,12 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ portuguese ] = "Destino no documento";
         QuickHelpText[ russian ] = "Φελό";
         QuickHelpText[ greek ] = "Σημείο προορισμού στο έγγραφο";
-        QuickHelpText[ dutch ] = "Doel";
+        QuickHelpText[ dutch ] = "Doel in document";
         QuickHelpText[ french ] = "Cible ΰ l'intιrieur du document";
-        QuickHelpText[ spanish ] = "Target";
+        QuickHelpText[ spanish ] = "Destino en documento";
         QuickHelpText[ italian ] = "Destinazione";
         QuickHelpText[ danish ] = "Mεl i dokumentet";
-        QuickHelpText[ swedish ] = "Mεl";
+        QuickHelpText[ swedish ] = "Mεl i dokumentet";
         QuickHelpText[ polish ] = "Cel";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "Δή·­ÒέΔ‚Ι‚ ‚ιΐ°Ήή―Δ";
@@ -592,10 +592,10 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Aan~wijzing" ;
         Text [ french ] = "~Texte" ;
-        Text[ spanish ] = "In~dicaciσn";
+        Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Hδn~visning";
+        Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Wskazσwka";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
@@ -701,7 +701,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ english_us ] = "Mail & News" ;
         Text[ portuguese ] = "Mail & News";
         Text[ russian ] = "Οθρόμΰ θ νξβξρςθ";
-        Text[ greek ] = "Αλληλογραφία και Συνομιλίες";
+        Text[ greek ] = "Αλληλογραφία και Συζητήσεις";
         Text[ dutch ] = "Mail & Nieuws";
         Text[ french ] = "Mail & News";
         Text[ spanish ] = "Correo y noticias";
@@ -752,7 +752,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ english_us ] = "~News";
         Text[ portuguese ] = "~News";
         Text[ russian ] = "Νξβξρςθ";
-        Text[ greek ] = "Συ~νομιλίες";
+        Text[ greek ] = "Συζητήσεις";
         Text[ dutch ] = "~Nieuws";
         Text[ french ] = "~News";
         Text[ spanish ] = "~Noticias";
@@ -1065,12 +1065,12 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ portuguese ] = "Te~xto";
         Text[ russian ] = "Σκΰηΰνθε";
         Text[ greek ] = "Κείμενο";
-        Text [ dutch ] = "Aan~wijzing" ;
+        Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
-        Text[ spanish ] = "In~dicaciσn";
+        Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Hδn~visning";
+        Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Wskazσwka";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
@@ -1304,7 +1304,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ greek ] = "Προορισμός";
         Text[ dutch ] = "~Doel";
         Text[ french ] = "~Cible";
-        Text[ spanish ] = "~Destino";
+        Text[ spanish ] = "Destino";
         Text[ italian ] = "Destina~zione";
         Text[ danish ] = "Mεl";
         Text[ swedish ] = "Mε~l";
@@ -1393,10 +1393,10 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ greek ] = "Σημείο προορισμού στο έγγραφο";
         QuickHelpText[ dutch ] = "Doel in document";
         QuickHelpText[ french ] = "Cible ΰ l'intιrieur du document";
-        QuickHelpText[ spanish ] = "Target in document";
+        QuickHelpText[ spanish ] = "Destino en documento";
         QuickHelpText[ italian ] = "Destinazione nel documento";
         QuickHelpText[ danish ] = "Mεl i dokumentet";
-        QuickHelpText[ swedish ] = "Mεl i dokument";
+        QuickHelpText[ swedish ] = "Mεl i dokumentet";
         QuickHelpText[ polish ] = "Cel w dokumencie";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "Δή·­ÒέΔ‚Ι‚ ‚ιΐ°Ήή―Δ";
@@ -1615,12 +1615,12 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ portuguese ] = "Te~xto";
         Text[ russian ] = "Σκΰηΰνθε";
         Text[ greek ] = "Κείμενο";
-        Text [ dutch ] = "Aan~wijzing" ;
+        Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
-        Text[ spanish ] = "In~dicaciσn";
+        Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Hδn~visning";
+        Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Wskazσwka";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
@@ -2116,12 +2116,12 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese ] = "Te~xto";
         Text[ russian ] = "Σκΰηΰνθε";
         Text[ greek ] = "Κείμενο";
-        Text [ dutch ] = "Aan~wijzing" ;
+        Text [ dutch ] = "Te~kst" ;
         Text [ french ] = "~Texte" ;
-        Text[ spanish ] = "In~dicaciσn";
+        Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
-        Text[ swedish ] = "Hδn~visning";
+        Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Wskazσwka";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶—ρ(~K)";
@@ -2432,7 +2432,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text [ english_us ] = "Mail & News" ;
     Text[ portuguese ] = "Mail & News";
     Text[ russian ] = "Οθρόμΰ θ ρξξαωενθÿ";
-    Text[ greek ] = "Αλληλογραφία και Μηνύματα";
+    Text[ greek ] = "Αλληλογραφία και Συζητήσεις";
     Text[ dutch ] = "Mail & Nieuws";
     Text[ french ] = "Mail & News";
     Text[ spanish ] = "Correo y noticias";
