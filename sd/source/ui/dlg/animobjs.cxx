@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:41:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,7 +916,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         rView.EndTextEdit();
 
     // Objekt(e) clonen und den/die Clone(s) in die Liste stellen
-    const SdrMarkList& rMarkList   = rView.GetMarkList();
+    const SdrMarkList& rMarkList   = rView.GetMarkedObjectList();
     ULONG              nMarkCount  = rMarkList.GetMarkCount();
     SdPage*            pPage       = pMyDoc->GetSdPage(0, PK_STANDARD);
     ULONG              nCloneCount = pPage->GetObjCount();
