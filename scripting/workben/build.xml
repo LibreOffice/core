@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-01-21 16:20:04 $
+#   last change: $Author: toconnor $ $Date: 2003-01-28 20:49:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,8 +162,6 @@
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
     </exec>
-    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
-        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -174,8 +172,6 @@
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
-        todir="${out}/class/sframework/skip_registration"/>
-    <copy file="${install.dir}/bsh-1.2b7.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
   <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
@@ -188,8 +184,6 @@
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/wntmsci7${proext}/ucr/dcsssfstorage.db"/>
     </exec>
-    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
-        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/windows.plt"/>
@@ -199,8 +193,6 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${install.dir}/bsh-1.2b7.jar"
-        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/wntmsci7${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
@@ -214,8 +206,6 @@
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/unxlngi4${proext}/ucr/dcsssfstorage.db"/>
     </exec>
-    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
-        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/linux_x86.plt"/>
@@ -225,8 +215,6 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${install.dir}/bsh-1.2b7.jar"
-        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/unxlngi4${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
@@ -240,8 +228,6 @@
         <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfprovider.db"/>
         <arg value="${prj}/../offapi/unxsols3${proext}/ucr/dcsssfstorage.db"/>
     </exec>
-    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
-        todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <mkdir dir="${out}/class/sframework/solaris_sparc.plt"/>
@@ -251,8 +237,6 @@
         </fileset>
     </copy>
     <mkdir dir="${out}/class/sframework/skip_registration"/>
-    <copy file="${install.dir}/bsh-1.2b7.jar"
-        todir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/unxsols3${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
@@ -263,6 +247,20 @@
     <copy file="${prj}/common/bin/scripting${env.UPD}01.res"
         todir="${out}/class/sframeworkinstall/sframework/"/>
   </target>
+
+  <!-- =================== Build BeanShell UNO package ===================== -->
+  <target name="buildbshuno">
+    <mkdir dir="${out}/class/bshruntime"/>
+    <copy file="${out}/class/ScriptRuntimeForBeanShell.jar"
+        todir="${out}/class/bshruntime/"/>
+    <mkdir dir="${out}/class/bshruntime/skip_registration"/>
+    <copy file="${install.dir}/bsh-1.2b7.jar"
+        todir="${out}/class/bshruntime/skip_registration"/>
+    <zip zipfile="${out}/class/bshruntime.zip"
+        basedir="${out}/class/bshruntime">
+    </zip>
+  </target>
+
   <!-- ===================== Package regsingletons ========================= -->
   <target name="packagesingletons_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/windows"/>
@@ -316,7 +314,7 @@
   </target>
 
   <!-- ===================== jar ========================= -->
-  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,packagesingletons,buildunopackage">
+  <target name="jar" depends="compileinstaller,packagedialogsandexamples,packageide,packagesingletons,buildunopackage,buildbshuno">
     <jar jarfile="${jardir}/${installerjarname}"
          basedir="${installerclasses}">
         <manifest>
