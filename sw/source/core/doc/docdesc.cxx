@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:52:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 16:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
                               GetPrt(), FALSE );
 
         SvxFrameDirection aFrameDirection = bRegardLanguage ?
-            GetDefaultFrameDirection(GetAppLanguage())
+            lcl_GetFrameDirection(GetAppLanguage())
             : FRMDIR_HORI_LEFT_TOP;
 
         pNew->GetMaster().SetAttr( SvxFrameDirectionItem(aFrameDirection) );
@@ -951,7 +951,7 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         delete pPrt;
         pPrt = pP;
     }
-
+    // OD 05.03.2003 #107870# - first adjust page description, before trigger formatting.
     if( bInitPageDesc )
     {
         // JP 17.04.97: Bug 38924 - falls noch kein Drucker gesetzt war
@@ -960,9 +960,6 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         if( pPrt && LONG_MAX == _GetPageDesc( 0 ).GetMaster().GetFrmSize().GetWidth() )
             _GetPageDesc( 0 ).SetLandscape( ORIENTATION_LANDSCAPE ==
                                             pPrt->GetOrientation() );
-
-        //Ggf. Standard Seitenformat anhand des Druckers einstellen.
-        //lcl_DefaultPageFmt() merkt ob ein Reader das Fmt veraendert hat.
 
         //MA 11. Mar. 97: Das sollten wir fuer alle Formate tun, weil die
         //Werte auf LONG_MAX initalisiert sind (spaetes anlegen des Druckers)
@@ -987,6 +984,7 @@ void SwDoc::SetUseVirtualDevice( sal_Bool bFlag )
         PrtDataChanged();
         SetModified();
     }
+
 }
 
 /*
