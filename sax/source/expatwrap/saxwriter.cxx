@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-22 16:32:24 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 09:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,9 @@ public:
     SAXWriter( ) :
         m_nMaxColumn(72),
         m_bForceLineBreak(sal_False),
-        m_bAllowLineBreak(sal_False)
+        m_bAllowLineBreak(sal_False),
+        m_seqStartElement(),
+        m_bIsSeqFilled(sal_False)
         {}
 
 public: // XActiveDataSource
@@ -450,10 +452,10 @@ private:
 
     inline void pushStartElement()
         {
-            if( m_seqStartElement.getLength() )
+            if( m_bIsSeqFilled && m_seqStartElement.getLength() )
             {
                 writeSequence( m_seqStartElement );
-                m_seqStartElement = Sequence < sal_Int8 > ();
+                m_bIsSeqFilled = sal_False;
             }
         }
 
@@ -463,6 +465,7 @@ private:
     Sequence < sal_Int8 > m_seqStartElement;
 
     // Status information
+    sal_Bool m_bIsSeqFilled;
     sal_Bool m_bDocStarted;
     sal_Bool m_bIsCDATA;
     sal_Bool m_bForceLineBreak;
@@ -683,7 +686,8 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
         nLength += nPrefix;
 
     // now create the sequence, store it ( maybe later an empty tag ? )
-    m_seqStartElement = Sequence< sal_Int8 > ( nLength );
+    m_seqStartElement.realloc( nLength );
+    m_bIsSeqFilled = sal_True;
 
     sal_Int8 *pTarget = (sal_Int8*) m_seqStartElement.getConstArray();  // we OWN the sequence
     sal_Int32 nPos =0;
@@ -737,7 +741,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         throw SAXException();
     }
 
-    if( m_seqStartElement.getLength() )
+    if( m_bIsSeqFilled && m_seqStartElement.getLength() )
     {
         m_seqStartElement.realloc( m_seqStartElement.getLength() + 1 );
 
@@ -745,7 +749,7 @@ void SAXWriter::endElement(const OUString& aName)   throw (SAXException, Runtime
         p[m_seqStartElement.getLength()-2] = '/';
         p[m_seqStartElement.getLength()-1] = '>';
         writeSequence( m_seqStartElement );
-        m_seqStartElement = Sequence< sal_Int8 > ();
+        m_bIsSeqFilled = sal_False;
         m_bForceLineBreak = sal_False;
     }
     else {
