@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-03 18:01:26 $
+ *  last change: $Author: sj $ $Date: 2000-11-06 09:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1865,8 +1865,8 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt
             }
         }
         rOut << nCharCount
-             << nDepth                   // Level
-             << (sal_uInt32)nPropertyFlags;  // Paragraph Attribut Set
+             << nDepth                          // Level
+             << (sal_uInt32)nPropertyFlags;     // Paragraph Attribut Set
 
         if ( nPropertyFlags & 0xf )
             rOut << nBulletFlags;
@@ -2593,7 +2593,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 nQuickIndex = 2;
                             else if ( aPropName == "Suffix" )
                                 nQuickIndex = 3;
-                            else if ( aPropName == "BulletId" )
+                            else if ( aPropName == "BulletChar" )
                                 nQuickIndex = 4;
                             else if ( aPropName == "BulletFont" )
                                 nQuickIndex = 5;
@@ -2659,9 +2659,11 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             break;
                             case 4 :
                             {
-                                if ( aPropName == "BulletId" )
+                                if ( aPropName == "BulletChar" )
                                 {
-                                    cBulletId = *( (sal_Int16*)pValue );
+                                    String aString( *( (String*)pValue ) );
+                                    if ( aString.Len() )
+                                        cBulletId = aString.GetChar( 0 );
                                     continue;
                                 }
                             }
