@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-05 16:43:19 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 07:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <rtl/uuid.h>
 #endif
 #include <vector>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 using namespace ::utl;
 using namespace ::rtl;
@@ -169,21 +172,7 @@ void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRel
             i++;
     }
     if (bFound)
-    {
-        sal_uInt32 nOldCount(maRelations[i].TargetSet.getLength());
-        sal_uInt32 nNewCount(maRelations[i].TargetSet.getLength() + rRelation.TargetSet.getLength());
-        maRelations[i].TargetSet.realloc(nNewCount);
-        uno::Reference < uno::XInterface >* pTargetSet = maRelations[i].TargetSet.getArray();
-        const uno::Reference < uno::XInterface >* pSourceSet = rRelation.TargetSet.getConstArray();
-        if (pSourceSet && pTargetSet)
-        {
-            sal_uInt32 k(0);
-            for (sal_uInt32 j = nOldCount; j < nNewCount; j++, k++)
-            {
-                pTargetSet[j] = pSourceSet[k];
-            }
-        }
-    }
+        maRelations[i].TargetSet = comphelper::concatSequences(maRelations[i].TargetSet, rRelation.TargetSet);
     else
         maRelations.push_back(rRelation);
 }
