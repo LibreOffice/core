@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
 namespace dbaui
 {
     using namespace ::connectivity;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     namespace
     {
         // -----------------------------------------------------------------------------
@@ -305,7 +305,7 @@ namespace dbaui
         }
 
     }
-#endif // DEBUG
+#endif // OSL_DEBUG_LEVEL
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -473,7 +473,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
             break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         case ID_EDIT_QUERY_SQL:
             break;
         case ID_EDIT_QUERY_DESIGN:
@@ -639,7 +639,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
 //              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         case ID_EDIT_QUERY_DESIGN:
         case ID_EDIT_QUERY_SQL:
             {
@@ -889,7 +889,7 @@ void OQueryController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ClearQuery")]       = ID_BROWSER_CLEAR_QUERY;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ExecuteQuery")]     = ID_BROWSER_QUERY_EXECUTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_RELATION_ADD_RELATION;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ShowParseTree")]    = ID_EDIT_QUERY_SQL;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/MakeDisjunct")]     = ID_EDIT_QUERY_DESIGN;
 #endif
