@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-30 10:52:05 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 13:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ RTLFUNC(FileCopy) // JSM
                     StarBASIC::Error( SbERR_PATH_NOT_FOUND );
 #else
             FileBase::RC nRet = File::copy( getFullPathUNC( aSource ), getFullPathUNC( aDest ) );
-            if( nRet != FileBase::RC::E_None )
+            if( nRet != FileBase::E_None )
             {
                 StarBASIC::Error( SbERR_PATH_NOT_FOUND );
             }
@@ -856,12 +856,12 @@ void implRemoveDirRecursive( const String& aDirPath )
 {
     DirectoryItem aItem;
     FileBase::RC nRet = DirectoryItem::get( aDirPath, aItem );
-    sal_Bool bExists = (nRet == FileBase::RC::E_None);
+    sal_Bool bExists = (nRet == FileBase::E_None);
 
     FileStatus aFileStatus( FileStatusMask_Type );
     nRet = aItem.getFileStatus( aFileStatus );
     FileStatus::Type aType = aFileStatus.getFileType();
-    sal_Bool bFolder = (aType == FileStatus::Type::Directory);
+    sal_Bool bFolder = (aType == FileStatus::Directory);
 
     if( !bExists || !bFolder )
     {
@@ -871,7 +871,7 @@ void implRemoveDirRecursive( const String& aDirPath )
 
     Directory aDir( aDirPath );
     nRet = aDir.open();
-    if( nRet != FileBase::RC::E_None )
+    if( nRet != FileBase::E_None )
     {
         StarBASIC::Error( SbERR_PATH_NOT_FOUND );
         return;
@@ -881,7 +881,7 @@ void implRemoveDirRecursive( const String& aDirPath )
     {
         DirectoryItem aItem;
         nRet = aDir.getNextItem( aItem );
-        if( nRet != FileBase::RC::E_None )
+        if( nRet != FileBase::E_None )
             break;
 
         // Handle flags
@@ -891,7 +891,7 @@ void implRemoveDirRecursive( const String& aDirPath )
 
         // Directory?
         FileStatus::Type aType = aFileStatus.getFileType();
-        sal_Bool bFolder = (aType == FileStatus::Type::Directory);
+        sal_Bool bFolder = (aType == FileStatus::Directory);
         if( bFolder )
         {
             implRemoveDirRecursive( aPath );
@@ -2380,7 +2380,7 @@ RTLFUNC(Dir)
                 //sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                 pRTLData->pDir = new Directory( aDirUNCStr );
                 FileBase::RC nRet = pRTLData->pDir->open();
-                if( nRet != FileBase::RC::E_None )
+                if( nRet != FileBase::E_None )
                 {
                     delete pRTLData->pDir;
                     pRTLData->pDir = NULL;
@@ -2397,7 +2397,7 @@ RTLFUNC(Dir)
                 {
                     DirectoryItem aItem;
                     FileBase::RC nRet = pRTLData->pDir->getNextItem( aItem );
-                    if( nRet != FileBase::RC::E_None )
+                    if( nRet != FileBase::E_None )
                     {
                         delete pRTLData->pDir;
                         pRTLData->pDir = NULL;
@@ -2413,7 +2413,7 @@ RTLFUNC(Dir)
                     if( bOnlyFolders )
                     {
                         FileStatus::Type aType = aFileStatus.getFileType();
-                        sal_Bool bFolder = (aType == FileStatus::Type::Directory);
+                        sal_Bool bFolder = (aType == FileStatus::Directory);
                         if( !bFolder )
                             continue;
                     }
@@ -2529,7 +2529,7 @@ RTLFUNC(GetAttr)
             sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
 
             FileStatus::Type aType = aFileStatus.getFileType();
-            sal_Bool bDirectory = (aType == FileStatus::Type::Directory);
+            sal_Bool bDirectory = (aType == FileStatus::Directory);
             if( bReadOnly )
                 nFlags |= 0x0001; // ATTR_READONLY
             if( bDirectory )
@@ -3702,7 +3702,7 @@ RTLFUNC(FileExists)
 #else
             DirectoryItem aItem;
             FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
-            bExists = (nRet == FileBase::RC::E_None);
+            bExists = (nRet == FileBase::E_None);
 #endif
         }
         rPar.Get(0)->PutBool( bExists );

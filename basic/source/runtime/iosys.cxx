@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-30 10:44:49 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 13:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,13 +420,13 @@ OslStream::OslStream( const String& rName, short nStrmMode )
     }
 
     FileBase::RC nRet = maFile.open( nFlags );
-    if( nRet == FileBase::RC::E_NOENT && nFlags != OpenFlag_Read )
+    if( nRet == FileBase::E_NOENT && nFlags != OpenFlag_Read )
     {
         nFlags |= OpenFlag_Create;
         nRet = maFile.open( nFlags );
     }
 
-    if( nRet != FileBase::RC::E_None )
+    if( nRet != FileBase::E_None )
     {
         SetError( ERRCODE_IO_GENERAL );
     }
