@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:34:39 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ spanish ] = "Ma~yúsculas/minúsculas" ;
         Text [ french ] = "la ~casse" ;
         Text [ dutch ] = "~Hoofd-/kleine letters belangrijk" ;
-        Text [ swedish ] = "Sto~ra och små bokstäver" ;
+        Text [ swedish ] = "Ve~rsalkänslig" ;
         Text [ danish ] = "Store og små bogstaver" ;
         Text[ chinese_simplified ] = "×ÖÄ¸´óÐ¡Ð´(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ðåãèñòð";
