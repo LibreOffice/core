@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:21:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,15 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-
-namespace com { namespace sun { namespace star { namespace accessibility
-{
-    class XAccessible;
-}}}}
 
 class Point;
 class Rectangle;
@@ -94,12 +92,11 @@ namespace dbaui
     class OConnectionLine;
 
     DBG_NAMEEX(OTableConnection)
-    class OTableConnection
+    class OTableConnection : public Window
     {
         ::std::vector<OConnectionLine*> m_vConnLine;
         OTableConnectionData*           m_pData;
         OJoinTableView*                 m_pParent;
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
 
         BOOL                            m_bSelected;
 
@@ -151,7 +148,7 @@ namespace dbaui
         const ::std::vector<OConnectionLine*>* GetConnLineList() const { return &m_vConnLine; }
         OJoinTableView*                 GetParent() const { return m_pParent; }
         virtual void                    Draw( const Rectangle& rRect );
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessible() const;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     };
 }
 #endif // DBAUI_TABLECONNECTION_HXX
