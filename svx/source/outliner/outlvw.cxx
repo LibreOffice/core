@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:13:08 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 14:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,15 @@ BOOL OutlinerView::PostKeyEvent( const KeyEvent& rKEvt )
     {
         if ( ImpCalcSelectedPages( FALSE ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
             return TRUE;
+    }
+
+    // #80304# Enable vertical writing, we don't have an UI yet
+    if ( ( rKEvt.GetKeyCode().GetCode() == KEY_V ) && rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
+    {
+        pOwner->SetVertical( !pOwner->IsVertical() );
+        pEditView->SetVisArea( Rectangle( Point(), Size() ) );
+        GetWindow()->Invalidate();
+        return TRUE;
     }
 
     if ( eFunc != KEYFUNC_DONTKNOW )
