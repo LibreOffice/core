@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:50:07 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:40:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ ASM=/usr/ccs/bin/as
 AFLAGS=-P -q
 
 
-CDEFS+=-mt -D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
+CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -92,10 +92,10 @@ CFLAGS_NO_EXCEPTIONS=-noex
 
 CFLAGSOBJGUIST=-KPIC
 CFLAGSOBJCUIST=-KPIC
-CFLAGSOBJGUIMT=-KPIC
-CFLAGSOBJCUIMT=-KPIC
-CFLAGSSLOGUIMT=-KPIC
-CFLAGSSLOCUIMT=-KPIC
+CFLAGSOBJGUIMT=-KPIC -mt
+CFLAGSOBJCUIMT=-KPIC -mt
+CFLAGSSLOGUIMT=-KPIC -mt
+CFLAGSSLOCUIMT=-KPIC -mt
 CFLAGSPROF=-xpg
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
