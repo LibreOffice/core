@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-16 16:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,16 @@ void OTableController::Execute(sal_uInt16 _nId)
                     bNew = bNew || (ID_BROWSER_SAVEASDOC == _nId);
                     if(bNew)
                     {
-                        String aDefaultName = (ID_BROWSER_SAVEASDOC == _nId && !bNew) ? String(m_sName.getStr()) : createUniqueName(xTables,String(ModuleRes(STR_TBL_TITLE)));
+                        String aDefaultName;
+                        if(ID_BROWSER_SAVEASDOC == _nId && !bNew)
+                             aDefaultName = String(m_sName);
+                        else
+                        {
+                            String aName = String(ModuleRes(STR_TBL_TITLE));
+                            aName = aName.GetToken(0,' ');
+                            aDefaultName = String(::dbtools::createUniqueName(xTables,aName));
+                        }
+
                         OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,m_xConnection->getMetaData(),aDefaultName);
                         if(aDlg.Execute() == RET_OK)
                         {
@@ -1111,20 +1120,6 @@ void OTableController::checkColumns()
             }
         }
     }
-}
-// -----------------------------------------------------------------------------
-String OTableController::createUniqueName(const Reference<XNameAccess>& _rxTables,const String& _rDefault)
-{
-    String aName(_rDefault);
-    aName.SearchAndReplace(String::CreateFromAscii(" #"),String::CreateFromAscii("1"));
-
-    sal_Int32 nPos = 2;
-    while(_rxTables->hasByName(aName))
-    {
-        aName = _rDefault;
-        aName.SearchAndReplace(String::CreateFromAscii(" #"),String::CreateFromInt32(nPos++));
-    }
-    return aName;
 }
 // -----------------------------------------------------------------------------
 void OTableController::alterColumns()
