@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,21 +1003,21 @@ String RID_STR_PROPERTIES_CONTROL
     /* ### ACHTUNG: Neuer Text in Resource? Eigenschaften:  : Kontrollelement Eigenschaften */
     Text = "Eigenschaften: " ;
     Text [ English ] = "Properties: " ;
-    Text [ portuguese ] = "Propriedades: " ;
-    Text [ english_us ] = "Properties: " ;
+    Text [ portuguese ] = "Propriedades:  " ;
+    Text [ english_us ] = "Properties:" ;
     Text [ portuguese_brazilian ] = "Control-Eigenschaften " ;
-    Text [ swedish ] = "Egenskaper:  " ;
-    Text [ danish ] = "Egenskaber: " ;
+    Text [ swedish ] = "Egenskaper:   " ;
+    Text [ danish ] = "Egenskaber:" ;
     Text [ italian ] = "Proprietà: " ;
-    Text [ spanish ] = "Propiedades:  " ;
+    Text [ spanish ] = "Propiedades:" ;
     Text [ french ] = "Propriétés : " ;
     Text [ dutch ] = "Eigenschappen  " ;
-    Text[ chinese_simplified ] = "ÊôĞÔ£º ";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º";
     Text[ russian ] = "Ñâîéñòâà:  ";
     Text[ polish ] = "W³aœciwoœci:  ";
-    Text[ japanese ] = "ÌßÛÊßÃ¨: ";
-    Text[ chinese_traditional ] = "Äİ©Ê¡G ";
-    Text[ greek ] = "Éäéüôçôåò: ";
+    Text[ japanese ] = "‘®«:";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G";
+    Text[ greek ] = "Éäéüôçôåò:";
     Text[ korean ] = "µî·ÏÁ¤º¸: ";
     Text[ arabic ] = "ÇáÎÕÇÆÕ: ";
     Text[ turkish ] = "Özellikler: ";
@@ -1027,23 +1027,23 @@ String RID_STR_PROPERTIES_COLUMN
 {
     Text = "Spalten-Eigenschaften: " ;
     Text [ English ] = "Column properties: " ;
-    Text [ portuguese ] = "Propriedades de colunas: " ;
-    Text [ english_us ] = "Column properties: " ;
+    Text [ portuguese ] = "Propriedades das colunas:  " ;
+    Text [ english_us ] = "Column properties:" ;
     Text [ portuguese_brazilian ] = "Spalten-Eigenschaften" ;
-    Text [ swedish ] = "Kolumnegenskaper: " ;
-    Text [ danish ] = "Kolonneegenskaber: " ;
+    Text [ swedish ] = "Kolumnegenskaper:  " ;
+    Text [ danish ] = "Kolonneegenskaber:" ;
     Text [ italian ] = "Proprietà colonne: " ;
-    Text [ spanish ] = "Propiedades de las columnas: " ;
+    Text [ spanish ] = "Propiedades de las columnas:" ;
     Text [ french ] = "Propriétés des colonnes : " ;
     Text [ dutch ] = "Kolomeigenschappen:  " ;
-    Text[ chinese_simplified ] = "ÁĞÊôĞÔ£º ";
+    Text[ chinese_simplified ] = "ÁĞÊôĞÔ£º";
     Text[ russian ] = "Ñâîéñòâà êîëîíîê:  ";
     Text[ polish ] = "W³aœciwoœci kolumny ";
-    Text[ japanese ] = "—ñ‚ÌÌßÛÊßÃ¨ ";
-    Text[ chinese_traditional ] = "ÄæÄİ©Ê¡G ";
-    Text[ greek ] = "Éäéüôçôåò óôŞëçò: ";
+    Text[ japanese ] = "—ñ‚Ì‘®«";
+    Text[ chinese_traditional ] = "ÄæÄİ©Ê¡G";
+    Text[ greek ] = "Éäéüôçôåò óôŞëçò:";
     Text[ korean ] = "¿­ µî·ÏÁ¤º¸: ";
-    Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáÃÚãÏÉ: ";
+    Text[ arabic ] = "ÎÕÇÆÕ ÇáÃÚãÏÉ: ";
     Text[ turkish ] = "Sütun öğeleri: ";
     Text[ language_user1 ] = " ";
 };
@@ -1134,7 +1134,7 @@ String RID_STR_CURSORSOURCE_TYPE
     Text[ chinese_simplified ] = "±í¸ñ;²éÑ¯;Sql Ö¸Áî";
     Text[ russian ] = "Òàáëèöà;Çàïğîñ;Êîìàíäà SQL";
     Text[ polish ] = "Tabela;kwerenda;polecenie SQL";
-    Text[ japanese ] = "Ã°ÌŞÙ;¸´Ø°;SQLºÏİÄŞ";
+    Text[ japanese ] = "Ã°ÌŞÙ;¸´Ø°;SQL ºÏİÄŞ";
     Text[ chinese_traditional ] = "ªí®æ;¬d¸ß;Sql;Sql [Native]";
     Text[ greek ] = "Ğßíáêáò;Åñşôçìá;ÅíôïëŞ SQL";
     Text[ korean ] = "Å×ÀÌºí;ÁúÀÇ;SQL ¸í·É";
@@ -1523,7 +1523,7 @@ String RID_STR_REC_TEXT
     Text [ italian ] = "Record di dati" ;
     Text [ spanish ] = "Registro" ;
     Text [ french ] = "Enregistrement" ;
-    Text [ dutch ] = "Gegevensreeks" ;
+    Text [ dutch ] = "Record" ;
     Text[ chinese_simplified ] = "Êı¾İÌõÄ¿";
     Text[ russian ] = "Çàïèñü";
     Text[ polish ] = "Rekord";
@@ -1542,7 +1542,7 @@ String RID_STR_REC_FROM_TEXT
     Text [ portuguese ] = "de" ;
     Text [ english_us ] = "of" ;
     Text [ portuguese_brazilian ] = "von" ;
-    Text [ swedish ] = "från" ;
+    Text [ swedish ] = "av" ;
     Text [ danish ] = "af" ;
     Text [ italian ] = "da" ;
     Text [ spanish ] = "de" ;
@@ -1685,21 +1685,21 @@ String RID_STR_DELETEERROR
 {
     Text = "Fehler beim Löschen von Daten. " ;
     Text [ ENGLISH ] = "Error while deleting data" ;
-    Text [ english_us ] = "Error deleting data. " ;
+    Text [ english_us ] = "Error deleting data." ;
     Text [ portuguese_brazilian ] = "Fehler beim Loeschen von Daten. " ;
-    Text [ swedish ] = "Fel vid radering av data.  " ;
-    Text [ danish ] = "Fejl ved sletning af data. " ;
+    Text [ swedish ] = "Fel vid radering av data.   " ;
+    Text [ danish ] = "Fejl ved sletning af data." ;
     Text [ italian ] = "Errore nel cancellare dati. " ;
-    Text [ spanish ] = "Error al eliminar datos.  " ;
+    Text [ spanish ] = "Error al eliminar datos." ;
     Text [ french ] = "Erreur lors de la suppression de données. " ;
     Text [ dutch ] = "Fout bij wissen van gegevens.  " ;
-    Text [ portuguese ] = "Erro ao eliminar dados. " ;
-    Text[ chinese_simplified ] = "ÔÚÉ¾³ıÊı¾İÊ±·¢Éú´íÎó ";
+    Text [ portuguese ] = "Erro ao eliminar dados.  " ;
+    Text[ chinese_simplified ] = "ÔÚÉ¾³ıÊı¾İÊ±·¢Éú´íÎó";
     Text[ russian ] = "Îøèáêà ïğè óäàëåíèè äàííûõ.  ";
     Text[ polish ] = "B³¹d przy usuwaniu danych.  ";
-    Text[ japanese ] = "ÃŞ°À‚Ìíœ‚ÌÛ‚Ì´×°¡ ";
-    Text[ chinese_traditional ] = "¦b§R°£¸ê®Æ®Éµo¥Í¤@­Ó¿ù»~ ";
-    Text[ greek ] = "ÓöÜëìá êáôÜ ôç äéáãñáöŞ äåäïìİíùí. ";
+    Text[ japanese ] = "ÃŞ°Àíœ‚ÌÛ‚Ì´×°¡";
+    Text[ chinese_traditional ] = "¦b§R°£¼ÆÕu®Éµo¥Í¤@­Ó¿ù»~";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôç äéáãñáöŞ äåäïìİíùí.";
     Text[ korean ] = "µ¥ÀÌÅÍ »èÁ¦½Ã ¿À·ù. ";
     Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÍĞİ ÈíÇäÇÊ. ";
     Text[ turkish ] = "Veri silme sırasında hata. ";
@@ -1772,7 +1772,7 @@ String RID_STR_SYNTAXERROR
     Text[ chinese_simplified ] = "²éÑ¯Óï¾ä³öÏÖÓï·¨´íÎó¡£";
     Text[ russian ] = "Îøèáêà ïğè àíàëèçå âûğàæåíèÿ çàïğîñà";
     Text[ polish ] = "B³¹d przy ocenie wydruku kwerendy";
-    Text[ japanese ] = "¸´Ø°Œ¾Œê‚Ì•ªÍ’†‚Å‚Ì´×°";
+    Text[ japanese ] = "¸´Ø°Œ¾Œê•ªÍ’†‚Å‚Ì´×°";
     Text[ chinese_traditional ] = "¦b¤À¸Ñ¬d¸ß»y¥y®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍáíá ÚÈÇÑÉ ÇáÇÓÊİÓÇÑ";
     Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜëõóç ôïõ ïñßóìáôïò ôïõ åñùôŞìáôïò";
@@ -2040,7 +2040,7 @@ String RID_STR_QUERY_NOT_FOUND
     Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½²éÑ¯ '#' ¡£";
     Text[ russian ] = "Íàéòè çàïğîñ '#' íå óäàåòñÿ.";
     Text[ polish ] = "Kwerendy '#' nie znaleziono.";
-    Text[ japanese ] = "¸´Ø°'#'‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ japanese ] = "'#' ¸´Ø°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ chinese_traditional ] = "µLªk§ä¨ì¬d¸ß'#' ¡C";
     Text[ greek ] = "Äåí âñİèçêå ôï åñşôçìá '#'.";
     Text[ korean ] = "ÁúÀÇ'#'¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
@@ -2227,7 +2227,7 @@ String RID_STR_SORT_CRITERIA
     Text[ italian ] = "Ordina";
     Text[ portuguese_brazilian ] = "Sort";
     Text[ portuguese ] = "Ordenar";
-    Text[ danish ] = "Sorter";
+    Text[ danish ] = "Sortering";
     Text[ french ] = "Tri";
     Text[ swedish ] = "Sortering";
     Text[ dutch ] = "Sortering";
@@ -3144,7 +3144,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text [ english_us ] = "Default selection" ;
     Text [ portuguese_brazilian ] = "Default Selektion" ;
     Text [ swedish ] = "Standardmarkering" ;
-    Text [ danish ] = "Standardudvalg" ;
+    Text [ danish ] = "Standardmarkering" ;
     Text [ italian ] = "Selezione standard" ;
     Text [ spanish ] = "Selección predeterminada" ;
     Text [ french ] = "Sélection par défaut" ;
@@ -3888,7 +3888,7 @@ String RID_STR_SPIN
     Text [ swedish ] = "Rotationsknapp" ;
     Text [ danish ] = "Rulleknap" ;
     Text [ italian ] = "Pulsante di selezione" ;
-    Text [ spanish ] = "Botón giratorio" ;
+    Text [ spanish ] = "Campo giratorio" ;
     Text [ french ] = "Compteur" ;
     Text [ dutch ] = "Draaiveld" ;
     Text[ chinese_simplified ] = "Ñ¡Öµ¿ò";
@@ -4054,7 +4054,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text [ english_us ] = "Insert graphics" ;
     Text [ portuguese_brazilian ] = "Grafik einfügen" ;
     Text [ swedish ] = "Infoga grafik" ;
-    Text [ danish ] = "Indsæt billede" ;
+    Text [ danish ] = "Indsæt grafik" ;
     Text [ italian ] = "Inserisci immagine" ;
     Text [ spanish ] = "Insertar imagen" ;
     Text [ french ] = "Insérer une image" ;
@@ -4927,7 +4927,7 @@ String RID_STR_EVT_MOUSEENTERED
     Text [ danish ] = "Mus indenfor" ;
     Text [ italian ] = "Mouse dentro" ;
     Text [ spanish ] = "Ratón dentro" ;
-    Text [ french ] = "Souris à l'intérieur de" ;
+    Text [ french ] = "Souris à l'intérieur" ;
     Text [ dutch ] = "Muis binnen" ;
     Text[ chinese_simplified ] = "Êó±ê½øÈë";
     Text[ russian ] = "Ìûøü âíóòğè";
@@ -4951,7 +4951,7 @@ String RID_STR_EVT_MOUSEEXITED
     Text [ danish ] = "Mus udenfor" ;
     Text [ italian ] = "Mouse fuori" ;
     Text [ spanish ] = "Ratón fuera" ;
-    Text [ french ] = "Souris à l'extérieur de" ;
+    Text [ french ] = "Souris à l'extérieur" ;
     Text [ dutch ] = "Muis buiten" ;
     Text[ chinese_simplified ] = "Êó±êÍË³ö";
     Text[ russian ] = "Ìûøü ñíàğóæè";
@@ -5069,7 +5069,7 @@ String RID_STR_EVT_POSITIONED
     Text [ danish ] = "Efter datapostskift" ;
     Text [ italian ] = "Dopo il cambio record di dati" ;
     Text [ spanish ] = "Tras el cambio de registro de datos" ;
-    Text [ french ] = "Après le passage au suivant" ;
+    Text [ french ] = "Après passage au suivant" ;
     Text [ dutch ] = "Na wisselen van record" ;
     Text[ chinese_simplified ] = "×ª»»Êı¾İÌõÄ¿ÒÔºó";
     Text[ russian ] = "Ïîñëå çàìåíû çàïèñè";
@@ -5383,7 +5383,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text [ english_us ] = "Option Button" ;
     Text [ portuguese_brazilian ] = "Radio button" ;
     Text [ swedish ] = "Alternativfält" ;
-    Text [ danish ] = "Alternativknap" ;
+    Text [ danish ] = "Alternativfelt" ;
     Text [ italian ] = "Pulsante di scelta" ;
     Text [ spanish ] = "Botón radio" ;
     Text [ french ] = "Bouton radio" ;
@@ -5787,23 +5787,23 @@ String RID_STR_PROPTITLE_DBGRID
 {
     Text = "Tabellen-Kontrollfeld " ;
     Text [ ENGLISH ] = "TableControl" ;
-    Text [ portuguese ] = "Controlo de tabelas " ;
-    Text [ english_us ] = "Table Control " ;
+    Text [ portuguese ] = "Controlo de tabelas  " ;
+    Text [ english_us ] = "Table Control" ;
     Text [ portuguese_brazilian ] = "Tabellen Control " ;
-    Text [ swedish ] = "Tabellkontrollfält  " ;
-    Text [ danish ] = "Tabelkontrolelement " ;
+    Text [ swedish ] = "Tabellkontrollfält   " ;
+    Text [ danish ] = "Tabelkontrolelement" ;
     Text [ italian ] = "Campo di controllo tabella " ;
-    Text [ spanish ] = "Control de tablas  " ;
+    Text [ spanish ] = "Control de tablas" ;
     Text [ french ] = "Champ de contrôle de table " ;
     Text [ dutch ] = "Tabelcontrole   " ;
-    Text[ chinese_simplified ] = "±í¸ñ¿ØÖÆ×Ö¶Î ";
+    Text[ chinese_simplified ] = "±í¸ñ¿ØÖÆ×Ö¶Î";
     Text[ russian ] = "İëåìåíò óïğàâëåíèÿ òàáëèö ";
     Text[ polish ] = "Pole kontrolne tabeli ";
-    Text[ japanese ] = "Ã°ÌŞÙºİÄÛ°Ù ";
-    Text[ chinese_traditional ] = "ªí®æ±±¨î¶µ ";
-    Text[ greek ] = "Ğåäßï åëİã÷ïõ ğßíáêá ";
+    Text[ japanese ] = "Ã°ÌŞÙºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "ªí®æ±±¨î¶µ";
+    Text[ greek ] = "Ğåäßï åëİã÷ïõ ğßíáêá";
     Text[ korean ] = "Å×ÀÌºí ÄÁÆ®·Ñ ÇÊµå ";
-    Text[ arabic ] = "ÚäÕÑ ÇáÊÍßã ÎÇÕ ÈÇáÌÏÇæá ";
+    Text[ arabic ] = "ÚäÕÑ ÊÍßã ÎÇÕ ÈÇáÌÏÇæá";
     Text[ turkish ] = "Tablo komut öğesi ";
     Text[ language_user1 ] = " ";
 };
