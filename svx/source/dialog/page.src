@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:14:55 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "~Format" ;
         Text[ english_us ] = "~Format";
         Text[ portuguese ] = "~Format";
-        Text[ russian ] = "~Format";
-        Text[ greek ] = "~Format";
+        Text[ russian ] = "Ôîğ~ìàò";
+        Text[ greek ] = "Ìïñ~öŞ";
         Text[ dutch ] = "~Format";
         Text[ french ] = "~Format";
         Text[ spanish ] = "~Format";
@@ -109,12 +109,12 @@ TabPage RID_SVXPAGE_PAGE
         Text[ swedish ] = "~Format";
         Text[ polish ] = "~Format";
         Text[ portuguese_brazilian ] = "~Format";
-        Text[ japanese ] = "~Format";
+        Text[ japanese ] = "‘®(~F)";
         Text[ korean ] = "~Format";
-        Text[ chinese_simplified ] = "~Format";
+        Text[ chinese_simplified ] = "¸ñÊ½";
         Text[ chinese_traditional ] = "®æ¦¡";
         Text[ turkish ] = "~Format";
-        Text[ arabic ] = "~Format";
+        Text[ arabic ] = "ÇáÊäÓíŞ";
     };
     ListBox LB_PAPER_SIZE
     {
@@ -321,8 +321,8 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "Page layout" ;
         Text[ chinese_simplified ] = "Ò³Ãæ°æÊ½";
         Text[ russian ] = "Ğàçìåòêà ñòğàíèöû";
-        Text[ polish ] = "Widok uk³adu strony";
-        Text[ japanese ] = "Íß°¼Ş Ú²±³Ä";
+        Text[ polish ] = "Uk³ad strony";
+        Text[ japanese ] = "Íß°¼ŞÚ²±³Ä";
         Text[ chinese_traditional ] = "­¶­±ª©¦¡";
         Text[ arabic ] = "ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "ÄéÜôáîç óåëßäáò";
@@ -401,10 +401,10 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ swedish ] =
         {
-            < "Alla" ; Default ; > ;
+            < "Höger och vänster" ; Default ; > ;
             < "Spegelvänt" ; Default ; > ;
-            < "Höger" ; Default ; > ;
-            < "Vänster" ; Default ; > ;
+            < "Bara höger" ; Default ; > ;
+            < "Bara till vänster" ; Default ; > ;
         };
         StringList [ dutch ] =
         {
@@ -429,52 +429,52 @@ TabPage RID_SVXPAGE_PAGE
         };
         StringList [ chinese_simplified ] =
         {
-                < "È«²¿" ; Default ; > ;
+                < "×óºÍÓÒ" ; Default ; > ;
             < "·­×ªµÄ" ; Default ; > ;
-            < "ÓÒ" ; Default ; > ;
-            < "×ó" ; Default ; > ;
+            < "Ö»ÏòÓÒ" ; Default ; > ;
+            < "Ö»Ïò×ó" ; Default ; > ;
         };
         StringList [ russian ] =
         {
-                < "Âñå" ; Default ; > ;
+                < "Ñïğàâà è ñëåâà" ; Default ; > ;
             < "Îòğàæåíèå" ; Default ; > ;
-            < "Ñïğàâà" ; Default ; > ;
-            < "Ñëåâà" ; Default ; > ;
+            < "Òîëüêî ñïğàâà" ; Default ; > ;
+            < "Òîëüêî ñëåâà" ; Default ; > ;
         };
         StringList [ polish ] =
         {
-                < "Wszystkie" ; Default ; > ;
+                < "Z prawej i z lewej" ; Default ; > ;
             < "Odbity" ; Default ; > ;
-            < "Z prawej" ; Default ; > ;
-            < "Z lewej" ; Default ; > ;
+            < "Tylko z prawej" ; Default ; > ;
+            < "Tylko z lewej" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
-                < "‚·‚×‚Ä" ; Default ; > ;
+                < "¶‰E" ; Default ; > ;
             < "¶‰E‘ÎÌ" ; Default ; > ;
-            < "‰E" ; Default ; > ;
-            < "¶" ; Default ; > ;
+            < "‰E‚Ì‚İ" ; Default ; > ;
+            < "¶‚Ì‚İ" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
                 < "¥ª©M¥k" ; Default ; > ;
             < "Â½Âàªº" ; Default ; > ;
-            < "¶È¥k" ; Default ; > ;
-            < "¶È¥ª" ; Default ; > ;
+            < "¶È¦V¥k" ; Default ; > ;
+            < "¶È¦V¥ª" ; Default ; > ;
         };
         StringList [ arabic ] =
         {
-                < "Çáßá" ; Default ; > ;
+                < "íãíä æíÓÇÑ" ; Default ; > ;
             < "ãäÚßÓ" ; Default ; > ;
-            < "íãíä" ; Default ; > ;
-            < "íÓÇÑ" ; Default ; > ;
+            < "íãíä İŞØ" ; Default ; > ;
+            < "íÓÇÑ İŞØ" ; Default ; > ;
         };
         StringList [ greek ] =
         {
-                < "¼ëá" ; Default ; > ;
+                < "ÄåîéÜ êáé áñéóôåñÜ" ; Default ; > ;
             < "Ìå êáôüğôñéóç" ; Default ; > ;
-            < "ÄåîéÜ" ; Default ; > ;
-            < "ÁñéóôåñÜ" ; Default ; > ;
+            < "Ìüíï äåîéÜ" ; Default ; > ;
+            < "Ìüíï áñéóôåñÜ" ; Default ; > ;
         };
         StringList [ korean ] =
         {
@@ -522,7 +522,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ japanese ] = "—p†»²½Ş";
         Text[ chinese_traditional ] = "¯È±i®æ¦¡";
         Text[ arabic ] = "ÍÌã ÇáæÑŞ";
-        Text[ greek ] = "ÌïñöŞ ÷áñôéïı";
+        Text[ greek ] = "Ìİãåèïò ÷áñôéïı";
         Text[ korean ] = "¿ëÁö ¼­½Ä";
         Text[ turkish ] = "Kağıt formatı";
         Text[ language_user1 ] = " ";
@@ -738,8 +738,8 @@ TabPage RID_SVXPAGE_PAGE
         Text [ ENGLISH ] = "For~mat" ;
         Text[ english_us ] = "For~mat";
         Text[ portuguese ] = "For~mat";
-        Text[ russian ] = "For~mat";
-        Text[ greek ] = "For~mat";
+        Text[ russian ] = "Ôîğìàò";
+        Text[ greek ] = "~ÌïñöŞ";
         Text[ dutch ] = "For~mat";
         Text[ french ] = "For~mat";
         Text[ spanish ] = "For~mat";
@@ -748,12 +748,12 @@ TabPage RID_SVXPAGE_PAGE
         Text[ swedish ] = "For~mat";
         Text[ polish ] = "For~mat";
         Text[ portuguese_brazilian ] = "For~mat";
-        Text[ japanese ] = "For~mat";
+        Text[ japanese ] = "‘®(~M)";
         Text[ korean ] = "For~mat";
-        Text[ chinese_simplified ] = "For~mat";
+        Text[ chinese_simplified ] = "¸ñÊ½";
         Text[ chinese_traditional ] = "®æ¦¡";
         Text[ turkish ] = "For~mat";
-        Text[ arabic ] = "For~mat";
+        Text[ arabic ] = "ÇáÊäÓíŞ";
     };
     ListBox LB_NUMBER_FORMAT
     {
@@ -1147,9 +1147,9 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "ÏÂÒ»¸öÑùÊ½";
         Text[ russian ] = "Ñëåäóşùèé ñòèëü";
         Text[ polish ] = "Nastêpny styl";
-        Text[ japanese ] = "Ÿ‚Ì½À²Ù";
+        Text[ japanese ] = "Ÿ‚É‘±‚­½À²Ù";
         Text[ chinese_traditional ] = "¤U¤@­Ó¼Ë¦¡";
-        Text[ arabic ] = "äãØ ÊÇáí";
+        Text[ arabic ] = "ÇáäãØ ÇáÊÇáí";
         Text[ greek ] = "Åğüìåíï ğñüôõğï";
         Text[ korean ] = "´ÙÀ½ À¯Çü";
         Text[ turkish ] = "Sonraki biçim";
