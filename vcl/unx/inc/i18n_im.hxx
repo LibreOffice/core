@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-10 13:08:38 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,6 @@ public:
     ~SalI18N_InputMethod();
 };
 
-#endif _SAL_I18N_INPUTMETHOD_HXX
+#endif // _SAL_I18N_INPUTMETHOD_HXX
 
 
