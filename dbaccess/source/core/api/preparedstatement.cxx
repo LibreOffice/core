@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
                    :OStatementBase(_xConn, _xStatement)
 {
     DBG_CTOR(OPreparedStatement, NULL);
-    m_pColumns = new OColumns(*this, m_aMutex, _xConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL);
+    Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
+    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL);
     m_xAggregateAsParameters = Reference< XParameters > (m_xAggregateAsSet, UNO_QUERY);
 }
 
@@ -224,17 +225,20 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
     // do we have to populate the columns
     if (!m_pColumns->isInitialized())
     {
-        // get the metadata
-        Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
-        // do we have columns
         try
         {
-            for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+            // get the metadata
+            Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
+            // do we have columns
+            if ( xMetaData.is() )
             {
-                // retrieve the name of the column
-                rtl::OUString aName = xMetaData->getColumnName(i + 1);
-                OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1);
-                m_pColumns->append(aName, pColumn);
+                for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+                {
+                    // retrieve the name of the column
+                    rtl::OUString aName = xMetaData->getColumnName(i + 1);
+                    OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1);
+                    m_pColumns->append(aName, pColumn);
+                }
             }
         }
         catch (SQLException)
