@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 13:38:55 $
+ *  last change: $Author: sj $ $Date: 2002-09-11 14:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _GEN_HXX
 #include <tools/gen.hxx>
+#endif
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
