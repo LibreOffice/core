@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 12:54:09 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 21:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _SW_XDOCUMENT_SETTINGS_HXX
 #include <SwXDocumentSettings.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
-#include <comphelper/propertysetinfo.hxx>
+#ifndef _COMPHELPER_MASTERPROPERTSETINFO_HXX_
+#include <comphelper/MasterPropertySetInfo.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -109,7 +109,12 @@
 #ifndef _SVX_ZOOMITEM_HXX
 #include <svx/zoomitem.hxx>
 #endif
-
+#ifndef _COMPHELPER_TYPEGENERATION_HXX_
+#include <comphelper/TypeGeneration.hxx>
+#endif
+#ifndef _UNOMOD_HXX
+#include <unomod.hxx>
+#endif
 
 using namespace rtl;
 using namespace comphelper;
@@ -138,38 +143,40 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_CURRENT_DATABASE_COMMAND_TYPE,
     HANDLE_SAVE_VERSION_ON_CLOSE
 };
-PropertySetInfo * lcl_createSettingsInfo()
-{
-    static PropertyMapEntry aWriterSettingsInfoMap[] =
-    {
-        { RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 &::getCppuType((Reference<XForbiddenCharacters>*)0),    0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode"),             HANDLE_LINK_UPDATE_MODE,                &::getCppuType((sal_Int16*)0),          0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("PrinterName"),                HANDLE_PRINTER_NAME,                    &::getCppuType((const OUString*)0),     0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      &::getCppuType((sal_Int16*)0),          0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      &::getBooleanCppuType(),                0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    &::getCppuType((const OUString*)0),     0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        &::getCppuType((const OUString*)0),     0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   &::getCppuType((const sal_Int16*)0),    0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           &::getBooleanCppuType(),                0,   0},
-        { NULL, 0, 0, NULL, 0, 0 }
-    };
 
-    PropertySetInfo *pInfo = new PropertySetInfo ( aWriterSettingsInfoMap );
-    return pInfo;
+MasterPropertySetInfo * lcl_createSettingsInfo()
+{
+    static PropertyInfo aWriterSettingsInfoMap[] =
+    {
+        { RTL_CONSTASCII_STRINGPARAM("ForbiddenCharacters"),        HANDLE_FORBIDDEN_CHARS,                 CPPUTYPE_REFFORBCHARS,  0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("LinkUpdateMode"),             HANDLE_LINK_UPDATE_MODE,                CPPUTYPE_INT16,         0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("FieldAutoUpdate"),            HANDLE_FIELD_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ChartAutoUpdate"),            HANDLE_CHART_AUTO_UPDATE,               CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacing"),        HANDLE_ADD_PARA_TABLE_SPACING,          CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("AddParaTableSpacingAtStart"), HANDLE_ADD_PARA_TABLE_SPACING_AT_START, CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("PrinterName"),                HANDLE_PRINTER_NAME,                    CPPUTYPE_OUSTRING,      0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("PrinterSetup"),               HANDLE_PRINTER_SETUP,                   CPPUTYPE_SEQINT8,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("IsKernAsianPunctuation"),     HANDLE_IS_KERN_ASIAN_PUNCTUATION,       CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CharacterCompressionType"),   HANDLE_CHARACTER_COMPRESSION_TYPE,      CPPUTYPE_INT16,         0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ApplyUserData"),              HANDLE_APPLY_USER_DATA,                 CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("SaveGlobalDocumentLinks"),    HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS,      CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseDataSource"),  HANDLE_CURRENT_DATABASE_DATA_SOURCE,    CPPUTYPE_OUSTRING,      0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommand"),     HANDLE_CURRENT_DATABASE_COMMAND,        CPPUTYPE_OUSTRING,      0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("CurrentDatabaseCommandType"), HANDLE_CURRENT_DATABASE_COMMAND_TYPE,   CPPUTYPE_INT16,         0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("SaveVersionOnClose"),         HANDLE_SAVE_VERSION_ON_CLOSE,           CPPUTYPE_BOOLEAN,           0,   0},
+        { NULL, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
+    };
+    return new MasterPropertySetInfo ( aWriterSettingsInfoMap );
 }
 
 SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
-: PropertySetHelper ( lcl_createSettingsInfo () )
+: MasterPropertySet ( lcl_createSettingsInfo () )
 , mxModel ( pModel )
 , mpModel ( pModel )
+, mpDocSh ( NULL )
+, mpDoc ( NULL )
 {
+    registerSlave ( new SwXPrintSettings ( sal_False ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
@@ -198,319 +205,337 @@ void SwXDocumentSettings::release ()
     OWeakObject::release();
 }
 
-void SwXDocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+void SwXDocumentSettings::_preSetValues ()
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    SwDocShell* pDocSh = mpModel->GetDocShell();
-    SwDoc* pDoc = pDocSh->GetDoc();
+    mpDocSh = mpModel->GetDocShell();
+    mpDoc = mpDocSh->GetDoc();
 
-    if( NULL == pDoc || NULL == pDocSh )
+    if( NULL == mpDoc || NULL == mpDocSh )
         throw UnknownPropertyException();
 
-    for( ; *ppEntries; ppEntries++, pValues++ )
+}
+void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+{
+    switch( rInfo.mnHandle )
     {
-        switch( (*ppEntries)->mnHandle )
+        case HANDLE_FORBIDDEN_CHARS:
+            break;
+        case HANDLE_LINK_UPDATE_MODE:
         {
-            case HANDLE_FORBIDDEN_CHARS:
-                break;
-            case HANDLE_LINK_UPDATE_MODE:
+            sal_Int16 nMode;
+            rValue >>= nMode;
+            switch (nMode)
             {
-                sal_Int16 nMode;
-                *pValues >>= nMode;
-                switch (nMode)
+                case NEVER:
+                case MANUAL:
+                case AUTOMATIC:
+                case GLOBALSETTING:
+                    break;
+                default:
+                    throw IllegalArgumentException();
+            }
+            mpDoc->SetLinkUpdMode(nMode);
+        }
+        break;
+        case HANDLE_FIELD_AUTO_UPDATE:
+        {
+            sal_Bool bUpdateField = *(sal_Bool*)rValue.getValue();
+            sal_Int16 nFlag = mpDoc->GetFldUpdateFlags();
+            mpDoc->SetFldUpdateFlags( bUpdateField ?
+                    nFlag == AUTOUPD_FIELD_AND_CHARTS ? AUTOUPD_FIELD_AND_CHARTS
+                    : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
+        }
+        break;
+        case HANDLE_CHART_AUTO_UPDATE:
+        {
+            sal_Bool bUpdateChart = *(sal_Bool*)rValue.getValue();
+            sal_Int16 nFlag = mpDoc->GetFldUpdateFlags();
+            mpDoc->SetFldUpdateFlags ( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS )
+                    ? bUpdateChart ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
+        }
+        break;
+        case HANDLE_ADD_PARA_TABLE_SPACING:
+        {
+            sal_Bool bParaSpace;
+            rValue >>= bParaSpace;
+            mpDoc->SetParaSpaceMax( bParaSpace, mpDoc->IsParaSpaceMaxAtPages());
+        }
+        break;
+        case HANDLE_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            sal_Bool bParaSpacePage;
+            rValue >>= bParaSpacePage;
+            mpDoc->SetParaSpaceMax( mpDoc->IsParaSpaceMax(), bParaSpacePage);
+        }
+        break;
+        case HANDLE_PRINTER_NAME:
+        {
+            SfxPrinter *pPrinter = mpDoc->GetPrt ( sal_False );
+            if (pPrinter)
+            {
+                OUString sPrinterName;
+                if (rValue >>= sPrinterName )
                 {
-                    case NEVER:
-                    case MANUAL:
-                    case AUTOMATIC:
-                    case GLOBALSETTING:
-                        break;
-                    default:
-                        throw IllegalArgumentException();
-                }
-                pDoc->SetLinkUpdMode(nMode);
-            }
-            break;
-            case HANDLE_FIELD_AUTO_UPDATE:
-            {
-                sal_Bool bUpdateField = *(sal_Bool*)(*pValues).getValue();
-                sal_Int16 nFlag = pDoc->GetFldUpdateFlags();
-                pDoc->SetFldUpdateFlags( bUpdateField ?
-                        nFlag == AUTOUPD_FIELD_AND_CHARTS ? AUTOUPD_FIELD_AND_CHARTS
-                        : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
-            }
-            break;
-            case HANDLE_CHART_AUTO_UPDATE:
-            {
-                sal_Bool bUpdateChart = *(sal_Bool*)(*pValues).getValue();
-                sal_Int16 nFlag = pDoc->GetFldUpdateFlags();
-                pDoc->SetFldUpdateFlags ( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS )
-                        ? bUpdateChart ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF );
-            }
-            break;
-            case HANDLE_ADD_PARA_TABLE_SPACING:
-            {
-                sal_Bool bParaSpace;
-                *pValues >>= bParaSpace;
-                pDoc->SetParaSpaceMax( bParaSpace, pDoc->IsParaSpaceMaxAtPages());
-            }
-            break;
-            case HANDLE_ADD_PARA_TABLE_SPACING_AT_START:
-            {
-                sal_Bool bParaSpacePage;
-                *pValues >>= bParaSpacePage;
-                pDoc->SetParaSpaceMax( pDoc->IsParaSpaceMax(), bParaSpacePage);
-            }
-            break;
-            case HANDLE_PRINTER_NAME:
-            {
-                SfxPrinter *pPrinter = pDoc->GetPrt ( sal_False );
-                if (pPrinter)
-                {
-                    OUString sPrinterName;
-                    if (*pValues >>= sPrinterName )
-                    {
-                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                        if (pNewPrinter->IsKnown())
-                            pDoc->SetPrt ( pNewPrinter );
-                        else
-                            delete pNewPrinter;
-                    }
+                    SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                    if (pNewPrinter->IsKnown())
+                        mpDoc->SetPrt ( pNewPrinter );
                     else
-                        throw IllegalArgumentException();
-                }
-            }
-            break;
-            case HANDLE_PRINTER_SETUP:
-            {
-                Sequence < sal_Int8 > aSequence;
-                if ( *pValues >>= aSequence )
-                {
-                    sal_uInt32 nSize = aSequence.getLength();
-                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 __READONLY_DATA nRange[] =
-                    {
-                        FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
-                        SID_HTML_MODE,  SID_HTML_MODE,
-                        SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                        SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                        0
-                    };
-                    SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetAttrPool(), nRange );
-                    SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
-
-                    pDoc->SetPrt( pPrinter );
-
-                    if ( !pPrinter->IsOriginal() )
-                    {
-                        pDocSh->UpdateFontList();
-                        SdrModel * pDrawModel = pDoc->GetDrawModel();
-                        if ( pDrawModel )
-                            pDrawModel->SetRefDevice( pPrinter );
-                        pDoc->SetOLEPrtNotifyPending();
-                    }
+                        delete pNewPrinter;
                 }
                 else
                     throw IllegalArgumentException();
             }
-            break;
-            case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
-            {
-                sal_Bool bIsKern = *(sal_Bool*)(*pValues).getValue();
-                pDoc->SetKernAsianPunctuation( bIsKern );
-                SwEditShell* pEditSh = pDoc->GetEditShell();
-                if(pEditSh)
-                    pEditSh->ChgHyphenation();
-            }
-            break;
-            case HANDLE_CHARACTER_COMPRESSION_TYPE:
-            {
-                sal_Int16 nMode;
-                *pValues >>= nMode;
-                switch (nMode)
-                {
-                    case CHARCOMPRESS_NONE:
-                    case CHARCOMPRESS_PUNCTUATION:
-                    case CHARCOMPRESS_PUNCTUATION_KANA:
-                        break;
-                    default:
-                        throw IllegalArgumentException();
-                }
-                pDoc->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
-            }
-            break;
-            case HANDLE_APPLY_USER_DATA:
-            {
-                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                sal_Bool bUseUserData = *(sal_Bool*)(*pValues).getValue();
-                rInfo.SetUseUserData(bUseUserData);
-            }
-            break;
-            case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
-            {
-                sal_Bool bSaveGlobal = *(sal_Bool*)(*pValues).getValue();
-                pDoc->SetGlblDocSaveLinks( bSaveGlobal );
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
-            {
-                SwDBData& rData = pDoc->GetDBData();
-                if ( *pValues >>= rData.sDataSource )
-                    pDoc->ChgDBData( rData );
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_COMMAND:
-            {
-                SwDBData& rData = pDoc->GetDBData();
-                if ( *pValues >>= rData.sCommand )
-                    pDoc->ChgDBData( rData );
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
-            {
-                SwDBData& rData = pDoc->GetDBData();
-                if ( *pValues >>= rData.nCommandType )
-                    pDoc->ChgDBData( rData );
-            }
-            break;
-            case HANDLE_SAVE_VERSION_ON_CLOSE:
-            {
-                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                sal_Bool bSaveVersion = *(sal_Bool*)(*pValues).getValue();
-                rInfo.SetSaveVersionOnClose ( bSaveVersion );
-            }
-            break;
-            default:
-                throw UnknownPropertyException();
         }
-    }
-}
-void SwXDocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue )
-    throw(UnknownPropertyException, WrappedTargetException )
-{
-    SwDocShell* pDocSh = mpModel->GetDocShell();
-    SwDoc* pDoc = pDocSh->GetDoc();
-    if( NULL == pDoc || NULL == pDocSh )
-        throw UnknownPropertyException();
-
-    for( ; *ppEntries; ppEntries++, pValue++ )
-    {
-        switch( (*ppEntries)->mnHandle )
+        break;
+        case HANDLE_PRINTER_SETUP:
         {
-            case HANDLE_FORBIDDEN_CHARS:
+            Sequence < sal_Int8 > aSequence;
+            if ( rValue >>= aSequence )
             {
-                Reference<XForbiddenCharacters> xRet(*mpModel->GetPropertyHelper(), UNO_QUERY);
-                *pValue <<= xRet;
-            }
-            break;
-            case HANDLE_LINK_UPDATE_MODE:
-            {
-                *pValue <<= static_cast < sal_Int16 > ( pDoc->GetLinkUpdMode() );
-            }
-            break;
-            case HANDLE_FIELD_AUTO_UPDATE:
-            {
-                sal_uInt16 nFlags = pDoc->GetFldUpdateFlags();
-                BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
-                (*pValue).setValue(&bFieldUpd, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_CHART_AUTO_UPDATE:
-            {
-                sal_uInt16 nFlags = pDoc->GetFldUpdateFlags();
-                BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
-                (*pValue).setValue(&bChartUpd, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_ADD_PARA_TABLE_SPACING:
-            {
-                sal_Bool bParaSpace = pDoc->IsParaSpaceMax();
-                (*pValue).setValue(&bParaSpace, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_ADD_PARA_TABLE_SPACING_AT_START:
-            {
-                sal_Bool bParaSpace = pDoc->IsParaSpaceMaxAtPages();
-                (*pValue).setValue(&bParaSpace, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_PRINTER_NAME:
-            {
-                SfxPrinter *pPrinter = pDoc->GetPrt ( sal_False );
-                *pValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
-
-            }
-            break;
-            case HANDLE_PRINTER_SETUP:
-            {
-                SfxPrinter *pPrinter = pDocSh->GetDoc()->GetPrt ( sal_False );
-                if (pPrinter)
+                sal_uInt32 nSize = aSequence.getLength();
+                SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                static sal_uInt16 __READONLY_DATA nRange[] =
                 {
-                    SvMemoryStream aStream;
-                    pPrinter->Store( aStream );
-                    aStream.Seek ( STREAM_SEEK_TO_END );
-                    sal_uInt32 nSize = aStream.Tell();
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    Sequence < sal_Int8 > aSequence( nSize );
-                    aStream.Read ( aSequence.getArray(), nSize );
-                    *pValue <<= aSequence;
+                    FN_PARAM_ADDPRINTER, FN_PARAM_ADDPRINTER,
+                    SID_HTML_MODE,  SID_HTML_MODE,
+                    SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                    SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
+                    0
+                };
+                SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
+                SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                mpDoc->SetPrt( pPrinter );
+
+                if ( !pPrinter->IsOriginal() )
+                {
+                    mpDocSh->UpdateFontList();
+                    SdrModel * pDrawModel = mpDoc->GetDrawModel();
+                    if ( pDrawModel )
+                        pDrawModel->SetRefDevice( pPrinter );
+                    mpDoc->SetOLEPrtNotifyPending();
                 }
             }
-            break;
-            case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
-            {
-                sal_Bool bParaSpace = pDoc->IsKernAsianPunctuation();
-                (*pValue).setValue(&bParaSpace, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_APPLY_USER_DATA:
-            {
-                SfxDocumentInfo &rInfo = pDocSh->GetDocInfo();
-                sal_Bool bUseUserInfo = rInfo.IsUseUserData();
-                (*pValue).setValue(&bUseUserInfo, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_CHARACTER_COMPRESSION_TYPE:
-            {
-                *pValue <<= static_cast < sal_Int16 > (pDoc->GetCharCompressType());
-            }
-            break;
-            case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
-            {
-                sal_Bool bSaveGlobal = pDoc->IsGlblDocSaveLinks();
-                (*pValue).setValue(&bSaveGlobal, ::getBooleanCppuType());
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
-            {
-                const SwDBData& rData = pDoc->GetDBDesc();
-                *pValue <<= rData.sDataSource;
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_COMMAND:
-            {
-                const SwDBData& rData = pDoc->GetDBDesc();
-                *pValue <<= rData.sCommand;
-            }
-            break;
-            case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
-            {
-                const SwDBData& rData = pDoc->GetDBDesc();
-                *pValue <<= rData.nCommandType;
-            }
-            break;
-            case HANDLE_SAVE_VERSION_ON_CLOSE:
-            {
-                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                sal_Bool bSaveVersion = rInfo.IsSaveVersionOnClose();
-                (*pValue).setValue(&bSaveVersion, ::getBooleanCppuType());
-            }
-            break;
-            default:
-                throw UnknownPropertyException();
+            else
+                throw IllegalArgumentException();
         }
+        break;
+        case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
+        {
+            sal_Bool bIsKern = *(sal_Bool*)(rValue).getValue();
+            mpDoc->SetKernAsianPunctuation( bIsKern );
+            SwEditShell* pEditSh = mpDoc->GetEditShell();
+            if(pEditSh)
+                pEditSh->ChgHyphenation();
+        }
+        break;
+        case HANDLE_CHARACTER_COMPRESSION_TYPE:
+        {
+            sal_Int16 nMode;
+            rValue >>= nMode;
+            switch (nMode)
+            {
+                case CHARCOMPRESS_NONE:
+                case CHARCOMPRESS_PUNCTUATION:
+                case CHARCOMPRESS_PUNCTUATION_KANA:
+                    break;
+                default:
+                    throw IllegalArgumentException();
+            }
+            mpDoc->SetCharCompressType(static_cast < SwCharCompressType > (nMode) );
+        }
+        break;
+        case HANDLE_APPLY_USER_DATA:
+        {
+            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
+            sal_Bool bUseUserData = *(sal_Bool*)rValue.getValue();
+            rInfo.SetUseUserData(bUseUserData);
+        }
+        break;
+        case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
+        {
+            sal_Bool bSaveGlobal = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetGlblDocSaveLinks( bSaveGlobal );
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
+        {
+            SwDBData& rData = mpDoc->GetDBData();
+            if ( rValue >>= rData.sDataSource )
+                mpDoc->ChgDBData( rData );
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_COMMAND:
+        {
+            SwDBData& rData = mpDoc->GetDBData();
+            if ( rValue >>= rData.sCommand )
+                mpDoc->ChgDBData( rData );
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
+        {
+            SwDBData& rData = mpDoc->GetDBData();
+            if ( rValue >>= rData.nCommandType )
+                mpDoc->ChgDBData( rData );
+        }
+        break;
+        case HANDLE_SAVE_VERSION_ON_CLOSE:
+        {
+            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
+            sal_Bool bSaveVersion = *(sal_Bool*)rValue.getValue();
+            rInfo.SetSaveVersionOnClose ( bSaveVersion );
+        }
+        break;
+        default:
+            throw UnknownPropertyException();
     }
 }
+
+void SwXDocumentSettings::_postSetValues ()
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+{
+    mpDocSh = 0;
+    mpDoc = 0;
+}
+
+void SwXDocumentSettings::_preGetValues ()
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+{
+    mpDocSh = mpModel->GetDocShell();
+    mpDoc = mpDocSh->GetDoc();
+    if( NULL == mpDoc || NULL == mpDocSh )
+        throw UnknownPropertyException();
+}
+
+void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException )
+{
+    switch( rInfo.mnHandle )
+    {
+        case HANDLE_FORBIDDEN_CHARS:
+        {
+            Reference<XForbiddenCharacters> xRet(*mpModel->GetPropertyHelper(), UNO_QUERY);
+            rValue <<= xRet;
+        }
+        break;
+        case HANDLE_LINK_UPDATE_MODE:
+        {
+            rValue <<= static_cast < sal_Int16 > ( mpDoc->GetLinkUpdMode() );
+        }
+        break;
+        case HANDLE_FIELD_AUTO_UPDATE:
+        {
+            sal_uInt16 nFlags = mpDoc->GetFldUpdateFlags();
+            BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
+            rValue.setValue(&bFieldUpd, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_CHART_AUTO_UPDATE:
+        {
+            sal_uInt16 nFlags = mpDoc->GetFldUpdateFlags();
+            BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
+            rValue.setValue(&bChartUpd, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_ADD_PARA_TABLE_SPACING:
+        {
+            sal_Bool bParaSpace = mpDoc->IsParaSpaceMax();
+            rValue.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_ADD_PARA_TABLE_SPACING_AT_START:
+        {
+            sal_Bool bParaSpace = mpDoc->IsParaSpaceMaxAtPages();
+            rValue.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_PRINTER_NAME:
+        {
+            SfxPrinter *pPrinter = mpDoc->GetPrt ( sal_False );
+            rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+
+        }
+        break;
+        case HANDLE_PRINTER_SETUP:
+        {
+            SfxPrinter *pPrinter = mpDocSh->GetDoc()->GetPrt ( sal_False );
+            if (pPrinter)
+            {
+                SvMemoryStream aStream;
+                pPrinter->Store( aStream );
+                aStream.Seek ( STREAM_SEEK_TO_END );
+                sal_uInt32 nSize = aStream.Tell();
+                aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                Sequence < sal_Int8 > aSequence( nSize );
+                aStream.Read ( aSequence.getArray(), nSize );
+                rValue <<= aSequence;
+            }
+        }
+        break;
+        case HANDLE_IS_KERN_ASIAN_PUNCTUATION:
+        {
+            sal_Bool bParaSpace = mpDoc->IsKernAsianPunctuation();
+            rValue.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_APPLY_USER_DATA:
+        {
+            SfxDocumentInfo &rInfo = mpDocSh->GetDocInfo();
+            sal_Bool bUseUserInfo = rInfo.IsUseUserData();
+            rValue.setValue(&bUseUserInfo, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_CHARACTER_COMPRESSION_TYPE:
+        {
+            rValue <<= static_cast < sal_Int16 > (mpDoc->GetCharCompressType());
+        }
+        break;
+        case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
+        {
+            sal_Bool bSaveGlobal = mpDoc->IsGlblDocSaveLinks();
+            rValue.setValue(&bSaveGlobal, ::getBooleanCppuType());
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_DATA_SOURCE:
+        {
+            const SwDBData& rData = mpDoc->GetDBDesc();
+            rValue <<= rData.sDataSource;
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_COMMAND:
+        {
+            const SwDBData& rData = mpDoc->GetDBDesc();
+            rValue <<= rData.sCommand;
+        }
+        break;
+        case HANDLE_CURRENT_DATABASE_COMMAND_TYPE:
+        {
+            const SwDBData& rData = mpDoc->GetDBDesc();
+            rValue <<= rData.nCommandType;
+        }
+        break;
+        case HANDLE_SAVE_VERSION_ON_CLOSE:
+        {
+            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
+            sal_Bool bSaveVersion = rInfo.IsSaveVersionOnClose();
+            rValue.setValue(&bSaveVersion, ::getBooleanCppuType());
+        }
+        break;
+        default:
+            throw UnknownPropertyException();
+    }
+}
+
+void SwXDocumentSettings::_postGetValues ()
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+{
+    mpDocSh = 0;
+    mpDoc = 0;
+}
+
 // XServiceInfo
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
     throw(RuntimeException)
