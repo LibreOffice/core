@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:05:49 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 09:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ DECLARE_CONSTASCII_USTRING(SERVICE_SDBCX_COLUMNS);
 DECLARE_CONSTASCII_USTRING(SERVICE_SDBCX_TABLES);
 DECLARE_CONSTASCII_USTRING(SERVICE_SDB_QUERIES);
 DECLARE_CONSTASCII_USTRING(SERVICE_SDBC_DRIVERMANAGER);
+DECLARE_CONSTASCII_USTRING(SERVICE_SDB_INTERACTION_HANDLER);
 
 //============================================================
 //= configuration key names
