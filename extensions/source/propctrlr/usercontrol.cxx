@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:34:02 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 15:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _ZFORMAT_HXX
+#include <svtools/zformat.hxx>
 #endif
 
 //............................................................................
@@ -239,7 +242,26 @@ namespace pcr
                 SetFormatter(pFormatter, sal_True);
             SetFormatKey(rDesc.nKey);
 
-            m_nLastDecimalDigits = GetDecimalDigits();
+            const SvNumberformat* pEntry = GetFormatter()->GetEntry(GetFormatKey());
+            switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
+            {
+                case NUMBERFORMAT_NUMBER:
+                case NUMBERFORMAT_CURRENCY:
+                case NUMBERFORMAT_SCIENTIFIC:
+                case NUMBERFORMAT_FRACTION:
+                case NUMBERFORMAT_PERCENT:
+                    m_nLastDecimalDigits = GetDecimalDigits();
+                    break;
+                case NUMBERFORMAT_DATETIME:
+                case NUMBERFORMAT_DATE:
+                case NUMBERFORMAT_TIME:
+                    m_nLastDecimalDigits = 7;
+                    break;
+                default:
+                    m_nLastDecimalDigits = 0;
+                    break;
+            }
+
         }
         else
         {
@@ -257,6 +279,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:34:02  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 09.01.01 10:23:42  fs
  ************************************************************************/
