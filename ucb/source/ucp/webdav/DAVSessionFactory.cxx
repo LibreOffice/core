@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,15 @@ ORef< DAVSession > DAVSessionFactory::createDAVSession(
                                 "com.sun.star.configuration.ConfigurationAccess" ),
                         aArguments ) );
 
-            VOS_ENSURE( xInterface.is(), "Content::Content - No config access!" );
+            VOS_ENSURE( xInterface.is(),
+                        "DAVSessionFactory::createDAVSession - No config access!" );
 
             if ( xInterface.is() )
             {
                 Reference< XNameAccess > xNameAccess( xInterface, UNO_QUERY );
 
-                VOS_ENSURE( xNameAccess.is(), "Content::Content - No name access!" );
+                VOS_ENSURE( xNameAccess.is(),
+                            "DAVSessionFactory::createDAVSession - No name access!" );
 
                 if ( xNameAccess.is() )
                 {
@@ -126,7 +128,7 @@ ORef< DAVSession > DAVSessionFactory::createDAVSession(
                                     >>= aProxyConfig.aName ) )
                         {
                             VOS_ENSURE( sal_False,
-                                        "Content::Content - "
+                                        "DAVSessionFactory::createDAVSession - "
                                         "Error getting config item value!" );
                         }
                     }
@@ -141,12 +143,13 @@ ORef< DAVSession > DAVSessionFactory::createDAVSession(
 
                     try
                     {
-                        if ( !( xNameAccess->getByName(
-                                OUString::createFromAscii( "Port" ) )
-                                      >>= aProxyConfig.nPort ) )
+                        Any aValue = xNameAccess->getByName(
+                                OUString::createFromAscii( "Port" ) );
+                        if ( aValue.hasValue() &&
+                             !( aValue >>= aProxyConfig.nPort ) )
                         {
                             VOS_ENSURE( sal_False,
-                                        "Content::Content - "
+                                        "DAVSessionFactory::createDAVSession - "
                                         "Error getting config item value!" );
                         }
                     }

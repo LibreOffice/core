@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@ struct ProxyConfig
 {
     ::rtl::OUString aName;
     sal_Int32       nPort;
+
+    ProxyConfig() : nPort( 0 ) {}
+    ProxyConfig( const ::rtl::OUString& rName, sal_Int32 Port )
+    : aName( rName ), nPort( Port ) {}
 };
 
 class DAVSession;

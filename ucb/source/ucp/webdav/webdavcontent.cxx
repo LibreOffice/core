@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
+ *  last change: $Author: kso $ $Date: 2000-12-19 17:04:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,8 +662,9 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                     }
                       else
                     {
-                          VOS_ENSURE( sal_False,
-                                      "Content::execute - invalid parameter!" );
+                        // Note: aOpenCommand.Sink may contain an XStream
+                        //       implementation. Support for this type of
+                        //       sink is optional...
                           throw CommandAbortedException();
                     }
                   }
@@ -785,13 +786,28 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             NeonUri sourceURI (transferArgs.SourceURL);
             NeonUri targetURI (m_xIdentifier->getContentIdentifier());
 
-            // Check for same scheme
+#ifdef HTTP_SUPPORTED
+            // Check scheme
             //
-            if (sourceURI.GetScheme ().getLength () &&
-                sourceURI.GetScheme () != targetURI.GetScheme () != 0)
-            {
+            const OUString aScheme = sourceURI.GetScheme();
+            if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                                WEBDAV_URL_SCHEME ) ) &&
+                  !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                                HTTP_URL_SCHEME ) ) &&
+                  !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                                HTTPS_URL_SCHEME ) ) )
                 throw CommandAbortedException();
-            }
+#else
+            // Check scheme
+            //
+            const OUString aScheme = sourceURI.GetScheme();
+            if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                                WEBDAV_URL_SCHEME ) ) )
+                throw CommandAbortedException();
+#endif
+            sourceURI.SetScheme (OUString::createFromAscii ("http"));
+            targetURI.SetScheme (OUString::createFromAscii ("http"));
+
             // Check for same host
             //
             if (sourceURI.GetHost ().getLength () &&
@@ -810,7 +826,6 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                 throw CommandAbortedException();
             }
 
-            targetURI.SetScheme (OUString::createFromAscii ("http"));
             targetURI.AppendPath (transferArgs.NewTitle);
 
             OUString aTargetURL = m_xIdentifier->getContentIdentifier();
