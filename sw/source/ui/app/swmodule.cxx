@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:45:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ SwModule::SwModule( SvFactory* pFact,
                                      pSwResMgr );
 
     SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMerge"));
+    SfxEventConfiguration::RegisterEvent(SW_EVENT_MAIL_MERGE_END, SW_RES(STR_PRINT_MERGE_MACRO), String::CreateFromAscii("OnMailMergeFinished"));
     SfxEventConfiguration::RegisterEvent(SW_EVENT_PAGE_COUNT, SW_RES(STR_PAGE_COUNT_MACRO), String::CreateFromAscii("OnPageCountChange"));
     pModuleConfig = new SwModuleOptions;
 
