@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:28:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:FontworkShapeTypes" oor:op="replace">
+            <node oor:name=".uno:FontworkShapeType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Fontwork-Form</value>
                     <value xml:lang="en-US">Fontwork Shape</value>
