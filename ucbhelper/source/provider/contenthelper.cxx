@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 15:15:21 $
+ *  last change: $Author: sb $ $Date: 2000-12-18 18:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,17 +279,36 @@ ContentImplHelper::~ContentImplHelper()
 //
 //=========================================================================
 
-XINTERFACE_IMPL_10( ContentImplHelper,
-                    XTypeProvider,
-                    XServiceInfo,
-                    XComponent,
-                    XContent,
-                    XCommandProcessor,
-                    XPropertiesChangeNotifier,
-                    XCommandInfoChangeNotifier,
-                    XPropertyContainer,
-                    XPropertySetInfoChangeNotifier,
-                    XChild );
+void SAL_CALL ContentImplHelper::acquire()
+    throw( com::sun::star::uno::RuntimeException )
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL ContentImplHelper::release()
+    throw( com::sun::star::uno::RuntimeException )
+{
+    vos::OGuard aGuard(m_xProvider->m_aMutex);
+    OWeakObject::release();
+}
+
+com::sun::star::uno::Any SAL_CALL ContentImplHelper::queryInterface(
+                                const com::sun::star::uno::Type & rType )
+    throw( com::sun::star::uno::RuntimeException )
+{
+    com::sun::star::uno::Any aRet = cppu::queryInterface( rType,
+            static_cast< XTypeProvider * >(this),
+            static_cast< XServiceInfo * >(this),
+            static_cast< XComponent * >(this),
+            static_cast< XContent * >(this),
+            static_cast< XCommandProcessor * >(this),
+            static_cast< XPropertiesChangeNotifier * >(this),
+            static_cast< XCommandInfoChangeNotifier * >(this),
+            static_cast< XPropertyContainer * >(this),
+            static_cast< XPropertySetInfoChangeNotifier * >(this),
+            static_cast< XChild * >(this));
+    return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+}
 
 //=========================================================================
 //
