@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFixedTextModel.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:45:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
+#ifndef __com_sun_star_style_VerticalAlignment_idl__
+#include <com/sun/star/style/VerticalAlignment.idl>
+#endif
 
 //=============================================================================
 
@@ -195,6 +198,11 @@ published service UnoControlFixedTextModel
      */
     [property] com::sun::star::util::Color TextLineColor;
 
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control
+    */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================
