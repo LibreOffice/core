@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:06:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ namespace
                     rNewValue = rValue;
                     break;
                 case DataType::BIT:
+                case DataType::BOOLEAN:
                     {
                         if(xMetaData.is())
                         {
