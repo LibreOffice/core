@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 14:16:52 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 13:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,10 +467,8 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
        return m_aRowsIter != m_aRows.end();
     }
 
-    if(m_aRowsIter == m_aRows.end())
-        return sal_False;
-
-    ++m_aRowsIter;
+    if(m_aRowsIter != m_aRows.end())
+        ++m_aRowsIter;
 
     return m_aRowsIter != m_aRows.end();
 }
@@ -482,7 +480,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
 
-    if(m_aRowsIter == m_aRows.end())
+    if(m_aRowsIter == m_aRows.end() || !(*m_aRowsIter)[m_nColPos].isValid())
         return sal_True;
 
     return (*m_aRowsIter)[m_nColPos]->getValue().isNull();
@@ -655,13 +653,11 @@ const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
-    if(m_aRowsIter != m_aRows.end() && (*m_aRowsIter)[columnIndex].isValid())
-    {
-        checkIndex(columnIndex );
-        m_nColPos = columnIndex;
+    checkIndex(columnIndex );
+    m_nColPos = columnIndex;
 
+    if(m_aRowsIter != m_aRows.end() && (*m_aRowsIter)[columnIndex].isValid())
         return *(*m_aRowsIter)[columnIndex];
-    }
     return m_aEmptyValue;
 }
 // -----------------------------------------------------------------------------
