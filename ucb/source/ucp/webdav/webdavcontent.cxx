@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
+ *  last change: $Author: obo $ $Date: 2001-09-28 07:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ Content::~Content()
 
 // virtual
 void SAL_CALL Content::acquire()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::acquire();
 }
@@ -277,7 +277,7 @@ void SAL_CALL Content::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL Content::release()
-    throw( uno::RuntimeException )
+    throw( )
 {
     ContentImplHelper::release();
 }
