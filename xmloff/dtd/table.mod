@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.14 2000-11-09 14:06:25 dr Exp $
+	$Id: table.mod,v 1.15 2000-11-23 11:10:04 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -52,13 +52,14 @@
    Contributor(s): _______________________________________
 
 -->
-<!ENTITY % table-columns "( table:table-columns | table:table-column+ )">
+
+<!ENTITY % table-columns "( table:table-columns | ( table:table-column | table:table-column-group )+ )">
 <!ENTITY % table-header-columns "table:table-header-columns">
-<!ENTITY % table-rows "( table:table-rows | table:table-row+ )">
+<!ENTITY % table-rows "( table:table-rows | ( table:table-row | table:table-row-group )+ )">
 <!ENTITY % table-header-rows "table:table-header-rows">
 <!ENTITY % table-column-groups "( (%table-columns;,(%table-header-columns;,%table-columns;?)?) | (%table-header-columns;,%table-columns;?) )">
 <!ENTITY % table-row-groups "( (%table-rows;,(%table-header-rows;,%table-rows;?)?) | (%table-header-rows;,%table-rows;?) )">
-<!ELEMENT table:table (table:scenario?, %table-column-groups;, %table-row-groups;)>
+<!ELEMENT table:table (table:table-source?, table:scenario?, table:shapes?, %table-column-groups;, %table-row-groups;)>
 <!ATTLIST table:table
 	table:name %string; #REQUIRED
 	table:style-name %styleName; #IMPLIED
@@ -66,6 +67,14 @@
 	table:cell-protection-key CDATA #IMPLIED
 	table:print-ranges %cell-range-address-list; #IMPLIED
 >
+<!ELEMENT table:table-source EMPTY>
+<!ATTLIST table:table-source table:mode ( copy-all | copy-results-only ) "copy-all"
+	xlink:type (simple) #FIXED "simple"
+	xlink:actuate (onRequest) "onRequest"
+	xlink:href %uriReference; #REQUIRED
+	table:filter-name CDATA #REQUIRED
+	table:table-name CDATA #REQUIRED
+	table:filter-options CDATA #REQUIRED>
 <!ELEMENT table:scenario EMPTY>
 <!ATTLIST table:scenario
 	table:display-border %boolean; "true"
@@ -77,17 +86,20 @@
 	table:scenario-ranges %cell-range-address-list; #REQUIRED
 	table:comment CDATA #IMPLIED
 >
-<!ELEMENT table:subtable (%table-column-groups;, %table-row-groups;)>
-<!ELEMENT table:table-header-columns (table:table-column+)>
-<!ELEMENT table:table-columns (table:table-column+)>
+<!ELEMENT table:table-column-group ( table:table-header-columns | table:table-column | table:table-column-group)+ >
+<!ATTLIST table:table-column-group table:display %boolean; "true">
+<!ELEMENT table:table-header-columns ( table:table-column | table:table-column-group )+>
+<!ELEMENT table:table-columns ( table:table-column | table:table-column-group )+>
 <!ELEMENT table:table-column EMPTY>
 <!ATTLIST table:table-column
 	table:number-columns-repeated %positiveInteger; "1"
 	table:style-name %styleName; #IMPLIED
 	table:visibility (visible | collapse | filter) "visible"
 >
-<!ELEMENT table:table-header-rows (table:table-row+)>
-<!ELEMENT table:table-rows (table:table-row+)>
+<!ELEMENT table:table-row-group ( table:table-header-rows | table:table-row | table:table-row-group)+ >
+<!ATTLIST table:table-row-group table:display %boolean; "true">
+<!ELEMENT table:table-header-rows ( table:table-row | table:table-row-group )+>
+<!ELEMENT table:table-rows ( table:table-row | table:table-row-group )+>
 <!ENTITY % table-cells "(table:table-cell|table:covered-table-cell)+">
 <!ELEMENT table:table-row %table-cells;>
 <!ATTLIST table:table-row
@@ -95,6 +107,7 @@
 	table:style-name %styleName; #IMPLIED
 	table:visibility (visible | collapse | filter) "visible"
 >
+<!ELEMENT table:subtable (%table-column-groups;, %table-row-groups;)>
 <!ENTITY % text-wo-table "(text:h|text:p|text:ordered-list|text:unordered-list|%shapes;|chart:chart)*">
 <!ENTITY % cell-content "(table:cell-range-source?,office:annotation?,table:detective?,(table:subtable|%text-wo-table;))">
 <!ELEMENT table:table-cell %cell-content;>
@@ -383,3 +396,7 @@
 	table:use-label (none | column | row | both) "none"
 	table:link-to-source-data %boolean; "false"
 >
+<!ELEMENT table:dde-links (table:dde-link)+ >
+<!ELEMENT table:dde-link (table:dde-source, table:table) >
+<!ATTLIST table:dde-link table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
+
