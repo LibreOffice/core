@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:36:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,11 +1279,15 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         {
             // Check for correct layout names
             SdPage* pPage = (SdPage*) GetPage( i );
-            if( pPage->GetMasterPageCount() > 0 )
+
+            if(pPage->TRG_HasMasterPage())
             {
-                SdPage* pMaster = (SdPage*) pPage->GetMasterPage( 0 );
-                if( pMaster && pMaster->GetLayoutName() != pPage->GetLayoutName() )
-                    pPage->SetLayoutName( pMaster->GetLayoutName() );
+                SdPage& rMaster = (SdPage&)pPage->TRG_GetMasterPage();
+
+                if(rMaster.GetLayoutName() != pPage->GetLayoutName())
+                {
+                    pPage->SetLayoutName(rMaster.GetLayoutName());
+                }
             }
         }
 
