@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-02 10:36:06 $
+ *  last change: $Author: mt $ $Date: 2001-11-08 16:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,6 +1272,9 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 void OKButton::Click()
 {
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
@@ -1297,7 +1300,11 @@ void OKButton::Click()
         }
     }
 
-    PushButton::Click();
+    if ( !aDelData.IsDelete() )
+    {
+        ImplRemoveDel( &aDelData );
+        PushButton::Click();
+    }
 }
 
 // =======================================================================
@@ -1336,6 +1343,9 @@ CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
 
 void CancelButton::Click()
 {
+    ImplDelData aDelData;
+    ImplAddDel( &aDelData );
+
     // Ist kein Link gesetzt, dann schliesse Parent
     if ( !GetClickHdl() || GetComponentInterface( FALSE ).is() )
     {
@@ -1361,7 +1371,11 @@ void CancelButton::Click()
         }
     }
 
-    PushButton::Click();
+    if ( !aDelData.IsDelete() )
+    {
+        ImplRemoveDel( &aDelData );
+        PushButton::Click();
+    }
 }
 
 // =======================================================================
