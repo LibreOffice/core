@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:43:38 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,9 +1107,6 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
                         aMtf.Stop();
                         aMtf.SetPrefMapMode( aTmp );
                         aMtf.SetPrefSize( aSz );
-#ifndef VCL
-                        aMtf.SetPrefPalette( OutputDevice::GetDitherPalette() );
-#endif
                         rGrf = aMtf;
                     }
                 }

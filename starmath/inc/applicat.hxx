@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applicat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-16 13:24:52 $
+ *  last change: $Author: fme $ $Date: 2001-08-16 09:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,19 +131,11 @@ protected:
     virtual void        OpenClients();
 
     // initialization / deinitialization
-#ifndef VCL
-    virtual void        Init(int nArgs, char* pArgs[]);
-#else
     virtual void        Init();
-#endif
     virtual void        Exit();
 
 public:
-#ifndef VCL
-    void Main(int nArgc, char* pArgv[]);
-#else
     void Main();
-#endif
 
     SmApplicat() :
         SfxApplication("iso")

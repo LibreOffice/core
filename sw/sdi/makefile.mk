@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:30 $
+#   last change: $Author: fme $ $Date: 2001-08-16 09:17:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,33 +146,9 @@ ALL: \
 
 .INCLUDE :  target.mk
 
-.IF "$(GUIBASE)$(VCL)"=="WIN"
-$(BIN)$/$(SDINAME).tlb: \
-        $(MISCX)$/$(SDINAME).odl
-    rscpp -I.;$(SVSDIINC);$(INC) -DSOLAR_VERSION=$(solar_version) $(MISC)$/$(SDINAME).odl $(MISC)$/$(SDINAME).odx
-.IF "$(GUI)"=="WIN"
-    wx /w /a mktyplib /nocpp /o $(MISC)$/$(SDINAME).err /tlb $(BIN)$/$(SDINAME).tlb $(MISC)$/$(SDINAME).odx
-.ELSE
-    mktyplib /win32 /nocpp /o $(MISC)$/$(SDINAME).err /tlb $(BIN)$/$(SDINAME).tlb $(MISC)$/$(SDINAME).odx
-.ENDIF
-    +type $(MISC)$/$(SDINAME).err
-.ELSE
 $(BIN)$/$(SDINAME).tlb:
     @echo nix
-.ENDIF
 
-.IF "$(GUIBASE)$(VCL)"=="WIN"
-$(BIN)$/$(SDI2NAME).tlb: \
-        $(MISCX)$/$(SDI2NAME).odl
-    rscpp -I.;$(SVSDIINC);$(INC) -DSOLAR_VERSION=$(solar_version) $(MISC)$/$(SDI2NAME).odl $(MISC)$/$(SDI2NAME).odx
-.IF "$(GUI)"=="WIN"
-    wx mktyplib /nocpp /o $(MISC)$/$(SDI2NAME).err /tlb $(BIN)$/$(SDI2NAME).tlb $(MISC)$/$(SDI2NAME).odx
-.ELSE
-    mktyplib /win32 /nocpp /o $(MISC)$/$(SDI2NAME).err /tlb $(BIN)$/$(SDI2NAME).tlb $(MISC)$/$(SDI2NAME).odx
-.ENDIF
-    +type $(MISC)$/$(SDI2NAME).err
-.ELSE
 $(BIN)$/$(SDI2NAME).tlb:
     @echo nix
-.ENDIF
 
