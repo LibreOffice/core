@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:46:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,13 @@
 #include "xihelper.hxx"
 #endif
 
-class ScDocument;
 class ScTokenArray;
-class XclImpStream;
 
 /* ============================================================================
 Classes for import of different kinds of internal/external references.
 - 3D cell and cell range links
 - External cell and cell range links
-- Internal and external defined names
+- External defined names
 - Add-in functions
 - DDE links
 - OLE object links
@@ -131,61 +129,6 @@ private:
 
     XclTabNameMap       maTabNames;     /// All Excel sheet names with Calc sheet index.
     ScfUInt16Vec        maTabIdVec;     /// The vector with sheet indexes.
-};
-
-// Internal defined names =====================================================
-
-class ScRangeData;
-
-/** Represents a defined name. It may be related to a single sheet or global. */
-class XclImpName : protected XclImpRoot
-{
-public:
-    explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex );
-
-    inline const String& GetXclName() const { return maXclName; }
-    inline const String& GetScName() const { return maScName; }
-    inline SCTAB        GetScTab() const { return mnScTab; }
-    inline const ScRangeData* GetScRangeData() const { return mpScData; }
-    inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
-
-private:
-    String              maXclName;      /// Original name read from the file.
-    String              maScName;       /// Name inserted into the Calc document.
-    const ScRangeData*  mpScData;       /// Pointer to Calc defined name (no ownership).
-    sal_Unicode         mcBuiltIn;      /// Excel built-in name index.
-    SCTAB               mnScTab;        /// Calc sheet index of local names.
-};
-
-// ----------------------------------------------------------------------------
-
-/** This buffer contains all internal defined names of the document.
-    @descr  It manages the position of the names in the document, means if they are
-    global or attached to a specific sheet. While inserting the names into the Calc
-    document this buffer resolves conflicts caused by equal names from different
-    sheets. */
-class XclImpNameBuffer : protected XclImpRoot
-{
-public:
-    explicit            XclImpNameBuffer( const XclImpRoot& rRoot );
-
-    /** Reads a NAME record and creates an entry in this buffer. */
-    void                ReadName( XclImpStream& rStrm );
-
-    /** Tries to find the name used in Calc, based on the original Excel defined name.
-        @param nScTab  The sheet index for local names or SCTAB_MAX for global names.
-        If no local name is found, tries to find a matching global name.
-        @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*   FindName( const String& rXclName, SCTAB nScTab = SCTAB_MAX ) const;
-
-    /** Get the name used in Calc using the index of the internal defined names in document.
-        @param nXtiIndex  The index of the internal defined names.
-        @return  Pointer to the defined name or 0 on error. */
-    const XclImpName*           GetNameFromIndex( sal_uInt16 nXtiIndex) const;
-
-private:
-    typedef ScfDelList< XclImpName > XclImpNameList;
-    XclImpNameList      maNameList;
 };
 
 // External names =============================================================
@@ -276,6 +219,8 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     bool                GetLinkData( String& rApplic, String& rTopic, sal_uInt16 nXtiIndex ) const;
+    /** Returns the specified macro name or an empty string on error. */
+    const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
