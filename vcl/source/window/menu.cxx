@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-01 10:07:20 $
+ *  last change: $Author: ssa $ $Date: 2002-11-13 13:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,7 @@ private:
     BOOL            bScrollUp;
     BOOL            bScrollDown;
     BOOL            bIgnoreFirstMove;
+    BOOL            bKeyInput;
 
                     DECL_LINK( PopupEnd, FloatingWindow* );
                     DECL_LINK( HighlightChanged, Timer* );
@@ -2898,6 +2899,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     bScrollUp           = FALSE;
     bScrollDown         = FALSE;
     bIgnoreFirstMove    = TRUE;
+    bKeyInput           = FALSE;
 
     EnableSaveBackground();
     ImplInitMenuWindow( this, TRUE, FALSE );
@@ -2920,7 +2922,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
 MenuFloatingWindow::~MenuFloatingWindow()
 {
-    if( pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+    if( !bKeyInput && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
     {
         // #102461# remove highlight in parent
         MenuItemData* pData;
@@ -3369,6 +3371,10 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
         {
             // #102461# do not remove highlight if a popup menu is open at this position
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
+            // close popup if we leave somewhere else
+            if( pActivePopup && pData->pSubMenu != pActivePopup )
+                KillActivePopup();
+
             if( !pActivePopup || pData->pSubMenu != pActivePopup )
                 ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
         }
@@ -3712,6 +3718,7 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
 {
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
+    bKeyInput = TRUE;
     switch ( nCode )
     {
         case KEY_UP:
@@ -3845,6 +3852,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             }
         }
     }
+    bKeyInput = FALSE;
 }
 
 void MenuFloatingWindow::Paint( const Rectangle& rRect )
