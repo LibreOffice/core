@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPServiceInfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:03 $
+ *  last change: $Author: tra $ $Date: 2001-08-24 08:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 
 #define TMPL95_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID    8000
 #define TMPL2000_FILEOPEN_LINK_PREVIEW_BOX_SIMPLE_ID  8001
+
+#define TMPL95_FILESAVE_AUTOEXT                       9000
+#define TMPL2000_FILESAVE_AUTOEXT                     9001
 
 // the service names
 #define FILE_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.SystemFilePicker"
