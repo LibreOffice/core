@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 11:56:27 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 08:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,16 +231,18 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
+protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
-        getAccessibleDescription (void)
+        createAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
-        getAccessibleName (void)
+        createAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+public:
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL

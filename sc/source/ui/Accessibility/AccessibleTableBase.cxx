@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-18 11:57:22 $
+ *  last change: $Author: sab $ $Date: 2002-01-22 08:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,24 +344,24 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleTableBase::getAccessibleDescription (void)
+    ScAccessibleTableBase::createAccessibleDescription (void)
     throw (uno::RuntimeException)
 {
-    setAccessibleDescription(getAccessibleName());
-    return SvAccessibleContextBase::getAccessibleDescription();
+    return getAccessibleName();
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleTableBase::getAccessibleName (void)
+    ScAccessibleTableBase::createAccessibleName (void)
     throw (uno::RuntimeException)
 {
+    rtl::OUString sName;
     if (mxSheet.is())
     {
         uno::Reference<container::XNamed> xName (mxSheet, uno::UNO_QUERY );
         if ( xName.is() )
-            setAccessibleName(xName->getName());
+            sName = xName->getName();
     }
-    return SvAccessibleContextBase::getAccessibleName();
+    return sName;
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
