@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,22 @@ String RID_GALLERYSTR_THEME_3D
     Text[ italian ] = "Effetti 3D";
     Text[ danish ] = "3D-effekter";
     Text[ swedish ] = "3D-effekter";
-    Text[ polish ] = "Efekty 3-W";
-    Text[ portuguese_brazilian ] = "3D";
+    Text[ polish ] = "Efekty 3D";
+    Text[ portuguese_brazilian ] = "Efeitos 3D";
     Text[ japanese ] = "3D 効果";
     Text[ chinese_simplified ] = "3 维效果";
     Text[ chinese_traditional ] = "3D 效果";
     Text[ arabic ] = "����� ������ �������";
     Text[ greek ] = "��� 3�";
     Text[ korean ] = "3Ｄ 효과";
-    Text[ turkish ] = "3B";
+    Text[ turkish ] = "3B Efekler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Efectes 3D";
     Text[ finnish ] = "Kolmiulotteiset tehosteet";
     Text[ thai ] = "ลักษณะ3มิติ";
+    Text[ czech ] = "3D efekty";
+    Text[ hebrew ] = "‮פעלולים תלת מימדיים‬";
+    Text[ hindi ] = "3D प्रभाव";
 };
 
 // -----------------------------------------------------------------------------
@@ -107,18 +110,21 @@ String RID_GALLERYSTR_THEME_ANIMATIONS
     Text[ danish ] = "Animationer";
     Text[ swedish ] = "Animationer";
     Text[ polish ] = "Animacje";
-    Text[ portuguese_brazilian ] = "Animations";
+    Text[ portuguese_brazilian ] = "Anima��es";
     Text[ japanese ] = "アニメーション";
     Text[ chinese_simplified ] = "动画";
     Text[ chinese_traditional ] = "動畫";
     Text[ arabic ] = "������� ����";
     Text[ greek ] = "���������� �������";
     Text[ korean ] = "애니메이션";
-    Text[ turkish ] = "Canland�rmalar";
+    Text[ turkish ] = "Animasyonlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animacions";
     Text[ finnish ] = "Animaatiot";
     Text[ thai ] = "เคลื่อนไหว";
+    Text[ czech ] = "Animace";
+    Text[ hebrew ] = "‮אנימציות‬";
+    Text[ hindi ] = "हुलास";
 };
 
 // -----------------------------------------------------------------------------
@@ -137,18 +143,21 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ danish ] = "Punkttegn";
     Text[ swedish ] = "Punkter";
     Text[ polish ] = "Znaki wypunktowania";
-    Text[ portuguese_brazilian ] = "Bullets";
+    Text[ portuguese_brazilian ] = "Marcas";
     Text[ japanese ] = "箇条書きシンボル";
     Text[ chinese_simplified ] = "项目符号";
     Text[ chinese_traditional ] = "項目符號";
     Text[ arabic ] = "������ �����";
     Text[ greek ] = "��������";
     Text[ korean ] = "글머리 기호";
-    Text[ turkish ] = "Madde i�aretleri";
+    Text[ turkish ] = "Ayra�lar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pics";
     Text[ finnish ] = "Luettelomerkit";
     Text[ thai ] = "สัญลักษณ์แสดงหัวข้อย่อย";
+    Text[ czech ] = "Odrážky";
+    Text[ hebrew ] = "‮נקודות כותרה (תבליטים)‬";
+    Text[ hindi ] = "बुल्लेट्स";
 };
 
 // -----------------------------------------------------------------------------
@@ -167,18 +176,21 @@ String RID_GALLERYSTR_THEME_OFFICE
     Text[ danish ] = "Kontor";
     Text[ swedish ] = "Kontor";
     Text[ polish ] = "Biuro";
-    Text[ portuguese_brazilian ] = "Clipart";
+    Text[ portuguese_brazilian ] = "Office";
     Text[ japanese ] = "オフィス";
     Text[ chinese_simplified ] = "办公室";
     Text[ chinese_traditional ] = "辦公室";
     Text[ arabic ] = "����";
     Text[ greek ] = "�������";
     Text[ korean ] = "클립아트";
-    Text[ turkish ] = "Clipart";
+    Text[ turkish ] = "Ofis";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Oficina";
     Text[ finnish ] = "Toimisto";
     Text[ thai ] = "ที่ทำงาน";
+    Text[ czech ] = "Kancelář";
+    Text[ hebrew ] = "‮משרד‬";
+    Text[ hindi ] = "ओफीस";
 };
 
 // -----------------------------------------------------------------------------
@@ -197,7 +209,7 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ danish ] = "Flag";
     Text[ swedish ] = "Flaggor";
     Text[ polish ] = "Flagi";
-    Text[ portuguese_brazilian ] = "Flags";
+    Text[ portuguese_brazilian ] = "Sinalizadores";
     Text[ japanese ] = "国旗";
     Text[ chinese_simplified ] = "各式国旗";
     Text[ chinese_traditional ] = "各式國旗";
@@ -209,6 +221,9 @@ String RID_GALLERYSTR_THEME_FLAGS
     Text[ catalan ] = "Indicadors";
     Text[ finnish ] = "Tunnisteet";
     Text[ thai ] = "ค่าสถานะ";
+    Text[ czech ] = "Vlajky";
+    Text[ hebrew ] = "‮דגלים‬";
+    Text[ hindi ] = "फ्लाग्स";
 };
 
 // -----------------------------------------------------------------------------
@@ -226,19 +241,22 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
     Text[ italian ] = "Diagramma di flusso";
     Text[ danish ] = "Rutediagrammer";
     Text[ swedish ] = "Fl�desdiagram";
-    Text[ polish ] = "Wykresy blokowy";
-    Text[ portuguese_brazilian ] = "Flowcharts";
+    Text[ polish ] = "Schematy blokowe";
+    Text[ portuguese_brazilian ] = "Fluxogramas";
     Text[ japanese ] = "フローチャート";
     Text[ chinese_simplified ] = "各种多边形";
     Text[ chinese_traditional ] = "各種多邊形";
     Text[ arabic ] = "������� ��������";
     Text[ greek ] = "����������� ����";
     Text[ korean ] = "순서도";
-    Text[ turkish ] = "Ak�� �emalar�";
+    Text[ turkish ] = "Ak�� �emalar�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Diagrames de flux";
     Text[ finnish ] = "Vuokaaviot";
     Text[ thai ] = "แผนผังลำดับงาน";
+    Text[ czech ] = "Grafy toku";
+    Text[ hebrew ] = "‮תרשימי זרימה‬";
+    Text[ hindi ] = "फ्लो चार्ट";
 };
 
 // -----------------------------------------------------------------------------
@@ -257,18 +275,21 @@ String RID_GALLERYSTR_THEME_EMOTICONS
     Text[ danish ] = "Smileys";
     Text[ swedish ] = "Emoticons";
     Text[ polish ] = "Bu�ki";
-    Text[ portuguese_brazilian ] = "Forms";
+    Text[ portuguese_brazilian ] = "Emoticons";
     Text[ japanese ] = "エモーティコン";
     Text[ chinese_simplified ] = "情绪图案";
     Text[ chinese_traditional ] = "情緒圖案";
     Text[ arabic ] = "�����";
     Text[ greek ] = "Emoticons";
     Text[ korean ] = "감정 표현 기호";
-    Text[ turkish ] = "�ekiller";
+    Text[ turkish ] = "Y�z simgeleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Emoticones";
     Text[ finnish ] = "Hymi�t";
     Text[ thai ] = "อารมณ์";
+    Text[ czech ] = "Emotikony";
+    Text[ hebrew ] = "‮חיוכונים‬";
+    Text[ hindi ] = "इमोटअइकॉन्स";
 };
 
 // -----------------------------------------------------------------------------
@@ -286,19 +307,22 @@ String RID_GALLERYSTR_THEME_PHOTOS
     Text[ italian ] = "Fotografie";
     Text[ danish ] = "Fotografier";
     Text[ swedish ] = "Foton";
-    Text[ polish ] = "Zdj�cia";
-    Text[ portuguese_brazilian ] = "Photos";
+    Text[ polish ] = "Obrazy";
+    Text[ portuguese_brazilian ] = "Imagens";
     Text[ japanese ] = "写真";
     Text[ chinese_simplified ] = "彩色照片";
     Text[ chinese_traditional ] = "彩色照片";
     Text[ arabic ] = "���";
     Text[ greek ] = "�����������";
     Text[ korean ] = "사진";
-    Text[ turkish ] = "Foto�raflar";
+    Text[ turkish ] = "Resimler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imatges";
     Text[ finnish ] = "Kuvat";
     Text[ thai ] = "รูปภาพ";
+    Text[ czech ] = "Obrázky";
+    Text[ hebrew ] = "‮תמונות‬";
+    Text[ hindi ] = "चित्र";
 };
 
 // -----------------------------------------------------------------------------
@@ -317,18 +341,21 @@ String RID_GALLERYSTR_THEME_BACKGROUNDS
     Text[ danish ] = "Baggrunde";
     Text[ swedish ] = "Bakgrunder";
     Text[ polish ] = "T�a";
-    Text[ portuguese_brazilian ] = "Backgrounds";
+    Text[ portuguese_brazilian ] = "Planos de fundo";
     Text[ japanese ] = "背景";
     Text[ chinese_simplified ] = "各种背景";
     Text[ chinese_traditional ] = "各式背景";
     Text[ arabic ] = "������";
     Text[ greek ] = "�������� ������";
     Text[ korean ] = "배경";
-    Text[ turkish ] = "Artalanlar";
+    Text[ turkish ] = "Arkaplanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fons";
     Text[ finnish ] = "Taustat";
     Text[ thai ] = "พื้นหลัง";
+    Text[ czech ] = "Pozadí";
+    Text[ hebrew ] = "‮רקעים‬";
+    Text[ hindi ] = "पृष्ठभाग";
 };
 
 // -----------------------------------------------------------------------------
@@ -341,12 +368,12 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ portuguese ] = "Homepage";
     Text[ russian ] = "�������� ��������";
     Text[ dutch ] = "Homepage";
-    Text[ french ] = "Homepage";
+    Text[ french ] = "Page Web";
     Text[ spanish ] = "P�gina principal";
     Text[ italian ] = "Homepage";
     Text[ danish ] = "Hjemmeside";
     Text[ swedish ] = "Hemsida";
-    Text[ polish ] = "Strona macierzysta";
+    Text[ polish ] = "Strona g��wna";
     Text[ portuguese_brazilian ] = "Homepage";
     Text[ japanese ] = "ホームページ";
     Text[ chinese_simplified ] = "主页";
@@ -354,11 +381,14 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ arabic ] = "���� ������";
     Text[ greek ] = "������ ������";
     Text[ korean ] = "홈페이지";
-    Text[ turkish ] = "Web sayfas�";
+    Text[ turkish ] = "Ev Sayfas�";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "P�gina principal";
     Text[ finnish ] = "Kotisivu";
     Text[ thai ] = "โฮมเพจ";
+    Text[ czech ] = "Domovská stránka";
+    Text[ hebrew ] = "‮דף בית‬";
+    Text[ hindi ] = "होमपेज ";
 };
 
 // -----------------------------------------------------------------------------
@@ -377,7 +407,7 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ danish ] = "Interaktion";
     Text[ swedish ] = "Interaktion";
     Text[ polish ] = "Interakcja";
-    Text[ portuguese_brazilian ] = "Interaction";
+    Text[ portuguese_brazilian ] = "Intera��o";
     Text[ japanese ] = "インタラクション";
     Text[ chinese_simplified ] = "交互式";
     Text[ chinese_traditional ] = "互動式";
@@ -389,6 +419,9 @@ String RID_GALLERYSTR_THEME_INTERACTION
     Text[ catalan ] = "Interacci�";
     Text[ finnish ] = "Vuorovaikutus";
     Text[ thai ] = "ปฏิสัมพันธ์";
+    Text[ czech ] = "Interakce";
+    Text[ hebrew ] = "‮אינטרקטיבי‬";
+    Text[ hindi ] = "इन्टराक्शन्";
 };
 
 // -----------------------------------------------------------------------------
@@ -407,7 +440,7 @@ String RID_GALLERYSTR_THEME_MAPS
     Text[ danish ] = "Kort";
     Text[ swedish ] = "Kartor";
     Text[ polish ] = "Mapy";
-    Text[ portuguese_brazilian ] = "Maps";
+    Text[ portuguese_brazilian ] = "Mapas";
     Text[ japanese ] = "地図";
     Text[ chinese_simplified ] = "世界地图";
     Text[ chinese_traditional ] = "世界地圖";
@@ -419,6 +452,9 @@ String RID_GALLERYSTR_THEME_MAPS
     Text[ catalan ] = "Mapes";
     Text[ finnish ] = "Kartat";
     Text[ thai ] = "แผนที่";
+    Text[ czech ] = "Mapy";
+    Text[ hebrew ] = "‮מפות‬";
+    Text[ hindi ] = "नक्शा";
 };
 
 // -----------------------------------------------------------------------------
@@ -436,19 +472,22 @@ String RID_GALLERYSTR_THEME_PEOPLE
     Text[ italian ] = "Persone";
     Text[ danish ] = "Personer";
     Text[ swedish ] = "Personer";
-    Text[ polish ] = "Ludziki";
-    Text[ portuguese_brazilian ] = "Furniture";
+    Text[ polish ] = "Ludzie";
+    Text[ portuguese_brazilian ] = "Pessoas";
     Text[ japanese ] = "人物";
     Text[ chinese_simplified ] = "人物";
     Text[ chinese_traditional ] = "人物";
     Text[ arabic ] = "�����";
     Text[ greek ] = "�������";
     Text[ korean ] = "사람";
-    Text[ turkish ] = "E�yalar";
+    Text[ turkish ] = "�nsanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Gent";
     Text[ finnish ] = "Ihmiset";
     Text[ thai ] = "ประชาชน";
+    Text[ czech ] = "Lidé";
+    Text[ hebrew ] = "‮אנשים‬";
+    Text[ hindi ] = "जन";
 };
 
 // -----------------------------------------------------------------------------
@@ -467,7 +506,7 @@ String RID_GALLERYSTR_THEME_SURFACES
     Text[ danish ] = "Overflader";
     Text[ swedish ] = "Ytor";
     Text[ polish ] = "Powierzchnie";
-    Text[ portuguese_brazilian ] = "Surfaces";
+    Text[ portuguese_brazilian ] = "Superf�cies";
     Text[ japanese ] = "表面";
     Text[ chinese_simplified ] = "彩色平面";
     Text[ chinese_traditional ] = "彩色平面";
@@ -479,6 +518,9 @@ String RID_GALLERYSTR_THEME_SURFACES
     Text[ catalan ] = "Superf�cies";
     Text[ finnish ] = "Pinnat";
     Text[ thai ] = "พื้นผิว";
+    Text[ czech ] = "Povrchy";
+    Text[ hebrew ] = "‮משטחים‬";
+    Text[ hindi ] = "तल";
 };
 
 // -----------------------------------------------------------------------------
@@ -512,19 +554,22 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ italian ] = "Limiti";
     Text[ danish ] = "Gr�nser";
     Text[ swedish ] = "Linjaler";
-    Text[ polish ] = "Granice";
-    Text[ portuguese_brazilian ] = "Rulers";
+    Text[ polish ] = "Obramowania";
+    Text[ portuguese_brazilian ] = "R�guas";
     Text[ japanese ] = "ルーラー";
     Text[ chinese_simplified ] = "彩色线条";
     Text[ chinese_traditional ] = "彩色線條";
     Text[ arabic ] = "����";
     Text[ greek ] = "����";
     Text[ korean ] = "눈금자";
-    Text[ turkish ] = "�izgiler";
+    Text[ turkish ] = "Cetveller";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Regles";
     Text[ finnish ] = "Viivaimet";
     Text[ thai ] = "ไม้บรรทัด";
+    Text[ czech ] = "Vodorovné čáry";
+    Text[ hebrew ] = "‮סרגלים‬";
+    Text[ hindi ] = "रूलर";
 };
 
 // -----------------------------------------------------------------------------
@@ -543,7 +588,7 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ danish ] = "Lyde";
     Text[ swedish ] = "Ljud";
     Text[ polish ] = "D�wi�ki";
-    Text[ portuguese_brazilian ] = "Sounds";
+    Text[ portuguese_brazilian ] = "Sons";
     Text[ japanese ] = "サウンド";
     Text[ chinese_simplified ] = "声音图标";
     Text[ chinese_traditional ] = "聲音圖示";
@@ -555,6 +600,9 @@ String RID_GALLERYSTR_THEME_SOUNDS
     Text[ catalan ] = "Sons";
     Text[ finnish ] = "��net";
     Text[ thai ] = "เสียง";
+    Text[ czech ] = "Zvuky";
+    Text[ hebrew ] = "‮קולות‬";
+    Text[ hindi ] = "ध्वनि";
 };
 
 // -----------------------------------------------------------------------------
@@ -573,7 +621,7 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ danish ] = "Symboler";
     Text[ swedish ] = "Symboler";
     Text[ polish ] = "Symbole";
-    Text[ portuguese_brazilian ] = "Symbols";
+    Text[ portuguese_brazilian ] = "S�mbolos";
     Text[ japanese ] = "シンボル";
     Text[ chinese_simplified ] = "各式图标";
     Text[ chinese_traditional ] = "各式圖示";
@@ -585,6 +633,9 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ catalan ] = "S�mbols";
     Text[ finnish ] = "Symbolit";
     Text[ thai ] = "สัญลักษณ์";
+    Text[ czech ] = "Symboly";
+    Text[ hebrew ] = "‮סמלים‬";
+    Text[ hindi ] = "संकेत";
 };
 
 // -----------------------------------------------------------------------------
@@ -603,17 +654,20 @@ String RID_GALLERYSTR_THEME_MYTHEME
     Text[ italian ] = "Argomento proprio";
     Text[ danish ] = "Eget emne";
     Text[ swedish ] = "Eget tema";
-    Text[ polish ] = "Wlasny temat";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ polish ] = "M�j temat";
+    Text[ portuguese_brazilian ] = "Meu Tema";
     Text[ japanese ] = "独自のテーマ";
     Text[ korean ] = "고유 주제";
     Text[ chinese_simplified ] = "自己的主题";
     Text[ chinese_traditional ] = "自訂主題";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Benim Temam";
     Text[ arabic ] = "����� ����";
     Text[ catalan ] = "El meu tema";
     Text[ finnish ] = "Oma teema";
     Text[ thai ] = "ชุดรูปแบบของฉัน";
+    Text[ czech ] = "Moje téma";
+    Text[ hebrew ] = "‮הנושא שלי‬";
+    Text[ hindi ] = "मेरा प्रकरण";
 };
 
 // -----------------------------------------------------------------------------
@@ -641,16 +695,19 @@ String RID_GALLERYSTR_THEME_ARROWS
     Text[ danish ] = "Pile";
     Text[ swedish ] = "Pilar";
     Text[ polish ] = "Strza�ki";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Setas";
     Text[ japanese ] = "矢印";
     Text[ korean ] = "화살표";
     Text[ chinese_simplified ] = "箭头";
     Text[ chinese_traditional ] = "箭頭";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Oklar";
     Text[ arabic ] = "����";
     Text[ catalan ] = "Fletxes";
     Text[ finnish ] = "Nuolet";
     Text[ thai ] = "ลูกศร";
+    Text[ czech ] = "Šipky";
+    Text[ hebrew ] = "‮חיצים‬";
+    Text[ hindi ] = "तीर";
 };
 
 // -----------------------------------------------------------------------------
@@ -670,16 +727,19 @@ String RID_GALLERYSTR_THEME_BALLOONS
     Text[ danish ] = "Talebobler";
     Text[ swedish ] = "Pratbubblor";
     Text[ polish ] = "Chmurki tekstowe";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Bal�es";
     Text[ japanese ] = "吹き出し";
     Text[ korean ] = "풍선";
     Text[ chinese_simplified ] = "说话文字框";
     Text[ chinese_traditional ] = "說話方框";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Baloncuklar";
     Text[ arabic ] = "����� ������";
     Text[ catalan ] = "Globus";
     Text[ finnish ] = "Puhekuplat";
     Text[ thai ] = "บอลลูน";
+    Text[ czech ] = "Bubliny";
+    Text[ hebrew ] = "‮בלונים‬";
+    Text[ hindi ] = "बलून";
 };
 
 // -----------------------------------------------------------------------------
@@ -699,16 +759,19 @@ String RID_GALLERYSTR_THEME_KEYBOARD
     Text[ danish ] = "Tastatur";
     Text[ swedish ] = "Tangentbord";
     Text[ polish ] = "Klawiatura";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Teclado";
     Text[ japanese ] = "キーボード";
     Text[ korean ] = "키보드";
     Text[ chinese_simplified ] = "键盘";
     Text[ chinese_traditional ] = "鍵盤";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Klavye";
     Text[ arabic ] = "���� ��������";
     Text[ catalan ] = "Teclat";
     Text[ finnish ] = "N�pp�imist�";
     Text[ thai ] = "แป้นพิมพ์";
+    Text[ czech ] = "Klávesnice";
+    Text[ hebrew ] = "‮מקלדת‬";
+    Text[ hindi ] = "कीबोर्ड";
 };
 
 // -----------------------------------------------------------------------------
@@ -728,16 +791,19 @@ String RID_GALLERYSTR_THEME_TIME
     Text[ danish ] = "Tid";
     Text[ swedish ] = "Tid";
     Text[ polish ] = "Czas";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Hora";
     Text[ japanese ] = "時間";
     Text[ korean ] = "시간";
     Text[ chinese_simplified ] = "时间";
     Text[ chinese_traditional ] = "時間";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Zaman";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Hora";
     Text[ finnish ] = "Aika";
     Text[ thai ] = "เวลา";
+    Text[ czech ] = "Čas";
+    Text[ hebrew ] = "‮שעה‬";
+    Text[ hindi ] = "समय";
 };
 
 // -----------------------------------------------------------------------------
@@ -757,16 +823,19 @@ String RID_GALLERYSTR_THEME_PRESENTATION
     Text[ danish ] = "Pr�sentation";
     Text[ swedish ] = "Presentation";
     Text[ polish ] = "Prezentacja";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Apresenta��o";
     Text[ japanese ] = "プレゼンテーション";
     Text[ korean ] = "프레젠테이션";
     Text[ chinese_simplified ] = "演示文稿";
     Text[ chinese_traditional ] = "簡報";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Sunum";
     Text[ arabic ] = "��� ������";
     Text[ catalan ] = "Presentaci�";
     Text[ finnish ] = "Esitys";
     Text[ thai ] = "การนำเสนอ";
+    Text[ czech ] = "Prezentace";
+    Text[ hebrew ] = "‮מצגת‬";
+    Text[ hindi ] = "प्रस्तुति";
 };
 
 // -----------------------------------------------------------------------------
@@ -786,16 +855,19 @@ String RID_GALLERYSTR_THEME_CALENDAR
     Text[ danish ] = "Kalender";
     Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Calend�rio";
     Text[ japanese ] = "カレンダー";
     Text[ korean ] = "칼렌더";
     Text[ chinese_simplified ] = "日历";
     Text[ chinese_traditional ] = "行事曆";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Takvim";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Calendari";
     Text[ finnish ] = "Kalenteri";
     Text[ thai ] = "ปฏิทิน";
+    Text[ czech ] = "Kalendář";
+    Text[ hebrew ] = "‮לוח שנה‬";
+    Text[ hindi ] = "केलन्डर";
 };
 
 // -----------------------------------------------------------------------------
@@ -815,16 +887,19 @@ String RID_GALLERYSTR_THEME_NAVIGATION
     Text[ danish ] = "Navigation";
     Text[ swedish ] = "Navigation";
     Text[ polish ] = "Nawigacja";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Navega��o";
     Text[ japanese ] = "ナビゲーション";
     Text[ korean ] = "탐색";
     Text[ chinese_simplified ] = "浏览";
     Text[ chinese_traditional ] = "瀏覽";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Y�nlendirme";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Navegaci�";
     Text[ finnish ] = "Siirtyminen";
     Text[ thai ] = "นำทาง";
+    Text[ czech ] = "Navigace";
+    Text[ hebrew ] = "‮ניווט‬";
+    Text[ hindi ] = "नाविगेशन";
 };
 
 // -----------------------------------------------------------------------------
@@ -844,16 +919,19 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
     Text[ danish ] = "Kommunikation";
     Text[ swedish ] = "Kommunikation";
     Text[ polish ] = "Komunikacja";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Comunica��o";
     Text[ japanese ] = "コミュニケーション";
     Text[ korean ] = "통신";
     Text[ chinese_simplified ] = "通讯";
     Text[ chinese_traditional ] = "通訊";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "�leti�im";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Comunicaci�";
     Text[ finnish ] = "Yhteydenpito";
     Text[ thai ] = "การสื่อสาร";
+    Text[ czech ] = "Komunikace";
+    Text[ hebrew ] = "‮תקשורת‬";
+    Text[ hindi ] = "बातचीत";
 };
 
 // -----------------------------------------------------------------------------
@@ -873,16 +951,19 @@ String RID_GALLERYSTR_THEME_FINANCES
     Text[ danish ] = "Finanser";
     Text[ swedish ] = "Ekonomi";
     Text[ polish ] = "Finanse";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ portuguese_brazilian ] = "Finan�as";
     Text[ japanese ] = "ファイナンス";
     Text[ korean ] = "재정 관리";
     Text[ chinese_simplified ] = "财务";
     Text[ chinese_traditional ] = "財務";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Parasal";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Finances";
     Text[ finnish ] = "Talous";
     Text[ thai ] = "การเงิน";
+    Text[ czech ] = "Finance";
+    Text[ hebrew ] = "‮כספים‬";
+    Text[ hindi ] = "आर्थिक व्यवस्था";
 };
 
 // -----------------------------------------------------------------------------
@@ -901,17 +982,20 @@ String RID_GALLERYSTR_THEME_COMPUTER
     Text[ italian ] = "Computer";
     Text[ danish ] = "Computer";
     Text[ swedish ] = "Dator";
-    Text[ polish ] = "Komputer";
-    Text[ portuguese_brazilian ] = "My theme";
+    Text[ polish ] = "Komputery";
+    Text[ portuguese_brazilian ] = "Computadores";
     Text[ japanese ] = "コンピュータ";
     Text[ korean ] = "컴퓨터";
     Text[ chinese_simplified ] = "计算机";
     Text[ chinese_traditional ] = "電腦";
-    Text[ turkish ] = "Kullan�c� konusu";
+    Text[ turkish ] = "Bilgisayarlar";
     Text[ arabic ] = "�������";
     Text[ catalan ] = "Ordinadors";
     Text[ finnish ] = "Tietokoneet";
     Text[ thai ] = "คอมพิวเตอร์";
+    Text[ czech ] = "Počítače";
+    Text[ hebrew ] = "‮מחשבים‬";
+    Text[ hindi ] = "गणक यंत्र";
 };
 
 // -----------------------------------------------------------------------------
@@ -931,16 +1015,19 @@ String RID_GALLERYSTR_THEME_CLIMA
     Text[ danish ] = "Klima";
     Text[ swedish ] = "Klimat";
     Text[ polish ] = "Klimat";
-    Text[ portuguese_brazilian ] = "Climate";
+    Text[ portuguese_brazilian ] = "Clima";
     Text[ japanese ] = "気候";
     Text[ korean ] = "기후";
     Text[ chinese_simplified ] = "气候";
     Text[ chinese_traditional ] = "氣候";
-    Text[ turkish ] = "Climate";
+    Text[ turkish ] = "�klim";
     Text[ arabic ] = "Climate";
     Text[ catalan ] = "Clima";
     Text[ finnish ] = "Ymp�rist�";
     Text[ thai ] = "อากาศ";
+    Text[ czech ] = "Podnebí";
+    Text[ hebrew ] = "‮אכלים‬";
+    Text[ hindi ] = "त्रृतु";
 };
 
 // -----------------------------------------------------------------------------
@@ -960,16 +1047,19 @@ String RID_GALLERYSTR_THEME_EDUCATION
     Text[ danish ] = "Skole og universitet";
     Text[ swedish ] = "Skola & universitet";
     Text[ polish ] = "Szko�a i uniwersytet";
-    Text[ portuguese_brazilian ] = "School & University";
+    Text[ portuguese_brazilian ] = "Escola & Universidade";
     Text[ japanese ] = "教育機関";
     Text[ korean ] = "교육 기관";
     Text[ chinese_simplified ] = "中学和大学";
     Text[ chinese_traditional ] = "中學和大學";
-    Text[ turkish ] = "School & University";
+    Text[ turkish ] = "Okull & Universite";
     Text[ arabic ] = "School & University";
     Text[ catalan ] = "Escola i universitat";
     Text[ finnish ] = "Koulu ja yliopisto";
     Text[ thai ] = "โรงเรียนและมหาวิทยาลัย";
+    Text[ czech ] = "Škola a univerzita";
+    Text[ hebrew ] = "‮בית ספר ואוניברסיטה‬";
+    Text[ hindi ] = "स्कूल और विश्वविद्यालय";
 };
 
 // -----------------------------------------------------------------------------
@@ -988,17 +1078,20 @@ String RID_GALLERYSTR_THEME_TROUBLE
     Text[ italian ] = "Soluzioni";
     Text[ danish ] = "Probleml�sninger";
     Text[ swedish ] = "Probleml�sningar";
-    Text[ polish ] = "Rozwi�zania problemu";
-    Text[ portuguese_brazilian ] = "Problem Solving";
+    Text[ polish ] = "Rozwi�zywanie problem�w";
+    Text[ portuguese_brazilian ] = "Solu��o de problemas";
     Text[ japanese ] = "トラブル解決";
     Text[ korean ] = "문제 해결";
     Text[ chinese_simplified ] = "解决问题的方案";
     Text[ chinese_traditional ] = "解決問題的方案";
-    Text[ turkish ] = "Problem Solving";
+    Text[ turkish ] = "Problem ��z�m�";
     Text[ arabic ] = "Problem Solving";
     Text[ catalan ] = "Soluci� de problemes";
     Text[ finnish ] = "Ongelmanratkaisu";
     Text[ thai ] = "การแก้ปัญหา";
+    Text[ czech ] = "Řešení problému";
+    Text[ hebrew ] = "‮פתרון בעיות‬";
+    Text[ hindi ] = "समस्या का उत्तर निकालना";
 };
 
 // -----------------------------------------------------------------------------
@@ -1009,9 +1102,9 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text[ENGLISH] = "ScreenBeans";
     Text[english_us] = "Screen Beans";
     Text[ language_user1 ] = "EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
-    Text[ portuguese ] = "ScreenBeans";
+    Text[ portuguese ] = "Screen Beans";
     Text[ russian ] = "���������";
-    Text[ greek ] = "ScreenBeans";
+    Text[ greek ] = "Screen Beans";
     Text[ dutch ] = "Screen Beans";
     Text[ french ] = "ScreenBeans";
     Text[ spanish ] = "Screen Beans";
@@ -1019,16 +1112,19 @@ String RID_GALLERYSTR_THEME_SCREENBEANS
     Text[ italian ] = "Screen Beans";
     Text[ danish ] = "ScreenBeans";
     Text[ swedish ] = "Screen Beans";
-    Text[ polish ] = "ScreenBeans";
-    Text[ portuguese_brazilian ] = "ScreenBeans";
+    Text[ polish ] = "Ludki";
+    Text[ portuguese_brazilian ] = "Screen Beans";
     Text[ japanese ] = "Screen Beans";
     Text[ korean ] = "ScreenBeans";
     Text[ chinese_simplified ] = "Screen Beans";
     Text[ chinese_traditional ] = "Screen Beans";
-    Text[ turkish ] = "ScreenBeans";
-    Text[ arabic ] = "ScreenBeans";
+    Text[ turkish ] = "Ekran";
+    Text[ arabic ] = "Screen Beans";
     Text[ catalan ] = "ScreenBeans";
     Text[ thai ] = "Screen Beans";
+    Text[ czech ] = "Ozdoby na obrazovku";
+    Text[ hebrew ] = "‮פולי מסך (Screen Beans)‬";
+    Text[ hindi ] = "स्क्रीन बीन्स";
 };
 
 // -----------------------------------------------------------------------------
@@ -1038,6 +1134,15 @@ String RID_GALLERYSTR_THEME_DUMMY5
     // !!! Don't translate, please !!!
     Text = "Dummy 5";
 };
+
+
+
+
+
+
+
+
+
 
 
 
