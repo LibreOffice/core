@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linedescriptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:54 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,5 +143,5 @@ namespace pcr
 } // namespace pcr
 //............................................................................
 
-#endif _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
+#endif // _EXTENSIONS_PROPCTRLR_LINEDESCRIPTOR_HXX_
 
