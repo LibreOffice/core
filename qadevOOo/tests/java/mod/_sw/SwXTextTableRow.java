@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextTableRow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 12:34:44 $
+ *  last change:$Date: 2003-05-27 13:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sw;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.table.XTableRows;
 import com.sun.star.text.XText;
@@ -85,7 +86,7 @@ public class SwXTextTableRow extends TestCase {
     XTextDocument xTextDoc;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
@@ -115,7 +116,7 @@ public class SwXTextTableRow extends TestCase {
         log.println( "Creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
          log.println("creating a texttable");
