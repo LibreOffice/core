@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2001-09-18 13:07:55 $
+#   last change: $Author: obo $ $Date: 2001-09-18 13:47:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,6 @@ SLOFILES=	\
         $(SLO)$/WNameMatch.obj				\
         $(SLO)$/WTypeSelect.obj				\
         $(SLO)$/WColumnSelect.obj			\
-        $(SLO)$/WCopyTable.obj				\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
         $(SLO)$/dsntypes.obj
