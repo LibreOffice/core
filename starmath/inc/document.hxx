@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:42:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,11 +195,11 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual ULONG       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
     virtual sal_Bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL        Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual BOOL        Insert( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL        Load( SfxMedium& rMedium );
+    BOOL                Insert( SfxMedium& rMedium );
             void        ImplSave(  SvStorageStreamRef xStrm  );
     virtual BOOL        Save();
-    virtual BOOL        SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    virtual BOOL        SaveAs( SfxMedium& rMedium );
     virtual BOOL        ConvertTo( SfxMedium &rMedium );
     virtual BOOL        SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
