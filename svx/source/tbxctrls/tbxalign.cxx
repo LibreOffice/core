@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxalign.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:20:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
+#ifndef _SFX_IMAGEMGR_HXX
+#include <sfx2/imagemgr.hxx>
+#endif
+#include <vcl/svapp.hxx>
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 
@@ -84,10 +91,14 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 \************************************************************************/
 
 SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
-
     SfxToolBoxControl( nSlotId, nId, rTbx )
-
+    ,   m_aSubTbName( RTL_CONSTASCII_USTRINGPARAM( "alignmentbar" ))
+    ,   m_aSubTbResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ))
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
+
+    m_aCommand = m_aCommandURL;
 }
 
 /*************************************************************************
@@ -111,23 +122,57 @@ SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 
 SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {
-    if ( GetId() == SID_OBJECT_ALIGN )
-    {
-        rtl::OUString aTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ));
-        createAndPositionSubToolBar( aTbxResName );
-/*
-        SvxPopupWindowTbxMgr* pWin =
-            new SvxPopupWindowTbxMgr( GetId(), this,
-                                      SVX_RES( RID_SVXTBX_ALIGNMENT ),
-                                      SVX_RES( TBX_ALIGNMENT ),
-                                      GetBindings() );
-        pWin->StartPopupMode( &GetToolBox(), TRUE );
-        pWin->StartSelection();
-        pWin->Show();
-        return pWin;
-*/
-    }
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( GetSlotId() == SID_OBJECT_ALIGN )
+        createAndPositionSubToolBar( m_aSubTbResName );
     return NULL;
 }
 
+//========================================================================
+// XSubToolbarController
+//========================================================================
 
+::sal_Bool SAL_CALL SvxTbxCtlAlign::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
+{
+    // We control a sub-toolbar therefor, we have to return true.
+    return sal_True;
+}
+
+::rtl::OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+{
+    // Provide the controlled sub-toolbar name, so we are notified whenever
+    // this toolbar executes a function.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    return m_aSubTbName;
+}
+
+void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // Our sub-toolbar wants to executes a function. We have to change
+    // the image of our toolbar button to reflect the new function.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( !m_bDisposed )
+    {
+        if ( aCommand.getLength() > 0 )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            if ( !!aImage )
+                GetToolBox().SetItemImage( GetId(), aImage );
+        }
+    }
+}
+
+void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::RuntimeException)
+{
+    // We should update the button image of our parent (toolbar). Use the stored
+    // command to set the correct current image.
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_aCommand.getLength() > 0 )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        if ( !!aImage )
+            GetToolBox().SetItemImage( GetId(), aImage );
+    }
+}
