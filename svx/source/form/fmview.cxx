@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-09 09:37:46 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 16:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,8 +387,6 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
         }
         else
         {
-            UnmarkAll();
-
             // Erste ::com::sun::star::form aktivieren
             pImpl->Activate(NULL);
 
