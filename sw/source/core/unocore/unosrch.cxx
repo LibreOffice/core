@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:47:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,10 @@ void    SwSearchProperties_Impl::SetProperties(const Sequence< PropertyValue >& 
     const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR);
     long nLen = aSearchAttribs.getLength();
     const PropertyValue* pProps = aSearchAttribs.getConstArray();
+    long i;
+
     //delete all existing values
-    for(long i = 0; i < nArrLen; i++)
+    for( i = 0; i < nArrLen; i++)
     {
         delete pValueArr[i];
         pValueArr[i] = 0;
@@ -188,7 +190,8 @@ void    SwSearchProperties_Impl::SetProperties(const Sequence< PropertyValue >& 
 const Sequence< PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
     sal_uInt16 nPropCount = 0;
-    for(sal_uInt16 i = 0; i < nArrLen; i++)
+    sal_uInt16 i;
+    for( i = 0; i < nArrLen; i++)
         if(pValueArr[i])
             nPropCount++;
 
