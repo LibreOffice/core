@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:27:19 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ portuguese ] = "Configuraηγo asiαtica";
                 Text[ russian ] = "ΐηθΰςρκΰÿ πΰημεςκΰ";
                 Text[ greek ] = "Ασιατική διάταξη";
-                Text[ dutch ] = "Asiatisch lay-out";
+                Text[ dutch ] = "Aziatisch lay-out";
                 Text[ french ] = "Mise en page asiatique";
                 Text[ spanish ] = "Diseρo asiαtico";
                 Text[ italian ] = "Layout asiatico";
@@ -272,7 +272,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ portuguese ] = "Tipografia asiαtica";
                 Text[ russian ] = "ΐηθΰςρκθε ψπθτςϋ";
                 Text[ greek ] = "Ασιάτικη τυπογραφία";
-                Text[ dutch ] = "Asiatische typografie";
+                Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografνa asiαtica";
                 Text[ italian ] = "Tipografia asiatica";
@@ -446,7 +446,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ chinese_simplified ] = "ΈόΜζΧΦ·ϋ(~E)";
         Text[ russian ] = "Οξμενÿςό ηνΰκθ";
         Text[ polish ] = "Wymieρ znaki";
-        Text[ japanese ] = "“ό‚κ‘γ‚θ‹–‰Β‚Μ•¶(~E)";
+        Text[ japanese ] = "“ό‚κ‘γ‚θ‹–‰Β‚Μ•¶”(~E)";
         Text[ chinese_traditional ] = "΄ΐ¥N¦r¤Έ(~E)";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΓΝΡέ";
         Text[ greek ] = "Αλλαγή χαρακτήρων";
@@ -489,7 +489,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ chinese_simplified ] = "ΠΒΤφΧΦ·ϋ(~A)";
         Text[ russian ] = "Δξαΰβθςό ηνΰκθ";
         Text[ polish ] = "Dodaj znaki";
-        Text[ japanese ] = "’Η‰Α‹–‰Β‚Μ•¶(~A)";
+        Text[ japanese ] = "’Η‰Α‹–‰Β‚Μ•¶”(~A)";
         Text[ chinese_traditional ] = "ΌW¥[¦r¤Έ(~A)";
         Text[ arabic ] = "ΕΦΗέΙ ΓΝΡέ";
         Text[ greek ] = "Προσθήκη χαρακτήρων";
@@ -530,7 +530,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ chinese_simplified ] = "ΙΎ³ύΧΦ·ϋ(~R)";
         Text[ russian ] = "Σαπΰςό ηνΰκθ";
         Text[ polish ] = "Usuρ znaki";
-        Text[ japanese ] = "ν‹–‰Β‚Μ•¶(~R)";
+        Text[ japanese ] = "ν‹–‰Β‚Μ•¶”(~R)";
         Text[ chinese_traditional ] = "§R°£¦r¤Έ(~R)";
         Text[ arabic ] = "ΕÒΗαΙ ΓΝΡέ";
         Text[ greek ] = "Διαγραφή χαρακτήρων";
