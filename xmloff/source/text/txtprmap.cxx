@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: cl $ $Date: 2001-07-04 13:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,6 +760,7 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
     case TEXT_PROP_MAP_TEXT:
         pMap = aXMLTextPropMap;
         break;
+    case TEXT_PROP_MAP_SHAPE_PARA:
     case TEXT_PROP_MAP_PARA:
         pMap = aXMLParaPropMap;
         break;
@@ -778,11 +779,6 @@ XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
         break;
     case TEXT_PROP_MAP_RUBY:
         pMap = aXMLRubyPropMap;
-        break;
-    case TEXT_PROP_MAP_SHAPE_PARA:
-        pMap = &aXMLParaPropMap[8];
-        DBG_ASSERT( pMap->meXMLName == XML_FONT_VARIANT,
-                    "paragraph map changed" );
         break;
     }
     DBG_ASSERT( pMap, "illegal map type" );
