@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: bm $ $Date: 2003-10-07 14:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,12 +77,12 @@ namespace chart
 class MinimumAndMaximumSupplier
 {
 public:
-    virtual double getMinimumX() { return -0.5; };
-    virtual double getMaximumX() { return 10.0; };
+    virtual double getMinimumX() = 0;
+    virtual double getMaximumX() = 0;
 
     //problem y maybe not is always the second border to ask for
-    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX ) { return -2.0; };
-    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX ) { return 20.0; };
+    virtual double getMinimumYInRange( double fMinimumX, double fMaximumX ) = 0;
+    virtual double getMaximumYInRange( double fMinimumX, double fMaximumX ) = 0;
 };
 
 //enum StackType { STACK_NORMAL, STACK_NONE, STACK_BESIDES, STACK_ONTOP, STACK_BEHIND };
