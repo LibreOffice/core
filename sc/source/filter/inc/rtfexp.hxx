@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfexp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@ class ScRTFExport : public ScExportBase
 {
     ULONG*              pCellX;     // kumulierte Zellbreiten einer Tabelle
 
-    void                WriteTab( USHORT nTab );
-    void                WriteRow( USHORT nTab, USHORT nRow );
-    void                WriteCell( USHORT nTab, USHORT nCol, USHORT nRow );
+    void                WriteTab( SCTAB nTab );
+    void                WriteRow( SCTAB nTab, SCROW nRow );
+    void                WriteCell( SCTAB nTab,  SCROW nRow, SCCOL nCol );
 
 public:
 
