@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:18:21 $
+ *  last change: $Author: os $ $Date: 2001-03-13 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,9 +243,23 @@ using namespace ::rtl;
 /* -----------------------------17.01.01 15:43--------------------------------
 
  ---------------------------------------------------------------------------*/
+#define SW_CREATE_DASH_TABLE            0x01
+#define SW_CREATE_GRADIENT_TABLE        0x02
+#define SW_CREATE_HATCH_TABLE           0x03
+#define SW_CREATE_BITMAP_TABLE          0x04
+#define SW_CREATE_TRANSGRADIENT_TABLE   0x05
+#define SW_CREATE_MARKER_TABLE          0x06
+
 class SwXDocumentPropertyHelper : public cppu::WeakImplHelper1
 <com::sun::star::i18n::XForbiddenCharacters>
 {
+    Reference<XInterface> xDashTable;
+    Reference<XInterface> xGradientTable;
+    Reference<XInterface> xHatchTable;
+    Reference<XInterface> xBitmapTable;
+    Reference<XInterface> xTransGradientTable;
+    Reference<XInterface> xMarkerTable;
+
     SwDoc*  m_pDoc;
 public:
     SwXDocumentPropertyHelper(SwDoc& rDoc);
@@ -256,8 +270,66 @@ public:
     virtual void SAL_CALL setForbiddenCharacters( const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters ) throw(RuntimeException);
     virtual void SAL_CALL removeForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException);
 
-    void Invalidate() {m_pDoc = 0;}
+    Reference<XInterface> GetDrawTable(short nWhich);
+
+    void Invalidate()
+        {
+            xDashTable = 0;
+            xGradientTable = 0;
+            xHatchTable = 0;
+            xBitmapTable = 0;
+            xTransGradientTable = 0;
+            xMarkerTable = 0;
+            m_pDoc = 0;
+        }
 };
+/* -----------------------------13.03.01 11:56--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
+{
+    Reference<XInterface> xRet;
+    if(m_pDoc)
+    {
+        switch(nWhich)
+        {
+            case SW_CREATE_DASH_TABLE         :
+                if(!xDashTable.is())
+                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xDashTable;
+            break;
+            case SW_CREATE_GRADIENT_TABLE     :
+                if(!xGradientTable.is())
+                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xGradientTable;
+            break;
+            case SW_CREATE_HATCH_TABLE        :
+                if(!xHatchTable.is())
+                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xHatchTable;
+            break;
+            case SW_CREATE_BITMAP_TABLE       :
+                if(!xBitmapTable.is())
+                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xBitmapTable;
+            break;
+            case SW_CREATE_TRANSGRADIENT_TABLE:
+                if(!xTransGradientTable.is())
+                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xTransGradientTable;
+            break;
+            case SW_CREATE_MARKER_TABLE       :
+                if(!xMarkerTable.is())
+                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xMarkerTable;
+            break;
+            default: DBG_ERROR("which table?")
+        }
+    }
+    return xRet;
+}
+
+
 /******************************************************************************
  *
  ******************************************************************************/
@@ -1822,29 +1894,27 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             {
                 if(bShape)
                 {
+                    short nTable = 0;
                     if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
+                        nTable = SW_CREATE_DASH_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
+                        nTable = SW_CREATE_GRADIENT_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
+                        nTable = SW_CREATE_HATCH_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
+                        nTable = SW_CREATE_BITMAP_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
+                        nTable = SW_CREATE_TRANSGRADIENT_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+                        nTable = SW_CREATE_MARKER_TABLE;
+                    if(nTable)
                     {
-                        xRet = SvxUnoDashTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
-                    }
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
-                    {
-                        xRet = SvxUnoGradientTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
-                    }
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
-                    {
-                        xRet = SvxUnoHatchTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
-                    }
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
-                    {
-                        xRet = SvxUnoBitmapTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
-                    }
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
-                    {
-                        xRet = SvxUnoTransGradientTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
-                    }
-                    if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
-                    {
-                        xRet = SvxUnoMarkerTable_createInstance( pDocShell->GetDoc()->GetDrawModel() );
+                        if(!xPropertyHelper.is())
+                        {
+                            pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
+                            xPropertyHelper = (cppu::OWeakObject*)pPropertyHelper;
+                        }
+                        xRet = pPropertyHelper->GetDrawTable(nTable);
                     }
                 }
                 if(!xRet.is())
