@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:34:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,8 @@ public:
     inline const Reference< XCommandEnvironment >& getEnvironment() const;
     inline void setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv );
+
+    void inserted();
 };
 
 //=========================================================================
@@ -1397,6 +1399,8 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
+
+    m_xImpl->inserted();
 }
 
 //=========================================================================
@@ -1464,6 +1468,8 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     InsertCommandArgument(
                                         rData,
                                         sal_False /* ReplaceExisting */ ) ) );
+    aNewContent.m_xImpl->inserted();
+
     rNewContent = aNewContent;
     return sal_True;
 }
@@ -1503,6 +1509,8 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
                                     InsertCommandArgument(
                                         rData,
                                         sal_False /* ReplaceExisting */ ) ) );
+    aNewContent.m_xImpl->inserted();
+
     rNewContent = aNewContent;
     return sal_True;
 }
@@ -1703,7 +1711,7 @@ Content_Impl::~Content_Impl()
     }
 }
 
-
+//=========================================================================
 void Content_Impl::disposing( const EventObject& Source )
 {
     Reference<XContent> xContent;
@@ -1884,6 +1892,14 @@ inline void Content_Impl::setEnvironment(
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_xEnv = xNewEnv;
+}
+
+//=========================================================================
+void Content_Impl::inserted()
+{
+    // URL might have changed during 'insert' => recalculate in next getURL()
+    osl::MutexGuard aGuard( m_aMutex );
+    m_aURL = ::rtl::OUString();
 }
 
 //=========================================================================
