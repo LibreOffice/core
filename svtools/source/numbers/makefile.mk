@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
+#   last change: $Author: er $ $Date: 2001-06-18 09:30:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,8 +109,7 @@ SLOFILES =  \
         $(SLO)$/numhead.obj \
         $(SLO)$/numuno.obj \
         $(SLO)$/numfmuno.obj \
-        $(SLO)$/supservs.obj \
-        $(SLO)$/currencyconfigitem.obj
+        $(SLO)$/supservs.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/numuno.obj \
