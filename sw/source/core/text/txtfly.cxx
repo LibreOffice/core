@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: od $ $Date: 2002-10-11 11:31:19 $
+ *  last change: $Author: aw $ $Date: 2002-10-30 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
 #endif
+#endif
+
+// #102344#
+#ifndef _SVDOEDGE_HXX
+#include <svx/svdoedge.hxx>
 #endif
 
 #include "txtfrm.hxx"     // SwTxtFrm
@@ -1276,6 +1281,16 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
 {
     if( pNew != pCurrFly )
     {
+        // #102344# Ignore connectors which have one or more connections
+        if(pNew && pNew->ISA(SdrEdgeObj))
+        {
+            if(((SdrEdgeObj*)pNew)->GetConnectedNode(TRUE)
+                || ((SdrEdgeObj*)pNew)->GetConnectedNode(FALSE))
+            {
+                return sal_False;
+            }
+        }
+
         if( ( bInFtn || bInFooterOrHeader ) && bTopRule )
         {
             SwFrmFmt *pFmt = ((SwContact*)GetUserCall(pNew))->GetFmt();
