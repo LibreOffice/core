@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 20:33:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,13 +610,13 @@ ModalDialog DLG_START_PRESENTATION
         Text [ danish ] = "Tillad animationer" ;
         Text [ italian ] = "Permetti animazioni" ;
         Text [ spanish ] = "Permitir animaci~ones" ;
-        Text [ french ] = "Permettre les animations" ;
+        Text [ french ] = "Autoriser les animati~ons" ;
         Text [ dutch ] = "Animati~es toestaan" ;
         Text [ portuguese ] = "Permitir a~nimações" ;
         Text[ chinese_simplified ] = "ÔÊĞí¶¯»­(~A)";
         Text[ russian ] = "Äîïóñòèòü àíèìàöèè";
         Text[ polish ] = "Dopu~œæ animacje";
-        Text[ japanese ] = "±ÆÒ°¼®İ‚ğg—p‰Â”\\‚É‚·‚é(~A)";
+        Text[ japanese ] = "±ÆÒ°¼®İ‚ğ“ü‚ê‚é(~A)";
         Text[ chinese_traditional ] = "¤¹³\\°Êµe(~A)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÍÑßÉ";
         Text[ greek ] = "Åğéôñİğ~ïíôáé êéíïıìåíåò åéêüíåò";
@@ -693,3 +693,4 @@ ModalDialog DLG_START_PRESENTATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Iniciar presentación";
 };
+
