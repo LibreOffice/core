@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-11 14:03:21 $
+ *  last change: $Author: pb $ $Date: 2002-10-31 09:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ SV_IMPL_PTRARR(ExpandedEntries, StringPtr)
 
 */
 
-class StyleTreeListBox_Impl: public DropListBox_Impl
+class StyleTreeListBox_Impl : public DropListBox_Impl
 {
 private:
     SvLBoxEntry*                    pCurEntry;
@@ -479,6 +479,7 @@ private:
 
 protected:
     virtual void    Command( const CommandEvent& rMEvt );
+    virtual long    Notify( NotifyEvent& rNEvt );
     virtual BOOL    DoubleClickHdl();
     virtual long    ExpandingHdl();
     virtual void    ExpandedHdl();
@@ -547,6 +548,29 @@ void StyleTreeListBox_Impl::Command( const CommandEvent& rCEvt )
 */
 {
     SvTreeListBox::Command(rCEvt);
+}
+
+//-------------------------------------------------------------------------
+
+long StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    // handle <RETURN> as double click
+
+    long nRet = 0;
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )
+        {
+            aDoubleClickLink.Call( this );
+            nRet = 1;
+        }
+    }
+
+    if ( !nRet )
+        nRet = DropListBox_Impl::Notify( rNEvt );
+
+    return nRet;
 }
 
 //-------------------------------------------------------------------------
@@ -802,7 +826,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 {
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
-    aFmtLb.SetWindowBits( WB_SORT );
+    aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
 #ifdef MAC
@@ -1742,7 +1766,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
             pTreeBox = new StyleTreeListBox_Impl(
                     this, WB_HASBUTTONS | WB_HASLINES |
                     WB_BORDER | WB_TABSTOP | WB_HASLINESATROOT |
-                    WB_HASBUTTONSATROOT );
+                    WB_HASBUTTONSATROOT | WB_HIDESELECTION );
             pTreeBox->SetFont( aFmtLb.GetFont() );
 
             pTreeBox->SetPosSizePixel(aFmtLb.GetPosPixel(), aFmtLb.GetSizePixel());
