@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fulinend.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,34 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FULINEND_HXX
-#define _SD_FULINEND_HXX
+#ifndef SD_FULINE_END_HXX
+#define SD_FULINE_END_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuLineEnd : public FuPoor
+namespace sd {
+
+class FuLineEnd
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuLineEnd(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuLineEnd() {}
+    FuLineEnd (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuLineEnd (void) {}
 
     virtual void Activate() {}
     virtual void Deactivate() {}
 };
 
-#endif      // _SD_FULINEND_HXX
+} // end of namespace sd
+
+#endif
 
