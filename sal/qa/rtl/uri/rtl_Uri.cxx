@@ -49,11 +49,6 @@ namespace Stringtest
     {
         rtl::OUString m_aStr;
     public:
-        void setUp()
-            {
-                // m_aStr = rtl::OUString::createFromAscii( "/tmp/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
-            }
-
         /*
           rtl::OString toUTF8(rtl::OUString const& _suStr)
             {
@@ -124,7 +119,7 @@ namespace Stringtest
                 showContent(suStr_UriDecodeToIuri);
 
                 // string --> ustring
-                rtl::OString sStr("hällo");
+                rtl::OString sStr("h\xE4llo");
                 rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri) == sal_True);
@@ -236,11 +231,7 @@ namespace Stringtest
         void test_FromUTF8()
             {
                 rtl::OString sStr("h%C3%A4llo");
-                // rtl::OString sStr("hällo");
-                // rtl::OUString suStr = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ASCII_US);
                 rtl::OUString suStr = rtl::OStringToOUString(sStr, osl_getThreadTextEncoding());
-                // rtl::OString  sStr = escapeString( rtl::OString("/tmp/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï") );
-                // rtl::OUString suStr = rtl::OUString::createFromAscii( sStr.getStr() );
 
 //    rtl_UriEncodeIgnoreEscapes,
 //    rtl_UriEncodeKeepEscapes,
@@ -258,36 +249,6 @@ namespace Stringtest
                 showContent(suStr_UriDecodeWithCharset);
                 toUTF8(suStr_UriDecodeWithCharset);
             }
-
-        void test_UTF8()
-            {
-                rtl::OUString aStr = rtl::OUString::createFromAscii( "/tmp/ÄãºÃ¤³¤ó¤Ë¤Á¤Ï" );
-
-            }
-
-/*
-        void UTF8()
-            {
-                rtl::OString sSysPath5_AsUTF8 = rtl::OUStringToOString(m_aStr, RTL_TEXTENCODING_UTF8);
-                t_print("aSysPath5 as UTF8 '%s'\n", sSysPath5_AsUTF8.getStr());
-
-            {
-                rtl::OUString suSysPath5Str = rtl::OStringToOUString(sSysPath5_AsUTF8, RTL_TEXTENCODING_UTF8);
-                if (suSysPath5Str.equals(m_aStr))
-                {
-                    t_print("1. convert works.\n");
-                }
-            }
-
-            sal_Char aSysPath5Str[] = "/tmp/ï¿ï¿£ï¾ºï¿ï¾¤ï¾³ï¾¤ï¿³ï¾¤ï¿ï¾¤ï¿ï¾¤ï¿";
-            rtl::OString aStr (aSysPath5Str);
-            rtl::OUString suSysPath5Str = rtl::OStringToOUString(aSysPath5Str, RTL_TEXTENCODING_UTF8);
-            if (suSysPath5Str.equals(m_aStr))
-            {
-                t_print("2. convert works.\n");
-            }
-            }
-*/
 
         CPPUNIT_TEST_SUITE( Convert );
         CPPUNIT_TEST( test_FromUTF8_001 );
