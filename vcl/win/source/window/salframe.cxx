@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:40:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
 #endif
+
+#include <osl/module.h>
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -381,9 +383,20 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             // check for W2k and XP
             if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT && aVerInfo.dwMajorVersion >= 5 )
             {
-                bLayeredAPI = 1;
-                HMODULE hModule = LoadLibrary("user32");
-                if( !(lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T )GetProcAddress( hModule, "SetLayeredWindowAttributes" ) ) )
+                OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
+                oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+                void *pFunc = NULL;
+                if( pLib )
+                {
+                    OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "SetLayeredWindowAttributes" ) );
+                    pFunc = osl_getSymbol( pLib, queryFuncName.pData );
+                }
+
+                lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
+
+                if ( pFunc )
+                    bLayeredAPI = 1;
+                else
                     bLayeredAPI = 0;
             }
     }
@@ -1521,9 +1534,22 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
 
     // Adjust Window in the screen
-    // but don't do this for floaters or ownerdraw windows
-    // TODO: move this into independent layer
-    if( !(mnStyle & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) )
+    BOOL bCheckOffScreen = TRUE;
+
+    // but don't do this for floaters or ownerdraw windows that are currently moved interactively
+    if( (mnStyle & SAL_FRAME_STYLE_FLOAT) && !(mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
+        bCheckOffScreen = FALSE;
+
+    if( mnStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION )
+    {
+        // may be the window is currently being moved (mouse is captured), then no check is required
+        if( mhWnd == ::GetCapture() )
+            bCheckOffScreen = FALSE;
+        else
+            bCheckOffScreen = TRUE;
+    }
+
+    if( bCheckOffScreen )
     {
         if ( nX+nWidth > nScreenX+nScreenWidth )
             nX = (nScreenX+nScreenWidth) - nWidth;
@@ -1959,8 +1985,10 @@ void WinSalFrame::StartPresentation( BOOL bStart )
 
                 if ( !aOS.nErrCode )
                 {
-                    pSalData->mhSageInst = LoadLibrary( aOS.szPathName );
-                    pSalData->mpSageEnableProc = (SysAgt_Enable_PROC)GetProcAddress( pSalData->mhSageInst, "System_Agent_Enable" );
+                    OUString aLibraryName( OUString::createFromAscii( aOS.szPathName ) );
+                    oslModule mhSageInst = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
+                    OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "System_Agent_Enable" ) );
+                    pSalData->mpSageEnableProc = (SysAgt_Enable_PROC) osl_getSymbol( mhSageInst, queryFuncName.pData );
                 }
                 else
                     pSalData->mnSageStatus = DISABLE_AGENT;
