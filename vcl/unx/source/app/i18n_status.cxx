@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 17:54:45 $
+ *  last change: $Author: pl $ $Date: 2001-10-17 17:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,16 +332,27 @@ void IIIMPStatusWindow::GetFocus()
     WorkWindow::GetFocus();
     if( m_pResetFocus )
     {
-        const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
-        BOOL bIgnore = m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
-        m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
-        XSetInputFocus( (Display*)pParentEnvData->pDisplay,
-                        (XLIB_Window)pParentEnvData->aShellWindow,
-                        RevertToNone,
-                        CurrentTime
-                        );
-        XSync( (Display*)pParentEnvData->pDisplay, False );
-        m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( FALSE );
+        /*
+         *  look if reset focus still exists
+         *  since reset focus really is an internal hack there should
+         *  not be a method to be called in SalFrame destructor
+         */
+        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        while( pFrame && pFrame != m_pResetFocus )
+            pFrame = pFrame->maFrameData.GetNextFrame();
+        if( pFrame == m_pResetFocus )
+        {
+            const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
+            BOOL bIgnore = m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
+            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+            XSetInputFocus( (Display*)pParentEnvData->pDisplay,
+                            (XLIB_Window)pParentEnvData->aShellWindow,
+                            RevertToNone,
+                            CurrentTime
+                            );
+            XSync( (Display*)pParentEnvData->pDisplay, False );
+            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( FALSE );
+        }
         m_pResetFocus = NULL;
     }
 }
