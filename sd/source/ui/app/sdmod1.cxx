@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-09 08:02:26 $
+ *  last change: $Author: cl $ $Date: 2000-10-11 08:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 
 #ifndef _SFXFILEDLG_HXX //au
 #include <sfx2/iodlg.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
+#include <svtools/useroptions.hxx>
 #endif
 
 #include "app.hrc"
@@ -560,8 +564,10 @@ void SdModule::Execute(SfxRequest& rReq)
                         SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
 
                         SfxStamp aCreated;
-                        aCreated.SetName( SFX_INIMANAGER()->GetFullName() );
+                        SvtUserOptions aOptions;
+                        aCreated.SetName( aOptions.GetFullName() );
                         rInfo.SetCreated( aCreated );
+
                         SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
                         rInfo.SetChanged( aInvalid );
                         rInfo.SetPrinted( aInvalid );
