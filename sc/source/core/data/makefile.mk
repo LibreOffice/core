@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 19:50:04 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:42:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,9 +204,9 @@ NOOPTFILES= \
         $(SLO)$/column3.obj \
         $(SLO)$/table3.obj \
         $(SLO)$/table4.obj  \
-        $(SLO)$/documen4.obj
+        $(SLO)$/documen4.obj \
+        $(SLO)$/conditio.obj
 .ENDIF
-# table4 opt=2 fill down
 
 EXCEPTIONSFILES= \
     $(SLO)$/documen6.obj \
