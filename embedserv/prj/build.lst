@@ -1,4 +1,4 @@
 sf	embedserv	:	unotools NULL
 sf	embedserv								usr1	-	w	es_mkout NULL
-sf	embedserv\source\embdoc					nmake	-	w	es_embdoc NULL
-sf	embedserv\util							nmake	-	w	es_embdoc NULL
+sf	embedserv\source\embed					nmake	-	w	es_embed NULL
+sf	embedserv\util							nmake	-	w	es_util es_embed.w NULL
