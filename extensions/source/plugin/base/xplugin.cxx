@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:42:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,8 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
             try
             {
                 xPS->setPropertyValue( OUString::createFromAscii( "URL" ), aAny );
+                aAny <<= mimetype;
+                xPS->setPropertyValue( OUString::createFromAscii( "TYPE" ), aAny );
             }
             catch(...)
             {
