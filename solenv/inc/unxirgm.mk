@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:16:08 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:28:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ CFLAGS= -w -c $(INCLUDE)
 CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC= 
 CFLAGSCXX=
+PICSWITCH:=-fpic
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
@@ -92,9 +93,9 @@ CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
 CFLAGSOBJCUIMT=
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fpic
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fpic
+CFLAGSSLOCUIMT=$(PICSWITCH)
 # Compiler flags for profiling
 CFLAGSPROF=
 # Compiler flags for debugging
