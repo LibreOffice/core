@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 16:59:57 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 10:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Äåéñòâèå íå ïîääåğæèâàåòñÿ";
         Text[ polish ] = "Akcja nie jest obs³ugiwana";
         Text[ japanese ] = "±¸¼®İ‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¾Ş§@¤£¨ü¤ä´©";
+        Text[ chinese_traditional ] = "°Ê§@¤£¨ü¤ä´©";
         Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ áÇ íõÏÚã";
         Text[ dutch ] = "Activiteit wordt niet ondersteund";
         Text[ chinese_simplified ] = "²Ù×÷²»ÊÜÖ§³Ö";
@@ -1199,7 +1199,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş ñ ôàéëàìè, \nñîäåğæàùèìè ïîäñòàíîâî÷íûå çíàêè, íåâîçìîæíî";
         Text[ polish ] = "Operacja nie mo¿e byæ wykonana na plikach, które \nzawieraj¹ symbole wieloznaczne (Wildcarts)";
         Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ‚ğŠÜ‚ŞÌ§²Ù‚Å\n‘€ì‚ÍÀs‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "³o¨ÇÀÉ®×§t¦³³q°t²Å¡M\n¦ÓµLªk°õ¦æ¾Ş§@";
+        Text[ chinese_traditional ] = "³o¨ÇÀÉ®×§t¦³³q°t²Å¡M\n¦ÓµLªk°õ¦æ¹Lµ{";
         Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ Úáì ãáİÇÊ\nÊÍÊæí Úáì ÃÍÑİ ÈÏá.";
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd bij bestanden \ndie wildcards bevatten";
         Text[ chinese_simplified ] = "ÎŞ·¨ÔÚº¬ÓĞÍ¨Åä·ûµÄ\nÎÄ¼şÖĞÖ´ĞĞÕâ¸ö²Ù×÷";
@@ -1224,7 +1224,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "İòà îïåğàöèÿ íå ïîääåğæèâàåòñÿ äàííîé îïåğàöèîííîé ñèñòåìîé";
         Text[ polish ] = "Ta operacja nie jest obs³ugiwana w tym systemie operacyjnym.";
         Text[ japanese ] = "‚±‚Ì‘€ì‚Í‚±‚ÌµÍßÚ°¼®İ ¼½ÃÑ‚Å‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "·í«e¨Ï¥Îªº¾Ş§@¨t²Î¤£¤ä´©³o­Ó¾Ş§@";
+        Text[ chinese_traditional ] = "·í«e¨Ï¥Îªº¾Ş§@¨t²Î¤£¤ä´©³o­Ó°Ê§@";
         Text[ arabic ] = "äÙÇã ÇáÊÔÛíá åĞÇ áÇ íÏÚã åĞå ÇáÚãáíÉ";
         Text[ dutch ] = "Deze opdracht wordt niet ondersteund door het bestaande besturingssysteem";
         Text[ chinese_simplified ] = "µ±Ç°µÄ²Ù×÷Æ½Ì¨²»Ö§³ÖÕâ¸ö²Ù×÷";
@@ -1325,7 +1325,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Èç-çà íåäîñòàòêà ïàìÿòè âûïîëíèòü îïåğàöèş íåâîçìîæíî";
         Text[ polish ] = "Operacja nie mog³a zostaæ wykonana z powodu braku pamiêci";
         Text[ japanese ] = "‚±‚Ì‘€ì‚ÍÒÓØ•s‘«‚Ì‚½‚ßÀs‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¦]¬°°O¾ĞÅé¤£¨¬¦ÓµLªk°õ¦æ³o­Ó¾Ş§@";
+        Text[ chinese_traditional ] = "¦]¬°°O¾ĞÅé¤£¨¬¦ÓµLªk°õ¦æ³o­Ó°Ê§@";
         Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ¡ ÈÓÈÈ äŞÕ ÇáĞÇßÑÉ";
         Text[ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen.";
         Text[ chinese_simplified ] = "ÒòÎªÄÚ´æ²»×ã¶øÎŞ·¨Ö´ĞĞÕâ¸ö²Ù×÷";
@@ -1550,7 +1550,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Îïåğàöèÿ çàïóùåíà ïğè ïîìîùè íåïğàâèëüíîãî ïàğàìåòğà";
         Text[ polish ] = "Przy rozpoczêciu operacji u¿yto nieprawid³owego parametru";
         Text[ japanese ] = "‚±‚Ì‘€ì‚Í–³Œø‚ÈÊß×Ò°À‚ÅŠJn‚µ‚Ü‚µ‚½";
-        Text[ chinese_traditional ] = "¨Ï¥Î¤@­ÓµL®Äªº§UÅÜ¶q±Ò°Ê³o­Ó¾Ş§@";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤@­ÓµL®Äªº°Ñ¼Æ¨Ó°õ¦æ³o­Ó¹Lµ{¡C";
         Text[ arabic ] = "Êã ÈÏÁ ÇáÚãáíÉ ÈãÚáãÉ ÛíÑ ÕÇáÍÉ";
         Text[ dutch ] = "Activiteit uitgevoerd met ongeldige parameter.";
         Text[ chinese_simplified ] = "Ê¹ÓÃÒ»¸öÎŞĞ§µÄ²ÎÊıÆô¶¯ÁËÕâ¸ö²Ù×÷";
@@ -1575,7 +1575,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Îïåğàöèÿ ñ ôàéëîì ïğåğâàíà";
         Text[ polish ] = "Operacja na pliku zosta³a przerwana";
         Text[ japanese ] = "Ì§²Ùã‚Ì‘€ì‚Í’†~‚³‚ê‚Ü‚µ‚½";
-        Text[ chinese_traditional ] = "³o­ÓÀÉ®×ªº¾Ş§@¤w¸g¤¤Â_";
+        Text[ chinese_traditional ] = "³o­ÓÀÉ®×ªº°õ¦æ¹Lµ{¤w¸g¤¤Â_";
         Text[ arabic ] = "Êã ŞØÚ ÇáÚãáíÉ İí Çáãáİ";
         Text[ dutch ] = "Activiteit werd gestopt";
         Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şµÄ²Ù×÷ÒÑ¾­ÖĞ¶Ï";
@@ -2336,7 +2336,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Äîêóìåíò, ê êîòîğîìó äîëæíî áûòü ïğèìåíåíî ıòî äåéñòâèå, íå ñóùåñòâóåò";
         Text[ polish ] = "Nie istnieje ¿aden dokument, do którego mo¿na by zastosowaæ tê akcjê.";
         Text[ japanese ] = "±¸¼®İ‚Ì“K—p‚Å‚«‚éÄŞ·­ÒİÄ‚Í‚ ‚è‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¥Î¨Ó°õ¦æ¾Ş§@ªº¤å¥ó¤£¦s¦b";
+        Text[ chinese_traditional ] = "¥Î©ó°õ¦æªº¤å¥ó¤£¦s¦b";
         Text[ arabic ] = "áÇ íæÌÏ ãÓÊäÏ íãßä ÊØÈíŞ ÇáÅÌÑÇÁ Úáíå";
         Text[ dutch ] = "Er bestaat geen document waarop deze activiteit kan worden toegepast.";
         Text[ chinese_simplified ] = "Ö´ĞĞ²Ù×÷ËùĞèµÄÎÄµµ²»´æÔÚ";
