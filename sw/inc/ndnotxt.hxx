@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:06:27 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,11 @@ class SwNoTxtNode : public SwCntntNode
     String aAlternateText;      // alternativer Text  (HTML)
 
     PolyPolygon *pContour;      // Polygon fuer Konturumlauf
-    BOOL bAutomaticContour;     // automatic contour polygon, not manipulated
+    BOOL bAutomaticContour : 1; // automatic contour polygon, not manipulated
+    BOOL bContourMapModeValid : 1; // contour map mode is not the graphics's
+                                   // prefered map mode, but either
+                                      // MM100 or or pixel
+    BOOL bPixelContour : 1;     // contour map mode is invalid and pixel.
 
     // erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
     // fuer Frame- und Grafik-Attributen (wird nur vom SwCntntNode gerufen)
@@ -108,10 +112,24 @@ public:
 
     void               SetContour( const PolyPolygon *pPoly,
                                    BOOL bAutomatic = FALSE );
-    const PolyPolygon *HasContour() const { return pContour; }
+    const PolyPolygon *HasContour() const;
+    const BOOL         _HasContour() const { return pContour!=0; };
     void               GetContour( PolyPolygon &rPoly ) const;
     void               CreateContour();
+
+    void               SetAutomaticContour( BOOL bSet ) { bAutomaticContour = bSet; }
     const BOOL         HasAutomaticContour() const { return bAutomaticContour; }
+
+    // set either a MM100 or pixel contour
+    void               SetContourAPI( const PolyPolygon *pPoly );
+
+    // get either a MM100 or pixel contour, return FALSE if no contour is set.
+    BOOL               GetContourAPI( PolyPolygon &rPoly ) const;
+
+    void               SetPixelContour( BOOL bSet ) { bPixelContour = bSet; }
+    const BOOL         IsPixelContour() const;
+
+    const BOOL         IsContourMapModeValid() const { return bContourMapModeValid; }
 
     //Besorgt die Graphic, mit SwapIn fuer GrfNode, per GetData fuer OLE.
     Graphic GetGraphic() const;

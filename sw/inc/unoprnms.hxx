@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 20:04:40 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,6 +593,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_SHADOW_FORMAT;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_POLY_POLYGON;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_PIXEL_CONTOUR;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_AUTOMATIC_CONTOUR;
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_WIDTH;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_COLOR;

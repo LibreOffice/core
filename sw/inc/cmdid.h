@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 11:55:21 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_BOOKMARK                     (FN_EXTRA2 + 79)
 #define FN_UNO_IS_COLLAPSED                 (FN_EXTRA2 + 80)
 #define FN_UNO_IS_START                     (FN_EXTRA2 + 81)
+#define FN_UNO_IS_AUTOMATIC_CONTOUR         (FN_EXTRA2 + 82)
+#define FN_UNO_IS_PIXEL_CONTOUR             (FN_EXTRA2 + 83)
 
 /*--------------------------------------------------------------------
     Bereich: Fenster
