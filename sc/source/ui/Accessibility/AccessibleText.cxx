@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-14 15:28:22 $
+ *  last change: $Author: sab $ $Date: 2002-03-15 10:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,10 @@
 class ScViewForwarder : public SvxViewForwarder
 {
     ScTabViewShell*     mpViewShell;
+    ScAddress           maCellPos;
     ScSplitPos          meSplitPos;
 public:
-                        ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
+                        ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell);
     virtual             ~ScViewForwarder();
 
     virtual BOOL        IsValid() const;
@@ -97,10 +98,11 @@ public:
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
 };
 
-ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
+ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell)
     :
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos)
+    meSplitPos(eSplitPos),
+    maCellPos(rCell)
 {
 }
 
@@ -120,9 +122,19 @@ Rectangle ScViewForwarder::GetVisArea() const
     {
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
+        {
             aVisArea.SetSize(pWindow->GetSizePixel());
-        if(mpViewShell->GetViewData())
-            aVisArea.SetPos(mpViewShell->GetViewData()->GetPixPos(meSplitPos));
+
+            ScHSplitPos eWhichH = ((meSplitPos == SC_SPLIT_TOPLEFT) || (meSplitPos == SC_SPLIT_BOTTOMLEFT)) ?
+                                    SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
+            ScVSplitPos eWhichV = ((meSplitPos == SC_SPLIT_TOPLEFT) || (meSplitPos == SC_SPLIT_TOPRIGHT)) ?
+                                    SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
+
+            Point aBaseCellPos(mpViewShell->GetViewData()->GetScrPos(mpViewShell->GetViewData()->GetPosX(eWhichH),
+                mpViewShell->GetViewData()->GetPosY(eWhichV), meSplitPos, sal_True));
+            Point aCellPos(mpViewShell->GetViewData()->GetScrPos(maCellPos.Col(), maCellPos.Row(), meSplitPos, sal_True));
+            aVisArea.SetPos(aCellPos - aBaseCellPos);
+        }
     }
     else
         DBG_ERROR("this ViewForwarder is not valid");
@@ -450,7 +462,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
 {
     if (!mpViewForwarder)
-        mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos);
+        mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
     return mpViewForwarder;
 }
 
