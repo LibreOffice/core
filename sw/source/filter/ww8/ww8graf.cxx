@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,6 +1486,7 @@ void SwWW8ImplReader::ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp )
         {
             pWWZOrder->InsertDrawingObject(pObject, SVBT16ToShort(aDo.dhgt));
             SwFrmFmt *pFrm = rDoc.Insert( *pPaM, *pObject, &aSet );
+            pObject->SetItemSet(aSet);
             pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFrm);
         }
     }
