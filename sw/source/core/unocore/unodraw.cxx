@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:42:22 $
+ *  last change: $Author: os $ $Date: 2003-05-06 09:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,8 +1598,8 @@ void SwXShape::dispose(void) throw( RuntimeException )
             else
                 pFmt->GetDoc()->DelLayoutFmt( pFmt );
     }
-    else
-        throw RuntimeException();
+//  else
+//      throw RuntimeException();
 }
 /* -----------------14.04.99 13:02-------------------
  *
