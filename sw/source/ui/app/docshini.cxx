@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:37:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #ifndef _OFA_MISCCFG_HXX //autogen
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
@@ -170,9 +170,7 @@
 #include <svx/svxacorr.hxx>
 #endif
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+#include <vcl/svapp.hxx>
 
 #ifndef _PRTOPT_HXX
 #include <prtopt.hxx>
@@ -545,7 +543,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     {
         XColorTable* pTable = pColItem->GetColorTable();
         // wurde eine neue Table angelegt, muss sie auch geloescht werden.
-        if((void*)pTable  != (void*)(OFF_APP())->GetStdColorTable())
+        if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
             delete pTable;
     }
 }
