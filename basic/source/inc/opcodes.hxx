@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ enum SbiOpcode {
                         // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
     _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
+    _FIND_CM,           // Search inside a class module (CM) to enable global search in time
     SbOP2_END
 
 };
