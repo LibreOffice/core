@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoPresView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:42:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 
 namespace sd {
 
-class View;
-class DrawViewShell;
-
 /**
  * This class implements the view component for a SdPresViewShell or SdPreviewViewShell
  */
@@ -76,7 +73,10 @@ class SdUnoPresView
     : public SdUnoDrawView
 {
 public:
-    SdUnoPresView (View& rView, DrawViewShell& rViewShell) throw();
+    SdUnoPresView (
+        ViewShellBase& rBase,
+        ViewShell& rViewShell,
+        View& rView) throw();
     virtual ~SdUnoPresView() throw();
 
     // XTypeProvider
