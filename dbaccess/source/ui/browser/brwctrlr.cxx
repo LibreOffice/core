@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:40:21 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 10:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,41 +69,15 @@
 #ifndef _SBX_BRWVIEW_HXX
 #include "brwview.hxx"
 #endif
-//#ifndef _SBA_SBADBCOM_HXX
-//#include "sbadbcom.hxx"
-//#endif
-//
-//#ifndef _ModuleRes_HRC
-//#include "ModuleRes.hrc"
-//#endif
-//#ifndef _SBA_SBARES_HXX
-//#include "sbares.hxx"
-//#endif
-//
-//#ifndef _SBA_DLGERR_HXX
-//#include "dlgerr.hxx"
-//#endif
-//#ifndef _SBA_SBASTAT_HXX
-//#include "dbstat.hxx"
-//#endif
-//
-#ifndef _SVX_QRYPARAM_HXX //autogen wg. FmEnterParamDlg
-#include <svx/qryparam.hxx>
-#endif
-
 #ifndef _OSL_MUTEX_HXX_ //autogen wg. MutexGuard
 #include <osl/mutex.hxx>
 #endif
-
 #ifndef _SFXAPP_HXX //autogen wg. SFX_APP
 #include <sfx2/app.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_TYPECLASS_HPP_
 #include <com/sun/star/uno/TypeClass.hpp>
 #endif
-//#ifndef _SBA_API_HRC
-//#include "api.hrc"
-//#endif
 #ifndef _SVX_DBERRBOX_HXX
 #include <svx/dbmsgbox.hxx>
 #endif
@@ -137,11 +111,9 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
 #include <com/sun/star/data/XDatabaseDialogs.hpp>
 #endif
@@ -190,15 +162,12 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-
 #ifndef _FMSEARCH_HXX
 #include <svx/fmsearch.hxx>
 #endif
-
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
 #endif
-
 #ifndef _SV_TOOLBOX_HXX //autogen wg. ToolBox
 #include <vcl/toolbox.hxx>
 #endif
@@ -229,15 +198,32 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XINTERACTIONSUPPLYPARAMETERS_HPP_
+#include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 
 #define GRID_NAME   "MyOneAndOnlyGrid"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace dbaui;
+using namespace ::dbtools;
+using namespace ::comphelper;
 
 ::rtl::OUString URL_CONFIRM_DELETION(::rtl::OUString::createFromAscii(".uno:FormSlots/ConfirmDeletion"));
 
@@ -262,6 +248,33 @@ using namespace dbaui;
     }                                                                       \
 
 #define DO_SAFE( action, message ) try { action; } catch(...) { DBG_ERROR(message); } ;
+
+//..................................................................
+namespace dbaui
+{
+//..................................................................
+
+//==================================================================
+// OParameterContinuation
+//==================================================================
+class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
+{
+    Sequence< PropertyValue >       m_aValues;
+
+public:
+    OParameterContinuation() { }
+
+    Sequence< PropertyValue >   getValues() const { return m_aValues; }
+
+// XInteractionSupplyParameters
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
+};
+
+//------------------------------------------------------------------
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException)
+{
+    m_aValues = _rValues;
+}
 
 //==================================================================
 //= OAsyncronousLink
@@ -1368,15 +1381,68 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     if (m_pContent && m_pContent->IsVisible())
         pParent = m_pContent;
 
-    Reference< XConnection >  xConn;
-    Reference< XRowSet >  xForm(aEvent.Source, UNO_QUERY);
-    if (xForm.is())
-        xConn = ::dbtools::getConnection(xForm);
-    FmEnterParamDlg aDlg(pParent, xParameters, xConn);
-    if (aDlg.Execute() != RET_OK)
+    // default handling: instantiate an interaction handler and let it handle the parameter request
+    try
     {
-        m_bLoadCanceled = sal_True;
-        return sal_False;
+        // two continuations allowed: OK and Cancel
+        OParameterContinuation* pParamValues = new OParameterContinuation;
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        // the request
+        ParametersRequest aRequest;
+        aRequest.Parameters = xParameters;
+        aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
+        OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
+        Reference< XInteractionRequest > xParamRequest(pParamRequest);
+        // some knittings
+        pParamRequest->addContinuation(pParamValues);
+        pParamRequest->addContinuation(pAbort);
+
+        // create the handler, let it handle the request
+        Reference< XInteractionHandler > xHandler(getProcessServiceFactory()->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+        if (xHandler.is())
+        {
+            ::vos::OGuard aGuard(Application::GetSolarMutex());
+            xHandler->handle(xParamRequest);
+        }
+
+        if (!pParamValues->wasSelected())
+        {   // canceled
+            m_bLoadCanceled = sal_True;
+            return sal_False;
+        }
+
+        // transfer the values into the parameter supplier
+        Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
+        if (aFinalValues.getLength() != aRequest.Parameters->getCount())
+        {
+            DBG_ERROR("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
+            m_bLoadCanceled = sal_True;
+            return sal_False;
+        }
+        const PropertyValue* pFinalValues = aFinalValues.getConstArray();
+        for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
+        {
+            Reference< XPropertySet > xParam;
+            ::cppu::extractInterface(xParam, aRequest.Parameters->getByIndex(i));
+            DBG_ASSERT(xParam.is(), "SbaXDataBrowserController::approveParameter: one of the parameters is no property set!");
+            if (xParam.is())
+            {
+#ifdef DBG_UTIL
+                ::rtl::OUString sName;
+                xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
+                DBG_ASSERT(sName.equals(pFinalValues->Name), "SbaXDataBrowserController::approveParameter: suspicious value names!");
+#endif
+                try { xParam->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value); }
+                catch(Exception&)
+                {
+                    DBG_ERROR("SbaXDataBrowserController::approveParameter: setting one of the properties failed!");
+                }
+            }
+        }
+    }
+    catch(Exception&)
+    {
+        DBG_ERROR("SbaXDataBrowserController::approveParameter: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
 
     return sal_True;
@@ -2816,3 +2882,6 @@ IMPL_LINK(LoadFormThread::ThreadStopper, OnDeleteInMainThread, LoadFormThread::T
     return 0L;
 }
 
+//..................................................................
+}   // namespace dbaui
+//..................................................................
