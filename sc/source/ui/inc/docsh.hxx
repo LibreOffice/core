@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 20:01:41 $
+ *  last change: $Author: nn $ $Date: 2001-02-22 17:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ public:
 
     void            SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages );
     BOOL            AdjustPrintZoom( const ScRange& rRange );
+
+    void            LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles );
 
     void            PageStyleModified( const String& rStyleName, BOOL bApi );
 
