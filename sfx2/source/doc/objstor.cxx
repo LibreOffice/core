@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:44:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -263,6 +266,22 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
+
+namespace css = ::com::sun::star;
+
+//=========================================================================
+void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
+{
+    if (!xModel.is())
+        return;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    css::uno::Reference< css::container::XSet > xModelCollection(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
+        css::uno::UNO_QUERY);
+    if (xModelCollection.is())
+        xModelCollection->insert(css::uno::makeAny(xModel));
+}
 
 //=========================================================================
 
@@ -649,6 +668,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
             aArgs[nLength].Value <<= ::rtl::OUString( GetTitle( SFX_TITLE_DETECT ) );
             xModel->attachResource( ::rtl::OUString(), aArgs );
+            impl_addToModelCollection(xModel);
         }
 
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
@@ -1016,6 +1036,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             uno::Sequence< beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             xModel->attachResource( aURL, aArgs );
+            impl_addToModelCollection(xModel);
         }
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
