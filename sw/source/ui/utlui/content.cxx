@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 11:32:31 $
+ *  last change: $Author: os $ $Date: 2001-01-29 12:43:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEXESSUPPLIER_HPP_
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XDOCUMENTINDEX_HPP_
+#include <com/sun/star/text/XDocumentIndex.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_XBOOKMARKSSUPPLIER_HPP_
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #endif
@@ -219,6 +222,9 @@
 #define CTYPE_CTT   1
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 
 #define CP2S(cChar) UniString::CreateFromAscii(cChar)
 #define C2S(cChar)  UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
@@ -2861,9 +2867,6 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
 
                     }
                 break;
-                case EDIT_MODE_UPD_IDX:
-                    nSlot = FN_UPDATE_CUR_TOX;
-                break;
                 case EDIT_MODE_RMV_IDX:
                 case EDIT_MODE_DELETE:
                 {
@@ -2871,11 +2874,22 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
                         pActiveShell->DeleteTOX(*pBase, EDIT_MODE_DELETE == nMode);
                 }
                 break;
+                case EDIT_MODE_UPD_IDX:
                 case EDIT_MODE_RENAME:
                 {
-                    uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                    uno::Reference< text::XDocumentIndexesSupplier >  xIndexes(xModel, uno::UNO_QUERY);
-                    xNameAccess = uno::Reference< container::XNameAccess >(xIndexes, uno::UNO_QUERY);
+                    Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                    Reference< XDocumentIndexesSupplier >  xIndexes(xModel, UNO_QUERY);
+                    Reference< XIndexAccess> xIdxAcc(xIndexes->getDocumentIndexes());
+                    Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
+                    if(EDIT_MODE_RENAME == nMode)
+                        xNameAccess = xLocalNameAccess;
+                    else if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
+                    {
+                        Any aIdx = xLocalNameAccess->getByName(pBase->GetTOXName());
+                        Reference< XDocumentIndex> xIdx;
+                        if(aIdx >>= xIdx)
+                            xIdx->update();
+                    }
                 }
                 break;
             }
@@ -3180,6 +3194,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/03 11:32:31  os
+    allow editing of indexes independent from the cursor position
+
     Revision 1.2  2000/10/20 13:42:18  jp
     use correct INetURL-Decode enum
 
