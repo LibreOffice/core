@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-20 08:13:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 07:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,7 @@ void OJoinController::Execute(sal_uInt16 _nId)
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
             break;
     }
+    InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )

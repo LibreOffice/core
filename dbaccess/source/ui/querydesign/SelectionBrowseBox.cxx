@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 07:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,6 +595,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 if((m_bOrderByUnRelated || pEntry->GetOrderDir() == ORDER_NONE) &&
                    (m_bGroupByUnRelated || !pEntry->IsGroupBy()))
                 {
+                    sal_Bool bOldValue = m_pVisibleCell->GetBox().GetSavedValue();
                     strOldCellContents = pEntry->IsVisible() ? g_strOne : g_strZero;
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
                 }
@@ -1664,6 +1665,8 @@ void OSelectionBrowseBox::CellModified()
         case BROW_VIS_ROW:
             {
                 OTableFieldDesc*    pEntry = (*static_cast<OQueryController*>(getDesignView()->getController())->getTableFieldDesc())[GetCurColumnId() - 1];
+                sal_Bool bOldValue = pEntry->IsVisible();
+
                 sal_uInt16 nIdx = m_pOrderCell->GetSelectEntryPos();
                 if(!m_bOrderByUnRelated && nIdx > 0 &&
                     nIdx != sal_uInt16(-1)          &&
@@ -1675,6 +1678,18 @@ void OSelectionBrowseBox::CellModified()
                 }
                 else
                     pEntry->SetVisible(m_pVisibleCell->GetBox().IsChecked());
+                m_pVisibleCell->GetBox().SaveValue();
+
+//              if(bOldValue != pEntry->IsVisible())
+//              {
+//                  String strOldCellContents =  bOldValue ? g_strOne : g_strZero;
+//                  // und noch die Undo-Action fuer das Ganze
+//                  OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
+//                  pUndoAct->SetCellIndex(GetCurRow());
+//                  pUndoAct->SetColId(GetCurColumnId());
+//                  pUndoAct->SetCellContents(strOldCellContents);
+//                  static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->AddUndoAction(pUndoAct);
+//              }
             }
             break;
     }
@@ -1973,7 +1988,7 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
             return String(nIdx);
         }
         default:
-            return GetCellText(nRow, nColId);
+            return GetCellText(nRow, (sal_uInt16)nColId);
     }
 }
 
@@ -2021,14 +2036,14 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
             pEntry->SetCriteria(nCellIndex - BROW_CRIT1_ROW, strNewText);
     }
 
-    RowModified(nCellIndex, nColId);
+    RowModified(nCellIndex, (sal_uInt16)nColId);
 
     // die entsprechende Feld-Beschreibung ist jetzt leer -> Visible auf sal_False (damit das konsistent mit normalen leeren Spalten ist)
     if (pEntry->IsEmpty())
         pEntry->SetVisible(sal_False);
 
     if (bWasEditing)
-        ActivateCell(nCellIndex, nColId);
+        ActivateCell(nCellIndex, (sal_uInt16)nColId);
 
     static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 }
