@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:08:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,10 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
                 _STRINGCONST( "JPG" ), nXOutFlags );
             if( !nErr )     // sonst fehlerhaft, da ist nichts auszugeben
             {
-                rLinkName = URIHelper::SmartRelToAbs( aGrfNm );
+                rLinkName = URIHelper::SmartRel2Abs(
+                        INetURLObject(aBaseURL),
+                        aGrfNm,
+                        URIHelper::GetMaybeFileHdl());
                 if ( HasCId() )
                     MakeCIdURL( rLinkName );
             }
@@ -280,12 +283,17 @@ void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
                 MakeCIdURL( rLinkName );
         }
         else
-            rLinkName = URIHelper::SmartRelToAbs( rLinkName );
+            rLinkName = URIHelper::SmartRel2Abs(
+                    INetURLObject(aBaseURL),
+                    rLinkName,
+                    URIHelper::GetMaybeFileHdl());
     }
     if( rLinkName.Len() )
     {   // <IMG SRC="..."[ rImgOptions]>
         rStrm << '<' << sHTML_image << ' ' << sHTML_O_src << "=\"";
-        HTMLOutFuncs::Out_String( rStrm, INetURLObject::AbsToRel( rLinkName ), eDestEnc ) << '\"';
+        HTMLOutFuncs::Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(
+                    aBaseURL,
+                    rLinkName ), eDestEnc ) << '\"';
         if ( rImgOptions.Len() )
             rStrm << rImgOptions.GetBuffer();
         rStrm << '>' << sNewLine << GetIndentStr();
