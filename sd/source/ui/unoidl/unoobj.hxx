@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 16:10:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,17 @@ public:
 
     // XEventsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    void setOldEffect( const com::sun::star::uno::Any& aValue );
+    void setOldTextEffect( const com::sun::star::uno::Any& aValue );
+    void setOldSpeed( const com::sun::star::uno::Any& aValue );
+    void setOldDimColor( const com::sun::star::uno::Any& aValue );
+    void setOldDimHide( const com::sun::star::uno::Any& aValue );
+    void setOldDimPrevious( const com::sun::star::uno::Any& aValue );
+    void setOldPresOrder( const com::sun::star::uno::Any& aValue );
+
+
 };
 
 struct SvEventDescription;
