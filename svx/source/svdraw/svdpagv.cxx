@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: tbe $ $Date: 2001-03-13 16:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
                  :pObj(_pObj)
                  ,xControl(_xControl)
                  ,bVisible(TRUE)
+                 ,bIsListening(FALSE)
                  ,bDisposed(FALSE)
                  ,nEvent(0)
                  ,pParent(_pParent)
@@ -191,6 +192,8 @@ SdrUnoControlRec::SdrUnoControlRec(SdrUnoControlList* _pParent, SdrUnoObj* _pObj
     if (xWindow.is())
     {
         xWindow->addWindowListener((awt::XWindowListener*)this);
+
+        StartListening();
 
         // Am Property fuer das DefaultControl lauschen um das Control eventuell auszutauschen
         uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
@@ -227,7 +230,7 @@ void SAL_CALL SdrUnoControlRec::disposing( const ::com::sun::star::lang::EventOb
     uno::Reference< awt::XControl > xSource( Source.Source, uno::UNO_QUERY);
     if (xSource.is())
     {
-        if (IsListening())
+        if (!IsVisible())
             StopListening();
 
         uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
@@ -278,7 +281,7 @@ void SAL_CALL SdrUnoControlRec::windowMoved( const ::com::sun::star::awt::Window
 void SAL_CALL SdrUnoControlRec::windowShown( const ::com::sun::star::lang::EventObject& e )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (IsListening())
+    if (!IsVisible())
         StopListening();
 
     bVisible = TRUE;
@@ -366,7 +369,7 @@ void SdrUnoControlRec::Clear(BOOL bDispose)
 {
     if (xControl.is())
     {
-        if (IsListening())
+        if (!IsVisible())
             StopListening();
 
         uno::Reference< awt::XWindow > xOldWindow(xControl, uno::UNO_QUERY);
@@ -454,18 +457,23 @@ void SdrUnoControlRec::ReplaceControl(uno::Reference< awt::XControl > _xControl)
 //------------------------------------------------------------------------------
 void SdrUnoControlRec::StartListening()
 {
-    if (xControl.is())
+    if (!IsListening())
     {
-        uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-        if (xSet.is())
-            xSet->addPropertyChangeListener(String(), this);
+        bIsListening = TRUE;
 
-        uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
-        if (xImg.is())
+        if (xControl.is())
         {
-            uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
-            if (xProducer.is())
-                xProducer->addConsumer(this);
+            uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->addPropertyChangeListener(String(), this);
+
+            uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
+            if (xImg.is())
+            {
+                uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
+                if (xProducer.is())
+                    xProducer->addConsumer(this);
+            }
         }
     }
 }
@@ -473,18 +481,23 @@ void SdrUnoControlRec::StartListening()
 //------------------------------------------------------------------------------
 void SdrUnoControlRec::StopListening()
 {
-    if (xControl.is())
+    if (IsListening())
     {
-        uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
-        if (xSet.is())
-            xSet->removePropertyChangeListener(String(), this);
+        bIsListening = FALSE;
 
-        uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
-        if (xImg.is())
+        if (xControl.is())
         {
-            uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
-            if (xProducer.is())
-                xProducer->removeConsumer(this);
+            uno::Reference< beans::XPropertySet > xSet(xControl->getModel(), uno::UNO_QUERY);
+            if (xSet.is())
+                xSet->removePropertyChangeListener(String(), this);
+
+            uno::Reference< form::XImageProducerSupplier > xImg(xSet, uno::UNO_QUERY);
+            if (xImg.is())
+            {
+                uno::Reference< awt::XImageProducer > xProducer = xImg->getImageProducer();
+                if (xProducer.is())
+                    xProducer->removeConsumer(this);
+            }
         }
     }
 }
