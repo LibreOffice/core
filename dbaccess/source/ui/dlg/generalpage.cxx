@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:32:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,22 @@
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
+
+#if defined(WIN) || defined(WNT)
+#define _ADO_DATALINK_BROWSE_
+#endif
+
+#ifdef _ADO_DATALINK_BROWSE_
+typedef void*               HWND;
+typedef void*               HMENU;
+#ifndef _SV_SYSDATA_HXX
+#include <vcl/sysdata.hxx>
+#endif
+#ifndef _DBAUI_ADO_DATALINK_HXX_
+#include "adodatalinks.hxx"
+#endif
+#endif //_ADO_DATALINK_BROWSE_
+
 
 //.........................................................................
 namespace dbaui
@@ -464,6 +480,7 @@ namespace dbaui
             case DST_TEXT:
             case DST_ADABAS:
             case DST_ODBC:
+            case DST_ADO:
             case DST_CALC:
             case DST_ADDRESSBOOK:
                 return sal_True;
@@ -1284,6 +1301,23 @@ namespace dbaui
                     return 1L;
             }
             break;
+#ifdef _ADO_DATALINK_BROWSE_
+            case DST_ADO:
+            {
+                ::rtl::OUString sOldDataSource=getURLNoPrefix();
+                ::rtl::OUString sNewDataSource;
+                HWND hWnd = GetParent()->GetSystemData()->hWnd;
+                sNewDataSource = getAdoDatalink((long)hWnd,sOldDataSource);
+                if ( sNewDataSource.getLength() )
+                {
+                    setURLNoPrefix(sNewDataSource);
+                    callModifiedHdl();
+                }
+                else
+                    return 1L;
+            }
+            break;
+#endif
             case DST_ADDRESSBOOK:
             {
                 ::rtl::OUString sAddressBookTypes[]=
@@ -1452,6 +1486,16 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36.40.2  2004/03/04 08:12:49  fs
+ *  #100000# needed a typedef to compile after resync
+ *
+ *  Revision 1.36.40.1  2004/02/13 11:55:36  yl146652
+ *  #i23384# Add browse dialog to ado data source
+ *
+ *  Revision 1.36  2003/09/04 08:32:54  obo
+ *  INTEGRATION: CWS oj4 (1.35.6); FILE MERGED
+ *  2003/06/24 10:02:45 oj 1.35.6.1: #110001# release rtl_uString after osl_getEnv call
+ *
  *  Revision 1.35.6.1  2003/06/24 10:02:45  oj
  *  #110001# release rtl_uString after osl_getEnv call
  *
