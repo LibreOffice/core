@@ -41,6 +41,14 @@ AC_ARG_WITH(perl-home,
  
                           Usage: --with-perl-home=<absolute path to Perl 5 home>
 ],,)
+AC_ARG_WITH(cl-home,
+[  --with-cl-home          for Windows NT users, please supply the MS-DOS format path (no spaces)
+                          for the Microsoft C/C++ compiler. 
+                          Note that this is not the location of the compiler binary but the
+                          location of the entire distribution.
+ 
+                          Usage: --with-cl-home=<absolute MS-DOS path to Microsoft C/C++ compiler home>
+],,)
 AC_ARG_WITH(local-solenv,
 [  --with-local-solenv     if you have solenv in a location other than OpenOffice/solenv,
                           please supply the path here.
@@ -323,14 +331,15 @@ if test "$_os" = "Darwin"; then
       fi
    fi
 fi     
+
 if test "$_os" = "WINNT"; then
-   AC_PATH_PROGS(_cl, cl)
-   COMPATH=`echo $_cl | $SED -n "s/\/cl//p"`
    AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-   if test -x "$_cl"; then
-      dnl compiler will do
+   dnl Check if there is a Microsoft C/C++ compiler.
+   if test -x "$with_cl_home/bin/cl"; then
+      COMPATH=$with_cl_home
       AC_MSG_RESULT([checked])
    else
+      COMPATH="NO_CL"
       AC_MSG_WARN([could not find Microsoft C/C++ Compiler])
       AC_MSG_WARN([could not find Microsoft C/C++ Compiler]) >> warn
    fi
@@ -764,9 +773,9 @@ fi
 # Executing the set_soenv script to setup the environment variables.
 if test -z "$enable_check_only"; then
    './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN
-   if test "$_os" = "WINNT"; then
-      mv WindowsNTEnv.bat ..
-   fi
+#   if test "$_os" = "WINNT"; then
+#     mv WindowsNTEnv.bat ..
+#   fi
 else
    echo
    echo Test Complete
