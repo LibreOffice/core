@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:02:56 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,9 +384,15 @@ Bug 29593: QuickHelp immer an der MausPosition anzeigen (besonders unter OS/2)
  ---------------------------------------------------------------------------*/
 Reference< XInterface > SwDPage::createUnoPage()
 {
-    Reference<XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
-    Reference<XDrawPageSupplier> xPageSupp(xModel, UNO_QUERY);
-    return xPageSupp->getDrawPage();
+    Reference < XInterface > xRet;
+    SwDocShell* pDocShell = rDoc.GetDocShell();
+    if ( pDocShell )
+    {
+        Reference<XModel> xModel = pDocShell->GetBaseModel();
+        Reference<XDrawPageSupplier> xPageSupp(xModel, UNO_QUERY);
+        xRet = xPageSupp->getDrawPage();
+    }
+    return xRet;
 }
 
 
