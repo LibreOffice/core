@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:59:30 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,7 +919,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
             else
             {
                 if ( pDoc->RemovePageStyleInUse( aString ) )
-                    pDocShell->PageStyleModified( STR_STANDARD, sal_True );
+                    pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), sal_True );
 
                 pStylePool->Erase( pStyle );
 
