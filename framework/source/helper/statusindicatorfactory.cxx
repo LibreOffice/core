@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:40 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,14 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -158,11 +166,9 @@ sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for r
 //*****************************************************************************************************************
 //  XInterface
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3     (   StatusIndicatorFactory                              ,
+DEFINE_XINTERFACE_1     (   StatusIndicatorFactory                              ,
                             OWeakObject                                         ,
-                            DIRECT_INTERFACE(css::task::XStatusIndicatorFactory ),
-                            DIRECT_INTERFACE(css::awt::XWindowListener          ),
-                            DIRECT_INTERFACE(css::lang::XEventListener          )
+                            DIRECT_INTERFACE(css::task::XStatusIndicatorFactory )
                         )
 
 /*-************************************************************************************************************//**
@@ -184,7 +190,7 @@ DEFINE_XINTERFACE_3     (   StatusIndicatorFactory                              
     @threadsafe yes
 *//*-*************************************************************************************************************/
 StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
-                                                const css::uno::Reference< css::awt::XWindow >&               xParentWindow ,
+                                                const css::uno::Reference< css::frame::XFrame >&              xFrame        ,
                                                       sal_Bool                                                bShowStatusBar)
         //  Init baseclasses first
         :   ThreadHelpBase      ( &Application::GetSolarMutex() )
@@ -192,14 +198,11 @@ StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::
         ,   ::cppu::OWeakObject (                               )
         // Init member
         ,   m_xFactory          ( xFactory                      )
-        ,   m_xParentWindow     ( xParentWindow                 )
-        ,   m_pStatusBar        ( NULL                          )
         ,   m_bProgressMode     ( sal_False                     )
+        ,   m_xFrame            ( xFrame                        )
 {
     try
     {
-        m_xParentWindow->addWindowListener( this );
-
         // Don't forget to open instance for normal working!
         m_aTransactionManager.setWorkingMode( E_WORK );
 
@@ -225,7 +228,6 @@ StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::
 *//*-*************************************************************************************************************/
 StatusIndicatorFactory::~StatusIndicatorFactory()
 {
-    LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "StatusIndicatorFactory::~StatusIndicatorFactory()", "Object wasn't disposed! WHY?" )
 }
 
 /*-************************************************************************************************************//**
@@ -261,129 +263,6 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
     css::uno::Reference< css::task::XStatusIndicator > xIndicator( static_cast< ::cppu::OWeakObject* >(pIndicator), css::uno::UNO_QUERY );
 
     return xIndicator;
-}
-
-/*-************************************************************************************************************//**
-    @interface  com.sun.star.awt.XWindowListener
-    @short      some listener callbacks for window events
-    @descr      We know our parent and the window of our shared status indicator to show our informations realy.
-                If somewhere change the parent window, we must actualize the progress window too. That's why
-                we are listener for some events and use it to recalc our layout.
-
-    @attention  Impl-Method is threadsafe by herself. We don't need any lock here.
-
-    @seealso    method impl_recalcLayout()
-
-    @param      "aEvent", describe source of this callback.
-    @return     -
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void SAL_CALL StatusIndicatorFactory::windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException )
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    implts_recalcLayout();
-}
-
-//*****************************************************************************************************************
-void SAL_CALL StatusIndicatorFactory::windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException )
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    implts_recalcLayout();
-}
-
-//*****************************************************************************************************************
-void SAL_CALL StatusIndicatorFactory::windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
-{
-    // Our progress window is always visible. Parent window regulate visible state of both windows by his own state.
-    // So it works automaticly!
-}
-
-//*****************************************************************************************************************
-void SAL_CALL StatusIndicatorFactory::windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
-{
-    // Our progress window is always visible. Parent window regulate visible state of both windows by his own state.
-    // So it works automaticly!
-}
-
-/*-************************************************************************************************************//**
-    @interface  com.sun.star.lang.XEventListener
-    @short      information callback for disposing of our owner
-    @descr      If our owner frame will die - he tell us this by calling this method. So we should dispose all our
-                child indicator objects and forget references to used services and our owner. After that this instance
-                isn't ready for working any longer.
-
-    @attention  Don't look on event source. We are listener on different services. But if one of them will die we can't work
-                any longer. So we can forget ALL references and die insteandly. It's better then checking for valid members
-                in every interface method!
-
-    @seealso    -
-
-    @param      "aEvent", describe source of this callback.
-    @return     -
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException )
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
-
-    // Prevent code against multiple disposing calls!
-    // Do it by using exclusiv access (write lock) ... !!! Otherwhise we cant guarantee
-    // right calling of this method in a multithreaded environment.
-    // May be two calls could pass this barrier before first call stop real working of this object by calling of
-    // "setWorkingMode()".
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // Close object for real working. We are dead. Only some (realy) neccessary calls on this instance are allowed.
-    // => look for "SOFTEXCEPTIONS" in this code!
-    // This call blocks till all currently registered transactions are gone.
-    // That's why we must release our own transaction before!!!
-    aTransaction.stop();
-    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
-
-    // Prevent us against dieing during this method is called!
-    // May be last owner of this instance release all references to us.
-    css::uno::Reference< css::uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-
-    // Lock isn't neccessary any longer. We should be alone now!
-    // All further calls are rejected with an exception ...
-    aLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-
-    try
-    {
-        // Let owner, parent and all other references die ...
-        m_xParentWindow     = css::uno::Reference< css::awt::XWindow >();
-        m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
-        m_xActiveIndicator  = css::uno::Reference< css::task::XStatusIndicator >();
-
-        // Forget all currently registered child indicator objects.
-        // We mustn't dispose these objects! The hold weak references to us ...
-        // and if these references are not valid ... they will die automaticly.
-        m_aStack.clear();
-
-        if (m_pStatusBar)
-        {
-            delete m_pStatusBar;
-            m_pStatusBar = NULL;
-        }
-
-        // Mark object as dead!
-        m_aTransactionManager.setWorkingMode( E_CLOSE );
-    }
-    catch( css::uno::RuntimeException& )
-    {
-    }
 }
 
 /*-************************************************************************************************************//**
@@ -450,15 +329,17 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
         vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Create status indicator window to shared it for all created indictaor objects by this factory.
-        if(!m_pStatusBar)
+        if(!m_xProgress.is())
             impl_createStatusBar();
 
         if(!m_bProgressMode)
         {
-            m_xParentWindow->setVisible( sal_True );
-            implts_recalcLayout();
-            m_pStatusBar->Show();
-            m_pStatusBar->StartProgressMode( sText );
+            css::uno::Reference< css::awt::XWindow > xParentWindow = implts_getParentWindow();
+            if ( xParentWindow.is() )
+                xParentWindow->setVisible( sal_True );
+
+            if ( m_xProgress.is() )
+                m_xProgress->start( sText, nRange );
             m_bProgressMode = sal_True;
         }
 
@@ -480,15 +361,39 @@ void StatusIndicatorFactory::impl_createStatusBar()
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
+    css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame ); // make reference hard
+    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
 
-    Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    if (xPropSet.is())
+    {
+        css::uno::Any a;
+        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
+        a >>= xLayoutManager;
+        if ( xLayoutManager.is() )
+        {
+            rtl::OUString aProgressBarResStr = DECLARE_ASCII( "private:resource/progressbar/progressbar" );
+            xLayoutManager->createElement( aProgressBarResStr );
+            xLayoutManager->showElement( aProgressBarResStr );
+
+            css::uno::Reference< drafts::com::sun::star::ui::XUIElement > xProgressBar =
+                xLayoutManager->getElement( aProgressBarResStr );
+            if ( xProgressBar.is() )
+            {
+                m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(
+                    xProgressBar->getRealInterface(), css::uno::UNO_QUERY );
+            }
+        }
+    }
+    aLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    css::uno::Reference< css::awt::XWindow > xParentWindow = implts_getParentWindow();
+    Window* pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
     if ( pParentWindow )
     {
         /* SOLAR SAFE { */
         ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
-        m_pStatusBar = new StatusBar( pParentWindow, WB_3DLOOK|WB_BORDER );
-        implts_recalcLayout();
-        m_pStatusBar->Show();
         // force repaint!
         pParentWindow->Show();
         pParentWindow->Invalidate( INVALIDATE_CHILDREN );
@@ -496,8 +401,35 @@ void StatusIndicatorFactory::impl_createStatusBar()
         aSolarLock.clear();
         /* } SOLAR SAFE */
     }
+}
 
+css::uno::Reference< css::awt::XWindow > StatusIndicatorFactory::implts_getParentWindow()
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register transaction and reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ResetableGuard aLock( m_aLock );
+
+    css::uno::Reference< css::awt::XWindow > xWindow;
+    css::uno::Reference< css::frame::XFrame > xFrame;
+
+    xFrame = m_xFrame;
     aLock.unlock();
+
+    if ( xFrame.is() )
+    {
+        try
+        {
+            xWindow = xFrame->getContainerWindow();
+        }
+        catch ( css::uno::Exception& )
+        {
+        }
+    }
+
+    return xWindow;
 }
 
 /*-************************************************************************************************************//**
@@ -538,28 +470,26 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     {
         try
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-
             IndicatorStack::reverse_iterator pInfo = m_aStack.rbegin();
             if( pInfo != m_aStack.rend() )
             {
                 m_xActiveIndicator = pInfo->m_xIndicator;
-                m_pStatusBar->SetProgressValue( (USHORT)pInfo->m_nValue );
-                m_pStatusBar->SetText( pInfo->m_sText );
+                if ( m_xProgress.is() )
+                {
+                    m_xProgress->setValue( (USHORT)pInfo->m_nValue );
+                    m_xProgress->setText( pInfo->m_sText );
+                }
             }
             else
             {
-                m_pStatusBar->EndProgressMode();
-                m_pStatusBar->Show( sal_False );
+                if ( m_xProgress.is() )
+                    m_xProgress->end();
 
                 // Destroy shared status indicator.
                 // Attention: Don't do it after destroying of parent or indicator window!
                 // Otherwhise vcl say: "parent with living child destroyed ..."
-                delete m_pStatusBar;
-                m_pStatusBar = NULL;
-
+                m_xProgress.clear();
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
-
                 m_bProgressMode = sal_False;
             }
         }
@@ -612,9 +542,8 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
     {
         try
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pStatusBar->SetProgressValue( 0 );
-            m_pStatusBar->SetText( String() );
+            if ( m_xProgress.is() )
+                m_xProgress->reset();
         }
         catch( css::uno::RuntimeException& )
         {
@@ -643,8 +572,8 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     {
         try
         {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pStatusBar->SetText( sText );
+            if ( m_xProgress.is() )
+                m_xProgress->setText( sText );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -668,22 +597,17 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
 
     IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
 
-    USHORT nOldPercentage = (USHORT)pItem->calcPercentage();
+    sal_Int32 nOldValue = pItem->m_nValue;
     pItem->m_nValue = nValue;
 
     if( xChild == m_xActiveIndicator )
     {
         try
         {
-            USHORT nNewPercentage = (USHORT)pItem->calcPercentage();
-
             // Set new value only if its new! StatusBar implementation redraws despite the fact
             // that the value isn't new!!!
-            if ( nNewPercentage != nOldPercentage )
-            {
-                vos::OGuard aGuard( Application::GetSolarMutex() );
-                m_pStatusBar->SetProgressValue( nNewPercentage );
-            }
+            if (( nOldValue != nValue ) && m_xProgress.is() )
+                m_xProgress->setValue( nValue );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -741,48 +665,6 @@ sal_uInt32 StatusIndicatorFactory::impl_get10ThSec()
 {
     sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
     return n10Ticks / CLOCKS_PER_SEC;
-}
-
-/*-************************************************************************************************************//**
-    @interface  -
-    @short      helper to resize/move indicator window relative to parent window
-    @descr      We are listener on our parent window for move/resize events. So we can re-layout our indicator
-                window.
-
-    @seealso    method windowResized()
-    @seealso    method windowMoved()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void StatusIndicatorFactory::implts_recalcLayout()
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ResetableGuard aLock( m_aLock );
-
-    try
-    {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        {
-            if( m_pStatusBar != NULL )
-            {
-                css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize(); // bug on toolkit! They doesn't use solar mutex by herself so we do it here.
-                Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
-
-                m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
-            }
-        }
-    }
-    catch( css::uno::RuntimeException& )
-    {
-    }
 }
 
 }       //  namespace framework
