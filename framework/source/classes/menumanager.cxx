@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:41:25 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -783,20 +783,21 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
 
     if ( xDesktop.is() )
     {
-        Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+        Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
         Reference< XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-        Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
-        while (( xList->hasMoreElements() == sal_True ))
+        Reference< XIndexAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
+        sal_Int32 nCount = xList->getCount();
+        for (sal_Int32 i=0; i<nCount; ++i )
         {
-            Reference< XTask > xTask;
-            xList->nextElement() >>= xTask;
-            if ( xTask.is() )
+            Any aItem = xList->getByIndex(i);
+            Reference< XFrame > xFrame;
+            aItem >>= xFrame;
+            if (xFrame.is())
             {
-                Reference< XFrame > xFrame( xTask, UNO_QUERY );
                 if ( xFrame == xCurrentFrame )
                     nActiveItemId = nItemId;
 
-                Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWin && pWin->IsVisible() )
                 {
                     aNewWindowListVector.push_back( pWin->GetText() );
@@ -1050,22 +1051,23 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                  nCurItemId <= END_ITEMID_WINDOWLIST )
             {
                 // window list menu item selected
-                Reference< XTasksSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+                Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
                                                 DESKTOP_SERVICE ), UNO_QUERY );
                 USHORT  nWindowItemId = START_ITEMID_WINDOWLIST;
 
                 if ( xDesktop.is() )
                 {
                     USHORT nTaskId = START_ITEMID_WINDOWLIST;
-                    Reference< XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-                    while (( xList->hasMoreElements() == sal_True ))
+                    Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
+                    sal_Int32 nCount = xList->getCount();
+                    for ( sal_Int32 i=0; i<nCount; ++i )
                     {
-                        Reference< XTask > xTask;
-                        xList->nextElement() >>= xTask;
-
-                        if ( xTask.is() && nTaskId == nCurItemId )
+                        Any aItem = xList->getByIndex(i);
+                        Reference< XFrame > xFrame;
+                        aItem >>= xFrame;
+                        if ( xFrame.is() && nTaskId == nCurItemId )
                         {
-                            Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
+                            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                             pWin->GrabFocus();
                             break;
                         }

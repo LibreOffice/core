@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:13:31 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,9 +386,8 @@ class FrameContainer : private ThreadHelpBase
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        css::uno::Reference< css::frame::XFrame > searchDeepDown        ( const ::rtl::OUString& sName ) const;
-        css::uno::Reference< css::frame::XFrame > searchFlatDown        ( const ::rtl::OUString& sName ) const;
-        css::uno::Reference< css::frame::XFrame > searchDirectChildren  ( const ::rtl::OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const ::rtl::OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const ::rtl::OUString& sName ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods

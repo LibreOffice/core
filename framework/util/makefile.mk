@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: as $ $Date: 2002-05-02 11:43:37 $
+#   last change: $Author: as $ $Date: 2002-05-23 12:54:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -224,8 +224,6 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
                 $(SLO)$/oframes.obj					\
                 $(SLO)$/opluginframedispatcher.obj	\
-                $(SLO)$/otasksaccess.obj			\
-                $(SLO)$/otasksenumeration.obj		\
                 $(SLO)$/pluginframe.obj				\
                 $(SLO)$/registerservices.obj		\
                 $(SLO)$/selfdispatcher.obj			\
@@ -233,7 +231,6 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/statusindicator.obj			\
                 $(SLO)$/statusindicatorfactory.obj	\
                 $(SLO)$/targetfinder.obj		  	\
-                $(SLO)$/task.obj					\
                 $(SLO)$/taskcreator.obj		  		\
                  $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\

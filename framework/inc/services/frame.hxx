@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 13:50:53 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,9 +206,17 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _VCL_EVNTPOST_HXX
+#include <vcl/evntpost.hxx>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
 #include <svtools/cmdoptions.hxx>
@@ -240,7 +248,7 @@ namespace framework{
 //  exported const
 //_________________________________________________________________________________________________________________
 
-// This enum can be used to set differnt active states of frames, tasks.
+// This enum can be used to set differnt active states of frames
 enum EActiveState
 {
     E_INACTIVE      ,   // I'am not a member of active path in tree and i don't have the focus.
@@ -252,13 +260,10 @@ enum EActiveState
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-//class FrameDataContainer;
-
 /*-************************************************************************************************************//**
     @short      implements a normal frame of hierarchy
-    @descr      An instance of these class can be a normal node in frame tree only. The highest level to be allowed is 3!
-                On 1 stand the desktop himself as the only one, on 2 are all tasks present ... and then comes frames only.
-                A frame support influencing of his subtree, find of subframes, activate- and deactivate-mechanism as well as
+    @descr      An instance of these class can be a normal node in frame tree. A frame support influencing of his
+                subtree, find of subframes, activate- and deactivate-mechanism as well as
                 set/get of a frame window, component or controller.
 
     @attention  This implementation supports three states: a)uninitialized, b)working, c)disposed
@@ -270,36 +275,20 @@ enum EActiveState
                     iv)     dispose object by calling XComponent::dispose()
                 After iv) all further requests are rejected by exceptions! (DisposedException)
 
-    @implements XInterface
-                XTypeProvider
-                XServiceInfo
-                XFramesSupplier
-                XFrame
-                XComponent
-                XStatusIndicatorFactory
-                XDispatchProvider
-                XDispatchInformationProvider
-                XDispatchProviderInterception
-                XMultiPropertySet
-                XFastPropertySet
-                XPropertySet
-                XWindowListener
-                XTopWindowListener
-                XFocusListener
-                XEventListener
-                XActionLockable
-
-    @base       MutexBase
-                ThreadHelpBase
-                TransactionBase
-                OBroadcastHelper
+    @base       ThreadHelpBase
+                    help to guarantee correct initialized lock member at startup
+    @base       TransactionBase
+                    help to implement unbreakable interface calls
+    @base       OBroadcastHelper
                 OPropertySetHelper
-                OWeakObject
+                    implements the property set
+    @base       OWeakObject
+                    provides the refcount and XInterface, XWeak
 
     @devstatus  ready to use
     @threadsafe yes
+    @modified   08.05.2002 09:38, as96863
 *//*-*************************************************************************************************************/
-
 class Frame :   // interfaces
                 public  css::lang::XTypeProvider                    ,
                 public  css::lang::XServiceInfo                     ,
@@ -312,6 +301,7 @@ class Frame :   // interfaces
                 public  css::awt::XTopWindowListener                ,
                 public  css::awt::XFocusListener                    ,
                 public  css::document::XActionLockable              ,
+                public  css::util::XCloseable                       ,   // => XCloseBroadcaster
                 // base classes
                 // Order is neccessary for right initialization of this class!
                 public  ThreadHelpBase                              ,   // helper for own threadsafe code
@@ -414,12 +404,12 @@ class Frame :   // interfaces
 
         //---------------------------------------------------------------------------------------------------------
         //  XTopWindowListener
-        //  Attention: windowActivated() and windowDeactivated() are implement only! All other are empty!
+        //  Attention: windowActivated(), windowDeactivated() and windowClosing() are implement only! All other are empty!
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL windowActivated                    (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowDeactivated                  (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowOpened                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
-        virtual void                                                SAL_CALL windowClosing                      (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowClosing                      (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowClosed                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowMinimized                    (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowNormalized                   (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
@@ -445,6 +435,18 @@ class Frame :   // interfaces
         virtual void        SAL_CALL removeActionLock(                 ) throw( css::uno::RuntimeException );
         virtual void        SAL_CALL setActionLocks  ( sal_Int16 nLock ) throw( css::uno::RuntimeException );
         virtual sal_Int16   SAL_CALL resetActionLocks(                 ) throw( css::uno::RuntimeException );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XCloseable
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL close( sal_Bool bDeliverOwnerShip ) throw( css::util::CloseVetoException,
+                                                                         css::uno::RuntimeException   );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XCloseable
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL addCloseListener   ( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException);
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -480,10 +482,6 @@ class Frame :   // interfaces
         *//*-*****************************************************************************************************/
 
         // threadsafe
-//        void                                                  implts_setContainerWindow       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
-        void                                                    implts_setComponentWindow       ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
-        sal_Bool                                                implts_setComponent             ( const css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
-                                                                                                  const css::uno::Reference< css::frame::XController >& xController      );
         void                                                    implts_sendFrameActionEvent     ( const css::frame::FrameAction&                        aAction          );
         void                                                    implts_resizeComponentWindow    (                                                                        );
         void                                                    implts_setTitleOnWindow         ( const ::rtl::OUString&                                sTitle           );
@@ -491,6 +489,12 @@ class Frame :   // interfaces
         void                                                    implts_setIconOnWindow          (                                                                        );
         void                                                    implts_startWindowListening     (                                                                        );
         void                                                    implts_stopWindowListening      (                                                                        );
+        void                                                    implts_saveWindowAttributes     (                                                                        );
+        void                                                    implts_checkSuicide             (                                                                        );
+        DECL_LINK( implts_windowClosing, void* );
+
+sal_Bool impl_setComponent(  const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
+                             const   css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException );
 
         // non threadsafe
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
@@ -576,9 +580,12 @@ class Frame :   // interfaces
         sal_Int16                                                               m_nExternalLockCount                ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier         ;   /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
         SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
+        sal_Bool                                                                m_bSelfClose                        ;   /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
+        ::vcl::EventPoster                                                      m_aPoster                           ;
 
     protected:
 
+        sal_Bool                                                                m_bIsPlugIn                         ;   /// In objects of these class this member is set to FALSE. But in derived class PlugInFrame it's overwritten with TRUE!
         FrameContainer                                                          m_aChildFrameContainer              ;   /// array of child frames
 
         inline css::uno::Reference< css::lang::XMultiServiceFactory > impl_getFactory()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:18:26 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #ifndef __FRAMEWORK_DESKTOP_HXX_
 #include <services/desktop.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_OTASKSACCESS_HXX_
-#include <helper/otasksaccess.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
@@ -187,6 +183,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -524,24 +524,30 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
         for( sal_Int32 nPosition=0; nPosition<nCount; ++nPosition )
         {
             // Get an element from container and cast it to task.
-            // IT MUST BE A TASK! Childs of desktop everytime tasks. No pure frames accepted!
-            // It can be a plugin too, but a plugin is derived from a task ...!
-            css::uno::Reference< css::frame::XTask > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XCloseable > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
             // Ask task for terminating. If anyone say "NO" ...
-            // ... we must reset oer default return value to "NO" too!
+            // ... we must reset our default return value to "NO" too!
             try
             {
-                if( xTask->close() == sal_False )
-                {
-                    bTaskVeto = sal_True;
-                    break;
-                }
+                // Don't deliver ownershipt of this task to any other one! => means call close(sal_False).
+                xTask->close(sal_False);
+                // Don't remove the task from our child container!
+                // A task do it by herself inside close ...
+            }
+            catch( css::util::CloseVetoException& )
+            {
+                // Any internal process of this task disagree with our request.
+                // Safe this state and break this loop. Following task willn't be asked!
+                bTaskVeto = sal_True;
+                break;
             }
             catch( css::lang::DisposedException& )
             {
                 // Task already closed by another thread or user ...
                 // It doesn't matter! Because dead is dead is dead ...!
                 // Do nothing and try to close next one.
+                // But may it's agood idea to release this task from our container
+                m_aChildTaskContainer.remove( lTasks[nPosition] );
             }
         }
     }
@@ -931,7 +937,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
             // ... but nothing is perfect here ... it's a hack currently and shouldn't occure in current
             // implementation.
             LOG_WARNING("Desktop::loadComponentFromURL()", "Missing interface XNotifyingDispatch. Return NULL!")
-            css::uno::Reference< css::frame::XTask > xClosable( xSysTask, css::uno::UNO_QUERY );
+            css::uno::Reference< css::util::XCloseable > xClosable( xSysTask, css::uno::UNO_QUERY );
             if(
                     bPlugin &&
                     xClosable.is() &&
@@ -941,7 +947,13 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                     )
               )
             {
-                xClosable->close();
+                try
+                {
+                    xClosable->close(sal_True);
+                }
+                catch( css::util::CloseVetoException& )
+                {
+                }
             }
             return xComponent;
         }
@@ -1026,13 +1038,15 @@ But; Don't forget - you will be the owner of returned object and must release it
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    LOG_WARNING("Desktop::getTasks()", "Use of obsolete interface XTaskSupplier")
+    return NULL;
+    /*
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     OTasksAccess* pTasksAccess = new OTasksAccess( this, &m_aChildTaskContainer );
     css::uno::Reference< css::container::XEnumerationAccess > xAccess( static_cast< ::cppu::OWeakObject* >(pTasksAccess), css::uno::UNO_QUERY );
     return xAccess;
+    */
 }
 
 /*-************************************************************************************************************//**
@@ -1055,11 +1069,13 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    /*
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     return css::uno::Reference< css::frame::XTask >( m_aChildTaskContainer.getActive(), css::uno::UNO_QUERY );
+    */
+    LOG_WARNING("Desktop::getActiveTask()", "Use of obsolete interface XTaskSupplier")
+    return NULL;
 }
 
 /*-************************************************************************************************************//**
@@ -1209,46 +1225,47 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() thr
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::initialize()", "Not implemented! Desktop has no window." )
 }
 
 //*****************************************************************************************************************
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getContainerWindow() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::getContainerWindow()", "Not implemented! Desktop has no window." )
     return css::uno::Reference< css::awt::XWindow >();
 }
 
 //*****************************************************************************************************************
 void SAL_CALL Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::setCreator()", "Not implemented! Desktop has no parent." )
 }
 
 //*****************************************************************************************************************
 css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::getCreator()", "Not implememted! Desktop has no parent." )
     return css::uno::Reference< css::frame::XFramesSupplier >();
 }
 
 //*****************************************************************************************************************
 ::rtl::OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::getName()", "Not implemented! Desktop could not have any valid name!" )
-    return ::rtl::OUString();
+    /* SAFE { */
+    ReadGuard aReadLock( m_aLock );
+    return m_sName;
+    /* } SAFE */
 }
 
 //*****************************************************************************************************************
 void SAL_CALL Desktop::setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::setName()", "Not implemented! Desktop could not have any valid name!" )
+    /* SAFE { */
+    WriteGuard aWriteLock( m_aLock );
+    m_sName = sName;
+    aWriteLock.unlock();
+    /* } SAFE */
 }
 
 //*****************************************************************************************************************
 sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::isTop()", "Not implemented! Desktop is top every time!" )
     return sal_True;
 }
 
@@ -1271,7 +1288,6 @@ void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException )
 //*****************************************************************************************************************
 sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::isActive()", "Not implemented! Desktop is active every time!" )
     return sal_True;
 }
 
@@ -1279,34 +1295,29 @@ sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException )
 sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       xComponentWindow ,
                                          const css::uno::Reference< css::frame::XController >& xController      ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::setComponent()", "Not implemented! No component allowed on desktop." )
     return sal_False;
 }
 
 //*****************************************************************************************************************
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getComponentWindow() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::getComponentWindow()", "Not implemented! No component allowed on desktop." )
     return css::uno::Reference< css::awt::XWindow >();
 }
 
 //*****************************************************************************************************************
 css::uno::Reference< css::frame::XController > SAL_CALL Desktop::getController() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::getController()", "Not implemented! No controller allowed on desktop." )
     return css::uno::Reference< css::frame::XController >();
 }
 
 //*****************************************************************************************************************
 void SAL_CALL Desktop::contextChanged() throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::contextChanged()", "Not implemented! Desktop has no component." )
 }
 
 //*****************************************************************************************************************
 void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::addFrameActionListener()", "Not implemented! There is no component inside." )
 }
 
 //*****************************************************************************************************************
@@ -1314,7 +1325,6 @@ void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::f
 //*****************************************************************************************************************
 void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    LOG_ERROR( "Desktop::addFrameActionListener()", "Not implemented! There is no component inside." )
 }
 
 /*-************************************************************************************************************//**
@@ -1347,76 +1357,152 @@ void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css
 css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::rtl::OUString& sTargetFrameName ,
                                                                              sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    LOG_ASSERT2( implcp_findFrame( sTargetFrameName, nSearchFlags ), "Desktop::findFrame()", "Invalid parameter detected." )
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    css::uno::Reference< css::frame::XFrame > xTarget;
 
-    // Log some important informations in special debug mode!
-    LOG_PARAMETER_FINDFRAME( "Desktop", ::rtl::OUString(), sTargetFrameName, nSearchFlags )
+    //-----------------------------------------------------------------------------------------------------
+    // 0) Ignore wrong parameter!
+    //    We doesn't support search for following special targets.
+    //    If we reject this requests - we mustnt check for such names
+    //    in following code again and again. If we do not so -wrong
+    //    search results can occure!
+    //-----------------------------------------------------------------------------------------------------
+    if (
+        (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
+        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
+        (sTargetFrameName==SPECIALTARGET_HELPAGENT)   ||    // valid for dispatches - not for findFrame()!
+        (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
+        (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
+                                                            // and they exist more then ones. We have no idea which our sub tasks is the right one
+       )
+    {
+        return NULL;
+    }
 
-    // Set default return value if method failed.
-    css::uno::Reference< css::frame::XFrame > xSearchedFrame;
+    //-----------------------------------------------------------------------------------------------------
+    // I) check for special defined targets first which must be handled exclusive.
+    //    force using of "if() else if() ..."
+    //-----------------------------------------------------------------------------------------------------
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // get threadsafe some neccessary member which are neccessary for following functionality
+    /* SAFE { */
     ReadGuard aReadLock( m_aLock );
-
     css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
-    css::uno::Reference< css::frame::XFrame >              xThis    ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-
     aReadLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    /* } SAFE */
 
-    // Ask helper for right decision for given parameter.
-    TargetInfo   aInfo   ( sTargetFrameName, nSearchFlags, E_DESKTOP, m_aChildTaskContainer.hasElements(), sal_False, ::rtl::OUString(), ::rtl::OUString() );
-    ETargetClass eResult = TargetFinder::classifyFindFrame( aInfo );
-    switch( eResult )
+    //-----------------------------------------------------------------------------------------------------
+    // I.I) "_blank"
+    //  create a new task as child of this desktop instance
+    //  Note: Used helper TaskCreator use us automaticly ...
+    //-----------------------------------------------------------------------------------------------------
+    if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
-        case E_CREATETASK   :   {
-                                    // Set visible state to FALSE - because; we cant support headless office otherwise!
-                                    // No additional informations are available ... so we should use a compromise ...
-                                    TaskInfo aCreateInfo( xFactory, xThis, sTargetFrameName, sal_False );
-                                    xSearchedFrame = TaskCreator::createSystemTask( aCreateInfo );
-                                }
-                                break;
-        case E_TASKS        :   {
-                                    xSearchedFrame = m_aChildTaskContainer.searchDirectChildren( sTargetFrameName );
-                                }
-                                break;
-        case E_DEEP_DOWN    :   {
-                                    xSearchedFrame = m_aChildTaskContainer.searchDeepDown( sTargetFrameName );
-                                }
-                                break;
-        case E_FLAT_DOWN    :   {
-                                    xSearchedFrame = m_aChildTaskContainer.searchFlatDown( sTargetFrameName );
-                                }
-                                break;
-        #ifdef ENABLE_WARNINGS
-        default             :   {
-                                    if( eResult != E_UNKNOWN )
-                                    {
-                                        LOG_ERROR( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
-                                    }
-                                }
-                                break;
-        #endif
+        TaskCreator aCreator(xFactory);
+        xTarget = aCreator.createTask(::rtl::OUString(),sal_False);
     }
 
-    // If no right target could be found - but CREATE flag was set ... do it; create a new task.
-    if  (
-            ( xSearchedFrame.is()    ==  sal_False )   &&
-            ( aInfo.bCreationAllowed ==  sal_True  )
-        )
+    //-----------------------------------------------------------------------------------------------------
+    // I.II) "_top"
+    //  We are top by definition
+    //-----------------------------------------------------------------------------------------------------
+    else
+    if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
-        TaskInfo aCreateInfo( xFactory, xThis, sTargetFrameName, sal_False );
-        xSearchedFrame = TaskCreator::createSystemTask( aCreateInfo );
+        xTarget = this;
     }
 
-    LOG_RESULT_FINDFRAME( "Desktop", m_sName, xSearchedFrame )
+    //-----------------------------------------------------------------------------------------------------
+    // I.III) "_self", ""
+    //  This mean this "frame" in every case.
+    //-----------------------------------------------------------------------------------------------------
+    else
+    if (
+        ( sTargetFrameName==SPECIALTARGET_SELF ) ||
+        ( sTargetFrameName.getLength()<1       )
+       )
+    {
+        xTarget = this;
+    }
 
-    // return result of operation.
-    return xSearchedFrame;
+    else
+    {
+        //-------------------------------------------------------------------------------------------------
+        // II) otherwhise use optional given search flags
+        //  force using of combinations of such flags. means no "else" part of use if() statements.
+        //  But we ust break further searches if target was already found.
+        //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
+        //  TASK and CREATE are handled special.
+        //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
+        //-------------------------------------------------------------------------------------------------
+
+        // get threadsafe some neccessary member which are neccessary for following functionality
+        /* SAFE { */
+        aReadLock.lock();
+        ::rtl::OUString sOwnName = m_sName;
+        aReadLock.unlock();
+        /* } SAFE */
+
+        //-------------------------------------------------------------------------------------------------
+        // II.I) SELF
+        //  Check for right name. If it's the searched one return ourself - otherwhise
+        //  ignore this flag.
+        //-------------------------------------------------------------------------------------------------
+        if (
+            (nSearchFlags &  css::frame::FrameSearchFlag::SELF)  &&
+            (sOwnName     == sTargetFrameName                 )
+           )
+        {
+            xTarget = this;
+        }
+
+        //-------------------------------------------------------------------------------------------------
+        // II.II) TASKS
+        //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
+        //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
+        //  a special feature: We use it to start search on our direct childrens only. That means we supress
+        //  search on ALL child frames. May that can be usefull to get access on opened document tasks
+        //  only without filter out all non realy required sub frames ...
+        //  Used helper method on our container doesn't create any frame - its a search only.
+        //-------------------------------------------------------------------------------------------------
+        if (
+            ( ! xTarget.is()                                  ) &&
+            (nSearchFlags & css::frame::FrameSearchFlag::TASKS)
+           )
+        {
+            xTarget = m_aChildTaskContainer.searchOnDirectChildrens(sTargetFrameName);
+        }
+
+        //-------------------------------------------------------------------------------------------------
+        // II.III) CHILDREN
+        //  Search on all children for the given target name.
+        //  An empty name value can't occure here - because it must be already handled as "_self"
+        //  before. Used helper function of container doesn't create any frame.
+        //  It makes a deep search only.
+        //-------------------------------------------------------------------------------------------------
+        if (
+            ( ! xTarget.is()                                     ) &&
+            (nSearchFlags & css::frame::FrameSearchFlag::CHILDREN)
+           )
+        {
+            xTarget = m_aChildTaskContainer.searchOnAllChildrens(sTargetFrameName);
+        }
+
+        //-------------------------------------------------------------------------------------------------
+        // II.IV) CREATE
+        //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
+        //  a new one ... we should do that. Used TaskCreator use us automaticly as parent!
+        //-------------------------------------------------------------------------------------------------
+        if (
+            ( ! xTarget.is()                                   )    &&
+            (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
+           )
+        {
+            TaskCreator aCreator(xFactory);
+            xTarget = aCreator.createTask(sTargetFrameName,sal_False);
+        }
+    }
+
+    return xTarget;
 }
 
 /*-************************************************************************************************************//**
@@ -1888,11 +1974,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
-#if SUPD>640
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException)
-#else
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo()
-#endif
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.

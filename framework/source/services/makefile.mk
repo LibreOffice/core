@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: as $ $Date: 2001-12-05 13:27:37 $
+#   last change: $Author: as $ $Date: 2002-05-23 12:54:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ SLOFILES=			\
                                         $(SLO)$/documentlist.obj                                                             \
                     $(SLO)$/desktop.obj								\
                     $(SLO)$/pluginframe.obj							\
-                    $(SLO)$/task.obj								\
                     $(SLO)$/frame.obj								\
                     $(SLO)$/frameloaderfactory.obj					\
                     $(SLO)$/filterfactory.obj						\

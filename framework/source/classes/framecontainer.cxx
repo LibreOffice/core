@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-22 08:13:27 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:51:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,7 @@ void FrameContainer::disableQuitTimer()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Reference< XFrame > FrameContainer::searchDeepDown( const OUString& sName ) const
+Reference< XFrame > FrameContainer::searchOnAllChildrens( const OUString& sName ) const
 {
     // Check incoming parameter.
     LOG_ASSERT2( implcp_searchDeepDown( sName ), "FrameContainer::searchDeepDown()", "Invalid parameter detected!" )
@@ -440,7 +440,7 @@ Reference< XFrame > FrameContainer::searchDeepDown( const OUString& sName ) cons
     }
     return xSearchedFrame;
 }
-
+/*
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -452,7 +452,6 @@ Reference< XFrame > FrameContainer::searchFlatDown( const OUString& sName ) cons
     // Register transaction. Reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
 
     // Step over all direct child frames first.
@@ -480,11 +479,11 @@ Reference< XFrame > FrameContainer::searchFlatDown( const OUString& sName ) cons
     }
     return xSearchedFrame;
 }
-
+*/
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Reference< XFrame > FrameContainer::searchDirectChildren( const OUString& sName ) const
+Reference< XFrame > FrameContainer::searchOnDirectChildrens( const OUString& sName ) const
 {
     // Check incoming parameter.
     LOG_ASSERT2( implcp_searchDirectChildren( sName ), "FrameContainer::searchDirectChildren()", "Invalid parameter detected!" )

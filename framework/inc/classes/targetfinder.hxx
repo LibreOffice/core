@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:49:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ struct TargetInfo
                                  const ::rtl::OUString&                           sFrame     ,
                                  const ::rtl::OUString&                           sParent    );
 
-        EFrameType getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame     );
+        static EFrameType getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame     );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

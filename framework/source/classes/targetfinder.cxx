@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:08:13 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@
 
 #ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
 #include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -248,18 +244,27 @@ EFrameType TargetInfo::getFrameType( const css::uno::Reference< css::frame::XFra
     // Try to cast it to right interfaces to get informations about right frame type.
     css::uno::Reference< css::frame::XDesktop >           xDesktopCheck( xFrame, css::uno::UNO_QUERY );
     css::uno::Reference< css::mozilla::XPluginInstance >  xPlugInCheck ( xFrame, css::uno::UNO_QUERY );
-    css::uno::Reference< css::frame::XTask >              xTaskCheck   ( xFrame, css::uno::UNO_QUERY );
     css::uno::Reference< css::frame::XFrame >             xFrameCheck  ( xFrame, css::uno::UNO_QUERY );
 
-    EFrameType eType;
+    EFrameType eType = E_UNKNOWNFRAME;
 
-    if( xDesktopCheck.is() == sal_True ) { eType = E_DESKTOP    ; } else
-    if( xPlugInCheck.is () == sal_True ) { eType = E_PLUGINFRAME; } else
-    if( xTaskCheck.is   () == sal_True ) { eType = E_TASK       ; } else
-    if( xFrameCheck.is  () == sal_True ) { eType = E_FRAME      ; }
-    #ifdef ENABLE_WARNINGS
-    else LOG_WARNING( "TargetFinder::getFrameType()", "Unknown frame implementation detected!" )
-    #endif
+    if (xDesktopCheck.is())
+        eType=E_DESKTOP;
+    else
+    if (xPlugInCheck.is())
+        eType=E_PLUGINFRAME;
+    else
+    if (xFrameCheck.is())
+    {
+        eType=E_FRAME;
+        // But may it's a special task frame.
+        // Such frames have the desktop as direct parent!
+        css::uno::Reference< ::com::sun::star::frame::XDesktop > xDesktopParentCheck( xFrame->getCreator(), css::uno::UNO_QUERY );
+        if (xDesktopParentCheck.is())
+            eType=E_TASK;
+    }
+
+    LOG_ASSERT2( eType==E_UNKNOWNFRAME, "TargetFinder::getFrameType()", "Unknown frame implementation detected!" )
 
     return eType;
 }
@@ -683,7 +688,7 @@ ETargetClass TargetFinder::impl_classifyForTask_findFrame(        sal_Bool      
         }
 
         //*********************************************************************************************************
-        //  II.II)  Look for PARENT.
+        //  II.III) Look for PARENT.
         //          Is allowed on tasks if outside search of it is allowed!
         //          Don't check name of parent here - otherwise we return the desktop as result ...
         //*********************************************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:05:16 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,6 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDESKTOPTASK_HPP_
-#include <com/sun/star/frame/XDesktopTask.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_WINDOWARRANGE_HPP_
@@ -440,6 +436,7 @@ class Desktop   :   // interfaces
         css::uno::Any                                                   m_aInteractionRequest       ;
         sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
         SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
+        ::rtl::OUString                                                 m_sName                     ;
 
 };      //  class Desktop
 

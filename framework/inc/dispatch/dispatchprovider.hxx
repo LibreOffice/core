@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2002-05-03 07:58:43 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
+#include <com/sun/star/mozilla/XPluginInstance.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -143,9 +147,14 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
 
+/**
+    @descr          We know some special dispatch objects with diffrent functionality.
+                    The can be created internaly by the following DispatchProvider.
+                    Here we define some identifier to force creation of the right one.
+
+    @modified       17.05.2002 07:56, as96863
+*/
 enum EDispatchHelper
 {
     E_DEFAULTDISPATCHER     ,
@@ -158,103 +167,96 @@ enum EDispatchHelper
 };
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
 
-/*-************************************************************************************************************//**
+/**
     @short          implement a helper for XDispatchProvider interface
-    @descr          Use this class as member only! Never use it as baseclass.
+    @descr          The result of a queryDispatch() call depends from the owner, which use an instance of this class.
+                    (frame, task, plugin, desktop) All of them must provides different functionality.
+                    E.g:    - task can be created by the desktop only
+                            - a plugin intercept some calls to forward it to the browser
+                            - a task can have a beamer as direct child
+                            - a normal frame never can create a new one by himself
+
+    @attention      Use this class as member only! Never use it as baseclass.
                     XInterface will be ambigous and we hold a weakreference to ouer OWNER - not to ouer SUPERCLASS!
 
-    @implements     XInterface
-                    XDispatchProvider
-                    XEventListener
-
     @base           ThreadHelpBase
-                    TransactionBase
-                    OWeakObject
+                        supports threadsafe mechanism
+    @base           OWeakObject
+                        provides ref count and weak mechanism
 
     @devstatus      ready to use
     @threadsafe     yes
-*//*-*************************************************************************************************************/
+    @modified       17.05.2002 07:56, as96863
+*/
 class DispatchProvider  :   // interfaces
                             public  css::lang::XTypeProvider            ,
                             public  css::frame::XDispatchProvider       ,
-                            public  css::lang::XEventListener           ,
                             // baseclasses
                             // Order is neccessary for right initialization!
                             private ThreadHelpBase                      ,
                             private TransactionBase                     ,
                             public  ::cppu::OWeakObject
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-        //  constructor / destructor
-        DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
-                          const css::uno::Reference< css::frame::XFrame >&              xFrame   );
+    /* member */
+    private:
+        /// reference to global service manager to create new services
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
+        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
+        /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
+        css::uno::Reference< css::frame::XDispatch > m_xMenuDispatcher     ;
+        css::uno::Reference< css::frame::XDispatch > m_xHelpAgentDispatcher;
+/*      css::uno::Reference< css::frame::XDispatch > m_xBlankDispatcher    ;
+        css::uno::Reference< css::frame::XDispatch > m_xSelfDispatcher     ;
+        css::uno::Reference< css::frame::XDispatch > m_xPlugInDispatcher   ;
+        css::uno::Reference< css::frame::XDispatch > m_xDefaultDispatcher  ;*/
+        /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
+        HandlerCache m_aProtocolHandlerCache;
+        // if we are running plugged inside a browser we must intercept some queryDispatch() calls and forward it to the browser
+        static css::uno::WeakReference< css::mozilla::XPluginInstance > m_xPluginInterceptor;
 
-        //  XInterface
+    /* interface */
+    public:
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
-        //  XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >                       SAL_CALL queryDispatch       ( const css::util::URL&                                       aURL             ,
-                                                                                                                  const ::rtl::OUString&                                      sTargetFrameName ,
-                                                                                                                        sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException );
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches     ( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
+        DispatchProvider( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory ,
+                          const css::uno::Reference< css::frame::XFrame >&              xFrame   );
 
-        //   XEventListener
-        virtual void                                                               SAL_CALL disposing           ( const css::lang::EventObject&                               aEvent           ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
+                                                                                                             const ::rtl::OUString&                                      sTargetFrameName ,
+                                                                                                                   sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
+        static void setPluginInterceptor( const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin );
+
+    /* helper */
     protected:
-        // Let him protected!
+        // Let him protected! So nobody can use us as base ...
         virtual ~DispatchProvider();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
     private:
-        css::uno::Reference< css::frame::XDispatch >         implts_getOrCreateDispatchHelper     ( EDispatchHelper         eHelper                       ,
-                                                                                                    const css::uno::Any&    aParameters = css::uno::Any() );
-        sal_Bool                                             implts_isLoadableContent             ( const css::util::URL&   aURL                          );
+        css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
+                                                                                          const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
+                                                                                          const css::uno::Any&                             aParameters = css::uno::Any() );
+        sal_Bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
+        css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >  xDesktop                      ,
+                                                                                          const css::util::URL&                            aURL                          ,
+                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
+                                                                                                sal_Int32                                  nSearchFlags                  );
+        css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >  xFrame                        ,
+                                                                                          const css::util::URL&                            aURL                          ,
+                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
+                                                                                                sal_Int32                                  nSearchFlags                  );
+        css::uno::Reference< css::frame::XDispatch > implts_queryPluginDispatch         ( const css::uno::Reference< css::frame::XFrame >  xPlugin                       ,
+                                                                                          const css::util::URL&                            aURL                          ,
+                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
+                                                                                                sal_Int32                                  nSearchFlags                  );
+        css::uno::Reference< css::frame::XDispatch > implts_searchProtocolHandler       ( const css::util::URL&                            aURL                          );
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_ctor           ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
-                                                const css::uno::Reference< css::frame::XFrame >&              xFrame          );
-        static sal_Bool implcp_queryDispatch  ( const css::util::URL&                                         aURL            ,
-                                                const ::rtl::OUString&                                        sTargetFrameName,
-                                                      sal_Int32                                               nSearchFlags    );
-        static sal_Bool implcp_queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >&   lDescriptions   );
-        static sal_Bool implcp_disposing      ( const css::lang::EventObject&                                 aEvent          );
-    #endif  // #ifdef ENABLE_ASSERTIONS
+}; // class DispatchProvider
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                  ;   /// reference to global service manager to create new services
-        css::uno::WeakReference< css::frame::XFrame >               m_xFrame                    ;   /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
-        css::uno::Reference< css::frame::XDispatch >                m_xMenuDispatcher           ;   /// different dispatcher to handle special dispatch calls, protocols or URLs
-        css::uno::Reference< css::frame::XDispatch >                m_xHelpAgentDispatcher      ;
-        css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
-        css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
-        css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
-        css::uno::Reference< css::frame::XDispatch >                m_xDefaultDispatcher        ;
-        HandlerCache                                                m_aProtocolHandlerCache     ;
+} // namespace framework
 
-};      //  class DispatchProvider
-
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
+#endif // #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_

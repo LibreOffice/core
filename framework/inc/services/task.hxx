@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 16:11:06 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
 
         DECL_LINK( Close_Impl, void* );
 
-        void    impl_SaveWindowAttributes();
+//        void    impl_SaveWindowAttributes();
 
 /*      sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
                                             const   css::uno::Any&      aValue          ,
@@ -657,7 +657,7 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
     protected:
 
         // But some values are neede by derived classes!
-        sal_Bool            m_bIsPlugIn         ;   /// In objects of these class this member is set to FALSE.
+//        sal_Bool            m_bIsPlugIn         ;   /// In objects of these class this member is set to FALSE.
                                                     /// But in derived class PlugInFrame it's overwrited with TRUE!
 
     private:

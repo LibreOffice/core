@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentenumeration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:15:04 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,6 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_

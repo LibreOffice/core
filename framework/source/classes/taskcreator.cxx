@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 08:06:50 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,14 @@
 
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_TARGETS_H_
+#include <targets.h>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -134,139 +142,243 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 /*-****************************************************************************************************//**
-    @short      create a new task with a system window inside
-    @descr      With this method you can create a new empty system task. We create the task and the container
-                window inside of it. Created node will be a child of given parent frame.
+    @short      initialize instance with neccessary informations
+    @descr      We need a valid uno service manager to create or instanciate new services.
+                All other informations to create frames or tasks come in on right interface methods.
 
-    @seealso    method createBrowserTask()
+    @param      xSMGR
+                    points to the valid uno service manager
 
-    @param      "aInfo", collection of information, which are used to create task
-    @return     A reference to the new created task.
-
-    @onerror    We return a null-reference.
-    @threadsafe no
+    @modified   16.05.2002 09:25, as96863
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createSystemTask( const TaskInfo& aInfo )
+TaskCreator::TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+    : ThreadHelpBase(       )
+    , m_xSMGR       ( xSMGR )
 {
-    // Safe impossible cases.
-    // Method is not designed for all incoming parameter!
-    LOG_ASSERT2( implcp_createSystemTask( aInfo ), "TaskCreator::createNewSystemTask()", "Invalid parameter detected!" )
+}
 
-    // Set default return value to NULL!
-    css::uno::Reference< css::frame::XFrame > xTask;
+/*-****************************************************************************************************//**
+    @short      deinitialize instance
+    @descr      We should release all used ressource which are not needed any longer.
 
-    // Get toolkit to create task container window.
-    css::uno::Reference< css::awt::XToolkit > xToolkit( aInfo.xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
-    if( xToolkit.is() == sal_True )
+    @modified   16.05.2002 09:33, as96863
+*//*-*****************************************************************************************************/
+TaskCreator::~TaskCreator()
+{
+    m_xSMGR = NULL;
+}
+
+/*-****************************************************************************************************//**
+    @short      create a new task on desktop
+    @descr      We use the global desktop instance as parent of the new created frame
+                and initialize it with some state values (name, visible).
+                But this function don't create such task directly. It decide only if it must be
+                a system or browser task. Because it depends from th office environment which one
+                is required.
+
+    @param      sName
+                    the name of this new created frame
+                    Note: Special ones like e.g. "_blank" are not allowed here. We check it and ignore
+                    such names.
+
+    @param      bVisible
+                    We use it to show or hide the new created container window inside this frame.
+
+    @modified   16.05.2002 09:36, as96863
+*//*-*****************************************************************************************************/
+css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
+                                                                         sal_Bool         bVisible )
+{
+    // Check incoming parameter. We don't allow special target names like e.g. "_blank"
+    ::rtl::OUString sRightName = impl_filterNames(sName);
+
+    /* SAFE { */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    /* } SAFE */
+
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY );
+    if ( ! xDesktop.is())
+        return NULL;
+
+    css::uno::Reference< css::frame::XFrames >          xContainer( xDesktop->getFrames(), css::uno::UNO_QUERY );
+    css::uno::Reference< css::container::XIndexAccess > xAccess   ( xContainer           , css::uno::UNO_QUERY );
+
+    // search for any plugin frame to decide which type the new created task must have
+    css::uno::Reference< css::mozilla::XPluginInstance > xPlugin     ;
+    sal_Bool                                             bPluginMode = sal_False;
+    sal_Int32                                            nCount      = xAccess->getCount();
+    for( sal_Int32 i=0; i<nCount; ++i )
     {
-        // Describe window properties.
-        css::awt::WindowDescriptor aDescriptor;
-        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
-        aDescriptor.ParentIndex         =   -1                                              ;
-        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
-        aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                    ;
-        aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
-                                            css::awt::WindowAttribute::MOVEABLE             |
-                                            css::awt::WindowAttribute::SIZEABLE             |
-                                            css::awt::WindowAttribute::CLOSEABLE            ;
-        // Create a new blank container window and get access to parent container to append new created task.
-        css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
-        css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
-        xPeer->setBackground( 0xFFFFFFFF );
-        css::uno::Reference< css::frame::XFrames >   xContainer = aInfo.xParent->getFrames();
-        if(
-            ( xWindow.is()    == sal_True ) &&
-            ( xContainer.is() == sal_True )
-          )
+        css::uno::Any                             aFrame = xAccess->getByIndex(i);
+        css::uno::Reference< css::frame::XFrame > xFrame ;
+        if ( !(aFrame>>=xFrame) || !xFrame.is() )
+            continue;
+
+        xPlugin = css::uno::Reference< css::mozilla::XPluginInstance >( xFrame, css::uno::UNO_QUERY );
+        if (xPlugin.is())
         {
-            // Create new system task.
-            xTask = css::uno::Reference< css::frame::XFrame >( aInfo.xFactory->createInstance( SERVICENAME_TASK ), css::uno::UNO_QUERY );
-            if( xTask.is() == sal_True )
-            {
-                // Set window on task.
-                // Do it before you call other interface methods on task-object ...
-                // because this object must be initialized before you can do such things.
-                // Otherwise he throw an exception for UNINITIALIZED working mode!
-
-                // Don't forget to create tree-bindings! use given parent as parent node of new task ...
-                // ... and append it to his container.
-                // (task member xParent will automaticly set by "append()" call!)
-
-                // ! sTaskName already filtered by TaskInfo structure! Special targets are not allowed here ...
-
-                // Disable task window first! Otherwise it's visible during showing of any progress
-                // and user interaction could make some trouble ... GPF is possible!
-                // So we disable it here ... and our loading proccess enable it after successfully operation.
-                xTask->initialize  ( xWindow         );
-                xTask->setName     ( aInfo.sTaskName );
-                xContainer->append ( xTask           );
-            }
+            bPluginMode = sal_True;
+            break;
         }
     }
 
-    // Return result of this operation.
+    // If information about plugin mode exists - we can call right creation helper
+    css::uno::Reference< css::frame::XFrame > xTask;
+    if (bPluginMode)
+        xTask = implts_createBrowserTask(xDesktop, xPlugin, sRightName, bVisible);
+    else
+        xTask = implts_createSystemTask(xDesktop, sRightName, bVisible);
+
     return xTask;
 }
 
-//*****************************************************************************************************************
-css::uno::Reference< css::frame::XFrame > TaskCreator::createBrowserTask( const TaskInfo& aInfo )
+/*-****************************************************************************************************//**
+    @short      create a new task with a system window inside
+    @descr      With this method you can create a new empty system task. We create the task and the container
+                window inside of it. Created node will be a child of given parent - which can be the desktop only.
+
+    @param      xDesktop
+                    only the desktop can be the parent of such new created task frame
+    @param      sName
+                    the new name for this task (filtered!)
+    @param      bVisible
+                    used to set the state of frame container window after creation
+
+    @return     A reference to the new created task or <NULL/> if it failed.
+
+    @threadsafe yes
+    @modified   16.05.2002 10:44, as96863
+*//*-*****************************************************************************************************/
+css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
+                                                                                const ::rtl::OUString&                                      sName    ,
+                                                                                      sal_Bool                                              bVisible )
 {
-    LOG_ERROR( "TaskCreator::createNewBrowserTask()", "Not supported yet! Return empty reference." )
-    return css::uno::Reference< css::frame::XFrame >();
+    css::uno::Reference< css::frame::XFrame > xTask;
+
+    // get toolkit to create task container window
+    /* SAFE { */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    /* } SAFE */
+    css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
+    if ( ! xToolkit.is() )
+        return NULL;
+
+    // describe window properties.
+    css::awt::WindowDescriptor aDescriptor;
+    aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+    aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
+    aDescriptor.ParentIndex         =   -1                                              ;
+    aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
+    aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                    ;
+    aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
+                                        css::awt::WindowAttribute::MOVEABLE             |
+                                        css::awt::WindowAttribute::SIZEABLE             |
+                                        css::awt::WindowAttribute::CLOSEABLE            ;
+    // create a new blank container window and get access to parent container to append new created task.
+    css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
+    css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
+    xPeer->setBackground( 0xFFFFFFFF );
+    css::uno::Reference< css::frame::XFrames >   xContainer = xDesktop->getFrames();
+    if (
+        ( xWindow.is()    ) &&
+        ( xContainer.is() )
+       )
+    {
+        // create new top level frame.
+        xTask = css::uno::Reference< css::frame::XFrame >( xSMGR->createInstance( SERVICENAME_FRAME ), css::uno::UNO_QUERY );
+        if (xTask.is())
+        {
+            // Set window on task.
+            // Do it before you call other interface methods on task-object ...
+            // because this object must be initialized before you can do such things.
+            // Otherwise he throw an exception for UNINITIALIZED working mode!
+
+            // Don't forget to create tree-bindings! use given parent as parent node of new task ...
+            // ... and append it to his container.
+            // (task member xParent will automaticly set by "append()" call!)
+
+            xTask->initialize  ( xWindow );
+            xTask->setName     ( sName   );
+            xContainer->append ( xTask   );
+
+            if (bVisible)
+                xWindow->setVisible(bVisible);
+        }
+    }
+
+    return xTask;
 }
 
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
+/*-****************************************************************************************************//**
+    @short      create a new task by using browser window as parent for own one
+    @descr      With this method you can create a new empty browser task. We create the task and the container
+                window inside of it. Created node will be a child of given parent - which can be the desktop only.
 
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
------------------------------------------------------------------------------------------------------------------*/
+    @attention  Currently it's not possible to create such browser tasks - because the browser doesn't support
+                synchronous creation of a new empty window. So we create system tasks here too , till
+                a solution exists.
 
-#ifdef ENABLE_ASSERTIONS
+    @param      xDesktop
+                    only the desktop can be the parent of such new created task frame
+    @param      xPlugin
+                    we need this instance as "gateway" to the browser
+    @param      sName
+                    the new name for this task (filtered!)
+    @param      bVisible
+                    used to set the state of frame container window after creation
 
-//*****************************************************************************************************************
-sal_Bool TaskCreator::implcp_createSystemTask( const TaskInfo& aInfo )
+    @return     A reference to the new created task or <NULL/> if it failed.
+
+    @threadsafe yes
+    @modified   16.05.2002 10:37, as96863
+*//*-*****************************************************************************************************/
+css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createBrowserTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
+                                                                                 const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin  ,
+                                                                                 const ::rtl::OUString&                                      sName    ,
+                                                                                       sal_Bool                                              bVisible )
 {
-    return(
-            ( &aInfo              == NULL                       )   ||
-            ( aInfo.xFactory.is() == sal_False                  )   ||
-            ( aInfo.xParent.is()  == sal_False                  )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_SELF         )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_BLANK        )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_PARENT       )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_TOP          )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_MENUBAR      )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_HELPAGENT    )   ||
-            (
-                ( aInfo.bVisible  != sal_True  ) &&
-                ( aInfo.bVisible  != sal_False )
-            )
-          );
+    LOG_WARNING("TaskCreator::implts_createBrowserTask()", "Not supported yet. I create a system task instead of a real browser task.")
+    return implts_createSystemTask(xDesktop, sName, bVisible);
 }
 
-//*****************************************************************************************************************
-sal_Bool TaskCreator::implcp_createBrowserTask( const TaskInfo& aInfo )
+/*-****************************************************************************************************//**
+    @short      decide which names are correct frame names
+    @descr      Not all names are allowed as frame name. e.g. special targets like "_blank" are forbidden.
+                They are used to force creation of new tasks and can make trouble during search off already
+                existing ones.
+
+    @attention  "_beamer" is a valid name - because:
+                It exist one beamer for one task tree only.
+                If he exist, we can find it - otherwhise he will be created by our task-frame!
+
+    @param      sName
+                    whished name by user
+
+    @return     The given name of user if it is an allowed one - or an empty string if not.
+
+    @threadsafe not neccessary
+    @modified   16.05.2002 10:32, as96863
+*//*-*****************************************************************************************************/
+::rtl::OUString TaskCreator::impl_filterNames( const ::rtl::OUString& sName )
 {
-    return(
-            ( &aInfo              == NULL                       )   ||
-            ( aInfo.xFactory.is() == sal_False                  )   ||
-            ( aInfo.xParent.is()  == sal_False                  )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_SELF         )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_BLANK        )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_PARENT       )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_TOP          )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_MENUBAR      )   ||
-            ( aInfo.sTaskName     == SPECIALTARGET_HELPAGENT    )   ||
-            (
-                ( aInfo.bVisible  != sal_True  ) &&
-                ( aInfo.bVisible  != sal_False )
-            )
-          );
+    ::rtl::OUString sFiltered( sName );
+    if(
+        ( sName == SPECIALTARGET_BLANK      )   ||
+        ( sName == SPECIALTARGET_DEFAULT    )   ||
+        ( sName == SPECIALTARGET_SELF       )   ||
+        ( sName == SPECIALTARGET_PARENT     )   ||
+        ( sName == SPECIALTARGET_TOP        )   ||
+        ( sName == SPECIALTARGET_MENUBAR    )   ||
+        ( sName == SPECIALTARGET_HELPAGENT  )
+       )
+    {
+        sFiltered = ::rtl::OUString();
+    }
+    return sFiltered;
 }
 
-#endif  // #ifdef ENABLE_ASSERTIONS
-
-}   //  namespace framework
+} // namespace framework

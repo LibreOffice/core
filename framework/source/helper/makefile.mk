@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: cd $ $Date: 2001-12-04 07:46:09 $
+#   last change: $Author: as $ $Date: 2002-05-23 12:53:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,9 +81,7 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			$(SLO)$/timerhelper.obj	 						\
-                    $(SLO)$/otasksaccess.obj	 					\
-                    $(SLO)$/otasksenumeration.obj					\
-                    $(SLO)$/ocomponentaccess.obj 					\
+                    $(SLO)$/ocomponentaccess.obj					\
                     $(SLO)$/ocomponentenumeration.obj				\
                     $(SLO)$/oframes.obj								\
                     $(SLO)$/opluginframedispatcher.obj				\

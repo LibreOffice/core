@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-05 10:06:23 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ namespace framework
     //--------------------------------------------------------------------
     void SAL_CALL HelpAgentDispatcher::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::com::sun::star::frame::XDispatch* >(this), ::com::sun::star::uno::UNO_QUERY );
+
         // not interested in case the container window is closed (this should be handled by our owner)
 
         // interested in case our agent window is closed (we're the only instance allowed to close it)
@@ -334,6 +336,8 @@ namespace framework
     //--------------------------------------------------------------------
     void HelpAgentDispatcher::closeAgentWindow()
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::com::sun::star::frame::XDispatch* >(this), ::com::sun::star::uno::UNO_QUERY );
+
         // now acquire the SolarMutex ...
         ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
         // ... and our own mutex
@@ -425,6 +429,9 @@ namespace framework
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/11/05 10:06:23  oj
+ *  #94279# set Listener to NULL in dtor
+ *
  *  Revision 1.3  2001/10/11 09:21:51  pb
  *  fix: #93014# dont show tooltip
  *

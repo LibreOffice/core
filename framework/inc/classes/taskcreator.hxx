@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:21 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
-#include <classes/targetfinder.hxx>
+#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+#include <threadhelp/threadhelpbase.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -86,12 +86,16 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
+#include <com/sun/star/mozilla/XPluginInstance.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -120,120 +124,49 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-struct TaskInfo
-{
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-        //---------------------------------------------------------------------------------------------------------
-        // Create new info structure and fill it with valid values.
-        inline TaskInfo( const css::uno::Reference< css::lang::XMultiServiceFactory >& xNewFactory ,
-                         const css::uno::Reference< css::frame::XFrame >&              xNewParent  ,
-                         const ::rtl::OUString&                                        sNewName    ,
-                               sal_Bool                                                bNewVisible )
-        {
-            xFactory    = xNewFactory                                                                          ;
-            xParent     = css::uno::Reference< css::frame::XFramesSupplier >( xNewParent, css::uno::UNO_QUERY );
-            sTaskName   = impl_filterNames( sNewName )                                                         ;
-            bVisible    = bNewVisible                                                                          ;
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        // Don't forget to release references and memory!
-        inline ~TaskInfo()
-        {
-            xFactory    = css::uno::Reference< css::lang::XMultiServiceFactory >();
-            xParent     = css::uno::Reference< css::frame::XFramesSupplier >()    ;
-            sTaskName   = ::rtl::OUString()                                       ;
-            bVisible    = sal_False                                               ;
-        }
-
-    private:
-        //---------------------------------------------------------------------------------------------------------
-        // Filter special names which can't be a valid frame name!
-        // Attention: "_beamer" is a valid name - because:
-        //  It exist one beamer for one task tree only.
-        //  If he exist, we can find it - otherwhise he will be created by our task-frame!
-        inline ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName )
-        {
-            ::rtl::OUString sFiltered( sName );
-            if(
-                ( sName == SPECIALTARGET_BLANK      )   ||
-                ( sName == SPECIALTARGET_SELF       )   ||
-                ( sName == SPECIALTARGET_PARENT     )   ||
-                ( sName == SPECIALTARGET_TOP        )   ||
-                ( sName == SPECIALTARGET_MENUBAR    )   ||
-                ( sName == SPECIALTARGET_HELPAGENT  )
-              )
-            {
-                sFiltered = ::rtl::OUString();
-            }
-            return sFiltered;
-        }
-
-    //-------------------------------------------------------------------------------------------------------------
-    public:
-        css::uno::Reference< css::lang::XMultiServiceFactory >  xFactory    ;
-        css::uno::Reference< css::frame::XFramesSupplier >      xParent     ;
-        ::rtl::OUString                                         sTaskName   ;
-        sal_Bool                                                bVisible    ;
-};
-
 /*-************************************************************************************************************//**
-    @short          a helper to create new tasks or plugin frames for "_blank" or FrameSearchFlag::CREATE at desktop
+    @short          a helper to create new tasks, sub or plugin frames for "_blank" or FrameSearchFlag::CREATE
     @descr          There are different places to create new tasks/plugin frames. Its not easy to service this code!
                     Thats the reason for this helper. He capsulate asynchronous/synchronous creation by calling
                     a simple interface.
 
-    @implements     -
-    @base           -
-
     @devstatus      ready to use
-    @threadsafe     no
+    @threadsafe     yes
+    @modified       16.05.2002 09:09, as96863
 *//*-*************************************************************************************************************/
-class TaskCreator
+class TaskCreator : private ThreadHelpBase
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    //_______________________
+    // member
+    private:
+
+        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xSMGR;
+
+    //_______________________
+    // interface
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-                 TaskCreator() {};
-        virtual ~TaskCreator() {};
+                 TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+        virtual ~TaskCreator(                                                                     );
 
-        static css::uno::Reference< css::frame::XFrame > createSystemTask ( const TaskInfo& aInfo );
-        static css::uno::Reference< css::frame::XFrame > createBrowserTask( const TaskInfo& aInfo );
+        css::uno::Reference< css::frame::XFrame > createTask( const ::rtl::OUString& sName    ,
+                                                                    sal_Bool         bVisible );
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-    protected:
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+    //_______________________
+    // helper
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_createSystemTask ( const TaskInfo& aInfo );
-        static sal_Bool implcp_createBrowserTask( const TaskInfo& aInfo );
-    #endif  //  #ifdef ENABLE_ASSERTIONS
+        css::uno::Reference< css::frame::XFrame > implts_createSystemTask ( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
+                                                                            const ::rtl::OUString&                                      sName    ,
+                                                                                  sal_Bool                                              bVisible );
+        css::uno::Reference< css::frame::XFrame > implts_createBrowserTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
+                                                                            const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin  ,
+                                                                            const ::rtl::OUString&                                      sName    ,
+                                                                                  sal_Bool                                              bVisible );
+        static ::rtl::OUString                    impl_filterNames        ( const ::rtl::OUString&                                      sName    );
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    private:
+}; // class TaskCreator
 
-};      //  class TaskCreator
+} // namespace framework
 
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
+#endif // #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_

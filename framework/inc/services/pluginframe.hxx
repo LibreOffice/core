@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pluginframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-05-16 13:28:34 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_SERVICES_TASK_HXX_
-#include <services/task.hxx>
+#ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
+#include <services/frame.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -144,13 +144,13 @@ namespace framework{
     @implements XInitialization
                 XPluginInstance
                 XDispatchResultListener
-    @base       Task
+    @base       Frame
 *//*-*************************************************************************************************************/
 
-class PlugInFrame   :   public css::lang::XInitialization   ,
-                        public css::mozilla::XPluginInstance,
+class PlugInFrame   :   public css::lang::XInitialization           ,
+                        public css::mozilla::XPluginInstance        ,
                         public css::frame::XDispatchResultListener  ,   // => XEVENTLISTENER
-                        public Task                             // Order of baseclasses is neccessary for right initialization!
+                        public Frame                                    // Order of baseclasses is neccessary for right initialization!
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -203,18 +203,6 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         //  XInitialization
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& seqArguments ) throw(  css::uno::Exception         ,
                                                                                                      css::uno::RuntimeException );
 
@@ -222,80 +210,16 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         //  XPluginInstance
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL start         () throw( css::uno::RuntimeException );
         void SAL_CALL implcb_start  () throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL stop          () throw( css::uno::RuntimeException );
         void SAL_CALL implcb_stop   () throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL destroy       () throw( css::uno::RuntimeException );
         void SAL_CALL implcb_destroy() throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL createWindow          (   const   css::uno::Any&      aPlatformWindowHandle   ,
                                                         sal_Bool            bEmbedded               ) throw( css::uno::RuntimeException );
         void SAL_CALL implcb_createWindow   (   const   css::uno::Any&      aPlatformWindowHandle   ,
                                                         sal_Bool            bEmbedded               ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL newStream     (   const   ::rtl::OUString&                                sMIMEDescription,
                                         const   ::rtl::OUString&                                sURL            ,
                                         const   ::rtl::OUString&                                sFilter         ,
@@ -307,19 +231,6 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
                                         const   ::rtl::OUString&                                sFilter         ,
                                         const   css::uno::Reference< css::io::XInputStream >&   xStream         ,
                                         const   css::uno::Any&                                  aSessionId      ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         void SAL_CALL newURL        (   const   ::rtl::OUString&    sMIMEDescription,
                                         const   ::rtl::OUString&    sURL            ,
                                         const   ::rtl::OUString&    sFilter         ,
@@ -328,19 +239,6 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
                                         const   ::rtl::OUString&    sURL            ,
                                         const   ::rtl::OUString&    sFilter         ,
                                         const   css::uno::Any&      aSessionId      ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         virtual void SAL_CALL getHttpServerURL( ::rtl::OUString&    sHost   ,
                                                 sal_uInt16&         nPort   ,
                                                 ::rtl::OUString&    sPrefix ) throw( css::uno::RuntimeException );
@@ -349,69 +247,20 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
         //   XDispatchProvider
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(    const   css::util::URL&     aURL            ,
                                                                                         const   ::rtl::OUString&    sTargetFrameName,
                                                                                                 sal_Int32           nSearchFlags    ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XDispatchResultListener
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
         virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XEventListener
         //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
 
         void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
@@ -426,18 +275,6 @@ class PlugInFrame   :   public css::lang::XInitialization   ,
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
 
         void impl_tryToLoadDocument();
         sal_Bool impl_registerRemoteFactories( const css::uno::Reference< css::lang::XMultiServiceFactory >& xRemoteServiceManager );

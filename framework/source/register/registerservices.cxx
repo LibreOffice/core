@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:41:56 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,6 @@
 #include <services/documentproperties.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_TASK_HXX_
-#include <services/task.hxx>
-#endif
-
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
 #endif
@@ -147,7 +143,6 @@ COMPONENTGETIMPLEMENTATIONENVIRONMENT
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
                         COMPONENTINFO( ::framework::PlugInFrame                 )
                         COMPONENTINFO( ::framework::Desktop                     )
-                        COMPONENTINFO( ::framework::Task                        )
                         COMPONENTINFO( ::framework::Frame                       )
                         COMPONENTINFO( ::framework::DocumentProperties          )
                         COMPONENTINFO( ::framework::SoundHandler                )
@@ -161,7 +156,6 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
                         IFFACTORY( ::framework::PlugInFrame                     )   else
                         IFFACTORY( ::framework::Desktop                         )   else
-                        IFFACTORY( ::framework::Task                            )   else
                         IFFACTORY( ::framework::Frame                           )   else
                         IFFACTORY( ::framework::DocumentProperties              )   else
                         IFFACTORY( ::framework::SoundHandler                    )   else

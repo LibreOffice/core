@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:22:14 $
+ *  last change: $Author: as $ $Date: 2002-05-23 12:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,6 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
-#include <com/sun/star/frame/XTask.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
