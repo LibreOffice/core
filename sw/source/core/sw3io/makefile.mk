@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 00:08:23 $
+#   last change: $Author: mib $ $Date: 2001-10-12 14:07:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,6 @@ CXXFILES = \
     sw3doc.cxx		\
     sw3field.cxx	\
     sw3fmts.cxx 	\
-    sw3frame.cxx	\
-    sw3frmio.cxx	\
     sw3imp.cxx		\
     sw3misc.cxx 	\
     sw3nodes.cxx	\
@@ -114,8 +112,6 @@ SLOFILES = \
     $(SLO)$/sw3doc.obj	\
     $(SLO)$/sw3field.obj \
     $(SLO)$/sw3fmts.obj	\
-    $(SLO)$/sw3frame.obj \
-    $(SLO)$/sw3frmio.obj \
     $(SLO)$/sw3imp.obj	\
     $(SLO)$/sw3misc.obj	\
     $(SLO)$/sw3nodes.obj \
