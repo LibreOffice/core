@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ Window DLG_NAVIGATION_PI
                 Text [ english_us ] = "Promote Chapter" ;
                  //HelpText[english_us-wrong] = "Move chapter down";//"Move chapter up"
                 Text[ chinese_simplified ] = "’¬…˝º∂";
-                Text[ russian ] = "√Î‡‚‡ Ò‚ÂıÛ";
+                Text[ russian ] = "√Î‡‚‡ ‚‚Âı";
                 Text[ polish ] = "Rozdzia≥ do gÛry";
                 Text[ japanese ] = "èÕÇÃ⁄ÕﬁŸÇè„Ç∞ÇÈ";
                 Text[ chinese_traditional ] = "≥π§…Ø≈";
@@ -353,7 +353,7 @@ Window DLG_NAVIGATION_PI
                 Text [ spanish ] = "Un capÌtulo hacia abajo" ;
                 Text [ english_us ] = "Demote Chapter" ;
                 Text[ chinese_simplified ] = "’¬Ωµº∂";
-                Text[ russian ] = "√Î‡‚‡ ÒÌËÁÛ";
+                Text[ russian ] = "√Î‡‚‡ ‚ÌËÁ";
                 Text[ polish ] = "Rozdzia≥ w dÛ≥";
                 Text[ japanese ] = "èÕÇÃ⁄ÕﬁŸÇâ∫Ç∞ÇÈ";
                 Text[ chinese_traditional ] = "≥π≠∞Ø≈";
@@ -432,7 +432,7 @@ Window DLG_NAVIGATION_PI
                 Text [ portuguese_brazilian ] = "Definir Marcas" ;
                 Text [ portuguese ] = "Definir marca" ;
                 Text [ finnish ] = "Aseta kirjanmerkit" ;
-                Text [ danish ] = "SÊt pÂmindelse" ;
+                Text [ danish ] = "SÊt bogmÊrke" ;
                 Text [ french ] = "DÈfinir un pense-bÍte" ;
                 Text [ swedish ] = "S‰tt tempor‰rt bokm‰rke" ;
                 Text [ dutch ] = "Merktekens plaatsen" ;
@@ -1355,7 +1355,7 @@ Window DLG_NAVIGATION_PI
         Text [ english_us ] = "Selection" ;
         Text [ portuguese_brazilian ] = "Selektion" ;
         Text [ swedish ] = "Markering" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "Markering" ;
         Text [ italian ] = "Selezione" ;
         Text [ spanish ] = "SelecciÛn" ;
         Text [ french ] = "SÈlection" ;
@@ -1474,7 +1474,7 @@ Window DLG_NAVIGATION_PI
         Text [ portuguese ] = "D~esproteger" ;
         Text [ finnish ] = "~Unprotect" ;
         Text [ danish ] = "OphÊv beskyttelse" ;
-        Text [ french ] = "Enlever la protection" ;
+        Text [ french ] = "~Annuler la protection" ;
         Text [ swedish ] = "~Upph‰v skydd" ;
         Text [ dutch ] = "Beveiliging ~opheffen" ;
         Text [ spanish ] = "~Desproteger" ;
