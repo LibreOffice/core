@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,26 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
     return pImpl->Add( nFamily, rParent, rProperties );
 }
 
+OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
+                                  const vector< XMLPropertyState >& rProperties )
+{
+    OUString sEmpty;
+    return pImpl->Add( nFamily, sEmpty, rProperties, sal_True );
+}
+
+OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
+                                  const OUString& rParent,
+                                  const vector< XMLPropertyState >& rProperties )
+{
+    return pImpl->Add( nFamily, rParent, rProperties, sal_True );
+}
+
+OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
+                                  const OUString& rParent )
+{
+    return pImpl->AddToCache( nFamily, rParent );
+}
+
 OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
                                    const vector< XMLPropertyState >& rProperties ) const
 {
@@ -288,6 +308,12 @@ OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
 {
     return pImpl->Find( nFamily, rParent, rProperties );
 }
+
+OUString SvXMLAutoStylePoolP::FindAndRemoveCached( sal_Int32 nFamily ) const
+{
+    return pImpl->FindAndRemoveCached( nFamily );
+}
+
 
 void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
     const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,

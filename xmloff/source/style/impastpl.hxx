@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,20 @@ class SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLAttributeList;
 class SvXMLExportPropertyMapper;
 
+#define MAX_CACHE_SIZE 65536
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Implementationclass for stylefamily-information
 //
 
+typedef ::rtl::OUString *OUStringPtr;
+DECLARE_LIST( SvXMLAutoStylePoolCache_Impl, OUStringPtr )
+
 class XMLFamilyData_Impl
 {
 public:
+    SvXMLAutoStylePoolCache_Impl        *pCache;
     sal_uInt32                          mnFamily;
     ::rtl::OUString                     maStrFamilyName;
     UniReference < SvXMLExportPropertyMapper >  mxMapper;
@@ -120,9 +126,11 @@ public:
     XMLFamilyData_Impl( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
             const UniReference < SvXMLExportPropertyMapper > &  rMapper,
             const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
-    XMLFamilyData_Impl( sal_Int32 nFamily )
-        : mnFamily( nFamily ), mpParentList( NULL ),
-          mpNameList( NULL ), mnCount( 0 ), mnName( 0 )
+
+    XMLFamilyData_Impl( sal_Int32 nFamily ) :
+        mnFamily( nFamily ), mpParentList( NULL ),
+        mpNameList( NULL ), mnCount( 0 ), mnName( 0 ),
+        pCache( 0 )
     {}
     ~XMLFamilyData_Impl();
 
@@ -227,9 +235,14 @@ public:
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
 
     ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
-                         const ::std::vector< XMLPropertyState >& rProperties );
+                         const ::std::vector< XMLPropertyState >& rProperties,
+                           sal_Bool bCache = sal_False );
+    ::rtl::OUString AddToCache( sal_Int32 nFamily,
+                                const ::rtl::OUString& rParent );
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
+
+    ::rtl::OUString FindAndRemoveCached( sal_Int32 nFamily ) const;
 
     void exportXML( sal_Int32 nFamily,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,

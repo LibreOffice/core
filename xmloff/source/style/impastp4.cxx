@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,8 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 
 OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
                                          const OUString& rParent,
-                                        const vector< XMLPropertyState >& rProperties )
+                                        const vector< XMLPropertyState >& rProperties,
+                                        sal_Bool bCache )
 {
     OUString sName;
     sal_uInt32 nPos;
@@ -205,11 +206,44 @@ OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
 
         if( pParent->Add( pFamily, rProperties, sName ) )
             pFamily->mnCount++;
+
+        if( bCache )
+        {
+            if( !pFamily->pCache )
+                pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
+            if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
+                pFamily->pCache->Insert( new OUString( sName ),
+                                         pFamily->pCache->Count() );
+        }
     }
 
     return sName;
 }
 
+OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
+                                         const OUString& rParent )
+{
+    sal_uInt32 nPos;
+
+    XMLFamilyData_Impl *pFamily = 0;
+    XMLFamilyData_Impl aTmp( nFamily );
+    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
+    {
+        pFamily = maFamilyList.GetObject( nPos );
+    }
+
+    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Add: unknown family" );
+    if( pFamily )
+    {
+        if( !pFamily->pCache )
+            pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
+        if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
+            pFamily->pCache->Insert( new OUString( rParent ),
+                                     pFamily->pCache->Count() );
+    }
+
+    return rParent;
+}
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
@@ -239,6 +273,37 @@ OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
             pFamily->mpParentList;
         if( pParents->Seek_Entry( &aTmp, &nPos ) )
             sName = pParents->GetObject( nPos )->Find( pFamily, rProperties );
+    }
+
+    return sName;
+}
+
+OUString SvXMLAutoStylePoolP_Impl::FindAndRemoveCached( sal_Int32 nFamily ) const
+{
+    OUString sName;
+
+    sal_uInt32 nPos;
+    XMLFamilyData_Impl aTmp( nFamily );
+    XMLFamilyData_Impl *pFamily = 0;
+    if( maFamilyList.Seek_Entry( &aTmp, &nPos ) )
+    {
+        pFamily = maFamilyList.GetObject( nPos );
+    }
+
+    DBG_ASSERT( pFamily, "SvXMLAutoStylePool_Impl::Find: unknown family" );
+
+    if( pFamily )
+    {
+        DBG_ASSERT( pFamily->pCache, "family doesn't have a cache" );
+
+        // The cache may be empty already. This happens if it was filled
+        // completly.
+        if( pFamily->pCache && pFamily->pCache->Count() )
+        {
+            OUString *pName = pFamily->pCache->Remove( 0UL );
+            sName = *pName;
+            delete pName;
+        }
     }
 
     return sName;
