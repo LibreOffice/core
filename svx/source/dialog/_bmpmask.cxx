@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 09:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SV_COLRDLG_HXX
+#include <svtools/colrdlg.hxx>
 #endif
 
 #pragma hdrstop
@@ -149,11 +152,14 @@ class MaskSet : public ValueSet
 
 
 public:
-
                     MaskSet( SvxBmpMask* pParent, WinBits nWinStyle );
                     MaskSet( SvxBmpMask* pParent, const ResId& rId );
 
     virtual void    Select();
+    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void GetFocus();
+
+    void onEditColor();
 };
 
 //-------------------------------------------------------------------------
@@ -178,27 +184,49 @@ void MaskSet::Select()
 {
     ValueSet::Select();
 
-    switch ( GetSelectItemId() )
+    pSvxBmpMask->onSelect( this );
+}
+
+void MaskSet::GetFocus()
+{
+    SelectItem( 1 );
+    pSvxBmpMask->onSelect( this );
+}
+
+void MaskSet::KeyInput( const KeyEvent& rKEvt )
+{
+    KeyCode aCode = rKEvt.GetKeyCode();
+
+    // if the key has a modifier we don't care
+    if( aCode.GetModifier() )
     {
-        case ( 1 ) :
-            pSvxBmpMask->aLbColor1.GrabFocus();
-        break;
-
-        case ( 2 ) :
-            pSvxBmpMask->aLbColor2.GrabFocus();
-        break;
-
-        case ( 3 ) :
-            pSvxBmpMask->aLbColor3.GrabFocus();
-        break;
-
-        case ( 4 ) :
-            pSvxBmpMask->aLbColor4.GrabFocus();
-        break;
-
-        default :
-        break;
+        ValueSet::KeyInput( rKEvt );
     }
+    else
+    {
+        // check for keys that interests us
+        switch ( aCode.GetCode() )
+        {
+            case KEY_SPACE:
+                onEditColor();
+                break;
+            default:
+                ValueSet::KeyInput( rKEvt );
+        }
+
+    }
+}
+
+void MaskSet::onEditColor()
+{
+    SvColorDialog* pColorDlg = new SvColorDialog( GetParent() );
+
+    pColorDlg->SetColor(GetItemColor(1));
+
+    if( pColorDlg->Execute() )
+        SetItemColor( 1, pColorDlg->GetColor() );
+
+    delete pColorDlg;
 }
 
 //-------------------------------------------------------------------------
@@ -263,16 +291,19 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
     // Wenn eine Checkbox gecheckt wurde, wird die Pipette enabled
     if ( pCbx->IsChecked() )
     {
-        if ( pCbx == &( pMask->aCbx1 ) )
-            pMask->pQSet->SelectItem( 1 );
-        else if ( pCbx == &( pMask->aCbx2 ) )
-            pMask->pQSet->SelectItem( 2 );
-        else if ( pCbx == &( pMask->aCbx3 ) )
-            pMask->pQSet->SelectItem( 3 );
-        else if ( pCbx == &( pMask->aCbx4 ) )
-            pMask->pQSet->SelectItem( 4 );
+        MaskSet* pSet = NULL;
 
-        pMask->pQSet->Select();
+        if ( pCbx == &( pMask->aCbx1 ) )
+            pSet = pMask->pQSet1;
+        else if ( pCbx == &( pMask->aCbx2 ) )
+            pSet = pMask->pQSet2;
+        else if ( pCbx == &( pMask->aCbx3 ) )
+            pSet = pMask->pQSet3;
+        else // if ( pCbx == &( pMask->aCbx4 ) )
+            pSet = pMask->pQSet4;
+
+        pSet->SelectItem( 1 );
+        pSet->Select();
 
         pMask->aTbxPipette.CheckItem( TBI_PIPETTE, TRUE );
         PipetteHdl( &( pMask->aTbxPipette ) );
@@ -287,7 +318,10 @@ IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
 {
     if ( bIsReady = pCbx->IsChecked() )
     {
-        pMask->pQSet->Disable();
+        pMask->pQSet1->Disable();
+        pMask->pQSet2->Disable();
+        pMask->pQSet3->Disable();
+        pMask->pQSet4->Disable();
         pMask->pCtlPipette->Disable();
         pMask->aCbx1.Disable();
         pMask->aSp1.Disable();
@@ -307,7 +341,10 @@ IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
     }
     else
     {
-        pMask->pQSet->Enable();
+        pMask->pQSet1->Enable();
+        pMask->pQSet2->Enable();
+        pMask->pQSet3->Enable();
+        pMask->pQSet4->Enable();
         pMask->pCtlPipette->Enable();
         pMask->aCbx1.Enable();
         pMask->aSp1.Enable();
@@ -341,14 +378,10 @@ IMPL_LINK( MaskData, CbxTransHdl, CheckBox*, pCbx )
 
 IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 {
-    if ( pLb == &( pMask->aLbColor1 ) )
-        pMask->pQSet->SelectItem( 1 );
-    else if ( pLb == &( pMask->aLbColor2 ) )
-        pMask->pQSet->SelectItem( 2 );
-    else if ( pLb == &( pMask->aLbColor3 ) )
-        pMask->pQSet->SelectItem( 3 );
-    else if ( pLb == &( pMask->aLbColor4 ) )
-        pMask->pQSet->SelectItem( 4 );
+    pMask->pQSet1->SelectItem( pLb == &( pMask->aLbColor1 ) ? 1 : 0 );
+    pMask->pQSet2->SelectItem( pLb == &( pMask->aLbColor2 ) ? 1 : 0 );
+    pMask->pQSet3->SelectItem( pLb == &( pMask->aLbColor3 ) ? 1 : 0 );
+    pMask->pQSet4->SelectItem( pLb == &( pMask->aLbColor4 ) ? 1 : 0 );
 
     return 0;
 }
@@ -429,25 +462,33 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         aTbxPipette         ( this, ResId( TBX_PIPETTE ) ),
         pCtlPipette         ( new ColorWindow( this, ResId( WND_PIPETTE ) ) ),
         aBtnExec            ( this, ResId( BTN_EXEC ) ),
-        pQSet               ( new MaskSet( this, ResId( QCOL_1 ) ) ),
+
         aCbx1               ( this, ResId( CBX_1 ) ),
+        pQSet1              ( new MaskSet( this, ResId( QCOL_1 ) ) ),
         aSp1                ( this, ResId( SP_1 ) ),
+        aLbColor1           ( this, ResId ( LB_1 ) ),
+
         aCbx2               ( this, ResId( CBX_2 ) ),
+        pQSet2              ( new MaskSet( this, ResId( QCOL_2 ) ) ),
         aSp2                ( this, ResId( SP_2 ) ),
+        aLbColor2           ( this, ResId ( LB_2 ) ),
+
         aCbx3               ( this, ResId( CBX_3 ) ),
+        pQSet3              ( new MaskSet( this, ResId( QCOL_3 ) ) ),
         aSp3                ( this, ResId( SP_3 ) ),
+        aLbColor3           ( this, ResId ( LB_3 ) ),
+
         aCbx4               ( this, ResId( CBX_4 ) ),
+        pQSet4              ( new MaskSet( this, ResId( QCOL_4 ) ) ),
         aSp4                ( this, ResId( SP_4 ) ),
+        aLbColor4           ( this, ResId ( LB_4 ) ),
+
         aCbxTrans           ( this, ResId( CBX_TRANS ) ),
         aGrpQ               ( this, ResId( GRP_Q ) ),
         pColTab             ( NULL ),
         pData               ( new MaskData( this, *pBindinx ) ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
-        aLbColor1           ( this, ResId ( LB_1 ) ),
-        aLbColor2           ( this, ResId ( LB_2 ) ),
-        aLbColor3           ( this, ResId ( LB_3 ) ),
-        aLbColor4           ( this, ResId ( LB_4 ) ),
         aLbColorTrans       ( this, ResId ( LB_TRANS ) ),
         aFt1                ( this, ResId ( FT_1 ) ),
         aFt2                ( this, ResId ( FT_2 ) ),
@@ -476,26 +517,81 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
     aSp3.SetValue( 10 );
     aSp4.SetValue( 10 );
 
-    pQSet->SetStyle( pQSet->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
-    pQSet->SetColCount( 1 );
-    pQSet->SetLineCount( 4 );
-    pQSet->SetExtraSpacing( 1 );
-    pQSet->InsertItem( 1, aPipetteColor );
-    pQSet->InsertItem( 2, aPipetteColor );
-    pQSet->InsertItem( 3, aPipetteColor );
-    pQSet->InsertItem( 4, aPipetteColor );
-    pQSet->SelectItem( 1 );
+    pQSet1->SetStyle( pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    pQSet1->SetColCount( 1 );
+    pQSet1->SetLineCount( 1 );
+//  pQSet1->SetExtraSpacing( 1 );
+    pQSet1->InsertItem( 1, aPipetteColor );
+    pQSet1->SelectItem( 1 );
 
-    pQSet->Show();
+    pQSet2->SetStyle( pQSet2->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    pQSet2->SetColCount( 1 );
+    pQSet2->SetLineCount( 1 );
+//  pQSet2->SetExtraSpacing( 1 );
+    pQSet2->InsertItem( 1, aPipetteColor );
+    pQSet2->SelectItem( 0 );
+
+    pQSet3->SetStyle( pQSet3->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    pQSet3->SetColCount( 1 );
+    pQSet3->SetLineCount( 1 );
+//  pQSet3->SetExtraSpacing( 1 );
+    pQSet3->InsertItem( 1, aPipetteColor );
+    pQSet3->SelectItem( 0 );
+
+    pQSet4->SetStyle( pQSet4->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
+    pQSet4->SetColCount( 1 );
+    pQSet4->SetLineCount( 1 );
+//  pQSet4->SetExtraSpacing( 1 );
+    pQSet4->InsertItem( 1, aPipetteColor );
+    pQSet4->SelectItem( 0 );
+
+    pQSet1->Show();
+    pQSet2->Show();
+    pQSet3->Show();
+    pQSet4->Show();
 }
 
 //-------------------------------------------------------------------------
 
 SvxBmpMask::~SvxBmpMask()
 {
-    delete pQSet;
+    delete pQSet1;
+    delete pQSet2;
+    delete pQSet3;
+    delete pQSet4;
     delete pCtlPipette;
     delete pData;
+}
+
+//-------------------------------------------------------------------------
+
+/** is called by a MaskSet when it is selected */
+void SvxBmpMask::onSelect( MaskSet* pSet )
+{
+    // automaticaly set focus to the corresponding listbox
+/*
+    if( pSet == pQSet1 )
+        aLbColor1.GrabFocus();
+    else if( pSet == pQSet2 )
+        aLbColor2.GrabFocus();
+    else if( pSet == pQSet2 )
+        aLbColor3.GrabFocus();
+    else if( pSet == pQSet2 )
+        aLbColor4.GrabFocus();
+*/
+
+    // now deselect all other value sets
+    if( pSet != pQSet1 )
+        pQSet1->SelectItem( 0 );
+
+    if( pSet != pQSet2 )
+        pQSet2->SelectItem( 0 );
+
+    if( pSet != pQSet3 )
+        pQSet3->SelectItem( 0 );
+
+    if( pSet != pQSet4 )
+        pQSet4->SelectItem( 0 );
 }
 
 //-------------------------------------------------------------------------
@@ -558,42 +654,29 @@ void SvxBmpMask::SetColor( const Color& rColor )
 
 void SvxBmpMask::PipetteClicked()
 {
-    USHORT nId = pQSet->GetSelectItemId();
-
-    pQSet->SetItemColor( nId, aPipetteColor );
-
-    switch( nId )
+    if( pQSet1->GetSelectItemId() == 1 )
     {
-        case ( 1 ) :
-        {
-            aCbx1.Check( TRUE );
-            pData->CbxHdl( &aCbx1 );
-        }
-        break;
-
-        case ( 2 ) :
-        {
-            aCbx2.Check( TRUE );
-            pData->CbxHdl( &aCbx2 );
-        }
-        break;
-
-        case ( 3 ) :
-        {
-            aCbx3.Check( TRUE );
-            pData->CbxHdl( &aCbx3 );
-        }
-        break;
-
-        case ( 4 ) :
-        {
-            aCbx4.Check( TRUE );
-            pData->CbxHdl( &aCbx4 );
-        }
-        break;
-
-        default:
-        break;
+        aCbx1.Check( TRUE );
+        pData->CbxHdl( &aCbx1 );
+        pQSet1->SetItemColor( 1, aPipetteColor );
+    }
+    else if( pQSet2->GetSelectItemId() == 1 )
+    {
+        aCbx2.Check( TRUE );
+        pData->CbxHdl( &aCbx2 );
+        pQSet2->SetItemColor( 1, aPipetteColor );
+    }
+    else if( pQSet3->GetSelectItemId() == 1 )
+    {
+        aCbx3.Check( TRUE );
+        pData->CbxHdl( &aCbx3 );
+        pQSet3->SetItemColor( 1, aPipetteColor );
+    }
+    else if( pQSet4->GetSelectItemId() == 1 )
+    {
+        aCbx4.Check( TRUE );
+        pData->CbxHdl( &aCbx4 );
+        pQSet4->SetItemColor( 1, aPipetteColor );
     }
 
     aTbxPipette.CheckItem( TBI_PIPETTE, FALSE );
@@ -620,28 +703,28 @@ USHORT SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, ULONG* pTo
 
     if ( aCbx1.IsChecked() )
     {
-        pSrcCols[nCount] = pQSet->GetItemColor( 1 );
+        pSrcCols[nCount] = pQSet1->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor1.GetSelectEntryColor();
         pTols[nCount++] = aSp1.GetValue();
     }
 
     if ( aCbx2.IsChecked() )
     {
-        pSrcCols[nCount] = pQSet->GetItemColor( 2 );
+        pSrcCols[nCount] = pQSet2->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor2.GetSelectEntryColor();
         pTols[nCount++] = aSp2.GetValue();
     }
 
     if ( aCbx3.IsChecked() )
     {
-        pSrcCols[nCount] = pQSet->GetItemColor( 3 );
+        pSrcCols[nCount] = pQSet3->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor3.GetSelectEntryColor();
         pTols[nCount++] = aSp3.GetValue();
     }
 
     if ( aCbx4.IsChecked() )
     {
-        pSrcCols[nCount] = pQSet->GetItemColor( 4 );
+        pSrcCols[nCount] = pQSet4->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor4.GetSelectEntryColor();
         pTols[nCount++] = aSp4.GetValue();
     }

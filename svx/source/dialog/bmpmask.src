@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:15:09 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 09:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,27 +194,12 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Reemplazar con...";
         Text[ finnish ] = "Korvaa kohteella...";
     };
+
+    // line 1
+
     CheckBox CBX_1
     {
         Pos = MAP_APPFONT ( 12 , 50 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_2
-    {
-        Pos = MAP_APPFONT ( 12 , 65 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_3
-    {
-        Pos = MAP_APPFONT ( 12 , 80 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
-        TabStop = TRUE ;
-    };
-    CheckBox CBX_4
-    {
-        Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         TabStop = TRUE ;
     };
@@ -222,9 +207,154 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         HelpId = HID_BMPMASK_CTL_QCOL_1 ;
         Pos = MAP_APPFONT ( 24 , 48 ) ;
-        Size = MAP_APPFONT ( 24 , 57 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
         Border = TRUE ;
+        TabStop = TRUE ;
     };
+    MetricField SP_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 48 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    ListBox LB_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 48 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
+    // line 2
+
+    CheckBox CBX_2
+    {
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+    };
+    Control QCOL_2
+    {
+        HelpId = HID_BMPMASK_CTL_QCOL_1 ;
+        Pos = MAP_APPFONT ( 24 , 63 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    MetricField SP_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 63 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    ListBox LB_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 63 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
+    // line 3
+
+    CheckBox CBX_3
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+    };
+    Control QCOL_3
+    {
+        HelpId = HID_BMPMASK_CTL_QCOL_1 ;
+        Pos = MAP_APPFONT ( 24 , 78 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    MetricField SP_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58, 78 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    ListBox LB_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 78 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
+    // Line 4
+
+    CheckBox CBX_4
+    {
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        TabStop = TRUE ;
+    };
+    Control QCOL_4
+    {
+        HelpId = HID_BMPMASK_CTL_QCOL_1 ;
+        Pos = MAP_APPFONT ( 24 , 93 ) ;
+        Size = MAP_APPFONT ( 24 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    MetricField SP_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 93 ) ;
+        Size = MAP_APPFONT ( 29 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    ListBox LB_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 93 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+
     CheckBox CBX_TRANS
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
@@ -254,62 +384,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Transparencia";
         Text[ finnish ] = "~L?pin?kyvyys";
     };
-    MetricField SP_1
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 48 ) ;
-        Size = MAP_APPFONT ( 29 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 99 ;
-        Last = 99 ;
-        SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-    };
-    MetricField SP_2
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 63 ) ;
-        Size = MAP_APPFONT ( 29 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 99 ;
-        Last = 99 ;
-        SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-    };
-    MetricField SP_3
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 58, 78 ) ;
-        Size = MAP_APPFONT ( 29 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 99 ;
-        Last = 99 ;
-        SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-    };
-    MetricField SP_4
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 58 , 93 ) ;
-        Size = MAP_APPFONT ( 29 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 99 ;
-        Last = 99 ;
-        SpinSize = 1 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-    };
+
     PushButton BTN_EXEC
     {
         Pos = MAP_APPFONT ( 93 , 6 ) ;
@@ -338,42 +413,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ catalan ] = "Reemplazar";
         Text[ finnish ] = "~Korvaa";
     };
-    ListBox LB_1
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 48 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
-    ListBox LB_2
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 63 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
-    ListBox LB_3
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 78 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
-    ListBox LB_4
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 93 , 93 ) ;
-        Size = MAP_APPFONT ( 64 , 75 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
+
     ListBox LB_TRANS
     {
         Border = TRUE ;
