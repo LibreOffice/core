@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:07:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,9 +913,9 @@ String STR_DROPDOWN
     TEXT[ french ] = "Liste de saisie";
     TEXT[ spanish ] = "Lista de entrada";
     TEXT[ finnish ] = "Input list";
-    TEXT[ italian ] = "Elenco inserimenti";
-    TEXT[ czech ] = "Input list";
-    TEXT[ slovak ] = "Input list";
+    TEXT[ italian ] = "Elenco digitazioni";
+    TEXT[ czech ] = "Vstupní seznam";
+    TEXT[ slovak ] = "Vstupný zoznam";
     TEXT[ danish ] = "Input list";
     TEXT[ swedish ] = "Inmatningslista";
     TEXT[ polish ] = "Input list";
@@ -929,6 +929,7 @@ String STR_DROPDOWN
     TEXT[ hebrew ] = "Input list";
     TEXT[ catalan ] = "Input list";
     TEXT[ thai ] = "Input list";
+    TEXT[ hindi ] = "Input list";
 };
  //
  // Bereich Referenzen
@@ -4262,6 +4263,28 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ hindi ] = "संपादन";
     Text[ slovak ] = "Upraviť";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
