@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recfloat.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:46:07 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ ToolBox SID_RECORDING_FLOATWINDOW
         ToolBoxItem
         {
             Identifier = SID_STOP_RECORDING;
+            Command = ".uno:StopRecording";
         };
     };
 };
