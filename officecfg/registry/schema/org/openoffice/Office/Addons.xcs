@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:34:54 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,21 +196,109 @@
 			<prop oor:name="ImageSmallURL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pt">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ru">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="el">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="nl">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="fr">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="es">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="fi">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="it">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="cs">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="da">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="sv">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pl">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ja">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ko">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-CN">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="tr">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ar">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="he">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ca">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="th">A file URL to address a external bitmap file used for menu images and/or small toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigURL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pt">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ru">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="el">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="nl">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="fr">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="es">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="fi">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="it">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="cs">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="da">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="sv">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pl">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ja">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ko">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-CN">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="tr">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ar">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="he">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ca">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="th">A file URL to address a external bitmap file used for big toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageSmallHCURL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pt">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ru">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="el">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="nl">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="fr">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="es">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="fi">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="it">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="cs">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="da">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="sv">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pl">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ja">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ko">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-CN">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="tr">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ar">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="he">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="ca">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
+					<desc xml:lang="th">A file URL to address a external bitmap file used for high contrast menu images and/or toolbox buttons. Standard size of an small image is 16x16 pixel.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageBigHCURL" oor:type="xs:string">
 				<info>
 					<desc xml:lang="en-US">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pt">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ru">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="el">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="nl">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="fr">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="es">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="fi">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="it">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="cs">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="da">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="sv">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pl">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="pt-BR">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ja">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ko">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-CN">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="zh-TW">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="tr">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ar">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="he">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="ca">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
+					<desc xml:lang="th">A file URL to address a external bitmap file used for big high contrast toolbox buttons. Standard size of an big image is 26x26 pixel.</desc>
 				</info>
 			</prop>
 		</group>
@@ -338,6 +426,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
