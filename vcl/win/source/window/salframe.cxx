@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 14:17:43 $
+ *  last change: $Author: th $ $Date: 2000-11-03 18:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1357,6 +1357,7 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
         // Set the Font for IME Handling
         if ( pContext->mpFont )
         {
+/*
             HIMC hIMC = ImmGetContext( maFrameData.mhWnd );
             if ( hIMC )
             {
@@ -1365,6 +1366,7 @@ void SalFrame::SetInputContext( SalInputContext* pContext )
                 ImmSetCompositionFontW( hIMC, &aLogFont );
                 ImmReleaseContext( maFrameData.mhWnd, hIMC );
             }
+*/
         }
     }
     else
@@ -3285,6 +3287,38 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
+static void ImplUpdateIMECursorPos( SalFrame* pFrame, HIMC hIMC )
+{
+    COMPOSITIONFORM aForm;
+    memset( &aForm, 0, sizeof( aForm ) );
+
+    // Cursor-Position ermitteln und aus der die Default-Position fuer
+    // das Composition-Fenster berechnen
+    SalExtTextInputPosEvent aPosEvt;
+    pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
+    if ( (aPosEvt.mnX == -1) && (aPosEvt.mnY == -1) )
+        aForm.dwStyle |= CFS_DEFAULT;
+    else
+    {
+        aForm.dwStyle          |= CFS_POINT;
+        aForm.ptCurrentPos.x    = aPosEvt.mnX;
+        aForm.ptCurrentPos.y    = aPosEvt.mnY;
+    }
+    ImmSetCompositionWindow( hIMC, &aForm );
+
+    // Because not all IME's use this values, we create
+    // a Windows caret to force the Position from the IME
+    if ( GetFocus() == pFrame->maFrameData.mhWnd )
+    {
+        CreateCaret( pFrame->maFrameData.mhWnd, 0,
+                     aPosEvt.mnWidth, aPosEvt.mnHeight );
+        SetCaretPos( aPosEvt.mnX, aPosEvt.mnY );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static BOOL ImplHandleIMEStartComposition( HWND hWnd )
 {
     BOOL bDef = TRUE;
@@ -3297,22 +3331,7 @@ static BOOL ImplHandleIMEStartComposition( HWND hWnd )
         HIMC hIMC = ImmGetContext( hWnd );
         if ( hIMC )
         {
-            // Cursor-Position ermitteln und aus der die Default-Position fuer
-            // das Composition-Fenster berechnen
-            SalExtTextInputPosEvent aPosEvt;
-            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                        SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvt );
-            COMPOSITIONFORM aForm;
-            memset( &aForm, 0, sizeof( aForm ) );
-            if ( (aPosEvt.mnX == -1) && (aPosEvt.mnY == -1) )
-                aForm.dwStyle |= CFS_DEFAULT;
-            else
-            {
-                aForm.dwStyle          |= CFS_FORCE_POSITION;
-                aForm.ptCurrentPos.x    = aPosEvt.mnX;
-                aForm.ptCurrentPos.y    = aPosEvt.mnY;
-            }
-            ImmSetCompositionWindow( hIMC, &aForm );
+            ImplUpdateIMECursorPos( pFrame, hIMC );
             ImmReleaseContext( hWnd, hIMC );
         }
 
@@ -3391,6 +3410,7 @@ static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
                                                 SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
                     pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                                 SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+                    ImplUpdateIMECursorPos( pFrame, hIMC );
                 }
 
                 if ( pFrame->maFrameData.mbAtCursorIME &&
@@ -3411,9 +3431,19 @@ static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
                         ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
                     }
 
-                    aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
-                    aEvt.mnDeltaStart = LOWORD( ImmGetCompositionStringW( hIMC, GCS_DELTASTART, 0, 0 ) );
-
+                    // Because Cursor-Position and DeltaStart never updated
+                    // from the korean input engine, we must handle this here
+                    if ( lParam & CS_INSERTCHAR )
+                    {
+                        aEvt.mnCursorPos = nTextLen;
+                        if ( aEvt.mnCursorPos && (lParam & CS_NOMOVECARET) )
+                            aEvt.mnCursorPos--;
+                    }
+                    else
+                    {
+                        aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
+                        aEvt.mnDeltaStart = LOWORD( ImmGetCompositionStringW( hIMC, GCS_DELTASTART, 0, 0 ) );
+                    }
                     if ( lParam == GCS_CURSORPOS )
                         aEvt.mbOnlyCursor = TRUE;
 
@@ -3464,6 +3494,7 @@ static BOOL ImplHandleIMEComposition( HWND hWnd, LPARAM lParam )
 
                     pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                                 SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+                    ImplUpdateIMECursorPos( pFrame, hIMC );
                     if ( pSalAttrAry )
                         delete pSalAttrAry;
                 }
@@ -3742,8 +3773,9 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 ImplSendMessage( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
             break;
 
-        case WM_SETFOCUS:
         case WM_KILLFOCUS:
+            DestroyCaret();
+        case WM_SETFOCUS:
         case SAL_MSG_POSTFOCUS:
             ImplHandleFocusMsg( hWnd );
             rDef = FALSE;
