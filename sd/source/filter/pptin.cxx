@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-20 13:15:57 $
+ *  last change: $Author: sj $ $Date: 2001-01-16 14:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,9 @@
 #ifndef _SFX_PROGRESS_HXX
 #include <sfx2/progress.hxx>
 #endif
-
+#ifndef _EDITSTAT_HXX
+#include <svx/editstat.hxx>
+#endif
 #include <svtools/pathoptions.hxx>
 
 #define MAX_USER_MOVE       2
@@ -310,6 +312,11 @@ BOOL SdPPTImport::Import()
 
     SetStarDraw();
     SdrOutliner& rOutl = pDoc->GetDrawOutliner();
+    sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
+    nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
+    nControlWord &=~ EE_CNTRL_ULSPACEFIRSTPARA;
+    ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
+
     SdrLayerAdmin& rAdmin = pDoc->GetLayerAdmin();
     nBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
     nBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
@@ -523,8 +530,6 @@ BOOL SdPPTImport::Import()
         PptPageKind     ePageKind = eAktPageKind;
         UINT16          nPageNum = nAktPageNum;
         UINT16          nMasterAnz = GetPageCount( PPT_MASTERPAGE );
-
-        SdOutliner*     pInternalOutl = pDoc->GetInternalOutliner();
 
         for ( USHORT nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
         {
