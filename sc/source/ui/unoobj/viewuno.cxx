@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:57:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,7 +853,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         SdrView* pDrawView = pViewSh->GetSdrView();
         if (pDrawView)
         {
-            const SdrMarkList& rMarkList = pDrawView->GetMarkList();
+            const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             ULONG nMarkCount = rMarkList.GetMarkCount();
             if (nMarkCount)
             {
