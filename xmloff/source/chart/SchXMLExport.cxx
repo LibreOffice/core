@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-09 16:46:01 $
+ *  last change: $Author: bm $ $Date: 2001-02-14 17:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,10 @@ void SchXMLExportHelper::exportAutoStyles()
 {
     if( mxExpPropMapper.is())
     {
+        //ToDo: when embedded in calc/writer this is not necessary because the
+        // numberformatter is shared between both documents
+        mrExport.exportAutoDataStyles();
+        // export auto styles
         mrAutoStylePool.exportXML(
             XML_STYLE_FAMILY_SCH_CHART_ID,
             mrExport.GetDocHandler(),
@@ -206,6 +210,7 @@ void SchXMLExportHelper::exportAutoStyles()
             mrExport.GetNamespaceMap());
     }
 }
+
 void SchXMLExportHelper::collectAutoStyles( uno::Reference< chart::XChartDocument > rChartDoc )
 {
     parseDocument( rChartDoc, sal_False );
@@ -1202,6 +1207,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
         return;
 
     // variables for autostyles
+    const ::rtl::OUString sNumFormat( ::rtl::OUString::createFromAscii( "NumberFormat" ));
+    sal_Int32 nNumberFormat;
     uno::Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
     sal_Int32 nStyleFamily = XML_STYLE_FAMILY_SCH_CHART_ID;
@@ -1330,7 +1337,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             {
                 xPropSet = xAxisSupp->getXAxis();
                 if( xPropSet.is())
+                {
+                    uno::Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                    aNumAny >>= nNumberFormat;
+                    mrExport.addDataStyle( nNumberFormat );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                }
             }
             if( bExportContent )
             {
@@ -1436,7 +1449,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             {
                 xPropSet = xAxisSupp->getSecondaryXAxis();
                 if( xPropSet.is())
+                {
+                    uno::Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                    aNumAny >>= nNumberFormat;
+                    mrExport.addDataStyle( nNumberFormat );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                }
             }
             if( bExportContent )
             {
@@ -1478,7 +1497,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             {
                 xPropSet = xAxisSupp->getYAxis();
                 if( xPropSet.is())
+                {
+                    uno::Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                    aNumAny >>= nNumberFormat;
+                    mrExport.addDataStyle( nNumberFormat );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                }
             }
             if( bExportContent )
             {
@@ -1579,7 +1604,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             {
                 xPropSet = xAxisSupp->getSecondaryYAxis();
                 if( xPropSet.is())
+                {
+                    uno::Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                    aNumAny >>= nNumberFormat;
+                    mrExport.addDataStyle( nNumberFormat );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                }
             }
             if( bExportContent )
             {
@@ -1617,7 +1648,13 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             {
                 xPropSet = xAxisSupp->getZAxis();
                 if( xPropSet.is())
+                {
+                    uno::Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                    aNumAny >>= nNumberFormat;
+                    mrExport.addDataStyle( nNumberFormat );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
+                }
             }
             if( bExportContent )
             {
@@ -1768,6 +1805,7 @@ void SchXMLExportHelper::addSize( uno::Reference< drawing::XShape > xShape )
 
 SchXMLExport::SchXMLExport()
 : SvXMLExport( MAP_CM ),
+  maAutoStylePool( *this ),
   maExportHelper( *this, maAutoStylePool )
 {
 }
