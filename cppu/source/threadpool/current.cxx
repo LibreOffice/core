@@ -2,9 +2,9 @@
  *
  *  $RCSfile: current.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 14:44:58 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,8 @@ static typelib_InterfaceTypeDescription * get_type_XCurrentContext()
             typelib_typedescription_release( (typelib_TypeDescription*)pMethod );
 #if ! defined CPPU_LEAK_STATIC_DATA
             // another static ref
-            ++pTD->nStaticRefCount;
+            ++reinterpret_cast< typelib_TypeDescription * >( pTD )->
+                nStaticRefCount;
 #endif
             s_type_XCurrentContext = pTD;
         }
