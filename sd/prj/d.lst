@@ -1,5 +1,10 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
+mkdir: %_DEST%\xml%_EXT%\uiconfig
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw
+mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress
+mkdir: %_DEST%\xml%_EXT%\uiconfig\sdraw\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\simpress\menubar
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%COMMON_OUTDIR%\srs\core_srs.hid %COMMON_DEST%\res%_EXT%\sdcore_srs.hid
 
@@ -63,5 +68,8 @@ mkdir: %_DEST%\inc%_EXT%\sd
 ..\xml\AccessiblePresentationGraphicShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationGraphicShape.xml
 ..\xml\AccessiblePresentationOLEShape.xml %_DEST%\xml%_EXT%\AccessiblePresentationOLEShape.xml
 ..\xml\AccessiblePageShape.xml %_DEST%\xml%_EXT%\AccessiblePageShape.xml
+
+..\uiconfig\sdraw\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\sdraw\menubar\*.xml
+..\uiconfig\simpress\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\simpress\menubar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
