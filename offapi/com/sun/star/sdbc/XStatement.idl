@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStatement.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XConnection;
-interface XResultSet;
+ published interface XConnection;
+ published interface XResultSet;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XStatement
@@ -91,7 +91,7 @@ interface XResultSet;
     close a statement's current ResultSet if an open one exists.
     </p>
  */
-interface XStatement: com::sun::star::uno::XInterface
+published interface XStatement: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XStatement::executeQuery
