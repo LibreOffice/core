@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Blob.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,18 +81,19 @@ namespace connectivity
     //************ Class: java.sql.SQLWarning
     //**************************************************************
     class java_sql_Blob :   public java_lang_Object,
-                                                        public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XBlob>
+                            public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XBlob>
     {
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+        virtual ~java_sql_Blob();
     public:
         static jclass getMyClass();
-        virtual ~java_sql_Blob();
+
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Blob( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
+        java_sql_Blob( JNIEnv * pEnv, jobject myObj );
 
         // XBlob
         virtual sal_Int64 SAL_CALL length(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
