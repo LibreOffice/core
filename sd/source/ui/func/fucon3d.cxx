@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:45:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fucon3d.hxx"
+
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -93,11 +95,19 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 
-#include "sdview.hxx"
-#include "sdwindow.hxx"
-#include "viewshel.hxx"
-#include "fucon3d.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 
 #ifndef _SVX3DITEMS_HXX
 #include <svx/svx3ditems.hxx>
@@ -108,10 +118,9 @@
 #include <svx/polysc3d.hxx>
 #endif
 
-class SfxRequest;
-class SdDrawDocument;
+namespace sd {
 
-TYPEINIT1( FuConst3dObj, FuConstruct );
+TYPEINIT1( FuConstruct3dObject, FuConstruct );
 
 /*************************************************************************
 |*
@@ -119,14 +128,15 @@ TYPEINIT1( FuConst3dObj, FuConstruct );
 |*
 \************************************************************************/
 
-FuConst3dObj::FuConst3dObj(SdViewShell*     pViewSh,
-                           SdWindow*        pWin,
-                           SdView*          pView,
-                           SdDrawDocument*  pDoc,
-                           SfxRequest&      rReq) :
-      FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+FuConstruct3dObject::FuConstruct3dObject (
+    ViewShell*  pViewSh,
+    ::sd::Window*       pWin,
+    ::sd::View*         pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&     rReq)
+    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
-    pViewShell->SwitchObjectBar(RID_DRAW_OBJ_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 }
 
 /*************************************************************************
@@ -135,7 +145,7 @@ FuConst3dObj::FuConst3dObj(SdViewShell*     pViewSh,
 |*
 \************************************************************************/
 
-FuConst3dObj::~FuConst3dObj()
+FuConstruct3dObject::~FuConstruct3dObject()
 {
 }
 
@@ -146,7 +156,7 @@ FuConst3dObj::~FuConst3dObj()
 \************************************************************************/
 
 // #97016#
-E3dCompoundObject* FuConst3dObj::ImpCreateBasic3DShape()
+E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 {
     E3dCompoundObject* p3DObj = NULL;
 
@@ -293,7 +303,7 @@ E3dCompoundObject* FuConst3dObj::ImpCreateBasic3DShape()
 }
 
 // #97016#
-void FuConst3dObj::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
+void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
 {
     Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
 
@@ -381,7 +391,7 @@ void FuConst3dObj::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *p
     pScene->SetMergedItemSetAndBroadcast(aAttr);
 }
 
-BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
@@ -430,7 +440,7 @@ BOOL FuConst3dObj::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConst3dObj::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -441,7 +451,7 @@ BOOL FuConst3dObj::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConst3dObj::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstruct3dObject::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
@@ -469,7 +479,7 @@ BOOL FuConst3dObj::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConst3dObj::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstruct3dObject::KeyInput(const KeyEvent& rKEvt)
 {
     return( FuConstruct::KeyInput(rKEvt) );
 }
@@ -480,7 +490,7 @@ BOOL FuConst3dObj::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void FuConst3dObj::Activate()
+void FuConstruct3dObject::Activate()
 {
     pView->SetCurrentObj(OBJ_NONE);
 
@@ -493,13 +503,13 @@ void FuConst3dObj::Activate()
 |*
 \************************************************************************/
 
-void FuConst3dObj::Deactivate()
+void FuConstruct3dObject::Deactivate()
 {
     FuConstruct::Deactivate();
 }
 
 // #97016#
-SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_3D_CUBE:
     // case SID_3D_SHELL:
@@ -588,3 +598,5 @@ SdrObject* FuConst3dObj::CreateDefaultObject(const sal_uInt16 nID, const Rectang
 
     return pScene;
 }
+
+} // end of namespace sd
