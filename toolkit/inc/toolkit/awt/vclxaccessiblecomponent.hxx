@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:17:00 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #define _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
+
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -118,7 +122,8 @@ typedef ::cppu::ImplHelper1<
     ::com::sun::star::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
 class VCLExternalSolarLock;
-class VCLXAccessibleComponent
+
+class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public AccessibleExtendedComponentHelper_BASE
         ,public ::comphelper::OAccessibleImplementationAccess
         ,public VCLXAccessibleComponent_BASE
