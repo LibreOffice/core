@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:14:15 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 13:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #define RID_MENU_START                  RID_DBACCESS_START
 #define RID_STRING_START                RID_DBACCESS_START
 #define RID_UNTYPED_START               RID_DBACCESS_START
+#define RID_WARN_START                  RID_DBACCESS_START
 
 //========================================================================
 // dialog ids
@@ -127,8 +128,7 @@
 #define ERR_QRY_TOO_MANY_TABLES         RID_ERRORBOX_START + 10
 #define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START + 11
 #define ERR_QRY_ILLEGAL_JOIN            RID_ERRORBOX_START + 12
-#define WARN_QRY_NATIVE                 RID_QUERYBOX_START + 13
-
+#define ERR_CANTADMINQUERIES            RID_ERRORBOX_START + 13
 
 //========================================================================
 // query boxes
@@ -138,6 +138,12 @@
 #define QUERY_BRW_DELETE_QUERY          RID_QUERYBOX_START +  2
 #define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  3
 #define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  4
+
+//========================================================================
+// warning boxes
+
+#define WARN_SAVEFORQUERIES             RID_WARN_START +  1
+#define WARN_QRY_NATIVE                 RID_WARN_START +  2
 
 //========================================================================
 // toolboxes
@@ -261,6 +267,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/02/05 09:14:15  oj
+ *  some new resources
+ *
  *  Revision 1.20  2001/01/30 08:26:51  fs
  *  +STR_ALL_*
  *
