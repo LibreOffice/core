@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:16:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-15 08:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _CONNECTIVITY_FLAT_DSTATEMENT_HXX_
 #include "flat/EStatement.hxx"
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
 #endif
 
 using namespace connectivity::flat;
