@@ -1,0 +1,42 @@
+    <node oor:name="StarCalc 5.0 Vorlage/Template" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>5050</value></prop>
+        <prop oor:name="Type"><value>calc_StarCalc_50_VorlageTemplate</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">StarCalc 5.0 - Szablon</value>
+            <value xml:lang="hu">StarCalc 5.0-sablon</value>
+            <value xml:lang="ja">StarCalc 5.0 テンプレート</value>
+            <value xml:lang="es">StarCalc 5.0 - Plantilla</value>
+            <value xml:lang="tr">StarCalc 5.0 Şablonu</value>
+            <value xml:lang="ru">StarCalc 5.0 Шаблон</value>
+            <value xml:lang="th">StarCalc 5.0 Template</value>
+            <value xml:lang="x-comment">StarCalc 5.0 Vorlage</value>
+            <value xml:lang="ca">Plantilla de l</value>
+            <value xml:lang="el">StarCalc 5.0 Πρότυπο</value>
+            <value xml:lang="zh-CN">StarCalc 5.0 样式</value>
+            <value xml:lang="pt">StarCalc 5.0 Modelo</value>
+            <value xml:lang="cs">Šablona StarCalc 5.0</value>
+            <value xml:lang="fr">StarCalc 5.0 Modèle</value>
+            <value xml:lang="ar">StarCalc 5.0 قالب</value>
+            <value xml:lang="zh-TW">StarCalc 5.0 樣式</value>
+            <value xml:lang="sl">StarCalc 5.0 Predloga</value>
+            <value xml:lang="fi">StarCalc 5.0 -mallipohja</value>
+            <value xml:lang="hi-IN">StarCalc 5.0 Template</value>
+            <value xml:lang="en-US">StarCalc 5.0 Template</value>
+            <value xml:lang="sk">Šablóna StarCalc 5.0</value>
+            <value xml:lang="he">‮תבנית StarCalc 5.0‬</value>
+            <value xml:lang="sv">StarCalc 5.0 mall</value>
+            <value xml:lang="da">StarCalc 5.0-skabelon</value>
+            <value xml:lang="de">StarCalc 5.0 Vorlage</value>
+            <value xml:lang="ko">StarCalc 5.0 서식 파일</value>
+            <value xml:lang="nl">StarCalc 5.0 Sjabloon</value>
+            <value xml:lang="pt-BR">Modelo do StarCalc 5.0 </value>
+            <value xml:lang="it">StarCalc 5.0 Modello</value>
+            <value xml:lang="x-translate">StarCalc 5.0 Vorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
+    </node>
