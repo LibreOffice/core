@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-18 08:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <vector>
+#include <algorithm>
 
 #include <ide_pch.hxx>
 
@@ -232,9 +234,16 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, StarB
                 Sequence< rtl::OUString > aNames = xLib->getElementNames();
                 sal_Int32 nNameCount = aNames.getLength();
                 const rtl::OUString* pNames = aNames.getConstArray();
-                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+
+                // sort dialog names
+                ::std::vector<String> aNameList(nNameCount);
+                for ( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+                    aNameList[ i ] = pNames[ i ];
+                ::std::sort( aNameList.begin() , aNameList.end() , StringCompareLessThan );
+
+                for ( i = 0 ; i < nNameCount ; i++ )
                 {
-                    String aDlgName = pNames[ i ];
+                    String aDlgName = aNameList[ i ];
                     SvLBoxEntry* pEntry = FindEntry( pLibRootEntry, aDlgName, OBJTYPE_OBJECT );
                     if ( !pEntry )
                     {

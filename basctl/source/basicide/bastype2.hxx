@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-15 08:45:17 $
+ *  last change: $Author: tbe $ $Date: 2001-06-18 08:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@ public:
 
     // new dialogs
     SbxItem         GetSbxItem( SvLBoxEntry* pEntry );
+
+    static BOOL     StringCompareLessThan( const String& rStr1, const String& rStr2 )
+                        { return (rStr1.CompareIgnoreCaseToAscii( rStr2 ) == COMPARE_LESS); }
 };
 
 /****************************************
