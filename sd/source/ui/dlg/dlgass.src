@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:32:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,7 @@ ModalDialog DLG_ASS
         Text[ portuguese_brazilian ] = "~Duration of page";
         Text[ japanese ] = "½×²ÄŞ•\\¦ŠÔ(~U)";
         Text[ chinese_simplified ] = "³ÖĞøÊ±¼ä(~U)";
-        Text[ chinese_traditional ] = "¶¡¹j®É¶¡(~U)";
+        Text[ chinese_traditional ] = "«ùÄò®É¶¡(~U)";
         Text[ arabic ] = "ãÏÉ ÇáÈŞÇÁ";
         Text[ greek ] = "ÄéÜñêåéá óôÜóçò";
         Text[ korean ] = "Áö¼Ó½Ã°£(~U)";
@@ -1257,6 +1257,7 @@ ModalDialog DLG_ASS
     Text[ catalan ] = "AutoPiloto Presentación";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
+
 
 
 
