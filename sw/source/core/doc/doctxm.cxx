@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 15:36:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                 break;
             }
     }
-    __DELETE( nFlagSize ) pSetFlags;
+    delete [] pSetFlags;
     if( pChkStr )
         return *pChkStr;
     return aName += String::CreateFromInt32( ++nNum );
