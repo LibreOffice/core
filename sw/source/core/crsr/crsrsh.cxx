@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:26:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,7 +1409,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                !pDoc->GetDocShell()->IsReadOnly() || bAllProtect )) ) )
         {
             if( !FindValidCntntNode( !HasDrawView() ||
-                    0 == Imp()->GetDrawView()->GetMarkList().GetMarkCount()))
+                    0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
             {
                 // alles ist geschuetzt / versteckt -> besonderer Mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
@@ -1507,14 +1507,14 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
             // im geschuetzten Fly? aber bei Rahmenselektion ignorieren
             if( !IsReadOnlyAvailable() && pFrm->IsProtected() &&
                 ( !Imp()->GetDrawView() ||
-                  !Imp()->GetDrawView()->GetMarkList().GetMarkCount() ) &&
+                  !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
                 (!pDoc->GetDocShell() ||
                  !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
                 // dann suche eine gueltige Position
                 BOOL bChgState = TRUE;
                 if( !FindValidCntntNode(!HasDrawView() ||
-                    0 == Imp()->GetDrawView()->GetMarkList().GetMarkCount()))
+                    0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
                 {
                     // alles ist geschuetzt / versteckt -> besonderer Mode
                     if( bAllProtect )
@@ -2578,7 +2578,7 @@ FASTBOOL SwCrsrShell::ShouldWait() const
     if ( IsTableMode() || GetCrsrCnt() > 1 )
         return TRUE;
 
-    if( HasDrawView() && GetDrawView()->GetMarkList().GetMarkCount() )
+    if( HasDrawView() && GetDrawView()->GetMarkedObjectList().GetMarkCount() )
         return TRUE;
 
     SwPaM* pPam = GetCrsr();
@@ -2845,7 +2845,7 @@ FASTBOOL SwCrsrShell::IsCrsrReadonly() const
              (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
              pFly->Lower() &&
              !pFly->Lower()->IsNoTxtFrm() &&
-             !GetDrawView()->GetMarkList().GetMarkCount() )
+             !GetDrawView()->GetMarkedObjectList().GetMarkCount() )
         {
             return FALSE;
         }
