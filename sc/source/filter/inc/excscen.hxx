@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excscen.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ protected:
     String*                     pName;
     String*                     pComment;
     String*                     pUserName;
+    UINT8                       nProtected;
 
     const UINT16                nTab;
 
