@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 21:23:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ ModalDialog DLG_MORPH
         Text[ korean ] = "¼³Á¤";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Configuración";
     };
     FixedText FT_STEPS
     {
@@ -147,6 +148,7 @@ ModalDialog DLG_MORPH
         Text[ korean ] = "Áõ°¡ºÐ";
         Text[ turkish ] = "Adýmlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pasos";
     };
     MetricField MTF_STEPS
     {
@@ -188,6 +190,7 @@ ModalDialog DLG_MORPH
         Text[ korean ] = "³¯¾Æ¿À±â ¼Ó¼º";
         Text[ turkish ] = "Öznitelikler: Serme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cubrir atributos";
     };
     CheckBox CBX_ORIENTATION
     {
@@ -215,6 +218,7 @@ ModalDialog DLG_MORPH
         Text[ korean ] = "°°Àº ¹æÇâ";
         Text[ turkish ] = "Ayný yön";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Misma orientación";
     };
     Text [ english_us ] = "Cross-fading" ;
     Text [ italian ] = "Morphing" ;
@@ -235,4 +239,5 @@ ModalDialog DLG_MORPH
     Text[ korean ] = "³¯¾Æ¿À±â";
     Text[ turkish ] = "Ser";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Disolvencia";
 };
