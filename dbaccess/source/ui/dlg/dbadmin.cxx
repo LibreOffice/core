@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 10:38:43 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,6 +685,8 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString::createFromAscii("DataCacheSize")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString::createFromAscii("ControlUser")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
+    // extra settings for odbc
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, ::rtl::OUString::createFromAscii("UseCatalog")));
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -994,11 +996,13 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxInt32Item(DSID_CONN_CACHESIZE, 20);
     *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, String());
     *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, String());
+    *pCounter++ = new SfxBoolItem(DSID_USECATALOG, sal_False);
 
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
@@ -2444,6 +2448,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2001/04/04 10:38:43  oj
+ *  reading uninitialized memory
+ *
  *  Revision 1.43  2001/03/30 11:54:34  fs
  *  #65293# missing include
  *

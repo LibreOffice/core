@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 15:42:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,14 +200,18 @@ namespace dbaui
     {
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         /// get the SfxPoolItem ids used by this tab page
         static sal_Int32* getDetailIds();
 
     private:
         FixedLine           m_aSeparator1;
+        CheckBox            m_aUseCatalog;
 
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
+
+        virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
     };
 
     //========================================================================
@@ -277,6 +281,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/05 15:42:07  fs
+ *  enlargen the tab pages -> some redesigns
+ *
  *  Revision 1.1  2001/01/26 16:14:21  fs
  *  initial checkin - administration tab pages used for special DSN types
  *

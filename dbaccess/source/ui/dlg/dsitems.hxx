@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 07:34:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,22 @@
 #define DSID_CONN_CACHESIZE         28
 #define DSID_CONN_CTRLUSER          29
 #define DSID_CONN_CTRLPWD           30
+#define DSID_USECATALOG             31          // should the driver use the catalog name when the database is filebased
 
 //========================================================================
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_CONN_CTRLPWD
+#define DSID_LAST_ITEM_ID   DSID_USECATALOG
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/27 07:34:29  oj
+ *  impl new page for adabas
+ *
  *  Revision 1.6  2001/02/05 13:57:41  fs
  *  #83430# +DSID_DATASOURCE_UNO
  *

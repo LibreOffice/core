@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 15:42:07 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,9 @@ namespace dbaui
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_UIDPWD | CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
         ,m_aSeparator1  (this, ResId(FL_SEPARATOR1))
+        ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
     {
+        m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
     }
 
@@ -618,11 +620,38 @@ namespace dbaui
             {
                 DSID_ADDITIONALOPTIONS,
                 DSID_CHARSET,
+                DSID_USECATALOG,
                 0
             };
             pRelevantIds = nRelevantIds;
         }
         return pRelevantIds;
+    }
+    // -----------------------------------------------------------------------
+    sal_Bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    {
+        sal_Bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
+        _rSet.Put(SfxBoolItem(DSID_USECATALOG, m_aUseCatalog.IsChecked()));
+        return bChangedSomething;
+    }
+    // -----------------------------------------------------------------------
+    void OOdbcDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
+    {
+        OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
+
+        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        sal_Bool bValid, bReadonly;
+        getFlags(_rSet, bValid, bReadonly);
+
+        SFX_ITEMSET_GET(_rSet, pUseCatalogItem, SfxBoolItem, DSID_USECATALOG, sal_True);
+
+        m_aUseCatalog.Check(pUseCatalogItem->GetValue());
+
+        if (_bSaveValue)
+            m_aUseCatalog.SaveValue();
+
+        if (bReadonly)
+            m_aUseCatalog.Disable();
     }
 
     //========================================================================
@@ -980,6 +1009,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/05 15:42:07  fs
+ *  enlargen the tab pages -> some redesigns
+ *
  *  Revision 1.1  2001/01/26 16:14:12  fs
  *  initial checkin - administration tab pages used for special DSN types
  *
