@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:04:25 $
+ *  last change: $Author: ssa $ $Date: 2001-05-04 15:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,4 +88,10 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ korean ] = "±¸¼º¿ä¼Ò (%s)À»£¨¸¦£©·ÎµåÇÏÁö¡¡¸øÇß½À´Ï´Ù.\n¼Â¾÷À»¡¡½ÃÀÛÇÑ´ÙÀ½¡¡¼ö¸®ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bir bileþen (%s) yüklenemedi.\nSetup programýný çalýþtýrýp onarýnýz.";
     Text[ language_user1 ] = " ";
+};
+
+String SV_STDTEXT_DONTWARNAGAIN
+{
+    Text = "Diesen Hinweis nicht mehr anzeigen.";
+    Text [English] = "Do not warn me again.";
 };

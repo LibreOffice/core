@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 14:19:33 $
+ *  last change: $Author: ssa $ $Date: 2001-05-04 15:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,14 @@ void MessBox::SetCheckBoxState( BOOL bCheck )
 {
     if( mpCheckBox ) mpCheckBox->Check( bCheck );
     mbCheck = bCheck;
+}
+
+// -----------------------------------------------------------------------
+
+void MessBox::SetDefaultCheckBoxText()
+{
+    XubString rText( ResId( SV_STDTEXT_DONTWARNAGAIN, ImplGetResMgr() ) );
+    maCheckBoxText = rText;
 }
 
 // -----------------------------------------------------------------------
