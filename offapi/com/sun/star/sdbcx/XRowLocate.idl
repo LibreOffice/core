@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRowLocate.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
     has to implement the compare method for bookmarks.
     </p>
  */
-interface XRowLocate: com::sun::star::uno::XInterface
+published interface XRowLocate: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbcx::XRowLocate::getBookmark
