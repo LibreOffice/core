@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:27 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ danish ] = "AutoPilot Gruppeelement";
     Text [ swedish ] = "AutoPilot f�r gruppelement";
     Text [ polish ] = "AutoPilot: Element grupy";
-    Text [ portuguese_brazilian ] = "AutoPilot Gruppenelement";
+    Text [ portuguese_brazilian ] = "Assistente de elementos de grupo";
     Text [ japanese ] = "オートパイロット グループ要素";
     Text [ chinese_simplified ] = "自动文件助理 小组单元";
     Text [ chinese_traditional ] = "自動檔案助理 群組單元";
@@ -85,7 +85,7 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text [ chinese_simplified ] = "自动文件助理 小组单元";
     Text [ greek ] = "�������� ������ ��� AutoPilot";
     Text [ korean ] = "자동 파일럿 그룹 요소";
-    Text [ turkish ] = "OtoPilot Grup ��esi";
+    Text [ turkish ] = "Otomatik Pilot Grup Eleman�";
 
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
@@ -95,6 +95,9 @@ ModalDialog RID_DLG_GROUPBOXWIZARD
     Text[ catalan ] = "Element de grup de l'AutoPilot";
     Text[ finnish ] = "Ohjatun toiminnon ryhm�elementti";
     Text[ thai ] = "นำร่ององค์ประกอบกลุ่มอัตโนมัติ ";
+    Text[ czech ] = "Průvodce skupinovým prvkem";
+    Text[ hebrew ] = "AutoPilot Gruppenelement";
+    Text[ hindi ] = "ओटोपैलट् समूह ऐलिमेन्ट्";
 };
 
 ModalDialog RID_DLG_LISTCOMBOWIZARD
@@ -126,7 +129,7 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ danish ] = "AutoPilot Tabelelement";
     Text [ swedish ] = "AutoPilot f�r tabellelement";
     Text [ polish ] = "AutoPilot: Element tabeli";
-    Text [ portuguese_brazilian ] = "AutoPilot Tabellenelement";
+    Text [ portuguese_brazilian ] = "Assistente de elementos de tabela";
     Text [ japanese ] = "オートパイロット テーブルの構成要素";
     Text [ chinese_simplified ] = "自动文件助理 表格单元";
     Text [ chinese_traditional ] = "自動檔案助理 表格單元";
@@ -135,10 +138,13 @@ ModalDialog RID_DLG_GRIDWIZARD
     Text [ chinese_simplified ] = "自动文件助理 表格单元";
     Text [ greek ] = "�������� ������ ��� �����������";
     Text [ korean ] = "자동 파일럿 테이블 요소";
-    Text [ turkish ] = "OtoPilot Tablo ��esi";
+    Text [ turkish ] = "AutoPilot Tablo Elementi";
     Text[ catalan ] = "Element de taula de l'AutoPilot";
     Text[ finnish ] = "Ohjatun toiminnon taulukkoelementti";
     Text[ thai ] = "นำร่ององค์ประกอบตารางอัตโนมัติ ";
+    Text[ czech ] = "Průvodce tabulárním prvkem";
+    Text[ hebrew ] = "AutoPilot Tabellenelement";
+    Text[ hindi ] = "ओटोपैलट् सारणी ऐलिमेन्ट्";
 };
 
 String RID_STR_LISTWIZARD_TITLE
@@ -155,7 +161,7 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ danish ] = "AutoPilot rulleliste";
     Text[ swedish ] = "AutoPilot f�r listruta";
     Text[ polish ] = "AutoPilot: Pole listy";
-    Text[ portuguese_brazilian ] = "Create group";
+    Text[ portuguese_brazilian ] = "Assistente de caixa de listagem";
     Text[ japanese ] = "オートパイロット リストフィールド";
     Text[ chinese_simplified ] = "自动文档助理 列单栏";
     Text[ chinese_traditional ] = "自動檔案助理 清單欄位";
@@ -164,10 +170,13 @@ String RID_STR_LISTWIZARD_TITLE
     Text[ chinese_simplified ] = "自动文档助理 列单栏";
     Text[ greek ] = "����� ������ ��� �����������";
     Text[ korean ] = "자동 파일럿 목록 필드";
-    Text[ turkish ] = "OtoPilot Liste alan�";
+    Text[ turkish ] = "AutoPilot Liste Kutusu";
     Text[ catalan ] = "Quadre de llista de l'AutoPilot";
     Text[ finnish ] = "Ohjatun toiminnon luetteloruutu";
     Text[ thai ] = "นำร่องกล่องรายการอัตโนมัติ ";
+    Text[ czech ] = "Průvodce seznamem";
+    Text[ hebrew ] = "AutoPilot Listenfeld";
+    Text[ hindi ] = "ओटोपैलट् सूची बॉक्स";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
@@ -183,7 +192,7 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ danish ] = "AutoPilot kombinationsboks";
     Text [ swedish ] = "AutoPilot f�r kombinationsf�lt";
     Text [ polish ] = "AutoPilot: Pole kombi";
-    Text [ portuguese_brazilian ] = "Option Group AutoPilot";
+    Text [ portuguese_brazilian ] = "Assistente de caixa de combina��o";
     Text [ japanese ] = "オートパイロット コンボボックス";
     Text [ chinese_simplified ] = "自动文件助理 组合栏";
     Text [ chinese_traditional ] = "自動檔案助理 組合欄位";
@@ -192,11 +201,14 @@ String RID_STR_COMBOWIZARD_TITLE
     Text [ chinese_simplified ] = "自动文件助理 组合栏";
     Text [ greek ] = "����� ���������� ��� �����������";
     Text [ korean ] = "자동 파일럿 콤보 상자";
-    Text [ turkish ] = "OtoPilot Kombinasyon alan�";
+    Text [ turkish ] = "AutoPilot Bile�en Kutusu";
     Text [ language_user1 ] = " ";
     Text[ catalan ] = "Quadre combinat de l'AutoPilot";
     Text[ finnish ] = "Ohjatun toiminnon yhdistelm�ruutu";
     Text[ thai ] = "นำร่องกล่องคอมโบ้อัตโนมัติ";
+    Text[ czech ] = "Průvodce kombinovaným polem";
+    Text[ hebrew ] = "AutoPilot Kombinationsfeld";
+    Text[ hindi ] = "ओटोपैलट् कॉम्बो बॉक्स";
 };
 
 String RID_STR_COULDNOTOPENTABLE
@@ -213,22 +225,37 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.";
     Text[ danish ] = "Tabelforbindelsen til datakilden kunne ikke oprettes.";
     Text[ swedish ] = "Det gick inte att uppr�tta en tabellf�rbindelse till datak�llan.";
-    Text[ polish ] = "Po��czenie tabeli ze �r�d�em bazy danych nie powiod�o si�.";
-    Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
+    Text[ polish ] = "Nie uda�o si� nawi�za� po��czenia mi�dzy tabel� a �r�d�em danych.";
+    Text[ portuguese_brazilian ] = "N�o foi poss�vel estabelecer a conex�o da tabela � fonte de dados.";
     Text[ japanese ] = "データソースのテーブルに接続できませんでした。";
     Text[ korean ] = "데이터 원본과 테이블을 연결할 수 없습니다.";
     Text[ chinese_simplified ] = "无法和数据源建立连接。";
     Text[ chinese_traditional ] = "無法連線到資料源。";
-    Text[ turkish ] = "The connection to the data source could not be established.";
+    Text[ turkish ] = "Veri kayna��na ba�lant� kurulamad�.";
     Text[ arabic ] = "���� ������� ����� ��������.";
     Text[ catalan ] = "No s'ha pogut establir la connexi� de la taula a la font de les dades";
     Text[ finnish ] = "Tietol�hteeseen ei voitu muodostaa taulukkoyhteytt�.";
     Text[ thai ] = "ไม่สามารถสร้างการเชื่อมต่อตารางกับแหล่งข้อมูลได้";
+    Text[ czech ] = "Spojení tabulky se zdrojem dat nelze navázat.";
+    Text[ hebrew ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
+    Text[ hindi ] = "ड़ॉटा मूल केलिए सारणी कनेक्शन को स्थापित नहीं कर सकते है ।";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18.2.7.6.3.2.1.26.3  2003/04/29 08:35:39  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.18.2.7.6.3.2.1.26.2  2003/04/16 18:58:08  gh
+ *  RESYNC: (1.18.2.7.6.3.2.1-1.27); FILE MERGED
+ *
+ *  Revision 1.18.2.7.6.3.2.1.26.1  2003/04/14 14:46:27  gh
+ *  merging all languages
+ *
+ *  Revision 1.27  2003/03/25 16:03:27  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.18.2.7.6.3.2.1  2003/02/22 16:36:26  hr
  *  INTEGRATION: CWS mergep (1.18.2.7.6.3.20); FILE MERGED
  *  2003/02/22 10:35:03 nf 1.18.2.7.6.3.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
@@ -327,6 +354,16 @@ String RID_STR_COULDNOTOPENTABLE
  *
  *  Revision 1.0 14.02.01 10:47:53  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
+
 
 
 
