@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:33:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,6 +625,7 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     }
 
     aContourWnd.SetPolyPolygon( aPolyPoly );
+    aContourWnd.GetSdrModel()->SetChanged( sal_True );
 }
 
 
@@ -763,6 +764,7 @@ void SvxSuperContourDlg::ReducePoints( const long nTol )
 
         rPoly.SetSize( nCounter );
         aContourWnd.SetPolyPolygon( aPolyPoly );
+        aContourWnd.GetSdrModel()->SetChanged( sal_True );
     }
 }
 
