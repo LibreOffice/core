@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:04 $
+*  last change: $Author: kz $ $Date: 2004-11-27 09:05:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -807,7 +807,7 @@ public class DBMetaData {
         XStorable xStoreable = (XStorable) UnoRuntime.queryInterface(XStorable.class, _xcomponent);
         PropertyValue[] oStoreProperties = new PropertyValue[1];
         oStoreProperties[0] = Properties.createProperty("FilterName", "writer8");
-        storepath += ".oot";
+        storepath += ".odt";
         xStoreable.storeAsURL(storepath, oStoreProperties);
         return true;
     } catch (Exception e) {
