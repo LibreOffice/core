@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-04-26 13:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ void lcl_exportString(
     SvXMLExport& rExport,
     const Reference<XPropertySet> & rPropSet,
     const OUString& sProperty,
+    sal_uInt16 nPrefix,
     const sal_Char* pElementName,
     sal_Bool bOmitIfEmpty = sal_True)
 {
@@ -285,7 +286,7 @@ void lcl_exportString(
     aAny >>= sTmp;
     if (!bOmitIfEmpty || (sTmp.getLength() > 0))
     {
-        rExport.AddAttribute(XML_NAMESPACE_TEXT, pElementName, sTmp);
+        rExport.AddAttribute(nPrefix, pElementName, sTmp);
     }
 }
 
@@ -294,28 +295,29 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     sal_Bool bIsEndnote)
 {
     // default/paragraph style
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sParaStyleName, sXML_default_style_name, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig, sParaStyleName,
+                      XML_NAMESPACE_TEXT, sXML_default_style_name, sal_True);
 
     // citation style
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sCharStyleName, sXML_citation_style_name, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig, sCharStyleName,
+                      XML_NAMESPACE_TEXT, sXML_citation_style_name, sal_True);
 
     // citation body style
     lcl_exportString( GetExport(), rFootnoteConfig, sAnchorCharStyleName,
-                      sXML_citation_body_style_name, sal_True);
+                      XML_NAMESPACE_TEXT, sXML_citation_body_style_name,
+                      sal_True);
 
     // page style
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sPageStyleName, sXML_master_page_name, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig, sPageStyleName,
+                      XML_NAMESPACE_TEXT, sXML_master_page_name, sal_True);
 
     // prefix
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sPrefix, sXML_num_prefix, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig, sPrefix,
+                      XML_NAMESPACE_STYLE, sXML_num_prefix, sal_True);
 
     // suffix
-    lcl_exportString( GetExport(), rFootnoteConfig,
-                      sSuffix, sXML_num_suffix, sal_True);
+    lcl_exportString( GetExport(), rFootnoteConfig, sSuffix,
+                      XML_NAMESPACE_STYLE, sXML_num_suffix, sal_True);
 
 
 
@@ -337,12 +339,12 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
                                       sBuffer.makeStringAndClear());
     }
 
-    // StartAt / offset
+    // StartAt / start-value
     aAny = rFootnoteConfig->getPropertyValue(sStartAt);
     sal_Int16 nOffset;
     aAny >>= nOffset;
     SvXMLUnitConverter::convertNumber(sBuffer, (sal_Int32)nOffset);
-    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_offset,
+    GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_start_value,
                              sBuffer.makeStringAndClear());
 
     // some properties are for footnotes only

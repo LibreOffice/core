@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: dvo $ $Date: 2001-04-26 13:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,13 +278,18 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
           XML_TOK_FTNCONFIG_DEFAULT_STYLENAME },
     { XML_NAMESPACE_TEXT, sXML_master_page_name,
           XML_TOK_FTNCONFIG_PAGE_STYLENAME },
-    { XML_NAMESPACE_TEXT, sXML_offset, XML_TOK_FTNCONFIG_OFFSET },
-    { XML_NAMESPACE_TEXT, sXML_num_prefix, XML_TOK_FTNCONFIG_NUM_PREFIX },
-    { XML_NAMESPACE_TEXT, sXML_num_suffix, XML_TOK_FTNCONFIG_NUM_SUFFIX },
+    { XML_NAMESPACE_TEXT, sXML_start_value, XML_TOK_FTNCONFIG_OFFSET },
+    { XML_NAMESPACE_STYLE, sXML_num_prefix, XML_TOK_FTNCONFIG_NUM_PREFIX },
+    { XML_NAMESPACE_STYLE, sXML_num_suffix, XML_TOK_FTNCONFIG_NUM_SUFFIX },
     { XML_NAMESPACE_STYLE, sXML_num_format, XML_TOK_FTNCONFIG_NUM_FORMAT },
     { XML_NAMESPACE_STYLE, sXML_num_letter_sync, XML_TOK_FTNCONFIG_NUM_SYNC },
     { XML_NAMESPACE_TEXT, sXML_start_numbering_at, XML_TOK_FTNCONFIG_START_AT},
     { XML_NAMESPACE_TEXT, sXML_footnotes_position, XML_TOK_FTNCONFIG_POSITION},
+
+    // for backwards compatibility with SRC630 & earlier
+    { XML_NAMESPACE_TEXT, sXML_num_prefix, XML_TOK_FTNCONFIG_NUM_PREFIX },
+    { XML_NAMESPACE_TEXT, sXML_num_suffix, XML_TOK_FTNCONFIG_NUM_SUFFIX },
+    { XML_NAMESPACE_TEXT, sXML_offset, XML_TOK_FTNCONFIG_OFFSET },
     XML_TOKEN_MAP_END
 };
 
