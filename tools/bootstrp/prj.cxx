@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-01 17:44:49 $
+ *  last change: $Author: nf $ $Date: 2001-03-22 16:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 #endif
 #endif
 #endif
+
+Link Star::aDBNotFoundHdl;
 
 //
 //  class SimpleConfig
@@ -707,6 +709,9 @@ String Star::CreateFileName( String sProject )
     aEntry += DirEntry( sProject );
     aEntry += DirEntry( sPrjDir );
     aEntry += DirEntry( sSolarFile );
+
+    if ( !aEntry.Exists() && aDBNotFoundHdl.IsSet())
+        aDBNotFoundHdl.Call( &sProject );
 
     return aEntry.GetFull();
 }
