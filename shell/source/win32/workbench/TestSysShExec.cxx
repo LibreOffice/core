@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestSysShExec.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 13:55:35 $
+ *  last change: $Author: tra $ $Date: 2001-05-14 07:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ using namespace com::sun::star::system;
 //  defines
 //--------------------------------------------------------------
 
-#define RDB_SYSPATH "D:\\Projects\\src630\\sysshell\\wntmsci7\\bin\\applicat.rdb"
+#define RDB_SYSPATH "D:\\Projects\\gsl\\shell\\wntmsci7\\bin\\applicat.rdb"
 
 //--------------------------------------------------------------
 //  global variables
