@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-12-02 11:48:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,8 @@ void Reader::SetNoOutlineNum( SwDoc& rDoc )
     rDoc.SetOutlineNumRules( aRules );
 
     // und UeberschirftBasis ohne Einrueckung!
-    SwTxtFmtColl* pCol = rDoc.GetTxtCollFromPool( RES_POOLCOLL_HEADLINE_BASE );
+    SwTxtFmtColl* pCol = rDoc.GetTxtCollFromPoolSimple
+        ( RES_POOLCOLL_HEADLINE_BASE, FALSE );
     pCol->ResetAttr( RES_LR_SPACE );
 #endif
 }
@@ -1182,9 +1183,11 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
     SwCntntNode* pCNd = rNds.GoNext( &aIdx );
     if( pCNd )
     {
-        pCNd->SetAttr( SwFmtPageDesc(
-                            rDoc.GetPageDescFromPool(RES_POOLPAGE_HTML) ) );
-        pCNd->ChgFmtColl( rDoc.GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
+        pCNd->SetAttr
+            ( SwFmtPageDesc(rDoc.GetPageDescFromPoolSimple(RES_POOLPAGE_HTML,
+                                                           FALSE) ) );
+        pCNd->ChgFmtColl( rDoc.GetTxtCollFromPoolSimple( RES_POOLCOLL_TEXT,
+                                                         FALSE ));
     }
 
     return bRet;
