@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrls.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: ka $ $Date: 2000-10-30 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,51 +103,59 @@ USHORT FadeEffectLB::GetSdResId( presentation::FadeEffect eFE )
 {
     switch( eFE )
     {
-        case presentation::FadeEffect_NONE:                     return STR_EFFECT_NONE;
-        case presentation::FadeEffect_FADE_FROM_LEFT:       return STR_EFFECT_FADE_FROM_LEFT;
-        case presentation::FadeEffect_FADE_FROM_TOP:            return STR_EFFECT_FADE_FROM_TOP;
-        case presentation::FadeEffect_FADE_FROM_RIGHT:      return STR_EFFECT_FADE_FROM_RIGHT;
-        case presentation::FadeEffect_FADE_FROM_BOTTOM:     return STR_EFFECT_FADE_FROM_BOTTOM;
-        case presentation::FadeEffect_FADE_TO_CENTER:       return STR_EFFECT_FADE_TO_CENTER;
-        case presentation::FadeEffect_FADE_FROM_CENTER:         return STR_EFFECT_FADE_FROM_CENTER;
-        case presentation::FadeEffect_MOVE_FROM_LEFT:       return STR_EFFECT_DISCARD_FROM_LEFT;
-        case presentation::FadeEffect_MOVE_FROM_TOP:            return STR_EFFECT_DISCARD_FROM_TOP;
-        case presentation::FadeEffect_MOVE_FROM_RIGHT:      return STR_EFFECT_DISCARD_FROM_RIGHT;
-        case presentation::FadeEffect_MOVE_FROM_BOTTOM:     return STR_EFFECT_DISCARD_FROM_BOTTOM;
-        case presentation::FadeEffect_ROLL_FROM_LEFT:       return STR_EFFECT_ROLL_FROM_LEFT;
-        case presentation::FadeEffect_ROLL_FROM_TOP:         return STR_EFFECT_ROLL_FROM_TOP;
-        case presentation::FadeEffect_ROLL_FROM_RIGHT:       return STR_EFFECT_ROLL_FROM_RIGHT;
-        case presentation::FadeEffect_ROLL_FROM_BOTTOM:     return STR_EFFECT_ROLL_FROM_BOTTOM;
+        case presentation::FadeEffect_NONE:                 return STR_EFFECT_NONE;
+        case presentation::FadeEffect_FADE_FROM_LEFT:       return STR_EFFECT_FADE_FROM_L;
+        case presentation::FadeEffect_FADE_FROM_UPPERLEFT:  return STR_EFFECT_FADE_FROM_UL;
+        case presentation::FadeEffect_FADE_FROM_TOP:        return STR_EFFECT_FADE_FROM_T;
+        case presentation::FadeEffect_FADE_FROM_UPPERRIGHT: return STR_EFFECT_FADE_FROM_UR;
+        case presentation::FadeEffect_FADE_FROM_RIGHT:      return STR_EFFECT_FADE_FROM_R;
+        case presentation::FadeEffect_FADE_FROM_LOWERRIGHT: return STR_EFFECT_FADE_FROM_LR;
+        case presentation::FadeEffect_FADE_FROM_BOTTOM:     return STR_EFFECT_FADE_FROM_B;
+        case presentation::FadeEffect_FADE_FROM_LOWERLEFT:  return STR_EFFECT_FADE_FROM_LL;
 
-        case presentation::FadeEffect_VERTICAL_STRIPES:         return STR_EFFECT_VERTICAL_STRIPES;
+        case presentation::FadeEffect_MOVE_FROM_LEFT:       return STR_EFFECT_DISCARD_FROM_L;
+        case presentation::FadeEffect_MOVE_FROM_UPPERLEFT:  return STR_EFFECT_DISCARD_FROM_UL;
+        case presentation::FadeEffect_MOVE_FROM_TOP:        return STR_EFFECT_DISCARD_FROM_T;
+        case presentation::FadeEffect_MOVE_FROM_UPPERRIGHT: return STR_EFFECT_DISCARD_FROM_UR;
+        case presentation::FadeEffect_MOVE_FROM_RIGHT:      return STR_EFFECT_DISCARD_FROM_R;
+        case presentation::FadeEffect_MOVE_FROM_LOWERRIGHT: return STR_EFFECT_DISCARD_FROM_LR;
+        case presentation::FadeEffect_MOVE_FROM_BOTTOM:     return STR_EFFECT_DISCARD_FROM_B;
+        case presentation::FadeEffect_MOVE_FROM_LOWERLEFT:  return STR_EFFECT_DISCARD_FROM_LL;
+        case presentation::FadeEffect_ROLL_FROM_LEFT:       return STR_EFFECT_ROLL_FROM_L;
+        case presentation::FadeEffect_ROLL_FROM_TOP:        return STR_EFFECT_ROLL_FROM_T;
+        case presentation::FadeEffect_ROLL_FROM_RIGHT:      return STR_EFFECT_ROLL_FROM_R;
+        case presentation::FadeEffect_ROLL_FROM_BOTTOM:     return STR_EFFECT_ROLL_FROM_B;
+
+        case presentation::FadeEffect_FADE_TO_CENTER:       return STR_EFFECT_FADE_TO_CENTER;
+        case presentation::FadeEffect_FADE_FROM_CENTER:     return STR_EFFECT_FADE_FROM_CENTER;
+
+        case presentation::FadeEffect_VERTICAL_STRIPES:     return STR_EFFECT_VERTICAL_STRIPES;
         case presentation::FadeEffect_HORIZONTAL_STRIPES:   return STR_EFFECT_HORIZONTAL_STRIPES;
-        case presentation::FadeEffect_CLOCKWISE:                return STR_EFFECT_CLOCKWISE;
-        case presentation::FadeEffect_COUNTERCLOCKWISE:         return STR_EFFECT_COUNTERCLOCKWISE;
-        case presentation::FadeEffect_FADE_FROM_UPPERLEFT:  return STR_EFFECT_FADE_FROM_UPPERLEFT;
-        case presentation::FadeEffect_FADE_FROM_UPPERRIGHT:     return STR_EFFECT_FADE_FROM_UPPERRIGHT;
-        case presentation::FadeEffect_FADE_FROM_LOWERLEFT:  return STR_EFFECT_FADE_FROM_LOWERLEFT;
-        case presentation::FadeEffect_FADE_FROM_LOWERRIGHT:     return STR_EFFECT_FADE_FROM_LOWERRIGHT;
+        case presentation::FadeEffect_VERTICAL_LINES:       return STR_EFFECT_VERTICAL_LINES;
+        case presentation::FadeEffect_HORIZONTAL_LINES:     return STR_EFFECT_HORIZONTAL_LINES;
+        case presentation::FadeEffect_VERTICAL_CHECKERBOARD:    return STR_EFFECT_VERTICAL_CHECKERBOARD;
+        case presentation::FadeEffect_HORIZONTAL_CHECKERBOARD:  return STR_EFFECT_HORIZONTAL_CHECKERBOARD;
+        case presentation::FadeEffect_CLOCKWISE:            return STR_EFFECT_CLOCKWISE;
+        case presentation::FadeEffect_COUNTERCLOCKWISE:     return STR_EFFECT_COUNTERCLOCKWISE;
         case presentation::FadeEffect_CLOSE_VERTICAL:       return STR_EFFECT_CLOSE_VERTICAL;
-        case presentation::FadeEffect_CLOSE_HORIZONTAL:         return STR_EFFECT_CLOSE_HORIZONTAL;
-        case presentation::FadeEffect_OPEN_VERTICAL:            return STR_EFFECT_OPEN_VERTICAL;
+        case presentation::FadeEffect_CLOSE_HORIZONTAL:     return STR_EFFECT_CLOSE_HORIZONTAL;
+        case presentation::FadeEffect_OPEN_VERTICAL:        return STR_EFFECT_OPEN_VERTICAL;
         case presentation::FadeEffect_OPEN_HORIZONTAL:      return STR_EFFECT_OPEN_HORIZONTAL;
 
-        case presentation::FadeEffect_SPIRALIN_LEFT:            return STR_EFFECT_SPIRALIN_LEFT;
-        case presentation::FadeEffect_SPIRALIN_RIGHT:       return STR_EFFECT_SPIRALIN_RIGHT;
-        case presentation::FadeEffect_SPIRALOUT_LEFT:       return STR_EFFECT_SPIRALOUT_LEFT;
-        case presentation::FadeEffect_SPIRALOUT_RIGHT:      return STR_EFFECT_SPIRALOUT_RIGHT;
-        case presentation::FadeEffect_DISSOLVE:                 return STR_EFFECT_DISSOLVE;
-        case presentation::FadeEffect_WAVYLINE_FROM_LEFT:   return STR_EFFECT_WAVYLINE_FROM_LEFT;
-        case presentation::FadeEffect_WAVYLINE_FROM_RIGHT:  return STR_EFFECT_WAVYLINE_FROM_RIGHT;
-        case presentation::FadeEffect_WAVYLINE_FROM_TOP:        return STR_EFFECT_WAVYLINE_FROM_TOP;
-        case presentation::FadeEffect_WAVYLINE_FROM_BOTTOM: return STR_EFFECT_WAVYLINE_FROM_BOTTOM;
-        case presentation::FadeEffect_VERTICAL_LINES:        return STR_EFFECT_VERTICAL_LINES;
-        case presentation::FadeEffect_HORIZONTAL_LINES:      return STR_EFFECT_HORIZONTAL_LINES;
-        case presentation::FadeEffect_RANDOM:                return STR_EFFECT_RANDOM;
-        case presentation::FadeEffect_STRETCH_FROM_LEFT:     return STR_EFFECT_STRETCH_FROM_LEFT;
-        case presentation::FadeEffect_STRETCH_FROM_TOP:      return STR_EFFECT_STRETCH_FROM_TOP;
-        case presentation::FadeEffect_STRETCH_FROM_RIGHT:    return STR_EFFECT_STRETCH_FROM_RIGHT;
-        case presentation::FadeEffect_STRETCH_FROM_BOTTOM:   return STR_EFFECT_STRETCH_FROM_BOTTOM;
+        case presentation::FadeEffect_SPIRALIN_LEFT:        return STR_EFFECT_SPIRALIN_L;
+        case presentation::FadeEffect_SPIRALIN_RIGHT:       return STR_EFFECT_SPIRALIN_R;
+        case presentation::FadeEffect_SPIRALOUT_LEFT:       return STR_EFFECT_SPIRALOUT_L;
+        case presentation::FadeEffect_SPIRALOUT_RIGHT:      return STR_EFFECT_SPIRALOUT_R;
+        case presentation::FadeEffect_DISSOLVE:             return STR_EFFECT_DISSOLVE;
+        case presentation::FadeEffect_WAVYLINE_FROM_LEFT:   return STR_EFFECT_WAVYLINE_FROM_L;
+        case presentation::FadeEffect_WAVYLINE_FROM_RIGHT:  return STR_EFFECT_WAVYLINE_FROM_R;
+        case presentation::FadeEffect_WAVYLINE_FROM_TOP:    return STR_EFFECT_WAVYLINE_FROM_T;
+        case presentation::FadeEffect_WAVYLINE_FROM_BOTTOM: return STR_EFFECT_WAVYLINE_FROM_B;
+        case presentation::FadeEffect_RANDOM:               return STR_EFFECT_RANDOM;
+        case presentation::FadeEffect_STRETCH_FROM_LEFT:    return STR_EFFECT_STRETCH_FROM_L;
+        case presentation::FadeEffect_STRETCH_FROM_TOP:     return STR_EFFECT_STRETCH_FROM_T;
+        case presentation::FadeEffect_STRETCH_FROM_RIGHT:   return STR_EFFECT_STRETCH_FROM_R;
+        case presentation::FadeEffect_STRETCH_FROM_BOTTOM:  return STR_EFFECT_STRETCH_FROM_B;
 
         default: DBG_ERROR( "Keine StringResource fuer FadeEffect vorhanden!" );
     }

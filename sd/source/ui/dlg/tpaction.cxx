@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-13 11:35:34 $
+ *  last change: $Author: ka $ $Date: 2000-10-30 12:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,13 @@ void SdTPAction::Construct()
 
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_NONE, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERLEFT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_TOP, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERRIGHT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_RIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERRIGHT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_BOTTOM, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERLEFT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_TO_CENTER, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_CENTER, LIST_APPEND);
     //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_LEFT, LIST_APPEND);
@@ -272,21 +276,17 @@ void SdTPAction::Construct()
     //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_FROM_BOTTOM, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_STRIPES, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_STRIPES, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_LINES, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_LINES, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_CHECKERBOARD, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOCKWISE, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_COUNTERCLOCKWISE, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_UPPERRIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERLEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_FADE_FROM_LOWERRIGHT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOSE_VERTICAL, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_CLOSE_HORIZONTAL, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_OPEN_VERTICAL, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_OPEN_HORIZONTAL, LIST_APPEND);
     //pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_PATH
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LEFT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_TOP, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_RIGHT, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_BOTTOM, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALIN_LEFT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALIN_RIGHT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_SPIRALOUT_LEFT, LIST_APPEND);
@@ -296,9 +296,23 @@ void SdTPAction::Construct()
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_TOP, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_RIGHT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_UPPERLEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_TOP, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_UPPERRIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_RIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LOWERRIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_BOTTOM, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_TO_LOWERLEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_TOP, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM, LIST_APPEND);
+    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT, LIST_APPEND);
     pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_RANDOM, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_VERTICAL_LINES, LIST_APPEND);
-    pCurrentEffects->Insert((void*)(ULONG)presentation::AnimationEffect_HORIZONTAL_LINES, LIST_APPEND);
 
     pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_NONE, LIST_APPEND);
     pCurrentActions->Insert((void*)(ULONG)presentation::ClickAction_PREVPAGE, LIST_APPEND);
@@ -1177,55 +1191,75 @@ USHORT SdTPAction::GetAnimationEffectSdResId( presentation::AnimationEffect eAE 
 {
     switch( eAE )
     {
-        case presentation::AnimationEffect_NONE:            return STR_EFFECT_NONE;
-        case presentation::AnimationEffect_FADE_FROM_LEFT:  return STR_EFFECT_FADE_FROM_LEFT;
-        case presentation::AnimationEffect_FADE_FROM_TOP:   return STR_EFFECT_FADE_FROM_TOP;
-        case presentation::AnimationEffect_FADE_FROM_RIGHT: return STR_EFFECT_FADE_FROM_RIGHT;
-        case presentation::AnimationEffect_FADE_FROM_BOTTOM: return STR_EFFECT_FADE_FROM_BOTTOM;
-        case presentation::AnimationEffect_FADE_TO_CENTER:  return STR_EFFECT_FADE_TO_CENTER;
-        case presentation::AnimationEffect_FADE_FROM_CENTER: return STR_EFFECT_FADE_FROM_CENTER;
-        case presentation::AnimationEffect_MOVE_FROM_LEFT:    return 0;
-        case presentation::AnimationEffect_MOVE_FROM_TOP:     return 0;
-        case presentation::AnimationEffect_MOVE_FROM_RIGHT:   return 0;
-        case presentation::AnimationEffect_MOVE_FROM_BOTTOM:   return 0;
-        case presentation::AnimationEffect_VERTICAL_STRIPES:    return STR_EFFECT_VERTICAL_STRIPES;
-        case presentation::AnimationEffect_HORIZONTAL_STRIPES:  return STR_EFFECT_HORIZONTAL_STRIPES;
-        case presentation::AnimationEffect_CLOCKWISE:           return STR_EFFECT_CLOCKWISE;
-        case presentation::AnimationEffect_COUNTERCLOCKWISE:    return STR_EFFECT_COUNTERCLOCKWISE;
-        case presentation::AnimationEffect_FADE_FROM_UPPERLEFT: return STR_EFFECT_FADE_FROM_UPPERLEFT;
-        case presentation::AnimationEffect_FADE_FROM_UPPERRIGHT: return STR_EFFECT_FADE_FROM_UPPERRIGHT;
-        case presentation::AnimationEffect_FADE_FROM_LOWERLEFT: return STR_EFFECT_FADE_FROM_LOWERLEFT;
-        case presentation::AnimationEffect_FADE_FROM_LOWERRIGHT: return STR_EFFECT_FADE_FROM_LOWERRIGHT;
-        case presentation::AnimationEffect_CLOSE_VERTICAL:      return STR_EFFECT_CLOSE_VERTICAL;
-        case presentation::AnimationEffect_CLOSE_HORIZONTAL:    return STR_EFFECT_CLOSE_HORIZONTAL;
-        case presentation::AnimationEffect_OPEN_VERTICAL:       return STR_EFFECT_OPEN_VERTICAL;
-        case presentation::AnimationEffect_OPEN_HORIZONTAL:     return STR_EFFECT_OPEN_HORIZONTAL;
-        case presentation::AnimationEffect_PATH:                return 0;
-        case presentation::AnimationEffect_MOVE_TO_LEFT:        return STR_EFFECT_MOVE_TO_LEFT;
-        case presentation::AnimationEffect_MOVE_TO_TOP:         return STR_EFFECT_MOVE_TO_TOP;
-        case presentation::AnimationEffect_MOVE_TO_RIGHT:       return STR_EFFECT_MOVE_TO_RIGHT;
-        case presentation::AnimationEffect_MOVE_TO_BOTTOM:      return STR_EFFECT_MOVE_TO_BOTTOM;
-        case presentation::AnimationEffect_SPIRALIN_LEFT:       return STR_EFFECT_SPIRALIN_LEFT;
-        case presentation::AnimationEffect_SPIRALIN_RIGHT:      return STR_EFFECT_SPIRALIN_RIGHT;
-        case presentation::AnimationEffect_SPIRALOUT_LEFT:      return STR_EFFECT_SPIRALOUT_LEFT;
-        case presentation::AnimationEffect_SPIRALOUT_RIGHT:     return STR_EFFECT_SPIRALOUT_RIGHT;
-        case presentation::AnimationEffect_DISSOLVE:            return STR_EFFECT_DISSOLVE;
-        case presentation::AnimationEffect_WAVYLINE_FROM_LEFT:  return STR_EFFECT_WAVYLINE_FROM_LEFT;
-        case presentation::AnimationEffect_WAVYLINE_FROM_RIGHT: return STR_EFFECT_WAVYLINE_FROM_RIGHT;
-        case presentation::AnimationEffect_WAVYLINE_FROM_TOP:   return STR_EFFECT_WAVYLINE_FROM_TOP;
-        case presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM: return STR_EFFECT_WAVYLINE_FROM_BOTTOM;
-        case presentation::AnimationEffect_VERTICAL_LINES:      return STR_EFFECT_VERTICAL_LINES;
-        case presentation::AnimationEffect_HORIZONTAL_LINES:    return STR_EFFECT_HORIZONTAL_LINES;
-        case presentation::AnimationEffect_RANDOM:              return STR_EFFECT_RANDOM;
-        case presentation::AnimationEffect_LASER_FROM_LEFT:      return 0;
-        case presentation::AnimationEffect_LASER_FROM_TOP:       return 0;
-        case presentation::AnimationEffect_LASER_FROM_RIGHT:     return 0;
-        case presentation::AnimationEffect_LASER_FROM_BOTTOM:    return 0;
-        case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:  return 0;
-        case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT: return 0;
-        case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:  return 0;
-        case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT: return 0;
-        default: DBG_ERROR( "Keine StringResource fuer AnimationEffect vorhanden!" );
+        case presentation::AnimationEffect_NONE:                    return STR_EFFECT_NONE;
+        case presentation::AnimationEffect_FADE_FROM_LEFT:          return STR_EFFECT_FADE_FROM_L;
+        case presentation::AnimationEffect_FADE_FROM_UPPERLEFT:     return STR_EFFECT_FADE_FROM_UL;
+        case presentation::AnimationEffect_FADE_FROM_TOP:           return STR_EFFECT_FADE_FROM_T;
+        case presentation::AnimationEffect_FADE_FROM_UPPERRIGHT:    return STR_EFFECT_FADE_FROM_UR;
+        case presentation::AnimationEffect_FADE_FROM_RIGHT:         return STR_EFFECT_FADE_FROM_R;
+        case presentation::AnimationEffect_FADE_FROM_LOWERRIGHT:    return STR_EFFECT_FADE_FROM_LR;
+        case presentation::AnimationEffect_FADE_FROM_BOTTOM:        return STR_EFFECT_FADE_FROM_B;
+        case presentation::AnimationEffect_FADE_FROM_LOWERLEFT:     return STR_EFFECT_FADE_FROM_LL;
+        case presentation::AnimationEffect_MOVE_FROM_LEFT:          return 0;
+        case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:     return 0;
+        case presentation::AnimationEffect_MOVE_FROM_TOP:           return 0;
+        case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:    return 0;
+        case presentation::AnimationEffect_MOVE_FROM_RIGHT:         return 0;
+        case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:    return 0;
+        case presentation::AnimationEffect_MOVE_FROM_BOTTOM:        return 0;
+        case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:     return 0;
+        case presentation::AnimationEffect_FADE_TO_CENTER:          return STR_EFFECT_FADE_TO_CENTER;
+        case presentation::AnimationEffect_FADE_FROM_CENTER:        return STR_EFFECT_FADE_FROM_CENTER;
+        case presentation::AnimationEffect_VERTICAL_STRIPES:        return STR_EFFECT_VERTICAL_STRIPES;
+        case presentation::AnimationEffect_HORIZONTAL_STRIPES:      return STR_EFFECT_HORIZONTAL_STRIPES;
+        case presentation::AnimationEffect_VERTICAL_LINES:          return STR_EFFECT_VERTICAL_LINES;
+        case presentation::AnimationEffect_HORIZONTAL_LINES:        return STR_EFFECT_HORIZONTAL_LINES;
+        case presentation::AnimationEffect_VERTICAL_CHECKERBOARD:   return STR_EFFECT_VERTICAL_CHECKERBOARD;
+        case presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD: return STR_EFFECT_HORIZONTAL_CHECKERBOARD;
+        case presentation::AnimationEffect_CLOCKWISE:               return STR_EFFECT_CLOCKWISE;
+        case presentation::AnimationEffect_COUNTERCLOCKWISE:        return STR_EFFECT_COUNTERCLOCKWISE;
+        case presentation::AnimationEffect_CLOSE_VERTICAL:          return STR_EFFECT_CLOSE_VERTICAL;
+        case presentation::AnimationEffect_CLOSE_HORIZONTAL:        return STR_EFFECT_CLOSE_HORIZONTAL;
+        case presentation::AnimationEffect_OPEN_VERTICAL:           return STR_EFFECT_OPEN_VERTICAL;
+        case presentation::AnimationEffect_OPEN_HORIZONTAL:         return STR_EFFECT_OPEN_HORIZONTAL;
+        case presentation::AnimationEffect_PATH:                    return 0;
+        case presentation::AnimationEffect_MOVE_TO_LEFT:            return STR_EFFECT_MOVE_TO_L;
+        case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:       return STR_EFFECT_MOVE_TO_UL;
+        case presentation::AnimationEffect_MOVE_TO_TOP:             return STR_EFFECT_MOVE_TO_T;
+        case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:      return STR_EFFECT_MOVE_TO_UR;
+        case presentation::AnimationEffect_MOVE_TO_RIGHT:           return STR_EFFECT_MOVE_TO_R;
+        case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:      return STR_EFFECT_MOVE_TO_LR;
+        case presentation::AnimationEffect_MOVE_TO_BOTTOM:          return STR_EFFECT_MOVE_TO_B;
+        case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:       return STR_EFFECT_MOVE_TO_LL;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:      return STR_EFFECT_MOVE_S_TO_L;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT: return STR_EFFECT_MOVE_S_TO_UL;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:       return STR_EFFECT_MOVE_S_TO_T;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:return STR_EFFECT_MOVE_S_TO_UR;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:     return STR_EFFECT_MOVE_S_TO_R;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:return STR_EFFECT_MOVE_S_TO_LR;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:    return STR_EFFECT_MOVE_S_TO_B;
+        case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT: return STR_EFFECT_MOVE_S_TO_LL;
+        case presentation::AnimationEffect_SPIRALIN_LEFT:           return STR_EFFECT_SPIRALIN_L;
+        case presentation::AnimationEffect_SPIRALIN_RIGHT:          return STR_EFFECT_SPIRALIN_R;
+        case presentation::AnimationEffect_SPIRALOUT_LEFT:          return STR_EFFECT_SPIRALOUT_L;
+        case presentation::AnimationEffect_SPIRALOUT_RIGHT:         return STR_EFFECT_SPIRALOUT_R;
+        case presentation::AnimationEffect_DISSOLVE:                return STR_EFFECT_DISSOLVE;
+        case presentation::AnimationEffect_WAVYLINE_FROM_LEFT:      return STR_EFFECT_WAVYLINE_FROM_L;
+        case presentation::AnimationEffect_WAVYLINE_FROM_RIGHT:     return STR_EFFECT_WAVYLINE_FROM_R;
+        case presentation::AnimationEffect_WAVYLINE_FROM_TOP:       return STR_EFFECT_WAVYLINE_FROM_T;
+        case presentation::AnimationEffect_WAVYLINE_FROM_BOTTOM:    return STR_EFFECT_WAVYLINE_FROM_B;
+        case presentation::AnimationEffect_RANDOM:                  return STR_EFFECT_RANDOM;
+        case presentation::AnimationEffect_LASER_FROM_LEFT:         return 0;
+        case presentation::AnimationEffect_LASER_FROM_TOP:          return 0;
+        case presentation::AnimationEffect_LASER_FROM_RIGHT:        return 0;
+        case presentation::AnimationEffect_LASER_FROM_BOTTOM:       return 0;
+        case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:    return 0;
+        case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:   return 0;
+        case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:    return 0;
+        case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:   return 0;
+
+        default:
+            DBG_ERROR( "Keine StringResource fuer AnimationEffect vorhanden!" );
     }
     return( 0 );
 }
