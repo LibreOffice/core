@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-10 10:38:18 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 15:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef  _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -487,7 +490,7 @@ void SAL_CALL  FileSource_Impl::terminate() throw( ::com::sun::star::uno::Runtim
     pMedium->Close();
 }
 
-String ConvertDateTime_Impl(const SfxStamp &rTime);
+String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper);
 
 //----------------------------------------------------------------
 SfxPoolCancelManager::SfxPoolCancelManager( SfxCancelManager* pParent, const String& rName )
@@ -2635,11 +2638,12 @@ SvStringsDtor* SfxVersionTableDtor::GetVersions() const
 {
     SvStringsDtor *pList = new SvStringsDtor;
     SfxVersionInfo* pInfo = ((SfxVersionTableDtor*) this)->First();
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     while ( pInfo )
     {
         String *pString = new String( pInfo->aComment );
         (*pString) += DEFINE_CONST_UNICODE( "; " );
-        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp );
+        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
         pList->Insert( pString, pList->Count() );
         pInfo = ((SfxVersionTableDtor*) this)->Next();
     }
