@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:14 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,10 @@ void SlideSorterView::PreModelChange (void)
         mrModel.GetAllPagesEnumeration());
     while (aPageEnumeration.HasMoreElements())
         aPageEnumeration.GetNextElement().ReleasePageObject();
+
+    // Reset the slide under the mouse.  It will be set to the correct slide
+    // on the next mouse motion.
+    GetOverlay().GetMouseOverIndicatorOverlay().SetSlideUnderMouse(NULL);
 }
 
 
