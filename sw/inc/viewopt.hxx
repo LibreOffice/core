@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-07-31 12:49:11 $
+ *  last change: $Author: os $ $Date: 2002-08-01 11:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ protected:
     BOOL            bReadonly : 1;      // Readonly-Doc
     BOOL            bStarOneSetting : 1;// prevent from UI automatics (no scrollbars in readonly documents)
     BOOL            bIsPagePreview : 1; // the preview mustn't print field/footnote/... shadings
+    BOOL            bSelectionInReadonly : 1; //determines whether selection is switched on in readonly documents
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
@@ -443,6 +444,9 @@ public:
     inline void  SetPagePrevCol( BYTE n ) { nPagePrevCol = n; }
     BOOL         IsReadonly() const { return bReadonly; }
     void         SetReadonly(BOOL bSet) { bReadonly = bSet; }
+
+    BOOL         IsSelectionInReadonly() const {return bSelectionInReadonly;}
+    void         SetSelectionInReadonly(BOOL bSet) {bSelectionInReadonly = bSet;}
 
     BOOL IsAutoCompleteWords() const;
 

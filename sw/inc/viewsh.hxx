@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:59:50 $
+ *  last change: $Author: os $ $Date: 2002-08-01 11:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ public:
            void  SetUIOptions( const SwViewOption &rOpt );
            void  SetReadonlyOption(sal_Bool bSet);   // Readonly-Bit d. ViewOptions setzen
            void  SetPrtFormatOption(sal_Bool bSet);  // PrtFormat-Bit d. ViewOptions setzen
+           void  SetReadonlySelectionOption(sal_Bool bSet);//change the selection mode in readonly docs
 
     static void           SetShellRes( ShellResource* pRes ) { pShellRes = pRes; }
     static ShellResource* GetShellRes() { return pShellRes; }

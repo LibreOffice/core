@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-07-04 14:40:40 $
+ *  last change: $Author: os $ $Date: 2002-08-01 11:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -992,7 +992,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_NEXT_TBLFML_ERR          (FN_SELECTION + 87)   /* zur naechsten fehl. Tabellenformel */
 #define FN_PREV_TBLFML_ERR          (FN_SELECTION + 88)   /* zur vorherigen fehl. Tabellenformel */
 
-
+#define FN_READONLY_SELECTION_MODE  (FN_SELECTION + 89)   /* switches text selection mode in readonly documents*/
 /*--------------------------------------------------------------------
     QUERY-Block
  --------------------------------------------------------------------*/
