@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: th $ $Date: 2000-11-03 14:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ public:
     BOOL                    mbHandleIME;            // TRUE: Wir handeln die IME-Messages
     BOOL                    mbSpezIME;              // TRUE: Spez IME
     BOOL                    mbAtCursorIME;          // TRUE: Wir behandeln nur einige IME-Messages
-    BOOL                    mbCompositionMode;      // TRUE: Wir befinden uns im Composition-Modus
     BOOL                    mbCandidateMode;        // TRUE: Wir befinden uns im Candidate-Modus
 };
 
