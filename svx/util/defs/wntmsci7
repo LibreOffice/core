@@ -16815,3 +16815,4 @@ _real@8@3ffd820c49ba5e354000
 ?getImplementationId@?$WeakImplHelper2@VXPropertySet@beans@star@sun@com@@VXPropertyState@2345@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
 ?isComposeable@OPropertySetComposerCallback@svxform@@UBEEABVOUString@rtl@@@Z
 ?queryInterface@cppu@@YA?AVAny@uno@star@sun@com@@ABVType@3456@PAVXFormComponent@form@456@PAVXChild@container@456@@Z
+??1?$Reference@VXForbiddenCharacters@i18n@star@sun@com@@@uno@star@sun@com@@QAE@XZ
