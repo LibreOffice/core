@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-01 17:15:10 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 11:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,37 +71,19 @@
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include "ProgressBarHelper.hxx"
 #endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
 
 using namespace ::com::sun::star;
 
 const sal_Int32 nProgressBarRange = 1000000;
 const sal_Int16 nProgressStep = 2;
 
-ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XModel>& rModel,
+ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const ::rtl::OUString& rText)
-    : nOldPercent(0)
+    : nOldPercent(0),
+    xStatusIndicator(xTempStatusIndicator)
 {
-    if (rModel.is())
-    {
-        uno::Reference<frame::XController> xController( rModel->getCurrentController());
-        if( xController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-            if( xFrame.is())
-            {
-                uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame, uno::UNO_QUERY );
-                if( xFactory.is())
-                {
-                    xStatusIndicator = xFactory->createStatusIndicator();
-                    if (xStatusIndicator.is())
-                        xStatusIndicator->start(rText, nProgressBarRange);
-                }
-            }
-        }
-    }
+    if (xStatusIndicator.is())
+        xStatusIndicator->start(rText, nProgressBarRange);
 }
 
 ProgressBarHelper::~ProgressBarHelper()
