@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 08:07:52 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,6 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -105,11 +100,6 @@
 #endif
 #ifndef _UNDO_HXX //autogen
 #include <svtools/undo.hxx>
-#endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIPROP_HXX
-#include <svtools/iniprop.hxx>
-#endif
 #endif
 #ifndef _INET_WRAPPER_HXX
 #include <inet/wrapper.hxx>
@@ -148,6 +138,8 @@
 #include <svtools/securityoptions.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/inetoptions.hxx>
+#include <svtools/miscopt.hxx>
+#include <vcl/toolbox.hxx>
 
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
@@ -162,7 +154,6 @@
 #include "docinf.hxx"
 #include "appdata.hxx"
 #include "picklist.hxx"
-#include "tbxconf.hxx"
 #include "workwin.hxx"
 #include <misccfg.hxx>
 #include <macrconf.hxx>
@@ -269,11 +260,7 @@ const USHORT* SfxApplication::GetOptionsRanges() const
 BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIni = GetIniManager();
-#endif
     SfxItemPool &rPool = GetPool();
-    SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
     String aTRUEStr = 0x0031; // ^= '1'
 
     const USHORT *pRanges = rSet.GetRanges();
@@ -282,6 +269,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
     SvtHelpOptions aHelpOptions;
     SvtInetOptions aInetOptions;
     SvtSecurityOptions  aSecurityOptions;
+    SvtMiscOptions aMiscOptions;
     while ( *pRanges )
     {
         for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -290,12 +278,12 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
             {
                 case SID_ATTR_BUTTON_OUTSTYLE3D :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_OUTSTYLE3D ),
-                              pTbxCfg->GetOutStyle() != TOOLBOX_STYLE_FLAT)))
+                              aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT)))
                         bRet = TRUE;
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ),
-                              pTbxCfg->GetSymbolSet() == SFX_SYMBOLS_LARGE_COLOR)))
+                              aMiscOptions.GetSymbolSet() == SFX_SYMBOLS_LARGE)))
                         bRet = TRUE;
                     break;
                 case SID_ATTR_BACKUP :
@@ -644,36 +632,32 @@ BOOL SfxApplication::IsSecureURL( const INetURLObject& rURL, const String* pRefe
 
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIni = GetIniManager();
-    pIni->EnterLock();
-#endif
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
     BOOL bResetSession = FALSE;
     BOOL bProxiesModified = FALSE;
 
-    SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
     SvtSaveOptions aSaveOptions;
     SvtUndoOptions aUndoOptions;
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtPathOptions aPathOptions;
     SvtInetOptions aInetOptions;
+    SvtMiscOptions aMiscOptions;
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         USHORT nOutStyle =
             ( (const SfxBoolItem *)pItem)->GetValue() ? 0 : TOOLBOX_STYLE_FLAT;
-        pTbxCfg->SetOutStyle( nOutStyle );
+        aMiscOptions.SetToolboxStyle( nOutStyle );
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_BIGSIZE), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         BOOL bBigSize = ( (const SfxBoolItem*)pItem )->GetValue();
-        pTbxCfg->SetSymbolSet( bBigSize ? SFX_SYMBOLS_LARGE_COLOR : SFX_SYMBOLS_SMALL_COLOR );
-        GetWorkWindow_Impl( SfxViewFrame::Current() )->UpdateObjectBars_Impl();
+        aMiscOptions.SetSymbolSet( bBigSize ? SFX_SYMBOLS_LARGE : SFX_SYMBOLS_SMALL );
+        DBG_ERROR("Update missing ?!");
     }
 
     // Backup
@@ -1115,10 +1099,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     }
 
     // geaenderte Daten speichern
-#if SUPD<613//MUSTINI
-    pIni->LeaveLock();
-    pIni->Flush();
-#endif
     aInetOptions.flush();
     SaveConfiguration();
 }
@@ -1369,17 +1349,11 @@ void SfxApplication::SaveConfiguration() const
     {
         // bei bDowning koennten falsche Sachen gespeichert werden bishin
         // zu Abstuerzen
-        if (!pAppData_Impl->pAppCfg->SaveConfig())
+        if (!pCfgMgr->StoreConfiguration())
             HandleConfigError_Impl((USHORT)pCfgMgr->GetErrorCode());
     }
 }
 
-//--------------------------------------------------------------------
-
-SfxConfigManager* SfxApplication::GetAppConfigManager_Impl() const
-{
-    return pAppData_Impl->pAppCfg;
-}
 //--------------------------------------------------------------------
 
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSynchron )
