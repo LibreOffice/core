@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listviewbuilder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:14:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void list_view_builder::setup_list_view()
 {
     HIMAGELIST h_ils = ImageList_Create(16,15,ILC_MASK, 7, 0);
     HBITMAP    h_bmp = LoadBitmap(GetModuleHandle(MODULE_NAME), MAKEINTRESOURCE(IDB_PROPERTY_IMAGES));
-    int        rc    = ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
+    ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
 
     ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
 
@@ -184,7 +184,7 @@ void list_view_builder::setup_list_view()
 //
 //------------------------------------
 
-void list_view_builder::insert_group(const std::wstring& title)
+void list_view_builder::insert_group(const std::wstring& /*title*/)
 {
     insert_item(L"", L"", false);
 }
@@ -276,7 +276,7 @@ void winxp_list_view_builder::insert_group(const std::wstring& name)
     lvg.state     = LVGS_NORMAL;
     lvg.uAlign    = LVGA_HEADER_CENTER;
 
-    int rc = ListView_InsertGroup(get_list_view(), row_count_++, &lvg);
+    ListView_InsertGroup(get_list_view(), row_count_++, &lvg);
 }
 
 //------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document_statistic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:14:18 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <string>
 #include <vector>
 
-#ifndef METAINFO_HXX_INCLUDED
-#include "internal/metainfo.hxx"
+#ifndef METAINFOREADER_HXX_INCLUDED
+#include "internal/metainforeader.hxx"
 #endif
 
 
@@ -108,7 +108,7 @@ typedef std::vector<statistic_group_t>                  statistic_group_list_t;
 class document_statistic_reader;
 typedef std::auto_ptr<document_statistic_reader> document_statistic_reader_ptr;
 
-document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
 //------------------------------------
 //
@@ -124,18 +124,18 @@ public:
     std::string get_document_name() const;
 
 protected:
-    document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+    document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section(COpenOfficeMetaInformation *meta_info_accessor,statistic_group_list_t* group_list) = 0;
+    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list) = 0;
 
-    virtual void fill_origin_section( COpenOfficeMetaInformation *meta_info_accessor,statistic_group_list_t* group_list);
+    virtual void fill_origin_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list);
 
 private:
     std::string document_name_;
-    COpenOfficeMetaInformation* meta_info_accessor_;
+    CMetaInfoReader* meta_info_accessor_;
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
-        const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+        const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
 
 //------------------------------------
@@ -145,12 +145,12 @@ private:
 class writer_document_statistic_reader : public document_statistic_reader
 {
 protected:
-    writer_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+    writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section(COpenOfficeMetaInformation *meta_info_accessor, statistic_group_list_t* group_list);
+    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
-        const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+        const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
 
 //------------------------------------
@@ -160,12 +160,12 @@ protected:
 class calc_document_statistic_reader : public document_statistic_reader
 {
 protected:
-    calc_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+    calc_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section( COpenOfficeMetaInformation *meta_info_accessor,statistic_group_list_t* group_list);
+    virtual void fill_description_section( CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list);
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
-        const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+        const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
 
 //------------------------------------
@@ -175,12 +175,12 @@ protected:
 class draw_impress_math_document_statistic_reader : public document_statistic_reader
 {
 protected:
-    draw_impress_math_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+    draw_impress_math_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 
-    virtual void fill_description_section(COpenOfficeMetaInformation *meta_info_accessor, statistic_group_list_t* group_list);
+    virtual void fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list);
 
     friend document_statistic_reader_ptr create_document_statistic_reader(
-        const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor);
+        const std::string& document_name, CMetaInfoReader* meta_info_accessor);
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsheets.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:15:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 //-----------------------------
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
-    LPCITEMIDLIST pidlFolder, LPDATAOBJECT lpdobj, HKEY hkeyProgID)
+    LPCITEMIDLIST /*pidlFolder*/, LPDATAOBJECT lpdobj, HKEY /*hkeyProgID*/)
 {
     InitCommonControls();
 
@@ -216,7 +216,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 {
     try
     {
-        m_pMetaInfo = std::auto_ptr<COpenOfficeMetaInformation>(new COpenOfficeMetaInformation(m_szFileName));
+        m_pMetaInfo = std::auto_ptr<CMetaInfoReader>(new CMetaInfoReader(m_szFileName));
     }
     catch (const std::exception&)
     {
@@ -238,7 +238,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     psp.pszTitle    = proppage_header.c_str();
     psp.pfnDlgProc  = reinterpret_cast<DLGPROC>(CPropertySheet::PropPageSummaryProc);
     psp.lParam      = reinterpret_cast<LPARAM>(this);
-    psp.pfnCallback = CPropertySheet::PropPageSummaryCallback;
+    psp.pfnCallback = reinterpret_cast<LPFNPSPCALLBACK>(CPropertySheet::PropPageSummaryCallback);
 
     HPROPSHEETPAGE hPage = CreatePropertySheetPage(&psp);
 
@@ -285,7 +285,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 //-----------------------------
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
-    UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
+    UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
 {
     return E_NOTIMPL;
 }
@@ -295,7 +295,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
 //-----------------------------
 
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
-    HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
+    HWND /*hwnd*/, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     CPropertySheet* pImpl =
         reinterpret_cast<CPropertySheet*>(ppsp->lParam);
@@ -315,10 +315,8 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 //
 //-----------------------------
 
-BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
-    CPropertySheet* pImpl = reinterpret_cast<CPropertySheet*>(lParam);
-
     switch (uiMsg)
     {
     case WM_INITDIALOG:
@@ -337,7 +335,7 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
 //
 //-----------------------------
 
-BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
     switch (uiMsg)
     {
@@ -354,7 +352,7 @@ BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPAR
 }
 
 //##################################
-void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE lppsp)
+void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
     SetWindowText(GetDlgItem(hwnd,IDC_TITLE),    m_pMetaInfo->getTagData( META_INFO_TITLE ).c_str() );
     SetWindowText(GetDlgItem(hwnd,IDC_AUTHOR),   m_pMetaInfo->getTagData( META_INFO_AUTHOR ).c_str() );
@@ -376,7 +374,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE lppsp)
 //---------------------------------
 /**
 */
-void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE lppsp)
+void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 {
     document_statistic_reader_ptr doc_stat_reader = create_document_statistic_reader(m_szFileName, m_pMetaInfo.get());
 

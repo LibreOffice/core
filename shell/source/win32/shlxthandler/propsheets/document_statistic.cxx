@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document_statistic.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:14:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include "internal/utilities.hxx"
 #endif
 
-#ifndef METAINFO_HXX_INCLUDED
-#include "internal/metainfo.hxx"
+#ifndef METAINFOREADER_HXX_INCLUDED
+#include "internal/metainforeader.hxx"
 #endif
 
 #ifndef RESOURCE_H_INCLUDED
@@ -94,7 +94,7 @@ const bool READONLY  = false;
 const bool WRITEABLE = true;
 
 //#####################################
-document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor)
+document_statistic_reader_ptr create_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor)
 {
     File_Type_t file_type = get_file_type(document_name);
 
@@ -108,7 +108,7 @@ document_statistic_reader_ptr create_document_statistic_reader(const std::string
 
 
 //#####################################
-document_statistic_reader::document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor) :
+document_statistic_reader::document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_name_(document_name),
     meta_info_accessor_(meta_info_accessor)
 {}
@@ -132,7 +132,7 @@ std::string document_statistic_reader::get_document_name() const
 }
 
 //#####################################
-void document_statistic_reader::fill_origin_section(COpenOfficeMetaInformation *meta_info_accessor, statistic_group_list_t* group_list)
+void document_statistic_reader::fill_origin_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
 
@@ -150,12 +150,12 @@ void document_statistic_reader::fill_origin_section(COpenOfficeMetaInformation *
 }
 
 //#####################################
-writer_document_statistic_reader::writer_document_statistic_reader(const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor) :
+writer_document_statistic_reader::writer_document_statistic_reader(const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
 //#####################################
-void writer_document_statistic_reader::fill_description_section(COpenOfficeMetaInformation *meta_info_accessor, statistic_group_list_t* group_list)
+void writer_document_statistic_reader::fill_description_section(CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
 
@@ -176,13 +176,13 @@ void writer_document_statistic_reader::fill_description_section(COpenOfficeMetaI
 
 //#######################################
 calc_document_statistic_reader::calc_document_statistic_reader(
-    const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor) :
+    const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
 //#######################################
 void calc_document_statistic_reader::fill_description_section(
-    COpenOfficeMetaInformation *meta_info_accessor,statistic_group_list_t* group_list)
+    CMetaInfoReader *meta_info_accessor,statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
 
@@ -199,13 +199,13 @@ void calc_document_statistic_reader::fill_description_section(
 
 //#######################################
 draw_impress_math_document_statistic_reader::draw_impress_math_document_statistic_reader(
-    const std::string& document_name, COpenOfficeMetaInformation* meta_info_accessor) :
+    const std::string& document_name, CMetaInfoReader* meta_info_accessor) :
     document_statistic_reader(document_name, meta_info_accessor)
 {}
 
 //#######################################
 void draw_impress_math_document_statistic_reader::fill_description_section(
-    COpenOfficeMetaInformation *meta_info_accessor, statistic_group_list_t* group_list)
+    CMetaInfoReader *meta_info_accessor, statistic_group_list_t* group_list)
 {
     statistic_item_list_t il;
 
