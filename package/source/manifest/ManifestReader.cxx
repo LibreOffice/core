@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: vg $ $Date: 2001-04-23 15:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP
-#include <com/sun/star/xml/sax/SaxParseException.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP
 #include <com/sun/star/xml/sax/XParser.hpp>
