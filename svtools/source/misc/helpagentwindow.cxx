@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-21 10:20:38 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 08:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,26 @@ namespace svt
     using namespace ::com::sun::star::lang;
 
     //====================================================================
+    //= CloserButton_Impl
+    //= overload of ImageButton, because sometimes vcl doesn't call the click handler
+    //====================================================================
+    //--------------------------------------------------------------------
+    class CloserButton_Impl : public ImageButton
+    {
+    public:
+        CloserButton_Impl( Window* pParent, WinBits nBits ) : ImageButton( pParent, nBits ) {}
+
+        virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    };
+
+    //--------------------------------------------------------------------
+    void CloserButton_Impl::MouseButtonUp( const MouseEvent& rMEvt )
+    {
+        ImageButton::MouseButtonUp( rMEvt );
+        GetClickHdl().Call( this );
+    }
+
+    //====================================================================
     //= HelpAgentWindow
     //====================================================================
     //--------------------------------------------------------------------
@@ -102,9 +122,9 @@ namespace svt
         // the closer button
         Bitmap aCloserBitmap(SvtResId(BMP_HELP_AGENT_CLOSER));
         Image aCloserImage( aCloserBitmap );
-        m_pCloser = new ImageButton( this, WB_NOTABSTOP | WB_NOPOINTERFOCUS );
-        static_cast<ImageButton*>(m_pCloser)->SetImage( aCloserImage );
-        static_cast<ImageButton*>(m_pCloser)->SetClickHdl( LINK(this, HelpAgentWindow, OnButtonClicked) );
+        m_pCloser = new CloserButton_Impl( this, WB_NOTABSTOP | WB_NOPOINTERFOCUS );
+        static_cast<CloserButton_Impl*>(m_pCloser)->SetImage( aCloserImage );
+        static_cast<CloserButton_Impl*>(m_pCloser)->SetClickHdl( LINK(this, HelpAgentWindow, OnButtonClicked) );
         m_pCloser->SetSizePixel( implOptimalButtonSize(aCloserImage) );
         m_pCloser->Show();
         m_pCloser->SetZOrder( NULL, WINDOW_ZORDER_LAST );
@@ -207,6 +227,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/06/21 10:20:38  hjs
+ *  no project prefix
+ *
  *  Revision 1.3  2001/06/18 15:36:47  mba
  *  #87300#: always enable input for help agent window
  *
