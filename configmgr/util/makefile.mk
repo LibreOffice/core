@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dg $ $Date: 2001-09-05 10:34:46 $
+#   last change: $Author: dg $ $Date: 2001-09-05 13:18:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,7 @@ SHL2LIBS=	$(SLB)$/registry.lib	\
             $(SLB)$/misc.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/treemgr.lib			\
-            $(SLB)$/sxl_api2.lib			\
+            $(SLB)$/api2.lib			\
             $(SLB)$/api.lib			\
             $(SLB)$/cm.lib
 
