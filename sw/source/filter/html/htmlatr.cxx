@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:38:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         const SwNodeNum& rAktNum = *pTxtNd->GetNum();
         ASSERT( GetRealLevel( rAktNum.GetLevel() ) == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        ASSERT( bNumbered == ((rAktNum.GetLevel() & NO_NUMLEVEL) == 0),
+        ASSERT( bNumbered == rAktNum.IsNum(),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
