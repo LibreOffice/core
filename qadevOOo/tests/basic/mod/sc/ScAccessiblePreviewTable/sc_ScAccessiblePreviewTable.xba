@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessiblePreviewTable.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:10 $ 
+'*  last change:$Date: 2003-05-27 12:11:26 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -102,7 +102,7 @@ On Error Goto ErrHndl
         wait(500)
         oWin = utils.at_getCurrentWindow(oDoc)
         xRoot = utils.at_getAccessibleObject(oWin)
-        oObj = utils.at_getAccessibleObjectForRole(xRoot,48)
+        oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.TABLE)
         multiSelection = true
     else
         Out.Log("QueryDispatch FAILED. Cannot switch to Preview mode...")
@@ -112,10 +112,6 @@ On Error Goto ErrHndl
 Exit Sub
 ErrHndl:
     Test.Exception()
-End Sub
-
-Sub DisposeObj()
-    oDoc.dispose()
 End Sub
 
 Sub fireEvent()
