@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:43:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,7 @@ BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     : eRuleType( eType ),
     sName( rNm ),
+      aMarkedLevels( MAXLEVEL ), // #i27615#
     bAutoRuleFlag( bAutoFlg ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( FALSE ),
@@ -548,6 +549,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     : eRuleType( rNumRule.eRuleType ),
     sName( rNumRule.sName ),
+    aMarkedLevels( MAXLEVEL ), // #i27615#
     bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( rNumRule.bContinusNum ),
@@ -844,6 +846,18 @@ void SwNumRule::SetNumAdjust(SvxAdjust eNumAdjust)
 {
     for (int i = 0; i < MAXLEVEL; i++)
         aFmts[i]->SetNumAdjust(eNumAdjust);
+}
+
+// #i27615#
+SwBitArray SwNumRule::SetLevelMarked(BYTE nLvl, BOOL bVal)
+{
+    SwBitArray aTmpMarkedLevels(aMarkedLevels);
+
+    aMarkedLevels.Set(nLvl, bVal);
+
+    aTmpMarkedLevels = aTmpMarkedLevels ^ aMarkedLevels;
+
+    return aTmpMarkedLevels;
 }
 
 // #i23725#, #i23726#
