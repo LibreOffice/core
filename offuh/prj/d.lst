@@ -36,6 +36,7 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\scanner
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\sheet
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\style
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\sync2
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\system
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\table
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\telephony
@@ -130,6 +131,8 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\mozilla
 ..\%__SRC%\inc\com\sun\star\sheet\*.hpp %_DEST%\inc%_EXT%\com\sun\star\sheet\*.hpp
 ..\%__SRC%\inc\com\sun\star\style\*.hdl %_DEST%\inc%_EXT%\com\sun\star\style\*.hdl
 ..\%__SRC%\inc\com\sun\star\style\*.hpp %_DEST%\inc%_EXT%\com\sun\star\style\*.hpp
+..\%__SRC%\inc\com\sun\star\sync2\*.hdl %_DEST%\inc%_EXT%\com\sun\star\sync2\*.hdl
+..\%__SRC%\inc\com\sun\star\sync2\*.hpp %_DEST%\inc%_EXT%\com\sun\star\sync2\*.hpp
 ..\%__SRC%\inc\com\sun\star\system\*.hdl %_DEST%\inc%_EXT%\com\sun\star\system\*.hdl
 ..\%__SRC%\inc\com\sun\star\system\*.hpp %_DEST%\inc%_EXT%\com\sun\star\system\*.hpp
 ..\%__SRC%\inc\com\sun\star\table\*.hdl %_DEST%\inc%_EXT%\com\sun\star\table\*.hdl
