@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:46:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,16 @@ SwPaM* SwPaM::MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg )
             pPam->Exchange();
     }
     return pPam;
+}
+
+SwPaM & SwPaM::Normalize(BOOL bPointFirst)
+{
+    if (HasMark())
+        if ((bPointFirst && *pPoint > *pMark) ||
+            (! bPointFirst && *pPoint < *pMark))
+            Exchange();
+
+    return *this;
 }
 
 USHORT SwPaM::GetPageNum( BOOL bAtPoint, const Point* pLayPos )
