@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 11:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,22 +480,6 @@ void SAL_CALL osl_releaseSocket( oslSocket Socket );
 oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
                                     oslSocketType   Type,
                                     oslProtocol     Protocol);
-
-/** Create a socket as a copy of another.
-    @deprecated
-    @return 0 if socket could not be created, otherwise you get a handle
-    to the allocated socket-datastructure.
-*/
-oslSocket SAL_CALL osl_copySocket(oslSocket Socket);
-
-/** Closes the socket and frees the Socket data-structure.
-    For a graceful termination of a connection, you should call
-    osl_shutdownSocket() first.
-    @deprecated
-    @param Socket [in] The Socket to be closed and destroyed.
-*/
-void SAL_CALL osl_destroySocket(oslSocket Socket);
-
 
 /** Retrieves the Address of the local end of the socket.
     Note that a socket must be bound or connected before
