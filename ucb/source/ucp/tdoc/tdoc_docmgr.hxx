@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_docmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:32:18 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include "com/sun/star/document/XEventListener.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/frame/XModel.hpp"
-#include "drafts/com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XModuleManager.hpp"
 
 namespace tdoc_ucp {
 
@@ -177,7 +177,7 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference<
             com::sun::star::document::XEventBroadcaster >   m_xDocEvtNotifier;
         com::sun::star::uno::Reference<
-            drafts::com::sun::star::frame::XModuleManager > m_xModuleMgr;
+            com::sun::star::frame::XModuleManager > m_xModuleMgr;
         DocumentList                                        m_aDocs;
         OfficeDocumentsEventListener *                      m_pDocEventListener;
     };
