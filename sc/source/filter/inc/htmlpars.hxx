@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:38:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,11 @@ public:
     /** Closes the body of the HTML document (</body> tag). */
     void                        BodyOff( const ImportInfo& rInfo );
 
+    /** Closes *this* table (</table> tag) or preformatted text (</pre> tag).
+        @descr  Used to close this table object regardless on opening tag type.
+        @return  Pointer to the parent table, or this, if no parent found. */
+    ScHTMLTable*                CloseTable( const ImportInfo& rInfo );
+
     /** Returns the resulting document row/column count of the specified HTML row/column. */
     sal_uInt16                  GetDocSize( ScHTMLOrient eOrient, sal_uInt16 nCellPos ) const;
     /** Returns the resulting document row/column count in the range [nCellBegin, nCellEnd). */
@@ -534,9 +539,6 @@ private:
     /** Inserts a nested table in the current cell at the specified position.
         @param bPreFormText  true = New table is based on preformatted text (<pre> tag). */
     ScHTMLTable*                InsertNestedTable( const ImportInfo& rInfo, bool bPreFormText );
-    /** Closes this table and inserts it into parent table.
-        @return  Pointer to the parent table, or this, if no parent found. */
-    ScHTMLTable*                CloseTable( const ImportInfo& rInfo );
 
     /** Inserts a new cell in an unused position, starting from current cell position. */
     void                        InsertNewCell( const ScHTMLSize& rSpanSize );
@@ -652,6 +654,9 @@ private:
     void                        PreOn( const ImportInfo& rInfo );
     /** Closes the current preformatted text table. */
     void                        PreOff( const ImportInfo& rInfo );
+
+    /** Closes the current table, regardless on opening tag. */
+    void                        CloseTable( const ImportInfo& rInfo );
 
     DECL_LINK( HTMLImportHdl, const ImportInfo* );
 
