@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2001-12-04 13:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,9 +248,6 @@ protected:
 private:
     DAVSessionFactory::Map::iterator m_aContainerIt;
     oslInterlockedCount m_nRefCount;
-
-    DAVSession( DAVSession & ); // not implemented
-    void operator =( DAVSession ); // not implemented
 
     friend class DAVSessionFactory;
 #if defined WNT
