@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:10:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 namespace vclcanvas
@@ -159,7 +158,7 @@ namespace vclcanvas
         CanvasBitmap_Base::disposing();
     }
 
-#define SERVICE_NAME "drafts.com.sun.star.rendering.CanvasBitmap"
+#define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
 
     ::rtl::OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
     {
