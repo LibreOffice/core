@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:20:40 $
+ *  last change: $Author: os $ $Date: 2001-04-24 08:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,10 +833,10 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     Text [ dutch ] = "Uitlijning" ;
     Text [ portuguese ] = "Alinhamento" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    GroupBox GB_ALIGN
+    FixedLine GB_ALIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 173 , 145 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
@@ -1162,15 +1162,20 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ turkish ] = "Son sözcüðü ~geniþlet";
         Text[ language_user1 ] = " ";
     };
+    FixedLine FL_VERTEX
+    {
+        Pos = MAP_APPFONT ( 179 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 128 ) ;
+    };
     Window WN_EXAMPLE
     {
         Pos = MAP_APPFONT ( 191 , 14 ) ;
         Size = MAP_APPFONT ( 56 , 128 ) ;
     };
-    GroupBox GB_EXAMPLE
+    FixedLine GB_EXAMPLE
     {
         Pos = MAP_APPFONT ( 185 , 3 ) ;
-        Size = MAP_APPFONT ( 68 , 145 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -1194,6 +1199,37 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+    };
+    FixedLine FL_VERTALIGN
+    {
+        Pos = MAP_APPFONT ( 6 , 146 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Vertikale Textausrichtung" ;
+        Text [ ENGLISH ] = "Vertical text alignment" ;
+        Hide = TRUE;
+    };
+    ListBox LB_VERTALIGN
+    {
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 100 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Automatisch" ; > ;
+            < "Grundlinie" ; > ;
+            < "Oben" ; > ;
+            < "Zentriert" ; > ;
+            < "Unten" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Automatic" ; > ;
+            < "Baseline" ; > ;
+            < "Top" ; > ;
+            < "Center" ; > ;
+            < "Bottom" ; > ;
+        };
     };
     Text[ chinese_simplified ] = "¶ÔÆë";
     Text[ russian ] = "Âûðàâíèâàíèå";

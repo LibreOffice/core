@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 08:54:55 $
+ *  last change: $Author: os $ $Date: 2001-04-24 08:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #define ITEMID_LRSPACE      0
 #define ITEMID_FMTBREAK     0
 #define ITEMID_FMTKEEP      0
+#define ITEMID_PARAVERTALIGN 0
 #define _SVX_PARAGRPH_CXX   0
 
 #include "dialogs.hrc"
@@ -109,6 +110,9 @@
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
 #include "htmlmode.hxx"
+#ifndef _SVX_PARAVERTALIGNITEM_HXX
+#include <paravertalignitem.hxx>
+#endif
 
 // static ----------------------------------------------------------------
 
@@ -1040,10 +1044,14 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aLastLineFT             ( this, ResId( FT_LASTLINE ) ),
     aLastLineLB             ( this, ResId( LB_LASTLINE ) ),
     aExpandCB               ( this, ResId( CB_EXPAND ) ),
+    aVertExFL               ( this, ResId( FL_VERTEX ) ),
     aExampleWin             ( this, ResId( WN_EXAMPLE ) ),
-    aExampleFrm             ( this, ResId( GB_EXAMPLE ) )
+    aExampleFrm             ( this, ResId( GB_EXAMPLE ) ),
+    aVertAlignFL            ( this, ResId( FL_VERTALIGN ) ),
+    aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
 {
     FreeResource();
+    aVertExFL.SetStyle(aVertExFL.GetStyle()|WB_VERT);
     Link aLink = LINK( this, SvxParaAlignTabPage, AlignHdl_Impl );
     aLeft.SetClickHdl( aLink );
     aRight.SetClickHdl( aLink );
@@ -1155,6 +1163,13 @@ BOOL SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             rOutSet.Put( aAdj );
         }
     }
+    if(aVertAlignLB.GetSavedValue() != aVertAlignLB.GetSelectEntryPos())
+    {
+        USHORT nWhich = GetWhich( SID_PARA_VERTALIGN );
+        rOutSet.Put(SvxParaVertAlignItem(aVertAlignLB.GetSelectEntryPos(), nWhich));
+        bModified = TRUE;
+    }
+
     return bModified;
 }
 
@@ -1216,6 +1231,19 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
             aJustify.Disable();
     }
 
+    nWhich = GetWhich( SID_PARA_VERTALIGN );
+    eItemState = rSet.GetItemState( nWhich );
+
+    if ( eItemState >= SFX_ITEM_AVAILABLE )
+    {
+        aVertAlignLB.Show();
+        aVertAlignFL.Show();
+
+        const SvxParaVertAlignItem& rAlign = (const SvxParaVertAlignItem&)rSet.Get( nWhich );
+        aVertAlignLB.SelectEntryPos(rAlign.GetValue());
+    }
+
+    aVertAlignLB.SaveValue();
     aLeft.SaveValue();
     aRight.SaveValue();
     aCenter.SaveValue();
