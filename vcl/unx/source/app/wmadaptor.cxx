@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:32:00 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 
