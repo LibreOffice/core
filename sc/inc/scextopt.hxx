@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:57:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,212 +58,121 @@
  *
  *
  ************************************************************************/
+#ifndef SC_SCEXTOPT_HXX
+#define SC_SCEXTOPT_HXX
 
-#ifndef _SCEXTOPT_HXX
-#define _SCEXTOPT_HXX
+#include <memory>
 
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
+#endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef SC_RANGELST_HXX
+#include "rangelst.hxx"
 #endif
 
-#ifndef SC_ADDRESS_HXX
-#include "address.hxx"
-#endif
+// ============================================================================
 
-/******************************************************************************
- *
- * ATTENTION:
- * All col/row/tab members here are dedicated UINT16/INT16 types for alien
- * binary file import/export. May have to be casted/converted when used in Calc
- * context.
- *
- *****************************************************************************/
-
-class ColRowSettings;
-
-// ACHTUNG1: einzelne Einstellungen sollten stimmen
-//              -> Absicherung nur ueber Assertions
-// ACHTUNG2: Plausibilitaet der Einstellungen untereinander ist nicht
-//              gewaehrleistet
-
-struct ScExtTabOptions
+/** Extended settings for the document, used in import/export filters. */
+struct ScExtDocSettings
 {
-    // Split -Info
-    UINT16                      nTabNum;
-    UINT16                      nSplitX;            // horiz. pos. in twips, 0 = no split
-    UINT16                      nSplitY;            // vert. pos. ~
-    UINT16                      nLeftCol;           // leftmost column visible
-    UINT16                      nTopRow;            // topmost row visible
-    UINT16                      nLeftSplitCol;      // leftmost column after horizontal split
-    UINT16                      nTopSplitRow;       // topmost row after vertical split
-    UINT16                      nActPane;           // 0: br, 1: tr, 2: bl, 3: tl
+    ScRange             maOleSize;          /// Visible range if embedded.
+    String              maGlobCodeName;     /// Global codename (VBA module name).
+    double              mfTabBarWidth;      /// Width of the tabbar, relative to frame window width (0.0 ... 1.0).
+    sal_uInt32          mnLinkCnt;          /// Recursive counter for loading external documents.
+    SCTAB               mnDisplTab;         /// Index of displayed sheet.
+    bool                mbWinProtected;     /// true = Window properties are protected.
+    bool                mbEncrypted;        /// true = Imported file was encrypted.
 
-    ScRange                     aLastSel;           // last selection
-    BOOL                        bValidSel;
-    ScRange                     aDim;               // original Excel size
-    BOOL                        bValidDim;
-
-    BOOL                        bSelected;
-    BOOL                        bFrozen;            // = TRUE -> nSplitX / nSplitY contain
-                                                    // count of visible columns/rows
-
-    explicit                    ScExtTabOptions();
-
-    void                        SetSelection( const ScRange& rSelection );
-    void                        SetDimension( const ScRange& rDim );
+    explicit            ScExtDocSettings();
 };
 
+// ============================================================================
 
-
-
-class CodenameList : protected List
+/** Enumerates possible positions of panes in split sheets. */
+enum ScExtPanePos
 {
-    // Code: colrowst.cxx
-private:
-protected:
-public:
-    inline                      CodenameList( void );
-                                CodenameList( const CodenameList& );
-    virtual                     ~CodenameList();
-
-    inline void                 Append( const String& );
-
-    inline const String*        First( void );
-    inline const String*        Next( void );
-    inline const String*        Act( void ) const;
-
-    List::Count;
+    SCEXT_PANE_TOPLEFT,         /// Single, top, left, or top-left pane.
+    SCEXT_PANE_TOPRIGHT,        /// Right, or top-right pane.
+    SCEXT_PANE_BOTTOMLEFT,      /// Bottom, or bottom-left pane.
+    SCEXT_PANE_BOTTOMRIGHT      /// Bottom-right pane.
 };
 
+// ----------------------------------------------------------------------------
 
+/** Extended settings for a sheet, used in import/export filters. */
+struct ScExtTabSettings
+{
+    ScRange             maUsedArea;         /// Used area in the sheet (columns/rows only).
+    ScRangeList         maSelection;        /// Selected cell ranges (columns/rows only).
+    ScAddress           maCursor;           /// The cursor position (column/row only).
+    ScAddress           maFirstVis;         /// Top-left visible cell (column/row only).
+    ScAddress           maSecondVis;        /// Top-left visible cell in add. panes (column/row only).
+    ScAddress           maFreezePos;        /// Position of frozen panes (column/row only).
+    Point               maSplitPos;         /// Position of split.
+    ScExtPanePos        meActivePane;       /// Active (focused) pane.
+    Color               maGridColor;        /// Grid color.
+    long                mnNormalZoom;       /// Zoom in percent for normal view.
+    long                mnPageZoom;         /// Zoom in percent for pagebreak preview.
+    bool                mbSelected;         /// true = Sheet is selected.
+    bool                mbFrozenPanes;      /// true = Frozen panes; false = Normal splits.
+    bool                mbPageMode;         /// true = Pagebreak mode; false = Normal view mode.
 
+    explicit            ScExtTabSettings();
+};
 
+// ============================================================================
+
+struct ScExtDocOptionsImpl;
+
+/** Extended options held by an ScDocument containing additional settings for filters.
+
+    This object is owned by a Calc document. It contains global document settings
+    (struct ScExtDocSettings), settings for all sheets in the document
+    (struct ScExtTabSettings), and a list of codenames used for VBA import/export.
+ */
 class ScExtDocOptions
 {
-// Code: colrowst.cxx
-private:
-    friend class ColRowSettings;
-    // Window -Info
-    ScExtTabOptions**       ppExtTabOpts;
-
-    String*                 pCodenameWB;
-    CodenameList*           pCodenames;
-
-    BOOL                    bChanged;       // for import: copy data only first time to doc
-    bool                    bWinProtection;  // Excel Workbook Windows protection flag
-    bool                    bWinEncryption;  // Excel Workbook Windows encryption flag
-
-    void                    Reset();
-
 public:
-    UINT32                  nLinkCnt;       // Zaehlt die Rekursionstufe beim Laden
-                                            //  von externen Dokumenten
-    UINT16                  nActTab;        // aktuelle Tabelle
-    ScRange*                pOleSize;       // visible range if embedded
-    UINT16                  nSelTabs;       // count of selected sheets
-    Color*                  pGridCol;       // Farbe Grid und Row-/Col-Heading
-    UINT16                  nZoom;          // in %
-    // Cursor
-    UINT16                  nCurCol;        // aktuelle Cursor-Position
-    UINT16                  nCurRow;
-    // -------------------------------------------------------------------
-                            ScExtDocOptions( void );
-                            ScExtDocOptions( const ScExtDocOptions& rCpy );
-                            ~ScExtDocOptions();
+    explicit            ScExtDocOptions();
+                        ScExtDocOptions( const ScExtDocOptions& rSrc );
+                        ~ScExtDocOptions();
 
-    ScExtDocOptions&        operator =( const ScExtDocOptions& rCpy );
+    ScExtDocOptions&    operator=( const ScExtDocOptions& rSrc );
 
-    void                    SetExtTabOptions( SCTAB nTabNum, ScExtTabOptions* pTabOpt );
+    /** Returns true, if the data needs to be copied to the view data after import. */
+    bool                IsChanged() const;
+    /** If set to true, the data will be copied to the view data after import. */
+    void                SetChanged( bool bChanged );
 
-    void                    SetGridCol( const Color& rColor );
-    void                    SetActTab( UINT16 nTab );
-    void                    SetOleSize( SCCOL nFirstCol, SCROW nFirstRow, SCCOL nLastCol, SCROW nLastRow );
-    void                    SetCursor( UINT16 nCol, UINT16 nRow );
-    void                    SetZoom( UINT16 nZaehler, UINT16 nNenner );
-    inline void             SetChanged( BOOL bChg )     { bChanged = bChg; }
-    inline BOOL             IsChanged() const           { return bChanged; }
+    /** Returns read access to the global document settings. */
+    const ScExtDocSettings& GetDocSettings() const;
+    /** Returns read/write access to the global document settings. */
+    ScExtDocSettings&   GetDocSettings();
 
-    void                    Add( const ColRowSettings& rCRS );
+    /** Returns read access to the settings of a sheet, if extant; otherwise 0. */
+    const ScExtTabSettings* GetTabSettings( SCTAB nTab ) const;
+    /** Returns read/write access to the settings of a sheet, may create a new struct. */
+    ScExtTabSettings&   GetOrCreateTabSettings( SCTAB nTab );
 
-    inline const ScExtTabOptions*   GetExtTabOptions( const SCTAB nTabNum ) const;
-    inline ScExtTabOptions* GetExtTabOptions( const SCTAB nTabNum );
-    inline const ScRange*   GetOleSize() const  { return pOleSize; }
+    /** Returns the number of sheet codenames. */
+    size_t              GetCodeNameCount() const;
+    /** Returns the specified codename (empty string = no codename). */
+    const String&       GetCodeName( size_t nIdx ) const;
+    /** Appends a codename for a sheet. */
+    void                AppendCodeName( const String& rCodeName );
 
-    inline const String*    GetCodename( void ) const;      // for Workbook globals
-    inline CodenameList*    GetCodenames( void );           // for tables
-
-    void                    SetCodename( const String& );   // -> Workbook globals
-    void                    AddCodename( const String& );   // -> tables
-    inline void             SetWinProtection(bool bImportWinProtection) {bWinProtection = bImportWinProtection; }
-    inline bool             IsWinProtected()         { return bWinProtection; }
-    inline void             SetWinEncryption(bool bImportWinEncryption) {bWinEncryption = bImportWinEncryption; }
-    inline bool             IsWinEncrypted()         { return bWinEncryption; }
+private:
+    ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;
 };
 
-
-
-
-inline CodenameList::CodenameList( void )
-{
-}
-
-
-inline void CodenameList::Append( const String& r )
-{
-    List::Insert( new String( r ), LIST_APPEND );
-}
-
-
-inline const String* CodenameList::First( void )
-{
-    return ( const String* ) List::First();
-}
-
-
-inline const String* CodenameList::Next( void )
-{
-    return ( const String* ) List::Next();
-}
-
-
-inline const String* CodenameList::Act( void ) const
-{
-    return ( const String* ) List::GetCurObject();
-}
-
-
-
-
-inline const ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const SCTAB nTab ) const
-{
-    return ValidTab(nTab) ? ppExtTabOpts[ nTab ] : NULL;
-}
-
-
-inline ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const SCTAB nTab )
-{
-    return ValidTab(nTab) ? ppExtTabOpts[ nTab ] : NULL;
-}
-
-
-inline const String* ScExtDocOptions::GetCodename( void ) const
-{
-    return pCodenameWB;
-}
-
-
-inline CodenameList* ScExtDocOptions::GetCodenames( void )
-{
-    return pCodenames;
-}
-
+// ============================================================================
 
 #endif
 
