@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:22:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "‰Ê⁄ «·«— »«ÿ «· ‘⁄»Ì";
         Text[ turkish ] = "Hyperlink t¸r¸";
         Text[ catalan ] = "Tipo de hiperenlace";
+        Text[ finnish ] = "Hyperlinkin tyyppi";
     };
     RadioButton RB_LINKTYP_INTERNET
     {
@@ -137,6 +138,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ turkish ] = "~Internet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Internet";
+        Text[ finnish ] = "~Internet";
     };
     RadioButton RB_LINKTYP_FTP
     {
@@ -163,6 +165,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "FT~P";
         Text[ turkish ] = "~FTP";
         Text[ catalan ] = "~FTP";
+        Text[ finnish ] = "~FTP";
     };
     RadioButton RB_LINKTYP_TELNET
     {
@@ -189,6 +192,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "T~elnet";
         Text[ turkish ] = "~Telnet";
         Text[ catalan ] = "~Telnet";
+        Text[ finnish ] = "~Telnet";
     };
     FixedText FT_TARGET_HTML
     {
@@ -196,7 +200,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Size = MAP_APPFONT ( 38 , 10 ) ;
         Text = "Sprungzie~l";
         Text [ ENGLISH ] = "Link tar~get" ;
-        Text [ english_us ] = "T~arget" ;
+        Text [ english_us ] = "Tar~get" ;
         Text[ portuguese ] = "~Destino";
         Text[ russian ] = "÷ÂÎ¸";
         Text[ greek ] = "–ÒÔÔÒÈÛÏ¸Ú";
@@ -215,6 +219,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«·Âœ›";
         Text[ turkish ] = "~Hedef";
         Text[ catalan ] = "Destino";
+        Text[ finnish ] = "K~ohde";
     };
     FixedText FT_LOGIN
     {
@@ -241,6 +246,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«”„ «· ”ÃÌ·";
         Text[ turkish ] = "~Oturum aÁma ad˝";
         Text[ catalan ] = "~Login";
+        Text[ finnish ] = "~K‰ytt‰j‰tunnus";
     };
     Edit ED_LOGIN
     {
@@ -274,6 +280,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ turkish ] = "~ﬁifre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~ContraseÒa";
+        Text[ finnish ] = "~Salasana";
     };
     Edit ED_PASSWD
     {
@@ -309,6 +316,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ turkish ] = "Anonim ~kullan˝c˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usuario ~anÛnimo";
+        Text[ finnish ] = "Tuntematon ~k‰ytt‰j‰";
     };
     ImageButton BTN_BROWSE
     {
@@ -341,6 +349,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ arabic ] = "„ ’›Õ ÊÌ»";
         QuickHelpText[ turkish ] = "WWW-Browser";
         QuickHelpText[ catalan ] = "Navegador";
+        QuickHelpText[ finnish ] = "Web-selain!";
     };
     ImageButton BTN_TARGET
     {
@@ -373,6 +382,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ arabic ] = "«·Âœ› ›Ì «·„” ‰œ";
         QuickHelpText[ turkish ] = "Target";
         QuickHelpText[ catalan ] = "Destino en documento";
+        QuickHelpText[ finnish ] = "Kohde asiakirjassa!";
     };
 
     Text[ portuguese ] = "HiperligaÁ„o";
@@ -418,6 +428,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "≈⁄œ«œ«  ≈÷«›Ì…";
         Text[ turkish ] = "Dier ayarlar";
         Text[ catalan ] = "Otras opciones";
+        Text[ finnish ] = "Muut asetukset";
     };
     FixedText FT_FRAME
     {
@@ -444,6 +455,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "≈ÿ«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "F~rame";
+        Text[ finnish ] = "K~ehys";
     };
     ComboBox CB_FRAME
     {
@@ -479,6 +491,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«·‘ﬂ·";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "f~orma";
+        Text[ finnish ] = "~Lomake";
     };
     ListBox LB_FORM
     {
@@ -599,6 +612,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
             < "Texto" ; Default ; > ;
         < "BotÛn" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Teksti" ; Default ; > ;
+        < "Painike" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -625,6 +643,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«·‰’";
         Text[ turkish ] = "~Balant˝ ad˝";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teks~ti";
     };
     Edit ED_INDICATION
     {
@@ -657,6 +676,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«”„";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~ombre";
+        Text[ finnish ] = "N~imi";
     };
     Edit ED_TEXT
     {
@@ -695,9 +715,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ arabic ] = "√Õœ«À";
         QuickHelpText[ turkish ] = "Ereignisse";
         QuickHelpText[ catalan ] = "Acontecimientos";
+        QuickHelpText[ finnish ] = "Tapahtumat!";
     };
     Text[ turkish ] = "Hyperlink";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 
 /*************************************************************************
@@ -742,6 +764,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "»—Ìœ Ê„Ã„Ê⁄«  √Œ»«—";
         Text[ turkish ] = "E-posta ve haber gruplar˝";
         Text[ catalan ] = "Correo y noticias";
+        Text[ finnish ] = "S‰hkˆposti ja uutisryhm‰";
     };
     RadioButton RB_LINKTYP_MAIL
     {
@@ -769,6 +792,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~E-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~E-mail";
+        Text[ finnish ] = "~S‰hkˆposti";
     };
     RadioButton RB_LINKTYP_NEWS
     {
@@ -796,6 +820,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~Haber gruplar˝";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Noticias";
+        Text[ finnish ] = "~Uutisryhm‰t";
     };
     FixedText FT_RECEIVER
     {
@@ -822,6 +847,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«·„” ·„";
         Text[ turkish ] = "A~l˝c˝";
         Text[ catalan ] = "D~estinatario";
+        Text[ finnish ] = "Vas~taanottaja";
     };
     FixedText FT_SUBJECT
     {
@@ -848,6 +874,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«·„Ê÷Ê⁄";
         Text[ turkish ] = "~Konu";
         Text[ catalan ] = "A~sunto";
+        Text[ finnish ] = "~Aihe";
     };
     Edit ED_SUBJECT
     {
@@ -886,6 +913,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ arabic ] = "œ› — «·⁄‰«ÊÌ‰";
         QuickHelpText[ turkish ] = "Adressbuch";
         QuickHelpText[ catalan ] = "Libreta de direcciones";
+        QuickHelpText[ finnish ] = "Osoitekirja!";
     };
 
     GroupBox GRP_MORE
@@ -913,6 +941,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "≈⁄œ«œ«  ≈÷«›Ì…";
         Text[ turkish ] = "Dier ayarlar";
         Text[ catalan ] = "Otras opciones";
+        Text[ finnish ] = "Muut asetukset";
     };
     FixedText FT_FRAME
     {
@@ -939,6 +968,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "≈ÿ«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "F~rame";
+        Text[ finnish ] = "K~ehys";
     };
     ComboBox CB_FRAME
     {
@@ -974,6 +1004,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«·‘ﬂ·";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "f~orma";
+        Text[ finnish ] = "~Lomake";
     };
     ListBox LB_FORM
     {
@@ -1094,6 +1125,11 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
             < "Texto" ; Default ; > ;
         < "BotÛn" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Teksti" ; Default ; > ;
+        < "Painike" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -1120,6 +1156,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«·‰’";
         Text[ turkish ] = "~Balant˝ ad˝";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teks~ti";
     };
     Edit ED_INDICATION
     {
@@ -1152,6 +1189,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«”„";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~ombre";
+        Text[ finnish ] = "N~imi";
     };
     Edit ED_TEXT
     {
@@ -1190,6 +1228,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ arabic ] = "√Õœ«À";
         QuickHelpText[ turkish ] = "Ereignisse";
         QuickHelpText[ catalan ] = "Acontecimientos";
+        QuickHelpText[ finnish ] = "Tapahtumat!";
     };
 
     Text[ portuguese ] = "HiperligaÁ„o";
@@ -1210,6 +1249,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Text[ arabic ] = "«— »«ÿ  ‘⁄»Ì";
     Text[ turkish ] = "Hyperlink";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 
 /*************************************************************************
@@ -1255,6 +1295,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ turkish ] = "Belge";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento";
+        Text[ finnish ] = "Asiakirja";
     };
     FixedText FT_PATH_DOC
     {
@@ -1281,6 +1322,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "„”«—";
         Text[ turkish ] = "~Veri yolu";
         Text[ catalan ] = "~Ruta";
+        Text[ finnish ] = "~Polku";
     };
     ImageButton BTN_FILEOPEN
     {
@@ -1314,6 +1356,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datei ˆffnen";
         QuickHelpText[ catalan ] = "Abrir archivo";
+        QuickHelpText[ finnish ] = "Avaa tiedosto!";
     };
 
     GroupBox GRP_TARGET
@@ -1341,6 +1384,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "«·Âœ› ›Ì «·„” ‰œ";
         Text[ turkish ] = "Belge iÁindeki hedef";
         Text[ catalan ] = "Destino en el documento";
+        Text[ finnish ] = "Kohde asiakirjassa";
     };
     FixedText FT_TARGET_DOC
     {
@@ -1367,6 +1411,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "«·Âœ›";
         Text[ turkish ] = "~Hedef";
         Text[ catalan ] = "Destino";
+        Text[ finnish ] = "K~ohde";
     };
     Edit ED_TARGET_DOC
     {
@@ -1400,6 +1445,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL";
+        Text[ finnish ] = "URL-osoite";
     };
     FixedText FT_FULL_URL
     {
@@ -1427,6 +1473,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ turkish ] = "Deneme metni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL";
+        Text[ finnish ] = "Koeteksti";
     };
     ImageButton BTN_BROWSE
     {
@@ -1459,6 +1506,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ arabic ] = "«·Âœ› ›Ì «·„” ‰œ";
         QuickHelpText[ turkish ] = "Ziel im Dokument";
         QuickHelpText[ catalan ] = "Destino en documento";
+        QuickHelpText[ finnish ] = "Kohde asiakirjassa!";
     };
 
     GroupBox GRP_MORE
@@ -1486,6 +1534,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "≈⁄œ«œ«  ≈÷«›Ì…";
         Text[ turkish ] = "Dier ayarlar";
         Text[ catalan ] = "Otras opciones";
+        Text[ finnish ] = "Muut asetukset";
     };
     FixedText FT_FRAME
     {
@@ -1512,6 +1561,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "≈ÿ«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "F~rame";
+        Text[ finnish ] = "K~ehys";
     };
     ComboBox CB_FRAME
     {
@@ -1547,6 +1597,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "«·‘ﬂ·";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "f~orma";
+        Text[ finnish ] = "~Lomake";
     };
     ListBox LB_FORM
     {
@@ -1667,6 +1718,11 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
             < "Texto" ; Default ; > ;
         < "BotÛn" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Teksti" ; Default ; > ;
+        < "Painike" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -1693,6 +1749,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "«·‰’";
         Text[ turkish ] = "~Balant˝ ad˝";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teks~ti";
     };
     Edit ED_INDICATION
     {
@@ -1725,6 +1782,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ arabic ] = "«”„";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~ombre";
+        Text[ finnish ] = "N~imi";
     };
     Edit ED_TEXT
     {
@@ -1763,6 +1821,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ arabic ] = "√Õœ«À";
         QuickHelpText[ turkish ] = "Ereignisse";
         QuickHelpText[ catalan ] = "Acontecimientos";
+        QuickHelpText[ finnish ] = "Tapahtumat!";
     };
     Text[ portuguese ] = "HiperligaÁ„o";
     Text[ russian ] = "√ËÔÂÒÒ˚ÎÍ‡";
@@ -1782,6 +1841,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Text[ arabic ] = "«— »«ÿ  ‘⁄»Ì";
     Text[ turkish ] = "Hyperlink";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 
 /*************************************************************************
@@ -1827,6 +1887,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ turkish ] = "Yeni belge";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nuevo documento";
+        Text[ finnish ] = "Uusi asiakirja";
     };
     RadioButton RB_EDITNOW
     {
@@ -1853,6 +1914,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = " Õ—Ì— «·¬‰";
         Text[ turkish ] = "~ﬁimdi d¸zenle";
         Text[ catalan ] = "Editar a~hora";
+        Text[ finnish ] = "Muokkaa ~nyt";
     };
     RadioButton RB_EDITLATER
     {
@@ -1879,6 +1941,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = " Õ—Ì— ›Ì„« »⁄œ";
         Text[ turkish ] = "~Sonra d¸zenle";
         Text[ catalan ] = "Edit~ar m·s tarde";
+        Text[ finnish ] = "Muokkaa ~myˆhemmin";
     };
     FixedText FT_PATH_NEWDOC
     {
@@ -1906,6 +1969,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "„·›";
         Text[ turkish ] = "~Dosya";
         Text[ catalan ] = "~Archivo";
+        Text[ finnish ] = "~Tiedosto";
     };
     Edit ED_PATH_NEWDOC
     {
@@ -1939,6 +2003,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ turkish ] = "Dosya ~tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ti~po";
+        Text[ finnish ] = "Tiedosto~tyyppi";
     };
     ListBox LB_DOCUMENT_TYPES
     {
@@ -1980,6 +2045,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ arabic ] = "«Œ Ì«— «·„”«—";
         QuickHelpText[ turkish ] = "Pfad ausw‰hlen";
         QuickHelpText[ catalan ] = "Seleccionar ruta";
+        QuickHelpText[ finnish ] = "Valitse polku!";
     };
 
     GroupBox GRP_MORE
@@ -2007,6 +2073,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "≈⁄œ«œ«  ≈÷«›Ì…";
         Text[ turkish ] = "Dier ayarlar";
         Text[ catalan ] = "Otras opciones";
+        Text[ finnish ] = "Muut asetukset";
     };
     FixedText FT_FRAME
     {
@@ -2033,6 +2100,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "≈ÿ«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "F~rame";
+        Text[ finnish ] = "K~ehys";
     };
     ComboBox CB_FRAME
     {
@@ -2068,6 +2136,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«·‘ﬂ·";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "f~orma";
+        Text[ finnish ] = "~Lomake";
     };
     ListBox LB_FORM
     {
@@ -2188,6 +2257,11 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
             < "Texto" ; Default ; > ;
         < "BotÛn" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Teksti" ; Default ; > ;
+        < "Painike" ; Default ; > ;
+    };
     };
     FixedText FT_INDICATION
     {
@@ -2214,6 +2288,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«·‰’";
         Text[ turkish ] = "~Balant˝ ad˝";
         Text[ catalan ] = "Texto";
+        Text[ finnish ] = "Teks~ti";
     };
     Edit ED_INDICATION
     {
@@ -2246,6 +2321,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«”„";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~ombre";
+        Text[ finnish ] = "N~imi";
     };
     Edit ED_TEXT
     {
@@ -2284,6 +2360,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ arabic ] = "√Õœ«À";
         QuickHelpText[ turkish ] = "Ereignisse";
         QuickHelpText[ catalan ] = "Acontecimientos";
+        QuickHelpText[ finnish ] = "Tapahtumat!";
     };
     Text[ portuguese ] = "HiperligaÁ„o";
     Text[ russian ] = "√ËÔÂÒÒ˚ÎÍ‡";
@@ -2303,6 +2380,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Text[ arabic ] = "«— »«ÿ  ‘⁄»Ì";
     Text[ turkish ] = "Hyperlink";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 
 /*************************************************************************
@@ -2338,6 +2416,7 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
     Text[ arabic ] = "«— »«ÿ  ‘⁄»Ì";
     Text[ turkish ] = "Hyperlink";
     Text[ catalan ] = "Hiperenlace";
+    Text[ finnish ] = "Hyperlinkki";
 };
 
 /*************************************************************************
@@ -2370,6 +2449,7 @@ String RID_SVXSTR_HYPDLG_APPLYBUT
     Text[ turkish ] = "Uygula";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar";
+    Text[ finnish ] = "K‰yt‰";
 };
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
@@ -2395,6 +2475,7 @@ String RID_SVXSTR_HYPDLG_CLOSEBUT
     Text[ turkish ] = "Kapat";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cerrar";
+    Text[ finnish ] = "Sulje";
 };
 String RID_SVXSTR_HYPDLG_MACROACT1
 {
@@ -2419,6 +2500,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text[ arabic ] = "«·„«Ê” ›Êﬁ «·ﬂ«∆‰";
     Text[ turkish ] = "Fare oku nesne ¸zerinde";
     Text[ catalan ] = "RatÛn sobre objeto";
+    Text[ finnish ] = "Hiiri objektin kohdalla";
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
@@ -2444,6 +2526,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text[ turkish ] = "Hyperlink'i etkinle˛tir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ejecutar hiperenlace";
+    Text[ finnish ] = "K‰ynnist‰ hyperlinkki";
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
@@ -2468,6 +2551,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text[ arabic ] = "«» ⁄«œ «·„«Ê” ⁄‰ «·ﬂ«∆‰";
     Text[ turkish ] = "Fare oku nesneden ayr˝l˝yor";
     Text[ catalan ] = "RatÛn fuera de objeto";
+    Text[ finnish ] = "Hiiri poistuu objektista";
 };
 
 String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
@@ -2494,6 +2578,7 @@ String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
     Text[ turkish ] = "GeÁerli bir dosya ad˝ girin.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Indique por favor un nombre v·lido de archivo.";
+    Text[ finnish ] = "Kirjoita kelvollinen tiedoston nimi.";
 };
 
 String RID_SVXSTR_HYPERDLG_HLINETTP
@@ -2519,6 +2604,7 @@ String RID_SVXSTR_HYPERDLG_HLINETTP
     Text[ arabic ] = "≈‰ —‰ ";
     Text[ turkish ] = "Internet";
     Text[ catalan ] = "Internet";
+    Text[ finnish ] = "Internet";
 };
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
@@ -2544,6 +2630,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ arabic ] = "»—Ìœ Ê„Ã„Ê⁄«  √Œ»«—";
     Text[ turkish ] = "E-posta ve haber gruplar˝";
     Text[ catalan ] = "Correo y noticias";
+    Text[ finnish ] = "S‰hkˆposti ja uutisryhm‰";
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP
@@ -2569,6 +2656,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
     Text[ arabic ] = "„” ‰œ";
     Text[ turkish ] = "Belge";
     Text[ catalan ] = "Documento";
+    Text[ finnish ] = "Asiakirja";
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP
@@ -2594,6 +2682,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text[ arabic ] = "„” ‰œ ÃœÌœ";
     Text[ turkish ] = "Yeni belge";
     Text[ catalan ] = "Nuevo documento";
+    Text[ finnish ] = "Uusi asiakirja";
 };
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON
@@ -2620,6 +2709,7 @@ String RID_SVXSTR_HYPERDLG_FORM_BUTTON
     Text [ arabic ] = "„› «Õ" ;
     Text [ turkish ] = "D¸me" ;
     Text[ catalan ] = "BotÛn";
+    Text[ finnish ] = "Painike";
 };
 
 String RID_SVXSTR_HYPERDLG_FROM_TEXT
@@ -2646,6 +2736,7 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
     Text [ arabic ] = "‰’" ;
     Text [ turkish ] = "Metin" ;
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 
 Image RID_SVXBMP_HLINETTP
