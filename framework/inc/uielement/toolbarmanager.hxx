@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:50:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,17 +101,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
-#include <drafts/com/sun/star/frame/XUIControllerRegistration.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XImageManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XIMAGEMANAGER_HPP_
+#include <com/sun/star/ui/XImageManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
@@ -147,7 +147,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                        public ::com::sun::star::frame::XStatusListener              ,
                        public ::com::sun::star::lang::XComponent                    ,
                        public ::com::sun::star::lang::XTypeProvider                 ,
-                       public ::drafts::com::sun::star::ui::XUIConfigurationListener,
+                       public ::com::sun::star::ui::XUIConfigurationListener,
                        public ThreadHelpBase                                        ,
                        public ::cppu::OWeakObject
 {
@@ -174,9 +174,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::drafts::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::ui::ConfigurationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
         void SAL_CALL dispose() throw ( ::com::sun::star::uno::RuntimeException );
@@ -260,9 +260,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ToolBarControllerVector                                                                         m_aControllerVector;
         ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
         ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XUIControllerRegistration >  m_xToolbarControllerRegistration;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                 m_xModuleImageManager;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XImageManager >                 m_xDocImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >  m_xToolbarControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                 m_xModuleImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                 m_xDocImageManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                          m_xImageOrientationListener;
         CommandToInfoMap                                                                                m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                             m_aSubToolBarControllerMap;
