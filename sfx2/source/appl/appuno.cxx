@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-27 11:51:27 $
+ *  last change: $Author: dv $ $Date: 2001-06-15 08:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FilePicker") );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker") );
 
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxFolderPicker::impl_getStaticImplementationName();
@@ -1013,7 +1013,7 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FolderPicker") );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FolderPicker") );
 
 #if 0
     if (pRegistryKey)
