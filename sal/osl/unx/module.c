@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-19 16:34:03 $
+ *  last change: $Author: mfe $ $Date: 2001-02-20 10:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,9 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
         pszModuleName=rtl_string_getStr(strModuleName);
 
+#if defined(DEBUG)
         fprintf(stderr,"lib to load : [%s]\n",pszModuleName);
-
+#endif
 
         if ( strncmp(pszModuleName,"//./",4) == 0 )
             pszModuleName+=3;
