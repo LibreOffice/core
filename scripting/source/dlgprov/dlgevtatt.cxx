@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgevtatt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:03:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
@@ -78,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
+#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -308,8 +314,10 @@ namespace dlgprov
     // DialogScriptListenerImpl
     // =============================================================================
 
-    DialogScriptListenerImpl::DialogScriptListenerImpl( const Reference< ::com::sun::star::frame::XModel >& rxModel )
-        : m_xModel( rxModel )
+    DialogScriptListenerImpl::DialogScriptListenerImpl( const Reference< XComponentContext >& rxContext,
+            const Reference< ::com::sun::star::frame::XModel >& rxModel )
+        :m_xContext( rxContext )
+        ,m_xModel( rxModel )
     {
     }
 
@@ -349,32 +357,52 @@ namespace dlgprov
 
         try
         {
-            Reference< provider::XScriptProviderSupplier > xSupplier( m_xModel, UNO_QUERY );
-            OSL_ENSURE( xSupplier.is(), "DialogScriptListenerImpl::firing_impl: failed to get script provider supplier" );
-
-            if ( xSupplier.is() )
+            Reference< provider::XScriptProvider > xScriptProvider;
+            if ( m_xModel.is() )
             {
-                Reference< provider::XScriptProvider > xScriptProvider( xSupplier->getScriptProvider() );
-                OSL_ENSURE( xScriptProvider.is(), "DialogScriptListenerImpl::firing_impl: failed to get script provider" );
-
-                if ( xScriptProvider.is() )
+                Reference< provider::XScriptProviderSupplier > xSupplier( m_xModel, UNO_QUERY );
+                OSL_ENSURE( xSupplier.is(), "DialogScriptListenerImpl::firing_impl: failed to get script provider supplier" );
+                if ( xSupplier.is() )
+                    xScriptProvider.set( xSupplier->getScriptProvider() );
+            }
+            else
+            {
+                OSL_ASSERT( m_xContext.is() );
+                if ( m_xContext.is() )
                 {
-                    Reference< provider::XScript > xScript = xScriptProvider->getScript( sScriptURL );
-                    OSL_ENSURE( xScript.is(), "DialogScriptListenerImpl::firing_impl: failed to get script" );
-
-                    if ( xScript.is() )
+                    Reference< provider::XScriptProviderFactory > xFactory(
+                        m_xContext->getValueByName(
+                        ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory" ) ),
+                        UNO_QUERY );
+                    OSL_ENSURE( xFactory.is(), "SFURL_firing_impl: failed to get master script provider factory" );
+                    if ( xFactory.is() )
                     {
-                        Sequence< Any > aInParams;
-                        Sequence< sal_Int16 > aOutParamsIndex;
-                        Sequence< Any > aOutParams;
-
-                        // get arguments for script
-                        aInParams = aScriptEvent.Arguments;
-
-                        Any aResult = xScript->invoke( aInParams, aOutParamsIndex, aOutParams );
-                        if ( pRet )
-                            *pRet = aResult;
+                        Any aCtx;
+                        aCtx <<= ::rtl::OUString::createFromAscii( "user" );
+                        xScriptProvider.set( xFactory->createScriptProvider( aCtx ), UNO_QUERY );
                     }
+                }
+            }
+
+            OSL_ENSURE( xScriptProvider.is(), "DialogScriptListenerImpl::firing_impl: failed to get script provider" );
+
+            if ( xScriptProvider.is() )
+            {
+                Reference< provider::XScript > xScript = xScriptProvider->getScript( sScriptURL );
+                OSL_ENSURE( xScript.is(), "DialogScriptListenerImpl::firing_impl: failed to get script" );
+
+                if ( xScript.is() )
+                {
+                    Sequence< Any > aInParams;
+                    Sequence< sal_Int16 > aOutParamsIndex;
+                    Sequence< Any > aOutParams;
+
+                    // get arguments for script
+                    aInParams = aScriptEvent.Arguments;
+
+                    Any aResult = xScript->invoke( aInParams, aOutParamsIndex, aOutParams );
+                    if ( pRet )
+                        *pRet = aResult;
                 }
             }
         }
