@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ssa $ $Date: 2002-01-15 11:44:59 $
+ *  last change: $Author: ssa $ $Date: 2002-02-01 15:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6123,12 +6123,17 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
 Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
 {
     SalFrameGeometry g = mpFrame->GetGeometry();
-    Point aPos( OutputToScreenPixel( GetPosPixel() ) );
-    aPos.X() += g.nX - g.nLeftDecoration;
-    aPos.Y() += g.nY - g.nTopDecoration;
+    Point aPos( OutputToScreenPixel( Point(0,0) ) );
+    aPos.X() += g.nX;
+    aPos.Y() += g.nY;
     Size aSize ( GetSizePixel() );
-    aSize.Width() += g.nLeftDecoration + g.nRightDecoration;
-    aSize.Height() += g.nTopDecoration + g.nBottomDecoration;
+    if( mbFrame || (mpBorderWindow && mpBorderWindow->mbFrame) )
+    {
+        aPos.X() -= g.nLeftDecoration;
+        aPos.Y() -= g.nTopDecoration;
+        aSize.Width() += g.nLeftDecoration + g.nRightDecoration;
+        aSize.Height() += g.nTopDecoration + g.nBottomDecoration;
+    }
     if( pRelativeWindow )
         aPos = pRelativeWindow->AbsoluteScreenToOutputPixel( aPos );
     return Rectangle( aPos, aSize );
