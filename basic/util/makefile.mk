@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 16:28:40 $
+#   last change: $Author: rt $ $Date: 2004-05-21 11:49:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ SRS1FILES= \
 # die ressourcen werden hier gelinkt
 
 RESLIB1NAME=stt
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
         $(SRS)$/app.srs \
         $(SRS)$/classes.srs
@@ -137,7 +138,7 @@ RESLIB1SRSFILES= \
 # --- Targets -----------------------------------------------------------
 
 .INCLUDE :  target.mk
-
+ 
 #-------------------------------------------------------------------------
 #								Windows NT
 #-------------------------------------------------------------------------
