@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:36:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,19 +91,19 @@ private:
 
     ImageList*                  mpSymbols;          /// Symbols for buttons.
     Color                       maLineColor;        /// Line color for expanded groups.
-    sal_Int32                   mnHeaderSize;       /// Size of the header area in entry direction.
-    sal_Int32                   mnHeaderPos;        /// Position of the header area in entry direction.
-    sal_Int32                   mnMainFirstPos;     /// First position of main area in entry direction.
-    sal_Int32                   mnMainLastPos;      /// Last position of main area in entry direction.
+    long                        mnHeaderSize;       /// Size of the header area in entry direction.
+    long                        mnHeaderPos;        /// Position of the header area in entry direction.
+    long                        mnMainFirstPos;     /// First position of main area in entry direction.
+    long                        mnMainLastPos;      /// Last position of main area in entry direction.
 
-    sal_uInt16                  mnMTLevel;          /// Mouse tracking: Level of active button.
-    sal_uInt16                  mnMTEntry;          /// Mouse tracking: Entry index of active button.
+    size_t                      mnMTLevel;          /// Mouse tracking: Level of active button.
+    size_t                      mnMTEntry;          /// Mouse tracking: Entry index of active button.
     bool                        mbMTActive;         /// Mouse tracking active?
     bool                        mbMTPressed;        /// Mouse tracking: Button currently drawed pressed?
 
     Rectangle                   maFocusRect;        /// Focus rectangle on screen.
-    sal_uInt16                  mnFocusLevel;       /// Level of focused button.
-    sal_uInt16                  mnFocusEntry;       /// Entry index of focused button.
+    size_t                      mnFocusLevel;       /// Level of focused button.
+    size_t                      mnFocusEntry;       /// Entry index of focused button.
     bool                        mbDontDrawFocus;    /// Do not redraw focus in next Paint().
 
 public:
@@ -115,12 +115,12 @@ public:
     virtual                     ~ScOutlineWindow();
 
     /** Sets the size of the header area (width/height dep. on window type). */
-    void                        SetHeaderSize( sal_Int32 nNewSize );
+    void                        SetHeaderSize( long nNewSize );
     /** Returns the width/height the window needs to show all levels. */
-    sal_Int32                   GetDepthSize() const;
+    long                        GetDepthSize() const;
 
     /** Scrolls the window content by the specified amount of pixels. */
-    void                        ScrollPixel( sal_Int32 nDiff );
+    void                        ScrollPixel( long nDiff );
 
 private:
     /** Initializes color and image settings. */
@@ -133,7 +133,7 @@ private:
     /** Returns the outline array of the corresponding document. */
     const ScOutlineArray*       GetOutlineArray() const;
     /** Returns the specified outline entry. */
-    const ScOutlineEntry*       GetOutlineEntry( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
+    const ScOutlineEntry*       GetOutlineEntry( size_t nLevel, size_t nEntry ) const;
 
     /** Returns true, if the column/row is hidden. */
     bool                        IsHidden( SCCOLROW nColRowIndex ) const;
@@ -145,59 +145,59 @@ private:
     void                        GetVisibleRange( SCCOLROW& rnColRowStart, SCCOLROW& rnColRowEnd ) const;
 
     /** Returns the point in the window of the specified position. */
-    Point                       GetPoint( sal_Int32 nLevelPos, sal_Int32 nEntryPos ) const;
+    Point                       GetPoint( long nLevelPos, long nEntryPos ) const;
     /** Returns the rectangle in the window of the specified position. */
     Rectangle                   GetRectangle(
-                                    sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-                                    sal_Int32 nLevelEnd, sal_Int32 nEntryEnd ) const;
+                                    long nLevelStart, long nEntryStart,
+                                    long nLevelEnd, long nEntryEnd ) const;
 
     /** Returns the window size for the level coordinate. */
-    sal_Int32                   GetOutputSizeLevel() const;
+    long                        GetOutputSizeLevel() const;
     /** Returns the window size for the entry coordinate. */
-    sal_Int32                   GetOutputSizeEntry() const;
+    long                        GetOutputSizeEntry() const;
 
     /** Returns the count of levels of the outline array. 0 means no outlines. */
-    sal_uInt16                  GetLevelCount() const;
+    size_t                      GetLevelCount() const;
     /** Returns the pixel position of the specified level. */
-    sal_Int32                   GetLevelPos( sal_uInt16 nLevel ) const;
+    long                        GetLevelPos( size_t nLevel ) const;
     /** Returns the level of the passed pixel position. */
-    sal_uInt16                  GetLevelFromPos( sal_Int32 nLevelPos ) const;
+    size_t                      GetLevelFromPos( long nLevelPos ) const;
 
     /** Returns the start coordinate of the specified column/row in the window. */
-    sal_Int32                   GetColRowPos( SCCOLROW nColRowIndex ) const;
+    long                        GetColRowPos( SCCOLROW nColRowIndex ) const;
     /** Returns the entry position of header images. */
-    sal_Int32                   GetHeaderEntryPos() const;
+    long                        GetHeaderEntryPos() const;
     /** Calculates the coordinates the outline entry takes in the window.
         @return  false = no part of the group is visible (outside window or collapsed by parent group). */
     bool                        GetEntryPos(
-                                    sal_uInt16 nLevel, sal_uInt16 nEntry,
-                                    sal_Int32& rnStartPos, sal_Int32& rnEndPos, sal_Int32& rnImagePos ) const;
+                                    size_t nLevel, size_t nEntry,
+                                    long& rnStartPos, long& rnEndPos, long& rnImagePos ) const;
     /** Calculates the absolute position of the image of the specified outline entry.
         @param nLevel  The level of the entry.
         @param nEntry  The entry index or SC_OL_HEADERENTRY for the header image.
         @return  false = image is not visible. */
-    bool                        GetImagePos( sal_uInt16 nLevel, sal_uInt16 nEntry, Point& rPos ) const;
+    bool                        GetImagePos( size_t nLevel, size_t nEntry, Point& rPos ) const;
     /** Returns true, if the button of the specified entry is visible in the window. */
-    bool                        IsButtonVisible( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
+    bool                        IsButtonVisible( size_t nLevel, size_t nEntry ) const;
 
     /** Returns true, if rPos is inside of a button or over the line of an expanded
         group. The outline entry data is stored in the passed variables. */
-    bool                        ItemHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry, bool& rbButton ) const;
+    bool                        ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry, bool& rbButton ) const;
     /** Returns true, if rPos is inside of a button.
         The button data is stored in the passed variables. */
-    bool                        ButtonHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const;
+    bool                        ButtonHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry ) const;
     /** Returns true, if rPos is over the line of an expanded group.
         The outline entry data is stored in the passed variables. */
-    bool                        LineHit( const Point& rPos, sal_uInt16& rnLevel, sal_uInt16& rnEntry ) const;
+    bool                        LineHit( const Point& rPos, size_t& rnLevel, size_t& rnEntry ) const;
 
     /** Performs an action with the specified item.
         @param nLevel  The level of the entry.
         @param nEntry  The entry index or SC_OL_HEADERENTRY for the header entry. */
-    void                        DoFunction( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
+    void                        DoFunction( size_t nLevel, size_t nEntry ) const;
     /** Expands the specified entry (does nothing with header entries). */
-    void                        DoExpand( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
+    void                        DoExpand( size_t nLevel, size_t nEntry ) const;
     /** Collapses the specified entry (does nothing with header entries). */
-    void                        DoCollapse( sal_uInt16 nLevel, sal_uInt16 nEntry ) const;
+    void                        DoCollapse( size_t nLevel, size_t nEntry ) const;
 
     /** Returns true, if the focused button is visible in the window. */
     bool                        IsFocusButtonVisible() const;
@@ -225,7 +225,7 @@ private:
     void                        MoveFocusByTabOrder( bool bForward );
 
     /** Starts mouse tracking after click on a button. */
-    void                        StartMouseTracking( sal_uInt16 nLevel, sal_uInt16 nEntry );
+    void                        StartMouseTracking( size_t nLevel, size_t nEntry );
     /** Returns whether mouse tracking mode is active. */
     inline bool                 IsMouseTracking() const { return mbMTActive; }
     /** Ends mouse tracking. */
@@ -235,18 +235,16 @@ private:
     void                        SetEntryAreaClipRegion();
     /** Converts coordinates to real window points and draws the line. */
     void                        DrawLineRel(
-                                    sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-                                    sal_Int32 nLevelEnd, sal_Int32 nEntryEnd );
+                                    long nLevelStart, long nEntryStart,
+                                    long nLevelEnd, long nEntryEnd );
     /** Converts coordinates to real window points and draws the rectangle. */
     void                        DrawRectRel(
-                                    sal_Int32 nLevelStart, sal_Int32 nEntryStart,
-                                    sal_Int32 nLevelEnd, sal_Int32 nEntryEnd );
+                                    long nLevelStart, long nEntryStart,
+                                    long nLevelEnd, long nEntryEnd );
     /** Draws the specified image unpressed. */
-    void                        DrawImageRel( sal_Int32 nLevelPos, sal_Int32 nEntryPos, sal_uInt16 nId );
+    void                        DrawImageRel( long nLevelPos, long nEntryPos, USHORT nId );
     /** Draws a pressed or unpressed border. */
-    void                        DrawBorder( const Point& rPos, bool bPressed );
-    /** Draws a pressed or unpressed border. */
-    void                        DrawBorderRel( sal_uInt16 nLevel, sal_uInt16 nEntry, bool bPressed );
+    void                        DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed );
 
     /** Draws the focus rectangle into the focused button. */
     void                        ShowFocus();
@@ -254,9 +252,9 @@ private:
     void                        HideFocus();
 
     /** Scrolls the window in entry-relative direction. */
-    void                        ScrollRel( sal_Int32 nEntryDiff );
+    void                        ScrollRel( long nEntryDiff );
     /** Scrolls the specified range of the window in entry-relative direction. */
-    void                        ScrollRel( sal_Int32 nEntryDiff, sal_Int32 nEntryStart, sal_Int32 nEntryEnd );
+    void                        ScrollRel( long nEntryDiff, long nEntryStart, long nEntryEnd );
 
 protected:
     virtual void                Paint( const Rectangle& rRect );
