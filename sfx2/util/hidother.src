@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:33:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "../source/inc/helpid.hrc"         // HID_XXX
 #include "../inc/sfxsids.hrc"               // SID_XXX
 #include "../inc/sfx.hrc"
+
 
 hidspecial HID_APP_WIN                          { HelpID = HID_APP_WIN; };
 hidspecial HID_DESKTOP                          { HelpID = HID_DESKTOP; };
@@ -187,7 +188,6 @@ hidspecial HID_FILEDLG_SRCHFOLDER_BTN           { HelpID = HID_FILEDLG_SRCHFOLDE
 hidspecial HID_FILEDLG_EDIT_FAVORITES_LISTBOX   { HelpID = HID_FILEDLG_EDIT_FAVORITES_LISTBOX; };
 hidspecial HID_FILEDLG_EDIT_FAVORITES_HEADERBAR { HelpID = HID_FILEDLG_EDIT_FAVORITES_HEADERBAR; };
 hidspecial HID_BROWSERCONTROL                   { HelpID = HID_BROWSERCONTROL; };
-hidspecial HID_STATUSBAR                        { HelpID = HID_STATUSBAR; };
 hidspecial HID_TASKSTATUSBAR                    { HelpID = HID_TASKSTATUSBAR; };
 hidspecial HID_CNT_PAGE_HEADER_TABBAR           { HelpID = HID_CNT_PAGE_HEADER_TABBAR; };
 hidspecial HID_CNT_PAGE_SUBSCR_TABBAR           { HelpID = HID_CNT_PAGE_SUBSCR_TABBAR; };
