@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:17:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,13 @@ struct MediatorMessage
     ~MediatorMessage()
         {
             if( m_pBytes )
-                delete m_pBytes;
+                delete [] m_pBytes;
         }
 
     void Set( ULONG nBytes, char* pBytes )
         {
             if( m_pBytes )
-                delete m_pBytes;
+                delete [] m_pBytes;
             m_nBytes = nBytes;
             m_pBytes = new char[ m_nBytes ];
             memcpy( m_pBytes, pBytes, (size_t)m_nBytes );
