@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:57:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,7 +815,9 @@ void SwRedlineAcceptDlg::Activate()
             if (pParent->pTLBParent)
             {
                 // Nur Kommentar aktualisieren
-                pTable->SetEntryText(rRedln.GetComment(), pParent->pTLBParent, 3);
+                String sComment(rRedln.GetComment());
+                sComment.SearchAndReplaceAll((sal_Unicode)_LF,(sal_Unicode)' ');
+                pTable->SetEntryText(sComment, pParent->pTLBParent, 3);
             }
             pParent->sComment = rRedln.GetComment();
         }
@@ -1106,7 +1108,9 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
         pRedlineParent = new SwRedlineDataParent;
         pRedlineParent->pData    = pRedlineData;
         pRedlineParent->pNext    = 0;
-        pRedlineParent->sComment = rRedln.GetComment();
+        String sComment(rRedln.GetComment());
+        sComment.SearchAndReplaceAll((sal_Unicode)_LF,(sal_Unicode)' ');
+        pRedlineParent->sComment = sComment;
         aRedlineParents.Insert(pRedlineParent, i);
 
         pData = new RedlinData;
@@ -1541,6 +1545,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
                             // Kommentar einfuegen bzw aendern
                             pSh->SetRedlineComment(sMsg);
+                            sMsg.SearchAndReplaceAll((sal_Unicode)_LF,(sal_Unicode)' ');
                             pTable->SetEntryText(sMsg, pEntry, 3);
                         }
 
