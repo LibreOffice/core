@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:30 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 08:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,6 +586,8 @@ void SfxTabDialog::EnableApplyButton(BOOL bEnable)
 
         pImpl->pApplyButton->SetText( String( SfxResId( STR_APPLY ) ) );
         pImpl->pApplyButton->Show();
+
+        pImpl->pApplyButton->SetHelpId( HID_TABDLG_APPLY_BTN );
     }
     else
     {
