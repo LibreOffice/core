@@ -111,7 +111,9 @@ double AreaChart::getTransformedDepth() const
 double AreaChart::getLogicGrounding() const
 {
     //@todo get this from model axis crosses at if that value is between min and max
+    //@todo get this for other directions - so far only y
     double fRet=0.0;
+    m_pPosHelper->clipLogicValues( 0, &fRet, 0 );
     return fRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 14:48:24 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 15:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ void PlottingPositionHelper::transformScaledLogicToScene( drawing::PolyPolygonSh
             double& fX = xValues[nP];
             double& fY = yValues[nP];
             double& fZ = zValues[nP];
-            aScenePosition = this->transformLogicToScene( fX,fY,fZ, false );
+            aScenePosition = this->transformLogicToScene( fX,fY,fZ,true );
             fX = aScenePosition.PositionX;
             fY = aScenePosition.PositionY;
             fZ = aScenePosition.PositionZ;
