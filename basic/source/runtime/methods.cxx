@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-08 16:35:54 $
+ *  last change: $Author: ab $ $Date: 2000-12-13 16:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,12 +241,20 @@ static long GetDayDiff( const Date& rDate )
 // according to the setting done by ChDir/ChDrive
 String getFullPath( const String& aRelPath )
 {
-    //return aRelPath;
-
-    String aUNCStr = getFullPathUNC( aRelPath );
-
     OUString aFileURL;
-    FileBase::RC nRet = File::getFileURLFromNormalizedPath( aUNCStr, aFileURL );
+
+    // #80204 Try first if it already is a file URL
+    INetURLObject aURLObj( aRelPath );
+    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    {
+        aFileURL = aURLObj.GetMainURL();
+    }
+    else
+    {
+        OUString aUNCStr;
+        FileBase::RC nRet = File::normalizePath( aRelPath, aUNCStr );
+        nRet = File::getFileURLFromNormalizedPath( aUNCStr, aFileURL );
+    }
     return aFileURL;
 }
 
@@ -255,13 +263,24 @@ String getFullPath( const String& aRelPath )
 // according to the setting done by ChDir/ChDrive
 String getFullPathUNC( const String& aRelPath )
 {
+    OUString aNormPath;
+
     // TODO: Use CurDir to build full path
     // First step: Return given path unchanged
 
     //static inline RC getAbsolutePath( const ::rtl::OUString& strDirBase, const ::rtl::OUString& strRelative, ::rtl::OUString& strAbsolute )
 
-    OUString aNormPath;
-    FileBase::RC nRet = File::normalizePath( aRelPath, aNormPath );
+    // #80204 Try first if it already is a file URL
+    INetURLObject aURLObj( aRelPath );
+    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    {
+        OUString aFileURL = aURLObj.GetMainURL();
+        FileBase::RC nRet = File::getNormalizedPathFromFileURL( aFileURL, aNormPath );
+    }
+    else
+    {
+        FileBase::RC nRet = File::normalizePath( aRelPath, aNormPath );
+    }
     return aNormPath;
 }
 
