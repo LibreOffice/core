@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-22 12:26:41 $
+ *  last change: $Author: abi $ $Date: 2000-11-27 12:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
+#include <com/sun/star/beans/PropertyState.hpp>
 #endif
 #ifndef _FILID_HXX_
 #include "filid.hxx"
@@ -220,10 +223,32 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
         rtl::OUString sProviderService =
             rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
 
+
+        // New access to configuration with locally cached components
+        rtl::OUString plugin = rtl::OUString::createFromAscii( "plugin" );
+        uno::Any aAny;
+        aAny <<= plugin;
+        beans::PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+                                    -1,
+                                    aAny,
+                                    beans::PropertyState_DIRECT_VALUE );
+
+        uno::Sequence< uno::Any > seq(1);
+        seq[0] <<= aProp;
+
         uno::Reference< lang::XMultiServiceFactory >
             sProvider(
-                m_xMultiServiceFactory->createInstance( sProviderService ),
+                m_xMultiServiceFactory->createInstanceWithArguments( sProviderService,seq ),
                 uno::UNO_QUERY );
+
+
+        /*
+          // Old access to configuration without locally cached components
+          uno::Reference< lang::XMultiServiceFactory >
+          sProvider(
+          m_xMultiServiceFactory->createInstance( sProviderService ),
+          uno::UNO_QUERY );
+        */
 
         rtl::OUString sReaderService =
             rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
@@ -286,18 +311,25 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
 
                     rtl::OUString aDir
                         = xCfgMgr->substituteVariables( aDirectory );
-                    osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
+                    // old,assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aDir, aUnqDir );
+                    // new, assuming system path:
+                    osl::FileBase::normalizePath( aDir,aUnqDir );
+
 
                     rtl::OUString aAlias
                         = xCfgMgr->substituteVariables( aAliasName );
-                    osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
+                    // old, assuming URL: osl::FileBase::getNormalizedPathFromFileURL( aAlias, aUnqAl );
+                    // new, assuming system path:
+                    osl::FileBase::normalizePath( aAlias,aUnqAl );
                 }
 
                 if ( !aUnqDir.getLength() )
-                    m_pMyShell->getUnqFromUrl( aDirectory,aUnqDir );
+                    osl::FileBase::normalizePath( aDirectory,aUnqDir );
+                // m_pMyShell->getUnqFromUrl( aDirectory,aUnqDir );
 
                 if ( !aUnqAl.getLength() )
-                    m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
+                    osl::FileBase::normalizePath( aAliasName,aUnqAl );
+                // m_pMyShell->getUnqFromUrl( aAliasName,aUnqAl );
 
 #ifdef UNX
                 rtl::OUString aRealUnqDir;
@@ -322,7 +354,6 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
                         shell::MountPoint( aUnqAl, aUnqDir ) );
                     m_pMyShell->m_bFaked = true;
                 }
-
 #endif
 
             }
