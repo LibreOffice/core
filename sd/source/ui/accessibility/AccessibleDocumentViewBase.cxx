@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-05-22 08:16:32 $
+ *  last change: $Author: af $ $Date: 2002-06-03 15:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 class SfxViewFrame;
 
@@ -259,14 +260,30 @@ awt::Rectangle SAL_CALL
     AccessibleDocumentViewBase::getBounds (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::Rectangle aVisibleArea (maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
+    // Transform visible area into screen coordinates.
+    ::Rectangle aVisibleArea (
+        maShapeTreeInfo.GetViewForwarder()->GetVisibleArea());
     ::Point aPixelTopLeft (
-        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aVisibleArea.TopLeft()));
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            aVisibleArea.TopLeft()));
     ::Point aPixelSize (
-        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (aVisibleArea.BottomRight())
+        maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+            aVisibleArea.BottomRight())
         - aPixelTopLeft);
-    return awt::Rectangle (aPixelTopLeft.X(), aPixelTopLeft.Y(),
-        aPixelSize.X(), aPixelSize.Y());
+
+    // Prepare to subtract the parent position to transform into relative
+    // coordinates.
+    awt::Point aParentPosition;
+    Reference<XAccessibleComponent> xParentComponent (
+        getAccessibleParent(), uno::UNO_QUERY);
+    if (xParentComponent.is())
+        aParentPosition = xParentComponent->getLocationOnScreen();
+
+    return awt::Rectangle (
+        aPixelTopLeft.X() - aParentPosition.X,
+        aPixelTopLeft.Y() - aParentPosition.Y,
+        aPixelSize.X(),
+        aPixelSize.Y());
 }
 
 
