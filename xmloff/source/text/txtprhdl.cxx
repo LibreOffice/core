@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 14:58:15 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HPP_
 #include <com/sun/star/text/VertOrientation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HPP_
+#include <com/sun/star/text/RubyAdjust.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
@@ -255,6 +258,18 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VertRelAsChar_Enum[] =
     { sXML_line,            VertOrientation::LINE_BOTTOM    },  // export only
     { 0, 0 }
 };
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_RubyAdjust_Enum[] =
+{
+    { sXML_left,                RubyAdjust_LEFT },
+    { sXML_center,              RubyAdjust_CENTER },
+    { sXML_right,               RubyAdjust_RIGHT },
+    { sXML_distribute_letter,   RubyAdjust_BLOCK },
+    { sXML_distribute_space,    RubyAdjust_INDENT_BLOCK },
+    { 0, 0 }
+};
+
+
 // ---------------------------------------------------------------------------
 
 class XMLDropCapPropHdl_Impl : public XMLPropertyHandler
@@ -1285,6 +1300,9 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT_MIN:
         pHdl = new XMLTextSyncWidthHeightPropHdl_Impl( sXML_scale_min );
+        break;
+    case XML_TYPE_TEXT_RUBY_ADJUST:
+        pHdl = new XMLConstantsPropertyHandler( pXML_RubyAdjust_Enum, 0 );
         break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:46 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,6 +634,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pRedlineExport( NULL ),
     pFrameShapeIdxs( 0 ),
     bBlock( sal_False ),
+    bOpenRuby( sal_False ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
     sTextFieldService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextField")),
@@ -705,6 +706,10 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
     sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
     sRedline(RTL_CONSTASCII_USTRINGPARAM("Redline")),
+    sRuby(RTL_CONSTASCII_USTRINGPARAM("Ruby")),
+    sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText")),
+    sRubyAdjust(RTL_CONSTASCII_USTRINGPARAM("RubyAdjust")),
+    sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName")),
     nProgress( nProg )
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
@@ -1335,6 +1340,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 if (NULL != pRedlineExport)
                     pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
+            else if (sType.equals(sRuby))
+            {
+                exportRuby(xPropSet, bAutoStyles);
+            }
             else
                 DBG_ERROR("unknown text portion type");
         }
@@ -1353,6 +1362,8 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
         }
     }
+
+    DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
 }
 
 void XMLTextParagraphExport::exportTable(
@@ -2356,4 +2367,99 @@ void XMLTextParagraphExport::exportTextAutoStyles()
                                   GetExport().GetMM100UnitConverter(),
                                   GetExport().GetNamespaceMap() );
     pListAutoPool->exportXML();
+}
+
+void XMLTextParagraphExport::exportRuby(
+    const Reference<XPropertySet> & rPropSet,
+    sal_Bool bAutoStyles )
+{
+    // early out: a collapsed ruby makes no sense
+    Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
+    if (*(sal_Bool*)aAny.getValue())
+        return;
+
+    // start value ?
+    aAny = rPropSet->getPropertyValue(sIsStart);
+    sal_Bool bStart = (*(sal_Bool*)aAny.getValue());
+
+    if (bAutoStyles)
+    {
+        // ruby auto styles
+        if (bStart)
+            Add( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet );
+    }
+    else
+    {
+        // prepare element names
+        OUString sRuby(RTL_CONSTASCII_USTRINGPARAM(sXML_ruby));
+        OUString sTextRuby(GetExport().GetNamespaceMap().
+                           GetQNameByKey(XML_NAMESPACE_TEXT, sRuby));
+        OUString sRubyBase(RTL_CONSTASCII_USTRINGPARAM(sXML_ruby_base));
+        OUString sTextRubyBase(GetExport().GetNamespaceMap().
+                           GetQNameByKey(XML_NAMESPACE_TEXT, sRubyBase));
+
+        if (bStart)
+        {
+            // ruby start
+
+            // we can only start a ruby if none is open
+            DBG_ASSERT(! bOpenRuby, "Can't open a ruby inside of ruby!");
+            if( bOpenRuby )
+                return;
+
+            // save ruby text + ruby char style
+            aAny = rPropSet->getPropertyValue(sRubyText);
+            aAny >>= sOpenRubyText;
+            aAny = rPropSet->getPropertyValue(sRubyCharStyleName);
+            aAny >>= sOpenRubyCharStyle;
+
+            // ruby style
+            GetExport().CheckAttrList();
+            OUString sEmpty;
+            OUString sStyleName = Find( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet,
+                                        sEmpty );
+            DBG_ASSERT(sStyleName.getLength() > 0, "I can't find the style!");
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                     sXML_style_name, sStyleName);
+
+            // export <text:ruby> and <text:ruby-base> start elements
+            GetExport().GetDocHandler()->startElement(
+                sTextRuby, GetExport().GetXAttrList());
+            GetExport().ClearAttrList();
+            GetExport().GetDocHandler()->startElement(
+                sTextRubyBase, GetExport().GetXAttrList());
+
+            bOpenRuby = sal_True;
+        }
+        else
+        {
+            // ruby end
+
+            // check for an open ruby
+            DBG_ASSERT(bOpenRuby, "Can't close a ruby if none is open!");
+            if( !bOpenRuby )
+                return;
+
+            // close <text:ruby-base>
+            GetExport().GetDocHandler()->endElement(sTextRubyBase);
+
+            // write the ruby text (with char style)
+            {
+                if (sOpenRubyCharStyle.getLength() > 0)
+                    GetExport().AddAttribute(
+                        XML_NAMESPACE_TEXT, sXML_style_name,
+                        sOpenRubyCharStyle);
+
+                SvXMLElementExport aRuby(
+                    GetExport(), XML_NAMESPACE_TEXT, sXML_ruby_text,
+                    sal_False, sal_False);
+
+                GetExport().GetDocHandler()->characters(sOpenRubyText);
+            }
+
+            // and finally, close the ruby
+            GetExport().GetDocHandler()->endElement(sTextRuby);
+            bOpenRuby = sal_False;
+        }
+    }
 }

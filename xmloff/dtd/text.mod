@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.23 2001-02-14 19:17:57 dvo Exp $
+	$Id: text.mod,v 1.24 2001-02-21 20:32:25 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -144,7 +144,7 @@
 						 text:alphabetical-index-mark-start |
 						 text:alphabetical-index-mark-end |
 						 text:alphabetical-index-mark |
-						 %change-marks; | draw:a)*">
+						 %change-marks; | draw:a | text:ruby)*">
 
 <!ELEMENT text:p %inline-text;>
 <!ELEMENT text:h %inline-text;>
@@ -1054,6 +1054,14 @@ indices, and there may be only one text:index-title element.
 
 <!ELEMENT text:measure (#PCDATA)>
 <!ATTLIST text:measure text:kind (value|unit|gap) #REQUIRED>
+
+<!ELEMENT text:ruby (text:ruby-base, text:ruby-text)>
+<!ATTLIST text:ruby text:style-name %styleName; #IMPLIED>
+
+<!ELEMENT text:ruby-base (%inline-text;)>
+
+<!ELEMENT text:ruby-text (#PCDATA)>
+<!ATTLIST text:ruby-text text:style-name %styleName; #IMPLIED>
 
 <!-- elements for change tracking -->
 

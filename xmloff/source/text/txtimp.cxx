@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 12:28:29 $
+ *  last change: $Author: dvo $ $Date: 2001-02-21 20:32:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,24 +1038,45 @@ void XMLTextImportHelper::SetRuby(
     const OUString& rTextStyleName,
     const OUString& rText )
 {
-    XMLPropStyleContext *pStyle = 0;
-    if( rStyleName.getLength() && xAutoStyles.Is() )
-    {
-        pStyle = PTR_CAST( XMLPropStyleContext,
-              ((SvXMLStylesContext *)&xAutoStyles)->
-                    FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
-                                           rStyleName, sal_True ) );
-    }
+    Reference<XPropertySet> xPropSet(rCursor, UNO_QUERY);
 
-    Any aAny;
-    if( xTextStyles.is() )
+    OUString sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText"));
+    OUString sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName"));
+
+    // if we have one Ruby property, we assume all of them are present
+    if (xPropSet.is() &&
+        xPropSet->getPropertySetInfo()->hasPropertyByName( sRubyText ))
     {
-        if( rTextStyleName.getLength() &&
-/*          xPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) && */
-            xTextStyles->hasByName( rTextStyleName ) )
+        Any aAny;
+
+        // the ruby text
+        aAny <<= rText;
+        xPropSet->setPropertyValue(sRubyText, aAny);
+
+        // the ruby style (ruby-adjust)
+        XMLPropStyleContext *pStyle = 0;
+        if( rStyleName.getLength() && xAutoStyles.Is() )
         {
-            aAny <<= rTextStyleName;
-/*          xPropSet->setPropertyValue( sUnvisitedCharStyleName, aAny ); */
+            pStyle = PTR_CAST(
+                XMLPropStyleContext,
+                ((SvXMLStylesContext *)&xAutoStyles)->
+                FindStyleChildContext( XML_STYLE_FAMILY_TEXT_RUBY,
+                                       rStyleName, sal_True ) );
+
+            if (NULL != pStyle)
+                pStyle->FillPropertySet( xPropSet );
+        }
+
+        // the ruby text character style
+        if( xTextStyles.is() )
+        {
+            if( (rTextStyleName.getLength() > 0) &&
+//              xPropSetInfo->hasPropertyByName( sRubyCharStyleName ) &&
+                xTextStyles->hasByName( rTextStyleName ) )
+            {
+                aAny <<= rTextStyleName;
+                xPropSet->setPropertyValue(sRubyCharStyleName, aAny);
+            }
         }
     }
 }
