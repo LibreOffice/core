@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:15:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,12 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
 // OD 2004-05-05 #i28701#
 SvXMLEnumMapEntry __READONLY_DATA pXML_WrapInfluenceOnPosition_Enum[] =
 {
-    { XML_NONE_SUCCESSIVE_POSITIONED, WrapInfluenceOnPosition::NONE_SUCCESSIVE_POSITIONED },
-    { XML_NONE_CONCURRENT_POSITIONED, WrapInfluenceOnPosition::NONE_CONCURRENT_POSITIONED },
+    // --> OD 2004-10-18 #i35017# - tokens have been renamed and
+    // <XML_ITERATIVE> has been added
+    { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
+    { XML_ONCE_CONCURRENT, WrapInfluenceOnPosition::ONCE_CONCURRENT },
+    { XML_ITERATIVE,       WrapInfluenceOnPosition::ITERATIVE },
+    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -1299,6 +1303,51 @@ XMLTextRotationAnglePropHdl_Impl::~XMLTextRotationAnglePropHdl_Impl()
 {
 }
 // ---------------------------------------------------------------------------
+class XMLNumber8OneBasedHdl : public XMLPropertyHandler
+{
+
+public:
+    XMLNumber8OneBasedHdl() {}
+    virtual ~XMLNumber8OneBasedHdl() {};
+
+    virtual sal_Bool importXML(
+            const ::rtl::OUString& rStrImpValue,
+            ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML(
+            ::rtl::OUString& rStrExpValue,
+            const ::com::sun::star::uno::Any& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+sal_Bool XMLNumber8OneBasedHdl::importXML(
+        const OUString& rStrImpValue,
+           Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nValue = 0;
+    sal_Bool bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+    if( bRet )
+        rValue <<= static_cast<sal_Int8>( nValue - 1 );
+    return bRet;
+}
+
+sal_Bool XMLNumber8OneBasedHdl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int8 nValue;
+    sal_Bool bRet = ( rValue >>= nValue );
+    if( bRet )
+    {
+        OUStringBuffer aOut;
+         rUnitConverter.convertNumber( aOut, nValue + 1 );
+        rStrExpValue = aOut.makeStringAndClear();
+    }
+    return bRet;
+}
+// ---------------------------------------------------------------------------
 class XMLTextPropertyHandlerFactory_Impl
 {
 public:
@@ -1466,6 +1515,9 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl(
                                     ::xmloff::token::XML_AUTO,
                                     ::xmloff::token::XML_ALWAYS);
+        break;
+    case XML_TYPE_TEXT_NUMBER8_ONE_BASED:
+        pHdl = new XMLNumber8OneBasedHdl();
         break;
     }
 
