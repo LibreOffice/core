@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 08:37:42 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:57:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=extensions
 TARGET=svg
 
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 
@@ -109,24 +108,22 @@ SLOFILES=	$(SLO)$/svgprinter.obj								\
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB=i$(SHL1TARGET)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
 SHL1STDLIBS=\
-    $(CPPULIB)			\
-    $(CPPUHELPERLIB)	\
-    $(VOSLIB)			\
-    $(SALLIB)			\
+    $(XMLOFFLIB)		\
     $(VCLLIB)			\
-    $(SVLLIB)			\
-    $(ONELIB)			\
     $(TOOLSLIB)			\
-    $(XMLOFFLIB)		
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # --- Targets ----------------------------------
 
