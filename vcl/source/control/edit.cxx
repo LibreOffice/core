@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-08 09:19:34 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 10:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1524,6 +1524,11 @@ void Edit::Command( const CommandEvent& rCEvt )
         xub_StrLen nCursorPos = mpIMEInfos->nPos + pData->GetCursorPos();
         SetSelection( Selection( nCursorPos, nCursorPos ) );
         SetInsertMode( !pData->IsCursorOverwrite() );
+
+        if ( pData->IsCursorVisible() )
+            GetCursor()->Show();
+        else
+            GetCursor()->Hide();
     }
     else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
