@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL XResultSet_impl::getMinorError()
 void SAL_CALL
 XResultSet_impl::acquire(
     void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -192,7 +192,7 @@ XResultSet_impl::acquire(
 void SAL_CALL
 XResultSet_impl::release(
     void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }

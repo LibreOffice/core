@@ -29,7 +29,7 @@ XCommandInfo_impl::~XCommandInfo_impl()
 void SAL_CALL
 XCommandInfo_impl::acquire(
                  void )
-  throw( uno::RuntimeException )
+  throw()
 {
   OWeakObject::acquire();
 }
@@ -38,7 +38,7 @@ XCommandInfo_impl::acquire(
 void SAL_CALL
 XCommandInfo_impl::release(
     void )
-  throw( uno::RuntimeException )
+  throw()
 {
     OWeakObject::release();
 }

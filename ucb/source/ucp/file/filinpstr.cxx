@@ -73,7 +73,7 @@ XInputStream_impl::queryInterface(
 void SAL_CALL
 XInputStream_impl::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -82,7 +82,7 @@ XInputStream_impl::acquire(
 void SAL_CALL
 XInputStream_impl::release(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }

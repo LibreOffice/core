@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: abi $ $Date: 2001-09-06 08:43:14 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ BaseContent::~BaseContent( )
 
 void SAL_CALL
 BaseContent::acquire( void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -230,7 +230,7 @@ BaseContent::acquire( void )
 
 void SAL_CALL
 BaseContent::release( void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }

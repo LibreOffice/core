@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2001-06-01 10:15:22 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ FileContentIdentifier::~FileContentIdentifier()
 void SAL_CALL
 FileContentIdentifier::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -122,7 +122,7 @@ FileContentIdentifier::acquire(
 void SAL_CALL
 FileContentIdentifier::release(
                 void )
-  throw( uno::RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filprp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ XPropertySetInfo_impl::~XPropertySetInfo_impl()
 void SAL_CALL
 XPropertySetInfo_impl::acquire(
                   void )
-  throw( RuntimeException )
+  throw()
 {
   OWeakObject::acquire();
 }
@@ -132,7 +132,7 @@ XPropertySetInfo_impl::acquire(
 void SAL_CALL
 XPropertySetInfo_impl::release(
               void )
-  throw( RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-15 15:45:40 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #endif
 
 #include <unotools/configmgr.hxx>
+
+#include <algorithm>
 
 using namespace fileaccess;
 using namespace com::sun::star;
@@ -381,7 +383,7 @@ FileProvider::~FileProvider()
 void SAL_CALL
 FileProvider::acquire(
     void )
-    throw( RuntimeException )
+    throw()
 {
   OWeakObject::acquire();
 }
@@ -390,7 +392,7 @@ FileProvider::acquire(
 void SAL_CALL
 FileProvider::release(
     void )
-  throw( RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }
@@ -608,12 +610,12 @@ public:
     virtual void SAL_CALL
     acquire(
         void )
-        throw( RuntimeException);
+        throw();
 
     virtual void SAL_CALL
     release(
         void )
-        throw( RuntimeException );
+        throw();
 
 
     virtual Sequence< Property > SAL_CALL
@@ -661,7 +663,7 @@ XPropertySetInfoImpl2::~XPropertySetInfoImpl2()
 void SAL_CALL
 XPropertySetInfoImpl2::acquire(
     void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -670,7 +672,7 @@ XPropertySetInfoImpl2::acquire(
 void SAL_CALL
 XPropertySetInfoImpl2::release(
     void )
-    throw( RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-23 13:05:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ XRow_impl::~XRow_impl()
 void SAL_CALL
 XRow_impl::acquire(
            void )
-  throw( uno::RuntimeException )
+  throw()
 {
   OWeakObject::acquire();
 }
@@ -140,7 +140,7 @@ XRow_impl::acquire(
 void SAL_CALL
 XRow_impl::release(
            void )
-  throw( uno::RuntimeException )
+  throw()
 {
   OWeakObject::release();
 }

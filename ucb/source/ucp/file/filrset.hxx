@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-29 15:00:12 $
+ *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,12 @@ namespace fileaccess {
         virtual void SAL_CALL
         acquire(
             void )
-            throw( com::sun::star::uno::RuntimeException);
+            throw();
 
         virtual void SAL_CALL
         release(
             void )
-            throw( com::sun::star::uno::RuntimeException);
+            throw();
 
 
         // XTypeProvider
