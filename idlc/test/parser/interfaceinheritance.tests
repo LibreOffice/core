@@ -2,9 +2,9 @@
 #
 #   $RCSfile: interfaceinheritance.tests,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:49:33 $
+#   last change: $Author: obo $ $Date: 2004-06-03 15:12:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -354,4 +354,45 @@ module com { module sun { module star { module uno {
 interface Base {};
 interface Derived {
     [optional] interface Base;
+};
+
+
+EXPECT FAILURE "interfaceinheritance.tests 26":
+interface Base;
+interface Derived {
+    interface Base;
+};
+
+
+EXPECT FAILURE "interfaceinheritance.tests 27":
+module com { module sun { module star { module uno {
+    interface XInterface { void acquire(); };
+}; }; }; };
+interface Base;
+interface Derived {
+    [optional] interface Base;
+};
+
+
+EXPECT FAILURE "interfaceinheritance.tests 28":
+module com { module sun { module star { module uno {
+    interface XInterface { void acquire(); };
+}; }; }; };
+interface Base {};
+typedef Base Hidden;
+interface Derived {
+    interface Base;
+    interface Hidden;
+};
+
+
+EXPECT FAILURE "interfaceinheritance.tests 29":
+module com { module sun { module star { module uno {
+    interface XInterface { void acquire(); };
+}; }; }; };
+interface Base {};
+typedef Base Hidden;
+interface Derived {
+    interface Hidden;
+    interface Base;
 };
