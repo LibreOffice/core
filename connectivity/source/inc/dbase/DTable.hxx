@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:52:13 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,6 @@ namespace connectivity
             BOOL DropImpl();
             BOOL CreateImpl();
             String      getEntry();
-            String      getInvalidityMessage() const { return m_sInvalidityMessage; }
 
             virtual BOOL InsertRow(file::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);

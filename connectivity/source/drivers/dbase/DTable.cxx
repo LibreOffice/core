@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 10:49:49 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ void ODbaseTable::readHeader()
         ((m_aHeader.db_kopf - 1) / 32 - 1) <= 0) // anzahl felder
     {
         // no dbase file
-        m_bValid = sal_False;
         ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
         sMessage += getEntry();
         sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
@@ -186,7 +185,6 @@ void ODbaseTable::readHeader()
             case dBaseIIIMemo:
             case dBaseIVMemo:
             case FoxProMemo:
-                m_bValid = sal_True;
                 m_pFileStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
                 break;
             default:
@@ -288,7 +286,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
         :ODbaseTable_BASE(_pConnection)
         ,m_pMemoStream(NULL)
         ,m_bWriteableMemo(sal_False)
-        ,m_bValid(sal_False)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -310,7 +307,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
-                ,m_bValid(sal_False)
 {
 }
 // -----------------------------------------------------------------------------
@@ -339,58 +335,54 @@ void ODbaseTable::construct()
     if(m_pFileStream)
     {
         readHeader();
-        if(isValid())
+        if (HasMemoFields())
         {
+            // Memo-Dateinamen bilden (.DBT):
+            // nyi: Unschoen fuer Unix und Mac!
 
-            if (HasMemoFields())
-            {
-                // Memo-Dateinamen bilden (.DBT):
-                // nyi: Unschoen fuer Unix und Mac!
+            if (m_aHeader.db_typ == FoxProMemo) // foxpro uses another extension
+                aURL.SetExtension(String::CreateFromAscii("fpt"));
+            else
+                aURL.SetExtension(String::CreateFromAscii("dbt"));
 
-                if (m_aHeader.db_typ == FoxProMemo) // foxpro uses another extension
-                    aURL.SetExtension(String::CreateFromAscii("fpt"));
-                else
-                    aURL.SetExtension(String::CreateFromAscii("dbt"));
+            // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
+            // allerdings koennen keine Updates durchgefuehrt werden
+            // jedoch die Operation wird ausgefuehrt
+            m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
+            if (!(m_bWriteableMemo = (NULL != m_pMemoStream)))
+                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
+            if (m_pMemoStream)
+                ReadMemoHeader();
+        }
+        fillColumns();
 
-                // Wenn die Memodatei nicht gefunden wird, werden die Daten trotzdem angezeigt
-                // allerdings koennen keine Updates durchgefuehrt werden
-                // jedoch die Operation wird ausgefuehrt
-                m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
-                if (!(m_bWriteableMemo = (NULL != m_pMemoStream)))
-                    m_pMemoStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(), STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYNONE );
-                if (m_pMemoStream)
-                    ReadMemoHeader();
-            }
-            fillColumns();
+        m_pFileStream->Seek(STREAM_SEEK_TO_END);
+        UINT32 nFileSize = m_pFileStream->Tell();
+        m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-            m_pFileStream->Seek(STREAM_SEEK_TO_END);
-            UINT32 nFileSize = m_pFileStream->Tell();
-            m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+        // Buffersize abhaengig von der Filegroesse
+        m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                                  nFileSize > 100000 ? 16384 :
+                                  nFileSize > 10000 ? 4096 : 1024);
+
+        if (m_pMemoStream)
+        {
+            // Puffer genau auf Laenge eines Satzes stellen
+            m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+            nFileSize = m_pMemoStream->Tell();
+            m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
 
             // Buffersize abhaengig von der Filegroesse
-            m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                      nFileSize > 100000 ? 16384 :
-                                      nFileSize > 10000 ? 4096 : 1024);
-
-            if (m_pMemoStream)
-            {
-                // Puffer genau auf Laenge eines Satzes stellen
-                m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-                nFileSize = m_pMemoStream->Tell();
-                m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
-
-                // Buffersize abhaengig von der Filegroesse
-                m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
-                                              nFileSize > 100000 ? 16384 :
-                                              nFileSize > 10000 ? 4096 :
-                                              m_aMemoHeader.db_size);
-            }
-
-            AllocBuffer();
-
-            refreshColumns();
-            refreshIndexes();
+            m_pMemoStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
+                                          nFileSize > 100000 ? 16384 :
+                                          nFileSize > 10000 ? 4096 :
+                                          m_aMemoHeader.db_size);
         }
+
+        AllocBuffer();
+
+        refreshColumns();
+        refreshIndexes();
     }
 }
 //------------------------------------------------------------------
