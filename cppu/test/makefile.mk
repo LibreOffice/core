@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-22 10:38:35 $
+#   last change: $Author: dbo $ $Date: 2001-01-09 12:48:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,6 +155,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.lang.XComponent \
         -Tcom.sun.star.container.XSet \
         -Tcom.sun.star.container.XNameContainer \
+        -Tcom.sun.star.uno.TypeClass \
         -Tcom.sun.star.uno.XReference \
         -Tcom.sun.star.uno.XAdapter \
         -Tcom.sun.star.uno.XAggregation \
