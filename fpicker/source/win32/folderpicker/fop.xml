@@ -19,6 +19,7 @@
         <type>  com.sun.star.ui.dialogs.ExecutableDialogResults         </type>
         <type>  com.sun.star.ui.dialogs.ExtendedFilePickerElementIds </type>
         <type>  com.sun.star.ui.dialogs.CommonFilePickerElementIds </type>
+        <type>  com.sun.star.util.XCancellable              </type>
         <type>  com.sun.star.lang.XMultiServiceFactory      </type>
         <type>  com.sun.star.lang.XSingleServiceFactory     </type>
         <type>  com.sun.star.lang.XServiceInfo              </type>
