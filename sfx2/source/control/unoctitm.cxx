@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:53:44 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,23 +957,30 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
     if ( bNotify && pContnr )
     {
-        // Retrieve metric from pool to have correct sub ID when calling QueryValue
-        USHORT     nSubId( 0 );
-        SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
-
-        // retrieve the core metric
-        // it's enough to check the objectshell, the only shell that does not use the pool of the document
-        // is SfxViewFrame, but it hasn't any metric parameters
-        // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
-        if ( pSlotServ && pDispatcher )
-            eMapUnit = GetCoreMetric( pDispatcher->GetShell( pSlotServ->GetShellLevel() )->GetPool(), nSID );
-
-        if ( eMapUnit == SFX_MAPUNIT_TWIP )
-            nSubId |= CONVERT_TWIPS;
-
         ::com::sun::star::uno::Any aState;
         if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
+        {
+            // Retrieve metric from pool to have correct sub ID when calling QueryValue
+            USHORT     nSubId( 0 );
+            SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
+
+            // retrieve the core metric
+            // it's enough to check the objectshell, the only shell that does not use the pool of the document
+            // is SfxViewFrame, but it hasn't any metric parameters
+            // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
+            if ( pSlotServ && pDispatcher )
+            {
+                SfxShell* pShell = pDispatcher->GetShell( pSlotServ->GetShellLevel() );
+                DBG_ASSERT( pShell, "Can't get core metric without shell!" );
+                if ( pShell )
+                    eMapUnit = GetCoreMetric( pShell->GetPool(), nSID );
+            }
+
+            if ( eMapUnit == SFX_MAPUNIT_TWIP )
+                nSubId |= CONVERT_TWIPS;
+
             pState->QueryValue( aState, (BYTE)nSubId );
+        }
         else if ( eState == SFX_ITEM_DONTCARE )
         {
             // Use special uno struct to transport don't care state
