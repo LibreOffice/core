@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSymbolImageContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2001-08-14 11:55:28 $
+ *  last change: $Author: bm $ $Date: 2001-08-14 13:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_HREF,
     XML_TOK_SYMBOL_IMAGE_TYPE,
     XML_TOK_SYMBOL_IMAGE_ACTUATE,
+    XML_TOK_SYMBOL_IMAGE_SHOW,
     XML_TOK_SYMBOL_IMAGE_END = XML_TOK_UNKNOWN
 };
 
@@ -100,6 +101,7 @@ static __FAR_DATA SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },
     { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_ACTUATE,  XML_TOK_SYMBOL_IMAGE_ACTUATE },
+    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_SHOW,     XML_TOK_SYMBOL_IMAGE_SHOW },
     XML_TOKEN_MAP_END
 };
 
@@ -137,8 +139,9 @@ void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttri
                 break;
             case XML_TOK_SYMBOL_IMAGE_ACTUATE:
             case XML_TOK_SYMBOL_IMAGE_TYPE:
+            case XML_TOK_SYMBOL_IMAGE_SHOW:
                 // these values are currently not interpreted
-                // it is always assumed 'actuate=onLoad', 'type=simple'
+                // it is always assumed 'actuate=onLoad', 'type=simple', 'show=embed'
                 break;
         }
     }
