@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 11:37:25 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,7 @@ public:
     inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
     inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
+    inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     INLINE  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
