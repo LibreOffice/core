@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-27 13:32:51 $
+ *  last change: $Author: fme $ $Date: 2001-07-06 15:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,11 +861,37 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         {
             SwNodeIndex aNdIdx( *pNode );
             SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
-            GetCharRect( aRect, aPos );
+            SwCrsrMoveState aTmpState( MV_NONE );
+            aTmpState.b2Lines = sal_True;
+            GetCharRect( aRect, aPos, &aTmpState );
+            // information about end of repaint area
+            Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
+            if ( pEnd2Pos )
+            {
+                // we are inside a special portion, take left border
+                aRect.Top( pEnd2Pos->aLine.Top() );
+                aRect.Left( pEnd2Pos->aPortion.Right() );
+                aRect.Width( 1 );
+                aRect.Height( pEnd2Pos->aLine.Height() );
+                delete pEnd2Pos;
+            }
+
+            aTmpState.p2Lines = NULL;
             SwRect aTmp;
             aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
-            SwCrsrMoveState aTmpState( MV_NONE );
             GetCharRect( aTmp, aPos, &aTmpState );
+            // information about start of repaint area
+            Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
+            if ( pSt2Pos )
+            {
+                // we are inside a special portion, take right border
+                aTmp.Top( pSt2Pos->aLine.Top() );
+                aTmp.Left( pSt2Pos->aPortion.Left() );
+                aTmp.Width( 1 );
+                aTmp.Height( pSt2Pos->aLine.Height() );
+                delete pSt2Pos;
+            }
+
             BOOL bSameFrame = TRUE;
             SwTxtFrm* pStartFrm = this;
             if( HasFollow() )
