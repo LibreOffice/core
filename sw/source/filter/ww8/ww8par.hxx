@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:29 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ class SwWW8FltControlStack : public SwFltControlStack
 private:
     SwWW8ImplReader& rReader;
     USHORT nToggleAttrFlags;
+    USHORT nToggleBiDiAttrFlags;
     //No copying
     SwWW8FltControlStack(const SwWW8FltControlStack&);
     SwWW8FltControlStack& operator=(const SwWW8FltControlStack&);
@@ -297,7 +298,7 @@ protected:
 public:
     SwWW8FltControlStack(SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
-        nToggleAttrFlags( 0 )
+        nToggleAttrFlags(0), nToggleBiDiAttrFlags(0)
     {}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
@@ -311,6 +312,15 @@ public:
             nToggleAttrFlags &= ~(1 << nId);
     }
     USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
+    void SetToggleBiDiAttr( BYTE nId, BOOL bOn )
+    {
+        if( bOn )
+            nToggleBiDiAttrFlags |= (1 << nId);
+        else
+            nToggleBiDiAttrFlags &= ~(1 << nId);
+    }
+    USHORT GetToggleBiDiAttrFlags() const { return nToggleBiDiAttrFlags; }
+
 
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
@@ -997,8 +1007,6 @@ friend class WW8FormulaControl;
     short GetTableLeft();
     BOOL IsInvalidOrToBeMergedTabCell() const;
 
-    ColorData GetCol( BYTE nIco );
-
 // Nummerierungen / Aufzaehlungen ( Autonumbered List Data Descriptor )
 // Liste:        ANLD ( Autonumbered List Data Descriptor )
 //   eine Ebene: ANLV ( Autonumber Level Descriptor )
@@ -1112,6 +1120,7 @@ friend class WW8FormulaControl;
 
     // Schnittstellen fuer die Toggle-Attribute
     void SetToggleAttr( BYTE nAttrId, BOOL bOn );
+    void SetToggleBiDiAttr( BYTE nAttrId, BOOL bOn );
     void _ChkToggleAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask );
 
     void ChkToggleAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask )
@@ -1119,6 +1128,15 @@ friend class WW8FormulaControl;
         if( nOldStyle81Mask != nNewStyle81Mask &&
             pCtrlStck->GetToggleAttrFlags() )
             _ChkToggleAttr( nOldStyle81Mask, nNewStyle81Mask );
+    }
+
+    void _ChkToggleBiDiAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask );
+
+    void ChkToggleBiDiAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask )
+    {
+        if( nOldStyle81Mask != nNewStyle81Mask &&
+            pCtrlStck->GetToggleBiDiAttrFlags() )
+            _ChkToggleBiDiAttr( nOldStyle81Mask, nNewStyle81Mask );
     }
 
     void PopTableDesc();
@@ -1144,7 +1162,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_Special(USHORT, const BYTE*, short nLen);
     void Read_Obj(USHORT, const BYTE*, short nLen);
     void Read_PicLoc(USHORT, const BYTE* pData, short nLen );
-    void Read_BoldUsw(          USHORT nId, const BYTE*, short nLen );
+    void Read_BoldUsw(USHORT nId, const BYTE*, short nLen);
+    void Read_BoldBiDiUsw(USHORT nId, const BYTE*, short nLen);
     void Read_SubSuper(         USHORT, const BYTE*, short nLen );
     BOOL ConvertSubToGraphicPlacement();
     SwFrmFmt *ContainsSingleInlineGraphic(const SwPaM &rRegion);
@@ -1291,6 +1310,7 @@ public:     // eigentlich private, geht aber leider nur public
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, BOOL bVer67);
     static BOOL ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
+    static ColorData GetCol(BYTE nIco);
 
     SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
         SwDoc& rD, bool bNewDoc );

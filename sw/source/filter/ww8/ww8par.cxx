@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 12:37:28 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1921,6 +1921,8 @@ void SwWW8ImplReader::ProcessAktCollChange( WW8PLCFManResult& rRes,
     {
         SetTxtFmtCollAndListLevel( *pPaM, pCollA[ nAktColl ]);
         ChkToggleAttr(pCollA[ nOldColl ].n81Flags, pCollA[ nAktColl ].n81Flags);
+        ChkToggleBiDiAttr(pCollA[nOldColl].n81BiDiFlags,
+            pCollA[nAktColl].n81BiDiFlags);
     }
 }
 

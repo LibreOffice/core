@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:53 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3601,6 +3601,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->nLeftParaMgn = pj->nLeftParaMgn;
             pSI->nTxtFirstLineOfst = pj->nTxtFirstLineOfst;
             pSI->n81Flags = pj->n81Flags;
+            pSI->n81BiDiFlags = pj->n81BiDiFlags;
         }
     }
     else if( pIo->mbNewDoc && bStyExist )

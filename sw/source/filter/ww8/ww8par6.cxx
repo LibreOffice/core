@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:55 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,13 +279,6 @@
 #include "ww8graf.hxx"
 #endif
 
-
-static ColorData __FAR_DATA eSwWW8ColA[] = {
-        COL_AUTO, COL_BLACK, COL_LIGHTBLUE,
-        COL_LIGHTCYAN, COL_LIGHTGREEN, COL_LIGHTMAGENTA, COL_LIGHTRED,
-        COL_YELLOW, COL_WHITE, COL_BLUE, COL_CYAN, COL_GREEN,
-        COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY, COL_LIGHTGRAY };
-
 //-----------------------------------------
 //              diverses
 //-----------------------------------------
@@ -298,8 +291,16 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0 );
 
 
-ColorData SwWW8ImplReader::GetCol( BYTE nIco )
+ColorData SwWW8ImplReader::GetCol(BYTE nIco)
 {
+    static const ColorData eSwWW8ColA[] =
+    {
+        COL_AUTO, COL_BLACK, COL_LIGHTBLUE, COL_LIGHTCYAN, COL_LIGHTGREEN,
+        COL_LIGHTMAGENTA, COL_LIGHTRED, COL_YELLOW, COL_WHITE, COL_BLUE,
+        COL_CYAN, COL_GREEN, COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY,
+        COL_LIGHTGRAY
+    };
+
     return eSwWW8ColA[nIco];
 }
 
@@ -371,7 +372,6 @@ static short ReadLRSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, short nDefaultVa
     return nVal;
 }
 
-
 // WW nimmt es mit den Groessen nicht so genau. Wird dieses nicht
 // korrigiert, dann erkennt es der Writer nur als Benutzergroesse
 // statt als richtiges Papierformat
@@ -379,23 +379,25 @@ static short ReadLRSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, short nDefaultVa
 // Werte bleiben unveraendert.
 static SwTwips AdjustSize( USHORT nPara )
 {
-    static SwTwips aSizA[] = { lA3Height, lA3Width, lA4Width, lA5Width,
-            lB4Height, lB4Width, lB5Width, lB6Width, lC4Width, lC4Height,
-            lC5Width, lC6Width, lC65Width, lDLWidth, lDLHeight,lLetterWidth,
-            lLetterHeight, lLegalHeight, lTabloidWidth, lTabloidHeight };
-
+    static const SwTwips aSizA[] =
+    {
+        lA3Height, lA3Width, lA4Width, lA5Width, lB4Height, lB4Width,
+        lB5Width, lB6Width, lC4Width, lC4Height, lC5Width, lC6Width,
+        lC65Width, lDLWidth, lDLHeight,lLetterWidth, lLetterHeight,
+        lLegalHeight, lTabloidWidth, lTabloidHeight
+    };
 
     SwTwips nSi = nPara;
-    for( USHORT i = 0; i < sizeof( aSizA ) / sizeof( aSizA[0] ); i++ ){
-        if( ( nSi - aSizA[i] < 5 )
-            && ( nSi - aSizA[i] > -5 ) ){
+    for (size_t i = 0; i < sizeof(aSizA) / sizeof(aSizA[0]); ++i)
+    {
+        if( (nSi - aSizA[i] < 5) && (nSi - aSizA[i] > -5))
+        {
             nSi = aSizA[i];
             break;
         }
     }
     return nSi;
 }
-
 
 void SwWW8ImplReader::RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol )
 {
@@ -673,23 +675,25 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
     if( nIniFlags & WW8FL_NO_LRUL )             // Abgeschaltet
         return;
 
-    static USHORT __READONLY_DATA aVer67Ids[] = {
-/*sprmSBOrientation*/               162,
-/*sprmSXaPage*/                     164,
-/*sprmSYaPage*/                     165,
-/*sprmSDxaLeft*/                    166,
-/*sprmSDxaRight*/                   167,
-/*sprmSDzaGutter*/                  170
-        };
+    static const USHORT aVer67Ids[] =
+    {
+        /*sprmSBOrientation*/   162,
+        /*sprmSXaPage*/         164,
+        /*sprmSYaPage*/         165,
+        /*sprmSDxaLeft*/        166,
+        /*sprmSDxaRight*/       167,
+        /*sprmSDzaGutter*/      170
+    };
 
-    static USHORT __READONLY_DATA aVer8Ids[] = {
-/*sprmSBOrientation*/               0x301d,
-/*sprmSXaPage*/                     0xB01F,
-/*sprmSYaPage*/                     0xB020,
-/*sprmSDxaLeft*/                    0xB021,
-/*sprmSDxaRight*/                   0xB022,
-/*sprmSDzaGutter*/                  0xB025
-        };
+    static const USHORT aVer8Ids[] =
+    {
+        /*sprmSBOrientation*/   0x301d,
+        /*sprmSXaPage*/         0xB01F,
+        /*sprmSYaPage*/         0xB020,
+        /*sprmSDxaLeft*/        0xB021,
+        /*sprmSDxaRight*/       0xB022,
+        /*sprmSDzaGutter*/      0xB025
+    };
 
     const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
 
@@ -707,8 +711,8 @@ void SwWW8ImplReader::SetPage1( SwPageDesc* pInPageDesc, SwFrmFmt &rFmt,
 
     // 3. LR-Raender
     // Default-Raender fuer verschiedene nationale Versionen
-    static USHORT __READONLY_DATA nLef[] = { MM_250, 1800 };
-    static USHORT __READONLY_DATA nRig[] = { MM_250, 1800 };
+    static const USHORT nLef[] = { MM_250, 1800 };
+    static const USHORT nRig[] = { MM_250, 1800 };
 
     short nWWLe = MSRoundTweak(ReadULSprm( pSep, pIds[3], nLef[nLIdx]));
     short nWWRi = MSRoundTweak(ReadULSprm( pSep, pIds[4], nRig[nLIdx]));
@@ -777,23 +781,25 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
         return;
 
             // Default-Raender fuer verschiedene nationale Versionen
-    static USHORT __READONLY_DATA nTop[] = { MM_250, 1440 };
-    static USHORT __READONLY_DATA nBot[] = { MM_200, 1440 };
+    static const USHORT nTop[] = { MM_250, 1440 };
+    static const USHORT nBot[] = { MM_200, 1440 };
 
     // Einlesen der WW-Einstellungen
 
-    static USHORT __READONLY_DATA aVer67Ids[] = {
-/*sprmSDyaTop*/         168,
-/*sprmSDyaBottom*/      169,
-/*sprmSDyaHdrTop*/      156,
-/*sprmSDyaHdrBottom*/   157
-        };
-    static USHORT __READONLY_DATA aVer8Ids[] = {
-/*sprmSDyaTop*/         0x9023,
-/*sprmSDyaBottom*/      0x9024,
-/*sprmSDyaHdrTop*/      0xB017,
-/*sprmSDyaHdrBottom*/   0xB018
-        };
+    static const USHORT aVer67Ids[] =
+    {
+        /*sprmSDyaTop*/         168,
+        /*sprmSDyaBottom*/      169,
+        /*sprmSDyaHdrTop*/      156,
+        /*sprmSDyaHdrBottom*/   157
+    };
+    static const USHORT aVer8Ids[] =
+    {
+        /*sprmSDyaTop*/         0x9023,
+        /*sprmSDyaBottom*/      0x9024,
+        /*sprmSDyaHdrTop*/      0xB017,
+        /*sprmSDyaHdrBottom*/   0xB018
+    };
 
     const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
 
@@ -1535,9 +1541,11 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
 
     // Seitennummernformat speichern
     {
-        static SvxExtNumType __READONLY_DATA aNumTyp[ 5 ] = {
+        static const SvxExtNumType aNumTyp[5] =
+        {
             SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
-            SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N };
+            SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N
+        };
 
         SvxNumberType aType; aType.SetNumberingType(aNumTyp[ nNfcPgn ]);
         pPageDesc->SetNumType( aType );
@@ -1727,8 +1735,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
 
     SetUseOn(pPageDesc, pPageDesc1, nCorrIhdt);
 
-    static BYTE __READONLY_DATA aPaperBinIds[ 17 ] =
-        {5,2,4,0,3,0,0,0,0,0,0,0,0,0,0,0,1};
+    static const BYTE aPaperBinIds[17] = {5,2,4,0,3,0,0,0,0,0,0,0,0,0,0,0,1};
         // WW                          SW
         // ------------------------------
         //  0 == default                5
@@ -1852,10 +1859,9 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     else
     {
 
-        static USHORT __READONLY_DATA aVer67Ids[5] =
-                { 38, 39, 40, 41, 42 };
+        static const USHORT aVer67Ids[5] = { 38, 39, 40, 41, 42 };
 
-        static USHORT __READONLY_DATA aVer8Ids[5] =
+        static const USHORT aVer8Ids[5] =
                 { 0x6424, 0x6425, 0x6426, 0x6427, 0x6428 };
 
         const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
@@ -2054,7 +2060,7 @@ void Set1Border( BOOL bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
     if (nCol == 0)
         nCol = 1;
 
-    aLine.SetColor( eSwWW8ColA[ nCol ] );
+    aLine.SetColor(SwWW8ImplReader::GetCol(nCol));
 
     if (pSize)
         pSize[nWWIndex] = nLineThickness+nSpace;
@@ -2098,13 +2104,14 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
     short *pSizeArray, BYTE nSetBorders, BOOL bChkBtwn )
 {
     BOOL bChange = FALSE;
-    static USHORT __READONLY_DATA aIdArr[ 10 ] = {
-            WW8_TOP,    BOX_LINE_TOP,
-            WW8_LEFT,   BOX_LINE_LEFT,
-            WW8_RIGHT,  BOX_LINE_RIGHT,
-            WW8_BOT,    BOX_LINE_BOTTOM,
-            WW8_BETW,   BOX_LINE_BOTTOM };
-
+    static const USHORT aIdArr[ 10 ] =
+    {
+        WW8_TOP,    BOX_LINE_TOP,
+        WW8_LEFT,   BOX_LINE_LEFT,
+        WW8_RIGHT,  BOX_LINE_RIGHT,
+        WW8_BOT,    BOX_LINE_BOTTOM,
+        WW8_BETW,   BOX_LINE_BOTTOM
+    };
 
     for( int i = 0, nEnd = 8; i < nEnd; i += 2 )
     {
@@ -3194,7 +3201,12 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
 #  Zeichen - Attribute
 #**************************************************************************/
 
-static USHORT __FAR_DATA nEndIds[ 8 + 2 ] = {
+// Read_BoldUsw fuer Italic, Bold, Kapitaelchen, Versalien, durchgestrichen,
+// Contour und Shadow
+void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
+{
+    static const USHORT nEndIds[ 8 + 2 ] =
+    {
         RES_CHRATR_WEIGHT,          RES_CHRATR_POSTURE,
         RES_CHRATR_CROSSEDOUT,      RES_CHRATR_CONTOUR,
         RES_CHRATR_SHADOWED,        RES_CHRATR_CASEMAP,
@@ -3203,10 +3215,6 @@ static USHORT __FAR_DATA nEndIds[ 8 + 2 ] = {
         RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CJK_POSTURE
     };
 
-// Read_BoldUsw fuer Italic, Bold, Kapitaelchen, Versalien, durchgestrichen,
-// Contour und Shadow
-void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
-{
     BYTE nI;
     // die Attribut-Nr fuer "doppelt durchgestrichen" tanzt aus der Reihe
     if( 0x2A53 != nId )
@@ -3225,8 +3233,7 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
         pCtrlStck->SetToggleAttr( nI, FALSE );
         return;
     }
-                            // Wert: 0 = Aus, 1 = An,
-                            //       128 = Wie Style, 129 entgegen Style
+    // Wert: 0 = Aus, 1 = An, 128 = Wie Style, 129 entgegen Style
     BOOL bOn = *pData & 1;
     SwWW8StyInf* pSI = &pCollA[nAktColl];
     if (pPlcxMan)
@@ -3265,40 +3272,130 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
     SetToggleAttr( nI, bOn );
 }
 
+// Read_BoldUsw for BiDi Italic, Bold
+void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
+    short nLen)
+{
+    ASSERT(!bVer67, "Completely impossible");
+
+    static const USHORT nEndIds[2] =
+    {
+        RES_CHRATR_CTL_WEIGHT,      RES_CHRATR_CTL_POSTURE,
+    };
+
+    BYTE nI = nId - 0x085C; // Index 0..2 (for now)
+
+    ASSERT(nI >= 0 && nI <= 1, "not happening");
+    if (nI < 0 || nI > 1)
+        return;
+
+    BYTE nMask = 1 << nI;
+
+    if( nLen < 0 )
+    {
+        pCtrlStck->SetAttr(*pPaM->GetPoint(),nEndIds[nI]);
+        pCtrlStck->SetToggleBiDiAttr(nI, FALSE);
+        return;
+    }
+    BOOL bOn = *pData & 1;
+    SwWW8StyInf* pSI = &pCollA[nAktColl];
+    if (pPlcxMan)
+    {
+        const BYTE *pCharIstd =
+            pPlcxMan->GetChpPLCF()->HasSprm(bVer67 ? 80 : 0x4A30);
+        if (pCharIstd)
+            pSI = &pCollA[SVBT16ToShort(pCharIstd)];
+    }
+
+    if (pAktColl)                           // StyleDef -> Flags merken
+    {
+        if( pSI->nBase < nColls             // Style Based on
+            && ( *pData & 0x80 )            // Bit 7 gesetzt ?
+            && ( pCollA[pSI->nBase].n81BiDiFlags & nMask ) ) // BasisMaske ?
+            bOn = !bOn;                     // umdrehen
+
+        if( bOn )
+            pSI->n81BiDiFlags |= nMask;         // Flag setzen
+        else
+            pSI->n81BiDiFlags &= ~nMask;        // Flag loeschen
+    }
+    else
+    {
+
+        // im Text -> Flags abfragen
+        if( *pData & 0x80 )                 // Bit 7 gesetzt ?
+        {
+            if( pSI->n81BiDiFlags & nMask )     // und in StyleDef an ?
+                bOn = !bOn;                 // dann invertieren
+            // am Stack vermerken, das dieses ein Toggle-Attribut ist
+            pCtrlStck->SetToggleBiDiAttr(nI, TRUE);
+        }
+    }
+
+    SetToggleBiDiAttr(nI, bOn);
+}
+
+void SwWW8ImplReader::SetToggleBiDiAttr( BYTE nAttrId, BOOL bOn )
+{
+    switch(nAttrId)
+    {
+        case 0:
+            {
+                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
+                aAttr.SetWhich( RES_CHRATR_CTL_WEIGHT );
+                NewAttr( aAttr );
+            }
+            break;
+        case 1:
+            {
+                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
+                aAttr.SetWhich( RES_CHRATR_CTL_POSTURE );
+                NewAttr( aAttr );
+            }
+            break;
+    }
+}
+
 void SwWW8ImplReader::SetToggleAttr( BYTE nAttrId, BOOL bOn )
 {
     switch( nAttrId )
     {
-    case 0:
-        {
-            SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
-            NewAttr( aAttr );
-            aAttr.SetWhich( RES_CHRATR_CJK_WEIGHT );
-            NewAttr( aAttr );
-        }
-        break;
-    case 1:
-        {
-            SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
-            NewAttr( aAttr );
-            aAttr.SetWhich( RES_CHRATR_CJK_POSTURE );
-            NewAttr( aAttr );
-        }
-        break;
-    case 2: NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
+        case 0:
+            {
+                SvxWeightItem aAttr( bOn ? WEIGHT_BOLD : WEIGHT_NORMAL );
+                NewAttr( aAttr );
+                aAttr.SetWhich( RES_CHRATR_CJK_WEIGHT );
+                NewAttr( aAttr );
+            }
             break;
-    case 3: NewAttr( SvxContourItem( bOn ) );
+        case 1:
+            {
+                SvxPostureItem aAttr( bOn ? ITALIC_NORMAL : ITALIC_NONE );
+                NewAttr( aAttr );
+                aAttr.SetWhich( RES_CHRATR_CJK_POSTURE );
+                NewAttr( aAttr );
+            }
             break;
-    case 4: NewAttr( SvxShadowedItem( bOn ) );
+        case 2:
+            NewAttr(SvxCrossedOutItem(bOn ? STRIKEOUT_SINGLE : STRIKEOUT_NONE));
             break;
-    case 5: NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_KAPITAELCHEN
-                                          : SVX_CASEMAP_NOT_MAPPED ) );
+        case 3:
+            NewAttr( SvxContourItem( bOn ) );
             break;
-    case 6: NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_VERSALIEN
-                                         : SVX_CASEMAP_NOT_MAPPED ) );
+        case 4:
+            NewAttr( SvxShadowedItem( bOn ) );
             break;
-    case 7: NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_DOUBLE
-                                            : STRIKEOUT_NONE ) );
+        case 5:
+            NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_KAPITAELCHEN
+                                              : SVX_CASEMAP_NOT_MAPPED ) );
+            break;
+        case 6:
+            NewAttr( SvxCaseMapItem( bOn ? SVX_CASEMAP_VERSALIEN
+                                             : SVX_CASEMAP_NOT_MAPPED ) );
+            break;
+        case 7:
+            NewAttr( SvxCrossedOutItem( bOn ? STRIKEOUT_DOUBLE
+                                                : STRIKEOUT_NONE ) );
             break;
     }
 }
@@ -3315,6 +3412,20 @@ void SwWW8ImplReader::_ChkToggleAttr( USHORT nOldStyle81Mask,
             SetToggleAttr( n, 0 != (i & nOldStyle81Mask ) );
         }
 }
+
+void SwWW8ImplReader::_ChkToggleBiDiAttr( USHORT nOldStyle81Mask,
+                                        USHORT nNewStyle81Mask )
+{
+    USHORT i = 1, nToggleAttrFlags = pCtrlStck->GetToggleBiDiAttrFlags();
+    BYTE n = 0;
+    for( ; n < 7; ++n, i <<= 1 )
+        if( (i & nToggleAttrFlags) &&
+            ( (i & nOldStyle81Mask) != (i & nNewStyle81Mask)))
+        {
+            SetToggleBiDiAttr( n, 0 != (i & nOldStyle81Mask ) );
+        }
+}
+
 
 void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
 {
@@ -3551,7 +3662,7 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
         if( b > 16 )                // unbekannt -> Black
             b = 0;
 
-        NewAttr( SvxColorItem( Color( eSwWW8ColA[b] ) ) );
+        NewAttr( SvxColorItem(Color(GetCol(b))));
         if (pAktColl && pStyles)
             pStyles->bTxtColChanged = TRUE;
     }
@@ -3585,13 +3696,16 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     String& rName, FontPitch& rePitch, CharSet& reCharSet )
 {
     // Die Defines, aus denen diese Tabellen erzeugt werden, stehen in windows.h
-    static FontPitch __READONLY_DATA ePitchA[]
-    = { PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, PITCH_DONTKNOW };
+    static const FontPitch ePitchA[] =
+    {
+        PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, PITCH_DONTKNOW
+    };
 
-    static FontFamily __READONLY_DATA eFamilyA[]
-    = { FAMILY_DONTKNOW, FAMILY_ROMAN, FAMILY_SWISS, FAMILY_MODERN,
-        FAMILY_SCRIPT, FAMILY_DECORATIVE };
-
+    static const FontFamily eFamilyA[] =
+    {
+        FAMILY_DONTKNOW, FAMILY_ROMAN, FAMILY_SWISS, FAMILY_MODERN,
+        FAMILY_SCRIPT, FAMILY_DECORATIVE
+    };
 
     const WW8_FFN* pF = pFonts->GetFont( nFCode );  // Info dazu
     if( !pF )                                   // FontNummer unbekannt ?
@@ -3648,7 +3762,7 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     */
 #define FONTNAMETAB_SZ    14
 #define MAX_FONTNAME_ROMAN 6
-    static sal_Char __READONLY_DATA
+    static const sal_Char
         // first comes ROMAN
         sFontName0[] = "\x07""Tms Rmn",
         sFontName1[] = "\x07""Timmons",
@@ -3665,7 +3779,7 @@ BOOL SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
         sFontName11[]= "\x11""Lucida Sans",
         sFontName12[]= "\x11""Small Fonts",
         sFontName13[]= "\x13""MS Sans Serif";
-    static const sal_Char* __READONLY_DATA aFontNameTab[ FONTNAMETAB_SZ ] =
+    static const sal_Char* const aFontNameTab[ FONTNAMETAB_SZ ] =
     {
         sFontName0,  sFontName1,  sFontName2,  sFontName3,
         sFontName4,  sFontName5,  sFontName6,  sFontName7,
@@ -3982,7 +4096,7 @@ void SwWW8ImplReader::Read_CharHighlight(USHORT, const BYTE* pData, short nLen)
         if( b > 16 )                // unbekannt -> Black
             b = 0;                  // Auto -> Black
 
-        Color aCol( eSwWW8ColA[b] );
+        Color aCol(GetCol(b));
         NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
     }
 }
@@ -4370,8 +4484,10 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 
 void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
 {
-    static SvxAdjust aAdjArr[] = { SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER,
-                                   SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
+    static const SvxAdjust aAdjArr[] =
+    {
+        SVX_ADJUST_LEFT,  SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK
+    };
 
     if( nLen < 0 )
     {
@@ -4514,19 +4630,19 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
 
 SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
 {
-    short b = rSHD.GetFore();
+    BYTE b = rSHD.GetFore();
     ASSERT(b < 17, "ww8: colour out of range");
     if (b >= 17)
         b = 0;
 
-    ColorData nFore = eSwWW8ColA[b];
+    ColorData nFore(SwWW8ImplReader::GetCol(b));
 
     b = rSHD.GetBack();
     ASSERT(b < 17, "ww8: colour out of range");
     if( b >=  17 )
         b = 0;
 
-    ColorData nBack = eSwWW8ColA[b];
+    ColorData nBack(SwWW8ImplReader::GetCol(b));
 
     b = rSHD.GetStyle( bVer67 );
 
@@ -4536,7 +4652,8 @@ SwWW8Shade::SwWW8Shade( BOOL bVer67, const WW8_SHD& rSHD )
 void SwWW8Shade::SetShade( BOOL bVer67, ColorData nFore, ColorData nBack,
     sal_uInt16 nIndex)
 {
-static ULONG __READONLY_DATA eMSGrayScale[] = {
+    static const ULONG eMSGrayScale[] =
+    {
         // Nul-Brush
            0,   // 0
         // Solid-Brush
@@ -4605,7 +4722,8 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
          950,   // 60
          975,   // 61
          // und zu guter Letzt:
-         970};// 62
+         970
+    };// 62
 
 
     //NO auto for shading so Foreground: Auto = Black
@@ -4943,21 +5061,22 @@ BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 #**************************************************************************/
 
 
-/***************************************************************************
-#       Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
-#**************************************************************************/
-typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
-
-static FNReadRecordExt aWwSprmTab2[] = {
-/* 0 (256) */   &SwWW8ImplReader::Read_Ftn,     // FootNote
-/* 1 (257) */   &SwWW8ImplReader::Read_Ftn,     // EndNote
-/* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Feld
-/* 3 (259) */   &SwWW8ImplReader::Read_Book,   // Bookmark
-/* 4 (260) */   &SwWW8ImplReader::Read_And     // Annotation
-};
-
 long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
+    /*************************************************************************
+    #       Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
+    #*************************************************************************/
+    typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
+
+    static const FNReadRecordExt aWwSprmTab2[] =
+    {
+        /* 0 (256) */   &SwWW8ImplReader::Read_Ftn,     // FootNote
+        /* 1 (257) */   &SwWW8ImplReader::Read_Ftn,     // EndNote
+        /* 2 (258) */   &SwWW8ImplReader::Read_Field,  // Feld
+        /* 3 (259) */   &SwWW8ImplReader::Read_Book,   // Bookmark
+        /* 4 (260) */   &SwWW8ImplReader::Read_And     // Annotation
+    };
+
     if( pRes->nSprmId < 280 )
     {
         BYTE nIdx = pRes->nSprmId - eFTN;
@@ -5383,10 +5502,10 @@ SprmReadInfo aSprmReadTab[] = {
     0xCA57, &SwWW8ImplReader::Read_CPropRMark, //"sprmCPropRMark" // chp.fPropRMark, chp.ibstPropRMark, chp.dttmPropRMark;Complex (see below);variable length always recorded as 7 bytes;
     0x0858, &SwWW8ImplReader::Read_Relief, //"sprmCFEmboss" // chp.fEmboss;1 or 0;bit;
     0x2859, (FNReadRecord)0, //"sprmCSfxText" // chp.sfxtText;text animation;byte;
-//0x085A, ? ? ?  , "sprmCFBiDi", // ;;;
-//0x085B, ? ? ?  , "sprmCFDiacColor", // ;;;
-    0x085C, (FNReadRecord)0, //"sprmCFBoldBi", // ;;;
-//0x085D, ? ? ?  , "sprmCFItalicBi", // ;;;
+    0x085A, (FNReadRecord)0, //Read_BoldBiDiUsw, //"sprmCFBiDi", // ;;;
+    0x085B, (FNReadRecord)0, //Read_BoldBiDiUsw, //"sprmCFDiacColor", // ;;;
+    0x085C, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFBoldBi"
+    0x085D, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFItalicBi"
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
     0x485F, (FNReadRecord)0, // "sprmCLidBi", // ;;;
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 10:52:52 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,6 +801,18 @@ static Writer& OutWW8_SwBoldUSW( Writer& rWrt, BYTE nId, BOOL bVal )
     return rWrt;
 }
 
+static Writer& OutWW8_SwBoldBiDiUSW( Writer& rWrt, BYTE nId, BOOL bVal )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    ASSERT(nId <= 1, "out of range");
+    if (!rWrtWW8.bWrtWW8 || nId > 1)
+        return rWrt;
+
+    rWrtWW8.InsUInt16(0x085C + nId);
+    rWrtWW8.pO->Insert(bVal ? 1 : 0, rWrtWW8.pO->Count());
+    return rWrt;
+}
+
 static Writer& OutWW8_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SvxFontItem& rAttr = (const SvxFontItem&)rHt;
@@ -833,6 +845,42 @@ static Writer& OutWW8_SwCJKFont( Writer& rWrt, const SfxPoolItem& rHt )
 #endif
         rWrtWW8.InsUInt16( 0x4a50 );
         rWrtWW8.InsUInt16(rWrtWW8.GetId((const SvxFontItem&)rHt));
+    }
+    return rWrt;
+}
+
+static Writer& OutWW8_SwBiDiWeight( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (rWrtWW8.bWrtWW8)
+    {
+        OutWW8_SwBoldBiDiUSW(rWrt, 0,
+            WEIGHT_BOLD == ((const SvxWeightItem&)rHt).GetWeight());
+    }
+    else
+    {
+        OutWW8_SwBoldUSW(rWrt, 0,
+            WEIGHT_BOLD == ((const SvxWeightItem&)rHt).GetWeight());
+    }
+    return rWrt;
+}
+
+static Writer& OutWW8_SwBiDiPosture( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (rWrtWW8.bWrtWW8)
+    {
+        OutWW8_SwBoldBiDiUSW( rWrt, 1,
+            ITALIC_NONE != ((const SvxPostureItem&)rHt).GetPosture() );
+    }
+    else
+    {
+        OutWW8_SwBoldUSW( rWrt, 1,
+            ITALIC_NONE != ((const SvxPostureItem&)rHt).GetPosture() );
     }
     return rWrt;
 }
@@ -4106,8 +4154,8 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CTL_FONT */           0,
 /* RES_CHRATR_CTL_FONTSIZE */       OutWW8_SwSize,
 /* RES_CHRATR_CTL_LANGUAGE */       0,
-/* RES_CHRATR_CTL_POSTURE */        0,
-/* RES_CHRATR_CTL_WEIGHT */         0,
+/* RES_CHRATR_CTL_POSTURE */        OutWW8_SwBiDiPosture,
+/* RES_CHRATR_CTL_WEIGHT */         OutWW8_SwBiDiWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  OutWW8_CharRotate,
 /* RES_CHRATR_EMPHASIS_MARK*/       OutWW8_EmphasisMark,
 /* RES_TXTATR_TWO_LINES */          OutWW8_SvxTwoLinesItem,
