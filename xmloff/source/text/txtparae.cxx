@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-06 09:56:58 $
+ *  last change: $Author: mib $ $Date: 2001-09-07 09:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,8 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             }
             if( rPropSetHelper.hasProperty( NUMBERING_RULES_AUTO ) )
             {
-                aAny = rPropSetHelper.getValue( NUMBERING_RULES_AUTO );
+                aAny = rPropSetHelper.getValue( NUMBERING_RULES_AUTO,
+                                                 rPropSet, sal_True );
                 Reference < XIndexReplace > xNumRule;
                 aAny >>= xNumRule;
                 if( xNumRule.is() && xNumRule->getCount() )
