@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
+ *  last change: $Author: dl $ $Date: 2001-03-05 12:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,33 @@ void SdrTextObj::ItemSetChanged()
 
     // call parent
     SdrAttrObj::ItemSetChanged();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    if( pNewItem )
+    {
+        switch( nWhich )
+        {
+            case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
+            {
+                if( pOutlinerParaObject )
+                    pOutlinerParaObject->SetVertical( FALSE );
+            }
+            break;
+
+            case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
+            {
+                if( pOutlinerParaObject )
+                    pOutlinerParaObject->SetVertical( TRUE );
+            }
+            break;
+        }
+    }
+
+    SdrAttrObj::ItemChange( nWhich, pNewItem );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

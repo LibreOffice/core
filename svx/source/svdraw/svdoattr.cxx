@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
+ *  last change: $Author: dl $ $Date: 2001-03-05 12:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
