@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 16:54:16 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,7 +1428,7 @@ namespace xmloff
             };
             static sal_Int32 nEnumPropertyAttrDefaults[] =
             {
-                FormSubmitEncoding_URL, FormSubmitMethod_GET, CommandType::COMMAND, NavigationBarMode_NONE, TabulatorCycle_RECORDS
+                FormSubmitEncoding_URL, FormSubmitMethod_GET, CommandType::COMMAND, NavigationBarMode_CURRENT, TabulatorCycle_RECORDS
             };
             sal_Int32 nIdCount = sizeof(eEnumPropertyIds) / sizeof(eEnumPropertyIds[0]);
         #ifdef DBG_UTIL
@@ -1471,6 +1471,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/03/21 16:54:16  jl
+ *  Replaced OSL_ENSHURE by OSL_ENSURE
+ *
  *  Revision 1.11  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
