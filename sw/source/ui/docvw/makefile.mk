@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mib $ $Date: 2002-02-14 10:43:39 $
+#   last change: $Author: vg $ $Date: 2003-04-17 15:23:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,6 @@ PRJNAME=sw
 TARGET=docvw
 
 AUTOSEG=true
-
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
 # --- Settings -----------------------------------------------------
 
