@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mtg $ $Date: 2001-02-20 16:21:10 $
+#   last change: $Author: mtg $ $Date: 2001-02-22 16:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ SLOFILES =  \
         $(SLO)$/svxcss1.obj \
         $(SLO)$/swhtml.obj \
         $(SLO)$/wrthtml.obj \
-        $(SLO)$/HTMLHelper.obj \
+        $(SLO)$/SwAppletImpl.obj \
 
 # --- Tagets -------------------------------------------------------
 
