@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:22:06 $
+ *  last change: $Author: vg $ $Date: 2001-07-19 20:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Nenhuma";
         Text[ russian ] = "Без";
         Text[ greek ] = "КбнЭнб";
-        Text[ dutch ] = "Geen";
+        Text[ dutch ] = "~Geen";
         Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
@@ -141,7 +141,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "E~squerda";
         Text[ russian ] = "Слева";
         Text[ greek ] = "БсйуфесЬ";
-        Text[ dutch ] = "Links";
+        Text[ dutch ] = "~Links";
         Text[ french ] = "А gauche";
         Text[ spanish ] = "Izquierda";
         Text[ italian ] = "A sinistra";
@@ -169,7 +169,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Centro";
         Text[ russian ] = "В центре";
         Text[ greek ] = "КЭнфсп";
-        Text[ dutch ] = "Minnden";
+        Text[ dutch ] = "Midden";
         Text[ french ] = "Milieu";
         Text[ spanish ] = "Centro";
         Text[ italian ] = "Al centro";
@@ -197,7 +197,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Distвncia";
         Text[ russian ] = "Интервал";
         Text[ greek ] = "Брьуфбуз";
-        Text[ dutch ] = "Afstand";
+        Text[ dutch ] = "~Afstand";
         Text[ french ] = "Йcart";
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
@@ -225,7 +225,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "Di~reita";
         Text[ russian ] = "Справа";
         Text[ greek ] = "ДеойЬ";
-        Text[ dutch ] = "Rechts";
+        Text[ dutch ] = "~Rechts";
         Text[ french ] = "А droite";
         Text[ spanish ] = "Derecha";
         Text[ italian ] = "A destra";
@@ -321,7 +321,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Nenhuma";
         Text[ russian ] = "Без";
         Text[ greek ] = "КбнЭнб";
-        Text[ dutch ] = "Geen";
+        Text[ dutch ] = "~Geen";
         Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
         Text[ italian ] = "Senza";
@@ -349,7 +349,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Topo";
         Text[ russian ] = "Сверху";
         Text[ greek ] = "РЬнщ";
-        Text[ dutch ] = "Boven";
+        Text[ dutch ] = "~Boven";
         Text[ french ] = "En haut";
         Text[ spanish ] = "Arriba";
         Text[ italian ] = "In alto";
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Centro";
         Text[ russian ] = "В центре";
         Text[ greek ] = "КЭнфсп";
-        Text[ dutch ] = "Midden";
+        Text[ dutch ] = "~Midden";
         Text[ french ] = "Milieu";
         Text[ spanish ] = "Centro";
         Text[ italian ] = "Al centro";
@@ -405,7 +405,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "~Distвncia";
         Text[ russian ] = "Интервал";
         Text[ greek ] = "Брьуфбуз";
-        Text[ dutch ] = "Afstand";
+        Text[ dutch ] = "~Afstand";
         Text[ french ] = "Йcart";
         Text[ spanish ] = "Espacio";
         Text[ italian ] = "Distanza";
@@ -433,7 +433,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ portuguese ] = "B~ase";
         Text[ russian ] = "Снизу";
         Text[ greek ] = "КЬфщ";
-        Text[ dutch ] = "Beneden";
+        Text[ dutch ] = "~Beneden";
         Text[ french ] = "En bas";
         Text[ spanish ] = "Abajo";
         Text[ italian ] = "In basso";
@@ -513,6 +513,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
 };
 
 // ********************************************************************** EOF
+
 
 
 
