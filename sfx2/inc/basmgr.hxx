@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-09 16:16:11 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 11:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@ com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 
-#if SUPD>620
 class SfxDialogContainer;
-#endif
 
 class SfxBasicManager : public BasicManager
 {
@@ -92,9 +90,7 @@ private:
     String              aStorageName;
     BOOL                bBasMgrModified;
 
-#if SUPD>620
-    SfxDialogContainer* pDialogContainer;
-#endif
+    SfxDialogContainer* mpDialogContainer;
 
     void                Init();
 
@@ -144,6 +140,8 @@ public:
 
     BOOL            SetLibName( USHORT nLib, const String& rName );
     String          GetLibName( USHORT nLib );
+
+    void            SetDialogContainer( SfxDialogContainer* pDialogContainer );
 
     BOOL            SetLibStorageName( USHORT nLib, const String& rName );
     String          GetLibStorageName( USHORT nLib );
