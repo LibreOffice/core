@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 17:48:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "§R°£(~D)";
             Text[ arabic ] = "ÍĞİ";
             Text[ greek ] = "Äéáãñá~öŞ";
-            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ korean ] = "»èÁ¦";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
         };
@@ -223,7 +223,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "½ü´«¶¶§Ç...";
             Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ...";
             Text[ greek ] = "Ó~åéñÜ åíåñãïğïßçóçò...";
-            Text[ korean ] = "ÅÇ ¼ø¼­...";
+            Text[ korean ] = "È°¼ºÈ­ ¼ø¼­...";
             Text[ turkish ] = "Etkinleştirme sırası...";
             Text[ language_user1 ] = " ";
         };
@@ -249,7 +249,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
             Text[ greek ] = "Ìåôïíïìáóßá";
-            Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
+            Text[ korean ] = "ÀÌ¸§ º¯°æ";
             Text[ turkish ] = "Yeniden adlandır";
             Text[ language_user1 ] = " ";
         };
@@ -275,7 +275,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "Äİ©Ê(~I)";
             Text[ arabic ] = "ÎÕÇÆÕ";
             Text[ greek ] = "Éäéüôçô~åò";
-            Text[ korean ] = "µî·ÏÁ¤º¸(~I)";
+            Text[ korean ] = "µî·ÏÁ¤º¸";
             Text[ turkish ] = "Özellikler";
             Text[ language_user1 ] = " ";
         };
@@ -764,7 +764,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ polish ] = "Pole formatowane";
             Text[ portuguese_brazilian ] = "Fo~rmatted Field";
             Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ(~R)";
-            Text[ korean ] = "¼­½ÄÀÌ µÈ ÇÊµå(~R)";
+            Text[ korean ] = "Æ÷¸ËµÈ ÇÊµå(~R)";
             Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÇøÓò(~R)";
             Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ(~R)";
             Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
