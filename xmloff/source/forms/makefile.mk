@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-18 14:53:32 $
+#   last change: $Author: ganaya $ $Date: 2001-01-31 18:20:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        formsimp.cxx\
         formevents.cxx \
         eventimport.cxx \
         eventexport.cxx \
@@ -99,7 +98,6 @@ CXXFILES = \
         strings.cxx
 
 SLOFILES =	\
-        $(SLO)$/formsimp.obj \
         $(SLO)$/formevents.obj \
         $(SLO)$/eventimport.obj \
         $(SLO)$/eventexport.obj \
@@ -120,6 +118,12 @@ SLOFILES =	\
         $(SLO)$/formenums.obj \
         $(SLO)$/strings.obj
 
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbforms.obj
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
