@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: od $ $Date: 2002-11-01 11:34:29 $
+ *  last change: $Author: od $ $Date: 2002-11-05 15:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2806,7 +2806,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                                             ( Prt().Height() - rOldSize.Height() );
                                     if ( nNewHeight < 0)
                                     {
-                                            ASSERT( !(pLowerFrm->Frm().Height()>0),
+                                            ASSERT( !( (pLowerFrm->Frm().Height()>0) && (pLowerFrm->IsValid()) ),
                                                     "ChgLowersProg - negative height for lower.");
                                             nNewHeight = 0;
                                     }
