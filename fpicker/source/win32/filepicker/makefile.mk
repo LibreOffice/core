@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:05:00 $
+#   last change: $Author: obo $ $Date: 2003-10-20 17:12:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,14 +68,14 @@ TARGET=fps
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/types.rdb
+UNOUCROUT=$(OUT)$/inc$/fpicker
+INCPRE+=$(OUT)$/inc$/fpicker
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
-
-.INCLUDE : ..$/..$/cppumaker.mk
 
 CFLAGS+=-GX -GR -D_WIN32_WINNT=0x0500 -D_UNICODE -DUNICODE
 
