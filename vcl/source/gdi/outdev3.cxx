@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:33:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3390,7 +3390,7 @@ bool OutputDevice::ImplNewFont() const
             else
                 pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
 
-            pFontEntry->maMetric.ImplInitTextLineSize();
+            pFontEntry->maMetric.ImplInitTextLineSize( this );
             pFontEntry->maMetric.ImplInitAboveTextLineSize();
 
             pFontEntry->mnLineHeight = pFontEntry->maMetric.mnAscent + pFontEntry->maMetric.mnDescent;
@@ -3627,7 +3627,7 @@ Rectangle OutputDevice::ImplGetTextBoundRect( const SalLayout& rSalLayout )
 
 void OutputDevice::ImplInitTextLineSize()
 {
-    mpFontEntry->maMetric.ImplInitTextLineSize();
+    mpFontEntry->maMetric.ImplInitTextLineSize( this );
 }
 
 // -----------------------------------------------------------------------
@@ -3696,7 +3696,7 @@ ImplFontMetricData::ImplFontMetricData( const ImplFontSelectData& rFontSelData )
 
 // -----------------------------------------------------------------------
 
-void ImplFontMetricData::ImplInitTextLineSize()
+void ImplFontMetricData::ImplInitTextLineSize( const OutputDevice* pDev )
 {
     long nDescent = mnDescent;
     if ( !nDescent )
@@ -3724,8 +3724,12 @@ void ImplFontMetricData::ImplInitTextLineSize()
     if ( !n2LineHeight )
         n2LineHeight = 1;
     long n2LineDY = n2LineHeight;
-    if ( n2LineDY <= 0 )
-        n2LineDY = 1;
+     /* #117909#
+      * add some pixels to minimum double line distance on higher resolution devices
+      */
+    long nMin2LineDY = 1 + pDev->ImplGetDPIY()/150;
+    if ( n2LineDY < nMin2LineDY )
+        n2LineDY = nMin2LineDY;
     long n2LineDY2 = n2LineDY/2;
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
