@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:09:46 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,17 +158,6 @@ public final class java_environment implements IEnvironment {
 //          }
 //      }
     }
-
-// TODO???
-//    // @see com.sun.star.lib.sandbox.Disposable#dispose
-//    public void dispose() {
-//       synchronized (proxies) {
-//           if (!proxies.isEmpty()) {
-//               list();
-//           }
-//           proxies.clear();
-//       }
-//    }
 
     // TODO  What's this???  java.lang.Object#equals requires reflexivity...
     //
