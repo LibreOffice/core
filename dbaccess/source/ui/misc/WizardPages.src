@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 14:36:01 $
+ *  last change: $Author: oj $ $Date: 2002-06-21 06:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,7 +1367,7 @@ Image IMG_SORTDOWN_H
 {
     ImageBitmap = Bitmap
     {
-        File = "sortdown.bmp" ;
+        File = "sortdown_h.bmp" ;
     };
     MaskColor = Color
     {
