@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:38:04 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2469,7 +2469,7 @@ String RID_STR_SCALE
     Text [ spanish ] = "Escala" ;
     Text [ french ] = "Échelle" ;
     Text [ dutch ] = "Schaalverdeling" ;
-    Text[ chinese_simplified ] = "ÏÔÊ¾¿Ì¶È";
+    Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
     Text[ russian ] = "Ìàñøòàáèğîâàíèå";
     Text[ polish ] = "Skalowanie";
     Text[ japanese ] = "½¹°Ù";
@@ -3544,7 +3544,7 @@ String RID_STR_TIMEFORMAT
 {
     Text = "Zeitformat" ;
     Text [ English ] = "Timeformat" ;
-    Text [ portuguese ] = "Formato das horas" ;
+    Text [ portuguese ] = "Formato da hora" ;
     Text [ english_us ] = "Time Format" ;
     Text [ portuguese_brazilian ] = "Zeitformat" ;
     Text [ swedish ] = "Tidsformat" ;
@@ -3689,7 +3689,7 @@ String RID_STR_CURRSYM_POSITION
     Text = "Symbol voranstellen" ;
     Text [ English ] = "prepend currency symbol" ;
     Text[ english_us ] = "Prefix symbol";
-    Text[ portuguese ] = "Colocar símbolo antes do nome";
+    Text[ portuguese ] = "Colocar símbolo antes";
     Text[ russian ] = "Ïîìåñòèòü ñèìâîë ñïåğåäè";
     Text[ greek ] = "Ôïğïèİôçóç óõìâüëïõ ìğñïóôÜ";
     Text[ dutch ] = "Valutateken vooraan";
@@ -3951,7 +3951,7 @@ String RID_STR_HARDLINEBREAKS
 {
     Text = "Harter Zeilenumbruch" ;
     Text [ English ] = "Hard line breaks" ;
-    Text [ portuguese ] = "Quebra de linha directa" ;
+    Text [ portuguese ] = "Quebra de linha manual" ;
     Text [ english_us ] = "Direct line break" ;
     Text [ portuguese_brazilian ] = "Harter Zeilenumbruch" ;
     Text [ swedish ] = "Hård radbrytning" ;
@@ -5013,7 +5013,7 @@ String RID_STR_EVT_MOUSEPRESSED
 {
     Text = "Maustaste gedrückt" ;
     Text [ English ] = "Mouse pressed" ;
-    Text [ portuguese ] = "Premir botão do rato " ;
+    Text [ portuguese ] = "Botão do rato premido" ;
     Text [ english_us ] = "Mouse button pressed" ;
     Text [ portuguese_brazilian ] = "Maustaste gedrückt" ;
     Text [ swedish ] = "Musknapp nedtryckt" ;
@@ -5037,7 +5037,7 @@ String RID_STR_EVT_MOUSERELEASED
 {
     Text = "Maustaste losgelassen" ;
     Text [ English ] = "Mouse released" ;
-    Text [ portuguese ] = "Soltar botão do rato" ;
+    Text [ portuguese ] = "Botão do rato largado" ;
     Text [ english_us ] = "Mouse button released" ;
     Text [ portuguese_brazilian ] = "Maustaste losgelassen" ;
     Text [ swedish ] = "Musknapp uppsläppt" ;
@@ -5062,7 +5062,7 @@ String RID_STR_EVT_POSITIONING
     Text = "Vor dem Datensatzwechsel" ;
     Text [ English ] = "Prior positioning" ;
     Text [ english_us ] = "Before record change" ;
-    Text[ portuguese ] = "Posição anterior";
+    Text[ portuguese ] = "Antes da alteração do registo";
     Text[ russian ] = "Ïåğåä îáìåíîì çàïèñåé";
     Text[ greek ] = "Ğñéí ôçí áëëáãŞ åããñáöŞò";
     Text[ dutch ] = "Voor wisselen van record";
@@ -5100,7 +5100,7 @@ String RID_STR_EVT_POSITIONED
     Text[ greek ] = "ÌåôÜ ôçí áëëáãŞ åããñáöŞò";
     Text[ korean ] = "·¹ÄÚµå º¯°æ ÈÄ¿¡";
     Text[ arabic ] = "ÈÚÏ ÊÛííÑ ÇáÓÌá";
-    Text[ portuguese ] = "Posição seguinte";
+    Text[ portuguese ] = "Após alteração do registo";
     Text[ turkish ] = "Veri kümesi değişikliğinden sonra";
     Text[ language_user1 ] = " ";
 };
@@ -5256,7 +5256,7 @@ String RID_STR_EVT_SUBMITTED
     Text = "Vor dem Submit" ;
     Text [ English ] = "Before submit" ;
     Text [ english_us ] = "Before submitting" ;
-    Text[ portuguese ] = "Antes de submeter";
+    Text[ portuguese ] = "Antes de enviar";
     Text[ russian ] = "Ïåğåä ïîäòâåğæäåíèåì";
     Text[ greek ] = "Ğñéí ôçí õğïâïëŞ";
     Text[ dutch ] = "Voor submit";
