@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:47 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ namespace pcr
                 virtual void                SetPropertyData( const ::rtl::OUString& rEntryName, void* pData );
                 virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
                 virtual IBrowserControl*    GetCurrentPropertyControl();
+                        void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
 
                 virtual void                SetFirstVisibleEntry(sal_uInt16 nPos);
                 virtual sal_uInt16          GetFirstVisibleEntry();
