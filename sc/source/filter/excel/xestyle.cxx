@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:32 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #endif
 
 #include <algorithm>
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
@@ -797,12 +801,30 @@ sal_uInt16 XclExpFontBuffer::Insert( const SvxFont& rFont, bool bAppFont )
     return Insert( XclExpFontData( GetRoot(), rFont ), bAppFont );
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
+sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bAppFont )
 {
-    /*  We need to determine if a CJK or CTL fontitem is set in the itemset.
-        This is discussed in #i17050#. It is possible that both may be present.
-        In this case, we will choose CJK. Either option is equally correct. */
-    BYTE nScript = SCRIPTTYPE_LATIN;
+    // #i17050# #114008# #115495# script type now provided by caller
+    return Insert( GetFontFromItemSet( rItemSet, nScript ), bAppFont );
+}
+
+sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern, sal_Int16 nScript, bool bAppFont )
+{
+    return Insert( rPattern.GetItemSet(), nScript, bAppFont );
+}
+
+void XclExpFontBuffer::Save( XclExpStream& rStrm )
+{
+    maFontList.Save( rStrm );
+}
+
+sal_Int16 XclExpFontBuffer::GetFirstUsedScript( const SfxItemSet& rItemSet )
+{
+    /*  #i17050# We need to determine if a CJK or CTL font item is set in the
+        item set. It is possible that both may be present. In this case,
+        we will choose CJK. Either option is equally correct. */
+
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    sal_Int16 nScript = ApiScriptType::LATIN;
 
     // #114008# do not let a font from a parent style override an explicit cell font
     const SfxItemSet* pCurrSet = &rItemSet;
@@ -811,29 +833,72 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
     {
         bFound = true;
         if( ScfTools::CheckItem( *pCurrSet, ATTR_CJK_FONT, false ) )
-            nScript = SCRIPTTYPE_ASIAN;
+            nScript = ApiScriptType::ASIAN;
         else if( ScfTools::CheckItem( *pCurrSet, ATTR_CTL_FONT, false ) )
-            nScript = SCRIPTTYPE_COMPLEX;
+            nScript = ApiScriptType::COMPLEX;
         else if( ScfTools::CheckItem( *pCurrSet, ATTR_FONT, false ) )
-            nScript = SCRIPTTYPE_LATIN;
+            nScript = ApiScriptType::LATIN;
         else
             bFound = false;
         pCurrSet = pCurrSet->GetParent();
     }
 
+    return nScript;
+}
+
+Font XclExpFontBuffer::GetFontFromItemSet( const SfxItemSet& rItemSet, sal_Int16 nScript )
+{
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+
+    // if WEAK is passed, guess script type from existing items in the item set
+    if( nScript == ApiScriptType::WEAK )
+        nScript = GetFirstUsedScript( rItemSet );
+
+    // convert to core script type constants
+    BYTE nScScript = SCRIPTTYPE_LATIN;
+    switch( nScript )
+    {
+        case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
+        case ApiScriptType::ASIAN:      nScScript = SCRIPTTYPE_ASIAN;   break;
+        case ApiScriptType::COMPLEX:    nScScript = SCRIPTTYPE_COMPLEX; break;
+        default:    DBG_ERRORFILE( "XclExpFontBuffer::GetFontFromItemSet - unknown script type" );
+    }
+
+    // fill the font object
     Font aFont;
-    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScript );
-    return Insert( aFont, bAppFont );
+    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
+    return aFont;
 }
 
-sal_uInt16 XclExpFontBuffer::Insert( const ScPatternAttr& rPattern, bool bAppFont )
+bool XclExpFontBuffer::CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
 {
-    return Insert( rPattern.GetItemSet(), bAppFont );
-}
+    static const USHORT pnCommonIds[] = {
+        ATTR_FONT_UNDERLINE, ATTR_FONT_CROSSEDOUT, ATTR_FONT_CONTOUR,
+        ATTR_FONT_SHADOWED, ATTR_FONT_COLOR, ATTR_FONT_LANGUAGE, 0 };
+    static const USHORT pnLatinIds[] = {
+        ATTR_FONT, ATTR_FONT_HEIGHT, ATTR_FONT_WEIGHT, ATTR_FONT_POSTURE, 0 };
+    static const USHORT pnAsianIds[] = {
+        ATTR_CJK_FONT, ATTR_CJK_FONT_HEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CJK_FONT_POSTURE, 0 };
+    static const USHORT pnComplexIds[] = {
+        ATTR_CTL_FONT, ATTR_CTL_FONT_HEIGHT, ATTR_CTL_FONT_WEIGHT, ATTR_CTL_FONT_POSTURE, 0 };
 
-void XclExpFontBuffer::Save( XclExpStream& rStrm )
-{
-    maFontList.Save( rStrm );
+    bool bUsed = ScfTools::CheckItems( rItemSet, pnCommonIds, bDeep );
+    if( !bUsed )
+    {
+        namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+        // if WEAK is passed, guess script type from existing items in the item set
+        if( nScript == ApiScriptType::WEAK )
+            nScript = GetFirstUsedScript( rItemSet );
+        // check the correct items
+        switch( nScript )
+        {
+            case ApiScriptType::LATIN:      bUsed = ScfTools::CheckItems( rItemSet, pnLatinIds, bDeep );    break;
+            case ApiScriptType::ASIAN:      bUsed = ScfTools::CheckItems( rItemSet, pnAsianIds, bDeep );    break;
+            case ApiScriptType::COMPLEX:    bUsed = ScfTools::CheckItems( rItemSet, pnComplexIds, bDeep );  break;
+            default:    DBG_ERRORFILE( "XclExpFontBuffer::CheckItems - unknown script type" );
+        }
+    }
+    return bUsed;
 }
 
 // private --------------------------------------------------------------------
@@ -1431,13 +1496,13 @@ void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
 // ----------------------------------------------------------------------------
 
 XclExpXF::XclExpXF(
-        const XclExpRoot& rRoot, const ScPatternAttr& rPattern,
+        const XclExpRoot& rRoot, const ScPatternAttr& rPattern, sal_Int16 nScript,
         ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) :
     XclXFBase( true ),
     XclExpRoot( rRoot )
 {
     mnParentXFId = GetXFBuffer().InsertStyle( rPattern.GetStyleSheet() );
-    Init( rPattern.GetItemSet(), nForceScNumFmt, nForceXclFont, bForceLineBreak, false );
+    Init( rPattern.GetItemSet(), nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak, false );
 }
 
 XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleSheet ) :
@@ -1446,7 +1511,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
     bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
-    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(),
+    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), ::com::sun::star::i18n::ScriptType::WEAK,
         NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false, bDefStyle );
 }
 
@@ -1495,7 +1560,7 @@ void XclExpXF::InitDefault()
     mnXclFont = mnXclNumFmt = 0;
 }
 
-void XclExpXF::Init( const SfxItemSet& rItemSet,
+void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
         ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak, bool bDefStyle )
 {
     InitDefault();
@@ -1507,17 +1572,8 @@ void XclExpXF::Init( const SfxItemSet& rItemSet,
     // font
     if( nForceXclFont == EXC_FONT_NOTFOUND )
     {
-        mnXclFont = GetFontBuffer().Insert( rItemSet, bDefStyle );
-        mbFontUsed =
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_HEIGHT,     IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_WEIGHT,     IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_POSTURE,    IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_UNDERLINE,  IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT, IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_CONTOUR,    IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_SHADOWED,   IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_COLOR,      IsStyleXF() ) ||
-            ScfTools::CheckItem( rItemSet, ATTR_FONT_LANGUAGE,   IsStyleXF() );
+        mnXclFont = GetFontBuffer().Insert( rItemSet, nScript, bDefStyle );
+        mbFontUsed = XclExpFontBuffer::CheckItems( rItemSet, nScript, IsStyleXF() );
     }
     else
     {
@@ -1755,20 +1811,20 @@ void XclExpXFBuffer::InitDefaults()
     InsertUserStyles();
 }
 
-sal_uInt32 XclExpXFBuffer::Insert( const ScPatternAttr* pPattern )
+sal_uInt32 XclExpXFBuffer::Insert( const ScPatternAttr* pPattern, sal_Int16 nScript )
 {
-    return InsertCellXF( pPattern, NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false );
+    return InsertCellXF( pPattern, nScript, NUMBERFORMAT_ENTRY_NOT_FOUND, EXC_FONT_NOTFOUND, false );
 }
 
-sal_uInt32 XclExpXFBuffer::InsertWithFont( const ScPatternAttr* pPattern,
+sal_uInt32 XclExpXFBuffer::InsertWithFont( const ScPatternAttr* pPattern, sal_Int16 nScript,
         sal_uInt16 nForceXclFont, bool bForceLineBreak )
 {
-    return InsertCellXF( pPattern, NUMBERFORMAT_ENTRY_NOT_FOUND, nForceXclFont, bForceLineBreak );
+    return InsertCellXF( pPattern, nScript, NUMBERFORMAT_ENTRY_NOT_FOUND, nForceXclFont, bForceLineBreak );
 }
 
-sal_uInt32 XclExpXFBuffer::InsertWithNumFmt( const ScPatternAttr* pPattern, ULONG nForceScNumFmt )
+sal_uInt32 XclExpXFBuffer::InsertWithNumFmt( const ScPatternAttr* pPattern, sal_Int16 nScript, ULONG nForceScNumFmt )
 {
-    return InsertCellXF( pPattern, nForceScNumFmt, EXC_FONT_NOTFOUND, false );
+    return InsertCellXF( pPattern, nScript, nForceScNumFmt, EXC_FONT_NOTFOUND, false );
 }
 
 sal_uInt32 XclExpXFBuffer::InsertStyle( const SfxStyleSheetBase* pStyleSheet )
@@ -1911,7 +1967,7 @@ sal_uInt32 XclExpXFBuffer::FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel )
     return EXC_XFID_NOTFOUND;
 }
 
-sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern,
+sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
         ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak )
 {
     const ScPatternAttr* pDefPattern = GetDoc().GetDefPattern();
@@ -1928,7 +1984,7 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern,
         if( rbPredefined )
         {
             // replace default cell pattern
-            XclExpXFRef xNewXF( new XclExpXF( GetRoot(), *pPattern ) );
+            XclExpXFRef xNewXF( new XclExpXF( GetRoot(), *pPattern, nScript ) );
             maXFList.ReplaceRecord( xNewXF, EXC_XF_DEFAULTCELL );
             rbPredefined = false;
         }
@@ -1942,7 +1998,7 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern,
         if( maXFList.Size() < EXC_XFLIST_HARDLIMIT )
         {
             maXFList.AppendRecord( XclExpXFRef( new XclExpXF(
-                GetRoot(), *pPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) ) );
+                GetRoot(), *pPattern, nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak ) ) );
             // do not set nXFId before the AppendRecord() call - it may insert 2 XFs (style+cell)
             nXFId = static_cast< sal_uInt32 >( maXFList.Size() - 1 );
         }
@@ -2102,7 +2158,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
 
     /*  Insert the real default hard cell format -> 0 is document default pattern.
         Do it here (and not already above) to really have all built-in styles. */
-    Insert( 0 );
+    Insert( 0, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
 void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
