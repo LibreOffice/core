@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:14:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,13 +307,13 @@ NodeData::NodeData(NodeImplHolder const& aSpecificNode, Name const& aName, NodeO
 }
 //-----------------------------------------------------------------------------
 
-data::NodeAccess NodeData::getOriginalNodeAccess(data::Accessor const& _aAccessor) const
+data::NodeAccessRef NodeData::getOriginalNodeAccessRef(data::Accessor const * _pAccessor) const
 {
-    return data::NodeAccess(_aAccessor, m_pSpecificNode->getOriginalNodeAddress());
+    return data::NodeAccessRef(_pAccessor, m_pSpecificNode->getOriginalNodeAddress());
 }
 //-----------------------------------------------------------------------------
 
-void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
 {
     using namespace data;
 
@@ -343,19 +343,19 @@ void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy,
 
 bool NodeData::isSetNode(data::Accessor const& _aAccessor) const
 {
-    return data::SetNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+    return data::SetNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
 }
 //-----------------------------------------------------------------------------
 
 bool NodeData::isValueElementNode(data::Accessor const& _aAccessor) const
 {
-    return data::ValueNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+    return data::ValueNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
 }
 //-----------------------------------------------------------------------------
 
 bool NodeData::isGroupNode(data::Accessor const& _aAccessor) const
 {
-    return data::GroupNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+    return data::GroupNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
 }
 //-----------------------------------------------------------------------------
 
@@ -449,14 +449,14 @@ data::TreeAccessor ElementTreeImpl::getOriginalTreeAccess(data::Accessor const& 
 }
 
 //-----------------------------------------------------------------------------
-void TreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+void TreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
 {
     m_xStrategy = _xNewStrategy;
     this->implRebuild( this->root_(), _aNewData, _aOldAccessor);
 }
 
 //-----------------------------------------------------------------------------
-void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
 {
     NodeData * pNode = nodeData(nNode);
     if (pNode->isGroupNode(_aOldAccessor))
@@ -467,7 +467,7 @@ void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData,
 
         for (NodeOffset nChild = firstChild_(nNode); isValidNode(nChild); nChild = findNextChild_(nNode,nChild))
         {
-            data::NodeAccess aChildAccess = aNewGroupAccess.getChildNode(implGetOriginalName(nChild));
+            data::NodeAccessRef aChildAccess = aNewGroupAccess.getChildNode(implGetOriginalName(nChild));
             OSL_ASSERT(aChildAccess.isValid());
             implRebuild(nChild,aChildAccess,_aOldAccessor);
         }
@@ -515,7 +515,7 @@ AbsolutePath TreeImpl::getRootPath() const
     return AbsolutePath(aPath);
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
+void TreeImpl::build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccessRef const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
 {
     OSL_ASSERT(m_aNodes.empty());
     m_nDepth = nDepth;
