@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:21 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,7 @@ BOOL SvxHyperlinkTabPageBase::FileExists( const INetURLObject& rURL )
 {
     BOOL bRet = FALSE;
 
-    if( rURL.GetFull().Len() > 0 )
+    if( rURL.GetFull().getLength() > 0 )
     {
         try
         {
