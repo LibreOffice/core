@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:09:07 $
+ *  last change: $Author: dv $ $Date: 2001-06-18 11:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,6 @@
 #include "dialog.hrc"
 #include "cfg.hrc"
 
-#ifdef MAC
-#ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
-#endif
-#endif
-
 #include "app.hxx"
 #include "appdata.hxx"
 #include "msg.hxx"
@@ -113,12 +107,9 @@
 #include "eventdlg.hxx"
 #include "tbxopdlg.hxx"
 #include "minfitem.hxx"
-#include "iodlg.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "viewfrm.hxx"
 #include "workwin.hxx"
+#include "filedlghelper.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -319,11 +310,8 @@ String SfxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
         {
             // Eintrag ist eine Funktion, Hilfe aus der Office-Hilfe
             USHORT nId = pInfo->nOrd;
-#if SUPD>628
             String aText = Application::GetHelp()->GetHelpText( nId, this );
-#else
-            String aText = Application::GetHelp()->GetHelpText( nId );
-#endif
+
             if ( !aText.Len() )
                 aText = SFX_SLOTPOOL().GetSlotHelpText_Impl( nId );
             return aText;
@@ -1306,11 +1294,8 @@ IMPL_LINK( SfxStatusBarConfigListBox, TimerHdl, Timer*, pTimer)
     {
         SfxStatBarInfo_Impl* pInfo = (SfxStatBarInfo_Impl*) pEntry->GetUserData();
         if ( !pInfo->aHelpText.Len() )
-#if SUPD>628
             pInfo->aHelpText = Application::GetHelp()->GetHelpText( pInfo->nId, this );
-#else
-            pInfo->aHelpText = Application::GetHelp()->GetHelpText( pInfo->nId );
-#endif
+
         Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), pInfo->aHelpText );
     }
 
@@ -1355,17 +1340,24 @@ void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
 
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
-    SfxFileDialog aFileDlg( pParent, nBits );
-    aFileDlg.SetText( rTitle );
+    short nDialogType;
+
+    if ( ( nBits & WB_SAVEAS ) == WB_SAVEAS )
+        nDialogType = FILESAVE_SIMPLE;
+    else
+        nDialogType = FILEOPEN_SIMPLE;
+
+    sfx2::FileDialogHelper aFileDlg( nDialogType, 0 );
+    aFileDlg.SetTitle( rTitle );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+
     INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath() );
     aFilePath.setFinalSlash();
     String aCfgName = aFilePath.PathToFileName();
-    aFileDlg.SetDefaultExt( DEFINE_CONST_UNICODE( "cfg" ) );
 
-    aFileDlg.SetPath( aCfgName );
-    if ( aFileDlg.Execute() )
+    aFileDlg.SetDisplayDirectory( aCfgName );
+    if ( ERRCODE_NONE == aFileDlg.Execute() )
         return aFileDlg.GetPath();
     else
         return String();
