@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-25 10:09:50 $
+ *  last change: $Author: tl $ $Date: 2001-08-14 09:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,17 +425,15 @@ static BOOL GetAltSpelling( INT16 &rnChgPos, INT16 &rnChgLen, OUString &rRplc,
 static INT16 GetOrigWordPos( const OUString &rOrigWord, INT16 nPos )
 {
     INT32 nLen = rOrigWord.getLength();
-    INT32 nNotSkippedChars = 0;
-    for (INT32 i = 0;  i < nLen;  ++i)
+    INT32 i = -1;
+    while (nPos >= 0  &&  i++ < nLen)
     {
         sal_Unicode cChar = rOrigWord[i];
         BOOL bSkip = IsHyphen( cChar ) || IsControlChar( cChar );
         if (!bSkip)
-            ++nNotSkippedChars;
-        if (nNotSkippedChars > nPos  ||  (bSkip  &&  nNotSkippedChars == nPos))
-            break;
+            --nPos;
     }
-    return i < nLen ? i : -1;
+    return (0 <= i  &&  i < nLen) ? i : -1;
 }
 
 
@@ -473,40 +471,44 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
         BOOL bAltSpelling = GetAltSpelling( nChgPos, nChgLen, aRplc, rxHyphWord );
 
         OUString aOrigHyphenatedWord;
-        INT16 nOrigHyphenPos = -1;
+        INT16 nOrigHyphenPos        = -1;
+        INT16 nOrigHyphenationPos   = -1;
         if (!bAltSpelling)
         {
 #ifdef DEBUG
             OUString aWord( rxHyphWord->getWord() );
 #endif
             aOrigHyphenatedWord = rOrigWord;
-            nOrigHyphenPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
+            nOrigHyphenPos      = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenPos() );
+            nOrigHyphenationPos = GetOrigWordPos( rOrigWord, rxHyphWord->getHyphenationPos() );
         }
         else
         {
             OUString aLeft, aRight;
             INT16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
+            nPos += (-1 + nChgLen);
             aLeft = rOrigWord.copy( 0, nPos );
-//            nPos = GetOrigWordPos( rOrigWord, nChgPos + nChgLen );
             aRight = rOrigWord.copy( nPos + nChgLen );
 
             aOrigHyphenatedWord =  aLeft;
             aOrigHyphenatedWord += aRplc;
             aOrigHyphenatedWord += aRight;
 
-            nOrigHyphenPos = aLeft.getLength() +
+            nOrigHyphenPos      = aLeft.getLength() +
                                     rxHyphWord->getHyphenPos() - nChgPos;
+            nOrigHyphenationPos = aLeft.getLength() +
+                                    rxHyphWord->getHyphenationPos() - nChgPos;
         }
 
-        if (nOrigHyphenPos == -1)
+        if (nOrigHyphenPos == -1  ||  nOrigHyphenationPos == -1)
         {
-            DBG_ERROR( "failed to get nOrigHyphenPos" );
+            DBG_ERROR( "failed to get nOrigHyphenPos or nOrigHyphenationPos" );
         }
         else
         {
             INT16 nLang = LocaleToLanguage( rxHyphWord->getLocale() );
             xRes = new HyphenatedWord(
-                        rOrigWord, nLang, rxHyphWord->getHyphenationPos(),
+                        rOrigWord, nLang, nOrigHyphenationPos,
                         aOrigHyphenatedWord, nOrigHyphenPos );
         }
 
