@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,7 @@ private:
     sal_Bool                            m_bIsDebug;     // environment variable "help_debug=1"
     SfxHelpOptions_Impl*                m_pOpt;         // the options
     ::std::vector< ::rtl::OUString >    m_aModulesList; // list of all installed modules
+    void                    Load();
 
 public:
     SfxHelp_Impl( sal_Bool bDebug );
@@ -306,8 +307,8 @@ public:
 
     SfxHelpOptions_Impl*    GetOptions();
     String                  GetHelpText( ULONG nHelpId, const String& rModule );    // get "Active Help"
-    sal_Bool                HasModule( const ::rtl::OUString& rModule ) const;      // module installed
-    sal_Bool                IsHelpInstalled() const;                                // module list not empty
+    sal_Bool                HasModule( const ::rtl::OUString& rModule );            // module installed
+    sal_Bool                IsHelpInstalled();                                      // module list not empty
 };
 
 SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
@@ -316,10 +317,20 @@ SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
     m_pOpt          ( NULL )
 
 {
+}
+
+SfxHelp_Impl::~SfxHelp_Impl()
+{
+    delete m_pOpt;
+}
+
+void SfxHelp_Impl::Load()
+{
     // fill modules list
     // create the help url (empty, without module and helpid)
     String sHelpURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
     AppendConfigToken_Impl( sHelpURL, sal_True );
+
     // open ucb content and get the list of the help modules
     // the list contains strings with three tokens "ui title \t type \t url"
     Sequence< ::rtl::OUString > aAllModulesList = SfxContentHelper::GetResultSet( sHelpURL );
@@ -336,11 +347,6 @@ SfxHelp_Impl::SfxHelp_Impl( sal_Bool bDebug ) :
         // insert the module (the host part of the "vnd.sun.star.help" url)
         m_aModulesList.push_back( ::rtl::OUString( INetURLObject( sURL ).GetHost() ) );
     }
-}
-
-SfxHelp_Impl::~SfxHelp_Impl()
-{
-    delete m_pOpt;
 }
 
 String SfxHelp_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
@@ -361,13 +367,17 @@ SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
     return m_pOpt;
 }
 
-sal_Bool SfxHelp_Impl::HasModule( const ::rtl::OUString& rModule ) const
+sal_Bool SfxHelp_Impl::HasModule( const ::rtl::OUString& rModule )
 {
+    if ( !m_aModulesList.size() )
+        Load();
     return ( ::std::find( m_aModulesList.begin(), m_aModulesList.end(), rModule ) != m_aModulesList.end() );
 }
 
-sal_Bool SfxHelp_Impl::IsHelpInstalled() const
+sal_Bool SfxHelp_Impl::IsHelpInstalled()
 {
+    if ( !m_aModulesList.size() )
+        Load();
     return ( m_aModulesList.begin() != m_aModulesList.end() );
 }
 
