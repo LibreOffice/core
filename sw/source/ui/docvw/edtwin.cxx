@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:41:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1627,9 +1627,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     break;
 
                 case KEY_RIGHT:
-                    if( !rSh.HasReadonlySel() )
                     {
-                        if( rSh.IsEndPara() && rSh.DontExpandFmt() )
+                        if( rSh.IsEndPara() && rSh.DontExpandFmt() && !rSh.HasReadonlySel())
                             eKeyState = KS_DontExpand;
                         else
                         {
