@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astenum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:07:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,13 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
         return sal_False;
     }
 
+    OUString emptyStr;
     sal_uInt16 nConst = getNodeCount(NT_enum_val);
     if ( nConst > 0 )
     {
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(),
-            OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-            RT_TYPE_ENUM, m_bPublished,
+            getDocumentation(), emptyStr, RT_TYPE_ENUM, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
 
@@ -140,7 +139,7 @@ sal_Bool AstEnum::dump(RegistryKey& rKey)
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        if (localKey.setValue(OUString(), RG_VALUETYPE_BINARY,
+        if (localKey.setValue(emptyStr, RG_VALUETYPE_BINARY,
                                 (RegValue)pBlob, aBlobSize))
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
