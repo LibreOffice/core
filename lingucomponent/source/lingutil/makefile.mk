@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:02:23 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:36:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,9 +71,6 @@ USE_DEFFILE=TRUE
 .INCLUDE : settings.mk
 
 
-all_target: ALLTAR DICTIONARY
-
-
 SLOFILES=	\
         $(SLO)$/dictmgr.obj \
         $(SLO)$/csutil.obj
@@ -90,14 +87,6 @@ SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-
-
-DIC2BIN= \
-    dictionary.lst
-
-
-DICTIONARY : 
-    +$(COPY) $(foreach,i,$(DIC2BIN) $i) $(BIN)
 
 
 # --- Targets ------------------------------------------------------
