@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 22:52:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ Menu RID_LAYERTAB_POPUP
                     Text[ chinese_traditional ] = "΄‘€J€ΐΌh(~Y)...";
             Text[ arabic ] = "...ΕΟΡΗΜ ΨΘήΙ";
             Text[ greek ] = "~Εισαγωγή επιπέδου...";
-            Text[ korean ] = "°θΓώ »πΐΤ...";
+            Text[ korean ] = "°θΓώ »πΐΤ(~Y)...";
             Text[ turkish ] = "Dόzey ekle...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Insertar capa...";
@@ -316,7 +316,7 @@ Menu RID_LAYERTAB_POPUP
                     Text[ chinese_traditional ] = "Εά§σ€ΐΌh(~Y)...";
             Text[ arabic ] = "...ΚΪΟνα ΨΘήΙ";
             Text[ greek ] = "Τροποποίηση ε~πιπέδου...";
-            Text[ korean ] = "°θΓώ ΌφΑ€...";
+            Text[ korean ] = "°θΓώ ΌφΑ€(~Y)...";
             Text[ turkish ] = "Dόzeyi deπiώtir...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Modificar capa...";
@@ -346,7 +346,7 @@ Menu RID_LAYERTAB_POPUP
                     Text[ chinese_traditional ] = "§R°£€ΐΌh(~L)...";
             Text[ arabic ] = "...ΝΠέ ΨΘήΙ";
             Text[ greek ] = "Διαγραφή επιπέ~δου...";
-            Text[ korean ] = "°θΓώ »θΑ¦...";
+            Text[ korean ] = "°θΓώ »θΑ¦(~L)...";
             Text[ turkish ] = "Dόzeyi sil...";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar capa...";
@@ -354,6 +354,7 @@ Menu RID_LAYERTAB_POPUP
         MN_RENAME_LAYER
     };
 };
+
 
 
 
