@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:33:56 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 10:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ XML_CONSTASCII_ACTION( sXML_animation_start_inside, "animation-start-inside" );
 XML_CONSTASCII_ACTION( sXML_animation_stop_inside, "animation-stop-inside" );
 XML_CONSTASCII_ACTION( sXML_animation_repeat, "animation-repeat" );
 XML_CONSTASCII_ACTION( sXML_animation_delay, "animation-delay" );
-
+XML_CONSTASCII_ACTION( sXML_animation_steps, "animation-steps" );
 XML_CONSTASCII_ACTION( sXML_annotation, "annotation" );
 XML_CONSTASCII_ACTION( sXML_annotations, "annotations" );
 XML_CONSTASCII_ACTION( sXML_annote, "annote" );
