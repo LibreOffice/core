@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-05 10:34:16 $
+ *  last change: $Author: nf $ $Date: 2000-12-19 16:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,8 @@ void CfgMerge::WorkOnText(
             if (( nLangIndex != GERMAN_INDEX ) &&
                 ( nLangIndex != ENGLISH_INDEX ) &&
                 ( pEntrys->GetText(
-                    sContent, STRING_TYP_TEXT, nLangIndex )))
+                    sContent, STRING_TYP_TEXT, nLangIndex )) &&
+                ( sContent != "-" ) && ( sContent.Len()))
             {
                 rText = UTF8Converter::ConvertToUTF8(
                     sContent, Export::GetCharSet( Export::LangId[ nLangIndex ]));
