@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-19 16:53:03 $
+ *  last change: $Author: aw $ $Date: 2001-11-08 18:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1306,8 +1306,18 @@ void SdrMeasureObj::RecalcBoundRect()
 void SdrMeasureObj::RecalcSnapRect()
 {
     // !!!!! nur zu Testzwecken !!!!!
-    maSnapRect=Rectangle(aPt1,aPt2);
-    maSnapRect.Justify();
+    //maSnapRect=Rectangle(aPt1,aPt2);
+    //maSnapRect.Justify();
+
+    // #94520# Added correct implementation here.
+    ImpMeasureRec aRec;
+    ImpMeasurePoly aMPol;
+    XPolyPolygon aXPP;
+
+    ImpTakeAttr(aRec);
+    ImpCalcGeometrics(aRec, aMPol);
+    ImpCalcXPoly(aMPol, aXPP);
+    maSnapRect = aXPP.GetBoundRect();
 }
 
 USHORT SdrMeasureObj::GetSnapPointCount() const
