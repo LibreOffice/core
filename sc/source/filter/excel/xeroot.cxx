@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:35:51 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,12 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
+#endif
 
 #ifndef SC_ADDINCOL_HXX
 #include "addincol.hxx"
@@ -92,10 +98,12 @@
 
 // Global data ================================================================
 
-XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium, ScDocument& rDocument, CharSet eCharSet, bool bRelUrl ) :
-    XclRootData( eBiff, rMedium, rDocument, eCharSet, true ),
-    mbRelUrl( bRelUrl )
+XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
+        SotStorageRef xRootStrg, SvStream& rBookStrm, ScDocument& rDoc, CharSet eCharSet ) :
+    XclRootData( eBiff, rMedium, xRootStrg, rBookStrm, rDoc, eCharSet, true )
 {
+    SvtSaveOptions aSaveOpt;
+    mbRelUrl = mrMedium.IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
 }
 
 XclExpRootData::~XclExpRootData()
