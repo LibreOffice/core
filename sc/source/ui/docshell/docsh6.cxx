@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
+ *  last change: $Author: nn $ $Date: 2001-07-04 19:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,12 +235,9 @@ String ScDocShell::CreateObjectName( const String& rPrefix )
 
 void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
-    //  wenn von aussen gerufen, nur Groesse anpassen
-    //  (linke obere Ecke bleibt unveraendert),
-    //  weil sonst beim Verschieben des Objekts durch Pixel-Rundungsfehler
-    //  manchmal ungewollt der Ausschnitt verschoben wird
-
-    SetVisAreaOrSize( rVisArea, FALSE );
+    //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
+    //  use both the size and position of the VisArea
+    SetVisAreaOrSize( rVisArea, TRUE );
 }
 
 void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, BOOL bModifyStart )
