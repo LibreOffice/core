@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:46:12 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2001-05-04 20:46:12 $
- // $Revision: 1.7 $
+ //     $Date: 2001-05-10 06:34:42 $
+ // $Revision: 1.8 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -221,7 +221,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Riferito a" ;
         Text [ portuguese_brazilian ] = "Remente a" ;
         Text [ portuguese ] = "Refere-se a" ;
-        Text [ finnish ] = "Viittaa:" ;
+        Text [ finnish ] = "Viittauskohde" ;
         Text [ danish ] = "Henviser til" ;
         Text [ french ] = "Réfère à" ;
         Text [ swedish ] = "Hänvisar till" ;
@@ -274,6 +274,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Kutista!";
     };
     MoreButton BTN_MORE
     {
@@ -308,7 +309,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Tipo di area" ;
         Text [ portuguese_brazilian ] = "Tipo de Área" ;
         Text [ portuguese ] = "Tipo de área" ;
-        Text [ finnish ] = "Alueen laji" ;
+        Text [ finnish ] = "Alueen tyyppi" ;
         Text [ danish ] = "Områdetype" ;
         Text [ french ] = "Type de plage" ;
         Text [ swedish ] = "Typ av område" ;
@@ -367,7 +368,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "~Filtro" ;
         Text [ portuguese_brazilian ] = "~Filtro" ;
         Text [ portuguese ] = "~Filtro" ;
-        Text [ finnish ] = "~Suodin" ;
+        Text [ finnish ] = "~Suodatin" ;
         Text [ danish ] = "Filter" ;
         Text [ french ] = "~Filtre" ;
         Text [ swedish ] = "Fil~ter" ;
@@ -397,7 +398,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Riga da ripetere" ;
         Text [ portuguese_brazilian ] = "Fileira de Tí~tulo" ;
         Text [ portuguese ] = "Linha a ~repetir" ;
-        Text [ finnish ] = "Otsikko~rivi" ;
+        Text [ finnish ] = "Toista ~rivi" ;
         Text [ danish ] = "Gentagelsesrække" ;
         Text [ french ] = "~Ligne à répéter" ;
         Text [ swedish ] = "Upprepn~ingsrad" ;
@@ -427,7 +428,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ italian ] = "Colonna da ripetere" ;
         Text [ portuguese_brazilian ] = "Rótulo da ~Coluna" ;
         Text [ portuguese ] = "~Coluna a repetir" ;
-        Text [ finnish ] = "Otsikkos~arake" ;
+        Text [ finnish ] = "Toista ~sarake" ;
         Text [ danish ] = "Gentagelseskolonne" ;
         Text [ french ] = "~Colonne à répéter" ;
         Text [ swedish ] = "~Upprepningskolumn" ;
@@ -490,7 +491,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ swedish ] = "Än~dra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
-        Text [ english_us ] = "~Modify" ;
+        Text [ english_us ] = "Mod~ify" ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
         Text[ russian ] = "Èçìåíèòü";
         Text[ polish ] = "Modyfikuj";
