@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: er $ $Date: 2001-10-16 11:16:13 $
+ *  last change: $Author: er $ $Date: 2001-10-19 12:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2428,6 +2428,32 @@ void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar, doub
 }
 
 
+BOOL SvNumberformat::FallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime )
+{
+    using namespace ::com::sun::star::i18n;
+    CalendarWrapper& rCal = GetCal();
+    if ( rCal.getUniqueID() != sGregorian )
+    {
+        sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
+        if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "Dummy" ) ) )
+        {
+            if ( !rOrgCalendar.Len() )
+            {
+                rOrgCalendar = rCal.getUniqueID();
+                fOrgDateTime = rCal.getDateTime();
+            }
+            else if ( rOrgCalendar == String(sGregorian) )
+                rOrgCalendar.Erase();
+            rCal.loadCalendar( sGregorian, rLoc().getLocale() );
+            rCal.setDateTime( fOrgDateTime );
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
 void lcl_SvNumberformat_AppendEraG( String& OutString, const CalendarWrapper& rCal )
 {
     using namespace ::com::sun::star::i18n;
@@ -2466,6 +2492,8 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
         SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+    if ( FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+        bOtherCalendar = FALSE;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
     for (USHORT i = 0; i < nAnz; i++)
@@ -2480,6 +2508,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 }
                 rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
                 rCal.setDateTime( fOrgDateTime );
+                FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
@@ -2699,6 +2728,8 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
         SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+    if ( FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+        bOtherCalendar = FALSE;
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     BOOL bInputLine;
@@ -2787,6 +2818,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 }
                 rCal.loadCalendar( rInfo.sStrArray[i], rLoc().getLocale() );
                 rCal.setDateTime( fOrgDateTime );
+                FallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 break;
             case SYMBOLTYPE_STAR:
                 if( bStarFlag )
