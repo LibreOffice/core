@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL OStaticSet::hashBookmark( const Any& bookmark ) throw(SQLExce
 // -------------------------------------------------------------------------
 sal_Bool OStaticSet::fetchRow()
 {
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
     if(!m_bEnd && (bRet = m_xDriverSet->next()))
     {
         m_aSet.push_back(new connectivity::ORowVector< connectivity::ORowSetValue >(m_xSetMetaData->getColumnCount()));
