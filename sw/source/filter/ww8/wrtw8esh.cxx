@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:43:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,8 +322,11 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             {
                 ASSERT(pObj, "wo ist das SDR-Object?");
                 if (pObj)
+                {
                     aRect = pObj->GetSnapRect();
-                aRect -= aIter->maParentPos;
+                    Point aObjPos(pObj->GetRelativePos());
+                    aRect.SetPos(aObjPos);
+                }
             }
 
             // spid
@@ -2329,16 +2332,19 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     if (aSortFmts.Count())
         aSortFmts.Remove( 0, aSortFmts.Count() );
 
-    USHORT n, nPos, nCnt = rSrcArr.size();
+    USHORT n, nCnt = rSrcArr.size();
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
-    maDirections.resize(nCnt);
+    maDirections.clear();
+    maDirections.reserve(nCnt);
     for( n = 0; n < nCnt; ++n )
     {
         ULONG nOrdNum = rWrt.GetSdrOrdNum(rSrcArr[n].mrCntnt);
+        USHORT nPos;
+        //returns what will be the index in aSortFmts of p as nPos
         aSort.Insert( nOrdNum, nPos );
         void* p = (void *)(&(rSrcArr[n].mrCntnt));
         aSortFmts.Insert( p, nPos );
-        maDirections[nPos] = rSrcArr[n].mnDirection;
+        maDirections.insert(maDirections.begin() + nPos, rSrcArr[n].mnDirection);
     }
 
     if (aFollowShpIds.Count())
