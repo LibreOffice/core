@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:18:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@
 #ifndef _SDDLL_HXX
 #include "sddll.hxx"
 #endif
+
+#include "helpids.h"
 
 using namespace ::com::sun::star;
 
@@ -482,12 +484,16 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getEntrancePresets(), bHasText );
+    mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_ENTRANCE, mpTabPages[ENTRANCE] );
     mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getEmphasisPresets(), bHasText );
+    mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EMPHASIS, mpTabPages[EMPHASIS] );
     mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getExitPresets(), bHasText );
+    mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EXIT, mpTabPages[EXIT] );
     mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getMotionPathsPresets(), bHasText );
+    mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
 
     getCurrentPage()->setDuration( mfDuration );
