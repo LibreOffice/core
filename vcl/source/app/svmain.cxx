@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-27 12:06:11 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 17:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,13 @@ void DeInitVCL()
     // free global data
     delete pSVData->maGDIData.mpGrfConverter;
 
+    if( pSVData->mpSettingsConfigItem )
+        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
+    if( pSVData->maGDIData.mpDefFontConfig )
+        delete pSVData->maGDIData.mpDefFontConfig, pSVData->maGDIData.mpDefFontConfig = NULL;
+    if( pSVData->maGDIData.mpFontSubstConfig )
+        delete pSVData->maGDIData.mpFontSubstConfig, pSVData->maGDIData.mpFontSubstConfig = NULL;
+
     if ( pSVData->maAppData.mpIdleMgr )
         delete pSVData->maAppData.mpIdleMgr;
     ImplDeInitTimer();
@@ -615,12 +622,10 @@ void DeInitVCL()
         ImplFreeEventHookData();
 
     ImplDeletePrnQueueList();
-#if SUPD != 627
     delete pSVData->maGDIData.mpScreenFontList;
     pSVData->maGDIData.mpScreenFontList = NULL;
     delete pSVData->maGDIData.mpScreenFontCache;
     pSVData->maGDIData.mpScreenFontCache = NULL;
-#endif
     ImplFreeOutDevFontData();
 
     ResMgr::DestroyAllResMgr();
