@@ -31,7 +31,7 @@ Public sKeyName(SBMAXAPPLCOUNT-1) as String
 Public sValueName(SBMAXAPPLCOUNT-1) as String
 Public sCRLF as String
 Public MSFilterName(5,4) as String
-Public XMLFilterName(7,3) as String
+Public XMLFilterName(7,3) as String &apos;Number of different formats
 Public FilterTracingLogPath(2) as String
 Public bMSApplFilterTracingAvailable(2) as String
 Public bTakeOverTargetName(2) as Boolean
@@ -54,6 +54,7 @@ Public Const SBTEMPLRECURSIVE = 6
 Public Const SBTEMPLSOURCE = 7
 Public Const SBTEMPLTARGET = 8
 Public Const SBAPPLKEY = 9
+Public XMLTemplateList()
 
 &apos; Application-relating Data are stored in this Array
 &apos; according to the following structure:
@@ -68,7 +69,7 @@ Public Const SBAPPLKEY = 9
 &apos; Applications(X,8) = &quot;File:///...&quot; 	(TargetUrl of the templates)
 &apos; Applications(X,9) = 0				    (Key to the original Index of the Applications)
 
-Public Const SBMAXEXTENSIONLENGTH = 7
+Public Const SBMAXEXTENSIONLENGTH = 15
 
 
 Sub FillStep_Welcome()
@@ -392,39 +393,39 @@ Sub	SetupMSConfiguration()
 
 &apos; See definition of Filtername-Array about meaning of fields
 	MSFilterName(0,0) = &quot;doc&quot;
-	MSFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
-	MSFilterName(0,2) = &quot;sxw&quot;
+	MSFilterName(0,1) = &quot;writer8&quot;
+	MSFilterName(0,2) = &quot;oot&quot;
 	MSFilterName(0,3) = sMSDocumentCheckBox(0)
 	MSFilterName(0,4) = &quot;Word&quot;
 	
 
 	MSFilterName(1,0) = &quot;xls&quot;
-	MSFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
-	MSFilterName(1,2) = &quot;sxc&quot;
+	MSFilterName(1,1) = &quot;calc8&quot;
+	MSFilterName(1,2) = &quot;oos&quot;
 	MSFilterName(1,3) = sMSDocumentCheckBox(1)
 	MSFilterName(1,4) = &quot;Excel&quot;
 
 	MSFilterName(2,0) = &quot;ppt&quot;
-	MSFilterName(2,1) = &quot;StarOffice XML (Impress)&quot;
-	MSFilterName(2,2) = &quot;sxi&quot;
+	MSFilterName(2,1) = &quot;impress8&quot;
+	MSFilterName(2,2) = &quot;oop&quot;
 	MSFilterName(2,3) = sMSDocumentCheckBox(2)
 	MSFilterName(2,4) = &quot;PowerPoint&quot;
 
 	MSFilterName(3,0) = &quot;dot&quot;
-	MSFilterName(3,1) = &quot;writer_StarOffice_XML_Writer_Template&quot;
-	MSFilterName(3,2) = &quot;stw&quot;
+	MSFilterName(3,1) = &quot;writer8_template&quot;
+	MSFilterName(3,2) = &quot;ott&quot;
 	MSFilterName(3,3) = sMSTemplateCheckBox(0)
 	MSFilterName(3,4) = &quot;Word&quot;	
 	
 	MSFilterName(4,0) = &quot;xlt&quot;
-	MSFilterName(4,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
-	MSFilterName(4,2) = &quot;stc&quot;
+	MSFilterName(4,1) = &quot;calc8_template&quot;
+	MSFilterName(4,2) = &quot;ots&quot;
 	MSFilterName(4,3) = sMSTemplateCheckBox(1)
 	MSFilterName(4,4) = &quot;Excel&quot;	
 
 	MSFilterName(5,0) = &quot;pot&quot;
-	MSFilterName(5,1) = &quot;impress_StarOffice_XML_Impress_Template&quot;
-	MSFilterName(5,2) = &quot;sti&quot;
+	MSFilterName(5,1) = &quot;impress8_template&quot;
+	MSFilterName(5,2) = &quot;otp&quot;
 	MSFilterName(5,3) = sMSTemplateCheckBox(2)
 	MSFilterName(5,4) = &quot;PowerPoint&quot;	
 End Sub
@@ -468,54 +469,53 @@ Sub SetupXMLConfiguration()
 	Wizardmode = SBXMLMODE
 	ApplCount = 4
 	MaxApplCount = 4
-	
+	XMLTemplateList = Array(&quot;vor&quot;, &quot;sti&quot;, &quot;stw&quot; , &quot;stc&quot;)
 	&apos; chkTemplatePath-Captions
 	GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
 	&apos; DocumentCheckbox- Captions
 	GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
 
-	XMLFilterName(0,0) = &quot;sdw&quot;
-	XMLFilterName(0,1) = &quot;StarOffice XML (Writer)&quot;
-	XMLFilterName(0,2) = &quot;sxw&quot;
+	XMLFilterName(0,0) = &quot;sdw|sxw&quot;
+	XMLFilterName(0,1) = &quot;writer8|writer8&quot;
+	XMLFilterName(0,2) = &quot;oot|oot&quot;
 	XMLFilterName(0,3) = sDocumentCheckBox(0)
 
-	XMLFilterName(1,0) = &quot;sdc&quot;
-	XMLFilterName(1,1) = &quot;StarOffice XML (Calc)&quot;
-	XMLFilterName(1,2) = &quot;sxc&quot;
+	XMLFilterName(1,0) = &quot;sdc|sxc&quot;
+	XMLFilterName(1,1) = &quot;calc8|calc8&quot;
+	XMLFilterName(1,2) = &quot;oos|oos&quot;
 	XMLFilterName(1,3) = sDocumentCheckBox(1)
 
-	XMLFilterName(2,0) = &quot;sdd|sda&quot;
-	XMLFilterName(2,1) = &quot;StarOffice XML (Impress)|sdraw: StarOffice XML (Draw)&quot;
-	XMLFilterName(2,2) = &quot;sxi|sxd&quot;
+	XMLFilterName(2,0) = &quot;sdd|sda|sxi|sxd&quot;
+	XMLFilterName(2,1) = &quot;impress8|draw8|impress8|draw8&quot;
+	XMLFilterName(2,2) = &quot;oop|ood|oop|ood&quot;
 	XMLFilterName(2,3) = sDocumentCheckBox(2)
-
-	XMLFilterName(3,0) = &quot;smf&quot;
-	XMLFilterName(3,1) = &quot;StarOffice XML (Math)&quot;
-	XMLFilterName(3,2) = &quot;sxm&quot;
+	
+	XMLFilterName(3,0) = &quot;smf|sxm&quot;
+	XMLFilterName(3,1) = &quot;math8|math8&quot;
+	XMLFilterName(3,2) = &quot;oof|oof&quot;
 	XMLFilterName(3,3) = sDocumentCheckBox(3)	
 
-	XMLFilterName(4,0) = &quot;application/x-openoffice-starwriter|application/vnd.stardivision.writer/web&quot;
-	XMLFilterName(4,1) = &quot;writer_StarOffice_XML_Writer_Template|writer_web_StarOffice_XML_Writer_Web_Template&quot;
-	XMLFilterName(4,2) = &quot;stw|stw&quot;
+	XMLFilterName(4,0) = &quot;application/x-openoffice-starwriter|application/vnd.stardivision.writer/web|application/vnd.sun.xml.writer|application/vnd.sun.xml.writerweb&quot;
+	XMLFilterName(4,1) = &quot;writer8_template|writerweb8_writer_template|writer8_template|writerweb8_writer_template&quot;
+	XMLFilterName(4,2) = &quot;ott|oth|ott|oth&quot;
 	XMLFilterName(4,3) = sTemplateCheckBox(0)
 
 
-	XMLFilterName(5,0) = &quot;application/x-openoffice-starcalc&quot;
-	XMLFilterName(5,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
-	XMLFilterName(5,2) = &quot;stc&quot;
+	XMLFilterName(5,0) = &quot;application/x-openoffice-starcalc|application/vnd.sun.xml.calc&quot;
+	XMLFilterName(5,1) = &quot;calc8_template|calc8_template&quot;
+	XMLFilterName(5,2) = &quot;ots|ots&quot;
 	XMLFilterName(5,3) = sTemplateCheckBox(1)
 
 	&apos; due to bug #108942# impress templates of the version 4.0 have to be handled in a special way because their mimetype 
 	&apos; falsely points to the draw application.
-	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw&quot;
-	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
-	XMLFilterName(6,2) = &quot;sti|sti|std&quot;
+	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw|application/vnd.sun.xml.impress&quot;
+	XMLFilterName(6,1) = &quot;impress8_template|impress8_template|draw8_template|impress8_template&quot;
+	XMLFilterName(6,2) = &quot;otp|otp|otd|otp&quot;
 	XMLFilterName(6,3) = sTemplateCheckBox(2)
 	
-
-	XMLFilterName(7,0) = &quot;sgl&quot;
-	XMLFilterName(7,1) = &quot;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument&quot;
-	XMLFilterName(7,2) = &quot;sxg&quot;
+	XMLFilterName(7,0) = &quot;sgl|sxg&quot;
+	XMLFilterName(7,1) = &quot;writerglobal8|writerglobal8&quot;
+	XMLFilterName(7,2) = &quot;oom|oom&quot;
 	XMLFilterName(7,3) = sTemplateCheckBox(3)
 End Sub
 
