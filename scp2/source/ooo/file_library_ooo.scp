@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.34 $
+*  $Revision: 1.35 $
 *
-*  last change: $Author: obo $ $Date: 2004-08-12 10:36:53 $
+*  last change: $Author: obo $ $Date: 2004-08-12 13:16:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -259,8 +259,6 @@ End
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
 #endif
 
-
-STD_UNO_LIB_FILE( gid_File_Lib_Cnt, cnt )
 
 File gid_File_Lib_Comphelper2
     TXT_FILE_BODY;
