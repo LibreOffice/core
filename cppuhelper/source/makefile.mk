@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:25 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 15:26:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,9 @@ UNOTYPES= \
         com.sun.star.reflection.XIdlReflection 		\
         com.sun.star.reflection.XIdlClass 		\
         com.sun.star.reflection.XIdlClassProvider	\
+        com.sun.star.reflection.XIndirectTypeDescription	\
+        com.sun.star.reflection.XMethodParameter	\
+        com.sun.star.reflection.XInterfaceMemberTypeDescription	\
         com.sun.star.beans.XPropertySet 		\
         com.sun.star.beans.XMultiPropertySet 		\
         com.sun.star.beans.XFastPropertySet 		\
