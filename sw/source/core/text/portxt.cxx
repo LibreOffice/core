@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,18 +384,25 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 
         && !rInf.GetLast()->IsHolePortion() )
     {
+        // calculate number of blanks
+        xub_StrLen nX = rInf.GetIdx() - 1;
+        USHORT nHoleLen = 1;
+        while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
+            nHoleLen++;
+
         // Erst uns einstellen und dann Inserten, weil wir ja auch ein
         // SwLineLayout sein koennten.
         KSHORT nBlankSize;
-        if(1 == GetLen())
+        if( nHoleLen == GetLen() )
             nBlankSize = Width();
         else
-            nBlankSize = rInf.GetTxtSize( ' ' ).Width();
+            nBlankSize = nHoleLen * rInf.GetTxtSize( ' ' ).Width();
         Width( Width() - nBlankSize );
         rInf.X( rInf.X() - nBlankSize );
-        SetLen( GetLen() - 1 );
+        SetLen( GetLen() - nHoleLen );
         SwLinePortion *pHole = new SwHolePortion( *this );
         ( (SwHolePortion *)pHole )->SetBlankWidth( nBlankSize );
+        ( (SwHolePortion *)pHole )->SetLen( nHoleLen );
         Insert( pHole );
     }
 }

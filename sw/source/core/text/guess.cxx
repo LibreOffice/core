@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nBreakPos = nCutPos;
         xub_StrLen nX = nBreakPos;
-        while( nX && rInf.GetLineStart() && CH_BLANK == rInf.GetChar( --nX ) )
+        while( nX && nBreakPos > rInf.GetLineStart() &&
+               CH_BLANK == rInf.GetChar( --nX ) )
             --nBreakPos;
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();

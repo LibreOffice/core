@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,10 +205,12 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
             Width(0);
             SetAscent(0);
             SetLen(0);
+            if( rInf.GetLast() )
+                rInf.GetLast()->FormatEOL( rInf );
+
             return bFull;
         }
     }
-
 
     rInf.GetParaPortion()->SetFly( sal_True );
     return bFull;
