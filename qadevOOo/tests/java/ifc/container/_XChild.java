@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChild.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:41 $
+ *  last change:$Date: 2003-09-08 10:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,12 @@
 
 package ifc.container;
 
+import lib.MultiMethodTest;
+import lib.Status;
+
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNamed;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
 
 /*
 * Testing <code>com.sun.star.container.XChild</code>
@@ -106,6 +108,14 @@ public class _XChild extends MultiMethodTest {
     */
     public void _setParent() {
         requiredMethod("getParent()") ;
+
+        String parentComment = (String) tEnv.getObjRelation("cannotSwitchParent");
+
+        if (parentComment != null) {
+            log.println(parentComment);
+            tRes.tested("setParent()",Status.skipped(true));
+            return;
+        }
 
         try {
             oObj.setParent(gotten);
