@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:36:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,5 +913,5 @@
 #define HID_MODULE_TOOLBOX                          (HID_BASE + 2184 )
 #define HID_SECTION_INDENTS_PAGE                    (HID_BASE + 2185 )
 
-
+#define HID_FLD_DROPDOWN                            (HID_BASE + 2186 )
 
