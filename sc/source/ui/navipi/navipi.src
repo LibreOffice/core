@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:10:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 07:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ french ] = "Ligne" ;
         QuickHelpText[ russian ] = "Ñòğîêà";
         QuickHelpText[ polish ] = "Wiersz";
-        QuickHelpText[ japanese ] = "s";
+        QuickHelpText[ japanese ] = "s!";
         QuickHelpText[ chinese_simplified ] = "ĞĞ";
         QuickHelpText[ chinese_traditional ] = "Äæ";
         QuickHelpText[ arabic ] = "ÓØÑ";
@@ -227,7 +227,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ french ] = "Colonne" ;
     QuickHelpText[ russian ] = "Ñòîëáåö";
         QuickHelpText[ polish ] = "Kolumna";
-        QuickHelpText[ japanese ] = "—ñ";
+        QuickHelpText[ japanese ] = "—ñ!";
         QuickHelpText[ chinese_simplified ] = "ÁĞ";
         QuickHelpText[ chinese_traditional ] = "¦C";
         QuickHelpText[ arabic ] = "ÚãæÏ";
@@ -273,7 +273,7 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "Äîêóìåíò";
         QuickHelpText[ polish ] = "Dokument";
-        QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ";
+        QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ!";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
         QuickHelpText[ chinese_traditional ] = "ÀÉ®×";
         QuickHelpText[ arabic ] = "ãÓÊäÏ";
@@ -352,7 +352,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ ENGLISH ] = "Start" ;
                 Text [ norwegian ] = "Start" ;
                 Text [ italian ] = "Inizio" ;
-                Text [ portuguese_brazilian ] = "Início" ;
+                Text [ portuguese_brazilian ] = "In?cio" ;
                 Text [ portuguese ] = "Início" ;
                 Text [ finnish ] = "Aloita" ;
                 Text [ danish ] = "Begyndelse" ;
@@ -429,7 +429,7 @@ Window RID_SCDLG_NAVIGATOR
                 Text [ portuguese_brazilian ] = "Inhalte" ;
                 Text[ chinese_simplified ] = "ÄÚÈİ";
                 Text[ russian ] = "Ñîäåğæèìîå";
-                Text[ polish ] = "Zawartoœci";
+                Text[ polish ] = "Zawarto?ci";
                 Text[ japanese ] = "“à—e";
                 Text[ chinese_traditional ] = "¤º®e";
                 Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -578,7 +578,7 @@ Window RID_SCDLG_NAVIGATOR
         Text [ portuguese_brazilian ] = "Anzeige" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾";
         Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Wyœwietl";
+        Text[ polish ] = "Wy?wietl";
         Text[ japanese ] = "•\\¦";
         Text[ chinese_traditional ] = "Åã¥Ü";
         Text[ arabic ] = "ÚÑÖ";
@@ -834,7 +834,7 @@ String SCSTR_CONTENT_ROOT
     Text [ portuguese_brazilian ] = "Inhalte" ;
     Text[ chinese_simplified ] = "ÄÚÈİ";
     Text[ russian ] = "Ñîäåğæèìîå";
-    Text[ polish ] = "Zawartoœci";
+    Text[ polish ] = "Zawarto?ci";
     Text[ japanese ] = "“à—e";
     Text[ chinese_traditional ] = "¤º®e";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -1020,7 +1020,7 @@ String SCSTR_CONTENT_AREALINK
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfte Bereiche : Verkn³pfte Bereiche */
     TEXT = "Verknüpfte Bereiche" ;
     TEXT [ English ] = "Linked areas" ;
-    Text [ portuguese_brazilian ] = "Verknüpfte Bereiche" ;
+    Text [ portuguese_brazilian ] = "Verkn?fte Bereiche" ;
     Text [ english_us ] = "Linked areas" ;
     Text [ portuguese ] = "Áreas ligadas" ;
     Text [ swedish ] = "Länkade områden" ;
@@ -1063,7 +1063,7 @@ Menu RID_POPUP_DROPMODE
             Text [ italian ] = "Inserisci come hyperlink" ;
             Text [ spanish ] = "Insertar como hiperenlace" ;
             Text [ french ] = "Insérer comme hyperlien" ;
-            Text [ portuguese_brazilian ] = "Als Hyperlink einfügen" ;
+            Text [ portuguese_brazilian ] = "Als Hyperlink einf?en" ;
             Text [ portuguese ] = "Inserir como hiperligação" ;
             Text[ chinese_simplified ] = "µ±×÷³¬Á´½Ó²åÈë";
             Text[ russian ] = "Âñòàâèòü êàê ãèïåğññûëêó";
@@ -1095,7 +1095,7 @@ Menu RID_POPUP_DROPMODE
             Text [ italian ] = "Inserisci come collegamento" ;
             Text [ spanish ] = "Insertar como vínculo" ;
             Text [ french ] = "Insérer comme lien" ;
-            Text [ portuguese_brazilian ] = "Als Verknüpfung einfügen" ;
+            Text [ portuguese_brazilian ] = "Als Verkn?fung einf?en" ;
             Text [ portuguese ] = "Inserir como ligação" ;
             Text[ chinese_simplified ] = "µ±×÷Á´½Ó²åÈë";
             Text[ russian ] = "Âñòàâèòü êàê ññûëêó";
@@ -1127,7 +1127,7 @@ Menu RID_POPUP_DROPMODE
             Text [ french ] = "Insérer comme copie" ;
             Text [ dutch ] = "Als kopie invoegen" ;
             Text [ portuguese ] = "Inserir como cópia" ;
-            Text [ portuguese_brazilian ] = "Als Kopie einfügen" ;
+            Text [ portuguese_brazilian ] = "Als Kopie einf?en" ;
             Text[ chinese_simplified ] = "µ±×÷¸´ÖÆ¼ş²åÈë";
             Text[ russian ] = "Âñòàâèòü êàê êîïèş";
             Text[ polish ] = "Wstaw jako kopiê";
@@ -1157,7 +1157,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ ENGLISH ] = "Delete" ;
             Text [ portuguese ] = "Eliminar" ;
             Text [ english_us ] = "Delete" ;
-            Text [ portuguese_brazilian ] = "Löschen" ;
+            Text [ portuguese_brazilian ] = "L?chen" ;
             Text [ swedish ] = "Radera" ;
             Text [ danish ] = "Slet" ;
             Text [ italian ] = "Elimina" ;
@@ -1196,7 +1196,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
             Text [ dutch ] = "Eigenschappen..." ;
             Text[ chinese_simplified ] = "ÊôĞÔ...";
             Text[ russian ] = "Ñâîéñòâà...";
-            Text[ polish ] = "W³aœciwoœci...";
+            Text[ polish ] = "W³a?ciwo?ci...";
             Text[ japanese ] = "ÌßÛÊßÃ¨...";
             Text[ chinese_traditional ] = "Äİ©Ê...";
             Text[ arabic ] = "ÎÕÇÆÕ...";
