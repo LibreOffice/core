@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 06:48:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
     {
         MID_SBA_QRY_REFRESH
         HelpId = SID_FM_REFRESH ;
+        DropDown = TRUE ;
     };
     CUR_SEPARATOR ;
     CUR_ITEM
@@ -1388,4 +1389,24 @@ String STR_COULDNOTCONNECT_DATASOURCE
     Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
     Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
+};
+
+Menu RID_MENU_REFRESH_DATA
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            MID_SBA_QRY_REFRESH
+            HelpId = SID_FM_REFRESH ;
+        };
+        MenuItem
+        {
+            Identifier = ID_BROWSER_REFRESH_REBUILD;
+            HelpId = HID_BROWSER_REFRESH_REBUILDVIEW;
+            Text = "neu aufbauen";
+            Text [ english ] = "reconstruct";
+            Text [ english_us ] = "reconstruct";
+        };
+    };
 };

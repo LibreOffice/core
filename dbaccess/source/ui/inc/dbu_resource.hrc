@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 06:45:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@
 #define MENU_BROWSER_BOOKMARKCONTEXT    RID_MENU_START + 16
 #define MENU_BROWSER_DEFAULTCONTEXT     RID_MENU_START + 17
 #define MENU_BROWSER_VIEWCONTEXT        RID_MENU_START + 18
+#define RID_MENU_REFRESH_DATA           RID_MENU_START + 19
 
 
 //========================================================================
@@ -462,6 +463,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.59  2001/08/15 06:45:19  fs
+ *  #91052# STR_COULDNOTCONNECT_DATASOURCE
+ *
  *  Revision 1.58  2001/07/23 13:15:04  oj
  *  #90074# check if calc doc exists
  *
