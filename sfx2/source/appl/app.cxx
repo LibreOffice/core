@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:31:23 $
+ *  last change: $Author: mba $ $Date: 2000-12-04 12:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,8 +608,9 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
 
             // Datei "offnen -- immer neue ::com::sun::star::sdbcx::View erzeugen
+            INetURLObject aURL( aArg, INET_PROT_FILE );
             SfxStringItem aTargetName( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-            SfxStringItem aFileName( SID_FILE_NAME, aArg );
+            SfxStringItem aFileName( SID_FILE_NAME, aURL.GetMainURL() );
             SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
             SfxBoolItem aHidden(SID_HIDDEN, sal_True);
             SfxBoolItem aSilent(SID_SILENT, sal_True);
