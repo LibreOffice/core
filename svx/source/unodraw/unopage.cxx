@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
+ *  last change: $Author: ka $ $Date: 2002-01-11 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,33 +677,37 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         if( pObj && !pObj->IsEmptyPresObj() )
                         {
                             SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
-                            const SvInfoObject *pInfo = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                            DBG_ASSERT( pInfo, "no info object for OLE object found" );
-
-                            // CL->KA: Why is this not working anymore?
-                            if( pInfo )
+                            if( pPersist )
                             {
+                                const SvInfoObject *pInfo = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                                const SvGlobalName aClassId( pInfo->GetClassName() );
-                                const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
-                                const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
-                                const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+                                DBG_ASSERT( pInfo, "no info object for OLE object found" );
 
-                                if( aPluginClassId == aClassId )
+                                // CL->KA: Why is this not working anymore?
+                                if( pInfo )
                                 {
-                                    pRet = new SvxPluginShape( pObj );
-                                    nType = OBJ_OLE2_PLUGIN;
-                                }
-                                else if( aAppletClassId == aClassId )
-                                {
-                                    pRet = new SvxAppletShape( pObj );
-                                    nType = OBJ_OLE2_APPLET;
-                                }
-                                else if( aIFrameClassId == aClassId )
-                                {
-                                    pRet = new SvxFrameShape( pObj );
-                                    nType = OBJ_FRAME;
+
+                                    const SvGlobalName aClassId( pInfo->GetClassName() );
+                                    const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                    const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                    const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                    if( aPluginClassId == aClassId )
+                                    {
+                                        pRet = new SvxPluginShape( pObj );
+                                        nType = OBJ_OLE2_PLUGIN;
+                                    }
+                                    else if( aAppletClassId == aClassId )
+                                    {
+                                        pRet = new SvxAppletShape( pObj );
+                                        nType = OBJ_OLE2_APPLET;
+                                    }
+                                    else if( aIFrameClassId == aClassId )
+                                    {
+                                        pRet = new SvxFrameShape( pObj );
+                                        nType = OBJ_FRAME;
+                                    }
                                 }
                             }
                         }
