@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 17:05:29 $
+ *  last change: $Author: hr $ $Date: 2001-10-25 17:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <tools/debug.hxx>
 
 #include "property.hrc"
+
+#include <algorithm>
 
 //.........................................................................
 namespace frm
