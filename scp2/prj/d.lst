@@ -20,8 +20,4 @@ mkdir: %_DEST%\par%_EXT%\omc
 mkdir: %_DEST%\inc%_EXT%\scp
 
 ..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
-
-..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
-..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
-..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
-
+..\%__SRC%\inc\langmacros.inc %_DEST%\inc%_EXT%\langmacros.inc
