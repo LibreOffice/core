@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:58 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _EXTENSIONS_PROPCTRLR_SELECTLABELDIALOG_HXX_
 #include "selectlabeldialog.hxx"
 #endif
@@ -121,9 +120,9 @@ namespace pcr
         ,m_aSeparator(this, ResId(1))
         ,m_aOk(this, ResId(1))
         ,m_aCancel(this, ResId(1))
+        ,m_aModelImages(ModuleRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
         ,m_pInitialSelection(NULL)
-        ,m_aModelImages(ModuleRes(RID_IL_FORMEXPLORER))
         ,m_pLastSelected(NULL)
         ,m_bHaveAssignableControl(sal_False)
     {
