@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:52:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,12 @@ module com {  module sun {  module star {  module java {
 // DocMerge from xml: interface com::sun::star::java::XJavaVM
 /** must be implemented by the user of the XJavaVM.
 
-    @incomplete
+    @deprecated
+    A UNO interface seems to be at the wrong abstraction level for this
+    functionality (also, the C++ class <code>jvmaccess::VirtualMachine</code>
+    used by <member scope="com::sun::star::java">XJavaVM::getJavaVM</member> is
+    not part of the public C++ UNO runtime API).  This should probably be
+    replaced by an appropriate C/C++ API.
  */
 interface XJavaVM: com::sun::star::uno::XInterface
 {
@@ -89,7 +94,8 @@ interface XJavaVM: com::sun::star::uno::XInterface
         <atom>any</atom> contains a JNI <code>JavaVM</code> pointer as a
         <atom>long</atom> or <atom>hyper</atom> integer (depending on the
         platform).  If the <code>processID</code> does not match the current
-        process, an empty <atom>any</atom> is returned.</p>
+        process, or if the VM cannot be instantiated for whatever reason, an
+        empty <atom>any</atom> is returned.</p>
 
         <p>If the <code>processID</code> has an additional 17th byte of value
         zero, the returned <atom>any</atom> contains a non-reference-counted
@@ -100,8 +106,9 @@ interface XJavaVM: com::sun::star::uno::XInterface
         <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
         pointer should be converted into a reference-counted reference as soon
         as possible).  Again, if the first 16 bytes of the
-        <code>processID</code> do not match the current process, an empty
-        <atom>any</atom> is returned.</p>
+        <code>processID</code> do not match the current process, or if the VM
+        cannot be instantiated for whatever reason, an empty <atom>any</atom> is
+        returned.</p>
 
         <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
         mainly for backwards compatibility, new code should use the second form
@@ -113,18 +120,14 @@ interface XJavaVM: com::sun::star::uno::XInterface
         <code>java.lang.Thread.getContextClassLoader</code>) will automatically
         be set to a meaningful value.</p>
 
-        If the instantiation of the Java Virtual Machine was successfull then
-        the returned any contains a long value on a 32 bit platform and a hyper
-        value on a 64 bit platform. The values can be cast to a JavaVM pointer.
-        If the JVM could not be created for whatever reason then a void any
-        will be returned.
-
         @param processID
-               The process ID of the caller's process.
-        @return
-               On success, a JavaVM pointer as long or hyper, otherwise the any
-               is void.
+        The process ID of the caller's process, probably extended by a 17th byte
+        of value zero.
 
+        @return
+        On success, the <atom>any</atom> contains a pointer represented as
+        <atom>long</atom> or <atom>hyper</atom>, otherwise the <atom>any</atom>
+        is <void/>.
      */
     any getJavaVM( [in] sequence<byte> processID );
 
