@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-30 14:46:55 $
+ *  last change: $Author: cl $ $Date: 2002-03-01 14:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2033,6 +2033,8 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
             pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
             bKillTable = TRUE;
         }
+
+           aBulColLB.InsertEntry( Color( COL_AUTO ), SVX_RESSTR( RID_SVXSTR_AUTOMATIC ));
 
         for ( long i = 0; i < pColorTable->Count(); i++ )
         {
