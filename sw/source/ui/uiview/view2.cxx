@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-24 17:20:05 $
+ *  last change: $Author: kz $ $Date: 2000-11-28 13:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
+#endif
+#ifndef _UNOTOOLS_TEXTSEARCH_HXX
+#include <unotools/testsearch.hxx>
 #endif
 
 #ifndef _SWWAIT_HXX
@@ -1167,7 +1170,7 @@ BOOL SwView::JumpToSwMark( const String& rMark )
             {
                 // Normale Textsuche
                 pWrtShell->EnterStdMode();
-                SearchParam aParam( sName, SearchParam::SRCH_NORMAL,
+                utl::SearchParam aParam( sName, utl::SearchParam::SRCH_NORMAL,
                                     TRUE, FALSE, FALSE );
 
                 if( pWrtShell->SearchPattern( aParam, DOCPOS_START, DOCPOS_END ))
