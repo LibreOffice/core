@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:41:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,7 +1438,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 }
                 else
                     rSh.GetAttr( aSet );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
                 const SvxShadowItem& rShItem = (const SvxShadowItem&)aSet.Get(nWhich);
                 rSet.Put(rShItem);
