@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-07 21:24:44 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 22:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ String S_NO_POPUP
     Text[ arabic ] = "PopUp menu not open";
     Text[ turkish ] = "PopUp menu not open";
     Text[ catalan ] = "No hi ha cap PopupMenu obert";
-    Text[ finnish ] = "Ponnahdusvalikko ei ole auki";
+    Text[ finnish ] = "Ponnahdusvalikko ei ole avoinna";
 };
 String S_NO_SUBMENU
 {
@@ -671,7 +671,7 @@ String S_ERROR_SAVING_IMAGE
     Text[ arabic ] = "Error #($Arg1) when saving the image";
     Text[ turkish ] = "Error #($Arg1) when saving the image";
     Text[ catalan ] = "S'ha produÔt un error #($Arg1) en desar la imatge";
-    Text[ finnish ] = "Virhe ($Arg1) tallennettaessa kuvaa";
+    Text[ finnish ] = "Virhe #($Arg1) tallennettaessa kuvaa";
 };
 String S_INVALID_POSITION
 {
@@ -1466,7 +1466,7 @@ String S_UNKNOWN_TYPE
     Text[ arabic ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ turkish ] = "Unknown object type ($Arg1) from UId";
     Text[ catalan ] = "No es permet un tipus d'objecte desconegut ($Arg1) de UId o un mËtode '($Arg2)'";
-    Text[ finnish ] = "Unknown object type ($Arg1) from UId";
+    Text[ finnish ] = "Tuntematon objektityyppi ($Arg1) UID:st‰ tai menetelm‰‰ '($Arg2)' ei tueta";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
@@ -1490,7 +1490,7 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ arabic ] = "›‘·  ⁄„·Ì… ›ﬂ ÷€ÿ  Œ“Ì‰\"($Arg1)\"  ≈·Ï \"($Arg2)\"";
     Text[ catalan ] = "Ha fallat la descompressiÛ de l'emmagatzemament \"($Arg1)\" a \"($Arg2)\"";
-    Text[ finnish ] = "Objektin ($Arg1) purkaminen kohteeseen ($Arg2) ei onnistunut";
+    Text[ finnish ] = "Pakkauksen ($Arg1) purkaminen kohteeseen ($Arg2) ei onnistunut";
 };
 String S_NO_LIST_BOX_BUTTON
 {
@@ -1514,7 +1514,7 @@ String S_NO_LIST_BOX_BUTTON
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ arabic ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ catalan ] = "No hi ha cap ListBoxButton a ($Arg1)";
-    Text[ finnish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ finnish ] = "Kohdetta ListBoxButton ei ole kohteessa ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 {
@@ -1538,7 +1538,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
     Text[ arabic ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ turkish ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ catalan ] = "No es pot executar Slot ID. ActiveDispatcher no existeix";
-    Text[ finnish ] = "Paikkatunnuksen suoritus ei onnistu. Ei aktiivista l‰hetint‰";
+    Text[ finnish ] = "UNO URL -osoitetta ($Arg1) ei voitu suorittaa. L‰hetinohjelmaa ei lˆytynyt.";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
 {
@@ -1562,7 +1562,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ arabic ] = "Slot ID could not be run";
     Text[ turkish ] = "Slot ID could not be run";
     Text[ catalan ] = "No es pot executar Slot ID";
-    Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
+    Text[ finnish ] = "UNO URL -osoitetta ($Arg1) ei voitu suorittaa: tyˆpˆyd‰ll‰ ei ole aktiivista kehyst‰.";
 };
 String S_NO_MENU
 {
@@ -1636,6 +1636,7 @@ String S_NO_SCROLLBAR
     Text[ arabic ] = "No status bar at ($Arg1)";
     Text[ catalan ] = "No status bar at ($Arg1)";
 };
+
 
 
 
