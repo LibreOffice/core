@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-07 14:01:58 $
+ *  last change: $Author: sj $ $Date: 2001-06-19 09:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1593,7 +1593,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     sal_uInt32          nPropertyFlags = 0;
     sal_uInt16          nDepth = 0;
     sal_Int16           nLineSpacing;
-    int             nInstance = rTextObj.GetInstance();
+    int                 nInstance = rTextObj.GetInstance();
 
     for ( ParagraphObj* pPara = rTextObj.First() ; pPara; pPara = rTextObj.Next(), bFirstParagraph = FALSE )
     {
@@ -1611,10 +1611,10 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
 
         const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
         sal_Int16 nNormalSpacing = 100;
-        if ( bFirstParagraph && pDesc )
+        if ( pDesc )
         {
             double fN = 100.0;
-            fN /= pDesc->Scaling;
+            fN *= pDesc->Scaling;
             nNormalSpacing = (sal_Int16)( fN + 0.5 );
         }
         if ( bFirstParagraph && ( nLineSpacing > nNormalSpacing ) )
@@ -1624,10 +1624,17 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
         }
         else
         {
-            if ( nLineSpacing > 0 )
+            if ( nLineSpacing >= 0 )
             {
                 if ( pDesc )
                      nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+            }
+            else
+            {
+                if ( pPortion && pPortion->mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+                    nLineSpacing = nNormalSpacing;
+                else
+                    nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
             }
             if ( ( pPara->meLineSpacing == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
@@ -2745,7 +2752,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
             case ::com::sun::star::style::LineSpacingMode::MINIMUM :
             case ::com::sun::star::style::LineSpacingMode::LEADING :
             case ::com::sun::star::style::LineSpacingMode::FIX :
-                mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height / 4.40972 ) );
+                mnLineSpacing = (sal_Int16)(-( aLineSpacing.Height ) );
             break;
 
             case ::com::sun::star::style::LineSpacingMode::PROP :

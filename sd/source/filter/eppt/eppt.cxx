@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-07 13:59:48 $
+ *  last change: $Author: sj $ $Date: 2001-06-19 09:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2218,6 +2218,19 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
             const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
             if ( pDesc )
                  nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+        }
+        else
+        {
+            if ( rCharLevel.mnFontHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+            {
+                const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
+                if ( pDesc )
+                     nLineSpacing = (sal_Int16)( (double)100.0 * pDesc->Scaling + 0.5 );
+                else
+                    nLineSpacing = 100;
+            }
+            else
+                nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
         }
         rLev.mnLineFeed = nLineSpacing;
     }
