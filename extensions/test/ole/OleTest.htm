@@ -373,6 +373,7 @@ function callOleTest(	 id)
 		arrout1[0]= ob;
 		alert (arrout1[0].value);
 		oletest.testinout_methodXInterface( arrout1);
+		alert (arrout1[0].value);
 		var outValue= arrout1[0];
 		for ( key in outValue)
 		{
@@ -949,7 +950,7 @@ Template: <b> Sequence &lt type &gt method( Sequence&lt type &gt ) </b> <br>
 
 
 IN/Out parameter <br>
-Template: <b> void method( Sequence &lt type &gt ) </b> <br>
+Template: <b> void method(type  ) </b> <br>
 <button onclick='callBasic(100)'>byte</button>
 <button onclick='callBasic(101)'>double</button>
 <button onclick='callBasic(102)'>boolean</button>

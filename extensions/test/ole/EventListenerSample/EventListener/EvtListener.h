@@ -16,6 +16,7 @@ public:
     CEvtListener()
     {
     }
+    ~CEvtListener();
 
 DECLARE_REGISTRY_RESOURCEID(IDR_EVTLISTENER)
 

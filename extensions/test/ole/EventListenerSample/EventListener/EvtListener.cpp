@@ -12,3 +12,8 @@ STDMETHODIMP CEvtListener::disposing( IDispatch* source)
         _T("EventListener.EvtListener component"), MB_OK);
     return S_OK;
 }
+
+CEvtListener::~CEvtListener()
+{
+
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 06:56:49 $
+ *  last change: $Author: jl $ $Date: 2001-12-03 13:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ interface XTestSequence: com::sun::star::uno::XInterface
     void testinout_methodSequence( [inout] sequence< long > rOut);
     void testinout_methodSequence2( [inout] sequence < sequence< long > > rOut);
     void testinout_methodXInterface( [inout] com::sun::star::script::XInvocation rOut);
+    void testinout_methodXInterface2( [inout] com::sun::star::uno::XInterface rOut);
 
     any methodAnyTest1( [in] any rIn);
     [attribute]  any AttrAny2;
@@ -151,6 +152,7 @@ interface XTestStruct: com::sun::star::uno::XInterface
 interface XTestOutParameters: com::sun::star::uno::XInterface
 {
     void out_methodByte( [out] byte rOut );
+    void out_methodFloat( [out] float rOut);
     void out_methodDouble( [out] double rOut);
     void out_methodBool( [out] boolean rOut);
     void out_methodShort( [out] short rOut);
@@ -162,18 +164,37 @@ interface XTestOutParameters: com::sun::star::uno::XInterface
     void out_methodAny  ( [out] any rOut);
     void out_methodSequence( [out] sequence< long > rOut);
     void out_methodSequence2( [out] sequence < sequence< long > > rOut);
-
     void out_methodMulParams1( [out] long rout1, [out] long rout2);
     void out_methodMulParams2( [out] long rout1, [out] long rout2, [out] string rout3);
     void out_methodMulParams3( [in] string sin, [out] string sout);
 
 
 };
-
 struct SimpleStruct
 {
     string message;
 };
+
+interface XTestInParameters: com::sun::star::uno::XInterface
+{
+    byte in_methodByte( [in] byte rIn );
+    float in_methodFloat( [in] float rIn);
+    double in_methodDouble( [in] double rIn);
+    boolean in_methodBool( [in] boolean rIn);
+    short in_methodShort( [in] short rIn);
+    unsigned short in_methodUShort( [in] unsigned short rIn);
+    long in_methodLong( [in]  long rIn);
+    unsigned long in_methodULong( [in] unsigned long rIn);
+    string in_methodString( [in] string rIn);
+    char in_methodChar( [in] char rIn);
+    any in_methodAny    ( [in] any rIn);
+    com::sun::star::script::XInvocation in_methodInvocation( [in] com::sun::star::script::XInvocation inv);
+    SimpleStruct in_methodStruct( [in] SimpleStruct aStruct);
+    void in_methodAll( [in] byte b, [in] float f, [in] double d, [in] boolean bool, [in]short sh,
+                       [in] unsigned short us, [in] long l, [in] unsigned long ul,
+                       [in] string s, [in] char c, [in] any a, [in] com::sun::star::script::XInvocation inv);
+};
+
 
 enum SimpleEnum
 {
@@ -284,7 +305,6 @@ interface XCallback: com::sun::star::uno::XInterface
 
 
 };
-
 
 interface XTestInterfaces: com::sun::star::uno::XInterface
 {

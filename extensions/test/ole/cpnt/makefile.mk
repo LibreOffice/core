@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2001-06-27 06:57:32 $
+#   last change: $Author: jl $ $Date: 2001-12-03 13:57:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,11 +93,14 @@ UNOTYPES= oletest.XTestSequence oletest.XTestStruct	\
     oletest.XSimple					\
     oletest.XSimple2				\
     oletest.XSimple3				\
+    oletest.XTestOutParameters	\
+    oletest.XTestInParameters	\
     com.sun.star.beans.PropertyAttribute	\
     com.sun.star.uno.XAggregation		\
     com.sun.star.lang.XTypeProvider		\
     com.sun.star.lang.XMultiServiceFactory	\
     com.sun.star.lang.XSingleServiceFactory		\
+    com.sun.star.lang.XEventListener	\
     com.sun.star.registry.XRegistryKey	\
     com.sun.star.script.XInvocation	\
     com.sun.star.reflection.XIdlReflection	
