@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlActions.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 08:36:41 $
+ *  last change: $Author: tra $ $Date: 2001-11-14 16:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,13 @@ constants ControlActions
      */
     const short GET_SELECTED_ITEM = 7;
 
+    //---------------------------------------------------------------------
+    /** Returns the zero based index of the currently selected item.
+        If the listbox is empty or there is no item selected -1 will be
+        returned. The returned value is a sal_Int32.
+     */
+
+    const short GET_SELECTED_ITEM_INDEX = 8;
 
     //---------------------------------------------------------------------
     /** sets the help URL of a control.
