@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-15 08:48:46 $
+ *  last change: $Author: jp $ $Date: 2001-10-12 15:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,8 +252,8 @@ void SdDLL::RegisterControllers()
     SfxMenuControl::RegisterControl( SID_BEZIER_CLOSE, pMod );
 
     // #UndoRedo#
-    SvxUndoControl::RegisterControl( SID_UNDO , pMod );
-    SvxRedoControl::RegisterControl( SID_REDO , pMod );
+    SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );
+    SvxUndoRedoControl::RegisterControl( SID_REDO , pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 }
