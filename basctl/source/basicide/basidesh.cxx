@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-10 16:22:03 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
         | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_CLIENT, IDEResId( RID_BASICIDE_OBJECTBAR ) );
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );
     SFX_FEATURED_CHILDWINDOW_REGISTRATION(SID_SHOW_BROWSER, BASICIDE_UI_FEATURE_SHOW_BROWSER);
+    SFX_POPUPMENU_REGISTRATION( IDEResId( RID_POPUP_DLGED ) );
 }
 
 

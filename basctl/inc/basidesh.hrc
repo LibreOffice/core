@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-03 15:13:19 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
 #define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
 #define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
+#define RID_POPUP_DLGED                 ( RID_BASICIDE_START + 62 )
 
 #define RID_STR_CANNOTCLOSE             ( RID_BASICIDE_START + 13 )
 #define RID_STR_IDENAME                 ( RID_BASICIDE_START + 14 )

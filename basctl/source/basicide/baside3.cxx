@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:08:45 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include <basidesh.hxx>
 #include <idetemp.hxx>
 #include <helpid.hrc>
+
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -237,6 +241,17 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
+    else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    {
+        Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
+        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
+        if ( pDispatcher )
+        {
+            pDispatcher->ExecutePopup( IDEResId(RID_POPUP_DLGED), this, &aPos );
+        }
+    }
     else
         IDEBaseWindow::Command( rCEvt );
 }
@@ -282,13 +297,19 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
         switch ( nWh )
         {
             case SID_PASTE:
+            {
+                if ( !pEditor->IsPasteAllowed() )
+                    rSet.DisableItem( nWh );
+            }
             break;
             case SID_CUT:
             case SID_COPY:
             case SID_DELETE:
             case SID_BACKSPACE:
             {
-                // Object selektiert?
+                // any object selected?
+                if ( !pEditor->GetView()->HasMarkedObj() )
+                    rSet.DisableItem( nWh );
             }
             break;
             case SID_REDO:

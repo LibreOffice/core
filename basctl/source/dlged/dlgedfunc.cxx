@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-10 15:14:45 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #ifndef _SV_SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
 #endif
+
 
 //----------------------------------------------------------------------------
 
@@ -230,18 +231,26 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 #endif
     pWindow->CaptureMouse();
 
-    SdrHdl* pHdl = pView->HitHandle(aPos, *pWindow);
+    if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
+    {
+        SdrHdl* pHdl = pView->HitHandle(aPos, *pWindow);
 
-    // if selected object was hit, drag object
-    if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
-        pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-    else
-    if ( pView->HasMarkedObj() )
-        pView->UnmarkAll();
+        // if selected object was hit, drag object
+        if ( pHdl!=NULL || pView->IsMarkedHit(aPos, nHitLog) )
+            pView->BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+        else if ( pView->HasMarkedObj() )
+            pView->UnmarkAll();
 
-    // if no action, create object
-    if ( rMEvt.IsLeft() && !pView->IsAction() )
-        pView->BegCreateObj(aPos);
+        // if no action, create object
+        if ( !pView->IsAction() )
+            pView->BegCreateObj(aPos);
+    }
+    else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
+    {
+        // if object was hit, show property browser
+        if ( pView->IsMarkedHit(aPos, nHitLog) )
+            pParent->ShowProperties();
+    }
 
     return TRUE;
 }
@@ -349,7 +358,7 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
     Point  aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-    if ( rMEvt.IsLeft() )
+    if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
 #ifdef MAC
         pWindow->GrabFocus();
@@ -392,6 +401,12 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                 bMarkAction = TRUE;
             }
         }
+    }
+    else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
+    {
+        // if object was hit, show property browser
+        if ( pView->IsMarkedHit(aMDPos, nHitLog) )
+            pParent->ShowProperties();
     }
 
     return TRUE;

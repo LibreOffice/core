@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 11:05:22 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@ public:
     void            Copy();
     void            Paste();
     void            Delete();
+    BOOL            IsPasteAllowed() const;
+
+    void            ShowProperties();
 
     void            PrintData( Printer*, const String& rTitle );    // not working yet
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 11:06:10 $
+ *  last change: $Author: tbe $ $Date: 2001-10-17 10:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,13 @@
 #include "dlgedclip.hxx"
 #endif
 
+#ifndef _BASCTL_DLGEDDEF_HXX
+#include <dlgeddef.hxx>
+#endif
+
+#include <basidesh.hxx>
+#include <iderdll.hxx>
+
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
@@ -93,6 +100,22 @@
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
+#endif
+
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
+
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+#ifndef _XMLSCRIPT_XML_HELPER_HXX_
+#include <xmlscript/xml_helper.hxx>
+#endif
+
+#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
+#include <xmlscript/xmldlg_imexp.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -117,18 +140,6 @@
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _XMLSCRIPT_XML_HELPER_HXX_
-#include <xmlscript/xml_helper.hxx>
-#endif
-
-#ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
-#include <xmlscript/xmldlg_imexp.hxx>
-#endif
-
-#ifndef _BASCTL_DLGEDDEF_HXX
-#include <dlgeddef.hxx>
 #endif
 
 
@@ -823,6 +834,42 @@ void DlgEditor::Delete()
     pSdrView->DeleteMarked();
     if( bDlgMarked )
         RemarkDialog();
+}
+
+//----------------------------------------------------------------------------
+
+BOOL DlgEditor::IsPasteAllowed() const
+{
+    BOOL bIsPasteAllowed = FALSE;
+
+    // get clipboard
+    Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
+    if ( xClipboard.is() )
+    {
+        // get clipboard content
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
+        Application::AcquireSolarMutex( nRef );
+        if ( xTransf.is() )
+        {
+            if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
+            {
+                bIsPasteAllowed = TRUE;
+            }
+        }
+    }
+
+    return bIsPasteAllowed;
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::ShowProperties()
+{
+    BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+    if ( pViewFrame && !pViewFrame->HasChildWindow( SID_SHOW_BROWSER ) )
+        pViewFrame->ToggleChildWindow( SID_SHOW_BROWSER );
 }
 
 //----------------------------------------------------------------------------
