@@ -83,6 +83,9 @@ interface TableDrawText : Selection
 
     SID_HYPERLINK_SETLINK   [ ExecMethod = Execute; Export = FALSE; ]
     SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
+
+    SID_TEXTDIRECTION_LEFT_TO_RIGHT     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM     [ ExecMethod = Execute; StateMethod = GetAttrState; Export = FALSE; ]
 }
 
 
