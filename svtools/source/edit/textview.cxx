@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:32:29 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 09:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,6 +762,9 @@ void TextView::Command( const CommandEvent& rCEvt )
             mpTextEngine->FormatAndUpdate( this );
 
             SetInsertMode( bInsertMode );
+
+            if ( mpTextEngine->IsModified() )
+                mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
         }
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
