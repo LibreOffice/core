@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
+ *  last change: $Author: jl $ $Date: 2001-02-13 10:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-13 10:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams);
 DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_serviceFactory( sf),
     WeakComponentImplHelper2< XDragSource, XInitialization >(m_mutex),
-    m_pcurrentContext_impl(0),
+//  m_pcurrentContext_impl(0),
     m_hAppWindow(0),
     m_MouseButton(0)
 {
@@ -160,99 +160,23 @@ void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
     // to the IDropSource interface implemented in this class (but only
     // while this function executes). The source context is also used
     // in DragSource::QueryContinueDrag.
-    m_pcurrentContext_impl=  new SourceContext(
-                             static_cast<DragSource*>(this), listener );
-    m_currentContext= static_cast<XDragSourceContext*>( m_pcurrentContext_impl);
+    m_currentContext= static_cast<XDragSourceContext*>( new SourceContext(
+                      static_cast<DragSource*>(this), listener ) );
 
     // Convert the XTransferable data object into an IDataObject object;
-#ifdef DBG_CLIPBOARD_DATA
-    IDataObject* pData;
-    OleGetClipboard( &pData);
-#else
-    IDataObject* pData= static_cast<IDataObject*>( new CXTDataObject( trans));
-#endif
-    pData->AddRef();
+
+    m_pDataObject= static_cast<IDataObject*>( new CXTDataObject( trans));
+    m_pDataObject->AddRef();
 
     // Obtain the id of the thread that created the window
     DWORD processId;
-    DWORD threadIdWindow= GetWindowThreadProcessId( m_hAppWindow, &processId);
+    m_threadIdWindow= GetWindowThreadProcessId( m_hAppWindow, &processId);
 
-    HRESULT hrDoDragDrop= DRAGDROP_S_CANCEL;
-
-    // DoDragDrop needs an Ole STA appartment.
-    // Determine what kind of apartment this thread belongs to. If it is an OLE STA
-    // then we assume that this thread created the window. If not then the thread
-    // must be an MTA. All other cases are not handled.
-    HRESULT hrInit= OleInitialize( NULL);
-
-    DWORD dropEffect= 0;
-    if( hrInit == S_OK || hrInit == S_FALSE)
-    {
-        // OleInitialize has not been called before we called it. However if this
-        // is the thread of the window then we do DnD.
-        if( threadIdWindow == GetCurrentThreadId() )
-        {
-            hrDoDragDrop= DoDragDrop(
-                pData,
-                static_cast<IDropSource*>( this),
-                dndActionsToDropEffects( sourceActions),
-                &dropEffect);
-        }
-        else
-            OSL_ENSURE( false, "calling thread is nor the window thread and neither a MTA thread");
-
-        if( hrInit == S_OK)
-            OleUninitialize();
-    }
-    else if( hrInit == RPC_E_CHANGED_MODE)
-    {
-        // This function runs currently in an MTA, so we need to create an OLE STA
-        // thread in which we call DoDragDrop
-
-        // The structure contains all in an out parameter necessary for the
-        // DoDragDrop function and it is past as parameter to the thread function.
-        DndParams params;
-        params.data= pData;
-        params.source= static_cast<IDropSource*>( this);
-        // The effects ( DROPEFFECT ) that is supported by the source and which
-        // are passed as paramater to the DoDragDrop function
-        params.dwOkEffects= dndActionsToDropEffects( sourceActions);
-        // dwEffect is the effect which is choosen by the drop target ( IDropTarget).
-        // It is passed as argument to DoDragDrop
-        params.dwEffect= DROPEFFECT_NONE;
-        // The return value of DoDragDrop is copied to this member.
-        params.hr= S_OK;
-        // The thread id of the thread which created the window in which the drag & drop
-        // operation started.
-        params.threadIdCreator= threadIdWindow;
-        // We are currently running in an MTA. The window has been created in a different
-        // thread which must be an Ole STA.
-        DWORD idThread;
-        HANDLE holeThread= CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)DndOleSTAFunc,
-                             &params, 0, &idThread);
-        // Is function shall only return when the drag and drop operation has finished.
-        // Therefore we wait for the termination of the thread we created above.
-        DWORD stat= WaitForSingleObject( holeThread, INFINITE);
-
-        hrDoDragDrop= params.hr;
-        dropEffect= params.dwEffect;
-    }
-    else
-    {
-        OSL_ASSERT( false);
-    }
-
-    OSL_ENSURE( hrDoDragDrop != E_INVALIDARG, "IDataObject impl does not contain valid data");
-
-
-    //Fire event
-    sal_Int8 action= hrDoDragDrop == DRAGDROP_S_DROP ? dndOleDropEffectsToActions( dropEffect) : ACTION_NONE;
-    m_pcurrentContext_impl->fire_dragDropEnd( hrDoDragDrop == DRAGDROP_S_DROP ? sal_True : sal_False,
-                                              action);
-    // Destroy SourceContextslkfgj
-    m_currentContext= 0;
-    // Destroy the XTransferable wrapper
-    pData->Release();
+    // The thread acccesses members of this instance but does not call acquire.
+    // Hopefully this instance is not destroyed before the thread has terminated.
+    DWORD threadId;
+    HANDLE holeThread= CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)DndOleSTAFunc,
+                         static_cast<DragSource*>(this), 0, &threadId);
 }
 
 #ifdef DEBUG
@@ -331,7 +255,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
                   ( m_sourceActions & dndOleKeysToAction( grfKeyState));
     sal_Int8 userAction= fEscapePressed ? ACTION_NONE :
                   dndOleKeysToAction( grfKeyState);
-    m_pcurrentContext_impl->fire_dropActionChanged( dropAction, userAction);
+    static_cast<SourceContext*>(m_currentContext.get())->fire_dropActionChanged( dropAction, userAction);
 
 #if DBG_CONSOLE_OUT
     printf("\nDragSource::QueryContinueDrag");
@@ -353,14 +277,15 @@ HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
 
 // This function is called as extra thread from DragSource::executeDrag.
 // The function carries out a drag and drop operation by calling
-// DoDragDrop
+// DoDragDrop. The thread also notifies all XSourceListener.
 DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
 {
     // The structure contains all arguments for DoDragDrop and other
-    DndParams *params= (DndParams*)pParams;
+    DragSource *pSource= (DragSource*)pParams;
     // Drag and drop only works in a thread in which OleInitialize is called.
-    params->hr= OleInitialize( NULL);
-    if( SUCCEEDED( params->hr) )
+
+    HRESULT hr= OleInitialize( NULL);
+    if( SUCCEEDED( hr) )
     {
         // We force the creation of a thread message queue. This is necessary
         // for a later call to AttachThreadInput
@@ -371,23 +296,33 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         // This thread is attached to the thread that created the window. Hence
         // this thread also receives all mouse and keyboard messages which are
         // needed by DoDragDrop
-        AttachThreadInput( threadId , params->threadIdCreator, TRUE );
+        AttachThreadInput( threadId , pSource->m_threadIdWindow, TRUE );
 
 #ifdef DBG_CLIPBOARD_DATA
-        IDataObject* pData;
-        OleGetClipboard( &pData);
-        params->data= pData;
+        m_pDataObject->release();
+        OleGetClipboard( &pSource->m_pDataObject);
 #endif
+        DWORD dwEffect= 0;
+        hr= DoDragDrop(
+            pSource->m_pDataObject,
+            static_cast<IDropSource*>(pSource),
+            dndActionsToDropEffects( pSource->m_sourceActions),
+            &dwEffect);
 
-        params->hr= DoDragDrop(
-            params->data,
-            params->source,
-            params->dwOkEffects,
-            &params->dwEffect);
+        OSL_ENSURE( hr != E_INVALIDARG, "IDataObject impl does not contain valid data");
+
+        //Fire event
+        sal_Int8 action= hr == DRAGDROP_S_DROP ? dndOleDropEffectsToActions( dwEffect) : ACTION_NONE;
+        static_cast<SourceContext*>(pSource->m_currentContext.get())->fire_dragDropEnd(
+                                                        hr == DRAGDROP_S_DROP ? sal_True : sal_False,
+                                                        action);
+        // Destroy SourceContextslkfgj
+        pSource->m_currentContext= 0;
+        // Destroy the XTransferable wrapper
+        pSource->m_pDataObject->Release();
 
         // Detach this thread from the window thread
-        AttachThreadInput( threadId, params->threadIdCreator, FALSE);
-
+        AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);
         OleUninitialize();
     }
     return 0;
