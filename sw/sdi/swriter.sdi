@@ -3742,7 +3742,7 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertAnnotation FN_POSTIT
-()
+( SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT, SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR, SvxPostItDateItem Date SID_ATTR_POSTIT_DATE )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3817,7 +3817,7 @@ SfxVoidItem InsertAuthoritiesEntry FN_INSERT_AUTH_ENTRY_DLG
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
-()
+( SfxStringItem Bookmark FN_INSERT_BOOKMARK )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3842,7 +3842,7 @@ SfxVoidItem InsertBookmark FN_INSERT_BOOKMARK
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertBreak FN_INSERT_BREAK_DLG
-()
+( SfxInt16Item Kind FN_INSERT_BREAK_DLG, SfxStringItem TemplateName FN_PARAM_1, SfxUInt16Item PageNumber FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4071,8 +4071,8 @@ SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertEndnoteDirect FN_INSERT_ENDNOTE
-()
+SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
+( SfxStringItem FootnoteAnchorText FN_INSERT_ENDNOTE, SfxStringItem FontName FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4203,7 +4203,7 @@ SfxBoolItem InsertFooter FN_INSERT_FOOTER
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE_DLG
+SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
 ()
 [
     /* flags: */
@@ -4228,8 +4228,8 @@ SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE_DLG
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem InsertFootnoteDirect FN_INSERT_FOOTNOTE
-()
+SfxVoidItem InsertFootnote FN_INSERT_FOOTNOTE
+( SfxStringItem NoteAnchorText FN_INSERT_FOOTNOTE, SfxStringItem FontName FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4360,7 +4360,7 @@ SfxVoidItem InsertFrameInteractNoColumns FN_INSERT_FRAME_INTERACT_NOCOL
 
 //--------------------------------------------------------------------------
 SfxBoolItem InsertGraphicRuler FN_INSERT_HRULER
-()
+( SfxStringItem GraphicName FN_INSERT_HRULER, SfxBoolItem IsSimpleLine FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4944,7 +4944,7 @@ SfxVoidItem InsertRows FN_TABLE_INSERT_ROW
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertScript FN_JAVAEDIT
-()
+( SfxStringItem Text FN_JAVAEDIT, SfxBoolItem IsURL FN_PARAM_1, SfxStringItem Type FN_PARAM_2 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4994,7 +4994,7 @@ SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol FN_INSERT_SYMBOL
-( SfxStringItem Symbols FN_INSERT_SYMBOL, SfxStringItem FontName FN_INSERT_STRING )
+( SfxStringItem Symbols FN_INSERT_SYMBOL, SfxStringItem FontName FN_PARAM_1 )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9432,6 +9432,30 @@ SfxVoidItem SetActGlossaryGroup FN_SET_ACT_GLOSSARY
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+SfxVoidItem DeleteBookmark FN_DELETE_BOOKMARK
+( SfxStringItem Bookmark FN_DELETE_BOOKMARK )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
