@@ -2,9 +2,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-29 08:50:55 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:59:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -692,6 +692,10 @@ sub remove_Files_Without_Sourcedirectory
 
     my $infoline;
 
+    my $error_occured = 0;
+    my @missingfiles = ();
+    push(@missingfiles, "ERROR: The following files could not be found: \n");
+
     my @newfilesarray = ();
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
@@ -705,6 +709,9 @@ sub remove_Files_Without_Sourcedirectory
             $infoline = "ERROR: Removing file $filename from file list.\n";
             push( @installer::globals::logfileinfo, $infoline);
 
+            push(@missingfiles, "ERROR: File not found: $filename\n");
+            $error_occured = 1;
+
             next;   # removing this file from list, if sourcepath is empty
         }
 
@@ -713,6 +720,12 @@ sub remove_Files_Without_Sourcedirectory
 
     $infoline = "\n";
     push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $error_occured )
+    {
+        for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
+        installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
+    }
 
     return \@newfilesarray;
 }
