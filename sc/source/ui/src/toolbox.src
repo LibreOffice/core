@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-29 02:40:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: obo $ $Date: 2001-06-29 02:40:31 $ $Revision: 1.21 $
+ // $Author: kz $ $Date: 2001-07-14 20:25:03 $ $Revision: 1.22 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -229,11 +229,11 @@ String SCSTR_QHELP_BTNOK
     Text [ dutch ] = "Accepteren" ;
     Text [ spanish ] = "Aplicar" ;
     Text [ english_us ] = "Accept" ;
-    Text[ chinese_simplified ] = "½ÓÊÜ";
+    Text[ chinese_simplified ] = "Ì×ÓÃ";
     Text[ russian ] = "Ïðèíÿòü";
     Text[ polish ] = "Zaakceptuj";
     Text[ japanese ] = "OK";
-    Text[ chinese_traditional ] = "±µ¨ü";
+    Text[ chinese_traditional ] = "±Ä¥Î";
     Text[ arabic ] = "ÅÏÎÇá";
     Text[ greek ] = "Accept";
     Text[ korean ] = "Àû¿ë";
@@ -289,7 +289,7 @@ String SCSTR_QHELP_BTNSUM
     Text[ russian ] = "Ñóììà";
     Text[ polish ] = "Suma";
     Text[ japanese ] = "µ°Ä Sum";
-    Text[ chinese_traditional ] = "Á`¼Æ";
+    Text[ chinese_traditional ] = "¤p­p";
     Text[ arabic ] = "ÇáãÌãæÚ";
     Text[ greek ] = "¢èñïéóìá";
     Text[ korean ] = "ÇÕ°è";
@@ -1762,6 +1762,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
