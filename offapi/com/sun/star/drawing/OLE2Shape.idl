@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OLE2Shape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *  last change: $Author: arellano $ $Date: 2001-04-23 23:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,10 @@ service OLE2Shape
     //-------------------------------------------------------------------------
 
     /** This is the model for the ole2 inside this shape.
-        <p>This property returns an empty reference if the ole2 is not
+        <p>This property returns an empty reference if the ole2 is not an
         Office component.
-    */
+
+    <!-- Dennis: Is it OLE2 or ole2? -->*/
     [readonly, property] com::sun::star::frame::XModel Model;
 
     /** This property returns <TRUE/> for all ole2 that are internal

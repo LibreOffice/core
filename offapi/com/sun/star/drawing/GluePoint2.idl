@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GluePoint2.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: arellano $ $Date: 2001-04-23 23:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,17 +81,19 @@
 
 /** This struct defines the attributes of a glue point.
     <p>A glue point is a position inside a drawing shape where an edge
-    of a connector shape can be connected at.</p>
+    of a connector shape can be connected.</p>
  */
 struct GluePoint2
 {
-    /** This is the position of this glue point point. Depending on
-        the flag <code>IsRelative</code> this is either in 1/100cm
+    /** This is the position of this glue point. Depending on
+        the flag <code>IsRelative</code>, this is either in 1/100cm
         or in 1/100%.
+
+    <!-- Dennis: Is the % correct? -->
      */
     com::sun::star::awt::Point Position;
 
-    /** if this flag is set to true the position of this glue point
+    /** if this flag is set to true, the position of this glue point
         is given in 1/100% values instead of 1/100cm. */
     boolean IsRelative;
 
@@ -109,7 +111,7 @@ struct GluePoint2
 
     /** if this flag is set to false, this is a default glue
         point. Some shapes may have default glue points attached
-        to them which can not be altered nor removed. */
+        to them which cannot be altered or removed. */
     boolean IsUserDefined;
 };
 
@@ -120,6 +122,9 @@ struct GluePoint2
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:41  mi
+    moved from api
+
     Revision 1.2  2000/10/27 09:50:54  cl
     added api for glue points
 
