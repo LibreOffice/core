@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:20:06 $
+ *  last change: $Author: jp $ $Date: 2000-11-30 12:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,12 +750,11 @@ void _InitCore()
     aAttrTab[ RES_PARATR_NUMRULE - POOLATTR_BEGIN ] = new SwNumRuleItem( aEmptyStr );
 
     aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =
-                                                    new SvxScriptSpaceItem;
+                                        new SvxScriptSpaceItem( TRUE );
     aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] =
-                                                new SvxHangingPunctuationItem;
-
+                                        new SvxHangingPunctuationItem( TRUE );
     aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =
-                                                new SvxForbiddenRuleItem( RES_PARATR_FORBIDDEN_RULES );
+                                        new SvxForbiddenRuleItem( TRUE );
 // ParaAttr - Dummies
     aAttrTab[ RES_PARATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY2 );
     aAttrTab[ RES_PARATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY3 );
