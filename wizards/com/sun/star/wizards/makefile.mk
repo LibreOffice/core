@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-08 15:32:23 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:18:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,13 @@ PACKAGE = com$/sun$/star$/wizards
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge xalan.jar xercesImp.jar xml-apis.jar
 
-JARCLASSDIRS	= com$/sun$/star$/wizards
+JARCLASSDIRS	=                                               \
+    com$/sun$/star$/wizards$/common	       	 		\
+    com$/sun$/star$/wizards$/db	       	 		\
+    com$/sun$/star$/wizards$/ui	       	 		\
+    com$/sun$/star$/wizards$/document     	 		\
+    com$/sun$/star$/wizards$/text
+
 JARTARGET	= commonwizards.jar
 
 # --- Files --------------------------------------------------------
@@ -157,7 +163,7 @@ JAVAFILES=							\
     text$/ViewHandler.java
 
 
-JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java/.class/))
+#JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java/.class/))
 
 # --- Targets ------------------------------------------------------
 
