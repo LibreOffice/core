@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:42 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 14:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_STRETCHMODE_HPP_
 #include <drafts/com/sun/star/layout/StretchMode.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
+#endif
 
 #include <algorithm>
 
@@ -95,6 +101,38 @@ namespace
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.Legend" ));
 
+enum
+{
+    PROP_LEGEND_POSITION,
+    PROP_LEGEND_PREFERRED_EXPANSION
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "Position" ),
+                  PROP_LEGEND_POSITION,
+                  ::getCppuType( reinterpret_cast< const chart2::LegendPosition * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "Expansion" ),
+                  PROP_LEGEND_PREFERRED_EXPANSION,
+                  ::getCppuType( reinterpret_cast< const chart2::LegendExpansion * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+void lcl_AddDefaultsToMap(
+    ::chart::helper::tPropertyValueMap & rOutMap )
+{
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_POSITION ));
+    rOutMap[ PROP_LEGEND_POSITION ] =
+        uno::makeAny( chart2::LegendPosition_LINE_END );
+}
+
 const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
     static uno::Sequence< Property > aPropSeq;
@@ -105,6 +143,7 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ false );
         ::chart::FillProperties::AddPropertiesToVector(
@@ -211,6 +250,7 @@ uno::Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( 0 == aStaticDefaults.size() )
     {
+        lcl_AddDefaultsToMap( aStaticDefaults );
         LineProperties::AddDefaultsToMap(
             aStaticDefaults,
             /* bIncludeStyleProperties = */ false );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-10 11:41:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 14:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
 #include <com/sun/star/drawing/LineJoint.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
+#endif
 
 
 // header for class Matrix3D
@@ -100,6 +103,9 @@
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 #include <vector>
@@ -129,10 +135,6 @@ namespace
 
 ::rtl::OUString lcl_getLabelForSeries( const uno::Reference< chart2::XDataSource > & xSource )
 {
-//     uno::Reference< beans::XPropertySet > xProp( xSource, uno::UNO_QUERY );
-//     ::rtl::OUString aStr;
-//     xProp->getPropertyValue( C2U("Identifier")) >>= aStr;
-//     return aStr;
     ::rtl::OUString aResult;
 
     if( xSource.is())
@@ -162,7 +164,8 @@ namespace
     use group shapes, because you can only add shapes to a group that itself has
     been added to an XShapes before.
  */
-uno::Reference< drawing::XShape > lcl_getSymbol(
+uno::Reference< drawing::XShape >
+    lcl_getSymbol(
     const uno::Reference< chart2::XChartTypeGroup > & xChartTypeGroup,
     const uno::Reference< beans::XPropertySet > & xSeriesProp,
     const uno::Reference< lang::XMultiServiceFactory > & xFact,
@@ -177,12 +180,6 @@ uno::Reference< drawing::XShape > lcl_getSymbol(
         {
             ::rtl::OUString aChartType( xType->getChartType());
 
-            sal_Int32 nColor = 0x191970; // midnight blue
-
-            if( xSeriesProp.is() )
-            {
-                xSeriesProp->getPropertyValue( C2U("Color")) >>= nColor;
-            }
             xResult.set( xFact->createInstance(
                              C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
             xShapeContainer->add( xResult );
@@ -366,7 +363,8 @@ void VLegend::createLegendEntries(
 }
 
 
-void VLegend::createShapes()
+void VLegend::createShapes(
+    const awt::Size & rAvailableSpace )
 {
     if(! (m_xLegend.is() &&
           m_xShapeFactory.is() &&
@@ -376,6 +374,7 @@ void VLegend::createShapes()
     try
     {
         awt::Size aSize;
+        chart2::LegendExpansion eExp = chart2::LegendExpansion_HIGH;
 
         //create shape and add to page
         m_xShape.set(
@@ -416,6 +415,8 @@ void VLegend::createShapes()
 
                 PropertyMapper::getValueMap( aValueMap, aNameMap, xLegendProp );
                 aValueMap[ C2U("LineJoint") ] = uno::makeAny( drawing::LineJoint_ROUND );
+
+                xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExp;
             }
 
             if( xBorder.is())
@@ -464,8 +465,16 @@ void VLegend::createShapes()
                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
                         xLegendContainer->add( xSeparator );
                         // correct resizing is done later, when the required size is known
-                        xSeparator->setSize( awt::Size( 100, 0 ));
-                        xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
+                        if( eExp == chart2::LegendExpansion_HIGH )
+                        {
+                            xSeparator->setSize( awt::Size( 100, 0 ));
+                            xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
+                        }
+                        else
+                        {
+                            xSeparator->setSize( awt::Size( 0, 100 ));
+                            xSeparator->setPosition( awt::Point( nCurrentWidth, 0 ));
+                        }
                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
 
                         // apply legend properties
@@ -484,11 +493,17 @@ void VLegend::createShapes()
             if( xBorder.is())
                 xBorder->setSize( aSize );
 
+            // post-process separators (set correct size)
             for( std::vector< uno::Reference< drawing::XShape > >::const_iterator aIt = aSeparators.begin();
                  aIt != aSeparators.end(); ++aIt )
             {
                 if( (*aIt).is())
-                    (*aIt)->setSize( ::awt::Size( aSize.Width, 0 ));
+                {
+                    if( eExp == chart2::LegendExpansion_HIGH )
+                        (*aIt)->setSize( ::awt::Size( aSize.Width, 0 ));
+                    else
+                        (*aIt)->setSize( ::awt::Size( 0, aSize.Height ));
+                }
             }
         }
 
@@ -501,22 +516,20 @@ void VLegend::createShapes()
     }
 }
 
-// void VLegend::setMaxSize( const awt::Size & rSize )
-// {
-//     m_aMaxSize = rSize;
-// }
-
-void VLegend::changePosition( const awt::Point & rPos )
+void VLegend::changePosition(
+    const awt::Point & rPos,
+    const layout::Alignment& rAlignment )
 {
     if(! m_xShape.is())
         return;
 
-    // anchor is right/middle
     m_aBoundRect.X = rPos.X;
     m_aBoundRect.Y = rPos.Y;
     awt::Point aUpperLeft( rPos );
-    aUpperLeft.X -= (m_aBoundRect.Width + 400);
-    aUpperLeft.Y -= (m_aBoundRect.Height / 2);
+    aUpperLeft.X -= static_cast< sal_Int32 >(
+        ::rtl::math::round( rAlignment.Primary * static_cast< double >( m_aBoundRect.Width )));
+    aUpperLeft.Y -= static_cast< sal_Int32 >(
+        ::rtl::math::round( rAlignment.Secondary * static_cast< double >( m_aBoundRect.Height )));
 
     m_xShape->setPosition( aUpperLeft );
 }

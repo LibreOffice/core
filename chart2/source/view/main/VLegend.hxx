@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-10 11:41:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 14:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASERIESTREEPARENT_HPP_
 #include <drafts/com/sun/star/chart2/XDataSeriesTreeParent.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_ALIGNMENT_HPP_
+#include <drafts/com/sun/star/layout/Alignment.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -97,11 +100,12 @@ public:
                         const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
 
-    void createShapes();
+    void createShapes( const ::com::sun::star::awt::Size & rAvailableSpace );
 
 //     void setMaxSize( const ::com::sun::star::awt::Size & rSize );
 
-    void changePosition( const ::com::sun::star::awt::Point & rPos );
+    void changePosition( const ::com::sun::star::awt::Point & rPos,
+                         const ::drafts::com::sun::star::layout::Alignment& rAlignment );
 
     ::com::sun::star::awt::Size getSize() const;
 
@@ -127,7 +131,6 @@ private:
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
 
-//     ::com::sun::star::awt::Size                                     m_aMaxSize;
     ::com::sun::star::awt::Rectangle                                m_aBoundRect;
 };
 

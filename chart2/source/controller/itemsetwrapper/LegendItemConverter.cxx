@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:39 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 14:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
 #include <drafts/com/sun/star/chart2/XLegend.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
+#include <drafts/com/sun/star/chart2/LegendExpansion.hpp>
 #endif
 
 #include <functional>
@@ -168,8 +174,48 @@ bool LegendItemConverter::ApplySpecialItem(
     {
         case SCHATTR_LEGEND_POS:
         {
-            // alwas right
-            //todo: implement different positions in model and view
+            chart2::LegendPosition eNewPos, eOldPos;
+            bool bIsWide = false;
+
+            SvxChartLegendPos eItemPos =
+                reinterpret_cast< const SvxChartLegendPosItem & >(
+                    rItemSet.Get( nWhichId )).GetValue();
+            switch( eItemPos )
+            {
+                case CHLEGEND_LEFT:
+                case CHLEGEND_NONE_LEFT:
+                    eNewPos = chart2::LegendPosition_LINE_START;
+                    break;
+                case CHLEGEND_NONE:
+                case CHLEGEND_RIGHT:
+                case CHLEGEND_NONE_RIGHT:
+                    eNewPos = chart2::LegendPosition_LINE_END;
+                    break;
+                case CHLEGEND_TOP:
+                case CHLEGEND_NONE_TOP:
+                    eNewPos = chart2::LegendPosition_PAGE_START;
+                    bIsWide = true;
+                    break;
+                case CHLEGEND_BOTTOM:
+                case CHLEGEND_NONE_BOTTOM:
+                    eNewPos = chart2::LegendPosition_PAGE_END;
+                    bIsWide = true;
+                    break;
+            }
+
+            bool bPropExisted =
+                ( GetPropertySet()->getPropertyValue( C2U( "Position" )) >>= eOldPos );
+
+            if( ! bPropExisted ||
+                ( bPropExisted && eOldPos != eNewPos ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "Position" ), uno::makeAny( eNewPos ));
+                chart2::LegendExpansion eExp = bIsWide
+                    ? chart2::LegendExpansion_WIDE
+                    : chart2::LegendExpansion_HIGH;
+                GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
+                bChanged = true;
+            }
         }
         break;
     }
@@ -184,9 +230,29 @@ void LegendItemConverter::FillSpecialItem(
     {
         case SCHATTR_LEGEND_POS:
         {
-            // alwas right
-            //todo: implement different positions in model and view
-            rOutItemSet.Put( SvxChartLegendPosItem( CHLEGEND_RIGHT ) );
+            SvxChartLegendPos eItemPos( CHLEGEND_RIGHT );
+            chart2::LegendPosition ePos;
+
+            if( GetPropertySet()->getPropertyValue( C2U( "Position" )) >>= ePos )
+            {
+                switch( ePos )
+                {
+                    case chart2::LegendPosition_LINE_START:
+                        eItemPos = CHLEGEND_LEFT;     break;
+                    case chart2::LegendPosition_LINE_END:
+                        eItemPos = CHLEGEND_RIGHT;    break;
+                    case chart2::LegendPosition_PAGE_START:
+                        eItemPos = CHLEGEND_TOP;      break;
+                    case chart2::LegendPosition_PAGE_END:
+                        eItemPos = CHLEGEND_BOTTOM;   break;
+
+                    case chart2::LegendPosition_CUSTOM:
+                    default:
+                        eItemPos = CHLEGEND_NONE;     break;
+                }
+            }
+
+            rOutItemSet.Put( SvxChartLegendPosItem( eItemPos ) );
         }
         break;
    }

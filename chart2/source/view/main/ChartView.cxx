@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-10 11:41:27 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 14:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "TitleHelper.hxx"
 #include "LegendHelper.hxx"
 #include "VLegend.hxx"
+#include "LayoutDefaults.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
 #include <drafts/com/sun/star/chart2/AxisOrientation.hpp>
@@ -101,6 +102,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <drafts/com/sun/star/chart2/XTitled.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
+#include <drafts/com/sun/star/chart2/LegendPosition.hpp>
 #endif
 
 //.............................................................................
@@ -553,27 +557,25 @@ void ChartViewImpl::getExplicitValuesForMeter(
 }
 
 bool getPosAndSizeForDiagram(
-    awt::Point& rPos, awt::Size& rSize, const awt::Size& rPageSize,
-    sal_Int32 nXOffsetFromRight, sal_Int32 nYOffset )
+    awt::Point& rOutPos, awt::Size& rOutSize,
+    const awt::Rectangle& rSpaceLeft )
 {
-    if(rPageSize.Width <= 0 || rPageSize.Height <= 0 )
+    if(rSpaceLeft.Width <= 0 || rSpaceLeft.Height <= 0 )
         return false;
 
-    long nHeight = (rPageSize.Height-nYOffset) * 5 / 6;
-    long nOffsetY = (rPageSize.Height-nYOffset)-nHeight;
-    nOffsetY /= 2;
-    nOffsetY += nYOffset;
+    long nHeight = rSpaceLeft.Height * 5 / 6;
+    // (1 - 5/6) / 2 = 1/12
+    long nOffsetY = rSpaceLeft.Y + rSpaceLeft.Height / 12;
 
-    long nWidth = (rPageSize.Width) * 5 / 6;
-    long nOffsetX = rPageSize.Width-nWidth;
-    nOffsetX /= 2;
-    nWidth -= nXOffsetFromRight;
+    long nWidth = rSpaceLeft.Width * 5 / 6;
+    // (1 - 5/6) / 2 = 1/12
+    long nOffsetX = rSpaceLeft.X + rSpaceLeft.Width / 12;
 
     if( nHeight <= 0 || nWidth <= 0 )
         return false;
 
-    rPos = awt::Point(nOffsetX,nOffsetY);
-    rSize = awt::Size(nWidth,nHeight);
+    rOutPos = awt::Point(nOffsetX,nOffsetY);
+    rOutSize = awt::Size(nWidth,nHeight);
     return true;
 }
 
@@ -606,17 +608,71 @@ void createLegend( const uno::Reference< XLegend > & xLegend
     {
         VLegend aVLegend( xLegend );
         aVLegend.init( xPageShapes, xShapeFactory );
-        // legend width is 1/5 of the total space
-//         long nWidth = rOutSpaceLeft.Width / 5;
-//         aVLegend.setMaxSize( awt::Size( nWidth, rOutSpaceLeft.Height ));
-        aVLegend.createShapes();
-        // legend is anchored to (right/middle) position
-        aVLegend.changePosition(
-            awt::Point( rOutSpaceLeft.X + rOutSpaceLeft.Width,
-                        rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)));
+        aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
 
-//         rOutSpaceLeft.Width -= nWidth;
-        rOutSpaceLeft.Width -= aVLegend.getSize().Width;
+        LegendPosition ePos = LegendPosition_LINE_END;
+        uno::Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY );
+        if( xLegendProp.is())
+        {
+            try
+            {
+                xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+
+        const sal_Int32 nEdgeOffset = 300;
+
+        switch( ePos )
+        {
+            case LegendPosition_LINE_END:
+                // legend is anchored to (right/middle) position
+                // todo: honor Orientation
+                aVLegend.changePosition(
+                    awt::Point( rOutSpaceLeft.X + rOutSpaceLeft.Width - nEdgeOffset,
+                                rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)),
+                    ::layout_defaults::const_aLineEnd );
+                rOutSpaceLeft.Width -= (aVLegend.getSize().Width + nEdgeOffset);
+                break;
+
+            case LegendPosition_LINE_START:
+                // legend is anchored to (left/middle) position
+                // todo: honor Orientation
+                aVLegend.changePosition(
+                    awt::Point( rOutSpaceLeft.X + nEdgeOffset,
+                                rOutSpaceLeft.Y + (rOutSpaceLeft.Height / 2)),
+                    ::layout_defaults::const_aLineStart );
+                rOutSpaceLeft.Width -= (aVLegend.getSize().Width + nEdgeOffset);
+                rOutSpaceLeft.X += aVLegend.getSize().Width + nEdgeOffset;
+                break;
+
+            case LegendPosition_PAGE_START:
+                // legend is anchored to (middle/top) position
+                // todo: honor Orientation
+                aVLegend.changePosition(
+                    awt::Point( rOutSpaceLeft.X + (rOutSpaceLeft.Width / 2),
+                                rOutSpaceLeft.Y + nEdgeOffset ),
+                    ::layout_defaults::const_aPageStart );
+                rOutSpaceLeft.Height -= (aVLegend.getSize().Height + nEdgeOffset);
+                rOutSpaceLeft.Y += aVLegend.getSize().Height + nEdgeOffset;
+                break;
+
+            case LegendPosition_PAGE_END:
+                // legend is anchored to (middle/bottom) position
+                // todo: honor Orientation
+                aVLegend.changePosition(
+                    awt::Point( rOutSpaceLeft.X + (rOutSpaceLeft.Width / 2),
+                                rOutSpaceLeft.Y + rOutSpaceLeft.Height - nEdgeOffset),
+                    ::layout_defaults::const_aPageEnd );
+                rOutSpaceLeft.Height -= (aVLegend.getSize().Height + nEdgeOffset);
+                break;
+
+            default:
+                break;
+        }
     }
 }
 
@@ -625,7 +681,7 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     uno::Reference<drawing::XShapes> xPageShapes =
         uno::Reference<drawing::XShapes>( m_xDrawPage, uno::UNO_QUERY );
 
-    sal_Int32 nXOffsetFromRight = 0;
+//     sal_Int32 nXOffsetFromRight = 0;
     sal_Int32 nYOffset = 0;
     sal_Int32 nXPosition = rPageSize.Width/2;
 //     sal_Int32 nYPosition = rPageSize.Height/2;
@@ -643,17 +699,18 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
         return true;
 
     //------------ create legend
-    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height );
+    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height - nYOffset );
     createLegend( LegendHelper::getLegend( m_xChartModel )
                   , aSpaceLeft, xPageShapes, m_xShapeFactory );
     // assume that the legend is on the right
     // todo: adapt diagram size to correct legend position
-    nXOffsetFromRight = rPageSize.Width - aSpaceLeft.Width;
+//     nXOffsetFromRight = rPageSize.Width - aSpaceLeft.Width;
 
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
     awt::Size  aSizeDia;
-    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, rPageSize, nXOffsetFromRight, nYOffset ) )
+//     if( getPosAndSizeForDiagram( aPosDia, aSizeDia, rPageSize, nXOffsetFromRight, nYOffset ) )
+    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft ) )
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
                     , aPosDia ,aSizeDia
