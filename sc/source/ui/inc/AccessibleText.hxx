@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:09 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,18 @@ public:
                         ScAccessibleTextData() {}
     virtual             ~ScAccessibleTextData() {}
 
-    virtual ScAccessibleTextData* Clone() const = NULL;
+    virtual ScAccessibleTextData* Clone() const = 0;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) {}
 
-    virtual SvxTextForwarder* GetTextForwarder() = NULL;
-    virtual SvxViewForwarder* GetViewForwarder() = NULL;
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) = NULL;
+    virtual SvxTextForwarder* GetTextForwarder() = 0;
+    virtual SvxViewForwarder* GetViewForwarder() = 0;
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) = 0;
     virtual SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
-    virtual void                UpdateData() = NULL;
-    virtual void                SetDoUpdate(sal_Bool bValue) = NULL;
-    virtual sal_Bool            IsDirty() const = NULL;
+    virtual void                UpdateData() = 0;
+    virtual void                SetDoUpdate(sal_Bool bValue) = 0;
+    virtual sal_Bool            IsDirty() const = 0;
 
 private:
     mutable SfxBroadcaster maBroadcaster;
