@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-20 09:59:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-20 14:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,40 +676,48 @@ void VLegend::changePosition( awt::Rectangle & rOutAvailableSpace )
                                           aAnchor.EscapeDirection ));
 
         // set position according to Alignment
-        m_aBoundRect.X = aPos.X;
-        m_aBoundRect.Y = aPos.Y;
-        awt::Point aUpperLeft( aPos );
-        aUpperLeft.X -= static_cast< sal_Int32 >(
+        aPos.X -= static_cast< sal_Int32 >(
             ::rtl::math::round( aAlignment.Primary * static_cast< double >( m_aBoundRect.Width )));
-        aUpperLeft.Y -= static_cast< sal_Int32 >(
+        aPos.Y -= static_cast< sal_Int32 >(
             ::rtl::math::round( aAlignment.Secondary * static_cast< double >( m_aBoundRect.Height )));
 
-        m_xShape->setPosition( aUpperLeft );
+        m_xShape->setPosition( aPos );
+
+        m_aBoundRect.X = aPos.X;
+        m_aBoundRect.Y = aPos.Y;
 
         // adapt rOutAvailableSpace if LegendPosition is not CUSTOM
         chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
         uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
         xLegendProp->getPropertyValue( C2U( "Position" )) >>= ePos;
 
-        if( ePos == chart2::LegendPosition_LINE_START ||
-            ePos == chart2::LegendPosition_LINE_END )
+        sal_Int32 nExtentY = m_aBoundRect.Y + m_aBoundRect.Height;
+        switch( ePos )
         {
-            sal_Int32 nExtent = static_cast< sal_Int32 >(
-                (1.0 + fabs(aOffset.Primary)) *
-                static_cast< double >( m_aBoundRect.Width ));
-            rOutAvailableSpace.Width -= nExtent;
-            if( ePos == chart2::LegendPosition_LINE_START )
+            case chart2::LegendPosition_LINE_START:
+            {
+                sal_Int32 nExtent = m_aBoundRect.X + m_aBoundRect.Width;
+                rOutAvailableSpace.Width -= nExtent;
                 rOutAvailableSpace.X += nExtent;
-        }
-        else if( ePos == chart2::LegendPosition_PAGE_START ||
-                 ePos == chart2::LegendPosition_PAGE_END )
-        {
-            sal_Int32 nExtent = static_cast< sal_Int32 >(
-                (1.0 + fabs(aOffset.Secondary)) *
-                static_cast< double >( m_aBoundRect.Height ));
-            rOutAvailableSpace.Height -= nExtent;
-            if( ePos == chart2::LegendPosition_PAGE_START )
+            }
+            break;
+            case chart2::LegendPosition_LINE_END:
+                rOutAvailableSpace.Width = m_aBoundRect.X - rOutAvailableSpace.X;
+                break;
+            case chart2::LegendPosition_PAGE_START:
+            {
+                sal_Int32 nExtent = m_aBoundRect.Y + m_aBoundRect.Height;
+                rOutAvailableSpace.Height -= nExtent;
                 rOutAvailableSpace.Y += nExtent;
+            }
+            break;
+            case chart2::LegendPosition_PAGE_END:
+                rOutAvailableSpace.Height = m_aBoundRect.Y - rOutAvailableSpace.Y;
+                break;
+
+            default:
+                // nothing
+                break;
         }
     }
     catch( uno::Exception & ex )
