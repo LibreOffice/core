@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-04-11 07:38:09 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
 
 namespace dbaui
 {
@@ -97,6 +100,7 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::datatransfer;
+    using namespace ::svx;
 
     // -----------------------------------------------------------------------------
     ODataClipboard::ODataClipboard(
@@ -113,15 +117,12 @@ namespace dbaui
         ,m_nFormats(_nFormats)
     {
         // build the descriptor (the property sequence)
-        m_aSeq.realloc(4);
-        m_aSeq[0].Name  = PROPERTY_DATASOURCENAME;
-        m_aSeq[0].Value <<= _rDatasource;
-        m_aSeq[1].Name  = PROPERTY_ACTIVECONNECTION;
-        m_aSeq[1].Value <<= _rxConnection;
-        m_aSeq[2].Name  = PROPERTY_COMMANDTYPE;
-        m_aSeq[2].Value <<= _nCommandType;
-        m_aSeq[3].Name  = PROPERTY_COMMAND;
-        m_aSeq[3].Value <<= _rCommand;
+        ODataAccessDescriptor aDescriptor;
+        aDescriptor[daDataSource]   <<= _rDatasource;
+        aDescriptor[daConnection]   <<= _rxConnection;
+        aDescriptor[daCommand]      <<= _rCommand;
+        aDescriptor[daCommandType]  <<= _nCommandType;
+        m_aSeq = aDescriptor.createPropertyValueSequence();
 
         // calculate some stuff which helps us providing the different formats
         if (m_nFormats && DCF_OBJECT_DESCRIPTOR)

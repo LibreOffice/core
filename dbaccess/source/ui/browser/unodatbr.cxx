@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 06:48:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-11 12:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
@@ -306,6 +309,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::dbtools;
+using namespace ::svx;
 
 // .........................................................................
 namespace dbaui
@@ -1348,15 +1352,15 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                     // first fill the selection
                     SbaGridControl* pGrid = getBrowserView()->getVclControl();
                     MultiSelection* pSelection = (MultiSelection*)pGrid->GetSelection();
-                    Sequence< sal_Int32 > aSelection;
+                    Sequence< Any > aSelection;
                     if (pSelection != NULL)
                     {
                         aSelection.realloc(pSelection->GetSelectCount());
                         long nIdx = pSelection->FirstSelected();
-                        sal_Int32 i = 0;
+                        Any* pSelectionNos = aSelection.getArray();
                         while (nIdx >= 0)
                         {
-                            aSelection[i++] = nIdx+1;
+                            *pSelectionNos++ <<= (sal_Int32)(nIdx + 1);
                             nIdx = pSelection->NextSelected();
                         }
                     }
@@ -1381,14 +1385,14 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 
                     try
                     {
-                        Sequence< PropertyValue> aProps(5);
-                        aProps[0] = PropertyValue(PROPERTY_DATASOURCENAME, -1, xProp->getPropertyValue(PROPERTY_DATASOURCENAME), PropertyState_DIRECT_VALUE);
-                        aProps[1] = PropertyValue(PROPERTY_COMMAND, -1, xProp->getPropertyValue(PROPERTY_COMMAND), PropertyState_DIRECT_VALUE);
-                        aProps[2] = PropertyValue(PROPERTY_COMMANDTYPE, -1, xProp->getPropertyValue(PROPERTY_COMMANDTYPE), PropertyState_DIRECT_VALUE);
-                        aProps[3] = PropertyValue(::rtl::OUString::createFromAscii("Selection"), -1, makeAny(aSelection), PropertyState_DIRECT_VALUE);
-                        aProps[4] = PropertyValue(::rtl::OUString::createFromAscii("Cursor"), -1, makeAny(xCursorClone), PropertyState_DIRECT_VALUE);
+                        ODataAccessDescriptor aDescriptor;
+                        aDescriptor[daDataSource]   =   xProp->getPropertyValue(PROPERTY_DATASOURCENAME);
+                        aDescriptor[daCommand]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
+                        aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMANDTYPE);
+                        aDescriptor[daCursor]       <<= xCursorClone;
+                        aDescriptor[daSelection]    <<= aSelection;
 
-                        xDispatch->dispatch(aParentUrl, aProps);
+                        xDispatch->dispatch(aParentUrl, aDescriptor.createPropertyValueSequence());
                     }
                     catch(Exception&)
                     {
