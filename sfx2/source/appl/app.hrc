@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 08:58:56 $
+ *  last change: $Author: pb $ $Date: 2000-12-11 09:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,28 +194,9 @@
 #define STR_KEY_WORK_PATH               (CONFIG_PATH_START+26)
 
 #define WIN_HELP_INDEX                          (RID_SFX_APP_START+99)
-#define FT_ACTIVE                               10
-#define LB_ACTIVE                               11
-#define FL_ACTIVE                               12
-#define TC_INDEX                                13
-
 #define TP_HELP_CONTENT                         (RID_SFX_APP_START+100)
-
 #define TP_HELP_INDEX                           (RID_SFX_APP_START+101)
-#define GB_SEARCH                               10
-#define FT_EXPRESSION                           11
-#define ED_EXPRESSION                           12
-#define LB_RESULTS                              13
-
 #define TP_HELP_SEARCH                          (RID_SFX_APP_START+102)
-#define FT_SEARCH                               10
-#define ED_SEARCH                               11
-#define PB_OPERATOR                             12
-#define FT_RESULT                               13
-#define LB_RESULT                               14
-#define CB_PREVIOUS                             15
-#define CB_MATCH                                16
-#define CB_TITLE                                17
 
 #define IMG_HELP_TOOLBOX_INDEX                  (RID_SFX_APP_START+110)
 #define IMG_HELP_TOOLBOX_START                  (RID_SFX_APP_START+111)
@@ -250,10 +231,6 @@
 #define STR_HELP_BUTTON_PREV                    (RID_SFX_APP_START+128)
 #define STR_HELP_BUTTON_NEXT                    (RID_SFX_APP_START+129)
 #define STR_HELP_BUTTON_PRINT                   (RID_SFX_APP_START+130)
-
-#define HELP_INDEX_PAGE_CONTENTS                1
-#define HELP_INDEX_PAGE_INDEX                   2
-#define HELP_INDEX_PAGE_SEARCH                  3
 
 #endif // #ifndef _SFX_APP_HRC
 
