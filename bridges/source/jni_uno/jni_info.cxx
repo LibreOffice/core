@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:00:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "jni_bridge.h"
 
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -444,8 +443,9 @@ JNI_type_info const * JNI_info::get_type_info(
     OUString const & uno_name = OUString::unacquired( &td->pTypeName );
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
+
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
-    if (m_type_map.end() == iFind)
+    if (iFind == m_type_map.end())
     {
         guard.clear();
         info = create_type_info( jni, td );
@@ -471,7 +471,7 @@ JNI_type_info const * JNI_info::get_type_info(
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
-    if (m_type_map.end() == iFind)
+    if (iFind == m_type_map.end())
     {
         guard.clear();
         TypeDescr td( type );
@@ -498,7 +498,7 @@ JNI_type_info const * JNI_info::get_type_info(
     JNI_type_info const * info;
     ClearableMutexGuard guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
-    if (m_type_map.end() == iFind)
+    if (iFind == m_type_map.end())
     {
         guard.clear();
         css::uno::TypeDescription td( uno_name );
