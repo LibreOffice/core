@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:24 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, lo
 
 }
 // -----------------------------------------------------------------------------
-FeatureState OJoinController::GetState(sal_uInt16 _nId)
+FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
         // (disabled automatically)

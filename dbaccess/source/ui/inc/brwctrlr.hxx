@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-29 15:13:10 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ namespace dbaui
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId);
+        virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
 
@@ -382,14 +382,14 @@ namespace dbaui
             // commit the current column (i.e. cell)
         virtual sal_Bool SaveModified(sal_Bool bCommit = sal_True);
             // save the modified record
-        virtual sal_uInt16 SaveData(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
-            // save all data if modified, eventually ask the user
+//      virtual sal_uInt16 SaveData(sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
+            // save all data if modified, maybe ask the user
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
             // a PropertySet corresponding to the cursor field a column is bound to
             // if nViewPos is (sal_uInt16)-1 (the default) then the field for the current column will be retrieved
 
-        sal_Bool PendingLoad() { return m_pLoadThread != NULL; }
+        sal_Bool PendingLoad() const { return m_pLoadThread != NULL; }
             // is there an asyncronous load operation in progress ?
 
         void enterFormAction();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:57:49 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry )
 }
 
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry* _pEntry )
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry* _pEntry ) const
 {
     if (!_pEntry)
         return etUnknown;

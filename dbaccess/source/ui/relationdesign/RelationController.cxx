@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 08:29:37 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ ORelationController::~ORelationController()
     DBG_DTOR(ORelationController,NULL);
 }
 // -----------------------------------------------------------------------------
-FeatureState ORelationController::GetState(sal_uInt16 _nId)
+FeatureState ORelationController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     aReturn.bEnabled = m_bRelationsPossible;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:57:19 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,7 @@
 #define IMG_PKEYICON                    RID_IMAGE_START + 12
 #define BOOKMARK_TREE_ICON              RID_IMAGE_START + 13
 #define BOOKMARKFOLDER_TREE_ICON        RID_IMAGE_START + 14
+#define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
 
 //========================================================================
 // image lists
@@ -470,6 +471,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.64  2001/10/05 06:57:19  oj
+ *  #84000# impl multiselction for queries and link docs
+ *
  *  Revision 1.63  2001/10/02 07:55:26  oj
  *  #87728# drag&drop of table row and tableinformation repaired
  *

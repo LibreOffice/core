@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 10:33:47 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void OTableController::disposing()
         delete *aIter;
 }
 // -----------------------------------------------------------------------------
-FeatureState OTableController::GetState(sal_uInt16 _nId)
+FeatureState OTableController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     // (disabled automatically)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ void OQueryController::clearFields()
     OTableFields().swap(m_vTableFieldDesc);
 }
 // -----------------------------------------------------------------------------
-FeatureState OQueryController::GetState(sal_uInt16 _nId)
+FeatureState OQueryController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
     aReturn.bEnabled = sal_True;

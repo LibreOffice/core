@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-29 15:14:28 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,8 +1117,8 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 // -----------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
-    m_bSuspending = sal_True;
-
+//  m_bSuspending = sal_True;
+//
     // have a pending open operation ?
     if (PendingLoad())
     {
@@ -1163,10 +1163,9 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncInvalidateAll.CancelCall();
 
-    sal_uInt16 nReturn = SaveData(sal_True, sal_False);
-
-    m_bSuspending = sal_False;
-    return nReturn != 0;
+    sal_Bool bSuccess = SaveModified();
+//  m_bSuspending = sal_False;
+    return bSuccess;
 }
 // -----------------------------------------------------------------------
 void SbaXDataBrowserController::disposing()
@@ -1414,7 +1413,7 @@ sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::R
     return sal_True;
 }
 //------------------------------------------------------------------------------
-FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
+FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
 {
     FeatureState aReturn;
         // (disabled automatically)
@@ -1831,7 +1830,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                     // the options not supported by the data source will be removed automatically
             else
             {
-                if (!SaveData(sal_True, sal_False))
+                if ( !SaveModified( ) )
                     // give the user a chance to save the current record (if neccessary)
                     break;
 
@@ -1846,7 +1845,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
         break;
 
         case ID_BROWSER_SEARCH:
-            if (SaveData(sal_True, sal_False))
+            if ( SaveModified( ) )
                 ExecuteSearch();
             break;
 
@@ -1981,7 +1980,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
         break;
 
         case ID_BROWSER_REFRESH:
-            if (SaveData(sal_True, sal_False))
+            if ( SaveModified( ) )
             {
                 if (!reloadForm(Reference< XLoadable >(getRowSet(), UNO_QUERY)))
                     criticalFail();
@@ -2057,7 +2056,8 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bCommit)
         bResult = sal_False;
     }
 
-    OGenericUnoController::SaveModified();
+    InvalidateFeature(ID_BROWSER_SAVEDOC);
+    InvalidateFeature(ID_BROWSER_UNDO);
     return bResult;
 }
 
@@ -2141,40 +2141,40 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, void*, EMPTYARG)
     return 0L;
 }
 
-//------------------------------------------------------------------
-sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-{
-    if (!getBrowserView())
-        return sal_True;
-
-    if (!isValidCursor())
-        return sal_True;
-
-    if (bUI && GetState(ID_BROWSER_SAVEDOC).bEnabled)
-    {
-        getBrowserView()->getVclControl()->GrabFocus();
-
-        QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
-        if (bForBrowsing)
-            aQry.AddButton(ResId(RID_STR_NEW_TASK), RET_NEWTASK,
-                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-
-        switch (aQry.Execute())
-        {
-            case RET_NO:
-                Execute(ID_BROWSER_UNDO);
-                return sal_True;
-            case RET_CANCEL:
-                return sal_False;
-            case RET_NEWTASK:
-                return RET_NEWTASK;
-        }
-    }
-
-
-    return OGenericUnoController::SaveData(bUI,bForBrowsing);
-}
-
+// ------------------------------------------------------------------------------
+//sal_uInt16 SbaXDataBrowserController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
+//{
+//  if (!getBrowserView())
+//      return sal_True;
+//
+//  if (!isValidCursor())
+//      return sal_True;
+//
+//  if (bUI && GetState(ID_BROWSER_SAVEDOC).bEnabled)
+//  {
+//      getBrowserView()->getVclControl()->GrabFocus();
+//
+//      QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+//      if (bForBrowsing)
+//          aQry.AddButton(ResId(RID_STR_NEW_TASK), RET_NEWTASK,
+//              BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+//
+//      switch (aQry.Execute())
+//      {
+//          case RET_NO:
+//              Execute(ID_BROWSER_UNDO);
+//              return sal_True;
+//          case RET_CANCEL:
+//              return sal_False;
+//          case RET_NEWTASK:
+//              return RET_NEWTASK;
+//      }
+//  }
+//
+//
+//  return OGenericUnoController::SaveData(bUI,bForBrowsing);
+//}
+//
 // -------------------------------------------------------------------------
 Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 nViewPos) const
 {

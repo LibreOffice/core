@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-22 13:17:07 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,18 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
-::rtl::OUString URL_CONFIRM_DELETION(::rtl::OUString::createFromAscii(".uno:FormSlots/ConfirmDeletion"));
+// -------------------------------------------------------------------------
+#define ALL_FEATURES    -1
 
 // -------------------------------------------------------------------------
-OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+const ::rtl::OUString& getConfirmDeletionURL()
+{
+    static const ::rtl::OUString sConfirmDeletionURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormSlots/ConfirmDeletion" ) );
+    return sConfirmDeletionURL;
+}
+
+// -------------------------------------------------------------------------
+OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_COMPBASE(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
@@ -161,7 +169,7 @@ OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::
 {
     try
     {
-        m_xUrlTransformer = Reference< ::com::sun::star::util::XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -214,25 +222,24 @@ IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-Reference< XWindow > OGenericUnoController::getComponentWindow()
+Reference< XWindow > OGenericUnoController::getComponentWindow() const
 {
-    return VCLUnoHelper::GetInterface(getView());
+    return VCLUnoHelper::GetInterface( getView() );
 }
 
 // -------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
-    Reference< ::com::sun::star::awt::XWindow >     xParent;
-    Reference< ::com::sun::star::frame::XFrame >    xFrame;
+    Reference< XWindow >        xParent;
+    Reference< XFrame > xFrame;
 
     PropertyValue aValue;
     const Any* pBegin   = aArguments.getConstArray();
     const Any* pEnd     = pBegin + aArguments.getLength();
 
-    ::rtl::OUString aFrameName = ::rtl::OUString::createFromAscii("Frame");
-    for(;pBegin != pEnd;++pBegin)
+    for ( ; pBegin != pEnd; ++pBegin )
     {
-        if((*pBegin >>= aValue) && aValue.Name == aFrameName)
+        if ( ( *pBegin >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Frame" ) ) )
         {
             if((aValue.Value >>= xFrame) && xFrame.is())
             {
@@ -308,33 +315,46 @@ Sequence< sal_Int8 > SAL_CALL OGenericUnoController::getImplementationId(  ) thr
 }
 
 // -------------------------------------------------------------------------
+sal_Bool OGenericUnoController::startFrameListening( )
+{
+    if ( m_xCurrentFrame.is() )
+        m_xCurrentFrame->addFrameActionListener( static_cast< XFrameActionListener* >( this ) );
+    return m_xCurrentFrame.is();
+}
+
+// -------------------------------------------------------------------------
+void OGenericUnoController::stopFrameListening( )
+{
+    if ( m_xCurrentFrame.is() )
+        m_xCurrentFrame->removeFrameActionListener( static_cast< XFrameActionListener* >( this ) );
+}
+
+// -------------------------------------------------------------------------
 void OGenericUnoController::disposing(const EventObject& Source) throw( RuntimeException )
 {
     // our frame ?
-    Reference< ::com::sun::star::frame::XFrame >  xSourceFrame(Source.Source, UNO_QUERY);
-    if (m_xCurrentFrame.is() && (xSourceFrame == m_xCurrentFrame))
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    Reference< XFrame >  xSourceFrame(Source.Source, UNO_QUERY);
+    if ( xSourceFrame == m_xCurrentFrame )
+        stopFrameListening( );
 }
 //------------------------------------------------------------------------
 void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeException )
 {
     m_bCurrentlyModified = sal_True;
-    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
+    InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_UNDO);
 }
 // -----------------------------------------------------------------------
-void OGenericUnoController::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
+void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) throw( RuntimeException )
 {
-    if (m_xCurrentFrame.is())
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    stopFrameListening( );
 
     m_xCurrentFrame = xFrame;
-    if (m_xCurrentFrame.is())
-    {
-        m_xCurrentFrame->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+
+    if ( startFrameListening( ) )
         m_bFrameUiActive = m_xCurrentFrame->isActive();
-    }
 }
+
 // -----------------------------------------------------------------------
 sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState)
 {
@@ -364,7 +384,7 @@ sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const Featu
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache)
+void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
 {
     sal_uInt16 nFeat = (sal_uInt16)m_aSupportedFeatures[_rFeature];
     FeatureState aFeatState(GetState(nFeat));
@@ -409,11 +429,11 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     }
     rCachedState = aFeatState;
 
-    ::com::sun::star::frame::FeatureStateEvent aEvent;
+    FeatureStateEvent aEvent;
     aEvent.FeatureURL.Complete = _rFeature;
     if (m_xUrlTransformer.is())
         m_xUrlTransformer->parseStrict(aEvent.FeatureURL);
-    aEvent.Source       = (::com::sun::star::frame::XDispatch*)this;
+    aEvent.Source       = (XDispatch*)this;
     aEvent.IsEnabled    = aFeatState.bEnabled;
     aEvent.Requery      = aFeatState.bRequery;
     aEvent.State        = aFeatState.aState;
@@ -422,7 +442,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
     if (xListener.is())
         xListener->statusChanged(aEvent);
     else
-    {   // no -> iterate through all listeners responsible for the ::com::sun::star::util::URL
+    {   // no -> iterate through all listeners responsible for the URL
         DispatchIterator iterSearch = m_arrStatusListener.begin();
         DispatchIterator iterEnd = m_arrStatusListener.end();
 
@@ -440,27 +460,11 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, const Reference< ::com::sun::star::frame::XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
-    FeaturePair aPair;
-    aPair.nId               = m_aSupportedFeatures[_rURLPath];
-    aPair.xListener         = _xListener;
-    aPair.bForceBroadcast   = _bForceBroadcast;
-
-    sal_Bool bWasEmpty = sal_False;
-    {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
-        bWasEmpty = m_aFeaturesToInvalidate.empty();
-        m_aFeaturesToInvalidate.push_back(aPair);
-    }
-    if(bWasEmpty)
-    {
-        m_aAsyncInvalidateAll.Call();
-        return;
-    }
-
-    //  ImplBroadcastFeatureState(rURLPath, xListener, _bForceBroadcast);
+    InvalidateFeature( m_aSupportedFeatures[_rURLPath], _xListener, _bForceBroadcast );
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::InvalidateFeature_Impl()
 {
@@ -479,26 +483,26 @@ void OGenericUnoController::InvalidateFeature_Impl()
     }
     while(!bEmpty)
     {
-        if(aNextFeature.nId == -1)
+        if ( ALL_FEATURES == aNextFeature.nId )
         {
             InvalidateAll_Impl();
             break;
         }
         else
         {
-            sal_Bool bFound = sal_False;
-            SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
-            for(;aIter != m_aSupportedFeatures.end();++aIter)
-            {
-                if(aIter->second == aNextFeature.nId)
-                {
-                    ImplBroadcastFeatureState(aIter->first,aNextFeature.xListener, aNextFeature.bForceBroadcast);
-                    bFound = sal_True;
-                    break;
-                }
-            }
-            if(!bFound)
+            SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+                m_aSupportedFeatures.begin(),
+                m_aSupportedFeatures.end(),
+                ::std::bind2nd( SupportedFeaturesFunc(), aNextFeature.nId )
+            );
+
+            if ( m_aSupportedFeatures.end() != aFeaturePos )
+                // we really know this feature
+                ImplBroadcastFeatureState( aFeaturePos->first, aNextFeature.xListener, aNextFeature.bForceBroadcast );
+            else
+                // we don't know this feature -> at least give the TB a chance
                 ImplInvalidateTBItem((sal_uInt16)aNextFeature.nId, GetState((sal_uInt16)aNextFeature.nId));
+
         }
 
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -514,58 +518,30 @@ void OGenericUnoController::InvalidateFeature_Impl()
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< ::com::sun::star::frame::XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
+void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
     FeaturePair aPair;
     aPair.nId               = _nId;
     aPair.xListener         = _xListener;
     aPair.bForceBroadcast   = _bForceBroadcast;
 
-    sal_Bool bWasEmpty = sal_False;
+    sal_Bool bWasEmpty;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
         bWasEmpty = m_aFeaturesToInvalidate.empty();
         m_aFeaturesToInvalidate.push_back(aPair);
     }
-    if(bWasEmpty)
-    {
+
+    if ( bWasEmpty )
         m_aAsyncInvalidateAll.Call();
-        return;
-    }
-//  sal_Bool bFound = sal_False;
-//  SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
-//  for(;aIter != m_aSupportedFeatures.end();++aIter)
-//  {
-//      if(aIter->second == _nId)
-//      {
-//          ImplBroadcastFeatureState(aIter->first,_xListener, _bForceBroadcast);
-//          bFound = sal_True;
-//          break;
-//      }
-//  }
-//  if(!bFound)
-//      ImplInvalidateTBItem(_nId, GetState(_nId));
 }
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::InvalidateAll()
 {
-    FeaturePair aPair;
-    aPair.nId               = -1;
-    aPair.xListener         = NULL;
-    aPair.bForceBroadcast   = sal_True;
-    sal_Bool bWasEmpty = sal_False;
-    {
-        ::osl::MutexGuard aGuard( m_aFeatureMutex);
-        bWasEmpty = m_aFeaturesToInvalidate.empty();
-        m_aFeaturesToInvalidate.push_back(aPair);
-    }
-    if(bWasEmpty)
-    {
-        m_aAsyncInvalidateAll.Call();
-        return;
-    }
+    InvalidateFeature( ALL_FEATURES, NULL, sal_True );
 }
+
 // -----------------------------------------------------------------------------
 void OGenericUnoController::InvalidateAll_Impl()
 {
@@ -575,7 +551,7 @@ void OGenericUnoController::InvalidateAll_Impl()
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
     for(;aIter != m_aSupportedFeatures.end();++aIter)
     {
-        ImplBroadcastFeatureState(aIter->first, Reference< ::com::sun::star::frame::XStatusListener > (), sal_True);
+        ImplBroadcastFeatureState(aIter->first, Reference< XStatusListener > (), sal_True);
     }
 
     // ------------------------------
@@ -583,9 +559,13 @@ void OGenericUnoController::InvalidateAll_Impl()
     ToolBox* pTB = getView() ? getView()->getToolBox() : NULL;
     if (pTB)
     {
-        for (i=0; i<pTB->GetItemCount(); ++i)
-            if (pTB->GetItemId(i))
-                InvalidateFeature(pTB->GetItemId(i));
+        sal_uInt16 nCount = pTB->GetItemCount();
+        for ( i = 0; i < nCount; ++i )
+        {
+            sal_uInt16 nId = pTB->GetItemId(i);
+            if ( nId )
+                InvalidateFeature( nId );
+        }
     }
 
     {
@@ -598,63 +578,74 @@ void OGenericUnoController::InvalidateAll_Impl()
 }
 
 // -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  OGenericUnoController::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    if (aURL.Complete.equals(URL_CONFIRM_DELETION))
-        return (::com::sun::star::frame::XDispatch*)this;
+    Reference< XDispatch > xReturn;
 
-    if (m_aSupportedFeatures.find(aURL.Complete) != m_aSupportedFeatures.end())
-        return (::com::sun::star::frame::XDispatch*)this;
+    // URL's we can handle ourself?
+    if  (   aURL.Complete.equals( getConfirmDeletionURL() )
+        ||  ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
+        )
+    {
+        xReturn = static_cast< XDispatch* >( this );
+    }
+    // no? -> ask the slave dispatcher
+    else if ( m_xSlaveDispatcher.is() )
+    {
+        xReturn = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
+    }
 
-    if (m_xSlaveDispatcher.is())
-        return m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
-
-    return Reference< ::com::sun::star::frame::XDispatch > ();
+    // outta here
+    return xReturn;
 }
 
 // -----------------------------------------------------------------------
-Sequence< Reference< ::com::sun::star::frame::XDispatch > > OGenericUnoController::queryDispatches(const Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( RuntimeException )
+Sequence< Reference< XDispatch > > OGenericUnoController::queryDispatches(const Sequence< DispatchDescriptor >& aDescripts) throw( RuntimeException )
 {
-    Sequence< Reference< ::com::sun::star::frame::XDispatch > > aReturn;
-    if (!aDescripts.getLength())
-        return aReturn;
+    Sequence< Reference< XDispatch > > aReturn;
+    sal_Int32 nLen = aDescripts.getLength();
+    if ( nLen )
+    {
+        aReturn.realloc( nLen );
+                Reference< XDispatch >* pReturn     = aReturn.getArray();
+        const   Reference< XDispatch >* pReturnEnd  = aReturn.getArray() + nLen;
+        const   DispatchDescriptor*     pDescripts  = aDescripts.getConstArray();
 
-    aReturn.realloc(aDescripts.getLength());
-    Reference< ::com::sun::star::frame::XDispatch > * pReturn = aReturn.getArray();
-
-    const ::com::sun::star::frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
-    for (sal_uInt16 i=0; i<aDescripts.getLength(); ++i, ++pDescripts, ++pReturn)
-        *pReturn = queryDispatch(pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags);
+        for ( ; pReturn != pReturnEnd; ++ pReturn, ++pDescripts )
+        {
+            *pReturn = queryDispatch( pDescripts->FeatureURL, pDescripts->FrameName, pDescripts->SearchFlags );
+        }
+    }
 
     return aReturn;
 }
 
 // -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatchProvider >  OGenericUnoController::getSlaveDispatchProvider(void) throw( RuntimeException )
+Reference< XDispatchProvider >  OGenericUnoController::getSlaveDispatchProvider(void) throw( RuntimeException )
 {
     return m_xSlaveDispatcher;
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::setSlaveDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( RuntimeException )
+void OGenericUnoController::setSlaveDispatchProvider(const Reference< XDispatchProvider > & _xNewProvider) throw( RuntimeException )
 {
     m_xSlaveDispatcher = _xNewProvider;
 }
 
 // -----------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatchProvider >  OGenericUnoController::getMasterDispatchProvider(void) throw( RuntimeException )
+Reference< XDispatchProvider >  OGenericUnoController::getMasterDispatchProvider(void) throw( RuntimeException )
 {
     return m_xMasterDispatcher;
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::setMasterDispatchProvider(const Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw( RuntimeException )
+void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatchProvider > & _xNewProvider) throw( RuntimeException )
 {
     m_xMasterDispatcher = _xNewProvider;
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
+void OGenericUnoController::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(aURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
@@ -662,9 +653,9 @@ void OGenericUnoController::dispatch(const ::com::sun::star::util::URL& aURL, co
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(RuntimeException)
+void OGenericUnoController::addStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL) throw(RuntimeException)
 {
-    // remeber the listener together with the ::com::sun::star::util::URL
+    // remeber the listener together with the URL
     m_arrStatusListener.insert(m_arrStatusListener.end(), DispatchTarget(_rURL, aListener));
     // initially broadcast the state
     ImplBroadcastFeatureState(_rURL.Complete, aListener, sal_True);
@@ -672,13 +663,12 @@ void OGenericUnoController::addStatusListener(const Reference< ::com::sun::star:
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& _rURL) throw(RuntimeException)
+void OGenericUnoController::removeStatusListener(const Reference< XStatusListener > & aListener, const URL& _rURL) throw(RuntimeException)
 {
     DispatchIterator iterSearch = m_arrStatusListener.begin();
-    DispatchIterator iterEnd    = m_arrStatusListener.end();
 
     sal_Bool bRemoveForAll = (_rURL.Complete.getLength() == 0);
-    while (iterSearch != iterEnd)
+    while ( iterSearch != m_arrStatusListener.end() )
     {
         DispatchTarget& rCurrent = *iterSearch;
         if  (   (rCurrent.xListener == aListener)
@@ -687,18 +677,10 @@ void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::st
                 )
             )
         {
+            m_arrStatusListener.erase( iterSearch );
             if (!bRemoveForAll)
-            {   // remove the listener only for the given ::com::sun::star::util::URL, so we can exit the loop after deletion
-                m_arrStatusListener.erase(iterSearch);
+                // remove the listener only for the given URL, so we can exit the loop after deletion
                 break;
-            }
-            else
-            {   // we have to remove the listener for all URLs, so a simple erase isn't sufficient (as the iterator may be invalid then)
-                sal_Int32 nOffset = iterSearch - m_arrStatusListener.begin();
-                m_arrStatusListener.erase(iterSearch);
-                iterSearch  = m_arrStatusListener.begin() + nOffset;
-                iterEnd     = m_arrStatusListener.end();
-            }
         }
         else
             ++iterSearch;
@@ -750,8 +732,7 @@ void OGenericUnoController::disposing()
 
     // check out from all the objects we are listening
     // the frame
-    if (m_xCurrentFrame.is())
-        m_xCurrentFrame->removeFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
+    stopFrameListening( );
 }
 
 // -----------------------------------------------------------------------
@@ -767,21 +748,21 @@ void OGenericUnoController::removeEventListener(const Reference< XEventListener 
 }
 
 //------------------------------------------------------------------------------
-void OGenericUnoController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
+void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
 {
-    if ((::com::sun::star::frame::XFrame*)aEvent.Frame.get() == (::com::sun::star::frame::XFrame*)m_xCurrentFrame.get())
+    if ((XFrame*)aEvent.Frame.get() == (XFrame*)m_xCurrentFrame.get())
         m_bFrameUiActive = (aEvent.Action == FrameAction_FRAME_UI_ACTIVATED);
 }
 //------------------------------------------------------------------------------
 void OGenericUnoController::EmptyWindow()
 {
-    // dispatch en empty ::com::sun::star::util::URL so we will be cleaned up
-//  Reference< ::com::sun::star::frame::XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
+    // dispatch en empty URL so we will be cleaned up
+//  Reference< XDispatchProvider >  xProvider(m_xCurrentFrame, UNO_QUERY);
 //  if (xProvider.is())
 //  {
-//      Reference< ::com::sun::star::frame::XDispatch >  xDispatcher = xProvider->queryDispatch(::com::sun::star::util::URL(), m_xCurrentFrame->getName(), 0);
+//      Reference< XDispatch >  xDispatcher = xProvider->queryDispatch(URL(), m_xCurrentFrame->getName(), 0);
 //      if (xDispatcher.is())
-//          xDispatcher->dispatch(::com::sun::star::util::URL(), Sequence< PropertyValue >());
+//          xDispatcher->dispatch(URL(), Sequence< PropertyValue >());
 //  }
     if(m_xCurrentFrame.is())
     {
@@ -802,7 +783,7 @@ void OGenericUnoController::AddSupportedFeatures()
 }
 
 //------------------------------------------------------------------------------
-FeatureState OGenericUnoController::GetState(sal_uInt16 nId)
+FeatureState OGenericUnoController::GetState(sal_uInt16 nId) const
 {
     FeatureState aReturn;
         // (disabled automatically)
@@ -838,13 +819,11 @@ FeatureState OGenericUnoController::GetState(sal_uInt16 nId)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OGenericUnoController::SaveModified(sal_Bool bCommit)
+sal_Bool OGenericUnoController::SaveModified( sal_Bool bCommit )
 {
-    sal_Bool bResult = sal_True;
-    InvalidateFeature(::rtl::OUString::createFromAscii(".uno:Save"));
-    InvalidateFeature(ID_BROWSER_UNDO);
-
-    return bResult;
+    InvalidateFeature( ID_BROWSER_SAVEDOC );
+    InvalidateFeature( ID_BROWSER_UNDO );
+    return sal_True;
 }
 
 //------------------------------------------------------------------------------
@@ -872,21 +851,26 @@ IMPL_LINK(OGenericUnoController, OnToolBoxSelected, ToolBox*, pToolBox)
     return 0L;
 }
 //------------------------------------------------------------------
-sal_uInt16 OGenericUnoController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-{
-    return (sal_uInt16)SaveModified();
-}
+//sal_uInt16 OGenericUnoController::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
+//{
+//  return (sal_uInt16)SaveModified();
+//}
 // -------------------------------------------------------------------------
-URL OGenericUnoController::getURLForId(sal_Int32 _nId)
+URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
 {
     URL aReturn;
-    if (m_xUrlTransformer.is())
+    if ( m_xUrlTransformer.is() )
     {
-        SupportedFeatures::iterator aIter = ::std::find_if(m_aSupportedFeatures.begin(),m_aSupportedFeatures.end(),::std::bind2nd(SupportedFeaturesFunc(),_nId));
-        if(m_aSupportedFeatures.end() != aIter && aIter->first.getLength())
+        SupportedFeatures::const_iterator aIter = ::std::find_if(
+            m_aSupportedFeatures.begin(),
+            m_aSupportedFeatures.end(),
+            ::std::bind2nd( SupportedFeaturesFunc(), _nId )
+        );
+
+        if ( m_aSupportedFeatures.end() != aIter && aIter->first.getLength() )
         {
             aReturn.Complete = aIter->first;
-            m_xUrlTransformer->parseStrict(aReturn);
+            m_xUrlTransformer->parseStrict( aReturn );
         }
     }
     return aReturn;
@@ -896,11 +880,13 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId)
 sal_Bool SAL_CALL OGenericUnoController::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+
     const ::rtl::OUString* pArray = aSupported.getConstArray();
-    for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
-        if (pArray->equals(ServiceName))
-            return sal_True;
-    return sal_False;
+    const ::rtl::OUString* pArrayEnd = aSupported.getConstArray() + aSupported.getLength();
+
+    for ( ;( pArray != pArrayEnd ) && !pArray->equals( ServiceName ); ++pArray )
+        ;
+    return pArray != pArrayEnd;
 }
 
 // -----------------------------------------------------------------------------
@@ -952,7 +938,7 @@ void OGenericUnoController::showError(const SQLExceptionInfo& _rInfo)
 }
 
 // -----------------------------------------------------------------------------
-void OGenericUnoController::loadMenu(const Reference< ::com::sun::star::frame::XFrame >& _xFrame)
+void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
 {
     String sMenuName = getMenu();
     if(sMenuName.Len())
@@ -965,12 +951,10 @@ void OGenericUnoController::loadMenu(const Reference< ::com::sun::star::frame::X
         URL aURL;
         aURL.Complete = aMenuRes;
 
-        Reference< XMultiServiceFactory >  xMgr = getORB();
-        Reference< XURLTransformer >  xTrans ( xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-        if( xTrans.is() )
+        if ( m_xUrlTransformer.is() )
         {
             // Datei laden
-            xTrans->parseStrict( aURL );
+            m_xUrlTransformer->parseStrict( aURL );
 
             Reference< XDispatchProvider >  xProv( _xFrame, UNO_QUERY );
             if ( xProv.is() )
@@ -1013,7 +997,7 @@ void SAL_CALL OGenericUnoController::restoreViewData(const Any& Data) throw( Run
 {
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OGenericUnoController::attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException )
+sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
 {
     return sal_False;
 }

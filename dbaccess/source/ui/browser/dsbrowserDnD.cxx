@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 13:13:04 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,10 +1028,10 @@ namespace dbaui
                                 if(xRename.is())
                                 {
                                     xRename->rename(sNewName);
-                                     nRet = 1;
+                                    nRet = 1;
                                     if(etQuery != eType)
                                     {// special handling for tables and views
-                                         xProp->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
+                                        xProp->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
                                         xProp->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
                                         ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sNewName,sName,sal_False);
                                         sOldName = sName;
@@ -1105,19 +1105,19 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry) const
     {
         // at the momoent this isn't allowed
         return sal_False;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  (eType == etTable || eType == etQuery || eType == etView);
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry) const
     {
         sal_Bool bAllowed = sal_False;
         EntryType eType = getEntryType(_pEntry);
@@ -1218,6 +1218,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/12/07 13:13:04  oj
+ *  #95728# insert try catch
+ *
  *  Revision 1.33  2001/11/23 14:51:40  oj
  *  #95142# check eState of parser
  *

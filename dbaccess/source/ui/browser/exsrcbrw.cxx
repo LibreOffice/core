@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 14:43:19 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,18 +347,17 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         ::com::sun::star::util::URL aNewUrl = aURL;
 
         // split the ::com::sun::star::util::URL
-        Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
-        OSL_ENSURE(xTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !");
-        if (xTransformer.is())
-            xTransformer->parseStrict(aNewUrl);
+        OSL_ENSURE( m_xUrlTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !" );
+        if ( m_xUrlTransformer.is() )
+            m_xUrlTransformer->parseStrict( aNewUrl );
 
         // set a new mark
         aNewUrl.Mark = ::rtl::OUString::createFromAscii("DB/FormGridView");
             // this controller is instantiated when somebody dispatches the ".component:DB/FormGridView" in any
             // frame, so we use "FormGridView" as mark that a dispatch request came from this view
 
-        if (xTransformer.is())
-            xTransformer->assemble(aNewUrl);
+        if (m_xUrlTransformer.is())
+            m_xUrlTransformer->assemble(aNewUrl);
 
         Reference< ::com::sun::star::frame::XDispatchProvider >  xFrameDispatcher(m_xCurrentFrame, UNO_QUERY);
         if (xFrameDispatcher.is())
@@ -530,16 +529,16 @@ void SbaExternalSourceBrowser::stopListening()
 }
 
 //------------------------------------------------------------------
-sal_uInt16 SbaExternalSourceBrowser::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
-{
-    if (m_bSuspending)
-        // don't ask the user if we're beeing suspended currently
-        // this is the responsibility of our owner, as we are only an external view to an existing form
-        // 73384 - 22.02.00 - FS
-        return (sal_uInt16)sal_True;
-
-    return SbaXDataBrowserController::SaveData(bUI, bForBrowsing);
-}
+//sal_uInt16 SbaExternalSourceBrowser::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
+//{
+//  if (m_bSuspending)
+//      // don't ask the user if we're beeing suspended currently
+//      // this is the responsibility of our owner, as we are only an external view to an existing form
+//      // 73384 - 22.02.00 - FS
+//      return (sal_uInt16)sal_True;
+//
+//  return SbaXDataBrowserController::SaveData(bUI, bForBrowsing);
+//}
 
 //==================================================================
 //==================================================================

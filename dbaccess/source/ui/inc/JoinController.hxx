@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
+ *  last change: $Author: fs $ $Date: 2002-01-24 17:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ namespace dbaui
 
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
-        virtual FeatureState    GetState(sal_uInt16 nId);
+        virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
         virtual void            Execute(sal_uInt16 nId);
 
