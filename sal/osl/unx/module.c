@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-10 23:21:40 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 07:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
     /* Try checking in the system directories */
     if ( ! pszModulePath )
     {
-        strcat( path, "/System/Library/Frameworks/" );
+        strcpy( path, "/System/Library/Frameworks/" );
         strcat( path, pszModuleName );
         pszModulePath = path;
     }
