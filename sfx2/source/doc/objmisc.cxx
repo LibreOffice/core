@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:44:54 $
+ *  last change: $Author: kz $ $Date: 2005-01-19 10:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ using namespace ::com::sun::star::script;
 #include "../appl/app.hrc"
 #include "secmacrowarnings.hxx"
 #include "sfxdlg.hxx"
+#include "scriptcont.hxx"
 
 using namespace ::com::sun::star;
 
@@ -2123,6 +2124,38 @@ void SfxObjectShell::InPlaceActivate( BOOL bActivate )
     } */
 }
 
+BOOL SfxObjectShell::HasMacros_Impl() const
+{
+    BOOL bHasMacros = (pImp->pBasicLibContainer != 0);
+    try
+    {
+        if ( bHasMacros )
+        {
+            // a library container exists; check if it's empty
+            try
+            {
+                // usually a "Standard" library is always present (design)
+                // for this reason we must check if it's empty
+                uno::Reference < container::XNameAccess > xLib;
+                uno::Any aAny = pImp->pBasicLibContainer->getByName(::rtl::OUString::createFromAscii("Standard"));
+                aAny >>= xLib;
+                if ( xLib.is() )
+                    bHasMacros = xLib->hasElements();
+            }
+            catch ( uno::Exception& )
+            {
+                // if no "Standard" library is present we check for others
+                // here we assume that they are not empty (because they have been created by the user)
+                bHasMacros = pImp->pBasicLibContainer->hasElements();
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return bHasMacros;
+}
 
 
 
