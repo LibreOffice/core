@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 18:42:05 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 20:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
  #endif
 #endif
 
-#define MAP_LEN(x) x, sizeof(x)
+#define MAP_LEN(x) x, sizeof(x)-1
 
 
 using namespace rtl;
