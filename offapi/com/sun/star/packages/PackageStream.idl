@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageStream.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-09 15:49:17 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 18:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,18 +91,17 @@ service.
 service PackageStream
 {
     /**
-    This sets or gets the name of the Stream as contained within it's parent
-    PackageFolder
+    This sets or gets the name of the Stream as contained within its parent
+    PackageFolder.
     */
     interface com::sun::star::container::XNamed;
     /**
     getParent returns the PackageFolder that the PackageStream is in. This
-    may be the root PackageFolder
-    setParent moves a PackageStream
+    may be the root PackageFolder. setParent moves a PackageStream.
     */
     interface com::sun::star::container::XChild;
     /**
-    getInputStream provide read access to the contents of this PackageStream.
+    getInputStream provides read access to the contents of this PackageStream.
     If this PackageStream was a member of the Package when it was instantiated,
     the XInputStream returned is a Reference to the stream of the whole Package,
     with limits set on where it can seek to and read from. If the PackageStream
@@ -111,7 +110,7 @@ service PackageStream
 
     setInputStream - provides a stream to the data contained in the PackageStream
     this must be specified for new PackageStreams added to the Package. If this
-    is called more than once will replace the existing stream.
+    is called more than once, it will replace the existing stream.
     */
     interface com::sun::star::io::XActiveDataSink;
     /**

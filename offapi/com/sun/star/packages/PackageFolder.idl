@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageFolder.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-09 15:49:17 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 18:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -93,15 +93,15 @@ module com {  module sun {  module star {   module packages {
 service PackageFolder
 {
     /**
-    This interface is used to get or set the name of the folder
+    This interface is used to get or set the name of the folder.
     */
     interface com::sun::star::container::XNamed;
     /**
     The getParent method of XChild will return the PackageFolder that
     contains this PackageFolder or nothing if this PackageFolder is
-    the root PackageFolder
+    the root PackageFolder.
 
-    setParent will move the PackageFolder
+    setParent will move the PackageFolder.
     */
     interface com::sun::star::container::XChild;
     /**
@@ -111,7 +111,7 @@ service PackageFolder
     XElementAccess::getElementType returns service PackageStream
     XNameAccess::getByName returns either a PackageFolder or a PackageStream
         as a css::uno::Any
-    XNameAccess::getElementNames returns a uno::Sequence of strings containing
+    XNameAccess::getElementNames returns an uno::Sequence of strings containing
         the names of all children stored in the PackageFolder
     */
     interface com::sun::star::container::XNameContainer;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Package.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-09 15:49:17 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 18:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Martin Gallwey (gallwey@sun.com)
  *
  *
  ************************************************************************/
@@ -96,11 +96,11 @@ module com {  module sun {  module star {  module packages {
 service Package
 {
     /**
-    This interface is used to obtain the package URL of the Package
-    file the instance is supposed to provide access to. It will throw
+    This interface is used to obtain the URL of the Package
+    file the instance is providing access to. It will throw
     a css::uno::Exception if the package does not exist or has an invalid
     format (for example, a corrupt central directory record if the file is
-    a ZIP file.
+    a ZIP file).
     */
     interface com::sun::star::lang::XInitialization;
     /**
@@ -111,7 +111,7 @@ service Package
     This is also used to get access to a particular folder within the
     Package. For example:
         getByHierarchicalName ("/folder/subfolder/");
-    Will return a PackageFolder which describes the contents of the specified
+    This will return a PackageFolder which describes the contents of the specified
     folder.
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
@@ -120,13 +120,13 @@ service Package
     implementation objects for addition to the Package.
 
     createInstance - creates a new stream implementation object (when first
-    created, the new object is not part of the Package. It must be added
+    created, the new object is not part of the Package). It must be added
     to the PackageFolder in which it will reside using the methods in the
     PackageFolder service.
 
     createInstanceWithArguments - This accepts one boolean value as an
-    argument. If it set to true, we create a PackageFolder implementation,
-    if it is set to false, we create a PackageStream implementation.
+    argument. If it set to true, a PackageFolder implementation is created,
+    if it is set to false, a PackageStream implementation is created.
 
     Creating and inserting a new stream would be done as follows:
 
@@ -142,7 +142,7 @@ service Package
     /**
     This interface is used to commit any changes to the Package. A new
     Package file will be written with any new or changed streams/folders and
-    omitting any PackageStream or PackageFolder that have been removed.
+    omitting any PackageStream or PackageFolder that has been removed.
     */
     interface com::sun::star::util::XChangesBatch;
 };
