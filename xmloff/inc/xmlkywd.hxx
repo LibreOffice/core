@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-13 16:02:47 $
+ *  last change: $Author: dvo $ $Date: 2001-02-13 17:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,6 +1544,7 @@ XML_CONSTASCII_ACTION( sXML_text_combine_start_char, "text-combine-start-char" )
 XML_CONSTASCII_ACTION( sXML_text_content, "text-content" );
 XML_CONSTASCII_ACTION( sXML_text_crossing_out, "text-crossing-out" );
 XML_CONSTASCII_ACTION( sXML_text_emphasize, "text-emphasize" );
+XML_CONSTASCII_ACTION( sXML_text_global, "text-global" );
 XML_CONSTASCII_ACTION( sXML_text_indent, "text-indent" );
 XML_CONSTASCII_ACTION( sXML_text_input, "text-input" );
 XML_CONSTASCII_ACTION( sXML_text_outline, "text-outline" );
