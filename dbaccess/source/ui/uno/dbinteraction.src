@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:23:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,21 +73,5 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 {
     Text [ de ] = "Kennwort dauerhaft ~speichern";
     Text [ en-US ] = "~Remember password";
-};
-
-String STR_QUERY_SAVE_DOCUMENT
-{
-    Text [ de ] = "Das Dokument \"$(DOC)\" wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
-    Text [ en-US ] = "The document \"$(DOC)\" has been modified.\nDo you want to save your changes?" ;
-};
-String STR_NOSAVEANDCLOSE
-{
-    Text [ de ] = "~Verwerfen" ;
-    Text [ en-US ] = "~Discard" ;
-};
-String STR_SAVEDOC
-{
-    Text [ de ] = "~Speichern" ;
-    Text [ en-US ] = "~Save" ;
 };
 
