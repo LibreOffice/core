@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:22:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1680,7 +1680,7 @@ String STR_MULT_INTERACT_HYPH_WARN
     Text[ russian ] = "Θνςεπΰκςθβνΰÿ πΰρρςΰνξβκΰ οεπενξρξβ\nσζε βκλώχενΰ β δπσγξμ δξκσμενςε";
     Text[ greek ] = "Το διαλογικό πρόγραμμα συλλαβισμού\nχρησιμοποιείται από κάποιο άλλο έγγραφο";
     Text[ dutch ] = "De interactieve woordafbreking is\nreeds actief in een ander document";
-    Text[ french ] = "La coupure de mots interactive est\nen cours d'utilisation dans un autre document.";
+    Text[ french ] = "La coupure interactive des mots est\nen cours d'utilisation dans un autre document.";
     Text[ spanish ] = "La separaciσn silαbica interactiva\nya estα activa en otro documento";
     Text[ italian ] = "La sillabazione  interattiva θ\ngiΰ stata attivata in un altro documento.";
     Text[ danish ] = "Den interaktive orddeling er\nallerede aktiv i et andet dokument";
@@ -1730,7 +1730,7 @@ String STR_HYPH_TITLE
     Text[ russian ] = "Πΰρρςΰνξβκΰ οεπενξρξβ";
     Text[ greek ] = "Συλλαβισμός";
     Text[ dutch ] = "Woordafbreking";
-    Text[ french ] = "Coupure de mots";
+    Text[ french ] = "Coupure des mots";
     Text[ spanish ] = "Separaciσn silαbica";
     Text[ italian ] = "Sillabazione";
     Text[ danish ] = "Orddeling";
