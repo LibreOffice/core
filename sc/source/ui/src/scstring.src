@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 15:22:14 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,10 @@ String SCSTR_APPLICATION
     Text[ russian ] = "StarCalc 5.0";
     Text[ polish ] = "StarCalc 5.0";
     Text[ japanese ] = "StarCalc 5.0";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 5.0";
+    Text[ chinese_traditional ] = "StarCalc 5.0";
     Text[ arabic ] = "StarCalc 5.0";
     Text[ greek ] = "Star Calc 5.0";
-    Text[ korean ] = "%PRODUCTNAME Calc  5.0";
+    Text[ korean ] = "StarCalc 5.0";
     Text[ turkish ] = "StarCalc 5.0";
     Text[ language_user1 ] = " ";
 };
@@ -122,10 +122,10 @@ String SCSTR_40_APPLICATION
     Text[ russian ] = "StarCalc 4.0";
     Text[ polish ] = "StarCalc 4.0";
     Text[ japanese ] = "StarCalc 4.0";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 4.0";
+    Text[ chinese_traditional ] = "StarCalc 4.0";
     Text[ arabic ] = "Star Calc 4.0";
     Text[ greek ] = "StarCalc 4.0";
-    Text[ korean ] = "%PRODUCTNAME Calc 4.0";
+    Text[ korean ] = "StarCalc 4.0";
     Text[ turkish ] = "StarCalc 4.0";
     Text[ language_user1 ] = " ";
 };
@@ -148,10 +148,10 @@ String SCSTR_30_APPLICATION
     Text[ russian ] = "StarCalc 3.0";
     Text[ polish ] = "StarCalc 3.0";
     Text[ japanese ] = "StarCalc 3.0";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 3.0";
+    Text[ chinese_traditional ] = "StarCalc 3.0";
     Text[ arabic ] = "Star Calc 3.0";
     Text[ greek ] = "Star Calc 3.0";
-    Text[ korean ] = "%PRODUCTNAME Calc 3.0";
+    Text[ korean ] = "StarCalc 3.0";
     Text[ turkish ] = "StarCalc 3.0";
     Text[ language_user1 ] = " ";
 };
@@ -171,10 +171,10 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ¹¤×÷±í";
     Text[ russian ] = "Ëèñò â %PRODUCTNAME 5.0";
     Text[ polish ] = "Arkusz kalkulacyjny %PRODUCTNAME 5.0";
-    Text[ japanese ] = "%PRODUCTNAME 5.0 •\\";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 •\\ŒvZ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤u§@ªí";
     Text[ arabic ] = "ÌÏæá %PRODUCTNAME Calc 5.0";
-    Text[ greek ] = "ÄéÜãñáììá %PRODUCTNAME 5.0";
+    Text[ greek ] = "%PRODUCTNAME 5.0 - Ğßíáêáò";
     Text[ korean ] = "%PRODUCTNAME Calc 5.0 ½ºÇÁ·¹µå ½ÃÆ®";
     Text[ turkish ] = "%PRODUCTNAME 5.0 tablosu";
     Text[ language_user1 ] = " ";
@@ -184,21 +184,21 @@ String SCSTR_40_LONG_DOCNAME
     Text = "%PRODUCTNAME 4.0 Tabelle" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Table" ;
     Text [ dutch ] = "StarCalc 4.0 werkblad" ;
-    Text [ english_us ] = "Spreadsheet (StarCalc 4.0)" ;
+    Text [ english_us ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
     Text [ swedish ] = "Star 4.0 tabell" ;
     Text [ danish ] = "StarCalc 4.0 regneark" ;
     Text [ italian ] = "Foglio elettronico %PRODUCTNAME 4.0" ;
     Text [ spanish ] = "%PRODUCTNAME 4.0 Hoja de cálculo" ;
-    Text [ french ] = "StarCalc 4.0 Classeur" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 Classeur" ;
     Text [ portuguese ] = "Folha de cálculo StarCalc 4.0" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Tabelle" ;
-    Text[ chinese_simplified ] = "StarCalc 4.0 ¹¤×÷±í";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ¹¤×÷±í";
     Text[ russian ] = "Ëèñò â %PRODUCTNAME 4.0";
-    Text[ polish ] = "Arkusz kalkulacyjny StarCalc 4.0";
-    Text[ japanese ] = "StarCalc 4.0 •\\ŒvZ";
+    Text[ polish ] = "%PRODUCTNAME 4.0 - Arkusz kalkulacyjny";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 •\\ŒvZ";
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤u§@ªí";
-    Text[ arabic ] = "ÌÏæá StarCalc 4.0";
-    Text[ greek ] = "Star Calc 4.0 - Ğßíáêáò";
+    Text[ arabic ] = "ÌÏæá %PRODUCTNAME 4.0";
+    Text[ greek ] = "%PRODUCTNAME 4.0 - Ğßíáêáò";
     Text[ korean ] = "½ºÇÁ·¹µå ½ÃÆ® (%PRODUCTNAME Calc 4.0)";
     Text[ turkish ] = "StarCalc 4.0 tablosu";
     Text[ language_user1 ] = " ";
@@ -213,17 +213,17 @@ String SCSTR_30_LONG_DOCNAME
     Text [ danish ] = "StarCalc 3.0 regneark" ;
     Text [ italian ] = "Foglio elettronico StarCalc 3.0" ;
     Text [ spanish ] = "Hoja de cálculo de StarCalc 3.0" ;
-    Text [ french ] = "Classeur StarCalc 3.0" ;
+    Text [ french ] = "StarCalc 3.0 Classeur" ;
     Text [ portuguese ] = "StarCalc 3.0 Folha de cálculo" ;
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc 3.0 Tabelle" ;
     Text[ chinese_simplified ] = "StaCalc 3.0 ¹¤×÷±í";
     Text[ russian ] = "Ëèñò â StarCalc 3.0";
     Text[ polish ] = "Arkusz kalkulacyjny StarCalc 3.0";
     Text[ japanese ] = "StarCalc 3.0 •\\ŒvZ";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Calc 3.0 ¤u§@ªí";
+    Text[ chinese_traditional ] = "StarCalc 3.0 ¤u§@ªí";
     Text[ arabic ] = "ÌÏæá Star Calc 3.0";
     Text[ greek ] = "StarCalc 3.0 - Ğßíáêáò";
-    Text[ korean ] = "%PRODUCTNAME Calc 3.0 ½ºÇÁ·¹µå ½ÃÆ®";
+    Text[ korean ] = "StarCalc 3.0 ½ºÇÁ·¹µå½ÃÆ®";
     Text[ turkish ] = "StarCalc 3.0 tablosu";
     Text[ language_user1 ] = " ";
 };
@@ -454,7 +454,7 @@ String SCSTR_DRAWFORMSHELL
     Text[ swedish ] = "Formulärobjekt";
     Text[ polish ] = "Obiekty formularzy";
     Text[ portuguese_brazilian ] = "Form objects";
-    Text[ japanese ] = "Ì«°Ñ µÌŞ¼Şª¸Ä";
+    Text[ japanese ] = "Ì«°ÑµÌŞ¼Şª¸Ä";
     Text[ chinese_simplified ] = "±íµ¥¶ÔÏó";
     Text[ chinese_traditional ] = "ªí³æª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÇáÇÓÊãÇÑÉ";
@@ -481,7 +481,7 @@ String SCSTR_CHARTSHELL
     Text[ polish ] = "Obiekty wykresu";
     Text[ portuguese_brazilian ] = "Chart-objects";
     Text[ japanese ] = "¸Ş×Ì‚ÌµÌŞ¼Şª¸Ä";
-    Text[ korean ] = "Â÷Æ®°³Ã¼";
+    Text[ korean ] = "Â÷Æ®-°³Ã¼";
     Text[ chinese_simplified ] = "Í¼±í¶ÔÏó";
     Text[ chinese_traditional ] = "¹Ïªíª«É²";
     Text[ arabic ] = "ßÇÆäÇÊ ÇáÑÓã ÇáÈíÇäí";
@@ -2054,7 +2054,7 @@ String SCSTR_UNPROTECTDOC
     Text[ chinese_traditional ] = "¨ú®øª«¥ó«OÅ@";
     Text[ arabic ] = "ÅÒÇáÉ ÍãÇíÉ ÇáãÓÊäÏ";
     Text[ greek ] = "ÊáôÜñãçóç ğñïóôáóßáò åããñÜöïõ";
-    Text[ korean ] = "¹®¼­ º¸È£ ÇØÁ¦";
+    Text[ korean ] = "¹®¼­º¸È£ ÇØÁ¦";
     Text[ turkish ] = "Belge korumasını kaldır";
     Text[ language_user1 ] = " ";
 };
@@ -2178,7 +2178,7 @@ String SCSTR_WRONGPASSWORD
     Text[ chinese_simplified ] = "ÃÜÂëÎŞĞ§";
     Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
     Text[ polish ] = "Niepoprawne has³o";
-    Text[ japanese ] = "ŠÔˆá‚Á‚½Êß½Ü°ÄŞ";
+    Text[ japanese ] = "³‚µ‚­‚È‚¢Êß½Ü°ÄŞ";
     Text[ chinese_traditional ] = "±K½XµL®Ä";
     Text[ arabic ] = "ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ";
     Text[ greek ] = "Åóöáëìİíïò êùäéêüò ğñüóâáóçò";
@@ -2437,11 +2437,11 @@ String SCSTR_CFG_SPELLCHECK
     Text [ danish ] = "Stavekontrol-indstillinger" ;
     Text [ portuguese ] = "Opções de ortografia" ;
     Text [ portuguese_brazilian ] = "Rechtschreiboptionen" ;
-    Text[ chinese_simplified ] = "Õı×Ö·¨Ñ¡Ïî";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÑ¡Ïî";
     Text[ russian ] = "Ïàğàìåòğû îğôîãğàôèè";
     Text[ polish ] = "Opcje pisowni";
     Text[ japanese ] = "½ÍßÙÁª¯¸‚ÌµÌß¼®İ";
-    Text[ chinese_traditional ] = "«÷¦r";
+    Text[ chinese_traditional ] = "«÷¼gÀË¬d¿ï¶µ";
     Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÏŞíŞ ÇáÅãáÇÆí";
     Text[ greek ] = "Åğéëïãİò ïñèïãñáößáò";
     Text[ korean ] = "¸ÂÃã¹ı ¿É¼Ç";
@@ -2494,7 +2494,7 @@ String SCSTR_CFG_NAVIPI
     Text[ chinese_traditional ] = "³]©w§U¤â";
     Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáäÇİíÌíÊæÑ";
     Text[ greek ] = "Ñõèìßóåéò Navigator";
-    Text[ korean ] = "³×¹Ì°ÔÀÌÅÍ ¼³Á¤";
+    Text[ korean ] = "³×ºñ°ÔÀÌÅÍ ¼³Á¤";
     Text[ turkish ] = "Navigatör ayarları";
     Text[ language_user1 ] = " ";
 };
@@ -2702,7 +2702,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
     Text[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íåâîçìîæíî";
     Text[ polish ] = "Pliku graficznego nie mo¿na by³o otworzyæ";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ğŠJ‚¯‚Ü‚¹‚ñB";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ªŠJ‚«‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "µLªk¶}±Ò¹Ï¤ùÀÉ®×";
     Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
@@ -2786,7 +2786,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼ş°æ±¾";
     Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸Ì§²Ù‚ÌÊŞ°¼Ş®İ‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB";
+    Text[ japanese ] = "‚±‚ÌÊŞ°¼Ş®İ‚Ì¸Ş×Ì¨¯¸Ì§²Ù‚Ì‚Íx‰‡‚³‚ê‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¤£¤ä´©³o­Óª©¥»ªº¹Ï¤ùÀÉ®×";
     Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
     Text[ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund";
@@ -2820,7 +2820,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ dutch ] = "Grafische filter niet gevonden";
     Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
     Text[ greek ] = "Äåí âñİèçêå ôï ößëôñï ãñáöéêşí";
-    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ°¡ ¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ¸¦ Ã£Áö ¸øÇß½À´Ï´Ù.";
     Text[ turkish ] = "Grafik filtresi bulunamadı";
     Text[ language_user1 ] = " ";
 };
@@ -2842,7 +2842,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ chinese_simplified ] = "Ã»ÓĞ×ã¹»µÄÄÚ´æÓÃÓÚ²åÈëÍ¼ĞÎ";
     Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ğèñóíêà";
     Text[ polish ] = "Za ma³o pamiêci do wstawienia grafiki";
-    Text[ japanese ] = "¸Ş×¯Ì¨¯¸‚Ì‘}“ü‚É\\•ª‚ÌÒÓØ‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
+    Text[ japanese ] = "¸Ş×¯Ì¨¯¸‚Ì‘}“ü‚É\\•ª‚ÈÒÓØ‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡AµLªk´¡¤J¹Ï¤ù";
     Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
     Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
