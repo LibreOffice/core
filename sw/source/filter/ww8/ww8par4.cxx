@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:49:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ struct OLE_MFP
 
 using namespace ::com::sun::star;
 
-SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
+// SV_IMPL_OP_PTRARR_SORT(WW8AuthorInfos, WW8AuthorInfo_Ptr)
 SV_IMPL_OP_PTRARR_SORT(WW8OleMaps, WW8OleMap_Ptr)
 
 static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
@@ -559,133 +559,6 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     return pRet;
 }
 
-void wwRedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
-{
-    ASSERT(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
-    maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
-}
-
-class SameOpenRedlineType :
-    public std::unary_function<const SwFltStackEntry*, bool>
-{
-private:
-    SwRedlineType meType;
-public:
-    SameOpenRedlineType(SwRedlineType eType) : meType(eType) {}
-    bool operator()(const SwFltStackEntry *pEntry) const
-    {
-        const SwFltRedline *pTest = static_cast<const SwFltRedline *>
-            (pEntry->pAttr);
-        return (pEntry->bLocked && (pTest->eType == meType));
-    }
-};
-
-void wwRedlineStack::close(const SwPosition& rPos, SwRedlineType eType)
-{
-    //Search from end for same type
-    myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
-        SameOpenRedlineType(eType));
-    ASSERT(aResult != maStack.rend(), "close without open!");
-    if (aResult != maStack.rend())
-        (*aResult)->SetEndPos(rPos);
-}
-
-class CloseIfOpen       //Subclass from something ?
-{
-private:
-    const SwPosition &mrPos;
-public:
-    explicit CloseIfOpen(const SwPosition &rPos) : mrPos(rPos) {}
-        void operator()(SwFltStackEntry *pEntry) const
-    {
-        if (pEntry->bLocked)
-            pEntry->SetEndPos(mrPos);
-    }
-private:
-   //No assignment
-   CloseIfOpen& operator=(const CloseIfOpen&);
-};
-
-void wwRedlineStack::closeall(const SwPosition& rPos)
-{
-    std::for_each(maStack.begin(), maStack.end(), CloseIfOpen(rPos));
-}
-
-class SetInDocAndDelete
-{
-private:
-    SwDoc &mrDoc;
-public:
-    explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
-    void operator()(SwFltStackEntry *pEntry);
-private:
-   //No assignment
-   SetInDocAndDelete& operator=(const SetInDocAndDelete&);
-};
-
-void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
-{
-    SwPaM aRegion(pEntry->nMkNode);
-    if (
-         pEntry->MakeRegion(&mrDoc, aRegion, true) &&
-         (*aRegion.GetPoint() != *aRegion.GetMark())
-       )
-    {
-        mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
-            REDLINE_SHOW_DELETE);
-        const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
-            (pEntry->pAttr);
-
-        if (USHRT_MAX != pFltRedline->nAutorNoPrev)
-        {
-            SwRedlineData aData(pFltRedline->eTypePrev,
-                pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyStr,
-                0);
-
-            mrDoc.AppendRedline(new SwRedline(aData, aRegion));
-        }
-
-        SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
-                pFltRedline->aStamp, aEmptyStr, 0);
-
-        mrDoc.AppendRedline(new SwRedline(aData, aRegion));
-        mrDoc.SetRedlineMode(REDLINE_NONE | REDLINE_SHOW_INSERT |
-            REDLINE_SHOW_DELETE );
-    }
-    delete pEntry;
-}
-
-class CompareRedlines:
-    public std::binary_function<const SwFltStackEntry*, const SwFltStackEntry*,
-       bool>
-{
-public:
-    bool operator()(const SwFltStackEntry *pOneE, const SwFltStackEntry *pTwoE)
-        const;
-};
-
-bool CompareRedlines::operator()(const SwFltStackEntry *pOneE,
-    const SwFltStackEntry *pTwoE) const
-{
-    const SwFltRedline *pOne= static_cast<const SwFltRedline*>
-        (pOneE->pAttr);
-    const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
-        (pTwoE->pAttr);
-
-    //Return the earlier time, if two have the same time, prioritize
-    //inserts over deletes
-    if (pOne->aStamp == pTwo->aStamp)
-        return (pOne->eType == REDLINE_INSERT && pTwo->eType != REDLINE_INSERT);
-    else
-        return (pOne->aStamp < pTwo->aStamp) ? true : false;
-}
-
-wwRedlineStack::~wwRedlineStack()
-{
-    std::sort(maStack.begin(), maStack.end(), CompareRedlines());
-    std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
-}
-
 void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     INT32 nTblPos, INT32 nTblSiz, SwDoc& rDocOut )
 {
@@ -700,8 +573,8 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
         USHORT nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
         if( !pAuthorInfos )
-            pAuthorInfos = new WW8AuthorInfos;
-        WW8AuthorInfo* pAutorInfo = new WW8AuthorInfo( nAuthor, nSWId );
+            pAuthorInfos = new sw::util::AuthorInfos;
+        sw::util::AuthorInfo* pAutorInfo = new sw::util::AuthorInfo( nAuthor, nSWId );
         if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
             delete pAutorInfo;
     }
@@ -762,18 +635,18 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
     {
         // start of new revision mark, if not there default to first entry
         USHORT nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort( pSprmCIbstRMark ) : 0;
-        WW8AuthorInfo aEntry(nWWAutNo);
+        sw::util::AuthorInfo aEntry(nWWAutNo);
         USHORT nPos;
         if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
         {
-            if (const WW8AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
+            if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
             {
                 UINT32 nWWDate = pSprmCDttmRMark ? SVBT32ToLong(pSprmCDttmRMark): 0;
 #if 0
                 ASSERT(nWWDate, "Date is 0, this will cause trouble!");
 #endif
 
-                DateTime aStamp(WW8ScannerBase::WW8DTTM2DateTime(nWWDate));
+                DateTime aStamp(sw::ms::DTTM2DateTime(nWWDate));
                 USHORT nAutorNo = pAuthor->nOurId;
                 SwFltRedline  aNewAttr(eType, nAutorNo, aStamp);
 
