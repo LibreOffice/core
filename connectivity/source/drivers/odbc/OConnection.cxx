@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 10:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD;
+    ::rtl::OUString aDSN(RTL_CONSTASCII_USTRINGPARAM("DSN=")), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
     sal_Int32 nTimeout = 20;
@@ -235,6 +235,12 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         {
             pBegin->Value >>= aPWD;
             aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+        }
+        else if(!pBegin->Name.compareToAscii("SystemDriverSettings"))
+        {
+            pBegin->Value >>= aSysDrvSettings;
+            aDSN += ::rtl::OUString::createFromAscii(";");
+            aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii("CharSet"))
         {
