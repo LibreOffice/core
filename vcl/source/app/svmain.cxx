@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-10 06:29:57 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 13:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     pSVData->maGDIData.mpScreenFontList   = new ImplDevFontList;
     pSVData->maGDIData.mpScreenFontCache  = new ImplFontCache( FALSE );
 
+    pSVData->maAppData.mpSolarMutex->acquire(); // mutex should be aquired for startup
 #if SUPD < 638
     // 638: changed startup behaviour
     // sfx will now wait for startup condition, not vcl
