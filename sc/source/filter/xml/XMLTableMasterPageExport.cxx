@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 09:30:56 $
+ *  last change: $Author: sab $ $Date: 2001-10-16 11:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,22 @@ XMLTableMasterPageExport::XMLTableMasterPageExport( ScXMLExport& rExp ) :
 
 XMLTableMasterPageExport::~XMLTableMasterPageExport()
 {
+}
+
+void XMLTableMasterPageExport::exportHeaderFooterContent(
+            const Reference< XText >& rText,
+            sal_Bool bAutoStyles, sal_Bool bProgress )
+{
+    DBG_ASSERT( rText.is(), "There is the text" );
+
+    if( bAutoStyles )
+        GetExport().GetTextParagraphExport()
+                ->collectTextAutoStyles( rText, bProgress, sal_False );
+    else
+    {
+        GetExport().GetTextParagraphExport()->exportTextDeclarations( rText );
+        GetExport().GetTextParagraphExport()->exportText( rText, bProgress, sal_False );
+    }
 }
 
 void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,

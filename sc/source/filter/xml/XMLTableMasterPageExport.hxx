@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-27 07:47:21 $
+ *  last change: $Author: sab $ $Date: 2001-10-16 11:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@ class XMLTableMasterPageExport : public XMLTextMasterPageExport
                             const sal_Bool bDisplay);
 
 protected:
+    virtual void exportHeaderFooterContent(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XText >& rText,
+            sal_Bool bAutoStyles, sal_Bool bProgress );
 
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <
