@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:21:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,6 +1323,14 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 }
                 if( !__nFlags )
                     PRINT();
+            }
+            break;
+            case 0x008C:        // COUNTRY
+            {
+                LINESTART();
+                ADDTEXT( "ui-country=" );           ADDDEC( 2 );
+                ADDTEXT( "   doc-country=" );       ADDDEC( 2 );
+                PRINT();
             }
             break;
             case 0x92:      // PALETTE
