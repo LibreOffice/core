@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,6 +281,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
+
     if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
         return;
 
@@ -561,7 +562,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             rReq.Done();
         }
         break;
-
         case SID_DRAW_POLYGON:
         case SID_DRAW_POLYGON_NOFILL:
         case SID_DRAW_XPOLYGON:
