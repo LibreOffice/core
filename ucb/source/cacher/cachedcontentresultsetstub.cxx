@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedcontentresultsetstub.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:50:13 $
+ *  last change: $Author: iha $ $Date: 2001-11-19 18:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
         osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
         if( !pTypes )
         {
-            pTypes->realloc( 13 );
+            pTypes = new Sequence< Type >(13);
             (*pTypes)[0] = CPPU_TYPE_REF( XTypeProvider );
             (*pTypes)[1] = CPPU_TYPE_REF( XServiceInfo );
             (*pTypes)[2] = CPPU_TYPE_REF( XComponent );
@@ -205,6 +205,73 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
         }
     }
     return *pTypes;
+    /*
+    static cppu::OTypeCollection * pCollection = 0;
+    if (!pCollection)
+    {
+        osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
+        if (!pCollection)
+        {
+            static cppu::OTypeCollection
+                aTheCollection(
+                    getCppuType(
+                        static_cast< Reference< XTypeProvider >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XServiceInfo >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XComponent >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XCloseable >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XResultSetMetaDataSupplier >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XPropertySet >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XPropertyChangeListener >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XVetoableChangeListener >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XResultSet >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XContentAccess >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XRow >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XFetchProvider >
+                                         const * >(
+                            0)),
+                    getCppuType(
+                        static_cast< Reference< XFetchProviderForContentAccess >
+                                         const * >(
+                            0))
+                            );
+            pCollection = &aTheCollection;
+        }
+    }
+    return pCollection->getTypes();
+    */
 }
 
 //--------------------------------------------------------------------------
@@ -592,9 +659,13 @@ Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
             const Reference< XResultSet > & xSource )
             throw( RuntimeException )
 {
-    Reference< XResultSet > xRet;
-    xRet = new CachedContentResultSetStub( xSource );
-    return xRet;
+    if( xSource.is() )
+    {
+        Reference< XResultSet > xRet;
+        xRet = new CachedContentResultSetStub( xSource );
+        return xRet;
+    }
+    return NULL;
 }
 
 
