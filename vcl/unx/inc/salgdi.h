@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:16:28 $
+ *  last change: $Author: cp $ $Date: 2001-04-10 10:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,19 +243,19 @@ protected:
                                 const sal_Unicode* pStr, int nLength );
 
             void            DispatchServerFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                ServerFont *pFont, const sal_uInt32* pGlyph,
                                 int nLength, const long* pDXAry );
 
             void            DrawServerSimpleFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                ServerFont *pFont, const sal_uInt32* pGlyph,
                                 int nLength, const long* pDXAry );
 
             void            DrawServerAAFontString( int nX, int nY,
-                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                ServerFont *pFont, const sal_uInt32* pGlyph,
                                 int nLength, const long* pDXAry );
 
             bool            DrawServerAAForcedString( int nX, int nY,
-                                ServerFont *pFont,  const sal_uInt16* pGlyph,
+                                ServerFont *pFont,  const sal_uInt32* pGlyph,
                                 int nLength, const long* pDXAry );
 
             void            DrawServerFontString( int nX, int nY,

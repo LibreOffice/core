@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cd $ $Date: 2001-04-10 08:38:09 $
+ *  last change: $Author: cp $ $Date: 2001-04-10 10:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -972,7 +972,7 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
 #ifdef USE_XRENDER
 
 void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
-    ServerFont *pFont, const sal_uInt16* pGlyph, int nLength, const long* pDXAry )
+    ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
     // translate unicode to glyph ids and make sure they are already on the server
     unsigned short* pGlyphString = (unsigned short*)alloca( 2*nLength );
@@ -1048,7 +1048,7 @@ void SalGraphicsData::DrawServerAAFontString( int nX, int nY,
 //--------------------------------------------------------------------------
 
 bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
-    ServerFont *pFont, const sal_uInt16* pGlyph, int nLength, const long* pDXAry )
+    ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
     // prepare glyphs and get extent of operation
     int nXmin, nXmax, nYmin, nYmax;
@@ -1203,7 +1203,7 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
 //--------------------------------------------------------------------------
 
 void SalGraphicsData::DrawServerSimpleFontString(
-    int nX, int nY, ServerFont *pFont, const sal_uInt16* pGlyph, int nLength, const long* pDXAry )
+    int nX, int nY, ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
     Display* pDisplay   = GetXDisplay();
     GC nGC = SelectFont();
@@ -1248,7 +1248,7 @@ void SalGraphicsData::DrawServerSimpleFontString(
 //--------------------------------------------------------------------------
 
 void SalGraphicsData::DispatchServerFontString( int nX, int nY,
-    ServerFont *pFont, const sal_uInt16* pGlyph, int nLen, const long* pDXAry )
+    ServerFont *pFont, const sal_uInt32* pGlyph, int nLen, const long* pDXAry )
 {
     #ifdef USE_XRENDER
     if( aX11GlyphPeer.GetGlyphSet( *pFont ) )
@@ -1276,7 +1276,7 @@ RotatedPoint( Point &rOrigin, int nDx, int nAngle )
 void SalGraphicsData::DrawServerFontString(
     int nX, int nY, const sal_Unicode* pStr, int nLength, const long* pDXAry )
 {
-    sal_uInt16 *pFGlyph  = (sal_uInt16*)alloca( nLength * sizeof(sal_uInt16) );
+    sal_uInt32 *pFGlyph  = (sal_uInt32*)alloca( nLength * sizeof(sal_uInt32) );
     for( int i = 0; i < nLength; ++i )
     {
         pFGlyph[i] = mpServerSideFont->GetGlyphIndex( pStr[i] );
@@ -1288,7 +1288,7 @@ void SalGraphicsData::DrawServerFontString(
         return;
     }
 
-    sal_uInt16 *pFFGlyph    = (sal_uInt16*)alloca( nLength * sizeof(sal_uInt16) );
+    sal_uInt32 *pFFGlyph    = (sal_uInt32*)alloca( nLength * sizeof(sal_uInt32) );
     long       *pDeltaArray = (long*)      alloca( nLength * sizeof(long) );
 
     int nAdvance = 0;
