@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2004-08-23 09:10:56 $
+#   last change: $Author: rt $ $Date: 2004-09-20 14:37:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,11 +125,12 @@ UNOTYPES = \
     com.sun.star.registry.XRegistryKey
 
 CFLAGS += -clr -AI $(OUT)$/bin
+#see  Microsoft Knowledge Base Article - 814472 
+LINKFLAGS += /NOENTRY /NODEFAULTLIB:nochkclr.obj /INCLUDE:__DllMainCRTStartup@12
 
 SLOFILES = \
         $(SLO)$/native_bootstrap.obj \
-    $(SLO)$/assembly_cppuhelper.obj
-
+    $(SLO)$/assembly_cppuhelper.obj 
 
 SHL1OBJS = $(SLOFILES)
 
