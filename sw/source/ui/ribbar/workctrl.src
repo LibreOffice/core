@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:13:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,13 +585,13 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text [ English ] = "Navigation" ;
     ImageList IL_VALUES
     {
-        ImageBitmap = Bitmap { File = "sr_navi.bmp" ; };
+        Prefix = "sr";
         MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
     ImageList ILH_VALUES
     {
-        ImageBitmap = Bitmap { File = "srh_navi.bmp" ; };
+        Prefix = "srh";
         MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
