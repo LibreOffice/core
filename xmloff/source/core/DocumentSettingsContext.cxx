@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:49:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,12 @@
 #ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
+
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -134,15 +137,33 @@ class XMLMyList
 {
     std::list<beans::PropertyValue> aProps;
     sal_uInt32                      nCount;
+
+    // #110680#
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
+
 public:
-    XMLMyList() : nCount(0) {}
-    ~XMLMyList() {}
+    // #110680#
+    XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory);
+    ~XMLMyList();
 
     void push_back(beans::PropertyValue& aProp) { aProps.push_back(aProp); nCount++; }
     uno::Sequence<beans::PropertyValue> GetSequence();
     uno::Reference<container::XNameContainer> GetNameContainer();
     uno::Reference<container::XIndexContainer> GetIndexContainer();
 };
+
+// #110680#
+XMLMyList::XMLMyList(const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory)
+:   nCount(0),
+    mxServiceFactory(xServiceFactory)
+{
+    DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
+}
+
+// #110680#
+XMLMyList::~XMLMyList()
+{
+}
 
 uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 {
@@ -166,13 +187,15 @@ uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 {
     uno::Reference<container::XNameContainer> xNameContainer;
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
-    if( xServiceFactory.is() )
+
+    // #110680#
+    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
+    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+
+    if( mxServiceFactory.is() )
     {
         rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.NamedPropertyValues"));
-        xNameContainer = uno::Reference<container::XNameContainer>(xServiceFactory->createInstance(sName), uno::UNO_QUERY);
+        xNameContainer = uno::Reference<container::XNameContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
         if (xNameContainer.is())
         {
             std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
@@ -189,13 +212,14 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
 uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer;
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        comphelper::getProcessServiceFactory();
-    DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
-    if( xServiceFactory.is() )
+    // #110680#
+    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
+    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
+
+    if( mxServiceFactory.is() )
     {
         rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"));
-        xIndexContainer = uno::Reference<container::XIndexContainer>(xServiceFactory->createInstance(sName), uno::UNO_QUERY);
+        xIndexContainer = uno::Reference<container::XIndexContainer>(mxServiceFactory->createInstance(sName), uno::UNO_QUERY);
         if (xIndexContainer.is())
         {
             std::list<beans::PropertyValue>::iterator aItr = aProps.begin();
@@ -461,7 +485,9 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, USHORT nPrfx,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
     rAny(rTempAny),
-    aProps(),
+    // #110680#
+    //aProps(),
+    aProps(rImport.getServiceFactory()),
     aProp(),
     pBaseContext(pTempBaseContext)
 {
