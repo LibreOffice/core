@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: as $ $Date: 2002-06-28 10:19:53 $
+ *  last change: $Author: as $ $Date: 2002-06-28 11:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,14 +1318,28 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
                 throw ILLEGALARGUMENTEXCEPTION();
             }
 
-            String sURL(sTemp);
-            INetURLObject aCheck(sURL);
+            String        sPath        ;
+            String        sURL  (sTemp);
+            INetURLObject aCheck(sURL );
             if (aCheck.GetProtocol()==INET_PROT_NOT_VALID)
-                throw ILLEGALARGUMENTEXCEPTION();
-
+            {
+                // OK - it's not a valid URL. But may it's a simple
+                // system path directly. It will be supported for historical
+                // reasons. Otherwhise we break to much external code ...
+                // We try to convert it to a file URL. If its possible
+                // we put the system path to the item set and let vcl work with it.
+                // No ucb or thread will be neccessary then. In case it couldnt be
+                // converted its not an URL nor a system path. Then we can't accept
+                // this parameter and have to throw an exception.
+                ::rtl::OUString sSystemPath(sTemp);
+                ::rtl::OUString sFileURL          ;
+                if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
+                    throw ILLEGALARGUMENTEXCEPTION();
+                aArgs.Put( SfxStringItem(SID_FILE_NAME,sTemp) );
+            }
+            else
             // It's a valid URL. but now we must know, if it is a local one or not.
             // It's a question of using ucb or not!
-            String sPath;
             if (::utl::LocalFileHelper::ConvertURLToSystemPath(sURL,sPath))
             {
                 // it's a local file, we can use vcl without special handling
