@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:44:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,12 @@
 
 #pragma hdrstop
 
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
 #endif
-#ifndef _EMBOBJ_HXX
-#include <so3/embobj.hxx>
-#endif
+
 #ifndef _SFX_CLIENTSH_HXX
-#include <sfx2/clientsh.hxx>
+#include <sfx2/ipclient.hxx>
 #endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
@@ -125,13 +123,15 @@
 #include <swcli.hxx>
 #endif
 
-SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
+using namespace com::sun::star;
+
+SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
     {
         SwOLENode *pNd = ((SwNoTxtFrm*)pFly->Lower())->GetNode()->GetOLENode();
-        if ( !pNd || &pNd->GetOLEObj().GetOleRef() != pIPObj )
+        if ( !pNd || pNd->GetOLEObj().GetOleRef() != xObj )
             pFly = 0;
     }
     else
@@ -151,7 +151,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const SvEmbeddedObject *pIPObj ) const
             if ( pNd->IsOLENode() &&
                 //do not load Objects! must not be neccessary here
                  ((SwOLENode*)pNd)->GetOLEObj().IsOleRef() &&
-                 &((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == pIPObj )
+                 ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
                 bExist = TRUE;
                 SwFrm *pFrm = ((SwOLENode*)pNd)->GetFrm();
@@ -180,9 +180,9 @@ String SwFEShell::GetUniqueFrameName() const
 }
 
 
-void SwFEShell::MakeObjVisible( const SvEmbeddedObject *pIPObj ) const
+void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    SwFlyFrm *pFly = FindFlyFrm( pIPObj );
+    SwFlyFrm *pFly = FindFlyFrm( xObj );
     if ( pFly )
     {
         SwRect aTmp( pFly->Prt() );
@@ -199,9 +199,13 @@ void SwFEShell::MakeObjVisible( const SvEmbeddedObject *pIPObj ) const
 BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();
-    BOOL bRet = pIPClient && pIPClient->IsInPlaceActive();
+    if ( !pIPClient )
+        return FALSE;
+
+    BOOL bRet = pIPClient->IsObjectInPlaceActive();
     if( bRet )
     {
+        uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();
         if( CNT_OLE == GetCntType() )
             ClearAutomaticContour();
 
@@ -209,11 +213,11 @@ BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
         SvtModuleOptions aMOpt;
         if( aMOpt.IsChart() )
         {
-            SvInPlaceObject* pObj = pIPClient->GetIPObj();
-            SvGlobalName aObjClsId( *pObj->GetSvFactory() );
+            uno::Reference < embed::XClassifiedObject > xClass( xObj, uno::UNO_QUERY );
+            SvGlobalName aObjClsId( xClass->getClassID() );
             SchMemChart* pMemChart;
             if( SotExchange::IsChart( aObjClsId ) &&
-                0 != (pMemChart = SchDLL::GetChartData( pObj ) ))
+                0 != (pMemChart = SchDLL::GetChartData( xObj ) ))
             {
                 pMemChart->SetSelectionHdl( Link() );
 
@@ -229,7 +233,7 @@ BOOL SwFEShell::FinishOLEObj()                      // Server wird beendet
             SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
 
         //InPlace beenden.
-        pIPClient->GetProtocol().Reset2Open();
+        xObj->changeState( embed::EmbedStates::RUNNING );
         SFX_APP()->SetViewFrame( GetSfxViewShell()->GetViewFrame() );
 
     }
