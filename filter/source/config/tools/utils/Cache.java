@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cache.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 14:27:08 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.filter.config.tools.utils;
 
 //_______________________________________________
@@ -589,7 +588,7 @@ public class Cache
         sRelationView.append("</table>");
         sRelationView.append("</body>");
 
-        FileHelper.writeTextToFile(new java.io.File(aDirectory, "relation_view.html"), false, sEncoding, sRelationView.toString());
+        FileHelper.writeEncodedBufferToFile(new java.io.File(aDirectory, "relation_view.html"), sEncoding, false, sRelationView);
 
         java.util.HashMap lFilters2TypeRegistration = new java.util.HashMap();
         aIt = m_lFilters.keySet().iterator();
@@ -627,7 +626,7 @@ public class Cache
         sType2FiltersView.append("</table>");
         sType2FiltersView.append("</body>");
 
-        FileHelper.writeTextToFile(new java.io.File(aDirectory, "type2filters_view.html"), false, sEncoding, sType2FiltersView.toString());
+        FileHelper.writeEncodedBufferToFile(new java.io.File(aDirectory, "type2filters_view.html"), sEncoding, false, sType2FiltersView);
     }
 
     //___________________________________________
