@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:26:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2620,7 +2620,9 @@ bool SwWW8ImplReader::ReadChars(long& rPos, long nNextAttr, long nTextEnd,
         bool bStartLine = ReadChar(rPos, nCpOfs);
         rPos++;
         if (bPgSecBreak || bStartLine || rPos == nEnd)  // CR oder Fertig
+        {
             return bStartLine;
+        }
     }
 }
 
@@ -3159,7 +3161,13 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
                 pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
             {
-//              AppendTxtNode(*pPaM->GetPoint());
+                // --> OD 2005-01-07 #i39251# - insert text node for page break,
+                // if no one inserted.
+                if ( !bStartLine )
+                {
+                    AppendTxtNode(*pPaM->GetPoint());
+                }
+                // <--
                 rDoc.Insert(*pPaM, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
                 bPgSecBreak = false;
             }
