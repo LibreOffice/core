@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:58:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String SID_SD_A11Y_D_DRAWVIEW_N
     Text[ danish ] = "Tegningsvisning";
     Text[ swedish ] = "Teckningsvy";
     Text[ polish ] = "Tryb rysunku";
-    Text[ portuguese_brazilian ] = "Modo Desenho";
+    Text[ portuguese_brazilian ] = "Modo de Desenho";
     Text[ japanese ] = "図形描画モード";
     Text[ korean ] = "그리기 보기";
     Text[ chinese_simplified ] = "绘图视图";
@@ -112,7 +112,7 @@ String SID_SD_A11Y_D_DRAWVIEW_D
     Text[ danish ] = "This is where you create and edit drawings.";
     Text[ swedish ] = "H�r kan du skapa och redigera teckningar.";
     Text[ polish ] = "This is where you create and edit drawings.";
-    Text[ portuguese_brazilian ] = "This is where you create and edit drawings.";
+    Text[ portuguese_brazilian ] = "Cria��o e edi��o de desenhos";
     Text[ japanese ] = "ここで、図形描画の作成と編集ができます。";
     Text[ korean ] = "여기에서 그리기를 만들고 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够新建和编辑绘图。";
@@ -143,7 +143,7 @@ String SID_SD_A11Y_I_DRAWVIEW_N
     Text[ danish ] = "Tegningsvisning";
     Text[ swedish ] = "Teckningsvy";
     Text[ polish ] = "Tryb rysunku";
-    Text[ portuguese_brazilian ] = "Modo Desenho";
+    Text[ portuguese_brazilian ] = "Modo de Desenho";
     Text[ japanese ] = "図形描画モード";
     Text[ korean ] = "그리기 보기";
     Text[ chinese_simplified ] = "绘图视图";
@@ -174,7 +174,7 @@ String SID_SD_A11Y_I_DRAWVIEW_D
     Text[ danish ] = "This is where you create and edit slides.";
     Text[ swedish ] = "H�r kan du skapa och redigera sidor.";
     Text[ polish ] = "This is where you create and edit slides.";
-    Text[ portuguese_brazilian ] = "This is where you create and edit slides.";
+    Text[ portuguese_brazilian ] = "Cria��o e edi��o de slides";
     Text[ japanese ] = "ここで、スライドの作成と編集ができます。";
     Text[ korean ] = "여기에서 슬라이드를 만들고 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够新建和编辑幻灯片。";
@@ -205,7 +205,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_N
     Text[ danish ] = "Dispositionsvisning";
     Text[ swedish ] = "Dispositionsvy";
     Text[ polish ] = "Tryb konspektu";
-    Text[ portuguese_brazilian ] = "Modo T�picos";
+    Text[ portuguese_brazilian ] = "Modo de Estrutura de T�picos";
     Text[ japanese ] = "アウトラインモード";
     Text[ korean ] = "개요 보기";
     Text[ chinese_simplified ] = "大纲视图";
@@ -236,7 +236,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_D
     Text[ danish ] = "This is where you enter or edit text in list form.";
     Text[ swedish ] = "H�r kan du mata in och redigera text i dispositionsvyn.";
     Text[ polish ] = "This is where you enter or edit text in list form.";
-    Text[ portuguese_brazilian ] = "This is where you enter or edit text in list form.";
+    Text[ portuguese_brazilian ] = "Cria��o e edi��o do texto dos t�picos.";
     Text[ japanese ] = "ここで、アウトライン用テキストの入力と編集ができます。";
     Text[ korean ] = "여기에서 텍스트를 개요 보기로 입력하거나 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够在大纲视图之中输入和编辑文字。";
@@ -267,7 +267,7 @@ String SID_SD_A11Y_I_SLIDEVIEW_N
     Text[ danish ] = "Diasvisning";
     Text[ swedish ] = "Diabildsvy";
     Text[ polish ] = "Tryb slajdu";
-    Text[ portuguese_brazilian ] = "Slides View";
+    Text[ portuguese_brazilian ] = "Modo de Slides";
     Text[ japanese ] = "スライドモード";
     Text[ korean ] = "슬라이드 보기";
     Text[ chinese_simplified ] = "幻灯片视图";
@@ -298,7 +298,7 @@ String SID_SD_A11Y_I_SLIDEVIEW_D
     Text[ danish ] = "This is where you sort slides.";
     Text[ swedish ] = "H�r kan du sortera sidor.";
     Text[ polish ] = "This is where you sort slides.";
-    Text[ portuguese_brazilian ] = "This is where you sort slides.";
+    Text[ portuguese_brazilian ] = "Sele��o de slides";
     Text[ japanese ] = "ここで、スライドの並べ替えができます。";
     Text[ korean ] = "여기에서 슬라이드를 정렬하실 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够排序页面。";
@@ -329,7 +329,7 @@ String SID_SD_A11Y_I_NOTESVIEW_N
     Text[ danish ] = "Notevisning";
     Text[ swedish ] = "Anteckningsvy";
     Text[ polish ] = "Tryb notatek";
-    Text[ portuguese_brazilian ] = "Modo Anota��es";
+    Text[ portuguese_brazilian ] = "Modo de Anota��es";
     Text[ japanese ] = "ノートモード";
     Text[ korean ] = "메모 보기";
     Text[ chinese_simplified ] = "备注视图";
@@ -360,7 +360,7 @@ String SID_SD_A11Y_I_NOTESVIEW_D
     Text[ danish ] = "This is where you enter and view notes.";
     Text[ swedish ] = "H�r kan du mata in och redigera anteckningar.";
     Text[ polish ] = "This is where you enter and view notes.";
-    Text[ portuguese_brazilian ] = "This is where you enter and view notes.";
+    Text[ portuguese_brazilian ] = "Digita��o e edi��o de anota��es";
     Text[ japanese ] = "ここで、ノートの入力と編集ができます。";
     Text[ korean ] = "여기에서 메모를 입력하고 편집하실 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够输入和编辑备注。";
@@ -422,7 +422,7 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text[ danish ] = "This is where you decide on the layout for handouts.";
     Text[ swedish ] = "H�r kan du redigera layout f�r flygblad.";
     Text[ polish ] = "This is where you decide on the layout for handouts.";
-    Text[ portuguese_brazilian ] = "This is where you decide on the layout for handouts.";
+    Text[ portuguese_brazilian ] = "Edi��o do layout dos folhetos";
     Text[ japanese ] = "ここで、ハンドアウトのレイアウトと編集ができます。";
     Text[ korean ] = "여기에서 유인물의 레이아웃을 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够编辑讲义的版式。";
@@ -436,6 +436,7 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text[ hindi ] = "This is where you decide on the layout for handouts.";
     Text[ slovak ] = "Tu sa môžete rozhodnúť pre rozloženie téz.";
 };
+
 
 
 
