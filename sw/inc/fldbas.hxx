@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 10:55:53 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 15:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,8 @@ public:
             USHORT          Which() const { return nWhich; }
 
     inline  void            UpdateFlds() const;
+
+    static SvStringsDtor* GetFldNames();
 };
 
 inline void SwFieldType::UpdateFlds() const
@@ -501,6 +503,29 @@ public:
     String                  GetExpandedFormula() const;
 
 };
+
+/*--------------------------------------------------------------------
+    Beschreibung:   Sortierung von Felder nach der Position
+ --------------------------------------------------------------------*/
+class SwFieldList
+{
+public:
+    SwFieldList(SwEditShell* pShell);
+    ~SwFieldList();
+
+    // Felder eines bestimmten Typen aufnehmen
+    void        InsertFields(USHORT nTypeId, const String* pName=0);
+
+    USHORT      Count() const;
+
+    SwField*    GetLastField() const;
+    SwField*    GetNextField() const;
+
+private:
+    SwEditShell*    pSh;
+    _SetGetExpFlds* pSrtLst;
+};
+
 
 #endif  // FIELDIDS_ONLY
 
