@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-03 13:23:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,7 +1409,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                                 STREAM_READ );
         aStrm.Seek( 0 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         {
             SvFileStream aDeb( String::CreateFromAscii(
                     "file:///d|/temp/update.txt" ), STREAM_WRITE );
