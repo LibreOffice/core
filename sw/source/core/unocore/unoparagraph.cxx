@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 10:13:14 $
+ *  last change: $Author: os $ $Date: 2001-03-29 14:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #pragma hdrstop
 
 #include <cmdid.h>
+#ifndef _UNOMID_H
+#include <unomid.h>
+#endif
 
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
@@ -371,112 +374,44 @@ void SwXParagraph::removeVetoableChangeListener(const OUString& PropertyName, co
 beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             SwUnoCrsr& rUnoCrsr,
                             const SwAttrSet** ppSet,
-                            SfxItemPropertySet& rPropSet,
-                            const OUString& rPropertyName )
+                            const SfxItemPropertyMap& rMap )
                                 throw( beans::UnknownPropertyException)
 {
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
-    if(0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPE) ||
-         0 == rPropertyName.compareToAscii(UNO_NAME_ANCHOR_TYPES) ||
-            0 == rPropertyName.compareToAscii(UNO_NAME_TEXT_WRAP))
+    if( FN_UNO_ANCHOR_TYPES == rMap.nWID  ||
+            RES_ANCHOR == rMap.nWID && MID_ANCHOR_ANCHORTYPE == rMap.nMemberId ||
+            RES_SURROUND == rMap.nWID  && MID_SURROUND_SURROUNDTYPE == rMap.nMemberId )
         return eRet;
-
-    const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                            rPropSet.getPropertyMap(), rPropertyName);
-    if(!pMap)
-    {
-        UnknownPropertyException aExcept;
-        aExcept.Message = rPropertyName;
-        throw aExcept;
-    }
 
     if(!(*ppSet))
     {
         SwNode& rTxtNode = rUnoCrsr.GetPoint()->nNode.GetNode();
         (*ppSet) = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
     }
-    if(!rPropertyName.compareToAscii(UNO_NAME_NUMBERING_RULES))
+    if(rMap.nWID == FN_UNO_NUM_RULES)
     {
         //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
         SwUnoCursorHelper::getNumberingProperty( rUnoCrsr, eRet );
     }
-    else if(!rPropertyName.compareToAscii(UNO_NAME_PARA_STYLE_NAME) ||
-            !rPropertyName.compareToAscii(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME))
+    else if(rMap.nWID == FN_UNO_PARA_STYLE ||
+            rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME )
     {
-        SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl( rUnoCrsr,
-            !rPropertyName.compareToAscii(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME));
+        SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(
+            rUnoCrsr, rMap.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
         if( !pFmt )
             eRet = beans::PropertyState_AMBIGUOUS_VALUE;
     }
-    else if(!rPropertyName.compareToAscii(UNO_NAME_PAGE_STYLE_NAME))
+    else if(rMap.nWID == FN_UNO_PAGE_STYLE)
     {
         String sVal = SwUnoCursorHelper::GetCurPageStyle( rUnoCrsr );
         if( !sVal.Len() )
             eRet = beans::PropertyState_AMBIGUOUS_VALUE;
     }
-    else if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(pMap->nWID, FALSE))
+    else if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rMap.nWID, FALSE))
         eRet = beans::PropertyState_DIRECT_VALUE;
     else
         eRet = beans::PropertyState_DEFAULT_VALUE;
 
-/*  if( !*ppSet )
-    {
-        // Absatz selektieren
-        SwParaSelection aParaSel( &rUnoCrsr );
-        *ppSet = new SfxItemSet( rUnoCrsr.GetDoc()->GetAttrPool(),
-                        RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-                        RES_FILL_ORDER,     RES_FRMATR_END -1,
-                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                        RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                        0L);
-        SwXTextCursor::GetCrsrAttr( rUnoCrsr, **ppSet, TRUE );
-    }
-    if(rPropertyName.equals(C2U(UNO_NAME_PAGE_DESC_NAME)))
-    {
-        // Sonderbehandlung RES_PAGEDESC
-        const SfxPoolItem* pItem;
-        if(SFX_ITEM_SET == (*ppSet)->GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
-        {
-            eRet = beans::PropertyState_DIRECT_VALUE;
-        }
-    }
-    else if(rPropertyName.equals(C2U(UNO_NAME_NUMBERING_RULES)))
-    {
-        //wenn eine Numerierung gesetzt ist, dann hier herausreichen, sonst nichts tun
-        lcl_getNumberingProperty( rUnoCrsr, eRet );
-    }
-    else if(rPropertyName.equals(C2U(UNO_NAME_PARA_STYLE_NAME)) ||
-            rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)))
-    {
-        SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl( rUnoCrsr,
-            rPropertyName.equals(C2U(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME)));
-        if( !pFmt )
-            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-    }
-    else if(rPropertyName.equals(C2U(UNO_NAME_PAGE_STYLE_NAME)))
-    {
-        String sVal = lcl_GetCurPageStyle( rUnoCrsr );
-        if( !sVal.Len() )
-            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-    }
-    else
-    {
-        eRet = rPropSet.getPropertyState( rPropertyName, **ppSet );
-        //special handling for character attributes that are set in the ItemSet of the text node
-        if(beans::PropertyState_DEFAULT_VALUE == eRet)
-        {
-            const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
-                                    rPropSet.getPropertyMap(), rPropertyName);
-            if(pMap)
-            {
-                SwNode& rTxtNode = rUnoCrsr.GetPoint()->nNode.GetNode();
-                SwAttrSet* pNodeAttrSet = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
-                if(pNodeAttrSet && SFX_ITEM_SET == pNodeAttrSet->GetItemState(pMap->nWID, FALSE))
-                    eRet = beans::PropertyState_DIRECT_VALUE;
-            }
-        }
-    }
-*/
     return eRet;
 }
 
@@ -492,8 +427,15 @@ beans::PropertyState SwXParagraph::getPropertyState(const OUString& rPropertyNam
     if( pUnoCrsr )
     {
         const SwAttrSet* pSet = 0;
-        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,
-                                                    aPropSet, rPropertyName );
+        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName );
+        if(!pMap)
+        {
+            UnknownPropertyException aExcept;
+            aExcept.Message = rPropertyName;
+            throw aExcept;
+        }
+        eRet = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet, *pMap );
     }
     else
         throw uno::RuntimeException();
@@ -513,12 +455,21 @@ uno::Sequence< beans::PropertyState > SwXParagraph::getPropertyStates(
     beans::PropertyState* pStates = aRet.getArray();
 
     SwUnoCrsr* pUnoCrsr = ((SwXParagraph*)this)->GetCrsr();
+    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
     if( pUnoCrsr )
     {
         const SwAttrSet* pSet = 0;
         for(sal_Int32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
-            pStates[i] = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,
-                                                         aPropSet, pNames[i]);
+        {
+            pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i] );
+            if(!pMap)
+            {
+                UnknownPropertyException aExcept;
+                aExcept.Message = pNames[i];
+                throw aExcept;
+            }
+            pStates[i] = lcl_SwXParagraph_getPropertyState( *pUnoCrsr, &pSet,*pMap);
+        }
     }
     else
         throw uno::RuntimeException();

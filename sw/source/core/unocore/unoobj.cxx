@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:48:52 $
+ *  last change: $Author: os $ $Date: 2001-03-29 14:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,48 +1930,39 @@ PropertyState lcl_SwXTextCursor_GetPropertyState( SfxItemSet** ppSet,
                                     SfxItemSet** ppSetParent,
                                     SwPaM& rPaM,
                                     SfxItemPropertySet& rPropSet,
-                                    const OUString& rPropertyName )
+                                    const SfxItemPropertyMap& rMap )
 {
     PropertyState eRet = PropertyState_DEFAULT_VALUE;
-    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
-                            rPropSet.getPropertyMap(), rPropertyName );
-    if( pMap )
+
+    if( !*ppSet )
     {
-        String aPropertyName( rPropertyName );
-
-        if( !*ppSet )
-        {
-            *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
-                    RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
-                    RES_FILL_ORDER,     RES_FRMATR_END -1,
-                    RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                    RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
-                    0L );
-            SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
-        }
-
-        Any aAny;
-        BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(pMap, rPaM, **ppSet, aAny, eRet );
-        if(!bDone)
-            eRet = rPropSet.getPropertyState( aPropertyName,**ppSet );
-
-        //try again to find out if a value has been inherited
-        if( beans::PropertyState_DIRECT_VALUE == eRet )
-        {
-            if( !*ppSetParent )
-            {
-                *ppSetParent = (*ppSet)->Clone( FALSE );
-                SwXTextCursor::GetCrsrAttr( rPaM, **ppSetParent, TRUE );
-            }
-            bDone = SwUnoCursorHelper::getCrsrPropertyValue( pMap, rPaM, **ppSetParent,
-                                                aAny, eRet );
-            if( !bDone )
-                eRet = rPropSet.getPropertyState( aPropertyName,
-                                                  **ppSetParent );
-        }
+        *ppSet = new SfxItemSet( rPaM.GetDoc()->GetAttrPool(),
+                RES_CHRATR_BEGIN,   RES_PARATR_NUMRULE,
+                RES_FILL_ORDER,     RES_FRMATR_END -1,
+                RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
+                RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
+                0L );
+        SwXTextCursor::GetCrsrAttr( rPaM, **ppSet, FALSE );
     }
-    else
-        throw UnknownPropertyException();
+
+    Any aAny;
+    BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(&rMap, rPaM, **ppSet, aAny, eRet );
+    if(!bDone)
+        eRet = rPropSet.getPropertyState( rMap,**ppSet );
+
+    //try again to find out if a value has been inherited
+    if( beans::PropertyState_DIRECT_VALUE == eRet )
+    {
+        if( !*ppSetParent )
+        {
+            *ppSetParent = (*ppSet)->Clone( FALSE );
+            SwXTextCursor::GetCrsrAttr( rPaM, **ppSetParent, TRUE );
+        }
+        bDone = SwUnoCursorHelper::getCrsrPropertyValue( &rMap, rPaM, **ppSetParent,
+                                            aAny, eRet );
+        if( !bDone )
+            eRet = rPropSet.getPropertyState( rMap, **ppSetParent );
+    }
     return eRet;
 }
 
@@ -1988,9 +1979,19 @@ Sequence< PropertyState > SwXTextCursor::GetPropertyStates(
     PropertyState* pStates = aRet.getArray();
 
     SfxItemSet *pSet = 0, *pSetParent = 0;
+    const SfxItemPropertyMap* pMap = rPropSet.getPropertyMap();
     for( INT32 i = 0, nEnd = PropertyNames.getLength(); i < nEnd; i++ )
+    {
+        pMap = SfxItemPropertyMap::GetByName( pMap, pNames[i] );
+        if(!pMap)
+        {
+            UnknownPropertyException aExcept;
+            aExcept.Message = pNames[i];
+            throw aExcept;
+        }
         pStates[i] = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
-                                            rPaM, rPropSet, pNames[i] );
+                                            rPaM, rPropSet, *pMap );
+    }
     delete pSet;
     delete pSetParent;
 
@@ -2005,8 +2006,16 @@ PropertyState SwXTextCursor::GetPropertyState(
 {
     PropertyState eRet;
     SfxItemSet *pSet = 0, *pSetParent = 0;
+    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
+                                rPropSet.getPropertyMap(), rPropertyName );
+    if(!pMap)
+    {
+        UnknownPropertyException aExcept;
+        aExcept.Message = rPropertyName;
+        throw aExcept;
+    }
     eRet = ::lcl_SwXTextCursor_GetPropertyState( &pSet, &pSetParent,
-                                       rPaM, rPropSet, rPropertyName );
+                                    rPaM, rPropSet, *pMap );
     delete pSet;
     delete pSetParent;
 
