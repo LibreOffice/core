@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-14 11:08:12 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ const sal_Char*         Biff8RecDumper::pLevelPreStringNT = pLevelPreString + st
 UINT32                  Biff8RecDumper::nInstances = 0;
 sal_Char*               Biff8RecDumper::pBlankLine = NULL;
 const UINT16            Biff8RecDumper::nLenBlankLine = 255;
-const UINT16            Biff8RecDumper::nRecCnt = 0x2000;
+const UINT16            Biff8RecDumper::nRecCnt = 0x2020;
 UINT8*                  Biff8RecDumper::pCharType = NULL;
 UINT8*                  Biff8RecDumper::pCharVal = NULL;
 
@@ -4232,6 +4232,7 @@ void Biff8RecDumper::DumpSubStream( SvStorage* pStorage, const sal_Char* pStream
     XclImpStream* pOldStream = pIn;
     pIn = new XclImpStream( *pStream );
     XclImpStream& rIn = *pIn;
+    rIn.SetWarningMode( bWarnings );
 
     // -- dump from here --
     UINT16  nId;
@@ -5571,6 +5572,8 @@ _KEYWORD Biff8RecDumper::GetKeyType( const ByteString& r )
         e = SkipOffset;
     else if( t == "READCONTRECS" )
         e = ReadContRecs;
+    else if( t == "NOWARNINGS" )
+        e = NoWarnings;
     else if( t == "CONTLOAD" )
         e = Contload;
     else if( t == "PARSEP" )
@@ -6043,6 +6046,7 @@ BOOL Biff8RecDumper::ExecCommand( const UINT32 nL, const ByteString& r, const By
         case Skipdump:      bSkip = TRUE;           break;
         case SkipOffset:    bSkipOffset = TRUE;     break;
         case ReadContRecs:  bReadContRecs = TRUE;   break;
+        case NoWarnings:    bWarnings = FALSE;      break;
         case Contload:      bEndLoading = TRUE;     break;
         case Parsep:
             if( nValLen == 0 )
@@ -6692,6 +6696,7 @@ Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
 
     nMaxBodyLines = 1024;
     bEndLoading = bSkip = bSkipOffset = bReadContRecs = FALSE;
+    bWarnings = TRUE;
 
     pDumpModes = NULL;
     ppRecNames = NULL;
@@ -6810,6 +6815,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
 
         pIn = &r;
         r.StoreUserPosition();
+        r.SetWarningMode( bWarnings );
 
         FilterProgressBar*  pPrgrsBar = new FilterProgressBar( r );
 
@@ -6827,6 +6833,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         delete pPrgrsBar;
 
         r.SeekUserPosition();
+        r.SetWarningMode( TRUE );
 
         pPivotCache = NULL;
 
