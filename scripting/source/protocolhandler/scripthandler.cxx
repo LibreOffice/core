@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: npower $ $Date: 2003-03-06 11:58:17 $
+*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:20 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -329,6 +329,7 @@ throw ( RuntimeException )
         }
 
         rtl::OUString documentString = rtl::OUString::createFromAscii( "location=document" );
+        rtl::OUString filesystemString = rtl::OUString::createFromAscii( "location=filesystem" );
 
         // Detect if workaround is necessary.
         // Problem, when FunctionProvier is created,
@@ -342,9 +343,10 @@ throw ( RuntimeException )
         // located script create FunctionProvider with extra paramater
         // which indicates to storage not to use security
         //
-        if ( ( url.indexOf( documentString ) == -1 ) )
+        // workaround also applies to scripts located on the filesystem
+        if ( ( url.indexOf( documentString ) == -1 ) && ( url.indexOf( filesystemString ) == -1 ) )
         {
-            // Not a document script - no need to use security
+            // Not a document or filesystem script - no need to use security
             OSL_TRACE(" Will create special FunctionProvider eg. one that doesn't user security" );
             args.realloc( 2 );
             args[ 1 ] <<= sal_False;

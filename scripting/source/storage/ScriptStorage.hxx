@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorage.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:17 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@ typedef ::std::hash_map < ::rtl::OUString,
 css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >,
 ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptOutput_hash;
+//-----------------------------------------------------------------------------
+typedef ::std::hash_map < ::rtl::OUString,
+::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+ScriptLanguages_hash;
 
 //=============================================================================
 
@@ -196,13 +200,14 @@ public:
         throw ( css::uno::RuntimeException );
     //=========================================================================
 
-
+private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess > m_xSimpleFileAccess;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 
     ::std::vector < ::rtl::OUString >  mv_logicalNames;
+    ScriptLanguages_hash mh_scriptLangs;
     ScriptInfo_hash mh_implementations;
     ScriptOutput_hash mh_parcels;
     sal_Int32 m_scriptStorageID;
@@ -216,6 +221,9 @@ public:
         css::uno::Reference < css::xml::sax::XExtendedDocumentHandler > & xExDocHandler );
     void create ()
     throw (css::uno::RuntimeException, css::uno::Exception);
+    void createForFilesystem ( const ::rtl::OUString & scriptLanguage )
+    throw (css::uno::RuntimeException, css::uno::Exception);
+    ::rtl::OUString getFileExtension ( const ::rtl::OUString & stringUri );
 
 }; // class ScriptingStorage
 

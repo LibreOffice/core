@@ -7,6 +7,8 @@ REM ----- Global Variables -----
 &apos;bindingDialog can refer to either KeyBinding or MenuBinding dialog
 private languages() as String 
 private locations() as String  
+private filesysScripts() as String
+private filesysCount as integer
 private bindingDialog as object
 private helpDialog as object
 &apos;Couldn&apos;t get redim to work, so scriptDisplayList is and array of arrays
@@ -247,7 +249,7 @@ end Sub
 
     
 Sub initialiseNavigationComboArrays()
-    locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot; )
+    locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
     ReDim languages(0) as String
 	languages(0) = &quot;Java&quot;
 	
@@ -391,23 +393,48 @@ function getScriptURI( selectedScript as String ) as String
 		location = &quot;user&quot;
 	elseif ( location = &quot;Share&quot; ) then
 		location = &quot;share&quot;
+	elseif ( location = &quot;Filesystem&quot; ) then
+		location = &quot;filesystem&quot;
 	else
 		location = &quot;document&quot;
 	end if
 
-	Dim scriptInfo as Object
-	scripts() = scriptDisplayList(0)
-	for n = LBOUND( scripts() ) to UBOUND( scripts() )
 
-		if ( scripts( n ).Name = selectedScript ) then
-			scriptInfo = scripts( n ).Value
-			exit for
-		end if
-	next n
 
-	getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; _
-		+ scriptInfo.getLanguage() + &quot;&amp;amp;function=&quot; + _
-		scriptInfo.getFunctionName() + &quot;&amp;amp;location=&quot; + location 	
+	if ( location = &quot;filesystem&quot; ) then
+		REM need to build URI here - dcf
+		combo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
+		language = combo.text
+		url = selectedscript
+		while instr( url, &quot;/&quot; ) &gt; 0
+			pos = instr( url, &quot;/&quot; )
+			locationpath = locationpath + mid( url, 1, pos )
+			url = mid( url, pos+1, len( url ) - pos )
+		wend
+		functionName = url
+		while instr( url, &quot;.&quot; ) &gt; 0
+			pos = instr( url, &quot;.&quot; )
+			logicalName = logicalName + mid( url, 1, pos )
+			url = mid( url, pos + 1, len( url ) - pos )
+		wend
+		logicalName = mid( logicalName, 1, len( logicalName ) - 1 )
+		getScriptURI() = &quot;script://&quot; + logicalName + &quot;?language=&quot; _
+			+ language + &quot;&amp;amp;function=&quot; + functionName _
+			+ &quot;&amp;amp;location=filesystem:&quot; + locationPath
+	else
+		Dim scriptInfo as Object
+		scripts() = scriptDisplayList(0)
+		for n = LBOUND( scripts() ) to UBOUND( scripts() )
+
+			if ( scripts( n ).Name = selectedScript ) then
+				scriptInfo = scripts( n ).Value
+				exit for
+			end if
+		next n
+		getScriptURI() = &quot;script://&quot; + scriptInfo.getLogicalName + &quot;?language=&quot; _
+			+ scriptInfo.getLanguage() + &quot;&amp;amp;function=&quot; + _
+			scriptInfo.getFunctionName() + &quot;&amp;amp;location=&quot; + location 	
+	end if
 	
 end function
 
@@ -1002,6 +1029,39 @@ sub PopulateScriptList( lang as String, loc as String )
 	elseif ( loc = &quot;Document&quot; )then
 		document = StarDesktop.ActiveFrame.Controller.Model
 		scriptLocationURI = document.getURL()
+	elseif ( loc = &quot;Filesystem&quot; ) then
+		REM populate the list from the filesysScripts list
+		length = UBOUND( filesysScripts() )
+		if(length = -1) then
+			exit sub
+		endif
+		if ( lang = &quot;BeanShell&quot; ) then
+			extn = &quot;bsh&quot;
+		elseif ( lang = &quot;Rhino&quot; ) then
+			extn = &quot;js&quot;
+		else
+			extn = &quot;&quot;
+		endif
+		dim locnDisplayList( length ) as new com.sun.star.beans.PropertyValue
+		for index = lbound(filesysScripts()) to ubound(filesysScripts())
+			scriptextn = filesysScripts(n)
+			while instr( scriptextn, &quot;.&quot; ) &gt; 0
+				pos = instr( scriptextn, &quot;.&quot; )
+				scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
+			wend
+			if ( detailedView ) and ( scriptextn = extn ) then
+				locnDisplayList( index ).Name = filesysScripts( index )
+				locnDisplayList( index ).Value = filesysScripts( index )
+			elseif ( scriptextn = extn ) then
+				REM replace name with simplified view
+				locnDisplayList( index ).Name = filesysScripts( index )
+				locnDisplayList( index ).Value = filesysScripts( index )
+			end if
+			scriptList.addItem( locnDisplayList( index ).Name, index )
+		next index
+		ScriptDisplayList(0) = locnDisplayList()
+		scriptList.selectItemPos( 0, true )
+		exit sub			
 	endif
 	scriptStorageID = scriptstoragemgr.getScriptStorageID( scriptLocationURI )
 	if ( scriptStorageID &gt; -1 ) then
@@ -1516,6 +1576,12 @@ sub LangLocComboListener()
         end if
     end if
     
+    if ( location = &quot;Filesystem&quot; ) then
+    	bindingDialog.Model.Browse.enabled = true
+    else
+    	bindingDialog.Model.Browse.enabled = false
+    endif
+    
     &apos; extra dialog dependant processing
     if dialogName = &quot;Menu&quot; then
     	&apos; will set New button to false if no text in LableBox
@@ -1776,6 +1842,58 @@ sub MenuNewButton()
 	SubMenuListListener()
 end sub
 
+sub BrowseButton()
+	Dim oFilePicker As Object, oSimpleFileAccess As Object
+	Dim oSettings As Object, oPathSettings As Object
+	Dim sFileURL As String
+	Dim sFiles As Variant
+
+	oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
+	REM need a better way of seeding this
+	oFilePicker.AppendFilter( &quot;BeanShell (*.bsh)&quot;, &quot;*.bsh&quot; )
+	oFilePicker.AppendFilter( &quot;Rhino (*.js)&quot;, &quot;*.js&quot;)
+	oFilePicker.SetCurrentFilter( &quot;BeanShell (*.bsh)&quot; )
+	
+	REM if no file URL is set, get path settings from configuration
+	REM perhaps get the documents URL?
+	sFileURL = &quot;&quot;
+
+	If ( sFileURL = &quot;&quot; ) Then
+		oSettings = CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
+		oPathSettings = oSettings.getByName( &quot;PathSettings&quot; )
+		sFileURL = oPathSettings.getPropertyValue( &quot;Work&quot; )
+	End If
+
+	REM set display directory
+	oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+	If oSimpleFileAccess.exists( sFileURL ) And oSimpleFileAccess.isFolder( sFileURL ) Then
+		oFilePicker.setDisplayDirectory( sFileURL )
+	End If
+	
+	REM execute file dialog
+	If oFilePicker.execute() Then
+		sFiles = oFilePicker.getFiles()
+		sFileURL = sFiles(0)
+		If oSimpleFileAccess.exists( sFileURL ) Then
+			REM add sFileURL to the list
+			reDIm preserve filesysScripts(filesysCount) as String
+			filesysScripts( filesysCount ) = sFileURL
+			filesysCount=filesysCount+1
+			sFilter = oFilePicker.getCurrentFilter()
+			langCombo = bindingDialog.getControl( &quot;LanguageCombo&quot; )
+			dim items() as String
+			items() = langCombo.getItems()
+			for index = lbound(items()) to ubound(items())
+				iPos = inStr(sFilter,items(index))
+				if( iPos &gt; 0 ) then
+					langCombo.text = items( index )
+					exit for
+				end if
+			next index
+		End If
+	End If		
+	LangLocComboListener()
+End Sub
 
 sub KeyOKButton()	
 	WriteXMLFromArray()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptNameResolverImpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:13 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
     OUString docString = OUString::createFromAscii( "location=document" );
     OUString userString = OUString::createFromAscii( "location=user" );
     OUString shareString = OUString::createFromAscii( "location=share" );
+    OUString filesysString = OUString::createFromAscii( "location=filesystem" );
 
     // initialise vector with doc, user and share
 
@@ -232,6 +233,61 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         OSL_TRACE("Full resolution available, search share");
         // search in share
         m_vSearchIDs[ 0 ] = ( *m_pSearchIDs )[ 2 ];
+        m_vSearchIDs.resize( 1 );
+    }
+    else if ( scriptURI.indexOf( filesysString ) != -1 )
+    {
+        OSL_TRACE("Full resolution available, create & search filesystem");
+        OUString filesysURL;
+        try
+        {
+            filesysURL = getFilesysURL( scriptURI );
+        }
+        catch ( RuntimeException & e )
+        {
+            OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
+            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        }
+        Reference< XInterface > xInterface = m_xMultiComFac->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii(
+                    "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
+        validateXRef( xInterface,
+            "FunctionProvider::initialise: cannot get SimpleFileAccess Service\n" );
+        Reference < ucb::XSimpleFileAccess > xSimpleFileAccess = Reference <
+                    ucb::XSimpleFileAccess > ( xInterface, UNO_QUERY_THROW );
+
+        // do we need to encode this? hope not.
+        OSL_TRACE( ">>>> About to create storage for %s",
+                ::rtl::OUStringToOString( filesysURL,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        // ask storage manager to create storage
+        sal_Int32 filesysScriptStorageID;
+        try
+        {
+            // need to get the ScriptStorageManager
+            Any a = m_xContext->getValueByName(
+                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
+            Reference < storage::XScriptStorageManager > xScriptStorageMgr;
+            if ( sal_False == ( a >>= xScriptStorageMgr ) )
+            {
+                OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: failed to get ScriptStorageManager" );
+                throw RuntimeException( temp, Reference< XInterface >() );
+                // need to throw
+            }
+            validateXRef( xScriptStorageMgr, "Cannot get ScriptStorageManager" );
+            filesysScriptStorageID =
+                    xScriptStorageMgr->createScriptStorageWithURI(
+                        xSimpleFileAccess, filesysURL );
+                OSL_TRACE( ">>>> Created storage %d - for %s ",
+                    filesysScriptStorageID, ::rtl::OUStringToOString(
+                        filesysURL, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+        catch ( RuntimeException & e )
+        {
+            OUString temp = OUSTR( "ScriptNameResolverImpl::resolve: " );
+            throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+        }
+        m_vSearchIDs[ 0 ] = filesysScriptStorageID;
         m_vSearchIDs.resize( 1 );
     }
     else
@@ -384,7 +440,24 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
     }
     try
     {
-        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid, docURI );
+        OUString permissionURI = docURI;
+        OUString filesysString = OUString::createFromAscii( "location=filesystem" );
+        if ( scriptURI.indexOf( filesysString ) != -1 )
+        {
+            // in the case of filesys scripts we're checking whether the
+            // location of the script, rather than the location of the document,
+            // has execute permission
+            try
+            {
+                permissionURI = getFilesysURL( scriptURI );
+            }
+            catch ( RuntimeException & e )
+            {
+                OUString temp = OUSTR( "ScriptNameResolverImpl::resolveFromURI: " );
+                throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+            }
+        }
+        Reference< storage::XScriptInfoAccess > storage = getStorageInstance( sid, permissionURI );
         validateXRef( storage,
         "ScriptNameResolverImpl::resolveURIFromStorageID: cannot get XScriptInfoAccess" );
         Sequence< Reference< storage::XScriptInfo > > results =
@@ -448,7 +521,7 @@ SAL_THROW ( ( lang::IllegalArgumentException, css::security::AccessControlExcept
 Reference< storage::XScriptInfoAccess >
 
 ScriptNameResolverImpl::getStorageInstance( sal_Int32 sid,
-const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::AccessControlException, lang::IllegalArgumentException ) )
+const ::rtl::OUString & permissionURI ) SAL_THROW ( ( RuntimeException, css::security::AccessControlException, lang::IllegalArgumentException ) )
 {
     Reference< storage::XScriptInfoAccess > xScriptInfoAccess;
     try
@@ -476,7 +549,7 @@ const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::
         if( ( sid != scriptingConstantsPool.USER_STORAGE_ID ) &&
             ( sid != scriptingConstantsPool.SHARED_STORAGE_ID ) )
         {
-            xScriptSecurity->checkPermission( docURI,
+            xScriptSecurity->checkPermission( permissionURI,
                 OUString::createFromAscii( "execute" ) );
             // if we get here, the checkPermission hasn't thrown an
             // AccessControlException, ie. permission has been granted
@@ -514,6 +587,58 @@ const ::rtl::OUString & docURI ) SAL_THROW ( ( RuntimeException, css::security::
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
     return xScriptInfoAccess;
+}
+//*************************************************************************
+OUString
+ScriptNameResolverImpl::getFilesysURL( const OUString & scriptURI )
+throw( RuntimeException )
+{
+        OUString filePath;
+        OUString fileName;
+        OUString filesysString = OUString::createFromAscii( "location=filesystem" );
+        sal_Int32 locationPos = scriptURI.indexOf( filesysString );
+        // expect location=filesys:file:///foo/bar/myscript.bsh etc
+        // except the file url at this point is encoded
+        // so we should be ok searching for the '&'
+        sal_Int32 filesysStrLen = filesysString.getLength() + 1;
+        sal_Int32 endOfLocn = scriptURI.indexOf( '&', locationPos );
+        if (endOfLocn == -1 )
+        {
+                filePath = scriptURI.copy( locationPos + filesysString.getLength() + 1 );
+        }
+        else
+        {
+                filePath = scriptURI.copy( locationPos + filesysStrLen,
+                                endOfLocn - locationPos - filesysStrLen );
+        }
+        //file name shoul also be encoded so again ok to search for '&'
+        OUString functionKey = OUString::createFromAscii( "function=" );
+        sal_Int32 functionKeyLength = functionKey.getLength();
+        sal_Int32 functionNamePos = scriptURI.indexOf( functionKey );
+        if ( functionNamePos > 0 )
+        {
+            sal_Int32 endOfFn = scriptURI.indexOf( '&', functionNamePos );
+            if ( endOfFn == -1 )
+            {
+                fileName = scriptURI.copy( functionNamePos + functionKeyLength );
+            }
+            else
+            {
+                fileName = scriptURI.copy( functionNamePos + functionKeyLength,
+                                endOfFn - functionNamePos - functionKeyLength );
+            }
+        }
+        else
+        {
+            // we need to throw
+            OUString temp = OUSTR( "ScriptNameResolverImpl::getFilesysURL: error getting the filesysURL" );
+            throw RuntimeException( temp, Reference< XInterface >() );
+        }
+        filePath+=fileName;
+        OSL_TRACE( "ScriptNameResolverImpl::getFilesysURL: filesys URL = %s",
+                 ::rtl::OUStringToOString( filePath,
+                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        return filePath;
 }
 //*************************************************************************
 Sequence<OUString> SAL_CALL

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptNameResolverImpl.hxx,v $
 *
-*  $Revision: 1.11 $
+*  $Revision: 1.12 $
 *
-*  last change: $Author: npower $ $Date: 2003-03-03 18:39:41 $
+*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -124,8 +124,11 @@ private:
         const ::rtl::OUString & nameToResolve )
         SAL_THROW ( ( css::lang::IllegalArgumentException, css::uno::RuntimeException ) );
     css::uno::Reference< dcsssf::storage::XScriptInfoAccess >
-    getStorageInstance( sal_Int32 sid, const rtl::OUString & docURI)
+    getStorageInstance( sal_Int32 sid, const rtl::OUString & permissionURI)
         SAL_THROW ( ( css::uno::RuntimeException ) );
+    ::rtl::OUString
+    ScriptNameResolverImpl::getFilesysURL( const ::rtl::OUString & scriptURI )
+        throw( css::uno::RuntimeException );
 
     /**********************************************
      Reference< XComponentContext > m_xContext

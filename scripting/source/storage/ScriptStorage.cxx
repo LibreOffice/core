@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.19 $
-*  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:16 $
+*  $Revision: 1.20 $
+*  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:22 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 #include <util/util.hxx>
+#include <rtl/uri.hxx>
+
 
 #include "ScriptData.hxx"
 #include "ScriptInfo.hxx"
@@ -145,6 +147,13 @@ throw ( RuntimeException, Exception )
     {   // Protect member variable writes
         ::osl::Guard< osl::Mutex > aGuard( m_mutex );
 
+        /* not sure whether Java scripts are supported as filesystem scripts
+         * mh_scriptLangs[ OUString::createFromAscii( "class" ) ] =
+         *  OUString::createFromAscii( "Java" ); */
+        mh_scriptLangs[ OUString::createFromAscii( "bsh" ) ] =
+            OUString::createFromAscii( "BeanShell" );
+        mh_scriptLangs[ OUString::createFromAscii( "js" ) ] =
+            OUString::createFromAscii( "Rhino" );
         // Check args
         if ( args.getLength() != NUMBER_STORAGE_INITIALIZE_ARGS )
         {
@@ -181,7 +190,21 @@ throw ( RuntimeException, Exception )
 
     try
     {
-        create();
+        // need to check for what???
+        // what we have is a URI for the filesystem or document
+        // we need to check of the last element in the path has an
+        // extension that is associated with a script (eg. .bsh, .js etc)
+        OUString fileExtension = getFileExtension( m_stringUri );
+        // and see if this is in our scripts map
+        ScriptLanguages_hash::iterator h_it = mh_scriptLangs.find( fileExtension );
+        if ( h_it != mh_scriptLangs.end() )
+        {
+            createForFilesystem( fileExtension );
+        }
+        else
+        {
+            create();
+        }
     }
     catch ( RuntimeException & re )
     {
@@ -369,6 +392,77 @@ throw ( RuntimeException, Exception )
     m_bInitialised = true;
 }
 
+//*************************************************************************
+// private method to create the usual data structures for scripts located
+// on the filesystem.
+// parcelURI = the path to the script
+// functionName = the full filename with extension
+// logicalName = the filename without the extension
+void
+ScriptStorage::createForFilesystem( const OUString & fileExtension )
+throw ( RuntimeException, Exception )
+{
+    // need to decode as file urls are encoded
+    OUString xStringUri = ::rtl::Uri::decode( m_stringUri,
+        rtl_UriDecodeWithCharset, RTL_TEXTENCODING_ASCII_US );
+
+    // no x-platform issues here as we are dealing with URLs
+    sal_Int32 lastFileSep = xStringUri.lastIndexOf( '/' );
+    sal_Int32 lastFileExt = xStringUri.lastIndexOf( fileExtension );
+    sal_Int32 startPath = xStringUri.indexOf( OUString::createFromAscii( "://" ) );
+    sal_Int32 uriLength = xStringUri.getLength();
+    OUString fileNameNoExt = xStringUri.copy( lastFileSep + 1,
+        lastFileExt - lastFileSep  - 2 );
+    OUString fileName = xStringUri.copy( lastFileSep + 1, uriLength - lastFileSep -1 );
+    OUString filePath = xStringUri.copy( startPath + 3,
+        lastFileSep - startPath - 2 );
+    OUString filePathWithName = xStringUri.copy( startPath + 3,
+        uriLength - startPath - 3 );
+
+    ScriptData scriptData;
+    scriptData.language = mh_scriptLangs.find( fileExtension )->second;
+    OSL_TRACE( "\t language = %s", ::rtl::OUStringToOString(
+        scriptData.language, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+    // do we need to encode this?
+    scriptData.functionname = fileName;
+    OSL_TRACE( "\t functionName = %s", ::rtl::OUStringToOString(
+        scriptData.functionname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    //scriptData.functionname = ::rtl::Uri::encode( fileName,
+        //rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
+        //RTL_TEXTENCODING_ASCII_US );
+
+    scriptData.parcelURI = filePath;
+    OSL_TRACE( "\t parcelURI = %s", ::rtl::OUStringToOString(
+        scriptData.parcelURI, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    scriptData.logicalname = fileNameNoExt;
+    OSL_TRACE( "\t logicalName = %s", ::rtl::OUStringToOString(
+        scriptData.logicalname, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+    // and now push onto the usual structures
+    Datas_vec v;
+    v.push_back( scriptData );
+    mh_implementations[ scriptData.logicalname ] = v;
+    m_bInitialised = true;
+}
+
+//*************************************************************************
+// private method to return the file extension, eg. bsh, js etc
+OUString
+ScriptStorage::getFileExtension( const OUString & stringUri )
+{
+    OUString fileExtension;
+    sal_Int32 lastDot = stringUri.lastIndexOf( '.' );
+    if( lastDot > 0 ) {
+        sal_Int32 stringUriLength = stringUri.getLength();
+        fileExtension = stringUri.copy( lastDot +1 , stringUriLength - lastDot - 1 );
+    }
+    else
+    {
+        fileExtension = OUString::createFromAscii("");
+    }
+    return fileExtension;
+}
 
 //*************************************************************************
 // private method for updating hashmaps
@@ -635,7 +729,7 @@ throw ( lang::IllegalArgumentException,
 
     OUString queryLang = scriptURI.getLanguage();
     OUString queryFunc = scriptURI.getFunctionName();
-   OSL_TRACE(  "Query uri logicalname [%s], functionName [%s], language [%s]",
+    OSL_TRACE(  "Query uri logicalname [%s], functionName [%s], language [%s]",
                 ::rtl::OUStringToOString( scriptURI.getLogicalName(),
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                 ::rtl::OUStringToOString( scriptURI.getFunctionName(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: npower $ $Date: 2003-03-03 18:39:41 $
+ *  last change: $Author: dfoster $ $Date: 2003-05-16 10:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+
 
 #include "ScriptNameResolverImpl.hxx"
 #include "ScriptRuntimeManager.hxx"
@@ -225,18 +227,18 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
         Any any = xPropSetResolvedCtx->getPropertyValue(
             scriptingConstantsPool.RESOLVED_STORAGE_ID );
-        sal_Int32 docSid;
-        if ( sal_False == ( any >>= docSid ) )
+        sal_Int32 resolvedSid;
+        if ( sal_False == ( any >>= resolvedSid ) )
         {
             throw RuntimeException( OUSTR(
-                "ScriptRuntimeManager::invoke : unable to get doc storage id from xPropSetResolvedCtx" ),
+                "ScriptRuntimeManager::invoke : unable to get resolved storage id from xPropSetResolvedCtx" ),
                 Reference< XInterface > () );
         }
 
-        OSL_TRACE("Storage sid is: %d\n", docSid);
+        OSL_TRACE("Storage sid is: %d\n", resolvedSid);
 
-        if (docSid != scriptingConstantsPool.USER_STORAGE_ID &&
-            docSid != scriptingConstantsPool.SHARED_STORAGE_ID)
+        if (resolvedSid != scriptingConstantsPool.USER_STORAGE_ID &&
+            resolvedSid != scriptingConstantsPool.SHARED_STORAGE_ID)
         {
             /* LanguageType nLang = LANGUAGE_SYSTEM;
             ResMgr *pResMgr = ResMgr::SearchCreateResMgr( "scripting" MAKE_NUMSTR(SUPD), nLang );
@@ -267,6 +269,25 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         // is contained as a property(SCRIPT_INFO) within the resolvedCtx
         results = xScriptInvocation->invoke( scriptURI, resolvedCtx, aParams,
                                              aOutParamIndex, aOutParam );
+
+        // need to dispose of filesystem storage
+        OUString filesysString = OUString::createFromAscii(
+                                        "location=filesystem" );
+        if ( scriptURI.indexOf( filesysString ) != -1 )
+        {
+            Any a = m_xContext->getValueByName(
+                    scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
+            Reference < lang::XEventListener > xEL_ScriptStorageManager;
+            if ( sal_False == ( a >>= xEL_ScriptStorageManager ) )
+            {
+                throw RuntimeException( OUSTR( "ScriptRuntimeManager::invoke: can't get ScriptStorageManager XEventListener interface when trying to dispose of filesystem storage" ),
+                        Reference< XInterface > () );
+            }
+            validateXRef( xEL_ScriptStorageManager, "Cannot get XEventListener from ScriptStorageManager" );
+            // need to find some way of wrapping this resolvedSid
+            // into an EventObject object
+            // xEL_ScriptStorageManager->disposing( source );
+        }
     }
     catch ( lang::IllegalArgumentException & iae )
     {
