@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:51:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
 
+#include <confighelper.hxx>
 
 class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper5<
                                                 ::com::sun::star::embed::XEmbedObjectCreator,
@@ -94,10 +97,13 @@ class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper5<
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
+    ConfigurationHelper m_aConfigHelper;
+
 public:
     OOoEmbeddedObjectFactory(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
+    , m_aConfigHelper( xFactory )
     {
         OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
     }
@@ -130,6 +136,40 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
+};
+
+class OOoSpecialEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
+                                                ::com::sun::star::embed::XEmbedObjectFactory,
+                                                ::com::sun::star::lang::XServiceInfo >
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+
+    ConfigurationHelper m_aConfigHelper;
+
+public:
+    OOoSpecialEmbeddedObjectFactory(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+    : m_xFactory( xFactory )
+    , m_aConfigHelper( xFactory )
+    {
+        OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
+    }
+
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+
+    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
+        impl_staticCreateSelfInstance(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+
+    // XEmbedObjectFactory
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceUserInit( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, sal_Int32 nEntryConnectionMode, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif
