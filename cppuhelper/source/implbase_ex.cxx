@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-18 11:44:03 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 12:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifdef SOLARIS
 #include <alloca.h>
 #elif defined MACOSX
+#include <sys/types.h>
 #include <sys/malloc.h>
 #else
 #include <malloc.h>
