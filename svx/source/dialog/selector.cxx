@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:53:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,11 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                 xContext ),
             UNO_QUERY );
 
-        OUString aModuleId = xModuleManager->identify( m_xFrame );
+        OUString aModuleId;
+        try{
+            aModuleId = xModuleManager->identify( m_xFrame );
+        }catch(const uno::Exception&)
+            { aModuleId = ::rtl::OUString(); }
 
         Reference< container::XNameAccess > xNameAccess(
             xMCF->createInstanceWithContext(
