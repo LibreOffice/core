@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-15 09:07:03 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8664,38 +8664,178 @@ String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
 {
     Text = "Textfluss Links-nach-rechts (horizontal)";
     Text [ English ] = "text flow horizontal from left";
+    Text[ english_us ] = "Text direction left-to-right (horizontal)";
+    Text[ portuguese ] = "text flow horizontal from left";
+    Text[ russian ] = "text flow horizontal from left";
+    Text[ greek ] = "text flow horizontal from left";
+    Text[ dutch ] = "text flow horizontal from left";
+    Text[ french ] = "Encha�nements de gauche � droite (horizontal)";
+    Text[ spanish ] = "Flujo de texto horizontal desde la izquierda";
+    Text[ finnish ] = "text flow horizontal from left";
+    Text[ italian ] = "Testo orizzontale da sinistra a destra";
+    Text[ danish ] = "text flow horizontal from left";
+    Text[ swedish ] = "Textriktning v�nster-till-h�ger (horisontellt)";
+    Text[ polish ] = "text flow horizontal from left";
+    Text[ portuguese_brazilian ] = "text flow horizontal from left";
+    Text[ japanese ] = "文字方向は左から右へ (横書き)";
+    Text[ korean ] = "텍스트 방향 왼쪽에서 오른쪽으로 (가로)";
+    Text[ chinese_simplified ] = "文字方向从左向右(横写)";
+    Text[ chinese_traditional ] = "文字方向從左向右(橫書)";
+    Text[ turkish ] = "text flow horizontal from left";
+    Text[ arabic ] = "text flow horizontal from left";
+    Text[ catalan ] = "text flow horizontal from left";
 };
 String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
 {
     Text = "Textfluss Rechts-nach-links (horizontal)";
     Text [ English ] = "text flow horizontal from right";
+    Text[ english_us ] = "Text direction right-to-left (horizontal)";
+    Text[ portuguese ] = "text flow horizontal from right";
+    Text[ russian ] = "text flow horizontal from right";
+    Text[ greek ] = "text flow horizontal from right";
+    Text[ dutch ] = "text flow horizontal from right";
+    Text[ french ] = "Encha�nements de droite � gauche (horizontal)";
+    Text[ spanish ] = "Flujo de texto horizontal desde la derecha";
+    Text[ finnish ] = "text flow horizontal from right";
+    Text[ italian ] = "Testo orizzontale da destra a sinistra";
+    Text[ danish ] = "text flow horizontal from right";
+    Text[ swedish ] = "Textriktning h�ger-till-v�nster (horisontellt)";
+    Text[ polish ] = "text flow horizontal from right";
+    Text[ portuguese_brazilian ] = "text flow horizontal from right";
+    Text[ japanese ] = "文字方向は右から左へ (横書き)";
+    Text[ korean ] = "텍스트 방향 오른쪽에서 왼쪽으로 (가로)";
+    Text[ chinese_simplified ] = "文字方向从右向左(竖写)";
+    Text[ chinese_traditional ] = "文字方向從右向左(橫書)";
+    Text[ turkish ] = "text flow horizontal from right";
+    Text[ arabic ] = "text flow horizontal from right";
+    Text[ catalan ] = "text flow horizontal from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
 {
     Text = "Textfluss Rechts-nach-links (vertikal)";
     Text [ English ] = "text flow vertical from right";
+    Text[ english_us ] = "Text direction right-to-left (vertical)";
+    Text[ portuguese ] = "text flow vertical from right";
+    Text[ russian ] = "text flow vertical from right";
+    Text[ greek ] = "text flow vertical from right";
+    Text[ dutch ] = "text flow vertical from right";
+    Text[ french ] = "Encha�nements de droite � gauche (vertical)";
+    Text[ spanish ] = "Flujo de texto vertical de derecha a izquierda";
+    Text[ finnish ] = "text flow vertical from right";
+    Text[ italian ] = "Testo verticale da destra a sinistra";
+    Text[ danish ] = "text flow vertical from right";
+    Text[ swedish ] = "Textriktning h�ger-till-v�nster (vertikalt)";
+    Text[ polish ] = "text flow vertical from right";
+    Text[ portuguese_brazilian ] = "text flow vertical from right";
+    Text[ japanese ] = "文字方向は右から左へ (縦書き)";
+    Text[ korean ] = "텍스트 방향 오른쪽에서 왼쪽으로 (세로)";
+    Text[ chinese_simplified ] = "文字方向从右向左(竖写)";
+    Text[ chinese_traditional ] = "文字方向從右向左(直書)";
+    Text[ turkish ] = "text flow vertical from right";
+    Text[ arabic ] = "text flow vertical from right";
+    Text[ catalan ] = "text flow vertical from right";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
 {
     Text = "Textfluss Links-nach-rechts (vertikal)";
     Text [ English ] = "text flow vertical from left";
+    Text[ english_us ] = "Text direction left-to-right (vertical)";
+    Text[ portuguese ] = "text flow vertical from left";
+    Text[ russian ] = "text flow vertical from left";
+    Text[ greek ] = "text flow vertical from left";
+    Text[ dutch ] = "text flow vertical from left";
+    Text[ french ] = "Encha�nements de gauche � droite (vertical)";
+    Text[ spanish ] = "Flujo de texto vertical de izquierda a derecha";
+    Text[ finnish ] = "text flow vertical from left";
+    Text[ italian ] = "Testo verticale da sinistra a destra";
+    Text[ danish ] = "text flow vertical from left";
+    Text[ swedish ] = "Textriktning v�nster-till-h�ger (vertikalt)";
+    Text[ polish ] = "text flow vertical from left";
+    Text[ portuguese_brazilian ] = "text flow vertical from left";
+    Text[ japanese ] = "文字方向は左から右へ (縦書き)";
+    Text[ korean ] = "텍스트 방향 왼쪽에서 오른쪽으로 (세로)";
+    Text[ chinese_simplified ] = "文字方向从左向右(横写)";
+    Text[ chinese_traditional ] = "文字方向從左向右(直書)";
+    Text[ turkish ] = "text flow vertical from left";
+    Text[ arabic ] = "text flow vertical from left";
+    Text[ catalan ] = "text flow vertical from left";
 };
 String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
     Text = "Textfluss-Einstellung des �bergeordneten Objektes verwenden";
     Text [ English ] = "text flow from environment";
+    Text[ english_us ] = "Use superordinate object text direction setting";
+    Text[ portuguese ] = "text flow from environment";
+    Text[ russian ] = "text flow from environment";
+    Text[ greek ] = "text flow from environment";
+    Text[ dutch ] = "text flow from environment";
+    Text[ french ] = "Utiliser le param�tre d'encha�nement de l'objet sup�rieur";
+    Text[ spanish ] = "Utilizar la configuraci�n del flujo de texto del objeto superior";
+    Text[ finnish ] = "text flow from environment";
+    Text[ italian ] = "Usa le impostazioni di testo dell'oggetto superiore";
+    Text[ danish ] = "text flow from environment";
+    Text[ swedish ] = "Anv�nd det �verordnade objektets inst�llning av textriktning";
+    Text[ polish ] = "text flow from environment";
+    Text[ portuguese_brazilian ] = "text flow from environment";
+    Text[ japanese ] = "上位オブジェクトに設定した体裁を使用";
+    Text[ korean ] = "고급 설정으로부터 텍스트 방향 설정";
+    Text[ chinese_simplified ] = "text flow from environment";
+    Text[ chinese_traditional ] = "沿用現有的文字方向的設定";
+    Text[ turkish ] = "text flow from environment";
+    Text[ arabic ] = "text flow from environment";
+    Text[ catalan ] = "text flow from environment";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_ON
 {
     Text = "Absatz wird am Textraster gefangen (wenn aktiviert)";
     Text [ English ] = "paragraph snap to grid";
+    Text[ english_us ] = "Paragraph snaps to text grid (if active)";
+    Text[ portuguese ] = "paragraph snap to grid";
+    Text[ russian ] = "paragraph snap to grid";
+    Text[ greek ] = "paragraph snap to grid";
+    Text[ dutch ] = "paragraph snap to grid";
+    Text[ french ] = "Capture du paragraphe � la grille du texte (si activ�e)";
+    Text[ spanish ] = "Utilizar la cuadr�cula en el p�rrafo (si activada) ";
+    Text[ finnish ] = "paragraph snap to grid";
+    Text[ italian ] = "Cattura il paragrafo alla griglia di testo (se attivata)";
+    Text[ danish ] = "paragraph snap to grid";
+    Text[ swedish ] = "Stycke f�sts mot textraster (om det �r aktiverat)";
+    Text[ polish ] = "paragraph snap to grid";
+    Text[ portuguese_brazilian ] = "paragraph snap to grid";
+    Text[ japanese ] = "段落を文字グリッド線で位置合わせ (グリッド線表示状態で)";
+    Text[ korean ] = "단락을 문자 수/열 수 외곽선에 정렬 (활성시)";
+    Text[ chinese_simplified ] = "段落和文字格子线对齐(如使用文字格子线)";
+    Text[ chinese_traditional ] = "段落和文字格子線對齊(如有使用文字格子線)";
+    Text[ turkish ] = "paragraph snap to grid";
+    Text[ arabic ] = "paragraph snap to grid";
+    Text[ catalan ] = "paragraph snap to grid";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_OFF
 {
     Text = "Absatz wird nicht am Textraster gefangen";
     Text [ English ] = "paragraph does not snap to grid";
+    Text[ english_us ] = "Paragraph does not snap to text grid";
+    Text[ portuguese ] = "paragraph does not snap to grid";
+    Text[ russian ] = "paragraph does not snap to grid";
+    Text[ greek ] = "paragraph does not snap to grid";
+    Text[ dutch ] = "paragraph does not snap to grid";
+    Text[ french ] = "Pas de capture du paragraphe � la grille du texte";
+    Text[ spanish ] = "No utiliza la cuadr�cula en el p�rrafo";
+    Text[ finnish ] = "paragraph does not snap to grid";
+    Text[ italian ] = "Non cattura il paragrafo alla griglia di testo";
+    Text[ danish ] = "paragraph does not snap to grid";
+    Text[ swedish ] = "Stycke f�sts inte mot textraster";
+    Text[ polish ] = "paragraph does not snap to grid";
+    Text[ portuguese_brazilian ] = "paragraph does not snap to grid";
+    Text[ japanese ] = "段落を文字グリッド線で位置合わせしない";
+    Text[ korean ] = "단락을 문자 수/열 수 외곽선에 정렬 안함";
+    Text[ chinese_simplified ] = "段落不和文字格子线对齐";
+    Text[ chinese_traditional ] = "段落不和文字格子線對齊";
+    Text[ turkish ] = "paragraph does not snap to grid";
+    Text[ arabic ] = "paragraph does not snap to grid";
+    Text[ catalan ] = "paragraph does not snap to grid";
 };
 
  // ********************************************************************** EOF
