@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-18 17:29:12 $
+ *  last change: $Author: cl $ $Date: 2001-02-20 12:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ using namespace com::sun::star::linguistic2;
 
 DBG_NAME( EditView );
 
+#ifndef SVX_LIGHT
 void SetSearchFlags( SvxSearchItem& rSearchItem, sal_uInt16 nSearchFlags )
 {
     rSearchItem.SetWordOnly( nSearchFlags &  EE_SEARCH_WORDONLY ? sal_True : sal_False );
@@ -105,6 +106,7 @@ void SetSearchFlags( SvxSearchItem& rSearchItem, sal_uInt16 nSearchFlags )
     rSearchItem.SetRegExp( nSearchFlags &  EE_SEARCH_REGEXPR ? sal_True : sal_False );
     rSearchItem.SetPattern( nSearchFlags &  EE_SEARCH_PATTERN ? sal_True : sal_False );
 }
+#endif
 
 
 // ----------------------------------------------------------------------
@@ -341,6 +343,7 @@ Cursor* EditView::GetCursor() const
 
 sal_uInt16 EditView::SearchAndReplace( const XubString& rBefore, const XubString& rAfter, EditSearchMode eSearchMode )
 {
+#ifndef SVX_LIGHT
     // eSearchMode auswerten!
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -348,6 +351,9 @@ sal_uInt16 EditView::SearchAndReplace( const XubString& rBefore, const XubString
     sal_uInt16 n = PIMPEE->SearchAndReplace( rBefore, rAfter, this );
     PIMPEE->UndoActionEnd( EDITUNDO_SRCHANDREPL );
     return n;
+#else
+    return 0;
+#endif
 }
 
 sal_Bool EditView::Search( const XubString& rText, sal_uInt16 nFlags )
