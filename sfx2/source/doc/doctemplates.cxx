@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-20 14:52:54 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 15:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WRKWIN_HXX
+#include <vcl/wrkwin.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
@@ -179,7 +182,22 @@ using namespace rtl;
 using namespace ucb;
 
 //-----------------------------------------------------------------------------
+class WaitWindow_Impl : public WorkWindow
+{
+    Rectangle   _aRect;
+    USHORT      _nTextStyle;
+    String      _aText;
 
+    public:
+                     WaitWindow_Impl();
+                    ~WaitWindow_Impl();
+    virtual void     Paint( const Rectangle& rRect );
+};
+
+#define X_OFFSET 15
+#define Y_OFFSET 15
+
+//-----------------------------------------------------------------------------
 struct NamePair_Impl
 {
     OUString maShortName;
@@ -224,6 +242,7 @@ class SfxDocTplService_Impl
 
     sal_Bool                    createFolder( const OUString& rNewFolderURL,
                                               sal_Bool  bCreateParent,
+                                              sal_Bool  bFsysFolder,
                                               Content   &rNewFolder );
     sal_Bool                    removeContent( Content& rContent );
     sal_Bool                    removeContent( const OUString& rContentURL );
@@ -245,14 +264,19 @@ public:
     void                        setLocale( const LOCALE & rLocale );
     Locale                      getLocale();
 
-    sal_Bool                    addTemplate( const ::rtl::OUString& rGroupName,
-                                             const ::rtl::OUString& rTemplateName,
-                                             const ::rtl::OUString& rSourceURL );
-    sal_Bool                    removeTemplate( const ::rtl::OUString& rGroupName,
-                                                const ::rtl::OUString& rTemplateName );
+    sal_Bool                    addTemplate( const OUString& rGroupName,
+                                             const OUString& rTemplateName,
+                                             const OUString& rSourceURL );
+    sal_Bool                    removeTemplate( const OUString& rGroupName,
+                                                const OUString& rTemplateName );
+    sal_Bool                    renameTemplate( const OUString& rGroupName,
+                                                const OUString& rOldName,
+                                                const OUString& rNewName );
 
     sal_Bool                    addGroup( const OUString& rGroupName );
     sal_Bool                    removeGroup( const OUString& rGroupName );
+    sal_Bool                    renameGroup( const OUString& rOldName,
+                                             const OUString& rNewName );
 
     void                        update();
 };
@@ -287,7 +311,7 @@ void SfxDocTplService_Impl::init_Impl()
     }
     else
     {
-        mbIsInitialized = createFolder( maRootURL, sal_True, maRootContent );
+        mbIsInitialized = createFolder( maRootURL, sal_True, sal_False, maRootContent );
     }
 
     if ( mbIsInitialized )
@@ -451,7 +475,7 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
                 OUString aNewFolderURL = aNewFolderObj.GetMainURL();
 
                 if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
-                     createFolder( aNewFolderURL, sal_False, aFolder ) )
+                     createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
                 {
                     setProperty( aFolder, aAdditionalProp, makeAny( aId ) );
                 }
@@ -465,7 +489,6 @@ void SfxDocTplService_Impl::getFolders( Content& rRoot,
 }
 
 // -----------------------------------------------------------------------
-
 void SfxDocTplService_Impl::getTemplates( Content& rTargetFolder,
                                           Content& rParentFolder )
 {
@@ -551,7 +574,8 @@ void SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString& aTi
     {
         INetURLObject aURL( rURL );
         aURL.CutExtension();
-        aTitle = aURL.GetName();
+        aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true,
+                               INetURLObject::DECODE_WITH_CHARSET );
     }
 }
 
@@ -616,7 +640,7 @@ void SfxDocTplService_Impl::addToStandard( Content& rRoot,
     aNewFolderURL = aNewFolderObj.GetMainURL();
 
     if ( ! Content::create( aNewFolderURL, maCmdEnv, aFolder ) &&
-         ! createFolder( aNewFolderURL, sal_False, aFolder ) )
+         ! createFolder( aNewFolderURL, sal_False, sal_False, aFolder ) )
     {
         DBG_ERRORFILE( "addToStandard(): Could not create Folder!" );
         return;
@@ -635,12 +659,14 @@ void SfxDocTplService_Impl::addToStandard( Content& rRoot,
 // -----------------------------------------------------------------------
 sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
                                               sal_Bool  bCreateParent,
+                                              sal_Bool  bFsysFolder,
                                               Content   &rNewFolder )
 {
     Content         aParent;
     sal_Bool        bCreatedFolder = sal_False;
     INetURLObject   aParentURL( rNewFolderURL );
-    OUString        aFolderName = aParentURL.getName();
+    OUString        aFolderName = aParentURL.getName( INetURLObject::LAST_SEGMENT, true,
+                                                      INetURLObject::DECODE_WITH_CHARSET );
 
     // compute the parent folder url from the new folder url
     // and remove the final slash, because Content::create doesn't
@@ -666,7 +692,12 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             pValues[0] = makeAny( aFolderName );
             pValues[1] = makeAny( sal_Bool( sal_True ) );
 
-            OUString aType( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
+            OUString aType;
+
+            if ( bFsysFolder )
+                aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FSYS_FOLDER ) );
+            else
+                aType = OUString( RTL_CONSTASCII_USTRINGPARAM( TYPE_FOLDER ) );
 
             aParent.insertNewContent( aType, aNames, aValues, rNewFolder );
             bCreatedFolder = sal_True;
@@ -687,9 +718,9 @@ sal_Bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
         // try to create the new folder again ( but this time, we set
         // bCreateParent to false to avoid endless recusions )
         if ( ( aParentURL.getSegmentCount() >= 1 ) &&
-               createFolder( aParentURL.GetMainURL(), bCreateParent, aParent ) )
+               createFolder( aParentURL.GetMainURL(), bCreateParent, bFsysFolder, aParent ) )
         {
-            bCreatedFolder = createFolder( rNewFolderURL, sal_False, rNewFolder );
+            bCreatedFolder = createFolder( rNewFolderURL, sal_False, bFsysFolder, rNewFolder );
         }
     }
 
@@ -863,7 +894,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     aNewGroupURL = aNewGroupObj.GetMainURL();
 
     if ( Content::create( aNewGroupURL, maCmdEnv, aNewGroup ) ||
-         ! createFolder( aNewGroupURL, sal_False, aNewGroup ) )
+         ! createFolder( aNewGroupURL, sal_False, sal_False, aNewGroup ) )
     {
         // if there already was a group with this name or the new group
         // could not be created, we return here
@@ -894,8 +925,7 @@ sal_Bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
 
     aNewFolderURL = aNewFolderObj.GetMainURL();
 
-    if ( ! Content::create( aNewFolderURL, maCmdEnv, aNewFolder ) &&
-         ! createFolder( aNewFolderURL, sal_False, aNewFolder ) )
+    if ( ! createFolder( aNewFolderURL, sal_False, sal_True, aNewFolder ) )
     {
         // we could not create the folder, so we delete the group in the
         // hierarchy and return
@@ -956,9 +986,72 @@ sal_Bool SfxDocTplService_Impl::removeGroup( const OUString& rGroupName )
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SfxDocTplService_Impl::addTemplate( const ::rtl::OUString& rGroupName,
-                                             const ::rtl::OUString& rTemplateName,
-                                             const ::rtl::OUString& rSourceURL )
+sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
+                                             const OUString& rNewName )
+{
+    // create the group url
+    Content         aGroup;
+    INetURLObject   aGroupObj( maRootURL );
+                    aGroupObj.insertName( rNewName, false,
+                                          INetURLObject::LAST_SEGMENT, true,
+                                          INetURLObject::ENCODE_ALL );
+    OUString        aGroupURL = aGroupObj.GetMainURL();
+
+    // Check, if there is a group with the new name, return false
+    // if there is one.
+    if ( Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    aGroupObj.removeSegment();
+    aGroupObj.insertName( rOldName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aGroupURL = aGroupObj.GetMainURL();
+
+    // When there is no group with the old name, we can't rename it
+    if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    // rename the group in the hierarchy
+    OUString    aTitleProp( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+    Any         aTitleValue;
+
+    aTitleValue <<= rNewName;
+
+    if ( setProperty( aGroup, aTitleProp, aTitleValue ) )
+    {
+        // Get the target url
+        OUString    aTargetProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
+        OUString    aTargetURL;
+        Any         aTargetValue;
+
+        if ( getProperty( aGroup, aTargetProp, aTargetValue ) )
+            aTargetValue >>= aTargetURL;
+
+        if ( aTargetURL.getLength() )
+        {
+            // rename the folder associated with the group
+            Content aTarget;
+            if ( Content::create( aTargetURL, maCmdEnv, aTarget ) )
+            {
+                if ( setProperty( aTarget, aTitleProp, aTitleValue ) )
+                {
+                    aTargetURL = aTarget.get()->getIdentifier()->getContentIdentifier();
+                    aTargetValue <<= aTargetURL;
+                    setProperty( aGroup, aTargetProp, aTargetValue );
+                }
+            }
+        }
+        return sal_True;
+    }
+    else
+        return sal_False;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
+                                             const OUString& rTemplateName,
+                                             const OUString& rSourceURL )
 {
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
@@ -1021,8 +1114,8 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const ::rtl::OUString& rGroupName,
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SfxDocTplService_Impl::removeTemplate( const ::rtl::OUString& rGroupName,
-                                                const ::rtl::OUString& rTemplateName )
+sal_Bool SfxDocTplService_Impl::removeTemplate( const OUString& rGroupName,
+                                                const OUString& rTemplateName )
 {
     // Check, wether or not there is a group with this name
     // Return false, if there is no group with the given name
@@ -1064,6 +1157,83 @@ sal_Bool SfxDocTplService_Impl::removeTemplate( const ::rtl::OUString& rGroupNam
 
     // delete the template entry
     return removeContent( aTemplate );
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
+                                                const OUString& rOldName,
+                                                const OUString& rNewName )
+{
+    // Check, wether or not there is a group with this name
+    // Return false, if there is no group with the given name
+    Content         aGroup, aTemplate;
+    OUString        aGroupURL, aTemplateURL;
+    INetURLObject   aGroupObj( maRootURL );
+
+    aGroupObj.insertName( rGroupName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aGroupURL = aGroupObj.GetMainURL();
+
+    if ( ! Content::create( aGroupURL, maCmdEnv, aGroup ) )
+        return sal_False;
+
+    // Check, if there's a template with the new name in this group
+    // Return false, if there is one
+    aGroupObj.insertName( rNewName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return sal_False;
+
+    // Check, if there's a template with the old name in this group
+    // Return false, if there is no template
+    aGroupObj.removeSegment();
+    aGroupObj.insertName( rOldName, false,
+                      INetURLObject::LAST_SEGMENT, true,
+                      INetURLObject::ENCODE_ALL );
+    aTemplateURL = aGroupObj.GetMainURL();
+
+    if ( !Content::create( aTemplateURL, maCmdEnv, aTemplate ) )
+        return sal_False;
+
+    // rename the template entry
+    OUString    aTitleProp( RTL_CONSTASCII_USTRINGPARAM( TITLE ) );
+    Any         aTitleValue;
+
+    aTitleValue <<= rNewName;
+
+    if ( setProperty( aTemplate, aTitleProp, aTitleValue ) )
+    {
+        // rename the target template:
+        // get the target URL from the template,
+        // rename the target and set the new taget url as property
+        OUString    aTargetURL;
+        OUString    aTargetProp( RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ) );
+        Any         aTargetValue;
+
+        if ( getProperty( aTemplate, aTargetProp, aTargetValue ) )
+            aTargetValue >>= aTargetURL;
+
+        if ( aTargetURL.getLength() )
+        {
+            Content aTarget;
+            if ( Content::create( aTargetURL, maCmdEnv, aTarget ) )
+            {
+                if ( setProperty( aTarget, aTitleProp, aTitleValue ) )
+                {
+                    aTargetURL = aTarget.get()->getIdentifier()->getContentIdentifier();
+                    aTargetValue <<= aTargetURL;
+                    setProperty( aTemplate, aTargetProp, aTargetValue );
+                }
+            }
+        }
+        return sal_True;
+    }
+    else
+        return sal_False;
 }
 
 //-----------------------------------------------------------------------------
@@ -1117,8 +1287,8 @@ Reference< XCONTENT > SAL_CALL SfxDocTplService::getContent()
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const ::rtl::OUString& GroupName,
-                                                   const ::rtl::OUString& TemplateName,
+sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const OUString& GroupName,
+                                                   const OUString& TemplateName,
                                                    const Reference< XSTORABLE >& Storable )
     throw( RUNTIMEEXCEPTION )
 {
@@ -1126,9 +1296,9 @@ sal_Bool SAL_CALL SfxDocTplService::storeTemplate( const ::rtl::OUString& GroupN
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::addTemplate( const ::rtl::OUString& rGroupName,
-                                                 const ::rtl::OUString& rTemplateName,
-                                                 const ::rtl::OUString& rSourceURL )
+sal_Bool SAL_CALL SfxDocTplService::addTemplate( const OUString& rGroupName,
+                                                 const OUString& rTemplateName,
+                                                 const OUString& rSourceURL )
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
@@ -1138,8 +1308,8 @@ sal_Bool SAL_CALL SfxDocTplService::addTemplate( const ::rtl::OUString& rGroupNa
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const ::rtl::OUString& rGroupName,
-                                                    const ::rtl::OUString& rTemplateName )
+sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const OUString& rGroupName,
+                                                    const OUString& rTemplateName )
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
@@ -1149,7 +1319,19 @@ sal_Bool SAL_CALL SfxDocTplService::removeTemplate( const ::rtl::OUString& rGrou
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::addGroup( const ::rtl::OUString& rGroupName )
+sal_Bool SAL_CALL SfxDocTplService::renameTemplate( const OUString& rGroupName,
+                                                    const OUString& rOldName,
+                                                    const OUString& rNewName )
+    throw( RUNTIMEEXCEPTION )
+{
+    if ( pImp->init() )
+        return pImp->renameTemplate( rGroupName, rOldName, rNewName );
+    else
+        return sal_False;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxDocTplService::addGroup( const OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
@@ -1159,11 +1341,22 @@ sal_Bool SAL_CALL SfxDocTplService::addGroup( const ::rtl::OUString& rGroupName 
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxDocTplService::removeGroup( const ::rtl::OUString& rGroupName )
+sal_Bool SAL_CALL SfxDocTplService::removeGroup( const OUString& rGroupName )
     throw( RUNTIMEEXCEPTION )
 {
     if ( pImp->init() )
         return pImp->removeGroup( rGroupName );
+    else
+        return sal_False;
+}
+
+//-----------------------------------------------------------------------------
+sal_Bool SAL_CALL SfxDocTplService::renameGroup( const OUString& rOldName,
+                                                 const OUString& rNewName )
+    throw( RUNTIMEEXCEPTION )
+{
+    if ( pImp->init() )
+        return pImp->renameGroup( rOldName, rNewName );
     else
         return sal_False;
 }
@@ -1174,5 +1367,37 @@ void SAL_CALL SfxDocTplService::update()
 {
     if ( pImp->init() )
         pImp->update();
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+WaitWindow_Impl::WaitWindow_Impl()
+    : WorkWindow( NULL, WB_BORDER | WB_3DLOOK )
+{
+    Rectangle aRect = Rectangle( 0, 0, 300, 30000 );
+    _nTextStyle = TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER | TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE;
+    _aText = String( SfxResId( RID_CNT_STR_WAITING ) );
+    _aRect = GetTextRect( aRect, _aText, _nTextStyle );
+    aRect = _aRect;
+    aRect.Right() += 2*X_OFFSET;
+    aRect.Bottom() += 2*Y_OFFSET;
+    _aRect.SetPos( Point( X_OFFSET, Y_OFFSET ) );
+    SetOutputSizePixel( aRect.GetSize() );
+    Show();
+    Update();
+    Flush();
+}
+
+//-----------------------------------------------------------------------------
+WaitWindow_Impl::~WaitWindow_Impl()
+{
+    Hide();
+}
+
+//-----------------------------------------------------------------------------
+void WaitWindow_Impl::Paint( const Rectangle& rRect )
+{
+    DrawText( _aRect, _aText, _nTextStyle );
 }
 
