@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:48:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
+#endif
+
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
 #endif
@@ -98,27 +103,53 @@
 
 #include "optsitem.hxx"
 #include "app.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "sdattr.hxx"
+#ifndef SD_FU_TEXT_HXX
 #include "futext.hxx"
+#endif
 #include "sdpage.hxx"
 #include "stlpool.hxx"
 #include "prntopts.hxx"
 #include "sdresid.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
+#endif
+#ifndef SD_SHOW_WINDOW_HXX
+#include "ShowWindow.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "docshell.hxx"
-#include "drviewsh.hxx"
-#include "presvish.hxx"
-#include "sdoutl.hxx"
-#include "sdclient.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
+#endif
 #include "unokywds.hxx"
+#ifndef SD_UNO_DRAW_VIEW_HXX
 #include "SdUnoDrawView.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
-#define TABCONTROL_INITIAL_SIZE     350
-#define PAPER_SHADOW_EXT_PIXEL        2
+namespace sd {
+
+static const int TABCONTROL_INITIAL_SIZE = 350;
+static const int PAPER_SHADOW_EXT_PIXEL = 2;
+
 
 /*************************************************************************
 |*
@@ -126,7 +157,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ModelHasChanged()
+void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
     // Damit der Navigator auch einen aktuellen Status bekommt
@@ -142,10 +173,10 @@ void SdDrawViewShell::ModelHasChanged()
 
     // jetzt den von der Drawing Engine neu erzeugten TextEditOutliner
     // initialisieren
-    Outliner* pOutliner       = pDrView->GetTextEditOutliner();
+    ::Outliner* pOutliner     = pDrView->GetTextEditOutliner();
     if (pOutliner)
     {
-        SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) pDocSh->GetStyleSheetPool();
+        SfxStyleSheetPool* pSPool = (SfxStyleSheetPool*) GetDocSh()->GetStyleSheetPool();
         pOutliner->SetStyleSheetPool(pSPool);
     }
 }
@@ -156,7 +187,7 @@ void SdDrawViewShell::ModelHasChanged()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
+void DrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 {
     if (!pFuSlideShow)
     {
@@ -164,9 +195,9 @@ void SdDrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
         // Seitenbreite nicht erlaubt
         bZoomOnPage = FALSE;
 
-        SdViewShell::InnerResizePixel(rPos, rSize);
+        ViewShell::InnerResizePixel(rPos, rSize);
 
-        SetZoomRect( pDocSh->GetVisArea(ASPECT_CONTENT) );
+        SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
     }
 }
 
@@ -176,15 +207,15 @@ void SdDrawViewShell::InnerResizePixel(const Point &rPos, const Size &rSize)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
+void DrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
     if (!pFuSlideShow || !pFuSlideShow->IsFullScreen())
     {
-        SdViewShell::OuterResizePixel(rPos, rSize);
+        ViewShell::OuterResizePixel(rPos, rSize);
 
-        if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
-            SetZoomRect( pDocSh->GetVisArea(ASPECT_CONTENT) );
+            SetZoomRect( GetDocSh()->GetVisArea(ASPECT_CONTENT) );
         }
     }
 
@@ -197,15 +228,15 @@ void SdDrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
 
 /** This call is simply delegated to the base class.
 */
-void SdDrawViewShell::AdjustPosSizePixel(const Point &rNewPos,
+void DrawViewShell::AdjustPosSizePixel(const Point &rNewPos,
                                          const Size &rNewSize)
 {
-    SdViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
+    ViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
 }
 
 
 
-void SdDrawViewShell::ArrangeGUIElements ()
+void DrawViewShell::ArrangeGUIElements ()
 {
     Size aTabSize = aTabControl.GetSizePixel();
 
@@ -240,7 +271,7 @@ void SdDrawViewShell::ArrangeGUIElements ()
 
     aTabControl.SetSizePixel(aTabSize);
 
-    SdViewShell::ArrangeGUIElements ();
+    ViewShell::ArrangeGUIElements ();
 
     aTabSize.Width() = pHScrlArray[0]->GetPosPixel().X() - aHPos.X();
     if ( aTabSize.Width() < 0 )
@@ -249,19 +280,20 @@ void SdDrawViewShell::ArrangeGUIElements ()
     aTabControl.SetPosSizePixel(aHPos, aTabSize);
     aLayerTab.SetPosSizePixel(aHPos, aTabSize);
 
-    SdClient*   pIPClient = (SdClient*)GetIPClient();
+    OSL_ASSERT (GetViewShell()!=NULL);
+    Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
     BOOL bClientActive = FALSE;
     if ( pIPClient && pIPClient->IsInPlaceActive() )
         bClientActive = TRUE;
 
-    BOOL bInPlaceActive = pDocSh->GetProtocol().IsInPlaceActive();
+    BOOL bInPlaceActive = GetDocSh()->GetProtocol().IsInPlaceActive();
 
-//        if ( bZoomOnPage && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+//        if ( bZoomOnPage && GetDocSh()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
     if ( bZoomOnPage && !bInPlaceActive && !bClientActive )
     {
         // bei Split immer erstes Fenster resizen
         pWindow = pWinArray[0][0];
-        SfxRequest aReq(SID_SIZE_PAGE, 0, pDoc->GetItemPool());
+        SfxRequest aReq(SID_SIZE_PAGE, 0, GetDoc()->GetItemPool());
         ExecuteSlot( aReq );
     }
 }
@@ -272,13 +304,13 @@ void SdDrawViewShell::ArrangeGUIElements ()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
+void DrawViewShell::ReadFrameViewData(FrameView* pView)
 {
-    BOOL bChanged = pDoc->IsChanged();      // merken
+    BOOL bChanged = GetDoc()->IsChanged();      // merken
 
     // Diese Option wird am Model eingestellt
-    pDoc->SetPickThroughTransparentTextFrames(
-             SD_MOD()->GetSdOptions(pDoc->GetDocumentType())->IsPickThrough());
+    GetDoc()->SetPickThroughTransparentTextFrames(
+             SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType())->IsPickThrough());
 
     // Initialisierungen der Zeichen-(Bildschirm-)Attribute
     if (HasRuler() != pView->HasRuler())
@@ -459,7 +491,7 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
     if (pDrView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         pDrView->SetFrameDragSingles( pView->IsFrameDragSingles() );
 
-    pDoc->SetChanged( bChanged );
+    GetDoc()->SetChanged( bChanged );
 }
 
 /*************************************************************************
@@ -468,7 +500,7 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::WriteFrameViewData()
+void DrawViewShell::WriteFrameViewData()
 {
     // Zeichen-(Bildschirm-)Attribute an FrameView merken
     pFrameView->SetRuler( HasRuler() );
@@ -515,7 +547,7 @@ void SdDrawViewShell::WriteFrameViewData()
         pFrameView->SetSelectedPage(0);
     else
     {
-        if( !ISA( SdPresViewShell ) )
+        if ( ! ISA(PresentationViewShell))
         {
             if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
                 pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
@@ -581,13 +613,13 @@ void SdDrawViewShell::WriteFrameViewData()
 |*
 \************************************************************************/
 
-void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
+void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
     // #103834# Fill var FillColor here to have it available on later call
     svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
-    if(DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType())
+    if(DOCUMENT_TYPE_IMPRESS == GetDoc()->GetDocumentType())
     {
         aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
     }
@@ -596,75 +628,75 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
         aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    if( pWin )
-    {
+//  if( pWin )
+//  {
 // #111096#
 // moved to ViewContactOfSdrPage::DrawPaper. There GetApplicationBackgroundColor
 // is used now to draw the background.
 //
-//      if( !pFuSlideShow || pWin != (SdWindow*) pFuSlideShow->GetShowWindow() )
+//      if ( !pFuSlideShow
+//             || pWin != static_cast<const ::sd::Window*>(
+//                 pFuSlideShow->GetShowWindow()))
 //      {
-//            const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
+//             const SdrPageView*  pPageView = pDrView->GetPageViewPvNum( 0 );
 //          const Color         aOldLineColor( pWin->GetLineColor() );
 //          const Color         aOldFillColor( pWin->GetFillColor() );
 //          const ULONG         nOldDrawMode( pWin->GetDrawMode() );
-//            const BOOL          bOldMap = pWin->IsMapModeEnabled();
-//            Point               aNullPoint;
-//            const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
+//             const BOOL          bOldMap = pWin->IsMapModeEnabled();
+//             Point               aNullPoint;
+//             const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
 //          Rectangle           aOutputPaperRect, aPaperRect;
-//
-//            if( pPageView )
-//                aPaperRect = pPageView->GetPageRect();
-//            else
-//                aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
-//
-//            ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
-//
-//            pWin->EnableMapMode( FALSE );
+
+//             if( pPageView )
+//                 aPaperRect = pPageView->GetPageRect();
+//             else
+//                 aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
+
+//             ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
+
+//             pWin->EnableMapMode( FALSE );
 //          pWin->SetDrawMode( DRAWMODE_DEFAULT );
 //          pWin->SetLineColor();
 //          pWin->SetFillColor( aFillColor );
-//
-//            if( aOutputPaperRect.IsEmpty() )
-//                pWin->DrawRect( aOutputRect );
-//            else
-//            {
-//                const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-//                PolyPolygon aPolyPoly( 2 );
-//                Rectangle   aOutputRectExt( aOutputRect );
-//
-//                aOutputRectExt.Left()--;
-//                aOutputRectExt.Top()--;
-//                aOutputRectExt.Right()++;
-//                aOutputRectExt.Bottom()++;
-//
-//                aPolyPoly.Insert( aOutputRectExt );
-//                aPolyPoly.Insert( aOutputPaperRect );
-//
+
+//             if( aOutputPaperRect.IsEmpty() )
+//                 pWin->DrawRect( aOutputRect );
+//             else
+//             {
+//                 const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+//                 PolyPolygon aPolyPoly( 2 );
+//                 Rectangle   aOutputRectExt( aOutputRect );
+
+//                 aOutputRectExt.Left()--;
+//                 aOutputRectExt.Top()--;
+//                 aOutputRectExt.Right()++;
+//                 aOutputRectExt.Bottom()++;
+
+//                 aPolyPoly.Insert( aOutputRectExt );
+//                 aPolyPoly.Insert( aOutputPaperRect );
+
 //              // draw paper
-//                pWin->DrawPolyPolygon( aPolyPoly );
-//
-//              // #110094#
-//              // moved to ViewContactOfSdrPage::DrawPaper
-//                // // draw shadow
-//                //pWin->SetFillColor( aShadowColor );
-//                //pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
-//                //                           Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
-//                //pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
-//                //                           Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
-//            }
-//
+//                 pWin->DrawPolyPolygon( aPolyPoly );
+
+//                  // draw shadow
+//                 pWin->SetFillColor( aShadowColor );
+//                 pWin->DrawRect( Rectangle( Point( aPaperRect.Right() + 1, aPaperRect.Top() + PAPER_SHADOW_EXT_PIXEL ),
+//                                            Size( PAPER_SHADOW_EXT_PIXEL, aPaperRect.GetHeight() ) ) );
+//                 pWin->DrawRect( Rectangle( Point( aPaperRect.Left() + PAPER_SHADOW_EXT_PIXEL, aPaperRect.Bottom() + 1 ),
+//                                            Size( aPaperRect.GetWidth(), PAPER_SHADOW_EXT_PIXEL ) ) );
+//             }
+
 //          pWin->SetFillColor( aOldFillColor );
 //          pWin->SetLineColor( aOldLineColor );
 //          pWin->SetDrawMode( nOldDrawMode );
-//            pWin->EnableMapMode( bOldMap );
+//             pWin->EnableMapMode( bOldMap );
 //      }
-    }
+//  }
 
     /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
-    pDoc->GetDrawOutliner( NULL ).SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // #103834# Set Application Background color for usage in SdrPaintView(s)
     pDrView->SetApplicationBackgroundColor(aFillColor);
@@ -672,14 +704,14 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
     /* #97517#  This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
-    pDoc->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
+    GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
     pDrView->InitRedraw( pWin, Region( rRect ) );
 
     if( pWin )
     {
-        if( pDocSh->GetActualFunction() )
-            pDocSh->GetActualFunction()->Paint( rRect, pWin );
+        if( GetDocSh()->GetActualFunction() )
+            GetDocSh()->GetActualFunction()->Paint( rRect, pWin );
 
         if( pFuActual )
             pFuActual->Paint( rRect, pWin );
@@ -692,9 +724,9 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
+void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
-    SdViewShell::SetZoomFactor(rZoomX, rZoomY);
+    ViewShell::SetZoomFactor(rZoomX, rZoomY);
     bZoomOnPage = FALSE;
     Point aOrigin = pWindow->GetViewOrigin();
     pWindow->SetWinViewPos(aOrigin);
@@ -706,7 +738,7 @@ void SdDrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoo
 |*
 \************************************************************************/
 
-Size SdDrawViewShell::GetOptimalSizePixel() const
+Size DrawViewShell::GetOptimalSizePixel() const
 {
     Size aSize;
 
@@ -728,7 +760,7 @@ Size SdDrawViewShell::GetOptimalSizePixel() const
                 // 1:1 Darstellung
                 MapMode aMapMode(MAP_100TH_MM);
                 aSize = pWindow->LogicToPixel( pPage->GetSize(), aMapMode );
-                ( (SdDrawViewShell*) this)->bZoomOnPage = TRUE;
+                ( (DrawViewShell*) this)->bZoomOnPage = TRUE;
             }
         }
     }
@@ -743,21 +775,20 @@ Size SdDrawViewShell::GetOptimalSizePixel() const
 |*
 \************************************************************************/
 
-void SdDrawViewShell::HidePage(SdrPageView* pPV)
+void DrawViewShell::HidePage(SdrPageView* pPV)
 {
-    FmFormShell* pShell = (FmFormShell*) aShellTable.Get(RID_FORMLAYER_TOOLBOX);
-
-    if (pShell)
-        pShell->PrepareClose(FALSE);
+    FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+    if (pFormShell != NULL)
+        pFormShell->PrepareClose (FALSE);
 }
 
 
 
-void SdDrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void DrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     WriteFrameViewData();
 
-    SdViewShell::WriteUserDataSequence( rSequence, bBrowse );
+    ViewShell::WriteUserDataSequence( rSequence, bBrowse );
 
     const sal_Int32 nIndex = rSequence.getLength();
     rSequence.realloc( nIndex + 1 );
@@ -765,11 +796,11 @@ void SdDrawViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < 
     rSequence[nIndex].Value <<= (sal_Bool)bZoomOnPage;
 }
 
-void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     WriteFrameViewData();
 
-    SdViewShell::ReadUserDataSequence( rSequence, bBrowse );
+    ViewShell::ReadUserDataSequence( rSequence, bBrowse );
 
     const sal_Int32 nLength = rSequence.getLength();
     const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
@@ -791,10 +822,10 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
 
         if (ePageKind == PK_NOTES)
         {
-            // SdDrawViewShell buttons
+            // DrawViewShell buttons
             aLayerBtn.Disable();
 
-            // SdViewShell buttons
+            // ViewShell buttons
             aDrawBtn.Check(FALSE);
             aOutlineBtn.Check(FALSE);
             aSlideBtn.Check(FALSE);
@@ -808,11 +839,11 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
         }
         else if (ePageKind == PK_HANDOUT)
         {
-            // SdDrawViewShell buttons
+            // DrawViewShell buttons
             aPageBtn.Disable();
             aLayerBtn.Disable();
 
-            // SdViewShell buttons
+            // ViewShell buttons
             aDrawBtn.Check(FALSE);
             aOutlineBtn.Check(FALSE);
             aSlideBtn.Check(FALSE);
@@ -826,7 +857,7 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
         }
         else
         {
-            // SdViewShell buttons
+            // ViewShell buttons
             aOutlineBtn.Check(FALSE);
             aSlideBtn.Check(FALSE);
             aPresentationBtn.Check(FALSE);
@@ -846,14 +877,14 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
     {
         const Rectangle aVisArea( pFrameView->GetVisArea() );
 
-        if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
-            pDocSh->SetVisArea(aVisArea);
+            GetDocSh()->SetVisArea(aVisArea);
         }
 
         VisAreaChanged(aVisArea);
 
-        SdView* pView = GetView();
+        ::sd::View* pView = GetView();
 
         if (pView)
         {
@@ -868,14 +899,13 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
 
 }
 
-void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
+void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 {
-    SdViewShell::VisAreaChanged( rRect );
+    ViewShell::VisAreaChanged( rRect );
 
-    if( pController )
-    {
-        pController->fireVisAreaChanged( rRect );
-    }
+    DrawSubController* pController = GetSubController();
+    if (pController != NULL)
+        pController->FireVisAreaChanged (rRect);
 }
 
 
@@ -888,15 +918,15 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
 */
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-    SdDrawViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
+    DrawViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    if (GetController() != NULL)
+    if (GetViewShellBase().GetController() != NULL)
     {
         accessibility::AccessibleDrawDocumentView* pDocumentView =
             new accessibility::AccessibleDrawDocumentView (
                 pWindow,
                 this,
-                GetController(),
+                GetViewShellBase().GetController(),
                 pWindow->GetAccessibleParentWindow()->GetAccessible());
         pDocumentView->Init();
         return ::com::sun::star::uno::Reference<
@@ -906,15 +936,15 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
     }
     else
     {
-        OSL_TRACE ("SdDrawViewShell::CreateAccessibleDocumentView: no controller");
-        return SdViewShell::CreateAccessibleDocumentView (pWindow);
+        OSL_TRACE ("DrawViewShell::CreateAccessibleDocumentView: no controller");
+        return ViewShell::CreateAccessibleDocumentView (pWindow);
     }
 }
 
 
 
 
-int SdDrawViewShell::GetTabLayerCount (void) const
+int DrawViewShell::GetTabLayerCount (void) const
 {
     return aLayerTab.GetPageCount();
 
@@ -923,7 +953,7 @@ int SdDrawViewShell::GetTabLayerCount (void) const
 
 
 
-int SdDrawViewShell::GetActiveTabLayerIndex (void) const
+int DrawViewShell::GetActiveTabLayerIndex (void) const
 {
     return aLayerTab.GetPagePos (aLayerTab.GetCurPageId());
 }
@@ -931,7 +961,7 @@ int SdDrawViewShell::GetActiveTabLayerIndex (void) const
 
 
 
-void SdDrawViewShell::SetActiveTabLayerIndex (int nIndex)
+void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 {
     // Ignore invalid indices silently.
     if (nIndex>=0 && nIndex<aLayerTab.GetPageCount())
@@ -945,7 +975,7 @@ void SdDrawViewShell::SetActiveTabLayerIndex (int nIndex)
 
 
 
-SdTabControl* SdDrawViewShell::GetPageTabControl (void)
+TabControl* DrawViewShell::GetPageTabControl (void)
 {
     return &aTabControl;
 }
@@ -953,7 +983,9 @@ SdTabControl* SdDrawViewShell::GetPageTabControl (void)
 
 
 
-SdLayerTab* SdDrawViewShell::GetLayerTabControl (void)
+LayerTabBar* DrawViewShell::GetLayerTabControl (void)
 {
     return &aLayerTab;
 }
+
+} // end of namespace sd
