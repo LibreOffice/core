@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-07-02 11:43:51 $
+ *  last change: $Author: dbo $ $Date: 2001-08-01 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,9 @@ inline void ObjectEntry::append(
 {
     InterfaceEntry aNewEntry;
     if (! fpFreeProxy)
+    {
         (*pEnv->acquireInterface)( pEnv, pInterface );
+    }
     aNewEntry.pInterface    = pInterface;
     aNewEntry.fpFreeProxy   = fpFreeProxy;
     aNewEntry.pOEntry       = this;
@@ -315,24 +317,26 @@ static void SAL_CALL defenv_registerInterface(
     SAL_THROW( () )
 {
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
-    const OUString & rOId = * reinterpret_cast< OUString * >( &pOId );
+    OUString const & rOId = * reinterpret_cast< OUString * >( &pOId );
 
-    ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    ClearableMutexGuard aGuard( that->aAccess );
 
-    const OId2ObjectMap::const_iterator iFind(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.find( rOId ) );
-    if (iFind == static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.end())
+    OId2ObjectMap::const_iterator const iFind( that->aOId2ObjectMap.find( rOId ) );
+    if (iFind == that->aOId2ObjectMap.end())
     {
         ObjectEntry * pOEntry = new ObjectEntry( pEnv, rOId );
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap[ rOId ] = pOEntry;
+        pair< OId2ObjectMap::iterator, bool > insertion(
+            that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, pOEntry ) ) );
+        OSL_ENSURE( insertion.second, "### inserting new object entry failed?!" );
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( *ppInterface, pTypeDescr, 0 );
     }
     else // object entry exists
     {
-        ObjectEntry * pOEntry = (*iFind).second;
+        ObjectEntry * pOEntry = iFind->second;
         ++pOEntry->nRef; // another register call on object
-        const InterfaceEntry * pIEntry = pOEntry->find( pTypeDescr );
+        InterfaceEntry const * pIEntry = pOEntry->find( pTypeDescr );
 
         if (pIEntry) // type entry exists
         {
@@ -358,24 +362,26 @@ static void SAL_CALL defenv_registerProxyInterface(
     SAL_THROW( () )
 {
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
-    const OUString & rOId = * reinterpret_cast< OUString * >( &pOId );
+    OUString const & rOId = * reinterpret_cast< OUString * >( &pOId );
 
-    ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    ClearableMutexGuard aGuard( that->aAccess );
 
-    const OId2ObjectMap::const_iterator iFind(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.find( rOId ) );
-    if (iFind == static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.end())
+    OId2ObjectMap::const_iterator const iFind( that->aOId2ObjectMap.find( rOId ) );
+    if (iFind == that->aOId2ObjectMap.end())
     {
         ObjectEntry * pOEntry = new ObjectEntry( pEnv, rOId );
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap[ rOId ] = pOEntry;
+        pair< OId2ObjectMap::iterator, bool > insertion(
+            that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, pOEntry ) ) );
+        OSL_ENSURE( insertion.second, "### inserting new object entry failed?!" );
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( *ppInterface, pTypeDescr, freeProxy );
     }
     else // object entry exists
     {
-        ObjectEntry * pOEntry = (*iFind).second;
+        ObjectEntry * pOEntry = iFind->second;
         ++pOEntry->nRef; // another register call on object
-        const InterfaceEntry * pIEntry = pOEntry->find( pTypeDescr );
+        InterfaceEntry const * pIEntry = pOEntry->find( pTypeDescr );
 
         if (pIEntry) // type entry exists
         {
@@ -401,22 +407,21 @@ static void SAL_CALL defenv_revokeInterface(
     SAL_THROW( () )
 {
     OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
-    ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    ClearableMutexGuard aGuard( that->aAccess );
 
-    const Ptr2ObjectMap::const_iterator iFind(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.find( pInterface ) );
-    OSL_ASSERT( iFind != static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.end() );
-    if (! --(*iFind).second->nRef)
+    Ptr2ObjectMap::const_iterator const iFind( that->aPtr2ObjectMap.find( pInterface ) );
+    OSL_ASSERT( iFind != that->aPtr2ObjectMap.end() );
+    if (! --iFind->second->nRef)
     {
-        ObjectEntry * pOEntry = (*iFind).second;
+        ObjectEntry * pOEntry = iFind->second;
         OSL_ASSERT( pEnv == pOEntry->pEnv );
         // cleanup maps
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.erase( pOEntry->oid );
+        that->aOId2ObjectMap.erase( pOEntry->oid );
         sal_Int32 nPos;
         for ( nPos = pOEntry->aInterfaces.size(); nPos--; )
         {
-            static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.erase(
-                pOEntry->aInterfaces[nPos].pInterface );
+            that->aPtr2ObjectMap.erase( pOEntry->aInterfaces[nPos].pInterface );
         }
 
         // the last proxy interface of the environment might kill this environment,
@@ -426,12 +431,16 @@ static void SAL_CALL defenv_revokeInterface(
         // release interfaces
         for ( nPos = pOEntry->aInterfaces.size(); nPos--; )
         {
-            const InterfaceEntry & rEntry = pOEntry->aInterfaces[nPos];
+            InterfaceEntry const & rEntry = pOEntry->aInterfaces[nPos];
             typelib_typedescription_release( (typelib_TypeDescription *)rEntry.pTypeDescr );
             if (rEntry.fpFreeProxy) // is proxy or used interface?
+            {
                 (*rEntry.fpFreeProxy)( pEnv, rEntry.pInterface );
+            }
             else
+            {
                 (*pEnv->releaseInterface)( pEnv, rEntry.pInterface );
+            }
         }
 
         delete pOEntry;
@@ -449,18 +458,18 @@ static void SAL_CALL defenv_getObjectIdentifier(
         *ppOId = 0;
     }
 
-    ClearableMutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    ClearableMutexGuard aGuard( that->aAccess );
 
-    const Ptr2ObjectMap::const_iterator iFind(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.find( pInterface ) );
-    if (iFind != static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.end())
-    {
-        ::rtl_uString_acquire( *ppOId = (*iFind).second->oid.pData );
-    }
-    else
+    Ptr2ObjectMap::const_iterator const iFind( that->aPtr2ObjectMap.find( pInterface ) );
+    if (iFind == that->aPtr2ObjectMap.end())
     {
         aGuard.clear();
         (*pEnv->computeObjectIdentifier)( pEnv, ppOId, pInterface );
+    }
+    else
+    {
+        ::rtl_uString_acquire( *ppOId = iFind->second->oid.pData );
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -476,17 +485,18 @@ static void SAL_CALL defenv_getRegisteredInterface(
         *ppInterface = 0;
     }
 
-    const OUString & rOId = * reinterpret_cast< OUString * >( &pOId );
+    OUString const & rOId = * reinterpret_cast< OUString * >( &pOId );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    MutexGuard aGuard( that->aAccess );
 
-    MutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
-
-    const OId2ObjectMap::const_iterator iFind(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.find( rOId ) );
-    if (iFind != static_cast< uno_DefaultEnvironment * >( pEnv )->aOId2ObjectMap.end())
+    OId2ObjectMap::const_iterator const iFind( that->aOId2ObjectMap.find( rOId ) );
+    if (iFind != that->aOId2ObjectMap.end())
     {
-        const InterfaceEntry * pIEntry = (*iFind).second->find( pTypeDescr );
+        InterfaceEntry const * pIEntry = iFind->second->find( pTypeDescr );
         if (pIEntry)
+        {
             (*pEnv->acquireInterface)( pEnv, *ppInterface = pIEntry->pInterface );
+        }
     }
 }
 //--------------------------------------------------------------------------------------------------
@@ -495,16 +505,15 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
     SAL_THROW( () )
 {
     OSL_ENSURE( pEnv && pppInterfaces && pnLen && memAlloc, "### null ptr!" );
-    MutexGuard aGuard( static_cast< uno_DefaultEnvironment * >( pEnv )->aAccess );
+    uno_DefaultEnvironment * that = static_cast< uno_DefaultEnvironment * >( pEnv );
+    MutexGuard aGuard( that->aAccess );
 
-    sal_Int32 nLen = static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.size();
+    sal_Int32 nLen = that->aPtr2ObjectMap.size();
     sal_Int32 nPos = 0;
     void ** ppInterfaces = (void **)(*memAlloc)( nLen * sizeof(void *) );
 
-    Ptr2ObjectMap::const_iterator iPos(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.begin() );
-    Ptr2ObjectMap::const_iterator const iEnd(
-        static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.end() );
+    Ptr2ObjectMap::const_iterator iPos( that->aPtr2ObjectMap.begin() );
+    Ptr2ObjectMap::const_iterator const iEnd( that->aPtr2ObjectMap.end() );
     while (iPos != iEnd)
     {
         (*pEnv->acquireInterface)( pEnv, ppInterfaces[nPos++] = (*iPos).first );
@@ -708,7 +717,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
     OId2ObjectMap::const_iterator iPos( ((uno_DefaultEnvironment *)pEnv)->aOId2ObjectMap.begin() );
     while (iPos != ((uno_DefaultEnvironment *)pEnv)->aOId2ObjectMap.end())
     {
-        ObjectEntry * pOEntry = (*iPos).second;
+        ObjectEntry * pOEntry = iPos->second;
         OSL_ASSERT( (uno_DefaultEnvironment *)pEnv == pOEntry->pEnv );
 
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("+ object entry: nRef=") );
@@ -907,7 +916,7 @@ inline void EnvironmentsData::getEnvironment(
     aKey += rEnvTypeName;
 
     // try to find registered mapping
-    const OUString2EnvironmentMap::const_iterator iFind( aName2EnvMap.find( aKey ) );
+    OUString2EnvironmentMap::const_iterator const iFind( aName2EnvMap.find( aKey ) );
     if (iFind != aName2EnvMap.end())
     {
         uno_Environment * pWeak = iFind->second;
@@ -925,11 +934,13 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     aKey += pEnv->pTypeName;
 
     // try to find registered environment
-    const OUString2EnvironmentMap::const_iterator iFind( aName2EnvMap.find( aKey ) );
+    OUString2EnvironmentMap::const_iterator const iFind( aName2EnvMap.find( aKey ) );
     if (iFind == aName2EnvMap.end())
     {
         (*pEnv->acquireWeak)( pEnv );
-        aName2EnvMap[ aKey ] = pEnv;
+        pair< OUString2EnvironmentMap::iterator, bool > insertion(
+            aName2EnvMap.insert( OUString2EnvironmentMap::value_type( aKey, pEnv ) ) );
+        OSL_ENSURE( insertion.second, "### insertion of env into map failed?!" );
     }
     else
     {
