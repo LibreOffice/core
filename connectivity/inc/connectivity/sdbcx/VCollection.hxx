@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 06:58:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,8 @@ namespace connectivity
         private:
             void notifyElementRemoved(const ::rtl::OUString& _sName);
             void disposeElements();
-            void dropImpl(sal_Int32 _nIndex);
+            void dropImpl(sal_Int32 _nIndex,sal_Bool _bReallyDrop = sal_True);
+            void dropImpl(const ObjectIter& _rCurrentObject,sal_Bool _bReallyDrop = sal_True);
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > getObject(ObjectIter& _rCurrentObject);
         };
     }
