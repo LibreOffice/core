@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 12:04:36 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 14:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,8 +1149,7 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
     return bConvert;
 }
 
-void SwFEShell::Paste( SvStorageStream& rStrm, USHORT nAction,
-                        const Point* pPt )
+void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 {
     SET_CURR_SHELL( this );
     StartAllAction();

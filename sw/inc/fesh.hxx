@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 11:53:58 $
+ *  last change: $Author: jp $ $Date: 2001-02-01 14:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ public:
     // Return-Wert besagt ob konvertiert wurde!!
     BOOL GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const;
 
-    void Paste( SvStorageStream& rStm, USHORT nAction, const Point* pPt = 0 );
+    void Paste( SvStream& rStm, USHORT nAction, const Point* pPt = 0 );
     BOOL Paste( const Graphic &rGrf );
     BOOL Paste( SotDataObject& rObj, const Point& rPt );
 
