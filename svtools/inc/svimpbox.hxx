@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:12:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ private:
     static Image*       s_pDefExpanded;
     static Image*       s_pDefCollapsedHC;
     static Image*       s_pDefExpandedHC;
+    static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
     // Node Bitmaps
     enum ImageType
