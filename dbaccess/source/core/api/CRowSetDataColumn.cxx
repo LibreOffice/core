@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 09:14:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-31 14:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,8 +261,6 @@ void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 
         fire(&nHandle, &aNew, &m_aOldValue, 1, sal_False );
     }
-    else
-        OSL_ENSURE(0,"Invalid column value found!");
 }
 
 // -------------------------------------------------------------------------
