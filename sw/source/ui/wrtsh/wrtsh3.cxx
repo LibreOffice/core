@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:53:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,56 +274,3 @@ sal_Bool SwWrtShell::GetURLFromButton( String& rURL, String& rDescr ) const
 
     return bRet;
 }
-
-
-    // falls ein util::URL-Button selektiert ist, dessen util::URL returnen, ansonsten
-    // einen LeerString
-sal_Bool SwWrtShell::SetURLToButton( const String& rURL, const String& rDescr )
-{
-    sal_Bool bRet = sal_False;
-    const SdrView *pDView = GetDrawView();
-    if( pDView )
-    {
-        // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
-        if (rMarkList.GetMark(0))
-        {
-            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
-            if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
-            {
-                uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
-
-                ASSERT( xControlModel.is(), "UNO-Control ohne Model" );
-                if( !xControlModel.is() )
-                    return bRet;
-
-                uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
-
-                uno::Any aTmp;
-
-                // Darf man eine util::URL an dem Objekt setzen?
-                uno::Reference< beans::XPropertySetInfo >  xPropInfoSet = xPropSet->getPropertySetInfo();
-                beans::Property aProp = xPropInfoSet->getPropertyByName( C2U("TargetURL") );
-                if (aProp.Name.getLength())
-                {
-                    // Ja!
-                    aTmp <<= OUString(rDescr);
-                    xPropSet->setPropertyValue( C2U("Label"), aTmp );
-
-                    aTmp <<= OUString(rURL);
-                    xPropSet->setPropertyValue( C2U("TargetURL"), aTmp );
-
-
-                    form::FormButtonType eButtonType = form::FormButtonType_URL;
-                    aTmp.setValue( &eButtonType, ::getCppuType((form::FormButtonType*)0));
-                    xPropSet->setPropertyValue( C2U("ButtonType"), aTmp );
-                }
-            }
-        }
-    }
-
-    return bRet;
-}
-
-
-
