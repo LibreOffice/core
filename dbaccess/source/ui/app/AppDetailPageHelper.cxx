@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:06:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,16 +831,20 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
     DBTreeListBox* pTreeView = getCurrentView();
     if ( pTreeView )
     {
+        SvLBoxEntry* pSelected = pTreeView->GetSelectedEntry();
+        sal_Bool bClearPreview = sal_False;
         switch( _eType )
         {
             case E_TABLE:
                 OSL_ENSURE(_rxConn.is(),"Connection is NULL! ->GPF");
+                // we don't need to clear the table here, it is already done by the dispose listener
                 static_cast<OTableTreeListBox*>(pTreeView)->removedTable(_rxConn,_rName);
                 break;
             case E_QUERY:
                 if ( pTreeView )
                 {
                     SvLBoxEntry* pEntry = lcl_findEntry_impl(*pTreeView,_rName,pTreeView->First());
+                    bClearPreview = pSelected == pEntry;
                     if ( pEntry )
                         pTreeView->GetModel()->Remove(pEntry);
                 }
@@ -851,6 +855,7 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
                     if ( pTreeView )
                     {
                         SvLBoxEntry* pEntry = lcl_findEntry(*pTreeView,_rName,pTreeView->First());
+                        bClearPreview = pSelected == pEntry;
                         if ( pEntry )
                             pTreeView->GetModel()->Remove(pEntry);
                     }
@@ -859,6 +864,8 @@ void OAppDetailPageHelper::elementRemoved(ElementType _eType,const ::rtl::OUStri
             default:
                 OSL_ENSURE(0,"Invalid element type");
         }
+        if ( bClearPreview && pSelected )
+            showPreview(NULL);
     }
 }
 // -----------------------------------------------------------------------------
