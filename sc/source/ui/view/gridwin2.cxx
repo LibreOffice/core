@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: dr $ $Date: 2002-10-21 17:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
     else
     {
         if (bMove)
-            SetPointer( Pointer( POINTER_NOTALLOWED ) );
+            SetPointer( Pointer( POINTER_PIVOT_DELETE ) );
         if (bDragRect)
             DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
         bDragRect = FALSE;
@@ -644,7 +644,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
     if (bMove)          // set mouse pointer
     {
-        PointerStyle ePointer = POINTER_NOTALLOWED;
+        PointerStyle ePointer = POINTER_PIVOT_DELETE;
         if ( bHasRange )
             switch (nOrient)
             {

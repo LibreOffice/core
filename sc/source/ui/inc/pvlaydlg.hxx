@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-01 11:33:44 $
+ *  last change: $Author: dr $ $Date: 2002-10-21 17:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,9 @@ public:
     virtual BOOL            Close();
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, long nFieldIndex );
-    const Pointer*          NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex );
+    PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
-    const Pointer*          NotifyMouseMove      ( const Point& rAt );
+    PointerStyle            NotifyMouseMove      ( const Point& rAt );
     void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bActive );
     void                    NotifyMoveField      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, long nFieldIndex );
@@ -174,15 +174,10 @@ private:
     PushButton              aBtnOptions;
     MoreButton              aBtnMore;
 
-    Pointer                 aPtrField;
-    Pointer                 aPtrCol;
-    Pointer                 aPtrRow;
-
     const String            aStrUndefined;
     const String            aStrNewTable;
     String*                 aFuncNameArr[FUNC_COUNT];
 
-    Pointer                 aPtrArrow;
     ScDPFieldType           eDnDFromType;
     long                    nDnDFromIndex;
     BOOL                    bIsDrag;

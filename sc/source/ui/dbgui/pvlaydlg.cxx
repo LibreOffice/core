@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 10:59:20 $
+ *  last change: $Author: dr $ $Date: 2002-10-21 17:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,11 +159,6 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFtData         ( this, ScResId( FT_DATA ) ),
         aWndData        ( this, ScResId( WND_DATA ),   TYPE_DATA,   &aFtData ),
         aWndSelect      ( this, ScResId( WND_SELECT ), TYPE_SELECT, String(ScResId(STR_SELECT)) ),
-
-        aPtrArrow       ( POINTER_ARROW ),
-        aPtrField       ( POINTER_PIVOT_FIELD ),
-        aPtrCol         ( POINTER_PIVOT_COL  ),
-        aPtrRow         ( POINTER_PIVOT_ROW  ),
 
         aSlider         ( this, ScResId( WND_HSCROLL ) ),
         aFlLayout       ( this, ScResId( FL_LAYOUT ) ),
@@ -814,42 +809,48 @@ void ScDPLayoutDlg::NotifyMouseButtonUp( const Point& rAt )
 
 //----------------------------------------------------------------------------
 
-const Pointer* ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
+PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
 {
-    Pointer* pPtr = &aPtrArrow;
+    PointerStyle ePtr = POINTER_ARROW;
 
     if ( bIsDrag )
     {
         Point aPos = ScreenToOutputPixel( rAt );
 
         if ( aRectCol.IsInside( aPos ) )
-            pPtr = &aPtrCol;
+            ePtr = POINTER_PIVOT_COL;
         else if ( aRectRow.IsInside( aPos ) )
-            pPtr = &aPtrRow;
+            ePtr = POINTER_PIVOT_ROW;
+        else if ( aRectData.IsInside( aPos ) )
+            ePtr = POINTER_PIVOT_FIELD;
+        else if ( eDnDFromType != TYPE_SELECT )
+            ePtr = POINTER_PIVOT_DELETE;
+        else if ( aRectSelect.IsInside( aPos ) )
+            ePtr = POINTER_PIVOT_FIELD;
         else
-            pPtr = &aPtrField;
+            ePtr = POINTER_NOTALLOWED;
     }
 
-    return pPtr;
+    return ePtr;
 }
 
 
 //----------------------------------------------------------------------------
 
-const Pointer* ScDPLayoutDlg::NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex )
+PointerStyle ScDPLayoutDlg::NotifyMouseButtonDown( ScDPFieldType eType, long nFieldIndex )
 {
-    Pointer* pPtr = &aPtrField;
+    PointerStyle ePtr = POINTER_ARROW;
 
     bIsDrag       = TRUE;
     eDnDFromType  = eType;
     nDnDFromIndex = nFieldIndex;
 
     if ( eType == TYPE_COL )
-        pPtr = &aPtrCol;
+        ePtr = POINTER_PIVOT_COL;
     else if ( eType == TYPE_ROW )
-        pPtr = &aPtrRow;
+        ePtr = POINTER_PIVOT_ROW;
 
-    return pPtr;
+    return ePtr;
 }
 
 

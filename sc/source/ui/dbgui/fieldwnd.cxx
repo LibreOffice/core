@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-08 08:19:51 $
+ *  last change: $Author: dr $ $Date: 2002-10-21 17:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,10 +473,9 @@ void __EXPORT ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
             if( rMEvt.GetClicks() == 1 )
             {
-                const Pointer* pPtr = pDlg->NotifyMouseButtonDown( eType, nIndex );
+                PointerStyle ePtr = pDlg->NotifyMouseButtonDown( eType, nIndex );
                 CaptureMouse();
-                if( *pPtr != GetPointer() )
-                    SetPointer( *pPtr );
+                SetPointer( Pointer( ePtr ) );
             }
             else
                 pDlg->NotifyDoubleClick( eType, nIndex );
@@ -503,10 +502,8 @@ void __EXPORT ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
 {
     if( IsMouseCaptured() )
     {
-        const Pointer* pPtr =
-            pDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
-        if ( *pPtr != GetPointer() )
-            SetPointer( *pPtr );
+        PointerStyle ePtr = pDlg->NotifyMouseMove( OutputToScreenPixel( rMEvt.GetPosPixel() ) );
+        SetPointer( Pointer( ePtr ) );
     }
 }
 
