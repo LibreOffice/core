@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-14 10:52:01 $
+ *  last change: $Author: nf $ $Date: 2000-12-14 11:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ Resource RSC_CHARSETS
         Text[ chinese_traditional ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);¨t²Î";
         Text[ arabic ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);äÙÇã";
         Text[ greek ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Óýóôçìá";
-        Text[ korean ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+        Text[ korean ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
         Text[ language_user1 ] = "Please take care of the numer of tokens in the translated string (Tokens are the units separated by ; characters). "
             "It must be exactly the same number as in the original (untranslated) string";
@@ -172,6 +172,9 @@ String STR_GENERAL_SDB_ERROR
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/14 10:52:01  fs
+ *  #81961# added a comment for the translation department
+ *
  *  Revision 1.5  2000/11/29 09:47:29  kz
  *  Merge SRC614: 29.11.00 - 10:46:51 (NoBranch)
  *
