@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTitleTemplateContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,9 @@ void XMLIndexTitleTemplateContext::EndElement()
 
     if (bStyleNameOK)
     {
-        aAny <<= sStyleName;
+        aAny <<= GetImport().GetStyleDisplayName(
+                                XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                                sStyleName );
         rTOCPropertySet->setPropertyValue(sParaStyleHeading, aAny);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCStylesContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@ void XMLIndexTOCStylesContext::EndElement()
         Sequence<OUString> aStyleNamesSequence(nCount);
         for(sal_Int32 i = 0; i < nCount; i++)
         {
-            aStyleNamesSequence[i] = aStyleNames[i];
+            aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                               aStyleNames[i] );
         }
 
         // get index replace
