@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,8 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
             if (pPts!=NULL && pPath!=NULL) {
                 pPts->ForceSort();
                 AddUndo(new SdrUndoGeoObj(*pPath));
-                Rectangle aBoundRect0; if (pPath->pUserCall!=NULL) aBoundRect0=pPath->GetBoundRect();
-                pPath->SendRepaintBroadcast();
+                Rectangle aBoundRect0; if (pPath->pUserCall!=NULL) aBoundRect0=pPath->GetLastBoundRect();
+                // #110094#-14 pPath->SendRepaintBroadcast();
                 for (ULONG nNum=pPts->GetCount(); nNum>0;) {
                     nNum--;
                     USHORT nPtNum=pPts->GetObject(nNum);
@@ -209,7 +209,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
                 pPath->ImpForceKind(); // ebenso impl. an der SdrPolyEditView
                 pPath->SetRectsDirty();
                 pPath->SetChanged();
-                pPath->SendRepaintBroadcast();
+                pPath->BroadcastObjectChange();
                 pPath->SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
             }
         }
@@ -237,8 +237,8 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
             if (pPts!=NULL && pPath!=NULL) {
                 pPts->ForceSort();
                 AddUndo(new SdrUndoGeoObj(*pPath));
-                Rectangle aBoundRect0; if (pPath->pUserCall!=NULL) aBoundRect0=pPath->GetBoundRect();
-                pPath->SendRepaintBroadcast();
+                Rectangle aBoundRect0; if (pPath->pUserCall!=NULL) aBoundRect0=pPath->GetLastBoundRect();
+                // #110094#-14 pPath->SendRepaintBroadcast();
                 for (ULONG nNum=pPts->GetCount(); nNum>0;) {   // hier muss ich mir noch den 1. und letzten Punkt
                     nNum--;                         // eines jeden Polygons merken (fehlende Impl.) !!!
                     USHORT nPtNum=pPts->GetObject(nNum);
@@ -252,7 +252,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
                 pPath->ImpForceKind(); // ebenso impl. an der SdrPolyEditView
                 pPath->SetRectsDirty();
                 pPath->SetChanged();
-                pPath->SendRepaintBroadcast();
+                pPath->BroadcastObjectChange();
                 pPath->SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
             }
         }
@@ -284,8 +284,8 @@ void SdrPolyEditView::DeleteMarkedPoints()
 
                     if(nMarkPtsAnz > 5)
                     {
-                        Rectangle aBoundRect0(pObj->GetBoundRect());
-                        pObj->SendRepaintBroadcast();
+                        Rectangle aBoundRect0(pObj->GetLastBoundRect());
+                        // #110094#-14 pObj->SendRepaintBroadcast();
                         for (ULONG i=nMarkPtsAnz; i>0 && !bDel;)
                         {
                             i--;
@@ -294,7 +294,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
                         if(!bDel)
                         {
                             pObj->SetChanged();
-                            pObj->SendRepaintBroadcast();
+                            pObj->BroadcastObjectChange();
                             pObj->SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
                         }
                     }
