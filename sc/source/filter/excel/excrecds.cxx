@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: gt $ $Date: 2001-02-23 09:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1678,12 +1678,10 @@ ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr
             nFormLen = pExcUPN->GetLenWithShrdFmla();
             pExcUPN->GetShrdFmla( pData, nFormLen );
 
-            if( pExcUPN->GetCode() && pShrdFmlas )
-            {
-                ExcArray*   pNew = new ExcArray( rTokArray, rPos.Col(), rPos.Row() );
-                if( !pShrdFmlas->Insert( pNew ) )
-                    delete pNew;
-            }
+            if( pExcUPN->GetCode() && pExcUPN->GetLen() )
+                *ppArray = new ExcArray( *pExcUPN, ( UINT8 ) rPos.Col(), rPos.Row() );
+            else
+                *ppArray = new ExcArray( ( UINT8 ) rPos.Col(), rPos.Row(), pExcUPN->GetArrayFormId() );
             break;
         case EC_ShrdFmla:
             if( ppShrdFmla && pExcUPN->GetShrdFmla( pData, nFormLen ) )
@@ -3179,7 +3177,7 @@ void ExcPalette2::SaveCont( SvStream& rStrm )
     for( ExcPal2Entry* pEntry = _First(); pEntry; pEntry = _Next() )
         pEntry->Save( rStrm );
 
-    for( UINT16 nInd = List::Count(); nInd < rColBuff.GetAnz(); nInd++ )
+    for( UINT16 nInd = ( UINT16 ) List::Count(); nInd < rColBuff.GetAnz(); nInd++ )
         rStrm   << rColBuff.GetRed( nInd )
                 << rColBuff.GetGreen( nInd )
                 << rColBuff.GetBlue( nInd )
@@ -4143,7 +4141,7 @@ UINT16 ExcFilterCondition::GetTextBytes() const
 {
     if( !pText )
         return 0;
-    return 1 + pText->GetByteCount();
+    return ( UINT16 ) ( 1 + pText->GetByteCount() );
 }
 
 void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT )
@@ -4563,12 +4561,18 @@ UINT16 XclExpPageBreaks::GetLen() const
 
 
 
-void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow )
+void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nId )
 {
-    nID = nCol;
-    nID <<= 16;
-    nID += nRow;
-    nID <<= 8;
+    if( nId == 0xFFFFFFFF )
+    {
+        nID = nCol;
+        nID <<= 16;
+        nID += nRow;
+        nID <<= 8;
+    }
+    else
+        nID = nId;
+
     nFirstRow = nLastRow = nRow;
     nFirstCol = nLastCol = nCol;
 }
@@ -4602,12 +4606,28 @@ ExcArray::ExcArray( const sal_Char* p, UINT16 n, UINT8 nCol, UINT16 nRow )
 }
 
 
-ExcArray::ExcArray( const ScTokenArray& rTokArr, UINT8 nCol, UINT16 nRow )
+ExcArray::ExcArray( const ExcUPN& rUPN, UINT8 nCol, UINT16 nRow )
 {
     SetColRow( nCol, nRow );
 
-    pData = NULL;
+    nFormLen = rUPN.GetLen();
+
+    if( nFormLen )
+    {
+        pData = new sal_Char[ nFormLen ];
+        memcpy( pData, rUPN.GetCode(), nFormLen );
+    }
+    else
+        pData = NULL;
+}
+
+
+ExcArray::ExcArray( UINT8 nCol, UINT16 nRow, UINT32 nId )
+{
+    SetColRow( nCol, nRow, nId );
+
     nFormLen = 0;
+    pData = NULL;
 }
 
 
@@ -4632,7 +4652,10 @@ UINT16 ExcArray::GetLen() const
 
 BOOL ExcArray::AppendBy( const ExcArray& r )
 {
-    BOOL    bRet;
+    if( nID != r.nID )
+        return FALSE;
+
+    BOOL            bRet;
 
     const UINT16    nNewRow = nLastRow + 1;
     const UINT16    nNewCol = nLastCol + 1;
@@ -4716,7 +4739,9 @@ BOOL ExcArrays::Insert( ExcArray* p )
     while( pAct )
     {
         if( pAct->AppendBy( *p ) )
-            return TRUE;
+            return FALSE;
+
+        pAct = ( ExcArray* ) List::Next();
     }
 
     Append( p );
@@ -4752,16 +4777,6 @@ void ExcShrdFmla::SaveCont( SvStream& r )
 ExcShrdFmla::ExcShrdFmla( const sal_Char* p, UINT16 n, const ScRange& r ) :
     ExcArray( p, n, ( UINT8 ) r.aStart.Col(), r.aStart.Row() )
 {
-/*  if( p && n )
-    {
-        pData = new sal_Char[ n ];
-        nLen = n;
-    }
-    else
-    {
-        pData = NULL;
-        nLen = 0;
-    }*/
 }
 
 

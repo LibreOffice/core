@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
+ *  last change: $Author: gt $ $Date: 2001-02-23 09:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ class UsedAttrList;
 class ExcArray;
 class ExcArrays;
 class ExcShrdFmla;
+class ExcUPN;
 
 class ScProgress;
 
@@ -1763,13 +1764,14 @@ protected:
     sal_Char*               pData;
     UINT16                  nFormLen;
 
-    void                    SetColRow( UINT8 nCol, UINT16 nRow );
+    void                    SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nID = 0xFFFFFFFF );
 
     virtual void            SaveCont( SvStream& rStrm );
 
                             ExcArray( const sal_Char* pData, UINT16 nLen, UINT8 nCol, UINT16 nRow );
 public:
-                            ExcArray( const ScTokenArray&, UINT8 nCol, UINT16 nRow );
+                            ExcArray( const ExcUPN&, UINT8 nCol, UINT16 nRow );
+                            ExcArray( UINT8 nCol, UINT16 nRow, UINT32 nID );
     virtual                 ~ExcArray();
 
     virtual UINT16          GetNum() const;
