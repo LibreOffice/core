@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-13 16:15:25 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 11:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@
 #ifndef _SW3IO_HXX
 #include <sw3io.hxx>
 #endif
-
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -162,6 +164,37 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     }
     else
         SetColorTable( OFF_APP()->GetStdColorTable() );
+
+    // copy all the default values to the SdrModel
+    SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
+    if( pSdrPool )
+    {
+        const USHORT aWhichRanges[] =
+            {
+                RES_CHRATR_BEGIN, RES_CHRATR_END,
+                RES_PARATR_BEGIN, RES_PARATR_END,
+                0
+            };
+
+        SfxItemPool& rDocPool = pD->GetAttrPool();
+        USHORT nEdtWhich, nSlotId;
+        const SfxPoolItem* pItem;
+        for( const USHORT* pRangeArr = aWhichRanges;
+            *pRangeArr; pRangeArr += 2 )
+            for( USHORT nW = *pRangeArr, nEnd = *(pRangeArr+1);
+                    nW < nEnd; ++nW )
+                if( 0 != (pItem = rDocPool.GetPoolDefaultItem( nW )) &&
+                    0 != (nSlotId = rDocPool.GetSlotId( nW ) ) &&
+                    nSlotId != nW &&
+                    0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
+                    nSlotId != nEdtWhich )
+                {
+                    SfxPoolItem* pCpy = pItem->Clone();
+                    pCpy->SetWhich( nEdtWhich );
+                    pSdrPool->SetPoolDefaultItem( *pCpy );
+                    delete pCpy;
+                }
+    }
 }
 
 /*************************************************************************

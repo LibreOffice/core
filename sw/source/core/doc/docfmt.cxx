@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:57:51 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 11:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,8 +421,8 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
 
             if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
             {
-                nMkPos = aBndry.startPos;
-                nPtPos = aBndry.endPos;
+                nMkPos = (xub_StrLen)aBndry.startPos;
+                nPtPos = (xub_StrLen)aBndry.endPos;
             }
             else
             {
@@ -766,8 +766,8 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                 if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
                 {
-                    nMkPos = aBndry.startPos;
-                    nPtPos = aBndry.endPos;
+                    nMkPos = (xub_StrLen)aBndry.startPos;
+                    nPtPos = (xub_StrLen)aBndry.endPos;
                 }
                 else
                     nPtPos = nMkPos = rSt.GetIndex();
@@ -1136,8 +1136,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SfxItemIter aIter( rSet );
     register USHORT nWhich;
     const SfxPoolItem* pItem = aIter.GetCurItem();
+    SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
     while( TRUE )
     {
+        BOOL bCheckSdrDflt = FALSE;
         nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetDefaultItem( nWhich ) );
         GetAttrPool().SetPoolDefaultItem( *pItem );
@@ -1147,9 +1149,13 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         {
             aCallMod.Add( pDfltTxtFmtColl );
             aCallMod.Add( pDfltCharFmt );
+            bCheckSdrDflt = 0 != pSdrPool;
         }
         else if( RES_PARATR_BEGIN <= nWhich && RES_PARATR_END > nWhich )
+        {
             aCallMod.Add( pDfltTxtFmtColl );
+            bCheckSdrDflt = 0 != pSdrPool;
+        }
         else if( RES_GRFATR_BEGIN <= nWhich && RES_GRFATR_END > nWhich )
             aCallMod.Add( pDfltGrfFmtColl );
         else if( RES_FRMATR_BEGIN <= nWhich && RES_FRMATR_END > nWhich )
@@ -1160,6 +1166,23 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         }
         else if( RES_BOXATR_BEGIN <= nWhich && RES_BOXATR_END > nWhich )
             aCallMod.Add( pDfltFrmFmt );
+
+        // copy also the defaults
+        if( bCheckSdrDflt )
+        {
+            USHORT nEdtWhich, nSlotId;
+            if( 0 != (nSlotId = GetAttrPool().GetSlotId( nWhich ) ) &&
+                nSlotId != nWhich &&
+                0 != (nEdtWhich = pSdrPool->GetWhich( nSlotId )) &&
+                nSlotId != nEdtWhich )
+            {
+                SfxPoolItem* pCpy = pItem->Clone();
+                pCpy->SetWhich( nEdtWhich );
+                pSdrPool->SetPoolDefaultItem( *pCpy );
+                delete pCpy;
+            }
+        }
+
         if( aIter.IsAtEnd() )
             break;
         pItem = aIter.NextItem();
