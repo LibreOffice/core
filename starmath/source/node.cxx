@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:38:53 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,15 +176,13 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
             if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
                 aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
 
-            nNewCol = COL_BLACK;
-            if (aBgCol.IsDark())
-            {
-                SmViewShell *pViewSh = SmGetActiveView();
-                const StyleSettings& rS = pViewSh ?
-                        pViewSh->GetGraphicWindow().GetSettings().GetStyleSettings() :
-                        Application::GetSettings().GetStyleSettings();
-                nNewCol = rS.GetWindowTextColor().GetColor();
-            }
+            nNewCol = SM_MOD1()->GetColorConfig().GetColorValue(svx::FONTCOLOR).nColor;
+
+            Color aTmpColor( nNewCol );
+            if (aBgCol.IsDark() && aTmpColor.IsDark())
+                nNewCol = COL_WHITE;
+            else if (aBgCol.IsBright() && aTmpColor.IsBright())
+                nNewCol = COL_BLACK;
         }
     }
     return Color( nNewCol );

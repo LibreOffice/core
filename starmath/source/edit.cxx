@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-22 13:21:44 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
 
+    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+
+    // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
@@ -254,15 +257,26 @@ SfxItemPool * SmEditWindow::GetEditEngineItemPool()
     return pDoc ? &pDoc->GetEditEngineItemPool() : 0;
 }
 
+void SmEditWindow::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
+{
+    // Note: SetBackground still done in SmEditWindow::DataChanged
+#ifdef DEBUG
+    ColorData nVal = rColorCfg.GetColorValue(svx::FONTCOLOR).nColor;
+#endif
+    SetTextColor( rColorCfg.GetColorValue(svx::FONTCOLOR).nColor );
+    Invalidate();
+}
 
 void SmEditWindow::DataChanged( const DataChangedEvent& )
 {
     const StyleSettings aSettings( GetSettings().GetStyleSettings() );
+
+    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
+
     // edit fields in other Applications use this font instead of
     // the application font thus we use this one too
     SetPointFont( aSettings.GetFieldFont() /*aSettings.GetAppFont()*/ );
-    SetTextColor( aSettings.GetWindowTextColor() );
 
     EditEngine  *pEditEngine = GetEditEngine();
     SfxItemPool *pEditEngineItemPool = GetEditEngineItemPool();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-17 08:28:26 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,9 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     Hide();
     const Fraction aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
-    SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
+
+    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+
     SetTotalSize();
 
     SetHelpId(HID_SMA_WIN_DOCUMENT);
@@ -212,11 +214,22 @@ void SmGraphicWindow::StateChanged( StateChangedType eType )
 }
 
 
+void SmGraphicWindow::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
+{
+    // Note: SetTextColor not necessary since the nodes that
+    // get painted have the color information.
+#ifdef DEBUG
+    ColorData nVal = rColorCfg.GetColorValue(svx::DOCCOLOR).nColor;
+#endif
+    SetBackground( Color( (ColorData) rColorCfg.GetColorValue(svx::DOCCOLOR).nColor ) );
+    Invalidate();
+}
+
+
 void SmGraphicWindow::DataChanged( const DataChangedEvent& rEvt )
 {
-    const StyleSettings aSettings( GetSettings().GetStyleSettings() );
-    SetBackground( aSettings.GetWindowColor() );
-    //SetTextColor( aSettings.GetWindowTextColor() );
+    ApplyColorConfigValues( SM_MOD1()->GetColorConfig() );
+
     ScrollableWindow::DataChanged( rEvt );
 }
 

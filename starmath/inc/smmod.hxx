@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:40:24 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
+#endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 
 #ifndef _SMDLL_HXX
@@ -149,8 +155,9 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SmModule : public SmModuleDummy
+class SmModule : public SmModuleDummy, public SfxListener
 {
+    svx::ColorConfig        *pColorConfig;
     SmConfig                *pConfig;
     SmLocalizedSymbolData   *pLocSymbolData;
     SmRectCache             *pRectCache;
@@ -161,6 +168,8 @@ class SmModule : public SmModuleDummy
     void _CreateSysLocale() const;
     void _CreateVirtualDev() const;
 
+    void ApplyColorConfigValues( const svx::ColorConfig &rColorCfg );
+
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START + 0);
@@ -170,6 +179,11 @@ public:
 
     virtual SfxModule * Load();
     virtual void        Free();
+
+    // SfxListener
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    svx::ColorConfig &  GetColorConfig();
 
     SmConfig *          GetConfig();
     SmRectCache *       GetRectCache()     { return pRectCache; }

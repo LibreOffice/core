@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:44:44 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _MyEDITDATA_HXX //autogen
 #include <svx/editdata.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
 #endif
 
 #ifndef _ACCESSIBILITY_HXX_
@@ -174,6 +177,8 @@ public:
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
+
+    void ApplyColorConfigValues( const svx::ColorConfig &rColorCfg );
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();

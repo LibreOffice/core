@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-17 08:28:25 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
 
 #ifndef EDIT_HXX
 #include "edit.hxx"
@@ -149,6 +152,8 @@ public:
     BOOL IsCursorVisible() const { return bIsCursorVisible; }
     void ShowCursor(BOOL bShow);
     const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
+
+    void ApplyColorConfigValues( const svx::ColorConfig &rColorCfg );
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();

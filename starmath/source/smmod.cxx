@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-11 15:35:49 $
+ *  last change: $Author: tl $ $Date: 2002-12-12 15:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _SFX_HRC //autogen
 #include <sfx2/sfx.hrc>
 #endif
+#ifndef _SFXVIEWSH_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 #ifndef _FACTORY_HXX //autogen
 #include <so3/factory.hxx>
 #endif
@@ -101,6 +104,9 @@
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
 #endif
+#ifndef _RTTI_HXX
+#include <tools/rtti.hxx>
+#endif
 
 #ifndef _SMMOD_HXX
 #include "smmod.hxx"
@@ -113,6 +119,12 @@
 #endif
 #ifndef _DIALOG_HXX
 #include "dialog.hxx"
+#endif
+#ifndef EDIT_HXX
+#include "edit.hxx"
+#endif
+#ifndef VIEW_HXX
+#include "view.hxx"
 #endif
 #include "starmath.hrc"
 
@@ -288,6 +300,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 SmModule::SmModule(SvFactory* pObjFact) :
     SmModuleDummy(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact),
     pConfig( 0 ),
+    pColorConfig( 0 ),
     pLocSymbolData( 0 ),
     pRectCache( new SmRectCache ),
     pSysLocale( 0 ),
@@ -300,6 +313,7 @@ SmModule::SmModule(SvFactory* pObjFact) :
 SmModule::~SmModule()
 {
     delete pConfig;
+    delete pColorConfig;
     delete pLocSymbolData;
     delete pRectCache;
     delete pSysLocale;
@@ -316,6 +330,46 @@ void SmModule::_CreateVirtualDev() const
 {
     SmModule* pThis = (SmModule*)this;
     pThis->pVirtualDev = new VirtualDevice;
+}
+
+void SmModule::ApplyColorConfigValues( const svx::ColorConfig &rColorCfg )
+{
+    //invalidate all graphic and edit windows
+    const TypeId aSmViewTypeId = TYPE(SmViewShell);
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        if ((pViewShell->IsA(aSmViewTypeId)))
+        {
+            SmViewShell *pSmView = (SmViewShell *) pViewShell;
+            pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );
+            SmEditWindow *pEditWin = pSmView->GetEditWindow();
+            if (pEditWin)
+                pEditWin->ApplyColorConfigValues( rColorCfg );
+        }
+        pViewShell = SfxViewShell::GetNext( *pViewShell );
+    }
+}
+
+svx::ColorConfig & SmModule::GetColorConfig()
+{
+    if(!pColorConfig)
+    {
+        pColorConfig = new svx::ColorConfig;
+        ApplyColorConfigValues( *pColorConfig );
+        StartListening( *pColorConfig );
+    }
+    return *pColorConfig;
+}
+
+void SmModule::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
+{
+    if (rHint.ISA(SfxSimpleHint))
+    {
+        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
+        if (SFX_HINT_COLORS_CHANGED == nHintId)
+            ApplyColorConfigValues(*pColorConfig);
+    }
 }
 
 SmConfig * SmModule::GetConfig()
