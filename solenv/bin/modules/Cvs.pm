@@ -1,7 +1,7 @@
 #
 # Cvs.pm - package for manipulating CVS archives
 #
-# $Id: Cvs.pm,v 1.1.1.1 2000-09-20 14:43:11 hr Exp $
+# $Id: Cvs.pm,v 1.2 2001-12-12 13:31:50 vg Exp $
 
 package Cvs;
 use strict;
@@ -16,7 +16,7 @@ sub new {
     $self->{HEAD} = undef;
     $self->{FLAGS} = undef;
     if ($^O eq "MSWin32" || $^O eq "os2" ) {
-    $self->{CVS_BINARY} = "_cvs.exe";
+    $self->{CVS_BINARY} = "cvsclt2.exe";
     } else {
     $self->{CVS_BINARY} = "cvs.clt";
     }
