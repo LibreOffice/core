@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.26 $
+#*  $Revision: 1.27 $
 #*
-#*  last change: $Author: hjs $ $Date: 2001-08-24 13:54:02 $
+#*  last change: $Author: hjs $ $Date: 2001-09-03 10:14:40 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,6 +63,7 @@ PRJ=..
 
 PRJNAME=svtools
 TARGET=svtool
+TARGETTYPE=GUI
 RESTARGET=svt
 RESTARGETSIMPLE=svs
 VERSION=$(UPD)
