@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-03 11:01:36 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 12:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4342,17 +4342,15 @@ FASTBOOL SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
             {
                 bRet = TRUE;
             }
-/*
             else if( pO->ISA( SdrGrafObj ) )
             {
                 SdrGrafObj* pGrafObj = (SdrGrafObj*) pO;
-                if( ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) ||
-                    ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() )
+                if( ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
+                    ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
                 {
                     bRet = TRUE;
                 }
             }
-*/
         }
     }
     else
@@ -4366,18 +4364,16 @@ FASTBOOL SdrObject::IsTransparent( BOOL bCheckForAlphaChannel ) const
         {
             bRet = TRUE;
         }
-/*
-        else if( pObject->ISA( SdrGrafObj ) )
+        else if( ISA( SdrGrafObj ) )
         {
-            SdrGrafObj* pGrafObj = (SdrGrafObj*) pObject;
+            SdrGrafObj* pGrafObj = (SdrGrafObj*) this;
 
-            if( ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) ||
-                ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() )
+            if( ( (const SdrGrafTransparenceItem&) aAttr.Get( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ||
+                ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && pGrafObj->GetGraphic().GetBitmapEx().IsAlpha() ) )
             {
                 bRet = TRUE;
             }
         }
-*/
     }
 
     return bRet;
