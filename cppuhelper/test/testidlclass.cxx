@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testidlclass.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:20:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #include <cppuhelper/stdidlclass.hxx>
