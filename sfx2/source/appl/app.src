@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:07:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2420,39 +2420,6 @@ ToolBox RID_FULLSCREENTOOLBOX
     };
 };
 
-String STR_EVENT_NEWMESSAGE
-{
-    Text = "Nachricht eingetroffen" ;
-    Text [ ENGLISH ] = "Message arrived" ;
-    Text [ english_us ] = "Message received" ;
-    Text [ portuguese_brazilian ] = "Mensagem recebida" ;
-    Text [ swedish ] = "Meddelande har kommit" ;
-    Text [ danish ] = "Modtaget meddelelse" ;
-    Text [ italian ] = "Messaggio arrivato" ;
-    Text [ spanish ] = "Mensaje recibido" ;
-    Text [ french ] = "Message reçu" ;
-    Text [ dutch ] = "Bericht ontvangen" ;
-    Text [ portuguese ] = "Mensagem recebida" ;
-    Text[ chinese_simplified ] = "æ–°çš„ç”µå­é‚®ä»¶";
-    Text[ russian ] = "Ñîîáùåíèå ïîëó÷åíî";
-    Text[ polish ] = "Nadesz³a wiadomoœæ";
-    Text[ japanese ] = "ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å—ä¿¡æ™‚";
-    Text[ chinese_traditional ] = "æ–°çš„é›»å­éƒµä»¶";
-    Text[ arabic ] = "æÕáÊ ÑÓÇáÉ";
-    Text[ dutch ] = "Bericht ontvangen";
-    Text[ chinese_simplified ] = "æ–°çš„ç”µå­é‚®ä»¶";
-    Text[ greek ] = "ËŞøç ìçíıìáôïò";
-    Text[ korean ] = "ë©”ì‹œì§€ê°€ ìˆ˜ì‹ ë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "İleti alındı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Missatge rebut";
-    Text[ finnish ] = "Vastaanotettu viesti";
-    Text[ thai ] = "à¹„à¸”à¹‰à¸£à¸±à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "PÅ™ijata zprÃ¡va";
-    Text[ hebrew ] = "â€®×”×•×“×¢×” ×”×ª×§×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¸à¤¨à¥à¤¦à¥‡à¤¶";
-};
-
 String STR_EVENT_STARTAPP
 {
     Text = "Programmstart" ;
@@ -2485,39 +2452,6 @@ String STR_EVENT_STARTAPP
     Text[ czech ] = "Spustit aplikaci";
     Text[ hebrew ] = "â€®×”×ª×—×œ×ª ×™×™×©×•×â€¬";
     Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¥‹";
-};
-
-String STR_EVENT_ONERROR
-{
-    Text = "Javascript-Laufzeitfehler" ;
-    Text [ ENGLISH ] = "Javascript runtime error" ;
-    Text [ english_us ] = "JavaScript runtime error" ;
-    Text [ portuguese_brazilian ] = "Erro na execução do JavaScript" ;
-    Text [ swedish ] = "Javascript runtime error" ;
-    Text [ danish ] = "JavaScript-runtimefejl" ;
-    Text [ italian ] = "Errore di runtime JavaScript" ;
-    Text [ spanish ] = "Error de ejecución Javascript" ;
-    Text [ french ] = "Runtime error JavaScript" ;
-    Text [ dutch ] = "Javascript runtime error" ;
-    Text [ portuguese ] = "Erro na execução de JavaScript" ;
-    Text[ chinese_simplified ] = "Javascript-è¿è¡Œæ—¶é—´é”™è¯¯";
-    Text[ russian ] = "Îøèáêà âğåì. âûïîëíåíèÿ JavaScript";
-    Text[ polish ] = "B³¹d wykonawczy skryptu JavaScript";
-    Text[ japanese ] = "JavaScript runtime ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºã®æ™‚";
-    Text[ chinese_traditional ] = "Javascript é‹è¡Œæ™‚é–“éŒ¯èª¤";
-    Text[ arabic ] = "ÎØÃ İí æŞÊ ÊÔÛíáJavaScript ";
-    Text[ dutch ] = "Javascript runtime error";
-    Text[ chinese_simplified ] = "Javascript-è¿è¡Œæ—¶é—´é”™è¯¯";
-    Text[ greek ] = "ÓöÜëìá ÷ñüíïõ åêôİë. JavaScript";
-    Text[ korean ] = "JavaScript Runtime ì˜¤ë¥˜";
-    Text[ turkish ] = "Javascript yürütüm süresi hatası";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Error d'execució de Javascript";
-    Text[ finnish ] = "JavaScriptin suoritusvirhe";
-    Text[ thai ] = "à¹ƒà¸Šà¹‰à¸‡à¸²à¸™ JavaScript à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-    Text[ czech ] = "Chyba pÅ™i bÄ›hu JavaScriptu";
-    Text[ hebrew ] = "â€®×©×’×™××” ×‘×¢×ª ×‘×™×¦×•×¢ JavaScriptâ€¬";
-    Text[ hindi ] = "à¤œà¤¾à¤µà¤¾ à¤¸à¥à¤•à¥à¤°à¤¿à¤ªà¥à¤Ÿà¥ à¤šà¤²à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤—à¤²à¤¤à¥€";
 };
 
 String STR_EVENT_CLOSEAPP
@@ -2591,8 +2525,8 @@ String STR_EVENT_CREATEDOC
 String STR_EVENT_CLOSEDOC
 {
     Text = "Dokument wird geschlossen" ;
-    Text [ ENGLISH ] = "Document closes" ;
-    Text [ ENGLISH_US ] = "Close Document" ;
+    Text [ ENGLISH ] = "Document is closing" ;
+    Text [ ENGLISH_US ] = "Document is closing" ;
     Text [ portuguese_brazilian ] = "Fechar Documento" ;
     Text [ swedish ] = "Dokumentet stängs" ;
     Text [ danish ] = "Programmet lukkes" ;
@@ -2920,6 +2854,12 @@ String STR_EVENT_PRINTDOC
     Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤›à¤ªà¤¾à¤ˆ";
 };
 
+String STR_EVENT_MODIFYCHANGED
+{
+    Text = "'Geändert'-Status wurde geändert" ;
+    Text [ ENGLISH ] = "'Modified' status has been changed" ;
+    Text [ english_us ] = "'Modified' status was changed" ;
+};
 
 String STR_ERR_NOTEMPLATE
 {
