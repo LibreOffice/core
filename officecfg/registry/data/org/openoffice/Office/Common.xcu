@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 13:05:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,18 @@
       </node>
       <node oor:name="m7" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
+          <value>private:factory/swriter?slot=21053</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">~XML Formulardokument</value>
+          <value xml:lang="en-US">~XML Form Document</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value>_default</value>
+        </prop>
+      </node>
+      <node oor:name="m8" oor:op="replace" install:module="writer">
+        <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter/GlobalDocument</value>
         </prop>
         <prop oor:name="Title">
@@ -285,7 +297,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m8" oor:op="replace">
+      <node oor:name="m9" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:separator</value>
         </prop>
@@ -293,7 +305,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m9" oor:op="replace" install:module="math">
+      <node oor:name="m10" oor:op="replace" install:module="math">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/smath</value>
         </prop>
@@ -305,7 +317,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m10" oor:op="replace" install:module="writer">
+      <node oor:name="m11" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter?slot=21051</value>
         </prop>
@@ -320,7 +332,7 @@
           <value >private:image/3163</value>
         </prop>
       </node>
-      <node oor:name="m11" oor:op="replace" install:module="writer">
+      <node oor:name="m12" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter?slot=21052</value>
         </prop>
@@ -335,7 +347,7 @@
           <value >private:image/3163</value>
         </prop>
       </node>
-      <node oor:name="m12" oor:op="replace">
+      <node oor:name="m13" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:separator</value>
         </prop>
@@ -343,7 +355,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m13" oor:op="replace">
+      <node oor:name="m14" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >slot:5500</value>
         </prop>
