@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Merger.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:07 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.filter.config.tools.utils.*;
 
 /** can merge different xml fragments together.
  *
- *  @author  Andreas Schlüns
+ *
  */
 public class Merger
 {
