@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ String RID_OUTLUNDO_EXPAND
     Text [ english_us ] = "Show subpoints" ;
     Text [ italian ] = "Mostra i sottoparagrafi" ;
     Text [ spanish ] = "Mostrar subpárrafos" ;
-    Text [ french ] = "Afficher sous-paragraphes" ;
+    Text [ french ] = "Afficher les sous-paragraphes" ;
     Text [ dutch ] = "Subalinea´s weergeven" ;
     Text [ swedish ] = "Visa understycken" ;
     Text [ danish ] = "Vis underafsnit" ;
@@ -153,7 +153,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text [ english_us ] = "Collapse" ;
     Text [ italian ] = "Nascondi i sottoparagrafi" ;
     Text [ spanish ] = "Ocultar subpárrafos" ;
-    Text [ french ] = "Masquer sous-paragraphes" ;
+    Text [ french ] = "Masquer les sous-paragraphes" ;
     Text [ dutch ] = "Subalinea´s verbergen" ;
     Text [ swedish ] = "Göm understycken" ;
     Text [ danish ] = "Skjul underafsnit" ;
