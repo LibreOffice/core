@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dlatheproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:49:21 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
 #include <svx/sdr/properties/e3dlatheproperties.hxx>
+#endif
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
