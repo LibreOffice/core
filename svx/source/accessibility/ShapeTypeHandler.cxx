@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-02-08 16:59:32 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 17:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,11 +212,12 @@ ShapeTypeHandler::~ShapeTypeHandler (void)
 
 
 
-ShapeTypeHandler::operator== (const ShapeTypeHandler& aHandler)
+bool ShapeTypeHandler::operator== (const ShapeTypeHandler& aHandler)
 {
     // Don't call this operator.  This class is a singleton.
     OSL_ENSURE (sal_False, "Assignment operator of singleton ShapeTypeHandler called."
         "  Don't do that again.");
+    return false;
 }
 
 
