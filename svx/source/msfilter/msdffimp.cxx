@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-15 17:25:38 $
+ *  last change: $Author: aw $ $Date: 2000-12-20 13:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2363,7 +2363,7 @@ SdrObject* SvxMSDffManager::Import3DObject( SdrObject* pRet, SfxItemSet& aSet, R
         Matrix4D aMatrix;
         // 3D-Objekt auf die Mitte des Gesamtrechtecks zentrieren
         aMatrix.Translate( Vector3D( -aCenter.X(), aCenter.Y(), 0.0 ) );
-        pScene->ApplyTransform( aMatrix );
+        pScene->SetTransform(pScene->GetTransform() * aMatrix);
         pScene->CorrectSceneDimensions();
         pScene->NbcSetSnapRect( aBoundRect );
 
