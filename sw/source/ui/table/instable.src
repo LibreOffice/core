@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:06:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,11 @@ ModalDialog DLG_INSERT_TABLE
         Text[ swedish ] = "Namn";
         Text[ dutch ] = "Naam";
         Text[ spanish ] = "Nombre";
-        Text[ english_us ] = "Name";
+        Text[ english_us ] = "Last name";
         Text[ chinese_simplified ] = "Ãû³Æ";
         Text[ russian ] = "Èìÿ";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "–¼‘O";
+        Text[ japanese ] = "•\\‚Ì–¼‘O";
         Text[ chinese_traditional ] = "¦WºÙ";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
@@ -215,6 +215,26 @@ ModalDialog DLG_INSERT_TABLE
         Size = MAP_APPFONT ( 212 , 8 ) ;
         Text = "Tabellengröße" ;
         Text [ ENGLISH ] = "Size" ;
+        Text[ english_us ] = "Size";
+        Text[ portuguese ] = "Size";
+        Text[ russian ] = "Ğàçìåğ òàáëèöû";
+        Text[ greek ] = "Size";
+        Text[ dutch ] = "Size";
+        Text[ french ] = "Size";
+        Text[ spanish ] = "Tamaño de tabla";
+        Text[ finnish ] = "Size";
+        Text[ italian ] = "Size";
+        Text[ danish ] = "Size";
+        Text[ swedish ] = "Tabellstorlek";
+        Text[ polish ] = "Rozmiar tabeli";
+        Text[ portuguese_brazilian ] = "Size";
+        Text[ japanese ] = "•\\‚Ì»²½Ş";
+        Text[ korean ] = "Size";
+        Text[ chinese_simplified ] = "Size";
+        Text[ chinese_traditional ] = "Size";
+        Text[ turkish ] = "Size";
+        Text[ arabic ] = "Size";
+        Text[ catalan ] = "Size";
     };
     CheckBox CB_HEADER
     {
@@ -297,7 +317,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "Íá ìç äéáéñåèåß ï ğßíáêáò";
-        Text[ korean ] = "Ç¥ ºĞ¸®ÇÏÁö¡¡¾Ê±â";
+        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö¡¡¾Ê±â";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
@@ -416,8 +436,9 @@ ModalDialog DLG_INSERT_TABLE
     Text[ chinese_traditional ] = "´¡¤Jªí®æ";
     Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
     Text[ greek ] = "ÅéóáãùãŞ ğßíáêá";
-    Text[ korean ] = "Ç¥¡¡»ğÀÔ";
+    Text[ korean ] = "Å×ÀÌºí »ğÀÔ";
     Text[ turkish ] = "Tablo ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar tabla";
 };
+
