@@ -37,8 +37,8 @@ class ShutdownIcon :    public ::com::sun::star::frame::XTerminateListener,
 #ifdef WNT
         void initSystray();
         void deInitSystray();
-        static void SetAutostartW32( bool bActivate );
-        static bool GetAutostartW32( );
+        static void SetAutostartW32( const ::rtl::OUString& aShortcutName, bool bActivate );
+        static bool GetAutostartW32( const ::rtl::OUString& aShortcutName );
 #endif
 
     public:

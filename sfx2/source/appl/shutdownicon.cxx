@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 08:06:40 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <shutdownicon.hxx>
+#include <app.hrc>
 #include <app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
@@ -132,14 +133,32 @@ ShutdownIcon* ShutdownIcon::getInstance()
 void ShutdownIcon::SetAutostart( bool bActivate )
 {
 #ifdef WNT
-    SetAutostartW32( bActivate );
+    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
+    if( SFX_APP() && SFX_APP()->GetSfxResManager() )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        UniString aRes( ResId( STR_QUICKSTART_LNKNAME, SFX_APP()->GetSfxResManager() ) );
+        aShortcutName = OUString( aRes );
+    }
+    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
+
+    SetAutostartW32( aShortcutName, bActivate );
 #endif
 }
 
 bool ShutdownIcon::GetAutostart( )
 {
 #ifdef WNT
-    return GetAutostartW32();
+    OUString aShortcutName( RTL_CONSTASCII_USTRINGPARAM( "StarOffice 6.0" ) );
+    if( SFX_APP() && SFX_APP()->GetSfxResManager() )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        UniString aRes( ResId( STR_QUICKSTART_LNKNAME, SFX_APP()->GetSfxResManager() ) );
+        aShortcutName = OUString( aRes );
+    }
+    aShortcutName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".lnk" ) );
+
+    return GetAutostartW32( aShortcutName );
 #else
     return false;
 #endif

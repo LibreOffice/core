@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 08:06:55 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,10 +744,11 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 // ------------------
 // install/uninstall
 
-void ShutdownIcon::SetAutostartW32( bool bActivate )
+void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
 {
     OUString aShortcut(SHGetAutostartFolderName());
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\QuickLauncher.lnk" ) );
+    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
+    aShortcut += aShortcutName;
 
     if( bActivate )
     {
@@ -787,10 +788,11 @@ void ShutdownIcon::SetAutostartW32( bool bActivate )
     }
 }
 
-bool ShutdownIcon::GetAutostartW32()
+bool ShutdownIcon::GetAutostartW32( const OUString& aShortcutName )
 {
     OUString aShortcut(SHGetAutostartFolderName());
-    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\QuickLauncher.lnk" ) );
+    aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
+    aShortcut += aShortcutName;
 
     OUString aShortcutUrl;
     File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 08:08:03 $
+ *  last change: $Author: ssa $ $Date: 2001-06-08 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4237,6 +4237,11 @@ String STR_QUICKSTART_PRELAUNCH
 {
     Text = "%PRODUCTNAME beim Systemstart laden" ;
     Text [ English ] = "Pre-launch %PRODUCTNAME during system start" ;
+};
+String STR_QUICKSTART_LNKNAME
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION" ;
 };
 
 
