@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase10.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:48:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,6 @@
 #ifndef _CPPUHELPER_IMPLBASE10_HXX_
 #include <cppuhelper/implbase10.hxx>
 #endif
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-/* use old impl helpers for macosx */
-
-#ifndef _CPPUHELPER_COMPBASE_HXX_
-#include <cppuhelper/compbase.hxx>
-#endif
-
-__DEF_COMPIMPLHELPER( 10 )
-
-#else /* ! MACOSX */
 
 #ifndef _CPPUHELPER_COMPBASE_EX_HXX_
 #include <cppuhelper/compbase_ex.hxx>
@@ -179,7 +168,5 @@ namespace cppu
             }
     };
 }
-
-#endif /* MACOSX */
 
 #endif
