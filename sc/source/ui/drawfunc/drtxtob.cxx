@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:07:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-09 19:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
 
 void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
-    SdrView* pView = pViewData->GetScDrawView();
+    ScDrawView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     Outliner* pOutliner = pView->GetTextEditOutliner();
 
@@ -401,15 +401,9 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             break;
 
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
-            if ( pOutliner->IsVertical() )
-                pOutliner->SetVertical( FALSE );
-            ExecuteGlobal( rReq );                  // also for the whole object
-            break;
-
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-            if(  !pOutliner->IsVertical() )
-                pOutliner->SetVertical( TRUE );
-            ExecuteGlobal( rReq );                  // also for the whole object
+            pView->ScEndTextEdit();                 // end text edit before switching direction
+            ExecuteGlobal( rReq );
             break;
     }
 }
@@ -931,56 +925,19 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  horizontal / vertical
 
-    BOOL bLeftToRight = FALSE;
-    BOOL bTopToBottom = FALSE;
+    BOOL bLeftToRight = TRUE;
 
     SdrOutliner* pOutl = pView->GetTextEditOutliner();
     if( pOutl )
     {
         if( pOutl->IsVertical() )
-            bTopToBottom = TRUE;
-        else
-            bLeftToRight = TRUE;
+            bLeftToRight = FALSE;
     }
     else
-    {
-        const SdrMarkList& rMark = pView->GetMarkList();
-        USHORT nCount = (USHORT) Min( rMark.GetMarkCount(), (ULONG) 10 );
-        OutlinerParaObject* pOPO = 0;
-        for( USHORT i = 0; i < nCount; i++ )
-        {
-            pOPO = rMark.GetMark( i )->GetObj()->GetOutlinerParaObject();
-            if( !pOPO )
-            {
-                bLeftToRight = FALSE;
-                bTopToBottom = FALSE;
-                 break;
-            }
-            else if ( pOPO->IsVertical() )
-            {
-                if( bLeftToRight )
-                {
-                    bLeftToRight = FALSE;
-                    break;
-                }
-                else
-                    bTopToBottom = TRUE;
-            }
-            else
-            {
-                if( bTopToBottom )
-                {
-                    bTopToBottom = FALSE;
-                    break;
-                }
-                else
-                    bLeftToRight = TRUE;
-            }
-        }
-    }
+        bLeftToRight = ( (const SfxBoolItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT ) ).GetValue();
 
     rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
-    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, bTopToBottom ) );
+    rDestSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
 }
 
 

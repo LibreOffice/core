@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:07:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-09 19:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,39 +413,16 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                const SdrMarkList& rMark = pView->GetMarkList();
-                SdrObject* pObj = NULL;
-                OutlinerParaObject* pOPO = 0;
-                for( ULONG i = 0; i < rMark.GetMarkCount(); i++ )
-                {
-                    pObj = rMark.GetMark( i )->GetObj();
-                    pOPO = pObj->GetOutlinerParaObject();
-                    if( pOPO )
-                    {
-                        SdrOutliner* pOutl = pView->GetTextEditOutliner();
-                        if( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
-                        {
-                            if( pOPO && pOPO->IsVertical() )
-                            {
-                                pOPO->SetVertical( FALSE );
-                                pObj->SendRepaintBroadcast();
-                            }
-                        }
-                        else
-                        {
-                            if( pOPO && !pOPO->IsVertical() )
-                            {
-                                pOPO->SetVertical( TRUE );
-                                pObj->SendRepaintBroadcast();
-                            }
-                        }
-                    }
-                }
+                SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
+                                    SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, 0 );
+                aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
+                                    BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+                pView->SetAttributes( aAttr );
 
                 Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
                 Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
 
-                rReq.Done();
+                rReq.Done( aAttr );
             }
             break;
     }
