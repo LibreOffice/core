@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MColumnAlias.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: fs $ $Date: 2001-10-23 17:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef CONNECTIVITY_MOZAB_MEXTCONFIGACCESS_HXX
+#include "MExtConfigAccess.hxx"
 #endif
 
 
@@ -143,74 +146,13 @@ void OColumnAlias::initialise()
     return;
 }
 //------------------------------------------------------------------
-namespace
-{
-
-    Reference< XPropertySet > createDriverConfigNode( Reference< XMultiServiceFactory > _rxORB, const ::rtl::OUString& _rDriverName )
-    {
-        Reference< XPropertySet > xNode;
-        try
-        {
-            //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-            // create the config provider
-            Reference< XMultiServiceFactory > xConfigProvider(
-                _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY
-            );
-            OSL_ENSURE( xConfigProvider.is(), "createDriverConfigNode: could not create the config provider!" );
-
-            if ( xConfigProvider.is() )
-            {
-                ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
-                sCompleteNodePath += _rDriverName;
-
-                //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-                // arguments for creating the config access
-                Sequence< Any > aArguments(2);
-                // the path to the node to open
-                aArguments[0] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii( "nodepath"),
-                    0,
-                    makeAny( sCompleteNodePath ),
-                    PropertyState_DIRECT_VALUE
-                );
-                // the depth: -1 means unlimited
-                aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii( "depth"),
-                    0,
-                    makeAny( (sal_Int32)-1 ),
-                    PropertyState_DIRECT_VALUE
-                );
-
-                //°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
-                // create the access
-                Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
-                    aArguments
-                );
-                OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
-
-                xNode = xNode.query( xAccess );
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "createDriverConfigNode: caught an exception while accessing the driver's config node!" );
-        }
-
-        // outta here
-        return xNode;
-    }
-
-}
-//------------------------------------------------------------------
 void OColumnAlias::setAlias(const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
 {
         // open our driver settings config node
 
         // the config path for our own driver's settings
-    Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB, OConnection::getImplementationName_Static() );
+    Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB );
     if ( xDriverNode.is() )
     {
         try
