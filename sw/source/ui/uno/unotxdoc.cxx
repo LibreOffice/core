@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-13 15:50:15 $
+ *  last change: $Author: os $ $Date: 2001-02-14 14:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     // Suche soll ueberall stattfinden
     pUnoCrsr->SetRemainInSection(sal_False);
     sal_uInt32 nResult;
+    UnoActionContext aContext(pDocShell->GetDoc());
     //try attribute search first
     if(pSearch->HasSearchAttributes()||pSearch->HasReplaceAttributes())
     {
@@ -822,7 +823,6 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         nResult = pUnoCrsr->Find( aSrchParam,
             eStart, eEnd,
             (FindRanges)eRanges,
-//int bReplace =
             sal_True );
     }
     return (sal_Int32)nResult;
