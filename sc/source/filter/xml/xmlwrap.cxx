@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:42:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,20 +190,16 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
         uno::Reference<frame::XController> xController( rModel->getCurrentController());
         if( xController.is())
         {
-            uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-            if( xFrame.is())
+            uno::Reference<task::XStatusIndicatorFactory> xFactory( xController->getFrame(), uno::UNO_QUERY );
+            if( xFactory.is())
             {
-                uno::Reference<task::XStatusIndicatorFactory> xFactory( xFrame, uno::UNO_QUERY );
-                if( xFactory.is())
+                try
                 {
-                    try
-                    {
-                        xStatusIndicator = xFactory->createStatusIndicator();
-                    }
-                    catch( lang::DisposedException e )
-                    {
-                        DBG_ERROR("Exception while trying to get a Status Indicator");
-                    }
+                    xStatusIndicator.set(xFactory->createStatusIndicator());
+                }
+                catch( lang::DisposedException e )
+                {
+                    DBG_ERROR("Exception while trying to get a Status Indicator");
                 }
             }
         }
@@ -221,10 +217,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
         {
             const SfxUnoAnyItem* pItem = static_cast<const SfxUnoAnyItem*>(pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
             if (pItem)
-            {
-                uno::Any aAny(pItem->GetValue());
-                aAny >>= xStatusIndicator;
-            }
+                xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
         }
     }
     return xStatusIndicator;
@@ -243,8 +236,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
     // Get data source ...
 
-    uno::Reference< uno::XInterface > xPipe;
-    uno::Reference< io::XActiveDataSource > xSource;
+//  uno::Reference< uno::XInterface > xPipe;
+//  uno::Reference< io::XActiveDataSource > xSource;
 
     sal_Bool bEncrypted = sal_False;
     rtl::OUString sStream(sDocName);
@@ -340,12 +333,12 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     xParser->setDocumentHandler( xDocHandler );
 
     // parse
-    if( xSource.is() )
+/*  if( xSource.is() )
     {
         uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
         if( xSourceControl.is() )
             xSourceControl->start();
-    }
+    }*/
 
     sal_Bool bFormatError = sal_False;
     try
@@ -461,9 +454,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         xStorage = pMedium->GetStorage();
 
     // get parser
-    uno::Reference<uno::XInterface> xXMLParser =
+    uno::Reference<uno::XInterface> xXMLParser(
         xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ));
     DBG_ASSERT( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
     if( !xXMLParser.is() )
         return sal_False;
@@ -473,7 +466,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     if ( pObjSh )
     {
         rtl::OUString sEmpty;
-        uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
+        uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
 
         /** property map for export info set */
         comphelper::PropertyMapEntry aImportInfoMap[] =
@@ -495,9 +488,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         {
             sal_Int32 nProgressRange(1000000);
             xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_LOAD_DOC)), nProgressRange);
-            uno::Any aProgRange;
-            aProgRange <<= nProgressRange;
-            xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+            xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), uno::makeAny(nProgressRange));
         }
 
         // Set base URI
@@ -690,18 +681,16 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         // would not be valid.
         xStream = xStorage->openStreamElement( sName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-        uno::Any aAny; aAny <<= sMediaType;
-        xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
-        if (bPlainText)
+        if (xSet.is())
         {
-            aAny = ::cppu::bool2any(sal_False);
-            xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), aAny);
-        }
-        else
-        {
-            aAny = ::cppu::bool2any(sal_True);
+            xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny(sMediaType));
+            if (bPlainText)
+                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed")), uno::makeAny(sal_False));
+            else
+            {
 //REMOVE                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted")), aAny);
-            xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")), aAny);
+                xSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption")), uno::makeAny(sal_True));
+            }
         }
 
         xOut = xStream->getOutputStream();
@@ -753,15 +742,13 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScXMLImportWrapper::Export" );
 
-    uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        comphelper::getProcessServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xServiceFactory(comphelper::getProcessServiceFactory());
     DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return sal_False;
 
-    uno::Reference<uno::XInterface> xWriter =
-        xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) );
+    uno::Reference<uno::XInterface> xWriter(xServiceFactory->createInstance(
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ));
     DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
     if(!xWriter.is())
         return sal_False;
@@ -800,20 +787,16 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
     {
         pObjSh->UpdateDocInfoForSave();     // update information
 
-        uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
-        uno::Reference<task::XStatusIndicator> xStatusIndicator = GetStatusIndicator(xModel);
+        uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
+        uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator(xModel));
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
             xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_SAVE_DOC)), nProgressRange);
-        uno::Any aProgRange;
-        aProgRange <<= nProgressRange;
-        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), aProgRange);
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressRange")), uno::makeAny(nProgressRange));
 
         SvtSaveOptions aSaveOpt;
         sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
-        uno::Any aUsePrettyPrinting;
-        aUsePrettyPrinting <<= bUsePrettyPrinting;
-        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), aUsePrettyPrinting);
+        xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(bUsePrettyPrinting));
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
