@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-23 14:41:38 $
+ *  last change: $Author: mib $ $Date: 2001-04-30 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,8 @@ sal_uInt32 SwXMLWriter::_Write()
     // export sub streams for package, else full stream into a file
     if (NULL != pStg)
     {
-        if( !bOrganizerMode )
+        if( !bOrganizerMode &&
+            SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
             WriteThroughComponent(
                 pStg, xModelComp, "meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaExporter",
@@ -493,11 +494,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.25 2001-04-23 14:41:38 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.26 2001-04-30 14:13:15 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/04/23 14:41:38  dvo
+      implemented MUST-change from SAB: number styles properties added
+
       Revision 1.24  2001/04/06 05:21:32  mib
       #85808#: Improve progress bar behaviour
 
