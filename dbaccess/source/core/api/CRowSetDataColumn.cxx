@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-27 07:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId() throw (RuntimeExce
 // -------------------------------------------------------------------------
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)
 {
-    if(!((*(*m_aColumnValue))[m_nPos] == _rOldValue))
+    if(!m_aColumnValue.isNull() && m_aColumnValue != m_rEnd && m_aColumnValue->isValid() && (!((*(*m_aColumnValue))[m_nPos] == _rOldValue)))
     {
         sal_Int32 nHandle = PROPERTY_ID_VALUE;
         m_aOldValue = _rOldValue.makeAny();
@@ -268,17 +268,12 @@ Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObjec
 {
     Reference< ::com::sun::star::container::XNamed > xNamed;
 
-    ::connectivity::OSQLColumns::const_iterator first = m_aColumns->begin();
-    ::connectivity::OSQLColumns::const_iterator last  = m_aColumns->end();
-
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
+    ::connectivity::OSQLColumns::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);
+    if(first != m_aColumns->end())
+        xNamed = Reference< ::com::sun::star::container::XNamed >(*first,UNO_QUERY);
 
-    while (first != last && !aCase(getString((*first)->getPropertyValue(PROPERTY_NAME)),_rName))
-        ++first;
-    if(first == last)
-        return Reference< ::com::sun::star::container::XNamed >();
-
-    return Reference< ::com::sun::star::container::XNamed >(*first,UNO_QUERY);
+    return xNamed;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumns::disposing(void)
