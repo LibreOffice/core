@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:20:06 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1853,14 +1853,14 @@ String STR_ObjNameSingulPERSPLN
     Text [ dutch ] = "Periodieke spline" ;
     Text [ spanish ] = "spline periódico" ;
     Text [ english_us ] = "Periodic Spline" ;
-    Text[ chinese_simplified ] = "ÓĞ¹æÔòµÄ³İÌõ";
+    Text[ chinese_simplified ] = "ÓĞ¹æÂÉµÄ³İÌõĞÎ";
     Text[ russian ] = "Ïåğèîäè÷åñêèé ñïëàéí";
     Text[ polish ] = "Okresowa krzywa sk³adana";
     Text[ japanese ] = "üŠú½Ìß×²İü";
-    Text[ chinese_traditional ] = "¦³³W«hªº¾¦±ø";
+    Text[ chinese_traditional ] = "¦³³W«ßªº¾¦±ø§Î";
     Text[ arabic ] = "ÔÑíÍÉ ÏæÑíÉ";
     Text[ dutch ] = "Periodieke spline";
-    Text[ chinese_simplified ] = "ÓĞ¹æÔòµÄ³İÌõ";
+    Text[ chinese_simplified ] = "ÓĞ¹æÂÉµÄ³İÌõĞÎ";
     Text[ greek ] = "ĞåñéïäéêŞ Spline";
     Text[ korean ] = "ÁÖ±âÀû ½ºÇÃ¶óÀÎ";
     Text[ turkish ] = "Düzenli Spline";
@@ -1992,7 +1992,7 @@ String STR_ObjNamePluralTEXTLNK
     Text [ dutch ] = "Gekoppelde tekstkaders" ;
     Text[ chinese_simplified ] = "Á¬½ÓµÄÎÄ±¾¿ò";
     Text[ russian ] = "ñâÿçàííûå òåêñòîâûå ğàìêè";
-    Text[ polish ] = "Po³¹czona ramka tekstu";
+    Text[ polish ] = "Po³¹czone ramki tekstu";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½Ã·½Ä˜g";
     Text[ chinese_traditional ] = "³sµ²ªº¤å¦r¤è¶ô";
     Text[ arabic ] = "ßæÇÏÑ ÇáäÕ ÇáãÑÊÈØÉ";
@@ -2277,7 +2277,7 @@ String STR_ObjNameSingulGRAF
     Text[ russian ] = "Ãğàôèêà";
     Text[ polish ] = "Grafika";
     Text[ japanese ] = "¸Ş×Ì¨¯¸";
-    Text[ chinese_traditional ] = "¹Ï¤ù";
+    Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ language_user1 ] = "Check in the program to see if small letter correct, this is a STRING: TSM 08.09.99";
     Text[ dutch ] = "Afbeelding";
@@ -2331,7 +2331,7 @@ String STR_ObjNameSingulGRAFLNK
     Text[ russian ] = "ñâÿçàííàÿ ãğàôèêà";
     Text[ polish ] = "Po³¹czona grafika";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½¸Ş×Ì¨¯¸";
-    Text[ chinese_traditional ] = "³sµ²ªº¹Ï¤ù";
+    Text[ chinese_traditional ] = "³sµ²ªº¹Ï§Î";
     Text[ arabic ] = "ÑÓãÉ ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde afbeelding";
     Text[ chinese_simplified ] = "Á´½ÓµÄÍ¼ĞÎ";
@@ -2357,7 +2357,7 @@ String STR_ObjNamePluralGRAFLNK
     Text[ russian ] = "Ñâÿçàííûå ãğàôèêè";
     Text[ polish ] = "Po³¹czone grafiki";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½¸Ş×Ì¨¯¸½";
-    Text[ chinese_traditional ] = "³sµ²ªº¹Ï¤ù";
+    Text[ chinese_traditional ] = "³sµ²ªº¹Ï§Î";
     Text[ arabic ] = "ÑÓæãÇÊ ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde afbeeldingen";
     Text[ chinese_simplified ] = "Á´½ÓµÄÍ¼ĞÎ";
@@ -2385,7 +2385,7 @@ String STR_ObjNameSingulGRAFNONE
     Text[ russian ] = "ïóñòîé ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Pusty obiekt graficzny";
     Text[ japanese ] = "‹ó‚Ì}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "ªÅªº¹Ï¤ùª«¥ó";
+    Text[ chinese_traditional ] = "ªÅªº¹Ï§Îª«¥ó";
     Text[ arabic ] = "ßÇÆä ÕæÑÉ İÇÑÛ";
     Text[ dutch ] = "Leeg grafisch object";
     Text[ chinese_simplified ] = "¿ÕµÄÍ¼ĞÎ¶ÔÏó";
@@ -2413,7 +2413,7 @@ String STR_ObjNamePluralGRAFNONE
     Text[ russian ] = "ïóñòûå ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "puste obiekty graficzne";
     Text[ japanese ] = "‹ó‚Ì}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "ªÅ¥Õªº¹Ï¤ùª«¥ó";
+    Text[ chinese_traditional ] = "ªÅ¥Õªº¹Ï§Îª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÑÓã İÇÑÛÉ";
     Text[ dutch ] = "Lege grafische objecten";
     Text[ chinese_simplified ] = "¿Õ°×µÄÍ¼ĞÎ¶ÔÏó";
@@ -2439,7 +2439,7 @@ String STR_ObjNameSingulGRAFNONELNK
     Text[ russian ] = "ïóñòîé ñâÿçàííûé ãğàôè÷åñêèé îáúåêò";
     Text[ polish ] = "Pusty po³¹czony obiekt graficzny";
     Text[ japanese ] = "‹ó‚ÌØİ¸‚³‚ê‚½}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "ªÅªº³sµ²¹Ï¤ùª«¥ó";
+    Text[ chinese_traditional ] = "ªÅªº³sµ²¹Ï§Îª«¥ó";
     Text[ arabic ] = "ßÇÆä ÕæÑÉ İÇÑÛ ãÑÊÈØ";
     Text[ dutch ] = "Leeg gekoppeld grafisch object";
     Text[ chinese_simplified ] = "¿ÕµÄÁ´½ÓÍ¼ĞÎ¶ÔÏó";
@@ -2465,7 +2465,7 @@ String STR_ObjNamePluralGRAFNONELNK
     Text[ russian ] = "ïóñòûå ñâÿçàííûå ãğàôè÷åñêèå îáúåêòû";
     Text[ polish ] = "Puste po³¹czone obiekty graficzne";
     Text[ japanese ] = "‹ó‚ÌØİ¸‚µ‚½}Œ`•`‰æµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "ªÅ¥Õªº³sµ²¹Ï¤ùª«¥ó";
+    Text[ chinese_traditional ] = "ªÅ¥Õªº³sµ²¹Ï§Îª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÑÓã İÇÑÛÉ ãÑÊÈØÉ";
     Text[ dutch ] = "Lege gekoppelde grafische objecten";
     Text[ chinese_simplified ] = "¿Õ°×µÄÁ´½ÓÍ¼ĞÎ¶ÔÏó";
@@ -2709,7 +2709,7 @@ String STR_ObjNameSingulGRAFMAC
     Text[ russian ] = "Ãğàôèêà Mac";
     Text[ polish ] = "Grafika Mac";
     Text[ japanese ] = "Mac ¸Ş×Ì¨¯¸";
-    Text[ chinese_traditional ] = "Mac ¹Ï¤ù";
+    Text[ chinese_traditional ] = "Mac ¹Ï§Î";
     Text[ arabic ] = "ÑÓãÉ Mac";
     Text[ dutch ] = "Mac-afbeelding";
     Text[ chinese_simplified ] = "Mac-Í¼ĞÎ";
@@ -2737,7 +2737,7 @@ String STR_ObjNamePluralGRAFMAC
     Text[ russian ] = "Ãğàôèêè Mac";
     Text[ polish ] = "Grafiki Mac";
     Text[ japanese ] = "Mac¸Ş×Ì¨¯¸";
-    Text[ chinese_traditional ] = "Mac ¹Ï¤ù";
+    Text[ chinese_traditional ] = "Mac ¹Ï§Î";
     Text[ arabic ] = "ÑÓæãÇÊ Mac";
     Text[ dutch ] = "Mac-afbeeldingen";
     Text[ chinese_simplified ] = "Mac-Í¼ĞÎ";
@@ -2763,7 +2763,7 @@ String STR_ObjNameSingulGRAFMACLNK
     Text[ russian ] = "ñâÿçàííàÿ ãğàôèêà Mac";
     Text[ polish ] = "Po³¹czona grafika Mac";
     Text[ japanese ] = "Øİ¸‚³‚ê‚½Mac¸Ş×Ì¨¯¸";
-    Text[ chinese_traditional ] = "³sµ²ªº Mac ¹Ï¤ù";
+    Text[ chinese_traditional ] = "³sµ²ªº Mac ¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ Mac ãÑÊÈØÉ";
     Text[ dutch ] = "Gekoppelde Mac-afbeeldingen";
     Text[ chinese_simplified ] = "Á´½ÓµÄ Mac-Í¼ĞÎ";
@@ -3240,7 +3240,7 @@ String STR_ObjNameSingulMEASURE
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekt : Bema˜ungsobjekt */
     Text = "Bemaßungsobjekt" ;
     Text [ ENGLISH ] = "measurement-object" ;
-    Text [ portuguese ] = "Objecto dimensional" ;
+    Text [ portuguese ] = "Objecto de dimensionamento" ;
     Text [ english_us ] = "Dimension line" ;
     Text [ portuguese_brazilian ] = "Bemaßungsobjekt" ;
     Text [ swedish ] = "Dimensioneringsobjekt" ;
@@ -3252,8 +3252,8 @@ String STR_ObjNameSingulMEASURE
     Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
     Text[ russian ] = "Îáúåêò äëÿ èçìåğåíèÿ";
     Text[ polish ] = "Obiekt do wymiarowania";
-    Text[ japanese ] = "kÚ‹L“ü‚·‚éµÌŞ¼Şª¸Ä";
-    Text[ chinese_traditional ] = "©w¤Ø¤oª«¥ó";
+    Text[ japanese ] = "¡–@‹L“ü‚·‚éµÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "©w¤Ø«×ª«¥ó";
     Text[ arabic ] = "ßÇÆä ÇáŞíÇÓ";
     Text[ dutch ] = "Objectafmetingen";
     Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
@@ -3268,7 +3268,7 @@ String STR_ObjNamePluralMEASURE
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekte : Bema˜ungsobjekte */
     Text = "Bemaßungsobjekte" ;
     Text [ ENGLISH ] = "measurement-objects" ;
-    Text [ portuguese ] = "Objectos dimensionais" ;
+    Text [ portuguese ] = "Objectos de dimensionamento" ;
     Text [ english_us ] = "Dimensioning objects" ;
     Text [ portuguese_brazilian ] = "Bemaßungsobjekte" ;
     Text [ swedish ] = "Dimensioneringsobjekt" ;
@@ -3427,7 +3427,7 @@ String STR_ObjNameSingulCube3d
     Text[ japanese ] = "3D —§•û‘Ì";
     Text[ korean ] = "3£Ä Á¤À°¸éÃ¼";
     Text[ chinese_simplified ] = "ÈıÎ¬Á¢·½Ìå";
-    Text[ chinese_traditional ] = "3 ºû¥ß¤è";
+    Text[ chinese_traditional ] = "3D ¥ß¤è";
     Text[ arabic ] = "ãßÚÈ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B küp";
     Text[ language_user1 ] = " ";
@@ -3452,7 +3452,7 @@ String STR_ObjNamePluralCube3d
     Text[ japanese ] = "3D —§•û‘Ì";
     Text[ korean ] = "3£Ä Á¤À°¸éÃ¼";
     Text[ chinese_simplified ] = "ÈıÎ¬Á¢·½Ìå";
-    Text[ chinese_traditional ] = "3 ºû¥ß¤è";
+    Text[ chinese_traditional ] = "3D ¥ß¤è";
     Text[ arabic ] = "ãßÚÈÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B küpler";
     Text[ language_user1 ] = " ";
@@ -3525,7 +3525,7 @@ String STR_ObjNameSingulLabel3d
     Text[ japanese ] = "3D ‘Ì•¶š—ñ";
     Text[ korean ] = "3£Ä ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "3 Î¬ÎÄ×Ö";
-    Text[ chinese_traditional ] = "3 ºû¤å¦r";
+    Text[ chinese_traditional ] = "3D ¤å¦r";
     Text[ arabic ] = "äÕ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B metin";
     Text[ language_user1 ] = " ";
@@ -3550,7 +3550,7 @@ String STR_ObjNamePluralLabel3d
     Text[ japanese ] = "3D ‘Ì•¶š—ñ";
     Text[ korean ] = "3£Ä ÅØ½ºÆ®";
     Text[ chinese_simplified ] = "3 Î¬ÎÄ×Ö";
-    Text[ chinese_traditional ] = "3 ºû¤å¦r";
+    Text[ chinese_traditional ] = "3D ¤å¦r";
     Text[ arabic ] = "äÕæÕ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B metinler";
     Text[ language_user1 ] = " ";
@@ -3623,7 +3623,7 @@ String STR_ObjNameSingulObj3d
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
     Text[ korean ] = "3£Ä °³Ã¼";
     Text[ chinese_simplified ] = "3 Î¬¶ÔÏó";
-    Text[ chinese_traditional ] = "3 ºûª«¥ó";
+    Text[ chinese_traditional ] = "3D ª«¥ó";
     Text[ arabic ] = "ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesne";
     Text[ language_user1 ] = " ";
@@ -3648,7 +3648,7 @@ String STR_ObjNamePluralObj3d
     Text[ japanese ] = "3D ‘ÌµÌŞ¼Şª¸Ä";
     Text[ korean ] = "3£Ä °³Ã¼";
     Text[ chinese_simplified ] = "3 Î¬¶ÔÏó";
-    Text[ chinese_traditional ] = "3 ºûª«¥ó";
+    Text[ chinese_traditional ] = "3D ª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
@@ -3673,7 +3673,7 @@ String STR_ObjNameSingulPoly3d
     Text[ japanese ] = "3D ‘½ŠpŒ`";
     Text[ korean ] = "3£Ä ´Ù°¢Çü";
     Text[ chinese_simplified ] = "3 Î¬¶à±ßĞÎ";
-    Text[ chinese_traditional ] = "3 ºû¦hÃä§Î";
+    Text[ chinese_traditional ] = "3D ¦hÃä§Î";
     Text[ arabic ] = "ãÖáÚ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B çokgen";
     Text[ language_user1 ] = " ";
@@ -3698,7 +3698,7 @@ String STR_ObjNamePluralPoly3d
     Text[ japanese ] = "3D ‘½ŠpŒ`";
     Text[ korean ] = "3£Ä ´Ù°¢Çü";
     Text[ chinese_simplified ] = "3 Î¬¶à±ßĞÎ";
-    Text[ chinese_traditional ] = "3 ºû¦hÃä§Î";
+    Text[ chinese_traditional ] = "3D ¦hÃä§Î";
     Text[ arabic ] = "ãÖáÚÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B çokgenler";
     Text[ language_user1 ] = " ";
@@ -3723,7 +3723,7 @@ String STR_ObjNameSingulScene3d
     Text[ japanese ] = "3D ¼°İ";
     Text[ korean ] = "3£Ä Àå¸é";
     Text[ chinese_simplified ] = "3 Î¬Í¼°¸";
-    Text[ chinese_traditional ] = "3 ºû¹Ï®×";
+    Text[ chinese_traditional ] = "3D ¹Ï®×";
     Text[ arabic ] = "ãÔåÏ ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B görüntü";
     Text[ language_user1 ] = " ";
@@ -3748,7 +3748,7 @@ String STR_ObjNamePluralScene3d
     Text[ japanese ] = "3D ¼°İ";
     Text[ korean ] = "3£Ä Àå¸é";
     Text[ chinese_simplified ] = "3 Î¬Í¼°¸";
-    Text[ chinese_traditional ] = "3 ºû¹Ï®×";
+    Text[ chinese_traditional ] = "3D ¹Ï®×";
     Text[ arabic ] = "ãÔÇåÏ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B görüntüler";
     Text[ language_user1 ] = " ";
@@ -4583,14 +4583,14 @@ String STR_EditUngroup
     Text [ dutch ] = "%O opheffen" ;
     Text [ spanish ] = "Deshacer %O" ;
     Text [ english_us ] = "Ungroup %O" ;
-    Text[ chinese_simplified ] = "½â³ı%O µÄ·Ö×é";
+    Text[ chinese_simplified ] = "½â³ı %O ·Ö×é";
     Text[ russian ] = "Ğàçãğóïïèğîâàòü %O";
     Text[ polish ] = "Rozgrupuj %O";
     Text[ japanese ] = "%O‚Ì‰ğœ";
-    Text[ chinese_traditional ] = "¸Ñ°£%O ªº¸s²Õ";
+    Text[ chinese_traditional ] = "¸Ñ°£ %O ¸s²Õ";
     Text[ arabic ] = "İß ÊÌãíÚ %O";
     Text[ dutch ] = "%O opheffen";
-    Text[ chinese_simplified ] = "½â³ı%O µÄ·Ö×é";
+    Text[ chinese_simplified ] = "½â³ı %O ·Ö×é";
     Text[ greek ] = "ÊáôÜñãçóç ïìáäïğïßçóçò %O";
     Text[ korean ] = "%O ±×·ì ÇØÁ¦";
     Text[ turkish ] = "Grubu çöz: %O";
@@ -7001,7 +7001,7 @@ String STR_ItemValON
     Text[ russian ] = "âêë.";
     Text[ polish ] = "w³¹cz";
     Text[ japanese ] = "µİ";
-    Text[ chinese_traditional ] = "¿E¬¡";
+    Text[ chinese_traditional ] = "±Ò°Ê";
     Text[ arabic ] = "ÊÔÛíá";
     Text[ dutch ] = "aan";
     Text[ chinese_simplified ] = "¼¤»î";
@@ -7683,7 +7683,7 @@ String STR_ItemValTEXTANI_BLINK
     Text[ russian ] = "ìèãàòü";
     Text[ polish ] = "miganie";
     Text[ japanese ] = "“_–Å";
-    Text[ chinese_traditional ] = "°{Ã{";
+    Text[ chinese_traditional ] = "°{°Ê";
     Text[ arabic ] = "æãíÖ";
     Text[ dutch ] = "knipperen";
     Text[ chinese_simplified ] = "ÉÁË¸";
@@ -8524,7 +8524,7 @@ String STR_ItemNam_SHADOW3D
     Text[ russian ] = "Òåíü 3-Ì";
     Text[ polish ] = "Cieñ 3-W";
     Text[ japanese ] = "3D ‘Ì‚Ì‰e";
-    Text[ chinese_traditional ] = "3 ºû³±¼v";
+    Text[ chinese_traditional ] = "3D ³±¼v";
     Text[ arabic ] = "Ùá ËáÇËí ÇáÃÈÚÇÏ";
     Text[ dutch ] = "3D-schaduw";
     Text[ chinese_simplified ] = "3 Î¬ÒõÓ°";
@@ -12166,7 +12166,7 @@ String SIP_SA_CAPTIONESCISREL
     Text[ portuguese_brazilian ] = "Reative exit of legend";
     Text[ japanese ] = "‘Š‘Î“I‚É–}—á‚ğo‚·";
     Text[ chinese_simplified ] = "Ïà¶ÔÍË³öµÄÍ¼Àı";
-    Text[ chinese_traditional ] = "¬Û¹ï°h¥Xªº¹Ï¨Ò";
+    Text[ chinese_traditional ] = "¹Ï¨Òªº¬Û¹ï°h¥X";
     Text[ arabic ] = "ÇáÎÑæÌ ÇáäÓÈí ááÔÑÍ ÇáÊİÓíÑí";
     Text[ language_user1 ] = " ";
     Text[ dutch ] = "Relatief verdwijnen van legenda";
@@ -12193,7 +12193,7 @@ String SIP_SA_CAPTIONESCREL
     Text[ portuguese_brazilian ] = "Reative exit of legend";
     Text[ japanese ] = "–}—á‚Ì‘Š‘Î“IoŒû";
     Text[ chinese_simplified ] = "Ïà¶ÔÍË³öµÄÍ¼Àı";
-    Text[ chinese_traditional ] = "Reative exit of legend";
+    Text[ chinese_traditional ] = "¹Ï¨Òªº¬Û¹ï°h¥X";
     Text[ arabic ] = "ÇáÎÑæÌ ÇáäÓÈí ááÊÚáíŞ ÇáÊİÓíÑí";
     Text[ dutch ] = "Relatief verdwijnen van legenda";
     Text[ chinese_simplified ] = "Ïà¶ÔÍË³öµÄÍ¼Àı";
@@ -12219,7 +12219,7 @@ String SIP_SA_CAPTIONESCABS
     Text[ portuguese_brazilian ] = "Absolute exit of legend";
     Text[ japanese ] = "â‘Î“I‚É–}—á‚ğo‚·";
     Text[ chinese_simplified ] = "¾ø¶ÔÍË³öµÄÍ¼Àı";
-    Text[ chinese_traditional ] = "Absolute exit of legend";
+    Text[ chinese_traditional ] = "¹Ï¨Òªºµ´¹ï°h¥X";
     Text[ arabic ] = "ÇáÎÑæÌ ÇáãØáŞ ááÊÚáíŞ ÇáÊİÓíÑí";
     Text[ dutch ] = "Absoluut verdwijnen van legenda";
     Text[ chinese_simplified ] = "¾ø¶ÔÍË³öµÄÍ¼Àı";
@@ -13060,7 +13060,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ japanese ] = "µ°Ä¼ª²Ìß’²®";
     Text[ korean ] = "ÀÚµ¿Çü»ó¡¡Á¶Á¤";
     Text[ chinese_simplified ] = "ĞÎ×´×Ô¶¯µ÷ÊÊ";
-    Text[ chinese_traditional ] = "¹Ï¼Ë¦Û°Ê½Õ¾A";
+    Text[ chinese_traditional ] = "§Îª¬¦Û°Ê½Õ¾A";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
     Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáŞÇÆíÉ";
 };
@@ -13238,7 +13238,7 @@ String SIP_SDRATTRSET_MISC
     Text[ portuguese_brazilian ] = "Div. attributes";
     Text[ japanese ] = "‚¢‚ë‚¢‚ë‚È‘®«";
     Text[ chinese_simplified ] = "¸÷ÖÖÊôĞÔ";
-    Text[ chinese_traditional ] = "¦UÏúÄİ©Ê";
+    Text[ chinese_traditional ] = "¦UºØÄİ©Ê";
     Text[ arabic ] = "ÓãÇÊ ãÎÊáİÉ";
     Text[ dutch ] = "Diverse attributen";
     Text[ chinese_simplified ] = "¸÷ÖÖÊôĞÔ";
@@ -13838,7 +13838,7 @@ String SIP_SA_MEASURETEXTVPOS
     Text[ portuguese_brazilian ] = "Dimension text vertical position";
     Text[ japanese ] = "¡–@ ã‰º‚ÌˆÊ’u";
     Text[ chinese_simplified ] = "¶¨Á¿ÎÄ×Ö´¹Ö±Î»ÖÃ";
-    Text[ chinese_traditional ] = "Dimension text vertical position";
+    Text[ chinese_traditional ] = "©w¶q¤å¦r««ª½¦ì¸m";
     Text[ arabic ] = "ÇáæÖÚ ÇáÑÃÓí áäÕ ÇáŞíÇÓ";
     Text[ language_user1 ] = " ";
     Text[ dutch ] = "Tekstafmetingen verticale positie";
@@ -15572,7 +15572,7 @@ String SIP_EE_PARA_BULLETSTATE
     Text[ swedish ] = "Visa uppräkningstecken";
     Text[ polish ] = "Poka¿ znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Show bullet";
-    Text[ japanese ] = "‰Óğ‘‚«‹L†‚Æ’i—”Ô†‚Ì•\\¦";
+    Text[ japanese ] = "‰Óğ‘‚«‘•ü‹L†‚Ì•\\¦";
     Text[ chinese_simplified ] = "ÏÔÊ¾±àºÅ";
     Text[ chinese_traditional ] = "Åã¥Ü½s¸¹";
     Text[ arabic ] = "ÅÙåÇÑ ÚáÇãÇÊ ÇáÊÚÏÇÏ";
@@ -15653,7 +15653,7 @@ String SIP_EE_PARA_BULLET
     Text[ swedish ] = "Uppräkningstecken";
     Text[ polish ] = "Znaki wypunktowania";
     Text[ portuguese_brazilian ] = "Character of enumeration";
-    Text[ japanese ] = "‰Óğ‘‚«‹L†‚Æ’i—”Ô†";
+    Text[ japanese ] = "‰Óğ‘‚«‘•ü‹L†";
     Text[ chinese_simplified ] = "±àºÅ·û";
     Text[ chinese_traditional ] = "½s¸¹²Å";
     Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
@@ -15836,7 +15836,7 @@ String SIP_EE_CHAR_FONTINFO
     Text[ spanish ] = "Juego de caracteres";
     Text[ italian ] = "Tipo di carattere";
     Text[ danish ] = "Tegnsæt";
-    Text[ swedish ] = "Teckensnitt";
+    Text[ swedish ] = "Teckenuppsättning";
     Text[ polish ] = "Czcionka";
     Text[ portuguese_brazilian ] = "Font";
     Text[ japanese ] = "•¶š—ñ";
