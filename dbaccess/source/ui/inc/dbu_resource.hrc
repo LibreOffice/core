@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:51:13 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,15 @@
 #define BMP_CHECKBUTTON_TRISTATE        RID_BITMAP_START +  6
 #define BMP_CHECKBUTTON_HITRISTATE      RID_BITMAP_START +  7
 
+#define BMP_PLUSBUTTON_SCH              RID_BITMAP_START +  8
+#define BMP_MINUSBUTTON_SCH             RID_BITMAP_START +  9
+#define BMP_CHECKBUTTON_UNCHECKED_SCH   RID_BITMAP_START + 10
+#define BMP_CHECKBUTTON_CHECKED_SCH     RID_BITMAP_START + 11
+#define BMP_CHECKBUTTON_HICHECKED_SCH   RID_BITMAP_START + 12
+#define BMP_CHECKBUTTON_HIUNCHECKED_SCH RID_BITMAP_START + 13
+#define BMP_CHECKBUTTON_TRISTATE_SCH    RID_BITMAP_START + 14
+#define BMP_CHECKBUTTON_HITRISTATE_SCH  RID_BITMAP_START + 15
+
 //========================================================================
 // images
 
@@ -220,10 +229,43 @@
 #define BOOKMARK_TREE_ICON              RID_IMAGE_START + 13
 #define BOOKMARKFOLDER_TREE_ICON        RID_IMAGE_START + 14
 #define IMG_DATABASE_CONNECTED          RID_IMAGE_START + 15
+// hi contrast iamges
+#define QUERYFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 16
+#define TABLEFOLDER_TREE_ICON_SCH       RID_IMAGE_START + 17
+#define BOOKMARKFOLDER_TREE_ICON_SCH    RID_IMAGE_START + 18
+#define IMG_DATABASE_SCH                RID_IMAGE_START + 19
+#define IMG_DATABASE_CONNECTED_SCH      RID_IMAGE_START + 20
+#define TABLE_TREE_ICON_SCH             RID_IMAGE_START + 21
+#define VIEW_TREE_ICON_SCH              RID_IMAGE_START + 22
+#define QUERY_TREE_ICON_SCH             RID_IMAGE_START + 23
+#define BOOKMARK_TREE_ICON_SCH          RID_IMAGE_START + 24
+#define IMG_DATABASE_MODIFIED_SCH       RID_IMAGE_START + 25
+#define IMG_DATABASE_NEW_SCH            RID_IMAGE_START + 26
+#define IMG_DATABASE_DELETED_SCH        RID_IMAGE_START + 27
+#define BMP_EXCEPTION_ERROR_SCH         RID_IMAGE_START + 28
+#define BMP_EXCEPTION_WARNING_SCH       RID_IMAGE_START + 29
+#define BMP_EXCEPTION_INFO_SCH          RID_IMAGE_START + 30
+#define IMG_PKEYICON_SCH                RID_IMAGE_START + 31
 
 //========================================================================
 // image lists
-#define IMG_JOINS                       RID_IMAGELIST_START + 0
+#define IMG_JOINS                       RID_IMAGELIST_START +  0
+#define IMG_INDEX_DLG_SC                RID_IMAGELIST_START +  1
+#define IMG_INDEX_DLG_SCH               RID_IMAGELIST_START +  2
+#define IMG_INDEX_DLG_LC                RID_IMAGELIST_START +  3
+#define IMG_INDEX_DLG_LCH               RID_IMAGELIST_START +  4
+#define IMG_TABLESUBCRIPTION_SC         RID_IMAGELIST_START +  5
+#define IMG_TABLESUBCRIPTION_SCH        RID_IMAGELIST_START +  6
+#define IMG_TABLESUBCRIPTION_LC         RID_IMAGELIST_START +  7
+#define IMG_TABLESUBCRIPTION_LCH        RID_IMAGELIST_START +  8
+#define IMG_QUERYADMINISTRATION_SC      RID_IMAGELIST_START +  9
+#define IMG_QUERYADMINISTRATION_SCH     RID_IMAGELIST_START + 10
+#define IMG_QUERYADMINISTRATION_LC      RID_IMAGELIST_START + 11
+#define IMG_QUERYADMINISTRATION_LCH     RID_IMAGELIST_START + 12
+#define IMG_DOCUMENTLINKS_SC            RID_IMAGELIST_START + 13
+#define IMG_DOCUMENTLINKS_SCH           RID_IMAGELIST_START + 14
+#define IMG_DOCUMENTLINKS_LC            RID_IMAGELIST_START + 15
+#define IMG_DOCUMENTLINKS_LCH           RID_IMAGELIST_START + 16
 
 //========================================================================
 // menues
@@ -483,6 +525,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.70  2002/04/23 07:51:13  oj
+ *  #98286# new member methods implemented
+ *
  *  Revision 1.69  2002/04/23 07:50:46  oj
  *  #98286# new member methods implemented
  *
