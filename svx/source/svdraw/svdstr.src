@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-19 18:08:05 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2329,7 +2329,7 @@ String STR_ObjNameSingulOUTLINETEXT
     Text[ dutch ] = "Overzichtstekst";
     Text[ chinese_simplified ] = "ε¤§ηΊ²ζ–‡ε­—";
     Text[ greek ] = "Κείμενο διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ ν…μ¤νΈ";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ ν…μ¤νΈ";
     Text[ turkish ] = "Anahat metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto del esquema";
@@ -2358,7 +2358,7 @@ String STR_ObjNamePluralOUTLINETEXT
     Text[ dutch ] = "Overzichtteksten";
     Text[ chinese_simplified ] = "ε¤§ηΊ²ζ–‡ε­—";
     Text[ greek ] = "Κείμενα διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ ν…μ¤νΈ";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ ν…μ¤νΈ";
     Text[ turkish ] = "Anahat metinleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Textos del esquema";
@@ -11978,7 +11978,7 @@ String SIP_XA_FORMTXTSTYLE
     Text[ dutch ] = "Fontwork stijl";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ζ ·εΌ";
     Text[ greek ] = "Στυλ Fontwork";
-    Text[ korean ] = "Fontwork μ ν•";
+    Text[ korean ] = "ν°νΈμ›ν¬ μ ν•";
     Text[ turkish ] = "Fontwork biηimi";
     Text[ catalan ] = "Estilos Fontwork";
     Text[ finnish ] = "Fonttityφn tyyli";
@@ -12006,7 +12006,7 @@ String SIP_XA_FORMTXTADJUST
     Text[ dutch ] = "Fontwork uitlijning";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ε―Ήι½";
     Text[ greek ] = "Στοίχιση Fontwork";
-    Text[ korean ] = "Fontwork λ§μ¶¤";
+    Text[ korean ] = "ν°νΈμ›ν¬ λ§μ¶¤";
     Text[ turkish ] = "Fontwork hizalamasύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaciσn Fontwork";
@@ -12035,7 +12035,7 @@ String SIP_XA_FORMTXTDISTANCE
     Text[ dutch ] = "Fontwork afstand";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι—΄ι”";
     Text[ greek ] = "Απόσταση Fontwork";
-    Text[ korean ] = "Fontwork κ°„κ²©";
+    Text[ korean ] = "ν°νΈμ›ν¬ κ°„κ²©";
     Text[ turkish ] = "Fontwork aralύπύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Distancia Fontwork";
@@ -12064,7 +12064,7 @@ String SIP_XA_FORMTXTSTART
     Text[ dutch ] = "Fontwork schriftbegin";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“η„εΌ€η«―";
     Text[ greek ] = "Αρχή γραμματοσειράς Fontwork";
-    Text[ korean ] = "Fontwork κΈ€κΌ΄ μ‹μ‘";
+    Text[ korean ] = "ν°νΈμ›ν¬ κΈ€κΌ΄ μ‹μ‘";
     Text[ turkish ] = "Fontwork: Yazύtipi baώύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Inicio Fontwork";
@@ -12093,7 +12093,7 @@ String SIP_XA_FORMTXTMIRROR
     Text[ dutch ] = "Fontwork spiegelschrift";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“εζ ";
     Text[ greek ] = "Καθρεπτισμός γραφής Fontwork";
-    Text[ korean ] = "Fontwork λ€μΉ­κΈ€κΌ΄";
+    Text[ korean ] = "ν°νΈμ›ν¬ λ€μΉ­κΈ€κΌ΄";
     Text[ turkish ] = "Fontwork aynalύ yazύ";
     Text[ catalan ] = "Reflejo Fontwork";
     Text[ finnish ] = "Fonttityφn kopio";
@@ -12121,7 +12121,7 @@ String SIP_XA_FORMTXTOUTLINE
     Text[ dutch ] = "Fontwork contourschrift";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“θ½®ε»“";
     Text[ greek ] = "Περίγραμμα Fontwork";
-    Text[ korean ] = "Fontwork μ¤κ³½ λ¬Έμ";
+    Text[ korean ] = "ν°νΈμ›ν¬ μ¤κ³½ λ¬Έμ";
     Text[ turkish ] = "Fontwork: Konturlu yazύ";
     Text[ catalan ] = "Contorno Fontwork";
     Text[ finnish ] = "Fonttityφn δδriviiva";
@@ -12149,7 +12149,7 @@ String SIP_XA_FORMTXTSHADOW
     Text[ dutch ] = "Fontwork schaduw";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±";
     Text[ greek ] = "Σκιά Fontwork";
-    Text[ korean ] = "Fontwork μμ";
+    Text[ korean ] = "ν°νΈμ›ν¬ μμ";
     Text[ turkish ] = "Fontwork gφlgesi";
     Text[ catalan ] = "Sombra Fontwork";
     Text[ finnish ] = "Fonttityφn varjostus";
@@ -12177,7 +12177,7 @@ String SIP_XA_FORMTXTSHDWCOLOR
     Text[ dutch ] = "Fontwork schaduwkleur";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±ιΆθ‰²";
     Text[ greek ] = "Χρώμα σκιάς Fontwork";
-    Text[ korean ] = "Fontwork μμ μƒ‰μƒ";
+    Text[ korean ] = "ν°νΈμ›ν¬ μμ μƒ‰μƒ";
     Text[ turkish ] = "Fontwork gφlge rengi";
     Text[ catalan ] = "Color de sombra Fontwork";
     Text[ finnish ] = "Fonttityφn varjostusvδri";
@@ -12205,7 +12205,7 @@ String SIP_XA_FORMTXTSHDWXVAL
     Text[ dutch ] = "Fontwork schaduwvulling X";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“εη§» X";
     Text[ greek ] = "Μετατόπιση Χ σκιάς Fontwork";
-    Text[ korean ] = "Fontwork μμ μ¤ν”„μ…‹ X";
+    Text[ korean ] = "ν°νΈμ›ν¬ μμ μ¤ν”„μ…‹ X";
     Text[ turkish ] = "Fontwork gφlge konumu X";
     Text[ catalan ] = "Desplaz. sombra de Fontwork X";
     Text[ finnish ] = "Fonttityφn varjosiirtymδ X";
@@ -12233,7 +12233,7 @@ String SIP_XA_FORMTXTSHDWYVAL
     Text[ dutch ] = "Fontwork schaduwvulling Y";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“εη§» Y";
     Text[ greek ] = "Μετατόπιση Y σκιάς Fontwork";
-    Text[ korean ] = "Fontwork μμ μ¤ν”„μ…‹ Y";
+    Text[ korean ] = "ν°νΈμ›ν¬ μμ μ¤ν”„μ…‹ Y";
     Text[ turkish ] = "Fontwork gφlge konumu Y";
     Text[ catalan ] = "Desplaz. sombra de Fontwork Y";
     Text[ finnish ] = "Fonttityφn varjosiirtymδ Y";
@@ -12261,7 +12261,7 @@ String SIP_XA_FORMTXTSTDFORM
     Text[ dutch ] = "Fontwork standaardvorm";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ζ ‡ε‡†ζ ΌεΌ";
     Text[ greek ] = "Προεπιλεγμένη μορφή Fontwork";
-    Text[ korean ] = "Fontwork κΈ°λ³Έν•";
+    Text[ korean ] = "ν°νΈμ›ν¬ κΈ°λ³Έν•";
     Text[ turkish ] = "Fontwork: Standart biηim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Forma estαndar Fontwork";
@@ -12290,7 +12290,7 @@ String SIP_XA_FORMTXTHIDEFORM
     Text[ dutch ] = "Fontwork contour verbergen";
     Text[ chinese_simplified ] = "ιθ—ηΎε·¥ε­—δ½“θ½®ε»“";
     Text[ greek ] = "Απόκρυψη περιγράμματος Fontwork";
-    Text[ korean ] = "Fontwork μ¤κ³½ μ¨κΈ°κΈ°";
+    Text[ korean ] = "ν°νΈμ›ν¬ μ¤κ³½ μ¨κΈ°κΈ°";
     Text[ turkish ] = "Fontwork konturunu gizle";
     Text[ catalan ] = "Ocultar contorno Fontwork";
     Text[ finnish ] = "Piilota fonttityφn δδriviivat";
@@ -12318,7 +12318,7 @@ String SIP_XA_FORMTXTSHDWTRANSP
     Text[ dutch ] = "Fontwork schaduwtransparantie";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ι΄ε½±ι€ζ";
     Text[ greek ] = "Διαφάνεια σκιάς Fontwork";
-    Text[ korean ] = "Fontwork μμ ν¬λª…";
+    Text[ korean ] = "ν°νΈμ›ν¬ μμ ν¬λª…";
     Text[ turkish ] = "Fontwork gφlge saydamlύπύ";
     Text[ catalan ] = "Transparencia de sombra Fontwork";
     Text[ finnish ] = "Fonttityφn varjostuksen lδpinδkyvyys";
@@ -12346,7 +12346,7 @@ String SIP_XA_FTRESERVED2
     Text[ dutch ] = "Fontwork reserve 2";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ιΆ„η•™ 2";
     Text[ greek ] = "Fontwork εναλλακτ. 2";
-    Text[ korean ] = "Fontwork μλΉ„ 2";
+    Text[ korean ] = "ν°νΈμ›ν¬ μλΉ„ 2";
     Text[ turkish ] = "Fontwork: Yedek 2";
     Text[ catalan ] = "Fontwork reserva 2";
     Text[ finnish ] = "Fonttityφ varattu 2:lle";
@@ -12374,7 +12374,7 @@ String SIP_XA_FTRESERVED3
     Text[ dutch ] = "Fontwork reserve 3";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ιΆ„η•™ 3";
     Text[ greek ] = "Fontwork εναλλακτ. 3";
-    Text[ korean ] = "Fontwork μλΉ„ 3";
+    Text[ korean ] = "ν°νΈμ›ν¬ μλΉ„ 3";
     Text[ turkish ] = "Fontwork: Yedek 3";
     Text[ catalan ] = "Fontwork reserva 3";
     Text[ finnish ] = "Fonttityφ varattu 3:lle";
@@ -12402,7 +12402,7 @@ String SIP_XA_FTRESERVED4
     Text[ dutch ] = "Fontwork reserve 4";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ιΆ„η•™ 4";
     Text[ greek ] = "Fontwork εναλλακτ. 4";
-    Text[ korean ] = "Fontwork μλΉ„ 4";
+    Text[ korean ] = "ν°νΈμ›ν¬ μλΉ„ 4";
     Text[ turkish ] = "Fontwork: Yedek 4";
     Text[ catalan ] = "Fontwork reserva 4";
     Text[ finnish ] = "Fonttityφ varattu 4:lle";
@@ -12430,7 +12430,7 @@ String SIP_XA_FTRESERVED5
     Text[ dutch ] = "Fontwork reserve 5";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ιΆ„η•™ 5";
     Text[ greek ] = "Fontwork εναλλακτ. 5";
-    Text[ korean ] = "Fontwork μλΉ„ 5";
+    Text[ korean ] = "ν°νΈμ›ν¬ μλΉ„ 5";
     Text[ turkish ] = "Fontwork: Yedek 5";
     Text[ catalan ] = "Fontwork reserva 5";
     Text[ finnish ] = "Fonttityφ varattu 5:lle";
@@ -12458,7 +12458,7 @@ String SIP_XA_FTRESERVED_LAST
     Text[ dutch ] = "Fontwork reserve 6";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ιΆ„η•™ 6";
     Text[ greek ] = "Fontwork εναλλακτ. 6";
-    Text[ korean ] = "Fontwork μλΉ„ 6";
+    Text[ korean ] = "ν°νΈμ›ν¬ μλΉ„ 6";
     Text[ turkish ] = "Fontwork: Yedek 6";
     Text[ catalan ] = "Fontwork reserva 6";
     Text[ finnish ] = "Fonttityφ varattu 6:lle";
@@ -12486,7 +12486,7 @@ String SIP_XATTRSET_TEXT
     Text[ dutch ] = "Fontwork attributen";
     Text[ chinese_simplified ] = "ηΎε·¥ε­—δ½“ε±ζ€§";
     Text[ greek ] = "Ιδιότητες Fontwork";
-    Text[ korean ] = "Fontwork μ†μ„±";
+    Text[ korean ] = "ν°νΈμ›ν¬ μ†μ„±";
     Text[ turkish ] = "Fontwork φznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de Fontwork";
