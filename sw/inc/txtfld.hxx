@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:13:20 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+#ifndef _PAM_HXX   // #111840#
+#include <pam.hxx>
+#endif
 
 class SwTxtNode;
 
@@ -90,6 +93,14 @@ public:
     void ChgTxtNode( const SwTxtNode* pNew ) { pMyTxtNd = (SwTxtNode*)pNew; }
     // enable notification that field content has changed and needs reformatting
     void NotifyContentChange(SwFmtFld& rFmtFld);
+
+    // #111840#
+    /**
+       Returns position of this field.
+
+       @return position of this field. Has to be deleted explicitly.
+    */
+    SwPosition * GetPosition() const;
 };
 
 inline const SwTxtNode& SwTxtFld::GetTxtNode() const
