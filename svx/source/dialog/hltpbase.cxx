@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:46:43 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 16:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,34 +427,36 @@ void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 {
     ( ( Window* ) mpMarkWnd )->Show();
 
-    // Size of dialog-window
-    Point aDlgPos ( mpDialog->GetPosPixel () );
+    // Size of dialog-window in screen pixels
+    Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( NULL ) );
+    Point aDlgPos ( aDlgRect.TopLeft() );
     Size aDlgSize ( mpDialog->GetSizePixel () );
 
-    // Size of Office-Main-Window
-    Size aWindowSize( SFX_APP()->GetTopWindow()->GetSizePixel() );
+    // Absolute size of the screen
+    Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
 
     // Size of Extrawindow
     Size aExtraWndSize( mpMarkWnd->GetSizePixel () );
 
-    if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
+    // mpMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
+    if( aDlgPos.X()+(1.05*aDlgSize.Width())+aExtraWndSize.Width() > aScreen.Right() )
     {
-        if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
+        if( aDlgPos.X() - ( 0.05*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
         {
             // Pos Extrawindow anywhere
-            MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ) );
+            MoveToExtraWnd( Point(10,10) );  // very unlikely
             mpMarkWnd->ConnectToDialog( FALSE );
         }
         else
         {
             // Pos Extrawindow on the left side of Dialog
-            MoveToExtraWnd( aDlgPos - Point( long(0.02*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
+            MoveToExtraWnd( Point(0,0) - Point( long(0.05*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
         }
     }
     else
     {
         // Pos Extrawindow on the right side of Dialog
-        MoveToExtraWnd ( aDlgPos + Point( long(1.02*aDlgSize.getWidth()), 0 ) );
+        MoveToExtraWnd ( Point( long(1.05*aDlgSize.getWidth()), 0 ) );
     }
 
     // Set size of Extra-Window
