@@ -2,9 +2,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:31:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,16 @@ class DT_TextToken : public DT_Dsapi
                         DT_TextToken(
                             const char *        i_sText )
                                                 :   sText(i_sText) {}
+                        DT_TextToken(
+                            const String &      i_sText )
+                                                :   sText(i_sText) {}
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
     const char *        GetText() const         { return sText; }
+    const String &      GetTextStr() const      { return sText; }
+
+    String &            Access_Text()           { return sText; }
 
   private:
     String              sText;
