@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:15:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,9 @@ void SwWW8Writer::DoComboBox(const rtl::OUString &rName, const rtl::OUString &rS
     if (nNoStrings)
     {
         bool bSelectedDone = false;
-        for (sal_uInt32 i = 0; i < nNoStrings; ++i)
+        sal_uInt32 i;
+
+        for ( i = 0; i < nNoStrings; ++i)
         {
             if (rSelected == rListItems[i])
             {
