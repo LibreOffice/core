@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:49:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Menu MN_SPELL_POPUP
             Text[ korean ] = "¸ÂÃã¹ý(~S)";
             Text[ turkish ] = "~Yazým kýlavuzu";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ortogra~fía";
         };
         MenuItem
         {
@@ -125,6 +126,7 @@ Menu MN_SPELL_POPUP
             Text[ korean ] = "Ãß°¡(~A)";
             Text[ turkish ] = "Ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Incluir";
         };
         MenuItem
         {
@@ -157,6 +159,7 @@ Menu MN_SPELL_POPUP
             Text[ greek ] = "ÐáñÜ~âëåøç üëùí";
             Text[ korean ] = "¸ðµÎ ¹«½Ã";
             Text[ turkish ] = "Tümünü yok say";
+            Text[ catalan ] = "~Ignorar todo";
         };
         MenuItem
         {
@@ -188,6 +191,7 @@ Menu MN_SPELL_POPUP
             Text[ korean ] = "ÀÚµ¿°íÄ§";
             Text[ turkish ] = "Otomatik düzeltme";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Auto~Corrección";
         };
     };
 };
@@ -216,6 +220,7 @@ String STR_WORD
     Text[ greek ] = "Ç ëÝîç åßíáé ";
     Text[ korean ] = "´Ü¾î´Â ";
     Text[ turkish ] = "Sözcük: ";
+    Text[ catalan ] = "La palabra es ";
 };
 String STR_PARAGRAPH
 {
@@ -242,6 +247,7 @@ String STR_PARAGRAPH
     Text[ greek ] = "Ç ðáñÜãñáöïò åßíáé ";
     Text[ korean ] = "´Ü¶ôÀº ";
     Text[ turkish ] = "Paragraf: ";
+    Text[ catalan ] = "El párrafo es  ";
 };
 String STR_SPELL_OK
 {
@@ -269,6 +275,7 @@ String STR_SPELL_OK
     Text[ korean ] = "¸ÂÃã¹ý °Ë»ç°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Yazým denetimi tamamlandý!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡Ha finalizado la revisión ortográfica!";
 };
 String STR_HYP_OK
 {
@@ -295,4 +302,5 @@ String STR_HYP_OK
     Text[ korean ] = "ÇÏÀÌÇÂÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Heceleme tamamlandý.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La separación silábica ha finalizado";
 };
