@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-05 15:25:14 $
+ *  last change: $Author: mt $ $Date: 2001-02-16 11:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@
 
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+
 #include <svtools/unoiface.hxx> // InitExtToolkit
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -189,6 +191,19 @@ public:
 
 MyApp aMyApp;
 
+
+class MyWin : public WorkWindow
+{
+private:
+    uno::Reference< awt::XView > mxView;
+
+public:
+    MyWin() : WorkWindow( NULL, WB_APP|WB_STDWORK ) {;}
+    void        Paint( const Rectangle& r );
+    void        SetXView(  uno::Reference< awt::XView > xV  ) { mxView = xV; }
+};
+
+
 // -----------------------------------------------------------------------
 
 void MyApp::Main()
@@ -255,8 +270,31 @@ void MyApp::Main()
     aValue <<= (sal_Int32) 20;
     xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "PositionX" ) ), aValue );
 
-    xDlg->createPeer( xToolkit, NULL );
+    MyWin aWindow;
+    aWindow.Show();
+
+    xDlg->setDesignMode( sal_True );
+
+    uno::Reference< awt::XWindow > xWindow( xDlg, uno::UNO_QUERY );
+    xWindow->setVisible( sal_False );
+
+    xDlg->createPeer( xToolkit, aWindow.GetComponentInterface() );
+
+    uno::Reference< awt::XView > xView( xDlg, uno::UNO_QUERY );
+    aWindow.SetXView( xView );
+
     uno::Reference< awt::XDialog > xD( xDlg, uno::UNO_QUERY );
-    xD->execute();
+    static BOOL bExecute = FALSE;
+    if ( bExecute )
+        xD->execute();
+    Execute();
 
 }
+
+void MyWin::Paint( const Rectangle& r )
+{
+    static BOOL bDraw = TRUE;
+    if ( bDraw )
+        mxView->draw( 50, 50 );
+}
+
