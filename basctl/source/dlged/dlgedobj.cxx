@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:22:27 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,9 +811,15 @@ SdrObject* DlgEdObj::Clone() const
 
 SdrObject* DlgEdObj::Clone(SdrPage* _pPage, SdrModel* _pModel) const // not working yet
 {
-    SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
-    if (!pReturn)
-        return pReturn;
+    // #116235#
+    //SdrObject* pReturn = SdrUnoObj::Clone(_pPage, _pModel);
+    SdrObject* pReturn = SdrUnoObj::Clone();
+
+    if(pReturn)
+    {
+        pReturn->SetModel(_pModel);
+        pReturn->SetPage(_pPage);
+    }
 
     return pReturn;
 }
