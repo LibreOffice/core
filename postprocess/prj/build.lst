@@ -1,0 +1,4 @@
+po	postprocess	:	ecomp sdk_oo NULL
+po	postprocess			    	usr1	-	all	po_mkout NULL
+po	postprocess\packconfig		nmake	-	all	po_packconfig NULL
+po	postprocess\rebase	    	nmake	-	w	po_rebase NULL
