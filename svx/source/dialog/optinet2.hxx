@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:13:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SVX_OPTINET_HXX
 #define _SVX_OPTINET_HXX
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
@@ -113,6 +117,9 @@ class SvtInetOptions;
 #endif
 
 
+namespace lang = ::com::sun::star::lang;
+namespace uno = ::com::sun::star::uno;
+
 // class SvxNoSpaceEdit --------------------------------------------------
 
 class SvxNoSpaceEdit : public Edit
@@ -157,9 +164,21 @@ private:
 
     String          sFromBrowser;
 
-    SvtInetOptions* pInetOptions;
+    const rtl::OUString aProxyModePN;
+    const rtl::OUString aHttpProxyPN;
+    const rtl::OUString aHttpPortPN;
+    const rtl::OUString aFtpProxyPN;
+    const rtl::OUString aFtpPortPN;
+    const rtl::OUString aNoProxyDescPN;
+
+    uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
+
 #ifdef _SVX_OPTINET2_CXX
     void            EnableControls_Impl(BOOL bEnable);
+
+        void ReadConfigData_Impl();
+        void ReadConfigDefaults_Impl();
+        void RestoreConfigDefaults_Impl();
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
