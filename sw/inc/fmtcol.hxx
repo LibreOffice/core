@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:50:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ private:
 };
 
 
-class SwTxtFmtColl: public SwFmtColl
+class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
 {
     friend class SwDoc;
 
@@ -133,7 +133,7 @@ public:
 
     TYPEINFO();     //Bereits in Basisklasse Client drin.
 
-    inline void SetOutlineLevel( BYTE );
+    void SetOutlineLevel( BYTE );
     inline BYTE GetOutlineLevel() const { return nOutlineLevel; }
 
     inline void SetNextTxtFmtColl(SwTxtFmtColl& rNext);
@@ -297,14 +297,5 @@ inline void SwTxtFmtColl::SetNextTxtFmtColl( SwTxtFmtColl& rNext )
 {
     pNextTxtFmtColl = &rNext;
 }
-
-inline void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
-{
-    ASSERT( nLevel < MAXLEVEL || nLevel == NO_NUMBERING ,
-                            "SwTxtFmtColl: Level too low" );
-    nOutlineLevel = nLevel;
-}
-
-
 #endif
 
