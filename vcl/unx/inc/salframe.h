@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:05:45 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ public:
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );
     virtual void              SetMinClientSize( long nWidth, long nHeight );
+    virtual void              SetMaxClientSize( long nWidth, long nHeight );
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
