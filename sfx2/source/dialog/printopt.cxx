@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:06:54 $
+ *  last change: $Author: ka $ $Date: 2001-05-07 10:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,8 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
 
     aReduceTransparencyAutoRB.Enable( bEnable );
     aReduceTransparencyNoneRB.Enable( bEnable );
+
+    aTransparencyCB.Enable( bEnable );
 
     return 0;
 }
