@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:37 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 16:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@ namespace osl
 {
 
     class Semaphore {
-        oslSemaphore semaphore;
 
     public:
 
@@ -121,6 +120,35 @@ namespace osl
         {
             return osl_releaseSemaphore(semaphore);
         }
+
+    private:
+        oslSemaphore semaphore;
+
+        /** The underlying oslSemaphore has no reference count.
+
+        Since the underlying oslSemaphore is not a reference counted object, copy
+        constructed Semaphore may work on an already destructed oslSemaphore object.
+
+        */
+        Semaphore(const Semaphore&);
+
+        /** The underlying oslSemaphore has no reference count.
+
+        When destructed, the Semaphore object destroys the undelying oslSemaphore,
+        which might cause severe problems in case it's a temporary object.
+
+        */
+        Semaphore(oslSemaphore Semaphore);
+
+        /** This assignment operator is private for the same reason as
+            the copy constructor.
+        */
+        Semaphore& operator= (const Semaphore&);
+
+        /** This assignment operator is private for the same reason as
+            the constructor taking a oslSemaphore argument.
+        */
+        Semaphore& operator= (oslSemaphore);
     };
 }
 
