@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-17 15:30:25 $
+ *  last change: $Author: mba $ $Date: 2001-10-01 09:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,10 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
         }
         else
+        {
             pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+            pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
+        }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
@@ -1541,7 +1544,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         {
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD,
+            sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS,
                                              0L, GetFactory() );
 
             if ( HasName() )
