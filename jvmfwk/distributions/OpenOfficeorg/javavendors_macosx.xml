@@ -13,6 +13,6 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Apple Computer, Inc.">program/macjavaplugin.dylib</library>
+  <library vendor="Apple Computer, Inc.">program/sunjavaplugin.dylib</library>
  </plugins>
 </javaSelection>

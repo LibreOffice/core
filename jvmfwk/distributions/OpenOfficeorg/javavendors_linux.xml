@@ -19,7 +19,7 @@
 
  <plugins>
   <library vendor="Sun Microsystems Inc.">program/sunjavaplugin.so</library>
-  <library vendor="IBM Corporation">program/ibmjavaplugin.so</library>
-  <library vendor="Blackdown Java-Linux Team">program/bdjavaplugin.so</library>
+  <library vendor="IBM Corporation">program/sunjavaplugin.so</library>
+  <library vendor="Blackdown Java-Linux Team">program/sunjavaplugin.so</library>
  </plugins>
 </javaSelection>
