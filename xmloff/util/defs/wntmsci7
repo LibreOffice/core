@@ -8684,3 +8684,4 @@ _real@8@bffdf1a9fbe76c8b4000
 ??0SchXMLPlotAreaContext@@QAE@AAVSchXMLImportHelper@@AAVSvXMLImport@@ABVOUString@rtl@@AAV?$Sequence@UChartSeriesAddress@chart@star@sun@com@@@uno@star@sun@com@@AAV34@4@Z
 ?ImpRecursiveObjectCount@SdXMLExport@@AAEKV?$Reference@VXShapes@drawing@star@sun@com@@@uno@star@sun@com@@@Z
 ?_ExportMeta@SdXMLExport@@EAEXXZ
+?realloc@?$Sequence@USymbolDescriptor@formula@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
