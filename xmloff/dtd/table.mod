@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.28 2001-03-23 16:31:21 dvo Exp $
+	$Id: table.mod,v 1.29 2001-04-03 06:14:31 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -436,6 +436,9 @@
 	table:bind-styles-to-content %boolean; "true"
 	table:target-range-address %cell-range-address; #IMPLIED
 	table:case-sensitive %boolean; "false"
+	table:language CDATA #IMPLIED
+	table:country CDATA #IMPLIED
+	table:algorithm CDATA #IMPLIED
 >
 <!ELEMENT table:sort-by EMPTY>
 <!ATTLIST table:sort-by
