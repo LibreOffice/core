@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seekableinput.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:34:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ uno::Reference< io::XInputStream > OSeekableInputWrapper::CheckSeekableCanWrap(
     uno::Reference< io::XInputStream > xNewStream(
             static_cast< io::XInputStream* >(
                 new OSeekableInputWrapper( xInStream, xFactory ) ) );
+    return xNewStream;
 }
 
 //---------------------------------------------------------------------------
