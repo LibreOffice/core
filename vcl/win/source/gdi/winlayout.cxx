@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:58:11 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #include <tools/svwin.h>
 #endif
 
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif // _SV_SALGDI_HXX
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -608,8 +608,6 @@ bool SimpleWinLayout::HasGSUBstitutions() const
     if( !pTTFont )
         return false;
 
-    mrGSUBList.erase( -1 ); // remove "no GSUB in font" mark
-
     // add vertically substituted characters to list
     static sal_Unicode aGSUBCandidates[] = {
         0x0020, 0x0080, // ASCII
@@ -619,12 +617,21 @@ bool SimpleWinLayout::HasGSUBstitutions() const
         0xFF00, 0xFFF0, // halfwidth|fullwidth forms
     0 };
 
+    bool bHasGSUB = false;
     for( sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
         for( sal_Unicode c = pPair[0]; c < pPair[1]; ++c )
             if( MapChar( pTTFont, c, 0 ) != MapChar( pTTFont, c, 1 ) )
+            {
+                if( !bHasGSUB )
+                {
+                    mrGSUBList.erase( -1 ); // remove "no GSUB in font" mark
+                    bHasGSUB = true;
+                }
                 mrGSUBList.insert( c ); // insert GSUBbed unicodes
+            }
 
     CloseTTFont( pTTFont );
+    return bHasGSUB;
 }
 
 // -----------------------------------------------------------------------
@@ -712,7 +719,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnGlyphCount <= 0 )
         return;
 
-    HDC aHDC = rGraphics.maGraphicsData.mhDC;
+    HDC aHDC = static_cast<WinSalGraphics&>(rGraphics).mhDC;
 
     UINT mnDrawOptions = ETO_GLYPH_INDEX;
     if( mbDisableGlyphs )
@@ -2327,7 +2334,7 @@ public:
     virtual ~WinTextLayoutCache() { flush( 0 ); }
     virtual void flush( int nMinLevel );
 
-// public access only visible to SalGraphics::GetTextLayout()
+// public access only visible to WinSalGraphics::GetTextLayout()
 #ifdef GNG_VERT_HACK
     GSUBList maGSUBLists[ MAX_FALLBACK ];
 #endif // GNG_VERT_HACK
@@ -2365,15 +2372,15 @@ void WinTextLayoutCache::flush( int nMinLevel )
 
 // =======================================================================
 
-SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
     WinLayout* pWinLayout = NULL;
 
-    WinTextLayoutCache* pCache = (WinTextLayoutCache*)maGraphicsData.mxTextLayoutCache.get();
+    WinTextLayoutCache* pCache = (WinTextLayoutCache*)mxTextLayoutCache.get();
     if( !pCache )
     {
         pCache = new WinTextLayoutCache;
-        maGraphicsData.mxTextLayoutCache.reset( pCache );
+        mxTextLayoutCache.reset( pCache );
     }
 
 #ifdef USE_UNISCRIBE
@@ -2382,7 +2389,7 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
     {
         // script complexity is determined in upper layers
         SCRIPT_CACHE& rScriptCache = pCache->maScriptCache[ nFallbackLevel ];
-        pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rScriptCache );
+        pWinLayout = new UniscribeLayout( mhDC, rScriptCache );
         // NOTE: it must be guaranteed that the SalGraphics lives longer than
         // the created UniscribeLayout, otherwise the data passed into the
         // constructor might become invalid too early
@@ -2391,7 +2398,7 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 #endif // USE_UNISCRIBE
     {
 #ifdef GCP_KERN_HACK
-        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && maGraphicsData.mbFontKernInit )
+        if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS) && mbFontKernInit )
             GetKernPairs( 0, NULL );
 #endif // GCP_KERN_HACK
 
@@ -2400,11 +2407,11 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 #endif // GNG_VERT_HACK
 
         BYTE eCharSet = ANSI_CHARSET;
-        if( maGraphicsData.mpLogFont )
-            eCharSet = maGraphicsData.mpLogFont->lfCharSet;
-        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, eCharSet
+        if( mpLogFont )
+            eCharSet = mpLogFont->lfCharSet;
+        pWinLayout = new SimpleWinLayout( mhDC, eCharSet
 #ifdef GCP_KERN_HACK
-            , maGraphicsData.mpFontKernPairs, maGraphicsData.mnFontKernPairCount
+            , mpFontKernPairs, mnFontKernPairCount
 #endif // GCP_KERN_HACK
 #ifdef GNG_VERT_HACK
             , rGSUBList
