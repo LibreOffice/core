@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:16:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,6 +1337,11 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             else
                                 pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
                         }
+                    }
+                    else if ( pMenuItemHandler->xPopupMenuController.is() )
+                    {
+                        // Force update of popup menu
+                        pMenuItemHandler->xPopupMenuController->updatePopupMenu();
                     }
                     else if ( pMenuItemHandler->xMenuItemDispatch.is() )
                     {
