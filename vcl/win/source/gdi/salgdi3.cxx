@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-28 16:47:31 $
+ *  last change: $Author: hdu $ $Date: 2001-12-06 18:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,15 +678,11 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     rLogFont.lfOrientation     = 0;
     rLogFont.lfClipPrecision   = CLIP_DEFAULT_PRECIS;
     rLogFont.lfQuality         = DEFAULT_QUALITY;
+    rLogFont.lfOutPrecision    = OUT_TT_PRECIS;
     if ( pFont->mnOrientation )
-    {
-        rLogFont.lfOutPrecision = OUT_TT_PRECIS;
         rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
-    }
-    else
-        rLogFont.lfOutPrecision = OUT_DEFAULT_PRECIS;
 
-    // Disable Antialiasing
+    // disable antialiasing if requested
     if ( pFont->mbNonAntialiased )
         rLogFont.lfQuality = NONANTIALIASED_QUALITY;
 }
@@ -797,21 +793,16 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
         maGraphicsData.mpLogFont->lfOrientation     = 0;
         maGraphicsData.mpLogFont->lfClipPrecision   = CLIP_DEFAULT_PRECIS;
         maGraphicsData.mpLogFont->lfQuality         = DEFAULT_QUALITY;
+        maGraphicsData.mpLogFont->lfOutPrecision    = OUT_TT_PRECIS;
         if ( pFont->mnOrientation )
-        {
-            maGraphicsData.mpLogFont->lfOutPrecision = OUT_TT_PRECIS;
             maGraphicsData.mpLogFont->lfClipPrecision |= CLIP_LH_ANGLES;
-        }
-        else
-            maGraphicsData.mpLogFont->lfOutPrecision = OUT_DEFAULT_PRECIS;
 
-        // Disable Antialiasing
+        // disable antialiasing if requested
         if ( pFont->mbNonAntialiased )
             maGraphicsData.mpLogFont->lfQuality = NONANTIALIASED_QUALITY;
 
-        // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
-        // skalierbar ist und wenn der Font skaliert oder rotiert werden
-        // muss
+        // on the display we prefer Courier New when Courier is a
+        // bitmap only font and we need to stretch or rotate it
         if ( maGraphicsData.mbScreen &&
              (pFont->mnWidth || pFont->mnOrientation ||
               !pFont->mpFontData || (pFont->mpFontData->mnHeight != pFont->mnHeight)) &&
@@ -1275,14 +1266,13 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
 
-        // We prefer the system character set, so that we get as much as
+        // prefer the system character set, so that we get as much as
         // possible important characters. In the other case we could only
         // display a limited set of characters (#87309#)
         if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
             pData->mnQuality += 100;
 
-        // Wenn es sich um einen nicht skalierbaren Bildschirm-Font
-        // handelt, dann auf dem Drucker ignorieren
+        // ignore non-scalable display font on printer
         if ( pData->meType != TYPE_SCALABLE )
         {
             if ( pInfo->mbPrinter )
@@ -1290,7 +1280,9 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
         }
         else
         {
-            // Feststellen, ob Courier skalierbar ist
+            pData->mnQuality += 150;
+
+            // knowing Courier to be scalable is nice
             if ( pInfo->mbCourier )
                 pInfo->mbImplSalCourierScalable = TRUE;
         }
@@ -1359,14 +1351,13 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
 
-        // We prefer the system character set, so that we get as much as
+        // prefer the system character set, so that we get as much as
         // possible important characters. In the other case we could only
         // display a limited set of characters (#87309#)
         if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
             pData->mnQuality += 100;
 
-        // Wenn es sich um einen nicht skalierbaren Bildschirm-Font
-        // handelt, dann auf dem Drucker ignorieren
+        // ignore non-scalable display font on printer
         if ( pData->meType != TYPE_SCALABLE )
         {
             if ( pInfo->mbPrinter )
@@ -1374,7 +1365,9 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
         }
         else
         {
-            // Feststellen, ob Courier skalierbar ist
+            pData->mnQuality += 150;
+
+            // knowing Courier to be scalable is nice
             if ( pInfo->mbCourier )
                 pInfo->mbImplSalCourierScalable = TRUE;
         }
