@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:05:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,8 @@ namespace dbaui
             for (; aIter != pConnectionList->end() ; ++aIter )
                 aRelations.push_back(getParentChild(aIter - pConnectionList->begin()));
 
-            Sequence< Reference<XInterface> > aSeq(aRelations.begin(),aRelations.size());
+            Reference<XInterface> *pRelations = aRelations.empty() ? 0 : &aRelations[0];
+            Sequence< Reference<XInterface> > aSeq(pRelations, aRelations.size());
             return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR,aSeq);
         }
         return AccessibleRelation();
