@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 14:17:54 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OSL_ENSHURE(xColumnsSupplier.is(),"Found Key without columns!?");
             if(xColumnsSupplier.is())
             {
                 Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
@@ -1481,6 +1480,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2000/11/10 14:17:54  oj
+    search for primarykey not only keys
+
     Revision 1.10  2000/11/10 11:05:43  oj
     bookmark error corrected
 

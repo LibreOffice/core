@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 09:24:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-10 16:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    return (!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+    return (m_aCurrentRow != m_pCache->getEnd()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
 
     return ::rtl::OUString();
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL ORowSetBase::getBoolean( sal_Int32 columnIndex ) throw(SQLExce
         throw DisposedException();
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return sal_False;
 }
@@ -251,7 +251,7 @@ sal_Int8 SAL_CALL ORowSetBase::getByte( sal_Int32 columnIndex ) throw(SQLExcepti
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return sal_Int8(0);
 }
@@ -264,7 +264,7 @@ sal_Int16 SAL_CALL ORowSetBase::getShort( sal_Int32 columnIndex ) throw(SQLExcep
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return sal_Int16(0);
 }
@@ -276,7 +276,7 @@ sal_Int32 SAL_CALL ORowSetBase::getInt( sal_Int32 columnIndex ) throw(SQLExcepti
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return sal_Int32(0);
 }
@@ -288,7 +288,7 @@ sal_Int64 SAL_CALL ORowSetBase::getLong( sal_Int32 columnIndex ) throw(SQLExcept
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return sal_Int64();
 }
@@ -300,7 +300,7 @@ float SAL_CALL ORowSetBase::getFloat( sal_Int32 columnIndex ) throw(SQLException
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return float(0.0);
 }
@@ -312,7 +312,7 @@ double SAL_CALL ORowSetBase::getDouble( sal_Int32 columnIndex ) throw(SQLExcepti
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return double(0.0);
 }
@@ -324,7 +324,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return Sequence< sal_Int8 >();
 }
@@ -337,7 +337,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return ::com::sun::star::util::Date();
 }
@@ -350,7 +350,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return ::com::sun::star::util::Time();
 }
@@ -362,7 +362,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSetBase::getBytes( sal_Int32 columnIndex ) thr
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     return ::com::sun::star::util::DateTime();
 }
@@ -375,7 +375,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     return Reference< ::com::sun::star::io::XInputStream >();
 }
@@ -388,7 +388,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getCharact
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    if(!m_bBeforeFirst && !m_bAfterLast && m_aCurrentRow != m_pCache->getEnd())
+    if(m_aCurrentRow != m_pCache->getEnd())
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     return Reference< ::com::sun::star::io::XInputStream >();
 }
@@ -631,7 +631,10 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
         firePropertyChange(aOldValues);
     }
     else
+    {
+        m_aCurrentRow = m_pCache->getEnd();
         m_bAfterLast = sal_True;
+    }
     fireRowcount();
     return bRet;
 }
@@ -656,7 +659,7 @@ sal_Bool SAL_CALL ORowSetBase::isAfterLast(  ) throw(SQLException, RuntimeExcept
     if(!m_pCache)
         throw FunctionSequenceException(*m_pMySelf);
 
-    return m_bAfterLast;
+    return m_aCurrentRow == m_pCache->getEnd();;
 
 //  if(m_aBookmark.hasValue())
 //      m_pCache->moveToBookmark(m_aBookmark);
@@ -716,8 +719,8 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
 
         m_pCache->beforeFirst();
         m_aBookmark     = Any();
-        m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        m_bBeforeFirst = !(m_bAfterLast = sal_False);
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_bBeforeFirst  = !(m_bAfterLast = sal_False);
         notifyAllListenersCursorMoved();
     }
 }
@@ -739,8 +742,8 @@ void SAL_CALL ORowSetBase::afterLast(  ) throw(SQLException, RuntimeException)
         notifyAllListenersCursorBeforeMove();
         m_pCache->afterLast();
         m_aBookmark     = Any();
-        m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        m_bAfterLast = !(m_bBeforeFirst = sal_False);
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_bAfterLast    = !(m_bBeforeFirst = sal_False);
         notifyAllListenersCursorMoved();
         fireRowcount();
     }
@@ -885,7 +888,8 @@ sal_Bool SAL_CALL ORowSetBase::absolute( sal_Int32 row ) throw(SQLException, Run
     }
     else
     {
-        m_bAfterLast = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_bAfterLast    = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
     }
     fireRowcount();
     return bRet;
@@ -931,7 +935,8 @@ sal_Bool SAL_CALL ORowSetBase::relative( sal_Int32 rows ) throw(SQLException, Ru
     }
     else
     {
-        m_bAfterLast = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_bAfterLast    = !(m_bBeforeFirst = m_pCache->isBeforeFirst());
     }
 
     fireRowcount();
@@ -975,7 +980,10 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         firePropertyChange(aOldValues);
     }
     else
-        m_bAfterLast = !m_bBeforeFirst;
+    {
+        m_aCurrentRow   = m_pCache->getEnd();
+        m_bAfterLast    = !m_bBeforeFirst;
+    }
     return bRet;
 }
 //------------------------------------------------------------------------------
