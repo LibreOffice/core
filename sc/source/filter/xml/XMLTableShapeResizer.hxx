@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
+ *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ class ScDocument;
 struct ScMyToResizeShape
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
-    rtl::OUString sName;
     rtl::OUString* pRangeList;
     com::sun::star::table::CellAddress  aEndCell;
     com::sun::star::table::CellAddress  aStartCell;
@@ -109,7 +108,6 @@ public:
     ~ScMyShapeResizer();
 
     void    AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                    const rtl::OUString& rName,
                     rtl::OUString* pRangeList,
                     com::sun::star::table::CellAddress& rStartAddress,
                     com::sun::star::table::CellAddress& rEndAddress,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,6 @@ void XMLTableShapeImportHelper::finishShape(
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         table::CellAddress aEndCell;
         rtl::OUString* pRangeList = NULL;
-        rtl::OUString sOleName;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
@@ -157,8 +156,6 @@ void XMLTableShapeImportHelper::finishShape(
             {
                 if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
                     pRangeList = new rtl::OUString(rValue);
-                else if (IsXMLToken(aLocalName, XML_NAME))
-                    sOleName = rValue;
             }
         }
         if (bBackground)
@@ -176,7 +173,7 @@ void XMLTableShapeImportHelper::finishShape(
         if (!bOnTable)
         {
             static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
-                sOleName, pRangeList, aStartCell, aEndCell, nEndX, nEndY);
+                pRangeList, aStartCell, aEndCell, nEndX, nEndY);
             SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
             if (pShapeImp)
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-29 16:07:01 $
+ *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,7 +1506,7 @@ void ScXMLExport::_ExportContent()
 
 void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 {
-    SvXMLExport::_ExportStyles(bUsed);
+//  SvXMLExport::_ExportStyles(bUsed);
     if (!pSharedData)
     {
         sal_Int32 nTableCount(0);
@@ -2339,6 +2339,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
     sal_Bool bMemChart(sal_False);
     rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
+    rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
     if (xShapeProps.is())
     {
         uno::Any aAny = xShapeProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")));
@@ -2358,8 +2359,9 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             {
                 if ( sCLSID.equalsIgnoreAsciiCase(GetChartExport()->getChartCLSID()) )
                 {
-                    uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
-                    rtl::OUString sOUName ( xNamed->getName() );
+                    aAny = xShapeProps->getPropertyValue(sPersistName);
+                    rtl::OUString sOUName;
+                    aAny >>= sOUName;
                     String sName(sOUName);
                     if (!pChartListener)
                     {

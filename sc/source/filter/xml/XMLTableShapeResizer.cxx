@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,12 @@ void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
 }
 
 void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
-    const rtl::OUString& rName, rtl::OUString* pRangeList,
+    rtl::OUString* pRangeList,
     table::CellAddress& rStartAddress, table::CellAddress& rEndAddress,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
     aShape.xShape = rShape;
-    aShape.sName = rName;
     aShape.pRangeList = pRangeList;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
@@ -164,6 +163,7 @@ void ScMyShapeResizer::ResizeShapes()
     if (!aShapes.empty() && rImport.GetModel().is())
     {
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
+        rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
         uno::Reference<table::XCellRange> xTableRow;
         uno::Reference<sheet::XSpreadsheet> xSheet;
         uno::Reference<table::XTableRows> xTableRows;
@@ -256,7 +256,20 @@ void ScMyShapeResizer::ResizeShapes()
                     else
                         DBG_ERROR("something wents wrong");
                     if (IsOLE(aItr->xShape))
-                        CreateChartListener(pDoc, aItr->sName, aItr->pRangeList);
+                    {
+                        uno::Reference < beans::XPropertySet > xShapeProps ( aItr->xShape, uno::UNO_QUERY );
+                        uno::Reference < beans::XPropertySetInfo > xShapeInfo = xShapeProps->getPropertySetInfo();
+                        if (xShapeProps.is() && xShapeInfo.is())
+                        {
+                            if (xShapeInfo->hasPropertyByName(sPersistName))
+                            {
+                                uno::Any aAny = xShapeProps->getPropertyValue(sPersistName);
+                                rtl::OUString sName;
+                                if (aAny >>= sName)
+                                    CreateChartListener(pDoc, sName, aItr->pRangeList);
+                            }
+                        }
+                    }
                     if (aItr->pRangeList)
                         delete aItr->pRangeList;
                     aItr = aShapes.erase(aItr);
