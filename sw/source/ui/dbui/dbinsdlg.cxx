@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:51:02 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 15:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
@@ -541,7 +541,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                         }
                     }
                     else
-                        pNew->nDBNumFmt = utl::getDefaultNumberFormat(xCol,
+                        pNew->nDBNumFmt = dbtools::getDefaultNumberFormat(xCol,
                                      xDocNumberFormatTypes,
                                      aDocLocale);
 
