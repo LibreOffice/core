@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:56:42 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,6 @@
 #include <so3/svstor.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
-#ifndef _SCHDLL0_HXX
-#include <sch/schdll0.hxx>
-#endif
 #include <svtools/itemset.hxx>
 #include <svtools/moduleoptions.hxx>
 #include <sfx2/app.hxx>
@@ -117,6 +114,7 @@
 #include <svx/editeng.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
+#include <sot/clsids.hxx>
 #ifndef _SVDOGRAF_HXX //autogen wg. SdrGrafObj
 #include <svx/svdograf.hxx>
 #endif
@@ -464,14 +462,12 @@ void ImportExcel::EndAllChartObjects( void )
     {
         if( p->nRow1 <= p->nRow2 && p->nCol1 <= p->nCol2 )
         {
-            SvStorageRef        aStor = new SvStorage( String() );
             SvInPlaceObjectRef  aIPObj;
             //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
             //! Warnung am Storage setzen?
             if ( SvtModuleOptions().IsChart() )
             {
-                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit
-                    ( *SCH_MOD()->pSchChartDocShellFactory, aStor );
+                aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
             }
             if( aIPObj.Is() )
             {
