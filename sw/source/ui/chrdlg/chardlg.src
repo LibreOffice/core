@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,9 +389,9 @@ TabPage TP_CHAR_URL
         Text[ portuguese ] = "Te~xto";
         Text[ russian ] = "”Í‡Á‡ÌËÂ";
         Text[ greek ] = " ÂﬂÏÂÌÔ";
-        Text[ dutch ] = "~Opmerking";
+        Text[ dutch ] = "~Tekst";
         Text[ french ] = "~Texte";
-        Text[ spanish ] = "In~dicaciÛn";
+        Text[ spanish ] = "Texto";
         Text[ italian ] = "Nota";
         Text[ danish ] = "Tekst";
         Text[ swedish ] = "H‰nv~isning";
