@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
+ *  last change: $Author: mib $ $Date: 2000-12-14 09:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,8 +350,10 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     eCSS1Unit = (FieldUnit)SW_MOD()->GetMetric( pDoc->IsHTMLMode() );
 
+    sal_Bool bWriteUTF8 = sal_False;
+    eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : gsl_getSystemTextEncoding();
     const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
+        rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
 
     // fuer Netscape optimieren heisst Spacer- und Multicol ausgeben
@@ -1397,11 +1399,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.4 2000-12-12 13:11:13 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.5 2000-12-14 09:28:31 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/12/12 13:11:13  mib
+      #80296#: Export start value if a list is continued
+
       Revision 1.3  2000/11/01 19:23:14  jp
       export of mail graphics removed
 
