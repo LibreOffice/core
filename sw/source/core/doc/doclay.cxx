@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:50:58 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:19:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,21 +497,36 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                 const SwFmtAnchor& rNewAnchor,
                                 sal_Bool bSetTxtFlyAtt, sal_Bool bMakeFrms )
 {
+    const bool bFly = RES_FLYFRMFMT == rSource.Which();
+    const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
+    ASSERT( bFly || bDraw, "this method only works for fly or draw" );
+
     SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
 
-    const sal_Bool bFly = RES_FLYFRMFMT == rSource.Which();
+    // #108784# may we copy this object?
+    // We may, unless it's 1) it's a control (and therfore a draw)
+    //                     2) anchored in a header/footer
+    //                     3) anchored (to paragraph?)
+    bool bMayNotCopy = false;
+    if( bDraw )
+    {
+        const SwDrawContact* pDrawContact =
+            static_cast<const SwDrawContact*>( rSource.FindContactObj() );
 
-    //DrawObjecte duerfen niemals in Kopf-/Fusszeilen landen.
-    // JP 31.05.96: die Zeichengebundenen muessen spaeter abgeprueft werden.
-    //              Und zwar wenn sie in den ZielNode eingefuegt werden;
-    //              erst dann ist der richtige Anker gueltig !!!!
-    if( !bFly &&
-        ( FLY_AT_CNTNT == rNewAnchor.GetAnchorId() ||
-          FLY_AT_FLY == rNewAnchor.GetAnchorId() ||
-          FLY_AUTO_CNTNT == rNewAnchor.GetAnchorId() ) &&
-        rNewAnchor.GetCntntAnchor() &&
-        IsInHeaderFooter( rNewAnchor.GetCntntAnchor()->nNode ) )
-        return 0;
+        bMayNotCopy =
+            ( FLY_AT_CNTNT == rNewAnchor.GetAnchorId() ||
+              FLY_AT_FLY == rNewAnchor.GetAnchorId() ||
+              FLY_AUTO_CNTNT == rNewAnchor.GetAnchorId() ) &&
+            rNewAnchor.GetCntntAnchor() &&
+            IsInHeaderFooter( rNewAnchor.GetCntntAnchor()->nNode ) &&
+            pDrawContact != NULL  &&
+            pDrawContact->GetMaster() != NULL  &&
+            CheckControlLayer( pDrawContact->GetMaster() );
+    }
+
+    // just return if we can't copy this
+    if( bMayNotCopy )
+        return NULL;
 
     SwFrmFmt* pDest = GetDfltFrmFmt();
     if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrmFmt() )
@@ -599,7 +614,14 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
                                         bCopyIsMove && this == pSrcDoc ) );
 
         if( pDest->GetAnchor() == rNewAnchor )
-            pContact->ConnectToLayout( &rNewAnchor );
+        {
+            // OD 03.07.2003 #108784# - do *not* connect to layout, if
+            // a <MakeFrms> will not be called.
+            if ( bMakeFrms )
+            {
+                pContact->ConnectToLayout( &rNewAnchor );
+            }
+        }
         else
             pDest->SetAttr( rNewAnchor );
 
@@ -652,7 +674,21 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     else if( bInsInPage )
         pPg->InsertObject( pObj );
 
-    pObj->SetLayer( rObj.GetLayer() );
+    // OD 02.07.2003 #108784# - for drawing objects: set layer of cloned object
+    // to invisible layer
+    SdrLayerID nLayerIdForClone = rObj.GetLayer();
+    if ( !pObj->ISA(SwFlyDrawObj) &&
+         !pObj->ISA(SwVirtFlyDrawObj) &&
+         !IS_TYPE(SdrObject,pObj) )
+    {
+        if ( IsVisibleLayerId( nLayerIdForClone ) )
+        {
+            nLayerIdForClone = GetInvisibleLayerIdByVisibleOne( nLayerIdForClone );
+        }
+    }
+    pObj->SetLayer( nLayerIdForClone );
+
+
     return pObj;
 }
 
@@ -975,14 +1011,24 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 
     const SwNodeIndex* pChkIdx = 0;
     if( !pAnchor )
+    {
         pChkIdx = &rRg.GetPoint()->nNode;
+    }
     else if( bIsAtCntnt )
+    {
         pChkIdx = pAnchor->GetCntntAnchor()
                     ? &pAnchor->GetCntntAnchor()->nNode
                     : &rRg.GetPoint()->nNode;
+    }
 
-    if( pChkIdx && IsInHeaderFooter( *pChkIdx ) )
-        pFmt->SetAttr( SwFmtAnchor( eAnchorId = FLY_PAGE ) );
+    // OD 24.06.2003 #108784# - allow drawing objects in header/footer, but
+    // control objects aren't allowed in header/footer.
+    if( pChkIdx &&
+        ::CheckControlLayer( &rDrawObj ) &&
+        IsInHeaderFooter( *pChkIdx ) )
+    {
+       pFmt->SetAttr( SwFmtAnchor( eAnchorId = FLY_PAGE ) );
+    }
     else if( !pAnchor || (bIsAtCntnt && !pAnchor->GetCntntAnchor() ))
     {
         // dann setze ihn, wird im Undo gebraucht
@@ -1581,7 +1627,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     // Den Rahmen ggf. in den Hintergrund schicken.
     sal_Int8 nLayerId = rSdrObj.GetLayer();
-    if ( GetHellId() != nLayerId )
+    // OD 02.07.2003 #108784# - consider 'invisible' hell layer.
+    if ( GetHellId() != nLayerId &&
+         GetInvisibleHellId() != nLayerId )
     {
         SvxOpaqueItem aOpaque;
         aOpaque.SetValue( sal_True );
@@ -1655,6 +1703,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
     if( nLayerId == GetHellId() )
         rSdrObj.SetLayer( GetHeavenId() );
+    // OD 02.07.2003 #108784# - consider drawing objects in 'invisible' hell layer
+    else if( nLayerId == GetInvisibleHellId() )
+        rSdrObj.SetLayer( GetInvisibleHeavenId() );
     pNewSet->Put( SvxLRSpaceItem() );
     pNewSet->Put( SvxULSpaceItem() );
 
