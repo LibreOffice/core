@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:52:17 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,11 @@ void ScDLL::Init()
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-    ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
+//REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
+
+    ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    ScDocShell::Factory().RegisterMenuBar( ScResId(SCCFG_MENUBAR) );
+    ScDocShell::Factory().RegisterAccel( ScResId(SCCFG_ACCELERATOR) );
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
                             //  erst nach ScGlobal::Init duerfen die App-Optionen
@@ -554,7 +558,7 @@ ULONG __EXPORT ScDLL::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilt
 
     //  Formate, die sicher erkannt werden:
 
-    SvStorage* pStorage = rMedium.GetStorage();
+    SotStorage* pStorage = rMedium.GetStorage();
     if ( pStorage )
     {
         String      aStreamName;
