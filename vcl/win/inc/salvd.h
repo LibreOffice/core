@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:50:00 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ public:
     WinSalVirtualDevice*    mpNext;                 // next VirDev
     USHORT                  mnBitCount;             // BitCount (0 or 1)
     BOOL                    mbGraphics;             // is Graphics used
+    BOOL                    mbForeignDC;            // uses a foreign DC instead of a bitmap
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
