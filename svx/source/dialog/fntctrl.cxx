@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 11:22:24 $
+ *  last change: $Author: ama $ $Date: 2001-07-19 07:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,31 +73,264 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
+
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_ULONGS
+#define _SVSTDARR_XUB_STRLEN
+#include <svtools/svstdarr.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "fntctrl.hxx"
 #include "dialogs.hrc"
 
-// struct FontPrevWin_Impl -----------------------------------------------
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 
-struct FontPrevWin_Impl
+// class FontPrevWin_Impl -----------------------------------------------
+
+class FontPrevWin_Impl
 {
-    BOOL    bSelection      : 1,
-            bGetSelection   : 1,
-            bUseResText     : 1;
+    friend class SvxFontPrevWindow;
+    Reference < XBreakIterator > xBreak;
+    SvULongs aTextWidth;
+    SvXub_StrLens aScriptChg;
+    SvUShorts aScriptType;
+    SvxFont aCJKFont;
+    String  aText;
+    String  aScriptText;
     Color*  pColor;
     Color*  pBackColor;
-    String  aText;
-
-    BOOL                bTwoLines;
+    long nAscent;
     sal_Unicode         cStartBracket;
     sal_Unicode         cEndBracket;
-
+    BOOL    bSelection      : 1,
+            bGetSelection   : 1,
+            bUseResText     : 1,
+            bTwoLines       : 1;
+    void _CheckScript();
+public:
     FontPrevWin_Impl() :
-        bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ), pColor( NULL ),
-        pBackColor( 0 ),
-        bTwoLines(FALSE), cStartBracket(0), cEndBracket(0) {}
+        cStartBracket(0), cEndBracket(0), pColor( NULL ), pBackColor( 0 ),
+        bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
+        bTwoLines( FALSE )  {}
+    void CheckScript() { if( aText != aScriptText ) _CheckScript(); }
+    Size CalcTextSize( OutputDevice* pWin, OutputDevice* pPrt, SvxFont &rFont );
+    void DrawPrev( OutputDevice* pWin, Printer* pPrt, Point &rPt,
+                   SvxFont &rFont );
 };
+
+// class FontPrevWin_Impl -----------------------------------------------
+
+/*-----------------19.7.2001 08:44------------------
+ * void FontPrevWin_Impl::_CheckScript()
+ * evalutates the scripttypes of the actual string.
+ * Afterwards the positions of script change are notified in aScriptChg,
+ * the scripttypes in aScriptType.
+ * The aTextWidth array will be filled with zero.
+ * --------------------------------------------------*/
+
+void FontPrevWin_Impl::_CheckScript()
+{
+    aScriptText = aText;
+    USHORT nCnt = aScriptChg.Count();
+    if( nCnt )
+    {
+        aScriptChg.Remove( 0, nCnt );
+        aScriptType.Remove( 0, nCnt );
+        aTextWidth.Remove( 0, nCnt );
+        nCnt = 0;
+    }
+    if( !xBreak.is() )
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference < XInterface > xI = xMSF->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        if ( xI.is() )
+        {
+            Any x = xI->queryInterface( ::getCppuType((const Reference< XBreakIterator >*)0) );
+            x >>= xBreak;
+        }
+    }
+    if( xBreak.is() )
+    {
+        USHORT nScript = xBreak->getScriptType( aText, 0 );
+        USHORT nChg = 0;
+        if( ScriptType::WEAK == nScript )
+        {
+            nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
+            if( nChg < aText.Len() )
+                nScript = xBreak->getScriptType( aText, nChg );
+            else
+                nScript = ScriptType::LATIN;
+        }
+
+        do
+        {
+            nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
+            aScriptChg.Insert( nChg, nCnt );
+            aScriptType.Insert( nScript, nCnt );
+            aTextWidth.Insert( ULONG(0), nCnt++ );
+
+            if( nChg < aText.Len() )
+                nScript = xBreak->getScriptType( aText, nChg );
+            else
+                break;
+        } while( TRUE );
+    }
+}
+
+/*-----------------19.7.2001 08:48------------------
+ * Size FontPrevWin_Impl::CalcTextSize(..)
+ * fills the aTextWidth array with the text width of every part
+ * of the actual string without a script change inside.
+ * For Latin parts the given rFont will be used,
+ * for Asian parts the aCJKFont.
+ * The returned size contains the whole string.
+ * The member nAscent is calculated to the maximal ascent of all used fonts.
+ * --------------------------------------------------*/
+
+Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
+    SvxFont &rFont )
+{
+    USHORT nScript;
+    USHORT nIdx = 0;
+    xub_StrLen nStart = 0;
+    xub_StrLen nEnd;
+    USHORT nCnt = aScriptChg.Count();
+    if( nCnt )
+    {
+        nEnd = aScriptChg[ nIdx ];
+        nScript = aScriptType[ nIdx ];
+    }
+    else
+    {
+        nEnd = aText.Len();
+        nScript = ScriptType::LATIN;
+    }
+    long nTxtWidth = 0;
+    long nCJKHeight = 0;
+    long nHeight = 0;
+    nAscent = 0;
+    long nCJKAscent = 0;
+    do
+    {
+        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : rFont;
+        ULONG nWidth = rFnt.GetTxtSize( pPrinter, aText, nStart, nEnd-nStart ).
+                       Width();
+        aTextWidth[ nIdx++ ] = nWidth;
+        nTxtWidth += nWidth;
+        if( nScript==ScriptType::ASIAN )
+        {
+            if( !nCJKHeight )
+            {
+                pWin->SetFont( aCJKFont );
+                FontMetric aMetric( pWin->GetFontMetric() );
+                nCJKHeight = aMetric.GetLineHeight();
+                nCJKAscent = aMetric.GetAscent();
+            }
+        }
+        else
+        {
+            if( !nHeight )
+            {
+                pWin->SetFont( rFont );
+                FontMetric aMetric( pWin->GetFontMetric() );
+                nHeight = aMetric.GetLineHeight();
+                nAscent = aMetric.GetAscent();
+            }
+        }
+        if( nEnd < aText.Len() && nIdx < nCnt )
+        {
+            nStart = nEnd;
+            nEnd = aScriptChg[ nIdx ];
+            nScript = aScriptType[ nIdx ];
+        }
+        else
+            break;
+    }
+    while( TRUE );
+    nHeight -= nAscent;
+    nCJKHeight -= nCJKAscent;
+    if( nHeight < nCJKHeight )
+        nHeight = nCJKHeight;
+    if( nAscent < nCJKAscent )
+        nAscent = nCJKAscent;
+    nHeight += nAscent;
+
+    Size aTxtSize( nTxtWidth, nHeight );
+    return aTxtSize;
+}
+
+/*-----------------19.7.2001 08:54------------------
+ * void FontPrevWin_Impl::DrawPrev(..)
+ * calls SvxFont::DrawPrev(..) for every part of the string without a script
+ * change inside, for Asian parts the aCJKFont will be used, otherwise the
+ * given rFont.
+ * --------------------------------------------------*/
+
+void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* pPrinter,
+    Point &rPt, SvxFont &rFont )
+{
+    Font aOldFont = pPrinter->GetFont();
+    USHORT nScript;
+    USHORT nIdx = 0;
+    xub_StrLen nStart = 0;
+    xub_StrLen nEnd;
+    USHORT nCnt = aScriptChg.Count();
+    if( nCnt )
+    {
+        nEnd = aScriptChg[ nIdx ];
+        nScript = aScriptType[ nIdx ];
+    }
+    else
+    {
+        nEnd = aText.Len();
+        nScript = ScriptType::LATIN;
+    }
+    do
+    {
+        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : rFont;
+        pPrinter->SetFont( rFnt );
+
+        rFnt.DrawPrev( pWin, pPrinter, rPt, aText, nStart, nEnd - nStart );
+
+        rPt.X() += aTextWidth[ nIdx++ ];
+        if( nEnd < aText.Len() && nIdx < nCnt )
+        {
+            nStart = nEnd;
+            nEnd = aScriptChg[ nIdx ];
+            nScript = aScriptType[ nIdx ];
+        }
+        else
+            break;
+    }
+    while( TRUE );
+    pPrinter->SetFont( aOldFont );
+}
 
 // class SvxFontPrevWindow -----------------------------------------------
 
@@ -145,7 +378,9 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
     }
     SetMapMode( MapMode( MAP_TWIP ) );
     aFont.SetTransparent(TRUE);
+    pImpl->aCJKFont.SetTransparent(TRUE);
     aFont.SetAlign(ALIGN_BASELINE);
+    pImpl->aCJKFont.SetAlign(ALIGN_BASELINE);
     InitSettings( TRUE, TRUE );
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
@@ -160,6 +395,13 @@ SvxFontPrevWindow::~SvxFontPrevWindow()
 
     if ( bDelPrinter )
         delete pPrinter;
+}
+
+// -----------------------------------------------------------------------
+
+SvxFont& SvxFontPrevWindow::GetCJKFont()
+{
+    return pImpl->aCJKFont;
 }
 
 // -----------------------------------------------------------------------
@@ -245,20 +487,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         if ( pImpl->aText.Len() > 15 )
             pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), 16 ) );
     }
-    Window::SetFont(aFont);
-    Font aOldFont = pPrinter->GetFont();
-    pPrinter->SetFont( aFont );
-    Size aTxtSize( aFont.GetTxtSize( pPrinter, pImpl->aText ) );
-    pPrinter->SetFont( aOldFont );
+
+    pImpl->CheckScript();
+    Size aTxtSize = pImpl->CalcTextSize( this, pPrinter, aFont );
+
     const Size aLogSize( GetOutputSize() );
-    FontMetric aMetric(GetFontMetric());
-    aTxtSize.Height() = aMetric.GetLineHeight();
 
     long nX = aLogSize.Width()  / 2 - aTxtSize.Width() / 2;
     long nY = aLogSize.Height() / 2 - aTxtSize.Height() / 2;
 
-    if ( nY + aMetric.GetAscent() > aLogSize.Height() )
-        nY = aLogSize.Height() - aMetric.GetAscent();
+    if ( nY + pImpl->nAscent > aLogSize.Height() )
+        nY = aLogSize.Height() - pImpl->nAscent;
 
     if ( pImpl->pBackColor )
     {
@@ -283,13 +522,23 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         SetFillColor( aFillCol );
     }
 
-    long nStdAscent = aMetric.GetAscent();
+    long nStdAscent = pImpl->nAscent;
     nY += nStdAscent;
 
     if(pImpl->bTwoLines)
     {
         SvxFont aSmallFont(aFont);
-        aSmallFont.SetHeight(aSmallFont.GetHeight() * 60 / 100);
+        Size aSize( aSmallFont.GetSize() );
+        aSize.Height() = ( aSize.Height() * 3 ) / 5;
+        aSize.Width() = ( aSize.Width() * 3 ) / 5;
+        aSmallFont.SetSize( aSize );
+        aSize = pImpl->aCJKFont.GetSize();
+        {
+            Size aTmpSize;
+            aTmpSize.Height() = ( aSize.Height() * 3 ) / 5;
+            aTmpSize.Width() = ( aSize.Width() * 3 ) / 5;
+            pImpl->aCJKFont.SetSize( aTmpSize );
+        }
 
         long nStartBracketWidth = 0;
         long nEndBracketWidth = 0;
@@ -304,7 +553,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
             String sBracket(pImpl->cEndBracket);
             nEndBracketWidth = aFont.GetTxtSize( pPrinter, sBracket ).Width();
         }
-        nTextWidth = aSmallFont.GetTxtSize( pPrinter, pImpl->aText ).Width();
+        nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
         long nResultWidth = nStartBracketWidth;
         nResultWidth += nEndBracketWidth;
         nResultWidth += nTextWidth;
@@ -313,9 +562,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         DrawLine( Point( 0,  nY ), Point( nX, nY ) );
         DrawLine( Point( nX + nResultWidth, nY ), Point( aLogSize.Width(), nY ) );
 
-        Window::SetFont(aSmallFont);
-        FontMetric aSmallMetric(GetFontMetric());
-        long nSmallAscent = aSmallMetric.GetAscent();
+        long nSmallAscent = pImpl->nAscent;
         long nOffset = (nStdAscent - nSmallAscent ) / 2;
 
         if(pImpl->cStartBracket)
@@ -325,24 +572,22 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
             nX += nStartBracketWidth;
         }
 
-        Window::SetFont(aFont);
-
-        aSmallFont.DrawPrev( this, pPrinter, Point( nX, nY - nSmallAscent - 2 ), pImpl->aText );
-        aSmallFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
+        pImpl->DrawPrev( this, pPrinter, Point( nX, nY - nSmallAscent - 2 ), aSmallFont );
+        pImpl->DrawPrev( this, pPrinter, Point( nX, nY ), aSmallFont );
 
         nX += nTextWidth;
-        Window::SetFont(aFont);
         if(pImpl->cEndBracket)
         {
             String sBracket(pImpl->cEndBracket);
             aFont.DrawPrev( this, pPrinter, Point( nX + 1, nY - nOffset - 4), sBracket );
         }
+        pImpl->aCJKFont.SetSize( aSize );
     }
     else
     {
         DrawLine( Point( 0,  nY ), Point( nX, nY ) );
         DrawLine( Point( nX + aTxtSize.Width(), nY ), Point( aLogSize.Width(), nY ) );
-        aFont.DrawPrev( this, pPrinter, Point( nX, nY ), pImpl->aText );
+        pImpl->DrawPrev( this, pPrinter, Point( nX, nY ), aFont );
     }
 }
 /* -----------------------------04.12.00 16:26--------------------------------
