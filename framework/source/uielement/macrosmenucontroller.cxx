@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosmenucontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 13:48:05 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -85,7 +85,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::style;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 
 namespace framework
 {
