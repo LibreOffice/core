@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:24:18 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,7 @@ SfxObjectShell::~SfxObjectShell()
     // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
     // erlaubt
     SfxObjectShell::Close();
-    if ( pImp->xModel.is() )
-        pImp->xModel->dispose();
+    pImp->xModel = NULL;
 
     String aPhysName;
     if ( pMedium )
@@ -914,7 +913,7 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 
 void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
-    if ( pImp->xModel.is() )
+    if ( pImp->xModel.is() && pModel )
         DBG_WARNING( "Model already set!" );
 
     pImp->xModel = pModel;
