@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:40:22 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,18 @@ IMPL_STATIC_LINK( SfxPrintProgress_Impl, DeleteHdl, SfxPrintProgress*, pAntiImpl
     return 0;
 }
 
+void actualizePrintCancelState(CancelButton& rButton, const SfxObjectShell* pShell)
+{
+    sal_Bool bEnableCancelButton = sal_True;
+    if (pShell)
+        bEnableCancelButton = pShell->Stamp_GetPrintCancelState();
+
+    if (!bEnableCancelButton)
+        rButton.Disable();
+    else
+        rButton.Enable();
+}
+
 //------------------------------------------------------------------------
 
 SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
@@ -226,7 +238,12 @@ SfxPrintProgress_Impl::SfxPrintProgress_Impl( SfxViewShell* pTheViewShell,
     pMonitor->aDocName.SetText(
         pViewShell->GetViewFrame()->GetObjectShell()->GetTitle( SFX_TITLE_MAXLEN_PRINTMONITOR ) );
     pMonitor->aPrinter.SetText( pViewShell->GetPrinter()->GetName() );
+
+    // Stampit enable/dsiable cancel button
+    actualizePrintCancelState(pMonitor->aCancel, pViewShell->GetObjectShell());
+
     pMonitor->aCancel.SetClickHdl( LINK( this, SfxPrintProgress_Impl, CancelHdl ) );
+
     StartListening( *pViewShell->GetObjectShell() );
 }
 
@@ -249,6 +266,9 @@ BOOL SfxPrintProgress_Impl::SetPage( USHORT nPage, const String &rPage )
     // wurde der Druckauftrag abgebrochen?
     if ( bCancel || !pMonitor )
         return FALSE;
+
+    // Stampit enable/dsiable cancel button
+    actualizePrintCancelState(pMonitor->aCancel, pViewShell->GetObjectShell());
 
     nLastPage = nPage;
     String aStrPrintInfo = String( SfxResId( STR_PAGE ) );
