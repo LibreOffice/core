@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:37:25 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,8 @@
 #include <svtools/svmedit.hxx>
 #endif
 
-#include "cfg.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include "macropg.hrc"
 #include <sfx2/macrconf.hxx>
 #include <sfx2/sfxdefs.hxx>
 
@@ -94,8 +92,11 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include "dialmgr.hxx"
-#include "dialogs.hrc"
 #include "selector.hxx"
+#include "cfg.hxx"
+#include "macropg.hrc"
+#include "helpid.hrc"
+#include "dialogs.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -770,6 +771,8 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const ResId& rResId, const Sf
 
     // must be done after FreeResource is called
     InitResources();
+
+    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
 
     InitAndSetHandler( xNameReplace, Reference< container::XNameReplace>(0), Reference< util::XModifiable >(0));
     DisplayAppEvents(true);
