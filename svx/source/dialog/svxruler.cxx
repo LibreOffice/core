@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-29 13:39:13 $
+ *  last change: $Author: ama $ $Date: 2001-02-16 14:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,10 +1059,13 @@ void SvxRuler::UpdateTabs()
             ConvertHPosPixel(lParaIndent + lLastTab);
         const long lRightIndent =
             ConvertHPosPixel(GetRightFrameMargin() - pParaItem->GetRight());
+        long nDefTabDist = ConvertHPosPixel(lDefTabDist);
+        if( !nDefTabDist )
+            nDefTabDist = 1;
         const USHORT nDefTabBuf = lPosPixel > lRightIndent ||
             lLastTab > lRightIndent
                 ? 0
-                : (USHORT)( (lRightIndent - lPosPixel) / ConvertHPosPixel(lDefTabDist) );
+                : (USHORT)( (lRightIndent - lPosPixel) / nDefTabDist );
         const long nOldTabCount = nTabCount;
 
         if(pTabStopItem->Count() + TAB_GAP + nDefTabBuf > nTabBufSize)
@@ -1095,12 +1098,12 @@ void SvxRuler::UpdateTabs()
         for(j = 0; j < nDefTabBuf; ++j)
         {
             pTabs[nTabCount + TAB_GAP].nPos =
-                pTabs[nTabCount].nPos + ConvertHPosPixel(lDefTabDist);
+                pTabs[nTabCount].nPos + nDefTabDist;
 
             if(j == 0 )
                 pTabs[nTabCount + TAB_GAP].nPos -=
                     ((pTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix)
-                     % ConvertHPosPixel(lDefTabDist));
+                     % nDefTabDist );
             if(pTabs[nTabCount+TAB_GAP].nPos >= lRightIndent)
                 break;
             pTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
