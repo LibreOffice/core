@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iprcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:26:48 $
+ *  last change: $Author: hr $ $Date: 2001-10-11 17:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,16 +338,20 @@ IPRSpellCache::IPRSpellCache( ULONG nSize ) :
 {
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
-    pFlushLstnr->SetDicList( GetDictionaryList() ); //! after reference is established
-    pFlushLstnr->SetPropSet( GetLinguProperties() );    //! after reference is established
+    Reference<XDictionaryList> aDictionaryList(GetDictionaryList());
+    pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
+    Reference<XPropertySet> aPropertySet(GetLinguProperties());
+    pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
 }
 
 IPRSpellCache::~IPRSpellCache()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    pFlushLstnr->SetDicList( Reference< XDictionaryList >() );
-    pFlushLstnr->SetPropSet( Reference< XPropertySet >() );
+    Reference<XDictionaryList> aDictionaryList;
+    pFlushLstnr->SetDicList( aDictionaryList );
+    Reference<XPropertySet> aPropertySet;
+    pFlushLstnr->SetPropSet( aPropertySet );
 
 #ifdef DBG_STATISTIC
     // Binary File oeffnen

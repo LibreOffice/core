@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-17 12:44:09 $
+ *  last change: $Author: hr $ $Date: 2001-10-11 17:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,8 +759,10 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
                                 "empty implementation name" );
                         Reference< XSupportedLocales > xSuppLoc( xSvc, UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is())
-                            aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
+                        if (xSuppLoc.is()) {
+                            Sequence<Locale> aLocaleSequence(xSuppLoc->getLocales());
+                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        }
 
                         pAvailSpellSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
                                             pAvailSpellSvcs->Count() );
@@ -814,8 +816,10 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
                                 "empty implementation name" );
                         Reference< XSupportedLocales > xSuppLoc( xSvc, UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is())
-                            aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
+                        if (xSuppLoc.is()) {
+                            Sequence<Locale> aLocaleSequence(xSuppLoc->getLocales());
+                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        }
 
                         pAvailHyphSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
                                             pAvailHyphSvcs->Count() );
@@ -869,8 +873,10 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                                 "empty implementation name" );
                         Reference< XSupportedLocales > xSuppLoc( xSvc, UNO_QUERY );
                         DBG_ASSERT( xSuppLoc.is(), "interfaces not supported" );
-                        if (xSuppLoc.is())
-                            aLanguages = LocaleSeqToLangSeq( xSuppLoc->getLocales() );
+                        if (xSuppLoc.is()) {
+                            Sequence<Locale> aLocaleSequence(xSuppLoc->getLocales());
+                            aLanguages = LocaleSeqToLangSeq( aLocaleSequence );
+                        }
 
                         pAvailThesSvcs->Insert( new SvcInfo( aImplName, aLanguages ),
                                             pAvailThesSvcs->Count() );
