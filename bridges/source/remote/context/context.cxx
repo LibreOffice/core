@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:27:48 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <stdio.h>
 #include <list>
 #include <hash_map>
@@ -133,8 +132,8 @@ ContextMap;
 struct MyCounter
 {
     MyCounter( sal_Char *pName ) :
-        m_pName ( pName ),
-        m_nCounter( 0 )
+        m_nCounter( 0 ),
+        m_pName ( pName )
         {
         }
     ~MyCounter()
