@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-01 07:18:57 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,6 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
 
-    OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
@@ -281,8 +280,9 @@ void ODatabaseImportExport::initialize()
 {
     m_bInInitialize = sal_True;
 
-    if(!m_xConnection.is())
+    if ( !m_xConnection.is() )
     {   // we need a connection
+        OSL_ENSURE(m_sDataSourceName.getLength(),"There must be a datsource name!");
         Reference<XNameAccess> xDatabaseContext = Reference< XNameAccess >(m_xFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
         SQLExceptionInfo aInfo = ::dbaui::createConnection(m_sDataSourceName,xDatabaseContext,m_xFactory,xEvt,m_xConnection);

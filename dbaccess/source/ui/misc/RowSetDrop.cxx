@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:07 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 08:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
 
 #include <functional>
@@ -173,9 +176,26 @@ BOOL ORowSetImportExport::Read()
     }
     else
     {
-        m_xResultSet->beforeFirst();
-        while(m_xResultSet.is() && m_xResultSet->next() && bContinue)
+        Reference<XPropertySet> xProp(m_xResultSet,UNO_QUERY);
+        sal_Int32 nRowCount = 0;
+        if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
+            sal_Bool bFinal = sal_False;
+            xProp->getPropertyValue(PROPERTY_ISROWCOUNTFINAL) >>= bFinal;
+            if ( !bFinal )
+                m_xResultSet->afterLast();
+            xProp->getPropertyValue(PROPERTY_ROWCOUNT) >>= nRowCount;
+        }
+        if ( !nRowCount )
+        {
+            m_xResultSet->afterLast();
+            nRowCount = m_xResultSet->getRow();
+        }
+        OSL_ENSURE(nRowCount,"RowCount is 0!");
+        m_xResultSet->beforeFirst();
+        while(m_xResultSet.is() && m_xResultSet->next() && bContinue && nRowCount )
+        {
+            --nRowCount;
             ++nCurrentRow;
             if(!m_pRowMarker || m_pRowMarker[nRowFilterIndex] == nCurrentRow)
             {
