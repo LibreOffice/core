@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-08 10:18:04 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,30 +154,16 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
     if ( !xActiveTask.is() )
         return FALSE;
 
-    // build up the help URL
-    String aHelpModuleName = GetHelpModuleName( nHelpId );
-    String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
-    aHelpURL += aHelpModuleName;
-    if ( !nHelpId )
-        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-    else
-    {
-        aHelpURL += '/';
-        aHelpURL += String::CreateFromInt32( nHelpId );
-    }
 
     // try to find the help frame
     Reference < XDispatchProvider > xFrame(
         xActiveTask->findFrame( ::rtl::OUString::createFromAscii( "OFFICE_HELP" ),
         FrameSearchFlag::GLOBAL ), UNO_QUERY );
-    ::com::sun::star::util::URL aURL;
-    aURL.Complete = aHelpURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aURL );
 
     Sequence < PropertyValue > aProps;
     sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
+    String aHelpModuleName = GetHelpModuleName( nHelpId );
+    sal_Bool bNewWin = sal_False;
     if ( aTicket.Len() )
     {
         // if there is a ticket, we are inside a plugin, so a request including the URL must be posted
@@ -190,6 +176,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         // otherwise the URL can be dispatched to the help frame
         if ( !xFrame.is() )
         {
+            bNewWin = sal_True;
             Reference < XFrame > xTask = xActiveTask->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
             xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
@@ -209,6 +196,21 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         }
     }
 
+    // build up the help URL
+    String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
+    aHelpURL += aHelpModuleName;
+    if ( !nHelpId || bNewWin )
+        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+    else
+    {
+        aHelpURL += '/';
+        aHelpURL += String::CreateFromInt32( nHelpId );
+    }
+    ::com::sun::star::util::URL aURL;
+    aURL.Complete = aHelpURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    xTrans->parseStrict( aURL );
     Reference < XDispatch > xDispatch = xFrame->queryDispatch( aURL,
                             DEFINE_CONST_UNICODE("OFFICE_HELP"), FrameSearchFlag::ALL );
     if ( xDispatch.is() )
