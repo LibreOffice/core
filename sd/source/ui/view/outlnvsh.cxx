@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:44:53 $
+ *  last change: $Author: af $ $Date: 2002-07-25 09:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,19 +420,28 @@ void SdOutlineViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
     SdViewShell::OuterResizePixel(rPos, rSize);
 }
 
-/*************************************************************************
-|*
-|* View-Groesse (und Position bei OLE) aendern
-|*
-\************************************************************************/
 
+/** This call is simply delegated to the base class.
+*/
 void SdOutlineViewShell::AdjustPosSizePixel(const Point &rNewPos,
                                             const Size &rNewSize)
 {
-    SdViewShell::AdjustPosSizePixel(rNewPos, rNewSize);
+    SdViewShell::AdjustPosSizePixel (rNewPos, rNewSize);
+}
 
-    long nSizeX = rNewSize.Width() - aScrBarWH.Width();
-    long nSizeY = rNewSize.Height() - aScrBarWH.Height();
+
+void SdOutlineViewShell::ArrangeGUIElements ()
+{
+    // Retrieve the current size (thickness) of the scroll bars.  That is
+    // the width of the vertical and the height of the horizontal scroll
+    // bar.
+    int nScrollBarSize = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
+    aScrBarWH = Size (nScrollBarSize, nScrollBarSize);
+
+    SdViewShell::ArrangeGUIElements ();
+
+    long nSizeX = aViewSize.Width() - aScrBarWH.Width();
+    long nSizeY = aViewSize.Height() - aScrBarWH.Height();
 
     for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
     {
