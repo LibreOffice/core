@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:19:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2549,7 +2549,7 @@
             </node>
             <node oor:name=".uno:DesignerDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Formatvorlagen und Formatierung</value>
+                    <value xml:lang="de">Formatvorlagen</value>
                     <value xml:lang="en-US">St~yles and Formatting</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
