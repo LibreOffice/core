@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:49:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,8 @@ void ScDrawLayer::MoveCells( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol
     if (!pPage)
         return;
 
+    BOOL bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
+
     ULONG nCount = pPage->GetObjCount();
     for ( ULONG i = 0; i < nCount; i++ )
     {
@@ -531,7 +533,7 @@ void ScDrawLayer::MoveCells( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol
                     PutInOrder( pData->aStt.nRow, pData->aEnd.nRow );
                 }
                 AddCalcUndo( new ScUndoObjData( pObj, aOldStt, aOldEnd, pData->aStt, pData->aEnd ) );
-                RecalcPos( pObj, pData );
+                RecalcPos( pObj, pData, bNegativePage );
             }
         }
     }
@@ -552,18 +554,20 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
         //  auch wenn Groesse gleich geblieben ist
         //  (einzelne Zeilen/Spalten koennen geaendert sein)
 
+        BOOL bNegativePage = pDoc && pDoc->IsNegativePage( nPageNo );
+
         ULONG nCount = pPage->GetObjCount();
         for ( ULONG i = 0; i < nCount; i++ )
         {
             SdrObject* pObj = pPage->GetObj( i );
             ScDrawObjData* pData = GetObjData( pObj );
             if( pData )
-                RecalcPos( pObj, pData );
+                RecalcPos( pObj, pData, bNegativePage );
         }
     }
 }
 
-void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
+void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData, BOOL bNegativePage )
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos without document" );
     if ( !pDoc )
@@ -585,6 +589,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
         aPos.X() -= 10;
+        if ( bNegativePage )
+            aPos.X() = -aPos.X();
 
         Point aOldTail = pCaptObj->GetTailPos();
         if ( aOldTail != aPos )
@@ -597,7 +603,13 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
             long nDiffX = aOldLogic.Left() - aOldTail.X();
             long nDiffY = aOldLogic.Top() - aOldTail.Y();
             Point aNewStart( aPos.X() + nDiffX, aPos.Y() + nDiffY );
-            if ( aNewStart.X() < 0 ) aNewStart.X() = 0;
+            if ( bNegativePage )
+            {
+                if ( aNewStart.X() + aOldLogic.GetWidth() > 0 )
+                    aNewStart.X() = -aOldLogic.GetWidth();
+            }
+            else
+                if ( aNewStart.X() < 0 ) aNewStart.X() = 0;
             if ( aNewStart.Y() < 0 ) aNewStart.Y() = 0;
             Rectangle aNewLogic( aNewStart, aOldLogic.GetSize() );
 
@@ -627,6 +639,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
         aRect.Right()   += 250;
         aRect.Top()     -= 70;
         aRect.Bottom()  += 70;
+        if ( bNegativePage )
+            MirrorRectRTL( aRect );
 
         if ( pObj->GetLogicRect() != aRect )
         {
@@ -652,11 +666,14 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
                 aPos.Y() += pDoc->GetRowHeight( pData->aStt.nRow, pData->aStt.nTab ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
-            if ( pObj->GetPoint(0) != aPos )
+            Point aStartPos = aPos;
+            if ( bNegativePage )
+                aStartPos.X() = -aStartPos.X();     // don't modify aPos - used below
+            if ( pObj->GetPoint(0) != aStartPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                pObj->SetPoint( aPos, 0 );
+                pObj->SetPoint( aStartPos, 0 );
             }
 
             if( !pData->bValidEnd )
@@ -664,6 +681,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
                 Point aEndPos( aPos.X() + DET_ARROW_OFFSET, aPos.Y() - DET_ARROW_OFFSET );
                 if (aEndPos.Y() < 0)
                     aEndPos.Y() += 2*DET_ARROW_OFFSET;
+                if ( bNegativePage )
+                    aEndPos.X() = -aEndPos.X();
                 if ( pObj->GetPoint(1) != aEndPos )
                 {
                     if (bRecording)
@@ -685,11 +704,14 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
                 aPos.Y() += pDoc->GetRowHeight( pData->aEnd.nRow, pData->aEnd.nTab ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
-            if ( pObj->GetPoint(1) != aPos )
+            Point aEndPos = aPos;
+            if ( bNegativePage )
+                aEndPos.X() = -aEndPos.X();         // don't modify aPos - used below
+            if ( pObj->GetPoint(1) != aEndPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
-                pObj->SetPoint( aPos, 1 );
+                pObj->SetPoint( aEndPos, 1 );
             }
 
             if( !pData->bValidStart )
@@ -699,6 +721,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
                     aStartPos.X() += 2*DET_ARROW_OFFSET;
                 if (aStartPos.Y() < 0)
                     aStartPos.Y() += 2*DET_ARROW_OFFSET;
+                if ( bNegativePage )
+                    aStartPos.X() = -aStartPos.X();
                 if ( pObj->GetPoint(0) != aStartPos )
                 {
                     if (bRecording)
@@ -726,6 +750,8 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
             TwipsToMM( aEnd.Y() );
 
             Rectangle aNew( aPos, aEnd );
+            if ( bNegativePage )
+                MirrorRectRTL( aNew );
             if ( pObj->GetLogicRect() != aNew )
             {
                 if (bRecording)
@@ -734,12 +760,16 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
             }
         }
         else
+        {
+            if ( bNegativePage )
+                aPos.X() = -aPos.X();
             if ( pObj->GetRelativePos() != aPos )
             {
                 if (bRecording)
                     AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
                 pObj->SetRelativePos( aPos );
             }
+        }
     }
 
 }
@@ -817,11 +847,14 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
     USHORT nTab = rRange.aStart.Tab();
     DBG_ASSERT( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab unterschiedlich" );
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+
     BOOL bAny = FALSE;
     long nEndX = 0;
     long nEndY = 0;
     long nStartX = LONG_MAX;
     long nStartY = LONG_MAX;
+
     USHORT i;
 
     // Grenzen ausrechnen
@@ -851,6 +884,13 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
             nEndY += pDoc->FastGetRowHeight(i,nTab);
         nStartY = (long)(nStartY * HMM_PER_TWIPS);
         nEndY   = (long)(nEndY   * HMM_PER_TWIPS);
+    }
+
+    if ( bNegativePage )
+    {
+        nStartX = -nStartX;     // positions are negative, swap start/end so the same comparisons work
+        nEndX   = -nEndX;
+        ::std::swap( nStartX, nEndX );
     }
 
     const SdrPage* pPage = GetPage(nTab);
@@ -886,6 +926,13 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
 
             pObject = aIter.Next();
         }
+    }
+
+    if ( bNegativePage )
+    {
+        nStartX = -nStartX;     // reverse transformation, so the same cell address calculation works
+        nEndX   = -nEndX;
+        ::std::swap( nStartX, nEndX );
     }
 
     if (bAny)
@@ -985,6 +1032,8 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
     if (!pPage)
         return;
 
+    BOOL bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
+
     // fuer Shrinking!
     Rectangle aNew( rArea );
     BOOL bShrink = FALSE;
@@ -1050,9 +1099,10 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
             else
             {
                 Rectangle aObjRect = pObject->GetLogicRect();
-                Point aOldMMPos = aObjRect.TopLeft();           // not converted, millimeters
+                // aOldMMPos: not converted, millimeters
+                Point aOldMMPos = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();
                 lcl_ReverseTwipsToMM( aObjRect );
-                Point aTopLeft = aObjRect.TopLeft();
+                Point aTopLeft = bNegativePage ? aObjRect.TopRight() : aObjRect.TopLeft();  // logical left
                 Size aMoveSize;
                 BOOL bDoMove = FALSE;
                 if (rArea.IsInside(aTopLeft))
@@ -1076,8 +1126,16 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
                 }
                 if ( bDoMove )
                 {
-                    if ( aTopLeft.X() + aMoveSize.Width() < 0 )
-                        aMoveSize.Width() = -aTopLeft.X();
+                    if ( bNegativePage )
+                    {
+                        if ( aTopLeft.X() + aMoveSize.Width() > 0 )
+                            aMoveSize.Width() = -aTopLeft.X();
+                    }
+                    else
+                    {
+                        if ( aTopLeft.X() + aMoveSize.Width() < 0 )
+                            aMoveSize.Width() = -aTopLeft.X();
+                    }
                     if ( aTopLeft.Y() + aMoveSize.Height() < 0 )
                         aMoveSize.Height() = -aTopLeft.Y();
 
@@ -1089,7 +1147,7 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
                     AddCalcUndo( new SdrUndoMoveObj( *pObject, aMoveSize ) );
                     pObject->Move( aMoveSize );
                 }
-                else if ( rArea.IsInside(aObjRect.BottomRight()) &&
+                else if ( rArea.IsInside( bNegativePage ? aObjRect.BottomLeft() : aObjRect.BottomRight() ) &&
                             !pObject->IsResizeProtect() )
                 {
                     //  geschuetzte Groessen werden nicht veraendert
@@ -1097,7 +1155,8 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
                     AddCalcUndo( new SdrUndoGeoObj( *pObject ) );
                     long nOldSizeX = aObjRect.Right() - aObjRect.Left() + 1;
                     long nOldSizeY = aObjRect.Bottom() - aObjRect.Top() + 1;
-                    pObject->Resize( aOldMMPos, Fraction( nOldSizeX+rMove.X(), nOldSizeX ),
+                    long nLogMoveX = rMove.X() * ( bNegativePage ? -1 : 1 );    // logical direction
+                    pObject->Resize( aOldMMPos, Fraction( nOldSizeX+nLogMoveX, nOldSizeX ),
                                                 Fraction( nOldSizeY+rMove.Y(), nOldSizeY ) );
                 }
             }
@@ -1115,6 +1174,8 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
 
     if (!bAdjustEnabled)
         return;
+
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
     lcl_ReverseTwipsToMM( aRect );
@@ -1136,10 +1197,13 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
         for (s=-1; s>=nDy; s--)
             aMove.Y() -= pDoc->FastGetRowHeight(s+(short)nRow1,nTab);
 
+    if ( bNegativePage )
+        aMove.X() = -aMove.X();
+
     Point aTopLeft = aRect.TopLeft();       // Anfang beim Verkleinern
     if (bInsDel)
     {
-        if ( aMove.X() < 0 )
+        if ( aMove.X() != 0 && nDx < 0 )    // nDx counts cells, sign is independent of RTL
             aTopLeft.X() += aMove.X();
         if ( aMove.Y() < 0 )
             aTopLeft.Y() += aMove.Y();
@@ -1181,6 +1245,14 @@ void ScDrawLayer::WidthChanged( USHORT nTab, USHORT nCol, long nDifTwips )
 
     //! aTopLeft ist falsch, wenn mehrere Spalten auf einmal ausgeblendet werden
 
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    if ( bNegativePage )
+    {
+        MirrorRectRTL( aRect );
+        aTopLeft.X() = -aTopLeft.X();
+        nDifTwips = -nDifTwips;
+    }
+
     MoveAreaTwips( nTab, aRect, Point( nDifTwips,0 ), aTopLeft );
 }
 
@@ -1207,6 +1279,13 @@ void ScDrawLayer::HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips )
     aRect.Right() = MAXMM;
 
     //! aTopLeft ist falsch, wenn mehrere Zeilen auf einmal ausgeblendet werden
+
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    if ( bNegativePage )
+    {
+        MirrorRectRTL( aRect );
+        aTopLeft.X() = -aTopLeft.X();
+    }
 
     MoveAreaTwips( nTab, aRect, Point( 0,nDifTwips ), aTopLeft );
 }
@@ -1239,6 +1318,10 @@ BOOL ScDrawLayer::HasObjectsInRows( USHORT nTab, USHORT nStartRow, USHORT nEndRo
 
     aTestRect.Left()  = 0;
     aTestRect.Right() = MAXMM;
+
+    BOOL bNegativePage = pDoc->IsNegativePage( nTab );
+    if ( bNegativePage )
+        MirrorRectRTL( aTestRect );
 
     SdrPage* pPage = GetPage(nTab);
     DBG_ASSERT(pPage,"Page nicht gefunden");
@@ -1509,6 +1592,14 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
         return;
     }
 
+    BOOL bMirrorObj = ( rSourceRange.Left() < 0 && rSourceRange.Right() < 0 &&
+                        rDestRange.Left()   > 0 && rDestRange.Right()   > 0 ) ||
+                      ( rSourceRange.Left() > 0 && rSourceRange.Right() > 0 &&
+                        rDestRange.Left()   < 0 && rDestRange.Right()   < 0 );
+    Rectangle aMirroredSource = rSourceRange;
+    if ( bMirrorObj )
+        MirrorRectRTL( aMirroredSource );
+
     USHORT nDestTab = rDestPos.Tab();
 
     SdrPage* pSrcPage = pClipModel->GetPage(nSourceTab);
@@ -1517,7 +1608,8 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
     if ( !pSrcPage || !pDestPage )
         return;
 
-    Size aMove( rDestRange.Left() - rSourceRange.Left(), rDestRange.Top() - rSourceRange.Top() );
+    // first mirror, then move
+    Size aMove( rDestRange.Left() - aMirroredSource.Left(), rDestRange.Top() - aMirroredSource.Top() );
 
     long nDestWidth = rDestRange.GetWidth();
     long nDestHeight = rDestRange.GetHeight();
@@ -1552,6 +1644,9 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
         if ( rSourceRange.IsInside( aObjRect ) )
         {
             SdrObject* pNewObject = pOldObject->Clone( pDestPage, this );
+
+            if ( bMirrorObj )
+                MirrorRTL( pNewObject );        // first mirror, then move
 
             pNewObject->NbcMove( aMove );
             if ( bResize )
@@ -1651,6 +1746,50 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, cons
 
         pOldObject = aIter.Next();
     }
+}
+
+void ScDrawLayer::MirrorRTL( SdrObject* pObj )
+{
+    UINT16 nIdent = pObj->GetObjIdentifier();
+
+    //  don't mirror OLE or graphics, otherwise ask the object
+    //  if it can be mirrored
+    BOOL bCanMirror = ( nIdent != OBJ_GRAF && nIdent != OBJ_OLE2 );
+    if (bCanMirror)
+    {
+        SdrObjTransformInfoRec aInfo;
+        pObj->TakeObjInfo( aInfo );
+        bCanMirror = aInfo.bMirror90Allowed;
+    }
+
+    if (bCanMirror)
+    {
+        Point aRef1( 0, 0 );
+        Point aRef2( 0, 1 );
+        if (bRecording)
+            AddCalcUndo( new SdrUndoGeoObj( *pObj ) );
+        pObj->Mirror( aRef1, aRef2 );
+    }
+    else
+    {
+        //  Move instead of mirroring:
+        //  New start position is negative of old end position
+        //  -> move by sum of start and end position
+        Rectangle aObjRect = pObj->GetLogicRect();
+        Size aMoveSize( -(aObjRect.Left() + aObjRect.Right()), 0 );
+        if (bRecording)
+            AddCalcUndo( new SdrUndoMoveObj( *pObj, aMoveSize ) );
+        pObj->Move( aMoveSize );
+    }
+}
+
+// static
+void ScDrawLayer::MirrorRectRTL( Rectangle& rRect )
+{
+    //  mirror and swap left/right
+    long nTemp = rRect.Left();
+    rRect.Left() = -rRect.Right();
+    rRect.Right() = -nTemp;
 }
 
 // static
