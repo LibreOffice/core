@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 14:07:40 $
+ *  last change: $Author: mib $ $Date: 2000-10-30 12:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #ifndef _COM_SUN_STAR_TEXT_TEXTCOLUMN_HPP_
 #include <com/sun/star/text/TextColumn.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include "xmlkywd.hxx"
@@ -95,11 +102,17 @@
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::rtl;
 
 
 XMLTextColumnsExport::XMLTextColumnsExport( SvXMLExport& rExp ) :
-    rExport( rExp )
+    rExport( rExp ),
+    sSeparatorLineIsOn(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")),
+    sSeparatorLineWidth(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineWidth")),
+    sSeparatorLineColor(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineColor")),
+    sSeparatorLineRelativeHeight(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineRelativeHeight")),
+    sSeparatorLineVerticalAlignment(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineVerticalAlignment"))
 {
 }
 
@@ -118,6 +131,63 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                               sValue.makeStringAndClear() );
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, sXML_columns,
                               sal_True, sal_True );
+
+    Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
+    if( xPropSet.is() )
+    {
+        Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
+        if( *(sal_Bool *)aAny.getValue() )
+        {
+            // style:width
+            aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );
+            sal_Int32 nWidth;
+            aAny >>= nWidth;
+            GetExport().GetMM100UnitConverter().convertMeasure( sValue,
+                                                                nWidth );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_width,
+                                      sValue.makeStringAndClear() );
+
+            // style:color
+            aAny = xPropSet->getPropertyValue( sSeparatorLineColor );
+            sal_Int32 nColor;
+            aAny >>= nColor;
+            GetExport().GetMM100UnitConverter().convertColor( sValue,
+                                                              nColor );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_color,
+                                      sValue.makeStringAndClear() );
+
+            // style:height
+            aAny = xPropSet->getPropertyValue( sSeparatorLineRelativeHeight );
+            sal_Int8 nHeight;
+            aAny >>= nHeight;
+            GetExport().GetMM100UnitConverter().convertPercent( sValue,
+                                                                nHeight );
+            GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_height,
+                                      sValue.makeStringAndClear() );
+
+            // style:vertical-align
+            aAny = xPropSet->getPropertyValue( sSeparatorLineVerticalAlignment );
+            VerticalAlignment eVertAlign;
+            aAny >>= eVertAlign;
+
+            sal_Char *pStr = 0;
+            switch( eVertAlign )
+            {
+//          case VerticalAlignment_TOP: pStr = sXML_top;
+            case VerticalAlignment_MIDDLE: pStr = sXML_middle; break;
+            case VerticalAlignment_BOTTOM: pStr = sXML_bottom; break;
+            }
+
+            if( pStr )
+                GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
+                                               sXML_vertical_align, pStr );
+
+            // style:column-sep
+            SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                                      sXML_column_sep,
+                                      sal_True, sal_True );
+        }
+    }
 
     while( nCount-- )
     {

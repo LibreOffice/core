@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-26 08:38:54 $
+ *  last change: $Author: mib $ $Date: 2000-10-30 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,21 @@
 
 namespace rtl { class OUString; }
 class XMLTextColumnsArray_Impl;
+class XMLTextColumnSepContext_Impl;
 class SvXMLTokenMap;
 
 class XMLTextColumnsContext :public XMLElementPropertyContext
 {
+    const ::rtl::OUString sSeparatorLineIsOn;
+    const ::rtl::OUString sSeparatorLineWidth;
+    const ::rtl::OUString sSeparatorLineColor;
+    const ::rtl::OUString sSeparatorLineRelativeHeight;
+    const ::rtl::OUString sSeparatorLineVerticalAlignment;
+
     XMLTextColumnsArray_Impl *pColumns;
+    XMLTextColumnSepContext_Impl     *pColumnSep;
     SvXMLTokenMap            *pColumnAttrTokenMap;
+    SvXMLTokenMap            *pColumnSepAttrTokenMap;
     sal_Int16                nCount;
 
 public:
