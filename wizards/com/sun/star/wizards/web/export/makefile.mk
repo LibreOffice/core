@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:32:41 $
+#   last change: $Author: rt $ $Date: 2005-01-28 15:56:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ all:
         @echo This dir cannot be build with gcj because of com.sun.star.wizards.web.data.CGSession
 .ELSE
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar
+JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar xalan.jar xercesImp.jar xml-apis.jar
 
 #JARCLASSDIRS	= com$/sun$/star$/wizards$/web
 #JARTARGET		= $(TARGET).jar
