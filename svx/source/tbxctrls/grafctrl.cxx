@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-26 15:14:03 $
+ *  last change: $Author: obo $ $Date: 2000-11-28 12:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1062,7 +1062,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                 SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                  aCropDlgAttr, 950, FALSE );
-                const String        aCropStr( SVX_RESSTR( RID_SVXSTR_GRAFCROP ) );
+                const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
                 SfxTabPage*         pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
 
                 pTabPage->SetText( aCropStr );
