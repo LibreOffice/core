@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:18:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.11 $ $ $Date: 2002-06-25 07:18:12 $
+ * @version     $Revision: 1.12 $ $ $Date: 2004-02-03 13:12:36 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -183,7 +183,11 @@ public class urp extends Protocol {
         exception[0] = (header & EXCEPTION) != 0;
         if(exception[0]) {// Exception? So the reply has an any as the result
             signature = __emptyITypeDescArray;
-            resultType = TypeDescription.__any_TypeDescription;
+            try {
+                resultType = TypeDescription.getTypeDescription("any");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("this cannot happen: " + e);
+            }
         }
 
         // read the result object
@@ -465,7 +469,11 @@ public class urp extends Protocol {
             header |= EXCEPTION;
 
             signature = __emptyITypeDescArray;
-            resType = TypeDescription.__any_TypeDescription;
+            try {
+                resType = TypeDescription.getTypeDescription("any");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("this cannot happen: " + e);
+            }
         }
 
         if(_out_threadId == null || !_out_threadId.equals(threadId)) { // change thread id ?
