@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:54:52 $
+#   last change: $Author: rt $ $Date: 2004-03-30 16:10:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,10 @@ PACKAGE=com$/sun$/star$/presentation
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    HeaderShape.idl\
+    FooterShape.idl\
+    DateTimeShape.idl\
+    SlideNumberShape.idl\
     AnimationEffect.idl\
     AnimationSpeed.idl\
     ChartShape.idl\
