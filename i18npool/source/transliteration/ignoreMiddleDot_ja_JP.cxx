@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreMiddleDot_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,30 +65,27 @@
 #define TRANSLITERATION_MiddleDot_ja_JP
 #include <transliteration_Ignore.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace rtl;
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 sal_Unicode
 ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
 {
-  switch (c) {
-  case 0x30FB: // KATAKANA MIDDLE DOT
-  case 0xFF65: // HALFWIDTH KATAKANA MIDDLE DOT
-    // no break;
-    return 0xffff; // Skip this character
-  }
-  return c;
+    switch (c) {
+        case 0x30FB: // KATAKANA MIDDLE DOT
+        case 0xFF65: // HALFWIDTH KATAKANA MIDDLE DOT
+        // no break;
+        return 0xffff; // Skip this character
+    }
+    return c;
 }
 
-
-OUString SAL_CALL
-ignoreMiddleDot_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+ignoreMiddleDot_ja_JP::ignoreMiddleDot_ja_JP()
 {
-  return transliteration_Ignore::transliterate( inStr, startPos, nCount, offset, ignoreMiddleDot_ja_JP_translator );
+        func = ignoreMiddleDot_ja_JP_translator;
+        table = 0;
+        map = 0;
+        transliterationName = "ignoreMiddleDot_ja_JP";
+        implementationName = "com.sun.star.i18n.Transliteration.ignoreMiddleDot_ja_JP";
 }
 
 } } } }

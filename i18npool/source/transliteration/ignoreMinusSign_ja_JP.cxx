@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreMinusSign_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,32 +62,29 @@
 // prevent internal compiler error with MSVC6SP3
 #include <stl/utility>
 
-#include <transliteration_OneToOne.hxx>
 #define TRANSLITERATION_MinusSign_ja_JP
 #include <transliteration_Ignore.hxx>
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 sal_Unicode
 ignoreMinusSign_ja_JP_translator (const sal_Unicode c)
 {
-  switch (c) {
-  case 0x2212: // MINUS SIGN
-  case 0x002d: // HYPHEN-MINUS
-    return 0x30fc; // KATAKANA-HIRAGANA PROLONGED SOUND MARK
-  }
-  return c;
+    switch (c) {
+        case 0x2212: // MINUS SIGN
+        case 0x002d: // HYPHEN-MINUS
+        return 0x30fc; // KATAKANA-HIRAGANA PROLONGED SOUND MARK
+    }
+    return c;
 }
 
-OUString SAL_CALL
-ignoreMinusSign_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+ignoreMinusSign_ja_JP::ignoreMinusSign_ja_JP()
 {
-  return transliteration_Ignore::transliterate( inStr, startPos, nCount, offset, ignoreMinusSign_ja_JP_translator );
+        func = ignoreMinusSign_ja_JP_translator;
+        table = 0;
+        map = 0;
+        transliterationName = "ignoreMinusSign_ja_JP";
+        implementationName = "com.sun.star.i18n.Transliteration.ignoreMinusSign_ja_JP";
 }
 
 } } } }
