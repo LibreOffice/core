@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-11 08:42:21 $
+ *  last change: $Author: mav $ $Date: 2002-10-16 12:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ), bUseInteractionHandler( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
-    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
+    bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
+    nLastStorageError( 0 )
 {
     aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
     aDoneLink.CreateMutex();
