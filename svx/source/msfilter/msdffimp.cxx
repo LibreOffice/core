@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-04 15:09:29 $
+ *  last change: $Author: mba $ $Date: 2001-05-16 14:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4963,7 +4963,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         {
             rSrcStorage->CopyTo( rStorageName, rDestStorage, aDstStgName );
 
-            xObjStor = rDestStorage->OpenStorage( aDstStgName,
+            xObjStor = rDestStorage->OpenOLEStorage( aDstStgName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
             if( xObjStor.Is() && xObjStor->GetError() )
             {
@@ -4992,7 +4992,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             else
             {
                 // or is it an OLE-1 Stream in the DataStream?
-                xObjStor = rDestStorage->OpenStorage( aDstStgName
+                xObjStor = rDestStorage->OpenOLEStorage( aDstStgName
                                 /*, STREAM_READWRITE | STREAM_SHARE_DENYALL*/ );
 
                 GDIMetaFile aMtf;
