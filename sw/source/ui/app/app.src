@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-04 10:59:47 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,7 +1565,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text [ swedish ] = "%PRODUCTNAME 3.0 text" ;
     Text [ danish ] = "%PRODUCTNAME 3.0 tekst" ;
     Text [ italian ] = "Test %PRODUCTNAME 3.0" ;
-    Text [ spanish ] = "Texto de %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 3.0 Texto" ;
     Text [ french ] = "%PRODUCTNAME 3.0 Texte" ;
     Text [ dutch ] = "%PRODUCTNAME 3.0 Tekst" ;
     Text [ portuguese ] = "%PRODUCTNAME 3.0 Text" ;
@@ -1592,7 +1592,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text [ swedish ] = "%PRODUCTNAME 4.0 text" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
     Text [ italian ] = "Testo %PRODUCTNAME 4.0" ;
-    Text [ spanish ] = "Texto de %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 4.0 texto" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Texte" ;
     Text [ dutch ] = "%PRODUCTNAME 4.0 Tekst" ;
     Text [ portuguese ] = "Texto (%PRODUCTNAME 4.0)" ;
@@ -1619,7 +1619,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text [ swedish ] = "%PRODUCTNAME 5.0 text" ;
     Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
     Text [ italian ] = "Testo %PRODUCTNAME 5.0" ;
-    Text [ spanish ] = "Texto de %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "%PRODUCTNAME 5.0 Texto" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
     Text [ dutch ] = "%PRODUCTNAME 5.0 Tekst" ;
     Text [ portuguese ] = "Texto (%PRODUCTNAME 5.0)" ;
@@ -1796,7 +1796,7 @@ String STR_LOAD_HTML_DOC
     Text[ chinese_simplified ] = "HTML ÎÄµµÃû³ÆºÍÂ·¾¶";
     Text[ russian ] = "Èìÿ è ïóòü äîêóìåíòà HTML";
     Text[ polish ] = "Nazwa i œcie¿ka dokumentu HTML";
-    Text[ japanese ] = "HTMLŒ`®ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
+    Text[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ‚Ì–¼‘O‚ÆÊß½";
     Text[ chinese_traditional ] = "HTML ¤å¥ó¦WºÙ©M¸ô®|";
     Text[ arabic ] = "ÇÓã æãÓÇÑ ãÓÊäÏ   HTML";
     Text[ dutch ] = "Naam en pad van het HTML document";
@@ -2814,7 +2814,7 @@ QueryBox MSG_SAVE_HTML_QUERY
     Message[ chinese_simplified ] = "ÎÄ¼ş×ª»»³É HTML ¸ñÊ½\n¿ÉÄÜ»áÒıÆğ×ÊÁÏËğÊ§¡£\nÄúÒª´æÅÌÕâ¸öÎÄ¼şÂğ?";
     Message[ russian ] = "Ïåğåõîä â ôîğìàò HTML \nìîæåò ïğèâåñòè ê ïîòåğå èíôîğìàöèè. \n Âû õîòèòå ñîõğàíèòü ıòîò äîêóìåíò?";
     Message[ polish ] = "Konwersja na format HTML \nmo¿e spowodowaæ utratê informacji. \nCzy chcesz zapisaæ dokument?";
-    Message[ japanese ] = "HTMLŒ`®‚É•ÏŠ·‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì•¶‘‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
+    Message[ japanese ] = "HTML Œ`®‚É•ÏŠ·‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì•¶‘‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "ÀÉ®×Âà´«¦¨ HTML ®æ¦¡\n¥i¯à·|¤Ş°_¸ê®Æ·l¥¢¡C\n±z­nÀx¦s³o­ÓÀÉ®×¡H";
     Message[ arabic ] = "ÇáÊÍæá Åáì ÊäÓíŞ HTML \níãßä Ãä íÄÏí Åáì İŞÏÇä ÈÚÖ ÇáãÚáæãÇÊ. \nåá ÊÑíÏ ÍİÙ ÇáãÓÊäÏ¿";
     Message[ dutch ] = "De convertering naar het HTML-formaat \nkan verlies van gegevens veroorzaken. \nWilt u het document opslaan?";
