@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ka $ $Date: 2001-02-13 14:14:06 $
+#   last change: $Author: hro $ $Date: 2001-03-13 11:59:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,6 +164,71 @@ APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
 
 
+
+
+.IF "$(GUI)" == "WNT"
+
+APP2DEPN= \
+        $(APP2RES) \
+        verinfo.rc
+
+APP2NOSAL=TRUE
+APP2TARGET=sowrapper
+
+APP2STDLIBS+=shell32.lib
+
+APP2OBJS= \
+                $(OBJ)$/sowrapper.obj \
+                $(OBJ)$/wrapperw.obj \
+                $(OBJ)$/wrappera.obj
+
+APP2RES=    $(RES)$/$(APP2TARGET).res
+APP2ICON=soffice.ico
+APP2VERINFO=verinfo.rc
+APP2LINKRES=$(MISC)$/$(APP2TARGET).res
+
+
+APP3DEPN= \
+        $(APP3RES) \
+        verinfo.rc
+
+APP3NOSAL=TRUE
+APP3TARGET=solocal
+
+APP3STDLIBS+=shell32.lib
+
+APP3OBJS= \
+                $(OBJ)$/sowrapper.obj \
+                $(OBJ)$/lwrapw.obj \
+                $(OBJ)$/lwrapa.obj
+
+APP3RES=    $(RES)$/$(APP3TARGET).res
+APP3ICON=soffice.ico
+APP3VERINFO=verinfo.rc
+APP3LINKRES=$(MISC)$/$(APP3TARGET).res
+
+
+
+APP4DEPN= \
+        $(APP4RES) \
+        verinfo.rc
+
+APP4NOSAL=TRUE
+APP4TARGET=soremote
+
+APP4STDLIBS+=shell32.lib
+
+APP4OBJS= \
+                $(OBJ)$/sowrapper.obj \
+                $(OBJ)$/rwrapw.obj \
+                $(OBJ)$/rwrapa.obj
+
+APP4RES=    $(RES)$/$(APP4TARGET).res
+APP4ICON=soffice.ico
+APP4VERINFO=verinfo.rc
+APP4LINKRES=$(MISC)$/$(APP4TARGET).res
+
+.ENDIF
 
 # --- Targets -------------------------------------------------------------
 
