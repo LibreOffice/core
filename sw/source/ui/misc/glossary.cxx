@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:30:41 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 #ifndef SVTOOLS_URIHELPER_HXX
@@ -754,7 +757,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         case FN_GL_IMPORT:
         {
             // call the FileOpenDialog do find WinWord - Files with templates
-            FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+            FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
             Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
             SvtPathOptions aPathOpt;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-06 13:50:04 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _CHARDLG_HRC
 #include <chardlg.hrc>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -430,7 +433,7 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
 
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
 {
-    FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+    FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2002-09-09 09:02:28 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _SVX_SIMPTABL_HXX //autogen wg. SvxSimpleTable
 #include <svx/simptabl.hxx>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -253,7 +256,8 @@ String lcl_CreateAutoMarkFileDlg( Window* pParent, const String& rURL,
 {
     String sRet;
 
-    FileDialogHelper aDlgHelper( bOpen ? FILEOPEN_SIMPLE : FILESAVE_AUTOEXTENSION, 0 );
+    FileDialogHelper aDlgHelper( bOpen ?
+                TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);

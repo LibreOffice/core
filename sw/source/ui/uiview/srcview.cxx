@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-03 10:51:37 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 #ifndef _UNOTOOLS_TEMPFILE_HXX
@@ -536,7 +539,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             SvtPathOptions aPathOpt;
             Window* pParent = &GetViewFrame()->GetWindow();
 
-            FileDialogHelper aDlgHelper( FILESAVE_SIMPLE, 0 );
+            FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
             Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
         //    pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
