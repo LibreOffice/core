@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-07 08:18:54 $
+#   last change: $Author: hjs $ $Date: 2002-05-15 17:21:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,14 +114,4 @@ SYMBOLPREFIX=$(TARGET)$(UCB_MAJOR)
 $(MISC)$/$(SHL1TARGET).flt:
     @echo ------------------------------
     @echo Making: $@
-#	@echo Type >> $@
-    @echo cpp >> $@
-    @echo m_ >> $@
-    @echo rtl >> $@
-    @echo vos >> $@
-    @echo component_getImplementationEnvironment >> $@
-    @echo component_writeInfo >> $@
-    @echo component_getFactory >> $@
-.IF "$(COM)"=="MSC"
-    @echo ??_ >> $@
-.ENDIF # COM MSC
+    $(TYPE) cached1.flt > $@
