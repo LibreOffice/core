@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:06:46 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ void SvxAngleTabPage::Construct()
     pView->GetPageViewPvNum( 0 )->LogicToPagePos( aRect );
 
     // Ankerposition beachten (Writer)
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
@@ -688,7 +688,7 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
 {
     // Wenn die View selektierte Objekte besitzt, muessen entspr. Items,
     // die SFX_ITEM_DEFAULT sind, disabled werden
-    BOOL bMarkedObj = pView->HasMarkedObj();
+    BOOL bMarkedObj = pView->AreObjectsMarked();
     const SfxPoolItem* pItem;
 
     // Eckenradius
@@ -889,7 +889,7 @@ void SvxPositionSizeTabPage::Construct()
     maWorkArea = mpView->GetWorkArea();
 
     // Beruecksichtigung Ankerposition (bei Writer)
-    const SdrMarkList& rMarkList = mpView->GetMarkList();
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
