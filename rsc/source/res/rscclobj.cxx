@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 |*    Letzte Aenderung  MM 03.05.91
 |*
 *************************************************************************/
-RefNode::RefNode( HASHID nTyp ){
+RefNode::RefNode( Atom nTyp ){
     pObjBiTree = 0;
     nTypNameId = nTyp;
 }
@@ -99,7 +99,7 @@ RefNode::RefNode( HASHID nTyp ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-USHORT RefNode::GetId() const
+sal_uInt32 RefNode::GetId() const
 {
     return( nTypNameId );
 }
@@ -181,7 +181,7 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, ULONG nFileKey ){
     if( GetFileKey() == nFileKey ){
         if( GetRscObj() ){
             pClass->Destroy( RSCINST( pClass, GetRscObj() ) );
-            RscMem::Free( GetRscObj() );
+            rtl_freeMemory( GetRscObj() );
         }
         pRetNode = (ObjNode *)Right();
         if( pRetNode ){
@@ -204,9 +204,9 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, ULONG nFileKey ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-USHORT ObjNode::GetId() const
+sal_uInt32 ObjNode::GetId() const
 {
-    return( (USHORT)(long)aRscId );
+    return( (sal_uInt32)(long)aRscId );
 }
 
 /*************************************************************************
