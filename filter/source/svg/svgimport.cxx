@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 15:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,8 @@
  ************************************************************************/
 
 #include "svgfilter.hxx"
-
+#include "rtl/ref.hxx"
+#include "jvmaccess/virtualmachine.hxx"
 // -------------
 // - SVGFilter -
 // -------------
@@ -69,7 +70,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     Reference< XMultiServiceFactory >   xServiceFactory( ::comphelper::getProcessServiceFactory() ) ;
-    OUString                            aTmpFileName;
+    rtl::OUString                           aTmpFileName;
     String                              aFileName;
     sal_Int32                           nLength = rDescriptor.getLength();
     const PropertyValue*                pValue = rDescriptor.getConstArray();
@@ -81,44 +82,41 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
     if( aTmpFileName.getLength() && xServiceFactory.is() )
     {
-        JavaVM*                 pJVM = NULL;
-        Reference< XJavaVM >    xJavaVM( xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine") ) ), UNO_QUERY );
-        Sequence< sal_Int8 >    aProcessID( 16 );
+
+        Reference< XJavaVM >    xJavaVM( xServiceFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine") ) ), UNO_QUERY );
+        Sequence< sal_Int8 >    aProcessID( 17 );
         String                  aLocalFile;
 
         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTmpFileName, aLocalFile ) && aLocalFile.Len() )
         {
             rtl_getGlobalProcessId( (sal_uInt8 *) aProcessID.getArray() );
-              Any aVMPtr( xJavaVM->getJavaVM( aProcessID ) );
+            aProcessID[16] = 0;
 
-            if( sizeof( pJVM) == sizeof( sal_Int32 ) )
+            OSL_ENSURE(sizeof (sal_Int64)
+                       >= sizeof (jvmaccess::VirtualMachine *),
+                       "Pointer cannot be represented as sal_Int64");
+            sal_Int64 nPointer = reinterpret_cast< sal_Int64 >(
+                static_cast< jvmaccess::VirtualMachine * >(0));
+            xJavaVM->getJavaVM(aProcessID) >>= nPointer;
+            rtl::Reference<jvmaccess::VirtualMachine> _virtualMachine =
+                reinterpret_cast< jvmaccess::VirtualMachine * >(nPointer);
+            if (!_virtualMachine.is())
+                return bRet;
+
+            jobjectArray    aArgs;
+            jclass          aClass;
+            jmethodID       aMId;
+            jstring         aJStr;
+
+            try
             {
-                sal_Int32 nP = 0;
+                jvmaccess::VirtualMachine::AttachGuard vmGuard(_virtualMachine);
 
-                aVMPtr >>= nP;
-                pJVM = reinterpret_cast< JavaVM* >( nP );
-            }
-            else if( sizeof( pJVM ) == sizeof( sal_Int64 ) )
-            {
-                sal_Int64 nP = 0;
+                JNIEnv * pEnv = vmGuard.getEnvironment();
 
-                aVMPtr >>= nP;
-                pJVM = reinterpret_cast< JavaVM* >( nP );
-            }
+                aClass = pEnv->FindClass( "SOTranscoder" );
 
-            if( pJVM )
-            {
-                jobjectArray    aArgs;
-                jclass          aClass;
-                jmethodID       aMId;
-                jstring         aJStr;
-
-                Reference< XJavaThreadRegister_11 > xJavaThreadRegister_11( xJavaVM, UNO_QUERY );
-                  sj2::TKTThreadAttach                aJEnv( pJVM, xJavaThreadRegister_11.get() );
-
-                aClass = aJEnv.pEnv->FindClass( "SOTranscoder" );
-
-                if( aClass && ( aMId = aJEnv.pEnv->GetStaticMethodID( aClass, "main", "([Ljava/lang/String;)V" ) ) )
+                if( aClass && ( aMId = pEnv->GetStaticMethodID( aClass, "main", "([Ljava/lang/String;)V" ) ) )
                 {
                     ::utl::TempFile aTempFile;
                     String          aOutputURL( aTempFile.GetURL() );
@@ -128,11 +126,11 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
                     if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( aOutputURL, aOutputFile ) && aOutputFile.Len() )
                     {
-                        aJStr = aJEnv.pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                        aArgs = aJEnv.pEnv->NewObjectArray( 2, aJEnv.pEnv->FindClass( "java/lang/String" ), aJStr );
-                        aJStr = aJEnv.pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
-                        aJEnv.pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
-                        aJEnv.pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
+                        aJStr = pEnv->NewStringUTF( ByteString( aLocalFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                        aArgs = pEnv->NewObjectArray( 2, pEnv->FindClass( "java/lang/String" ), aJStr );
+                        aJStr = pEnv->NewStringUTF( ByteString( aOutputFile.GetBuffer(), RTL_TEXTENCODING_UTF8 ).GetBuffer() );
+                        pEnv->SetObjectArrayElement( aArgs, 1, aJStr );
+                        pEnv->CallStaticVoidMethod( aClass, aMId, aArgs );
 
                         Graphic     aGraphic;
                         SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aOutputURL, STREAM_READ );
@@ -157,15 +155,15 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                 {
                                     Reference< XShapes >        xShapes( xDrawPage, UNO_QUERY );
                                     Reference< XPropertySet>    xPagePropSet( xDrawPage, UNO_QUERY );
-                                    Reference< XShape >         xShape( Reference< XMultiServiceFactory >( mxDstDoc, UNO_QUERY )->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) ), UNO_QUERY );
+                                    Reference< XShape >         xShape( Reference< XMultiServiceFactory >( mxDstDoc, UNO_QUERY )->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) ), UNO_QUERY );
 
                                     if( xPagePropSet.is() && xShapes.is() && xShape.is() )
                                     {
                                         Reference< XPropertySet >   xPropSet( xShape, UNO_QUERY );
                                         sal_Int32                   nPageWidth = 0, nPageHeight = 0;
 
-                                        xPagePropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nPageWidth;
-                                        xPagePropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nPageHeight;
+                                        xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nPageWidth;
+                                        xPagePropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nPageHeight;
 
                                         if( xPropSet.is() && nPageWidth && nPageHeight )
                                         {
@@ -185,8 +183,8 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                                 aGraphicSize = OutputDevice::LogicToLogic( aGraphObj.GetPrefSize(), aGraphObj.GetPrefMapMode(), aTargetMapMode );
 
                                             aGraphURL += String( aGraphObj.GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
-                                            aValue <<= OUString( aGraphURL );
-                                            xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), aValue );
+                                            aValue <<= rtl::OUString( aGraphURL );
+                                            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), aValue );
 
                                             aPos.X = ( nPageWidth - aGraphicSize.Width() ) >> 1;
                                             aPos.Y = ( nPageHeight - aGraphicSize.Height() ) >> 1;
@@ -206,8 +204,11 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                     }
                 }
             }
+            catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
+            {
+            }
         }
     }
-
     return bRet;
 }
+
