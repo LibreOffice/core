@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-23 14:13:20 $
+ *  last change: $Author: fs $ $Date: 2002-08-20 14:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 
 #define FT_EXPLORERFILE_FILENAME            30
 #define ED_EXPLORERFILE_FILENAME            31
-#define FT_EXPLORERFILE_FILEVERSION         32
-#define LB_EXPLORERFILE_FILEVERSION         33
+#define FT_EXPLORERFILE_SHARED_LISTBOX      32
+#define LB_EXPLORERFILE_SHARED_LISTBOX      33
 #define FT_EXPLORERFILE_FILETYPE            34
 #define LB_EXPLORERFILE_FILETYPE            35
 
