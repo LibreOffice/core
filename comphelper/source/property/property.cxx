@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_GENFUNC_H_
+#include <com/sun/star/uno/genfunc.h>
 #endif
 
 #include <algorithm>
@@ -174,12 +177,23 @@ sal_Bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldVal
     sal_Bool bModified(sal_False);
     if (_rCurrentValue.getValue() != _rValueToSet.getValue())
     {
-        if (_rValueToSet.hasValue() && !_rExpectedType.equals(_rValueToSet.getValueType()))
-            throw starlang::IllegalArgumentException();
-
-        if (!compare(_rCurrentValue, _rValueToSet))
+        if ( _rValueToSet.hasValue() && ( !_rExpectedType.equals( _rValueToSet.getValueType() ) ) )
         {
+            _rConvertedValue = staruno::Any( NULL, _rExpectedType.getTypeLibType() );
+
+            if  ( !uno_type_assignData(
+                    const_cast< void* >( _rConvertedValue.getValue() ), _rConvertedValue.getValueType().getTypeLibType(),
+                    const_cast< void* >( _rValueToSet.getValue() ), _rValueToSet.getValueType().getTypeLibType(),
+                    staruno::cpp_queryInterface, staruno::cpp_acquire, staruno::cpp_release
+                  )
+                )
+                throw starlang::IllegalArgumentException();
+        }
+        else
             _rConvertedValue = _rValueToSet;
+
+        if ( _rCurrentValue != _rConvertedValue )
+        {
             _rOldValue = _rCurrentValue;
             bModified = sal_True;
         }
