@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:04:34 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,9 @@
 #include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "appimp.hxx"
 #include "referers.hxx"
@@ -780,11 +782,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
     DBG_MEMTEST();
-
-    int bSearchedMDI = FALSE;
-    int bFoundNormMDI = FALSE;
-    int bFoundMiniMDI = FALSE;
-    int bFoundNonDesktopMDI = FALSE;
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const USHORT *pRanges = rSet.GetRanges();
