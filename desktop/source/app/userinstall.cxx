@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:14:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
+#include "app.hxx"
 
 using namespace rtl;
 using namespace osl;
@@ -149,14 +150,14 @@ namespace desktop {
     static const char *szReadme = "/readme.txt";
 #endif
 
-    UserInstall::UserInstallError UserInstall::finalize()
+    UserInstall::UserInstallError UserInstall::finalize( Desktop& rDesktop )
     {
         OUString aUserInstallPath;
         Bootstrap::PathStatus aLocateResult =
             Bootstrap::locateUserInstallation(aUserInstallPath);
         OUString aReadme = aUserInstallPath + (OUString::createFromAscii(szReadme));
         File aReadmeFile(aReadme);
-
+        UserInstallError aError = E_None;
         switch (aLocateResult) {
 
             case Bootstrap::DATA_INVALID:
@@ -173,10 +174,23 @@ namespace desktop {
                 }
             case Bootstrap::PATH_VALID:
                 // found a path but need to create user install
-                if (License::check())
-                    return create_user_install(aUserInstallPath);
+                aError = create_user_install(aUserInstallPath);
+
+                {
+                    Reference< XMultiServiceFactory > xMultiServiceFactory( ::comphelper::getProcessServiceFactory() );
+                    rDesktop.RegisterServices( xMultiServiceFactory );
+                }
+
+                if (aError == E_None)
+                {
+                    // if installation was created, check license
+                    if (License::check())
+                        return E_None;
+                    else
+                        return E_License;
+                }
                 else
-                    return E_License;
+                    return aError;
             default:
                 return E_Unknown;
         }
