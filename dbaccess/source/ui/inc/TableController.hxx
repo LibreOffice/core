@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:35:57 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@ namespace dbaui
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
-        sal_Bool        m_bModified : 1;        // is the data modified
         sal_Bool        m_bNew      : 1;        // is true when we create a new table
 
 
