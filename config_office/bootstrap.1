@@ -13,6 +13,8 @@ else if ($platform == "FreeBSD") then
    make linux
 else if ($platform == "OSF1") then
    make tru64
+else if ($platform == "Irix" || $platform == "Irix64") then
+   make irix
 else if ($platform == "Darwin") then
    make macosx
 endif
