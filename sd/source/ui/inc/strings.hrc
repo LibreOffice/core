@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 17:22:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,20 @@
 
 #define STR_DESC_RENAMESLIDE                (RID_APP_START+682)
 #define STR_TITLE_RENAMESLIDE               (RID_APP_START+683)
+
+#define STR_PLACEHOLDER_DESCRIPTION_TITLE       (RID_APP_START+684)
+#define STR_PLACEHOLDER_DESCRIPTION_OUTLINE     (RID_APP_START+685)
+#define STR_PLACEHOLDER_DESCRIPTION_FOOTER      (RID_APP_START+686)
+#define STR_PLACEHOLDER_DESCRIPTION_HEADER      (RID_APP_START+687)
+#define STR_PLACEHOLDER_DESCRIPTION_DATETIME    (RID_APP_START+688)
+#define STR_PLACEHOLDER_DESCRIPTION_NUMBER      (RID_APP_START+689)
+#define STR_PLACEHOLDER_DESCRIPTION_SLIDE       (RID_APP_START+690)
+#define STR_PLACEHOLDER_DESCRIPTION_NOTES       (RID_APP_START+691)
+
+#define STR_FIELD_PLACEHOLDER_HEADER            (RID_APP_START+692)
+#define STR_FIELD_PLACEHOLDER_FOOTER            (RID_APP_START+693)
+#define STR_FIELD_PLACEHOLDER_DATETIME          (RID_APP_START+694)
+#define STR_FIELD_PLACEHOLDER_NUMBER            (RID_APP_START+695)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
