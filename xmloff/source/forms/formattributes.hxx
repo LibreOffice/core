@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:14:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ namespace xmloff
     #define BA_LINKED_CELL              0x00000001
     #define BA_LIST_LINKING_TYPE        0x00000002
     #define BA_LIST_CELL_RANGE          0x00000004
+    #define BA_XFORMS_BIND              0x00000008
+    #define BA_XFORMS_LISTBIND          0x00000010
+    #define BA_XFORMS_SUBMISSION        0x00000020
 
     // flags for event attributes
     #define EA_CONTROL_EVENTS           0x00000001
