@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 14:18:17 $
+ *  last change: $Author: fs $ $Date: 2000-11-14 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,9 @@
 #endif
 #ifndef _UNTOOLS_UCBLOCKBYTES_HXX
 #include <unotools/ucblockbytes.hxx>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 // compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
