@@ -9823,3 +9823,14 @@ _real@8@3ffeccccccccccccd000
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@UNamedValue@beans@star@sun@com@@@2345@@Z
 ?s_pType@?$Sequence@UNamedValue@beans@star@sun@com@@@uno@star@sun@com@@2PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_beans_NamedValue@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUNamedValue@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??RFilterTitleMatch@?%O:\SRC641\src\svtools\source\filepicker\filepicker.cxx519426844@@QAE_NABUFilterEntry@@@Z
+??0?$WeakReference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??1?$WeakReference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?GetTopMostFolderPicker@SvtFolderPicker@@SA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?getTopMostPicker@?%O:\SRC641\src\svtools\source\filepicker\folderpicker.cxx77743758@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@XZ
+?implPushBackPicker@?%O:\SRC641\src\svtools\source\filepicker\folderpicker.cxx77743758@@YAXABV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@Z
+?GetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1042314453@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1042314453@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1042314453@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1042314453@@YAXPAVControl@@JJAAJ@Z
+?lcl_DecoratedFilter@?%O:\SRC641\src\svtools\source\filepicker\iodlgimp.cxx2624823650@@YA?AVString@@ABV2@@Z
