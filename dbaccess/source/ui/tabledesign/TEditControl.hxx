@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:54:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace dbaui
         virtual void Undo();
         virtual void Redo();
         virtual String GetCellText(long nRow, USHORT nColId) const;
-        virtual ULONG GetTotalCellWidth(long nRow, USHORT nColId) const;
+        virtual ULONG GetTotalCellWidth(long nRow, USHORT nColId);
 
         virtual void CopyRows();
         virtual void InsertRows( long nRow );
