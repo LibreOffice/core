@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:19:04 $
+ *  last change: $Author: as $ $Date: 2001-07-09 12:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@
     #undef  ENABLE_TARGETINGDEBUG
     #undef  ENABLE_PLUGINDEBUG
     #undef  ENABLE_MUTEXDEBUG
-    #undef  ENABLE_TIMEMEASURE
+//    #undef  ENABLE_TIMEMEASURE
     #undef  ENABLE_MEMORYMEASURE
 
 #endif
@@ -185,9 +185,11 @@
 //  special macros to measure times of some operations
 //*****************************************************************************************************************
 
+/*OBSOLETE
 #ifndef __FRAMEWORK_MACROS_DEBUG_TIMEMEASURE_HXX_
 #include <macros/debug/timemeasure.hxx>
 #endif
+*/
 
 //*****************************************************************************************************************
 //  end of file
