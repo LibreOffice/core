@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:26:04 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:34:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ russian ] = "Îïòèìàëüíî";
             Text[ polish ] = "Optymalny";
             Text[ japanese ] = "Å“K";
-            Text[ chinese_traditional ] = "³Ì¨Î";
+            Text[ chinese_traditional ] = "³Ì¦X¾Aªº";
             Text[ arabic ] = "ÇáÃãËá";
             Text[ dutch ] = "Optimaal";
             Text[ chinese_simplified ] = "×î¼Ñ";
@@ -383,7 +383,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text [ portuguese_brazilian ] = "Anzahl2" ;
             Text[ chinese_simplified ] = "ÊıÄ¿2";
             Text[ russian ] = "Êîëè÷åñòâî2";
-            Text[ polish ] = "Liczba2";
+            Text[ polish ] = "ILOŒÆ2";
             Text[ japanese ] = "”2";
             Text[ chinese_traditional ] = "¼Æ¥Ø2";
             Text[ arabic ] = "ÚÏÏ2";
