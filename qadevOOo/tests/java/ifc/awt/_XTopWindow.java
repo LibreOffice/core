@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTopWindow.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:30 $
+ *  last change:$Date: 2003-05-27 12:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.awt.XMenuBar;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import java.io.PrintWriter;
@@ -137,7 +138,7 @@ public class _XTopWindow extends MultiMethodTest {
 
 
     protected void before() {
-        aTextDoc = util.WriterTools.createTextDoc(tParam.getMSF());
+        aTextDoc = util.WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -204,7 +205,8 @@ public class _XTopWindow extends MultiMethodTest {
 
         try {
             menu = (XMenuBar) UnoRuntime.queryInterface(XMenuBar.class,
-                tParam.getMSF().createInstance("com.sun.star.awt.MenuBar")) ;
+                ((XMultiServiceFactory)tParam.getMSF()).
+                createInstance("com.sun.star.awt.MenuBar")) ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Can't instanciate MenuBar service") ;
             result = false ;

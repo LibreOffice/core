@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlFormattedFieldModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:07:44 $
+ *  last change:$Date: 2003-05-27 12:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.awt;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.MultiPropertyTest;
 import lib.MultiPropertyTest$PropertyTester;
 import util.utils;
@@ -184,8 +185,9 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
             protected Object getNewValue(String p, Object v) {
                 Object newValue = null;
                 try {
-                    newValue = tParam.getMSF().createInstance(
-                                    "com.sun.star.util.NumberFormatsSupplier");
+                    newValue = ((XMultiServiceFactory)tParam.getMSF())
+                        .createInstance(
+                        "com.sun.star.util.NumberFormatsSupplier");
                 } catch (com.sun.star.uno.Exception e) {}
                 return newValue;
             }
