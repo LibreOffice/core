@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:44:56 $
+ *  last change: $Author: cd $ $Date: 2001-08-14 13:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxFrameLoader::load" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
 
     // Extract URL from given descriptor.
     String rURL;
@@ -415,7 +415,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     // It can detect all types for that an internal filter is known, even if the preselected filter is an external one.
     // Internal filters may have "old" names that must be retrieved from a table using a static method in class SfxFilterContainer, or it may have
     // a "new name that follows the rules for filter names that can be used as configuration keys.
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxFrameLoader::detect" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::detect" );
 
     Reference < XInputStream > xStream;
     String aURL;
