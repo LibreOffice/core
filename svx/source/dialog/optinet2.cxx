@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:23:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 08:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,6 +1099,11 @@ SvxScriptingTabPage::SvxScriptingTabPage( Window* pParent, const SfxItemSet& rSe
     aJavaSecurityCB.SetClickHdl( aLink );
     aClassPathPB.SetClickHdl( LINK(this, SvxScriptingTabPage, ClassPathHdl_Impl) );
 #endif
+
+    aJavaEnableCB.Hide();
+    aClassPathFT.Hide();
+    aClassPathED.Hide();
+    aClassPathPB.Hide();
 }
 
 /*--------------------------------------------------------------------*/
