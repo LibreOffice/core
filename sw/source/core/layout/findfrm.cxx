@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 16:59:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:48:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1319,6 +1319,9 @@ void SwFrm::SetDirFlags( BOOL bVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
+
+            ASSERT( pAsk != this, "Autsch! Stack overflow is about to happen" )
+
             if( pAsk )
             {
                 bVertical = pAsk->IsVertical() ? 1 : 0;
@@ -1339,6 +1342,9 @@ void SwFrm::SetDirFlags( BOOL bVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
+
+            ASSERT( pAsk != this, "Autsch! Stack overflow is about to happen" )
+
             if( pAsk )
                 bRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;
             if( !pAsk || pAsk->bInvalidR2L )
