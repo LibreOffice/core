@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styfitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:14:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILY_ITEM ) )
 
 {
-    USHORT nMask = (USHORT) ReadShortRes();
+    ULONG nMask = ReadLongRes();
 
     if(nMask & RSC_SFX_STYLE_ITEM_LIST)
     {
-        USHORT nCount = (USHORT) ReadShortRes();
-        for( USHORT i = 0; i < nCount; i++ )
+        ULONG nCount = ReadLongRes();
+        for( ULONG i = 0; i < nCount; i++ )
         {
             SfxFilterTupel *pTupel = new SfxFilterTupel;
             pTupel->aName = ReadStringRes();
@@ -120,7 +120,7 @@ SfxStyleFamilyItem::SfxStyleFamilyItem( const ResId &rResId ) :
     }
     if(nMask & RSC_SFX_STYLE_ITEM_STYLEFAMILY)
     {
-        nFamily = (USHORT)ReadShortRes();
+        nFamily = (USHORT)ReadLongRes();
     }
     else
         nFamily = SFX_STYLE_FAMILY_PARA;
@@ -156,8 +156,8 @@ SfxStyleFamilies::SfxStyleFamilies( const ResId& rResId ) :
     Resource( rResId.SetRT( RSC_SFX_STYLE_FAMILIES ).SetAutoRelease( FALSE ) ),
     aEntryList( 4, 1 )
 {
-    USHORT nCount = (USHORT)ReadShortRes();
-    for( USHORT i = 0; i < nCount; i++ )
+    ULONG nCount = ReadLongRes();
+    for( ULONG i = 0; i < nCount; i++ )
     {
         const ResId aResId((RSHEADER_TYPE *)GetClassRes());
         SfxStyleFamilyItem *pItem = new SfxStyleFamilyItem(aResId);
