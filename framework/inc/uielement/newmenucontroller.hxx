@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newmenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:30:34 $
+ *  last change: $Author: rt $ $Date: 2005-03-02 09:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -110,8 +110,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef _COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -178,7 +178,7 @@ namespace framework
             typedef ::std::hash_map< int, ::rtl::OUString > TargetFrameForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
+            void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
@@ -196,9 +196,9 @@ namespace framework
             rtl::OUString       m_aModuleIdentifier;
             rtl::OUString       m_aEmptyDocURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >                 m_xURLTransformer;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
     };
 }
 

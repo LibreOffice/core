@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:32:22 $
+ *  last change: $Author: rt $ $Date: 2005-03-02 09:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,14 +102,14 @@
 #ifndef _COM_SUN_STAR_AWT_MENUITEMSTYLE_HPP_
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -158,8 +158,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::container;
-using namespace drafts::com::sun::star::ui;
-using namespace drafts::com::sun::star::frame;
+using namespace com::sun::star::ui;
 
 static const char SFX_REFERER_USER[] = "private:user";
 
