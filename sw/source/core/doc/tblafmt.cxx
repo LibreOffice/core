@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 15:28:04 $
+ *  last change: $Author: jp $ $Date: 2001-01-30 20:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,7 +899,7 @@ BOOL SwTableAutoFmtTbl::Save() const
     sNm += INET_PATH_TOKEN;
     sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName ));
     SfxMedium aStream(sNm, STREAM_STD_WRITE, TRUE );
-    return Save( *aStream.GetOutStream() );
+    return Save( *aStream.GetOutStream() ) && aStream.Commit();
 }
 
 BOOL SwTableAutoFmtTbl::Load( SvStream& rStream )
