@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: vg $ $Date: 2004-04-02 09:51:25 $
+#   last change: $Author: vg $ $Date: 2004-04-02 09:56:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.102 $ ';
+    $id_str = ' $Revision: 1.103 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -841,7 +841,7 @@ sub usage {
 
 sub init_logging {
     return if (!defined $ENV{CWS_WORK_STAMP} || $show || defined $ENV{NO_LOGGING});
-    my $parameter_list;
+    my $parameter_list = '';
     foreach (@ARGV) {$parameter_list .= "$_\;"};
     $parameter_list = $` if ($parameter_list =~ /;$/o);
 
