@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
-#ifndef _VECTOR_
-#include <vector>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
@@ -73,6 +73,10 @@
 #ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
 #endif
+#ifndef _SV_TASKPANELIST_HXX
+#include <vcl/taskpanelist.hxx>
+#endif
+
 // we only need forward decl here
 namespace com { namespace sun { namespace star {
 
@@ -96,6 +100,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Window;
+class ToolBox;
 class Font;
 class SvNumberFormatter;
 // .........................................................................
@@ -218,6 +223,35 @@ namespace dbaui
                             const ::rtl::OUString& _sName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory,
                             Window* _pParent);
+
+    /** notifySystemWindow adds or remove the given window _pToRegister at the Systemwindow found when search _pWindow.
+        @param  _pWindow
+            The window which is used to search for the SystemWindow.
+        @param  _pToRegister
+            The window which should be added or removed on the TaskPaneList.
+        @param  _rMemFunc
+            The member function which should be called at the SystemWindow when found.
+            Possible values are:
+            ::comphelper::mem_fun(&TaskPaneList::AddWindow)
+            ::comphelper::mem_fun(&TaskPaneList::RemoveWindow)
+    */
+    void notifySystemWindow(Window* _pWindow,
+                            Window* _pToRegister,
+                            ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc);
+
+    /** adjustToolBoxSize checks if the size of the ToolBox is still valid. If not it will be resized.
+        @param  _pToolBox
+            The Toolbox which should be resized.
+    */
+    void adjustToolBoxSize(ToolBox* _pToolBox);
+
+    /** isHiContrast check if we are in hi contrast mode.
+        @param  _pWindow
+            The window we have to check on.
+        @return
+            <TRUE/> if so, otherwise <FALSE/>
+    */
+    sal_Bool isHiContrast(Window* _pWindow);
 
 // .........................................................................
 }
