@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Runner.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:46 $
+ *  last change:$Date: 2003-05-27 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import helper.CfgParser;
 public class Runner {
 
     public static void main(String[] args) {
+        DynamicClassLoader dcl = new DynamicClassLoader();
+
+        // get a class for test parameters
         TestParameters param = new TestParameters();
 
         ClParser cli = new ClParser();
@@ -93,16 +96,14 @@ public class Runner {
 
         System.out.println("TestJob: "+param.get("TestJob"));
 
-        DynamicClassLoader dcl = new DynamicClassLoader();
-
         TestBase toExecute = (TestBase) dcl.getInstance("base."+
                                             (String)param.get("TestBase"));
 
         boolean worked = toExecute.executeTest(param);
 
         if (!worked) {
-            System.out.println("Couldn't execute Job "+param.get("TestJob"));
-            System.exit(1);
+            System.out.println("Job "+param.get("TestJob")+" failed");
+            System.exit(-1);
         } else {
             System.out.println("Job "+param.get("TestJob")+" successful executed");
             System.exit(0);
