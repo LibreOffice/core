@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:50:41 $
+ *  last change:$Date: 2003-12-11 12:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,6 @@
  ************************************************************************/
 package mod._sw;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-import util.WriterTools;
-
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
@@ -88,6 +79,16 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XSelectionSupplier;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.SOfficeFactory;
+import util.WriterTools;
 
 
 public class SwXTextDocument extends TestCase {
@@ -125,7 +126,8 @@ public class SwXTextDocument extends TestCase {
 
         try {
             log.println("creating a textdocument");
-            xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
+            xTextDoc = WriterTools.createTextDoc(
+                               (XMultiServiceFactory) Param.getMSF());
 
             XText oText = xTextDoc.getText();
             XTextCursor oCursor = oText.createTextCursor();
@@ -236,7 +238,8 @@ public class SwXTextDocument extends TestCase {
             SOfficeFactory.insertTextContent(xTextDoc, (XTextContent) oTC);
 
             log.println("creating a second textdocument");
-            xSecondTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
+            xSecondTextDoc = WriterTools.createTextDoc(
+                                     (XMultiServiceFactory) Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
@@ -267,6 +270,9 @@ public class SwXTextDocument extends TestCase {
 
         XController cont1 = model1.getCurrentController();
         XController cont2 = model2.getCurrentController();
+
+        cont1.getFrame().setName("cont1");
+        cont2.getFrame().setName("cont2");
 
         XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
                                          XSelectionSupplier.class, cont1);
