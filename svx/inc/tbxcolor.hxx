@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcolor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:38:33 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _SVX_TBXCOLOR_HXX
 #define _SVX_TBXCOLOR_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef INCLUDED_SVXDLLAPI_H
@@ -83,7 +83,7 @@ namespace svx
         bool                                                    m_bDocking;
         ::rtl::OUString                                         m_sToolboxResName;
         ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::frame::XLayoutManager >   m_xLayouter;
+            ::com::sun::star::frame::XLayoutManager >   m_xLayouter;
 
     public:
         ToolboxAccess( const ::rtl::OUString& rToolboxName );
