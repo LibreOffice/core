@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 15:36:47 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,7 +1566,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_31
     Text [ danish ] = "StarOffice 3.0 tekst" ;
     Text [ italian ] = "Test StarOffice 3.0" ;
     Text [ spanish ] = "Texto de StarOffice 3.0" ;
-    Text [ french ] = "Texte StarOffice 3.0" ;
+    Text [ french ] = "StarOffice 3.0 Texte" ;
     Text [ dutch ] = "StarOffice 3.0 Tekst" ;
     Text [ portuguese ] = "StarOffice 3.0 Text" ;
     Text[ chinese_simplified ] = "StarOffice 3.0 文本";
@@ -1593,7 +1593,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE_40
     Text [ danish ] = "StarOffice 4.0 tekst" ;
     Text [ italian ] = "Testo StarOffice 4.0" ;
     Text [ spanish ] = "Texto de StarOffice 4.0" ;
-    Text [ french ] = "Texte StarOffice 4.0" ;
+    Text [ french ] = "StarOffice 4.0 Texte" ;
     Text [ dutch ] = "StarOffice 4.0 Tekst" ;
     Text [ portuguese ] = "Texto (StarOffice 4.0)" ;
     Text[ chinese_simplified ] = "StarOffice 4.0 文本";
@@ -1620,7 +1620,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text [ danish ] = "StarOffice 4.0 tekst" ;
     Text [ italian ] = "Testo StarOffice 5.0" ;
     Text [ spanish ] = "Texto de StarOffice 5.0" ;
-    Text [ french ] = "Texte StarOffice 5.0" ;
+    Text [ french ] = "StarOffice 5.0 Texte" ;
     Text [ dutch ] = "StarOffice 5.0 Tekst" ;
     Text [ portuguese ] = "Texto (StarOffice 5.0)" ;
     Text[ chinese_simplified ] = "StarOffice 5.0 文本";
