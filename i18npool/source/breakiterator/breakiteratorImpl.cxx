@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:02:01 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,8 @@ Boundary SAL_CALL BreakIteratorImpl::getWordBoundary( const OUString& Text, sal_
                 if (next != prev) {
                     if (next == nPos && next != len)
                         bDirection = sal_True;
+                    else if (prev == nPos && prev != 0)
+                        bDirection = sal_False;
                     else
                         nPos = bDirection ? next : prev;
                 }
@@ -253,7 +255,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::isEndWord( const OUString& Text, sal_Int32 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale ) throw(RuntimeException)
 {
-        if (nStartPos < 0 || nStartPos >= Text.getLength())
+        if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
         return LBI->beginOfSentence(Text, nStartPos, rLocale);
 }
@@ -261,7 +263,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfSentence( const OUString& Text, sal
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
         const Locale &rLocale ) throw(RuntimeException)
 {
-        if (nStartPos < 0 || nStartPos >= Text.getLength())
+        if (nStartPos < 0 || nStartPos > Text.getLength())
             return -1;
         return LBI->endOfSentence(Text, nStartPos, rLocale);
 }
