@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:43:04 $
+ *  last change: $Author: os $ $Date: 2001-07-02 12:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,29 +168,8 @@ TabPage RID_TP_GENERAL
     {
         Pos = MAP_APPFONT( FT_POS, 20 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
-        Text = "A~utor";
-        Text[English]= "Author";
-        Text[ english_us ] = "~Author";
-        Text[ portuguese ] = "A~utor";
-        Text[ russian ] = "Àâòîð";
-        Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ dutch ] = "~Auteur";
-        Text[ french ] = "A~uteur";
-        Text[ spanish ] = "A~utor";
-        Text[ italian ] = "A~utore";
-        Text[ danish ] = "Forfatter";
-        Text[ swedish ] = "Författare";
-        Text[ polish ] = "Autor";
-        Text[ portuguese_brazilian ] = "Author";
-        Text[ japanese ] = "’˜ŽÒ(~A)";
-        Text[ korean ] = "~ÀÛ¼ºÀÚ";
-        Text[ chinese_simplified ] = "×÷Õß(~A)";
-        Text[ chinese_traditional ] = "§@ªÌ(~A)";
-        Text[ arabic ] = "ÇáãÄáÝ";
-        Text[ turkish ] = "Yazar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~utor";
-        Text[ finnish ] = "~Laatija";
+        Text = "A~utor(en)" ;
+        Text [ ENGLISH ] = "Author(s)" ;
     };
     FixedText FT_TITLE
     {
@@ -448,29 +427,8 @@ TabPage RID_TP_GENERAL
     {
         Pos = MAP_APPFONT( FT_POS_MIDDLE, 83 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
-        Text = "Buch Nummer";
-        Text[English]= "Volume";
-        Text[ english_us ] = "Volume";
-        Text[ portuguese ] = "Volume";
-        Text[ russian ] = "Òîì";
-        Text[ greek ] = "Ôüìïò";
-        Text[ dutch ] = "Deel nummer";
-        Text[ french ] = "Volume";
-        Text[ spanish ] = "Tomo";
-        Text[ italian ] = "Numero libro";
-        Text[ danish ] = "Bind";
-        Text[ swedish ] = "Volym";
-        Text[ polish ] = "Tom";
-        Text[ portuguese_brazilian ] = "Volume";
-        Text[ japanese ] = "Šª";
-        Text[ korean ] = "±Ç";
-        Text[ chinese_simplified ] = "Êé¼®±àºÅ";
-        Text[ chinese_traditional ] = "®Ñ¸¹";
-        Text[ arabic ] = "ÑÞã ÇáãÌáÏ";
-        Text[ turkish ] = "Kitap no.";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tomo";
-        Text[ finnish ] = "Laitos";
+        Text = "Band" ;
+        Text [ ENGLISH ] = "Volume" ;
     };
     FixedText FT_HOWPUBLISHED
     {
@@ -560,57 +518,15 @@ TabPage RID_TP_GENERAL
     {
         Pos = MAP_APPFONT( FT_POS_RIGHT, 97 );
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
-        Text = "Universit~ät/Hochschule";
-        Text[English]= "University";
-        Text[ english_us ] = "Unive~rsity";
-        Text[ portuguese ] = "~Universidade/Escola Sup.";
-        Text[ russian ] = "ÂÓÇ";
-        Text[ greek ] = "Á.Å.É./Ô.Å.É.";
-        Text[ dutch ] = "~Universeit/Hogeschool";
-        Text[ french ] = "~Université/École supérieure";
-        Text[ spanish ] = "~Universidad";
-        Text[ italian ] = "Università";
-        Text[ danish ] = "Universitet/læreanstalt";
-        Text[ swedish ] = "Universitet/högskola";
-        Text[ polish ] = "Uniwersytet/Szko³a wy¿sza";
-        Text[ portuguese_brazilian ] = "University";
-        Text[ japanese ] = "‹³ˆç‹@ŠÖ–¼(~R)";
-        Text[ korean ] = "´ëÇÐ±³(~R)";
-        Text[ chinese_simplified ] = "´óÑ§(~R)";
-        Text[ chinese_traditional ] = "°ªµ¥°|®Õ(~R)";
-        Text[ arabic ] = "ÇáÌÇãÚÉ";
-        Text[ turkish ] = "Üniversite/yüksek okul";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Universidad";
-        Text[ finnish ] = "Yli~opisto";
+        Text = "Hochschule/Universit~ät" ;
+        Text [ ENGLISH ] = "University" ;
     };
     FixedText FT_REPORT
     {
         Pos = MAP_APPFONT( FT_POS, 111);
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
-        Text = "Re~port";
-        Text[English]= "Report";
-        Text[ english_us ] = "Re~port";
-        Text[ portuguese ] = "~Relatório";
-        Text[ russian ] = "Îò÷åò";
-        Text[ greek ] = "ÁíáöïñÜ";
-        Text[ dutch ] = "~Reportage";
-        Text[ french ] = "Rapport";
-        Text[ spanish ] = "I~nforme";
-        Text[ italian ] = "Relazione";
-        Text[ danish ] = "Rapport";
-        Text[ swedish ] = "Rapport";
-        Text[ polish ] = "Raport";
-        Text[ portuguese_brazilian ] = "Report";
-        Text[ japanese ] = "ÚÎß°Ä(~P)";
-        Text[ korean ] = "¸®Æ÷Æ®(~P)";
-        Text[ chinese_simplified ] = "±¨¸æ(~P)";
-        Text[ chinese_traditional ] = "³ø§i(~P)";
-        Text[ arabic ] = "ÊÞÑíÑ";
-        Text[ turkish ] = "Rapor";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "I~nforme";
-        Text[ finnish ] = "Ra~portti";
+        Text = "Art des Berichts" ;
+        Text [ ENGLISH ] = "Type of proceedings" ;
     };
     FixedText FT_MONTH
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-29 21:55:10 $
+ *  last change: $Author: os $ $Date: 2001-07-02 12:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: obo $ $Date: 2001-06-29 21:55:10 $ $Revision: 1.15 $
+// $Author: os $ $Date: 2001-07-02 12:11:10 $ $Revision: 1.16 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -192,28 +192,8 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 229 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Autor";
-        Text [ENGLISH] = "Author";
-        Text[ english_us ] = "Author";
-        Text[ portuguese ] = "Autor";
-        Text[ russian ] = "Àâòîð";
-        Text[ greek ] = "ÓõããñáöÝáò";
-        Text[ dutch ] = "Auteur";
-        Text[ french ] = "Auteur";
-        Text[ spanish ] = "Autor";
-        Text[ italian ] = "Autore";
-        Text[ danish ] = "Forfatter";
-        Text[ swedish ] = "Författare";
-        Text[ polish ] = "Autor";
-        Text[ portuguese_brazilian ] = "Author";
-        Text[ japanese ] = "’˜ŽÒ";
-        Text[ korean ] = "ÀÛ¼ºÀÚ";
-        Text[ chinese_simplified ] = "×÷Õß";
-        Text[ chinese_traditional ] = "§@ªÌ";
-        Text[ arabic ] = "ÇáãÄáÝ";
-        Text[ turkish ] = "Yazan";
-        Text[ catalan ] = "Autor";
-        Text[ finnish ] = "Laatija";
+        Text = "A~utor(en)" ;
+        Text [ ENGLISH ] = "Author(s)" ;
     };
     ListBox LB_AUTHOR
     {
@@ -832,8 +812,8 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Hochschule";
-        Text [ENGLISH] = "School";
+        Text = "Hochschule/Universit~ät" ;
+        Text [ ENGLISH ] = "University" ;
         Text[ english_us ] = "University";
         Text[ portuguese ] = "Universidade";
         Text[ russian ] = "ÂÓÇ";
@@ -865,8 +845,8 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 118 , 119 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Serie";
-        Text [ENGLISH] = "Series";
+        Text = "Ser~ie";
+        Text[English]= "Series";
         Text[ english_us ] = "Series";
         Text[ portuguese ] = "Série";
         Text[ russian ] = "Ñåðèÿ";
@@ -933,8 +913,8 @@ ModalDialog RID_DLG_MAPPING
     {
         Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Band";
-        Text [ENGLISH] = "Volume";
+        Text = "Band" ;
+        Text [ ENGLISH ] = "Volume" ;
         Text[ english_us ] = "Volume";
         Text[ portuguese ] = "Volume";
         Text[ russian ] = "Òîì";
