@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:46:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -903,8 +906,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if( pGal->IsLinkage() )
                     {
                         // Verknuepft
-                        aGrfName = pGal->GetURL().PathToFileName();
-                        aGrfName = URIHelper::SmartRelToAbs(aGrfName);
+                        aGrfName = pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
                         aFltName = pGal->GetFilterName();
                     }
 
@@ -2634,8 +2636,19 @@ int SwBaseShell::InsertGraphic( const String &rPath, const String &rFilter,
         SwWrtShell &rSh = GetShell();
         rSh.StartAction();
         if( bLink )
-            rSh.Insert( URIHelper::SmartRelToAbs( rPath ),
+        {
+            SwDocShell* pDocSh = GetView().GetDocShell();
+            INetURLObject aTemp(
+                pDocSh->HasName() ?
+                    pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
+                    rtl::OUString());
+
+            String sURL = URIHelper::SmartRel2Abs(
+                aTemp, rPath, URIHelper::GetMaybeFileHdl() );
+
+            rSh.Insert( sURL,
                         rFilter, aGrf, pFrmMgr, bRule );
+        }
         else
             rSh.Insert( aEmptyStr, aEmptyStr, aGrf, pFrmMgr );
         // nach dem EndAction ist es zu spaet, weil die Shell dann schon zerstoert sein kann
