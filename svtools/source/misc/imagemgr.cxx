@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-29 12:08:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 12:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 #include "svtools.hrc"
 #include "imagemgr.hrc"
@@ -198,9 +201,9 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG },
     { "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0 },
     { "sbl",   FALSE, 0,                                     IMG_MACROLIB },
-    { "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0 },
+    { "sch",   FALSE, 0,                                     0 },
     { "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
-    { "sdb",   FALSE, 0,                                     IMG_DATABASE },
+    { "sdb",   FALSE, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
     { "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
     { "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
     { "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED },
@@ -543,7 +546,7 @@ USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
     {
         SvEaMgr aMgr( sURL );
         String aType;
-            if( aMgr.GetFileType( aType ) )
+        if ( aMgr.GetFileType( aType ) )
         {
             for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
                 if ( Mappings[ nIndex ]._pExt == aType )
@@ -787,6 +790,22 @@ Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 
 //****************************************************************************
 
+void ReplaceStarOfficeVar( String& _rDescription )
+{
+    static String sVariable( RTL_CONSTASCII_STRINGPARAM( "%STAROFFICE" ) );
+    static String sProductName;
+    if ( sProductName.Len() == 0 )
+    {
+        ::rtl::OUString sTemp;
+        ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME ) >>= sTemp;
+        if ( sTemp.equalsAscii( "StarSuite" ) == sal_False )
+            sProductName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarOffice" ) );
+        else
+            sProductName = String( sTemp );
+    }
+    _rDescription.SearchAndReplace( sVariable, sProductName );
+}
+
 String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObject, sal_Bool bDetectFolder )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aTimeLog, "svtools", "hb93813", "SvFileInformationManager::GetDescription_Impl()" );
@@ -853,6 +872,7 @@ String SvFileInformationManager::GetDescription_Impl( const INetURLObject& rObje
         sDescription += ')';
     }
 
+    ReplaceStarOfficeVar( sDescription );
     return sDescription;
 }
 
