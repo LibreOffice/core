@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:00 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
+#ifndef _SV_VIRDEV_HXX
+#include <virdev.hxx>
+#endif
 
 // =======================================================================
 
@@ -177,6 +180,9 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
             pGraphics->DrawRect( aRect, nHorzRound, nVertRound );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
 // -----------------------------------------------------------------------
@@ -236,6 +242,9 @@ void OutputDevice::DrawEllipse( const Rectangle& rRect )
         pGraphics->DrawEllipse( aRect );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawEllipse( rRect );
 }
 
 // -----------------------------------------------------------------------
@@ -294,6 +303,9 @@ void OutputDevice::DrawArc( const Rectangle& rRect,
                             ImplLogicToDevicePixel( rEndPt ) );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
 }
 
 // -----------------------------------------------------------------------
@@ -359,6 +371,9 @@ void OutputDevice::DrawPie( const Rectangle& rRect,
                             ImplLogicToDevicePixel( rEndPt ) );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
 }
 
 // -----------------------------------------------------------------------
@@ -424,4 +439,7 @@ void OutputDevice::DrawChord( const Rectangle& rRect,
                               ImplLogicToDevicePixel( rEndPt ) );
     }
 #endif
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawChord( rRect, rStartPt, rEndPt );
 }
