@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 06:40:09 $
+ *  last change: $Author: os $ $Date: 2001-08-29 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
+#endif
 
 using namespace utl;
 using namespace rtl;
@@ -142,25 +145,26 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                 case 1:
                 {
 //all values are contained as colon-separated 1/100 mm values except for the
-//continuous flag (0/1)
+//continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
                     USHORT nTokenCount = sMeasure.GetTokenCount(';');
                     xub_StrLen nIdx = 0;
                     for(USHORT i = 0; i < nTokenCount; i++)
                     {
-                        int nVal = sMeasure.GetToken(i, ';' ).ToInt32();
+                        String sToken(sMeasure.GetToken(i, ';' ));
+                        int nVal = sToken.ToInt32();
                         switch(i)
                         {
-                            case 0 : pNewRec->nRows     = nVal; break;
-                            case 1 : pNewRec->nCols     = nVal; break;
-                            case 2 : pNewRec->lWidth    = MM100_TO_TWIP(nVal);break;
-                            case 3 : pNewRec->lHeight   = MM100_TO_TWIP(nVal); break;
-                            case 4 : pNewRec->lHDist    = MM100_TO_TWIP(nVal);break;
-                            case 5 : pNewRec->lVDist    = MM100_TO_TWIP(nVal);break;
-                            case 6 : pNewRec->lLeft     = MM100_TO_TWIP(nVal);break;
-                            case 7 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);break;
-                            case 8 : pNewRec->bCont = nVal ? sal_True : sal_False; break;
+                            case 0 : pNewRec->bCont = sToken.GetChar(0) == 'C'; break;
+                            case 1 : pNewRec->lHDist    = MM100_TO_TWIP(nVal);break;
+                            case 2 : pNewRec->lVDist    = MM100_TO_TWIP(nVal);break;
+                            case 3 : pNewRec->lWidth    = MM100_TO_TWIP(nVal);break;
+                            case 4 : pNewRec->lHeight   = MM100_TO_TWIP(nVal); break;
+                            case 5 : pNewRec->lLeft     = MM100_TO_TWIP(nVal);break;
+                            case 6 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);break;
+                            case 7 : pNewRec->nRows     = nVal; break;
+                            case 8 : pNewRec->nCols     = nVal; break;
                         }
                     }
                 }
@@ -188,15 +192,15 @@ Sequence<PropertyValue> lcl_CreateProperties(
             case 1:
             {
                 OUString sTmp;
-                sTmp += OUString::valueOf(rRec.nRows   );          sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nCols   );          sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );          sTmp += sColon;
-                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHeight) );          sTmp += sColon;
+                sTmp += C2U( rRec.bCont ? "C" : "S");                            sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHDist) );           sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lVDist));            sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lWidth)  );          sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHeight) );          sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lLeft)   );          sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lUpper)  );          sTmp += sColon;
-                sTmp += OUString::valueOf((sal_Int32)(rRec.bCont ? 1 : 0));
+                sTmp += OUString::valueOf(rRec.nRows   );          sTmp += sColon;
+                sTmp += OUString::valueOf(rRec.nCols   );
                 pValues[nProp].Value <<= sTmp;
             }
             break;
@@ -207,11 +211,12 @@ Sequence<PropertyValue> lcl_CreateProperties(
 //-----------------------------------------------------------------------------
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
-    const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
+    OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
+    const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
     const OUString* pLabels = aLabels.getConstArray();
     for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
     {
-        OUString sPrefix(rManufacturer);
+        OUString sPrefix(sManufacturer);
         sPrefix += C2U("/");
         sPrefix += pLabels[nLabel];
         sPrefix += C2U("/");
@@ -235,11 +240,12 @@ sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rt
     }
     if(bFound)
     {
-        const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
+        OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
+        const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
         const OUString* pLabels = aLabels.getConstArray();
         for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
         {
-            OUString sPrefix(rManufacturer);
+            OUString sPrefix(sManufacturer);
             sPrefix += C2U("/");
             sPrefix += pLabels[nLabel];
             sPrefix += C2U("/");
@@ -294,12 +300,13 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
         }
     }
 
-    const Sequence<OUString> aLabels = GetNodeNames(rManufacturer);
+    OUString sManufacturer(wrapConfigurationElementName(rManufacturer));
+    const Sequence<OUString> aLabels = GetNodeNames(sManufacturer);
     const OUString* pLabels = aLabels.getConstArray();
     OUString sFoundNode;
     for(sal_Int32 nLabel = 0; nLabel < aLabels.getLength(); nLabel++)
     {
-        OUString sPrefix(rManufacturer);
+        OUString sPrefix(sManufacturer);
         sPrefix += C2U("/");
         sPrefix += pLabels[nLabel];
         sPrefix += C2U("/");
