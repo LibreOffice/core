@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: sb $ $Date: 2002-11-04 15:29:59 $
+#   last change: $Author: obo $ $Date: 2002-11-18 16:22:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,7 +125,7 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/unload.obj		\
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tresimpl.obj    \
-            $(SLO)$/math.obj
+            $(OBJ)$/math.obj
 
 #.ENDIF
 
