@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyuri.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 07:20:58 $
+ *  last change: $Author: kso $ $Date: 2001-07-06 07:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ void HierarchyUri::init() const
         {
             // error, but remember that we did a init().
             m_aPath = rtl::OUString::createFromAscii( "/" );
+            return;
         }
 
         // Scheme is case insensitive.
