@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 18:02:54 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 17:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,23 +208,22 @@ protected:
                                           const SwTableEntry *pTable,
                                           sal_uInt8 nCount);
 
-    static String& getNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
+    static void fillNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
     static const String& getNameFromId ( sal_uInt16 nId, const String &rName, sal_Bool bProgName );
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, sal_Bool bProgName );
 public:
     // This gets the UI Name from the programmatic name
-    static       String& GetUIName ( String& rFillName, SwGetPoolIdFromName );
     static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
-    // This gets the UI Name from the Pool ID
-    static       String& GetUIName ( sal_uInt16 nId, String& rFillName );
-    static const String& GetUIName ( sal_uInt16 nId, const String& rName );
-
     // Get the programmatic Name from the UI name
-    static       String& GetProgName( String& rName, SwGetPoolIdFromName );
     static const String& GetProgName( const String& rName, SwGetPoolIdFromName );
+
+    // This gets the UI Name from the Pool ID
+    static          void FillUIName ( sal_uInt16 nId, String& rFillName );
+    static const String& GetUIName  ( sal_uInt16 nId, const String& rName );
+
     // This gets the programmatic Name from the Pool ID
-    static       String& GetProgName( sal_uInt16 nId, String& rFillName );
-    static const String& GetProgName( sal_uInt16 nId, const String& rName );
+    static          void FillProgName( sal_uInt16 nId, String& rFillName );
+    static const String& GetProgName ( sal_uInt16 nId, const String& rName );
 
     // This gets the PoolId from the UI Name
     static sal_uInt16 GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName );

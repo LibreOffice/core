@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 12:40:39 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 17:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,11 +624,6 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     return *pHash;
 }
 // This gets the UI Name from the programmatic name
-String& SwStyleNameMapper::GetUIName ( String& rName, SwGetPoolIdFromName eFlags )
-{
-    sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
-}
 const String& SwStyleNameMapper::GetUIName ( const String& rName, SwGetPoolIdFromName eFlags )
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
@@ -636,11 +631,6 @@ const String& SwStyleNameMapper::GetUIName ( const String& rName, SwGetPoolIdFro
 }
 
 // Get the programmatic Name from the UI name
-String& SwStyleNameMapper::GetProgName( String& rName, SwGetPoolIdFromName eFlags )
-{
-    sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
-    return nId != USHRT_MAX ? GetProgName( nId, rName ) : rName;
-}
 const String& SwStyleNameMapper::GetProgName( const String& rName, SwGetPoolIdFromName eFlags )
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
@@ -732,7 +722,7 @@ const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rF
     }
     return pStrArr ? rFillName : *(pStrArr->operator[] ( nId - nStt ) );
 }
-String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, String& rFillName, sal_Bool bProgName )
+void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, sal_Bool bProgName )
 {
     sal_uInt16 nStt = 0;
     const SvStringsDtor* pStrArr = 0;
@@ -817,12 +807,11 @@ String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, String& rFillName, sal
     }
     if (pStrArr)
         rFillName = *(pStrArr->operator[] ( nId - nStt ) );
-    return rFillName;
 }
 // Get the UI Name from the pool ID
-String& SwStyleNameMapper::GetUIName ( sal_uInt16 nId, String& rFillName )
+void SwStyleNameMapper::FillUIName ( sal_uInt16 nId, String& rFillName )
 {
-    return getNameFromId ( nId, rFillName, sal_False );
+    fillNameFromId ( nId, rFillName, sal_False );
 }
 // Get the UI Name from the pool ID
 const String& SwStyleNameMapper::GetUIName ( sal_uInt16 nId, const String& rName )
@@ -831,9 +820,9 @@ const String& SwStyleNameMapper::GetUIName ( sal_uInt16 nId, const String& rName
 }
 
 // Get the programmatic Name from the pool ID
-String& SwStyleNameMapper::GetProgName ( sal_uInt16 nId, String& rFillName )
+void SwStyleNameMapper::FillProgName ( sal_uInt16 nId, String& rFillName )
 {
-    return getNameFromId ( nId, rFillName, sal_True );
+    fillNameFromId ( nId, rFillName, sal_True );
 }
 // Get the programmatic Name from the pool ID
 const String& SwStyleNameMapper::GetProgName ( sal_uInt16 nId, const String& rName )
