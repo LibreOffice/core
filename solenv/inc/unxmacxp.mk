@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-14 07:24:56 $
+#   last change: $Author: pluby $ $Date: 2000-12-14 07:51:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,10 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DSTLPORT_VERSIO
 
 # Temporary settings to enable VCL test code. These should be deleted once
 # VCL development is complete.
+.IF "$(dbgutil)"==""
 dbgutil=true
 product=
+.ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
 JAVADEF=-DSOLAR_JAVA
@@ -108,6 +110,10 @@ CFLAGSNOOPT=-O
 CFLAGSOUTOBJ=-o
 
 SOLARVERSHLLIBS=$(shell -$(FIND) $(SOLARVERSION)$/$(INPATH)$/lib -name $(DLLPRE)\*$(DLLPOST))
+.IF "$(STLPORT4)"!=""
+SOLARVERSHLLIBS+=$(shell -$(FIND) $(STLPORT4)$/lib -name $(DLLPRE)\*$(DLLPOST))
+.ENDIF
+
 LINK=cc
 LINKFLAGS=-dynamic -framework System -framework Cocoa -lcc_dynamic -lstdc++ \
   $(foreach,i,$(SOLARVERSHLLIBS) '-dylib_file @executable_path$/$(i:f):$i')
