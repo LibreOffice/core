@@ -1,0 +1,10 @@
+BASCTL_1.0 {
+    global:
+        CreateObjBasicDocShellDll;
+        InitBasicIDEDll;
+        DeInitBasicIDEDll;
+        basicide_choose_macro;
+        basicide_handle_basic_error;
+    local:
+    *;
+};
