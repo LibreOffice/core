@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-24 12:43:00 $
+#   last change: $Author: hjs $ $Date: 2002-01-31 12:45:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -551,6 +551,10 @@ SRS9TARGET=$(BIN)$/$(RES9TARGET).res
 .IF "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
 .IF "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+.ELSE			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
+.IF "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVACLASSFILES)"
+JAVAFILES=	$(foreach,i,$(JAVACLASSFILES) $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(i:b).java))
+.ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVACLASSFILES)"
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
 .ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
