@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 15:13:25 $
+ *  last change: $Author: os $ $Date: 2000-11-03 08:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5838,9 +5838,14 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     DBG_ERROR("ToxMark");
                 break;
                 case RES_TXTATR_REFMARK:
+                    pUnoCrsr->Right(1);
+                    bAttrFound = sal_True;
                     lcl_InsertRefMarkPortion(
                         rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
                     ePortionType = PORTION_TEXT;
+                    if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
+                            pUnoCrsr->Exchange();
+                    pUnoCrsr->DeleteMark();
                 break;
                 default:
                     DBG_ERROR("was fuer ein Attribut?");
