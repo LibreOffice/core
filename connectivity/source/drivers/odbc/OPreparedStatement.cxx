@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
                             parameterIndex,
                             bindBuf,
                             getLengthBuf(parameterIndex),
-                            (SWORD)_nType,
+                            fSqlType,
                             sal_False,
                             m_pConnection->useOldDateFormat(),
                             _pData,

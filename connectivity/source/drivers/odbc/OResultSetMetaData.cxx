@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
     {
         try
         {
-            nType = getNumColAttrib(column,SQL_DESC_TYPE);
+            nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE);
             if(nType == SQL_UNKNOWN_TYPE)
-                nType = getNumColAttrib(column,SQL_DESC_CONCISE_TYPE );
+                nType = getNumColAttrib(column, SQL_DESC_TYPE);
             nType = OTools::MapOdbcType2Jdbc(nType);
         }
         catch(SQLException& ) // in this case we have an odbc 2.0 driver

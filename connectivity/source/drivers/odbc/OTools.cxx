@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-30 14:09:44 $
+ *  last change: $Author: oj $ $Date: 2001-12-03 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ void OTools::bindParameter( OConnection* _pConnection,
     OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize);
     if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
         nColumnSize = 1;
+
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
@@ -272,14 +273,17 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
         case SQL_DATE:
             *(DATE_STRUCT*)_pData = *(DATE_STRUCT*)_pValue;
             *pLen = (SDWORD)sizeof(DATE_STRUCT);
+            _nColumnSize = 10;
             break;
         case SQL_TIME:
             *(TIME_STRUCT*)_pData = *(TIME_STRUCT*)_pValue;
             *pLen = (SDWORD)sizeof(TIME_STRUCT);
+            _nColumnSize = 8;
             break;
         case SQL_TIMESTAMP:
             *(TIMESTAMP_STRUCT*)_pData = *(TIMESTAMP_STRUCT*)_pValue;
             *pLen = (SDWORD)sizeof(TIMESTAMP_STRUCT);
+            _nColumnSize = 19;
             break;
     }
 }
