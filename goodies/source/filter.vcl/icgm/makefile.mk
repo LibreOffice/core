@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-02 23:22:09 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,15 +154,6 @@ SLOFILES =	$(SLO)$/cgm.obj		\
             $(SLO)$/bitmap.obj	\
             $(SLO)$/elements.obj
 #			$(SLO)$/svdem.obj
-
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore m ultiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbicgm.obj
-.ENDIF
-
-
 
 SHL1TARGET	=	icg$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB	=	icgm

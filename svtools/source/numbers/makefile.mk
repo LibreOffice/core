@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:46:27 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,11 +115,6 @@ EXCEPTIONSFILES= \
         $(SLO)$/numuno.obj \
         $(SLO)$/numfmuno.obj \
         $(SLO)$/supservs.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symb ols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbnumbers.obj
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 

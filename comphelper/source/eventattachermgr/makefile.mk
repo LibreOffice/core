@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 17:30:20 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,11 +102,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	$(SLO)$/eventattachermgr.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbeventattachermgr.obj 
-.ENDIF
 
 # --- Targets ----------------------------------
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 17:30:20 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:13:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,6 @@ SLOFILES=	$(SLO)$/interaction.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/querydeep.obj \
             $(SLO)$/regpathhelper.obj \
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbinteraction.obj 
-.ENDIF
 
 # --- Targets ----------------------------------
 

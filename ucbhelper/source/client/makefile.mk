@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kso $ $Date: 2001-02-05 15:52:01 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,13 +85,6 @@ SLOFILES=\
                 $(SLO)$/fileidentifierconverter.obj \
         $(SLO)$/activedatasink.obj
 
-.ENDIF
-
-# SCO and MACOSX: the linker does know about weak
-# symbols, but we can't ignore multiple defined symbols
-
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbclient.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------

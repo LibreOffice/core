@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:45 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,11 +98,6 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/xception.obj	\
                 $(SLO)$/evtque.obj
 
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
-
 # $(SLO)$/evtque.obj
 
 .IF "$(GUI)"=="WIN"
@@ -136,11 +131,6 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/dynload.obj		\
                 $(OBJ)$/xception.obj	\
                 $(OBJ)$/evtque.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-OBJFILES+=$(OBJ)$/staticmb.obj
-.ENDIF
 
 # $(SLO)$/evtque.obj
 .ENDIF

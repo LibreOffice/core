@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mba $ $Date: 2001-01-17 13:55:23 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,15 +98,6 @@ SLOFILES=\
                         $(SLO)$/ucbhelper.obj \
                         $(SLO)$/ucbstreamhelper.obj \
                         $(SLO)$/tempfile.obj
-
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism
-# for GCC won't work.  SCO and MACOSX: the linker does know about weak
-# symbols, but we can't ignore multiple defined symbols
-
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbucbhelper.obj
-.ENDIF
 
 # --- Targets ----------------------------------
 
