@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-04 16:43:42 $
+ *  last change: $Author: aw $ $Date: 2000-12-11 11:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2531,6 +2531,9 @@ void E3dScene::SetItemSet( const SfxItemSet& rSet )
 
 void E3dScene::PreSave()
 {
+    // call parent
+    E3dObject::PreSave();
+
     // set at all contained objects
     sal_uInt32 nCount(pSub->GetObjCount());
     for(sal_uInt32 a(0); a < nCount; a++)
@@ -2539,6 +2542,9 @@ void E3dScene::PreSave()
 
 void E3dScene::PostSave()
 {
+    // call parent
+    E3dObject::PostSave();
+
     // set at all contained objects
     sal_uInt32 nCount(pSub->GetObjCount());
     for(sal_uInt32 a(0); a < nCount; a++)
