@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ protected:
     virtual String  GetEntryText( USHORT nEntryNo ) = 0;
 
     virtual USHORT  GetHiddenCount( USHORT nEntryNo );
+    virtual BOOL    IsLayoutRTL();
+    virtual BOOL    IsMirrored();
 
     virtual void    SetEntrySize( USHORT nPos, USHORT nNewWidth ) = 0;
     virtual void    HideEntries( USHORT nStart, USHORT nEnd ) = 0;
