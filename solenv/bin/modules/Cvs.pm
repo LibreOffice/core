@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2002-10-16 13:21:10 $
+#   last change: $Author: hr $ $Date: 2002-11-06 14:30:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,6 +239,7 @@ sub get_branch_rev
 
 #### methods to manipulate archive ####
 
+# Delete a revision. Use with care.
 sub delete_rev
 {
     my $self = shift;
@@ -258,10 +259,9 @@ sub delete_rev
     return 0;
 }
 
-# Update archive with options $options.Returns 'success' and new revision
-# on success or reason of failure.
-# If no update happens because file was up-to-date consider operation
-# a success.
+# Update archive with options $options .Returns 'success' and new revision
+# on success or reason of failure. If no update happens because file was
+# up-to-date consider operation a success.
 sub update
 {
     my $self = shift;
@@ -322,6 +322,51 @@ sub commit
     return wantarray ? ('success', $new_revision) : 'success';
 }
 
+# Tag file with specified tag. Options my be specified,
+# '-b' for a branch tag and -F for forced tag are valid options.
+# Retagging without moving the tag is considered a succesful
+# operation.
+sub tag
+{
+    my $self    = shift;
+    my $tag     = shift;
+    my $options = shift;
+
+    return 'invalidtag' if !$tag;
+    # check for valid options
+    if ( $options ) {
+        my @elem = split(' ', $options);
+        foreach (@elem) {
+            unless ( /^-F/ || /-b/ ) {
+                return 'invalidoption';
+            }
+            $options = join(' ', @elem);
+        }
+    }
+    else {
+        $options = '';
+    }
+
+    my $tagged     = 0;
+    my $cant_move  = 0;
+    my $unknown    = 0;
+    my $file = $self->name();
+    open (CVSTAG, "$self->{CVS_BINARY} tag $options $tag $file 2>&1 |");
+    while(<CVSTAG>) {
+        /^T $file/ && ++$tagged;
+        /NOT MOVING tag/ && ++$cant_move;
+        /nothing known about/ && ++$unknown;
+    }
+    close(CVSTAG);
+
+    # no message from CVS means that tag already exists
+    # and has not been moved.
+    return 'success'  if ($tagged || (!$cant_move && !$unknown));
+    return 'cantmove' if $cant_move;
+    return 'unkown'   if $unknown;
+    # should never happen
+    return 'unkownfailure';
+}
 
 #### private methods ####
 sub parse_log
