@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:51:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
             Text[ turkish ] = "Ekle";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Insertar";\
+            Text[ finnish ] = "Lisää";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
@@ -124,6 +125,7 @@
             Text[ turkish ] = "Kapat";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Cerrar";\
+            Text[ finnish ] = "Sulje";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -192,6 +194,7 @@
             QuickHelpText[ arabic ] = "ÝåÑÓ ÌÏíÏ ãÚÑÝ ãä ÞÈá ÇáãÓÊÎÏã";\
             QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
             QuickHelpText[ catalan ] = "Nuevo índice definido por usuario";\
+            QuickHelpText[ finnish ] = "Uusi käyttäjän määrittämä hakemisto!";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -235,7 +238,7 @@
             Text [ italian ] = "Contrassegna" ;                     \
             Text [ portuguese_brazilian ] = "Marca" ;               \
             Text [ portuguese ] = "Selecção" ;                        \
-            Text [ finnish ] = "Merkintä" ;                         \
+            Text [ finnish ] = "Valinta" ;                         \
             Text [ danish ] = "Markering" ;                             \
             Text [ french ] = "Marque" ;                            \
             Text [ swedish ] = "Markering" ;                        \
@@ -302,7 +305,7 @@
             Text [ italian ] = "Voc~e" ;                            \
             Text [ portuguese_brazilian ] = "~Entrada" ;            \
             Text [ portuguese ] = "E~ntrada" ;                      \
-            Text [ finnish ] = "~Hakusana" ;                        \
+            Text [ finnish ] = "~Merkintä" ;                        \
             Text [ danish ] = "Element" ;                           \
             Text [ french ] = "~Entrée" ;                           \
             Text [ swedish ] = "~Post" ;                       \
@@ -333,7 +336,7 @@
             Text [ italian ] = "Chiave ~1" ;                        \
             Text [ portuguese_brazilian ] = "~1. Tecla" ;           \
             Text [ portuguese ] = "~1ª chave" ;                    \
-            Text [ finnish ] = "~1. avain" ;                        \
+            Text [ finnish ] = "Ensimmäinen avain" ;                        \
             Text [ danish ] = "1. nøgle" ;                         \
             Text [ french ] = "~1re clé" ;                      \
             Text [ swedish ] = "Sorteringskod ~1" ;                  \
@@ -372,7 +375,7 @@
             Text [ italian ] = "Chiave ~2" ;                        \
             Text [ portuguese_brazilian ] = "~2. Tecla" ;           \
             Text [ portuguese ] = "~2ª chave" ;                    \
-            Text [ finnish ] = "~2. avain" ;                        \
+            Text [ finnish ] = "~Toinen avain" ;                        \
             Text [ danish ] = "2. nøgle" ;                         \
             Text [ french ] = "~2ème clé" ;                     \
             Text [ swedish ] = "Sorteringskod ~2" ;                  \
@@ -471,6 +474,7 @@
             Text[ turkish ] = "A~na giriþ";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Entrada principal";\
+            Text[ finnish ] = "~Päämerkintä";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
@@ -499,6 +503,7 @@
             Text[ turkish ] = "~Tüm eþ metinlere uygula.";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Aplicar a todos los textos iguales.";\
+            Text[ finnish ] = "~Käytä kaikissa samanlaisissa teksteissä.";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
@@ -526,6 +531,7 @@
             Text[ arabic ] = "ÈÍË ÏÞíÞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlý";\
             Text[ catalan ] = "Coincidencia e~xacta";\
+            Text[ finnish ] = "Sa~ma kirjainkoko";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
@@ -553,6 +559,7 @@
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ ÝÞØ";\
             Text[ turkish ] = "Yalnýzca ~tam sözcükler bul";\
             Text[ catalan ] = "Solo palabras e~nteras";\
+            Text[ finnish ] = "~Vain kokonaiset sanat";\
         };                                                                      \
     };
 
@@ -641,6 +648,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ turkish ] = "Yeni kullanýcý dizini";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nuevo índice de usuario";
+        Text[ finnish ] = "Uusi käyttäjähakemisto";
     };
     FixedText FT_NAME
     {
@@ -669,6 +677,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -698,6 +707,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ turkish ] = "Yeni kullanýcý tanýmlý dizin oluþtur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear nuevo índice de usuario";
+    Text[ finnish ] = "Luo uusi käyttäjän määrittämä hakemisto";
 };
 
 String STR_IDXMRK_EDIT
@@ -708,7 +718,7 @@ String STR_IDXMRK_EDIT
     Text [ italian ] = "Modifica voce di indice" ;
     Text [ portuguese_brazilian ] = "Editar entrada de índice" ;
     Text [ portuguese ] = "Editar entrada de índice" ;
-    Text [ finnish ] = "Muokkaa hakusanaa" ;
+    Text [ finnish ] = "Muokkaa hakemistomerkintää" ;
     Text [ danish ] = "Rediger indekselement" ;
     Text [ french ] = "Édition d'une entrée d'index" ;
     Text [ swedish ] = "Redigera förteckningspost" ;
@@ -736,7 +746,7 @@ String STR_IDXMRK_INSERT
     Text [ italian ] = "Inserisci voce di indice" ;
     Text [ portuguese_brazilian ] = "Inserir entrada de índice" ;
     Text [ portuguese ] = "Inserir entrada no índice" ;
-    Text [ finnish ] = "Lisää hakemistotekstin" ;
+    Text [ finnish ] = "Lisää hakemistomerkintä" ;
     Text [ danish ] = "Indsæt indekselement" ;
     Text [ french ] = "Insertion d'une entrée d'index" ;
     Text [ swedish ] = "Infoga förteckningspost" ;
@@ -786,6 +796,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ãä ÞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
             Text[ turkish ] = "Kaynakça veritabanýndan";\
             Text[ catalan ] = "De la base de datos ~bibliográfica";\
+            Text[ finnish ] = "Bibliografia~tietokannasta";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
@@ -812,6 +823,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
             Text[ turkish ] = "~Belge içeriðinden";\
             Text[ catalan ] = "~Del contenido del documento";\
+            Text[ finnish ] = "~Asiakirjan sisällöstä";\
         };                                                          \
         FixedText FT_ENTRY                              \
         {                                               \
@@ -839,6 +851,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "K~ýsaltma";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Abre~viatura";\
+            Text[ finnish ] = "Lyhyt ~nimi";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -882,6 +895,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Yazan";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Autor";\
+            Text[ finnish ] = "Laatija";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -915,6 +929,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Baþlýk";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Título";\
+            Text[ finnish ] = "Otsikko";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -948,6 +963,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Giriþ";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Entrada";\
+            Text[ finnish ] = "Merkintä";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -977,6 +993,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Ekle";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Insertar";\
+            Text[ finnish ] = "Lisää";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
@@ -1004,6 +1021,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Kapat";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Cerrar";\
+            Text[ finnish ] = "Sulje";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1036,6 +1054,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "~Yeni";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "N~uevo";\
+            Text[ finnish ] = "~Uusi";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
@@ -1062,6 +1081,7 @@ String STR_IDXMRK_INSERT
             Text[ arabic ] = "ÊÍÑíÑ";\
             Text[ turkish ] = "D~üzenle";\
             Text[ catalan ] = "~Editar";\
+            Text[ finnish ] = "Muokkaa";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
@@ -1087,6 +1107,7 @@ String STR_IDXMRK_INSERT
             Text[ turkish ] = "Deðiþtir";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "Modificar";\
+            Text[ finnish ] = "Muokkaa";\
         };                                              \
     };
 
@@ -1168,6 +1189,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ turkish ] = "Giriþ verileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Datos de la entrada";
+        Text[ finnish ] = "Merkintätiedot";
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliográfica";
@@ -1188,6 +1210,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ arabic ] = "ÊÚÑíÝ ÅÏÎÇá Ýí ÝåÑÓ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça giriþini tanýmla";
     Text[ catalan ] = "Definir entrada de bibliografía";
+    Text[ finnish ] = "Määritä bibliografiamerkintä";
 };
 String STR_AUTHMRK_EDIT
 {
@@ -1214,6 +1237,7 @@ String STR_AUTHMRK_EDIT
     Text[ turkish ] = "Kaynakça dizini giriþini düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar entrada de bibliografía";
+    Text[ finnish ] = "Muokkaa bibliografiamerkintää";
 };
 String STR_AUTHMRK_INSERT
 {
@@ -1240,6 +1264,7 @@ String STR_AUTHMRK_INSERT
     Text[ turkish ] = "Kaynakça dizini giriþi ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar entrada de bibliografía";
+    Text[ finnish ] = "Lisää bibliografiamerkintä";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
@@ -1266,5 +1291,6 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáÝÚá Ýí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáÝÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
     MESSAGE[ turkish ] = "Kaynakça giriþi, farklý veriler ile belgede mevcut.";
     MESSAGE[ catalan ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
+    MESSAGE[ finnish ] = "The bibliography entry is already contained in the document with different data. ";
 };
 
