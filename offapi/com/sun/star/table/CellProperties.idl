@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:37 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef __com_sun_star_table_CellProperties_idl__
 #define __com_sun_star_table_CellProperties_idl__
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
@@ -128,7 +132,7 @@ service CellProperties
 
     /** contains the cell background color.
      */
-    [property] long CellBackColor;
+    [property] com::sun::star::util::Color CellBackColor;
 
     //-------------------------------------------------------------------------
 
