@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:59 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
     //0x085B, 0, L_FIX, // "sprmCFDiacColor" ;;;
         0x085C, 1, L_FIX, // "sprmCFBoldBi" ;;;
     //0x085D, 0, L_FIX, // "sprmCFItalicBi" ;;;
-    //0x4A5E, 0, L_FIX, // "sprmCFtcBi" ;;;
+        0x4A5E, 2, L_FIX,
         0x485F, 2, L_FIX, // "sprmCLidBi" ;;;
     //0x4A60, 0, L_FIX, // "sprmCIcoBi" ;;;
         0x4A61, 2, L_FIX, // "sprmCHpsBi" ;;;
@@ -5555,9 +5555,12 @@ WW8Style::WW8Style( SvStream& rStream, WW8Fib& rFibPara )
         if( 16 > nRead ) break;
         rSt >> ftcStandardChpCJKStsh;
 
+        if ( 18 > nRead ) break;
+        rSt >> ftcStandardChpCTLStsh;
+
         // ggfs. den Rest ueberlesen
-        if( 16 < nRead )
-            rSt.SeekRel( nRead-16 );
+        if( 18 < nRead )
+            rSt.SeekRel( nRead-18 );
     }
     while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
                     //   und kann vorzeitig per "break" verlassen werden.
@@ -5574,7 +5577,7 @@ WW8Style::WW8Style( SvStream& rStream, WW8Fib& rFibPara )
 // Slot, dann wird ein Nullpointer zurueckgeliefert.
 WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
 {
-    WW8_STD* pStd = (WW8_STD*)0;
+    WW8_STD* pStd = 0;
 
     UINT16 cbStd;
     rSt >> cbStd;   // lies Laenge

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:57 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -828,6 +828,17 @@ static Writer& OutWW8_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
     else
         rWrtWW8.pO->Insert( 93, rWrtWW8.pO->Count() );
     rWrtWW8.InsUInt16( nFontID );
+    return rWrt;
+}
+
+static Writer& OutWW8_SwCTLFont(Writer& rWrt, const SfxPoolItem& rHt)
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (rWrtWW8.bWrtWW8)
+    {
+        rWrtWW8.InsUInt16(0x4A5E);
+        rWrtWW8.InsUInt16(rWrtWW8.GetId((const SvxFontItem&)rHt));
+    }
     return rWrt;
 }
 
@@ -4160,7 +4171,7 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHRATR_CJK_LANGUAGE */       OutWW8_SwLanguage,
 /* RES_CHRATR_CJK_POSTURE */        OutWW8_SwPosture,
 /* RES_CHRATR_CJK_WEIGHT */         OutWW8_SwWeight,
-/* RES_CHRATR_CTL_FONT */           0,
+/* RES_CHRATR_CTL_FONT */           OutWW8_SwCTLFont,
 /* RES_CHRATR_CTL_FONTSIZE */       OutWW8_SwSize,
 /* RES_CHRATR_CTL_LANGUAGE */       OutWW8_SwLanguage,
 /* RES_CHRATR_CTL_POSTURE */        OutWW8_SwBiDiPosture,

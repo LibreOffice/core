@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:49 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3286,12 +3286,15 @@ WW8RStyle::WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI )
 
 void WW8RStyle::Set1StyleDefaults()
 {
-    if( !bCJKFontChanged )  // Style no CJK Font? set the default
-        pIo->SetNewFontAttr( ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT );
+    if (!bCJKFontChanged)   // Style no CJK Font? set the default
+        pIo->SetNewFontAttr(ftcStandardChpCJKStsh, TRUE, RES_CHRATR_CJK_FONT);
+
+    if (!bCTLFontChanged)   // Style no CTL Font? set the default
+        pIo->SetNewFontAttr(ftcStandardChpCTLStsh, TRUE, RES_CHRATR_CJK_FONT);
 
     //#88976# western 2nd to make western charset conversion the default
-    if( !bFontChanged )     // Style has no Font? set the default,
-        pIo->SetNewFontAttr( ftcStandardChpStsh, TRUE, RES_CHRATR_FONT );
+    if (!bFontChanged)      // Style has no Font? set the default,
+        pIo->SetNewFontAttr(ftcStandardChpStsh, TRUE, RES_CHRATR_FONT);
 
     if( !pIo->bNoAttrImport )
     {
@@ -3618,8 +3621,8 @@ void WW8RStyle::Import1Style( USHORT nNr )
                                     // wird, gehts danach wieder richtig
 
     pStyRule = 0;                   // falls noetig, neu anlegen
-    bTxtColChanged = bFontChanged = bCJKFontChanged = bFSizeChanged =
-        bFCTLSizeChanged = bWidowsChanged = FALSE;
+    bTxtColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
+        bFSizeChanged = bFCTLSizeChanged = bWidowsChanged = FALSE;
     pIo->SetNAktColl( nNr );
     pIo->bStyNormal = nNr == 0;
 

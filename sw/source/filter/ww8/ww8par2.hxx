@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 12:39:50 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ friend class SwWW8ImplReader;
     BOOL bTxtColChanged : 1;
     BOOL bFontChanged   : 1;    // For Simulating Default-Font
     BOOL bCJKFontChanged: 1;    // For Simulating Default-CJK Font
+    BOOL bCTLFontChanged: 1;    // For Simulating Default-CTL Font
     BOOL bFSizeChanged  : 1;    // For Simulating Default-FontSize
     BOOL bFCTLSizeChanged  : 1; // For Simulating Default-CTL FontSize
     BOOL bWidowsChanged : 1;    // For Simulating Default-Widows / Orphans

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-15 14:12:41 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,6 +1395,8 @@ protected:
     UINT16  ftcStandardChpStsh;
     // CJK ftc used by StandardChpStsh for this document
     UINT16  ftcStandardChpCJKStsh;
+    // CTL ftc used by StandardChpStsh for this document
+    UINT16  ftcStandardChpCTLStsh;
 
     //No copying
     WW8Style(const WW8Style&);

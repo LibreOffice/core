@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-23 16:47:58 $
+ *  last change: $Author: cmc $ $Date: 2002-07-23 17:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3868,21 +3868,23 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                               // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-        case 0x4a51:
-//          nId = RES_CHRATR_CTL_FONT;  break;
-        case 93:
-        case 0x4a4f:
-            nId = RES_CHRATR_FONT;
-            break;
-        case 0x4a50:
-            nId = RES_CHRATR_CJK_FONT;
-            break;
-        default:
-            return ;
+    //      case 0x4a51:    //font to bias towards all else being equal ?
+            case 0x4a5E:
+                nId = RES_CHRATR_CTL_FONT;
+                break;
+            case 93:
+            case 0x4a4f:
+                nId = RES_CHRATR_FONT;
+                break;
+            case 0x4a50:
+                nId = RES_CHRATR_CJK_FONT;
+                break;
+            default:
+                return ;
         }
 
-        if( nLen < 0 )
-        {                   // Ende des Attributes
+        if( nLen < 0 ) // Ende des Attributes
+        {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
             ResetCharSetVars();
         }
@@ -3893,8 +3895,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
                 && pAktColl && pStyles )                // Style-Def ?
             {
                 // merken zur Simulation Default-Font
-                if( RES_CHRATR_CJK_FONT == nId )
+                if (RES_CHRATR_CJK_FONT == nId)
                     pStyles->bCJKFontChanged = TRUE;
+                else if (RES_CHRATR_CTL_FONT == nId)
+                    pStyles->bCTLFontChanged = TRUE;
                 else
                     pStyles->bFontChanged = TRUE;
             }
@@ -5509,7 +5513,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x085B, (FNReadRecord)0, //Read_BoldBiDiUsw, //"sprmCFDiacColor", // ;;;
     0x085C, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFBoldBi"
     0x085D, (FNReadRecord)&SwWW8ImplReader::Read_BoldBiDiUsw, //"sprmCFItalicBi"
-//0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
+    0x4A5E, (FNReadRecord)&SwWW8ImplReader::Read_FontCode,
     0x485F, (FNReadRecord)&SwWW8ImplReader::Read_Language, // "sprmCLidBi"
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
     0x4A61, &SwWW8ImplReader::Read_FontSize,    // "sprmCHpsBi", // ;;;
