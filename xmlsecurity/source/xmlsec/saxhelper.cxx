@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,17 @@ SAXHelper::SAXHelper( )
 #endif /* XMLSEC_NO_XSLT */
 
     m_pParserCtxt = xmlNewParserCtxt() ;
+
+    /*
+     * i41748
+     *
+     * mmi : re-initialize the SAX handler to version 1
+     */
+
+    xmlSAXVersion(m_pParserCtxt->sax, 1);
+
+    /* end */
+
     if( m_pParserCtxt->inputTab[0] != NULL )
     {
         m_pParserCtxt->inputTab[0] = NULL ;
