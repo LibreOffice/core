@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:55:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Přiřadit návrh";
         Text[ hebrew ] = "Design zuweisen";
         Text[ hindi ] = "Assign design";
+        Text[ slovak ] = "Priradiť design";
     };
 
     RadioButton PAGE1_NEW_DESIGN
@@ -155,6 +156,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Nový návrh";
         Text[ hebrew ] = "~Neues Design";
         Text[ hindi ] = "New design";
+        Text[ slovak ] = "Nový design";
     };
 
     RadioButton PAGE1_OLD_DESIGN
@@ -188,6 +190,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Existující návrh";
         Text[ hebrew ] = "~Existierendes Design";
         Text[ hindi ] = "Existing Design";
+        Text[ slovak ] = "Existujúci design";
     };
 
     ListBox PAGE1_DESIGNS
@@ -232,6 +235,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Smazat vybraný návrh";
         Text[ hebrew ] = "Markiertes Design ~löschen";
         Text[ hindi ] = "Delete Selected Design";
+        Text[ slovak ] = "Zmazať vybraný design";
     };
 
     FixedText PAGE1_DESC
@@ -265,6 +269,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vyberte existující návrh nebo vytvořte nový";
         Text[ hebrew ] = "Wählen Sie ein existierendes Design, oder erstellen Sie ein neues";
         Text[ hindi ] = "Select an existing design or create a new one";
+        Text[ slovak ] = "Vybrať existujúci design alebo vytvoriť nový";
     };
 
 
@@ -313,6 +318,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Druh publikace";
         Text[ hebrew ] = "Art der Veröffentlichung";
         Text[ hindi ] = "Publication type";
+        Text[ slovak ] = "Druh publikácie";
     };
 
     RadioButton PAGE2_STANDARD
@@ -346,6 +352,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Standardní HTML formát";
         Text[ hebrew ] = "Standard ~HTML Format";
         Text[ hindi ] = "Standard H~TML format";
+        Text[ slovak ] = "Štandardný H~TML formát";
     };
 
     RadioButton PAGE2_FRAMES
@@ -379,6 +386,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Standardní HTML s rámci";
         Text[ hebrew ] = "Standard HTML mit ~Frames";
         Text[ hindi ] = "Standard HTML with ~frames";
+        Text[ slovak ] = "Štan~dardný HTML s rámcami";
     };
 
     RadioButton PAGE2_KIOSK
@@ -412,6 +420,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~Automatic";
+        Text[ slovak ] = "~Automaticky";
     };
 
     RadioButton PAGE2_WEBCAST
@@ -444,6 +453,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "WebCast";
         Text[ hebrew ] = "~WebCast";
         Text[ hindi ] = "~WebCast";
+        Text[ slovak ] = "~WebCast";
     };
 
     FixedBitmap PAGE2_NOFRAMES_FB
@@ -520,6 +530,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options";
+        Text[ slovak ] = "Nastavenia";
     };
 
     CheckBox PAGE2_CONTENT
@@ -553,6 +564,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vytvořit titulní stranu";
         Text[ hebrew ] = "~Titelseite erzeugen";
         Text[ hindi ] = "Create title page";
+        Text[ slovak ] = "Vytvoriť titulnú stránku";
     };
 
     FixedLine PAGE2_VERT
@@ -593,6 +605,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Zobrazit poznámky";
         Text[ hebrew ] = "~Notizen anzeigen";
         Text[ hindi ] = "Show notes";
+        Text[ slovak ] = "Zobraziť poznámky";
     };
 
     ///////////////////////////////
@@ -629,6 +642,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Přechod na další snímek";
         Text[ hebrew ] = "Seitenwechsel";
         Text[ hindi ] = "Advance slides";
+        Text[ slovak ] = "Prechod na ďalší snímok";
     };
 
     RadioButton PAGE2_CHG_DEFAULT
@@ -662,6 +676,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Jak je uvedeno v dokumentu";
         Text[ hebrew ] = "~Wie im Dokument angegeben";
         Text[ hindi ] = "~As stated in document";
+        Text[ slovak ] = "~Ako je uvedené v dokumente";
     };
 
     RadioButton PAGE2_CHG_AUTO
@@ -696,6 +711,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Automaticky";
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~Automatic";
+        Text[ slovak ] = "~Automaticky";
     };
 
     FixedText PAGE2_DURATION_TXT
@@ -728,6 +744,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Čas prohlížení prezentace:";
         Text[ hebrew ] = "~Standdauer:";
         Text[ hindi ] = "~Slide view time:";
+        Text[ slovak ] = "Ča~s zobrazovanej prezentácie";
     };
 
     TimeField PAGE2_DURATION_TMF
@@ -778,6 +795,7 @@ ModalDialog DLG_PUBLISHING
         QuickHelpText[ czech ] = "Trvání stránky";
         QuickHelpText[ hebrew ] = "Stand~dauer";
         QuickHelpText[ hindi ] = "~Duration of page";
+        QuickHelpText[ slovak ] = "~Dĺžka pohľadu na stránku";
     };
 
     CheckBox PAGE2_ENDLESS
@@ -811,6 +829,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Nekonečně";
         Text[ hebrew ] = "~Endlos";
         Text[ hindi ] = "~Endless";
+        Text[ slovak ] = "N~ekonečná";
     };
 
     /////////////////////////////////
@@ -847,6 +866,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "WebCast";
         Text[ hebrew ] = "WebCast";
         Text[ hindi ] = "WebCast";
+        Text[ slovak ] = "WebCast";
     };
 
     RadioButton PAGE2_ASP
@@ -879,6 +899,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Active Server Pages (ASP)";
         Text[ hebrew ] = "~Active Server Pages (ASP)";
         Text[ hindi ] = "~Active Server Pages (ASP)";
+        Text[ slovak ] = "~Aktívne serverové stránky (ASP)";
     };
 
     RadioButton PAGE2_PERL
@@ -911,6 +932,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Perl";
         Text[ hebrew ] = "~Perl";
         Text[ hindi ] = "Perl";
+        Text[ slovak ] = "Perl";
     };
 
     FixedText PAGE2_INDEX_TXT
@@ -944,6 +966,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "URL pro posluchače";
         Text[ hebrew ] = "~URL für Zuhörer";
         Text[ hindi ] = "~URL for listeners";
+        Text[ slovak ] = "~URL pre poslucháčov";
     };
 
     Edit PAGE2_INDEX
@@ -985,6 +1008,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "URL pro prezentaci:";
         Text[ hebrew ] = "URL für ~Präsentation:";
         Text[ hindi ] = "URL for ~presentation:";
+        Text[ slovak ] = "URL pre ~prezentáciu";
     };
 
     Edit PAGE2_URL
@@ -1025,6 +1049,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "URL pro Perl skripty:";
         Text[ hebrew ] = "URL für ~Perl Skripte:";
         Text[ hindi ] = "URL for ~Perl scripts:";
+        Text[ slovak ] = "URL pre ~perl skripty";
     };
 
     Edit PAGE2_CGI
@@ -1084,6 +1109,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Uložit obrázek jako";
         Text[ hebrew ] = "Grafiken speichern als";
         Text[ hindi ] = "Save graphics as";
+        Text[ slovak ] = "Uložiť obrázok ako";
     };
 
     RadioButton PAGE3_GIF
@@ -1116,6 +1142,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "GIF";
         Text[ hebrew ] = "~GIF";
         Text[ hindi ] = "~GIF";
+        Text[ slovak ] = "~GIF";
     };
 
     RadioButton PAGE3_JPG
@@ -1148,6 +1175,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "JPG";
         Text[ hebrew ] = "~JPG";
         Text[ hindi ] = "~JPG";
+        Text[ slovak ] = "~JPG";
     };
 
     ComboBox PAGE3_QUALITY
@@ -1188,6 +1216,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Kvalita";
         Text[ hebrew ] = "Qualität";
         Text[ hindi ] = "गुण";
+        Text[ slovak ] = "Kvalita";
     };
 
     FixedLine PAGE3_VERT
@@ -1231,6 +1260,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Rozlišení monitoru";
         Text[ hebrew ] = "Monitorauflösung";
         Text[ hindi ] = "Monitor resolution";
+        Text[ slovak ] = "Rozlíšenie monitora";
     };
 
     RadioButton PAGE3_RESOLUTION_1
@@ -1263,6 +1293,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Nízké rozlišení (640x480 pixelů)";
         Text[ hebrew ] = "Niedrige Auflösung (~640x480 Pixel)";
         Text[ hindi ] = "Low resolution (~640x480 pixels)";
+        Text[ slovak ] = "Nízke rozlíšenie (~640x480 bodov)";
     };
 
     RadioButton PAGE3_RESOLUTION_2
@@ -1295,6 +1326,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Střední rozlišení (800x600 pixelů)";
         Text[ hebrew ] = "Mittlere Auflösung (~800x600 Pixel)";
         Text[ hindi ] = "Medium resolution (~800x600 pixels)";
+        Text[ slovak ] = "Stredné rozlíšenie (~800x600 bodov)";
     };
 
     RadioButton PAGE3_RESOLUTION_3
@@ -1327,6 +1359,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vysoké rozlišení (1024x768 pixelů)";
         Text[ hebrew ] = "Hohe Auflösung (~1024x768 Pixel)";
         Text[ hindi ] = "High resolution (~1024x768 pixels)";
+        Text[ slovak ] = "Vysoké rozlíšenie (~1024x768 bodov)";
     };
 
     ////////////////
@@ -1364,6 +1397,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Efekty";
         Text[ hebrew ] = "‮אפקטים‬";
         Text[ hindi ] = "Effects";
+        Text[ slovak ] = "Efekty";
     };
 
     CheckBox PAGE3_SLD_SOUND
@@ -1397,6 +1431,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Exportovat zvuk při posunu snímku";
         Text[ hebrew ] = "~Klänge beim Seitenwechsel exportieren";
         Text[ hindi ] = "~Export sounds when slide advances";
+        Text[ slovak ] = "~Exportovať zvuk keď sa posunie snímok";
     };
 
     ////////////////////////////////////////
@@ -1442,6 +1477,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Informace na titulní stránku";
         Text[ hebrew ] = "Informationen für die Titelseite";
         Text[ hindi ] = "Information for the title page";
+        Text[ slovak ] = "Informácia na titulnú stránku";
     };
 
     FixedText PAGE4_AUTHOR_TXT
@@ -1474,6 +1510,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~Author";
+        Text[ slovak ] = "~Autor";
     };
 
     Edit PAGE4_AUTHOR
@@ -1515,6 +1552,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Emailová adresa";
         Text[ hebrew ] = "E-~Mail-Adresse";
         Text[ hindi ] = "E-~mail address";
+        Text[ slovak ] = "E-~mailová adresa";
     };
 
     Edit PAGE4_EMAIL_EDIT
@@ -1556,6 +1594,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vaše domovská stránka";
         Text[ hebrew ] = "Ihre ~Homepage";
         Text[ hindi ] = "Your hom~epage";
+        Text[ slovak ] = "Vaša dom~ovská stránka";
     };
 
     Edit PAGE4_WWW_EDIT
@@ -1596,6 +1635,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Další informace";
         Text[ hebrew ] = "Weitere ~Informationen";
         Text[ hindi ] = "Additional ~information";
+        Text[ slovak ] = "Ďalšie ~informácie";
     };
 
     MultiLineEdit PAGE4_MISC
@@ -1639,6 +1679,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Odkaz na kopii původní prezentace";
         Text[ hebrew ] = "Link auf Kopie der ~Originalpräsentation";
         Text[ hindi ] = "Link to a copy of the ~original presentation";
+        Text[ slovak ] = "Odkaz na kópiu ~originálnej prezentácie";
     };
 
     CheckBox PAGE4_CREATED
@@ -1672,6 +1713,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Poznámka: 'Vytvořeno pomocí %PRODUCTNAME'";
         Text[ hebrew ] = "Hinweis: 'Erzeugt mit %PRODUCTNAME'";
         Text[ hindi ] = "Note: 'Created with %PRODUCTNAME'";
+        Text[ slovak ] = "Poznámka: 'vytvorené pomocou %PRODUCTNAME'";
     };
 
     /////////////////////
@@ -1718,6 +1760,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vybrat styl tlačítek";
         Text[ hebrew ] = "Schaltflächenstil auswählen";
         Text[ hindi ] = "Select button style";
+        Text[ slovak ] = "Vybrať štýl tlačítok";
     };
 
     CheckBox PAGE5_TEXTONLY
@@ -1751,6 +1794,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Pouze text";
         Text[ hebrew ] = "Nur ~Text";
         Text[ hindi ] = "~Text only";
+        Text[ slovak ] = "Iba ~text";
     };
 
     Control PAGE5_BUTTONS
@@ -1805,6 +1849,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vybrat barevné schéma";
         Text[ hebrew ] = "Farbschema auswählen";
         Text[ hindi ] = "Select color scheme";
+        Text[ slovak ] = "Vybrať farebnú schému";
     };
 
     RadioButton PAGE6_DOCCOLORS
@@ -1838,6 +1883,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Použít schéma barev dokumentu";
         Text[ hebrew ] = "Farbschema aus Dokument ü~bernehmen";
         Text[ hindi ] = "~Apply color scheme from document";
+        Text[ slovak ] = "Použiť schému f~arieb z dokumentu";
     };
 
     RadioButton PAGE6_DEFAULT
@@ -1870,6 +1916,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Použít barvy prohlížeče";
         Text[ hebrew ] = "~Browser Farben verwenden";
         Text[ hindi ] = "Use ~browser colors";
+        Text[ slovak ] = "Použiť far~by prehliadača";
     };
 
     RadioButton PAGE6_USER
@@ -1902,6 +1949,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Použít vlastní barevné schéma";
         Text[ hebrew ] = "~Eigenes Farbschema verwenden";
         Text[ hindi ] = "~Use custom color scheme";
+        Text[ slovak ] = "Po~užiť vlastnú farebnú schému";
     };
 
     PushButton PAGE6_TEXT
@@ -1935,6 +1983,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "Text";
+        Text[ slovak ] = "Text";
     };
 
     PushButton PAGE6_LINK
@@ -1968,6 +2017,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Hypertextový odkaz";
         Text[ hebrew ] = "Hyper~link";
         Text[ hindi ] = "Hyper~link";
+        Text[ slovak ] = "Hypertextový od~kaz";
     };
 
     PushButton PAGE6_ALINK
@@ -2001,6 +2051,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Aktivní odkaz";
         Text[ hebrew ] = "~Aktiver Link";
         Text[ hindi ] = "Active Li~nk";
+        Text[ slovak ] = "Aktív~ny odkaz";
     };
 
     PushButton PAGE6_VLINK
@@ -2033,6 +2084,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Navštívený odkaz";
         Text[ hebrew ] = "~Gesichteter Link";
         Text[ hindi ] = "~Visited Link";
+        Text[ slovak ] = "Navští~vený odkaz";
     };
 
     Control PAGE6_PREVIEW
@@ -2072,6 +2124,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Pozadí";
         Text[ hebrew ] = "‮רקע‬";
         Text[ hindi ] = "Bac~kground";
+        Text[ slovak ] = "Poza~die";
     };
 
     // generell
@@ -2115,6 +2168,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "<< Zpět";
         Text[ hebrew ] = "<< ‮הקודם‬";
         Text[ hindi ] = "<< Back";
+        Text[ slovak ] = "<< Späť";
     };
 
     PushButton BUT_NEXT
@@ -2151,6 +2205,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Další >>";
         Text[ hebrew ] = "‮הבא‬ >>";
         Text[ hindi ] = "Next >>";
+        Text[ slovak ] = "Ďalší >>";
     };
 
     OKButton BUT_FINISH
@@ -2186,6 +2241,7 @@ ModalDialog DLG_PUBLISHING
         Text[ czech ] = "Vytvořit";
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~Create";
+        Text[ slovak ] = "V~ytvoriť";
     };
 
     CancelButton BUT_CANCEL
@@ -2220,6 +2276,7 @@ ModalDialog DLG_PUBLISHING
     Text[ czech ] = "HTML export";
     Text[ hebrew ] = "HTML-Export";
     Text[ hindi ] = "HTML Export";
+    Text[ slovak ] = "Exportovať HTML";
 };
 
 ModalDialog DLG_DESIGNNAME
@@ -2274,6 +2331,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ czech ] = "Uložit";
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "~Save";
+        Text[ slovak ] = "~Uložiť";
     };
 
     CancelButton BTN_NOSAVE
@@ -2309,6 +2367,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ czech ] = "Neukládat";
         Text[ hebrew ] = "~Nicht speichern";
         Text[ hindi ] = "Do Not Save";
+        Text[ slovak ] = "Neukladať";
     };
     Text[ italian ] = "Nome per il design HTML";
     Text[ portuguese_brazilian ] = "Name for HTML-design";
@@ -2335,7 +2394,10 @@ ModalDialog DLG_DESIGNNAME
     Text[ czech ] = "Název HTML návrhu";
     Text[ hebrew ] = "Name fuer HTML-Design";
     Text[ hindi ] = "Name HTML Design";
+    Text[ slovak ] = "Názov HTML návrhu";
 };
+
+
 
 
 
