@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-13 13:26:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 11:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,6 +838,12 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             Sequence<PropertyValue> aValues;
             if (!(rValue >>= aValues))
                 throw IllegalArgumentException();
+
+            const PropertyValue* pBegin = aValues.getConstArray();
+            const PropertyValue* pEnd   = pBegin + aValues.getLength();
+            for (;pBegin != pEnd ; ++pBegin)
+                if ( !pBegin->Name.getLength() )
+                    throw IllegalArgumentException();
 
             bModified = sal_True;
                 // don't wan't to check the properties, it's seems more expensiv than just to set the same props again
