@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabDialog DLG_DROPCAPS
     Text [ finnish ] = "Anfangit" ;
     Text [ danish ] = "Initialer" ;
     Text [ french ] = "Lettrines" ;
-    Text [ swedish ] = "Anfangsbokstäver" ;
+    Text [ swedish ] = "Anfanger" ;
     Text [ dutch ] = "Initialen" ;
     Text [ spanish ] = "Iniciales" ;
     Text [ english_us ] = "Drop Caps" ;
@@ -101,7 +101,7 @@ TabDialog DLG_DROPCAPS
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
                 Text [ french ] = "Lettrines" ;
-                Text [ swedish ] = "Anfangsbokstäver" ;
+                Text [ swedish ] = "Anfanger" ;
                 Text [ dutch ] = "Initialen" ;
                 Text [ spanish ] = "Iniciales" ;
                 Text [ english_us ] = "Drop Caps" ;
@@ -147,7 +147,7 @@ TabPage TP_DROPCAPS
         Text [ spanish ] = "Mostrar iniciales" ;
         Text [ french ] = "~Première(s) lettre(s)" ;
         Text [ dutch ] = "I~nitialen weergeven" ;
-        Text [ swedish ] = "Visa anfangsbokstäver" ;
+        Text [ swedish ] = "Visa a~nfanger" ;
         Text [ danish ] = "Vis initialer" ;
         Text [ portuguese_brazilian ] = "Initialen anzeigen" ;
         Text [ portuguese ] = "Mostrar i~niciais" ;
