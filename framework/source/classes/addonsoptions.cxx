@@ -2,8 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.6 $
- *  last change: $Author: rt $ $Date: 2004-05-21 12:36:16 $
+ *  $Revision: 1.7 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,12 +273,13 @@ class AddonsOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool                                        HasAddonsMenu       () const ;
-        sal_Bool                                        HasAddonsHelpMenu   () const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu       () const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart() const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart() const ;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu   () const ;
+        sal_Bool                                        HasAddonsMenu        () const ;
+        sal_Bool                                        HasAddonsHelpMenu    () const ;
+        sal_Int32                                       GetAddonsToolBarCount() const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
         Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
 
     //-------------------------------------------------------------------------------------------------------------
@@ -303,6 +304,7 @@ class AddonsOptions_Impl : public ConfigItem
         };
 
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
+        typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
 
         enum ImageSize
         {
@@ -325,7 +327,7 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool             ReadAddonMenuSet( Sequence< Sequence< PropertyValue > >& aAddonMenuSeq );
         sal_Bool             ReadOfficeMenuBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeMenuBarSeq );
-        sal_Bool             ReadOfficeToolBarSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
+        sal_Bool             ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars );
         sal_Bool             ReadToolBarItemSet( const rtl::OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         sal_Bool             ReadImages( ImageManager& aImageManager );
@@ -367,10 +369,11 @@ class AddonsOptions_Impl : public ConfigItem
         OUString                                            m_aPrivateImageURL;
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuProperties;
         Sequence< Sequence< PropertyValue > >               m_aCachedMenuBarPartProperties;
-        Sequence< Sequence< PropertyValue > >               m_aCachedToolBarPartProperties;
+        AddonToolBars                                       m_aCachedToolBarPartProperties;
         Sequence< Sequence< PropertyValue > >               m_aCachedHelpMenuProperties;
         Reference< com::sun::star::util::XMacroExpander >   m_xMacroExpander;
         ImageManager                                        m_aImageManager;
+        Sequence< Sequence< PropertyValue > >               m_aEmptyAddonToolBar;
 };
 
 //_________________________________________________________________________________________________________________
@@ -477,6 +480,14 @@ sal_Bool AddonsOptions_Impl::HasAddonsHelpMenu  () const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Int32 AddonsOptions_Impl::GetAddonsToolBarCount() const
+{
+    return m_aCachedToolBarPartProperties.size();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenu() const
 {
     return m_aCachedMenuProperties;
@@ -493,9 +504,12 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBa
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart() const
+const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
-    return m_aCachedToolBarPartProperties;
+    if ( nIndex >= 0 && nIndex < m_aCachedToolBarPartProperties.size() )
+        return m_aCachedToolBarPartProperties[nIndex];
+    else
+        return m_aEmptyAddonToolBar;
 }
 
 //*****************************************************************************************************************
@@ -644,7 +658,7 @@ sal_Bool AddonsOptions_Impl::ReadOfficeMenuBarSet( Sequence< Sequence< PropertyV
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq )
+sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( AddonToolBars& rAddonOfficeToolBars )
 {
     // Read the OfficeToolBar set and fill property sequences
     OUString                aAddonToolBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolBar" ));
@@ -657,10 +671,11 @@ sal_Bool AddonsOptions_Impl::ReadOfficeToolBarSet( Sequence< Sequence< PropertyV
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
         OUString aToolBarItemNode( aAddonToolBarNode + aAddonToolBarNodeSeq[n] );
-        ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBarSeq );
+        rAddonOfficeToolBars.push_back( m_aEmptyAddonToolBar );
+        ReadToolBarItemSet( aToolBarItemNode, rAddonOfficeToolBars[n] );
     }
 
-    return ( rAddonOfficeToolBarSeq.getLength() > 0 );
+    return ( rAddonOfficeToolBars.size() > 0 );
 }
 
 
@@ -674,17 +689,6 @@ sal_Bool AddonsOptions_Impl::ReadToolBarItemSet( const rtl::OUString rToolBarIte
     OUString                    aAddonToolBarItemSetNode( rToolBarItemSetNodeName + m_aPathDelimiter );
     Sequence< OUString >        aAddonToolBarItemSetNodeSeq = GetNodeNames( rToolBarItemSetNodeName );
     Sequence< PropertyValue >   aToolBarItem( PROPERTYCOUNT_TOOLBARITEM );
-
-    // Separate different toolbar item sets automatically with a separator
-    if ( nToolBarItemCount > 0 )
-    {
-        OUString aURL;
-        Sequence< PropertyValue > aPredToolBarItemSeq = rAddonOfficeToolBarSeq[nToolBarItemCount-1];
-        if (( aPredToolBarItemSeq[OFFSET_TOOLBARITEM_URL].Value >>= aURL ) && !( aURL.equals( SEPARATOR_URL )))
-            bInsertSeparator = sal_True;
-    }
-    else
-        bInsertSeparator = sal_True;
 
     // Init the property value sequence
     aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Name = m_aPropNames[ OFFSET_MENUITEM_URL              ];
@@ -1356,6 +1360,16 @@ sal_Bool AddonsOptions::HasAddonsHelpMenu() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+
+sal_Int32 AddonsOptions::GetAddonsToolBarCount() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetAddonsToolBarCount();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenu() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
@@ -1374,10 +1388,10 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart() const
+const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->GetAddonsToolBarPart();
+    return m_pDataContainer->GetAddonsToolBarPart( nIndex );
 }
 
 //*****************************************************************************************************************
