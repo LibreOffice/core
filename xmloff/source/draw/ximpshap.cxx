@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 11:47:34 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,11 +512,14 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         UniReference< XMLShapeImportHelper > xImp( GetImport().GetShapeImport() );
         xImp->addShape( xShape, mxAttrList, mxShapes );
 
+/* #i42043# this fix causes our presentation objects on the masterpages to have
+            wrong defaults after load. I have to implement setAllPropertiesToDefault()
+            more intelligent later. For now this fix is off. See #i32217# for final fix.
         uno::Reference<beans::XMultiPropertyStates> xMultiPropertyStates(
             xShape, uno::UNO_QUERY );
         if (xMultiPropertyStates.is())
             xMultiPropertyStates->setAllPropertiesToDefault();
-
+*/
         // #107848#
         if(!mbTemporaryShape && (!GetImport().HasTextImport()
             || !GetImport().GetTextImport()->IsInsideDeleteContext()))
