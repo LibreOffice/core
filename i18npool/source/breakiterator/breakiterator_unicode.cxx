@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-03 19:07:07 $
+ *  last change: $Author: khong $ $Date: 2002-07-23 16:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,13 +144,20 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
     sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
     throw(RuntimeException)
 {
-    if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, "", LOAD_CHARACTER_BREAKITERATOR);
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
+        if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, "", LOAD_CHARACTER_BREAKITERATOR);
 
-    characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
-    for (nDone = 0; nDone < nCount; nDone++) {
+        characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+        for (nDone = 0; nDone < nCount; nDone++) {
         nStartPos = characterBreak->following(nStartPos);
         if (nStartPos == BreakIterator::DONE)
-        return Text.getLength();
+            return Text.getLength();
+        }
+    } else { // for CHARACTER mode
+        nDone = Text.getLength() - nStartPos;
+        if (nDone > nCount)
+        nDone = nCount;
+        nStartPos += nDone;
     }
     return nStartPos;
 }
@@ -160,7 +167,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
     sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
     throw(RuntimeException)
 {
-    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
+    if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
         if (!characterBreak) characterBreak = loadICUBreakIterator(rLocale, "", LOAD_CHARACTER_BREAKITERATOR);
 
         characterBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
@@ -169,7 +176,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
         if (nStartPos == BreakIterator::DONE)
             return 0;
         }
-    } else { // for BS to delete one char.
+    } else { // for BS to delete one char and CHARACTER mode.
         nDone = (nStartPos > nCount) ? nCount : nStartPos;
         nStartPos -= nDone;
     }
