@@ -67,13 +67,8 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @echo using: $(LIB$(TNR)TARGET)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="UNX"
-    @-+IF EXIST $@ del $@
-.ENDIF
-.ENDIF
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
-    @+$(RM) $@
     @+echo $(LIB$(TNR)OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB$(TNR)FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
@@ -97,7 +92,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .IF "$(LIB$(TNR)FILES)"!=""    
     @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB$(TNR)FILES)"!=""    
-    @+echo.
+    @+$(ECHONL)
 .ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $@
     +echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
