@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-03-09 14:57:22 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 10:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #include <event.hxx>
 #include <svapp.hxx>
 #include <svdata.hxx>
+
+
+
+// INTERIM-Checkin
+#include <unohelp.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #pragma hdrstop
 
@@ -256,7 +262,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
 FormatterBase::FormatterBase( Edit* pField )
 {
     mpField                     = pField;
-    mpInternational             = NULL;
+// INTERIM-Checkin  mpInternational             = NULL;
     mbReformat                  = FALSE;
     mbStrictFormat              = FALSE;
     mbEmptyFieldValue           = FALSE;
@@ -267,7 +273,7 @@ FormatterBase::FormatterBase( Edit* pField )
 
 FormatterBase::~FormatterBase()
 {
-    delete mpInternational;
+// INTERIM-Checkin  delete mpInternational;
 }
 
 // -----------------------------------------------------------------------
@@ -299,16 +305,16 @@ void FormatterBase::SetStrictFormat( BOOL bStrict )
 
 void FormatterBase::SetInternational( const International& rInternational )
 {
-    delete mpInternational;
-    mpInternational = new International( rInternational );
-    ReformatAll();
+// INTERIM-Checkin  delete mpInternational;
+// INTERIM-Checkin  mpInternational = new International( rInternational );
+// INTERIM-Checkin  ReformatAll();
 }
 
 // -----------------------------------------------------------------------
 
 const International& FormatterBase::GetInternational() const
 {
-    if ( !mpInternational )
+// INTERIM-Checkin  if ( !mpInternational )
     {
         if ( mpField )
             return mpField->GetSettings().GetInternational();
@@ -316,7 +322,7 @@ const International& FormatterBase::GetInternational() const
             return Application::GetSettings().GetInternational();
     }
 
-    return *mpInternational;
+// INTERIM-Checkin  return *mpInternational;
 }
 
 // -----------------------------------------------------------------------
@@ -2376,3 +2382,32 @@ long CurrencyBox::GetValue() const
     // Implementation not inline, because it is a virtual Function
     return CurrencyFormatter::GetValue();
 }
+
+
+// MT 06/30/2001
+// INTERIM-Checkin => use new header, but old cxx, in case there are problems
+// without the International class, and I'm on vacation the next 2 weeks.
+LocaleDataWrapper& FormatterBase::GetLocaleDataWrapper() const
+{
+    static LocaleDataWrapper* pWrapper = NULL;
+    if ( !pWrapper )
+        pWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+    return *pWrapper;
+}
+const ::com::sun::star::lang::Locale& FormatterBase::GetLocale() const
+{
+        if ( mpField )
+            return mpField->GetSettings().GetLocale();
+        else
+            return Application::GetSettings().GetLocale();
+}
+void FormatterBase::SetLocale( const ::com::sun::star::lang::Locale& rLocale ){;}
+void NumericFormatter::SetUseThousandSep( BOOL b ){;}
+void CurrencyFormatter::SetCurrencySymbol( const String& rStr ){;}
+String CurrencyFormatter::GetCurrencySymbol() const{ return String();}
+void DateFormatter::SetDateFormat( DateFormat eFormat ){;}
+DateFormat DateFormatter::GetDateFormat() const{return DateFormat();}
+void DateFormatter::SetShowDateCentury( BOOL bShowCentury ){;}
+void TimeFormatter::SetTimeFormat( TimeFormat eNewFormat ){;}
+TimeFormat TimeFormatter::GetTimeFormat() const{return TimeFormat();}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-18 12:28:15 $
+ *  last change: $Author: mt $ $Date: 2001-06-29 10:35:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,14 +300,16 @@ BOOL ImplLongCurrencyReformat( const XubString& rStr, BigInt nMin, BigInt nMax,
 
         if ( rFormatter.GetErrorHdl().IsSet() && (nValue != nTempVal) )
         {
-            rFormatter.mnCorrectedValue = nTempVal;
+// INTERIM-Checkin          rFormatter.mnCorrectedValue = nTempVal;
             if ( !rFormatter.GetErrorHdl().Call( &rFormatter ) )
             {
-                rFormatter.mnCorrectedValue = 0;
+// INTERIM-Checkin              rFormatter.mnCorrectedValue = 0;
                 return FALSE;
             }
             else
-                rFormatter.mnCorrectedValue = 0;
+            {
+// INTERIM-Checkin              rFormatter.mnCorrectedValue = 0;
+            }
         }
 
         rOutStr = rInter.GetCurr( nTempVal, nDecDigits );
@@ -876,3 +878,13 @@ XubString International::GetCurr( const BigInt &rNumber, USHORT nDigits ) const
 
     return aTemplate;
 }
+
+
+
+
+// MT 06/30/2001
+// INTERIM-Checkin => use new header, but old cxx, in case there are problems
+// without the International class, and I'm on vacation the next 2 weeks.
+void LongCurrencyFormatter::SetUseThousandSep( BOOL b ){;}
+void LongCurrencyFormatter::SetCurrencySymbol( const String& rStr ){;}
+String LongCurrencyFormatter::GetCurrencySymbol() const{return String();}
