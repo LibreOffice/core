@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 14:40:09 $
+ *  last change: $Author: nn $ $Date: 2001-03-19 19:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svtools/numuno.hxx>
 #include <svtools/smplhint.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/bindings.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <ctype.h>
@@ -116,7 +117,9 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
 {
     static SfxItemPropertyMap aDocOptPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),   0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_AREALINKS),    0,  &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
+        {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
@@ -802,6 +805,26 @@ void SAL_CALL ScModelObj::setPropertyValue(
                 pDoc->SetLanguage( eLatin, eCjk, eCtl );
             }
         }
+        else if ( aString.EqualsAscii( SC_UNO_APPLYFMDES ) )
+        {
+            //  model is created if not there
+            ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
+            pModel->SetOpenInDesignMode( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+
+            SfxBindings* pBindings = pDocShell->GetViewBindings();
+            if (pBindings)
+                pBindings->Invalidate( SID_FM_OPEN_READONLY );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_AUTOCONTFOC ) )
+        {
+            //  model is created if not there
+            ScDrawLayer* pModel = pDocShell->MakeDrawLayer();
+            pModel->SetAutoControlFocus( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+
+            SfxBindings* pBindings = pDocShell->GetViewBindings();
+            if (pBindings)
+                pBindings->Invalidate( SID_FM_AUTOCONTROLFOCUS );
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -822,7 +845,8 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
 
     if (pDocShell)
     {
-        const ScDocOptions& rOpt = pDocShell->GetDocument()->GetDocOptions();
+        ScDocument* pDoc = pDocShell->GetDocument();
+        const ScDocOptions& rOpt = pDoc->GetDocOptions();
         aRet = ScDocOptionsHelper::getPropertyValue( rOpt, aPropertyName );
         if ( aRet.hasValue() )
         {
@@ -831,7 +855,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
             LanguageType eLatin, eCjk, eCtl;
-            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+            pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
             lang::Locale aLocale;
             ScUnoConversion::FillLocale( aLocale, eLatin );
@@ -840,7 +864,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
         {
             LanguageType eLatin, eCjk, eCtl;
-            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+            pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
             lang::Locale aLocale;
             ScUnoConversion::FillLocale( aLocale, eCjk );
@@ -849,7 +873,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_CTL_CLOCAL ) )
         {
             LanguageType eLatin, eCjk, eCtl;
-            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+            pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
             lang::Locale aLocale;
             ScUnoConversion::FillLocale( aLocale, eCtl );
@@ -889,6 +913,20 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             uno::Reference<container::XNameAccess> xLinks = new ScSheetLinksObj( pDocShell );
             aRet <<= xLinks;
+        }
+        else if ( aString.EqualsAscii( SC_UNO_APPLYFMDES ) )
+        {
+            // default for no model is TRUE
+            ScDrawLayer* pModel = pDoc->GetDrawLayer();
+            sal_Bool bOpenInDesign = pModel ? pModel->GetOpenInDesignMode() : sal_True;
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bOpenInDesign );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_AUTOCONTFOC ) )
+        {
+            // default for no model is FALSE
+            ScDrawLayer* pModel = pDoc->GetDrawLayer();
+            sal_Bool bAutoControlFocus = pModel ? pModel->GetAutoControlFocus() : sal_False;
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bAutoControlFocus );
         }
     }
 

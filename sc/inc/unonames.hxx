@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-15 20:25:32 $
+ *  last change: $Author: nn $ $Date: 2001-03-19 19:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
 #define SC_UNO_LINKDISPNAME         "LinkDisplayName"
+
+//  drawing objects
+#define SC_UNONAME_IMAGEMAP         "ImageMap"
 
 //  other cell properties
 #define SC_UNONAME_CHCOLHDR         "ChartColumnAsLabel"
@@ -408,6 +411,10 @@
 #define SC_UNO_NULLDATE             "NullDate"
 #define SC_UNO_SPELLONLINE          "SpellOnline"
 #define SC_UNO_STANDARDDEC          "StandardDecimals"
+
+//  document properties from FormModel
+#define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
+#define SC_UNO_AUTOCONTFOC          "AutomaticControlFocus"
 
 //  view options
 #define SC_UNO_COLROWHDR            "HasColumnRowHeaders"
