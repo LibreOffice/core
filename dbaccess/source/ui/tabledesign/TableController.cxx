@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:47:38 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 11:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,7 +1174,7 @@ void OTableController::loadData()
             // search for type
             ::std::pair<OTypeInfoMap::iterator, OTypeInfoMap::iterator> aPair = m_aTypeInfo.equal_range(nType);
             OTypeInfoMap::iterator aIter = aPair.first;
-            if(aIter == m_aTypeInfo.end())
+            if(aIter == m_aTypeInfo.end()) // compare with end is correct here
             {
                 OSL_ENSURE(sal_False, "OTableController::loadData: no type info found for this type!");
                 continue;
@@ -1202,9 +1202,9 @@ void OTableController::loadData()
                 for(aIter = aPair.first; aIter != aPair.second; ++aIter)
                 {
                     // search the best matching type (now comparing the local names)
-                    if  (   (aIter->second->aLocalTypeName == sTypeName)
-                        &&  (aIter->second->nPrecision >= nPrecision)
-                        &&  (aIter->second->nMaximumScale >= nScale)
+                    if  (   (aIter->second->aLocalTypeName  == sTypeName)
+                        &&  (aIter->second->nPrecision      >= nPrecision)
+                        &&  (aIter->second->nMaximumScale   >= nScale)
                         )
                     {
                         OSL_ENSURE(sal_False,
