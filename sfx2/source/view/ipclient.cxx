@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 11:16:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
         throw uno::RuntimeException();
 
     m_pClient->GetViewShell()->OutplaceActivated( bVisible, m_pClient );
+    m_pClient->Invalidate();
 }
 
 
@@ -828,9 +829,13 @@ const Fraction& SfxInPlaceClient::GetScaleHeight() const
 void SfxInPlaceClient::Invalidate()
 {
     // TODO/LATER: do we need both?
-    awt::Rectangle aAwtRect = m_pImp->getPlacement();
-    Rectangle aRect = VCLRectangle( aAwtRect );
-    m_pEditWin->Invalidate( aRect );
+
+    // the object area is provided in logical coordinates of the window but without scaling applied
+    Rectangle aRealObjArea( m_pImp->m_aObjArea );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImp->m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_pImp->m_aScaleHeight ) );
+    m_pEditWin->Invalidate( aRealObjArea );
+
     ViewChanged();
 }
 
