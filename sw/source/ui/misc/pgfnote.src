@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-26 09:30:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "³Ì°ª¤£¶W¹L­¶°ª(~N)";
         Text[ arabic ] = "áíÓ ÃßÈÑ ãä äØÇŞ ÇáÕİÍÉ";
         Text[ greek ] = "¼÷é ìåãáëıôåñï ıøïò áğü ôçí ğåñéï÷Ş óåëßäáò";
-        Text[ korean ] = "ÃÖ´ë¡¡³ôÀÌ£¬ÂÊ³ôÀÌ¿Í¡¡°°°Ô";
+        Text[ korean ] = "ÃÖ´ë¡¡³ôÀÌ£¬ÂÊ³ôÀÌ¿Í¡¡°°°Ô(~N)";
         Text[ turkish ] = "En fazla sayfa yüksekliğinde";
         Text[ language_user1 ] = " ";
     };
@@ -121,7 +121,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "µù¸}ªº³Ì°ª(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Ìİãéóôï ıøïò õğïóçìåßùóçò";
-        Text[ korean ] = "°¢ÁÖ ÃÖ´ë ³ôÀÌ";
+        Text[ korean ] = "°¢ÁÖ ÃÖ´ë ³ôÀÌ(~H)";
         Text[ turkish ] = "Azami dipnot yüksekliği";
         Text[ language_user1 ] = " ";
     };
@@ -241,7 +241,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "¦ì¸m(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
     };
@@ -409,14 +409,14 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ spanish ] = "~Grosor" ;
         Text [ french ] = "~Épaisseur" ;
         Text [ dutch ] = "~Sterkte" ;
-        Text[ chinese_simplified ] = "ÏßÌõ´ÖÏ¸(~L)";
+        Text[ chinese_simplified ] = "ÏßÌõ´ÖÏ¸(~W)";
         Text[ russian ] = "Òîëùèíà ëèíèé";
         Text[ polish ] = "Gruboœæ";
-        Text[ japanese ] = "ü‚Ì‘¾‚³(~L)";
-        Text[ chinese_traditional ] = "½u±ø²Ê²Ó(~L)";
+        Text[ japanese ] = "ü‚Ì‘¾‚³(~W)";
+        Text[ chinese_traditional ] = "½u±ø²Ê²Ó(~W)";
         Text[ arabic ] = "Óõãúß ÇáÎØ";
         Text[ greek ] = "ĞÜ÷ïò ãñáììŞò";
-        Text[ korean ] = "µÎ²²";
+        Text[ korean ] = "µÎ²²(~W)";
         Text[ turkish ] = "Çizgi kal.";
         Text[ language_user1 ] = " ";
     };
@@ -453,7 +453,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_traditional ] = "ªø«×(~L)";
         Text[ arabic ] = "ÇáØæá";
         Text[ greek ] = "ÌŞêïò";
-        Text[ korean ] = "±æÀÌ";
+        Text[ korean ] = "±æÀÌ(~L)";
         Text[ turkish ] = "Uzunluk";
         Text[ language_user1 ] = " ";
     };
@@ -494,12 +494,12 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ chinese_simplified ] = "ÖÁ×¢½ÅÎÄµÄ¼ä¸ô(~S)";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà ñíîñêè";
         Text[ polish ] = "Odstêp do treœci przypisów dolnych";
-        Text[ japanese ] = "‹r’‚Ü‚Å‚ÌŠÔŠu(~‚r)";
+        Text[ japanese ] = "‹r’‚Ü‚Å‚ÌŠÔŠu(~S)";
         Text[ chinese_traditional ] = "¦Üµù¸}¤åªº¶¡¹j(~S)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ãÍÊæíÇÊ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Áğüó~ôáóç áğü ôï ğåñéå÷üìåíï õğïóçìåßùóçò";
-        Text[ korean ] = "°¢ÁÖ ³»¿ë¿¡ ´ëÇÑ¡¡°£°İ";
+        Text[ korean ] = "°¢ÁÖ ³»¿ë¿¡ ´ëÇÑ¡¡°£°İ(~S)";
         Text[ turkish ] = "Dipnot içeriğine uzaklık";
     };
     MetricField ED_LINEDIST
