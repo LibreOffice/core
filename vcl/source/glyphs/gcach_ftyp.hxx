@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-30 12:20:05 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ public:
     void                        ClearFontList();
 
     class FreetypeServerFont*   CreateFont( const ImplFontSelectData& );
+    void*                       GetFontHandle (int nFontId);
 
 private:
     struct std::hash<FtFontInfo*> { size_t operator()( const FtFontInfo* ) const; };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:30:34 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,20 +138,16 @@ class ExtendedFontStruct : public SvRefBase
         sal_Size            mnDefaultWidth;
         sal_Bool            mbVertical;
         rtl_TextEncoding    mnCachedEncoding;
+        rtl_TextEncoding    mnAsciiEncoding;
 
         ExtendedXlfd*       mpXlfd;
         XFontStruct**       mpXFontStruct;
-        XFontStruct***      mpVXFontStruct;
 
         int                 LoadEncoding( rtl_TextEncoding nEncoding );
         FontPitch           GetSpacing( rtl_TextEncoding nEncoding );
         Bool                GetFontBoundingBox( XCharStruct *pCharStruct,
                                     int *pAscent, int *pDescent ) ;
 
-        void                GetVerticalCharWidth( rtl_TextEncoding nEncoding,
-                                    sal_Unicode nFrom, sal_Unicode nTo,
-                                    sal_Unicode nOutFrom, sal_Unicode nOutTo,
-                                    long *pWidthArray );
         sal_Size            GetDefaultWidth();
         sal_Size            GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray,
@@ -160,10 +156,6 @@ class ExtendedFontStruct : public SvRefBase
                                     long *pWidthArray );
         sal_Size            GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
-        XFontStruct*        GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass );
-        int                 GetVTransX( rtl_TextEncoding nEncoding, short nVClass );
-        int                 GetVTransY( short );
-
     public:
                             ExtendedFontStruct( Display* pDisplay,
                                     unsigned short nPixelSize, sal_Bool bVertical,
@@ -171,11 +163,6 @@ class ExtendedFontStruct : public SvRefBase
                             ~ExtendedFontStruct();
         Bool                Match( const ExtendedXlfd *pXlfd,
                                     int nPixelSize, sal_Bool bVertical ) const;
-        int                 GetVerticalTextItems( const sal_Unicode* pStr,
-                                    int nLength,
-                                    rtl_TextEncoding nEncoding,
-                                    const sal_Unicode* pOutStr,
-                                    VerticalTextItem** &pTextItems );
         XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
         XFontStruct*        GetFontStruct( sal_Unicode nChar,
                                     rtl_TextEncoding *pEncoding );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-29 16:04:17 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ inline size_t std::hash<ImplFontSelectData>::operator()( const ImplFontSelectDat
     nHash   += rFontSelData.mnOrientation;
     nHash   += rFontSelData.mbVertical;
     return nHash;
+
 }
 
 // -----------------------------------------------------------------------
@@ -197,6 +198,16 @@ long GlyphCache::FetchFontList( ImplDevFontList* pList ) const
         nCount += pFtManager->FetchFontList( pList );
     //  nCount += VirtDevServerFont::FetchFontList( pList );
     return nCount;
+}
+
+// -----------------------------------------------------------------------
+
+void*
+GlyphCache::GetFontHandle (int nFontId)
+{
+    if ( pFtManager != NULL )
+        return pFtManager->GetFontHandle (nFontId);
+    return NULL;
 }
 
 // -----------------------------------------------------------------------

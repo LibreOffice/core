@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.25 $
- *  last change: $Author: hdu $ $Date: 2001-04-05 08:28:20 $
+ *  $Revision: 1.26 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,20 @@ FreetypeManager::FreetypeManager()
 FreetypeManager::~FreetypeManager()
 {
     FT_Error rcFT = FT_Done_FreeType( aLibFT );
+}
+
+// -----------------------------------------------------------------------
+
+void*
+FreetypeManager::GetFontHandle (int nFontId)
+{
+    FontList::const_iterator it;
+    for( it = maFontList.begin(); it != maFontList.end(); ++it )
+    {
+        if ((*it)->nFontId == nFontId)
+            return (void*)*it;
+    }
+    return NULL;
 }
 
 // -----------------------------------------------------------------------

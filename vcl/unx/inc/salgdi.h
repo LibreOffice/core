@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-05 07:23:25 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ class   SalVirtualDevice;
 class   SalPolyLine;
 class   SalPrinter;
 class   SalInfoPrinter;
+class   ServerFont;
 
 #ifdef USE_PSPRINT
 namespace psp { struct JobData; class PrinterGfx; }
@@ -129,7 +130,8 @@ class SalGraphicsData
             GC              pFontGC_;           // Font attributes
             ExtendedFontStructRef       xFont_;
             ExtendedFontStructRef       mxFallbackFont;
-            class ServerFont            *mpServerSideFont;
+            ServerFont                  *mpServerSideFont;
+            ServerFont                  *mpSrvFallbackFont;
 
             Fraction        aScale_;
             SalColor        nTextColor_;
@@ -240,17 +242,25 @@ protected:
             void            DrawStringUCS2( int nX, int nY,
                                 const sal_Unicode* pStr, int nLength );
 
-            void            DrawServerFontString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
+            void            DispatchServerFontString( int nX, int nY,
+                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                int nLength, const long* pDXAry );
 
             void            DrawServerSimpleFontString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
+                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                int nLength, const long* pDXAry );
 
             void            DrawServerAAFontString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
+                                ServerFont *pFont, const sal_uInt16* pGlyph,
+                                int nLength, const long* pDXAry );
 
             bool            DrawServerAAForcedString( int nX, int nY,
-                                const sal_Unicode* pStr, int nLength, const long* pDXAry );
+                                ServerFont *pFont,  const sal_uInt16* pGlyph,
+                                int nLength, const long* pDXAry );
+
+            void            DrawServerFontString( int nX, int nY,
+                                const sal_Unicode* pStr,
+                                int nLength, const long* pDXAry );
 #endif
 public:
                             SalGraphicsData();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2001-04-05 07:40:27 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,41 +90,26 @@
 #define VCLASS_FONT_NUM         2 // Other than rotate and rotate_reverse,
                                   // don't have spacial font
 
-ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
-    unsigned short nPixelSize, sal_Bool bVertical, ExtendedXlfd* pXlfd ) :
+ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay, unsigned short nPixelSize,
+                                        sal_Bool bVertical, ExtendedXlfd* pXlfd ) :
         mpDisplay( pDisplay ),
         mnPixelSize( nPixelSize ),
         mbVertical( bVertical ),
         mpXlfd( pXlfd ),
         mnCachedEncoding( RTL_TEXTENCODING_DONTKNOW )
 {
-    // member functions rely on zero initialized pointer for checking of
-    // already loaded fonts
+    mnAsciiEncoding = GetAsciiEncoding (NULL);
+    mnDefaultWidth = GetDefaultWidth();
+
     mpXFontStruct = (XFontStruct**)calloc( mpXlfd->NumEncodings(),
                                             sizeof(XFontStruct*) );
-    mpVXFontStruct = (XFontStruct***)calloc( mpXlfd->NumEncodings(),
-                                            sizeof(XFontStruct**) );
-    for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
-    {
-        mpVXFontStruct[nIdx] = (XFontStruct**)calloc (VCLASS_FONT_NUM,
-                                                        sizeof (XFontStruct*) );
-    }
-    mnDefaultWidth = GetDefaultWidth();
 }
 
 ExtendedFontStruct::~ExtendedFontStruct()
 {
     for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
-    {
         if ( mpXFontStruct[nIdx] != NULL )
             XFreeFont( mpDisplay, mpXFontStruct[nIdx] );
-
-        for ( int nIdx2 = 0; nIdx2 < VCLASS_FONT_NUM; nIdx2++ )
-        {
-            if ( mpVXFontStruct[nIdx][nIdx2] != NULL )
-                XFreeFont( mpDisplay, mpVXFontStruct[nIdx][nIdx2] );
-        }
-    }
 }
 
 rtl_TextEncoding
@@ -267,6 +252,12 @@ ExtendedFontStruct::GetFontStruct( sal_Unicode nChar, rtl_TextEncoding *pEncodin
 {
     SalConverterCache *pCvt = SalConverterCache::GetInstance();
 
+    if ( pCvt->EncodingHasChar(mnAsciiEncoding, nChar) )
+    {
+        *pEncoding = mnAsciiEncoding;
+        return GetFontStruct (mnAsciiEncoding);
+    }
+    else
     if ( pCvt->EncodingHasChar(mnCachedEncoding, nChar) )
     {
         *pEncoding = mnCachedEncoding;
@@ -277,7 +268,8 @@ ExtendedFontStruct::GetFontStruct( sal_Unicode nChar, rtl_TextEncoding *pEncodin
         for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         {
             rtl_TextEncoding nEnc = mpXlfd->GetEncoding(nIdx);
-            if ((nEnc != mnCachedEncoding) && pCvt->EncodingHasChar(nEnc, nChar))
+            if (   (nEnc != mnCachedEncoding) && (nEnc != mnAsciiEncoding)
+                && pCvt->EncodingHasChar(nEnc, nChar))
             {
                 mnCachedEncoding = nEnc;
                 *pEncoding = mnCachedEncoding;
@@ -360,48 +352,6 @@ ExtendedFontStruct::GetDefaultWidth()
     return (mnPixelSize + 1) / 2;
 }
 
-void
-ExtendedFontStruct::GetVerticalCharWidth( rtl_TextEncoding nEncoding,
-                                          sal_Unicode nFrom, sal_Unicode nTo,
-                                          sal_Unicode nOutFrom, sal_Unicode nOutTo,
-                                          long* pWidthArray )
-{
-    int nLength = nTo - nFrom + 1;
-    sal_Unicode* pStr = new sal_Unicode[nTo - nFrom + 1];
-    for ( int nIdx = 0; nIdx < nLength; nIdx++ )
-    {
-        pStr[nIdx] = nTo + nIdx;
-    }
-    VerticalTextItem** pTextItems;
-    int nNum;
-    if ( nEncoding == RTL_TEXTENCODING_UNICODE )
-    {
-        nNum = GetVerticalTextItems( pStr, nLength, nEncoding, pStr, pTextItems );
-    }
-    else
-    {
-        sal_Unicode* pStr2 = new sal_Unicode[nOutTo - nOutFrom + 1];
-        for ( int nIdx2 = 0; nIdx2 < nLength; nIdx2++ )
-        {
-            pStr2[nIdx2] = nOutTo + nIdx2;
-        }
-        nNum = GetVerticalTextItems( pStr, nLength, nEncoding, pStr2, pTextItems );
-        delete( pStr2 );
-    }
-    delete( pStr );
-
-    int nArrayIdx = 0;
-    for ( int nItemIdx = 0; nItemIdx < nNum; nItemIdx++ )
-    {
-        for ( int nChar = 0; nChar < pTextItems[nItemIdx]->mnLength; nChar++ )
-        {
-            pWidthArray[nArrayIdx++] = pTextItems[nItemIdx]->mbFixed ?
-                pTextItems[nItemIdx]->mnFixedAdvance :
-                pTextItems[nItemIdx]->mpAdvanceAry[nChar];
-        }
-    }
-}
-
 // Handle single byte fonts which do not require conversion, this exploits
 // the fact that unicode equals latin1 or ansi1252 in the range [0..0xff] and
 // is compatible with iso8859-X at least in the range to 0x7f
@@ -462,12 +412,6 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         return 0;
 
     // query the font metrics
-    if ( mbVertical )
-    {
-        GetVerticalCharWidth( RTL_TEXTENCODING_UNICODE, nFrom, nTo, nFrom, nTo,
-                              pWidthArray );
-    }
-    else
     if (   nSpacing == PITCH_VARIABLE
         && pXFontStruct->per_char == NULL)
     {
@@ -516,30 +460,34 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
     {
         FontPitch nSpacing;
         sal_Size nSize;
+        sal_Unicode nUniIdx = (sal_Unicode)nIdx;
 
         // get a matching fontstruct
-        rtl_TextEncoding nEncoding;
-        XFontStruct *pXFontStruct;
+        rtl_TextEncoding nEnc;
+        XFontStruct *pFont;
 
-        if ( (pXFontStruct = GetFontStruct(nIdx, &nEncoding)) != NULL )
+        if ( (pFont = GetFontStruct(nUniIdx, &nEnc)) != NULL )
         {
-            nSpacing = GetSpacing( nEncoding );
+            nSpacing = GetSpacing( nEnc );
         }
         else
         if (   (pFallback != NULL)
-            && ((pXFontStruct = pFallback->GetFontStruct(nIdx, &nEncoding)) != NULL) )
+            && ((pFont = pFallback->GetFontStruct(nUniIdx, &nEnc)) != NULL) )
         {
-            nSpacing = pFallback->GetSpacing( nEncoding );
+            nSpacing = pFallback->GetSpacing( nEnc );
+        }
+        else
+        if (   (pFallback != NULL)
+            && ((pFont = pFallback->GetFontStruct(nUniIdx = '?', &nEnc)) != NULL) )
+        {
+            nSpacing = pFallback->GetSpacing( nEnc );
         }
 
-        if ( pXFontStruct )
+        if ( pFont )
         {
-            sal_Unicode nUniIdx = (sal_Unicode)nIdx;
-            nSize = pCvt->ConvertStringUTF16( &nUniIdx, 1, pBuffer, sizeof(pBuffer),
-                            nEncoding );
+            nSize = pCvt->ConvertStringUTF16(&nUniIdx, 1, pBuffer, sizeof(pBuffer), nEnc);
             // XXX FIXME
-            if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
-                || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
+            if ((nEnc == RTL_TEXTENCODING_GB_2312) || (nEnc == RTL_TEXTENCODING_EUC_KR))
             {
                 for (int n_char = 0; n_char < nSize; n_char++ )
                     pBuffer[ n_char ] &= 0x7F;
@@ -547,35 +495,29 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
         }
 
         // query font metrics
-        if ( pXFontStruct && (nSize == 1 || nSize == 2) )
+        if ( pFont && (nSize == 1 || nSize == 2) )
         {
             nChar = nSize == 1 ? (sal_MultiByte)pBuffer[0] :
                 ((sal_MultiByte)pBuffer[0] << 8) + (sal_MultiByte)pBuffer[1];
 
-            if ( mbVertical )
-            {
-                GetVerticalCharWidth( nEncoding, nIdx, nIdx, nChar, nChar, pWidthArray );
-            }
-            else
             if (   nSpacing == PITCH_VARIABLE
-                && pXFontStruct->per_char == NULL)
+                && pFont->per_char == NULL)
             {
                 // get per_char information from the x-server
-                *pWidthArray = QueryCharWidth16( mpDisplay, pXFontStruct->fid,
+                *pWidthArray = QueryCharWidth16( mpDisplay, pFont->fid,
                             nChar, mnDefaultWidth );
             }
             else
-            if (   (    pXFontStruct->max_bounds.width
-                    ==  pXFontStruct->min_bounds.width)
-                || (pXFontStruct->per_char == NULL) )
+            if (   (pFont->max_bounds.width ==  pFont->min_bounds.width)
+                || (pFont->per_char == NULL) )
             {
                 // fixed width font
-                *pWidthArray = pXFontStruct->min_bounds.width;
+                *pWidthArray = pFont->min_bounds.width;
             }
             else
             {
                 // get per_char information from the xfontstruct
-                XCharStruct* pChar = GetCharinfo( pXFontStruct, nChar );
+                XCharStruct* pChar = GetCharinfo( pFont, nChar );
                 *pWidthArray = CharExists(pChar) ? pChar->width : mnDefaultWidth;
             }
         }
@@ -639,234 +581,34 @@ GetVerticalClass( sal_Unicode nChar )
         {
             return VCLASS_ROTATE;
         }
-        else if ( nChar == 0x3001 || nChar == 0x3002 )
+        else
+        if ( nChar == 0x3001 || nChar == 0x3002 )
         {
             return VCLASS_TRANSFORM1;
         }
-        else if ( nChar == 0x3041 || nChar == 0x3043 ||
-              nChar == 0x3045 || nChar == 0x3047 ||
-              nChar == 0x3049 || nChar == 0x3063 ||
-              nChar == 0x3083 || nChar == 0x3085 ||
-              nChar == 0x3087 || nChar == 0x308e ||
-              nChar == 0x30a1 || nChar == 0x30a3 ||
-              nChar == 0x30a5 || nChar == 0x30a7 ||
-              nChar == 0x30a9 || nChar == 0x30c3 ||
-              nChar == 0x30e3 || nChar == 0x30e5 ||
-              nChar == 0x30e7 || nChar == 0x30ee ||
-              nChar == 0x30f5 || nChar == 0x30f6 )
+        else
+        if ( nChar == 0x3041 || nChar == 0x3043 ||
+             nChar == 0x3045 || nChar == 0x3047 ||
+             nChar == 0x3049 || nChar == 0x3063 ||
+             nChar == 0x3083 || nChar == 0x3085 ||
+             nChar == 0x3087 || nChar == 0x308e ||
+             nChar == 0x30a1 || nChar == 0x30a3 ||
+             nChar == 0x30a5 || nChar == 0x30a7 ||
+             nChar == 0x30a9 || nChar == 0x30c3 ||
+             nChar == 0x30e3 || nChar == 0x30e5 ||
+             nChar == 0x30e7 || nChar == 0x30ee ||
+             nChar == 0x30f5 || nChar == 0x30f6 )
         {
             return VCLASS_TRANSFORM2;
         }
-        else if ( nChar == 0x30fc )
+        else
+        if ( nChar == 0x30fc )
         {
             return VCLASS_ROTATE_REVERSE;
         }
+
         return VCLASS_CJK;
     }
     return VCLASS_ROTATE;
-}
-
-XFontStruct*
-ExtendedFontStruct::GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass )
-{
-    int nIdx = mpXlfd->GetEncodingIdx( nEncoding );
-    if (nIdx < 0)
-            return NULL;
-
-    switch( nVClass )
-    {
-        case VCLASS_ROTATE_REVERSE:
-        {
-            if (mpVXFontStruct[nIdx][nVClass] == NULL)
-            {
-                ByteString aFontName;
-                mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d ~%d 0]", nEncoding );
-                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay,
-                                                            aFontName.GetBuffer() );
-                if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
-                    pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
-
-                mpVXFontStruct[nIdx][nVClass] = pXFontStruct;
-            }
-            break;
-        }
-        case VCLASS_ROTATE:
-        {
-            if (mpVXFontStruct[nIdx][nVClass] == NULL)
-            {
-                ByteString aFontName;
-                mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d %d 0]", nEncoding );
-                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay,
-                                                            aFontName.GetBuffer() );
-                if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
-                    pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
-
-                mpVXFontStruct[nIdx][nVClass] = pXFontStruct;
-            }
-            break;
-        }
-            case VCLASS_CJK:
-        default:
-            return mpXFontStruct[nIdx];
-
-    }
-    return mpVXFontStruct[nIdx][nVClass];
-}
-
-int
-ExtendedFontStruct::GetVTransX( rtl_TextEncoding nEncoding, short nVClass )
-{
-    int nAscent, nDescent, nWidth;
-    XCharStruct aBoundingBox;
-    XFontStruct *pXFontStruct = GetFontStruct( nEncoding );
-    if (pXFontStruct->per_char == NULL)
-    {
-        int nDirection;
-        XCharStruct aBoundingBox;
-        XChar2b cTestChar;
-        cTestChar.byte1 = pXFontStruct->min_byte1;
-        cTestChar.byte2 = pXFontStruct->min_char_or_byte2;
-        XQueryTextExtents16( mpDisplay, pXFontStruct->fid, &cTestChar, 1,
-                     &nDirection, &nAscent, &nDescent, &aBoundingBox );
-        nWidth = aBoundingBox.width;
-    }
-    else
-    {
-        if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
-            nWidth = aBoundingBox.width;
-        else
-            nWidth = mnDefaultWidth;
-    }
-
-    switch( nVClass )
-    {
-        case VCLASS_ROTATE_REVERSE:
-            return nWidth * 2.2 / 5;
-        case VCLASS_TRANSFORM1:
-            return 0;
-        case VCLASS_TRANSFORM2:
-            return -nWidth / 3;
-        case VCLASS_ROTATE:
-        default:
-            return -nWidth / 2;
-    }
-}
-
-int
-ExtendedFontStruct::GetVTransY( short nVClass )
-{
-    int nAscent, nDescent, nHeight;
-    XCharStruct aBoundingBox;
-    if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
-    {
-        nHeight = nAscent + nDescent;
-    }
-    else
-    {
-        nHeight = 0;
-    }
-    switch( nVClass )
-    {
-        case VCLASS_TRANSFORM1:
-            return nHeight / 3;
-        case VCLASS_TRANSFORM2:
-            return nHeight * 5 / 6;
-        case VCLASS_ROTATE:
-        case VCLASS_ROTATE_REVERSE:
-            return 0;
-        default:
-            return nHeight;
-    }
-}
-
-int
-ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength,
-    rtl_TextEncoding nEncoding, const sal_Unicode* pOutStr,
-    VerticalTextItem** &pTextItems )
-{
-    int nNumItem = 0;
-    short nCurrentVClass = GetVerticalClass( *pStr );
-    short nNextVClass;
-    VerticalTextItem** items = (VerticalTextItem**)calloc( nLength,
-                                                            sizeof(VerticalTextItem*) );
-    int nPrevPtr = 0;
-    for ( int nIdx = 0; nIdx < nLength; nIdx++ )
-    {
-        nNextVClass = (nIdx == nLength - 1) ?
-                        VCLASS_DONTKNOW : GetVerticalClass( *(pStr + nIdx + 1) );
-        if ( nNextVClass != nCurrentVClass )
-        {
-            int nLen = nIdx - nPrevPtr + 1;
-
-            switch(nCurrentVClass)
-            {
-                case VCLASS_ROTATE:
-                case VCLASS_ROTATE_REVERSE:
-                {
-                    XFontStruct *pXFontStruct = GetFontStruct ( nEncoding );
-                    int *pAdvanceAry = new int[nLen];
-                    for ( int nIdx2 = 0; nIdx2 < nLen; nIdx2++ )
-                    {
-                        if (pXFontStruct->per_char == NULL)
-                        {
-                            int nDirection, nAscent, nDescent;
-                            XCharStruct aBoundingBox;
-                            XQueryTextExtents16( mpDisplay, pXFontStruct->fid,
-                                         (XChar2b*)(pOutStr + nPrevPtr + nIdx2), 1,
-                                         &nDirection, &nAscent, &nDescent,
-                                         &aBoundingBox );
-                            pAdvanceAry[nIdx2] = aBoundingBox.width;
-                        }
-                        else
-                        {
-                            XCharStruct *pChar = GetCharinfo( pXFontStruct,
-                                              *(pOutStr + nPrevPtr + nIdx2) );
-                            pAdvanceAry[nIdx2] = CharExists(pChar) ?
-                                                    pChar->width : mnDefaultWidth;
-                        }
-                    }
-                    items[nNumItem++] = new VerticalTextItem(
-                                          GetVXFontStruct( nEncoding, nCurrentVClass ),
-                                          pOutStr + nPrevPtr,
-                                          nLen,
-                                          GetVTransX( nEncoding, nCurrentVClass ),
-                                          GetVTransY( nCurrentVClass ),
-                                          pAdvanceAry );
-                }
-                break;
-                default:
-                {
-                    int nAscent, nDescent, nHeight;
-                    XCharStruct aBoundingBox;
-                    if ( GetFontBoundingBox( &aBoundingBox, &nAscent, &nDescent ) )
-                    {
-                        nHeight = nAscent + nDescent;
-                    }
-                    else
-                    {
-                        nHeight = 0;
-                    }
-                    items[nNumItem++] = new VerticalTextItem(
-                                          GetVXFontStruct( nEncoding, nCurrentVClass ),
-                                          pOutStr + nPrevPtr,
-                                          nLen,
-                                          GetVTransX( nEncoding, nCurrentVClass ),
-                                          GetVTransY( nCurrentVClass ),
-                                          nHeight );
-                }
-            }
-            nPrevPtr = nIdx + 1;
-            nCurrentVClass = nNextVClass;
-        }
-    }
-
-    VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nNumItem,
-                                                            sizeof(VerticalTextItem*) );
-    memcpy( pTmp, items, nNumItem * sizeof(VerticalTextItem*) );
-    free( items );
-
-    pTextItems = pTmp;
-
-    return nNumItem;
 }
 

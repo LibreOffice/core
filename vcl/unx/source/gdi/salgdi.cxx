@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
+ *  last change: $Author: cp $ $Date: 2001-04-06 08:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ SalGraphicsData::SalGraphicsData()
     pFontGC_            = NULL;
 //  xFont_              = NULL;
     mpServerSideFont    = NULL;
+    mpSrvFallbackFont   = NULL;
     aScale_             = Fraction( 1, 1 );
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
