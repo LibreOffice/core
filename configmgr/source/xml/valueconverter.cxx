@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:36:25 $
+ *  last change: $Author: jb $ $Date: 2001-04-09 13:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,35 +418,149 @@ bool OValueConverter::convertListToAny(StringList const& aContentList, uno::Any&
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    sal_Int32 const NO_MORE_TOKENS = -1;
+    struct OTokenizeByWhitespace
+    {
+        static inline bool isWhitespace(sal_Unicode ch)
+        {
+            // note: for definition of whitescape see also
+            //   canUseWhitespace(OUString const&)
+            // in xmlformater.cxx
+            // -----------------------------------------------------------------------------
+            sal_Unicode const c_chWhite0 = ' ';
+            sal_Unicode const c_chWhite1 = '\t';
+
+            OSL_ENSURE(ch != 0xA && ch != 0xD, "Unexpected line break character");
+            return (ch == c_chWhite0) || (ch == c_chWhite1);
+        }
+
+        sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
+        {
+            return findNextTokenStart(sText,0);
+        }
+
+        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const throw()
+        {
+            sal_Int32 const nEnd = sText.getLength();
+            sal_Int32 nPos = nPrevTokenEnd;
+
+            OSL_PRECOND( nPos == 0 || (0 < nPos && nPos < nEnd && isWhitespace(sText[nPos])) || nPos == nEnd,
+                         "Invalid nPrevTokenEnd");
+
+            while (nPos < nEnd && isWhitespace(sText[nPos]))
+            {
+                ++nPos;
+            }
+
+            if (nPos < nEnd)
+                return nPos;
+            else
+                return NO_MORE_TOKENS;
+        }
+
+        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const throw()
+        {
+            sal_Int32 const nEnd = sText.getLength();
+            sal_Int32 nPos = nTokenStart;
+
+            OSL_PRECOND( 0 <= nPos && nPos < nEnd && !isWhitespace(sText[nPos]),
+                         "Invalid nTokenStart");
+
+            while (nPos < nEnd && !isWhitespace(sText[nPos]))
+            {
+                ++nPos;
+            }
+
+            return nPos;
+        }
+    };
+// -----------------------------------------------------------------------------
+    struct OTokenizeBySeparator
+    {
+        OUString const sSeparator;
+        OTokenizeBySeparator(OUString const& _sSeparator) throw()
+            : sSeparator(_sSeparator)
+        {
+            OSL_PRECOND(sSeparator.trim().getLength() > 0, "Invalid empty separator string");
+        }
+
+        sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
+        {
+            return 0;
+        }
+        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const throw()
+        {
+            sal_Int32 const nEnd = sText.getLength();
+            sal_Int32 nPos = nPrevTokenEnd;
+            OSL_PRECOND( nPos == nEnd || (0 <= nPos && nPos < nEnd && sText.indexOf(sSeparator, nPos) == nPos),
+                         "Invalid nPrevTokenEnd");
+
+            if (nPos < nEnd)
+                return nPos + sSeparator.getLength();
+            else
+                return NO_MORE_TOKENS;
+        }
+        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const throw()
+        {
+            sal_Int32 const nEnd = sText.getLength();
+            OSL_PRECOND( 0 <= nTokenStart && nTokenStart <= nEnd ,
+                         "Invalid nTokenStart");
+
+            sal_Int32 nPos = sText.indexOf(sSeparator,nTokenStart);
+
+            if (nPos >= 0)
+                return nPos;
+            else
+                return nEnd;
+        }
+    };
+// -----------------------------------------------------------------------------
+    template <class Tokenizer>
+    void tokenizeListData(Tokenizer const& aTokenizer, OUString const& aContent, StringList& rContentList)
+            CFG_THROW( ( uno::RuntimeException ) )
+    {
+        sal_Int32 nTokenPos = aTokenizer.findFirstTokenStart(aContent);
+
+        while(nTokenPos != NO_MORE_TOKENS)
+        {
+            sal_Int32 nTokenEnd = aTokenizer.findTokenEnd(aContent, nTokenPos);
+
+            // this is what the tokenizer must provide
+            OSL_ASSERT(0 <= nTokenPos && nTokenPos <= nTokenEnd && nTokenEnd <= aContent.getLength());
+
+            rContentList.push_back( aContent.copy(nTokenPos, nTokenEnd-nTokenPos) );
+
+            nTokenPos= aTokenizer.findNextTokenStart(aContent, nTokenEnd);
+        }
+    }
+// -----------------------------------------------------------------------------
+}
+// -----------------------------------------------------------------------------
 void OValueConverter::splitListData(OUString const& aContent, StringList& rContentList) const
-        CFG_THROW( ( uno::RuntimeException ) )
+    CFG_THROW( ( uno::RuntimeException ) )
 {
     OUString sSeparator = m_aValueDesc.sSeparator;
 
-    sal_Int32 nSeparatorLength = sSeparator.getLength();
-    if (nSeparatorLength == 0)
+    bool bSeparateByWhitespace = (sSeparator.trim().getLength() == 0);
+
+    OSL_ENSURE( bSeparateByWhitespace == (!sSeparator.getLength() || sSeparator.equals(DEFAULT_SEPARATOR)),
+                "Unexpected whitespace-only separator");
+
+    if (bSeparateByWhitespace)
     {
-        sSeparator = DEFAULT_SEPARATOR;
-        nSeparatorLength = sSeparator.getLength();
+        OSL_ENSURE( sSeparator.getLength()==0 || sSeparator.equals(DEFAULT_SEPARATOR),
+                    "Unexpected whitespace-only separator");
+
+        tokenizeListData( OTokenizeByWhitespace(), aContent, rContentList );
     }
-    OSL_ASSERT(nSeparatorLength > 0);
-
-    sal_Int32 nPos = 0;
-
-    for(;;)
+    else
     {
-        sal_Int32 nEnd = aContent.indexOf(sSeparator, nPos);
+        OSL_ENSURE( sSeparator.trim()==sSeparator,
+                    "Unexpected whitespace in separator");
 
-        if (nEnd < 0) break;
-
-        rContentList.push_back( aContent.copy(nPos, nEnd-nPos) );
-
-        nPos = nEnd + nSeparatorLength;
-    }
-
-    if (nPos < aContent.getLength())
-    {
-        rContentList.push_back( aContent.copy(nPos) );
+        tokenizeListData( OTokenizeBySeparator(aContent), aContent, rContentList );
     }
 }
 // -----------------------------------------------------------------------------
