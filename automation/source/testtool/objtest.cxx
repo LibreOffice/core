@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:07:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3290,7 +3290,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                     pImpl->naRemoteTime[ i ] += nLNr1;
                                     pImpl->naLocalTime[ i ] += Time::GetSystemTicks() - pImpl->LocalStarttime;
 
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
                                     if ( nLNr1 > (Time::GetSystemTicks() - pImpl->LocalStarttime) )
                                     {
                                         String aLine = CUniString("Testtoolzeit(").Append(String::CreateFromInt64(Time::GetSystemTicks() - pImpl->LocalStarttime)).AppendAscii(") kleiner Officezeit(").Append(String::CreateFromInt64(nLNr1)).AppendAscii(")\n");
