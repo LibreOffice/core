@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:43:07 $
+ *  last change: $Author: jp $ $Date: 2001-04-04 08:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,36 @@
 #define _SORTOPT_HXX
 
 
-#ifndef _SVARRAY_HXX //autogen
+#ifndef _ONLY_SORT_KEY_TYPE
+#ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
+#endif
 
-enum SwSortKeyType      { SRT_APLHANUM, SRT_NUMERIC     };
+// also used in the resources !
+
+    // for all
+#define SRT_NUMERIC     1
+    // for western
+#define SRT_APLHANUM    2
+    // additional for chinese
+#define SRT_PINYIN      3
+#define SRT_STROKE      4
+#define SRT_RADICALS    5
+#define SRT_DATE        6
+#define SRT_CHUYIN      7
+    // additional for japanese
+#define SRT_JIS         8
+#define SRT_SYLLABEL    9
+    // additional for korean
+#define SRT_KS_CODE     10
+#define SRT_DICTIONARY  11
+
+
+#ifndef _ONLY_SORT_KEY_TYPE
+
+typedef USHORT SwSortKeyType;
+
 enum SwSortOrder        { SRT_ASCENDING, SRT_DESCENDING };
 enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 
@@ -92,10 +117,14 @@ struct SwSortOptions
     ~SwSortOptions();
     SwSortOptions(const SwSortOptions& rOpt);
 
-    BOOL            bTable;
-    sal_Unicode     cDeli;
-    SwSortDirection eDirection;
     SwSortKeys      aKeys;
+    SwSortDirection eDirection;
+    sal_Unicode     cDeli;
+    USHORT          nLanguage;
+    BOOL            bTable;
+    BOOL            bIgnoreCase;
 };
+
+#endif // _ONLY_SORT_KEY_TYPE
 
 #endif  // _SORTOPT_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:46:33 $
+ *  last change: $Author: jp $ $Date: 2001-04-04 08:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,16 @@
 
 #pragma hdrstop
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#include "sortopt.hxx"
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+
+#ifndef _SORTOPT_HXX
+#include <sortopt.hxx>
+#endif
 
 
 SV_IMPL_PTRARR(SwSortKeys, SwSortKey*)
@@ -105,21 +111,26 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
  --------------------------------------------------------------------*/
 
 
-SwSortOptions::SwSortOptions() :
-    eDirection(SRT_ROWS),
-    cDeli(9),
-    bTable(FALSE)
+SwSortOptions::SwSortOptions()
+    : eDirection( SRT_ROWS ),
+    nLanguage( LANGUAGE_SYSTEM ),
+    cDeli( 9 ),
+    bTable( FALSE ),
+    bIgnoreCase( FALSE )
 {
 }
 
 
 SwSortOptions::SwSortOptions(const SwSortOptions& rOpt) :
-    eDirection(rOpt.eDirection),
-    cDeli(rOpt.cDeli),
-    bTable(rOpt.bTable)
+    eDirection( rOpt.eDirection ),
+    cDeli( rOpt.cDeli ),
+    nLanguage( rOpt.nLanguage ),
+    bTable( rOpt.bTable ),
+    bIgnoreCase( rOpt.bIgnoreCase )
 {
     for(USHORT i=0; i < rOpt.aKeys.Count(); ++i)
-    {   SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
+    {
+        SwSortKey* pNew = new SwSortKey(*rOpt.aKeys[i]);
         aKeys.C40_INSERT( SwSortKey, pNew, aKeys.Count());
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:46:49 $
+ *  last change: $Author: jp $ $Date: 2001-04-04 08:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,37 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
-#include "view.hxx"
-#include "cmdid.h"
-#include "wrtsh.hxx"
-#include "srtdlg.hxx"
-#include "sortopt.hxx"
-#include "misc.hrc"
-#include "srtdlg.hrc"
-#include "swtable.hxx"
-#include "node.hxx"
-#include "tblsel.hxx"
+
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _SRTDLG_HXX
+#include <srtdlg.hxx>
+#endif
+#ifndef _SORTOPT_HXX
+#include <sortopt.hxx>
+#endif
+#ifndef _MISC_HRC
+#include <misc.hrc>
+#endif
+#ifndef _SRTDLG_HRC
+#include <srtdlg.hrc>
+#endif
+#ifndef _SWTABLE_HXX
+#include <swtable.hxx>
+#endif
+#ifndef _NODE_HXX
+#include <node.hxx>
+#endif
+#ifndef _TBLSEL_HXX
+#include <tblsel.hxx>
+#endif
 
 static BOOL bCheck1 = TRUE;
 static BOOL bCheck2 = FALSE;
@@ -102,16 +123,19 @@ static USHORT nCol1 = 1;
 static USHORT nCol2 = 1;
 static USHORT nCol3 = 1;
 
-static USHORT nType1 = 0;
-static USHORT nType2 = 0;
-static USHORT nType3 = 0;
+static USHORT nType1 = SRT_APLHANUM;
+static USHORT nType2 = SRT_APLHANUM;
+static USHORT nType3 = SRT_APLHANUM;
+
+static USHORT nLang = LANGUAGE_SYSTEM;
 
 static BOOL   bAsc1  = TRUE;
 static BOOL   bAsc2  = TRUE;
 static BOOL   bAsc3  = TRUE;
 static BOOL   bCol   = FALSE;
-static sal_Unicode    cDeli  = '\t';
+static BOOL   bIgnrCs= FALSE;
 
+static sal_Unicode    cDeli  = '\t';
 
 
 /*--------------------------------------------------------------------
@@ -120,7 +144,7 @@ static sal_Unicode    cDeli  = '\t';
  --------------------------------------------------------------------*/
 
 
-BOOL lcl_GetSelTbl( SwWrtShell &rSh,USHORT& rX, USHORT& rY )
+BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
     if( !pTblNd )
@@ -142,6 +166,18 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh,USHORT& rX, USHORT& rY )
 
     rY = aFndBox.GetLines()[0]->GetBoxes().Count();
     return TRUE;
+}
+
+void lcl_SelectUserData( ListBox& rLstBox, USHORT nType )
+{
+    USHORT n = 0, nEnd = rLstBox.GetEntryCount();
+    for( ; n < nEnd; ++n )
+        if( nType == (USHORT)(long)rLstBox.GetEntryData( n ) )
+            break;
+
+    if( n >= nEnd )
+        n = 0;
+    rLstBox.SelectEntryPos( n );
 }
 
 /*--------------------------------------------------------------------
@@ -226,9 +262,9 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aColEdt2.SetValue(nCol2);
     aColEdt3.SetValue(nCol3);
 
-    aTypDLB1.SelectEntryPos(nType1);
-    aTypDLB2.SelectEntryPos(nType2);
-    aTypDLB3.SelectEntryPos(nType3);
+    ::lcl_SelectUserData( aTypDLB1, nType1 );
+    ::lcl_SelectUserData( aTypDLB2, nType2 );
+    ::lcl_SelectUserData( aTypDLB3, nType3 );
 
     aSortUpRB.Check(bAsc1);
     aSortDnRB.Check(!bAsc1);
@@ -257,9 +293,6 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     }
 }
 
-
-
-
 SwSortDlg::~SwSortDlg()
 {
 }
@@ -269,42 +302,52 @@ SwSortDlg::~SwSortDlg()
  --------------------------------------------------------------------*/
 void SwSortDlg::Apply()
 {
+    // Alte Einstellung speichern
+    //
+    bCheck1 = aKeyCB1.IsChecked();
+    bCheck2 = aKeyCB2.IsChecked();
+    bCheck3 = aKeyCB3.IsChecked();
+
+    nCol1 = (USHORT)aColEdt1.GetValue();
+    nCol2 = (USHORT)aColEdt2.GetValue();
+    nCol3 = (USHORT)aColEdt3.GetValue();
+
+    nType1 = (USHORT)(long)aTypDLB1.GetEntryData(aTypDLB1.GetSelectEntryPos());
+    nType2 = (USHORT)(long)aTypDLB2.GetEntryData(aTypDLB2.GetSelectEntryPos());
+    nType3 = (USHORT)(long)aTypDLB3.GetEntryData(aTypDLB3.GetSelectEntryPos());
+
+    bAsc1 = aSortUpRB.IsChecked();
+    bAsc2 = aSortUp2RB.IsChecked();
+    bAsc3 = aSortUp3RB.IsChecked();
+    bCol = aColumnRB.IsChecked();
+
     SwSortOptions aOptions;
-    if(aKeyCB1.IsChecked())
+    if( bCheck1 )
     {
-        USHORT nSort = aSortUpRB.IsChecked() ?
-                                (USHORT)SRT_ASCENDING : (USHORT)SRT_DESCENDING ;
-        SwSortKey *pKey = new SwSortKey(aColEdt1.GetValue(),
-                (SwSortKeyType)aTypDLB1.GetSelectEntryPos(),
-                (SwSortOrder)nSort);
+        SwSortKey *pKey = new SwSortKey( nCol1, nType1,
+                                    bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
     }
 
-    if(aKeyCB2.IsChecked())
+    if( bCheck2 )
     {
-        USHORT nSort = aSortUp2RB.IsChecked() ?
-                                (USHORT)SRT_ASCENDING : (USHORT)SRT_DESCENDING ;
-        SwSortKey *pKey = new SwSortKey(aColEdt2.GetValue(),
-                (SwSortKeyType)aTypDLB2.GetSelectEntryPos(),
-                (SwSortOrder)nSort);
-        aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
+        SwSortKey *pKey = new SwSortKey( nCol2, nType2,
+                                    bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
+        aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
     }
 
-    if(aKeyCB3.IsChecked())
+    if( bCheck3 )
     {
-        USHORT nSort = aSortUp3RB.IsChecked() ?
-                                (USHORT)SRT_ASCENDING : (USHORT)SRT_DESCENDING ;
-        SwSortKey *pKey = new SwSortKey(aColEdt3.GetValue(),
-                (SwSortKeyType)aTypDLB3.GetSelectEntryPos(),
-                (SwSortOrder)nSort);
-        aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
+        SwSortKey *pKey = new SwSortKey( nCol3, nType3,
+                                    bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
+        aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
     }
-    aOptions.eDirection =  aRowRB.IsChecked() ?
-                        SRT_ROWS    : SRT_COLUMNS;
+    aOptions.eDirection =  bCol ? SRT_COLUMNS : SRT_ROWS;
+
     sal_Unicode cDeli = '\t';
     if(!aDelimTabRB.IsChecked())
     {
-        String aTmp(aDelimEdt.GetText());
+        String aTmp( aDelimEdt.GetText() );
         if( aTmp.Len() )
             cDeli = aTmp.GetChar( 0 );
     }
@@ -322,26 +365,8 @@ void SwSortDlg::Apply()
 
     if( !bRet )
         InfoBox( this->GetParent(), SW_RES(MSG_SRTERR)).Execute();
-
-    // Alte Einstellung speichern
-    //
-    bCheck1 = aKeyCB1.IsChecked();
-    bCheck2 = aKeyCB2.IsChecked();
-    bCheck3 = aKeyCB3.IsChecked();
-
-    nCol1 = (USHORT)aColEdt1.GetValue();
-    nCol2 = (USHORT)aColEdt2.GetValue();
-    nCol3 = (USHORT)aColEdt3.GetValue();
-
-    nType1 = aTypDLB1.GetSelectEntryPos();
-    nType2 = aTypDLB2.GetSelectEntryPos();
-    nType3 = aTypDLB3.GetSelectEntryPos();
-
-    bAsc1 = aSortUpRB.IsChecked();
-    bAsc2 = aSortUp2RB.IsChecked();
-    bAsc3 = aSortUp3RB.IsChecked();
-    bCol = aColumnRB.IsChecked();
 }
+
 /* -----------------30.09.98 10:03-------------------
  *
  * --------------------------------------------------*/
@@ -379,6 +404,9 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/12/15 14:46:49  os
+    #80953# SortOptions-delimiter: char->sal_Unicode
+
     Revision 1.2  2000/11/30 11:47:50  jp
     Bug #80930#: handle the return value correct
 

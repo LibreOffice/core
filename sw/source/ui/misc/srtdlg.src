@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 07:06:07 $
+ *  last change: $Author: jp $ $Date: 2001-04-04 08:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #include "srtdlg.hrc"
 #include "cmdid.h"
 #include "helpid.h"
+
+#define _ONLY_SORT_KEY_TYPE
+#include "sortopt.hxx"
+
 ModalDialog DLG_SORTING
 {
     HelpID = FN_SORTING_DLG ;
@@ -243,121 +247,38 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
+        Sort = TRUE;
         StringList =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumerisch" ; SRT_APLHANUM ; > ;
+            < "numerisch" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+            < "Dictionary" ; SRT_DICTIONARY ; > ;
+#endif
         };
         StringList [ ENGLISH ] =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumeric" ; SRT_APLHANUM ; > ;
+            < "numeric" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+#endif
         };
-        StringList [ norwegian ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "alfanumerica" ; > ;
-            < "numerica" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "alphanumérique" ; > ;
-            < "numérique" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "alfanumeriek" ; > ;
-            < "numeriek" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "alfanumérica" ; > ;
-            < "numérica" ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "alphanumeric" ; > ;
-            < "numeric" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "×ÖÄ¸" ; > ;
-        < "Êý×Ö" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "àëôàâèòíî-öèôðîâîé" ; > ;
-        < "öèôðîâîé" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "alfanumeryczny" ; > ;
-        < "numeryczny" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "±ÙÌ§ÍÞ¯Ä‡" ; > ;
-        < "”Žš" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "¦r¥À" ; > ;
-        < "¼Æ¦r" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "åÌÇÆí ÚÏÏí" ; > ;
-        < "ÚÏÏí" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "áëöáñéèìçôéêÜ" ; > ;
-        < "áñéèìçôéêÜ" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "¿µ¼ýÀÚ" ; > ;
-        < "¼ýÀÚ" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "alfanümerik" ; > ;
-        < "nümerik" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-    };
     };
     RadioButton RB_UP
     {
@@ -470,121 +391,38 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
+        Sort = TRUE;
         StringList =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumerisch" ; SRT_APLHANUM ; > ;
+            < "numerisch" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+            < "Dictionary" ; SRT_DICTIONARY ; > ;
+#endif
         };
         StringList [ ENGLISH ] =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumeric" ; SRT_APLHANUM ; > ;
+            < "numeric" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+#endif
         };
-        StringList [ norwegian ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "alfanumerica" ; > ;
-            < "numerica" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "alphanumérique" ; > ;
-            < "numérique" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "alfanumeriek" ; > ;
-            < "numeriek" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "alfanumérica" ; > ;
-            < "numérica" ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "alphanumeric" ; > ;
-            < "numeric" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "×ÖÄ¸" ; > ;
-        < "Êý×Ö" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "àëôàâèòíî-öèôðîâîé" ; > ;
-        < "öèôðîâîé" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "alfanumeryczny" ; > ;
-        < "numeryczny" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "±ÙÌ§ÍÞ¯Ä‡" ; > ;
-        < "”Žš" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "¦r¥À" ; > ;
-        < "¼Æ¦r" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "åÌÇÆí ÚÏÏí" ; > ;
-        < "ÚÏÏí" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "áëöáñéèìçôéêÜ" ; > ;
-        < "áñéèìçôéêÜ" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "¿µ¼ýÀÚ" ; > ;
-        < "¼ýÀÚ" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "alfanümerik" ; > ;
-        < "nümerik" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-    };
     };
     RadioButton RB_UP2
     {
@@ -697,121 +535,38 @@ ModalDialog DLG_SORTING
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
+        Sort = TRUE;
         StringList =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumerisch" ; SRT_APLHANUM ; > ;
+            < "numerisch" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+            < "Dictionary" ; SRT_DICTIONARY ; > ;
+#endif
         };
         StringList [ ENGLISH ] =
         {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
+            < "alphanumeric" ; SRT_APLHANUM ; > ;
+            < "numeric" ; SRT_NUMERIC ; > ;
+#ifdef DEBUG
+            < "Pinyin" ; SRT_PINYIN ; > ;
+            < "Stroke" ; SRT_STROKE ; > ;
+            < "Radicals" ; SRT_RADICALS ; > ;
+            < "Date" ; SRT_DATE ; > ;
+            < "Chuyin" ; SRT_CHUYIN ; > ;
+            < "JIS" ; SRT_JIS ; > ;
+            < "Syllabel" ; SRT_SYLLABEL ; > ;
+            < "KS code" ; SRT_KS_CODE ; > ;
+#endif
         };
-        StringList [ norwegian ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "alfanumerica" ; > ;
-            < "numerica" ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "alfanumérico" ; > ;
-            < "numérico" ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "alphanumerisch" ; > ;
-            < "numerisch" ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "alphanumérique" ; > ;
-            < "numérique" ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "alfanumerisk" ; > ;
-            < "numerisk" ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "alfanumeriek" ; > ;
-            < "numeriek" ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "alfanumérica" ; > ;
-            < "numérica" ; > ;
-        };
-        StringList [ english_us ] =
-        {
-            < "alphanumeric" ; > ;
-            < "numeric" ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "×ÖÄ¸" ; > ;
-        < "Êý×Ö" ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "àëôàâèòíî-öèôðîâîé" ; > ;
-        < "öèôðîâîé" ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "alfanumeryczny" ; > ;
-        < "numeryczny" ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "±ÙÌ§ÍÞ¯Ä‡" ; > ;
-        < "”Žš" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "¦r¥À" ; > ;
-        < "¼Æ¦r" ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "åÌÇÆí ÚÏÏí" ; > ;
-        < "ÚÏÏí" ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "áëöáñéèìçôéêÜ" ; > ;
-        < "áñéèìçôéêÜ" ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "¿µ¼ýÀÚ" ; > ;
-        < "¼ýÀÚ" ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "alfanümerik" ; > ;
-        < "nümerik" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-    };
     };
     RadioButton RB_UP3
     {
