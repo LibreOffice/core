@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:10:44 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 10:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,6 +1592,12 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     }
 
     t->fsize = st.st_size;
+
+    if (t->fsize == 0) {
+        ret = SF_BADFILE;
+        goto cleanup;
+    }
+
 
     if ((t->ptr = (sal_uInt8 *) mmap(0, t->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
         ret = SF_MEMORY;
