@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-27 19:28:25 $
+ *  last change: $Author: dv $ $Date: 2001-07-09 14:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _STDCTRL_HXX
 #include <svtools/stdctrl.hxx>
 #endif
-#ifndef _SFX_INETTBC_HXX
-#include <sfx2/inettbc.hxx>
+#ifndef _SVTOOLS_INETTBC_HXX
+#include <svtools/inettbc.hxx>
 #endif
 
 
@@ -104,7 +104,7 @@ class ScLinkedAreaDlg : public ModalDialog
 {
 private:
     FixedLine           aFlLocation;
-    SfxURLBox           aCbUrl;
+    SvtURLBox           aCbUrl;
     PushButton          aBtnBrowse;
     FixedInfo           aTxtHint;
     FixedText           aFtRanges;
