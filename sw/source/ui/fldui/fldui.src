@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:49:07 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,8 +863,7 @@ String STR_GETREFFLD
  //
 String STR_DBFLD
 {
-    TEXT = "Serienbrieffeld" ;
-    TEXT [ English ] = "Print merge field" ;
+    TEXT = "Seriendruck-Feld" ;
     TEXT [ norwegian ] = "Print merge field" ;
     TEXT [ italian ] = "Campo stampa in serie" ;
     TEXT [ portuguese_brazilian ] = "Imprimir campo intercalado" ;
@@ -875,7 +874,7 @@ String STR_DBFLD
     TEXT [ swedish ] = "Standardbrevf‰lt" ;
     TEXT [ dutch ] = "Standaardbriefveld" ;
     TEXT [ spanish ] = "Campo de carta en serie" ;
-    TEXT [ english_us ] = "Form letter field" ;
+    TEXT [ english_us ] = "Mail merge field" ;
     TEXT[ chinese_simplified ] = "ÈÇÆ‰ª∂ÂêàÂπ∂Â≠óÊÆµ";
     TEXT[ russian ] = "œÓÎˇ ·‡Á ‰‡ÌÌ˚ı";
     TEXT[ polish ] = "Pole korespondencji seryjnej";

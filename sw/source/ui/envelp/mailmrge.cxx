@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-22 13:10:59 $
+ *  last change: $Author: os $ $Date: 2002-11-29 12:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,5 +784,23 @@ Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
     }
     return xResSetClone;
 }
-// -----------------------------------------------------------------------------
+/*-- 27.11.2002 12:27:33---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
+    ModalDialog(pParent, SW_RES(DLG_MERGE_CREATE)),
+    aCreateFromFL(  this, ResId( FL_CREATEFROM  )),
+    aThisDocRB(     this, ResId( RB_THISDOC     )),
+    aUseTemplateRB( this, ResId( RB_TEMPLATE    )),
+    aOK(            this, ResId( BT_OK          )),
+    aCancel(        this, ResId( BT_CANCEL      )),
+    aHelp(          this, ResId( BT_HELP        ))
+{
+    FreeResource();
+}
+/*-- 27.11.2002 12:27:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
+{
+}
