@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:37:15 $
+ *  last change: $Author: mba $ $Date: 2002-01-09 17:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,7 +1477,11 @@ sal_Bool SfxObjectShell::IsSecure()
     }
 
     INetURLObject aURL( "macro:" );
-    if ( aReferer.Len() && SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
+    if ( !aReferer.Len() )
+        // empty new or embedded document
+        return sal_True;
+
+    if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
     {
         if ( GetMedium()->GetContent().is() )
         {
@@ -1529,6 +1533,13 @@ void SfxObjectShell::Invalidate( USHORT nId )
 
 void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
 {
+    if ( IsPreview() || eCreateMode != SFX_CREATE_MODE_STANDARD )
+    {
+        // no execution, no warnings
+        pImp->nMacroMode = eNEVER_EXECUTE;
+        return;
+    }
+
     SvtSecurityOptions aOpt;
 
     // eFROM_LIST is uninitialized default
