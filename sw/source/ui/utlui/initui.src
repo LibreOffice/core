@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:32:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ Resource RID_SW_SHELLRES
         TEXT[ chinese_simplified ] = "ÄÚÈÝÄ¿Â¼";
         TEXT[ language_user1 ] = " ";
         TEXT[ russian ] = "Îãëàâëåíèå";
-        TEXT[ polish ] = "Spis tre?ci";
+        TEXT[ polish ] = "Spis treœci";
         TEXT[ japanese ] = "–ÚŽŸ";
         TEXT[ chinese_traditional ] = "¤º®e¥Ø¿ý";
         TEXT[ arabic ] = "ÝåÑÓ ÇáãÍÊæíÇÊ";
@@ -1136,8 +1136,8 @@ Resource RID_SW_SHELLRES
         Text[ spanish ] = "Convertir, serie $(ARG1)";
         Text[ italian ] = "Conversione seguente $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
-        Text[ swedish ] = "Konvertering följd $(ARG1)";
-        Text[ polish ] = "Kolejno?æ konwersji $(ARG1)";
+        Text[ swedish ] = "Konvertering följande $(ARG1)";
+        Text[ polish ] = "Kolejnoœæ konwersji $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
         Text[ japanese ] = "ŽŸ‚É $(ARG1) ‚ð•ÏŠ·";
         Text[ korean ] = "º¯È¯ $(ARG1)";
