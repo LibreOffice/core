@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@
 #define RID_GRAPHIC_TEXT_TOOLBOX    (SFX_ITEMTYPE_SD_BEGIN + 28)
 
 #define RID_DRAW_GRAF_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 30)
+#define RID_DRAW_MEDIA_TOOLBOX      (SFX_ITEMTYPE_SD_BEGIN + 31)
 
 
 #endif
