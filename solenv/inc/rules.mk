@@ -7,8 +7,8 @@
 ##*                      Regeln
 ##*
 ##*    Ersterstellung    MH 9.2.96
-##*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:17 $
-##*    $Revision: 1.1.1.1 $
+##*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-21 13:12:00 $
+##*    $Revision: 1.2 $
 ##*
 ##*    $Logfile:   T:/solar/inc/rules.mkv  $
 ##*
@@ -728,4 +728,8 @@ $(MISC)$/%.mk $(MISC)$/%_description.cxx : %.xml
 $(BIN)$/%.rdb: $(SOLARBINDIR)$/applicat.rdb $(MISC)$/%.mk
     +rdbmaker -BUCR -O$(BIN)$/$*.rdb $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB)
 
+#strip dos lineends
+$(MISC)$/%.sh : %.sh
+    @+-$(RM) -f $@ >& $(NULLDEV)
+    @+tr -d "\015" < $< > $@
 

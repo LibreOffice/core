@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hr $ $Date: 2000-09-20 14:43:17 $
-#*	  $Revision: 1.1.1.1 $
+#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-09-21 13:12:00 $
+#*	  $Revision: 1.2 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1856,6 +1856,7 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(PRJHIDTARGET) \
         $(SIGNFORNETSCAPE) \
         $(SIGNFOREXPLORER) \
+        $(UNIXTEXT) \
         last_target
 
 .IF "$(EXCEPTIONSNOOPT_FLAG)"==""
