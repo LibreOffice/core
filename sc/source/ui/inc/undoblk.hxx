@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-09 10:58:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ private:
     BOOL            bCut;
     BOOL            bKeepScenarioFlags;
 
-    void            PaintArea( ScRange aRange ) const;
+    void            PaintArea( ScRange aRange, USHORT nExtFlags ) const;
     void            DoUndo( ScRange aRange ) const;
 
     void            SetChangeTrack();
