@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ namespace
 
     private: // NodeAction implementation
         Result handle(ValueNodeAccess const& _aValueNode);
-        Result handle(NodeAccess const& _aNonValueNode);
+        Result handle(NodeAccessRef const& _aNonValueNode);
     };
 //-----------------------------------------------------------------------------
     static UnoType detectNodeType(TreeAccessor const& _aElement)
@@ -437,7 +437,7 @@ namespace
         return CONTINUE; // always continue to detect errors in data
     }
 //-----------------------------------------------------------------------------
-    TypeDetector::Result TypeDetector::handle(NodeAccess const& _aNonValueNode)
+    TypeDetector::Result TypeDetector::handle(NodeAccessRef const& _aNonValueNode)
     {
         OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValueNode),"Value node dipatched to wrong handler");
         switch (this->result) // transition depends on previous state
