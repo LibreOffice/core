@@ -43,6 +43,9 @@ namespace utl
         static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
                                 NS_UNO::Reference < NS_TASK::XInteractionHandler >,
                                 UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
+        static SvStream*    CreateStream( const String& rFileName, StreamMode eOpenMode,
+                                sal_Bool bFileExists,
+                                UcbLockBytesHandler* pHandler=0, sal_Bool bForceSynchron=sal_True );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XInputStream > xStream );
         static SvStream*    CreateStream( NS_UNO::Reference < NS_IO::XStream > xStream );
     };
