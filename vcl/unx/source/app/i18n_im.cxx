@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:27:17 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #  endif
 #endif
 #include <poll.h>
+#ifdef SOLARIS
+// for SetSystemEnvironment()
+#include <alloca.h>
+#endif
 
 #include <prex.h>
 #include <X11/Xlocale.h>
@@ -87,6 +91,10 @@
 #ifdef MACOSX
 #include <osl/process.h>
 #include <tools/string.hxx>
+#endif
+
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 
 using namespace vcl;
@@ -208,13 +216,32 @@ SetSystemLocale( const char* p_inlocale )
 
     if ( (p_outlocale = setlocale(LC_ALL, p_inlocale)) == NULL )
     {
-        fprintf( stderr,
-            "I18N: Operating system doesn't support locale \"%s\"\n",
+        fprintf( stderr, "I18N: Operating system doesn't support locale \"%s\"\n",
             p_inlocale );
     }
 
     return p_outlocale;
 }
+
+#ifdef SOLARIS
+static void
+SetSystemEnvironment( const char* p_locale )
+{
+    const char *lc_all = "LC_ALL=%s";
+    const char *lang   = "LANG=%s";
+
+    char *p_buffer;
+
+    if (p_locale != NULL)
+    {
+        p_buffer = (char*)alloca(10 + strlen(p_locale));
+        sprintf(p_buffer, lc_all, p_locale);
+        putenv(strdup(p_buffer));
+        sprintf(p_buffer, lang, p_locale);
+        putenv(strdup(p_buffer));
+    }
+}
+#endif
 
 static Bool
 IsPosixLocale( const char* p_locale )
@@ -239,18 +266,21 @@ IsXWindowCompatibleLocale( const char* p_locale )
 
     if ( !XSupportsLocale() )
     {
-        if ( p_locale != NULL )
-            fprintf (stderr,
-                "I18N: X Window System doesn't support locale \"%s\"\n",
+        fprintf (stderr, "I18N: X Window System doesn't support locale \"%s\"\n",
                 p_locale );
         return False;
     }
     return True;
 }
 
-// Locale setting for the Input Method
-// allways provide a fallback, even if it means falling back to the
-// portable POSIX "C" locale
+// Set the operating system locale prior to trying to open an
+// XIM InputMethod.
+// Handle the cases where the current locale is either not supported by the
+// operating system (LANG=gaga) or by the XWindow system (LANG=aa_ER@saaho)
+// by providing a fallback.
+// Upgrade "C" or "POSIX" to "en_US" locale to allow umlauts and accents
+// see i8988, i9188, i8930, i16318
+// on Solaris the environment needs to be set equivalent to the locale (#i37047#)
 
 Bool
 SalI18N_InputMethod::SetLocale( const char* pLocale )
@@ -259,27 +289,22 @@ SalI18N_InputMethod::SetLocale( const char* pLocale )
     // do not need to set the locale
     if ( mbUseable )
     {
-        char *locale;
-
-        // check whether the operating system supports the LANG
-        if ( (locale = SetSystemLocale( pLocale )) == NULL )
+        char *locale = SetSystemLocale( pLocale );
+        if ( (!IsXWindowCompatibleLocale(locale)) || IsPosixLocale(locale) )
         {
-            if ( (locale = SetSystemLocale( "C" )) == NULL )
-                mbUseable = False;
-        }
-
-        // check whether the XWindow system supports the LANG
-        if ( !IsXWindowCompatibleLocale(locale) )
-        {
-            if ( !IsPosixLocale(locale) )
+            osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
+            locale = SetSystemLocale( "en_US" );
+            #ifdef SOLARIS
+            SetSystemEnvironment( "en_US" );
+            #endif
+            if (! IsXWindowCompatibleLocale(locale))
             {
                 locale = SetSystemLocale( "C" );
-                if ( !IsXWindowCompatibleLocale(locale) )
+                #ifdef SOLARIS
+                SetSystemEnvironment( "C" );
+                #endif
+                if (! IsXWindowCompatibleLocale(locale))
                     mbUseable = False;
-            }
-            else
-            {
-                mbUseable = False;
             }
         }
 
