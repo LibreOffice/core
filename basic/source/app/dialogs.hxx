@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:39:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,8 @@ class SbxVariable;
 #endif
 
 class AboutDialog : public ModalDialog {
-    FixedText a1,a3,a4,aVersionString;
+    FixedText a1,a4,aVersionString;
     OKButton  aOk;
-//  FixedIcon aIcon;
 public:
     AboutDialog (Window*, const ResId&);
 };
