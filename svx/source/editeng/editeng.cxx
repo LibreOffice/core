@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-05 08:05:12 $
+ *  last change: $Author: mt $ $Date: 2002-02-25 16:07:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,12 @@ Color EditEngine::GetBackgroundColor() const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetBackgroundColor();
+}
+
+Color EditEngine::GetAutoColor() const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetAutoColor();
 }
 
 const SfxItemSet& EditEngine::GetEmptyItemSet()
