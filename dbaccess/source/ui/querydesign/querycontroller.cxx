@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-24 08:55:47 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 14:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,18 +775,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         setModified(sal_False);
 
         // set the title of the beamer
-        Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
-        {
-            ::rtl::OUString sName = m_sName;
-            if(!sName.getLength())
-            {
-                String aName = String(ModuleRes(m_bCreateView ? STR_VIEWDESIGN : STR_QUERYDESIGN));
-                sName = ::dbtools::createUniqueName(getElements(),aName);
-                sName = aName + ::rtl::OUString::createFromAscii(": ") + sName;
-            }
-            xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
-        }
+        setTitle(m_sName);
     }
     catch(SQLException& e)
     {
@@ -799,6 +788,24 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             OSQLMessageBox(pWindow,e).Execute();
         }
         throw;
+    }
+}
+// -----------------------------------------------------------------------------
+void OQueryController::setTitle(const ::rtl::OUString& _sName)
+{
+    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+    if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE) )
+    {
+        ::rtl::OUString sName = _sName;
+        if ( !sName.getLength() )
+        {
+            String aDefaultName = String(ModuleRes(m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE));
+            aDefaultName = aDefaultName.GetToken(0,' ');
+            sName = ::dbtools::createUniqueName(getElements(),aDefaultName);
+        }
+        String aName = String(ModuleRes(m_bCreateView ? STR_VIEWDESIGN : STR_QUERYDESIGN));
+        sName = aName + ::rtl::OUString::createFromAscii(": ") + sName;
+        xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sName));
     }
 }
 // -----------------------------------------------------------------------------
@@ -1358,6 +1365,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                         OSL_ENSURE(0,"OQueryController::doSaveAsDoc: Query could not be inserted!");
                     }
                     showError(aInfo);
+                    // set the title of the beamer
+                    setTitle(m_sName);
                 }
             }
         }
