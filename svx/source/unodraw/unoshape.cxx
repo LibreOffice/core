@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-13 15:08:47 $
+ *  last change: $Author: cl $ $Date: 2001-08-16 15:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1628,22 +1628,23 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 {
                     aPropSet.setPropertyValue( pMap, rVal, *pSet );
 
-                    if(bIsNotPersist)
-                    {
-                        // Not-Persist Attribute extra setzen
-                        pObj->ApplyNotPersistAttr( *pSet );
-                        delete pSet;
-                    }
-                    else
-                    {
-                        // if we have a XMultiProperty call then the item set
-                        // will be set in setPropertyValues later
-                        if( !mbIsMultiPropertyCall )
-                        {
-                            pObj->SetItemSetAndBroadcast( *pSet );
-                            delete pSet;
-                        }
-                    }
+                }
+            }
+
+            if(bIsNotPersist)
+            {
+                // Not-Persist Attribute extra setzen
+                pObj->ApplyNotPersistAttr( *pSet );
+                delete pSet;
+            }
+            else
+            {
+                // if we have a XMultiProperty call then the item set
+                // will be set in setPropertyValues later
+                if( !mbIsMultiPropertyCall )
+                {
+                    pObj->SetItemSetAndBroadcast( *pSet );
+                    delete pSet;
                 }
             }
             return;
