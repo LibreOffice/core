@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:40:51 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,9 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_E( "BackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
     M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
     M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
-    M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
+
+    // move protect-flag into section element
+//  M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
 
     // section footnote settings
     M_E( "FootnoteIsOwnNumbering",      TEXT,   _empty, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),

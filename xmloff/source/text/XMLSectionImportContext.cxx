@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,8 @@ enum XMLSectionToken {
     XML_TOK_SECTION_NAME,
     XML_TOK_SECTION_CONDITION,
     XML_TOK_SECTION_DISPLAY,
-    XML_TOK_SECTION_PASSWORD
+    XML_TOK_SECTION_PROTECT,
+    XML_TOK_SECTION_PROTECTION_KEY
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
@@ -161,7 +162,8 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_SECTION_NAME },
     { XML_NAMESPACE_TEXT, sXML_condition, XML_TOK_SECTION_CONDITION },
     { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_SECTION_DISPLAY },
-    { XML_NAMESPACE_TEXT, sXML_password, XML_TOK_SECTION_PASSWORD },
+    { XML_NAMESPACE_TEXT, sXML_protect, XML_TOK_SECTION_PROTECT },
+    { XML_NAMESPACE_TEXT, sXML_protection_key, XML_TOK_SECTION_PROTECTION_KEY},
     XML_TOKEN_MAP_END
 };
 
@@ -185,6 +187,7 @@ XMLSectionImportContext::XMLSectionImportContext(
         sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
         sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
         sPassword(RTL_CONSTASCII_USTRINGPARAM(sAPI_Password)),
+        sIsProtected(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsProtected)),
         sStyleName(),
         sName(),
         sCond(),
@@ -192,7 +195,8 @@ XMLSectionImportContext::XMLSectionImportContext(
         bValid(sal_False),
         bCondOK(sal_False),
         bIsVisible(sal_True),
-        bSequenceOK(sal_False)
+        bSequenceOK(sal_False),
+        bProtect(sal_False)
 {
 }
 
@@ -272,6 +276,11 @@ void XMLSectionImportContext::StartElement(
                     aAny <<= aSequence;
                     xPropSet->setPropertyValue(sPassword, aAny);
                 }
+
+                // protection
+                Any aAny;
+                aAny.setValue( &bProtect, ::getBooleanCppuType() );
+                xPropSet->setPropertyValue( sIsProtected, aAny );
 
                 // insert marker, <paragraph>, marker; then insert
                 // section over the first marker character, and delete the
@@ -353,10 +362,19 @@ void XMLSectionImportContext::ProcessAttributes(
                 }
                 // else: ignore
                 break;
-            case XML_TOK_SECTION_PASSWORD:
+            case XML_TOK_SECTION_PROTECTION_KEY:
                 SvXMLUnitConverter::decodeBase64(aSequence, sAttr);
                 bSequenceOK = sal_True;
                 break;
+            case XML_TOK_SECTION_PROTECT:
+            {
+                sal_Bool bTmp;
+                if (SvXMLUnitConverter::convertBool(bTmp, sAttr))
+                {
+                    bProtect = bTmp;
+                }
+                break;
+            }
             default:
                 ; // ignore
                 break;

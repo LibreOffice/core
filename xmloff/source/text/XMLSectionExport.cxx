@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
+ *  last change: $Author: dvo $ $Date: 2001-03-21 16:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,14 +574,20 @@ void XMLSectionExport::ExportRegularSectionStart(
                                       pDisplay);
     }
 
-    // password
+    // protect + protection key
+    aAny = xPropSet->getPropertyValue(sIsProtected);
+    if (*(sal_Bool*)aAny.getValue())
+    {
+        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protect,
+                                      sXML_true);
+    }
     Sequence<sal_Int8> aPassword;
     xPropSet->getPropertyValue(sPassword) >>= aPassword;
     if (aPassword.getLength() > 0)
     {
         OUStringBuffer aBuffer;
         SvXMLUnitConverter::encodeBase64(aBuffer, aPassword);
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_password,
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_protection_key,
                                  aBuffer.makeStringAndClear());
     }
 
