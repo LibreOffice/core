@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:36:07 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
 #include "modulepcr.hxx"
-#endif
-#ifndef _SVX_CHARDLG_HXX
-#include <svx/chardlg.hxx>
 #endif
 #ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
 #include "formlocalid.hrc"
@@ -187,6 +184,7 @@
 #endif
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+#include <svx/flagsdef.hxx>
 //............................................................................
 namespace pcr
 {
