@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-05 12:40:27 $
+ *  last change: $Author: lla $ $Date: 2001-04-12 06:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,16 @@ void commit()
 
 // -----------------------------------------------------------------------------
 static sal_Bool             s_bInitialized  =   sal_False;
+#ifdef LLA_PRIVAT_DEBUG
+static const sal_Char*      s_pSourcePath   =   "l:/src625/configmgr/workben/local_io/share";
+static const sal_Char*      s_pUpdatePath   =   "l:/src625/configmgr/workben/local_io/user";
+static const sal_Char*      s_pRootNode     =   "org.openoffice.ucb.Hierarchy"; // "org.openoffice.test";
+static const sal_Char*      s_pServerType   =   "local";
+static const sal_Char*      s_pLocale       =   "de-DE";
+static const sal_Char*      s_pServer       =   "";
+static const sal_Char*      s_pUser         =   "";
+static const sal_Char*      s_pPassword     =   "";
+#else
 static const sal_Char*      s_pSourcePath   =   "g:/src/configmgr/workben/local_io/share";
 static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_io/user";
 static const sal_Char*      s_pRootNode     =   "org.openoffice.test";
@@ -211,6 +221,7 @@ static const sal_Char*      s_pLocale       =   "de-DE";
 static const sal_Char*      s_pServer       =   "lautrec-3108:19205";
 static const sal_Char*      s_pUser         =   "lars";
 static const sal_Char*      s_pPassword     =   "";
+#endif
 
 
 // -----------------------------------------------------------------------------
