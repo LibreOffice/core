@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:27:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,29 +67,12 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
-// global.hxx can be removed if SC*** typedefs are there
-#ifndef SC_SCGLOB_HXX
-#include "global.hxx"
+#ifndef _SOLAR_H_
+#include <tools/solar.h>
 #endif
 
 
 // Common =====================================================================
-
-typedef USHORT SCCOL;
-const SCCOL SCMAXCOL = MAXCOL;
-const SCCOL SCCOLCOUNT = SCMAXCOL + 1;
-
-typedef USHORT SCROW;
-const SCROW SCMAXROW = MAXROW;
-const SCROW SCROWCOUNT = SCMAXROW + 1;
-
-typedef USHORT SCTAB;
-const SCTAB SCMAXTAB = MAXTAB;
-const SCTAB SCTABCOUNT = SCMAXTAB + 1;
-
-// remember to remove the #include "global.hxx" above
-
 
 // Excel sheet dimensions -----------------------------------------------------
 
@@ -113,7 +96,8 @@ const sal_uInt16 EXC_MAXCOL8                = EXC_MAXCOL5;
 const sal_uInt16 EXC_MAXROW8                = 65535;
 const sal_uInt16 EXC_MAXTAB8                = EXC_MAXTAB5;
 
-const sal_uInt16 EXC_NOTAB                  = 0xFFFF;   /// An invalid sheet index, for common use.
+const USHORT SCNOTAB                        = 0xFFFF;   /// An invalid Calc sheet index, for common use.
+const sal_uInt16 EXC_NOTAB                  = 0xFFFF;   /// An invalid Excel sheet index, for common use.
 
 
 // In/out stream --------------------------------------------------------------
@@ -159,7 +143,7 @@ const sal_Unicode EXC_URL_DOSDRIVE          = '\x01';   /// DOS drive letter or 
 const sal_Unicode EXC_URL_DRIVEROOT         = '\x02';   /// Root directory of current drive.
 const sal_Unicode EXC_URL_SUBDIR            = '\x03';   /// Directory name delimiter.
 const sal_Unicode EXC_URL_PARENTDIR         = '\x04';   /// Parent directory.
-const sal_Unicode EXC_URL_MACVOLUME         = '\x05';   /// MAC volume name.
+const sal_Unicode EXC_URL_RAW               = '\x05';   /// Unencoded URL.
 const sal_Unicode EXC_URL_SHEETNAME         = '\x09';   /// Sheet name starts here (BIFF4).
 
 const sal_Unicode EXC_DDE_DELIM             = '\x03';   /// DDE application-topic delimiter
@@ -198,6 +182,12 @@ const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
+
+// (0x003D) WINDOW1 -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_WINDOW1             = 0x003D;
+const sal_uInt16 EXC_WIN1_DEFAULTFLAGS      = 0x0038;   /// Default flags for export.
+const sal_uInt16 EXC_WIN1_TABBARRATIO       = 600;      /// Sheet tab bar takes 60% of window width.
 
 // (0x0055) DEFCOLWIDTH -------------------------------------------------------
 
