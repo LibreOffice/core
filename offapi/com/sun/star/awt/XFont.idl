@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFont.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:48 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,7 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XFont
 /** decribes a font on a specific device.
-
-
 
     <p>All values are in pixels within this device.</p>
  */
@@ -91,43 +88,41 @@ interface XFont: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getFontDescriptor
-    /** @returns
-                the description of the font.
+    /** returns the description of the font.
 
-                <p>The unit of measurement is pixels for the device.
+        <p>The unit of measurement is pixels for the device.
      */
     com::sun::star::awt::FontDescriptor getFontDescriptor();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getFontMetric
-    /** @returns
-                additional information about the font.
+    /** returns additional information about the font.
      */
     com::sun::star::awt::SimpleFontMetric getFontMetric();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getCharWidth
-    /** @returns
-                the width of the specified character
-                measured in pixels for the device.
+    /** returns the width of the specified character.
+
+        @returns
+                the character width measured in pixels for the device.
      */
     short getCharWidth( [in] char c );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getCharWidths
-    /** @returns
-                    a sequence of the widths of subsequent characters for this font.
+    /** returns the widths of the specified characters.
+
+        @returns
+                a sequence of the widths of subsequent characters for this font.
      */
     sequence<short> getCharWidths( [in] char nFirst, [in] char nLast );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getStringWidth
-    /** @returns
+    /** returns the string width.
+
+        @returns
                 the width of the specified string of characters
                 measured in pixels for the device.
      */
@@ -135,12 +130,13 @@ interface XFont: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::awt::XFont::getStringWidthArray
-    /** @returns
+    /** returns the string and the character widths.
+
+        @returns
                 the width of the specified string of characters
                 measured in pixels for the device.
 
-                @param aDXArray
+        @param aDXArray
                 receives the width of every single character
                 measured in pixels for the device.
      */
@@ -149,7 +145,6 @@ interface XFont: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XFont::getKernPairs
     /** queries the kerning pair table.
      */
     void getKernPairs( [out] sequence<char> Chars1,
