@@ -1,0 +1,6 @@
+"BridgeFactory";"com::sun::star::lang::XComponent";"dispose()"
+"BridgeFactory";"com::sun::star::lang::XComponent";"addEventListener()"
+"BridgeFactory";"com::sun::star::lang::XComponent";"removeEventListener()"
+"BridgeFactory";"com::sun::star::bridge::XBridgeFactory";"createBridge()"
+"BridgeFactory";"com::sun::star::bridge::XBridgeFactory";"getBridge()"
+"BridgeFactory";"com::sun::star::bridge::XBridgeFactory";"getExistingBridges()"
