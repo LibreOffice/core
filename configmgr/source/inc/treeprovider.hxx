@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,8 @@ namespace configmgr
     //==========================================================================
     //= ITreeProvider
     //==========================================================================
-    class ITreeProvider
+    struct SAL_NO_VTABLE ITreeProvider
     {
-    public:
         typedef configuration::AbsolutePath AbsolutePath;
 
         enum { ALL_LEVELS = -1  };
@@ -150,7 +149,7 @@ namespace configmgr
     //==========================================================================
     // a ITreeProvider which can notify changes that were done, and manages the lifetime of subtrees
 
-    class ITreeManager
+    class SAL_NO_VTABLE ITreeManager
     {
     public:
         typedef configuration::AbsolutePath AbsolutePath;
@@ -182,7 +181,7 @@ namespace configmgr
         virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
 
         // notification
-        virtual void notifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges ) CFG_UNO_THROW_RTE(  ) = 0;
+        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges ) CFG_UNO_THROW_ALL(  ) = 0;
 
         // bookkeeping support
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
@@ -201,9 +200,8 @@ namespace configmgr
     //==========================================================================
     //= ITemplateProvider
     //==========================================================================
-    class ITemplateProvider
+    struct SAL_NO_VTABLE ITemplateProvider
     {
-    public:
         typedef configuration::Name         Name;
 
         virtual ::std::auto_ptr<INode> loadTemplate(
@@ -216,7 +214,7 @@ namespace configmgr
     //==========================================================================
     //= ITemplateManager
     //==========================================================================
-    class ITemplateManager
+    class SAL_NO_VTABLE ITemplateManager
     {
     public:
         typedef configuration::Name         Name;
@@ -236,9 +234,8 @@ namespace configmgr
     /** a listener on configuration nodes. able to receive all changes in one or more
         specific registry sub trees.
     */
-    class INotifyListener : public IInterface
+    struct SAL_NO_VTABLE INotifyListener : public IInterface
     {
-    public:
         /** called whenever another session modified a node which the listener is registered for
             @param      _rChanges       The list of changes for a node.
         */
@@ -252,15 +249,23 @@ namespace configmgr
         specific registry sub trees.
 
     */
-    class INotifyBroadcaster
+    struct SAL_NO_VTABLE INotifyBroadcaster
     {
-    public:
-
         /** registers a listener for node changes.
         */
         virtual void    setNotifyListener(const ::vos::ORef< INotifyListener >& _rListener) = 0;
     };
 
+    //==========================================================================
+    /// a complete combined TreeManager
+    struct SAL_NO_VTABLE IConfigTreeManager
+    : public Refcounted
+    , public ITreeManager
+    , public ITemplateManager
+    {};
+
+
+    //==========================================================================
 } // namespace configmgr
 
 #endif
