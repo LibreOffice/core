@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: aw $ $Date: 2004-08-10 13:59:43 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,9 @@ enum SwDocumentSettingsPropertyHandles
     // #i20158#: OASIS file format
     HANDLE_CHANGES_PASSWORD,
     // --> OD 2004-07-08 #i28701#
-    HANDLE_CONSIDER_WRAP_ON_OBJPOS
+    HANDLE_CONSIDER_WRAP_ON_OBJPOS,
+    // --> PB 2004-08-20 #i33095#
+    HANDLE_LOAD_READONLY
     // <--
 };
 
@@ -225,10 +227,11 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,           0,   0},
         // FME 2004-04-22 #108724#, #i13832#, #i24135#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
-        { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),      HANDLE_CHANGES_PASSWORD,        CPPUTYPE_SEQINT8,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),       HANDLE_CHANGES_PASSWORD,                CPPUTYPE_SEQINT8,           0,   0},
         // --> OD 2004-07-08 #i28701#
-        { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,
-     0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos"),   HANDLE_CONSIDER_WRAP_ON_OBJPOS,         CPPUTYPE_BOOLEAN,           0,   0},
+        // --> PB 2004-08-20 #i33095#
+        { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
         // <--
 
 /*
@@ -635,6 +638,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetConsiderWrapOnObjPos( bTmp );
         }
         break;
+        // --> PB 2004-08-20 #i33095#
+        case HANDLE_LOAD_READONLY:
+        {
+            sal_Bool bReadonly = *(sal_Bool*)rValue.getValue();
+            if ( bReadonly )
+                mpDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
+        }
+        break;
         // <--
         default:
             throw UnknownPropertyException();
@@ -865,6 +876,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->ConsiderWrapOnObjPos();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // --> PB 2004-08-20 #i33095#
+        case HANDLE_LOAD_READONLY:
+        {
+            sal_Bool bReadonly = mpDocSh->GetDocInfo().IsLoadReadonly();
+            rValue.setValue( &bReadonly, ::getBooleanCppuType() );
         }
         break;
         // <--
