@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:26:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,15 +198,35 @@ typedef void *                   sal_Handle;
 #endif
 
 #ifdef _MSC_VER
-#   define SAL_DLLEXPORT    __declspec(dllexport)
+#   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
+#   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
+#   define SAL_DLLPRIVATE
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_OS2
-#   define SAL_DLLEXPORT
+#   define SAL_DLLPUBLIC_EXPORT
+#   define SAL_DLLPUBLIC_IMPORT
+#   define SAL_DLLPRIVATE
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
 #elif defined SAL_UNX
-#   define SAL_DLLEXPORT
+#   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
+#     define SAL_DLLPUBLIC_EXPORT  __global
+#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPRIVATE        __hidden
+#   elif defined(__SUNPRO_C ) && (__SUNPRO_C  >= 0x550)
+#     define SAL_DLLPUBLIC_EXPORT  __global
+#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPRIVATE        __hidden
+#   elif defined(__GNUC__) && (__GNUC__ >= 3) && (__GNUC_MINOR__ >= 4)
+#     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
+#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#   else
+#     define SAL_DLLPUBLIC_EXPORT
+#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPRIVATE
+#   endif
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
 #else
