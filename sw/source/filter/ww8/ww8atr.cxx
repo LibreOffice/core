@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:53:39 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2010,22 +2010,32 @@ void SwWW8Writer::StartTOX( const SwSection& rSect )
 
                 if( TOX_OUTLINELEVEL & pTOX->GetCreateType() )
                 {
-                    // are the chapter template the normal headline 1 to 9 ?
-                    // search all outlined collections
-                    BYTE nLvl, nMinLvl = MAXLEVEL;
+                    // Search over all the outline styles used and figure out
+                    // what is the minimum outline level we need to display
+                    // (ignoring headline styles 1-9)
+                    BYTE nLvl, nMinLvl = 0;
                     const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
                     const SwTxtFmtColl* pColl;
                     for( n = rColls.Count(); n; )
-                        if( MAXLEVEL > (nLvl = ( pColl =
-                                    rColls[ --n ] )->GetOutlineLevel() ) &&
-                              nMinLvl > nLvl &&
-                            ( RES_POOLCOLL_HEADLINE1 > pColl->GetPoolFmtId() ||
-                              RES_POOLCOLL_HEADLINE9 < pColl->GetPoolFmtId() ))
+                    {
+                        pColl = rColls[ --n ];
+                        nLvl = pColl->GetOutlineLevel();
+                        USHORT nPoolId = pColl->GetPoolFmtId();
+                        if( MAXLEVEL > nLvl && nMinLvl < nLvl &&
+                            ( RES_POOLCOLL_HEADLINE1 > nPoolId ||
+                              RES_POOLCOLL_HEADLINE9 < nPoolId ))
                         {
+
+
+                    // If we are using the default heading styles then use nTOXLvl
+                    if(!nMinLvl)
+                        nLvl = nTOXLvl;
+                    else
+                        nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
                             nMinLvl = nLvl;
                         }
+                    }
 
-                    nLvl = nMinLvl < nTOXLvl ? nMinLvl : (BYTE)nTOXLvl;
                     if( nLvl )
                     {
                         USHORT nTmpLvl = nLvl + 1;
