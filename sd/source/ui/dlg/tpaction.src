@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 18:03:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,94 +94,12 @@ TabPage TP_ANIMATION
 
     // sometimes visible ---------------------------------------------------------------------
 
-    //------------------------------------
-    // Fade object stuff
 #define MA_Y0 (MA_ACTIONLB_TOP + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_BOTTOM)
-    FixedLine FL_EFFECT
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT , MA_Y0 ) ;
-        Size = MAP_APPFONT ( 247 , 8 ) ;
-        Text [ de ] = "Effekt" ;
-        Text [ en-US ] = "Effects" ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
 #define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
-    FixedText FT_ANIMATION
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y1 + 1) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ de ] = "Animation" ;
-        Hide = TRUE ;
-        Text [ en-US ] = "Animation";
-    };
-    ListBox LB_EFFECT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y1 ) ;
-        Size = MAP_APPFONT ( 82 , 63 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        Hide = TRUE ;
-    };
 #define MA_Y2 (MA_Y1 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
-    FixedText FT_SPEED
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y2 + 1) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ de ] = "Geschwindigkeit" ;
-        Hide = TRUE ;
-        Text [ en-US ] = "Speed";
-    };
-    RadioButton RBT_SLOW
-    {
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 ) ;
-        Size = MAP_APPFONT ( 83 , 12 ) ;
-        Text [ de ] = "~Langsam" ;
-        Text [ en-US ] = "~Slow" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton RBT_MEDIUM
-    {
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 + RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
-        Size = MAP_APPFONT ( 83 , 12 ) ;
-        Text [ de ] = "~Mittel" ;
-        Text [ en-US ] = "~Medium" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
-    RadioButton RBT_FAST
-    {
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 + 2*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y) ) ;
-        Size = MAP_APPFONT ( 83 , 12 ) ;
-        Text [ de ] = "S~chnell" ;
-        Text [ en-US ] = "~Fast" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text [ x-comment ] = " ";
-    };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
-    TriStateBox TSB_SOUND
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 ) ;
-        Size = MAP_APPFONT ( 247 - 65 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 10 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text [ de ] = "Mit Klang ausblenden" ;
-        Text [ en-US ] = "Fade with sound";
-    };
-    Edit EDT_SOUND
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
-        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 12 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-    };
+
      // Es ist schon wichtig, daﬂ Durchsuchen (search) und Suchen (seek/find) unter-
      // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
     PushButton BTN_SEARCH
@@ -192,16 +110,6 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
         Text [ de ] = "Durch~suchen..." ;
         Text [ en-US ] = "~Browse..." ;
-        Text [ x-comment ] = " ";
-    };
-    TriStateBox TSB_PLAY_FULL
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
-        Size = MAP_APPFONT ( 219 , 10 ) ;
-        Text [ de ] = "Klang ~vollst‰ndig abspielen" ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-        Text [ en-US ] = "~Play in full" ;
         Text [ x-comment ] = " ";
     };
 
@@ -225,14 +133,6 @@ TabPage TP_ANIMATION
     Control LB_TREE_DOCUMENT
     {
         HelpID = HID_CTL_ACTION_DLG_2 ;
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
-        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
-        TabStop = TRUE ;
-        Hide = TRUE ;
-    };
-    ListBox LB_OLE_ACTION
-    {
         Border = TRUE ;
         Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
         Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
