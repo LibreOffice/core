@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-20 20:15:36 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 12:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ String RID_DB_COMMON_START + 2
     Text[ dutch ] = "<< ~Vorige";
     Text[ chinese_simplified ] = "<< 返回(~B)";
     Text[ greek ] = "<< ����";
-    Text[ korean ] = "<< 이전(~B)";
+    Text[ korean ] = "<< 뒤로(~B)";
     Text[ turkish ] = "<< Ge~ri";
     Text[ catalan ] = "<< ~Enrere";
     Text[ finnish ] = "<< Edellinen";
@@ -527,6 +527,9 @@ String RID_DB_COMMON_START + 21
     Text[ arabic ] = "�����";
     Text[ thai ] = "~หยุด";
     Text[ catalan ] = "~Atura";
+    Text[ french ] = "Stop";
+    Text[ spanish ] = "~Stop";
+    Text[ italian ] = "Stop";
 };
 
 
@@ -539,15 +542,15 @@ String RID_DB_COMMON_START + 30
     Text[ russian ] = "The document could not be stored.";
     Text[ greek ] = "The document could not be stored.";
     Text[ dutch ] = "The document could not be stored.";
-    Text[ french ] = "The document could not be stored.";
-    Text[ spanish ] = "The document could not be stored.";
+    Text[ french ] = "Impossible d'enregistrer le document !";
+    Text[ spanish ] = "No se pudo guardar el documento.";
     Text[ finnish ] = "The document could not be stored.";
-    Text[ italian ] = "The document could not be stored.";
+    Text[ italian ] = "Impossibile salvare il documento.";
     Text[ danish ] = "The document could not be stored.";
     Text[ swedish ] = "Det gick inte att spara dokumentet.";
     Text[ polish ] = "The document could not be stored.";
-    Text[ japanese ] = "The document could not be stored.";
-    Text[ korean ] = "The document could not be stored.";
+    Text[ japanese ] = "ドキュメントは保存できませんでした。";
+    Text[ korean ] = "문서를 저장할 수 없었습니다.";
     Text[ chinese_simplified ] = "无法存盘这个文档。";
     Text[ chinese_traditional ] = "無法儲存這個文件。";
     Text[ turkish ] = "The document could not be stored.";
@@ -564,15 +567,15 @@ String RID_DB_COMMON_START + 31
     Text[ russian ] = "A link to the datasource could not be created.";
     Text[ greek ] = "A link to the datasource could not be created.";
     Text[ dutch ] = "A link to the datasource could not be created.";
-    Text[ french ] = "A link to the datasource could not be created.";
-    Text[ spanish ] = "A link to the datasource could not be created.";
+    Text[ french ] = "Impossible de cr�er un lien vers la source de donn�es ";
+    Text[ spanish ] = "No se ha podido crear ning�n v�nculo a la fuente de datos. ";
     Text[ finnish ] = "A link to the datasource could not be created.";
-    Text[ italian ] = "A link to the datasource could not be created.";
+    Text[ italian ] = " Impossibile creare un collegamento alla sorgente dati.";
     Text[ danish ] = "A link to the datasource could not be created.";
     Text[ swedish ] = "Det gick inte att skapa en l�nk till datak�llan.";
     Text[ polish ] = "A link to the datasource could not be created.";
-    Text[ japanese ] = "A link to the datasource could not be created.";
-    Text[ korean ] = "A link to the datasource could not be created.";
+    Text[ japanese ] = "データソースへのリンクは作成できませんでした。";
+    Text[ korean ] = "데이터 소스로 연결할 수 없습니다.";
     Text[ chinese_simplified ] = "无法建立数据源的链接。";
     Text[ chinese_traditional ] = "無法建立資料源的捷徑。";
     Text[ turkish ] = "A link to the datasource could not be created.";
@@ -588,15 +591,15 @@ String RID_DB_COMMON_START + 32
     Text[ russian ] = "A link to the datasource will be created automatically.";
     Text[ greek ] = "A link to the datasource will be created automatically.";
     Text[ dutch ] = "A link to the datasource will be created automatically.";
-    Text[ french ] = "A link to the datasource will be created automatically.";
-    Text[ spanish ] = "A link to the datasource will be created automatically.";
+    Text[ french ] = "Un lien vers la source de donn�es va �tre cr�� automatiquement.";
+    Text[ spanish ] = "Se crear� autom�ticamente un v�nculo hacia la fuente de datos. ";
     Text[ finnish ] = "A link to the datasource will be created automatically.";
-    Text[ italian ] = "A link to the datasource will be created automatically.";
+    Text[ italian ] = "Il collegamento alla sorgente dati viene creato automaticamente.";
     Text[ danish ] = "A link to the datasource will be created automatically.";
     Text[ swedish ] = "En l�nk till datak�llan skapas automatiskt.";
     Text[ polish ] = "A link to the datasource will be created automatically.";
-    Text[ japanese ] = "A link to the datasource will be created automatically.";
-    Text[ korean ] = "A link to the datasource will be created automatically.";
+    Text[ japanese ] = "データソースへのリンクは自動的に作成されます。";
+    Text[ korean ] = "데이터 소스로 연결하는 링크가 자동으로 만들어집니다.";
     Text[ chinese_simplified ] = "将会自动建立一个数据源的链接。";
     Text[ chinese_traditional ] = "將會自動建立一個資料源的捷徑。";
     Text[ turkish ] = "A link to the datasource will be created automatically.";
@@ -613,15 +616,15 @@ String RID_DB_COMMON_START + 33
     Text[ russian ] = "The AutoPilot will be terminated!";
     Text[ greek ] = "The AutoPilot will be terminated!";
     Text[ dutch ] = "The AutoPilot will be terminated!";
-    Text[ french ] = "The AutoPilot will be terminated!";
-    Text[ spanish ] = "The AutoPilot will be terminated!";
+    Text[ french ] = "Fermeture de l'AutoPilote !";
+    Text[ spanish ] = "Cierre del AutoPiloto.";
     Text[ finnish ] = "The AutoPilot will be terminated!";
-    Text[ italian ] = "The AutoPilot will be terminated!";
+    Text[ italian ] = "Chiusura del Pilota Automatico.";
     Text[ danish ] = "The AutoPilot will be terminated!";
     Text[ swedish ] = "AutoPiloten avslutas!";
     Text[ polish ] = "The AutoPilot will be terminated!";
-    Text[ japanese ] = "The AutoPilot will be terminated!";
-    Text[ korean ] = "The AutoPilot will be terminated!";
+    Text[ japanese ] = "オートパイロットを終了します。";
+    Text[ korean ] = "자동 파일럿이 종료됩니다.";
     Text[ chinese_simplified ] = "将要关闭自动文件助理！";
     Text[ chinese_traditional ] = "將要關閉自動檔案助理！";
     Text[ turkish ] = "The AutoPilot will be terminated!";
@@ -637,15 +640,15 @@ String RID_DB_COMMON_START + 34
     Text[ russian ] = "Connection to the Datasource will be established...";
     Text[ greek ] = "Connection to the Datasource will be established...";
     Text[ dutch ] = "Connection to the Datasource will be established...";
-    Text[ french ] = "Connection to the Datasource will be established...";
-    Text[ spanish ] = "Connection to the Datasource will be established...";
+    Text[ french ] = "Connexion � la source de donn�es...";
+    Text[ spanish ] = "Conexi�n con la fuente de datos...";
     Text[ finnish ] = "Connection to the Datasource will be established...";
-    Text[ italian ] = "Connection to the Datasource will be established...";
+    Text[ italian ] = "Collegamento alla sorgente dati...";
     Text[ danish ] = "Connection to the Datasource will be established...";
     Text[ swedish ] = "Kopplar till datak�llan...";
     Text[ polish ] = "Connection to the Datasource will be established...";
-    Text[ japanese ] = "Connection to the Datasource will be established...";
-    Text[ korean ] = "Connection to the Datasource will be established...";
+    Text[ japanese ] = "データソースへ接続しています...";
+    Text[ korean ] = "데이터 소스로 연결 중...";
     Text[ chinese_simplified ] = "正在连接数据源...";
     Text[ chinese_traditional ] = "正在連線到資料源...";
     Text[ turkish ] = "Connection to the Datasource will be established...";
@@ -661,15 +664,15 @@ String RID_DB_COMMON_START + 35
     Text[ russian ] = "The connection to the Datasource could not be established";
     Text[ greek ] = "The connection to the Datasource could not be established";
     Text[ dutch ] = "The connection to the Datasource could not be established";
-    Text[ french ] = "The connection to the Datasource could not be established";
-    Text[ spanish ] = "The connection to the Datasource could not be established";
+    Text[ french ] = "Impossible d'�tablir la connexion � la source de donn�es !";
+    Text[ spanish ] = "No se pudo establecer la conexi�n con la fuente de datos.";
     Text[ finnish ] = "The connection to the Datasource could not be established";
-    Text[ italian ] = "The connection to the Datasource could not be established";
+    Text[ italian ] = "Impossibile creare il collegamento alla sorgente dati.";
     Text[ danish ] = "The connection to the Datasource could not be established";
     Text[ swedish ] = "Det gick inte att koppla till datak�llan";
     Text[ polish ] = "The connection to the Datasource could not be established";
-    Text[ japanese ] = "The connection to the Datasource could not be established";
-    Text[ korean ] = "The connection to the Datasource could not be established";
+    Text[ japanese ] = "データソースへ接続できませんでした。";
+    Text[ korean ] = "데이터 소스로 연결할 수 없습니다.";
     Text[ chinese_simplified ] = "无法和数据源连接！";
     Text[ chinese_traditional ] = "無法連線到資料源！";
     Text[ turkish ] = "The connection to the Datasource could not be established";
@@ -681,7 +684,27 @@ String RID_DB_COMMON_START + 36
 {
     Text = "Der eingegebene Dateipfad is ung�ltig!";
     Text [ english ] = "Your entered file path is not valid!";
-    Text[ english_us ] = "Your entered file path is not valid!";
+    Text[ english_us ] = "The file path entered is not valid.";
+    Text[ portuguese ] = "Your entered file path is not valid!";
+    Text[ russian ] = "Your entered file path is not valid!";
+    Text[ greek ] = "Your entered file path is not valid!";
+    Text[ dutch ] = "Your entered file path is not valid!";
+    Text[ french ] = "Le chemin saisi pour le fichier n'est pas valide !";
+    Text[ spanish ] = "La ruta del archivo no es v�lida.";
+    Text[ finnish ] = "Your entered file path is not valid!";
+    Text[ italian ] = "Il percorso del file non � valido.";
+    Text[ danish ] = "Your entered file path is not valid!";
+    Text[ swedish ] = "Den angivna s�kv�gen �r ogiltig!";
+    Text[ polish ] = "Your entered file path is not valid!";
+    Text[ portuguese_brazilian ] = "Your entered file path is not valid!";
+    Text[ japanese ] = "入力したファイルのパスは無効です。";
+    Text[ korean ] = "입력하신 파일 경로는 유효하지 않습니다.";
+    Text[ chinese_simplified ] = "您输入的文件路径无效！";
+    Text[ chinese_traditional ] = "您輸入的檔案路徑無效！";
+    Text[ turkish ] = "Your entered file path is not valid!";
+    Text[ arabic ] = "Your entered file path is not valid!";
+    Text[ catalan ] = "Your entered file path is not valid!";
+    Text[ thai ] = "Your entered file path is not valid!";
 };
 
 
@@ -794,7 +817,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ dutch ] = ": tabel selecteren";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ greek ] = ": ������� ������";
-    Text[ korean ] = ": 시트 선택";
+    Text[ korean ] = ": 테이블 선택";
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Selecci� de taula";
     Text[ finnish ] = ": Taulukon valinta";
@@ -1503,7 +1526,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ dutch ] = "(Datum)";
     Text[ chinese_simplified ] = " (日期)";
     Text[ greek ] = "(����������)";
-    Text[ korean ] = " (일자)";
+    Text[ korean ] = " (날짜)";
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Data)";
     Text[ finnish ] = "(P�iv�m��r�)";
@@ -1531,7 +1554,7 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ dutch ] = "(Tijd)";
     Text[ chinese_simplified ] = " (时间)";
     Text[ greek ] = "(���)";
-    Text[ korean ] = "(시각)";
+    Text[ korean ] = "(시간)";
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(Hora)";
     Text[ finnish ] = "(Aika)";
@@ -1615,7 +1638,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ dutch ] = ": veld uitlijnen";
     Text[ chinese_simplified ] = "：字段对齐";
     Text[ greek ] = ": �������� ������";
-    Text[ korean ] = ": 필드 정렬";
+    Text[ korean ] = ": 필드 맞춤";
     Text[ turkish ] = ": Alan hizalamas�";
     Text[ catalan ] = ": Alineaci� de camp";
     Text[ finnish ] = ": Kent�n tasaus";
@@ -1671,7 +1694,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ greek ] = ": ���������� ������";
-    Text[ korean ] = ": 용지 만들기";
+    Text[ korean ] = ": 양식 만들기";
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
@@ -3329,7 +3352,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ dutch ] = ": tabel selecteren";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ greek ] = ": ������� ������";
-    Text[ korean ] = ": 시트 선택";
+    Text[ korean ] = ": 테이블 선택";
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Selecci� de taula";
     Text[ finnish ] = ": Taulukon valinta";
@@ -3414,7 +3437,7 @@ String RID_DB_QUERY_WIZARD_START + 17
     Text[ dutch ] = ": sortering";
     Text[ chinese_simplified ] = "：排序";
     Text[ greek ] = ": ����������";
-    Text[ korean ] = ": 분류";
+    Text[ korean ] = ": 정렬";
     Text[ turkish ] = ": S�ralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Ordre";
@@ -5155,15 +5178,15 @@ String RID_DB_REPORT_WIZARD_START + 60
     Text[ russian ] = "Binary Fields cannot be displayed in the report";
     Text[ greek ] = "Binary Fields cannot be displayed in the report";
     Text[ dutch ] = "Binary Fields cannot be displayed in the report";
-    Text[ french ] = "Binary Fields cannot be displayed in the report";
-    Text[ spanish ] = "Binary Fields cannot be displayed in the report";
+    Text[ french ] = "Impossible d'afficher les champs binaires dans l'�tat !";
+    Text[ spanish ] = "Los campos binarios no se pueden mostrar en el informe. ";
     Text[ finnish ] = "Binary Fields cannot be displayed in the report";
-    Text[ italian ] = "Binary Fields cannot be displayed in the report";
+    Text[ italian ] = "Impossibile raffigurare i campi binari nel rapporto.";
     Text[ danish ] = "Binary Fields cannot be displayed in the report";
     Text[ swedish ] = "Det g�r inte att visa bin�ra f�lt i rapporten.";
     Text[ polish ] = "Binary Fields cannot be displayed in the report";
-    Text[ japanese ] = "Binary Fields cannot be displayed in the report";
-    Text[ korean ] = "Binary Fields cannot be displayed in the report";
+    Text[ japanese ] = "バイナリフィールドは、レポートでは表示できません。";
+    Text[ korean ] = "바이너리 필드를 보고서에 표시할 수 없습니다.";
     Text[ chinese_simplified ] = "无法在报表之中显示二进制字段";
     Text[ chinese_traditional ] = "無法在報表之中顯示二元欄位";
     Text[ turkish ] = "Binary Fields cannot be displayed in the report";
@@ -5179,15 +5202,15 @@ String RID_DB_REPORT_WIZARD_START + 61
     Text[ russian ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ greek ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ dutch ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ french ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ spanish ] = "The TextTable '<TABLENAME>' does not exist.";
+    Text[ french ] = "La table '<TABLENAME>' n'existe pas.";
+    Text[ spanish ] = "La tabla '<TABLENAME>' no existe. ";
     Text[ finnish ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ italian ] = "The TextTable '<TABLENAME>' does not exist.";
+    Text[ italian ] = "La tabella '<TABLENAME>' non esiste.";
     Text[ danish ] = "The TextTable '<TABLENAME>' does not exist.";
     Text[ swedish ] = "Tabellen '<TABLENAME>' finns inte.";
     Text[ polish ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ japanese ] = "The TextTable '<TABLENAME>' does not exist.";
-    Text[ korean ] = "The TextTable '<TABLENAME>' does not exist.";
+    Text[ japanese ] = "テーブル '<TABLENAME>' はありません。";
+    Text[ korean ] = "'<TABLENAME>' 테이블이 없습니다.";
     Text[ chinese_simplified ] = "表格 '<TABLENAME>' 不存在。";
     Text[ chinese_traditional ] = "表格 '<TABLENAME>' 不存在。";
     Text[ turkish ] = "The TextTable '<TABLENAME>' does not exist.";
@@ -5202,15 +5225,15 @@ String RID_DB_REPORT_WIZARD_START + 62
     Text[ russian ] = "Report is created...";
     Text[ greek ] = "Report is created...";
     Text[ dutch ] = "Report is created...";
-    Text[ french ] = "Report is created...";
-    Text[ spanish ] = "Report is created...";
+    Text[ french ] = "Cr�ation de l'�tat...";
+    Text[ spanish ] = "Creaci�n del informe...";
     Text[ finnish ] = "Report is created...";
-    Text[ italian ] = "Report is created...";
+    Text[ italian ] = "Creazione del rapporto...";
     Text[ danish ] = "Report is created...";
     Text[ swedish ] = "Rapport skapas...";
     Text[ polish ] = "Report is created...";
-    Text[ japanese ] = "Report is created...";
-    Text[ korean ] = "Report is created...";
+    Text[ japanese ] = "レポートを作成しています...";
+    Text[ korean ] = "보고서를 만드는 중...";
     Text[ chinese_simplified ] = "正在建立报表...";
     Text[ chinese_traditional ] = "正在建立報表...";
     Text[ turkish ] = "Report is created...";
@@ -5225,15 +5248,15 @@ String RID_DB_REPORT_WIZARD_START + 63
     Text[ russian ] = "Number of inserted Records: <COUNT>";
     Text[ greek ] = "Number of inserted Records: <COUNT>";
     Text[ dutch ] = "Number of inserted Records: <COUNT>";
-    Text[ french ] = "Number of inserted Records: <COUNT>";
-    Text[ spanish ] = "Number of inserted Records: <COUNT>";
+    Text[ french ] = "Nombre d'enregistrements ins�r�s : <COUNT>";
+    Text[ spanish ] = "N�mero de registros insertados: <COUNT>";
     Text[ finnish ] = "Number of inserted Records: <COUNT>";
-    Text[ italian ] = "Number of inserted Records: <COUNT>";
+    Text[ italian ] = "Numero dei record inseriti: <COUNT>";
     Text[ danish ] = "Number of inserted Records: <COUNT>";
     Text[ swedish ] = "Antal dataposter som har infogats: <COUNT>";
     Text[ polish ] = "Number of inserted Records: <COUNT>";
-    Text[ japanese ] = "Number of inserted Records: <COUNT>";
-    Text[ korean ] = "Number of inserted Records: <COUNT>";
+    Text[ japanese ] = "挿入したレコードの数: <COUNT>";
+    Text[ korean ] = "삽입된 레코드 수: <COUNT>";
     Text[ chinese_simplified ] = "插入数据条目的数目：<COUNT>";
     Text[ chinese_traditional ] = "插入項目的數目：<COUNT>";
     Text[ turkish ] = "Number of inserted Records: <COUNT>";
@@ -5248,15 +5271,15 @@ String RID_DB_REPORT_WIZARD_START + 64
     Text[ russian ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ greek ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ dutch ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ french ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ spanish ] = "The form '<REPORTFORM>'Number of inserted Records";
+    Text[ french ] = "Le formulaire '<REPORTFORM>' n'existe pas.";
+    Text[ spanish ] = "El formulario '<REPORTFORM>' no existe.";
     Text[ finnish ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ italian ] = "The form '<REPORTFORM>'Number of inserted Records";
+    Text[ italian ] = "Il formulario '<REPORTFORM>' non esite.";
     Text[ danish ] = "The form '<REPORTFORM>'Number of inserted Records";
     Text[ swedish ] = "Formul�ret '<REPORTFORM>' existerar inte.";
     Text[ polish ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ japanese ] = "The form '<REPORTFORM>'Number of inserted Records";
-    Text[ korean ] = "The form '<REPORTFORM>'Number of inserted Records";
+    Text[ japanese ] = "フォーム '<REPORTFORM>' はありません。";
+    Text[ korean ] = "'<REPORTFORM>' 양식이 없습니다.";
     Text[ chinese_simplified ] = "表单 '<REPORTFORM>' 不存在。";
     Text[ chinese_traditional ] = "表單 '<REPORTFORM>' 不存在。";
     Text[ turkish ] = "The form '<REPORTFORM>'Number of inserted Records";
@@ -5271,15 +5294,15 @@ String RID_DB_REPORT_WIZARD_START + 65
     Text[ russian ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ greek ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ dutch ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ french ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ spanish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+    Text[ french ] = "Impossible d'ex�cuter la requ�te avec l'expression <BR>'<STATEMENT>' <BR> ! <BR> V�rifiez la source de donn�es.";
+    Text[ spanish ] = "La consulta con la expresi�n <BR>'<STATEMENT>' <BR> no se ha podido ejecutar. <BR> Verifique su fuente de datos.";
     Text[ finnish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ italian ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+    Text[ italian ] = "Impossibile eseguire la ricerca con l'espressione <BR>'<STATEMENT>' <BR>. <BR> Verificate la sorgente dati.";
     Text[ danish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
     Text[ swedish ] = "Det gick inte att utf�ra s�kningen med uttrycket <BR>'<STATEMENT>' <BR>. <BR> Kontrollera din datak�lla.";
     Text[ polish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ japanese ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
-    Text[ korean ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
+    Text[ japanese ] = "命令文 <BR>'<STATEMENT>' を使ったクエリーは、<BR> 実行できませんでした。<BR> データソースをチェックしてください。";
+    Text[ korean ] = "<BR>'<STATEMENT>' 문장의 쿼리를 실행할 수 없습니다. <BR> 데이터 소스를 검사해주십시오.";
     Text[ chinese_simplified ] = "无法执行含有陈述<BR>'<STATEMENT>' <BR>的查询命令。<BR>请检查所使用的数据源。";
     Text[ chinese_traditional ] = "無法執行含有陳述<BR>'<STATEMENT>' <BR> 的查詢指令。<BR>請檢查所使用的資料源。";
     Text[ turkish ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
@@ -5294,15 +5317,15 @@ String RID_DB_REPORT_WIZARD_START + 66
     Text[ russian ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ greek ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ dutch ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ french ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ french ] = "Impossible de lire le contr�le suivant masqu� dans le formulaire '<FORMNAME>' : '<CONTROLNAME>'.";
     Text[ spanish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ finnish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ italian ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ danish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ swedish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ swedish ] = "Det gick inte att l�sa f�ljande dolda control i formul�ret '<FORMNAME>': '<CONTROLNAME>'.";
     Text[ polish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ japanese ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
-    Text[ korean ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ japanese ] = "フォーム '<FORMNAME>' にある隠しコントロールは読み取れませんでした。'<CONTROLNAME>'";
+    Text[ korean ] = "다음의 '<FORMNAME>' 양식 안에 숨겨진 제어기는 읽을 수 없습니다: '<CONTROLNAME>'.";
     Text[ chinese_simplified ] = "无法读取以下隐藏在表单 '<FORMNAME>' 之内的控制项：'<CONTROLNAME>'";
     Text[ chinese_traditional ] = "無法存取下列隱藏在表單 '<FORMNAME>' 之内的控制：'<CONTROLNAME>' 。";
     Text[ turkish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
@@ -5317,15 +5340,15 @@ String RID_DB_REPORT_WIZARD_START + 67
     Text[ russian ] = "All the data is imported...";
     Text[ greek ] = "All the data is imported...";
     Text[ dutch ] = "All the data is imported...";
-    Text[ french ] = "All the data is imported...";
-    Text[ spanish ] = "All the data is imported...";
+    Text[ french ] = "Import des donn�es...";
+    Text[ spanish ] = "Importe de datos...";
     Text[ finnish ] = "All the data is imported...";
-    Text[ italian ] = "All the data is imported...";
+    Text[ italian ] = "Importazione dei dati...";
     Text[ danish ] = "All the data is imported...";
     Text[ swedish ] = "Data importeras...";
     Text[ polish ] = "All the data is imported...";
-    Text[ japanese ] = "All the data is imported...";
-    Text[ korean ] = "All the data is imported...";
+    Text[ japanese ] = "データをインポートしています...";
+    Text[ korean ] = "데이터를 가져오는 중...";
     Text[ chinese_simplified ] = "正在输入数据...";
     Text[ chinese_traditional ] = "正在匯入資料...";
     Text[ turkish ] = "All the data is imported...";
@@ -5526,7 +5549,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ dutch ] = ": tabeltype";
     Text[ chinese_simplified ] = "：表格类型";
     Text[ greek ] = ": ����� ������";
-    Text[ korean ] = ": 표 유형";
+    Text[ korean ] = ": 테이블 유형";
     Text[ turkish ] = ": Tablo tipi";
     Text[ catalan ] = ": Tipus de taula";
     Text[ finnish ] = ": Taulukon tyyppi";
@@ -5582,7 +5605,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ dutch ] = ": individualiseren";
     Text[ chinese_simplified ] = "：使用者自订";
     Text[ greek ] = ": �������������";
-    Text[ korean ] = ": 사용자 설정";
+    Text[ korean ] = ": 사용자 정의 설정";
     Text[ turkish ] = ": �zelle�tirme";
     Text[ catalan ] = ": Personalitzaci�";
     Text[ finnish ] = ": Mukautus";
@@ -5980,7 +6003,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ dutch ] = "(Datum)";
     Text[ chinese_simplified ] = " (日期)";
     Text[ greek ] = "(����������)";
-    Text[ korean ] = " (일자)";
+    Text[ korean ] = " (날짜)";
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Data)";
     Text[ finnish ] = "(P�iv�m��r�)";
@@ -6008,7 +6031,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ dutch ] = "(Tijd)";
     Text[ chinese_simplified ] = " (时间)";
     Text[ greek ] = "(���)";
-    Text[ korean ] = "(시각)";
+    Text[ korean ] = "(시간)";
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(Hora)";
     Text[ finnish ] = "(Aika)";
@@ -6177,7 +6200,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ greek ] = ": ���������� ������";
-    Text[ korean ] = ": 양식 작성";
+    Text[ korean ] = ": 양식 만들기";
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
@@ -6519,7 +6542,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ dutch ] = ": formulier maken";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ greek ] = ": ���������� ������";
-    Text[ korean ] = ": 양식 생성";
+    Text[ korean ] = ": 양식 만들기";
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
