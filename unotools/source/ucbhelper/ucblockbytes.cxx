@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 10:32:17 $
+ *  last change: $Author: cd $ $Date: 2001-10-17 05:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 
 #include <ucbhelper/contentbroker.hxx>
@@ -640,6 +643,10 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
         xSeekable->seek( nPos );
     }
     catch ( IOException )
+    {
+        return ERRCODE_IO_CANTSEEK;
+    }
+    catch (com::sun::star::lang::IllegalArgumentException)
     {
         return ERRCODE_IO_CANTSEEK;
     }
