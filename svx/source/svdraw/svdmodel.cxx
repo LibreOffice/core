@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-16 14:21:27 $
+ *  last change: $Author: dl $ $Date: 2000-11-21 14:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,45 +353,6 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
 //-/        pUndoItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
 //-/        pUndoItemPool->FreezeIdRanges();
 //-/    }
-
-#ifdef DBG_UTIL
-    UINT16 nCnt(0);
-    BOOL bXOutFnd(FALSE);
-    BOOL bEEngFnd(FALSE);
-    SfxItemPool* pTmpPool = pItemPool;
-
-    while(pTmpPool)
-    {
-        if(pTmpPool->GetFirstWhich() <= SDRATTR_START && pTmpPool->GetLastWhich() >= SDRATTR_END)
-            bXOutFnd = TRUE;
-
-        if(pTmpPool->GetName().EqualsAscii("EditEngineItemPool"))
-            bEEngFnd = TRUE;
-
-        nCnt++;
-        pTmpPool = pTmpPool->GetSecondaryPool();
-    }
-
-    if(!bXOutFnd || !bEEngFnd)
-    {
-        ByteString aMsg("SdrModel::ImpCtor(): ");
-        aMsg += nCnt;
-        aMsg += " ItemPool(s) in der Pool-Verkettung gefunden,\njedoch";
-
-        if(!bXOutFnd)
-            aMsg += " kein SdrItemPool";
-
-        if(!bXOutFnd && !bEEngFnd)
-            aMsg += " und";
-
-        if(!bEEngFnd)
-            aMsg += " kein EditEngine";
-
-        aMsg += '.';
-
-        DBG_ERROR(aMsg.GetBuffer());
-    }
-#endif
 
     pLayerAdmin=new SdrLayerAdmin;
     pLayerAdmin->SetModel(this);
@@ -2463,9 +2424,13 @@ void SdrModel::PreSave()
     for(sal_uInt16 a(0); a < nCnt; a++)
     {
         // MasterPages
-        const SdrObjList& rObjList = *GetMasterPage(a);
-        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
-            rObjList.GetObj(b)->PreSave();
+        const SdrPage& rPage = *GetMasterPage(a);
+        SdrObject* pObj = rPage.GetBackgroundObj();
+        if( pObj )
+            pObj->PreSave();
+
+        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+            rPage.GetObj(b)->PreSave();
 //-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
 //-/        while(aIter.IsMore())
 //-/            aIter.Next()->PreSave();
@@ -2475,9 +2440,13 @@ void SdrModel::PreSave()
     for(a = 0; a < nCnt; a++)
     {
         // Pages
-        const SdrObjList& rObjList = *GetPage(a);
-        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
-            rObjList.GetObj(b)->PreSave();
+        const SdrPage& rPage = *GetPage(a);
+        SdrObject* pObj = rPage.GetBackgroundObj();
+        if( pObj )
+            pObj->PreSave();
+
+        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+            rPage.GetObj(b)->PreSave();
 //-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
 //-/        while(aIter.IsMore())
 //-/            aIter.Next()->PreSave();
@@ -2491,9 +2460,13 @@ void SdrModel::PostSave()
     for(sal_uInt16 a(0); a < nCnt; a++)
     {
         // MasterPages
-        const SdrObjList& rObjList = *GetMasterPage(a);
-        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
-            rObjList.GetObj(b)->PostSave();
+        const SdrPage& rPage = *GetMasterPage(a);
+        SdrObject* pObj = rPage.GetBackgroundObj();
+        if( pObj )
+            pObj->PostSave();
+
+        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+            rPage.GetObj(b)->PostSave();
 //-/        SdrObjListIter aIter(*GetMasterPage(i), IM_FLAT);
 //-/        while(aIter.IsMore())
 //-/            aIter.Next()->PreSave();
@@ -2503,9 +2476,13 @@ void SdrModel::PostSave()
     for(a = 0; a < nCnt; a++)
     {
         // Pages
-        const SdrObjList& rObjList = *GetPage(a);
-        for(sal_uInt32 b(0); b < rObjList.GetObjCount(); b++)
-            rObjList.GetObj(b)->PostSave();
+        const SdrPage& rPage = *GetPage(a);
+        SdrObject* pObj = rPage.GetBackgroundObj();
+        if( pObj )
+            pObj->PostSave();
+
+        for(sal_uInt32 b(0); b < rPage.GetObjCount(); b++)
+            rPage.GetObj(b)->PostSave();
 //-/        SdrObjListIter aIter(*GetPage(i), IM_FLAT);
 //-/        while(aIter.IsMore())
 //-/            aIter.Next()->PreSave();
