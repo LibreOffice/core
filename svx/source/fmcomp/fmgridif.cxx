@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-20 11:32:50 $
+ *  last change: $Author: fs $ $Date: 2002-09-24 14:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,9 +633,7 @@ void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt:
             DBG_ASSERT(mxPeer.is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
             pPeer = FmXGridPeer::getImplementation(mxPeer);
 
-            ::com::sun::star::awt::Rectangle rArea = getPosSize();
-            if (!VCLUnoHelper::IsZero(rArea))
-                pPeer->setPosSize(rArea.X, rArea.Y, rArea.Width, rArea.Height, ::com::sun::star::awt::PosSize::POSSIZE);
+            setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, ::com::sun::star::awt::PosSize::POSSIZE );
 
             Reference< XIndexContainer >  xColumns(getModel(), UNO_QUERY);
             if (xColumns.is())
