@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MimeContentTypeFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-01-23 13:29:43 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,14 @@ interface XMimeContentTypeFactory;
 //=============================================================================
 /** the MimeContentType service creates instances of mime contenttype
 
+ <!-- Dennis: What is the correct capitalization of "mime" -->
+
     @see com::sun::star::datatransfer::XMimeContentTypeFactory
 */
 service MimeContentTypeFactory
 {
     //-------------------------------------------------------------------------
-    /** creates mime contenttypes from strings
+    /** creates mime contenttypes from strings.
     */
     interface XMimeContentTypeFactory;
 

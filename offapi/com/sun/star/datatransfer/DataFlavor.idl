@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFlavor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ module com { module sun { module star { module datatransfer {
 //=============================================================================
 /** Each instance represents the opaque concept of a data format as would
     appear on a clipboard or during drag and drop.
+
+ <!-- Dennis: What is an "opaque concept"? This sentence needs to be reworded. -->
 */
 
 struct DataFlavor
@@ -85,7 +87,7 @@ struct DataFlavor
     string HumanPresentableName;
 
     //-------------------------------------------------------------------------
-    /** The type of the object to transfer, e.g. XOutputStream.
+    /** The type of the object to transfer, for example, XOutputStream.
     */
     type DataType;
 };

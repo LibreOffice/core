@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferDataAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ interface XTransferDataAccess: com::sun::star::uno::XInterface
 
         @param aFlavorList
         the requested data flavors. Unsupported flavors will be ignored.
-    */
+
+ <!-- Dennis: What is an "empty any"? -->   */
     sequence < any > getData( [in] sequence < DataFlavor > aFlavorList );
 };
 

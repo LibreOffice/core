@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataFormatTranslator.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 09:47:51 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,9 @@ module com { module sun { module star { module datatransfer {
 /** <p>Interface to be implemented by objects used to translate DataFlavors to
     system dependent data transfer types and vice versa. Different platforms
     use different data transfer types to describe dates during data exchange
-    operations like clipboard or drag&drop, e.g. Windows uses interger values,
-    Unix uses atoms, other platforms may use strings etc.</p>
-    <p>Under Windows a data type of format int32 will be interpreted as
+    operations like clipboard or drag&drop, for example, Windows uses interger values,
+    Unix uses atoms, other platforms may use strings.</p>
+    <p>Under Windows, a data type of format int32 will be interpreted as
     clipboard format value, whereas a string will be interpreted as a format name
     which has to be registered in order to get a valid clipboard format value.</p>
 */
@@ -90,14 +90,14 @@ interface XDataFormatTranslator : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @returns
-        a DataFlavor for the given system data type
+        a DataFlavor for the given system data type.
     */
     [const] any getSystemDataTypeFromDataFlavor( [in] DataFlavor aDataFlavor );
 
     //-------------------------------------------------------------------------
     /**
         @returns
-        a system data type for the given DataFlavor
+        a system data type for the given DataFlavor.
     */
     [const] DataFlavor getDataFlavorFromSystemDataType( [in] any aSysDataType );
 };

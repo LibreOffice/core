@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferable.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,14 +120,16 @@ interface XTransferable: com::sun::star::uno::XInterface
     /** Checks if the data object supports the specified data flavor.
 
         @returns
-        </TRUE> if the data flavor is supported by the transfer source,
-        </FALSE> otherwise.
+        <TRUE/> if the data flavor is supported by the transfer source,
+        <FALSE/> otherwise.
 
         @remarks
         This method is only for analogy with the JAVA Clipboard interface. To
         avoid many calls the caller should rather use getRansferDataFlavors.
 
         @see com::sun::star::datatransfer::XTransferable::getRansferDataFlavors
+
+ <!-- Dennis: Should this be "getTransferDataFlavors" ? -->
     */
     [const] boolean isDataFlavorSupported( [in] DataFlavor aFlavor );
 };

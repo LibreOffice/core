@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransferableEx.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+ *  last change: $Author: arellano $ $Date: 2001-03-01 17:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,12 +89,12 @@ interface XTransferableEx: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /** @requestedFlavors
         Sequence of flavors of interest. Specify an empty sequence for interest
-        in all flavors with top-level MIMIE types. To get all MIME types call
+        in all flavors with top-level MIME types. To get all MIME types call
         com::sun::star::datatransfer::XTransferable.
 
         @returns
-        the list of the matching supported falvors that where requested. For
-        each requested top-level MIMIE type all supported subtypes are returned.
+        the list of the matching supported flavors that were requested. For
+        each requested top-level MIME type, all supported subtypes are returned.
     */
     [const] sequence < DataFlavor > queryTransferDataFlavors( [in] sequence< DataFlavor > requestedFlavors );
 };
