@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
+ *  last change: $Author: sab $ $Date: 2002-07-26 13:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,7 +2257,19 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                         rtl::OUString sOUName(sName);
                         uno::Any aAny;
                         aAny <<= aTableViewSettings;
-                        xNameContainer->insertByName(sName, aAny);
+                        try
+                        {
+                            xNameContainer->insertByName(sName, aAny);
+                        }
+                        //#101739#; two tables with the same name are possible
+                        catch ( container::ElementExistException& )
+                        {
+                            DBG_ERRORFILE("seems there are two tables with the same name");
+                        }
+                        catch ( uno::RuntimeException& )
+                        {
+                            DBG_ERRORFILE("something went wrong");
+                        }
                     }
                 }
                 pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLES));
