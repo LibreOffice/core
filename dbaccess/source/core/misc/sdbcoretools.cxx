@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:16:32 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,10 @@ void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun
     {
         xModi.set(xParent,UNO_QUERY);
         Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : NULL,UNO_QUERY);
+        if ( xChild.is() )
+            xParent.set(xChild->getParent() ,UNO_QUERY);
+        else
+            xParent = NULL;
     }
     if ( xModi.is() )
         xModi->setModified(_bModified);
