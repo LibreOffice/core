@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:51:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,6 @@ class SwXMLTableInfo_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
 
-#ifndef XML_PROGRESS_REF_NOT_SET
-#define XML_PROGRESS_REF_NOT_SET ((sal_Int32)-1)
-#endif
-
-
 class SwXMLExport : public SvXMLExport
 {
     friend class SwXMLExpContext;
@@ -168,6 +163,8 @@ class SwXMLExport : public SvXMLExport
     const ::rtl::OUString sIsProtected;
     const ::rtl::OUString sCell;
 
+    void setBlockMode();
+
 protected:
 
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
@@ -197,8 +194,6 @@ public:
         sal_Bool bShowProgr );
 #endif
     virtual ~SwXMLExport();
-
-    void setBlockMode();
 
     virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
