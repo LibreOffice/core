@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 16:19:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ using namespace ::xmloff::token;
 enum SvXMLTokenMapAttrs
 {
     XML_TOK_GRADIENT_NAME,
+    XML_TOK_GRADIENT_DISPLAY_NAME,
     XML_TOK_GRADIENT_STYLE,
     XML_TOK_GRADIENT_CX,
     XML_TOK_GRADIENT_CY,
@@ -135,6 +136,7 @@ enum SvXMLTokenMapAttrs
 static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
     { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
     { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
     { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
@@ -181,6 +183,7 @@ sal_Bool XMLGradientStyleImport::importXML(
     sal_Bool bHasStyle      = sal_False;
     sal_Bool bHasStartColor = sal_False;
     sal_Bool bHasEndColor   = sal_False;
+    OUString aDisplayName;
 
     awt::Gradient aGradient;
     aGradient.XOffset = 0;
@@ -212,6 +215,11 @@ sal_Bool XMLGradientStyleImport::importXML(
                 bHasName = sal_True;
             }
             break;
+        case XML_TOK_GRADIENT_DISPLAY_NAME:
+            {
+                aDisplayName = rStrValue;
+            }
+            break;
         case XML_TOK_GRADIENT_STYLE:
             {
                 sal_uInt16 eValue;
@@ -224,11 +232,11 @@ sal_Bool XMLGradientStyleImport::importXML(
             break;
         case XML_TOK_GRADIENT_CX:
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.XOffset = nTmpValue;
+            aGradient.XOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_TOK_GRADIENT_CY:
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.YOffset = nTmpValue;
+            aGradient.YOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_TOK_GRADIENT_STARTCOLOR:
             {
@@ -246,11 +254,11 @@ sal_Bool XMLGradientStyleImport::importXML(
             break;
         case XML_TOK_GRADIENT_STARTINT:
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.StartIntensity = nTmpValue;
+            aGradient.StartIntensity = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_TOK_GRADIENT_ENDINT:
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.EndIntensity = nTmpValue;
+            aGradient.EndIntensity = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_TOK_GRADIENT_ANGLE:
             {
@@ -261,7 +269,7 @@ sal_Bool XMLGradientStyleImport::importXML(
             break;
         case XML_TOK_GRADIENT_BORDER:
             rUnitConverter.convertPercent( nTmpValue, rStrValue );
-            aGradient.Border = nTmpValue;
+            aGradient.Border = static_cast< sal_Int16 >( nTmpValue );
             break;
 
         default:
@@ -271,6 +279,13 @@ sal_Bool XMLGradientStyleImport::importXML(
     }
 
     rValue <<= aGradient;
+
+    if( aDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRADIENT_ID, rStrName,
+                                     aDisplayName );
+        rStrName = aDisplayName;
+    }
 
     bRet = bHasName && bHasStyle && bHasStartColor && bHasEndColor;
 
@@ -319,8 +334,15 @@ sal_Bool XMLGradientStyleExport::exportXML(
             else
             {
                 // Name
+                sal_Bool bEncoded = sal_False;
                 OUString aStrName( rStrName );
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStrName );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                      rExport.EncodeStyleName( aStrName,
+                                                                &bEncoded ) );
+                if( bEncoded )
+                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                            aStrName );
+
 
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
