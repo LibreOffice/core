@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-06 15:53:41 $
+#   last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 
 PRJNAME=desktop
-TARGET=wrp
+TARGET=dkt
 LIBTARGET=NO
 AUTOSEG=true
 ENABLE_EXCEPTIONS=TRUE
@@ -82,45 +82,21 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 # --- Files --------------------------------------------------------
 
 OBJFILES = \
-        $(OBJ)$/app.obj \
-        $(OBJ)$/wrapper.obj \
-    $(OBJ)$/intro.obj
+        $(OBJ)$/app.obj					\
+        $(OBJ)$/intro.obj				\
+        $(OBJ)$/officeipcthread.obj		\
+        $(OBJ)$/appinit.obj				\
+        $(OBJ)$/cmdlineargs.obj			\
+        $(OBJ)$/pluginacceptthread.obj	\
+        $(OBJ)$/officeacceptthread.obj	\
+        $(OBJ)$/oinstanceprovider.obj	\
+        $(OBJ)$/opluginframefactory.obj	\
+        $(OBJ)$/appsys.obj				\
+        $(OBJ)$/desktopresid.obj
 
-#SLOFILES = \
-#        $(SLO)$/wrapper.obj
+SRC1FILES=	desktop.src
+SRS1NAME=	desktop
 
-#SHL1OBJS=   $(SLOFILES)
-#SHL1TARGET=     $(TARGET)$(UPD)$(DLLPOSTFIX)
-
-#SHL1IMPLIB= iwrp
-#SHL1STDLIBS=    \
-#                $(SCHLIB)               \
-#                $(SMLIB)                \
-#                $(SIMLIB)               \
-#                $(SWLIB)                \
-#                $(SDLIB)                \
-#                $(SCLIB)                \
-#                $(SBALIB)               \
-#                $(OFALIB)               \
-#                $(SVXLIB)               \
-#                $(SFXLIB)               \
-#                $(TOOLSLIB)               \
-#                $(UNOTOOLSLIB)               \
-#                $(SVLLIB)               \
-#                $(SVTOOLLIB)               \
-#                $(SOTLIB)               \
-#                $(SO2LIB)               \
-#                $(SALLIB)               \
-#                $(CPPULIB)               \
-#                $(CPPUHELPERLIB)               \
-#                $(VCLLIB)
-#
-#SHL1DEPN=       makefile.mk
-#SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-#
-#DEF1NAME=       $(SHL1TARGET)
-#DEF1EXPORTFILE= exports.dxp
-#
 # --- Targets ------------------------------------------------------
 
 .IF "$(depend)" != ""

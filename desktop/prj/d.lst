@@ -20,6 +20,8 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+
 ..\res\s*.exe %_DEST%\bin%_EXT%\s*.exe
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib

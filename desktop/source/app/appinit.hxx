@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: app.hxx,v $
+ *  $RCSfile: appinit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:53:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,23 @@
  *
  ************************************************************************/
 
-#ifndef _DESK_APP_HXX
-#define _DESK_APP_HXX
+#ifndef _DESKTOP_APPINIT_HXX_
+#define _DESKTOP_APPINIT_HXX_
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-/*--------------------------------------------------------------------
-    Description:    Application-class
- --------------------------------------------------------------------*/
-class IntroWindow_Impl;
-class Desktop : public Application //public SfxApplicationClass
-{
-    public:
-                            Desktop();
-        virtual void        Main( );
-        virtual void        Init();
-        virtual void        DeInit();
-        virtual BOOL        QueryExit();
-        virtual USHORT      Exception(USHORT nError);
-        virtual void        Property( ApplicationProperty& );
-        virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void        AppEvent( const ApplicationEvent& rAppEvent );
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > createApplicationServiceManager();
 
-        DECL_LINK(          OpenClients_Impl, void* );
+void registerServices( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
 
-        static void         OpenClients();
-        static void         OpenDefault();
-        static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*      GetDesktopResManager();
+void destroyApplicationServiceManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMgr );
 
-    private:
-        void                OpenStartupScreen( const char* );
-        void                CloseStartupScreen();
+void createTemporaryDirectory();
+void removeTemporaryDirectory();
 
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        USHORT              m_nAppEvents;
-        ResMgr*             m_pLabelResMgr;
-        IntroWindow_Impl*   m_pIntro;
-
-        static ResMgr*      pResMgr;
-};
-
-#endif // DESK_APP_HXX_
+#endif

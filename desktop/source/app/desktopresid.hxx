@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: app.hxx,v $
+ *  $RCSfile: desktopresid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:53:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _DESK_APP_HXX
-#define _DESK_APP_HXX
+#ifndef _DESKTOP_RESID_HXX_
+#define _DESKTOP_RESID_HXX_
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
 #endif
 
-/*--------------------------------------------------------------------
-    Description:    Application-class
- --------------------------------------------------------------------*/
-class IntroWindow_Impl;
-class Desktop : public Application //public SfxApplicationClass
+class DesktopResId : public ResId
 {
     public:
-                            Desktop();
-        virtual void        Main( );
-        virtual void        Init();
-        virtual void        DeInit();
-        virtual BOOL        QueryExit();
-        virtual USHORT      Exception(USHORT nError);
-        virtual void        Property( ApplicationProperty& );
-        virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void        AppEvent( const ApplicationEvent& rAppEvent );
-
-        DECL_LINK(          OpenClients_Impl, void* );
-
-        static void         OpenClients();
-        static void         OpenDefault();
-        static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*      GetDesktopResManager();
-
-    private:
-        void                OpenStartupScreen( const char* );
-        void                CloseStartupScreen();
-
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        USHORT              m_nAppEvents;
-        ResMgr*             m_pLabelResMgr;
-        IntroWindow_Impl*   m_pIntro;
-
-        static ResMgr*      pResMgr;
+        DesktopResId( USHORT nId );
 };
 
-#endif // DESK_APP_HXX_
+
+#endif // _DESKTOP_RESID_HXX_

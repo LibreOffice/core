@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-06 15:54:11 $
+#   last change: $Author: cd $ $Date: 2001-07-16 12:55:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,32 +96,32 @@ APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
 APP1_STDPOST=
 .ENDIF
 
+RESLIB1NAME=		dkt
+RESLIB1SRSFILES=	$(SRS)$/desktop.srs
+
 APP1TARGET=$(TARGET)
 
-APP1STDLIBS= 		\
-    $(APP1_STDPRE)  \
-    $(SFX2LIB) 		\
-    $(BASICLIB) 	\
-    $(SO2LIB) 		\
-    $(SJLIB) 		\
-    $(TKLIB) 		\
-    $(SVTOOLLIB) 	\
-    $(SETUPLIB) 	\
-    $(SVLLIB) 		\
-    $(SVMEMLIB) 	\
-        $(OFALIB)               \
-    $(ONELIB) 		\
-    $(VCLLIB) 		\
-    $(SOTLIB) 		\
-        $(APP1_STDPOST)     \
-                $(SCHLIB)               \
-                $(SMLIB)                \
-                $(SWLIB)                \
-                $(SDLIB)                \
-                $(SCLIB)                \
-                $(SVXLIB)               \
-    $(UNOTOOLSLIB)						\
-    $(COMPHELPERLIB)
+APP1STDLIBS=			\
+    $(APP1_STDPRE)		\
+    $(AUTOMATIONLIB)	\
+    $(SETUPLIB)			\
+    $(SVLLIB)			\
+    $(SVMEMLIB)			\
+    $(ONELIB)			\
+    $(VCLLIB)			\
+    $(APP1_STDPOST)		\
+    $(UNOTOOLSLIB)		\
+    $(UCBHELPERLIB)		\
+    $(COMPHELPERLIB)	\
+    $(SALHELPERLIB)
+
+#	$(TKLIB)			\
+#	$(SJLIB)			\
+#	$(SOTLIB)			\
+#   $(OFALIB)			\
+#	$(SFX2LIB)			\
+#	$(SO2LIB)			\
+#	$(BASICLIB)			\
 
 .IF "$(OS)" == "SOLARIS"
 # for Java applets
@@ -150,9 +150,20 @@ APP1DEPN= \
         verinfo.rc
 
 APP1OBJS= \
-                $(OBJ)$/app.obj \
-                $(OBJ)$/wrapper.obj \
-        $(OBJ)$/intro.obj
+            $(OBJ)$/app.obj					\
+            $(OBJ)$/intro.obj				\
+            $(OBJ)$/officeipcthread.obj		\
+            $(OBJ)$/appinit.obj				\
+            $(OBJ)$/cmdlineargs.obj			\
+            $(OBJ)$/pluginacceptthread.obj	\
+            $(OBJ)$/officeacceptthread.obj	\
+            $(OBJ)$/oinstanceprovider.obj	\
+            $(OBJ)$/opluginframefactory.obj	\
+            $(OBJ)$/appsys.obj				\
+            $(OBJ)$/desktopresid.obj
+
+#			$(OBJ)$/shutdownicon.obj \
+#			$(OBJ)$/shutdowniconw32.obj \
 
 #APP1STACK=64000
 

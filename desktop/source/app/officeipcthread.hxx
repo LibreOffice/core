@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: app.hxx,v $
+ *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:53:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,52 @@
  *
  ************************************************************************/
 
-#ifndef _DESK_APP_HXX
-#define _DESK_APP_HXX
+#ifndef _DESKTOP_OFFICEIPCTHREAD_HXX_
+#define _DESKTOP_OFFICEIPCTHREAD_HXX_
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
+#ifndef _VOS_PIPE_HXX_
+#include <vos/pipe.hxx>
 #endif
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
+#ifndef _VOS_SECURITY_HXX_
+#include <vos/security.hxx>
+#endif
+#ifndef _VOS_THREAD_HXX_
+#include <vos/thread.hxx>
+#endif
+#ifndef _VOS_SIGNAL_HXX_
+#include <vos/signal.hxx>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
-/*--------------------------------------------------------------------
-    Description:    Application-class
- --------------------------------------------------------------------*/
-class IntroWindow_Impl;
-class Desktop : public Application //public SfxApplicationClass
+class SalMainPipeExchangeSignalHandler : public vos::OSignalHandler
 {
-    public:
-                            Desktop();
-        virtual void        Main( );
-        virtual void        Init();
-        virtual void        DeInit();
-        virtual BOOL        QueryExit();
-        virtual USHORT      Exception(USHORT nError);
-        virtual void        Property( ApplicationProperty& );
-        virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void        AppEvent( const ApplicationEvent& rAppEvent );
-
-        DECL_LINK(          OpenClients_Impl, void* );
-
-        static void         OpenClients();
-        static void         OpenDefault();
-        static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*      GetDesktopResManager();
-
-    private:
-        void                OpenStartupScreen( const char* );
-        void                CloseStartupScreen();
-
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        USHORT              m_nAppEvents;
-        ResMgr*             m_pLabelResMgr;
-        IntroWindow_Impl*   m_pIntro;
-
-        static ResMgr*      pResMgr;
+    virtual TSignalAction SAL_CALL signal(TSignalInfo *pInfo);
 };
 
-#endif // DESK_APP_HXX_
+class OfficeIPCThread : public vos::OThread
+{
+  private:
+    static OfficeIPCThread*     pGlobalOfficeIPCThread;
+
+    vos::OPipe                  maPipe;
+    vos::OStreamPipe            maStreamPipe;
+    static vos::OSecurity       maSecurity;
+    rtl::OUString               maPipeIdent;
+
+    OfficeIPCThread();
+
+  protected:
+    /// Working method which should be overridden
+    virtual void SAL_CALL run();
+
+  public:
+    virtual ~OfficeIPCThread();
+
+    // return FALSE if second office
+    static sal_Bool EnableOfficeIPCThread();
+    static void     DisableOfficeIPCThread();
+};
+
+#endif // _DESKTOP_OFFICEIPCTHREAD_HXX_

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: app.hxx,v $
+ *  $RCSfile: desktopresid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:53:12 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,51 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _DESK_APP_HXX
-#define _DESK_APP_HXX
+#pragma hdrstop
 
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
-#endif
+#include "desktopresid.hxx"
+#include "app.hxx"
 
-/*--------------------------------------------------------------------
-    Description:    Application-class
- --------------------------------------------------------------------*/
-class IntroWindow_Impl;
-class Desktop : public Application //public SfxApplicationClass
+// -----------------------------------------------------------------------
+
+DesktopResId::DesktopResId( USHORT nId ) :
+    ResId( nId, Desktop::GetDesktopResManager() )
 {
-    public:
-                            Desktop();
-        virtual void        Main( );
-        virtual void        Init();
-        virtual void        DeInit();
-        virtual BOOL        QueryExit();
-        virtual USHORT      Exception(USHORT nError);
-        virtual void        Property( ApplicationProperty& );
-        virtual void        SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
-        virtual void        AppEvent( const ApplicationEvent& rAppEvent );
-
-        DECL_LINK(          OpenClients_Impl, void* );
-
-        static void         OpenClients();
-        static void         OpenDefault();
-        static void         HandleAppEvent( const ApplicationEvent& rAppEvent );
-        static ResMgr*      GetDesktopResManager();
-
-    private:
-        void                OpenStartupScreen( const char* );
-        void                CloseStartupScreen();
-
-        sal_Bool            m_bMinimized;
-        sal_Bool            m_bInvisible;
-        USHORT              m_nAppEvents;
-        ResMgr*             m_pLabelResMgr;
-        IntroWindow_Impl*   m_pIntro;
-
-        static ResMgr*      pResMgr;
-};
-
-#endif // DESK_APP_HXX_
+}

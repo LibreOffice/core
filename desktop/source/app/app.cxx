@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:34:26 $
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,49 +60,129 @@
  ************************************************************************/
 
 #include "app.hxx"
-#include "wrapper.hxx"
+#include "desktop.hrc"
+#include "appinit.hxx"
 #include "intro.hxx"
+#include "officeipcthread.hxx"
+#include "cmdlineargs.hxx"
+#include "officeacceptthread.hxx"
+#include "pluginacceptthread.hxx"
+#include "appsys.hxx"
+#include "desktopresid.hxx"
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
-#include <com/sun/star/uno/Reference.h>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
+#ifndef _COM_SUN_STAR_BRIDGE_XCONNECTIONBROKER_HPP_
+#include <com/sun/star/bridge/XConnectionBroker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XPRINTABLE_HPP_
+#include <com/sun/star/view/XPrintable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
+#include <com/sun/star/frame/XTasksSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
-#include <offmgr/app.hxx>
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _VOS_SECURITY_HXX_
+#include <vos/security.hxx>
+#endif
 #include <comphelper/processfactory.hxx>
-#include <sfx2/sfxuno.hxx>
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
-#ifndef _VOS_PROCESS_HXX_
-#include <vos/process.hxx>
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
 #endif
+#ifndef _TOOLS_TEMPFILE_HXX
+#include <tools/tempfile.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
+#ifndef SVTOOLS_TESTTOOL_HXX
+#include <svtools/testtool.hxx>
+#endif
+#include <svtools/pathoptions.hxx>
+#include <svtools/cjkoptions.hxx>
+#include <svtools/internaloptions.hxx>
 
 #include <rtl/logfile.hxx>
 #include <setup2/installer.hxx>
-#include <svtools/pathoptions.hxx>
-#include "svtools/cjkoptions.hxx"
 #include <unotools/configmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/bitmap.hxx>
 #include <sfx2/sfx.hrc>
-
-#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
-#include <com/sun/star/uno/Exception.hpp>
-#endif
+#include <ucbhelper/contentbroker.hxx>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII##))
+#define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
+using namespace vos;
+using namespace rtl;
+using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::bridge;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::view;
+
+static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
+
+OOfficeAcceptorThread*  pOfficeAcceptThread = 0;
+ResMgr*                 Desktop::pResMgr    = 0;
+
+// ----------------------------------------------------------------------------
+
+ResMgr* Desktop::GetDesktopResManager()
+{
+    if ( !Desktop::pResMgr )
+    {
+        String aMgrName = String::CreateFromAscii( "dkt" );
+        aMgrName += String::CreateFromInt32(SOLARUPD);
+        return ResMgr::CreateResMgr(U2S(aMgrName));
+    }
+    return Desktop::pResMgr;
+}
+
+
+CommandLineArgs* GetCommandLineArgs()
+{
+    static CommandLineArgs* pArgs = 0;
+    if ( !pArgs )
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !pArgs )
+            pArgs = new CommandLineArgs( ::vos::OExtCommandLine() );
+    }
+
+    return pArgs;
+}
 
 void PreloadConfigTrees()
 {
@@ -163,14 +243,81 @@ void ReplaceStringHookProc( UniString& rStr )
 
 Desktop aDesktop;
 
+/*
+BOOL SVMain()
+{
+    BOOL bInit = InitVCL( Reference < XMultiServiceFactory >() );
+
+    if( bInit )
+    {
+        GetpApp()->Main();
+    }
+
+    DeInitVCL();
+    return bInit;
+}
+*/
+
 Desktop::Desktop() : m_pLabelResMgr( 0 ), m_pIntro( 0 )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "Desktop::Desktop()" );
+}
+
+void Desktop::Init()
+{
+    Reference < XMultiServiceFactory > rSMgr = createApplicationServiceManager();
+    if( ! rSMgr.is() )
+        exit(0);
+    ::comphelper::setProcessServiceFactory( rSMgr );
+
+    if ( !Application::IsRemoteServer() )
+    {
+        // start ipc thread only for non-remote offices
+        RTL_LOGFILE_CONTEXT( aLog, "OfficeIPCThread::EnableOfficeIPCThread" );
+        if( !OfficeIPCThread::EnableOfficeIPCThread( ) )
+            exit( 0 );
+        pSignalHandler = new SalMainPipeExchangeSignalHandler;
+    }
+}
+
+void Desktop::DeInit()
+{
+    destroyApplicationServiceManager( ::comphelper::getProcessServiceFactory() );
+
+    if( !Application::IsRemoteServer() )
+    {
+        OfficeIPCThread::DisableOfficeIPCThread();
+        if( pSignalHandler )
+            DELETEZ( pSignalHandler );
+    }
+}
+
+BOOL Desktop::QueryExit()
+{
+    return TRUE;
+}
+
+USHORT Desktop::Exception(USHORT nError)
+{
+    // first test implementation!!
+    sal_uInt16 nOldMode = Application::GetSystemWindowMode();
+    Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
+    return Application::Exception( nError );
+}
+
+void Desktop::Property( ApplicationProperty& )
+{
+}
+
+void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
+{
+    HandleAppEvent( rAppEvent );
 }
 
 void Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "Desktop::Main()" );
+
+    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
 
     // ----  Startup screen ----
     OpenStartupScreen( "iso" );
@@ -191,21 +338,10 @@ void Desktop::Main()
     }
 #endif
 
-    bool bTerminate = false;
-    int nParamCount = GetCommandLineParamCount();
+    sal_Bool bTerminate = pCmdLineArgs->IsTerminateAfterInit();
 
-    for( int nActParam = 0; nActParam < nParamCount ; nActParam++ )
-    {
-        String sActParam = GetCommandLineParam( nActParam );
-        if( sActParam.EqualsIgnoreCaseAscii("-terminate_after_init") )
-        {
-            bTerminate = true;
-            break;
-        }
-    }
-
-//  Read the common configuration items for optimization purpose
-//  do not do it if terminate flag was specified, to avoid exception
+    //  Read the common configuration items for optimization purpose
+    //  do not do it if terminate flag was specified, to avoid exception
     if( !bTerminate )
     {
         try
@@ -214,15 +350,15 @@ void Desktop::Main()
         }
         catch(com::sun::star::uno::Exception &e)
         {
-            bTerminate = true;
+            bTerminate = sal_True;
             rtl::OUString sError = rtl::OUString::createFromAscii("Unable to retrieve application configuration data: ");
             sError += e.Message;
             Application::Abort(sError);
         }
     }
 
-//  The only step that should be done if terminate flag was specified
-//  Typically called by the plugin only
+    //  The only step that should be done if terminate flag was specified
+    //  Typically called by the plugin only
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "start Installer::InitializeInstallation()" );
     Installer* pInstaller = new Installer;
     pInstaller->InitializeInstallation( Application::GetAppFileName() );
@@ -231,50 +367,444 @@ void Desktop::Main()
 
     if( !bTerminate )
     {
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SvtPathOptions/SvtCJKOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
         SvtCJKOptions* pCJKOPptions = new SvtCJKOptions(sal_True);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SvtPathOptions/SvtCJKOptions" );
-        RegisterServices();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create OfficeWrapper::OfficeWrapper()" );
-        OfficeWrapper* pWrapper = new OfficeWrapper( ::comphelper::getProcessServiceFactory() );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create OfficeWrapper::OfficeWrapper()" );
-//      Reference < XComponent > xWrapper( ::utl::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.office.OfficeWrapper" ) ), UNO_QUERY );
+        registerServices( xSMgr );
 
-        // Post user event to startup first application component window
-        Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "start call SfxApplicationClass::Main()" );
-        SfxApplicationClass::Main();
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "end call SfxApplicationClass::Main()" );
-//      xWrapper->dispose();
+        OUString        aDescription;
+        Sequence< Any > aSeq( 1 );
 
-        if( pWrapper!=NULL)
+        if ( pOfficeAcceptThread )
+            aDescription = pOfficeAcceptThread->GetDescriptionString();
+        else
+            pCmdLineArgs->GetPortalConnectString( aDescription );
+        aSeq[0] <<= aDescription;
+
+        Reference < XComponent > xWrapper( xSMgr->createInstanceWithArguments( DEFINE_CONST_UNICODE(
+                                                "com.sun.star.office.OfficeWrapper" ), aSeq ),
+                                        UNO_QUERY );
+
+        // code from SfxApplicationClass::Main copied!!
         {
-            delete pWrapper;
-            pWrapper=NULL;
+            RTL_LOGFILE_CONTEXT( aLog, "SfxApplicationClass::Main()" );
+            Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+
+            Reference< XConnectionBroker >  xServiceManagerBroker;
+            Reference< XConnectionBroker >  xPalmPilotManagerBroker;
+            PluginAcceptThread*             pPluginAcceptThread = 0;
+
+            RemoteControl aControl;
+
+            // the shutdown icon sits in the systray and allows the user to keep
+            // the office instance running for quicker restart
+            // this will only be activated if -quickstart was specified on cmdline
+            Reference < XComponent > xQuickstart( xSMgr->createInstance(
+                                                    DEFINE_CONST_UNICODE( "com.sun.star.office.Quickstart" )), UNO_QUERY );
+
+            if ( pCmdLineArgs->IsPlugin() )
+            {
+                OUString    aAcceptString( RTL_CONSTASCII_USTRINGPARAM( "pipe,name=soffice_plugin" ));
+                OUString    aUserIdent;
+                OSecurity   aSecurity;
+
+                aSecurity.getUserIdent( aUserIdent );
+                aAcceptString += aUserIdent;
+
+                pPluginAcceptThread = new PluginAcceptThread(   xSMgr,
+                                                                new OInstanceProvider( xSMgr ),
+                                                                aAcceptString );
+
+                // We have to acquire the plugin accept thread object to be sure
+                // that the instance is still alive after an exception was thrown
+                pPluginAcceptThread->acquire();
+                pPluginAcceptThread->create();
+            }
+
+            if ( !Application::IsRemoteServer() )
+            {
+                // Create TypeDetection service to have filter informations for quickstart feature
+                Reference< XTypeDetection > xTypeDetection( xSMgr->createInstance(
+                                                                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),
+                                                            UNO_QUERY );
+            }
+
+            int nAcquireCount = 0;
+            ::vos::IMutex& rMutex = Application::GetSolarMutex();
+            if ( rMutex.tryToAcquire() )
+                nAcquireCount = Application::ReleaseSolarMutex() - 1;
+
+            Application::WaitForClientConnect();
+
+            // Post user event to startup first application component window
+            // We have to send this OpenClients message short before execute() to
+            // minimize the risk that this message overtakes type detection contruction!!
+            Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "call Application::Execute()" );
+            if ( nAcquireCount )
+                Application::AcquireSolarMutex( nAcquireCount );
+
+            // call Application::Execute to process messages in vcl message loop
+            Execute();
+
+            // remove temp directory
+            removeTemporaryDirectory();
+
+            if( xPalmPilotManagerBroker.is() )
+                xPalmPilotManagerBroker->stopAccepting();
+            if( xServiceManagerBroker.is() )
+                xServiceManagerBroker->stopAccepting();
+
+            if( pOfficeAcceptThread )
+            {
+                pOfficeAcceptThread->stopAccepting();
+#ifndef LINUX
+                pOfficeAcceptThread->join();
+                delete pOfficeAcceptThread;
+#endif
+                pOfficeAcceptThread = 0;
+            }
+
+            if ( pPluginAcceptThread )
+            {
+                pPluginAcceptThread->terminate();
+                pPluginAcceptThread->release();
+            }
         }
+
+        xWrapper->dispose();
+        xWrapper = 0;
 
         delete pCJKOPptions;
         delete pPathOptions;
     }
 
-    // instead of removing of the configManager jast let it commit all the changes
-    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
+    ::ucb::ContentBroker::deinitialize();
 
-    //utl::ConfigManager::RemoveConfigManager();
+    // instead of removing of the configManager just let it commit all the changes
+    utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 }
 
 void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* pFrame )
 {
-    OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
+//  OFF_APP()->SystemSettingsChanging( rSettings, pFrame );
 }
 
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
-    SfxApplicationClass::OpenClients();
+    OpenClients();
     CloseStartupScreen();
 
     return 0;
+}
+
+void Desktop::OpenClients()
+{
+    // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
+    // should be created
+    Reference < XComponent > xFirst;
+    BOOL bLoaded = FALSE;
+
+    CommandLineArgs* pArgs = GetCommandLineArgs();
+    SvtInternalOptions  aInternalOptions;
+
+    if ( !pArgs->IsServer() && !aInternalOptions.IsRecoveryListEmpty() )
+    {
+        // crash recovery
+        sal_Bool bUserCancel = sal_False;
+        ::rtl::OUString sURL;
+        ::rtl::OUString sFilter;
+        ::rtl::OUString sTempName;
+
+        Reference< XComponentLoader > xDesktop(
+                ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                ::com::sun::star::uno::UNO_QUERY );
+
+        // create the parameter array
+        Sequence < PropertyValue > aArgs( 5 );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
+        aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+        aArgs[2].Name = ::rtl::OUString::createFromAscii("FilterName");
+        aArgs[3].Name = ::rtl::OUString::createFromAscii("RealURL");
+        aArgs[4].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+
+        // mark it as a user request
+        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+
+        while(  !aInternalOptions.IsRecoveryListEmpty() && !bUserCancel )
+        {
+            // Read and delete top recovery item from list
+            aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
+
+            INetURLObject aURL( sURL );
+
+            sal_Bool bIsURL = aURL.GetProtocol() != INET_PROT_NOT_VALID;
+            String sRealFileName( sURL );
+            String sTempFileName( sTempName );
+
+            String aMsg( DesktopResId( STR_RECOVER_QUERY ) );
+            aMsg.SearchAndReplaceAscii( "$1", sRealFileName );
+            MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK, String( DesktopResId( STR_RECOVER_TITLE ) ), aMsg );
+            switch( aBox.Execute() )
+            {
+                case RET_YES:
+                {
+                    // recover a file
+                    aArgs[2].Value <<= ::rtl::OUString( sFilter );
+                    if ( bIsURL )
+                    {
+                        // get the original URL for the recovered document
+                        aArgs[1].Value <<= sal_False;
+                        aArgs[3].Value <<= ::rtl::OUString( sRealFileName );
+                        aArgs[4].Value <<= ::rtl::OUString( sRealFileName );
+                    }
+                    else
+                    {
+                        // this was an untitled document ( open as template )
+                        aArgs[1].Value <<= sal_True;
+                        aArgs[3].Value <<= ::rtl::OUString();
+                        aArgs[4].Value <<= ::rtl::OUString();
+                    }
+
+                    // load the document
+                    Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs );
+                    if ( !xFirst.is() )
+                        // remember the first successfully recovered file
+                        xFirst = xDoc;
+
+                    // remove saved copy
+                    ::utl::UCBContentHelper::Kill( sTempFileName );
+                    break;
+                }
+
+                case RET_NO:
+                {
+                    // skip this file
+                    ::utl::UCBContentHelper::Kill( sTempFileName );
+                    break;
+                }
+
+                case RET_CANCEL:
+                {
+                    // cancel recovering
+                    ::utl::UCBContentHelper::Kill( sTempFileName );
+                    bUserCancel = sal_True;
+
+                    // delete recovery list and all files
+                    while( aInternalOptions.IsRecoveryListEmpty() == sal_False )
+                    {
+                        aInternalOptions.PopRecoveryItem( sURL, sFilter, sTempName );
+                        ::utl::UCBContentHelper::Kill( sTempName );
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+
+    // check for open parameters
+    String aEmptyStr;
+    ::rtl::OUString aOpenList;
+    if ( pArgs->GetOpenList( aOpenList ) )
+    {
+        bLoaded = TRUE;
+        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
+                                        APPEVENT_OPEN_STRING,
+                                        aOpenList );
+        HandleAppEvent( *pAppEvt );
+        delete pAppEvt;
+    }
+
+
+    // check for print parameters
+    ::rtl::OUString aPrintList;
+    if ( pArgs->GetPrintList( aPrintList ) )
+    {
+        bLoaded = TRUE;
+        ApplicationEvent* pAppEvt = new ApplicationEvent( aEmptyStr, aEmptyStr,
+                                        APPEVENT_PRINT_STRING,
+                                        aPrintList );
+        HandleAppEvent( *pAppEvt );
+        delete pAppEvt;
+    }
+
+    // no default document if a document was loaded by recovery or by command line or if soffice is used as server
+    if ( bLoaded || xFirst.is() || pArgs->IsServer() )
+        return;
+
+    if( pArgs->IsQuickstart()   ||
+        pArgs->IsInvisible()    ||
+        pArgs->IsPlugin()       ||
+        pArgs->IsBean()             )
+
+        // soffice was started as tray icon
+        return;
+
+    {
+        OpenDefault();
+    }
+}
+
+void Desktop::OpenDefault()
+{
+    String aName;
+    if ( !aName.Len() )
+    {
+        aName = String( DEFINE_CONST_UNICODE("private:factory/" ) );
+        SvtModuleOptions aOpt;
+        if ( aOpt.IsWriter() )
+            aName += DEFINE_CONST_UNICODE("swriter");
+        else if ( aOpt.IsCalc() )
+            aName += DEFINE_CONST_UNICODE("scalc");
+        else if ( aOpt.IsImpress() )
+            aName += DEFINE_CONST_UNICODE("simpress");
+        else if ( aOpt.IsDraw() )
+            aName += DEFINE_CONST_UNICODE("sdraw");
+        else
+            return;
+    }
+
+    Sequence < PropertyValue > aNoArgs;
+    Reference< XComponentLoader > xDesktop(
+            ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+            ::com::sun::star::uno::UNO_QUERY );
+    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aNoArgs );
+}
+
+
+String GetURL_Impl( const String& rName )
+{
+    // if the filename is a physical name, it is the client file system, not the file system
+    // of the machine where the office is running ( if this are different machines )
+    // so in the remote case we can't handle relative filenames as arguments, because they
+    // are parsed relative to the program path
+    // the file system of the client is addressed through the "file:" protocol
+    ::rtl::OUString aProgName, aTmp;
+    ::vos::OStartupInfo aInfo;
+    aInfo.getExecutableFile( aProgName );
+    aTmp = aProgName;
+    INetURLObject aObj( aTmp );
+    bool bWasAbsolute;
+    INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
+    return aURL.GetMainURL(INetURLObject::NO_DECODE);
+}
+
+void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
+{
+    if ( rAppEvent.IsOpenEvent() || rAppEvent.IsPrintEvent() )
+    {
+        String aPrinterName;
+        Reference< XComponentLoader > xDesktop(
+                ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                ::com::sun::star::uno::UNO_QUERY );
+
+        // create parameter array
+        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 1;
+        Sequence < PropertyValue > aArgs( nCount );
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
+
+        if ( rAppEvent.IsPrintEvent() )
+        {
+            aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
+            aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
+            aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
+        }
+
+        // mark request as user interaction from outside
+        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+
+        for( sal_uInt16 i=0; i<rAppEvent.GetParamCount(); i++ )
+        {
+            // get file name
+            String aName( rAppEvent.GetParam(i) );
+
+            // is the parameter a printername ?
+            if( aName.Len()>1 && *aName.GetBuffer()=='@' )
+            {
+                aPrinterName = aName.Copy(1);
+                continue;
+            }
+
+#ifdef WNT
+            FATToVFat_Impl( aName );
+#endif
+            aName = GetURL_Impl(aName);
+
+            if ( rAppEvent.IsPrintEvent() )
+            {
+                // documents opened for printing are opened readonly because they must be opened as a new document and this
+                // document could be open already
+                aArgs[1].Value <<= sal_True;
+
+                // always open a new document for printing, because it must be disposed afterwards
+                aArgs[2].Value <<= sal_True;
+
+                // printing is done in a hidden view
+                aArgs[3].Value <<= sal_True;
+
+                // load document for printing without user interaction
+                aArgs[4].Value <<= sal_True;
+            }
+
+            // load the document
+            Reference < XPrintable > xDoc ( xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs ), UNO_QUERY );
+            if ( rAppEvent.IsPrintEvent() )
+            {
+                if( aPrinterName.Len() && xDoc.is() )
+                {
+                    // create the printer
+                    Sequence < PropertyValue > aPrinterArgs( 1 );
+                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Name");
+                    aPrinterArgs[0].Value <<= ::rtl::OUString( aPrinterName );
+                    xDoc->setPrinter( aPrinterArgs );
+
+                    // print ( also without user interaction )
+                    aPrinterArgs[0].Name = ::rtl::OUString::createFromAscii("Silent");
+                    aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
+                    xDoc->print( aPrinterArgs );
+                }
+                else
+                {
+                    // place error message here ...
+                }
+
+                // remove the document
+                Reference < XComponent > xComp( xDoc, UNO_QUERY );
+                if ( xComp.is() )
+                    xComp->dispose();
+            }
+        }
+    }
+    else if ( rAppEvent.GetEvent() == "APPEAR" )
+    {
+        // find active task - the active task is always a visible task
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier >
+                xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
+                ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTask > xTask = xDesktop->getActiveTask();
+        if ( !xTask.is() )
+        {
+            // get any task if there is no active one
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
+            if ( xList->hasMoreElements() )
+                xList->nextElement() >>= xTask;
+        }
+
+        if ( xTask.is() )
+        {
+            Reference< com::sun::star::awt::XTopWindow > xTop( xTask->getContainerWindow(), UNO_QUERY );
+            xTop->toFront();
+        }
+        else
+            // no visible task that could be activated found
+            OpenDefault();
+    }
 }
 
 void Desktop::OpenStartupScreen( const char* pLabelPrefix )
@@ -296,9 +826,10 @@ void Desktop::OpenStartupScreen( const char* pLabelPrefix )
         }
 
         // Intro nur anzeigen, wenn normaler Start (kein Print/Server etc.)
-        ParseCommandLine();
-        if ( !m_bInvisible && !m_bMinimized &&
-             m_nAppEvents != DISPATCH_PRINT && m_nAppEvents != DISPATCH_SERVER )
+        OUString aTmpString;
+        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsQuickstart() && !pCmdLine->IsMinimized() &&
+             !pCmdLine->IsEmbedding() && !pCmdLine->GetPrintList( aTmpString ) )
         {
             const USHORT nResId = RID_DEFAULTINTRO;
             ResId aIntroBmpRes( nResId, m_pLabelResMgr );
@@ -314,60 +845,3 @@ void Desktop::CloseStartupScreen()
     m_pIntro = 0;
 }
 
-void Desktop::ParseCommandLine()
-{
-    m_nAppEvents = 0;
-    m_bMinimized = 0;
-    m_bInvisible = 0;
-
-    BOOL   bPrintEvent = FALSE;
-    BOOL   bOpenEvent  = TRUE;
-
-    ::vos::OExtCommandLine aCmdLine;
-    sal_uInt32 nCount = aCmdLine.getCommandArgCount();
-    for( sal_uInt32 i=0; i < nCount; i++ )
-    {
-        String aArg;
-        ::rtl::OUString aDummy;
-        aCmdLine.getCommandArg( i, aDummy );
-        aArg = aDummy;
-
-        if ( aArg.EqualsIgnoreCaseAscii("-minimized") == sal_True )
-            m_bMinimized = sal_True;
-        else if ( aArg.EqualsIgnoreCaseAscii("-invisible") == sal_True )
-            m_bInvisible = sal_True;
-        else if ( aArg.EqualsIgnoreCaseAscii("-embedding") == sal_True )
-            m_nAppEvents |= DISPATCH_SERVER;
-        else if ( aArg.EqualsIgnoreCaseAscii("-bean") == sal_True )
-            m_bInvisible = sal_True;
-        else if ( aArg.EqualsIgnoreCaseAscii("-plugin") == sal_True )
-            m_bInvisible  = sal_True;
-
-        const xub_Unicode* pArg = aArg.GetBuffer();
-        // Erstmal nur mit -, da unter Unix Dateinmane auch mit Slasch anfangen koennen
-        if ( (*pArg == '-') /* || (*pArg == '/') */ )
-        {
-            pArg++;
-
-            // Ein Schalter
-            if ( (*pArg == 'p') || (*pArg == 'P') )
-            {
-                bPrintEvent = TRUE;
-                bOpenEvent = FALSE;    // Ab hier keine OpenEvents mehr
-            }
-        }
-        else
-        {
-            if ( bOpenEvent )
-            {
-                // Dies wird als Dateiname interpretiert
-                m_nAppEvents |= DISPATCH_OPEN;
-            }
-            else if ( bPrintEvent )
-            {
-                // Print Event anhaengen
-                m_nAppEvents |= DISPATCH_PRINT;
-            }
-        }
-    }
-}

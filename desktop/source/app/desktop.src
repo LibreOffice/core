@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ *  $RCSfile: desktop.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "desktop.hrc"
+
+String STR_RECOVER_QUERY
+{
+    Text = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
+    Text [ ENGLISH ] = "Recover file $1?" ;
+    Text [ portuguese ] = "Deseja restaurar o ficheiro \"$1\"?" ;
+    Text [ english_us ] = "Should the file \"$1\" be restored?" ;
+    Text [ portuguese_brazilian ] = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
+    Text [ swedish ] = "Skall filen \"$1\" återställas?" ;
+    Text [ danish ] = "Skal filen \"$1\" gendannes?" ;
+    Text [ italian ] = "Volete recuperare il file \"$1\"?" ;
+    Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
+    Text [ french ] = "Le fichier \"$1\" doit-il être restauré ?" ;
+    Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
+    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
+    Text[ polish ] = "Odtworzyæ plik \"$1\"?";
+    Text[ japanese ] = "Ì§²Ù \"$1\" ‚ğ•œŒ³‚µ‚Ü‚·‚©B";
+    Text[ chinese_traditional ] = "±z­nÁÙ­ìÀÉ®× $1 ?";
+    Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
+    Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
+    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ greek ] = "Íá ãßíåé åğáíáöïñÜ ôïõ áñ÷åßïõ \"$1\";";
+    Text[ korean ] = "ÆÄÀÏ \"$1\"À»£¨¸¦£© º¹±¸ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "\"$1\" dosyası geri getirilsin mi?";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea restaurar el archivo \"$1\"?";
+    Text[ finnish ] = "Palautetaanko tiedosto $1?";
+};
+
+String STR_RECOVER_TITLE
+{
+    Text = "Datei-Wiederherstellung" ;
+    Text [ ENGLISH ] = "File Recovery" ;
+    Text [ english_us ] = "File Recovery" ;
+    Text [ portuguese_brazilian ] = "Datei-Wiederherstellung" ;
+    Text [ swedish ] = "Återställa fil" ;
+    Text [ danish ] = "Fil-gendannelse" ;
+    Text [ italian ] = "Recupero file" ;
+    Text [ spanish ] = "Recuperar archivo" ;
+    Text [ french ] = "Restauration de fichier" ;
+    Text [ dutch ] = "Herstel bestand" ;
+    Text [ portuguese ] = "Restaurar ficheiro" ;
+    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ russian ] = "Âîññòàíîâëåíèå ôàéëà";
+    Text[ polish ] = "Odtwarzanie plików";
+    Text[ japanese ] = "Ì§²Ù‚Ì•œŒ³";
+    Text[ chinese_traditional ] = "­×´_ÀÉ®×";
+    Text[ arabic ] = "ÇÓÊÚÇÏÉ ãáİ";
+    Text[ dutch ] = "Herstel bestand";
+    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ greek ] = "ÅğáíáöïñÜ áñ÷åßïõ";
+    Text[ korean ] = "ÆÄÀÏ º¹±¸";
+    Text[ turkish ] = "Dosya kurtarma";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Recuperar archivo";
+    Text[ finnish ] = "Tiedoston palautus";
+};
