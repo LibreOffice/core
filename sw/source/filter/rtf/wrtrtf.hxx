@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:47:34 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ class SwRTFWriter : public Writer
     void OutRTFListTab();
 
     void MakeHeader();
+    void OutUnicodeSafeRecord(const sal_Char *pToken,
+        const String &rContent);
     void OutDocInfoStat();
     void OutInfoDateTime( const DateTime&, const sal_Char* );
     void CheckEndNodeForSection( const SwNode& rNd );
