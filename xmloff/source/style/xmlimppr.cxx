@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:16:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVETOEXCEPTION_HPP_
 #include <com/sun/star/beans/PropertyVetoException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -413,30 +417,38 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
 sal_Bool SvXMLImportPropertyMapper::FillPropertySet(
             const vector< XMLPropertyState >& aProperties,
             const Reference< XPropertySet > rPropSet,
-            struct _ContextID_Index_Pair* pSpecialContextIds ) const
+            _ContextID_Index_Pair* pSpecialContextIds ) const
 {
     sal_Bool bSet = sal_False;
 
-    // get property set info
-    Reference< XPropertySetInfo > xInfo = rPropSet->getPropertySetInfo();
+    Reference< XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
+    if (xTolPropSet.is())
+        bSet = _FillTolerantMultiPropertySet( aProperties, xTolPropSet, maPropMapper, rImport,
+                                            pSpecialContextIds );
 
-    // check for multi-property set
-    Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
-    if ( xMultiPropSet.is() )
+    if (!bSet)
     {
-        // Try XMultiPropertySet. If that fails, try the regular route.
-        bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
-                                      xInfo, maPropMapper,
-                                         pSpecialContextIds );
-        if ( !bSet )
-            bSet = _FillPropertySet( aProperties, rPropSet,
-                                     xInfo, maPropMapper, rImport,
+        // get property set info
+        Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
+
+        // check for multi-property set
+        Reference<XMultiPropertySet> xMultiPropSet( rPropSet, UNO_QUERY );
+        if ( xMultiPropSet.is() )
+        {
+            // Try XMultiPropertySet. If that fails, try the regular route.
+            bSet = _FillMultiPropertySet( aProperties, xMultiPropSet,
+                                        xInfo, maPropMapper,
+                                        pSpecialContextIds );
+            if ( !bSet )
+                bSet = _FillPropertySet( aProperties, rPropSet,
+                                        xInfo, maPropMapper, rImport,
                                         pSpecialContextIds);
+        }
+        else
+            bSet = _FillPropertySet( aProperties, rPropSet, xInfo,
+                                    maPropMapper, rImport,
+                                    pSpecialContextIds );
     }
-    else
-        bSet = _FillPropertySet( aProperties, rPropSet, xInfo,
-                                 maPropMapper, rImport,
-                                 pSpecialContextIds );
 
     return bSet;
 }
@@ -447,7 +459,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillPropertySet(
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
     SvXMLImport& rImport,
-    struct _ContextID_Index_Pair* pSpecialContextIds )
+    _ContextID_Index_Pair* pSpecialContextIds )
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
     OSL_ENSURE( rPropSetInfo.is(), "need an XPropertySetInfo" );
@@ -560,19 +572,14 @@ struct PropertyPairLessFunctor :
     }
 };
 
-sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
+void SvXMLImportPropertyMapper::_PrepareForMultiPropertySet(
     const vector<XMLPropertyState> & rProperties,
-    const Reference<XMultiPropertySet> & rMultiPropSet,
     const Reference<XPropertySetInfo> & rPropSetInfo,
     const UniReference<XMLPropertySetMapper> & rPropMapper,
-    struct _ContextID_Index_Pair* pSpecialContextIds )
+    _ContextID_Index_Pair* pSpecialContextIds,
+    Sequence<OUString>& rNames,
+    Sequence<Any>& rValues)
 {
-    sal_Int32 i;
-
-    OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
-    OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
-
-    sal_Bool bSuccessful = sal_False;
     sal_Int32 nCount = rProperties.size();
 
     // property pairs structure stores names + values of properties to be set.
@@ -580,6 +587,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     aPropertyPairs.reserve( nCount );
 
     // iterate over property states that we want to set
+    sal_Int32 i;
     for( i = 0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = rProperties[i];
@@ -594,11 +602,11 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
 
         if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY ) ) &&
              ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
-               rPropSetInfo->hasPropertyByName( rPropName ) )    )
+               !rPropSetInfo.is() ||
+               (rPropSetInfo.is() && rPropSetInfo->hasPropertyByName( rPropName )) ) )
         {
             // save property into property pair structure
-            PropertyPair aPair( &rPropName, &rProp.maValue );
-            aPropertyPairs.push_back( aPair );
+            aPropertyPairs.push_back( PropertyPair( &rPropName, &rProp.maValue ) );
         }
 
         // handle no-property and special items
@@ -630,26 +638,105 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
           PropertyPairLessFunctor());
 
     // create sequences
-    Sequence<OUString> aNames( aPropertyPairs.size() );
-    OUString* pNamesArray = aNames.getArray();
-    Sequence<Any> aValues( aPropertyPairs.size() );
-    Any* pValuesArray = aValues.getArray();
+    rNames.realloc( aPropertyPairs.size() );
+    OUString* pNamesArray = rNames.getArray();
+    rValues.realloc( aPropertyPairs.size() );
+    Any* pValuesArray = rValues.getArray();
 
     // copy values into sequences
     i = 0;
     for( PropertyPairs::iterator aIter = aPropertyPairs.begin();
          aIter != aPropertyPairs.end();
-         aIter++ )
+         ++aIter )
     {
         pNamesArray[i] = *(aIter->first);
         pValuesArray[i++] = *(aIter->second);
     }
+}
+
+sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
+    const vector<XMLPropertyState> & rProperties,
+    const Reference<XMultiPropertySet> & rMultiPropSet,
+    const Reference<XPropertySetInfo> & rPropSetInfo,
+    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    _ContextID_Index_Pair* pSpecialContextIds )
+{
+    OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
+    OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
+
+    sal_Bool bSuccessful = sal_False;
+
+    Sequence<OUString> aNames;
+    Sequence<Any> aValues;
+
+    _PrepareForMultiPropertySet(rProperties, rPropSetInfo, rPropMapper, pSpecialContextIds,
+        aNames, aValues);
 
     // and, finally, try to set the values
     try
     {
         rMultiPropSet->setPropertyValues( aNames, aValues );
         bSuccessful = sal_True;
+    }
+    catch ( ... )
+    {
+        OSL_ENSURE(bSuccessful, "Exception caught; style may not be imported correctly.");
+    }
+
+    return bSuccessful;
+}
+
+sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
+    const vector<XMLPropertyState> & rProperties,
+    const Reference<XTolerantMultiPropertySet> & rTolMultiPropSet,
+    const UniReference<XMLPropertySetMapper> & rPropMapper,
+    SvXMLImport& rImport,
+    _ContextID_Index_Pair* pSpecialContextIds )
+{
+    OSL_ENSURE( rTolMultiPropSet.is(), "Need tolerant multi property set. ");
+
+    sal_Bool bSuccessful = sal_False;
+
+    Sequence<OUString> aNames;
+    Sequence<Any> aValues;
+
+    _PrepareForMultiPropertySet(rProperties, Reference<XPropertySetInfo>(NULL), rPropMapper, pSpecialContextIds,
+        aNames, aValues);
+
+    // and, finally, try to set the values
+    try
+    {
+        Sequence< SetPropertyTolerantFailed > aResults(rTolMultiPropSet->setPropertyValuesTolerant( aNames, aValues ));
+        if (aResults.getLength() == 0)
+            bSuccessful = sal_True;
+        else
+        {
+            sal_Int32 nCount(aResults.getLength());
+            for( sal_Int32 i = 0; i < nCount; ++i)
+            {
+                Sequence<OUString> aSeq(1);
+                aSeq[0] = aResults[i].Name;
+                rtl::OUString sMessage;
+                switch (aResults[i].Result)
+                {
+                case TolerantPropertySetResultType::UNKNOWN_PROPERTY :
+                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNKNOWN_PROPERTY"));
+                    break;
+                case TolerantPropertySetResultType::ILLEGAL_ARGUMENT :
+                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ILLEGAL_ARGUMENT"));
+                    break;
+                case TolerantPropertySetResultType::PROPERTY_VETO :
+                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROPERTY_VETO"));
+                    break;
+                case TolerantPropertySetResultType::WRAPPED_TARGET :
+                    sMessage = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WRAPPED_TARGET"));
+                    break;
+                };
+                rImport.SetError(
+                    XMLERROR_STYLE_PROP_OTHER | XMLERROR_FLAG_ERROR,
+                    aSeq, sMessage, NULL );
+            }
+        }
     }
     catch ( ... )
     {
