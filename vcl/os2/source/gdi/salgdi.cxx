@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:34 $
+ *  last change: $Author: thb $ $Date: 2002-06-19 11:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,28 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
     for( i = 0; i < nPoly; i++ )
         delete [] aPolygonAry[ i ].aPointl;
     delete [] aPolygonAry;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+{
+    return sal_False;
 }
 
 // =======================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-19 11:26:33 $
+ *  last change: $Author: thb $ $Date: 2002-06-19 11:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,6 +1296,28 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
         delete [] pWinPointAry;
     if ( pWinPointAryAry != aWinPointAryAry )
         delete [] pWinPointAryAry;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+{
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
