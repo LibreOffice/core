@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Bookmarks.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 // DocMerge from xml: service com::sun::star::text::Bookmarks
 /** This service specifies a collection of <type>Bookmark</type>s.
  */
-service Bookmarks
+published service Bookmarks
 {
 
 
