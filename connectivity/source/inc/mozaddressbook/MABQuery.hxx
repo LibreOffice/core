@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABQuery.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: fs $ $Date: 2001-06-27 15:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace connectivity
             const ::std::vector< ::rtl::OUString> &getMatchItems(void) const;
             void                            setMatchValues( ::std::vector< ::rtl::OUString>&);
             const ::std::vector< ::rtl::OUString> &getMatchValues(void) const;
-            void                            setMaxNrOfReturns( sal_Int32&);
+            void                            setMaxNrOfReturns( const sal_Int32);
             sal_Int32                       getMaxNrOfReturns(void) const;
             void                            setQuerySubDirs( sal_Bool&);
             sal_Bool                        getQuerySubDirs(void) const;
