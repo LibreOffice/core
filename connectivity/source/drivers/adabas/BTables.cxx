@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
                                         aName,xRow->getString(4),xRow->getString(5),aSchema);
             xRet = pRet;
         }
+        ::comphelper::disposeComponent(xResult);
     }
 
     return xRet;

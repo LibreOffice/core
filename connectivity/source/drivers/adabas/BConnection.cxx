@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:07 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,21 +222,23 @@ void OAdabasConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference< XComponent > xComp2(m_xCatalog, UNO_QUERY);
-    if(xComp2.is())
-        xComp2->dispose();
+    ::comphelper::disposeComponent(Reference< XTablesSupplier >(m_xCatalog));
 
-    m_xCatalog = Reference< XTablesSupplier >();
+    m_xCatalog = WeakReference< XTablesSupplier >();
 
     OConnection_BASE2::disposing();
 }
 //------------------------------------------------------------------------------
-::com::sun::star::uno::Reference< XTablesSupplier > OAdabasConnection::createCatalog()
+Reference< XTablesSupplier > OAdabasConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if(!m_xCatalog.is())
-        m_xCatalog = new OAdabasCatalog(m_aConnectionHandle,this);
-    return m_xCatalog;
+    Reference< XTablesSupplier > xTab = m_xCatalog;
+    if(!xTab.is())
+    {
+        xTab = new OAdabasCatalog(m_aConnectionHandle,this);
+        m_xCatalog = xTab;
+    }
+    return xTab;
 }
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OAdabasConnection::getMetaData(  ) throw(SQLException, RuntimeException)

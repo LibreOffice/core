@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:08:38 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,8 +432,8 @@ void OConnection::disposing()
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
     m_xDir      = NULL;
     m_xContent  = NULL;
-    ::comphelper::disposeComponent(m_xCatalog);
-    m_xCatalog  = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>();
+    //  ::comphelper::disposeComponent(m_xCatalog);
+    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
 
     dispose_ChildImpl();
     OConnection_BASE::disposing();
@@ -443,7 +443,7 @@ void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.is())
+    if(!xTab.is())
     {
         xTab = new OFileCatalog(this);
         m_xCatalog = xTab;

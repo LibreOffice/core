@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:01:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;
-    if(!m_xCatalog.is())
+    if(!xTab.is())
     {
         OFlatCatalog *pCat = new OFlatCatalog(this);
         xTab = pCat;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,12 +102,6 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
                 ,m_aConnectionHdl(_aConnectionHdl)
                 ,m_xMetaData(m_pConnection->getMetaData(  ))
 {
-//  osl_incrementInterlockedCount( &m_refCount );
-//  refreshTables();
-//  refreshViews();
-//  refreshGroups();
-//  refreshUsers();
-//  osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshTables()

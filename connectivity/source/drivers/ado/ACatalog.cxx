@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,12 +93,6 @@ OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sd
                 ,m_pConnection(_pCon)
                 ,m_aCatalog(_pCatalog)
 {
-    osl_incrementInterlockedCount( &m_refCount );
-    refreshTables();
-    refreshViews();
-    refreshGroups();
-    refreshUsers();
-    osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshTables()
@@ -125,8 +119,9 @@ void OCatalog::refreshTables()
     }
 
     if(m_pTables)
-        delete m_pTables;
-    m_pTables = new OTables(this,m_aMutex,aVector,pTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pTables->reFill(aVector);
+    else
+        m_pTables = new OTables(this,m_aMutex,aVector,pTables,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshViews()
@@ -153,8 +148,9 @@ void OCatalog::refreshViews()
     }
 
     if(m_pViews)
-        delete m_pViews;
-    m_pViews = new OViews(this,m_aMutex,aVector,pViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pViews->reFill(aVector);
+    else
+        m_pViews = new OViews(this,m_aMutex,aVector,pViews,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshGroups()
@@ -181,8 +177,9 @@ void OCatalog::refreshGroups()
     }
 
     if(m_pGroups)
-        delete m_pGroups;
-    m_pGroups = new OGroups(this,m_aMutex,aVector,pGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pGroups->reFill(aVector);
+    else
+        m_pGroups = new OGroups(this,m_aMutex,aVector,pGroups,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 void OCatalog::refreshUsers()
@@ -209,8 +206,9 @@ void OCatalog::refreshUsers()
     }
 
     if(m_pUsers)
-        delete m_pUsers;
-    m_pUsers = new OUsers(this,m_aMutex,aVector,pUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        m_pUsers->reFill(aVector);
+    else
+        m_pUsers = new OUsers(this,m_aMutex,aVector,pUsers,m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ECatalog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@ using namespace connectivity::flat;
 // -------------------------------------------------------------------------
 OFlatCatalog::OFlatCatalog(OFlatConnection* _pCon) : file::OFileCatalog(_pCon)
 {
-    osl_incrementInterlockedCount( &m_refCount );
-    refreshTables();
-    osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OFlatCatalog::refreshTables()
@@ -107,8 +104,11 @@ void OFlatCatalog::refreshTables()
             aVector.push_back(xRow->getString(3));
     }
     if(m_pTables)
-        delete m_pTables;
-    m_pTables = new OFlatTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables->reFill(aVector);
+    else
+        m_pTables = new OFlatTables(m_xMetaData,*this,m_aMutex,aVector);
 }
+// -----------------------------------------------------------------------------
+
 
 

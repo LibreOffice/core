@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 06:11:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,7 @@ void OFileCatalog::refreshTables()
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
-        delete m_pTables;
-    m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
+        m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
 
 // -------------------------------------------------------------------------

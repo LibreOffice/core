@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-06 09:17:58 $
+ *  last change: $Author: oj $ $Date: 2001-10-05 06:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,20 @@ Reference< XNameAccess > SAL_CALL OCatalog::getViews(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
 
-    if(!m_pViews)
-        refreshViews();
+    try
+    {
+        if(!m_pViews)
+            refreshViews();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OCatalog*>(this)->m_pViews;
 }
@@ -176,8 +188,20 @@ Reference< XNameAccess > SAL_CALL OCatalog::getUsers(  ) throw(RuntimeException)
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
 
-    if(!m_pUsers)
-        refreshUsers();
+    try
+    {
+        if(!m_pUsers)
+            refreshUsers();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OCatalog*>(this)->m_pUsers;
 }
@@ -188,9 +212,20 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
 
-
-    if(!m_pGroups)
-        refreshGroups();
+    try
+    {
+        if(!m_pGroups)
+            refreshGroups();
+    }
+    catch( const RuntimeException& )
+    {
+        // allowed to leave this method
+        throw;
+    }
+    catch( const Exception& )
+    {
+        // allowed
+    }
 
     return const_cast<OCatalog*>(this)->m_pGroups;
 }
