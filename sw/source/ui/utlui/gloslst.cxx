@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:04:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
@@ -99,6 +96,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -593,14 +593,15 @@ BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLong
     USHORT nFound = 0;
     USHORT nCount = aGroupArr.Count();
     USHORT nBeginLen = rBegin.Len();
-    const International& rInt = Application::GetAppInternational();
+    CollatorWrapper& rColl = ::GetAppCollator();
+
     for(USHORT i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(i);
         for(USHORT j = 0; j < pGroup->nCount; j++)
         {
             String sBlock = pGroup->sLongNames.GetToken(j, STRING_DELIM);
-            if(rInt.CompareEqual(sBlock.Copy(0, nBeginLen), rBegin, INTN_COMPARE_IGNORECASE) &&
+            if( 0 == rColl.compareString( sBlock.Copy(0, nBeginLen), rBegin ) &&
                 nBeginLen + 1 < sBlock.Len())
             {
                 String* pBlock = new String(sBlock);
@@ -631,11 +632,14 @@ void    SwGlossaryList::ClearGroups()
 
     Source Code Control System - Header
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.4 2000-11-06 09:04:23 jp Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.5 2001-04-27 17:50:25 jp Exp $
 
     Source Code Control System - Update
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/06 09:04:23  jp
+    must changes: GlossaryPath -> AutoTextPath
+
     Revision 1.3  2000/10/06 13:39:19  jp
     should changes: don't use IniManager
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-12 08:25:35 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:53:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
 // ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted = FALSE);
 //inserts a string sorted into a ListBox,
-USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffset, const International& rInt);
+USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffset);
 
 // Tabellenbreite und Ausrichtung ermitteln
 SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:39:00 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
@@ -96,6 +93,9 @@
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
 
 #include <svtools/svstdarr.hxx>
@@ -548,14 +548,15 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         //ist es nicht case sensitive muss man selbst suchen
         if( 0xffffffff == nPos)
         {
+            CollatorWrapper& rColl = ::GetAppCollator();
             for(USHORT i = 0; i < aGroupTLB.GetEntryCount(); i++)
             {
                 String sTemp = aGroupTLB.GetEntryText( i, 0 );
                 ULONG nCaseReadonly = (ULONG)aPathLB.GetEntryData(
                     aPathLB.GetEntryPos(aGroupTLB.GetEntryText(i,1)));
                 BOOL bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
-                const International& rInt = Application::GetAppInternational();
-                if(!bCase && rInt.CompareEqual(sTemp, sEntry, INTN_COMPARE_IGNORECASE))
+
+                if( !bCase && 0 == rColl.compareString( sTemp, sEntry ))
                 {
                     nPos = i;
                     break;
@@ -679,6 +680,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/03/08 15:39:00  os
+      #84732# skip invalid auto text groups
+
       Revision 1.5  2000/11/15 14:43:07  hr
       #65293#: SFX_SEARCHPATH_DELIMITER -> SVT_SEARCHPATH_DELIMITER
 

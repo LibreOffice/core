@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -250,19 +246,18 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 
     // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
-    const International& rInt = Application::GetAppInternational();
     const USHORT nCount = rSh.GetPageDescCnt();
     for(USHORT i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
-        ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, TRUE, rInt);
+        ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, TRUE );
     }
 
     String aFmtName;
     for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos(
                                     GetDocPoolNm( i, aFmtName )))
-            ::InsertStringSorted(aFmtName, aPageCollBox, TRUE, rInt);
+            ::InsertStringSorted(aFmtName, aPageCollBox, TRUE );
 
     CheckEnable();
     aPageNumEdit.SetText( aEmptyStr );
@@ -309,6 +304,9 @@ SwBreakDlg::~SwBreakDlg() {}
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:32  hr
+    initial import
+
     Revision 1.62  2000/09/18 16:05:13  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 14:35:29 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,10 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _APP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
+
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
@@ -331,7 +332,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
         }
     }
     //man darf zweimal suchen, denn bei mehreren Verzeichnissen koennte der caseinsensitive Name mehrfach auftreten
-    const International& rInt = Application::GetAppInternational();
+    CollatorWrapper& rColl = ::GetAppCollator();
+
     Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
 
     for(i = 0; i < nCount; i++)
@@ -361,9 +363,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
         {
         }
 
-        if( !bCaseSensitive &&
-                rInt.CompareEqual( rGroup, sTemp.GetToken(0, GLOS_DELIM),
-                                    INTN_COMPARE_IGNORECASE))
+        if( !bCaseSensitive && 0 ==
+            rColl.compareString( rGroup, sTemp.GetToken(0, GLOS_DELIM) ))
         {
             rGroup = sTemp;
             return sal_True;
@@ -908,6 +909,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/04/05 14:35:29  os
+    define corrected
+
     Revision 1.8  2000/12/21 12:18:20  os
     catch(...) -> catch(Exception&)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-12 08:25:49 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,13 @@
 #endif
 
 
-#ifndef _SV_SVAPP_HXX //autogen
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -784,13 +788,14 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
 /*-----------------09.04.98 16:58-------------------
 
 --------------------------------------------------*/
-USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffset, const International& rInt)
+USHORT InsertStringSorted(const String& rEntry, ListBox& rToFill, BOOL bHasOffset )
 {
     USHORT i = bHasOffset ? 1 : 0;
-    for(; i < rToFill.GetEntryCount(); i++)
+    CollatorWrapper& rCaseColl = ::GetAppCaseCollator();
+
+    for( ; i < rToFill.GetEntryCount(); i++ )
     {
-        String sTemp(rToFill.GetEntry(i));
-        if(COMPARE_GREATER == rInt.Compare(sTemp, rEntry))
+        if( 0 < rCaseColl.compareString( rToFill.GetEntry(i), rEntry ))
             break;
     }
     return rToFill.InsertEntry(rEntry, i);
@@ -801,7 +806,6 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
     SfxStyleSheetBasePool* pPool = pDocSh->GetStyleSheetPool();
     pPool->SetSearchMask(SFX_STYLE_FAMILY_CHAR, SFXSTYLEBIT_ALL);
     SwDoc* pDoc = pDocSh->GetDoc();
-    const International& rInt = Application::GetAppInternational();
     const SfxStyleSheetBase* pBase = pPool->First();
     String sStandard; GetDocPoolNm( RES_POOLCOLL_STANDARD, sStandard );
     while(pBase)
@@ -810,7 +814,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
         {
             USHORT nPos;
             if(bSorted)
-                nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset, rInt);
+                nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(pBase->GetName());
             long nPoolId = pDoc->GetPoolId( pBase->GetName(), GET_POOLID_CHRFMT );
@@ -830,7 +834,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted)
         {
             USHORT nPos;
             if(bSorted)
-                nPos = InsertStringSorted(rName, rToFill, bHasOffset, rInt);
+                nPos = InsertStringSorted(rName, rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(rName);
             long nPoolId = USHRT_MAX;
@@ -897,6 +901,9 @@ String GetAppLangDateTimeString( const DateTime& rDT )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/12 08:25:49  jp
+    Bug #85969#: ItemSetToPageDesc: don't use the current WrtShell for search a SwTxtFmtColl
+
     Revision 1.4  2001/02/23 12:45:30  os
     Complete use of DefaultNumbering component
 
