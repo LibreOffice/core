@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.30 $
- *  last change: $Author: rt $ $Date: 2004-07-13 16:31:47 $
+ *  $Revision: 1.31 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,13 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     GenericSalLayout::AdjustLayout( rArgs );
 
-    // asian kerning
+    // apply asian kerning if the glyphs are not already formatted
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
     && !(rArgs.mnFlags & SAL_LAYOUT_VERTICAL) )
-        ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
+        if( (rArgs.mpDXArray != NULL) || (rArgs.mnLayoutWidth != 0) )
+            ApplyAsianKerning( rArgs.mpStr, rArgs.mnLength );
 
-    // kashida justification
+    // insert kashidas where requested by the formatting array
     if( (rArgs.mnFlags & SAL_LAYOUT_KASHIDA_JUSTIFICATON) && rArgs.mpDXArray )
     {
         int nKashidaIndex = mrServerFont.GetGlyphIndex( 0x0640 );
