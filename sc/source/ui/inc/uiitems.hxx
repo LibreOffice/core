@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiitems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:49:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
     ScViewData*         GetViewData () const { return pViewData; }
     const ScSortParam&  GetSortData () const { return theSortData; }
@@ -259,6 +260,7 @@ public:
     virtual String          GetValueText() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberUd ) const;
 
     ScViewData*             GetViewData () const { return pViewData; }
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }
