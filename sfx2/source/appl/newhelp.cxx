@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 14:01:43 $
+ *  last change: $Author: pb $ $Date: 2001-07-12 10:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,13 +159,12 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TEXTWIN_ID          3
 
 #define TBI_INDEX           1001
-#define TBI_START           1002
-#define TBI_BACKWARD        1003
-#define TBI_FORWARD         1004
-#define TBI_CONTEXT         1005
-#define TBI_PRINT           1006
-#define TBI_BOOKMARKS       1007
-#define TBI_SOURCEVIEW      1008
+#define TBI_BACKWARD        1002
+#define TBI_FORWARD         1003
+#define TBI_START           1004
+#define TBI_PRINT           1005
+#define TBI_BOOKMARKS       1006
+#define TBI_SOURCEVIEW      1007
 
 #define CONFIGNAME_HELPWIN      String(DEFINE_CONST_UNICODE("OfficeHelp"))
 #define CONFIGNAME_INDEXWIN     String(DEFINE_CONST_UNICODE("OfficeHelpIndex"))
@@ -260,7 +259,7 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
     aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
     aFactoryTimer.SetTimeout( 200 );
 
-    nMinWidth = GetSizePixel().Width();
+    nMinWidth = aOpenBtn.GetSizePixel().Width();
 }
 
 // -----------------------------------------------------------------------
@@ -426,29 +425,27 @@ IMPL_LINK( IndexTabPage_Impl, FactoryHdl, Timer*, EMPTYARG )
 void IndexTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
-    long nWidth = aExpressionFT.GetPosPixel().X() + aExpressionFT.GetSizePixel().Width();
-    if ( aSize.Width() > nMinWidth || nWidth > aSize.Width() )
-    {
-        Point aPnt = aExpressionFT.GetPosPixel();
-        long nDelta = ( aPnt.X() / 2 );
-        Size aNewSize = aExpressionFT.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aExpressionFT.SetSizePixel( aNewSize );
+    if ( aSize.Width() < nMinWidth )
+        aSize.Width() = nMinWidth;
+    Point aPnt = aExpressionFT.GetPosPixel();
+    long nDelta = ( aPnt.X() / 2 );
+    Size aNewSize = aExpressionFT.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aExpressionFT.SetSizePixel( aNewSize );
 
-        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-        Size aBtnSize = aOpenBtn.GetSizePixel();
+    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    Size aBtnSize = aOpenBtn.GetSizePixel();
 
-        aPnt = aIndexCB.GetPosPixel();
-        aNewSize = aIndexCB.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aNewSize.Height() = aSize.Height() - aPnt.Y();
-        aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
-        aIndexCB.SetSizePixel( aNewSize );
+    aPnt = aIndexCB.GetPosPixel();
+    aNewSize = aIndexCB.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aNewSize.Height() = aSize.Height() - aPnt.Y();
+    aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
+    aIndexCB.SetSizePixel( aNewSize );
 
-        aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-        aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
-        aOpenBtn.SetPosPixel( aPnt );
-    }
+    aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
+    aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+    aOpenBtn.SetPosPixel( aPnt );
 }
 
 // -----------------------------------------------------------------------
@@ -645,26 +642,24 @@ IMPL_LINK( SearchTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 void SearchTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
-    long nWidth = aSearchBtn.GetPosPixel().X() + aSearchBtn.GetSizePixel().Width();
-    if ( aSize.Width() > aMinSize.Width() || nWidth > aSize.Width() )
-    {
-        Point aPnt = aSearchFT.GetPosPixel();
-        Size aNewSize = aSearchFT.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aSearchFT.SetSizePixel( aNewSize );
-        aNewSize.Height() = aResultsLB.GetSizePixel().Height();
-        aResultsLB.SetSizePixel( aNewSize );
-        aNewSize.Height() = aScopeCB.GetSizePixel().Height();
-        aScopeCB.SetSizePixel( aNewSize );
+    if ( aSize.Width() < aMinSize.Width() )
+        aSize.Width() = aMinSize.Width();
+    Point aPnt = aSearchFT.GetPosPixel();
+    Size aNewSize = aSearchFT.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aSearchFT.SetSizePixel( aNewSize );
+    aNewSize.Height() = aResultsLB.GetSizePixel().Height();
+    aResultsLB.SetSizePixel( aNewSize );
+    aNewSize.Height() = aScopeCB.GetSizePixel().Height();
+    aScopeCB.SetSizePixel( aNewSize );
 
-        aNewSize = aSearchED.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
-                           ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
-        aSearchED.SetSizePixel( aNewSize );
-        Point aNewPnt = aSearchBtn.GetPosPixel();
-        aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
-        aSearchBtn.SetPosPixel( aNewPnt );
-    }
+    aNewSize = aSearchED.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
+                        ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
+    aSearchED.SetSizePixel( aNewSize );
+    Point aNewPnt = aSearchBtn.GetPosPixel();
+    aNewPnt.X() = aPnt.X() + aNewSize.Width() + ( aPnt.X() / 2 );
+    aSearchBtn.SetPosPixel( aNewPnt );
 
     if ( aSize.Height() > aMinSize.Height() )
     {
@@ -837,7 +832,7 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
 {
     FreeResource();
 
-    nMinWidth = GetSizePixel().Width();
+    nMinWidth = aBookmarksPB.GetSizePixel().Width();
 
     // load bookmarks from configuration
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
@@ -860,29 +855,27 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent ) :
 void BookmarksTabPage_Impl::Resize()
 {
     Size aSize = GetSizePixel();
-    long nWidth = aBookmarksFT.GetPosPixel().X() + aBookmarksFT.GetSizePixel().Width();
-    if ( aSize.Width() > nMinWidth || nWidth > aSize.Width() )
-    {
-        Point aPnt = aBookmarksFT.GetPosPixel();
-        long nDelta = ( aPnt.X() / 2 );
-        Size aNewSize = aBookmarksFT.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aBookmarksFT.SetSizePixel( aNewSize );
+    if ( aSize.Width() < nMinWidth )
+        aSize.Width() = nMinWidth;
+    Point aPnt = aBookmarksFT.GetPosPixel();
+    long nDelta = ( aPnt.X() / 2 );
+    Size aNewSize = aBookmarksFT.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aBookmarksFT.SetSizePixel( aNewSize );
 
-        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-        Size aBtnSize = aBookmarksPB.GetSizePixel();
+    Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+    Size aBtnSize = aBookmarksPB.GetSizePixel();
 
-        aPnt = aBookmarksBox.GetPosPixel();
-        aNewSize = aBookmarksBox.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aNewSize.Height() = aSize.Height() - aPnt.Y();
-        aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
-        aBookmarksBox.SetSizePixel( aNewSize );
+    aPnt = aBookmarksBox.GetPosPixel();
+    aNewSize = aBookmarksBox.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aNewSize.Height() = aSize.Height() - aPnt.Y();
+    aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
+    aBookmarksBox.SetSizePixel( aNewSize );
 
-        aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-        aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
-        aBookmarksPB.SetPosPixel( aPnt );
-    }
+    aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
+    aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+    aBookmarksPB.SetPosPixel( aPnt );
 }
 
 // -----------------------------------------------------------------------
@@ -1003,7 +996,11 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
         pFactory->ToLowerAscii();
         if ( *pFactory == pIPage->GetFactory() )
         {
-            aActiveLB.SelectEntryPos(i);
+            if ( aActiveLB.GetSelectEntryPos() != i )
+            {
+                aActiveLB.SelectEntryPos(i);
+                aSelectFactoryLink.Call( NULL );
+            }
             break;
         }
     }
@@ -1066,6 +1063,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, SelectHdl, ListBox *, EMPTYARG )
         String aFactory( *pFactory );
         aFactory.ToLowerAscii();
         SetFactory( aFactory, sal_False );
+        aSelectFactoryLink.Call( this );
     }
 
     return 0;
@@ -1084,26 +1082,20 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
 void SfxHelpIndexWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
-    Size aNewSize;
-    Point aPnt;
-
     if ( aSize.Width() < nMinWidth )
         aSize.Width() = nMinWidth;
-    else
-    {
-        aPnt = aActiveLB.GetPosPixel();
-        aNewSize = aActiveLB.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aActiveLB.SetSizePixel( aNewSize );
 
-        aPnt = aActiveLine.GetPosPixel();
-        aNewSize = aActiveLine.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aActiveLine.SetSizePixel( aNewSize );
-    }
-
+    Point aPnt = aActiveLB.GetPosPixel();
+    Size aNewSize = aActiveLB.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aActiveLB.SetSizePixel( aNewSize );
+    aPnt = aActiveLine.GetPosPixel();
+    aNewSize = aActiveLine.GetSizePixel();
+    aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+    aActiveLine.SetSizePixel( aNewSize );
     aPnt = aTabCtrl.GetPosPixel();
     aNewSize = aSize;
+    aSize.Width() -= aPnt.X();
     aSize.Height() -= aPnt.Y();
     aTabCtrl.SetSizePixel( aSize );
 }
@@ -1180,30 +1172,35 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     Window( pParent, WB_CLIPCHILDREN ),
 
-    aToolBox( this, 0 ),
-    pHelpWin( pParent ),
-    pTextWin( new Window( this, 0 ) ),
-    bIsDebug( sal_False )
+    aToolBox        ( this, 0 ),
+    pHelpWin        ( pParent ),
+    pTextWin        ( new Window( this, 0 ) ),
+    bIsDebug        ( sal_False ),
+    aIndexOnText    ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
+    aIndexOffText   ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
+    aIndexOnImage   ( SfxResId( IMG_HELP_TOOLBOX_INDEX_ON ) ),
+    aIndexOffImage  ( SfxResId( IMG_HELP_TOOLBOX_INDEX_OFF ) )
 
 {
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->createInstance(
-            DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
 
+
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
-    aToolBox.InsertItem( TBI_INDEX, Image( SfxResId( IMG_HELP_TOOLBOX_INDEX ) ) );
-    aToolBox.SetQuickHelpText( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
+    aToolBox.InsertItem( TBI_INDEX, aIndexOffImage );
+    aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOffText );
     aToolBox.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
-    aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
-    aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
-    aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
     aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
     aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
     aToolBox.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
     aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
     aToolBox.SetQuickHelpText( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
     aToolBox.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
+    aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
+    aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+    aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
     aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
     aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
     aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
@@ -1211,8 +1208,12 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetQuickHelpText( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
 
+    Size a3Size = LogicToPixel( Size( 0, 3 ), MAP_APPFONT );
+    Size a14Size = LogicToPixel( Size( 0, 14 ), MAP_APPFONT );
     Size aSize = aToolBox.CalcWindowSizePixel();
-    aToolBox.SetSizePixel( aSize );
+    long nY = a3Size.Height() + ( ( a14Size.Height() - aSize.Height() ) / 2 );
+    aSize.Height() += nY + 3;
+    aToolBox.SetPosSizePixel( Point( 0, nY ), aSize );
     aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aToolBox.Show();
 
@@ -1257,12 +1258,15 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             // link at current mouse position ?
             const Point&  rPos = pCmdEvt->GetMousePosPixel();
             PopupMenu aMenu;
-            aMenu.InsertItem( TBI_INDEX, String( SfxResId( STR_HELP_BUTTON_INDEX ) ) );
-            aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+            if ( bIsIndexOn )
+                aMenu.InsertItem( TBI_INDEX, aIndexOffText );
+            else
+                aMenu.InsertItem( TBI_INDEX, aIndexOnText );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
             aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
             aMenu.InsertSeparator();
@@ -1280,6 +1284,23 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     }
 
     return nDone ? nDone : Window::PreNotify( rNEvt );
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
+{
+    bIsIndexOn = bOn;
+    if ( bIsIndexOn )
+    {
+        aToolBox.SetItemImage( TBI_INDEX, aIndexOffImage );
+        aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOffText );
+    }
+    else
+    {
+        aToolBox.SetItemImage( TBI_INDEX, aIndexOnImage );
+        aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOnText );
+    }
 }
 
 // class SfxHelpWindow_Impl ----------------------------------------------
@@ -1413,6 +1434,38 @@ void SfxHelpWindow_Impl::SaveConfig()
 
 // -----------------------------------------------------------------------
 
+void SfxHelpWindow_Impl::ShowStartPage()
+{
+    String aStartURL;
+    aStartURL = HELP_URL;
+    aStartURL += pIndexWin->GetFactory();
+    aStartURL += DEFINE_CONST_UNICODE("/start");
+    AppendConfigToken_Impl( aStartURL, sal_True );
+
+    URL aURL;
+    aURL.Complete = aStartURL;
+    PARSE_URL( aURL );
+
+    String aTarget( DEFINE_CONST_UNICODE("_self") );
+    Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
+    Reference < XDispatch > xDisp = xProv.is() ?
+        xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
+
+    if ( xDisp.is() )
+    {
+        Sequence < PropertyValue > aArgs( 1 );
+        aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
+        BOOL bReadOnly = TRUE;
+        aArgs[0].Value <<= bReadOnly;
+        if ( !IsWait() )
+            EnterWait();
+        ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
+        xDisp->dispatch( aURL, aArgs );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 {
     if ( pToolBox )
@@ -1464,6 +1517,21 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
     return 0;
 }
 
+//-------------------------------------------------------------------------
+
+IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
+{
+    String aNewTitle = aTitle;
+    aNewTitle += String( DEFINE_CONST_UNICODE(" - ") );
+    aNewTitle += pIndexWin->GetActiveFactoryTitle();
+    GetParent()->SetText( aNewTitle );
+
+    if ( pWin )
+        ShowStartPage();
+
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
@@ -1489,7 +1557,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >& rFrame,
     Window* pParent, WinBits nBits ) :
 
-    SplitWindow( pParent, nBits | WB_3DLOOK ),
+    SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 
     pIndexWin       ( NULL ),
     pTextWin        ( NULL ),
@@ -1500,7 +1568,8 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     nHeight         ( 0 ),
     nIndexSize      ( 40 ),
     nTextSize       ( 60 ),
-    bIndex          ( sal_True )
+    bIndex          ( sal_True ),
+    aTitle          ( pParent->GetText() )
 
 {
     SetHelpId( HID_HELP_WINDOW );
@@ -1511,6 +1580,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pHelpInterceptor->InitWaiter( (OpenStatusListener_Impl*)xOpenListener.get(), this );
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
+    pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
     pIndexWin->Show();
     pTextWin = new SfxHelpTextWindow_Impl( this );
     Reference < XFramesSupplier > xSup( rFrame, UNO_QUERY );
@@ -1568,37 +1638,13 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
         {
             bIndex = !bIndex;
             MakeLayout();
+            pTextWin->ToggleIndex( bIndex );
             break;
         }
 
         case TBI_START :
         {
-            String aStartURL;
-            aStartURL = HELP_URL;
-            aStartURL += pIndexWin->GetFactory();
-            aStartURL += DEFINE_CONST_UNICODE("/start");
-            AppendConfigToken_Impl( aStartURL, sal_True );
-
-            URL aURL;
-            aURL.Complete = aStartURL;
-            PARSE_URL( aURL );
-
-            String aTarget( DEFINE_CONST_UNICODE("_self") );
-            Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-            Reference < XDispatch > xDisp = xProv.is() ?
-                xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
-
-            if ( xDisp.is() )
-            {
-                Sequence < PropertyValue > aArgs( 1 );
-                aArgs[0].Name = String( DEFINE_CONST_UNICODE("ReadOnly") );
-                BOOL bReadOnly = TRUE;
-                aArgs[0].Value <<= bReadOnly;
-                if ( !IsWait() )
-                    EnterWait();
-                ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
-                xDisp->dispatch( aURL, aArgs );
-            }
+            ShowStartPage();
             break;
         }
 
@@ -1613,9 +1659,6 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
             pHelpInterceptor->dispatch( aURL, Sequence < PropertyValue >() );
             break;
         }
-
-        case TBI_CONTEXT :
-            break;
 
         case TBI_PRINT :
         case TBI_SOURCEVIEW :
