@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:42:35 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String STR_QUERY_UNDO_MODIFYSQLEDIT
     Text[ dutch ] = "SQL modificeren";
     Text[ chinese_simplified ] = "ÐÞ¸Ä SQL";
     Text[ greek ] = "Ôñïðïðïßçóç ôïõ SQL";
-    Text[ korean ] = "SQL  º¯°æ";
+    Text[ korean ] = "SQL ¼öÁ¤";
     Text[ arabic ] = "SQL ÊÚÏíá";
     Text[ turkish ] = "SQL deyimini deðiþtir";
     Text[ language_user1 ] = " ";
