@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2001-10-18 14:40:54 $
+ *  last change: $Author: ka $ $Date: 2001-10-18 16:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
+#endif
+#ifndef _SVX_XFLCLIT_HXX
+#include <svx/xflclit.hxx>
 #endif
 #include <svx/dbexch.hrc>
 #ifndef _SOT_FORMATS_HXX //autogen
@@ -566,7 +569,34 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
                 BOOL        bBookmark = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
                 BOOL        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
-                if( bXFillExchange || ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( nDropAction & DND_ACTION_LINK ) ) )
+                // check handle insert
+                if( !nRet && ( bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
+                {
+                    const SdrHdlList& rHdlList = GetHdlList();
+
+                    for( sal_uInt32 n = 0; n < rHdlList.GetHdlCount(); n++ )
+                    {
+                        SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
+
+                        if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
+                        {
+                            const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
+
+                            if( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                            {
+                                nRet = nDropAction;
+                                static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_SELECTED );
+                            }
+                            else
+                                static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
+                        }
+                    }
+
+                    RefreshAllIAOManagers();
+                }
+
+                // check object insert
+                if( !nRet && ( bXFillExchange || ( ( bDrawing || bGraphic || bMtf || bBitmap || bBookmark ) && ( nDropAction & DND_ACTION_LINK ) ) ) )
                 {
                     SdrObject*      pPickObj = NULL;
                     SdrPageView*    pPV = NULL;
@@ -597,12 +627,13 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
                             pDropMarker->Show();
                         }
 
-                        nRet = DND_ACTION_LINK;
+                        nRet = nDropAction;
                     }
                     else
                         bXFillExchange = FALSE;
                 }
 
+                // check normal insert
                 if( !nRet )
                 {
                     const BOOL  bSBAFormat = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
@@ -627,6 +658,14 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
         }
     }
 
+    // destroy drop marker if this is a leaving event
+    if( rEvt.mbLeaving && pDropMarker )
+    {
+        pDropMarker->Hide();
+        delete pDropMarker, pDropMarker = NULL;
+        pDropMarkerObj = NULL;
+    }
+
     return nRet;
 }
 
@@ -635,17 +674,18 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
 sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                               SdWindow* pTargetWindow, USHORT nPage, USHORT nLayer )
 {
+    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+    String          aActiveLayer = GetActiveLayer();
+    sal_Int8        nDropAction = rEvt.mnAction;
+    sal_Int8        nRet = DND_ACTION_NONE;
+
+    // destroy drop marker if it is shown
     if( pDropMarker )
     {
         pDropMarker->Hide();
         delete pDropMarker, pDropMarker = NULL;
         pDropMarkerObj = NULL;
     }
-
-    SdrPageView*    pPV = GetPageViewPvNum( 0 );
-    String          aActiveLayer = GetActiveLayer();
-    sal_Int8        nDropAction = rEvt.mnAction;
-    sal_Int8        nRet = DND_ACTION_NONE;
 
     if( !pPV->IsLayerLocked( aActiveLayer ) )
     {
@@ -681,10 +721,46 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
             if( pTargetWindow )
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
-            if( !InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) && pViewSh )
+            // handle insert?
+            if( !nRet && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA ) )
             {
-                String                  aTmpString1, aTmpString2;
-                INetBookmark            aINetBookmark( aTmpString1, aTmpString2 );
+                const SdrHdlList& rHdlList = GetHdlList();
+
+                for( sal_uInt32 n = 0; !nRet && n < rHdlList.GetHdlCount(); n++ )
+                {
+                    SdrHdl* pIAOHandle = rHdlList.GetHdl( n );
+
+                    if( pIAOHandle && ( HDL_COLR == pIAOHandle->GetKind() ) )
+                    {
+                        const B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
+
+                        if( rIAOGroup.IsHit( rEvt.maPosPixel ) )
+                        {
+                            SotStorageStreamRef xStm;
+
+                            if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
+                            {
+                                XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
+
+                                *xStm >> aFillData;
+                                const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetValue() );
+                                static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
+                                nRet = nDropAction;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // standard insert?
+            if( !nRet && InsertData( aDataHelper, aPos, nDropAction, TRUE, 0, nPage, nLayer ) )
+                nRet = nDropAction;
+
+            // special insert?
+            if( !nRet && pViewSh )
+            {
+                String          aTmpString1, aTmpString2;
+                INetBookmark    aINetBookmark( aTmpString1, aTmpString2 );
 
                 // insert bookmark
                 if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
@@ -776,8 +852,6 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                     }
                 }
             }
-            else
-                nRet = nDropAction;
         }
     }
 
