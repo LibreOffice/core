@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:20:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ danish ] = "~Enter password";
         Text[ swedish ] = "D~efiniera lösenord";
         Text[ polish ] = "~Enter password";
-        Text[ portuguese_brazilian ] = "~Enter password";
+        Text[ portuguese_brazilian ] = "Digite a s~enha";
         Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å…¥åŠ›(~E)";
-        Text[ korean ] = "ì•”í˜¸ ì…ë ¥";
+        Text[ korean ] = "ì•”í˜¸ ì…ë ¥(~E)";
         Text[ chinese_simplified ] = "è¾“å…¥å¯†ç (~E)";
         Text[ chinese_traditional ] = "è¼¸å…¥å¯†ç¢¼(~E)";
         Text[ turkish ] = "~Parolayı girin";
@@ -135,7 +135,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ danish ] = "~Bekræft adgangskode";
         Text[ swedish ] = "~Bekräfta lösenord";
         Text[ polish ] = "PotwierdŸ has³o";
-        Text[ portuguese_brazilian ] = "~Confirmar senha";
+        Text[ portuguese_brazilian ] = "~Confirme a senha";
         Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ç¢ºèª(~C)";
         Text[ korean ] = "ì•”í˜¸ í™•ì¸(~C)";
         Text[ chinese_simplified ] = "ç¡®è®¤å¯†ç (~C)";
@@ -176,7 +176,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ english_us ] = "Password";
     Text[ portuguese ] = "Indique a senha principal.";
     Text[ russian ] = "Ââåñòè îñíîâíîé ïàğîëü";
-    Text[ greek ] = "Please enter master password";
+    Text[ greek ] = "ÅéóáãùãŞ êıñéïõ êùäéêïı ğñüóâáóçò";
     Text[ dutch ] = "Hoofdwachtwoord invoeren";
     Text[ french ] = "Mot de passe";
     Text[ spanish ] = "Contraseña ";
@@ -185,7 +185,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ danish ] = "Definer hovedadgangskode";
     Text[ swedish ] = "Lösenord";
     Text[ polish ] = "WprowadŸ has³o g³ówne";
-    Text[ portuguese_brazilian ] = "Digitar senha principal.";
+    Text[ portuguese_brazilian ] = "Digite a senha principal.";
     Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å…¥åŠ›";
     Text[ korean ] = "ì•”í˜¸";
     Text[ chinese_simplified ] = "å¯†ç ";
@@ -199,6 +199,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤•à¥‹ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿ à¤•à¤°à¥‹";
     Text[ slovak ] = "Heslo";
 };
+
 
 
 
