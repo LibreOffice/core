@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-17 11:39:52 $
+ *  last change: $Author: nn $ $Date: 2002-10-22 13:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEDATA_HPP_
 #include <com/sun/star/sheet/XCellRangeData.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEFORMULA_HPP_
+#include <com/sun/star/sheet/XCellRangeFormula.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLSERIES_HPP_
 #include <com/sun/star/sheet/XCellSeries.hpp>
@@ -688,6 +691,7 @@ class ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XSheetCellRange,
                        public com::sun::star::sheet::XArrayFormulaRange,
                        public com::sun::star::sheet::XCellRangeData,
+                       public com::sun::star::sheet::XCellRangeFormula,
                        public com::sun::star::sheet::XMultipleOperation,
                        public com::sun::star::util::XMergeable,
                        public com::sun::star::sheet::XCellSeries,
@@ -761,6 +765,14 @@ public:
                                 ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::uno::Any > >& aArray )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XCellRangeFormula
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
+                            ::rtl::OUString > > SAL_CALL getFormulaArray()
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFormulaArray( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aArray )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XMultipleOperation
     virtual void SAL_CALL   setTableOperation(

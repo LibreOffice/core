@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:28:15 $
+ *  last change: $Author: nn $ $Date: 2002-10-22 13:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@ public:
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
                                     BOOL bInterpret, BOOL bEnglish, BOOL bApi );
+
+                    // creates a new cell for use with PutCell
+    ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText );
 
     BOOL            SetNoteText( const ScAddress& rPos, const String& rText, BOOL bApi );
 

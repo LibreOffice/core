@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:28:43 $
+ *  last change: $Author: nn $ $Date: 2002-10-22 13:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,6 +948,52 @@ ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
 }
 
 
+ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos, const String& rText )
+{
+    ScDocument* pDoc = rDocShell.GetDocument();
+    ScBaseCell* pNewCell = NULL;
+
+    if ( rText.Len() > 1 && rText.GetChar(0) == '=' )
+    {
+        ScTokenArray* pCode;
+        if ( pDoc->IsImportingXML() )
+        {   // temporary formula string as string tokens
+            pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText );
+            pDoc->IncXMLImportedFormulaCount( rText.Len() );
+        }
+        else
+        {
+            ScCompiler aComp( pDoc, rPos );
+            aComp.SetCompileEnglish( TRUE );
+            pCode = aComp.CompileString( rText );
+        }
+        pNewCell = new ScFormulaCell( pDoc, rPos, pCode, 0 );
+        delete pCode;   // Zell-ctor hat das TokenArray kopiert
+    }
+    else if ( rText.Len() > 1 && rText.GetChar(0) == '\'' )
+    {
+        //  for bEnglish, "'" at the beginning is always interpreted as text
+        //  marker and stripped
+        pNewCell = ScBaseCell::CreateTextCell( rText.Copy( 1 ), pDoc );
+    }
+    else        // (nur) auf englisches Zahlformat testen
+    {
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        ULONG nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
+        double fVal;
+        if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
+            pNewCell = new ScValueCell( fVal );
+        else if ( rText.Len() )
+            pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
+
+        //  das (englische) Zahlformat wird nicht gesetzt
+        //! passendes lokales Format suchen und setzen???
+    }
+
+    return pNewCell;
+}
+
+
 BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
                                 BOOL bInterpret, BOOL bEnglish, BOOL bApi )
 {
@@ -959,42 +1005,10 @@ BOOL ScDocFunc::SetCellText( const ScAddress& rPos, const String& rText,
     {
         if ( bEnglish )
         {
-            if ( rText.Len() > 1 && rText.GetChar(0) == '=' )
-            {
-                ScTokenArray* pCode;
-                if ( pDoc->IsImportingXML() )
-                {   // temporary formula string as string tokens
-                    pCode = lcl_ScDocFunc_CreateTokenArrayXML( rText );
-                    pDoc->IncXMLImportedFormulaCount( rText.Len() );
-                }
-                else
-                {
-                    ScCompiler aComp( pDoc, rPos );
-                    aComp.SetCompileEnglish( TRUE );
-                    pCode = aComp.CompileString( rText );
-                }
-                pNewCell = new ScFormulaCell( pDoc, rPos, pCode, 0 );
-                delete pCode;   // Zell-ctor hat das TokenArray kopiert
-            }
-            else if ( rText.Len() > 1 && rText.GetChar(0) == '\'' )
-            {
-                //  for bEnglish, "'" at the beginning is always interpreted as text
-                //  marker and stripped
-                pNewCell = ScBaseCell::CreateTextCell( rText.Copy( 1 ), pDoc );
-            }
-            else        // (nur) auf englisches Zahlformat testen
-            {
-                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                ULONG nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
-                double fVal;
-                if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
-                    pNewCell = new ScValueCell( fVal );
-                else if ( rText.Len() )
-                    pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
+            //  code moved to own method InterpretEnglishString because it is also used in
+            //  ScCellRangeObj::setFormulaArray
 
-                //  das (englische) Zahlformat wird nicht gesetzt
-                //! passendes lokales Format suchen und setzen???
-            }
+            pNewCell = InterpretEnglishString( rPos, rText );
         }
         // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:29:39 $
+ *  last change: $Author: nn $ $Date: 2002-10-22 13:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,6 +1202,161 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     rDocShell.SetDocumentModified();
 
     return !bError;
+}
+
+BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
+                        const uno::Sequence< uno::Sequence<rtl::OUString> >& aData )
+{
+//  BOOL bApi = TRUE;
+
+    ScDocument* pDoc = rDocShell.GetDocument();
+    USHORT nTab = rRange.aStart.Tab();
+    USHORT nStartCol = rRange.aStart.Col();
+    USHORT nStartRow = rRange.aStart.Row();
+    USHORT nEndCol = rRange.aEnd.Col();
+    USHORT nEndRow = rRange.aEnd.Row();
+    BOOL bUndo(pDoc->IsUndoEnabled());
+
+    if ( !pDoc->IsBlockEditable( nTab, nStartCol,nStartRow, nEndCol,nEndRow ) )
+    {
+        //! error message
+        return FALSE;
+    }
+
+    long nCols = 0;
+    long nRows = aData.getLength();
+    const uno::Sequence<rtl::OUString>* pArray = aData.getConstArray();
+    if ( nRows )
+        nCols = pArray[0].getLength();
+
+    if ( nCols != nEndCol-nStartCol+1 || nRows != nEndRow-nStartRow+1 )
+    {
+        //! error message?
+        return FALSE;
+    }
+
+    ScDocument* pUndoDoc = NULL;
+    if ( bUndo )
+    {
+        pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+        pUndoDoc->InitUndo( pDoc, nTab, nTab );
+        pDoc->CopyToDocument( rRange, IDF_CONTENTS, FALSE, pUndoDoc );
+    }
+
+    pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );
+
+    ScDocFunc aFunc( rDocShell );       // for InterpretEnglishString
+
+    BOOL bError = FALSE;
+    USHORT nDocRow = nStartRow;
+    for (long nRow=0; nRow<nRows; nRow++)
+    {
+        const uno::Sequence<rtl::OUString>& rColSeq = pArray[nRow];
+        if ( rColSeq.getLength() == nCols )
+        {
+            USHORT nDocCol = nStartCol;
+            const rtl::OUString* pColArr = rColSeq.getConstArray();
+            for (long nCol=0; nCol<nCols; nCol++)
+            {
+                String aText = pColArr[nCol];
+                ScAddress aPos( nDocCol, nDocRow, nTab );
+                ScBaseCell* pNewCell = aFunc.InterpretEnglishString( aPos, aText );
+                pDoc->PutCell( aPos, pNewCell );
+
+                ++nDocCol;
+            }
+        }
+        else
+            bError = TRUE;                          // wrong size
+
+        ++nDocRow;
+    }
+
+    BOOL bHeight = rDocShell.AdjustRowHeight( nStartRow, nEndRow, nTab );
+
+    if ( pUndoDoc )
+    {
+        ScMarkData aDestMark;
+        aDestMark.SelectOneTable( nTab );
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new ScUndoPaste( &rDocShell,
+                nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab, aDestMark,
+                pUndoDoc, NULL, IDF_CONTENTS, NULL,NULL,NULL,NULL, FALSE ) );
+    }
+
+    if (!bHeight)
+        rDocShell.PostPaint( rRange, PAINT_GRID );      // AdjustRowHeight may have painted already
+
+    rDocShell.SetDocumentModified();
+
+    return !bError;
+}
+
+//  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
+String lcl_GetInputString( ScDocShell* pDocSh, const ScAddress& rPosition, BOOL bEnglish )
+{
+    String aVal;
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        ScBaseCell* pCell = pDoc->GetCell( rPosition );
+        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
+        {
+            CellType eType = pCell->GetCellType();
+            if ( eType == CELLTYPE_FORMULA )
+            {
+                ScFormulaCell* pForm = (ScFormulaCell*)pCell;
+                if (bEnglish)
+                    pForm->GetEnglishFormula( aVal );
+                else
+                    pForm->GetFormula( aVal );
+            }
+            else
+            {
+                SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
+                                                            pDoc->GetFormatTable();
+                // Since the English formatter was constructed with
+                // LANGUAGE_ENGLISH_US the "General" format has index key 0,
+                // we don't have to query.
+                ULONG nNumFmt = bEnglish ?
+//                      pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
+                        0 :
+                        pDoc->GetNumberFormat( rPosition );
+
+                if ( eType == CELLTYPE_EDIT )
+                {
+                    //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
+                    //  hier werden die Umbrueche aber gebraucht
+                    const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
+                    if (pData)
+                    {
+                        EditEngine& rEngine = pDoc->GetEditEngine();
+                        rEngine.SetText( *pData );
+                        aVal = rEngine.GetText( LINEEND_LF );
+                    }
+                }
+                else
+                    ScCellFormat::GetInputString( pCell, nNumFmt, aVal, *pFormatter );
+
+                //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
+                if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
+                {
+                    double fDummy;
+                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy));
+                    if ( bIsNumberFormat )
+                        aVal.Insert('\'',0);
+                    else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
+                    {
+                        //  if the string starts with a "'", add another one because setFormula
+                        //  strips one (like text input, except for "text" number formats)
+                        if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
+                            aVal.Insert('\'',0);
+                    }
+                }
+            }
+        }
+    }
+    return aVal;
 }
 
 //------------------------------------------------------------------------
@@ -4338,6 +4493,7 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XSheetCellRange )
     SC_QUERYINTERFACE( sheet::XArrayFormulaRange )
     SC_QUERYINTERFACE( sheet::XCellRangeData )
+    SC_QUERYINTERFACE( sheet::XCellRangeFormula )
     SC_QUERYINTERFACE( sheet::XMultipleOperation )
     SC_QUERYINTERFACE( util::XMergeable )
     SC_QUERYINTERFACE( sheet::XCellSeries )
@@ -4373,23 +4529,24 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 15 );
+        aTypes.realloc( nParentLen + 16 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XCellRangeAddressable>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XSheetCellRange>*)0);
         pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XArrayFormulaRange>*)0);
         pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XCellRangeData>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<util::XMergeable>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<util::XSortable>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<util::XImportable>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XCellRangeFormula>*)0);
+        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
+        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<util::XMergeable>*)0);
+        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
+        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
+        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<util::XSortable>*)0);
+        pPtr[nParentLen +10] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
+        pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
+        pPtr[nParentLen +12] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
+        pPtr[nParentLen +13] = getCppuType((const uno::Reference<util::XImportable>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -4686,6 +4843,67 @@ void SAL_CALL ScCellRangeObj::setDataArray(
     {
         //! move lcl_PutDataArray to docfunc?
         bDone = lcl_PutDataArray( *pDocSh, aRange, aArray );
+    }
+
+    if (!bDone)
+        throw uno::RuntimeException();      // no other exceptions specified
+}
+
+// XCellRangeFormula
+
+uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+    {
+        //  don't create a data array for the sheet
+        throw uno::RuntimeException();
+    }
+
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+    {
+        USHORT nStartCol = aRange.aStart.Col();
+        USHORT nStartRow = aRange.aStart.Row();
+        USHORT nEndCol = aRange.aEnd.Col();
+        USHORT nEndRow = aRange.aEnd.Row();
+        USHORT nColCount = nEndCol + 1 - nStartCol;
+        USHORT nRowCount = nEndRow + 1 - nStartRow;
+        USHORT nTab = aRange.aStart.Tab();
+
+        uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
+        uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
+        for (USHORT nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++)
+        {
+            uno::Sequence<rtl::OUString> aColSeq( nColCount );
+            rtl::OUString* pColAry = aColSeq.getArray();
+            for (USHORT nColIndex = 0; nColIndex < nColCount; nColIndex++)
+                pColAry[nColIndex] = lcl_GetInputString( pDocSh,
+                                    ScAddress( nStartCol+nColIndex, nStartRow+nRowIndex, nTab ), TRUE );
+
+            pRowAry[nRowIndex] = aColSeq;
+        }
+
+        return aRowSeq;
+    }
+
+    throw uno::RuntimeException();      // no other exceptions specified
+    return uno::Sequence< uno::Sequence<rtl::OUString> >(0);
+}
+
+void SAL_CALL ScCellRangeObj::setFormulaArray(
+                        const uno::Sequence< uno::Sequence<rtl::OUString> >& aArray )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    BOOL bDone = FALSE;
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+    {
+        bDone = lcl_PutFormulaArray( *pDocSh, aRange, aArray );
     }
 
     if (!bDone)
@@ -5541,69 +5759,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::Run
 
 String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormula / FormulaLocal
 {
-    ScDocShell* pDocSh = GetDocShell();
-    String aVal;
-    if ( pDocSh )
-    {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        ScBaseCell* pCell = pDoc->GetCell( aCellPos );
-        if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
-        {
-            CellType eType = pCell->GetCellType();
-            if ( eType == CELLTYPE_FORMULA )
-            {
-                ScFormulaCell* pForm = (ScFormulaCell*)pCell;
-                if (bEnglish)
-                    pForm->GetEnglishFormula( aVal );
-                else
-                    pForm->GetFormula( aVal );
-            }
-            else
-            {
-                SvNumberFormatter* pFormatter = bEnglish ? ScGlobal::GetEnglishFormatter() :
-                                                            pDoc->GetFormatTable();
-                // Since the English formatter was constructed with
-                // LANGUAGE_ENGLISH_US the "General" format has index key 0,
-                // we don't have to query.
-                ULONG nNumFmt = bEnglish ?
-//                      pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
-                        0 :
-                        pDoc->GetNumberFormat( aCellPos );
-
-                if ( eType == CELLTYPE_EDIT )
-                {
-                    //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-                    //  hier werden die Umbrueche aber gebraucht
-                    const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
-                    if (pData)
-                    {
-                        EditEngine& rEngine = pDoc->GetEditEngine();
-                        rEngine.SetText( *pData );
-                        aVal = rEngine.GetText( LINEEND_LF );
-                    }
-                }
-                else
-                    ScCellFormat::GetInputString( pCell, nNumFmt, aVal, *pFormatter );
-
-                //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
-                if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
-                {
-                    double fDummy;
-                    sal_Bool bIsNumberFormat(pFormatter->IsNumberFormat(aVal, nNumFmt, fDummy));
-                    if ( bIsNumberFormat )
-                        aVal.Insert('\'',0);
-                    else if ( aVal.Len() && aVal.GetChar(0) == '\'' )
-                    {
-                        //  if the string starts with a "'", add another one because setFormula
-                        //  strips one (like text input, except for "text" number formats)
-                        if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
-                            aVal.Insert('\'',0);
-                    }
-                }
-            }
-        }
-    }
-    return aVal;
+    return lcl_GetInputString( GetDocShell(), aCellPos, bEnglish );
 }
 
 String ScCellObj::GetOutputString_Impl() const
