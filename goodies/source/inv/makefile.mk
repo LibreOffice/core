@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:01:07 $
+#   last change: $Author: hr $ $Date: 2005-02-11 19:30:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES= \
 SRS1NAME=$(TARGET)
 SRC1FILES=gegner.src strings.src
 
+RESLIB1IMAGES= $(PRJ)$/res
 RESLIB1NAME=tfu
 RESLIB1SRSFILES=$(SRS)$/invader.srs
 
@@ -120,7 +121,8 @@ SHL1TARGET= tfu$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= itfu
 SHL1STDLIBS=\
             $(SVLIB)     \
-            $(TOOLSLIB)
+            $(TOOLSLIB)  \
+            $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
@@ -154,8 +156,7 @@ $(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/types.rdb
     $(GNUCOPY) $(SOLARBINDIR)$/types.rdb $@
     +cd $(BIN) && \
         regcomp -register -r applicat.rdb \
-            -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
-            -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
+            -c i18npool.uno$(DLLPOST)
 
 # --- Def-File ---
 
