@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:36:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 00:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1453,13 +1453,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 
     ImageList 1 // == BMP_COLOR_NORMAL + 1
     {
-        ImageBitmap = Bitmap { File = "sf_out.bmp" ; };
+        Prefix = "sf";
         MaskColor = IMAGE_MASK_STDCOLOR;
         STYLE_IMAGE_LISTEF
     };
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
-        ImageBitmap = Bitmap { File = "sfh_out.bmp" ; };
+        Prefix = "sfh";
         MaskColor = IMAGE_MASK_STDCOLOR_HC;
         STYLE_IMAGE_LISTEF
     };
