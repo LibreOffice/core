@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:26:37 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2020,7 +2020,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pMaster);
         AddUndo(new SdrUndoNewPage(*pMaster));
-        pMaster->SetAutoLayout(AUTOLAYOUT_NONE, TRUE);
+        pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
         pNotesMaster = (SdPage*) AllocPage(TRUE);
         pNotesMaster->SetPageKind(PK_NOTES);
@@ -2033,7 +2033,7 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pNotesMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pNotesMaster);
         AddUndo(new SdrUndoNewPage(*pNotesMaster));
-        pNotesMaster->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE);
+        pNotesMaster->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
         EndUndo();
 
         /*********************************************************************
