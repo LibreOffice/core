@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 07:49:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,26 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Laden" ;
         Text [ English ] = "Load" ;
+        Text[ english_us ] = "Load";
+        Text[ portuguese ] = "Carregar";
+        Text[ russian ] = "Load";
+        Text[ greek ] = "Load";
+        Text[ dutch ] = "Load";
+        Text[ french ] = "Load";
+        Text[ spanish ] = "Load";
+        Text[ finnish ] = "Load";
+        Text[ italian ] = "Load";
+        Text[ danish ] = "Load";
+        Text[ swedish ] = "Ladda";
+        Text[ polish ] = "£aduj";
+        Text[ portuguese_brazilian ] = "Load";
+        Text[ japanese ] = "“Ç‚İ‚Ş";
+        Text[ korean ] = "Load";
+        Text[ chinese_simplified ] = "×°Èë";
+        Text[ chinese_traditional ] = "¸ü¤J";
+        Text[ turkish ] = "Load";
+        Text[ arabic ] = "Load";
+        Text[ catalan ] = "Load";
     };
     CheckBox CB_LOAD_SETTINGS
     {
@@ -110,6 +130,26 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
         Text [ English ] = "Load user-defined settings with the document" ;
+        Text[ english_us ] = "Load user-specific settings with the document";
+        Text[ portuguese ] = "~Carregar definições personalizadas com o documento";
+        Text[ russian ] = "Load user-defined settings with the document";
+        Text[ greek ] = "Load user-defined settings with the document";
+        Text[ dutch ] = "Load user-defined settings with the document";
+        Text[ french ] = "Load user-defined settings with the document";
+        Text[ spanish ] = "Load user-defined settings with the document";
+        Text[ finnish ] = "Load user-defined settings with the document";
+        Text[ italian ] = "Load user-defined settings with the document";
+        Text[ danish ] = "Load user-defined settings with the document";
+        Text[ swedish ] = "Ladda ~användarspecifika inställningar med dokumentet";
+        Text[ polish ] = "£aduj dokument ³¹cznie z ustawieniami indywidualnymi";
+        Text[ portuguese_brazilian ] = "Load user-defined settings with the document";
+        Text[ japanese ] = "Õ°»Ş°“Æ©‚Ìİ’è‚ğÄŞ·­ÒİÄ‚Æ‚Æ‚à‚É“Ç‚İ‚Ş";
+        Text[ korean ] = "Load user-defined settings with the document";
+        Text[ chinese_simplified ] = "Á¬Í¬Ê¹ÓÃÕßµÄÉè¶¨Ò»Æğ×°ÈëÎÄµµ";
+        Text[ chinese_traditional ] = "³s¦P¨Ï¥ÎªÌªº³]©w¤@°_¸ü¤J¤å¥ó";
+        Text[ turkish ] = "Load user-defined settings with the document";
+        Text[ arabic ] = "Load user-defined settings with the document";
+        Text[ catalan ] = "Load user-defined settings with the document";
     };
     FixedLine GB_SAVE
     {
@@ -123,7 +163,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese ] = "Guardar" ;
         Text [ finnish ] = "Tallenna" ;
         Text [ danish ] = "Gem" ;
-        Text [ french ] = "Options d'enregistrement" ;
+        Text [ french ] = "Enregistrement" ;
         Text [ swedish ] = "Spara" ;
         Text [ dutch ] = "Opslaan" ;
         Text [ spanish ] = "Guardar" ;
@@ -398,7 +438,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ polish ] = "Domyœlny format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
         Text[ japanese ] = "•W€Ì§²ÙŒ`®";
-        Text[ korean ] = "Standard file format";
+        Text[ korean ] = "±âº» ÆÄÀÏ Æ÷¸Ë";
         Text[ chinese_simplified ] = "±ê×¼ÎÄ¼ş¸ñÊ½";
         Text[ chinese_traditional ] = "¼Ğ·ÇÀÉ®×®æ¦¡";
         Text[ turkish ] = "Standard file format";
@@ -413,7 +453,7 @@ TabPage RID_SFXPAGE_SAVE
         Text = "~Dokumenttyp" ;
         Text [ English ] = "Document type" ;
         Text[ english_us ] = "D~ocument type";
-        Text[ portuguese ] = "Tipo de documento";
+        Text[ portuguese ] = "~Tipo de documento";
         Text[ russian ] = "Òèï äîêóìåíòà";
         Text[ greek ] = "Ôığïò åããñÜöïõ";
         Text[ dutch ] = "Document";
@@ -425,10 +465,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "~Dokumenttyp";
         Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
-        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìí—Ş";
-        Text[ korean ] = "Document";
-        Text[ chinese_simplified ] = "ÎÄµµÀàĞÍ";
-        Text[ chinese_traditional ] = "¤å¥óÃş«¬";
+        Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìí—Ş(~O)";
+        Text[ korean ] = "¹®¼­ À¯Çü(~O)";
+        Text[ chinese_simplified ] = "ÎÄµµÀàĞÍ(~O)";
+        Text[ chinese_traditional ] = "¤å¥óÃş«¬(~O)";
         Text[ turkish ] = "Document";
         Text[ arabic ] = "Document";
         Text[ catalan ] = "Document";
@@ -440,7 +480,7 @@ TabPage RID_SFXPAGE_SAVE
         Text = "Immer spei~chern als" ;
         Text [ English ] = "Always save as" ;
         Text[ english_us ] = "Always sa~ve as";
-        Text[ portuguese ] = "Guardar sempre como";
+        Text[ portuguese ] = "G~uardar sempre como";
         Text[ russian ] = "Âñåãäà ñîõğàíÿòü êàê";
         Text[ greek ] = "ĞÜíôá áğïèŞêåõóç ùò";
         Text[ dutch ] = "Bestandsformaten";
@@ -452,10 +492,10 @@ TabPage RID_SFXPAGE_SAVE
         Text[ swedish ] = "Spara alltid s~om";
         Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
-        Text[ japanese ] = "í‚ÉŸ‚ÌŒ`®‚Å•Û‘¶";
-        Text[ korean ] = "File formats";
-        Text[ chinese_simplified ] = "×ÜÊÇÁí´æÎª";
-        Text[ chinese_traditional ] = "Á`¬O¥t¦s¬°";
+        Text[ japanese ] = "í‚ÉŸ‚ÌŒ`®‚Å•Û‘¶(~V)";
+        Text[ korean ] = "Ç×»ó ..·Î ÀúÀå(~V)";
+        Text[ chinese_simplified ] = "×ÜÊÇÁí´æÎª(~V)";
+        Text[ chinese_traditional ] = "Á`¬O¥t¦s¬°(~V)";
         Text[ turkish ] = "File formats";
         Text[ arabic ] = "File formats";
         Text[ catalan ] = "File formats";
@@ -620,12 +660,12 @@ TabPage RID_SFXPAGE_SAVE
     };
     StringList [ korean ] =
     {
-            < "ÅØ½ºÆ®¡¡¹®¼­" ;     APP_WRITER    ; > ;
-        < "HTML ¹®¼­" ;    APP_WRITER_WEB;  > ;
-        < "½ºÇÁ·¹µå½ÃÆ®t" ; APP_CALC      ; > ;
-        < "ÇÁ¸®Á¨Å×ÀÌ¼Ç" ;     APP_IMPRESS   ; > ;
-        < "±×¸®±â" ;        APP_DRAW      ; > ;
-        < "FORMULA" ;           APP_MATH      ; > ;
+            < "±Û¡¡¹®¼­" ;     APP_WRITER    ; > ;
+        < "HTMLÇü ¹®¼­" ;    APP_WRITER_WEB;  > ;
+        < "Å×ÀÌºí ¹®¼­" ; APP_CALC      ; > ;
+        < "½½¶óÀÌµå¼î" ;     APP_IMPRESS   ; > ;
+        < "draw" ;        APP_DRAW      ; > ;
+        < "¼ö½Ä" ;           APP_MATH      ; > ;
     };
     StringList [ chinese_simplified ] =
     {
@@ -684,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
