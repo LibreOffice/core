@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ class Marshal implements IMarshal {
         }
     }
 
-    static class M_ThreadId {
+    static public class M_ThreadId {
         public byte  full[];
         public short cache;
 
@@ -131,9 +131,12 @@ class Marshal implements IMarshal {
             this.full  = full;
             this.cache = cache;
         }
+        public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = {
+            new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( "full", 0, 0 ),
+            new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( "cache", 1, 0 ) };
     }
 
-    static class M_InterfaceReference {
+    static public class M_InterfaceReference {
         public String full;
         public short cache;
 
@@ -143,6 +146,9 @@ class Marshal implements IMarshal {
             this.full  = full;
             this.cache = cache;
         }
+        public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = {
+            new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( "full", 0, 0 ),
+            new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( "cache", 1, 0 ) };
     }
 
 
