@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AddIn.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 13:59:41 $
+ *  last change: $Author: nn $ $Date: 2001-02-19 19:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 
 #ifndef __com_sun_star_sheet_XAddIn_idl__
 #include <com/sun/star/sheet/XAddIn.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XCompatibilityNames_idl__
+#include <com/sun/star/sheet/XCompatibilityNames.idl>
 #endif
 
 
@@ -213,6 +217,10 @@ service AddIn
     // DocMerge: empty anyway
     interface com::sun::star::sheet::XAddIn;
 
+    /** This optional interface gives access to compatibility names for
+        the functions.
+     */
+    [optional] interface com::sun::star::sheet::XCompatibilityNames;
 };
 
 //=============================================================================
@@ -222,6 +230,9 @@ service AddIn
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/19 13:59:41  mi
+    syntax errors in documentation fixed
+
     Revision 1.4  2000/12/19 13:13:17  mi
     no dim='[][]' anymore for new document generator
 

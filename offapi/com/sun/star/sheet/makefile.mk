@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: nn $ $Date: 2000-11-09 19:50:08 $
+#   last change: $Author: nn $ $Date: 2001-02-19 19:52:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ IDLFILES=\
     HeaderFooterContent.idl\
     LabelRange.idl\
     LabelRanges.idl\
+    LocalizedName.idl\
     MemberResult.idl\
     MemberResultFlags.idl\
     NamedRange.idl\
@@ -187,6 +188,7 @@ IDLFILES=\
     XCellRangeReferrer.idl\
     XCellRangesQuery.idl\
     XCellSeries.idl\
+    XCompatibilityNames.idl\
     XConsolidatable.idl\
     XConsolidationDescriptor.idl\
     XDatabaseRange.idl\
