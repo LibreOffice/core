@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:55 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ namespace configmgr
     {
     protected:
         IConfigBroadcaster() {}
-        ~IConfigBroadcaster() {}
+        virtual ~IConfigBroadcaster() {}
     public:
         virtual void addListener(AbsolutePath const& aPath, const RequestOptions& _aOptions, INodeListenerRef const& pListener) = 0;
         virtual void removeListener(const RequestOptions& _aOptions, INodeListenerRef const& pListener) = 0;
