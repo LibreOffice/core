@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "स्तंभें";
+        Text[ slovak ] = "Stĺpce";
     };
     NumericField ED_NUMBER
     {
@@ -169,6 +170,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Rovnoměrně rozděl obsah mezi všechny sloupce";
         Text[ hebrew ] = "~Inhalt über alle Spalten gleichmäßig verteilen";
         Text[ hindi ] = "सब स्तंभों में विषयों को समान रीति से वितरण करो";
+        Text[ slovak ] = "Rovnomerne rozdeľ obsah medzi všetky stĺpce";
     };
     FixedLine FL_COLUMNS
     {
@@ -201,6 +203,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
+        Text[ slovak ] = "Nastavenia";
     };
     FixedText FT_COLUMN
     {
@@ -233,6 +236,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "स्तंभ";
+        Text[ slovak ] = "Stĺpec";
     };
     Window WN_BSP
     {
@@ -310,6 +314,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Šířka";
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "चौड़ाई";
+        Text[ slovak ] = "Šírka";
     };
     MetricField ED_1
     {
@@ -399,6 +404,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "अंतर देना";
+        Text[ slovak ] = "Vzdialenosť";
     };
     MetricField ED_DIST1
     {
@@ -471,6 +477,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Automatická šířka";
         Text[ hebrew ] = "A~utomatische Breite";
         Text[ hindi ] = "स्वचालित ~ढंग से चौड़ाई";
+        Text[ slovak ] = "~Automatická šírka";
     };
     FixedLine FL_LAYOUT
     {
@@ -503,6 +510,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Šířka a vzdálenosti";
         Text[ hebrew ] = "Breite und Abstand";
         Text[ hindi ] = "चौड़ाई और अंतर देना";
+        Text[ slovak ] = "Šírka a vzdialenosti";
     };
 
     FixedText FT_STYLE
@@ -540,6 +548,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Čára";
         Text[ hebrew ] = "A~rt";
         Text[ hindi ] = "~रेखा";
+        Text[ slovak ] = "Čia~ra";
     };
     ListBox LB_STYLE
     {
@@ -667,6 +676,10 @@ TabPage TP_COLUMN
     {
          < "कोई नहीं" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; Default ; > ;
+    };
     };
     FixedText FT_HEIGHT
     {
@@ -703,6 +716,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
+        Text[ slovak ] = "~Výška";
     };
     MetricField ED_HEIGHT
     {
@@ -755,6 +769,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "U~miestnenie";
     };
     ListBox LB_POSITION
     {
@@ -942,6 +957,12 @@ TabPage TP_COLUMN
         < "केन्द्रित" ; Default ; > ;
         < "नीचे" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Navrchu" ; Default ; > ;
+        < "Na stred" ; Default ; > ;
+        < "Dole" ; Default ; > ;
+    };
     };
     FixedLine FL_LINETYPE
     {
@@ -977,6 +998,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Oddělovací čára";
         Text[ hebrew ] = "Trennlinie";
         Text[ hindi ] = "अलगानेवाला रेखा";
+        Text[ slovak ] = "Oddeľovacia čiara";
     };
     FixedLine  FL_VERT
     {
@@ -1016,6 +1038,7 @@ TabPage TP_COLUMN
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "Properties";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -1048,6 +1071,7 @@ TabPage TP_COLUMN
         Text[ portuguese_brazilian ] = "Text ~direction";
         Text[ thai ] = "Text ~direction";
         Text[ hindi ] = "Text ~direction";
+        Text[ slovak ] = "S~mer textu";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -1218,6 +1242,12 @@ TabPage TP_COLUMN
         < "Right-to-left" ; 1; > ;
         < "Use superordinate object settings" ; 4; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Zľava-do-prava" ; 0; > ;
+        < "Sprava-do-ľava" ; 1; > ;
+        < "Použiť nastavenia nadriadeného objektu" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "栏";
     Text[ russian ] = "�������";
@@ -1236,6 +1266,7 @@ TabPage TP_COLUMN
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
+    Text[ slovak ] = "Stĺpce";
 };
 
 ModalDialog DLG_COLUMN
@@ -1297,6 +1328,7 @@ ModalDialog DLG_COLUMN
         Text[ czech ] = "Použít na";
         Text[ hebrew ] = "~Anwenden auf";
         Text[ hindi ] = "में ~लागू करो";
+        Text[ slovak ] = "~Použiť na";
     };
     ListBox LB_APPLY_TO
     {
@@ -1395,7 +1427,7 @@ ModalDialog DLG_COLUMN
         StringList [ italian ] =
         {
             < "Selezione" ;             LISTBOX_SELECTION; > ;
-            < "Sezione corrente" ;      LISTBOX_SECTION     ; > ;
+            < "Sezione attiva" ;    LISTBOX_SECTION     ; > ;
             < "Aree contrassegnate" ;  LISTBOX_SECTIONS ; > ;
             < "Cornice" ;               LISTBOX_FRAME       ; > ;
             < "Modello di pagina: " ;       LISTBOX_PAGE        ; > ;
@@ -1520,6 +1552,14 @@ ModalDialog DLG_COLUMN
         < "फ्रेम " ;                  LISTBOX_FRAME       ; > ;
         < "पृष्ठ शैली: " ;        LISTBOX_PAGE        ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Výber" ;           LISTBOX_SELECTION; > ;
+        < "Aktuálna oblasť" ;     LISTBOX_SECTION     ; > ;
+        < "Vybrané oblasti" ;  LISTBOX_SECTIONS    ; > ;
+        < "Rámček" ;                  LISTBOX_FRAME       ; > ;
+        < "Štýl stránky:" ;          LISTBOX_PAGE        ; > ;
+    };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";
@@ -1546,7 +1586,10 @@ ModalDialog DLG_COLUMN
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
+    Text[ slovak ] = "Stĺpce";
 };
+
+
 
 
 
