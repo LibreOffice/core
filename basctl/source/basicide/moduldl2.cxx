@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: tbe $ $Date: 2002-01-22 09:05:54 $
+ *  last change: $Author: tbe $ $Date: 2002-04-25 14:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,8 @@ void LibPage::CheckButtons()
         {
             aPasswordButton.Disable();
             aDelButton.Disable();
+            if ( !aLibBox.HasFocus() )
+                aCloseButton.GrabFocus();
         }
         else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                   ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
