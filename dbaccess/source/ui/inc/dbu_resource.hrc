@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:27:34 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@
 #define MENU_DATASOURCELIST_POPUP       RID_MENU_START +  1
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
 #define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
+#define MENU_BROWSERTREE_CONTEXT        RID_MENU_START +  4
 
 //========================================================================
 // strings
@@ -209,6 +210,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2000/12/03 10:27:34  fs
+ *  #79820# have a range for dbaccess resource ids now
+ *
  *  Revision 1.11  2000/11/10 16:10:43  oj
  *  new defines
  *
