@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:25:00 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3212,7 +3212,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
             return rWrt;                // Fly um Grafik -> Auto-Groesse
 
 //???? was ist bei Prozentangaben ???
-        if( rSz.GetWidth() )
+        if( rSz.GetWidth() && rSz.GetWidthSizeType() == ATT_FIX_SIZE)
         {
             //"sprmPDxaWidth"
             if( rWW8Wrt.bWrtWW8 )
@@ -3231,7 +3231,7 @@ static Writer& OutWW8_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
                 rWW8Wrt.pO->Insert( 45, rWW8Wrt.pO->Count() );
 
             USHORT nH = 0;
-            switch( rSz.GetSizeType() )
+            switch( rSz.GetHeightSizeType() )
             {
             case ATT_VAR_SIZE: break;
             case ATT_FIX_SIZE: nH = (USHORT)rSz.GetHeight() & 0x7fff; break;
