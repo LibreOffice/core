@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:35:49 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ String RID_WEBTEXT_TOOLBOX
     Text [ english_us ] = "Text Object Bar/Web" ;
     Text [ italian ] = "Barra degli oggetti di testo/Web" ;
     Text [ spanish ] = "Barra de objetos de texto/Web" ;
-    Text [ french ] = "Barre d'objets de texte/web" ;
+    Text [ french ] = "Barre d'objets de texte/Web" ;
     Text [ swedish ] = "Textobjektlist/Webb" ;
     Text [ danish ] = "Tekstobjektlinje/Web" ;
     Text [ portuguese ] = "Barra de objectos de texto/Web" ;
@@ -510,7 +510,7 @@ String RID_WEBGRAPHIC_TOOLBOX
     Text[ polish ] = "Pasek obiektów graficznych/Web";
     Text[ japanese ] = "}Œ`•`‰æµÌŞ¼Şª¸ÄÊŞ°/Web";
     Text[ chinese_traditional ] = "¹Ï¤ùª«¥ó¦C/Web";
-    Text[ arabic ] = "ÔÑíØ ßÇÆä ÕæÑÉ/ æíÈ";
+    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ/ æíÈ";
     Text[ dutch ] = "Objectbalk afbeeldingen/Web";
     Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÀ¸/Web";
     Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ó÷åäéáóìïı/Web";
