@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges(data::
 
     if (!m_aChanges.empty())
     {
-        data::NodeAccess aOriginalData = this->getOriginalNodeAccess(_aAccessor);
+        data::NodeAccessRef aOriginalData = this->getOriginalNodeAccessRef(&_aAccessor);
         aRet.reset( new SubtreeChange(  aOriginalData.getName().toString(),
                                         aOriginalData.getAttributes() ) );
 
@@ -603,7 +603,7 @@ void DeferredSetNodeImpl::rebuildElement(data::Accessor const& _aAccessor, Name 
 //-----------------------------------------------------------------------------
 std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(data::Accessor const& _aAccessor, ElementList& _rRemovedElements)
 {
-    data::NodeAccess aOriginalData = this->getOriginalNodeAccess(_aAccessor);
+    data::NodeAccessRef aOriginalData = this->getOriginalNodeAccessRef(&_aAccessor);
     // now first get the name of this node
     Name sSetName = aOriginalData.getName();
 
