@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:09:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/resmgr.hxx>
+#include <tools/resmgr.hxx>
 #include <tools/rcid.h>
 #include <vos/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
