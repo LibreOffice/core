@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-29 13:24:44 $
+ *  last change: $Author: cmc $ $Date: 2001-04-20 10:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,7 +1913,7 @@ void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
 void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd, EscherPropertyContainer& rPropOpt )
 {
     const SfxPoolItem* pItem;
-    USHORT nMode = GRAPHICDRAWMODE_STANDARD;
+    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
     sal_Int32 nContrast = 0;
     sal_Int16 nBrightness = 0;
 
@@ -2338,11 +2338,14 @@ BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.14 2001-03-29 13:24:44 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.15 2001-04-20 10:51:44 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/03/29 13:24:44  cmc
+      set hiword and loword bits in escher graphic drawmode
+
       Revision 1.13  2001/03/27 12:01:49  cmc
       brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
 
