@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2002-10-30 14:56:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, cons
 
             // extract it
             sal_Int32 nFormatKey = 0;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
             m_aFormatKey >>= nFormatKey;
