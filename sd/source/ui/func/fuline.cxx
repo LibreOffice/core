@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuline.hxx"
+
 #include <svx/svxids.hrc>
 #ifndef _SVX_TAB_LINE_HXX //autogen
 #include <svx/tabline.hxx>
@@ -89,15 +91,20 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#ifndef _SD_VIEWSHEL_HXX
-#include "viewshel.hxx"
-#endif
 
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "fuline.hxx"
 #include "app.hrc"
+
+namespace sd {
 
 TYPEINIT1( FuLine, FuPoor );
 
@@ -107,8 +114,12 @@ TYPEINIT1( FuLine, FuPoor );
 |*
 \************************************************************************/
 
-FuLine::FuLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-               SdDrawDocument* pDoc, SfxRequest& rReq)
+FuLine::FuLine (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     BOOL        bHasMarked = pView->HasMarkedObj();
@@ -180,4 +191,4 @@ FuLine::FuLine(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     rReq.Ignore ();
 }
 
-
+} // end of namespace sd

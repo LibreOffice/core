@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,20 @@
  *
  ************************************************************************/
 
+#include "fucushow.hxx"
+
 #include <svx/svxids.hrc>
 
 #pragma hdrstop
 
-#include "fucushow.hxx"
 #include "custsdlg.hxx"
 
 #include "app.hrc"
 #include "sdresid.hxx"
 
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 
@@ -83,6 +86,8 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
+namespace sd {
+
 TYPEINIT1( FuCustomShowDlg, FuPoor );
 
 
@@ -92,9 +97,13 @@ TYPEINIT1( FuCustomShowDlg, FuPoor );
 |*
 \************************************************************************/
 
-FuCustomShowDlg::FuCustomShowDlg( SdViewShell* pViewSh, SdWindow*    pWin,
-                                SdView* pView, SdDrawDocument* pDoc, SfxRequest& rReq) :
-            FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+FuCustomShowDlg::FuCustomShowDlg (
+    ViewShell* pViewSh,
+    ::sd::Window*    pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
     USHORT nRet = RET_YES;
 
@@ -119,3 +128,5 @@ FuCustomShowDlg::FuCustomShowDlg( SdViewShell* pViewSh, SdWindow*    pWin,
         }
     }
 }
+
+} // end of namespace
