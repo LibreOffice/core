@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 16:20:41 $
+ *  last change: $Author: os $ $Date: 2001-07-10 08:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         //check for filter type
                         const SfxFilter* pFlt = GetMedium()->GetFilter();
-                        if(!pFlt || pFlt->GetFilterName() != pHtmlFlt->GetFilterName())
+                        if(!pFlt || pFlt->GetUserData() != pHtmlFlt->GetUserData())
                         {
                             QueryBox aQuery(&pViewFrm->GetWindow(), SW_RES(MSG_SAVEAS_HTML_QUERY));
                             if(RET_YES == aQuery.Execute())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:10:19 $
+ *  last change: $Author: os $ $Date: 2001-07-10 08:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1089,7 +1089,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     SfxMedium* pMedium = pDocShell->GetMedium();
 
     const SfxFilter* pFilter = pMedium->GetFilter();
-    BOOL bHtml = pFilter && C2S("HTML") == pFilter->GetFilterName();
+    BOOL bHtml = pFilter && pFilter->GetUserData().EqualsAscii("HTML");
     BOOL bDocModified = pDocShell->IsModified();
     if(bHtml && !bDocModified && pDocShell->HasName())
     {
