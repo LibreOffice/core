@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:07:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "SlsListener.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "SlsSlotManager.hxx"
+#include "SlsSelectionCommand.hxx"
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
@@ -727,14 +728,23 @@ void SlideSorterController::DeleteSelectedPages (void)
 bool SlideSorterController::MoveSelectedPages (USHORT nTargetPageIndex)
 {
     bool bMoved (false);
+    PageSelector& rSelector (GetPageSelector());
 
-    ModelChangeLock aLock (*this);
     mrView.LockRedraw (TRUE);
+    ModelChangeLock aLock (*this);
+
+    // Transfer selection of the slide sorter to the document.
     mrModel.SynchronizeDocumentSelection ();
+
+    // Prepare to select the moved pages.
+    SelectionCommand* pCommand = new SelectionCommand(rSelector,mrModel);
+    pCommand->AddPages(rSelector.GetPageSelection());
 
     // At the moment we can not move master pages.
     if (mrModel.GetEditMode() == EM_PAGE)
-        bMoved = (mrModel.GetDocument()->MovePages (nTargetPageIndex)==TRUE);
+        bMoved = mrModel.GetDocument()->MovePages(nTargetPageIndex);
+    if (bMoved)
+        mpSlotManager->ExecuteCommandAsynchronously(::std::auto_ptr<controller::Command>(pCommand));
 
     mrView.LockRedraw (FALSE);
 
