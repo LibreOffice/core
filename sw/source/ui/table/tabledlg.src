@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 10:01:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,6 +1894,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "Trennung der Ta~belle an Seiten- und Spaltenenden zulassen" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Allow ~table to split across pages and columns" ;
+        Text[ chinese_simplified ] = "å…è®¸è·¨é¡µå’Œè·¨åˆ—æ‹†åˆ†è¡¨æ ¼";
     };
     TriStateBox CB_SPLIT_ROW
     {
@@ -1902,6 +1903,7 @@ TabPage TP_TABLE_TEXTFLOW
         TabStop = TRUE ;
         Text = "Zeilenumb~ruch an Seiten- und Spaltenenden zulassen" ;
         Text [ english_us ] = "Allow row to break a~cross pages and columns" ;
+        Text[ chinese_simplified ] = "å…è®¸è·¨é¡µæ–­è¡Œ";
     };
     CheckBox CB_KEEP
     {
@@ -1919,7 +1921,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ french ] = "Paragraphes solidaires" ;
         Text [ dutch ] = "~Alinea's bijeenhouden" ;
         Text [ portuguese ] = "Jun~tar ao parágrafo seguinte" ;
-        Text[ chinese_simplified ] = "å’Œä¸‹ä¸€æ®µè½ä¿æŒè¿æ¥(~K)";
+        Text[ chinese_simplified ] = "å’Œä¸‹ä¸€æ®µè½ä¿æŒè¿æ¥)";
         Text[ russian ] = "Âìåñòå ñî ñëåäóşùèì àáçàöåì";
         Text[ polish ] = "Zac~howuj razem z nastêpnym akapitem";
         Text[ japanese ] = "æ¬¡ã®æ®µè½ã‚’é›¢ã•ãªã„(~K)";
