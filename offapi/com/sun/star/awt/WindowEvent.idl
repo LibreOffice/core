@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WindowEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,84 +72,67 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::WindowEvent
-/** specifies the component-level keyboard event.@see InputEvent
+/** specifies a window event.
  */
 struct WindowEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::X
-    /** specifies the outer X-position of the window.
+    /** specifies the outer x position of the window.
      */
     long X;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::Y
-    /** specifies the outer Y-position of the window.
+    /** specifies the outer y position of the window.
      */
     long Y;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::Width
     /** specifies the outer (total) width of the window.
      */
     long Width;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::Height
     /** specifies the outer (total) height of the window.
      */
     long Height;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::LeftInset
     /** specifies the inset from the left.
 
-
-
         <p>The inset is the distance between the outer and the inner window,
-        with other words in this case it is the width of the left border. </p>
+        that means the left inset is the width of the left border.</p>
      */
     long LeftInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::TopInset
     /** specifies the inset from the top.
 
-
-
         <p>The inset is the distance between the outer and the inner window,
-        with other words in this case it is the heigt of the top border. </p>
+        that means the top inset is the heigt of the top border.</p>
      */
     long TopInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::RightInset
     /** specifies the inset from the right.
 
-
-
         <p>The inset is the distance between the outer and the inner window,
-        with other words in this case it is the width of the right border. </p>
+        that means the right inset is the width of the right border.</p>
      */
     long RightInset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::WindowEvent::BottomInset
     /** specifies the inset from the bottom.
 
-
-
         <p>The inset is the distance between the outer and the inner window,
-        with other words in this case it is the heigt of the bottom border. </p>
+        that means the bottom inset is the heigt of the bottom border.</p>
      */
     long BottomInset;
 
