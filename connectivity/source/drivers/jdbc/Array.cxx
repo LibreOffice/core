@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Array.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ jclass java_sql_Array::getMyClass()
 
 void java_sql_Array::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==NULL  )
+    if( pClass==NULL  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
