@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _grfsh.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,12 @@ interface BaseTextGraphic : Selection
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+        SID_COLOR_SETTINGS       // status(final|play|rec)
+        [
+                ExecMethod = ExecAttr ;
+                StateMethod = GetAttrState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
 
 }
 
