@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:06:27 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,7 +956,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                         if ( cLast == '\\' )
                         {   // escaped
                             aSymbol += OUString( pSym, pSrc - pSym - 2 );
-                            aSymbol += OUString(&c);
+                            aSymbol += OUString( &c, 1);
                         }
                         else
                         {
@@ -981,7 +981,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                     if ( cLast == '\\' )
                     {   // escaped
                         aSymbol += OUString( pSym, pSrc - pSym - 2 );
-                        aSymbol += OUString(&c);
+                        aSymbol += OUString( &c, 1);
                     }
                     else if ( c == *pSrc &&
                             !(nContTypes & KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING) )
