@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:16:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,196 +62,31 @@
 
 String STR_DDEERROR_APP1
 {
-    TEXT = "Die Applikation [" ;
-    TEXT [ ENGLISH ] = "Application [" ;
-    TEXT [ norwegian ] = "Applikasjon[" ;
-    TEXT [ italian ] = "L'applicazione [" ;
-    TEXT [ portuguese_brazilian ] = "A aplicação [" ;
-    TEXT [ portuguese ] = "A aplicação [" ;
-    TEXT [ finnish ] = "Sovellus [" ;
-    TEXT [ danish ] = "Applikationen [" ;
-    TEXT [ french ] = "L'application [" ;
-    TEXT [ swedish ] = "Programmet [" ;
-    TEXT [ dutch ] = "Toepassing [" ;
-    TEXT [ spanish ] = "La aplicación [" ;
-    TEXT [ english_us ] = "Application [" ;
-    TEXT[ chinese_simplified ] = "åº”ç”¨ç¨‹åº [";
-    TEXT[ russian ] = "Ïğèëîæåíèş [";
-    TEXT[ polish ] = "Aplikacja [";
-    TEXT[ japanese ] = "ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ [";
-    TEXT[ greek ] = "Ç åöáñìïãŞ [";
-    TEXT[ korean ] = "ì‘ìš© í”„ë¡œê·¸ë¨ [";
-    TEXT[ chinese_traditional ] = "ç¨‹å¼ [";
-    TEXT[ arabic ] = "ÇáÊØÈíŞ  ]";
-    TEXT[ turkish ] = "Uygulama [";
-    TEXT[ catalan ] = "L'aplicació [";
-    TEXT[ thai ] = "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ [";
-    TEXT[ czech ] = "Aplikace [";
-    TEXT[ hebrew ] = "â€®×¤×¢×•×œ×” [â€¬";
-    TEXT[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® [";
-    TEXT[ slovak ] = "AplikÃ¡cia [";
+    Text[ de ] = "Die Applikation [" ;
+    Text[ en-US ] = "Application [" ;
 };
 String STR_DDEERROR_APP2
 {
-    TEXT = "] kann nicht angesprochen werden" ;
-    TEXT [ ENGLISH ] = "] does not respond" ;
-    TEXT [ norwegian ] = "] korresponderer ikke" ;
-    TEXT [ italian ] = "] non risponde" ;
-    TEXT [ portuguese_brazilian ] = "] não está respondendo" ;
-    TEXT [ portuguese ] = "] não responde." ;
-    TEXT [ finnish ] = "] ei vastaa." ;
-    TEXT [ danish ] = "] svarer ikke" ;
-    TEXT [ french ] = "] ne répond pas" ;
-    TEXT [ swedish ] = "]  svarar inte" ;
-    TEXT [ dutch ] = "] reageert niet" ;
-    TEXT [ spanish ] = "] no responde" ;
-    TEXT [ english_us ] = "] is not responding." ;
-    TEXT[ chinese_simplified ] = "] æ²¡æœ‰å›åº”ã€‚";
-    TEXT[ russian ] = "] íå îòâå÷àåò";
-    TEXT[ polish ] = "] nie reaguje.";
-    TEXT[ japanese ] = "] ã‹ã‚‰ã®å¿œç­”ãŒã‚ã‚Šã¾ã›ã‚“";
-    TEXT[ chinese_traditional ] = "] æ²’æœ‰å›æ‡‰ã€‚";
-    TEXT[ arabic ] = "[ áÇ íÓÊÌíÈ";
-    TEXT[ dutch ] = "] reageert niet";
-    TEXT[ chinese_simplified ] = "] æ²¡æœ‰å›åº”ã€‚";
-    TEXT[ greek ] = "] äåí áíôáğïêñßíåôáé.";
-    TEXT[ korean ] = "] ìœ¼ë¡œë¶€í„° ì‘ë‹µì´ ì—†ìŠµë‹ˆë‹¤.";
-    TEXT[ turkish ] = "] cevap vermiyor";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no respon";
-    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸•à¸­à¸šà¸ªà¸™à¸­à¸‡";
-    TEXT[ czech ] = "] neodpovÃ­dÃ¡.";
-    TEXT[ hebrew ] = "] kann nicht angesprochen werden";
-    TEXT[ hindi ] = "] à¤‰à¤¤à¥à¤¤à¤° à¤¨à¤¹à¥€à¤‚ à¤¦à¥‡ à¤°à¤¹à¤¾ à¤¹à¥ˆ à¥¤";
-    TEXT[ slovak ] = "] neodpovedÃ¡.";
+    Text[ de ]= "] kann nicht angesprochen werden" ;
+    Text[ en-US ] = "] is not responding." ;
 };
 String STR_DDEERROR_DATA1
 {
-    TEXT = "Die Daten zu [" ;
-    TEXT [ ENGLISH ] = "Data for [" ;
-    TEXT [ norwegian ] = "Data for [" ;
-    TEXT [ italian ] = "Dati per [" ;
-    TEXT [ portuguese_brazilian ] = "Os dados para [" ;
-    TEXT [ portuguese ] = "Os dados para [" ;
-    TEXT [ finnish ] = "Tietoja [" ;
-    TEXT [ danish ] = "Dataene til [" ;
-    TEXT [ french ] = "Les données pour [" ;
-    TEXT [ swedish ] = "Data till [" ;
-    TEXT [ dutch ] = "Gegevens voor [" ;
-    TEXT [ spanish ] = "Los datos para [" ;
-    TEXT [ english_us ] = "Data for [" ;
-    TEXT[ chinese_simplified ] = "ç”¨äº [";
-    TEXT[ russian ] = "Äàííûå äëÿ [";
-    TEXT[ polish ] = "Danych dla [";
-    TEXT[ japanese ] = "[";
-    TEXT[ greek ] = "Ôá äåäïìİíá ãéá [";
-    TEXT[ korean ] = "[";
-    TEXT[ chinese_traditional ] = "ç”¨æ–¼[";
-    TEXT[ arabic ] = "ÈíÇäÇÊ  ] ";
-    TEXT[ turkish ] = "[";
-    TEXT[ catalan ] = "Les dades per a [";
-    TEXT[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸³à¸«à¸£à¸±à¸š [";
-    TEXT[ czech ] = "Data pro [";
-    TEXT[ hebrew ] = "Die Daten zu [";
-    TEXT[ hindi ] = "à¤•à¥‡à¤²à¤¿à¤ à¤¡à¤¼à¥‰à¤Ÿà¤¾  [";
-    TEXT[ slovak ] = "DÃ¡ta pre [";
+    Text[ de ] = "Die Daten zu [" ;
+    Text[ en-US ] = "Data for [" ;
 };
 String STR_DDEERROR_DATA2
 {
-    TEXT = "] können nicht ermittelt werden" ;
-    TEXT [ ENGLISH ] = "] cannot be obtained" ;
-    TEXT [ norwegian ] = "] kan ikke oppnåes" ;
-    TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] não podem ser obtidos" ;
-    TEXT [ portuguese ] = "] não podem ser determinados." ;
-    TEXT [ finnish ] = "] eivät ole saatavilla" ;
-    TEXT [ danish ] = "] kan ikke bestemmes" ;
-    TEXT [ french ] = "] ne peuvent pas être obtenues" ;
-    TEXT [ swedish ] = "] kan inte bestämmas" ;
-    TEXT [ dutch ] = "] onmogelijk" ;
-    TEXT [ spanish ] = "] no pueden ser determinados" ;
-    TEXT [ english_us ] = "] cannot be obtained" ;
-    TEXT[ chinese_simplified ] = "] çš„æ•°æ®æ— æ³•è¢«è¯»å–ã€‚";
-    TEXT[ russian ] = "] ïîëó÷èòü íåâîçìîæíî";
-    TEXT[ polish ] = "] nie mo¿e byæ uzyskany";
-    TEXT[ japanese ] = "] ã®ãƒ‡ãƒ¼ã‚¿ã¯ç¢ºèªã§ãã¾ã›ã‚“";
-    TEXT[ chinese_traditional ] = "] çš„è³‡æ–™ç„¡æ³•è¢«è®€å–ã€‚";
-    TEXT[ arabic ] = "[ ÛíÑ ãÊæİÑÉ";
-    TEXT[ dutch ] = "] onmogelijk";
-    TEXT[ chinese_simplified ] = "] çš„æ•°æ®æ— æ³•è¢«è¯»å–ã€‚";
-    TEXT[ greek ] = "] äåí åßíáé äõíáôüí íá åîáêñéâùèïıí.";
-    TEXT[ korean ] = "] ì˜ ë°ì´í„°ë¥¼ í™•ì¸í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
-    TEXT[ turkish ] = "] ile ilgili veriler alınamıyor";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no es poden obtenir";
-    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹„à¸”à¹‰à¸£à¸±à¸š";
-    TEXT[ czech ] = "] nelze obdrÅ¾et";
-    TEXT[ hebrew ] = "] kÃ¶nnen nicht ermittelt werden";
-    TEXT[ hindi ] = "] à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤² à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ";
-    TEXT[ slovak ] = "] nemoÅ¾no zÃ­skaÅ¥";
+    Text[ de ] = "] können nicht ermittelt werden" ;
+    Text[ en-US ] = "] cannot be obtained" ;
 };
 String STR_DDEERROR_LINK1
 {
-    TEXT = "Die Verknüpfung zu [" ;
-    TEXT [ ENGLISH ] = "Link to [" ;
-    TEXT [ norwegian ] = "Koble til [" ;
-    TEXT [ italian ] = "Collegamento con [" ;
-    TEXT [ portuguese_brazilian ] = "O vinculo para [" ;
-    TEXT [ portuguese ] = "A ligação a [" ;
-    TEXT [ finnish ] = "Linkki [" ;
-    TEXT [ danish ] = "Kæden til [" ;
-    TEXT [ french ] = "Le lien à [" ;
-    TEXT [ swedish ] = "Länk till [" ;
-    TEXT [ dutch ] = "Koppeling naar [" ;
-    TEXT [ spanish ] = "El vínculo con [" ;
-    TEXT [ english_us ] = "Link to [" ;
-    TEXT[ chinese_simplified ] = "æ— æ³•å»ºç«‹ä¸ [";
-    TEXT[ russian ] = "Ññûëêó íà [";
-    TEXT[ polish ] = "£¹cza do [";
-    TEXT[ japanese ] = "[";
-    TEXT[ greek ] = "Ç óıíäåóç ìå [";
-    TEXT[ korean ] = "[";
-    TEXT[ chinese_traditional ] = "é€£çµ [";
-    TEXT[ arabic ] = "ÇáÇÑÊÈÇØ Åáì  ]";
-    TEXT[ turkish ] = "[";
-    TEXT[ catalan ] = "L'enllaç amb [";
-    TEXT[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡ [";
-    TEXT[ czech ] = "Odkaz na [";
-    TEXT[ hebrew ] = "Die VerknÃ¼pfung zu [";
-    TEXT[ hindi ] = "Link to [";
-    TEXT[ slovak ] = "Odkaz na [";
+    Text[ de ]  = "Die Verknüpfung zu [" ;
+    Text[ en-US ] = "Link to [" ;
 };
 String STR_DDEERROR_LINK2
 {
-    TEXT = "] kann nicht eingerichtet werden" ;
-    TEXT [ ENGLISH ] = "] cannot be established" ;
-    TEXT [ norwegian ] = "] kan ikke etableres" ;
-    TEXT [ italian ] = "]" ;
-    TEXT [ portuguese_brazilian ] = "] não pode ser estabelecido" ;
-    TEXT [ portuguese ] = "] não pode ser estabelecido." ;
-    TEXT [ finnish ] = "] ei ole muodostettavissa" ;
-    TEXT [ danish ] = "] kan ikke oprettes" ;
-    TEXT [ french ] = "] ne peut pas être établi" ;
-    TEXT [ swedish ] = "] kan inte etableras" ;
-    TEXT [ dutch ] = "] onmogelijk" ;
-    TEXT [ spanish ] = "] no se puede establecer" ;
-    TEXT [ english_us ] = "] cannot be established" ;
-    TEXT[ chinese_simplified ] = "]çš„é“¾æ¥";
-    TEXT[ russian ] = "] óñòàíîâèòü íåâîçìîæíî";
-    TEXT[ polish ] = "] nie mo¿e byæ ustanowiony";
-    TEXT[ japanese ] = "] ã¸ã®ãƒªãƒ³ã‚¯ã¯ã¤ãã‚Œã¾ã›ã‚“";
-    TEXT[ chinese_traditional ] = "] ç„¡æ³•å»ºç«‹ã€‚";
-    TEXT[ arabic ] = "[ ÛíÑ ŞÇÈá ááÅÚÏÇÏ";
-    TEXT[ dutch ] = "] onmogelijk";
-    TEXT[ chinese_simplified ] = "]çš„é“¾æ¥";
-    TEXT[ greek ] = "] äåí åßíáé äõíáôüí íá ğñáãìáôïğïéçèåß.";
-    TEXT[ korean ] = "] ë¡œì˜ ë§í¬ëŠ” ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤";
-    TEXT[ turkish ] = "] ile ilgili bağlantı oluşturulamıyor";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "] no es pot establir";
-    TEXT[ thai ] = "] à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¹„à¸”à¹‰";
-    TEXT[ czech ] = "] nelze provÃ©st";
-    TEXT[ hebrew ] = "] kann nicht eingerichtet werden";
-    TEXT[ hindi ] = "] à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
-    TEXT[ slovak ] = "] nemoÅ¾no vykonaÅ¥";
+    Text[ de ] = "] kann nicht eingerichtet werden" ;
+    Text[ en-US ] = "] cannot be established" ;
 };
