@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compressedarray.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $  $Date: 2004-10-22 07:57:49 $
+ *  last change: $Author: rt $  $Date: 2005-03-29 13:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,7 +872,7 @@ void ScCoupledCompressedArrayIterator<A,D,S>::InitLimits()
 {
     bool bFound = true;
     bool bMoved = false;
-    while ((*aIter1 & rBitMask) != rMaskedCompare)
+    while (bFound && ((*aIter1 & rBitMask) != rMaskedCompare))
     {
         bFound = aIter1.NextRange();
         bMoved = true;
