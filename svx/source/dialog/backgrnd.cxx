@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 10:31:06 $
+ *  last change: $Author: pb $ $Date: 2002-04-18 04:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,12 +291,35 @@ void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
         if ( pBitmap )
         {
             Size aSize = GetOutputSizePixel();
+            // InnerSize == Size without one pixel border
+            Size aInnerSize = aSize;
+            aInnerSize.Width() -= 2;
+            aInnerSize.Height() -= 2;
             aDrawSize = pBitmap->GetSizePixel();
 
-            if ( aDrawSize.Width() > aSize.Width() )
-                aDrawSize.Width() = aSize.Width();
-            if ( aDrawSize.Height() > aSize.Height() )
-                aDrawSize.Height() = aSize.Height();
+            // bitmap bigger than preview window?
+            if ( aDrawSize.Width() > aInnerSize.Width() )
+            {
+                aDrawSize.Height() = aDrawSize.Height() * aInnerSize.Width() / aDrawSize.Width();
+                if ( aDrawSize.Height() > aInnerSize.Height() )
+                {
+                    aDrawSize.Width() = aDrawSize.Height();
+                    aDrawSize.Height() = aInnerSize.Height();
+                }
+                else
+                    aDrawSize.Width() = aInnerSize.Width();
+            }
+            else if ( aDrawSize.Height() > aInnerSize.Height() )
+            {
+                aDrawSize.Width() = aDrawSize.Width() * aInnerSize.Height() / aDrawSize.Height();
+                if ( aDrawSize.Width() > aInnerSize.Width() )
+                {
+                    aDrawSize.Height() = aDrawSize.Width();
+                    aDrawSize.Width() = aInnerSize.Width();
+                }
+                else
+                    aDrawSize.Height() = aInnerSize.Height();
+            }
 
             aDrawPos.X() = (aSize.Width()  - aDrawSize.Width())  / 2;
             aDrawPos.Y() = (aSize.Height() - aDrawSize.Height()) / 2;
