@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:29:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,11 @@ public:
                                     BYTE    eTableOrQuery = SW_DB_SELECT_UNKNOWN);
 
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
+
+    /**
+     Loads a data source from file and registers it. Returns the registered name.
+     */
+    static String               LoadAndRegisterDataSource();
 
     static SwDbtoolsClient&    GetDbtoolsClient();
     // has to be called from _FinitUI()
