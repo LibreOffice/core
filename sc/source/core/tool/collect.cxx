@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
+ *  last change: $Author: er $ $Date: 2001-08-08 14:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,8 +481,6 @@ BOOL TypedStrCollection::FindText( const String& rStart, String& rResult,
     //  Die Collection ist nach String-Vergleichen sortiert, darum muss hier
     //  alles durchsucht werden
 
-    sal_Int32 nMatch1, nMatch2;
-    xub_StrLen nCmpLen = rStart.Len();
     BOOL bFound = FALSE;
 
     String aOldResult;
