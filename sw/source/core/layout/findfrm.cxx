@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:08:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,21 +232,6 @@ const SwFrm *SwLayoutFrm::ContainsAny() const
             // Wir liefern jetzt auch "geloeschte" SectionFrms zurueck,
             // damit diese beim SaveCntnt und RestoreCntnt mitgepflegt werden.
             return pLayLeaf;
-#ifdef USED
-            const SwCntntFrm *pCnt = pLayLeaf->ContainsCntnt();
-            if( pCnt )
-                return pLayLeaf;
-            if( pLayLeaf->GetNext() )
-            {
-                if( pLayLeaf->GetNext()->IsLayoutFrm() )
-                {
-                    pLayLeaf = (SwLayoutFrm*)pLayLeaf->GetNext();
-                    continue;
-                }
-                else
-                    return (SwCntntFrm*)pLayLeaf->GetNext();
-            }
-#endif
         }
         else if ( pLayLeaf->Lower() )
             return (SwCntntFrm*)pLayLeaf->Lower();
@@ -620,18 +605,6 @@ SwSectionFrm* SwFrm::ImplFindSctFrm()
     return (SwSectionFrm*)pRet;
 }
 
-SwSectionFrm* SwFrm::ImplFindTopSctFrm()
-{
-    SwFrm *pRet = 0;
-    SwFrm *pTmp = this;
-    do
-    {   if( pTmp->IsSctFrm() )
-            pRet = pTmp;
-       pTmp = pTmp->GetUpper();
-    } while ( pTmp && pTmp->IsInSct() );
-    return (SwSectionFrm*)pRet;
-}
-
 SwFtnFrm *SwFrm::ImplFindFtnFrm()
 {
     SwFrm *pRet = this;
@@ -688,14 +661,6 @@ const SwFtnFrm* SwFtnContFrm::FindFootNote() const
     if( pRet && !pRet->GetAttr()->GetFtn().IsEndNote() )
         return pRet;
     return NULL;
-}
-
-const SwFtnFrm* SwFtnContFrm::FindEndNote() const
-{
-    const SwFtnFrm* pRet = (SwFtnFrm*)Lower();
-    while( pRet && !pRet->GetAttr()->GetFtn().IsEndNote() )
-        pRet = (SwFtnFrm*)pRet->GetNext();
-    return pRet;
 }
 
 BOOL SwRootFrm::IsPageAtPos( const Point &rPt ) const
