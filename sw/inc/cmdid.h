@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:00:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,23 @@
  *
  *
  ************************************************************************/
+
 /******************************************************************************
 Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
          erlaubt, da es von swicli.c included wird!
 ******************************************************************************/
+
+#ifndef INCLUDED_SW_CMDID_H
+#define INCLUDED_SW_CMDID_H
+
 #ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
 #endif
 
+#ifndef SW_UNOMID_H
 #include <unomid.h>
+#endif
+
 /* Flags die mittels des Disable-Features in den Slot-Definitionen ausgenutzt
  * werden */
 #define SW_DISABLE_ON_PROTECTED_CURSOR  0x00000001
@@ -1269,3 +1277,4 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define MAC_EVENT_IMAGE_ABORT       0x0a            //
 #define MAC_EVENT_IMAGE_ERROR       0x0b            //
 
+#endif /* INCLUDED_SW_CMDID_H */
