@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:21:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:36:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,15 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
 
 using namespace osl;
@@ -126,6 +134,22 @@ ResId padmin::PaResId( ULONG nId )
     if( ! pPaResMgr )
     {
         LanguageType nLang = LANGUAGE_SYSTEM;
+
+        utl::OConfigurationNode aNode =
+            utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+                    vcl::unohelper::GetMultiServiceFactory(),
+                    OUString::createFromAscii( "org.openoffice.Setup/L10N" ) );
+        if ( aNode.isValid() )
+        {
+            rtl::OUString aLoc;
+            Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
+            if( aValue >>= aLoc )
+            {
+                LanguageType nTmpLang = ConvertIsoStringToLanguage( aLoc );
+                if( nTmpLang != LANGUAGE_DONTKNOW )
+                    nLang = nTmpLang;
+            }
+        }
         pPaResMgr = ResMgr::SearchCreateResMgr( "spa" MAKE_NUMSTR(SUPD), nLang );
         AllSettings aSettings = Application::GetSettings();
         aSettings.SetUILanguage( nLang );
