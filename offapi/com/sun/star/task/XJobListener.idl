@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJobListener.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-14 09:48:16 $
+ *  last change: $Author: fs $ $Date: 2001-09-25 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@ interface XJobListener : com::sun::star::lang::XEventListener
 {
     /** indicates that the job is done.
     */
-    void    jobDone( [in] XAsyncJob xJob );
+    void    jobDone( [in] XAsyncJob xJob, [in] any aResult );
 
     /** indicates that the job has been cancelled.
     */
-    void    jobCancelled( [in] XAsyncJob xJob );
+    void    jobAborted( [in] XAsyncJob xJob, [in] any aReason );
 };
 
 //.............................................................................
@@ -92,6 +92,9 @@ interface XJobListener : com::sun::star::lang::XEventListener
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/09/14 09:48:16  fs
+ *  initial checkin - specification for a listener to an asynchronous job
+ *
  *
  *  Revision 1.0 13.09.01 17:03:45  fs
  ************************************************************************/
