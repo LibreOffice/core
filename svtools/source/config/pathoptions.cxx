@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-09 11:56:28 $
+ *  last change: $Author: mba $ $Date: 2001-04-11 09:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,6 @@ private:
     const String&   GetPath( StrPtr pPtr );
     void            SetPath( StrPtr pPtr, const String& rNewPath );
 
-    rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
     rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
 
 public:
@@ -287,6 +286,7 @@ public:
     void            SetWorkPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aWorkPath, rPath ); }
 
     rtl::OUString   SubstVar( const rtl::OUString& rVar );
+    rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
 };
 
 // global ----------------------------------------------------------------
@@ -760,10 +760,6 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         }
     }
 
-    // Return text with replaced substrings.
-    OUString aSysPath;
-    if ( FileBase::getSystemPathFromNormalizedPath( aWorkText, aSysPath ) == FileBase::E_None )
-        aWorkText = aSysPath;
     return aWorkText;
 }
 
@@ -790,7 +786,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
         if ( !m_aInstURL.Len() )
         {
             FileBase::getFileURLFromNormalizedPath( m_aInstPath, aTmp );
-            m_aInstURL = aTmp;
+            INetURLObject aObj( aTmp );
+            m_aInstURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
     }
     else
@@ -813,7 +810,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
         if ( !m_aUserURL.Len() )
         {
             FileBase::getFileURLFromNormalizedPath( m_aUserPath, aTmp );
-            m_aUserURL = aTmp;
+            INetURLObject aObj( aTmp );
+            m_aUserURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
         }
     }
     else
@@ -827,7 +825,8 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
     {
         m_aProgPath = aProgName.copy( 0, lastIndex );
         FileBase::getFileURLFromNormalizedPath( m_aProgPath, aTmp );
-        m_aProgURL = aTmp;
+        INetURLObject aObj( aTmp );
+        m_aProgURL = aObj.GetMainURL(INetURLObject::NO_DECODE);
     }
 
     m_eLanguageType = LANGUAGE_ENGLISH_US;
@@ -859,7 +858,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                     {
                         // multi pathes
                         if ( pValues[nProp] >>= aTempStr )
-                            aFullPath = SubstVar( aTempStr );
+                            aFullPath = SubstituteAndConvert( aTempStr );
                         else
                         {
                             DBG_ERRORFILE( "any operator >>= failed" );
@@ -877,7 +876,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                             sal_Int32 nCount = aList.getLength();
                             for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
                             {
-                                aTempStr = SubstVar( aList[ nPosition ] );
+                                aTempStr = SubstituteAndConvert( aList[ nPosition ] );
                                 aFullPath += aTempStr;
                                 if ( nPosition < nCount-1 )
                                     aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
@@ -1405,7 +1404,7 @@ void SvtPathOptions::SetWorkPath( const String& rPath )
 
 String SvtPathOptions::SubstituteVariable( const String& rVar )
 {
-    String aRet = pImp->SubstVar( rVar );
+    String aRet = pImp->SubstituteAndConvert( rVar );
     return aRet;
 }
 
@@ -1420,7 +1419,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
         return sal_False;
     }
 
-    String aIniFile = SubstituteVariable( rIniFile );
+    String aIniFile = pImp->SubstVar( rIniFile );
     sal_Bool bRet = sal_False;
 
     switch ( ePath )
