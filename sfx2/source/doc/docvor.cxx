@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-18 11:06:00 $
+ *  last change: $Author: dv $ $Date: 2001-07-12 07:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2061,39 +2061,6 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 */
 {
-#ifdef DONT_USE_FILE_DIALOG_SERVICE
-    SfxFileDialog *pFileDlg = new SfxFileDialog( pDialog, WB_OPEN );
-    const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
-    USHORT nMax = rFact.GetFilterCount();
-    for ( USHORT i = 0; i < nMax; ++i )
-    {
-        const SfxFilter* pFilter = rFact.GetFilter(i);
-        if ( pFilter->IsInternal() )
-            continue;
-        BOOL bIsImpFilter = pFilter->CanImport();
-        if (bIsImpFilter && pFilter->IsAllowedAsTemplate())
-        {
-            pFileDlg->AddFilter(
-                pFilter->GetUIName(), pFilter->GetWildcard()(),
-                pFilter->GetTypeName() );
-        }
-    }
-    pFileDlg->AddFilter( String(SfxResId(RID_STR_FILTCONFIG)), DEFINE_CONST_UNICODE( "*.cfg" ) );
-    pFileDlg->AddFilter( String(SfxResId(RID_STR_FILTBASIC)), DEFINE_CONST_UNICODE( "*.sbl" ) );
-
-    if ( aLastDir.Len() )
-        pFileDlg->SetPath( aLastDir );
-    if ( RET_OK == pFileDlg->Execute() )
-    {
-        String aPath = pFileDlg->GetPath();
-        aMgr.InsertFile( pFocusBox, aPath );
-        INetURLObject aObj( aPath );
-        aObj.removeSegment();
-        aObj.setFinalSlash();
-        aLastDir = aObj.GetMainURL();
-    }
-    delete pFileDlg;
-#else
     sfx2::FileDialogHelper aFileDlg( WB_OPEN );
 
     const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
@@ -2123,7 +2090,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
         aObj.setFinalSlash();
         aLastDir = aObj.GetMainURL();
     }
-#endif
+
     return 0;
 }
 
