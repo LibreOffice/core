@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:08:09 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "OutlineViewShell.hxx"
+
 #include "app.hrc"
 #define ITEMID_HYPERLINK    SID_HYPERLINK_SETLINK
 #ifndef _SVX_HLNKITEM_HXX
@@ -102,30 +104,76 @@
 #include "optsitem.hxx"
 #endif
 
-#include "sdoutl.hxx"
-#include "sdwindow.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_FU_BULLET_HXX
 #include "fubullet.hxx"
+#endif
+#ifndef SD_FU_OUTLINE_BULLET_HXX
 #include "fuolbull.hxx"
-#include "frmview.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_FU_ZOOM_HXX
 #include "fuzoom.hxx"
+#endif
+#ifndef SD_FU_SCALE_HXX
 #include "fuscale.hxx"
+#endif
+#ifndef SD_FU_CHAR_HXX
 #include "fuchar.hxx"
+#endif
+#ifndef SD_FU_INSERT_FILE_HXX
 #include "fuinsfil.hxx"
+#endif
+#ifndef SD_FU_PRESENTATION_OBJECTS_HXX
 #include "fuprobjs.hxx"
+#endif
+#ifndef SD_FU_THESAURUS_HXX
 #include "futhes.hxx"
+#endif
+#ifndef SD_FU_TEMPLATE_HXX
 #include "futempl.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
 #include "fusldlg.hxx"
+#endif
 #include "zoomlist.hxx"
-#include "prevchld.hxx"
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_FU_EXPAND_PAGE_HXX
 #include "fuexpand.hxx"
+#endif
+#ifndef SD_FU_SUMMARY_PAGE_HXX
 #include "fusumry.hxx"
+#endif
+#ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
 #include "fucushow.hxx"
+#endif
 #include "dlgfield.hxx"
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
-#include "preview.hxx"
-#include "presvish.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
+#endif
+
+namespace sd {
+
 
 /************************************************************************/
 
@@ -135,7 +183,7 @@
 |*
 \************************************************************************/
 
-void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
+void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 {
     if (pFuActual)
     {
@@ -189,7 +237,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             else
             {
                 // hier den Zoom-Dialog oeffnen
-                pFuActual = new FuScale( this, pWindow, pOlView, pDoc, rReq );
+                pFuActual = new FuScale( this, pWindow, pOlView, GetDoc(), rReq );
             }
             Cancel();
         }
@@ -197,7 +245,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_ZOOM_OUT:
         {
-            pFuActual = new FuZoom(this, pWindow, pOlView, pDoc, rReq);
+            pFuActual = new FuZoom(this, pWindow, pOlView, GetDoc(), rReq);
             // Beendet sich selbst, kein Cancel() notwendig!
             rReq.Done();
         }
@@ -263,7 +311,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_OUTLINE_FORMAT:
         {
-            Outliner* pOutl = pOutlinerView->GetOutliner();
+            ::Outliner* pOutl = pOutlinerView->GetOutliner();
             pOutl->SetFlatMode( !pOutl->IsFlatMode() );
             Invalidate( SID_COLORVIEW );
             Cancel();
@@ -273,21 +321,21 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_BULLET:
         {
-            pFuActual = new FuBullet( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuBullet( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_OUTLINE_BULLET:
         {
-            pFuActual = new FuOutlineBullet( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuOutlineBullet( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_THESAURUS:
         {
-            pFuActual = new FuThesaurus( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuThesaurus( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
             rReq.Ignore ();
         }
@@ -295,28 +343,28 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_CHAR_DLG:
         {
-            pFuActual = new FuChar( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuChar( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_INSERTFILE:
         {
-            pFuActual = new FuInsertFile(this, pWindow, pOlView, pDoc, rReq);
+            pFuActual = new FuInsertFile(this, pWindow, pOlView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_PRESENTATIONOBJECT:
         {
-            pFuActual = new FuPresentationObjects(this, pWindow, pOlView, pDoc, rReq);
+            pFuActual = new FuPresentationObjects(this, pWindow, pOlView, GetDoc(), rReq);
             Cancel();
         }
         break;
 
         case SID_SELECTALL:
         {
-            Outliner* pOutl = pOlView->GetOutliner();
+            ::Outliner* pOutl = pOlView->GetOutliner();
             ULONG nParaCount = pOutl->GetParagraphCount();
             if (nParaCount > 0)
             {
@@ -331,19 +379,26 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             pOlView->PrepareClose();
 
             SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
+            const BOOL bFullScreen = pFullScreen ? pFullScreen->GetValue() : GetDoc()->GetPresFullScreen();
 
             if( bFullScreen )
             {
-                SdPresViewShell::CreateFullScreenShow( this, rReq );
+                PresentationViewShell::CreateFullScreenShow( this, rReq );
                 Cancel();
             }
             else
             {
-                pFrameView->SetPresentationViewShellId( SID_VIEWSHELL2 );
-                pFrameView->SetSlotId( SID_PRESENTATION );
-                pFrameView->SetPageKind( PK_STANDARD );
-                GetViewFrame()->GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_ASYNCHRON );
+                pFrameView->SetPresentationViewShellId (SID_VIEWSHELL2);
+                pFrameView->SetSlotId (SID_PRESENTATION);
+                pFrameView->SetPageKind (PK_STANDARD);
+                pFrameView->SetPreviousViewShellType (GetShellType());
+
+                // Switch to an Impress view shell which shows the
+                // presentation in a window.  Switching to a presentation
+                // view shell is an error here, because this would not
+                // return to us (re-create us).
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_IMPRESS);
             }
 
             rReq.Done();
@@ -352,7 +407,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_COLORVIEW:
         {
-            Outliner* pOutl = pOutlinerView->GetOutliner();
+            ::Outliner* pOutl = pOutlinerView->GetOutliner();
             ULONG nCntrl = pOutl->GetControlWord();
 
             if ( !(nCntrl & EE_CNTRL_NOCOLORS) )
@@ -383,7 +438,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
             }
             else
             {
-                USHORT nId = SdPreviewChildWindow::GetChildWindowId();
+                USHORT nId = PreviewChildWindow::GetChildWindowId();
                 bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
             }
 
@@ -502,10 +557,10 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
                 case SID_INSERT_FLD_FILE:
                 {
                     String aName;
-                    if( pDocSh->HasName() )
-                        aName = pDocSh->GetMedium()->GetName();
+                    if( GetDocSh()->HasName() )
+                        aName = GetDocSh()->GetMedium()->GetName();
                     //else
-                    //  aName = pDocSh->GetName();
+                    //  aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ) );
                 }
                 break;
@@ -580,7 +635,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
                     {
                         pOutlinerView->SetAttribs( aSet );
 
-                        Outliner* pOutliner = pOutlinerView->GetOutliner();
+                        ::Outliner* pOutliner = pOutlinerView->GetOutliner();
                         if( pOutliner )
                             pOutliner->UpdateFields();
                     }
@@ -597,7 +652,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
         {
             if( rReq.GetArgs() )
             {
-                pFuActual = new FuTemplate( this, pWindow, pOlView, pDoc, rReq );
+                pFuActual = new FuTemplate( this, pWindow, pOlView, GetDoc(), rReq );
                 Cancel();
             }
 
@@ -607,14 +662,14 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            pFuActual = new FuSlideShowDlg( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuSlideShowDlg( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            pFuActual = new FuCustomShowDlg( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuCustomShowDlg( this, pWindow, pOlView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -622,7 +677,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_SUMMARY_PAGE:
         {
             pOlView->SetSelectedPages();
-            pFuActual = new FuSummaryPage( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuSummaryPage( this, pWindow, pOlView, GetDoc(), rReq );
             pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
@@ -633,7 +688,7 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_EXPAND_PAGE:
         {
             pOlView->SetSelectedPages();
-            pFuActual = new FuExpandPage( this, pWindow, pOlView, pDoc, rReq );
+            pFuActual = new FuExpandPage( this, pWindow, pOlView, GetDoc(), rReq );
             pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
@@ -665,4 +720,4 @@ void SdOutlineViewShell::FuTemporary(SfxRequest &rReq)
     Invalidate(SID_PASTE);
 }
 
-
+} // end of namespace sd
