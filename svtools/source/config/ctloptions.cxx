@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:03:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -106,8 +109,6 @@ using namespace ::com::sun::star::uno;
 class SvtCTLOptions_Impl : public utl::ConfigItem, public SfxBroadcaster
 {
 private:
-    static Sequence< rtl::OUString > m_aPropertyNames;
-
     sal_Bool                        m_bIsLoaded;
     sal_Bool                        m_bCTLFontEnabled;
     sal_Bool                        m_bCTLSequenceChecking;
@@ -145,7 +146,11 @@ public:
     sal_Bool        IsReadOnly(SvtCTLOptions::EOption eOption) const;
 };
 //------------------------------------------------------------------------------
-Sequence< rtl::OUString > SvtCTLOptions_Impl::m_aPropertyNames;
+namespace
+{
+    struct PropertyNames
+        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames > {};
+}
 //------------------------------------------------------------------------------
 sal_Bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
 {
@@ -191,8 +196,9 @@ void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& aPropertyNames
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Commit()
 {
-    rtl::OUString* pOrgNames = m_aPropertyNames.getArray();
-    sal_Int32 nOrgCount = m_aPropertyNames.getLength();
+    Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
+    rtl::OUString* pOrgNames = rPropertyNames.getArray();
+    sal_Int32 nOrgCount = rPropertyNames.getLength();
 
     Sequence< rtl::OUString > aNames( nOrgCount );
     Sequence< Any > aValues( nOrgCount );
@@ -261,28 +267,29 @@ void SvtCTLOptions_Impl::Commit()
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Load()
 {
-    if ( !m_aPropertyNames.getLength() )
+    Sequence< rtl::OUString >& rPropertyNames = PropertyNames::get();
+    if ( !rPropertyNames.getLength() )
     {
-        m_aPropertyNames.realloc(4);
-        rtl::OUString* pNames = m_aPropertyNames.getArray();
+        rPropertyNames.realloc(4);
+        rtl::OUString* pNames = rPropertyNames.getArray();
         pNames[0] = ASCII_STR("CTLFont");
         pNames[1] = ASCII_STR("CTLSequenceChecking");
         pNames[2] = ASCII_STR("CTLCursorMovement");
         pNames[3] = ASCII_STR("CTLTextNumerals");
-        EnableNotification( m_aPropertyNames );
+        EnableNotification( rPropertyNames );
     }
-    Sequence< Any > aValues = GetProperties( m_aPropertyNames );
-    Sequence< sal_Bool > aROStates = GetReadOnlyStates( m_aPropertyNames );
+    Sequence< Any > aValues = GetProperties( rPropertyNames );
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates( rPropertyNames );
     const Any* pValues = aValues.getConstArray();
     const sal_Bool* pROStates = aROStates.getConstArray();
-    DBG_ASSERT( aValues.getLength() == m_aPropertyNames.getLength(), "GetProperties failed" );
-    DBG_ASSERT( aROStates.getLength() == m_aPropertyNames.getLength(), "GetReadOnlyStates failed" );
-    if ( aValues.getLength() == m_aPropertyNames.getLength() && aROStates.getLength() == m_aPropertyNames.getLength() )
+    DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
+    DBG_ASSERT( aROStates.getLength() == rPropertyNames.getLength(), "GetReadOnlyStates failed" );
+    if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )
     {
         sal_Bool bValue = sal_False;
         sal_Int32 nValue = 0;
 
-        for ( int nProp = 0; nProp < m_aPropertyNames.getLength(); nProp++ )
+        for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
             if ( pValues[nProp].hasValue() )
             {
@@ -353,14 +360,14 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
 
 static SvtCTLOptions_Impl*  pCTLOptions = NULL;
 static sal_Int32            nCTLRefCount = 0;
-static ::osl::Mutex         aCTLMutex;
+namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
 
 // class SvtCTLOptions --------------------------------------------------
 
 SvtCTLOptions::SvtCTLOptions( sal_Bool bDontLoad )
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aCTLMutex );
+    ::osl::MutexGuard aGuard( CTLMutex::get() );
     if ( !pCTLOptions )
         pCTLOptions = new SvtCTLOptions_Impl;
     if( !bDontLoad && !pCTLOptions->IsLoaded() )
@@ -376,7 +383,7 @@ SvtCTLOptions::SvtCTLOptions( sal_Bool bDontLoad )
 SvtCTLOptions::~SvtCTLOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aCTLMutex );
+    ::osl::MutexGuard aGuard( CTLMutex::get() );
 
     if ( !--nCTLRefCount )
         DELETEZ( pCTLOptions );
