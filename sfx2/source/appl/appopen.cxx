@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:25:21 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,47 @@ void SAL_CALL SfxOpenDocStatusListener_Impl::statusChanged( const FeatureStateEv
 void SAL_CALL SfxOpenDocStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
 }
+
+ErrCode FileOpenDialog_Impl
+(
+    sal_uInt32              nFlags,
+    const SfxObjectFactory& rFact,
+    SvStringsDtor*&         rpURLList,
+    String&                 rFilter,
+    SfxItemSet *&           rpSet,
+    String                  aPath
+)
+{
+    SfxApplication* pApp = SFX_APP();
+    const SfxFilter* pFilt = pApp->GetFilterMatcher().GetDefaultFilter();
+    if( pFilt )
+        rFilter = pFilt->GetName();
+
+    SfxFileDialog* pDlg = pApp->CreateDocFileDialog( nFlags ?  nFlags : WB_OPEN | WB_3DLOOK, rFact );
+    if ( aPath.Len() )
+        pDlg->SetPath( aPath );
+
+    const short nRet = pDlg->Execute();
+    if ( nRet == RET_OK )
+    {
+        rFilter = pDlg->GetCurFilter();
+        rpSet = new SfxAllItemSet( *pDlg->GetItemSet() );
+        if ( SFXWB_INSERT == (nFlags & SFXWB_INSERT) )
+            rpSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+        sal_Bool bActivate = sal_False;
+        rFilter = pDlg->GetCurFilter();
+        rpURLList = pDlg->GetPathList();
+        delete pDlg;
+        return ERRCODE_NONE;
+    }
+    else
+    {
+        delete pDlg;
+        return ERRCODE_ABORT;
+    }
+}
+
+
 
 SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 (
@@ -549,7 +590,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
         SvStringsDtor* pURLList = NULL;
         String aFilter;
         SfxItemSet* pSet;
-        ErrCode nErr = FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet );
+        ErrCode nErr = FileOpenDialog_Impl( nFlags | SFXWB_INSERT | WB_3DLOOK, rFact, pURLList, aFilter, pSet, String() );
         if( !nErr )
         {
             DBG_ASSERT( pURLList, "invalid URLList" );
@@ -1104,8 +1145,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         String aFilter;
         void* pDummy = 0; // wegen GCC und C272
         SfxItemSet* pSet;
+        String aPath;
+        if ( nSID == SID_OPENTEMPLATE )
+        {
+            aPath = GetIniManager()->Get( SFX_KEY_TEMPLATE_PATH );
+            aPath = aPath.GetToken(0,';');
+        }
+
         ULONG nErr = FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, *(SfxObjectFactory*)pDummy, pURLList, aFilter, pSet );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, *(SfxObjectFactory*)pDummy, pURLList, aFilter, pSet, aPath );
         if ( nErr == ERRCODE_ABORT )
         {
             delete pURLList;

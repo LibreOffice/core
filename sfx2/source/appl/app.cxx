@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:35:49 $
+ *  last change: $Author: mba $ $Date: 2000-10-19 17:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,7 +857,9 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         pViewFrame = pFrame;
 
         // Jetzt ist der ViewFrame gesetzt, das TopWindow kann abgefragt werden
-        Application::SetDefDialogParent( pViewFrame ? GetWorkWindow_Impl(pViewFrame)->GetTopWindow() : NULL );
+        SfxWorkWindow* pWork = pViewFrame ? pViewFrame->GetFrame()->GetWorkWindow_Impl() : NULL;
+        Window* pWin = pWork ? pWork->GetTopWindow() : NULL;
+        Application::SetDefDialogParent( pWin );
 
         const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
         if ( !pSh )
@@ -998,47 +1000,6 @@ sal_uInt32 SfxApplication::DetectFilter(
 }
 
 
-
-//--------------------------------------------------------------------
-
-ErrCode SfxApplication::FileOpenDialog_Impl
-(
-    sal_uInt32                   nFlags,
-    const SfxObjectFactory& rFact,
-    SvStringsDtor*&         rpURLList,
-    String&                 rFilter,
-    SfxItemSet *&           rpSet,
-    sal_Bool*                   pConvert
-)
-{
-    const SfxFilter* pFilt = GetFilterMatcher().GetDefaultFilter();
-    if( pFilt )
-        rFilter = pFilt->GetName();
-
-    SfxViewFrame *pFrame = SfxViewFrame::Current();
-    while ( pFrame->GetParentViewFrame_Impl() )
-        pFrame = pFrame->GetParentViewFrame_Impl();
-
-    SfxFileDialog* pDlg = CreateDocFileDialog( nFlags ?  nFlags : WB_OPEN | WB_3DLOOK, rFact );
-    const short nRet = pDlg->Execute();
-    if ( nRet == RET_OK )
-    {
-        rFilter = pDlg->GetCurFilter();
-        rpSet = new SfxAllItemSet( *pDlg->GetItemSet() );
-        if ( SFXWB_INSERT == (nFlags & SFXWB_INSERT) )
-            rpSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-        sal_Bool bActivate = sal_False;
-        rFilter = pDlg->GetCurFilter();
-        rpURLList = pDlg->GetPathList();
-        delete pDlg;
-        return ERRCODE_NONE;
-    }
-    else
-    {
-        delete pDlg;
-        return ERRCODE_ABORT;
-    }
-}
 
 //--------------------------------------------------------------------
 
