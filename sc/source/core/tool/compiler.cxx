@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-05-02 14:14:36 $
+ *  last change: $Author: er $ $Date: 2001-05-17 12:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <unotools/collatorwrapper.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 #include <ctype.h>
 #include <stdio.h>
@@ -3362,10 +3365,19 @@ ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
         case svDouble:
         {
             String aStr;
-            ULONG nIndex = ( pSymbolTable == pSymbolTableEnglish ?
-                pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US ) : 0 );
-            pDoc->GetFormatTable()->
-                    GetInputLineString(t->GetDouble(),nIndex,aStr);
+            if ( pSymbolTable == pSymbolTableEnglish )
+            {   // Don't go via number formatter, slows down XML export
+                // significantly because on every formula the number formatter
+                // has to switch to/from English/native language.
+                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
+                    '.', TRUE );
+            }
+            else
+            {
+                SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
+                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                    TRUE );
+            }
             rFormula += aStr;
         }
         break;
