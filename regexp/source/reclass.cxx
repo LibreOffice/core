@@ -108,13 +108,7 @@
 #  ifdef __GNUC__
 #   define alloca __builtin_alloca
 #  else /* not __GNUC__ */
-#   if defined( FREEBSD )
-#    include <stdlib.h>
-#   elif defined( WNT )
-#    include <malloc.h>
-#   else
-#    include <alloca.h>
-#   endif /* HAVE_ALLOCA_H */
+#   include <sal/alloca.h>
 #  endif /* not __GNUC__ */
 
 # endif /* not alloca */
