@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:49:46 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 16:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/08/07 14:49:46  kz
+ *  Merge SRC638: 08/07/01 - 16:49:49
+ *
  *  Revision 1.30  2001/07/13 20:46:08  kz
  *  Merge SRC638: 13.07.01 - 22:45:06
  *
@@ -355,6 +358,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
