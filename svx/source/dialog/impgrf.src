@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:45:30 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "The directory '" ;
         Text [ norwegian ] = "The directory '" ;
         Text [ italian ] = "La cartella '" ;
-        Text [ portuguese_brazilian ] = "O diretÛrio" ;
+        Text [ portuguese_brazilian ] = "O diret?io" ;
         Text [ portuguese ] = "O directÛrio '" ;
         Text [ finnish ] = "Hakemisto '" ;
         Text [ danish ] = "Biblioteket '" ;
@@ -179,7 +179,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "' does not exist." ;
         Text [ norwegian ] = "' does not exist." ;
         Text [ italian ] = "' non esiste." ;
-        Text [ portuguese_brazilian ] = "' n„o existe." ;
+        Text [ portuguese_brazilian ] = "' n?o existe." ;
         Text [ portuguese ] = "' n„o existe." ;
         Text [ finnish ] = "' ei ole" ;
         Text [ danish ] = "' findes ikke." ;
@@ -222,7 +222,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Can't open graphic file" ;
         TEXT [ norwegian ] = "Can't open graphic file" ;
         TEXT [ italian ] = "Impossibile aprire il file grafico" ;
-        TEXT [ portuguese_brazilian ] = "N„o consigo abrir arquivo gr·fico" ;
+        TEXT [ portuguese_brazilian ] = "N?o consigo abrir arquivo gr?fico" ;
         TEXT [ portuguese ] = "ImpossÌvel abrir ficheiro gr·fico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
         TEXT [ danish ] = "Det er ikke muligt at Âbne grafikfilen" ;
@@ -249,7 +249,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Can't read graphic file" ;
         TEXT [ norwegian ] = "Can't read graphic file" ;
         TEXT [ italian ] = "Impossibile leggere il file grafico" ;
-        TEXT [ portuguese_brazilian ] = "N„o consigo ler arquivo gr·fico" ;
+        TEXT [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
         TEXT [ portuguese ] = "ImpossÌvel ler ficheiro gr·fico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
         TEXT [ danish ] = "Det er ikke muligt at lÊse grafikfilen" ;
@@ -276,7 +276,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Unknown graphic format" ;
         TEXT [ norwegian ] = "Unknown graphic format" ;
         TEXT [ italian ] = "Formato grafico sconosciuto" ;
-        TEXT [ portuguese_brazilian ] = "Formato gr·fico desconhecido" ;
+        TEXT [ portuguese_brazilian ] = "Formato gr?fico desconhecido" ;
         TEXT [ portuguese ] = "Formato gr·fico desconhecido" ;
         TEXT [ finnish ] = "Tuntematon grafiikkamuoto" ;
         TEXT [ danish ] = "Ukendt grafikformat" ;
@@ -303,7 +303,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Version of graphic file not supported" ;
         TEXT [ norwegian ] = "Version of graphic file not supported" ;
         TEXT [ italian ] = "Versione del file grafico non supportata" ;
-        TEXT [ portuguese_brazilian ] = "Vers„o de arquivo gr·fico n„o suportada" ;
+        TEXT [ portuguese_brazilian ] = "Vers?o de arquivo gr?fico n?o suportada" ;
         TEXT [ portuguese ] = "Vers„o do ficheiro gr·fico n„o tem suporte" ;
         TEXT [ finnish ] = "Grafiikkatiedoston versiota ei tueta" ;
         TEXT [ danish ] = "Grafikfilens version underst¯ttes ikke" ;
@@ -330,7 +330,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Graphic filter not found" ;
         TEXT [ norwegian ] = "Graphic filter not found" ;
         TEXT [ italian ] = "Filtro grafico non trovato" ;
-        TEXT [ portuguese_brazilian ] = "Filtro gr·fico n„o encontrado" ;
+        TEXT [ portuguese_brazilian ] = "Filtro gr?fico n?o encontrado" ;
         TEXT [ portuguese ] = "Filtro gr·fico n„o encontrado" ;
         TEXT [ finnish ] = "Grafiikkasuodatinta ei lˆytynyt" ;
         TEXT [ danish ] = "Grafikfilter blev ikke fundet" ;
@@ -357,7 +357,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Not enough memory to insert graphic" ;
         TEXT [ norwegian ] = "Not enough memory to insert graphic" ;
         TEXT [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
-        TEXT [ portuguese_brazilian ] = "MemÛria insuficiente para inserir o gr·fico" ;
+        TEXT [ portuguese_brazilian ] = "Mem?ia insuficiente para inserir o gr?fico" ;
         TEXT [ portuguese ] = "MemÛria insuficiente para inserir a imagem." ;
         TEXT [ finnish ] = "Muisti ei riit‰ kuvan lis‰‰miseen" ;
         TEXT [ danish ] = "Ikke tilstrÊkkelig hukommelse til at indsÊtte grafik" ;
@@ -395,7 +395,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "~Properties..." ;
         Text[ chinese_simplified ] = " Ù–‘(~P)...";
         Text[ russian ] = "—‚ÓÈÒÚ‚‡...";
-        Text[ polish ] = "W≥aúciwoúci...";
+        Text[ polish ] = "W≥a?ciwo?ci...";
         Text[ japanese ] = "Ãﬂ€ ﬂ√®(~P)...";
         Text[ chinese_traditional ] = "ƒ›© (~P)...";
         Text[ arabic ] = "Œ’«∆’...";
@@ -422,7 +422,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "Standard" ;
         Text[ chinese_simplified ] = "±Í◊º(~O)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "Domyúlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "ïWèÄ(~O)";
         Text[ chinese_traditional ] = "º–∑«(~O)";
         Text[ arabic ] = "ﬁÌ«”Ì";
@@ -438,7 +438,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "~Link" ;
         Text [ norwegian ] = "~Link" ;
         Text [ italian ] = "~Collega" ;
-        Text [ portuguese_brazilian ] = "~LigaÁ„o" ;
+        Text [ portuguese_brazilian ] = "~Liga??o" ;
         Text [ portuguese ] = "~Ligar" ;
         Text [ finnish ] = "~Linkit‰" ;
         Text [ danish ] = "KÊd" ;
