@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 11:45:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-12 13:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,24 +1036,28 @@ namespace dbaui
 
                 // initial selection
                 String sType = m_aConnection.GetText();
-                for (sal_Int32 nPos = 0; nPos < s_nTypes && sType != String(sAddressBookTypes[nPos]); ++nPos)
+                sal_Int32 nOldPos = 0;
+                for (; nOldPos < s_nTypes && sType != String(sAddressBookTypes[nOldPos]); ++nOldPos)
                     ;
-                if (nPos < s_nTypes)
-                    aSelector.Select(sAddressBookTypesTrans[nPos]);
+                if (nOldPos < s_nTypes)
+                    aSelector.Select(sAddressBookTypesTrans[nOldPos]);
 
                 if (RET_OK == aSelector.Execute())
                 {
                     String sType = aSelector.GetSelected();
-                    sal_Int32 nPos=0;
-                    for(;nPos < s_nTypes && sType != sAddressBookTypesTrans[nPos];++nPos)
+                    sal_Int32 nNewPos=0;
+                    for(;nNewPos < s_nTypes && sType != sAddressBookTypesTrans[nNewPos];++nNewPos)
                         ;
-                    m_aConnection.SetText(sAddressBookTypes[nPos]);
-                    if(nPos == 2)
-                        m_pAdminDialog->addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
-                    else
-                        m_pAdminDialog->removeDetailPages();
+                    if(nOldPos != nNewPos)
+                    {
+                        m_aConnection.SetText(sAddressBookTypes[nNewPos]);
+                        if(nNewPos == 2)
+                            m_pAdminDialog->addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
+                        else
+                            m_pAdminDialog->removeDetailPages();
 
-                    callModifiedHdl();
+                        callModifiedHdl();
+                    }
                 }
             }
             break;
@@ -1174,6 +1178,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/07/09 11:45:43  oj
+ *  #89383# ask for directory not displaydir
+ *
  *  Revision 1.11  2001/06/20 13:45:26  fs
  *  #88447# call Select when browsing for an address book
  *
