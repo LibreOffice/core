@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-20 08:50:05 $
+ *  last change: $Author: gt $ $Date: 2002-09-25 08:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2552,10 +2552,13 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& 
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 {
-    if( mpNameTrans )
-        mpNameTrans->SetActualFolder( rActualFolder );
-    else
-        mpNameTrans = new NameTranslator_Impl( rActualFolder );
+    if( mbReplaceNames )
+    {
+        if( mpNameTrans )
+            mpNameTrans->SetActualFolder( rActualFolder );
+        else
+            mpNameTrans = new NameTranslator_Impl( rActualFolder );
+    }
 }
 
 // -----------------------------------------------------------------------
