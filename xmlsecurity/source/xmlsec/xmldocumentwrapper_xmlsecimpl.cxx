@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldocumentwrapper_xmlsecimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <xmloff/attrlist.hxx>
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 
-#include <malloc.h>
+//#include <malloc.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
