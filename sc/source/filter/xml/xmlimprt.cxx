@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 12:08:42 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2261,6 +2261,7 @@ void SAL_CALL ScXMLImport::endDocument(void)
 {
     if (getImportFlags() & IMPORT_CONTENT)
     {
+        GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
             pDoc->CompileXML();
         aTables.UpdateRowHeights();
