@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 16:36:02 $
+ *  last change: $Author: dvo $ $Date: 2001-10-09 18:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,14 +426,18 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             // the progress works correctly.
             if( aDocStat.bModified )
                 pDoc->UpdateDocStat( aDocStat );
-//          sal_Int32 nRef = 6; // meta + settings
-            sal_Int32 nRef = 2;
-            nRef += pDoc->GetCharFmts()->Count();
-            nRef += pDoc->GetFrmFmts()->Count();
-            nRef += pDoc->GetTxtFmtColls()->Count();
+
+            // count each item once, and then multiply by two to reach the
+            // figures given above
+            // The styles in pDoc also count the default style that never
+            // gets exported -> subtract one.
+            sal_Int32 nRef = 1;
+            nRef += pDoc->GetCharFmts()->Count() - 1;
+            nRef += pDoc->GetFrmFmts()->Count() - 1;
+            nRef += pDoc->GetTxtFmtColls()->Count() - 1;
 //          nRef += pDoc->GetPageDescCnt();
-            nRef += 2*aDocStat.nPara;
-            pProgress->SetReference( nRef );
+            nRef += aDocStat.nPara;
+            pProgress->SetReference( 2*nRef );
             pProgress->SetValue( 0 );
         }
     }
