@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:32:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,90 +75,20 @@ String STR_BOTTOM
     Text [ en-US ] = "~Bottom" ;
     Text [ x-comment ] = " ";
 };
+String STR_CENTER_VERT
+{
+    Text [ de ] = "~Mitte" ;
+    Text [ en-US ] = "C~enter" ;
+};
 String STR_CENTER_HORI
 {
     Text [ de ] = "M~itte" ;
     Text [ en-US ] = "~Center" ;
     Text [ x-comment ] = " ";
 };
-String STR_FROMTOP
-{
-    Text [ de ] = "Von Oben" ;
-    Text [ en-US ] = "From top" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FROMBOTTOM
-{
-    Text [ de ] = "Von Unten" ;
-    Text [ en-US ] = "From bottom" ;
-    Text [ x-comment ] = " ";
-};
-String STR_BELOW
-{
-    Text [ de ] = "Unterhalb" ;
-    Text [ en-US ] = "Below" ;
-    Text [ x-comment ] = " ";
-};
-/*-----------------------------------------------------------------------
-    Beschreibung: H-Align
- -----------------------------------------------------------------------*/
-String STR_LEFT
-{
-    Text [ de ] = "Links" ;
-    Text [ en-US ] = "Left" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_LEFT
-{
-    Text [ de ] = "Innen" ;
-    Text [ en-US ] = "Inside" ;
-    Text [ x-comment ] = " ";
-};
-String STR_RIGHT
-{
-    Text [ de ] = "Rechts" ;
-    Text [ en-US ] = "Right" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_RIGHT
-{
-    Text [ de ] = "Auﬂen" ;
-    Text [ en-US ] = "Outside" ;
-    Text [ x-comment ] = " ";
-};
-String STR_CENTER_VERT
-{
-    Text [ de ] = "~Mitte" ;
-    Text [ en-US ] = "C~enter" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FROMLEFT
-{
-    Text [ de ] = "Von Links" ;
-    Text [ en-US ] = "From left" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_FROMLEFT
-{
-    Text [ de ] = "Von Innen" ;
-    Text [ en-US ] = "From inside" ;
-    Text [ x-comment ] = " ";
-};
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel
  -----------------------------------------------------------------------*/
-String STR_REL_BORDER
-{
-    Text [ de ] = "Rand" ;
-    Text [ en-US ] = "Margin" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_PRTAREA
-{
-    Text [ de ] = "Absatztextbereich" ;
-    Text [ en-US ] = "Paragraph text area" ;
-    Text [ x-comment ] = " ";
-};
 String STR_TOPPRT
 {
     Text [ de ] = "Oberer Rand" ;
@@ -166,144 +96,12 @@ String STR_TOPPRT
     Text [ x-comment ] = " ";
 };
 
-// OD 05.01.2004 #i22341#
-String STR_REL_LINE
-{
-    Text [ de ] = "Textzeile" ;
-    Text [ en-US ] = "Line of text" ;
-};
 /*-----------------------------------------------------------------------
     Beschreibung: H-Rel
  -----------------------------------------------------------------------*/
-String STR_FLY_REL_PG_LEFT
-{
-    Text [ de ] = "Rahmenrand links" ;
-    Text [ en-US ] = "Left frame border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FLY_MIR_REL_PG_LEFT
-{
-    Text [ de ] = "Rahmenrand innen" ;
-    Text [ en-US ] = "Inner frame border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FLY_REL_PG_RIGHT
-{
-    Text [ de ] = "Rahmenrand rechts" ;
-    Text [ en-US ] = "Right frame border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FLY_MIR_REL_PG_RIGHT
-{
-    Text [ de ] = "Rahmenrand auﬂen" ;
-    Text [ en-US ] = "Outer frame border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FLY_REL_PG_FRAME
-{
-    Text [ de ] = "Gesamter Rahmen" ;
-    Text [ en-US ] = "Entire frame" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FLY_REL_PG_PRTAREA
-{
-    Text [ de ] = "Rahmentextbereich" ;
-    Text [ en-US ] = "Frame text area" ;
-    Text [ x-comment ] = " ";
-};
-String STR_FRAME
-{
-    Text [ de ] = "Absatzbereich" ;
-    Text [ en-US ] = "Paragraph area" ;
-    Text [ x-comment ] = " ";
-};
-String STR_PRTAREA
-{
-    Text [ de ] = "Absatztextbereich" ;
-    Text [ en-US ] = "Paragraph text area" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_PG_LEFT
-{
-    Text [ de ] = "Seitenrand links" ;
-    Text [ en-US ] = "Left page border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_REL_PG_LEFT
-{
-    Text [ de ] = "Seitenrand innen" ;
-    Text [ en-US ] = "Inner page border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_PG_RIGHT
-{
-    Text [ de ] = "Seitenrand rechts" ;
-    Text [ en-US ] = "Right page border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_REL_PG_RIGHT
-{
-    Text [ de ] = "Seitenrand auﬂen" ;
-    Text [ en-US ] = "Outer page border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_FRM_LEFT
-{
-    Text [ de ] = "Absatzrand links" ;
-    Text [ en-US ] = "Left paragraph border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_REL_FRM_LEFT
-{
-    Text [ de ] = "Absatzrand innen" ;
-    Text [ en-US ] = "Inner paragraph border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_FRM_RIGHT
-{
-    Text [ de ] = "Absatzrand rechts" ;
-    Text [ en-US ] = "Right paragraph border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_MIR_REL_FRM_RIGHT
-{
-    Text [ de ] = "Absatzrand auﬂen" ;
-    Text [ en-US ] = "Outer paragraph border" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_PG_FRAME
-{
-    Text [ de ] = "Gesamte Seite" ;
-    Text [ en-US ] = "Entire page" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_PG_PRTAREA
-{
-    Text [ de ] = "Seitentextbereich" ;
-    Text [ en-US ] = "Page text area" ;
-    Text [ x-comment ] = " ";
-};
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel Zeichenausrichtungen
  -----------------------------------------------------------------------*/
-String STR_REL_BASE
-{
-    Text [ de ] = "Grundlinie" ;
-    Text [ en-US ] = "Base line" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_CHAR
-{
-    Text [ de ] = "Zeichen" ;
-    Text [ en-US ] = "Character" ;
-    Text [ x-comment ] = " ";
-};
-String STR_REL_ROW
-{
-    Text [ de ] = "Zeile" ;
-    Text [ en-US ] = "Row" ;
-    Text [ x-comment ] = " ";
-};
 /*-----------------------------------------------------------------------
     Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
  -----------------------------------------------------------------------*/
@@ -406,30 +204,5 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     Message [ de ] = "Der Spaltenabstand ist zu groﬂ f¸r die Spaltenbreite." ;
     Message [ en-US ] = "Column spacing exceeds the column width." ;
     Message [ x-comment ] = " ";
-};
-String STR_REL_PG_TOP
-{
-    Text [ de ] = "Seitenrand oben" ;
-    Text [ en-US ] = "Top page border" ;
-};
-String STR_REL_PG_BOTTOM
-{
-    Text [ de ] = "Seitenrand unten" ;
-    Text [ en-US ] = "Bottom page border" ;
-};
-String STR_REL_FRM_TOP
-{
-    Text [ de ] = "Absatzrand oben" ;
-    Text [ en-US ] = "Top paragraph border" ;
-};
-String STR_REL_FRM_BOTTOM
-{
-    Text [ de ] = "Absatzrand unten" ;
-    Text [ en-US ] = "Bottom paragraph border" ;
-};
-String STR_FROMRIGHT
-{
-    Text [ de ] = "Von rechts" ;
-    Text [ en-US ] = "From right" ;
 };
 
