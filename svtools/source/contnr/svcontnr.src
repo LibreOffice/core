@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svcontnr.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:26:53 $
+ *  last change: $Author: pb $ $Date: 2002-09-13 12:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,35 @@ Image RID_IMG_TREENODE_EXPANDED_HC
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
 };
 
+// descriptions of accessible objects
 
+String STR_SVT_ACC_DESC_TABLISTBOX
+{
+    Text = "Zeile: %1, Spalte: %2";
+    Text [ english_us ] = "Row: %1, Column: %2";
+};
+String STR_SVT_ACC_DESC_FILEVIEW
+{
+    Text = ", Typ: %1, URL: %2";
+    Text [ english_us ] = ", Type: %1, URL: %2";
+};
+String STR_SVT_ACC_DESC_FOLDER
+{
+    Text = "Ordner";
+    Text [ english_us ] = "Folder";
+};
+String STR_SVT_ACC_DESC_FILE
+{
+    Text = "Datei";
+    Text [ english_us ] = "File";
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/07/19 13:26:53  fs
+ *  initial checkin - shared resource file for this directory
+ *
  *
  *  Revision 1.0 19.07.2002 14:28:03  fs
  ************************************************************************/
