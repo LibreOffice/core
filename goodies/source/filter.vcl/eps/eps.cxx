@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-31 08:50:36 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 16:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,7 +742,18 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                             ImplMoveTo( aPoly.GetPoint( 0 ) );
                             i = 1;
                             while ( i < nPointCount )
-                                ImplLineTo( aPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+                            {
+                                if ( ( aPoly.GetFlags( i ) == POLY_CONTROL )
+                                        && ( ( i + 2 ) < nPointCount )
+                                            && ( aPoly.GetFlags( i + 1 ) == POLY_CONTROL )
+                                                && ( aPoly.GetFlags( i + 2 ) == POLY_NORMAL ) )
+                                {
+                                    ImplCurveTo( aPoly[ i ], aPoly[ i + 1 ], aPoly[ i + 2 ], PS_WRAP );
+                                    i += 3;
+                                }
+                                else
+                                    ImplLineTo( aPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
+                            }
                         }
                         ImplPathDraw();
                         if ( !rLineInfo.IsDefault() )
