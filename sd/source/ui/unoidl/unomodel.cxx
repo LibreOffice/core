@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:34:47 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,20 +1203,31 @@ OUString SAL_CALL SdXImpressDocument::getImplementationName()
 sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    if (
+        (ServiceName.equalsAscii("com.sun.star.document.OfficeDocument"       )) ||
+        (ServiceName.equalsAscii("com.sun.star.drawing.GenericDrawingDocument")) ||
+        (ServiceName.equalsAscii("com.sun.star.drawing.DrawingDocumentFactory"))
+       )
+    {
+        return sal_True;
+    }
+
+    return (
+            ( mbImpressDoc && ServiceName.equalsAscii("com.sun.star.presentation.PresentationDocument")) ||
+            (!mbImpressDoc && ServiceName.equalsAscii("com.sun.star.drawing.DrawingDocument"          ))
+           );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames() throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( mbImpressDoc ? 4 : 3 );
+    uno::Sequence< OUString > aSeq( 2 );
     OUString* pServices = aSeq.getArray();
 
-    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
-    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
     *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
-
     if( mbImpressDoc )
         *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
+    else
+        *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
 
     return aSeq;
 }
