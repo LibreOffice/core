@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 19:43:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,6 +1292,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Birli/ikili iþleçler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Operadores ~unarios/binarios";
+            Text[ finnish ] = "~Unaari-/binäärioperaattorit";
         };
         MenuItem
         {
@@ -1461,6 +1462,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Ýliþkiler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Relaciones";
+            Text[ finnish ] = "~Suhteet";
         };
         MenuItem
         {
@@ -1636,6 +1638,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Küme iþlemleri";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Operaciones de conjuntos";
+            Text[ finnish ] = "~Määritä toiminnot";
         };
         MenuItem
         {
@@ -1848,6 +1851,7 @@ Menu RID_COMMANDMENU
                         TEXT[ arabic ] = "ÛíÑ Ðáß";
                         TEXT[ turkish ] = "Diðer";
                         TEXT[ catalan ] = "otros";
+                        TEXT[ finnish ] = "Lisää";
                     };
                 };
             };
@@ -1864,6 +1868,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Fonksiyon";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Funciones";
+            Text[ finnish ] = "~Toiminnot";
         };
         MenuItem
         {
@@ -1981,6 +1986,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Ýþleçler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Operadores";
+            Text[ finnish ] = "~Operaattorit";
         };
         MenuItem
         {
@@ -2162,6 +2168,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Öznitelikler";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Atributos";
+            Text[ finnish ] = "~Määritteet";
         };
         MenuItem
         {
@@ -2347,6 +2354,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Ayraçlar";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Paréntesis";
+            Text[ finnish ] = "~Sulkeet";
         };
         MenuItem
         {
@@ -2435,6 +2443,7 @@ Menu RID_COMMANDMENU
                         Text[ turkish ] = "Yeni satýr";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "nueva línea";
+                        Text[ finnish ] = "Uusi viiva";
                     };
                     MenuItem
                     {
@@ -2464,6 +2473,7 @@ Menu RID_COMMANDMENU
                         Text[ turkish ] = "Küçük aralýk";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "espacio pequeño";
+                        Text[ finnish ] = "Pieni väli";
                     };
                     MenuItem
                     {
@@ -2493,6 +2503,7 @@ Menu RID_COMMANDMENU
                         Text[ turkish ] = "Aralýk";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "espacio";
+                        Text[ finnish ] = "Väli";
                     };
                     MenuItem
                     {
@@ -2549,6 +2560,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Format";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Formatos";
+            Text[ finnish ] = "~Muodot";
         };
         MenuItem
         {
@@ -2706,6 +2718,7 @@ Menu RID_COMMANDMENU
             Text[ turkish ] = "Diðer";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Otros";
+            Text[ finnish ] = "~Muut";
         };
     };
 };
