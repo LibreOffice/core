@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 11:25:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2137,6 +2137,12 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
 
                     }
                 }
+                // OD 2004-03-17 #i11860#
+                if ( GetIndNext() &&
+                     !GetAttrSet()->GetDoc()->IsFormerObjectPositioning() )
+                {
+                    GetIndNext()->InvalidateObjPos();
+                }
                 Prepare( PREP_UL_SPACE );   //TxtFrm muss Zeilenabst. korrigieren.
                 rInvFlags |= 0x80;
                 /* kein Break hier */
@@ -3778,3 +3784,69 @@ void SwRootFrm::InvalidateAllCntnt( BYTE nInv )
     }
 }
 
+/** method to invalidate/re-calculate the position of all floating
+    screen objects (Writer fly frames and drawing objects), which are
+    anchored to paragraph or to character.
+
+    OD 2004-03-16 #i11860#
+
+    @author OD
+*/
+void SwRootFrm::InvalidateAllObjPos()
+{
+    const SwPageFrm* pPageFrm = static_cast<const SwPageFrm*>(Lower());
+    while( pPageFrm )
+    {
+        pPageFrm->InvalidateFlyLayout();
+
+        if ( pPageFrm->GetSortedObjs() )
+        {
+            const SwSortDrawObjs& rObjs = *(pPageFrm->GetSortedObjs());
+            for ( sal_uInt8 i = 0; i < rObjs.Count(); ++i )
+            {
+                SdrObject* pObj = rObjs[i];
+                SwFrmFmt* pObjFmt = ::FindFrmFmt( pObj );
+                ASSERT( pObjFmt,
+                        "<SwRootFrm::InvalidateAllObjPos()> - no format found for connected object" );
+                const SwFmtAnchor& rAnch = pObjFmt->GetAnchor();
+                if ( rAnch.GetAnchorId() != FLY_AT_CNTNT &&
+                     rAnch.GetAnchorId() != FLY_AUTO_CNTNT )
+                {
+                    // only to paragraph and to character anchored objects are considered.
+                    continue;
+                }
+
+                if ( pObj->ISA(SwVirtFlyDrawObj) )
+                {
+                    // Writer fly frame
+                    // frame position will be invalidated
+                    SwFlyFrm* pFlyFrm =
+                            static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
+                    pFlyFrm->InvalidatePos();
+                }
+                else if ( pObj->ISA(SwDrawVirtObj) )
+                {
+                    // 'virtual' drawing object
+                    // re-calculate its position by settings its anchor position
+                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
+                    pDrawVirtObj->SetAnchorPos(
+                        pDrawVirtObj->GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                    pDrawVirtObj->AdjustRelativePosToReference();
+                }
+                else
+                {
+                    // 'master' drawing object
+                    // re-calculate its position by settings its anchor position
+                    SwDrawContact* pDrawContact =
+                                static_cast<SwDrawContact*>(GetUserCall(pObj));
+                    ASSERT( pDrawContact,
+                        "<SwRootFrm::InvalidateAllObjPos()> - no contact found for connected object" );
+                    pObj->SetAnchorPos( pDrawContact->GetAnchor()->GetFrmAnchorPos( ::HasWrap( pObj ) ) );
+                    pDrawContact->CorrectRelativePosOfVirtObjs();
+                }
+            }
+        }
+
+        pPageFrm = static_cast<const SwPageFrm*>(pPageFrm->GetNext());
+    }
+}
