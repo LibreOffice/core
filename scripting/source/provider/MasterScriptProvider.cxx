@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 14:16:16 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
+
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
@@ -261,11 +265,23 @@ throw ( lang::IllegalArgumentException, RuntimeException )
             RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
 
     // need to get the language from the string
-    //::rtl::OUString language = getLanguageFromURI( scriptURI );
-    ::rtl::OUString language;
 
-    if(  scriptURI.getLength() == 0 ||
-        ( language = getLanguageFromURI( scriptURI ) ).getLength() == 0 )
+    Reference< uri::XUriReferenceFactory > xFac (
+         m_xMgr->createInstanceWithContext( rtl::OUString::createFromAscii(
+            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
+    if ( !xFac.is() )
+    {
+        throw RuntimeException(
+            OUSTR( "MasterScriptProvider::getScript(), could not instatiate UriReferenceFactory." ),
+            Reference< XInterface >() );
+    }
+
+    Reference<  uri::XUriReference > uriRef(
+        xFac->parse( scriptURI ), UNO_QUERY );
+
+    Reference < uri::XVndSunStarScriptUrl > sfUri( uriRef, UNO_QUERY );
+
+    if ( !uriRef.is() || !sfUri.is() )
     {
         ::rtl::OUString errorMsg = OUSTR( "Incorrect format for Script URI: " );
         errorMsg.concat( scriptURI );
@@ -273,6 +289,19 @@ throw ( lang::IllegalArgumentException, RuntimeException )
                 OUSTR( "invalid URI: " ).concat( errorMsg ),
                 Reference < XInterface > (), 1 );
     }
+
+    ::rtl::OUString langKey = ::rtl::OUString::createFromAscii( "language" );
+
+    if ( sfUri->hasParameter( langKey ) == sal_False ||
+         ( sfUri->getName().getLength() == 0  ) )
+    {
+        ::rtl::OUString errorMsg = OUSTR( "Incorrect format for Script URI: " );
+        errorMsg.concat( scriptURI );
+        throw lang::IllegalArgumentException(
+                OUSTR( "invalid URI: " ).concat( errorMsg ),
+                Reference < XInterface > (), 1 );
+    }
+    ::rtl::OUString language = sfUri->getParameter( langKey );
 
     Reference< provider::XScript > xScript;
     Reference< provider::XScriptProvider > xScriptProvider;
@@ -335,41 +364,6 @@ MasterScriptProvider::providerCache()
         }
     }
     return m_pPCache;
-}
-
-//*************************************************************************
-::rtl::OUString
-MasterScriptProvider::getLanguageFromURI( const ::rtl::OUString& scriptURI )
-{
-    ::rtl::OUString language;
-    ::rtl::OUString attr;
-    sal_Int32 len = scriptURI.indexOf( '?' );
-    if( ( len < 0 ) || ( scriptURI.getLength() == 0 ) )
-    {
-        return language;
-    }
-    // if we have a match, then start the search after the ?
-
-    len++;
-    do
-    {
-        attr = scriptURI.getToken( 0, '&', len );
-        OSL_TRACE( "chunk is %s, len is %d",
-            ::rtl::OUStringToOString( attr,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer, len  );
-        if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "language" ) )
-            == sal_True )
-        {
-            sal_Int32 len2 = attr.indexOf('=');
-            language = attr.copy( len2 + 1 );
-            OSL_TRACE( "Language name is %s",
-                ::rtl::OUStringToOString( language,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-            break;
-        }
-    }
-    while ( len >= 0 );
-    return language;
 }
 
 
