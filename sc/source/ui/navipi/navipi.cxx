@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:05:14 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,8 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     //  #52973# grosse Images haben wir nicht, darum nur fuer CHANGEOUTSTYLE anmelden
     rDlg.GetBindings().GetImageManager()->RegisterToolBox( this, SFX_TOOLBOX_CHANGEOUTSTYLE );
 
+    InitImageList();    // ImageList members of ScNavigatorDlg must be initialized before!
+
     SetSizePixel( CalcWindowSizePixel() );
 //  EnableItem( IID_UP, FALSE );
 //  EnableItem( IID_DOWN, FALSE );
@@ -555,14 +557,43 @@ void CommandToolBox::UpdateButtons()
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
+    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+
     USHORT nImageId = 0;
     switch ( rDlg.nDropMode )
     {
-        case SC_DROPMODE_URL:   nImageId = RID_IMG_DROP_URL;    break;
-        case SC_DROPMODE_LINK:  nImageId = RID_IMG_DROP_LINK;   break;
-        case SC_DROPMODE_COPY:  nImageId = RID_IMG_DROP_COPY;   break;
+        case SC_DROPMODE_URL:   nImageId = bDark ? RID_IMG_H_DROP_URL  : RID_IMG_DROP_URL;  break;
+        case SC_DROPMODE_LINK:  nImageId = bDark ? RID_IMG_H_DROP_LINK : RID_IMG_DROP_LINK; break;
+        case SC_DROPMODE_COPY:  nImageId = bDark ? RID_IMG_H_DROP_COPY : RID_IMG_DROP_COPY; break;
     }
     SetItemImage( IID_DROPMODE, Image(ScResId(nImageId)) );
+}
+
+void CommandToolBox::InitImageList()
+{
+    BOOL bDark = GetDisplayBackground().GetColor().IsDark();
+
+    ImageList& rImgLst = bDark ? rDlg.aCmdImageListH : rDlg.aCmdImageList;
+
+    USHORT nCount = GetItemCount();
+    for (USHORT i = 0; i < nCount; i++)
+    {
+        USHORT nId = GetItemId(i);
+        SetItemImage( nId, rImgLst.GetImage( nId ) );
+    }
+}
+
+void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        //  update item images
+
+        InitImageList();
+        UpdateButtons();    // drop mode
+    }
+
+    ToolBox::DataChanged( rDCEvt );
 }
 
 //==================================================================
@@ -676,6 +707,8 @@ void __EXPORT ScNavigatorDialogWrapper::Resizing( Size& rSize )
 ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent ) :
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
+        aCmdImageList( ScResId( IL_CMD ) ),
+        aCmdImageListH( ScResId( ILH_CMD ) ),
         aFtCol      ( this, ScResId( FT_COL ) ),
         aEdCol      ( this, ScResId( ED_COL ) ),
         aFtRow      ( this, ScResId( FT_ROW ) ),
@@ -837,6 +870,17 @@ void ScNavigatorDlg::Paint( const Rectangle& rRec )
     aFtRow.SetBackground( aBack );
 
     Window::Paint( rRec );
+}
+
+void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        //  toolbox images are exchanged in CommandToolBox::DataChanged
+        Invalidate();
+    }
+
+    Window::DataChanged( rDCEvt );
 }
 
 //------------------------------------------------------------------------

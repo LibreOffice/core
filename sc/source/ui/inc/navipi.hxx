@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-10 18:37:23 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,9 @@ public:
 
     void Select( USHORT nId );
     void UpdateButtons();
+    void InitImageList();
+
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 protected:
     virtual void    Select();
@@ -277,6 +280,8 @@ friend class ScContentTree;
 private:
     SfxBindings&        rBindings;      // must be first member
 
+    ImageList           aCmdImageList;  // must be before aTbxCmd
+    ImageList           aCmdImageListH;
     FixedInfo           aFtCol;
     ColumnEdit          aEdCol;
     FixedInfo           aFtRow;
@@ -374,6 +379,7 @@ public:
 
     virtual SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 //==================================================================

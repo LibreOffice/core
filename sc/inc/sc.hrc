@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 11:12:58 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1140,6 +1140,7 @@
 #define RID_GRAPHIC_OBJECTBAR   (SC_RESOURCE_START+54)
 #define RID_BMP_REFBTN1_H       (SC_RESOURCE_START+55)
 #define RID_BMP_REFBTN2_H       (SC_RESOURCE_START+56)
+#define RID_IMAGELIST_H_NAVCONT (SC_RESOURCE_START+57)
 
 
 #define STR_START               (SC_RESOURCE_START+100)
@@ -1331,6 +1332,9 @@
 #define RID_IMG_DROP_URL        (BMP_START + 2)
 #define RID_IMG_DROP_LINK       (BMP_START + 3)
 #define RID_IMG_DROP_COPY       (BMP_START + 4)
+#define RID_IMG_H_DROP_URL      (BMP_START + 5)
+#define RID_IMG_H_DROP_LINK     (BMP_START + 6)
+#define RID_IMG_H_DROP_COPY     (BMP_START + 7)
 
 #define RID_SCPTR_PIVOTCOL      (BMP_START + 81)
 #define RID_SCPTR_PIVOTROW      (BMP_START + 82)

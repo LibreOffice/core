@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-28 20:16:51 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,20 @@
  ************************************************************************/
 
 #include "navipi.hrc"
+
+#define SC_NAVI_CMD_IDLIST \
+    IdList =               \
+    {                      \
+        IID_DATA ;         \
+        IID_UP ;           \
+        IID_DOWN ;         \
+        IID_SCENARIOS ;    \
+        IID_DROPMODE ;     \
+        IID_CHANGEROOT ;   \
+        IID_ZOOMOUT ;      \
+    };                     \
+    IdCount = { 8 ; };
+
 Window RID_SCDLG_NAVIGATOR
 {
     SVLook = TRUE ;
@@ -293,28 +307,24 @@ Window RID_SCDLG_NAVIGATOR
         QuickHelpText[ finnish ] = "Asiakirja";
         QuickHelpText[ thai ] = "Document";
     };
+    ImageList IL_CMD
+    {
+        ImageBitmap = Bitmap { File = "na_vipi.bmp" ; };
+        MaskColor = STD_MASKCOLOR ;
+        SC_NAVI_CMD_IDLIST
+    };
+    ImageList ILH_CMD
+    {
+        ImageBitmap = Bitmap { File = "nah_vipi.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR ;
+        SC_NAVI_CMD_IDLIST
+    };
     ToolBox TBX_CMD
     {
         Pos = MAP_APPFONT ( 66 , 3 ) ;
         HelpId = HID_SC_NAVIPI_TOOLBOX ;
         SVLook = TRUE ;
         Border = FALSE ;
-        ItemImageList = ImageList
-        {
-            ImageBitmap = Bitmap { File = "na_vipi.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
-            IdList =  // 3
-            {
-                IID_DATA ;
-                IID_UP ;  // 5
-                IID_DOWN ;  // 6
-                IID_SCENARIOS ;  // 7
-                IID_DROPMODE ;  // 9
-                IID_CHANGEROOT ;  // 10
-                IID_ZOOMOUT ;  // 11
-            };
-            IdCount = { 8 ; };
-        };
         LineCount = 2 ;
         ItemList =
         {
@@ -797,24 +807,35 @@ Window RID_SCDLG_NAVIGATOR
     Text[ catalan ] = "Navigator";
     Text[ thai ] = "ตัวนำ";
 };
+
+// SC_CONTENT_...
+#define SC_NAVI_CONT_IDLIST \
+    IdList =                \
+    {                       \
+        1 ;                 \
+        2 ;                 \
+        3 ;                 \
+        4 ;                 \
+        5 ;                 \
+        6 ;                 \
+        7 ;                 \
+        8 ;                 \
+    };                      \
+    IdCount = { 8 ; };
+
 ImageList RID_IMAGELIST_NAVCONT
 {
     ImageBitmap = Bitmap { File = "nc_ont.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
-    IdList =
-    {
-         // SC_CONTENT_...
-        1 ;
-        2 ;
-        3 ;
-        4 ;
-        5 ;
-        6 ;
-        7 ;
-        8 ;
-    };
-    IdCount = { 8 ; };
+    SC_NAVI_CONT_IDLIST
 };
+ImageList RID_IMAGELIST_H_NAVCONT
+{
+    ImageBitmap = Bitmap { File = "nch_ont.bmp" ; };
+    MaskColor = SC_HC_MASKCOLOR ;
+    SC_NAVI_CONT_IDLIST
+};
+
 Bitmap RID_BMP_EXPAND
 {
     File = "plus.bmp" ;
@@ -837,6 +858,21 @@ Image RID_IMG_DROP_COPY
 {
     ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
     MaskColor = STD_MASKCOLOR ;
+};
+Image RID_IMG_H_DROP_URL
+{
+    ImageBitmap = Bitmap { File = "dropurl_h.bmp" ; };
+    MaskColor = SC_HC_MASKCOLOR ;
+};
+Image RID_IMG_H_DROP_LINK
+{
+    ImageBitmap = Bitmap { File = "droplink_h.bmp" ; };
+    MaskColor = SC_HC_MASKCOLOR ;
+};
+Image RID_IMG_H_DROP_COPY
+{
+    ImageBitmap = Bitmap { File = "dropcopy_h.bmp" ; };
+    MaskColor = SC_HC_MASKCOLOR ;
 };
 
 //  content description strings are also used in ScLinkTargetsObj

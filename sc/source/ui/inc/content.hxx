@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:04:05 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class ScContentTree : public SvTreeListBox
     Bitmap              aExpBmp;
     Bitmap              aCollBmp;
     ImageList           aEntryImages;
+    ImageList           aHCEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
     USHORT              nRootType;          // als Root eingestellt
     String              aManualDoc;         // im Navigator umgeschaltet (Title)

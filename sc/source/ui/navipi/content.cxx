@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:05:14 $
+ *  last change: $Author: nn $ $Date: 2002-06-03 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     aExpBmp         ( ScResId( RID_BMP_EXPAND ) ),
     aCollBmp        ( ScResId( RID_BMP_COLLAPSE ) ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
+    aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( FALSE ),
     pHiddenDocument ( NULL )
@@ -206,6 +207,11 @@ void ScContentTree::InitRoot( USHORT nType )
     // wieder an die richtige Position:
     USHORT nPos = nRootType ? 0 : pPosList[nType]-1;
     SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, FALSE, nPos );
+
+    const Image& rHCImage = aHCEntryImages.GetImage( nType );
+    SetExpandedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
+    SetCollapsedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
+
     pRootNodes[nType] = pNew;
 }
 
