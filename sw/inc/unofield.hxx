@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 16:19:00 $
+ *  last change: $Author: tl $ $Date: 2002-07-05 08:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,11 +319,10 @@ class SwXFieldEnumeration : public cppu::WeakImplHelper2
 >,
     public SwClient
 {
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > > aItems;
+    sal_Int32       nNextIndex;     // index of next element to be returned
+
     SwDoc* pDoc;
-    const SwFieldType*      pLastFieldType;
-    const SwFieldType*      pNextFieldType;
-    const SwFmtFld*         pLastFieldFmt;
-    const SwFmtFld*         pNextFieldFmt;
 
 public:
     SwXFieldEnumeration(SwDoc* pDoc);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-04 08:05:55 $
+ *  last change: $Author: tl $ $Date: 2002-07-05 08:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1842,6 +1842,8 @@ uno::Reference< XTextRange >  SwXTextField::getAnchor(void) throw( uno::RuntimeE
     if(pField)
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+        if(!pTxtFld)
+            throw uno::RuntimeException();
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
 
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
@@ -2689,12 +2691,45 @@ Sequence< OUString > SwXFieldEnumeration::getSupportedServiceNames(void) throw( 
  * --------------------------------------------------*/
 SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
     pDoc(pDc),
-    pLastFieldType(0),
-    pLastFieldFmt(0),
-    pNextFieldFmt(0),
-    pNextFieldType(0)
+    nNextIndex(0)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+
+    // build sequence
+    sal_Int32 nSize = 32;
+    aItems.realloc( nSize );
+    uno::Reference< XTextField > *pItems = aItems.getArray();
+    sal_Int32 nFillPos = 0;
+    //
+    const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
+    sal_uInt16 nCount = pFldTypes->Count();
+    for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
+    {
+        const SwFieldType *pCurType = pFldTypes->GetObject(nType);
+
+        SwClientIter aIter( *(SwFieldType*)pCurType );
+        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        while (pCurFldFmt)
+        {
+            const SwTxtFld *pTxtFld = pCurFldFmt->GetTxtFld();
+            // skip fields that are currently not in the document
+            // e.g. fields in undo or redo array
+            BOOL bSkip = !pTxtFld ||
+                         !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
+            if (!bSkip)
+                pItems[ nFillPos++ ] = new SwXTextField(*pCurFldFmt, pDoc);
+            pCurFldFmt = (SwFmtFld*)aIter.Next();
+
+            // enlarge sequence if necessary
+            if (aItems.getLength() == nFillPos)
+            {
+                aItems.realloc( 2 * aItems.getLength() );
+                pItems = aItems.getArray();
+            }
+        }
+    }
+    // resize sequence to actual used size
+    aItems.realloc( nFillPos );
 }
 /*-- 21.12.98 14:57:23---------------------------------------------------
 
@@ -2706,61 +2741,11 @@ SwXFieldEnumeration::~SwXFieldEnumeration()
 /*-- 21.12.98 14:57:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXFieldEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+sal_Bool SwXFieldEnumeration::hasMoreElements(void)
+    throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    sal_Bool bRet = sal_False;
-    pNextFieldFmt = 0;
-    if(pDoc)
-    {
-        const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
-        sal_uInt16 nCount = pFldTypes->Count();
-        //wenn man noch nicht hier war, dann muss man nichts ueberspringen
-        sal_Bool bFieldTypeFound = pLastFieldType == 0;
-        sal_Bool bFieldFmtFound = pLastFieldFmt == 0;
-        for(sal_uInt16 nType = 0; nType < nCount; nType++)
-        {
-            const SwFieldType* pCurType = pFldTypes->GetObject(nType);
-            if(!bFieldTypeFound)
-            {
-                if(pCurType != pLastFieldType)
-                    continue;
-                bFieldTypeFound = sal_True;
-            }
-            //hier sind wir etwa da, wo wir das letzte Mal aufgehoert haben
-            //jetzt noch das richtige Feld
-            //pLastFieldFmt
-            SwClientIter aIter( *(SwFieldType*)pCurType );
-            SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-            sal_Int32 nRet = 0;
-            while( pCurFldFmt && !pNextFieldFmt)
-            {
-                if(!bFieldFmtFound)
-                {
-                    if(pCurFldFmt == pLastFieldFmt)
-                    {
-                        bFieldFmtFound = sal_True;
-
-                    }
-                }
-                else if(pCurFldFmt->GetTxtFld() && //keine TextAttr, dann schon geloescht
-                    pCurFldFmt->GetTxtFld()->GetpTxtNode()->GetNodes().IsDocNodes())
-                {
-                    pNextFieldFmt = pCurFldFmt;
-                    pNextFieldType = pCurType;
-                }
-                pCurFldFmt = (SwFmtFld*)aIter.Next();
-            }
-            if(pNextFieldFmt)
-            {
-                bRet = sal_True;
-                break;
-            }
-        }
-    }
-    else
-        throw uno::RuntimeException();
-    return bRet;
+    return nNextIndex < aItems.getLength();
 }
 /*-- 21.12.98 14:57:42---------------------------------------------------
 
@@ -2769,48 +2754,17 @@ uno::Any SwXFieldEnumeration::nextElement(void)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    if(pDoc)
-    {
-        if(pNextFieldFmt || hasMoreElements())
-        {
-            const SwFldTypes* pFldTypes = pDoc->GetFldTypes();
-            sal_uInt16 nCount = pFldTypes->Count();
-            sal_Bool bTypeFound = sal_False;
-            for(sal_uInt16 nType = 0; nType < nCount; nType++)
-            {
-                if(pNextFieldType == pFldTypes->GetObject(nType))
-                {
-                    bTypeFound = sal_True;
-                    break;
-                }
-            }
-            if(!bTypeFound)
-                throw NoSuchElementException();
-            SwClientIter aIter(*(SwFieldType*)pNextFieldType);
-            SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-            while( pCurFldFmt)
-            {
-                if(pCurFldFmt == pNextFieldFmt)
-                    break;
-                pCurFldFmt = (SwFmtFld*)aIter.Next();
-            }
-            if(!pCurFldFmt)
-                throw NoSuchElementException();
-            //jetzt ist alles wiedergefunden, kann also benutzt werden
-            pLastFieldFmt = pNextFieldFmt;
-            pLastFieldType = pNextFieldType;
-            pNextFieldFmt = 0;
-            pNextFieldType = 0;
-        }
-        else
-            throw NoSuchElementException();
-    }
-    else
-        throw uno::RuntimeException();
-    uno::Reference< XTextField >  xFld = new SwXTextField(*pLastFieldFmt, pDoc);
-    uno::Any aRet(&xFld, ::getCppuType((const uno::Reference<XTextField>*)0));
-    return aRet;
 
+    if (!(nNextIndex < aItems.getLength()))
+        throw NoSuchElementException();
+
+#ifdef DEBUG
+    uno::Reference< XTextField > *pItems = aItems.getArray();
+#endif
+    uno::Reference< XTextField >  &rxFld = aItems.getArray()[ nNextIndex++ ];
+    uno::Any aRet(&rxFld, ::getCppuType((const uno::Reference<XTextField>*)0));
+    rxFld = 0;  // free memory for item that is not longer used
+    return aRet;
 }
 /* -----------------21.12.98 15:08-------------------
  *
