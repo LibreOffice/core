@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-29 07:36:38 $
+ *  last change: $Author: pb $ $Date: 2001-11-05 10:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,15 +414,15 @@ public:
 
     virtual void            Resize();
     virtual long            PreNotify( NotifyEvent& rNEvt );
-
-    void                    SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
+    virtual void            GetFocus();
 
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }
+
+    void                    SetSelectHdl( const Link& rLink ) { aToolBox.SetSelectHdl( rLink ); }
     void                    ToggleIndex( sal_Bool bOn );
     void                    SelectSearchText( const String& rSearchText );
-
-    virtual void            GetFocus();
+    void                    SetPageStyleHeaderOff() const;
 
     inline ToolBox&         GetToolBox() { return aToolBox; }
 };

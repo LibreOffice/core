@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-29 07:33:58 $
+ *  last change: $Author: pb $ $Date: 2001-11-05 10:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "helpid.hrc"
 
 #include <hash_map>
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -118,6 +119,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
+#include <com/sun/star/style/XStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -188,6 +195,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -253,20 +261,26 @@ struct IndexEntry_Impl
 
 void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& Event ) throw(RuntimeException)
 {
-    m_bSuccess = Event.IsEnabled;
-    m_bFinished = sal_True;
-    m_aOpenLink.Call( this );
-    m_xDispatch->removeStatusListener( this, Event.FeatureURL );
-    m_aURL.Erase();
+    if ( m_aURL.Len() > 0 )
+    {
+        m_bSuccess = Event.IsEnabled;
+        m_bFinished = sal_True;
+        m_aOpenLink.Call( this );
+        m_xDispatch->removeStatusListener( this, Event.FeatureURL );
+        m_aURL.Erase();
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    URL aURL;
-    aURL.Complete = m_aURL;
-    m_xDispatch->removeStatusListener( this, aURL );
+    if ( m_aURL.Len() > 0 )
+    {
+        URL aURL;
+        aURL.Complete = m_aURL;
+        m_xDispatch->removeStatusListener( this, aURL );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -274,6 +288,7 @@ void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) th
 void OpenStatusListener_Impl::AddListener( Reference< XDispatch >& xDispatch,
                                            const ::com::sun::star::util::URL& aURL )
 {
+    DBG_ASSERT( aURL.Complete.getLength() > 0, "invalid URL" );
     m_aURL = aURL.Complete;
     m_xDispatch = xDispatch;
     m_xDispatch->addStatusListener( this, aURL );
@@ -573,9 +588,9 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 // -----------------------------------------------------------------------
 
-namespace {
+namespace sfx2 {
 
-    struct equalOU
+    struct equalOUString
     {
         bool operator()( const ::rtl::OUString& rKey1, const ::rtl::OUString& rKey2 ) const
         {
@@ -584,7 +599,7 @@ namespace {
     };
 
 
-    struct hashOU
+    struct hashOUString
     {
         size_t operator()( const ::rtl::OUString& rName ) const
         {
@@ -592,13 +607,12 @@ namespace {
         }
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, int, hashOU, equalOU > KeywordInfo;
-
+    typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                        \
     it =                                                                                        \
-    aInfo.insert( KeywordInfo::value_type( aToken, 0 ) ).first;                                 \
+    aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                            \
     if ( ( tmp = it->second++ ) != 0 )                                                          \
        nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                    \
     else                                                                                        \
@@ -624,7 +638,7 @@ void IndexTabPage_Impl::InitializeIndex()
     for( int k = 0; k < 256; ++k )
         append[k] = sal_Unicode( ' ' );
 
-    KeywordInfo aInfo;
+    sfx2::KeywordInfo aInfo;
     aIndexCB.SetUpdateMode( FALSE );
 
     try
@@ -663,7 +677,7 @@ void IndexTabPage_Impl::InitializeIndex()
                 int ndx,tmp;
                 ::rtl::OUString aIndex, aTempString;
                 ::rtl::OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
-                KeywordInfo::iterator it;
+                sfx2::KeywordInfo::iterator it;
 
                 for ( int i = 0; i < aKeywordList.getLength(); ++i )
                 {
@@ -2049,6 +2063,29 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
+void SfxHelpTextWindow_Impl::GetFocus()
+{
+    if ( !bIsInClose )
+    {
+        try
+        {
+            if( xFrame.is() )
+            {
+                Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
+                if( xWindow.is() )
+                    xWindow->setFocus();
+            }
+        }
+        catch( Exception& )
+        {
+            DBG_ERRORFILE( "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
+        }
+    }
+}
+
+
+// -----------------------------------------------------------------------
+
 void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 {
     bIsIndexOn = bOn;
@@ -2074,26 +2111,62 @@ void SfxHelpTextWindow_Impl::SelectSearchText( const String& rSearchText )
 
 // -----------------------------------------------------------------------
 
-void SfxHelpTextWindow_Impl::GetFocus()
+void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
 {
-    if ( !bIsInClose )
+#ifdef DBG_UTIL
+    sal_Bool bSetOff = sal_False;
+#endif
+    // set off the pagestyle header to prevent print output of the help URL
+    try
     {
-        try
+        Reference < XController > xController = xFrame->getController();
+        Reference < XSelectionSupplier > xSelSup( xController, UNO_QUERY );
+        if ( xSelSup.is() )
         {
-            if( xFrame.is() )
+            Reference < XIndexAccess > xSelection;
+            if ( xSelSup->getSelection() >>= xSelection )
             {
-                Reference< ::com::sun::star::awt::XWindow > xWindow = xFrame->getComponentWindow();
-                if( xWindow.is() )
-                    xWindow->setFocus();
+                Reference < XTextRange > xRange;
+                if ( xSelection->getByIndex(0) >>= xRange )
+                {
+                    Reference < XText > xText = xRange->getText();
+                    Reference < XPropertySet > xProps( xText->createTextCursorByRange( xRange ), UNO_QUERY );
+                    ::rtl::OUString sStyleName;
+                    if ( xProps->getPropertyValue( DEFINE_CONST_OUSTRING("PageStyleName") ) >>= sStyleName )
+                    {
+                        Reference < XStyleFamiliesSupplier > xStyles( xController->getModel(), UNO_QUERY );
+                        Reference < XNameContainer > xContainer;
+                        if ( xStyles->getStyleFamilies()->getByName( DEFINE_CONST_OUSTRING("PageStyles") )
+                             >>= xContainer )
+                        {
+                            Reference < XStyle > xStyle;
+                            if ( xContainer->getByName( sStyleName ) >>= xStyle )
+                            {
+                                Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
+                                xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("HeaderIsOn"),
+                                                            makeAny( sal_Bool( sal_False ) ) );
+#ifdef DBG_UTIL
+                                bSetOff = sal_True;
+#endif
+                            }
+                        }
+                    }
+                }
             }
         }
-        catch( Exception& )
-        {
-            DBG_ERROR( "SfxHelpTextWindow_Impl::GetFocus(): unexpected exception" );
-        }
     }
-}
+    catch( Exception& )
+    {
+        DBG_ERRORFILE( "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): unexpected exception" );
+    }
 
+#ifdef DBG_UTIL
+    if ( !bSetOff )
+    {
+        DBG_ERRORFILE( "SfxHelpTextWindow_Impl::SetPageStyleHeaderOff(): set off failed" );
+    }
+#endif
+}
 
 // class SfxHelpWindow_Impl ----------------------------------------------
 
@@ -2417,6 +2490,9 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         String sSearchText = pIndexWin->GetSearchText();
         if ( sSearchText.Len() > 0 )
             pTextWin->SelectSearchText( sSearchText );
+
+        // no page style header -> this prevents a print output of the URL
+        pTextWin->SetPageStyleHeaderOff();
     }
 
     return 0;
