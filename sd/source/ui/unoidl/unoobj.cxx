@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:13:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
