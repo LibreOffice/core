@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-23 12:26:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,12 @@
 #include <basic/basicrt.hxx>
 #endif
 #ifndef _BASIC_TESTTOOL_HXX_
-#include <basic/testtool.hxx>
+//#include <basic/testtool.hxx>
 #endif
+#ifndef _SMARTID_HXX_
+#include "smartid.hxx"
+#endif
+
 
 #include <map>
 
@@ -142,7 +146,7 @@ class ControlData
 {
 public:
     String Kurzname;
-    TTUniqueId aUId;
+    SmartId aUId;
 };
 
 DBG_NAMEEX( ControlItem )
@@ -154,8 +158,8 @@ private:
 public:
     ControlData *pData;
 
-    ControlItem( const char *Name, TTUniqueId aUIdP );
-    ControlItem( const String &Name, TTUniqueId aUIdP );
+    ControlItem( const char *Name, SmartId aUIdP );
+    ControlItem( const String &Name, SmartId aUIdP );
 //  ControlItem( const String &Name, const String &URL, const URLType aType );
 //    ControlItem( const String &Name, const String &URL, const ULONG nUId );
 //    ControlItem( const char *Name, const String &URL, const ULONG nUId );
@@ -194,9 +198,9 @@ public:
 class ControlItemSon : public ControlItem, public ControlSon
 {
 public:
-    ControlItemSon(const char *Name, TTUniqueId aUIdP )
+    ControlItemSon(const char *Name, SmartId aUIdP )
         : ControlItem( Name, aUIdP ) {}
-    ControlItemSon(const String &Name, TTUniqueId aUIdP );
+    ControlItemSon(const String &Name, SmartId aUIdP );
 //  ControlItemSon(const String &Name, const String &URL, const URLType aType );
 //    ControlItemSon(const String &Name, const String &URL, const ULONG nUId );
 //    ControlItemSon(const char *Name, const String &URL, const ULONG nUId );
@@ -206,9 +210,9 @@ public:
 class ControlDef : public ControlItemSon
 {
 public:
-    ControlDef(const char *Name, TTUniqueId aUIdP )
+    ControlDef(const char *Name, SmartId aUIdP )
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
-    ControlDef(const String &Name, TTUniqueId aUIdP );
+    ControlDef(const String &Name, SmartId aUIdP );
 //  ControlDef(const String &Name, const String &URL, const URLType aType );
     ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons = FALSE );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
@@ -221,7 +225,7 @@ public:
 class ControlItemUId : public ControlItem
 {
 public:
-    ControlItemUId(String Name, TTUniqueId aUIdP)
+    ControlItemUId(String Name, SmartId aUIdP)
         : ControlItem( Name, aUIdP){}
     virtual BOOL operator < (const ControlItem &rPar);
     virtual BOOL operator == (const ControlItem &rPar);
@@ -230,7 +234,7 @@ public:
 class ControlItemUIdSon : public ControlItemUId, public ControlSon
 {
 public:
-    ControlItemUIdSon(String Name, TTUniqueId aUIdP) : ControlItemUId( Name, aUIdP) {}
+    ControlItemUIdSon(String Name, SmartId aUIdP) : ControlItemUId( Name, aUIdP) {}
     MK_SON_ACCESS( ControlItemUId )
 };
 
@@ -239,14 +243,14 @@ class ReverseName : public ControlItemUId
 public:
     ULONG LastSequence;
 
-    ReverseName(String Name, TTUniqueId aUIdP, ULONG nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
+    ReverseName(String Name, SmartId aUIdP, ULONG nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
 };
 
 class CRevNames: public CNames
 {
 public:
-    void Insert( String aName, TTUniqueId aUId, ULONG nSeq );
-    String GetName( TTUniqueId aUId );
+    void Insert( String aName, SmartId aUId, ULONG nSeq );
+    String GetName( SmartId aUId );
     void Invalidate ( ULONG nSeq );
 };
 
