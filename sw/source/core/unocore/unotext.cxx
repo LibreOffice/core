@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:48:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void SwXText::insertControlCharacter(const uno::Reference< XTextRange > & xTextR
 
                 SwCursor aCrsr(*aTmp.GetPoint());
                 SwXTextCursor::SelectPam(aCrsr, sal_True);
-                aCrsr.Left(1, CRSR_SKIP_CHARS);
+                aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 //hier muss der uebergebene PaM umgesetzt werden:
                 if(pRange)
                     pRange->_CreateNewBookmark(aCrsr);
