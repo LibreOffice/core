@@ -2,9 +2,9 @@
 *
 *  $RCSfile: PrimaryKeyHandler.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:42:53 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:22:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -217,7 +217,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
     public void togglePrimeKeyFields(){
         boolean bdoEnable = (this.chkcreatePrimaryKey.getState() == 1);
-
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), "Enabled", new Boolean(bdoEnable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueAutomatic), "Enabled", new Boolean(bAutoPrimaryKeysupportsAutoIncrmentation && bdoEnable));
         Helper.setUnoPropertyValue(UnoDialog.getModel(optUseExisting), "Enabled", new Boolean(bdoEnable));
@@ -245,9 +244,8 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
     private boolean isAutoIncrementatable(String _fieldname){
     boolean bisAutoIncrementable = false;
     try {
-        XPropertySet xColPropertySet = curTableDescriptor.getColumnbyName(_fieldname);
+        XPropertySet xColPropertySet = curTableDescriptor.getByName(_fieldname);
         if (xColPropertySet != null){
-            int itype = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
             if (curTableDescriptor.getDBDataTypeInspector() != null)
                 return curTableDescriptor.getDBDataTypeInspector().isAutoIncrementable(xColPropertySet);
         }
@@ -275,10 +273,20 @@ public class PrimaryKeyHandler implements XFieldSelectionListener {
 
 
     public void onPrimeKeySelected(){
-        boolean bdoenable = isAutoIncrementatable(lstSinglePrimeKey.getSelectedItem());
+    try {
+        String selfieldname = lstSinglePrimeKey.getSelectedItem();
+        boolean bdoenable = isAutoIncrementatable(selfieldname);
         CurUnoDialog.setcompleted(TableWizard.SOPRIMARYKEYPAGE, lstSinglePrimeKey.getSelectedItemPos() != -1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "Enabled", new Boolean(bdoenable));
-    }
+        XPropertySet xColPropertySet = curTableDescriptor.getByName(selfieldname);
+        boolean bIsAutoIncremented = ((Boolean) xColPropertySet.getPropertyValue("IsAutoIncrement")).booleanValue();
+        if (bIsAutoIncremented)
+            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "State", new Short((short) 1));
+        else
+            Helper.setUnoPropertyValue(UnoDialog.getModel(chkApplyAutoValueExisting), "State", new Short((short) 0));
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
 
 
     private void toggleAutomaticAutoValueCheckBox(){
