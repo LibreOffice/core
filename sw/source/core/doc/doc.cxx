@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:48:02 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,7 +557,7 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
                             pFrmFmt );
 }
 
-SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, String& rObjName,
+SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
                         SwFrmFmt* pFrmFmt )
