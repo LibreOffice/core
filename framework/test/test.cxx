@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:25 $
+ *  last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_SERVICEMANAGER_HXX_
 #include <classes/servicemanager.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
+#include <classes/filtercache.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
@@ -159,12 +163,24 @@
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XELEMENTACCESS_HPP_
+#include <com/sun/star/container/XElementAccess.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -208,7 +224,7 @@
 //_________________________________________________________________________________________________________________
 
 using namespace ::rtl                       ;
-using namespace ::utl                       ;
+using namespace ::comphelper                ;
 using namespace ::framework                 ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::uno       ;
@@ -220,6 +236,8 @@ using namespace ::com::sun::star::util      ;
 using namespace ::com::sun::star::task      ;
 using namespace ::com::sun::star::mozilla   ;
 using namespace ::com::sun::star::bridge    ;
+using namespace ::com::sun::star::document  ;
+using namespace ::com::sun::star::container ;
 
 //_________________________________________________________________________________________________________________
 //  defines
@@ -236,15 +254,21 @@ class TestApplication : public Application
         void Main();
 
     private:
-        // Test the whole desktop implementation.
-        void impl_testDesktop( const Reference< XDesktop >& xDesktop );
-        // Build a new tree with desktop on top.
-        void impl_buildTree( const Reference< XDesktop >& xDesktop );
-        // Write names of all frames in tree to logfile.
-        void impl_logTree( const Reference< XDesktop >& xDesktop );
-        void impl_testPlugIn( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory );
-        // Test login dialog
-        void impl_testLoginDialog();
+
+        //*********************************************************************************************************
+        // test methods
+        //*********************************************************************************************************
+        void impl_testDesktop       ( const Reference< XDesktop >& xDesktop                                                     );
+        void impl_testPlugIn        ( const Reference< XDesktop >& xDesktop, const Reference< XMultiServiceFactory >& xFactory  );
+        void impl_testLoginDialog   (                                                                                           );
+        void impl_testFilterCache   (                                                                                           );
+        void impl_testTypeDetection (                                                                                           );
+
+        //*********************************************************************************************************
+        // helper methods
+        //*********************************************************************************************************
+        void impl_buildTree ( const Reference< XDesktop >& xDesktop );// Build a new tree with desktop on top.
+        void impl_logTree   ( const Reference< XDesktop >& xDesktop );// Write names of all frames in tree to logfile.
 
 };  //  class TestApplication
 
@@ -260,31 +284,53 @@ TestApplication aTestApplication ;
 
 void TestApplication::Main()
 {
-    // 1) Init global servicemanager and set it.
+    /**-***********************************************************************************************************
+        initialize program
+    **************************************************************************************************************/
+
+    // Init global servicemanager and set it.
     ServiceManager aManager;
     Reference< XMultiServiceFactory > xGlobalServiceManager = aManager.getManager();
-    LOG_ASSERT( !(xGlobalServiceManager.is()==sal_False), "TestApplication::Main()\nCan't create global service manager.\n\n" )
-
-    // We must set this global servicemanager as global static variable.
-    // Office must have access to this.
     setProcessServiceFactory( xGlobalServiceManager );
-    // Control this!
-    LOG_ASSERT( !(getProcessServiceFactory()!=xGlobalServiceManager), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n" )
 
-    // For follow operations, we need the vcl-toolkit!
-    // But there is nothing to test for us.
+    // Control sucess of operation.
+    LOG_ASSERT( !(xGlobalServiceManager.is()==sal_False             ), "TestApplication::Main()\nCan't create global service manager.\n\n"          )
+    LOG_ASSERT( !(getProcessServiceFactory()!=xGlobalServiceManager ), "TestApplication::Main()\nGlobal servicemanager not set in UNOTOOLS.\n\n"    )
+
+    // For some follow operations, we need the vcl-toolkit!
     InitExtVclToolkit();
 
-    // 2) Try to create the root of ouer frame hierarchy - the desktop himself.
-    Reference< XDesktop > xDesktop( xGlobalServiceManager->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
-    LOG_ASSERT( !(xDesktop.is()==sal_False), "TestApplication::Main()\nServicename of Desktop is unknown.\n\n" )
+    /**-***********************************************************************************************************
+        test area
+    **************************************************************************************************************/
 
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_FILTERCACHE
+    impl_testFilterCache();
+    #endif
+
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_TYPEDETECTION
+    impl_testTypeDetection();
+    #endif
+
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_LOGINDIALOG
     ResMgr* pRessourceManager = CREATEVERSIONRESMGR( lgd );
     Resource::SetResManager( pRessourceManager );
+    impl_testLoginDialog();
+    #endif
 
-//  impl_testLoginDialog();
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_DESKTOP
+    Reference< XDesktop > xDesktop( xGlobalServiceManager->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
     impl_testDesktop( xDesktop );
-//  impl_testPlugIn( xDesktop, xGlobalServiceManager );
+    #endif
+
+    //-------------------------------------------------------------------------------------------------------------
+    #ifdef TEST_PLUGIN
+    impl_testPlugIn( xDesktop, xGlobalServiceManager );
+    #endif
 
 /*
     Reference< XDispatchProvider > xProvider( xDesktop, UNO_QUERY );
@@ -370,6 +416,184 @@ void TestApplication::Main()
 //  Execute();
 //    xFrame->dispose();
 //    delete pMainWindow;
+    LOG_ASSERT( sal_False, "TestApplication: test successful ..." )
+}
+
+//_________________________________________________________________________________________________________________
+//  test method
+//_________________________________________________________________________________________________________________
+void TestApplication::impl_testTypeDetection()
+{
+    // We use a string buffer to log important informations and search results.
+    // Errors are shown directly by an assert!
+    OUStringBuffer sBuffer( 100000 );
+
+    // Create a new type detection service.
+    Reference< XTypeDetection > xTypeDetection( getProcessServiceFactory()->createInstance( SERVICENAME_TYPEDETECTION ), UNO_QUERY );
+    LOG_ASSERT( !(xTypeDetection.is()==sal_False), "TestApplication::impl_testTypeDetection()\nCouldn't create the type detection service.\n" );
+
+    if( xTypeDetection.is() == sal_True )
+    {
+        // a) Check his implementation and his supported interfaces first.
+        Reference< XInterface >     xInterface      ( xTypeDetection, UNO_QUERY );
+        Reference< XTypeProvider >  xTypeProvider   ( xTypeDetection, UNO_QUERY );
+        Reference< XServiceInfo >   xServiceInfo    ( xTypeDetection, UNO_QUERY );
+        Reference< XNameAccess >    xNameAccess     ( xTypeDetection, UNO_QUERY );
+        Reference< XElementAccess > xElementAccess  ( xTypeDetection, UNO_QUERY );
+
+        LOG_ASSERT( !(  xInterface.is()     ==  sal_False   ||
+                        xTypeProvider.is()  ==  sal_False   ||
+                        xServiceInfo.is()   ==  sal_False   ||
+                        xNameAccess.is()    ==  sal_False   ||
+                        xElementAccess.is() ==  sal_False   ), "TestApplication::impl_testTypeDetection()\nMiss supported for searched interface!\n" )
+
+        // b) Check OneInstance mode of service.
+        Reference< XTypeDetection > xTypeDetection2( getProcessServiceFactory()->createInstance( SERVICENAME_TYPEDETECTION ), UNO_QUERY );
+        LOG_ASSERT( !(xTypeDetection!=xTypeDetection2), "TestApplication::impl_testTypeDetection()\nService isn't \"OneInstance\" ...!\n" )
+        xTypeDetection2 = Reference< XTypeDetection >();
+
+        // c) Check "XTypeDetection" ... flat by URL
+        // Define list of URLs for checking.
+        OUString pURLs[] =
+        {
+            DECLARE_ASCII("file://c|/temp/test.sdw" ),
+            DECLARE_ASCII("private:factory/scalc"   ),
+            DECLARE_ASCII("file://c|/temp/test.txt" ),
+            DECLARE_ASCII("slot:5000"               ),
+        };
+        sal_uInt32 nCount = 4;
+        Sequence< OUString > seqURLs( pURLs, nCount );
+
+        Reference< XMultiServiceFactory > xFilterFactory( getProcessServiceFactory()->createInstance( SERVICENAME_FILTERFACTORY     ), UNO_QUERY );
+        Reference< XMultiServiceFactory > xLoaderFactory( getProcessServiceFactory()->createInstance( SERVICENAME_FRAMELOADERFACTORY), UNO_QUERY );
+        LOG_ASSERT( !(xFilterFactory.is()==sal_False), "TestApplication::impl_testTypeDetection()\nCouldn't create filter factory!\n" )
+        LOG_ASSERT( !(xLoaderFactory.is()==sal_False), "TestApplication::impl_testTypeDetection()\nCouldn't create loader factory!\n" )
+
+        // Step over these list.
+        for( sal_uInt32 nURL=0; nURL<nCount; ++nURL )
+        {
+            // Try to get a type name for every URL from list and log search result.
+            OUString sTypeName = xTypeDetection->queryTypeByURL( seqURLs[nURL] );
+            sBuffer.appendAscii ( "queryTypeByURL( \""      );
+            sBuffer.append      ( seqURLs[nURL]             );
+            sBuffer.appendAscii ( "\" ) returns type \""    );
+            sBuffer.append      ( sTypeName                 );
+            sBuffer.appendAscii ( "\"\n"                    );
+            // If a type was found - try to get a filter and a frame loader for it.
+            if( sTypeName.getLength() > 0 )
+            {
+                Reference< XInterface > xFilter = xFilterFactory->createInstance( sTypeName );
+                Reference< XInterface > xLoader = xLoaderFactory->createInstance( sTypeName );
+                if( xFilter.is() == sal_False )
+                {
+                    sBuffer.appendAscii( "Couldn't find an filter.\n" );
+                }
+                else
+                {
+                    Reference< XPropertySet > xFilterProperties( xFilter, UNO_QUERY );
+                    LOG_ASSERT( !(xFilterProperties.is()==sal_False), "TestApplication::impl_testTypeDetection()\nFilter don't support XPropertySet!\n" )
+                    if( xFilterProperties.is() == sal_True )
+                    {
+                        OUString sUIName;
+                        xFilterProperties->getPropertyValue( DECLARE_ASCII("UIName") ) >>= sUIName;
+                        sBuffer.appendAscii ( "Found filter \"" );
+                        sBuffer.append      ( sUIName           );
+                        sBuffer.appendAscii ( "\"\n"            );
+                    }
+
+                    Reference< XPropertySet > xLoaderProperties( xLoader, UNO_QUERY );
+                    LOG_ASSERT( !(xLoaderProperties.is()==sal_False), "TestApplication::impl_testTypeDetection()\nLoader don't support XPropertySet!\n" )
+                    if( xLoaderProperties.is() == sal_True )
+                    {
+                        OUString sUIName;
+                        xLoaderProperties->getPropertyValue( DECLARE_ASCII("UIName") ) >>= sUIName;
+                        sBuffer.appendAscii ( "Found loader \"" );
+                        sBuffer.append      ( sUIName           );
+                        sBuffer.appendAscii ( "\"\n"            );
+                    }
+                }
+            }
+        }
+    }
+
+    WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()).getStr() )
+}
+
+//_________________________________________________________________________________________________________________
+//  test method
+//_________________________________________________________________________________________________________________
+void TestApplication::impl_testFilterCache()
+{
+    FilterCache aCache;
+
+    OUStringBuffer sBuffer( 100000 );
+    if( aCache.isValid() == sal_False )
+    {
+        sBuffer.appendAscii( "Cache isn't valid!\n" );
+    }
+    else
+    {
+/*
+        // Step over all types and log his values.
+        // These simulate a XNameAccess!
+        const Sequence< OUString > seqAllTypeNames = aCache.getAllTypeNames();
+        sal_uInt32 nCount = seqAllTypeNames.getLength();
+        for( sal_uInt32 nPosition=0; nPosition<nCount; ++nPosition )
+        {
+            sBuffer.appendAscii( "--------------------------------------------------------------------------------\n" );
+            const TType* pType = aCache.getTypeByName( seqAllTypeNames[nPosition] );
+            if( pType == NULL )
+            {
+                sBuffer.appendAscii ( "Type ["                  );
+                sBuffer.append      ( (sal_Int32)nPosition      );
+                sBuffer.appendAscii ( "] \""                    );
+                sBuffer.append      ( seqAllTypeNames[nPosition]);
+                sBuffer.appendAscii ( "\" isn't valid!"         );
+            }
+            else
+            {
+                sBuffer.appendAscii ( "Type ["                      );
+                sBuffer.append      ( (sal_Int32)nPosition          );
+                sBuffer.appendAscii ( "] \""                        );
+                sBuffer.append      ( seqAllTypeNames[nPosition]    );
+                sBuffer.appendAscii ( "\"\n\t\tUIName\t=\t"         );
+                sBuffer.append      ( pType->sUIName                );
+                sBuffer.appendAscii ( "\n\t\tMediaType\t=\t"        );
+                sBuffer.append      ( pType->sMediaType             );
+                sBuffer.appendAscii ( "\n\t\tClipboardFormat\t=\t"  );
+                sBuffer.append      ( pType->sClipboardFormat       );
+                sBuffer.appendAscii ( "\n\t\tURLPattern\t=\t{"      );
+                for( TConstStringIterator aIterator=pType->lURLPattern.begin(); aIterator!=pType->lURLPattern.end(); ++aIterator )
+                {
+                    sBuffer.append      ( *aIterator    );
+                    sBuffer.appendAscii ( ";\n\t\t"     );
+                }
+                sBuffer.appendAscii( "}\nExtensions\t=\t" );
+                for( aIterator=pType->lExtensions.begin(); aIterator!=pType->lExtensions.end(); ++aIterator )
+                {
+                    sBuffer.append      ( *aIterator    );
+                    sBuffer.appendAscii ( ";\n\t\t"     );
+                }
+                sBuffer.appendAscii ( "}\nDocumentIconID\t=\t"          );
+                sBuffer.append      ( (sal_Int32)pType->nDocumentIconID );
+            }
+        }
+*/
+        // searchFirstType( URL, MediaType, ClipboardFormat, startEntry )
+        TConstTypeIterator aIterator;
+        sBuffer.appendAscii( "search type for \"file://c|/temp/test.sdw\"; no media type; no clipboard format\n" );
+        OUString sURL = DECLARE_ASCII("file://c|/temp/test.sdw");
+        const OUString* pType = aCache.searchFirstType( &sURL, NULL, NULL, aIterator );
+        while( pType != NULL )
+        {
+            sBuffer.appendAscii ( "\tfound \""  );
+            sBuffer.append      ( *pType        );
+            sBuffer.appendAscii ( "\"\n"        );
+            pType = aCache.searchType( &sURL, NULL, NULL, aIterator );
+        }
+    }
+
+    WRITE_LOGFILE( "test_FilterCache.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
 
 //_________________________________________________________________________________________________________________
@@ -507,6 +731,7 @@ void TestApplication::impl_testPlugIn( const Reference< XDesktop >& xDesktop, co
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
+#define LOGFILE_TARGETING "targeting.log"
 void TestApplication::impl_testDesktop( const Reference< XDesktop >& xDesktop )
 {
     //-------------------------------------------------------------------------------------------------------------

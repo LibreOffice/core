@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+#   last change: $Author: as $ $Date: 2000-11-23 14:52:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,12 +76,27 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Generate -----------------------------------------------------
 
+.IF "$(TF_FILTER)"!=""
 SLOFILES=			\
+                    $(SLO)$/desktop.obj								\
+                    $(SLO)$/pluginframe.obj							\
                     $(SLO)$/task.obj								\
                     $(SLO)$/frame.obj								\
-                    $(SLO)$/frameloaderfactory.obj
-
-#					$(SLO)$/desktop.obj								\
+                    $(SLO)$/frameloaderfactory2.obj					\
+                    $(SLO)$/filterfactory.obj						\
+                    $(SLO)$/typedetection.obj						\
+                    $(SLO)$/urltransformer.obj						\
+                    $(SLO)$/mediatypedetectionhelper.obj
+.ELSE
+SLOFILES=			\
+                    $(SLO)$/desktop.obj								\
+                    $(SLO)$/pluginframe.obj							\
+                    $(SLO)$/task.obj								\
+                    $(SLO)$/frame.obj								\
+                    $(SLO)$/frameloaderfactory.obj					\
+                    $(SLO)$/urltransformer.obj						\
+                    $(SLO)$/mediatypedetectionhelper.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

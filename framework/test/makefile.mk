@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:29:25 $
+#   last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,16 +65,18 @@ PRJNAME=			framework
 TARGET=				test
 LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
+USE_DEFFILE=		TRUE
+NO_BSYMBOLIC=		TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
-.INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
+.INCLUDE :  svpre.mk
+.INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
-# --- Files --------------------------------------------------------
-
-SLOFILES=		$(SLO)$/test.obj
+.IF "$(COM)"=="ICC"
+LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
+.ENDIF
 
 # --- Applikation --------------------------------------------------
 
@@ -82,23 +84,26 @@ APP1TARGET= 	$(TARGET)
 
 APP1OBJS=		$(SLO)$/test.obj
 
-APP1STDLIBS=	$(SLB)$/fwk_classes.lib		\
-                $(SLB)$/fwk_helper.lib		\
-                $(CPPULIB)					\
-                $(CPPUHELPERLIB)			\
-                $(OSLLIB)					\
-                $(SALLIB)					\
-                $(VOSLIB)					\
-                $(TOOLSLIB) 				\
-                $(SVTOOLLIB)				\
-                $(TKLIB)					\
-                $(UNOTOOLSLIB)				\
+APP1LIBS=		$(SLB)$/fwk_classes.lib				\
+                $(SLB)$/fwk_helper.lib
+
+APP1STDLIBS=	\
+                $(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(TOOLSLIB) 						\
+                $(SVTOOLLIB)						\
+                $(TKLIB)							\
+                $(COMPHELPERLIB)					\
                 $(SVLIB)
 
-APP1DEPN=		$(SLB)$/fwk_classes.lib
+APP1DEPN=		$(SLB)$/fwk_helper.lib				\
+                $(SLB)$/fwk_classes.lib
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/$(TARGET).def
+APP1DEF=		$(MISC)$/test.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------

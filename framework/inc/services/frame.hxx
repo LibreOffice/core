@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-10-23 13:56:42 $
+ *  last change: $Author: as $ $Date: 2000-11-23 14:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ namespace framework{
 #define XFOCUSLISTENER                              ::com::sun::star::awt::XFocusListener
 #define XFRAME                                      ::com::sun::star::frame::XFrame
 #define XFRAMEACTIONLISTENER                        ::com::sun::star::frame::XFrameActionListener
-#define XFRAMELOADER                                ::com::sun::star::frame::XFrameLoader
 #define XFRAMES                                     ::com::sun::star::frame::XFrames
 #define XFRAMESSUPPLIER                             ::com::sun::star::frame::XFramesSupplier
 #define XMULTISERVICEFACTORY                        ::com::sun::star::lang::XMultiServiceFactory

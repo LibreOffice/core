@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+ *  last change: $Author: as $ $Date: 2000-11-23 14:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_________________________________________________________________________________________________________________
 //  includes of my own project
 //_________________________________________________________________________________________________________________
@@ -92,6 +91,22 @@
                              )
 =================================================================================================================*/
 
+#ifndef __FRAMEWORK_BAEHSERVICES_URLTRANSFORMER_HXX_
+#include <baeh_services/urltransformer.hxx>
+#endif
+
+#ifndef __FRAMEWORK_BAEHSERVICES_PLUGINFRAME_HXX_
+#include <baeh_services/pluginframe.hxx>
+#endif
+
+#ifndef __FRAMEWORK_BAEHSERVICES_DESKTOP_HXX_
+#include <baeh_services/desktop.hxx>
+#endif
+
+#ifndef __FRAMEWORK_BAEHSERVICES_MEDIATYPEDETECTIONHELPER_HXX_
+#include <baeh_services/mediatypedetectionhelper.hxx>
+#endif
+
 #ifndef __FRAMEWORK_SERVICES_TASK_HXX_
 #include <services/task.hxx>
 #endif
@@ -104,14 +119,56 @@
 #include <services/frameloaderfactory.hxx>
 #endif
 
+#if TF_FILTER//MUSTFILTER
+    #ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
+    #include <services/filterfactory.hxx>
+    #endif
+
+    #ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
+    #include <services/typedetection.hxx>
+    #endif
+#endif//MUSTFILTER
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::Task                )
-                        COMPONENTINFO( ::framework::Frame               )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory  )
+#if TF_FILTER//MUSTFILTER
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
+                        COMPONENTINFO( ::framework::PlugInFrame                 )
+                        COMPONENTINFO( ::framework::Desktop                     )
+                        COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
+                        COMPONENTINFO( ::framework::Task                        )
+                        COMPONENTINFO( ::framework::Frame                       )
+                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
+                        COMPONENTINFO( ::framework::FilterFactory               )
+                        COMPONENTINFO( ::framework::TypeDetection               )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::Task                    )   else
-                        IFFACTORY( ::framework::Frame                   )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory      )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
+                        IFFACTORY( ::framework::PlugInFrame                     )   else
+                        IFFACTORY( ::framework::Desktop                         )   else
+                        IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
+                        IFFACTORY( ::framework::Task                            )   else
+                        IFFACTORY( ::framework::Frame                           )   else
+                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
+                        IFFACTORY( ::framework::FilterFactory                   )   else
+                        IFFACTORY( ::framework::TypeDetection                   )
                     )
+#else//MUSTFILTER
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
+                        COMPONENTINFO( ::framework::PlugInFrame                 )
+                        COMPONENTINFO( ::framework::Desktop                     )
+                        COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
+                        COMPONENTINFO( ::framework::Task                        )
+                        COMPONENTINFO( ::framework::Frame                       )
+                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
+                    )
+
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
+                        IFFACTORY( ::framework::PlugInFrame                     )   else
+                        IFFACTORY( ::framework::Desktop                         )   else
+                        IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
+                        IFFACTORY( ::framework::Task                            )   else
+                        IFFACTORY( ::framework::Frame                           )   else
+                        IFFACTORY( ::framework::FrameLoaderFactory              )
+                    )
+#endif//MUSTFILTER

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: as $ $Date: 2000-10-23 11:10:46 $
+#   last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,9 @@ LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 SHL2TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
 
-SHL2OBJS=		$(SLO)$/registerbaehservices.obj
+SHL2OBJS=		$(SLO)$/registerservices.obj
 
-SHL2LIBS=		$(SLB)$/fwk_baehservices.lib		\
-                $(SLB)$/fwk_services.lib			\
+SHL2LIBS=		$(SLB)$/fwk_services.lib			\
                 $(SLB)$/fwk_helper.lib				\
                 $(SLB)$/fwk_classes.lib
 
@@ -101,7 +100,6 @@ SHL2STDLIBS=	$(CPPULIB)							\
                 $(SVLIB)							\
                 $(COMPHELPERLIB)					\
                 $(SVLLIB)
-
 
 SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
 
@@ -118,8 +116,6 @@ APP1OBJS=		$(SLO)$/framework.obj
 APP1LIBS=		$(SLB)$/fwk_classes.lib				\
                 $(SLB)$/fwk_helper.lib				\
                 $(SLB)$/fwk_services.lib
-
-
 
 APP1STDLIBS=	\
                 $(CPPULIB)							\
