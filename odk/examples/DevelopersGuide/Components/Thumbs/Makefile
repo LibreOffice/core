@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:15:10 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:21:46 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -65,7 +65,7 @@ $(SUBDIRS) :
 
 org/openoffice/comp/test : org/openoffice/test
 
-ComponentsThumbsExample : $(COMPONENT1_PACKAGE)
+ComponentsThumbsExample : $(COMPONENT_PACKAGE)
 	@echo --------------------------------------------------------------------------------
 	@echo The ImageShrink Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
