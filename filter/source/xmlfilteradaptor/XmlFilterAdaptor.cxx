@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:57:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,18 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTSETINFO_HXX_
+#include <comphelper/propertysetinfo.hxx>
+#endif
+
 using namespace rtl;
+using namespace comphelper;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
@@ -144,6 +155,8 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
+
+#define MAP_LEN(x) x, sizeof(x) - 1
 
 Reference< com::sun::star::frame::XModel > xModel;
 
@@ -293,11 +306,31 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     try{
         // create the xml exporter service and supply the converter component
         // which implements the document handler
-        Sequence < Any > aAnys ( 1 );
+        Sequence < Any > aAnys (2);
         aAnys[0] <<= xConverter;
+
+        // create an XProperty set to configure the exporter for pretty printing
+        // pretty printing is confusing for some filters so it is disabled by default
+        sal_Bool bPrettyPrint =
+            (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCaseAscii("true"));
+         PropertyMapEntry aImportInfoMap[] =
+         {
+             { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((const sal_Bool*)0),
+                PropertyAttribute::MAYBEVOID, 0},
+             { NULL, 0, 0, NULL, 0, 0 }
+         };
+         Reference< XPropertySet > xInfoSet(
+            GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
+         xInfoSet->setPropertyValue(
+            OUString::createFromAscii( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
+        aAnys[1] <<= xInfoSet;
+
         Reference< XExporter > xExporter( mxMSF->createInstanceWithArguments (
                        udExport, aAnys ), UNO_QUERY_THROW );
+
+        // attach to source document
         xExporter->setSourceDocument( mxDoc );
+
         // get XFilter interface
         Reference< XFilter > xFilter( xExporter, UNO_QUERY_THROW );
 
