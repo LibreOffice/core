@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:52:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,9 +820,13 @@ SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 {
     SwPageFrm* pRetPageFrm = 0L;
 
-    // --> OD 2004-10-08 #i26945# - use new method <GetAnchorFrmContainingAnchPos()>
-    pRetPageFrm = GetAnchorFrmContainingAnchPos()->FindPageFrm();
-    // <--
+    // --> OD 2005-03-08 #i44339# - check, if anchor frame exists.
+    if ( mpAnchorFrm )
+    {
+        // --> OD 2004-10-08 #i26945# - use new method <GetAnchorFrmContainingAnchPos()>
+        pRetPageFrm = GetAnchorFrmContainingAnchPos()->FindPageFrm();
+        // <--
+    }
 
     return pRetPageFrm;
 }
@@ -842,13 +846,18 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
 {
     SwTxtFrm* pAnchorCharFrm( 0L );
 
-    const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
-    if ( rAnch.GetAnchorId() == FLY_AUTO_CNTNT ||
-         rAnch.GetAnchorId() == FLY_IN_CNTNT )
+    // --> OD 2005-03-08 #i44339# - check, if anchor frame exists.
+    if ( mpAnchorFrm )
     {
-        pAnchorCharFrm = &(static_cast<SwTxtFrm*>(AnchorFrm())->
-                    GetFrmAtOfst( rAnch.GetCntntAnchor()->nContent.GetIndex() ));
+        const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
+        if ( rAnch.GetAnchorId() == FLY_AUTO_CNTNT ||
+             rAnch.GetAnchorId() == FLY_IN_CNTNT )
+        {
+            pAnchorCharFrm = &(static_cast<SwTxtFrm*>(AnchorFrm())->
+                        GetFrmAtOfst( rAnch.GetCntntAnchor()->nContent.GetIndex() ));
+        }
     }
+    // <--
 
     return pAnchorCharFrm;
 }
