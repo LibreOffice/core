@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OGridControlModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:48:45 $
+ *  last change:$Date: 2003-11-18 16:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,10 @@ public class OGridControlModel extends TestCase {
             }
         });
 
-        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+        int THRCNT = 1;
+        String count = (String)Param.get("THRCNT");
+        if (count != null)
+            THRCNT = Integer.parseInt(count);
 
 
         // INSTANCEn : _XNameContainer; _XNameReplace
