@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:25:42 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text[ russian ] = "—Ú‡ÌËˆ‡";
                 Text[ polish ] = "Strona";
                 Text[ japanese ] = "Õﬂ∞ºﬁ";
-                Text[ chinese_traditional ] = "≠∂≠±";
+                Text[ chinese_traditional ] = "≠∂";
                 Text[ arabic ] = "’›Õ…";
                 Text[ greek ] = "”ÂÎﬂ‰·";
                 Text[ korean ] = "¬ ";
