@@ -51,6 +51,7 @@ typedef _W64 int   ssize_t;
 #endif
 
 #include "def.h"
+#include <string.h>
 #ifdef hpux
 #define sigvec sigvector
 #endif /* hpux */
@@ -109,6 +110,11 @@ char    *directives[] = {
 #include "imakemdep.h"  /* from config sources */
 #undef MAKEDEPEND
 
+/*******   function declarations ********/
+/*******   added by -Wall project *******/
+void freefile(struct filepointer * fp);
+void redirect(char * line, char * makefile );
+
 struct  inclist inclist[ MAXFILES ],
         *inclistp = inclist,
         maininclist;
@@ -153,7 +159,7 @@ catch (sig)
 struct sigaction sig_act;
 #endif /* USGISH */
 
-main(argc, argv)
+int main(argc, argv)
     int argc;
     char    **argv;
 {
@@ -493,7 +499,7 @@ struct filepointer *getfile(file)
     return(content);
 }
 
-freefile(fp)
+void freefile(fp)
     struct filepointer  *fp;
 {
     free(fp->f_base);
@@ -509,7 +515,7 @@ char *copy(str)
     return(p);
 }
 
-match(str, list)
+int match(str, list)
     register char   *str, **list;
 {
     register int    i;
@@ -530,7 +536,7 @@ char *getline(filep)
     register char   *p, /* walking pointer */
             *eof,   /* end of file pointer */
             *bol;   /* beginning of line pointer */
-    register    lineno; /* line number */
+    register int    lineno; /* line number */
 
     p = filep->f_p;
     eof = filep->f_end;
@@ -621,7 +627,7 @@ int rename (from, to)
 }
 #endif /* USGISH */
 
-redirect(line, makefile)
+void redirect(line, makefile)
     char    *line,
         *makefile;
 {
@@ -691,10 +697,10 @@ redirect(line, makefile)
 }
 
 #if NeedVarargsPrototypes
-fatalerr(char *msg, ...)
+int fatalerr(char *msg, ...)
 #else
 /*VARARGS*/
-fatalerr(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
+int fatalerr(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
     char *msg;
 #endif
 {
@@ -713,10 +719,10 @@ fatalerr(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
 }
 
 #if NeedVarargsPrototypes
-warning(char *msg, ...)
+int warning(char *msg, ...)
 #else
 /*VARARGS0*/
-warning(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
+int warning(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
     char *msg;
 #endif
 {
@@ -733,13 +739,14 @@ warning(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
     fprintf(stderr, msg,x1,x2,x3,x4,x5,x6,x7,x8,x9);
 #endif
 #endif /* DEBUG_MKDEPEND */
+    return 0;
 }
 
 #if NeedVarargsPrototypes
-warning1(char *msg, ...)
+void warning1(char *msg, ...)
 #else
 /*VARARGS0*/
-warning1(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
+void warning1(msg,x1,x2,x3,x4,x5,x6,x7,x8,x9)
     char *msg;
 #endif
 {
