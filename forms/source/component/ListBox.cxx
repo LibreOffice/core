@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-23 15:11:49 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ void OListBoxModel::loadData()
                 if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                 {
                     Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
-                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(sal_Bool(sal_False)));
+                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any((sal_False)));
                 }
                 xListCursor = xStmt->executeQuery(sListSource);
             }
@@ -903,7 +903,7 @@ void OListBoxModel::_loaded(const EventObject& rEvent)
     // an Felder gebundene Listboxen haben keine Multiselektion
     if (m_xField.is())
     {
-        setFastPropertyValue(PROPERTY_ID_MULTISELECTION, makeAny(sal_Bool(sal_False)));
+        setFastPropertyValue(PROPERTY_ID_MULTISELECTION, ::cppu::bool2any((sal_False)));
     }
 
     if (m_eListSourceType != ListSourceType_VALUELIST)

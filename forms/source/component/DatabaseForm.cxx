@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:44:22 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,14 +1016,14 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 {
                     // <name>.x=<pos.X>&<name>.y=<pos.Y>
                     ::rtl::OUString aLhs = aName;
-                    ::rtl::OUString aRhs = ::rtl::OUString( MouseEvt.X );
+                    ::rtl::OUString aRhs = ::rtl::OUString::valueOf( MouseEvt.X );
 
                     // nur wenn ein Name vorhanden ist, kann ein name.x
                     aLhs += aName.getLength() ? UniString::CreateFromAscii(".x") : UniString::CreateFromAscii("x");
                     rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
 
                     aLhs = aName;
-                    aRhs = ::rtl::OUString( MouseEvt.Y );
+                    aRhs = ::rtl::OUString::valueOf( MouseEvt.Y );
                     aLhs += aName.getLength() ? UniString::CreateFromAscii(".y") : UniString::CreateFromAscii("y");
                     rList.push_back( HtmlSuccessfulObj(aLhs, aRhs) );
 
@@ -1326,9 +1326,9 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 
 
     // Jeden einzelnen Character ueberpruefen
-    sal_uInt16 nStrLen = rString.getLength();
+    sal_Int32 nStrLen = rString.getLength();
     sal_Unicode nCharCode;
-    for( sal_uInt16 nCurPos=0; nCurPos < nStrLen; ++nCurPos )
+    for( sal_Int32 nCurPos=0; nCurPos < nStrLen; ++nCurPos )
     {
         nCharCode = rString[nCurPos];
 
@@ -2021,7 +2021,7 @@ Any SAL_CALL ODatabaseForm::getFastPropertyValue( sal_Int32 nHandle )
        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     if ((nHandle == PROPERTY_ID_ISMODIFIED) && (m_nResetsPending > 0))
-        return makeAny(sal_Bool(sal_False));
+        return ::cppu::bool2any((sal_False));
         // don't allow the aggregate which is currently reset to return a (temporary) "yes"
     else
         return OPropertySetAggregationHelper::getFastPropertyValue(nHandle);
@@ -2407,7 +2407,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     // on the modified state of the row
     // 21.02.00 - 73265 - FS)
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, makeAny(sal_Bool(sal_False)));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any(sal_Bool(sal_False)));
 
     aResetGuard.clear();
     {
@@ -2419,7 +2419,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     // and again : ensure the row isn't modified
     // we already did this after we (and maybe our dependents) resetted the values, but the listeners may have changed the row, too
     if (bInsertRow)
-        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, makeAny(sal_Bool(sal_False)));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any((sal_False)));
 
     --m_nResetsPending;
 }
