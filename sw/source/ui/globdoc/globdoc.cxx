@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:11:19 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,7 @@
 
 #pragma hdrstop
 
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
-
 #include <sot/clsids.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svtools/moduleoptions.hxx>
 
 #include "swtypes.hxx"
@@ -85,19 +80,7 @@
 TYPEINIT1(SwGlobalDocShell, SwDocShell);
 
 //-------------------------------------------------------------------------
-SFX_IMPL_OBJECTFACTORY(SwGlobalDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter/GlobalDocument, SvGlobalName(SO3_SWGLOB_CLASSID) )
-{
-    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
-    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.GlobalDocument"));
-    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::GlobDetectFilter );
-    SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWGLOBAL_MENU));
-    SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
-    if ( SvtModuleOptions().IsWriter() )
-    {
-        SwGlobalDocShell::Factory().RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
-        //SwGlobalDocShell::Factory().RegisterHelpPIFile(String::CreateFromAscii("swriter.svh"));
-    }
-}
+SFX_IMPL_OBJECTFACTORY( SwGlobalDocShell, SvGlobalName(SO3_SWGLOB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/GlobalDocument" )
 
 SwGlobalDocShell::SwGlobalDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode)
@@ -113,25 +96,9 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion ) const
+                                   sal_Int32 nVersion ) const
 {
-    SfxInPlaceObject::FillClass(pClassName, pClipFormat, pAppName, pLongUserName,
-                                pUserName, nVersion);
-
-    if (nVersion == SOFFICE_FILEFORMAT_40)
-    {
-        *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_40 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_40;
-        *pAppName = String::CreateFromAscii("StarWriter 4.0/GlobalDocument");
-        *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE_40);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_50)
-    {
-        *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_50 );
-        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_50;
-        *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE_50);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_60)
+    if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_60;
