@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 15:18:00 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 11:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,12 +379,12 @@
 #define SC_UNO_STANDARDDEC          "StandardDecimals"
 
 //  view options
-#define SC_UNO_COLROWHDR            "ColumnRowHeaders"
+#define SC_UNO_COLROWHDR            "HasColumnRowHeaders"
 #define SC_UNO_GRIDCOLOR            "GridColor"
 #define SC_UNO_HIDESPELL            "HideSpellMarks"
-#define SC_UNO_HORSCROLL            "HorizontalScrollBar"
-#define SC_UNO_OUTLSYMB             "OutlineSymbols"
-#define SC_UNO_SHEETTABS            "SheetTabs"
+#define SC_UNO_HORSCROLL            "HasHorizontalScrollBar"
+#define SC_UNO_OUTLSYMB             "IsOutlineSymbolsSet"
+#define SC_UNO_SHEETTABS            "HasSheetTabs"
 #define SC_UNO_SHOWANCHOR           "ShowAnchor"
 #define SC_UNO_SHOWCHARTS           "ShowCharts"
 #define SC_UNO_SHOWDRAW             "ShowDrawing"
@@ -396,8 +396,16 @@
 #define SC_UNO_SHOWPAGEBR           "ShowPageBreaks"
 #define SC_UNO_SHOWZERO             "ShowZeroValues"
 #define SC_UNO_SHOWSOLID            "SolidHandles"
-#define SC_UNO_VALUEHIGH            "ValueHighlighting"
-#define SC_UNO_VERTSCROLL           "VerticalScrollBar"
+#define SC_UNO_VALUEHIGH            "IsValueHighlightingEnabled"
+#define SC_UNO_VERTSCROLL           "HasVerticalScrollBar"
+
+//  old (5.2) property names for view options - for compatibility only!
+#define OLD_UNO_COLROWHDR           "ColumnRowHeaders"
+#define OLD_UNO_HORSCROLL           "HorizontalScrollBar"
+#define OLD_UNO_OUTLSYMB            "OutlineSymbols"
+#define OLD_UNO_SHEETTABS           "SheetTabs"
+#define OLD_UNO_VALUEHIGH           "ValueHighlighting"
+#define OLD_UNO_VERTSCROLL          "VerticalScrollBar"
 
 //  data pilot source
 #define SC_UNO_COLGRAND             "ColumnGrand"

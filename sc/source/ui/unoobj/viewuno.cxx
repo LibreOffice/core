@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 22:59:48 $
+ *  last change: $Author: nn $ $Date: 2000-12-21 11:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,18 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
 {
     static SfxItemPropertyMap aViewOptPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_COLROWHDR),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_HORSCROLL),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_SHEETTABS),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_VERTSCROLL),   0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_HORSCROLL),   0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(SC_UNO_VALUEHIGH),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_OUTLSYMB),    0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_SHEETTABS),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_SHOWANCHOR),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_SHOWCHARTS),   0,  &getCppuType((sal_Int16*)0),    0},
         {MAP_CHAR_LEN(SC_UNO_SHOWDRAW),     0,  &getCppuType((sal_Int16*)0),    0},
@@ -121,8 +127,8 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SHOWPAGEBR),   0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),          0},
         {MAP_CHAR_LEN(SC_UNO_SHOWSOLID),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_VALUEHIGH),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_VERTSCROLL),   0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_VALUEHIGH),   0,  &getBooleanCppuType(),          0},
+        {MAP_CHAR_LEN(OLD_UNO_VERTSCROLL),  0,  &getBooleanCppuType(),          0},
         {0,0,0,0}
     };
     return aViewOptPropertyMap_Impl;
@@ -1231,13 +1237,13 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         const ScViewOptions& rOldOpt = pViewSh->GetViewData()->GetOptions();
         ScViewOptions aNewOpt = rOldOpt;
 
-        if ( aString.EqualsAscii( SC_UNO_COLROWHDR ) )
+        if ( aString.EqualsAscii( SC_UNO_COLROWHDR ) || aString.EqualsAscii( OLD_UNO_COLROWHDR ) )
             aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_HORSCROLL ) )
+        else if ( aString.EqualsAscii( SC_UNO_HORSCROLL ) || aString.EqualsAscii( OLD_UNO_HORSCROLL ) )
             aNewOpt.SetOption( VOPT_HSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_OUTLSYMB ) )
+        else if ( aString.EqualsAscii( SC_UNO_OUTLSYMB ) || aString.EqualsAscii( OLD_UNO_OUTLSYMB ) )
             aNewOpt.SetOption( VOPT_OUTLINER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_SHEETTABS ) )
+        else if ( aString.EqualsAscii( SC_UNO_SHEETTABS ) || aString.EqualsAscii( OLD_UNO_SHEETTABS ) )
             aNewOpt.SetOption( VOPT_TABCONTROLS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWANCHOR ) )
             aNewOpt.SetOption( VOPT_ANCHOR, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -1255,9 +1261,9 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             aNewOpt.SetOption( VOPT_NULLVALS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWSOLID ) )
             aNewOpt.SetOption( VOPT_SOLIDHANDLES, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_VALUEHIGH ) )
+        else if ( aString.EqualsAscii( SC_UNO_VALUEHIGH ) || aString.EqualsAscii( OLD_UNO_VALUEHIGH ) )
             aNewOpt.SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-        else if ( aString.EqualsAscii( SC_UNO_VERTSCROLL ) )
+        else if ( aString.EqualsAscii( SC_UNO_VERTSCROLL ) || aString.EqualsAscii( OLD_UNO_VERTSCROLL ) )
             aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWOBJ ) )
         {
@@ -1324,10 +1330,14 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
     {
         const ScViewOptions& rOpt = pViewSh->GetViewData()->GetOptions();
 
-        if ( aString.EqualsAscii( SC_UNO_COLROWHDR ) )       ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HEADER ) );
-        else if ( aString.EqualsAscii( SC_UNO_HORSCROLL ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HSCROLL ) );
-        else if ( aString.EqualsAscii( SC_UNO_OUTLSYMB ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_OUTLINER ) );
-        else if ( aString.EqualsAscii( SC_UNO_SHEETTABS ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_TABCONTROLS ) );
+        if ( aString.EqualsAscii( SC_UNO_COLROWHDR ) || aString.EqualsAscii( OLD_UNO_COLROWHDR ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HEADER ) );
+        else if ( aString.EqualsAscii( SC_UNO_HORSCROLL ) || aString.EqualsAscii( OLD_UNO_HORSCROLL ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_HSCROLL ) );
+        else if ( aString.EqualsAscii( SC_UNO_OUTLSYMB ) || aString.EqualsAscii( OLD_UNO_OUTLSYMB ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_OUTLINER ) );
+        else if ( aString.EqualsAscii( SC_UNO_SHEETTABS ) || aString.EqualsAscii( OLD_UNO_SHEETTABS ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_TABCONTROLS ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWANCHOR ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_ANCHOR ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWFORM ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_FORMULAS ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWGRID ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_GRID ) );
@@ -1336,8 +1346,10 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
         else if ( aString.EqualsAscii( SC_UNO_SHOWPAGEBR ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_PAGEBREAKS ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWZERO ) )   ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_NULLVALS ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWSOLID ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_SOLIDHANDLES ) );
-        else if ( aString.EqualsAscii( SC_UNO_VALUEHIGH ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_SYNTAX ) );
-        else if ( aString.EqualsAscii( SC_UNO_VERTSCROLL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_VSCROLL ) );
+        else if ( aString.EqualsAscii( SC_UNO_VALUEHIGH ) || aString.EqualsAscii( OLD_UNO_VALUEHIGH ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_SYNTAX ) );
+        else if ( aString.EqualsAscii( SC_UNO_VERTSCROLL ) || aString.EqualsAscii( OLD_UNO_VERTSCROLL ) )
+            ScUnoHelpFunctions::SetBoolInAny( aRet, rOpt.GetOption( VOPT_VSCROLL ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWOBJ ) )    aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_OLE ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWCHARTS ) ) aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_CHART ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWDRAW ) )   aRet <<= (sal_Int16)( rOpt.GetObjMode( VOBJ_TYPE_DRAW ) );
