@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:18:34 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -230,8 +229,7 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
         }
     }
 
-    char    *s=NULL;
-    for (i; i < ac; i++)
+    for (; i < ac; i++)
     {
         if (av[i][0] == '-')
         {
@@ -542,10 +540,10 @@ DoIt::DoIt(sal_Bool bRegister,
     : _bRegister(bRegister),
       _bRevoke(bRevoke),
       _bSilent( bSilent ),
-      _xReg(xReg),
       _sRegName(sRegName),
-      _xImplRegistration(xImplRegistration),
       _sLoaderName(sLoaderName),
+      _xImplRegistration(xImplRegistration),
+      _xReg(xReg),
       _exitCode(exitCode)
 {}
 
