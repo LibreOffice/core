@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:41:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,17 +842,37 @@ void SdDrawView::PresPaint(const Region& rRegion)
 
         if( pPageView )
         {
-            SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
-            rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor(pPageView) );
+            // #110325#
+            // in the case that the first page is not yet displayed and there
+            // is a fade effect set on the first page, we don't want to redraw
+            // the page before it is faded in. An indicator that no page is
+            // faded in yet is that GetActualPage() from the slideshow return
+            // null. In that case and if the first page contain a fade effect
+            // we only display the black background and not the page. This
+            // will fade in from the presentation later.
+            bool bAllowPaint = true;
 
-            const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
+            if( pFuSlideShow && (pFuSlideShow->GetActualPage() == NULL) )
+            {
+                const USHORT nCurPage = pFuSlideShow->GetCurrentPage();
+                SdPage* pCurPage = pDoc->GetSdPage( nCurPage, PK_STANDARD );
+                bAllowPaint = pCurPage && pCurPage->GetFadeEffect() == com::sun::star::presentation::FadeEffect_NONE;
+            }
 
-            pWindow->Push( PUSH_CLIPREGION );
-            pWindow->IntersectClipRegion( pPageView->GetPageRect() );
+            if( bAllowPaint )
+            {
+                SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
+                rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor(pPageView) );
 
-            pPageView->InitRedraw( (USHORT) 0, rRegion, 0, &aPaintProcLink );
+                const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
 
-            pWindow->Pop();
+                pWindow->Push( PUSH_CLIPREGION );
+                pWindow->IntersectClipRegion( pPageView->GetPageRect() );
+
+                pPageView->InitRedraw( (USHORT) 0, rRegion, 0, &aPaintProcLink );
+
+                pWindow->Pop();
+            }
 
             if( ( bLivePresentation && !IsShownXorVisible( pWindow ) ) || pSlideShow )
                 ShowShownXor( pWindow );
