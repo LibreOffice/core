@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:22:10 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 12:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+            case DataType::LONGVARCHAR:
                 _xParameter->setString(nPos,_rValue);
                 break;
             case DataType::BIGINT:
@@ -530,7 +531,6 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
-            case DataType::LONGVARCHAR:
                 _xParameter->setBytes(nPos,_rValue);
                 break;
             case DataType::CLOB:
@@ -571,6 +571,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::VARCHAR:
         case DataType::DECIMAL:
         case DataType::NUMERIC:
+        case DataType::LONGVARCHAR:
             (*aIter) = getString(i);
             break;
         case DataType::BIGINT:
@@ -595,7 +596,6 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
-        case DataType::LONGVARCHAR:
             (*aIter) = getBytes(i);
             break;
         case DataType::BIT:

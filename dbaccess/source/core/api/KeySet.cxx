@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 10:07:04 $
+ *  last change: $Author: oj $ $Date: 2002-08-26 12:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,6 +956,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::VARCHAR:
         case DataType::DECIMAL:
         case DataType::NUMERIC:
+        case DataType::LONGVARCHAR:
             xParameter->setString(nPos,*aExternParamIter);
             break;
         case DataType::BIGINT:
@@ -980,7 +981,6 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
-        case DataType::LONGVARCHAR:
             xParameter->setBytes(nPos,*aExternParamIter);
             break;
         case DataType::BIT:
@@ -1021,6 +1021,7 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::VARCHAR:
         case DataType::DECIMAL:
         case DataType::NUMERIC:
+        case DataType::LONGVARCHAR:
             xParameter->setString(nPos,*aIter);
             break;
         case DataType::BIGINT:
@@ -1045,7 +1046,6 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
-        case DataType::LONGVARCHAR:
             xParameter->setBytes(nPos,*aIter);
             break;
         case DataType::BIT:
@@ -1295,6 +1295,7 @@ void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>&
     case DataType::VARCHAR:
     case DataType::DECIMAL:
     case DataType::NUMERIC:
+    case DataType::LONGVARCHAR:
         _rValue = _xRow->getString(_nPos);
         break;
     case DataType::BIGINT:
@@ -1319,7 +1320,6 @@ void OKeySet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>&
     case DataType::BINARY:
     case DataType::VARBINARY:
     case DataType::LONGVARBINARY:
-    case DataType::LONGVARCHAR:
         _rValue = _xRow->getBytes(_nPos);
         break;
     case DataType::BIT:
@@ -1394,6 +1394,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.34  2002/08/22 10:07:04  oj
+    #102394# insert even into key row if no auto increment exists
+
     Revision 1.33  2002/07/25 06:38:47  oj
     #95146# ask for generated values after insert new row
 
