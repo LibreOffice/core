@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-11 15:13:13 $
+ *  last change: $Author: jbu $ $Date: 2002-02-06 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ static Sequence< OUString > retrieveAsciiValueList(
             }
         }
     }
-    else
+    else if( xReg.is () )
     {
         try
         {
