@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:19:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,12 @@
 #endif
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <svtools/ctloptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
+#include <sfx2/printer.hxx>
 #include <svx/langitem.hxx>
 #include <svtools/colorcfg.hxx>
 
@@ -140,6 +142,7 @@
 #include "opredlin.hxx"
 #include "transobj.hxx"
 #include "detfunc.hxx"
+#include "preview.hxx"
 
 #define ScModule
 #include "scslots.hxx"
@@ -177,6 +180,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pNavipiCfg( NULL ),
     pColorConfig( NULL ),
     pAccessOptions( NULL ),
+    pCTLOptions( NULL ),
     pTeamDlg( NULL ),
     nCurRefDlgId( 0 ),
     pErrorHdl( NULL ),
@@ -305,6 +309,56 @@ void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 pViewShell = SfxViewShell::GetNext( *pViewShell );
             }
         }
+        else if ( nHintId == SFX_HINT_CTL_SETTINGS_CHANGED )
+        {
+            //  for all documents: set digit language for printer, recalc output factor, update row heights
+            SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+            while ( pObjSh )
+            {
+                if ( pObjSh->Type() == TYPE(ScDocShell) )
+                {
+                    ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                    OutputDevice* pPrinter = pDocSh->GetPrinter();
+                    if ( pPrinter )
+                        pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
+
+                    pDocSh->CalcOutputFactor();
+
+                    USHORT nTabCount = pDocSh->GetDocument()->GetTableCount();
+                    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                        pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+                }
+                pObjSh = SfxObjectShell::GetNext( *pObjSh );
+            }
+
+            //  for all views (table and preview): update digit language
+            SfxViewShell* pSh = SfxViewShell::GetFirst();
+            while ( pSh )
+            {
+                if ( pSh->ISA( ScTabViewShell ) )
+                {
+                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+
+                    //  set ref-device for EditEngine (re-evaluates digit settings)
+                    ScInputHandler* pHdl = GetInputHdl(pViewSh);
+                    if (pHdl)
+                        pHdl->UpdateRefDevice();
+
+                    pViewSh->DigitLanguageChanged();
+                    pViewSh->PaintGrid();
+                }
+                else if ( pSh->ISA( ScPreviewShell ) )
+                {
+                    ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
+                    ScPreview* pPreview = pPreviewSh->GetPreview();
+
+                    pPreview->SetDigitLanguage( GetOptDigitLanguage() );
+                    pPreview->Invalidate();
+                }
+
+                pSh = SfxViewShell::GetNext( *pSh );
+            }
+        }
     }
 }
 
@@ -328,6 +382,11 @@ void ScModule::DeleteCfg()
     {
         EndListening(*pAccessOptions);
         DELETEZ( pAccessOptions );
+    }
+    if ( pCTLOptions )
+    {
+        EndListening(*pCTLOptions);
+        DELETEZ( pCTLOptions );
     }
 }
 
@@ -957,6 +1016,25 @@ SvtAccessibilityOptions& ScModule::GetAccessOptions()
     }
 
     return *pAccessOptions;
+}
+
+SvtCTLOptions& ScModule::GetCTLOptions()
+{
+    if ( !pCTLOptions )
+    {
+        pCTLOptions = new SvtCTLOptions;
+        StartListening(*pCTLOptions);
+    }
+
+    return *pCTLOptions;
+}
+
+USHORT ScModule::GetOptDigitLanguage()
+{
+    SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
+    return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
+           ( eNumerals == SvtCTLOptions::NUMERALS_HINDI)   ? LANGUAGE_ARABIC :
+                                                             LANGUAGE_SYSTEM;
 }
 
 //------------------------------------------------------------------
