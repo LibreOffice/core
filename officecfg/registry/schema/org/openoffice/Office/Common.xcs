@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:58:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 14:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,7 +892,7 @@
 					<desc>Specifies if 3D graphics from Draw and Impress will be displayed on the user&apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 					<label>Use OpenGL</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="OpenGL_Faster" oor:type="xs:boolean">
 				<!-- OldPath: 3D-Engine/OpenGL_Faster -->
