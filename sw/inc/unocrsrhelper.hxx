@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 15:03:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 struct SfxItemPropertyMap;
 class SwPaM;
 class SfxItemSet;
+class SwDoc;
 
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -117,6 +118,9 @@ namespace SwUnoCursorHelper
     sal_Int16                   IsNodeNumStart(
                                     SwPaM& rPam,
                                     com::sun::star::beans::PropertyState& eState);
+
+    sal_Bool    DocInsertStringSplitCR(  SwDoc &rDoc,
+                                    const SwPaM &rNewCursor, const String &rText );
 
 };
 
