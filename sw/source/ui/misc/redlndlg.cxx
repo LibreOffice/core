@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-07 11:47:55 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 16:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,7 +1551,7 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
     rExtraData += ';';
     for(USHORT i = 0; i < nCount; i++)
     {
-        rExtraData += String(pTable->GetTab(i));
+        rExtraData += String::CreateFromInt32( pTable->GetTab(i) );
         rExtraData += ';';
     }
     rExtraData += ')';
@@ -1560,6 +1560,9 @@ void SwRedlineAcceptDlg::FillInfo(String &rExtraData) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/12/07 11:47:55  os
+    #81429# String::CreateFromInt32()
+
     Revision 1.2  2000/10/25 19:14:21  jp
     Select the current/next/prev redline if the dialog starts
 
