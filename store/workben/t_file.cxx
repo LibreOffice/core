@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
+ *  last change: $Author: mhu $ $Date: 2001-03-15 15:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _T_FILE_CXX "$Revision: 1.3 $"
+#define _T_FILE_CXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -105,11 +105,36 @@ int SAL_CALL main (int argc, char **argv)
 
 #if 0  /* EXP */
 
-    rtl::OUString aNormPath;
-    osl_searchNormalizedPath (aFilename.pData, 0, &(aNormPath.pData));
+    if (aFilename.getLength() > 0)
+    {
+        oslFileError result;
 
-    rtl::OUString aSysPath;
-    osl_getSystemPathFromNormalizedPath (aNormPath.pData, &(aSysPath.pData));
+        rtl::OUString aNormalizedPath;
+        result = osl_normalizePath (
+            aFilename.pData, &(aNormalizedPath.pData));
+        if (!(result == osl_File_E_None))
+        {
+            // Neither System, nor Normalized. Try parsing as Url.
+            result = osl_getNormalizedPathFromFileURL (
+                aFilename.pData, &(aNormalizedPath.pData));
+            if (!(result == osl_File_E_None))
+            {
+                // Invalid path.
+                return (store_E_InvalidParameter);
+            }
+        }
+
+        rtl::OUString aSystemPath;
+        result = osl_getSystemPathFromNormalizedPath (
+            aNormalizedPath.pData, &(aSystemPath.pData));
+        if (!(result == osl_File_E_None))
+        {
+            // Invalid path.
+            return (store_E_InvalidParameter);
+        }
+
+        aFilename = aSystemPath;
+    }
 
 #endif /* EXP */
 
