@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:36:28 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1008,7 +1008,13 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
 
 static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
 {
-    IMPL_RTL_STRINGDATA* pData = (IMPL_RTL_STRINGDATA*)rtl_allocateMemory( sizeof( IMPL_RTL_STRINGDATA ) + (nLen*sizeof( IMPL_RTL_STRCODE )) );
+    IMPL_RTL_STRINGDATA * pData
+        = (nLen <= (SAL_MAX_UINT32 - sizeof (IMPL_RTL_STRINGDATA))
+                       / sizeof (IMPL_RTL_STRCODE))
+        ? (IMPL_RTL_STRINGDATA *) rtl_allocateMemory(
+            sizeof (IMPL_RTL_STRINGDATA) + nLen * sizeof (IMPL_RTL_STRCODE))
+        : NULL;
+    OSL_ASSERT(pData != NULL);
     pData->refCount     = 1;
     pData->length       = nLen;
     pData->buffer[nLen] = 0;
@@ -1093,8 +1099,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
         if ( *ppThis)
             IMPL_RTL_STRINGNAME( release )( *ppThis );
 
-        *ppThis = (IMPL_RTL_STRINGDATA*)rtl_allocateMemory( sizeof( IMPL_RTL_STRINGDATA ) + (nLen*sizeof( IMPL_RTL_STRCODE )) );
-        (*ppThis)->refCount = 1;
+        *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
         (*ppThis)->length   = 0;
 
         {
@@ -1558,7 +1563,6 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
                                                     IMPL_RTL_STRCODE cTok,
                                                     sal_Int32 nIndex )
 {
-    IMPL_RTL_STRINGDATA*    pOrg            = *ppThis;
     const IMPL_RTL_STRCODE* pCharStr        = pStr->buffer;
     const IMPL_RTL_STRCODE* pCharStrStart;
     const IMPL_RTL_STRCODE* pOrgCharStr;
