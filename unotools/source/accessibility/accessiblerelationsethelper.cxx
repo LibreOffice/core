@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblerelationsethelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 12:45:28 $
+ *  last change: $Author: sab $ $Date: 2002-03-05 16:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,34 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelationByType( sal_Int16
 void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRelation)
     throw (uno::RuntimeException)
 {
-    maRelations.push_back(rRelation);
+    sal_Int32 nCount(getRelationCount());
+    sal_Int32 i(0);
+    sal_Bool bFound(sal_False);
+    while ((i < nCount) && !bFound)
+    {
+        if (maRelations[i].RelationType == rRelation.RelationType)
+            bFound = sal_True;
+        else
+            i++;
+    }
+    if (bFound)
+    {
+        sal_uInt32 nOldCount(maRelations[i].TargetSet.getLength());
+        sal_uInt32 nNewCount(maRelations[i].TargetSet.getLength() + rRelation.TargetSet.getLength());
+        maRelations[i].TargetSet.realloc(nNewCount);
+        uno::Reference < uno::XInterface >* pTargetSet = maRelations[i].TargetSet.getArray();
+        const uno::Reference < uno::XInterface >* pSourceSet = rRelation.TargetSet.getConstArray();
+        if (pSourceSet && pTargetSet)
+        {
+            sal_uInt32 k(0);
+            for (sal_uInt32 j = nOldCount; j < nNewCount; j++, k++)
+            {
+                pTargetSet[j] = pSourceSet[k];
+            }
+        }
+    }
+    else
+        maRelations.push_back(rRelation);
 }
 
 //=====  internal  ============================================================
