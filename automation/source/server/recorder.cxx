@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recorder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:53:14 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 15:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                     MessBox* pMB = (MessBox*)pControl;
                     switch( nEventID )
                     {
-#if SUPD > 631
                         case M_GetCheckBoxText:
                             pRet->GenReturn ( RET_Value, nUId, pMB->GetCheckBoxText() );
                             break;
@@ -900,7 +899,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         case M_UnCheck :
                             pMB->SetCheckBoxState( STATE_NOCHECK );
                             break;
-#endif
                         case M_GetText :
                             pRet->GenReturn ( RET_Value, nUId, pMB->GetMessText());
                             break;
