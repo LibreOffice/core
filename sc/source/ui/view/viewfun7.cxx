@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
+ *  last change: $Author: nn $ $Date: 2001-12-12 21:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
                 pDrawView->GetPageViewPvNum(0)->GetPage() ==
                 pDragEditView->GetPageViewPvNum(0)->GetPage() )
         {
-            pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY), FALSE);
+            if ( nDiffX != 0 || nDiffY != 0 )
+                pDragEditView->MoveAllMarked(Size(nDiffX,nDiffY), FALSE);
         }
         else
         {
