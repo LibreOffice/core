@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,9 @@
 #endif
 
 #include <so3/outplace.hxx>
+
+// from fefly1.cxx
+extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 // from fefly1.cxx
 extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -1405,6 +1408,21 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     aAnchor.SetAnchor( aPam.Start() );
                     aSet.Put(aAnchor);
                 }
+
+                // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
+                SwFlyFrm *pFly = 0;
+                if (PTR_CAST(SwFlyFrmFmt, pFmt))
+                    pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
+                if (pFly)
+                {
+                    const SfxPoolItem* pItem;
+                    if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, sal_False, &pItem ))
+                    {
+                        aSet.Put( *pItem );
+                        ::lcl_ChkAndSetNewAnchor( *pFly, aSet );
+                    }
+                }
+
                 pFmt->GetDoc()->SetFlyFrmAttr( *pFmt, aSet );
             }
             else
