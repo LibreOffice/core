@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-01-08 13:43:13 $
+ *  last change: $Author: pb $ $Date: 2001-01-23 07:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,14 +578,8 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     for ( int nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        if ( 21 == nProp )
-                            // temp path without name
-                            aNames.InsertValue( nProp, String() );
-                        else
-                        {
-                            const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
-                            aNames.InsertValue( nProp, aName );
-                        }
+                        const String aName( SfxResId( CONFIG_PATH_START + nProp ) );
+                        aNames.InsertValue( nProp, aName );
                         String aValue;
                         switch ( nProp )
                         {
