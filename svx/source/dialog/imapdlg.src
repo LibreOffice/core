@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:36:27 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text[ russian ] = "В активном режиме";
                 Text[ polish ] = "Aktywny";
                 Text[ japanese ] = "±ёГЁМЮ";
-                Text[ chinese_traditional ] = "їE¬Ў";
+                Text[ chinese_traditional ] = "ЁПҐО¤¤";
                 Text[ arabic ] = "дФШ";
                 Text[ greek ] = "ЕнесгЬ";
                 Text[ korean ] = "И°јє";
@@ -866,7 +866,7 @@ Menu RID_SVXMN_IMAP
             Text[ russian ] = "В активном режиме";
             Text[ polish ] = "Aktywny";
             Text[ japanese ] = "±ёГЁМЮ";
-            Text[ chinese_traditional ] = "їE¬Ў(~A)";
+            Text[ chinese_traditional ] = "±Т°К(~A)";
             Text[ arabic ] = "дФШ";
             Text[ greek ] = "Енес~гЬ";
             Text[ korean ] = "И°јє";
@@ -905,7 +905,7 @@ Menu RID_SVXMN_IMAP
                         Text [ norwegian ] = "Bring to Front" ;
                         Text [ italian ] = "Porta in primo piano" ;
                         Text [ portuguese_brazilian ] = "Trazer para a Frente" ;
-                        Text [ portuguese ] = "Trazer para a ~frente" ;
+                        Text [ portuguese ] = "P~rimeiro plano" ;
                         Text [ finnish ] = "E~dustalle" ;
                         Text [ danish ] = "~Placer forrest" ;
                         Text [ french ] = "Tout а l'~avant" ;
@@ -1121,7 +1121,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ russian ] = "Альтернативный текст:";
         Text[ polish ] = "Tekst alternatywny:";
         Text[ japanese ] = "‘г—pГ·ЅД:";
-        Text[ chinese_traditional ] = "№wіЖ¤е:";
+        Text[ chinese_traditional ] = "ґАҐN¤е¦r:";
         Text[ arabic ] = ":дХ ИПнб";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Енбллбкфйкь кеЯменп:";
