@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-01 11:18:15 $
+ *  last change: $Author: sj $ $Date: 2002-11-20 12:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,14 +988,14 @@ XubString SvxExtFileField::GetFormatted() const
         switch( eFormat )
         {
             case SVXFILEFORMAT_FULLPATH:
-                aString = aURLObj.GetMainURL();
+                aString = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             break;
 
             case SVXFILEFORMAT_PATH:
                 aURLObj.removeSegment(INetURLObject::LAST_SEGMENT, false);
                 // #101742# Leave trailing slash at the pathname
                 aURLObj.setFinalSlash();
-                aString = aURLObj.GetMainURL();
+                aString = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             break;
 
             case SVXFILEFORMAT_NAME:
