@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-12 12:26:59 $
+#   last change: $Author: hr $ $Date: 2003-03-27 11:54:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,24 +70,34 @@ TARGET=so_stlport
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+.EXPORT : CC CXX
+.IF "$(COMID)"=="gcc3"
+TARFILE_NAME=STLport-4.5
+PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
+.ELSE			# "$(COMID)"=="gcc3"
+.IF "$(OS)"=="MACOSX"
+# [ed] For gcc2, we need to use STLport 4.0.  4.5 will not compile with gcc2 on OS X.
+TARFILE_NAME=STLport-4.0
+PATCH_FILE_NAME=STLport-4.0.macosx.patch
+.ELSE
+TARFILE_NAME=STLport-4.0
+PATCH_FILE_NAME=STLport-4.0.patch
+.ENDIF			# "$(OS)"=="MACOSX"
+.ENDIF			# "$(COMID)"=="gcc3"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(CCNUMVER)"<="001300000000"
 TARFILE_NAME=STLport-4.0
 PATCH_FILE_NAME=STLport-4.0.patch
 .ELSE			# "$(CCNUMVER)"<="001300000000"
-TARFILE_NAME=STLport-5.0-0409
-PATCH_FILE_NAME=STLport-5.0-0409.patch
-#PATCH_FILE_NAME=STLport-4.5.3.patch
+TARFILE_NAME=STLport-4.5-0119
+PATCH_FILE_NAME=STLport-4.5-0119.patch
 .ENDIF			# "$(CCNUMVER)"<="001300000000"
-.ELSE
-TARFILE_NAME=STLport-4.5.3
-PATCH_FILE_NAME=STLport-4.5.3.patch
 .ENDIF
 
 .IF "$(USE_SHELL)"=="4nt"
-TAR_EXCLUDES="*/SC5/*"
-.ENDIF          # "$(GUI)"=="WNT"
+TAR_EXCLUDES=*/SC5/*
+.ENDIF          # "$(USE_SHELL)"=="4nt"
 
 ADDITIONAL_FILES=src$/gcc-3.0.mak
 
@@ -118,12 +128,20 @@ BUILD_FLAGS=-f gcc-3.0.mak
 .ENDIF # "$(OS)"=="MACOSX"
 .ENDIF # "$(COMID)"=="gcc3"
 BUILD_ACTION=make
+# build in parallel
+BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
 
 .IF "$(COM)"=="C52"
 BUILD_ACTION=make
-BUILD_FLAGS=-f sunpro.mak
+BUILD_FLAGS=-f sunpro6.mak
 .ENDIF
+
+.IF "$(COM)"=="C52"
+OUT2INC= \
+    stlport$/SC5$/*.SUNWCCh
+
+.ENDIF          # "$(COM)"=="C52"
 
 OUTDIR2INC= \
     stlport
@@ -132,44 +150,56 @@ OUTDIR2INC= \
 
 OUT2LIB= \
     lib$/*.lib
-    
+
 OUT2BIN= \
     lib$/*.dll \
     lib$/*.pdb
-    
+
 .ELSE          # "$(GUI)"=="WNT"
 
 OUT2LIB= \
     lib$/lib*
 
 .ENDIF          # "$(GUI)"=="WNT"
-    
+
 # --- Targets ------------------------------------------------------
+
+.IF "$(STLPORT4)"!="NO_STLPORT4"
+all :
+       @echo "         An already available installation of STLport has been chosen in the configure process."
+       @echo "         Therefore the version provided here does not need to be built in addition."
+       +$(COPY) $(STLPORT4)$/lib$/*stlport*$(DLLPOST) $(DLLDEST)
+.ELSE
+all : $(MISC)$/STLport-4.5.patch ALLTAR
+.ENDIF
 
 .INCLUDE : set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
 
+
+$(MISC)$/STLport-4.5.patch : STLport-4.5.patch
+    +$(SED)	-e 's#GXX_INCLUDE_PATH#$(GXX_INCLUDE_PATH)#g' < STLport-4.5.patch > $(MISC)$/STLport-4.5.patch
+
 .IF "$(GUI)"=="WNT"
 .IF "$(CCNUMVER)"<="001300000000"
+
 $(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
 avoid_win32_patches :
     @+$(ECHONL)
-    @+echo ERROR! this module can't use automated patch creation 
+    @+echo ERROR! this module can't use automated patch creation
     @+echo on windows.
     @+$(ECHONL)
     force_dmake_to_error
-    
+
 $(PACKAGE_DIR)$/so_custom_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .IF "$(USE_SHELL)"=="4nt"
     +win32_custom.bat $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ELSE			# "$(USE_SHELL)"=="4nt"
     +win32_custom.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ENDIF			# "$(USE_SHELL)"=="4nt"
-    
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 
-ooo: $(PACKAGE_DIR)$/win32_sdk_patch 
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_custom_patch
 
 .IF "$(USE_NEW_SDK)"!=""
 $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
@@ -178,10 +208,8 @@ $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 .ELSE			# "$(USE_SHELL)"=="4nt"
     +win32_sdk.sh $(PACKAGE_DIR) $(BACK_PATH) && $(TOUCH) $@
 .ENDIF			# "$(USE_SHELL)"=="4nt"
-    
+
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# "$(USE_NEW_SDK)"!=""
-
-.ENDIF			# "$(CCNUMVER)"<="001300000000"
+.ENDIF			# COMVER<=001300000000
 .ENDIF          # "$(GUI)"=="WNT"
-

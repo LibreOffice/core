@@ -7,6 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\stl\using
 mkdir: %_DEST%\inc%_EXT%\stl\using\h
 mkdir: %_DEST%\inc%_EXT%\stl\wrap_std
 mkdir: %_DEST%\inc%_EXT%\stl\wrap_std\h
+..\%__SRC%\inc\*.SUNWCCH %_DEST%\inc%_EXT%\stl\*
 ..\%__SRC%\inc\stlport\* %_DEST%\inc%_EXT%\stl\*
 ..\%__SRC%\inc\stlport\stl\* %_DEST%\inc%_EXT%\stl\stl\*
 ..\%__SRC%\inc\stlport\stl\debug\* %_DEST%\inc%_EXT%\stl\stl\debug\*

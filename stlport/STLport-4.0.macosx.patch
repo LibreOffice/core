@@ -1,0 +1,974 @@
+diff -Naur ./src/fstream.cpp ./src/fstream.cpp
+--- misc/build/STLport-4.0/src/fstream.cpp	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/src/fstream.cpp	Tue Mar 20 11:59:14 2001
+@@ -30,6 +30,9 @@
+ #  include <sys/mman.h>           // For mmap
+ #  include <unistd.h>
+ #  include <fcntl.h>
++# ifdef __APPLE__
++#  include <sys/sysctl.h>
++# endif
+ #elif defined (__STL_USE_WIN32_IO)
+ # define WIN32_LEAN_AND_MEAN
+ #  include <windows.h>
+@@ -326,7 +329,19 @@
+ {
+   if (!_M_page_size)
+ #if defined (__STL_UNIX)
++#  if defined (__APPLE__)
++  {
++  int mib[2];
++  size_t pagesize, len;
++  mib[0] = CTL_HW;
++  mib[1] = HW_PAGESIZE;
++  len = sizeof(pagesize);
++  sysctl(mib, 2, &pagesize, &len, NULL, 0);
++  _M_page_size = pagesize;
++  }
++#  else
+   _M_page_size = sysconf(_SC_PAGESIZE);
++#  endif
+ # elif defined (__STL_USE_WIN32_IO)
+   {
+   SYSTEM_INFO SystemInfo;
+diff -Naur ./src/gcc-apple-macosx.mak ./src/gcc-apple-macosx.mak
+--- misc/build/STLport-4.0/src/gcc-apple-macosx.mak	Wed Dec 31 16:00:00 1969
++++ misc/build/STLport-4.0/src/gcc-apple-macosx.mak	Tue Mar 20 12:04:05 2001
+@@ -0,0 +1,70 @@
++#
++# Note : this makefile is for gcc-2.95 and later !
++#
++
++#
++# compiler
++#
++CC = cc
++CXX = cc
++
++#
++# Basename for libraries
++#
++LIB_BASENAME = libstlport_gcc
++
++#
++# guts for common stuff
++#
++#
++LINK=libtool -static -o
++# 2.95 flag
++DYN_LINK=libtool -dynamic -framework System -lcc_dynamic -lstdc++ -install_name @executable_path/$(@F) -o
++
++OBJEXT=o
++DYNEXT=dylib
++STEXT=a
++RM=rm -Rf
++PATH_SEP=/
++MKDIR=mkdir -p
++COMP=GCC$(ARCH)
++
++all: all_dynamic all_static
++
++include common_macros.mak
++
++WARNING_FLAGS= -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
++
++CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS} -D_REENTRANT -D_PTHREADS
++
++ifneq ("$(shell uname -r)", "1.2")
++CXXFLAGS_COMMON += -fno-coalesce
++endif
++
++CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2
++CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC 
++
++CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
++CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
++
++CXXFLAGS_STLDEBUG_static = $(CXXFLAGS_DEBUG_static) -D__STL_DEBUG
++CXXFLAGS_STLDEBUG_dynamic = $(CXXFLAGS_DEBUG_dynamic) -D__STL_DEBUG -fPIC
++
++# Add a single source file where all static data members for template classes
++# are initialized
++RELEASE_OBJECTS_static += \
++	$(RELEASE_OBJDIR_static)$(PATH_SEP)static_instances.o
++DEBUG_OBJECTS_static += \
++	$(DEBUG_OBJDIR_static)$(PATH_SEP)static_instances.o
++STLDEBUG_OBJECTS_static += \
++	$(STLDEBUG_OBJDIR_static)$(PATH_SEP)static_instances.o
++RELEASE_OBJECTS_dynamic += \
++	$(RELEASE_OBJDIR_dynamic)$(PATH_SEP)static_instances.o
++DEBUG_OBJECTS_dynamic += \
++	$(DEBUG_OBJDIR_dynamic)$(PATH_SEP)static_instances.o
++STLDEBUG_OBJECTS_dynamic += \
++	$(STLDEBUG_OBJDIR_dynamic)$(PATH_SEP)static_instances.o
++
++include common_percent_rules.mak
++include common_rules.mak
++
+diff -Naur ./src/message_facets.cpp ./src/message_facets.cpp
+--- misc/build/STLport-4.0/src/message_facets.cpp	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/src/message_facets.cpp	Tue Mar 20 11:59:15 2001
+@@ -31,8 +31,8 @@
+   // Don't bother to do anything unless we're using a non-default ctype facet
+   try {
+     typedef ctype<_Char> wctype;
+-    const wctype& wct = use_facet<wctype>(L);
+-    const wctype* zz = (const wctype*)0;
++    wctype& wct = (wctype &)use_facet<wctype>(L);
++    wctype* zz = (wctype*)0;
+     if (typeid(&wct) != typeid(zz)) {
+       if (!M)
+         M = new hash_map<int, locale, hash<int>, equal_to<int> >;
+diff -Naur ./src/num_put_float.cpp ./src/num_put_float.cpp
+--- misc/build/STLport-4.0/src/num_put_float.cpp	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/src/num_put_float.cpp	Tue Mar 20 12:01:44 2001
+@@ -43,13 +43,15 @@
+ 
+ # ifdef __STL_UNIX
+ 
+-# include <values.h>
++#  ifndef __APPLE__
++#   include <values.h>
++#  endif
+ 
+ # if defined (__sun) 
+ #  include <floatingpoint.h>
+ # endif
+ 
+-# if !defined(__STL_USE_GLIBC) && !defined(__FreeBSD__)   // dwa 1/10/00 - nan.h not supplied with gcc
++# if !defined(__STL_USE_GLIBC) && !defined(__FreeBSD__) && !( defined(__GNUC__) && defined(__APPLE__) )   // dwa 1/10/00 - nan.h not supplied with gcc
+ // DEC & Solaris need this
+ #  include <nan.h>
+ # endif
+@@ -95,7 +97,7 @@
+ # endif
+   inline bool _Stl_is_inf(double x)        { return isinf(x); }
+   inline bool _Stl_is_neg_inf(double x)    { return isinf(x) < 0; }
+-#elif defined(__unix) && !defined(__FreeBSD__) /* (__sgi) || defined (__sun) IRIX , Solaris, others ? */
++#elif defined(__unix) && !defined(__FreeBSD__) && !defined(__APPLE__) /* (__sgi) || defined (__sun) IRIX , Solaris, others ? */
+   inline bool _Stl_is_nan_or_inf(double x) { return IsNANorINF(x); }
+   inline bool _Stl_is_inf(double x)        { return IsNANorINF(x) && IsINF(x); }
+   inline bool _Stl_is_neg_inf(double x)    { return (IsINF(x)) && (x < 0.0); }
+@@ -124,7 +126,7 @@
+   bool _Stl_is_inf(double x)        { return !isfinite(x); }
+   bool _Stl_is_neg_inf(double x)    { return !isfinite(x) && signbit(x); }
+   bool _Stl_is_neg_nan(double x)    { return isnan(x) && signbit(x); }
+-#elif defined (__FreeBSD__)
++#elif defined (__FreeBSD__) || ( defined (__GNUC__) && defined (__APPLE__) )
+  inline bool _Stl_is_nan_or_inf(double x) { return !finite(x); }
+  inline bool _Stl_is_inf(double x)        {
+    return _Stl_is_nan_or_inf(x) && ! isnan(x);
+@@ -193,7 +195,7 @@
+      { return _ldfcvt(*(long_double*)&x, n, pt, sign); }
+ #  endif
+ 
+-#elif defined (__unix)  && !defined(__FreeBSD__)/* defined(__sgi) IRIX */
++#elif defined (__unix)  && !defined(__FreeBSD__) && !defined(__APPLE__) /* defined(__sgi) IRIX */
+   inline char* _Stl_ecvtR(double x, int n, int* pt, int* sign, char* buf)
+     { return ecvt_r(x, n, pt, sign, buf); }
+   inline char* _Stl_fcvtR(double x, int n, int* pt, int* sign, char* buf)
+@@ -203,7 +205,7 @@
+   inline char* _Stl_qfcvtR(long double x, int n, int* pt, int* sign, char* buf)
+     { return qfcvt_r(x, n, pt, sign, buf); }
+ 
+-#elif defined (__FreeBSD__)
++#elif defined (__FreeBSD__) || ( defined (__GNUC__) && defined (__APPLE__) )
+ 
+ /*
+  * Copyright (c) 1995-1997 The Apache Group.  All rights reserved.
+diff -Naur ./src/static_instances.cpp ./src/static_instances.cpp
+--- misc/build/STLport-4.0/src/static_instances.cpp	Wed Dec 31 16:00:00 1969
++++ misc/build/STLport-4.0/src/static_instances.cpp	Tue Mar 20 12:04:13 2001
+@@ -0,0 +1,31 @@
++/*
++ * Copyright (c) 1999
++ * Silicon Graphics Computer Systems, Inc.
++ *
++ * Copyright (c) 1999 
++ * Boris Fomitchev
++ *
++ * This material is provided "as is", with absolutely no warranty expressed
++ * or implied. Any use is at your own risk.
++ *
++ * Permission to use or copy this software for any purpose is hereby granted 
++ * without fee, provided the above notices are retained on all copies.
++ * Permission to modify the code and to distribute modified code is granted,
++ * provided the above notices are retained, and a notice that the code was
++ * modified is included with the above copyright notice.
++ *
++ */
++
++# ifndef __PUT_STATIC_DATA_MEMBERS_HERE
++# define __PUT_STATIC_DATA_MEMBERS_HERE
++# endif
++
++# include "stlport_prefix.h"
++
++# include <hash_map>
++# include <limits>
++# include <rope>
++
++// Local Variables:
++// mode:C++
++// End:
+diff -Naur ./stlport/config/stl_gcc.h ./stlport/config/stl_gcc.h
+--- misc/build/STLport-4.0/stlport/config/stl_gcc.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/config/stl_gcc.h	Tue Mar 20 12:02:30 2001
+@@ -42,6 +42,33 @@
+ #   define __STL_NO_NATIVE_MBSTATE_T      1
+ # endif
+ 
++/* Mac OS X is a little different with namespaces and cannot instantiate
++ * static data members in template classes */
++# if defined (__APPLE__)
++/* Mac OS X is missing a required typedef and standard macro */
++typedef unsigned int wint_t;
++#  define __unix
++/* Mac OS X needs one and only one source file to initialize all static data
++ * members in template classes. Only one source file in an executable or
++ * library can declare instances for such data members, otherwise duplicate
++ * symbols will be generated. */
++#  ifdef __PUT_STATIC_DATA_MEMBERS_HERE
++#   define __STL_NO_STATIC_TEMPLATE_DATA
++#   define __STL_STATIC_TEMPLATE_DATA 0
++#   define __STL_WEAK_ATTRIBUTE 0
++#   define __DECLARE_INSTANCE(type,item,init) type item init
++#  endif
++/* Mac OS X needs all "::" scope references to be "std::" */
++#  undef __STL_VENDOR_GLOBAL_STD
++#  undef __STL_VENDOR_GLOBAL_CSTD
++#  define __STL_NO_CSTD_FUNCTION_IMPORTS
++/* Workaround for the broken Mac OS X C++ preprocessor which cannot handle
++ * parameterized macros in #include statements */
++#  define __STL_NATIVE_HEADER(header) <../g++/##header##>
++#  define __STL_NATIVE_C_HEADER(header) <../include/##header##>
++#  define __STL_NATIVE_CPP_C_HEADER(header) <../g++/##header##>
++#  define __STL_NATIVE_OLD_STREAMS_HEADER(header) <../g++/##header##>
++# endif
+ 
+ /* g++ 2.7.x and above */
+ #   define __STL_LONG_LONG    1
+diff -Naur ./stlport/cwchar ./stlport/cwchar
+--- misc/build/STLport-4.0/stlport/cwchar	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/cwchar	Tue Mar 20 12:01:01 2001
+@@ -34,7 +34,7 @@
+ 
+ # if defined  (__STL_USE_NEW_C_HEADERS) && ! defined (__HP_aCC)
+ #  include __STL_NATIVE_CPP_C_HEADER(cwchar)
+-# elif defined (__MRC__) || defined (__SC__) || defined (__BORLANDC__)
++# elif defined (__MRC__) || defined (__SC__) || defined (__BORLANDC__) || (defined (__GNUC__) && defined (__APPLE__))
+ #  include __STL_NATIVE_C_HEADER(stddef.h)
+ # else
+ #  include __STL_NATIVE_C_HEADER(wchar.h)
+diff -Naur ./stlport/exception ./stlport/exception
+--- misc/build/STLport-4.0/stlport/exception	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/exception	Tue Mar 20 12:03:09 2001
+@@ -42,7 +42,7 @@
+ #  undef __STL_INCOMPLETE_EXCEPTION_HEADER
+ # endif
+ 
+-#  if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 )
++#  if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 ) && ! defined (__APPLE__)
+ #    include <../include/exception>
+ #  else
+ #    include __STL_NATIVE_HEADER(exception)
+diff -Naur ./stlport/exception.h ./stlport/exception.h
+--- misc/build/STLport-4.0/stlport/exception.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/exception.h	Tue Mar 20 11:59:15 2001
+@@ -1,46 +1,46 @@
+-/*
+- * Copyright (c) 1999 
+- * Boris Fomitchev
+- *
+- * This material is provided "as is", with absolutely no warranty expressed
+- * or implied. Any use is at your own risk.
+- *
+- * Permission to use or copy this software for any purpose is hereby granted 
+- * without fee, provided the above notices are retained on all copies.
+- * Permission to modify the code and to distribute modified code is granted,
+- * provided the above notices are retained, and a notice that the code was
+- * modified is included with the above copyright notice.
+- *
+- */
+-
+-#ifndef __STLPORT_OLDSTD_exception
+-# define __STLPORT_OLDSTD_exception
+-
+-# if !defined (__STL_OUTERMOST_HEADER_ID)
+-#  define __STL_OUTERMOST_HEADER_ID 0x824
+-#  include <stl/_prolog.h>
+-# elif (__STL_OUTERMOST_HEADER_ID == 0x824) && ! defined (__STL_DONT_POP_0x824)
+-#  define __STL_DONT_POP_0x824
+-# endif
+-
+-# if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 )
+-#  include <../include/exception.h>
+-# elif defined (__BORLANDC__)
+-#  include <exception.>
+-# else
+-#  include __STL_NATIVE_HEADER(exception.h)
+-# endif
+-
+-# if (__STL_OUTERMOST_HEADER_ID == 0x824)
+-#  if ! defined (__STL_DONT_POP_0x824)
+-#   include <stl/_epilog.h>
+-#   undef  __STL_OUTERMOST_HEADER_ID
+-#   endif
+-#   undef  __STL_DONT_POP_0x824
+-# endif
+-
+-#endif /* __STLPORT_OLDSTD_exception */
+-
+-// Local Variables:
+-// mode:C++
+-// End:
++/*
++ * Copyright (c) 1999 
++ * Boris Fomitchev
++ *
++ * This material is provided "as is", with absolutely no warranty expressed
++ * or implied. Any use is at your own risk.
++ *
++ * Permission to use or copy this software for any purpose is hereby granted 
++ * without fee, provided the above notices are retained on all copies.
++ * Permission to modify the code and to distribute modified code is granted,
++ * provided the above notices are retained, and a notice that the code was
++ * modified is included with the above copyright notice.
++ *
++ */
++
++#ifndef __STLPORT_OLDSTD_exception
++# define __STLPORT_OLDSTD_exception
++
++# if !defined (__STL_OUTERMOST_HEADER_ID)
++#  define __STL_OUTERMOST_HEADER_ID 0x824
++#  include <stl/_prolog.h>
++# elif (__STL_OUTERMOST_HEADER_ID == 0x824) && ! defined (__STL_DONT_POP_0x824)
++#  define __STL_DONT_POP_0x824
++# endif
++
++# if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 ) && ! defined (__APPLE__)
++#  include <../include/exception.h>
++# elif defined (__BORLANDC__)
++#  include <exception.>
++# else
++#  include __STL_NATIVE_HEADER(exception.h)
++# endif
++
++# if (__STL_OUTERMOST_HEADER_ID == 0x824)
++#  if ! defined (__STL_DONT_POP_0x824)
++#   include <stl/_epilog.h>
++#   undef  __STL_OUTERMOST_HEADER_ID
++#   endif
++#   undef  __STL_DONT_POP_0x824
++# endif
++
++#endif /* __STLPORT_OLDSTD_exception */
++
++// Local Variables:
++// mode:C++
++// End:
+diff -Naur ./stlport/new ./stlport/new
+--- misc/build/STLport-4.0/stlport/new	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/new	Tue Mar 20 12:07:19 2001
+@@ -43,7 +43,7 @@
+ #endif
+ 
+ # if !defined (__STL_NO_NEW_NEW_HEADER)
+-#  if ( defined (__GNUC__) && (__GNUC_MINOR__ >= 8 )) || ( defined (__MVS__) && ! defined (__GNUC__))
++#  if ( defined (__GNUC__) && (__GNUC_MINOR__ >= 8 ) && ! defined (__APPLE__)) || ( defined (__MVS__) && ! defined (__GNUC__))
+ #    include __STL_NATIVE_C_HEADER(new)
+ #   else
+ #    include __STL_NATIVE_HEADER(new)
+diff -Naur ./stlport/new.h ./stlport/new.h
+--- misc/build/STLport-4.0/stlport/new.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/new.h	Tue Mar 20 12:07:37 2001
+@@ -22,7 +22,7 @@
+ # endif
+ 
+ # ifndef __STL_WINCE
+-# if ( defined (__GNUC__) && (__GNUC_MINOR__ >= 8 )) || ( defined (__MVS__) && ! defined (__GNUC__))
++# if ( defined (__GNUC__) && (__GNUC_MINOR__ >= 8 ) && ! defined (__APPLE__)) || ( defined (__MVS__) && ! defined (__GNUC__))
+ #   include __STL_NATIVE_C_HEADER(new.h)
+ # elif defined (__BORLANDC__)
+ #  include <new.>
+diff -Naur ./stlport/stl/_alloc.c ./stlport/stl/_alloc.c
+--- misc/build/STLport-4.0/stlport/stl/_alloc.c	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/stl/_alloc.c	Tue Mar 20 12:05:59 2001
+@@ -301,6 +301,7 @@
+     _Node_Alloc_Lock<__threads, __inst>::_S_lock __STL_MUTEX_INITIALIZER;
+ #endif
+ 
++#  if defined(__GNUC__) && !defined(__APPLE__)
+ template <bool __threads, int __inst>
+ _Node_alloc_obj * __STL_VOLATILE
+ __node_alloc<__threads, __inst>::_S_free_list[_NFREELISTS]
+@@ -317,7 +318,7 @@
+ 
+ template <bool __threads, int __inst>
+ size_t __node_alloc<__threads, __inst>::_S_heap_size = 0;
+-
++#  endif /* defined(__GNUC__) && !defined(__APPLE__) */
+ 
+ # else /* ( __STL_STATIC_TEMPLATE_DATA > 0 ) */
+ 
+diff -Naur ./stlport/stl/_limits.c ./stlport/stl/_limits.c
+--- misc/build/STLport-4.0/stlport/stl/_limits.c	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/stl/_limits.c	Tue Mar 20 12:06:06 2001
+@@ -92,21 +92,21 @@
+ # undef __declare_numeric_base_member
+ 
+ # if defined (__STL_NO_STATIC_TEMPLATE_DATA)
+-#  define __HACK_ILIMITS(_Int, __imin, __imax, __idigits) _Integer_limits<_Int, __imin, __imax, __idigits>
++#  define __HACK_ILIMITS(_Int, __imin, __imax, __idigits, __ismod) _Integer_limits<_Int, __imin, __imax, __idigits, __ismod>
+ #  define __HACK_NOTHING
+-#  define __declare_integer_limits_member(_Int, __imin, __imax, __idigits, __type, __mem) \
+-  __DECLARE_INSTANCE(const __type, __HACK_ILIMITS(_Int, __imin, __imax, __idigits):: __mem,__HACK_NOTHING)
++#  define __declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, __type, __mem) \
++  __DECLARE_INSTANCE(const __type, __HACK_ILIMITS(_Int, __imin, __imax, __idigits, __ismod):: __mem,__HACK_NOTHING)
+ 
+-#  define __declare_int_members(_Int, __imin, __imax, __idigits) \
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_specialized);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, int, digits);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, int, digits10);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_signed);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_integer);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_exact);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, int, radix);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_bounded);\
+-__declare_integer_limits_member(_Int, __imin, __imax, __idigits, bool, is_modulo);
++#  define __declare_int_members(_Int, __imin, __imax, __idigits, __ismod) \
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_specialized);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, int, digits);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, int, digits10);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_signed);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_integer);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_exact);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, int, radix);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_bounded);\
++__declare_integer_limits_member(_Int, __imin, __imax, __idigits, __ismod, bool, is_modulo);
+ 
+ 
+ #  else
+@@ -197,25 +197,25 @@
+ 
+ # ifdef __STL_NO_STATIC_TEMPLATE_DATA
+ #  ifndef __STL_NO_BOOL
+-__declare_int_members(bool, false, true, 0)
++__declare_int_members(bool, false, true, 0, false)
+ #  endif
+-__declare_int_members(char, CHAR_MIN, CHAR_MAX, -1)
++__declare_int_members(char, CHAR_MIN, CHAR_MAX, -1, true)
+ #  ifndef __STL_NO_SIGNED_BUILTINS
+-__declare_int_members(signed char, SCHAR_MIN, SCHAR_MAX, -1)
++__declare_int_members(signed char, SCHAR_MIN, SCHAR_MAX, -1, true)
+ #  endif
+-__declare_int_members(unsigned char, 0, UCHAR_MAX, -1)
++__declare_int_members(unsigned char, 0, UCHAR_MAX, -1, true)
+ #  if defined (__STL_HAS_WCHAR_T) && !defined ( __STL_WCHAR_T_IS_USHORT)
+-__declare_int_members(wchar_t, INT_MIN, INT_MAX, -1)
++__declare_int_members(wchar_t, INT_MIN, INT_MAX, -1, true)
+ #  endif
+-__declare_int_members(short, SHRT_MIN, SHRT_MAX, -1)
+-__declare_int_members(unsigned short, 0, USHRT_MAX, -1)
+-__declare_int_members(int, INT_MIN, INT_MAX, -1)
+-__declare_int_members(unsigned int, 0, UINT_MAX, -1)
+-__declare_int_members(long, LONG_MIN, LONG_MAX, -1)
+-__declare_int_members(unsigned long, 0, ULONG_MAX, -1)
++__declare_int_members(short, SHRT_MIN, SHRT_MAX, -1, true)
++__declare_int_members(unsigned short, 0, USHRT_MAX, -1, true)
++__declare_int_members(int, INT_MIN, INT_MAX, -1, true)
++__declare_int_members(unsigned int, 0, UINT_MAX, -1, true)
++__declare_int_members(long, LONG_MIN, LONG_MAX, -1, true)
++__declare_int_members(unsigned long, 0, ULONG_MAX, -1, true)
+ #  ifdef __STL_LONG_LONG
+-__declare_int_members(long long, LONGLONG_MIN, LONG_MAX, -1)
+-__declare_int_members(unsigned long long, 0, ULONGLONG_MAX, -1)
++__declare_int_members(long long, LONGLONG_MIN, LONG_MAX, -1, true)
++__declare_int_members(unsigned long long, 0, ULONGLONG_MAX, -1, true)
+ #  endif
+ __declare_float_members(float, FLT_MANT_DIG,FLT_DIG,
+                   	    FLT_MIN_EXP,
+@@ -318,26 +318,26 @@
+ 
+ #else
+ 
+-__DECLARE_INSTANCE(_F_rep,
+-                   _LimG<bool>::_F_inf, __STL_ARRAY_STATIC_INIT(__STL_FLOAT_INF_REP));
+-__DECLARE_INSTANCE(_F_rep,
+-                   _LimG<bool>::_F_qNaN, __STL_ARRAY_STATIC_INIT(__STL_FLOAT_QNAN_REP));
+-__DECLARE_INSTANCE(_F_rep,
+-                   _LimG<bool>::_F_sNaN, __STL_ARRAY_STATIC_INIT(__STL_FLOAT_SNAN_REP));
+-__DECLARE_INSTANCE(_D_rep,
+-                   _LimG<bool>::_D_inf, __STL_ARRAY_STATIC_INIT(__STL_DOUBLE_INF_REP));
+-__DECLARE_INSTANCE(_D_rep,
+-                   _LimG<bool>::_D_qNaN, __STL_ARRAY_STATIC_INIT(__STL_DOUBLE_QNAN_REP));
+-__DECLARE_INSTANCE(_D_rep,
+-                   _LimG<bool>::_D_sNaN, __STL_ARRAY_STATIC_INIT(__STL_DOUBLE_SNAN_REP));
+ # ifndef __STL_NO_LONG_DOUBLE
+-__DECLARE_INSTANCE(_L_rep,
+-                   _LimG<bool>::_L_inf, __STL_ARRAY_STATIC_INIT(__STL_LDOUBLE_INF_REP));
+-__DECLARE_INSTANCE(_D_rep,
+-                   _LimG<bool>::_L_qNaN, __STL_ARRAY_STATIC_INIT(__STL_LDOUBLE_QNAN_REP));
+-__DECLARE_INSTANCE(_L_rep,
+-                   _LimG<bool>::_L_sNaN, __STL_ARRAY_STATIC_INIT(__STL_LDOUBLE_SNAN_REP));
++__DECLARE_INSTANCE(const _L_rep, _LimG<bool>::_L_inf,
++  __STL_ARRAY_STATIC_INIT({__STL_LDOUBLE_INF_REP}));
++__DECLARE_INSTANCE(const _L_rep, _LimG<bool>::_L_qNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_LDOUBLE_QNAN_REP}));
++__DECLARE_INSTANCE(const _L_rep, _LimG<bool>::_L_sNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_LDOUBLE_SNAN_REP}));
+ # endif
++__DECLARE_INSTANCE(const _D_rep, _LimG<bool>::_D_inf,
++  __STL_ARRAY_STATIC_INIT({__STL_DOUBLE_INF_REP}));
++__DECLARE_INSTANCE(const _D_rep, _LimG<bool>::_D_qNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_DOUBLE_QNAN_REP}));
++__DECLARE_INSTANCE(const _D_rep, _LimG<bool>::_D_sNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_DOUBLE_SNAN_REP}));
++__DECLARE_INSTANCE(const _F_rep, _LimG<bool>::_F_inf,
++  __STL_ARRAY_STATIC_INIT({__STL_FLOAT_INF_REP}));
++__DECLARE_INSTANCE(const _F_rep, _LimG<bool>::_F_qNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_FLOAT_QNAN_REP}));
++__DECLARE_INSTANCE(const _F_rep, _LimG<bool>::_F_sNaN,
++  __STL_ARRAY_STATIC_INIT({__STL_FLOAT_SNAN_REP}));
+ 
+ #endif /* STATIC_DATA */   
+ 
+diff -Naur ./stlport/stl/_stdio_file.h ./stlport/stl/_stdio_file.h
+--- misc/build/STLport-4.0/stlport/stl/_stdio_file.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/stl/_stdio_file.h	Tue Mar 20 12:06:12 2001
+@@ -116,7 +116,7 @@
+ 
+ # define __STL_FILE_I_O_IDENTICAL 1
+ 
+-#elif defined (__CYGWIN__) || defined(__FreeBSD__)
++#elif defined (__CYGWIN__) || defined(__FreeBSD__) || ( defined(__GNUC__) && defined(__APPLE__) )
+ 
+ inline int   _FILE_fd(const FILE& __f) { return __f._file; }
+ inline char* _FILE_I_begin(const FILE& __f) { return (char*) __f._bf._base; }
+diff -Naur ./stlport/stl/c_locale.h ./stlport/stl/c_locale.h
+--- misc/build/STLport-4.0/stlport/stl/c_locale.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/stl/c_locale.h	Tue Mar 20 12:10:32 2001
+@@ -280,6 +280,17 @@
+ # define _Locale_PRINT _CTYPE_R
+ # define _Locale_ALPHA _CTYPE_A
+ 
++# elif defined (__APPLE__)
++
++# define _Locale_CNTRL _C
++# define _Locale_UPPER _U
++# define _Locale_LOWER _L
++# define _Locale_DIGIT _D
++# define _Locale_XDIGIT _X
++# define _Locale_PUNCT _P
++# define _Locale_SPACE _S
++# define _Locale_PRINT _R
++# define _Locale_ALPHA _A
+ 
+ # elif defined(__STL_USE_GLIBC) /* linux, using the gnu compiler */
+ 
+diff -Naur ./stlport/stl/debug/_debug.c ./stlport/stl/debug/_debug.c
+--- misc/build/STLport-4.0/stlport/stl/debug/_debug.c	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/stl/debug/_debug.c	Tue Mar 20 12:09:21 2001
+@@ -92,8 +92,11 @@
+   }
+ 
+ # if ( __STL_STATIC_TEMPLATE_DATA > 0 )
++
++#  if !defined(__GNUC__) && !defined(__APPLE__)
+ template <class _Dummy>
+ const char* __stl_debug_engine<_Dummy>::_Message_table[_StlMsg_MAX]  __STL_MESSAGE_TABLE_BODY;
++#  endif /* !defined(__GNUC__) && !defined(__APPLE__) */
+ 
+ # else
+ __DECLARE_INSTANCE(const char*, __stl_debug_engine<bool>::_Message_table[_StlMsg_MAX],
+diff -Naur ./stlport/typeinfo ./stlport/typeinfo
+--- misc/build/STLport-4.0/stlport/typeinfo	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/typeinfo	Tue Mar 20 12:07:42 2001
+@@ -23,7 +23,7 @@
+ 
+ # ifndef __STL_NO_TYPEINFO
+ 
+-# if defined (__GNUC__) && (__GNUC_MINOR__ > 7)
++# if defined (__GNUC__) && (__GNUC_MINOR__ > 7) && ! defined (__APPLE__)
+ #  include <../include/typeinfo>
+ # elif defined (__STL_NO_NEW_NEW_HEADER)
+ #  include __STL_NATIVE_HEADER(typeinfo.h)
+diff -Naur ./stlport/typeinfo.h ./stlport/typeinfo.h
+--- misc/build/STLport-4.0/stlport/typeinfo.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/typeinfo.h	Tue Mar 20 12:07:48 2001
+@@ -23,7 +23,7 @@
+ 
+ # ifndef __STL_NO_TYPEINFO
+ 
+-# if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 )
++# if defined (__GNUC__) && (__GNUC_MINOR__ >= 8 ) && ! defined (__APPLE__)
+ #  include <../include/typeinfo.h>
+ # else
+ #  include __STL_NATIVE_HEADER(typeinfo.h)
+diff -Naur ./stlport/wchar.h ./stlport/wchar.h
+--- misc/build/STLport-4.0/stlport/wchar.h	Thu Jul 13 18:53:26 2000
++++ misc/build/STLport-4.0/stlport/wchar.h	Tue Mar 20 12:07:54 2001
+@@ -27,7 +27,11 @@
+ using __STL_VENDOR_CSTD::strlen;
+ using __STL_VENDOR_CSTD::strspn;
+ # endif
++# if defined (__GNUC__) && defined (__APPLE__)
++# include __STL_NATIVE_C_HEADER(stddef.h)
++# else
+ # include __STL_NATIVE_C_HEADER(wchar.h)
++# endif
+ 
+ # endif /* WINCE */
+ 
+diff -Naur ./test/eh/gcc-apple-macosx.mak ./test/eh/gcc-apple-macosx.mak
+--- misc/build/STLport-4.0/test/eh/gcc-apple-macosx.mak	Wed Dec 31 16:00:00 1969
++++ misc/build/STLport-4.0/test/eh/gcc-apple-macosx.mak	Tue Mar 20 12:04:27 2001
+@@ -0,0 +1,113 @@
++# ;;; -*- Mode:makefile;-*- 
++# Generated automatically from Makefile.in by configure.
++# This requires GNU make.
++
++srcdir = .
++VPATH = .
++DYLD_LIBRARY_PATH = ../../lib
++
++# point this to proper location
++STL_INCL=-I../../stlport
++
++AUX_LIST=TestClass.cpp main.cpp nc_alloc.cpp random_number.cpp
++
++TEST_LIST=test_algo.cpp  \
++test_algobase.cpp     test_list.cpp test_slist.cpp \
++test_bit_vector.cpp   test_vector.cpp \
++test_deque.cpp test_set.cpp test_map.cpp \
++test_hash_map.cpp  test_hash_set.cpp test_rope.cpp \
++test_string.cpp test_bitset.cpp test_valarray.cpp \
++test_static_instances.cpp
++
++LIST=${AUX_LIST} ${TEST_LIST}
++
++OBJECTS = $(LIST:%.cpp=obj/%.o) $(STAT_MODULE)
++D_OBJECTS = $(LIST:%.cpp=d_obj/%.o) $(STAT_MODULE)
++NOSGI_OBJECTS = $(LIST:%.cpp=nosgi_obj/%.o) $(STAT_MODULE)
++
++EXECS = $(LIST:%.cpp=%)
++TESTS = $(LIST:%.cpp=%.out)
++TEST_EXE  = ./eh_test
++D_TEST_EXE = ./eh_test_d
++NOSGI_TEST_EXE = ./eh_test_nosgi
++
++TEST  = ./eh_test.out
++D_TEST = ./eh_test_d.out
++NOSGI_TEST = ./eh_test_nosgi.out
++
++CC = cc
++CXX = $(CC)
++
++# dwa 12/22/99 -- had to turn off -ansi flag so we could use SGI IOSTREAMS
++CXX_EXTRA_FLAGS = -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -traditional-cpp -fno-coalesce
++CXXFLAGS = -g -O ${STL_INCL} -I. ${CXX_EXTRA_FLAGS} -DEH_VECTOR_OPERATOR_NEW
++D_CXXFLAGS = -g -O ${STL_INCL} -I. ${CXX_EXTRA_FLAGS} -DEH_VECTOR_OPERATOR_NEW -D__STL_DEBUG -D__STL_USE_STATIC_LIB
++NOSGI_CXXFLAGS = -Wall -g -O2 ${STL_INCL} -I. ${CXX_EXTRA_FLAGS} -D__STL_NO_SGI_IOSTREAMS -D__STL_DEBUG_UNINITIALIZED -DEH_VECTOR_OPERATOR_NEW
++
++check: $(TEST)
++
++LIBS = -framework System
++D_LIBSTLPORT = -L../../lib -lstlport_gcc_debug
++LIBSTLPORT = -L../../lib -lstlport_gcc
++
++all: $(TEST_EXE) $(D_TEST_EXE) $(NOSGI_TEST_EXE)
++
++check_nosgi: $(NOSGI_TEST)
++check_d: $(D_TEST)
++
++
++$(TEST_EXE) : $(OBJECTS)
++	$(CXX) $(CXXFLAGS) $(OBJECTS) $(LIBSTLPORT) $(LIBS) -o $(TEST_EXE)
++	ln -sf ../../lib/libstlport_gcc.dylib
++
++$(D_TEST_EXE) : $(D_OBJECTS)
++	$(CXX) $(D_CXXFLAGS) $(D_OBJECTS) $(D_LIBSTLPORT) $(LIBS) -o $(D_TEST_EXE)
++	ln -sf ../../lib/libstlport_gcc_debug.dylib
++
++$(NOSGI_TEST_EXE) : $(NOSGI_OBJECTS)
++	$(CXX) $(NOSGI_CXXFLAGS) $(NOSGI_OBJECTS) $(LIBS) -o $(NOSGI_TEST_EXE)
++
++
++$(TEST) : $(TEST_EXE)
++	$(TEST_EXE)
++
++$(D_TEST) : $(D_TEST_EXE)
++	$(D_TEST_EXE)
++
++$(NOSGI_TEST) : $(NOSGI_TEST_EXE)
++	$(NOSGI_TEST_EXE)
++
++SUFFIXES: .cpp.o.exe.out.res
++
++nosgi_obj/%.o : %.cpp
++	$(CXX) $(NOSGI_CXXFLAGS) $< -c -o $@
++
++d_obj/%.o : %.cpp
++	$(CXX) $(D_CXXFLAGS) $< -c -o $@
++
++obj/%.o : %.cpp
++	$(CXX) $(CXXFLAGS) $< -c -o $@
++
++nosgi_obj/%.i : %.cpp
++	$(CXX) $(NOSGI_CXXFLAGS) $< -E -H > $@
++
++d_obj/%.i : %.cpp
++	$(CXX) $(D_CXXFLAGS) $< -E -H > $@
++
++obj/%.i : %.cpp
++	$(CXX) $(CXXFLAGS) $< -E -H > $@
++
++%.out: %.cpp
++	$(CXX) $(CXXFLAGS) $< -c -USINGLE -DMAIN -g -o $*.o
++	$(CXX) $(CXXFLAGS) $*.o $(LIBS) -o $*
++	./$* > $@
++	-rm -f $*
++
++%.s: %.cpp
++	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
++
++%.E: %.cpp
++	$(CXX) $(CXXFLAGS) -E $<  -o $@
++
++clean:
++	-rm -fR ${TEST_EXE} *.o */*.o *.rpo *.obj *.out core *~
+diff -Naur ./test/eh/test_static_instances.cpp ./test/eh/test_static_instances.cpp
+--- misc/build/STLport-4.0/test/eh/test_static_instances.cpp	Wed Dec 31 16:00:00 1969
++++ misc/build/STLport-4.0/test/eh/test_static_instances.cpp	Tue Mar 20 12:04:37 2001
+@@ -0,0 +1,57 @@
++/*
++ * Copyright (c) 1999
++ * Silicon Graphics Computer Systems, Inc.
++ *
++ * Copyright (c) 1999 
++ * Boris Fomitchev
++ *
++ * This material is provided "as is", with absolutely no warranty expressed
++ * or implied. Any use is at your own risk.
++ *
++ * Permission to use or copy this software for any purpose is hereby granted 
++ * without fee, provided the above notices are retained on all copies.
++ * Permission to modify the code and to distribute modified code is granted,
++ * provided the above notices are retained, and a notice that the code was
++ * modified is included with the above copyright notice.
++ *
++ */
++
++# ifndef __PUT_STATIC_DATA_MEMBERS_HERE
++# define __PUT_STATIC_DATA_MEMBERS_HERE
++# endif
++
++# ifndef __STL_LINK_TIME_INSTANTIATION
++# define __STL_LINK_TIME_INSTANTIATION
++# endif
++
++# include "Prefix.h"
++
++# if defined (EH_NEW_HEADERS)
++#include <rope>
++#else
++#include <rope.h>
++#endif 
++ 
++// typedef rope<TestClass, alloc> TestRope; 
++typedef __STLPORT_STD::rope<char, eh_allocator(char) > TestRope;
++
++# define __ROPE_TABLE_BODY  = { \
++/* 0 */1, /* 1 */2, /* 2 */3, /* 3 */5, /* 4 */8, /* 5 */13, /* 6 */21,         \
++/* 7 */34, /* 8 */55, /* 9 */89, /* 10 */144, /* 11 */233, /* 12 */377,         \
++/* 13 */610, /* 14 */987, /* 15 */1597, /* 16 */2584, /* 17 */4181,             \
++/* 18 */6765ul, /* 19 */10946ul, /* 20 */17711ul, /* 21 */28657ul, /* 22 */46368ul,   \
++/* 23 */75025ul, /* 24 */121393ul, /* 25 */196418ul, /* 26 */317811ul,                \
++/* 27 */514229ul, /* 28 */832040ul, /* 29 */1346269ul, /* 30 */2178309ul,             \
++/* 31 */3524578ul, /* 32 */5702887ul, /* 33 */9227465ul, /* 34 */14930352ul,          \
++/* 35 */24157817ul, /* 36 */39088169ul, /* 37 */63245986ul, /* 38 */102334155ul,      \
++/* 39 */165580141ul, /* 40 */267914296ul, /* 41 */433494437ul,                        \
++/* 42 */701408733ul, /* 43 */1134903170ul, /* 44 */1836311903ul,                      \
++/* 45 */2971215073ul }
++
++__DECLARE_INSTANCE(const unsigned long,
++                   TestRope::_S_min_len[__ROPE_DEPTH_SIZE],
++                   __ROPE_TABLE_BODY);
++
++// Local Variables:
++// mode:C++
++// End:
+diff -Naur ./test/regression/gcc-apple-macosx.mak ./test/regression/gcc-apple-macosx.mak
+--- misc/build/STLport-4.0/test/regression/gcc-apple-macosx.mak	Wed Dec 31 16:00:00 1969
++++ misc/build/STLport-4.0/test/regression/gcc-apple-macosx.mak	Tue Mar 20 12:04:48 2001
+@@ -0,0 +1,169 @@
++# ;;; -*- Mode:makefile;-*- 
++# Generated automatically from Makefile.in by configure.
++# This requires GNU make.
++.SUFFIXES:	.cc .cpp .o .exe .out
++
++srcdir = .
++VPATH = .
++
++STL_INCL=-I../../stlport
++
++LIST  = stl_test.cpp accum1.cpp accum2.cpp \
++	adjdiff0.cpp adjdiff1.cpp adjdiff2.cpp \
++	adjfind0.cpp adjfind1.cpp adjfind2.cpp \
++	advance.cpp \
++	alg1.cpp alg2.cpp alg3.cpp alg4.cpp alg5.cpp \
++	bcompos1.cpp bcompos2.cpp \
++	bind1st1.cpp bind1st2.cpp \
++	bind2nd1.cpp bind2nd2.cpp \
++	binsert1.cpp binsert2.cpp \
++	binsrch1.cpp binsrch2.cpp \
++	bnegate1.cpp bnegate2.cpp bvec1.cpp \
++	copy1.cpp copy2.cpp copy3.cpp copy4.cpp \
++	copyb.cpp copyb0.cpp \
++	count0.cpp count1.cpp \
++	countif1.cpp \
++	deque1.cpp \
++	divides.cpp \
++	eqlrnge0.cpp eqlrnge1.cpp eqlrnge2.cpp \
++	equal0.cpp equal1.cpp equal2.cpp \
++	equalto.cpp \
++	fill1.cpp filln1.cpp \
++	find0.cpp find1.cpp \
++	findif0.cpp findif1.cpp \
++	finsert1.cpp finsert2.cpp \
++	foreach0.cpp foreach1.cpp \
++	func1.cpp func2.cpp func3.cpp \
++	gener1.cpp gener2.cpp \
++	genern1.cpp genern2.cpp \
++	greateq.cpp greater.cpp \
++	incl0.cpp incl1.cpp incl2.cpp \
++	inplmrg1.cpp inplmrg2.cpp \
++	inrprod0.cpp inrprod1.cpp inrprod2.cpp \
++	insert1.cpp insert2.cpp \
++	iota1.cpp \
++	istmit1.cpp \
++	iter1.cpp iter2.cpp iter3.cpp iter4.cpp \
++	iterswp0.cpp iterswp1.cpp \
++	less.cpp \
++	lesseq.cpp \
++	lexcmp1.cpp lexcmp2.cpp \
++	list1.cpp list2.cpp list3.cpp list4.cpp \
++	logicand.cpp logicnot.cpp \
++	logicor.cpp \
++	lwrbnd1.cpp lwrbnd2.cpp \
++	map1.cpp \
++	max1.cpp max2.cpp \
++	maxelem1.cpp maxelem2.cpp \
++	merge0.cpp merge1.cpp merge2.cpp \
++	min1.cpp min2.cpp \
++	minelem1.cpp minelem2.cpp \
++	minus.cpp \
++	mismtch0.cpp mismtch1.cpp mismtch2.cpp \
++	mkheap0.cpp mkheap1.cpp \
++	mmap1.cpp mmap2.cpp \
++	modulus.cpp \
++	mset1.cpp mset3.cpp mset4.cpp mset5.cpp \
++	negate.cpp nequal.cpp \
++	nextprm0.cpp nextprm1.cpp nextprm2.cpp \
++	nthelem0.cpp nthelem1.cpp nthelem2.cpp \
++	ostmit.cpp \
++	pair0.cpp pair1.cpp pair2.cpp \
++	parsrt0.cpp parsrt1.cpp parsrt2.cpp \
++	parsrtc0.cpp parsrtc1.cpp parsrtc2.cpp \
++	partsrt0.cpp \
++	partsum0.cpp partsum1.cpp partsum2.cpp \
++	pheap1.cpp pheap2.cpp \
++	plus.cpp \
++	pqueue1.cpp \
++	prevprm0.cpp prevprm1.cpp prevprm2.cpp \
++	ptition0.cpp ptition1.cpp \
++	ptrbinf1.cpp ptrbinf2.cpp \
++	ptrunf1.cpp ptrunf2.cpp \
++	queue1.cpp \
++	rawiter.cpp \
++	remcopy1.cpp \
++	remcpif1.cpp \
++	remif1.cpp \
++	remove1.cpp \
++	repcpif1.cpp \
++	replace0.cpp replace1.cpp replcpy1.cpp replif1.cpp \
++	revbit1.cpp revbit2.cpp \
++	revcopy1.cpp reverse1.cpp reviter1.cpp reviter2.cpp \
++	rndshuf0.cpp rndshuf1.cpp rndshuf2.cpp \
++	rotate0.cpp rotate1.cpp rotcopy0.cpp rotcopy1.cpp \
++	search0.cpp search1.cpp search2.cpp \
++	set1.cpp set2.cpp \
++	setdiff0.cpp setdiff1.cpp setdiff2.cpp \
++	setintr0.cpp setintr1.cpp setintr2.cpp \
++	setsymd0.cpp setsymd1.cpp setsymd2.cpp \
++	setunon0.cpp setunon1.cpp setunon2.cpp \
++	sort1.cpp sort2.cpp \
++	stack1.cpp stack2.cpp \
++	stblptn0.cpp stblptn1.cpp \
++	stblsrt1.cpp stblsrt2.cpp \
++	swap1.cpp \
++	swprnge1.cpp \
++	times.cpp \
++	trnsfrm1.cpp trnsfrm2.cpp \
++	ucompos1.cpp ucompos2.cpp \
++	unegate1.cpp unegate2.cpp \
++	uniqcpy1.cpp uniqcpy2.cpp \
++	unique1.cpp unique2.cpp \
++	uprbnd1.cpp uprbnd2.cpp \
++	vec1.cpp vec2.cpp vec3.cpp vec4.cpp vec5.cpp vec6.cpp vec7.cpp vec8.cpp \
++    hmmap1.cpp hset2.cpp hmset1.cpp slist1.cpp hmap1.cpp string1.cpp bitset1.cpp
++
++
++# STAT_MODULE=stat.o
++OBJECTS = $(LIST:%.cpp=%.o) $(STAT_MODULE)
++EXECS = $(LIST:%.cpp=%.exe)
++TESTS = $(LIST:%.cpp=%.out)
++TEST_EXE  = stl_test.exe
++TEST  = stl_test.out
++
++CC = c++
++CXX = $(CC)
++
++# DEBUG_FLAGS= -D__STL_DEBUG
++
++CXXFLAGS = -D__STL_NO_SGI_IOSTREAMS -D__STL_WHOLE_NATIVE_STD -fhonor-std -D__HONOR_STD ${STL_INCL} -I. ${CXX_EXTRA_FLAGS} ${STL_VERSION_FLAGS}
++
++CXXFLAGS = -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -D__STL_NO_SGI_IOSTREAMS ${STL_INCL} -I. ${CXX_EXTRA_FLAGS} ${STL_VERSION_FLAGS} -traditional-cpp -fno-coalesce
++
++LIBS = -framework System
++LIBSTDCXX = 
++
++check: $(TEST)
++
++$(TEST) : $(OBJECTS)
++	$(CXX) $(CXXFLAGS) ${REPO_FLAGS} $(OBJECTS) $(LIBS) -o $(TEST_EXE)
++	echo 'a string' | ./$(TEST_EXE) > $(TEST)
++
++
++.cc.o .cxx.o .C.o .cpp.o:
++	${CXX} ${CXXFLAGS} ${DEBUG_FLAGS} ${REPO_FLAGS} ${.IMPSRC} -c -o $*.o $<
++
++%.out: %.cpp
++	$(CXX) $(CXXFLAGS) ${DEBUG_FLAGS} -USINGLE -DMAIN=1 $< -c -o $*.o
++	$(CXX) $(CXXFLAGS) $*.o $(STAT_MODULE) $(LIBS) -o $*.exe
++	./$*.exe > $@
++	-rm -f $*.exe
++
++istmit1.out: istmit1.cpp
++	$(CXX) $(CXXFLAGS) ${DEBUG_FLAGS} ${REPO_FLAGS} $< $(STAT_MODULE) $(LIBSTDCXX) -lstdc++ $(LIBS) -o istmit1
++	echo 'a string' | ./istmit1 > istmit1.out
++	-rm -f ./istmit1
++
++$(STAT_MODULE): stat.cpp
++	$(CXX) $(CXXFLAGS) ${DEBUG_FLAGS} ${REPO_FLAGS} -c $< -o $@
++
++%.s: %.cpp
++	$(CXX) $(CXXFLAGS) -O3 -fno-exceptions -D__STL_NO_EXCEPTIONS -S $<  -o $*.s
++
++%.i: %.cpp
++	$(CXX) $(CXXFLAGS) ${DEBUG_FLAGS} -E $<  > $@
++
++clean:
++	-rm -Rf *.exe *.out *.o *.rpo core *.out
++
