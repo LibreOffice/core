@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:24:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1659,7 +1659,7 @@ String ScDrawLayer::GetVisibleName( SdrObject* pObj )
     return aName;
 }
 
-inline IsNamedObject( SdrObject* pObj, const String& rName )
+inline sal_Bool IsNamedObject( SdrObject* pObj, const String& rName )
 {
     //  TRUE if rName is the object's Name or PersistName
     //  (used to find a named object)
