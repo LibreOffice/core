@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:36:05 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,7 +873,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
-        Text [ swedish ] = "~Titel" ;
+        Text [ swedish ] = "~Rubrik" ;
         Text [ danish ] = "Titel" ;
         Text [ italian ] = "~Titolo" ;
         Text [ spanish ] = "~Título" ;
@@ -899,7 +899,7 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ ENGLISH ] = "~Input help" ;
         Text [ dutch ] = "~Invoerhulp" ;
         Text [ english_us ] = "~Input help" ;
-        Text [ swedish ] = "~Inmatningshjälp" ;
+        Text [ swedish ] = "In~matningshjälp" ;
         Text [ danish ] = "Inputhjælp" ;
         Text [ italian ] = "Aiuto per la digitazione" ;
         Text [ spanish ] = "Ayuda de ~entrada" ;
@@ -1041,7 +1041,7 @@ TabPage TP_VALIDATION_ERROR
         Text = "~Titel" ;
         Text [ ENGLISH ] = "~Title" ;
         Text [ english_us ] = "~Title" ;
-        Text [ swedish ] = "~Titel" ;
+        Text [ swedish ] = "~Rubrik" ;
         Text [ danish ] = "Titel" ;
         Text [ italian ] = "~Titolo" ;
         Text [ spanish ] = "~Título" ;
