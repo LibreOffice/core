@@ -9,6 +9,10 @@ import drafts.com.sun.star.accessibility.XAccessibleStateSet;
 import drafts.com.sun.star.accessibility.XAccessibleText;
 import drafts.com.sun.star.accessibility.XAccessibleEditableText;
 import drafts.com.sun.star.accessibility.AccessibleTextType;
+import drafts.com.sun.star.accessibility.XAccessibleEventListener;
+import drafts.com.sun.star.accessibility.XAccessibleEventBroadcaster;
+import drafts.com.sun.star.accessibility.AccessibleEventObject;
+import drafts.com.sun.star.accessibility.AccessibleEventId;
 
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.IndexOutOfBoundsException;
@@ -25,29 +29,10 @@ import javax.swing.event.*;
 
 /** This class is a start to collect the handling of a JTree and a DefaultTreeModel.
 */
-public class AccessibilityTree extends JTree
+public class AccessibilityTree
+    extends JTree
+    implements XAccessibleEventListener
 {
-//     public static void main (String args[])
-//     {
-//         // doesn't work any more; constructor has changed
-//         new AccessibilityWorkBench ();
-//     }
-
-
-
-
-    /** Local class used to store the accessible object with every tree node.
-    */
-    protected class TreeNode extends DefaultMutableTreeNode
-    {
-        public AccessibleObject aAccessibleObject;
-        public TreeNode (String sName)
-        {
-            super (sName);
-            aAccessibleObject = null;
-        }
-    }
-
     /** Create a new accessibility tree.  Use the specified message display
         for displaying messages and the specified canvas to draw the
         graphical representations of accessible objects on.
@@ -65,6 +50,9 @@ public class AccessibilityTree extends JTree
 
         setEditable (true);
 
+        maCellRenderer = new AccessibleTreeCellRenderer();
+        setCellRenderer (maCellRenderer);
+
         MouseListener ml = new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     int selRow = getRowForLocation(e.getX(), e.getY());
@@ -77,7 +65,7 @@ public class AccessibilityTree extends JTree
                             if (TreeNode.class.isInstance (aObject))
                             {
                                 TreeNode aNode = (TreeNode)aObject;
-                                createTree (aNode.aAccessibleObject.getAccessible(),
+                                createTree (aNode.maAccessibleObject.getAccessible(),
                                     selPath);
                                 expandShapes ();
                             }
@@ -94,10 +82,16 @@ public class AccessibilityTree extends JTree
 
 
 
+    public void createTree (XAccessible xRoot)
+    {
+        createTree (xRoot, new TreePath (maRoot));
+    }
+
+
+
+
     public void createTree (XAccessible xRoot, TreePath aPath)
     {
-        System.out.println ("creating accessibility tree for root " + xRoot + " under path " +
-            aPath);
         TreeNode aTree = createAccessibilityTree (
             xRoot,
             0,
@@ -107,14 +101,6 @@ public class AccessibilityTree extends JTree
         aRoot.insert (aTree, aRoot.getChildCount());
         maTreeModel.reload ();
     }
-
-
-
-    public void createTree (XAccessible xRoot)
-    {
-        createTree (xRoot, new TreePath (maRoot));
-    }
-
 
 
 
@@ -133,31 +119,40 @@ public class AccessibilityTree extends JTree
 
         try
         {
-            aRoot = newTreeNode (xRoot, depth);
+            aRoot = new TreeNode (xRoot, this);
+
+            // Register as event listener.
+            XAccessibleEventBroadcaster xEventBroadcaster =
+                (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
+                    XAccessibleEventBroadcaster.class, xRoot);
+            if (xEventBroadcaster != null)
+                xEventBroadcaster.addEventListener (this);
+
+
             TreePath aNewPath = aPath.pathByAddingChild (aRoot);
 
-            if (depth >= 0)
+            // Create the accessible object and register this tree as listener at them.
+            AccessibleObject aObject = new AccessibleObject (xRoot, aNewPath);
+
+            aRoot.maAccessibleObject = aObject;
+            message ("creating accessibility tree at depth " + depth + ": "
+                     + aObject.toString());
+
+            if (maCanvas != null)
             {
-                AccessibleObject aObject = new AccessibleObject (xRoot, aNewPath);
-                aRoot.aAccessibleObject = aObject;
-                message ("creating accessibility tree at depth " + depth + ": "
-                    + aObject.toString());
-
-                if (maCanvas != null)
+                if (aObject.getOrigin().x != 0 || aObject.getOrigin().y != 0)
                 {
-                    if (aObject.getOrigin().x != 0 || aObject.getOrigin().y != 0)
-                    {
-                        maCanvas.addAccessible (aObject);
-                        System.out.println ("adding object " + aObject.toString() + " to canvas");
-                    }
+                    maCanvas.addAccessible (aObject);
                 }
-                else
-                    System.out.println ("no canvas");
-
-                aOrigin = aObject.getOrigin ();
             }
+            else
+                System.out.println ("no canvas");
 
-            //  Iterate over children and show them.
+            aOrigin = aObject.getOrigin ();
+
+
+            //  Iterate over accessible children, create their subtrees and
+            //  inserert these trees into the new node.
             XAccessibleContext xContext = xRoot.getAccessibleContext();
             if (xContext != null)
             {
@@ -170,10 +165,6 @@ public class AccessibilityTree extends JTree
                     aRoot.insert (aNode, aRoot.getChildCount());
                 }
             }
-            else
-            {
-                //                println ("object is not accessible");
-            }
         }
         catch (Exception e)
         {
@@ -184,250 +175,25 @@ public class AccessibilityTree extends JTree
     }
 
 
-
-
-    /** Create a new node for the JTree which represents the specified accessible object.
-        The node displays selected attributes of the accessible object.
+    /** Remove this tree as event listener from all the nodes in the subtree
+        of the specified root.
     */
-    protected TreeNode newTreeNode (XAccessible xAccessible, int depth)
+    protected void removeEventListeners (DefaultMutableTreeNode aRoot)
     {
-        TreeNode aNode = null;
-        try
+        java.util.Enumeration aEnumeration = aRoot.breadthFirstEnumeration();
+        while (aEnumeration.hasMoreElements())
         {
-            if (xAccessible == null)
+            Object aElement = aEnumeration.nextElement();
+            if (TreeNode.class.isInstance (aElement))
             {
-                aNode = new TreeNode ("not accessible");
-            }
-            else
-            {
-                XAccessibleContext xContext = xAccessible.getAccessibleContext();
-
-                if (xContext == null)
-                {
-                    aNode = new TreeNode ("no context");
-                }
-                else
-                {
-                    aNode = new TreeNode (
-                        xContext.getAccessibleName());
-                    aNode.add (new DefaultMutableTreeNode (
-                                   "Description: "+ xContext.getAccessibleDescription()));
-                    aNode.add (new DefaultMutableTreeNode (
-                                   "Role: "+ xContext.getAccessibleRole()));
-                    aNode.add (new DefaultMutableTreeNode (
-                                   "Has parent: "+ (xContext.getAccessibleParent()!=null?
-                                       "yes" : "no")));
-                    aNode.add (new DefaultMutableTreeNode (
-                                   "Child count: "+ xContext.getAccessibleChildCount()));
-
-                    XAccessibleComponent xComponent =
-                        (XAccessibleComponent) UnoRuntime.queryInterface (
-                            XAccessibleComponent.class, xContext);
-                    if (xComponent != null)
-                    {
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "Location: "+ xComponent.getLocation().X + ", "
-                                       + xComponent.getLocation().Y));
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "Location on Screen: "+ xComponent.getLocationOnScreen().X
-                                       + ", "+ xComponent.getLocationOnScreen().Y));
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "Size: "+ xComponent.getSize().Width + ", "
-                                       + xComponent.getSize().Height));
-
-                    }
-                    else
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "XAccessibleComponent not supported"));
-
-                    XAccessibleExtendedComponent xEComponent =
-                        (XAccessibleExtendedComponent) UnoRuntime.queryInterface (
-                            XAccessibleExtendedComponent.class, xContext);
-                    if (xEComponent != null)
-                    {
-                        int nColor = xEComponent.getForeground();
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "Foreground color: R"
-                                       + (nColor>>16&0xff)
-                                       +"G"+ (nColor>>8&0xff)
-                                       +"B"+ (nColor>>0&0xff)));
-                        nColor = xEComponent.getBackground();
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "Background color: R"
-                                       + (nColor>>16&0xff)
-                                       +"G"+ (nColor>>8&0xff)
-                                       +"B"+ (nColor>>0&0xff)));
-                    }
-                    else
-                        aNode.add (new DefaultMutableTreeNode (
-                                       "XAccessibleExtendedComponent not supported"));
-
-                    XAccessibleAction xAction =
-                        (XAccessibleAction) UnoRuntime.queryInterface (
-                            XAccessibleAction.class, xContext);
-                    if (xAction != null)
-                    {
-                        int nActions = xAction.getAccessibleActionCount();
-                        aNode.add (
-                            new DefaultMutableTreeNode (
-                                "Actions: " + nActions));
-                        for (int i=0; i<nActions; i++)
-                            aNode.add (
-                                new DefaultMutableTreeNode (
-                                    "Action " + i + " : " + xAction.getAccessibleActionDescription(i)));
-                    }
-
-                    XAccessibleImage xImage =
-                        (XAccessibleImage) UnoRuntime.queryInterface (
-                            XAccessibleImage.class, xContext);
-                    if (xImage != null)
-                    {
-                        aNode.add (
-                            new DefaultMutableTreeNode (
-                                "Image description: " + xImage.getAccessibleImageDescription()));
-                    }
-
-                    XAccessibleText xText =
-                        (XAccessibleText) UnoRuntime.queryInterface (
-                            XAccessibleText.class, xContext);
-                    if (xText != null)
-                    {
-                        aNode.add( newTextTreeNode( xText ) );
-                    }
-                }
-            }
-
-            // Use interface XServiceInfo to retrieve information about
-            // supported services.
-            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface (
-                XServiceInfo.class, xAccessible);
-            if (xSI == null)
-                aNode.add (new DefaultMutableTreeNode (
-                               "XServiceInfo  not supported"));
-            else
-                aNode.add (new DefaultMutableTreeNode (
-                               "Service name: " + xSI.getImplementationName ()));
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception in newTreeNode: " + e);
-        }
-
-        return aNode;
-    }
-
-    /** Create a node for an XAccessibleText interface. */
-    private DefaultMutableTreeNode newTextTreeNode( XAccessibleText xText )
-    {
-        // construct XAccessibleText node with (editable) text
-        DefaultMutableTreeNode aNode = new DefaultMutableTreeNode( xText );
-        aNode.add( new DefaultMutableTreeNode( xText.getText() ) );
-
-        // other methods
-        int nChars = xText.getCharacterCount();
-        aNode.add( new DefaultMutableTreeNode( "# chars: " + nChars ) );
-
-        // getCharacter (as array)
-        if( nChars > 30 )
-            nChars = 30;
-        StringBuffer aChars = new StringBuffer();
-        try
-        {
-            aChars.append( "[" );
-            for( int i = 0; i < nChars; i++)
-            {
-                aChars.append( xText.getCharacter(i) );
-                aChars.append( "," );
-            }
-            if( nChars > 0)
-            {
-                if( nChars == xText.getCharacterCount() )
-                    aChars.deleteCharAt( aChars.length() - 1 );
-                else
-                    aChars.append( "..." );
-            }
-            aChars.append( "]" );
-        }
-        catch( IndexOutOfBoundsException e )
-        {
-            aChars.append( "   ERROR   " );
-        }
-        aNode.add( new DefaultMutableTreeNode("getCharacters: " + aChars));
-
-        // selection + caret
-        aNode.add( new DefaultMutableTreeNode(
-            "selection: " + "[" + xText.getSelectionStart() + "," +
-            xText.getSelectionStart() + "] \"" + xText.getSelectedText() +
-            "\"" ) );
-
-        aNode.add( new DefaultMutableTreeNode(
-            "getCaretPosition: " + xText.getCaretPosition() ) );
-
-        // now do all the TextTypes
-        aNode.add( newTextAtIndexTreeNode(
-            xText, "Character", AccessibleTextType.CHARACTER ) );
-        aNode.add( newTextAtIndexTreeNode(
-            xText, "Word", AccessibleTextType.WORD ) );
-        aNode.add( newTextAtIndexTreeNode(
-            xText, "Sentence", AccessibleTextType.SENTENCE ) );
-        aNode.add( newTextAtIndexTreeNode(
-            xText, "Paragraph", AccessibleTextType.PARAGRAPH ) );
-        aNode.add( newTextAtIndexTreeNode(
-            xText, "Line", AccessibleTextType.LINE ) );
-
-        return aNode;
-    }
-
-    /** Create a text node that lists all strings of a particular text type
-     */
-    private DefaultMutableTreeNode newTextAtIndexTreeNode(
-        XAccessibleText xText, String sName, short nTextType)
-    {
-        DefaultMutableTreeNode aNode =
-            new DefaultMutableTreeNode( "TextType: " + sName );
-
-        // get word at all positions;
-        // for nicer display, compare current word to previous one and
-        // make a new node for every interval, not for every word
-        int nLength = xText.getCharacterCount();
-        if( nLength > 0 )
-        {
-            try
-            {
-                // sWord + nStart mark the current word
-                // make a node as soon as a new one is found; close the last
-                // one at the end
-                String sWord = xText.getTextAtIndex(0, nTextType);
-                int nStart = 0;
-                for(int i = 1; i < nLength; i++)
-                {
-                    String sTmp = xText.getTextAtIndex(i, nTextType);
-                    if( ! sTmp.equals( sWord ) )
-                    {
-                        aNode.add( new DefaultMutableTreeNode(
-                            "[" + nStart + "," + (i-1) + "] \"" +
-                            sWord + "\"" ) );
-                        sWord = sTmp;
-                        nStart = i;
-                    }
-
-                    // don't generate more than 50 children.
-                    if( aNode.getChildCount() > 50 )
-                    {
-                        sWord = "...";
-                        break;
-                    }
-                }
-                aNode.add( new DefaultMutableTreeNode(
-                    "[" + nStart + "," + nLength + "] \"" + sWord + "\"" ) );
-            }
-            catch( IndexOutOfBoundsException e )
-            {
-                aNode.add( new DefaultMutableTreeNode( e.toString() ) );
+                TreeNode aNode = (TreeNode)aElement;
+                XAccessibleEventBroadcaster xEventBroadcaster =
+                    (XAccessibleEventBroadcaster) UnoRuntime.queryInterface (
+                        XAccessibleEventBroadcaster.class, aNode.getContext());
+                if (xEventBroadcaster != null)
+                    xEventBroadcaster.addEventListener (this);
             }
         }
-
-        return aNode;
     }
 
 
@@ -436,60 +202,31 @@ public class AccessibilityTree extends JTree
     */
     public void expandShapes ()
     {
-        mbFirstShapeSeen = false;
-        expandShapes (maRoot);
-
-        addTreeSelectionListener( new TreeSelectionListener() {
-                public void valueChanged(TreeSelectionEvent e) {
-                    System.out.println ("TreeSelectionEvent = " + e);
-                    }
-                }
-            );
-
-    }
-
-
-
-    /** Expand all nodes and their subtrees that represent shapes.
-    */
-    protected void expandShapes (Object aRoot)
-    {
         message ("Expanding shapes.");
 
-        try
+        mbFirstShapeSeen = false;
+        // Iterate over all nodes in the tree.
+        java.util.Enumeration aEnumeration = maRoot.breadthFirstEnumeration();
+        while (aEnumeration.hasMoreElements())
         {
-            int nChildCount = maTreeModel.getChildCount(aRoot);
-            // Ignore leafs.
-            if (nChildCount > 0)
+            Object aElement = aEnumeration.nextElement();
+            if (TreeNode.class.isInstance (aElement))
             {
-                for (int i=0; i<nChildCount; i++)
-                {
-                    Object aChild = maTreeModel.getChild (aRoot, i);
-                    if (TreeNode.class.isInstance (aChild))
+                TreeNode aNode = (TreeNode)aElement;
+                AccessibleObject aAccessibleObject = (AccessibleObject)aNode.maAccessibleObject;
+                if (aAccessibleObject != null)
+                    // Expand every node that has one of the new OO roles.
+                    if (aAccessibleObject.getRole() >= 100)
                     {
-                        TreeNode aNode = (TreeNode)aChild;
-                        AccessibleObject aAccessibleObject = (AccessibleObject)aNode.aAccessibleObject;
-                        if (aAccessibleObject != null)
-                            // Expand every node that has one of the new OO roles.
-                            if (aAccessibleObject.getRole() >= 100)
-                            {
-                                TreePath aPath = new TreePath (aNode.getPath());
-                                expandPath (aPath);
-                                if ( ! mbFirstShapeSeen)
-                                {
-                                    mbFirstShapeSeen = true;
-                                    makeVisible (aPath);
-                                }
-                            }
+                        TreePath aPath = new TreePath (aNode.getPath());
+                        expandPath (aPath);
+                        if ( ! mbFirstShapeSeen)
+                        {
+                            mbFirstShapeSeen = true;
+                            makeVisible (aPath);
+                        }
                     }
-                    // Descent into tree strucuture.
-                    expandShapes (aChild);
-                }
             }
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception while expanding shape nodes: " + e);
         }
     }
 
@@ -500,12 +237,10 @@ public class AccessibilityTree extends JTree
     {
         if (maTreeModel != null && maRoot != null)
         {
-            System.out.println ("Trying to add node at position " + maRoot.getChildCount()
-                + " into root node");
             if (sURL.length() == 0)
                 sURL = "<unnamed>";
             TreeNode aNode = new TreeNode ("Document: " + sURL);
-            aNode.aAccessibleObject = new AccessibleObject (xAccessible,
+            aNode.maAccessibleObject = new AccessibleObject (xAccessible,
                 new TreePath (maRoot).pathByAddingChild(aNode));
             maRoot.insert (aNode, maRoot.getChildCount());
         }
@@ -515,7 +250,179 @@ public class AccessibilityTree extends JTree
 
     public void clear ()
     {
+        removeEventListeners (maRoot);
         maRoot.removeAllChildren();
+    }
+
+
+    /** Search for node in tree that represents the specified accessible object.
+        If found return this node, else return null.
+    */
+    public TreeNode getNodeForXAccessible (XAccessible xAccessible)
+    {
+        try
+        {
+            java.util.Enumeration aEnumeration = maRoot.depthFirstEnumeration ();
+            while (aEnumeration.hasMoreElements())
+            {
+                Object aElement = aEnumeration.nextElement();
+                if (TreeNode.class.isInstance (aElement))
+                {
+                    TreeNode aNode = (TreeNode)aElement;
+                    if (aNode != null)
+                    {
+                        AccessibleObject aAccessibleObject = (AccessibleObject)aNode.maAccessibleObject;
+                        if (aAccessibleObject!=null)
+                            if (aAccessibleObject.getAccessible().equals (xAccessible))
+                                return aNode;
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println ("caught exception while getting XAccessible: " + e);
+        }
+        return null;
+    }
+
+
+    /** Callback for accessible notify events.
+    */
+    public void notifyEvent (AccessibleEventObject e)
+    {
+        try
+        {
+            System.out.println ("notify Event ("+e.EventId+") : " + e);
+            XAccessible xSource = (XAccessible) UnoRuntime.queryInterface (
+                XAccessible.class, e.Source);
+            switch (e.EventId)
+            {
+                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                    XAccessible aOldChild = (XAccessible)e.OldValue;
+                    XAccessible aNewChild = (XAccessible)e.NewValue;
+                    if (aNewChild == null)
+                    {
+                        System.out.println ("child event deletion of " + aOldChild);
+                        removeNode (getNodeForXAccessible (aOldChild));
+                    }
+                    else
+                    {
+                        System.out.println ("adding child "+ aNewChild);
+                        addNode (getNodeForXAccessible (xSource), aNewChild);
+                    }
+                    break;
+
+                case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
+                    System.out.println ("xSource = " + xSource);
+                    System.out.println ("Source = " + e.Source);
+                    System.out.println ("old and new values =" + e.OldValue + ", " + e.NewValue);
+                    updateNode (getNodeForXAccessible (xSource));
+                    break;
+
+                default:
+                    System.out.println ("   event has unhandled id " + e.EventId);
+
+            }
+        }
+        catch (Exception event)
+        {
+            System.out.println ("caught exception processing notifyEvent: " + event);
+        }
+    }
+
+
+
+
+    /** Remove the specified node and its sub-tree from the tree and the canvas.
+        @param aNode
+            The root node of the sub-tree to remove.  If it is null then
+            nothing happens.
+    */
+    protected void removeNode (TreeNode aRoot)
+    {
+        if (aRoot != null)
+        {
+            System.out.println ("   removing node " + aRoot);
+            removeEventListeners (aRoot);
+            if (TreeNode.class.isInstance (aRoot.getParent()))
+                ((TreeNode)aRoot.getParent()).updateChildCount();
+            aRoot.removeFromParent();
+            maTreeModel.reload ();
+            expandShapes ();
+
+            // Remove all nodes of the subtree from the canvas by iterating
+            // over an enumeration of that tree.
+            System.out.println ("removing object from canvas");
+            java.util.Enumeration aSubtree = aRoot.depthFirstEnumeration();
+            while (aSubtree.hasMoreElements())
+            {
+                Object aNode = aSubtree.nextElement ();
+                if (TreeNode.class.isInstance (aNode))
+                    maCanvas.removeAccessible (((TreeNode)aNode).maAccessibleObject);
+            }
+        }
+    }
+
+
+
+
+    /** Add the specified node to the tree and the canvas.
+        @param aRoot
+            The root node under which to add the new child.  If it is null then
+            nothing happens.
+        @param aNewChild
+            The new child node to add.
+    */
+    protected void addNode (TreeNode aRoot, XAccessible aNewChild)
+    {
+        if (aRoot != null)
+        {
+            aRoot.insert (
+                createAccessibilityTree (
+                    aNewChild,
+                    0,
+                    aRoot.maAccessibleObject.getOrigin(),
+                    new TreePath (aRoot.getPath())),
+                aRoot.getChildCount());
+            maTreeModel.reload ();
+            expandShapes ();
+        }
+    }
+
+
+    /** Update the visible data of the specified node.  This method is
+        called after resize and movement operations of objects.
+    */
+    protected void updateNode (TreeNode aNode)
+    {
+        try
+        {
+            System.out.println ("aNode = " + aNode);
+            if (aNode != null)
+            {
+                maCellRenderer.clearAllChanges ();
+
+                // Update the graphical represenation of the node.
+                aNode.maAccessibleObject.update ();
+
+                // Create a new list to collect all changed nodes in.
+                Vector aChangedNodes = new Vector ();
+                if (aNode.maAccessibleObject != null)
+                {
+                    aNode.updateVisibleData (aChangedNodes);
+                    maCellRenderer.addChangedNodes (aChangedNodes, this);
+                }
+
+                // Repaint the tree and the canvas.
+                repaint ();
+                maCanvas.repaint ();
+            }
+        }
+        catch (Exception event)
+        {
+            System.out.println ("caught exception while updating a node: " + event);
+        }
     }
 
 
@@ -523,21 +430,6 @@ public class AccessibilityTree extends JTree
     {
         maMessageDisplay.message (message);
     }
-
-
-    protected MessageInterface
-        maMessageDisplay;
-
-    private DefaultMutableTreeNode
-        maRoot;
-    private DefaultTreeModel
-        maTreeModel;
-    private Canvas
-        maCanvas;
-    private boolean
-        mbFirstShapeSeen;
-
-
 
 
     /** listen to tree model changes in order to update XAccessibleText objects
@@ -664,4 +556,19 @@ public class AccessibilityTree extends JTree
 //             }
 //         }
     }
+
+
+    protected MessageInterface
+        maMessageDisplay;
+    protected AccessibleTreeCellRenderer
+        maCellRenderer;
+
+    private DefaultMutableTreeNode
+        maRoot;
+    private DefaultTreeModel
+        maTreeModel;
+    private Canvas
+        maCanvas;
+    private boolean
+        mbFirstShapeSeen;
 }

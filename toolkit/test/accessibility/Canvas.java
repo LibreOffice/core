@@ -39,6 +39,11 @@ class Canvas
         maBoundingBox = maBoundingBox.union (aObject.getBBox());
     }
 
+    public void removeAccessible (AccessibleObject aObject)
+    {
+        maObjects.remove (aObject);
+    }
+
     public void clear ()
     {
         maObjects.clear();
@@ -143,10 +148,11 @@ class Canvas
             if (aObject != null)
             {
                 aObject.deselect ();
-                if (aObject.contains (e.getX(),e.getY()))
-                {
-                    maActiveObject = aObject;
-                }
+                if (aObject != null)
+                    if (aObject.contains (e.getX(),e.getY()))
+                    {
+                        maActiveObject = aObject;
+                    }
             }
         }
         if (maActiveObject != null)
@@ -156,8 +162,11 @@ class Canvas
                 +maActiveObject.toString());
             System.out.println (maActiveObject.getPath());
 
-            maTree.scrollPathToVisible (maActiveObject.getPath());
-            maTree.repaint ();
+            if (maTree != null)
+            {
+                maTree.scrollPathToVisible (maActiveObject.getPath());
+                maTree.repaint ();
+            }
         }
         repaint ();
     }

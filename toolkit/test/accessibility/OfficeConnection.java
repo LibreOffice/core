@@ -62,14 +62,14 @@ public class OfficeConnection
     private void connect (String hostname, int portnumber)
     {
         mbInitialized = true;
+        //  Set up connection string.
+        String sConnectString = "uno:socket,host=" + hostname + ",port=" + portnumber
+            + ";urp;StarOffice.ServiceManager";
+
 
         // connect to a running office and get the ServiceManager
         try
         {
-            //  Set up connection string.
-            String sConnectString = "uno:socket,host=" + hostname + ",port=" + portnumber
-                + ";urp;StarOffice.ServiceManager";
-
             //  Create a URL Resolver.
             XMultiServiceFactory aLocalServiceManager =
                 com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
@@ -86,7 +86,7 @@ public class OfficeConnection
 
         catch (Exception e)
         {
-            print.println ("Could not connect: " + e);
+            print.println ("Could not connect with " + sConnectString + " : " + e);
             print.println ("Please start OpenOffice/StarOffice with "
                                 + "\"-accept=socket,host=localhost,port=5678;urp;\"");
         }

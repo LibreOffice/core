@@ -23,6 +23,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.uno.UnoRuntime;
 
 import drafts.com.sun.star.accessibility.XAccessible;
@@ -31,7 +32,6 @@ import drafts.com.sun.star.accessibility.XAccessibleComponent;
 import drafts.com.sun.star.accessibility.XAccessibleExtendedComponent;
 import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
 import drafts.com.sun.star.accessibility.XAccessibleStateSet;
-
 
 import java.util.Vector;
 import java.awt.*;
@@ -47,7 +47,8 @@ public class AccessibilityWorkBench
         MessageInterface,
         XEventListener,
         XFrameActionListener,
-        XPropertyChangeListener
+        XPropertyChangeListener,
+        XTerminateListener
 {
     public String msFileName;
     /*WinFilename
@@ -62,7 +63,9 @@ public class AccessibilityWorkBench
     public static void main (String args[])
     {
         int nPortNumber = 5678;
-        String sFileName = "file:///tmp/impress-test-document.sxi";
+        String sFileName
+            = "file:///tmp/impress-test-document.sxi";
+        //            = "file:///tmp/draw-test-document.sxd";
 
         for (int i=0; i<args.length; i++)
         {
@@ -241,13 +244,18 @@ public class AccessibilityWorkBench
     protected void initialize ()
     {
         // Clear the accessibility tree.
-        maTree.clear ();
+        if (maTree != null)
+            maTree.clear ();
 
         // Delete the graphical representations.
-        maCanvas.clear ();
+        if (maCanvas != null)
+            maCanvas.clear ();
 
         // Add entries for open documents to tree.
         addOpenDocumentsToTree ();
+
+        //        if (office != null && office.getDesktop() != null)
+        //  office.getDesktop().addTerminateListener (this);
     }
 
 
@@ -262,6 +270,7 @@ public class AccessibilityWorkBench
         }
         else if (e.getActionCommand().equals("quit"))
         {
+            maTree.clear();
             System.exit (0);
         }
         else if (e.getActionCommand().equals("load"))
@@ -546,12 +555,25 @@ public class AccessibilityWorkBench
     }
 
 
+    // XTerminateListener
+    public void queryTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
+    {
+        System.out.println ("Terminate Event : " + aEvent);
+    }
+
+    // XTerminateListener
+    public void notifyTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
+    {
+        System.out.println ("Notifiy Termination Event : " + aEvent);
+    }
+
+
     /** Write message into message area.
     */
     public void message (String message)
     {
         maMessageArea.setText (message);
-        System.out.println (message);
+        //        System.out.println (message);
 
         // Show the new message string immediately.
         maMessageArea.paintImmediately (maMessageArea.getVisibleRect());

@@ -6,14 +6,13 @@
 #   and file URL.
 PORT_NUMBER = 5678
 FILE_NAME = "file:///tmp/impress-test-document.sxi"
-#   The JAR_PATH points to the jar files of your local office installation.
-JAR_PATH = $(STAR_RESOURCEPATH)$/
-
 
 
 # The following variables probably don't need to be changed.
 JAVAC = javac
 JAVA = java
+#   The JAR_PATH points to the jar files of your local office installation.
+JAR_PATH = $(STAR_RESOURCEPATH)$/
 
 
 
@@ -32,6 +31,7 @@ JAR_FILES =		\
 JAVA_FILES = \
     AccessibilityWorkBench.java	\
     AccessibleObject.java		\
+    AccessibleTreeCellRenderer.java		\
     AccessibilityTree.java		\
     Canvas.java					\
     InformationWriter.java		\
@@ -39,7 +39,8 @@ JAVA_FILES = \
     MessageInterface.java		\
     OfficeConnection.java		\
     Print.java					\
-    SimpleOffice.java
+    SimpleOffice.java			\
+    TreeNode.java
 
 JAVA_CLASSPATHS := 			\
     .						\
