@@ -1,0 +1,26 @@
+This directory contains the DMAKE manual page.  The typeset version of the
+manual is compressed and uuencoded as this is the only reasonable method of
+shipping the control-character filled manpage around.
+
+To unpack the typeset manual page please issue the following sequence of
+commands:
+
+	uudecode dmake.uue
+	uncompress dmake.Z
+	mv dmake dmake.p
+
+NOTE:  You only need to do this if you cannot typeset the manual page
+       yourself.
+
+The other two files found here are:
+
+	dmake.tf	- troff source for the manual page, you must use
+			  GNU groff to typeset it.
+	dmake.nc	- a typeset version of the manual page containing
+			  no control characters.
+
+Alternately visit the dmake WWW site, at
+
+	http://www.wticorp.com/dmake/dmake.html
+
+Dennis

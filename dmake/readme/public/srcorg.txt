@@ -1,0 +1,74 @@
+SOURCE CODE ORGANIZATION:
+-------------------------
+The source code is organized as follows:
+
+			dmake 		[source for all common functions]
+			  |
+			  |
+	    ----------------------------
+	    |	 |     |    |          |
+	   unix tos   qnx  os2       msdos  [source for OS specific functions]
+	    |	            |          |
+  --------------------      |       -------------------
+  |         |        |      |       |       |         |
+386ix     bsd43  sysvr[134] |    tccdos   bccdos   mscdos  [source for OSRELEASE
+	    |	      	    |		    |	            specific functions] 
+	    |           ---------       ------------------
+	    |           |       |       |        |       |
+	    |          ibm    mscdos  bcc30    bcc32   bcc40
+	    |
+	    |
+	    |
+	--------
+	|      |
+       uw      vf   [source for OSENVIRONMENT specific functions]
+
+
+Each of the directories (eg. bsd43, mscdos, tccdos, and sysvr3) contain source
+that is specific to that release of the OS (and possibly C-library)
+
+
+CREATING A NEW VERSION:
+-----------------------
+To create yet another version of dmake you should follow the following steps.
+
+The sysvr3 version as sent is the base version, all dmake versions must provide
+the equivalent of the functions defined in the sysvr3 directory, and MUST
+provide the same semantics (MSDOS archive lib searches are an exception since
+we cannot search libraries for timestamps in MSDOS, Actually the MKS version
+of dmake does this, I don't have the inclination to add this code though).
+
+1. Create a new directory for the version you will be making at the level
+   that is appropriate.  If it is a new OS then add the dir at the top level,
+   if it is a new version of UNIX then add it below the unix directory.
+
+2. Copy the files from the unix and unix/sysvr3 directories to the new dir.
+   (Or from any other directory sub-tree that is more appropriate)
+
+3. Not all OS/OSRELEASE combinations are compatible so in order to make
+   dmake on each, the particular directory may contain C-source for functions
+   present in the SVID SysV R3 distribution which are used by dmake but are
+   not supplied by the C-library in the target system.  For example the bsd43
+   directory contains source for tempnam.c since it is not provided with
+   the BSD C-library.  Before writing a new version of the source file
+   check the other directories to see if one already exists.
+
+4. Under some systems the standard include files may be missing or incorrect.
+   eg. under BSD stdarg.h and string.h.  If this is the case
+   you should create the proper .h file in the proper directory.
+   This works as expected as the compile line includes the flag -Idir
+   where dir is the configuration dir, (bsd43 for example) and any
+   standard include files will be searched for in dir before the compiler
+   looks in the normal places (if you have a sane compiler :-).
+
+5. Modify dmake.sh to contain the appropriate C compiler flags and link command
+   and to include any specific C files that you have had to add for this
+   version of dmake, and run the result through the shell.
+   (make the same changes to config.mk so that once you have a working copy of
+   dmake you can use it to bring itself up to date)
+
+6. Send me the changes :-) so that I can incorporate them into future
+   distributions.
+
+7. This should be all that you require to create a new version of dmake.
+   If you have any questions send e-mail to dvadura@plg.uwaterloo.ca

@@ -1,0 +1,194 @@
+DMAKE Version 4.1
+=================
+FINAL FREE RELEASE OF DMAKE, REPLACES VERSION 4.0
+
+Nature: This distribution advances dmake to Version 4.1, patch level 0.
+------- This release adds significant functionality and eliminates
+        bugs that were introduced with release 4.0.
+
+
+DETAILS OF ENHANCEMENTS/TWEAKS:
+===============================
+
+BUG FIXES:
+----------
+
+1. General clean up all over to fix small incompatibilities and obvious
+   typos.
+
+2. Fixed bug in getinp.c where buffer was being erroneously overwritten,
+   this caused the invalidation of the return address on the stack on
+   DOS systems.
+
+3. Fixed a bug that caused the "<target> is up to date" message to be
+   suppressed.
+
+4. Fixed a bug involving the value of $@ in conjunction with dynamic
+   prerequisites.
+
+5. Relegated the warning associated with duplicate entries in prerequisite
+   lists to a non-essential warning.  Added an option flag -Vw to display
+   it if you wish to check your makefile for duplicate entries.  Either way
+   the parser ignores duplicates.
+
+6. Better default action on checking out RCS targets.  If an RCS target has
+   no directory prefix of its own it is checked out into the directory
+   which contains the RCS subdirectory, otherwise it ends up in its directory
+   qualified location.
+
+7. Improved the speed of lookups in the directory cache; handle mixed case
+   file name entries on OS/2 and Win95/NT.
+
+8. Improved prerequisite list generation for long prerequisite lists.
+
+9. Rearanged startup macro files to form an architectural hierarchy.
+   This greatly simplifies the maintenance of the startup files.  They
+   might even be right at some point in the future.  Please let me know if
+   you encounter difficulties, as I don't have access to all possible
+   platforms, this sub-hierarchy is bound to have ommisions at this release
+   and hence is intended to be evolutionary over time.
+
+10. A build that only touches targets (-t) uses the same algorithm to decide
+    valid names as a normal build.
+
+11. Conditional macro assignments fixed, and now work for builtin macro
+    variables as well.
+
+
+NEW FEATURES:
+-------------
+
+0. Complete reorganization of Dmake STARTUP scripts.  Please refer to the
+   installation notes for details.  THIS ONE IS IMPORTANT!!!
+
+1. Support for long archive member names if Elf is available, plus better
+   support for archivers that truncate member names (see comments in
+   unix/arlib.c for details).
+
+2. Added variable MAKEVERSION which contains a string indicating the current
+   version of dmake.
+
+3. Added the .EXECUTE attribute, see man page for details.
+
+4. Added the .ERRREMOVE attribute, see man page for details.
+
+5. Added support for gmake style if/else/endif, but only if not part of
+   a Group recipe.
+
+6. Added initial build target for Coherent version 4.2 UNIX
+   and for Windows-NT/Windows-95 32-bit app using Borland C++ 4.0,4.5, 5.0,
+   and Microsoft Visual C++ 4.0.
+
+7. MSDOS version now supports two builtin runtime commands, noop, and echo.
+
+8. Added new macro $(uniq list) which returns a sorted version of the
+   white space separated tokens in list such that there are no repetitions.
+
+9. Added the function macro $(echo list) which simply returns list.
+   This is most useful in conjunction with the new $(foreach ...)
+   function macro.
+
+10. Added gmake style function macro
+
+	$(foreach,var,list data)
+
+    where var and list are expanded, and the result is the concatenation of
+    expanding data with var being set to each white space separated token in
+    list in turn.  For example:
+
+	list = a b c
+	all :
+		echo [$(foreach,i,$(list) [$i])]
+
+    will output
+
+	[[a] [b] [c]]
+
+    The iterator variable is defined as a local variable to this foreach
+    instance.  The following expression illustrates this:
+
+	$(foreach,i,$(foreach,i,$(sort c a b) root/$i) [$i/f.h])
+
+    when evaluated the result is:
+
+	[root/a/f.h] [root/b/f.h] [root/c/f.h]
+
+    The specification of list must be a valid macro expression, such as:
+
+	$($(assign list=a b c))
+	$(sort d a b c)
+	$(echo a b c)
+
+    and cannot just be the list itself.  That is, the following foreach
+    expression:
+
+	$(foreach,i,a b c [$i])
+
+    yields:
+	
+	"b c [a]"
+
+    when evaluated.
+
+11. Added the macro $(and list).
+
+12. Added the macro $(or list).
+
+13. Added the macro $(not term).
+
+14. Added the .NOINFER attribute to the .INCLUDE directive.  When specified
+    any prerequisite of the .INCLUDE directive which cannot be found in
+    the .INCLUDEDIRS search list is not automatically made.
+
+15. Improved the handling of internal macros for proper functioning of the *=
+    and *:= assignment constructs.  Macros that are internally initially
+    defined are considered to be undefined for the purpose of *= and *:=
+    assignment until they are the target of an explicit assignment operation.
+
+16. Improved the caching of file names, and their matching on case insensitive
+    file systems.  Two control macros help to manage the functionality:
+
+	.DIRCACHE := yes
+
+    Implies that the directory cache will be used.  This is on by default for
+    systems that support the reading of directories.  Setting the value of this
+    macro to 'no' is equivalent to supplying the '-d' command line switch.
+
+        .DIRCACHERESPCASE := yes
+
+    Causes dmake to respect the case of the directory entries when the cache
+    is enabled, thereby treating directory entries in a case sensitive manner.
+    Setting this to 'no' disables the matching of case.  This macro has effect
+    only if .DIRCACHE := yes.  Otherwise the facilities provided by the native
+    OS are used to match file names using 'stat'.
+
+17. Added parameterized user defined function macros.  Yes it's true
+    you may now define your own parametized function macros.  Here is
+    how it works.  Any macro that is not a predefined function macro and
+    is invoked with parameters is looked up as a user defined function
+    macro.  A new macro scope is created.  The n'th argument to the
+    macro is then assigned to the value of the the macro $n where n is 0
+    for the first argument, 1 for the second argument and so on.  The
+    argument is expanded before it is assigned.  The original macro is
+    then expanded.  For example:
+
+        FOO = a $0 b $1 c $2 d
+        echo :; $(FOO x y z)
+
+    Will produce the result string "a z b y c z d".  The
+    expansion of $(FOO) on it's own behaves as expected and returns the
+    string "a b c d" (assuming that each of $0, $1, $2
+    are undefined).   The only restriction when specifying function
+    macro arguments is as before:  they cannot contain spaces
+    themselves.
+
+
+ACKNOWLEDGEMENTS:
+=================
+    Thanks to all who submitted code for new features, suggestions for
+    improvements, and bug fixes.  I have tried to make sure no gotchas
+    remain, if you encounter problems installing or running dmake please
+    let me know.  As always, I am always happy to receive e-mail.
+
+    Many have contributed suggestions and bug fixes that make this
+    release possible.  The NET thanks you.

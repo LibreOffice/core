@@ -1,0 +1,31 @@
+Atari TOS specific information for dmake.  This information is provided in the
+hope that it makes it easier to install and recompile dmake in a TOS
+environment.  I do not own an ST.  As a result I rely on others to insure that
+this version of dmake works as advertized.  If you have any problems with it
+please fix them and send me the differences so that I can incorporate them
+into future releases and patches.
+
+
+1. ENVIRONMENT VARIABLE SETTINGS
+
+Only a single set of settings is available for Atari TOS.  There are no
+sub-selections for specific OS release and/or environment.
+
+   OS		 - tos
+   OSRELEASE	 - NULL
+   OSENVIRONMENT - NULL
+
+
+2. IMPLEMENTATION NOTES
+
+The code to compile on an Atari-ST using GCC was supplied by Edgar Roeder
+(roeder@cs.uni-sb.de).  I do not have an ST on which to verify the
+distribution sources but I have no reason to believe them to not work.
+If there are any problems please let Edgar or myself know.
+
+I know of no bugs or limitation to the Atari-ST implementation.  Note that
+it is similar to the DOS version but it does not swap itself out.  This does
+not appear to be as much of a problem on the Atari as it is on MSDOS boxes :-).
+See the msdos specific info file for further information.
+
+-dennis

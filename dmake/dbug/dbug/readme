@@ -1,0 +1,6 @@
+To unpack the DBUG manual page please issue the following sequence of
+commands:
+
+	uudecode dbug.uue
+	uncompress dbug.Z
+	mv dbug dbug.p

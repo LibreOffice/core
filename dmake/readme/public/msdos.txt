@@ -1,0 +1,124 @@
+MSDOS specific information for dmake.  This information is provided in the
+hope that it makes it easier to install and recompile dmake under MSDOS.
+I will be happy to hear of erroneous information and will make every effort
+to correct it.
+
+NOTE:  If you are seeking information for Win32 compiles please refer to
+       the file "readme/winnt".
+
+
+1. ENVIRONMENT VARIABLE SETTINGS
+
+There are many environment variable settings available for MSDOS.  Each
+option is described below.
+
+   OS		 - msdos
+
+   OSRELEASE	 - borland              # Borland compilers
+	         - microsft             # Microsoft compilers
+                 - zortech              # zortech compilers (unsupported)
+
+   OSENVIRONMENT - tcc20                # Borland Turbo C 2.0
+		 - bcc30		# Borland C++ V3.0 MSDOS compile
+   		 - bcc40		# Borland C++ V4.0 MSDOS compile
+   		 - bcc45		# Borland C++ V4.5 MSDOS compile
+   		 - bcc50		# Borland C++ V5.0 MSDOS compile
+
+		 - msc51                # Microsoft 5.1 Compiler MSDOS compile
+		 - msc60                # Microsoft 6.0 Compiler MSDOS compile
+
+   MSC_VER	 - 5.1			# Microsoft Compiler version 
+		 - 6.0			# Microsoft Compiler version 
+
+
+2. IMPLEMENTATION NOTES
+
+Bootstrapping the binary:
+-------------------------
+   A make.bat file is provided to bootstrap the binary.  The file contains
+   several targets for bootstrapping.  Invoking the batch file with no
+   arguments lists the possibilities shown below.
+
+      INDEX:  You must specify one of:
+         tccswp   - Turbo C 2.0 compile of swapping dmake.
+	 bcc30swp - Borland C++ 3.0 compile of swapping dmake.
+	 bcc40swp - Borland C++ 4.0 compile of swapping dmake.
+	 bcc45swp - Borland C++ 4.5 compile of swapping dmake.
+	 bcc50swp - Borland C++ 5.0 compile of swapping dmake.
+
+	 msc51    - Microsoft C 5.1 compile.
+	 msc51swp - Microsoft C 5.1, MASM 5.1 compile of swapping dmake.
+	 msc60    - Microsoft C 6.0 compile.
+	 msc60swp - Microsoft C 6.0, MASM 5.1 compile of swapping dmake.
+
+   Based on the compiler you have installed and whether or not you
+   want the swapping version of dmake, you should select the appropriate
+   target and issue 'make.bat target'.
+
+   The batch file runs a second batch script that comes with the distribution
+   which compiles the sources using the appropriate compiler and flags.  The
+   MSC Versions of the batch files should not require any further user
+   intervention during the build.  The Borland versions, as a final step,
+   invoke tlink with two response files.  The second of these response files,
+   named in msdos/borland/{bcc*,tcc20}/mk*.bat, contains absolute path names to
+   Borland's libraries.  You likely need to edit these before getting a
+   successful binary linked.  The reason for this is that not all of us
+   install the Borland compiler in the same place.
+
+   Note that the file msdos/exec.uue is a uuencoded version of a BCC++
+   compiled exec.obj (from exec.asm).  If you do not have an assembler
+   either microsoft MASM or Borland TASM (or some other), you can uudecode
+   this file and put it into src/objects/exec.obj.  The build will then
+   link against it to build your binary.
+
+
+Using dmake to Make itself:
+---------------------------
+   See the file "readme/install" for information on building dmake by using
+   dmake itself.  Once successfully built using the presupplied scripts it
+   should be straight forward to rebuild dmake.
+
+
+Memory Requirements and Swapping:
+---------------------------------
+   The swapping code currently only swaps to DISK, there are hooks
+   in the code to accomodate XMS and EMS, but have not been used (and
+   probably never will).
+
+   It appears that a ramdisk seems to work just fine.  If anyone
+   wishes to fill in the hooks please do so and send us the differences.
+
+
+^C and stopping a make:
+-----------------------
+   Thanks to the efforts of Len Reed, appears to now work.  I have been unable
+   to hang my machine if it's swapped out and I hit ^C a couple thousand times.
+
+
+Other notes:
+------------
+   dmake does not care if you are running command.com or some other command
+   interpretter, you must however specify the proper values of the environment
+   variables SHELL, SHELLFLAGS, GROUPSHELL, and GROUPFLAGS in order for things
+   to work correctly.  Read the man page FIRST, if you still have trouble
+   then send email.
+
+   Group recipes under DOS that use command.com as the command interpretter
+   require you to set the GROUPSUFFIX macro.
+
+   As shipped the startup.mk files for the DOS version try to figure out what
+   command interpretter you are using and set things up appropriately.
+   Two command interpretters are supported in the shipped startup.mk file,
+   command.com, and the MKS Korn shell.
+
+   The dos version of dmake contains one builtin command.  noop which
+   simply ignores the remainder of the line and always retuns success,
+
+   dmake supports the MKS argument passing conventions.  The facility is
+   enabled by setting .MKSARGS:=1.  It is set by default in the startup.mk file
+   if an MKS Korn shell is detected as being the active command interpretter.
+
+   At this time there are no plans to support the other popular UNIX like
+   argument passing conventions available under DOS.  We recommend you get
+   a copy of the MKS Toolkit from Mortice Kern Systems in Waterloo, Ontario,
+   Canada [http://www.mks.com/].

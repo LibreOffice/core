@@ -1,0 +1,3 @@
+The following is a summary of the supported dmake environments.  When you
+issue the build command 'dmake tag' where tag is the target environment it
+will build one of these by default.

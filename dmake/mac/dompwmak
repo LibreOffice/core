@@ -1,0 +1,67 @@
+newfolder objects
+c -I. -I :mac -d _MPW -s infer -sym off -o :objects:infer.c.o infer.c
+c -I. -I :mac -d _MPW -s make -sym off -o :objects:make.c.o make.c
+c -I. -I :mac -d _MPW -s stat -sym off -o :objects:stat.c.o stat.c
+c -I. -I :mac -d _MPW -s expand -sym off -o :objects:expand.c.o expand.c
+c -I. -I :mac -d _MPW -s dmstring -sym off -o :objects:dmstring.c.o dmstring.c
+c -I. -I :mac -d _MPW -s hash -sym off -o :objects:hash.c.o hash.c
+c -I. -I :mac -d _MPW -s dag -sym off -o :objects:dag.c.o dag.c
+c -I. -I :mac -d _MPW -s dmake -sym off -o :objects:dmake.c.o dmake.c
+c -I. -I :mac -d _MPW -s path -sym off -o :objects:path.c.o path.c
+c -I. -I :mac -d _MPW -s imacs -sym off -o :objects:imacs.c.o imacs.c
+c -I. -I :mac -d _MPW -s sysintf -sym off -o :objects:sysintf.c.o sysintf.c
+c -I. -I :mac -d _MPW -s parse -sym off -o :objects:parse.c.o parse.c
+c -I. -I :mac -d _MPW -s getinp -sym off -o :objects:getinp.c.o getinp.c
+c -I. -I :mac -d _MPW -s quit -sym off -o :objects:quit.c.o quit.c
+c -I. -I :mac -d _MPW -s state -sym off -o :objects:state.c.o state.c
+c -I. -I :mac -d _MPW -s basename -sym off -o :objects:basename.c.o basename.c
+c -I. -I :mac -d _MPW -s dmdump -sym off -o :objects:dmdump.c.o dmdump.c
+c -I. -I :mac -d _MPW -s macparse -sym off -o :objects:macparse.c.o macparse.c
+c -I. -I :mac -d _MPW -s rulparse -sym off -o :objects:rulparse.c.o rulparse.c
+c -I. -I :mac -d _MPW -s percent -sym off -o :objects:percent.c.o percent.c
+c -I. -I :mac -d _MPW -s function -sym off -o :objects:function.c.o function.c
+duplicate -y :mac:arlib.c arlib.c
+c -I. -I :mac -d _MPW -s arlib -sym off -o :objects:arlib.c.o arlib.c
+delete arlib.c
+duplicate -y :mac:bogus.c bogus.c
+c -I. -I :mac -d _MPW -s bogus -sym off -o :objects:bogus.c.o bogus.c
+delete bogus.c
+duplicate -y :mac:dirbrk.c dirbrk.c
+c -I. -I :mac -d _MPW -s dirbrk -sym off -o :objects:dirbrk.c.o dirbrk.c
+delete dirbrk.c
+duplicate -y :mac:directry.c directry.c
+c -I. -I :mac -d _MPW -s directry -sym off -o :objects:directry.c.o directry.c
+delete directry.c
+duplicate -y :mac:environ.c environ.c
+c -I. -I :mac -d _MPW -s environ -sym off -o :objects:environ.c.o environ.c
+delete environ.c
+duplicate -y :mac:main.c main.c
+c -I. -I :mac -d _MPW -s main -sym off -o :objects:main.c.o main.c
+delete main.c
+duplicate -y :mac:rmprq.c rmprq.c
+c -I. -I :mac -d _MPW -s rmprq -sym off -o :objects:rmprq.c.o rmprq.c
+delete rmprq.c
+duplicate -y :mac:ruletab.c ruletab.c
+c -I. -I :mac -d _MPW -s ruletab -sym off -o :objects:ruletab.c.o ruletab.c
+delete ruletab.c
+duplicate -y :mac:tempnam.c tempnam.c
+c -I. -I :mac -d _MPW -s tempnam -sym off -o :objects:tempnam.c.o tempnam.c
+delete tempnam.c
+duplicate -y :mac:tomacfil.c tomacfil.c
+c -I. -I :mac -d _MPW -s tomacfil -sym off -o :objects:tomacfil.c.o tomacfil.c
+delete tomacfil.c
+Set p1 ":objects:infer.c.o :objects:make.c.o :objects:stat.c.o :objects:expand.c.o"
+Set p2 ":objects:dmstring.c.o :objects:hash.c.o :objects:dag.c.o :objects:dmake.c.o"
+Set p3 ":objects:path.c.o :objects:imacs.c.o :objects:sysintf.c.o :objects:parse.c.o"
+Set p4 ":objects:getinp.c.o :objects:quit.c.o :objects:state.c.o :objects:basename.c.o"
+Set p5 ":objects:dmdump.c.o :objects:macparse.c.o :objects:rulparse.c.o" 
+Set p6 ":objects:percent.c.o :objects:function.c.o :objects:arlib.c.o :objects:bogus.c.o"
+Set p7 ":objects:dirbrk.c.o :objects:directry.c.o :objects:environ.c.o :objects:main.c.o"
+Set p8 ":objects:rmprq.c.o :objects:ruletab.c.o :objects:tempnam.c.o"
+Set p9 ":objects:tomacfil.c.o Micah:MPW:Libraries:CLibraries:CSANELib.o" 
+Set p10 "Micah:MPW:Libraries:CLibraries:Math.o" 
+Set p11 "Micah:MPW:Libraries:CLibraries:StdCLib.o" 
+Set p12 "Micah:MPW:Libraries:Libraries:Runtime.o" 
+Set p13 "Micah:MPW:Libraries:Libraries:Interface.o Micah:MPW:Libraries:Libraries:Toollibs.o" 
+link -w -c 'MPS ' -t MPST -sym off -o dmake {p1} {p2} {p3} {p4} {p5} {p6} {p7} {p8} {p9} {p10} {p11} {p12} {p13}
+duplicate :mac:startup.mk startup.mk

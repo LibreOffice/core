@@ -1,0 +1,171 @@
+UNIX specific information for dmake.  This information is provided in the
+hope that it makes it easier to install and recompile dmake under UNIX.
+I will be happy to hear of erroneous information and will make every effort
+to correct it.
+
+
+1. ENVIRONMENT VARIABLE SETTINGS
+
+There are many environment variable settings available for UNIX.  Each
+option is described below.
+
+   OS - unix
+
+   OSRELEASE - bsd43		# generic BSD 4.3
+	     - solaris 		# Solaris environments
+	     - sysvr1		# System V R1
+	     - sysvr3		# System V R3
+	     - sysvr4		# System V R4
+	     - xenix		# Xenix
+	     - 386ix		# Sun IPX 386 boxen
+	     - coherent		# Coherent...
+	     - qnx		# QNX 
+
+   OSENVIRONMENT - uw		# U of Waterloo mfcf environment for BSD4.3
+		 - vf		# for environments needing vfprintf
+		 - pwd		# for environments needing new pwd
+		 - gcc		# for GCC compiles with Solaris2.3 and greater
+		 - verxx        # for specific OS versions.
+
+
+The table below lists valid combinations for settings of OS, OSRELEASE, and
+OSENVIRONMENT.
+
+	OS		OSRELEASE		OSENVIRONMENT
+	--		---------		-------------
+	unix		bsd43
+	unix		bsd43			uw
+	unix		bsd43			vf
+	unix		solaris
+	unix		solaris			gcc
+	unix		sysvr1
+	unix		sysvr3
+	unix		sysvr3			pwd
+	unix		sysvr4
+	unix		xenix
+	unix		xenix			pwd
+	unix		386ix
+	unix		coherent		ver40
+	unix		coherent		ver42
+
+You must set OS and OSRELEASE, OSENVIRONMENT to correspond to one of the
+configurations in the above table.
+
+
+2. IMPLEMENTATION NOTES
+
+Bootstrapping the binary:
+-------------------------
+   A 'makefile' file is provided to bootstrap the binary.  The file contains
+   many targets for bootstrapping.  Issuing 'make' will provide the list of
+   possible targets that can be built.  A restricted sample is shown below:
+
+   INDEX:  You must specify 'make target' where target is one of:
+   -------------
+      make bsd43         - Generic BSD 4.3 System
+      make bsd43uw       - Generic BSD 4.3 at U of Waterloo
+      make bsd43vf       - Generic BSD 4.3 that needs vfprintf
+      make sysvr4        - Generic SysV R4 UNIX System
+      make sysvr3        - Generic SysV R3 UNIX System
+      make sysvr3pwd     - Generic SysV R3 UNIX System, our PWD
+      make sysvr1        - Generic SysV R1 UNIX System
+      make dynix         - Sequent DYNIX System
+      make linux         - Linux
+      make ultrix        - Ultrix 3.0 System
+      make mips          - Any MIPS System
+      make coherent40    - Any Coherent Version 4.0 System
+      make coherent42    - Any Coherent Version 4.2 or greater System
+      make hpux          - HP Unix
+      make 386ix         - 386/ix (SysV R3) System
+      make xenix         - 386 Xenix System
+      make xenixpwd      - 386 Xenix System, our PWD
+      make aix           - IBM RS6000/AIX System
+      make Solaris       - SUN Solaris 1.0 to 2.0
+      make Solaris2.1    - SUN Solaris 2.1 or greater
+      make gccSolaris2.1 - SUN Solaris 2.1 or greater with gcc
+
+   The above shows only the possible builds for UNIX like operating systems.
+   Choose the one that best suits your needs and issue the command
+
+      'make target'
+
+
+Using dmake to Make itself:
+---------------------------
+   If you use dmake to make itself you must first set a number of makefile
+   control variables, either through the environment or on the command line.
+
+   The following variables must be set:
+
+	OS	       - defines operating system (must be set)
+	OSRELEASE      - particular version of it.
+	OSENVIRNOMENT  - more customization
+
+   These three variables should be defined in your environment.  Valid values
+   for UNIX are listed above in Section 1.  You must chose one a setting from
+   the table that best matches your system.
+
+   Once set simply issue the command: 'dmake' and the sources will be
+   automatically rebuilt.  You do not need to specify a target when you
+   use dmake and the environment variables are correctly set.
+
+
+.NAMEMAX and length of file names:
+----------------------------------
+dmake assumes that no file name component has a name longer than .NAMEMAX
+(a user-settable variable, see the man page).  Files whose basename is
+longer than .NAMEMAX return a timestamp of 0 when statted.  The reason for
+this test is to handle broken versions of stat that return non-zero times
+for stating files that are longer than the legal file name length but for
+which a file whose name is the legal maximum file name length and is a prefix
+of the longer name exists.  This used to cause infinite loops in the inference
+engine.
+
+As a result the value of .NAMEMAX is important.  dmake attempts to determine
+it at from your system header files when compiled however sometimes even these
+may be erroneous thus as a result as of dmake 4.0 users may set the value of
+.NAMEMAX to any value they wish.
+
+
+Library Name Length:
+--------------------
+By default the maximum length of library member names is defined in the the
+ar.h header file and is usually 14.  Elf libraries allow for a arbitrarily
+long member names, if your archiver supports the elf archiver extension for
+long member names then edit the file unix/arlib.c and set the CHECKELF define
+to indicate that the Elf archiver extension is to be checked for.
+
+If Elf is not supported and your archiver truncates member names you should
+set (in unix/arlib.c) the macro AR_TRUNCATE_MEMBER_NAMES.  dmake will then
+also truncate member names and perform a length limitted comparison when
+scanning the library for matching member names.
+
+
+UNIX Sysv R3 and getcwd:
+------------------------
+Some versions of UNIX SysV R3 and Xenix use the popen call to capture the
+output of pwd when invoking the C library function getcwd().  These versions
+of the function cause dmake to terminate with the "lost a child" message
+due to the fact that the parent dmake process may catch the pwd and not
+recognize it as a child.  For systems that have this problem use the version
+of dmake that supplies its own getcwd function.  The settings are:
+
+   OS = unix
+   OSRELEASE = sysvr3
+   OSENVIRONMENT = pwd 
+
+It is directly available through the 'makefile' by typing one of:
+
+   make sysvr3pwd
+   make xenixpwd
+
+both include the getcwd code but the xenixpwd target compiles for a Xenix
+system.
+
+
+UNIX and "limits.h":
+--------------------
+Some compilers do not yet provide the "limits.h" file, if yours is one of
+these then simply copy the file "namemax.h" in the source root directory to
+"limits.h".  Make sure the length of a file name is correctly set in
+"limits.h" as it is processed prior to "namemax.h".

@@ -1,0 +1,41 @@
+DMAKE 4.1 [http://dmake.wticorp.com/]
+-------------------------------------
+
+This directory tree contains a number of files.  Here is a short
+description of what each file contains so that you do not need to
+search as much.  There is also a recommended order for reading them.
+
+	read1st.txt	- index of files found in the readme directory.
+	intro.txt      	- short note describing what 'dmake' is and where to
+			  get it from.
+	release.txt	- changes from previous release, and release specific
+			  notes.
+	../man		- directory containing DMAKE manual page.
+
+	patchX		- release notes for patchX to the current release.
+
+   gold/install.txt	- installation instructions for the Dmake Gold release
+ public/install.txt	- installation files for the Dmake public release
+
+The next group of files provides additional information for specific
+platforms.  These are found in the appropriate gold and public release
+sub-folders.
+
+	apple.mac	- information for macintosh users
+	atari.tos	- information for ATARI TOS users
+	msdos		- information for MSDOS users
+	winnt           - information for Win95 and WinNT users
+	os2		- information for OS/2 users
+	unix		- information for UNIX users
+	qssl-qnx	- information for QNX users
+	srcorg          - information on the source code organization
+
+You should read the information in the first group of files.  The
+second group of files contains platform specific configuration
+information and information that may assist you in building dmake on
+the related target system.  You need to read the relevant file only if
+you are building the dmake executable from the source distribution
+using 'dmake' itself, or if you want to create a new version of dmake.
+
+You can also obtain relevant dmake information by checking out the
+Official Dmake Web pages at "http://dmake.wticorp.com/".

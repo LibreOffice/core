@@ -1,0 +1,76 @@
+OS/2 specific information for dmake.  This information is provided in the
+hope that it makes it easier to install and recompile dmake in a OS/2
+environment.
+
+Notes on the OS/2 implementation of dmake:
+==========================================
+
+As shipped the DOS versions of dmake will run under OS/2 protected mode.
+However, support for a full OS/2 version is also provided.  The OS/2 version
+will run in parallel under OS/2.
+
+Bootstrapping the binary:
+-------------------------
+   A make.cmd file is provided to bootstrap the binary.  The file contains
+   several targets for bootstrapping.  Invoking the batch file with no
+   arguments lists the possibilities shown below.
+
+      INDEX:  You must specify one of:
+	 ibm	  - IBM C2 compile.
+
+   The only supported compiler under OS/2 is the Visual Age ICC compiler.
+   I have tested the build using this compiler.  The resulting binary
+   performs proper directory caching and file-name case mapping for cached
+   directories and is capable of parallel target builds.  The only known
+   limitation of the OS/2 implementation is the treatment of library time
+   stamps.  Libraries do not have time stamps on members and the timestamp
+   of the library is used instead.
+
+
+OS/2 Specifics
+--------------
+
+   There is a small number of OS/2 specific features that need to be
+   stated.  
+
+   1. The environment variables TMP as well as TMPDIR are checked for the
+      location of the directory where dmake should place any temporary files.
+      TMPDIR is checked before TMP.
+
+   2. Appropriate limits are setup for MAXPROCESSES and buffer sizes etc.
+      See output of 'dmake -V'.
+
+   3. By default dmake will look for the startup.mk file in the path:
+          
+	  $(ROOTDIR)/dmake/startup/startup.mk
+
+      This is more in keeping with OS/2 philosophy.  You may still rename
+      and put it anywhere else you like by defining the MAKESTARTUP
+      environment variable.
+
+   4. Swapping the dmake binary to disk is not supported under OS/2.
+
+
+Other notes:
+------------
+   dmake does not care if you are running cmd.exe or some other command
+   interpretter, you must however specify the proper values of the environment
+   variables SHELL, SHELLFLAGS, GROUPSHELL, and GROUPFLAGS in order for things
+   to work correctly.  Read the man page first.
+
+   Group recipes under OS/2 that use cmd.exe as the command interpretter
+   require you to set the GROUPSUFFIX macro.
+
+   As shipped the startup.mk files try to figure out what
+   command interpretter you are using and set things up appropriately.
+   Two command interpretters are supported in the shipped startup.mk file,
+   cmd.exe (via COMSPEC), and the MKS Korn shell.
+
+   dmake does not contain any builtin commands.  It gets all commands it
+   executes from an external file system.  It is therefore most useful if it
+   is used in conjunction with an environment similar to that provided by
+   the MKS Tool kit, or equivalent.
+
+   dmake now supports the MKS argument passing conventions.  The facility is
+   enabled by setting .MKSARGS:=1 and is set by default in the startup.mk file
+   if an MKS Korn shell is detected as being the active command interpretter.

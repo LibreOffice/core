@@ -1,0 +1,43 @@
+DMAKE 4.1 [http://dmake.wticorp.com/]
+----------------------------------------------------
+
+The dmake home page can be found at:
+
+   http://dmake.wticorp.com/
+
+Visit there for the latest in dmake related information.
+
+dmake is different from other versions of Make in that it supports significant
+enhancements (See the WWW page).  A short summary of the more important
+features follows:
+
+	. support for portable makefiles
+	. portable accross many platforms
+	. significantly enhanced macro facilities
+	. sophisticated inference algorithm supporting transitive closure
+	  over the inference graph
+	. support for traversing the file sytem both during making of targets
+	  and during inference
+	. %-meta rules for specifying rules to be used for inferring
+	  prerequisites
+	. conditional macros
+	. local rule macro variables
+	. proper support for libraries
+	. parallel making of targets on architectures that support it
+	. attributed targets
+	. text diversions
+	. group recipes
+	. swapping itself to DISK under MSDOS
+	. supports MKS extended argument passing convention
+	. directory caching
+	. highly configurable
+
+Additional information pertaining to installation can be found in either the
+
+	gold/	- sub-folder for the Dmake Gold release
+	public/ - sub-folder for the Damke public release
+
+Release notes for this release of dmake can be found in the file
+
+	release.txt
+
