@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:05 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:33:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.60 $$"
+LIBSMKREV!:="$$Revision: 1.61 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -109,6 +109,7 @@ SALTLSLIB=-lsaltls$(UDK_MAJOR)
 SALZIPLIB=-lsalzip$(UDK_MAJOR)
 RMCXTLIB=-lrmcxt
 BTSTRPLIB=-lbtstrp
+TRANSEXLIB=-ltransex
 IOTXLIB=
 OTXLIB=-lotx_ind
 OSXLIB=-losx
@@ -293,6 +294,7 @@ SFXLIB=$(SFX2LIB)
 FWELIB=$(LIBPRE) ifwe.lib
 FWILIB=$(LIBPRE) ifwi.lib
 BTSTRPLIB=$(LIBPRE) bootstrp.lib
+TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
 AUTOMATIONLIB=$(LIBPRE) automation.lib
