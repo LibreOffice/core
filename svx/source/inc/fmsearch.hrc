@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,9 @@
 #define LB_FIELD            2
 #define LB_POSITION         3
 
-#define PB_APPROXSETTINGS   1
-#define PB_SEARCH           2
+#define PB_APPROXSETTINGS       1
+#define PB_SEARCH               2
+#define PB_SOUNDSLIKESETTINGS   3
 
 #define GB_SEARCHFOR        1
 #define GB_WHERE            2
@@ -96,5 +97,7 @@
 #define CB_WILDCARD         5
 #define CB_REGULAR          6
 #define CB_APPROX           7
+#define CB_HALFFULLFORMS    8
+#define CB_SOUNDSLIKECJK    9
 
 #endif // _FMSEARCH_HRC

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 10:08:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,36 +103,26 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#if SUPD>=514
-#define NEW_REGULAR_SEARCH
+#ifndef _UNOTOOLS_TEXTSEARCH_HXX
+#include <unotools/textsearch.hxx>
 #endif
-
-#ifdef NEW_REGULAR_SEARCH
-    #ifndef _UNOTOOLS_TEXTSEARCH_HXX
-    #include <unotools/textsearch.hxx>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
-    #include <com/sun/star/util/SearchOptions.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
-    #include <com/sun/star/util/SearchAlgorithms.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
-    #include <com/sun/star/util/SearchResult.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
-    #include <com/sun/star/util/SearchFlags.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-    #include <com/sun/star/lang/Locale.hpp>
-    #endif
-    #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
-    #include <com/sun/star/i18n/TransliterationModules.hpp>
-    #endif
-#else
-    #ifndef _TXTCMP_HXX //autogen
-    #include <svtools/txtcmp.hxx>
-    #endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
+#include <com/sun/star/util/SearchOptions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHALGORITHMS_HPP_
+#include <com/sun/star/util/SearchAlgorithms.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHRESULT_HPP_
+#include <com/sun/star/util/SearchResult.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_SEARCHFLAGS_HPP_
+#include <com/sun/star/util/SearchFlags.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 
 #ifndef _ISOLANG_HXX
@@ -642,7 +632,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
         else
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
-        if (!m_bCase)
+        if (!GetCaseSensitive())
         {// normieren, wenn kein Gross/Klein
             Locale aAppLocale = buildApplicationLocale();
             sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
@@ -696,12 +686,11 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     FieldCollectionIterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
-#ifdef NEW_REGULAR_SEARCH
     SearchOptions aParam;
     aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
     aParam.searchFlag = 0;
-    aParam.transliterateFlags = m_bCase ? 0 : TransliterationModules_IGNORE_CASE;
-    if (!m_bCase)
+    aParam.transliterateFlags = m_nTransliterationFlags;
+    if (!GetCaseSensitive())
         aParam.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
     if (m_bLevenshtein)
     {
@@ -714,18 +703,6 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
     aParam.searchString = strExpression;
     buildApplicationLocale(aParam.Locale);
     ::utl::TextSearch aLocalEngine(aParam);
-#else
-    SearchParam aParam(strExpression, m_bRegular ? SearchParam::SRCH_REGEXP : SearchParam::SRCH_LEVDIST, m_bCase, sal_False, sal_False);
-    if (m_bLevenshtein)
-    {
-        aParam.SetSrchRelaxed(m_bLevRelaxed);
-        aParam.SetLEVOther(m_nLevOther);
-        aParam.SetLEVShorter(m_nLevShorter);
-        aParam.SetLEVLonger(m_nLevLonger);
-    }
-
-    SearchText aLocalEngine(aParam, GetpApp()->GetAppInternational());
-#endif
 
     // --------------------------------------------------------------
     sal_Bool bFound(sal_False);
@@ -763,11 +740,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
             switch (m_nPosition)
             {
                 case MATCHING_WHOLETEXT :
-#ifdef NEW_REGULAR_SEARCH
                     if (nEnd != sCurrentCheck.getLength())
-#else
-                    if (nEnd != sCurrentCheck.getLength() - 1)
-#endif
                     {
                         bFound = sal_False;
                         break;
@@ -778,11 +751,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
                         bFound = sal_False;
                     break;
                 case MATCHING_END :
-#ifdef NEW_REGULAR_SEARCH
                     if (nEnd != sCurrentCheck.getLength())
-#else
-                    if (nEnd != sCurrentCheck.getLength() - 1)
-#endif
                         bFound = sal_False;
                     break;
             }
@@ -828,10 +797,11 @@ FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultS
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_bUsingTextComponents(sal_False)
-    ,m_bCase(sal_False)
     ,m_bFormatter(sal_False)
     ,m_bForward(sal_False)
     ,m_nPosition(MATCHING_ANYWHERE)
+    ,m_nTransliterationFlags(0)
+    ,m_bTransliteration(sal_False)
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
@@ -854,10 +824,11 @@ FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultS
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, sal_True)
     ,m_bUsingTextComponents(sal_True)
-    ,m_bCase(sal_False)
     ,m_bFormatter(sal_True)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
     ,m_bForward(sal_False)
     ,m_nPosition(MATCHING_ANYWHERE)
+    ,m_nTransliterationFlags(0)
+    ,m_bTransliteration(sal_False)
     ,m_nCurrentFieldIndex(-2)
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
@@ -875,6 +846,36 @@ FmSearchEngine::~FmSearchEngine()
     clearControlTexts();
 
     DBG_DTOR(FmSearchEngine,NULL);
+}
+
+//------------------------------------------------------------------------
+void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
+{
+    if (bSet)
+        m_nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
+    else
+        m_nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
+}
+
+//------------------------------------------------------------------------
+sal_Bool FmSearchEngine::GetIgnoreWidthCJK() const
+{
+    return 0 != (m_nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
+}
+
+//------------------------------------------------------------------------
+void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
+{
+    if (bSet)
+        m_nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
+    else
+        m_nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+}
+
+//------------------------------------------------------------------------
+sal_Bool FmSearchEngine::GetCaseSensitive() const
+{
+    return 0 == (m_nTransliterationFlags & TransliterationModules_IGNORE_CASE);
 }
 
 //------------------------------------------------------------------------
@@ -1028,7 +1029,7 @@ void FmSearchEngine::SearchNextImpl()
 
     // die Parameter der Suche
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
-    if (!m_bCase)
+    if (!GetCaseSensitive())
     {// normieren, wenn kein Gross/Klein
         Locale aAppLocale = buildApplicationLocale();
         strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));

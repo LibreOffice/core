@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-23 13:06:37 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,13 +253,14 @@ class FmSearchEngine
     DECLARE_STL_VECTOR(ControlTextWrapper*, ControlTextSuppliers);
     ControlTextSuppliers    m_aControlTexts;
 
-    sal_Bool                    m_bUsingTextComponents;
+    sal_Bool                m_bUsingTextComponents;
     CursorWrapper           m_xOriginalIterator;
     CursorWrapper           m_xClonedIterator;
 
     // Daten fuer Entscheidung, in welchem Feld ich ein "Found" akzeptiere
-    ::com::sun::star::uno::Any              m_aPreviousLocBookmark;             // Position, an der ich zuletzt fuendig war
+    ::com::sun::star::uno::Any  m_aPreviousLocBookmark;             // Position, an der ich zuletzt fuendig war
     FieldCollectionIterator     m_iterPreviousLocField;             // dito Feld
+
     // Kommunikation mit dem Thread, der die eigentliche Suche durchfuehrt
     ::rtl::OUString             m_strSearchExpression;              // Hinrichtung
     SEARCHFOR_TYPE      m_eSearchForType;                   // dito
@@ -267,19 +268,19 @@ class FmSearchEngine
 
     // der Link, dem ich Fortschritte und Ergebnisse mitteile
     Link                m_aProgressHandler;
-    sal_Bool                m_bSearchingCurrently;          // laeuft gerade eine (asynchrone) Suche ?
-    sal_Bool                m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
-    ::osl::Mutex                m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
+    sal_Bool            m_bSearchingCurrently;          // laeuft gerade eine (asynchrone) Suche ?
+    sal_Bool            m_bCancelAsynchRequest : 1;     // soll abgebrochen werden ?
+    ::osl::Mutex        m_aCancelAsynchAccess;          // Zugriff auf m_bCancelAsynchRequest (eigentlich nur bei
                                                         // m_eMode == SM_USETHREAD interesant)
     FmSearchDialog::SEARCH_MODE m_eMode;                // der aktuelle Modus
 
     // Parameter fuer die Suche
-    sal_Bool    m_bCase : 1;            // case-sensitive
     sal_Bool    m_bFormatter : 1;       // Feldformatierung benutzen
     sal_Bool    m_bForward : 1;         // Richtung
     sal_Bool    m_bWildcard : 1;        // Platzhalter-Suche ?
     sal_Bool    m_bRegular : 1;         // regulaerer Ausdruck
     sal_Bool    m_bLevenshtein : 1;     // Levenshtein-Suche
+    sal_Bool    m_bTransliteration : 1; // Levenshtein-Suche
 
     sal_Bool    m_bLevRelaxed : 1;      // Parameter fuer Levenshtein-Suche
     sal_uInt16  m_nLevOther;
@@ -288,39 +289,50 @@ class FmSearchEngine
 
     sal_uInt16  m_nPosition;            // wenn nicht regulaer oder lev, dann einer der MATCHING_...-Werte
 
+    sal_Int32   m_nTransliterationFlags;
+
 // -------------
 // Memberzugriff
 private:
     sal_Bool    CancelRequested();      // liefert eine durch m_aCancelAsynchAccess gesicherte Auswertung von m_bCancelAsynchRequest
 
 public:
-    void    SetCaseSensitive(sal_Bool bSet)     { m_bCase = bSet; }
-    sal_Bool    GetCaseSensitive() const        { return m_bCase; }
+    void        SetCaseSensitive(sal_Bool bSet);
+    sal_Bool    GetCaseSensitive() const;
 
-    void    SetFormatterUsing(sal_Bool bSet);   // das ist etwas umfangreicher, deshalb kein hier inline ....
-    sal_Bool    GetFormatterUsing() const       { return m_bFormatter; }
+    void        SetFormatterUsing(sal_Bool bSet);   // das ist etwas umfangreicher, deshalb kein hier inline ....
+    sal_Bool    GetFormatterUsing() const           { return m_bFormatter; }
 
-    void    SetDirection(sal_Bool bForward)     { m_bForward = bForward; }
-    sal_Bool    GetDirection() const            { return m_bForward; }
+    void        SetDirection(sal_Bool bForward)     { m_bForward = bForward; }
+    sal_Bool    GetDirection() const                { return m_bForward; }
 
-    void    SetWildcard(sal_Bool bSet)          { m_bWildcard = bSet; }
-    sal_Bool    GetWildcard() const             { return m_bWildcard; }
+    void        SetWildcard(sal_Bool bSet)          { m_bWildcard = bSet; }
+    sal_Bool    GetWildcard() const                 { return m_bWildcard; }
 
-    void    SetRegular(sal_Bool bSet)           { m_bRegular = bSet; }
-    sal_Bool    GetRegular() const              { return m_bRegular; }
+    void        SetRegular(sal_Bool bSet)           { m_bRegular = bSet; }
+    sal_Bool    GetRegular() const                  { return m_bRegular; }
 
-    void    SetLevenshtein(sal_Bool bSet)       { m_bLevenshtein = bSet; }
-    sal_Bool    GetLevenshtein() const          { return m_bLevenshtein; }
+    void        SetLevenshtein(sal_Bool bSet)       { m_bLevenshtein = bSet; }
+    sal_Bool    GetLevenshtein() const              { return m_bLevenshtein; }
 
-    void    SetLevRelaxed(sal_Bool bSet)        { m_bLevRelaxed = bSet; }
-    sal_Bool    GetLevRelaxed() const           { return m_bLevRelaxed; }
-    void    SetLevOther(sal_uInt16 nHowMuch)    { m_nLevOther = nHowMuch; }
-    sal_uInt16  GetLevOther() const             { return m_nLevOther; }
-    void    SetLevShorter(sal_uInt16 nHowMuch)  { m_nLevShorter = nHowMuch; }
-    sal_uInt16  GetLevShorter() const           { return m_nLevShorter; }
-    void    SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
-    sal_uInt16  GetLevLonger() const            { return m_nLevLonger; }
+    void        SetIgnoreWidthCJK(sal_Bool bSet);
+    sal_Bool    GetIgnoreWidthCJK() const;
+
+    void        SetTransliteration(sal_Bool bSet)   { m_bTransliteration = bSet; }
+    sal_Bool    GetTransliteration() const          { return m_bTransliteration; }
+
+    void        SetLevRelaxed(sal_Bool bSet)        { m_bLevRelaxed = bSet; }
+    sal_Bool    GetLevRelaxed() const               { return m_bLevRelaxed; }
+    void        SetLevOther(sal_uInt16 nHowMuch)    { m_nLevOther = nHowMuch; }
+    sal_uInt16  GetLevOther() const                 { return m_nLevOther; }
+    void        SetLevShorter(sal_uInt16 nHowMuch)  { m_nLevShorter = nHowMuch; }
+    sal_uInt16  GetLevShorter() const               { return m_nLevShorter; }
+    void        SetLevLonger(sal_uInt16 nHowMuch)   { m_nLevLonger = nHowMuch; }
+    sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
         // die ganzen Lev-Werte werden nur bei  m_bLevenshtein==sal_True beachtet
+
+    void        SetTransliterationFlags(sal_Int32 _nFlags)  { m_nTransliterationFlags = _nFlags; }
+    sal_Int32   GetTransliterationFlags() const             { return m_nTransliterationFlags; }
 
     void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
     sal_uInt16  GetPosition() const             { return m_nPosition; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:35:40 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
 {
     OutputSize = TRUE;
     SVLook = TRUE;
-    Size = MAP_APPFONT( 300, 236 );
+    Size = MAP_APPFONT( 300, 253 );
     Text = "Datensatz-Suche";
     Text [ ENGLISH ] = "Data record search";
     Text [ english_us ] = "Record Search";
@@ -104,6 +104,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 12, 23 );
         Size = MAP_APPFONT( 50, 10 );
+        Group = TRUE;
         Text = "~Text :";
         Text [ ENGLISH ] = "~Text :";
         Text[ italian ] = "~Testo :";
@@ -314,7 +315,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     GroupBox GB_OPTIONS
     {
         Pos = MAP_APPFONT( 6, 126 );
-        Size = MAP_APPFONT( 288, 76 );
+        Size = MAP_APPFONT( 288, 93 );
         Text = "Einstellungen";
         Text [ ENGLISH ] = "Einstellungen";
         Text[ italian ] = "Impostazioni";
@@ -430,8 +431,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_BACKWARD
     {
-        Pos = MAP_APPFONT( 110, 158 );
-        Size = MAP_APPFONT( 80, 10 );
+        Pos = MAP_APPFONT( 105, 158 );
+        Size = MAP_APPFONT( 85, 10 );
         Text = "R¸c~kw‰rts suchen";
         Text [ ENGLISH ] = "R¸c~kw‰rts suchen";
         TabStop = TRUE;
@@ -458,8 +459,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     CheckBox CB_STARTOVER
     {
-        Pos = MAP_APPFONT( 110, 171 );
-        Size = MAP_APPFONT( 80, 10 );
+        Pos = MAP_APPFONT( 105, 171 );
+        Size = MAP_APPFONT( 85, 10 );
         Text = "~Vom Anfang";
         Text [ ENGLISH ] = "~Vom Anfang";
         TabStop = TRUE;
@@ -515,7 +516,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     CheckBox CB_REGULAR
     {
         Pos = MAP_APPFONT( 190, 171 );
-        Size = MAP_APPFONT( 84, 10 );
+        Size = MAP_APPFONT( 100, 10 );
         Text = "Re~gul‰rer Ausdruck";
         Text [ ENGLISH ] = "Re~gul‰rer Ausdruck";
         TabStop = TRUE;
@@ -596,9 +597,70 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ turkish ] = "~...";
         Text[ language_user1 ] = " ";
     };
+    CheckBox CB_HALFFULLFORMS
+    {
+        Pos = MAP_APPFONT( 105, 201 );
+        Size = MAP_APPFONT( 85, 10 );
+        TabStop = TRUE ;
+        Text = "Halb-/normalbreite Formen" ;
+        Text [ English ] = "Match half/full width forms" ;
+        Text[ english_us ] = "Match half/full-width forms";
+        Text[ portuguese ] = "Match half/full width forms";
+        Text[ russian ] = "ÕÓÏ‡Î¸Ì˚Â/ÔÓÎÛ¯ËÓÍËÂ ÙÓÏ˚";
+        Text[ greek ] = "÷¸ÒÏÂÚ ÏÂ Í·ÌÔÌÈÍ¸/ÏÈÛ¸ Î‹ÙÔÚ";
+        Text[ dutch ] = "Match half/full width forms";
+        Text[ french ] = "Match half/full width forms";
+        Text[ spanish ] = "Formas con ancho medio o normal";
+        Text[ italian ] = "Match half/full width forms";
+        Text[ danish ] = "Match half/full width forms";
+        Text[ swedish ] = "Halv-/normalbreda former";
+        Text[ polish ] = "Formy o zwyk≥ej/o po≥owie szerokoúci";
+        Text[ portuguese_brazilian ] = "Match half/full width forms";
+        Text[ japanese ] = "îºäpÇ∆ëSäpÇãÊï ";
+        Text[ korean ] = "Match half/full width forms";
+        Text[ chinese_simplified ] = "∞ÎΩ«∫Õ»´Ω«◊÷∑˚";
+        Text[ chinese_traditional ] = "•bßŒ©M•˛ßŒ¶r§∏";
+        Text[ turkish ] = "Match half/full width forms";
+        Text[ arabic ] = "‰„«–Ã ‰’› «·⁄—÷/⁄—÷ ⁄«œÌ";
+    };
+    CheckBox CB_SOUNDSLIKECJK
+    {
+        Pos = MAP_APPFONT( 190, 201 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE ;
+        Text = "ƒhnl. Schreibweise (Jap.)" ;
+        Text [ English ] = "Sounds like (Japanese)" ;
+        Text[ english_us ] = "Sounds like (Japanese)";
+        Text[ portuguese ] = "Sounds like (Japanese)";
+        Text[ russian ] = "œÓ‰Ó·ÌÓÂ ÔËÒ¸ÏÓ (ˇÔÓÌÒÍËÈ)";
+        Text[ greek ] = "–·Ò¸ÏÔÈ· „Ò·ˆﬁ (…·˘Ì›ÊÈÍ·)";
+        Text[ dutch ] = "Sounds like (Japanese)";
+        Text[ french ] = "Sounds like (Japanese)";
+        Text[ spanish ] = "OrtografÌa similar (JaponÈs)";
+        Text[ italian ] = "Sounds like (Japanese)";
+        Text[ danish ] = "Sounds like (Japanese)";
+        Text[ swedish ] = "Likn. skrivs‰tt (japanska)";
+        Text[ polish ] = "Podobna pisownia (JapoÒski)";
+        Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
+        Text[ japanese ] = "Ç†Ç¢Ç‹Ç¢åüçı(ì˙ñ{åÍ)";
+        Text[ korean ] = "Sounds like (Japanese)";
+        Text[ chinese_simplified ] = "¿‡À∆◊÷∑˚(»’Œƒ)";
+        Text[ chinese_traditional ] = "√˛¶¸¶r§∏(§È§Â)";
+        Text[ turkish ] = "Sounds like (Japanese)";
+        Text[ arabic ] = "ﬂ «»… „‘«»Â…(Ì«»«‰Ì…)";
+    };
+    PushButton PB_SOUNDSLIKESETTINGS
+    {
+        Pos = MAP_APPFONT( 275, 199 );
+        Size = MAP_APPFONT( 14, 14 );
+        TabStop = TRUE ;
+        Text = "..." ;
+        Text [ english ] = "..." ;
+        Text [ english_us ] = "..." ;
+    };
     GroupBox GB_STATE
     {
-        Pos = MAP_APPFONT( 6, 205 );
+        Pos = MAP_APPFONT( 6, 222 );
         Size = MAP_APPFONT( 288, 25 );
         Text = "Status" ;
         Text [ ENGLISH ] = "State" ;
@@ -624,7 +686,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     FixedText FT_RECORDLABEL
     {
-        Pos = MAP_APPFONT( 12, 215 );
+        Pos = MAP_APPFONT( 12, 232 );
         Size = MAP_APPFONT( 40, 10 );
         Text = "Datensatz :" ;
         Text [ ENGLISH ] = "Datensatz :" ;
@@ -650,14 +712,14 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
     FixedText FT_RECORD
     {
-        Pos = MAP_APPFONT( 55, 215 );
+        Pos = MAP_APPFONT( 55, 232 );
         Size = MAP_APPFONT( 30, 10 );
         UniqueId = UID_SEARCH_RECORDSTATUS;
         TabStop = TRUE;
     };
     FixedText FT_HINT
     {
-        Pos = MAP_APPFONT( 99, 215 );
+        Pos = MAP_APPFONT( 99, 232 );
         Size = MAP_APPFONT( 190, 10 );
     };
     PushButton PB_SEARCH

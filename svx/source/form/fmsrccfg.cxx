@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,12 @@
 #ifndef _SFXFILEREC_HXX //autogen
 #include <svtools/filerec.hxx>
 #endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HPP_
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 
 // ===================================================================================================
 // = struct FmSearchParams - Parameter einer Suche
@@ -102,6 +108,12 @@ BOOL FmSearchParams::operator ==(const FmSearchParams& rComp) const
         return FALSE;
     if (nLevLonger != rComp.nLevLonger)
         return FALSE;
+    if (nTransliterationFlags != rComp.nTransliterationFlags)
+        return FALSE;
+    if (bIgnoreWidthCJK != rComp.bIgnoreWidthCJK)
+        return FALSE;
+    if (bSoundsLikeCJK != rComp.bSoundsLikeCJK)
+        return FALSE;
 
     // strSingleSearchField wird nicht mit verglichen : dieser Operator ist nur fuer die persistenten Eigenschaften gedacht,
     // und strSingleSearchField ist nicht persistent
@@ -116,6 +128,7 @@ BOOL FmSearchParams::operator ==(const FmSearchParams& rComp) const
 #define FM_SEARCH_CONFIG_VERSION_SO50       1       // nur in internen Versionen und der 5.1 beta benutzt worden
 #define FM_SEARCH_CONFIG_VERSION_SO51       2       // zur 5.1 eingesetzt
 #define FM_SEARCH_CONFIG_VERSION_SO52       3       // ab der SRC557
+#define FM_SEARCH_CONFIG_VERSION_SO60       4       // ab der SRC629
 
 //------------------------------------------------------------------------
 FmSearchConfigItem::FmSearchConfigItem() : SfxConfigItem(SFX_ITEMTYPE_SVXSEARCHPARAMS)
@@ -146,6 +159,13 @@ INT32 FmSearchConfigItem::CalcCheckSum(const FmSearchParams& aParams, short nFor
     if (nFormatVersion >= FM_SEARCH_CONFIG_VERSION_SO52)
         nReturn += aParams.nSearchForType;
 
+    if (nFormatVersion >= FM_SEARCH_CONFIG_VERSION_SO60)
+    {
+        nReturn += aParams.nTransliterationFlags;
+        nReturn += aParams.bIgnoreWidthCJK;
+        nReturn += aParams.bSoundsLikeCJK;
+    }
+
     return nReturn;
 }
 
@@ -158,6 +178,9 @@ int FmSearchConfigItem::Load(SvStream& rStore)
     {
         if (aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO51))  // 5.1 oder groesser
         {
+            sal_Bool bVersion52 = aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO52);
+            sal_Bool bVersion60 = aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO60);
+
             INT32 nCheckSum;
             *aRecord >> nCheckSum;
 
@@ -168,26 +191,45 @@ int FmSearchConfigItem::Load(SvStream& rStore)
 
             INT16 nBitField;
             *aRecord >> nBitField;
-            nBitField >>= 0; aParams.bAllFields     = nBitField & 0x0001;
-            nBitField >>= 1; aParams.nPosition      = nBitField & 0x0003;
-            nBitField >>= 2; aParams.bUseFormatter  = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bCaseSensitive = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bBackwards     = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bWildcard      = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bRegular       = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bApproxSearch  = nBitField & 0x0001;
-            nBitField >>= 1; aParams.bLevRelaxed    = nBitField & 0x0001;
+            nBitField >>= 0; aParams.bAllFields     = nBitField & 0x0001;   //  1 bit used up
+            nBitField >>= 1; aParams.nPosition      = nBitField & 0x0003;   //  3 bits used up
+            nBitField >>= 2; aParams.bUseFormatter  = nBitField & 0x0001;   //  4 bits used up
+            nBitField >>= 1; aParams.bCaseSensitive = nBitField & 0x0001;   //  5 bits used up
+            nBitField >>= 1; aParams.bBackwards     = nBitField & 0x0001;   //  6 bits used up
+            nBitField >>= 1; aParams.bWildcard      = nBitField & 0x0001;   //  7 bits used up
+            nBitField >>= 1; aParams.bRegular       = nBitField & 0x0001;   //  8 bits used up
+            nBitField >>= 1; aParams.bApproxSearch  = nBitField & 0x0001;   //  9 bits used up
+            nBitField >>= 1; aParams.bLevRelaxed    = nBitField & 0x0001;   // 10 bits used up
 
             *aRecord >> aParams.nLevOther;
             *aRecord >> aParams.nLevShorter;
             *aRecord >> aParams.nLevLonger;
 
-            if (aRecord.HasVersion(FM_SEARCH_CONFIG_VERSION_SO52))  // 5.2 oder groesser
+            if (bVersion52) // 5.2 oder groesser
             {
-                nBitField >>= 1; aParams.nSearchForType     = nBitField & 0x0003;
+                nBitField >>= 1; aParams.nSearchForType     = nBitField & 0x0003;   // 12 bits used up
             }
             else
                 aParams.nSearchForType = 0;
+
+            if (bVersion60) // 6.0 oder größer
+            {
+                nBitField >>= 1; aParams.bIgnoreWidthCJK    = nBitField & 0x0001;   // 13 bits used up
+                nBitField >>= 1; aParams.bSoundsLikeCJK     = nBitField & 0x0001;   // 14 bits used up
+
+                *aRecord >> aParams.nTransliterationFlags;
+            }
+            else
+            {
+                aParams.bIgnoreWidthCJK = sal_False;
+                aParams.bSoundsLikeCJK = sal_False;
+                aParams.nTransliterationFlags =
+                        TransliterationModules_ignoreSpace_ja_JP
+                    |   TransliterationModules_ignoreMiddleDot_ja_JP
+                    |   TransliterationModules_ignoreProlongedSoundMark_ja_JP
+                    |   TransliterationModules_ignoreSeparator_ja_JP
+                    |   TransliterationModules_IGNORE_CASE;
+            }
 
 
             if (nCheckSum == CalcCheckSum(aParams, aRecord.GetVersion()))
@@ -242,7 +284,7 @@ BOOL FmSearchConfigItem::Store(SvStream& rStore)
     SfxSingleRecordWriter aRecord(&rStore, FM_SEARCH_TAG_PARAMS, FM_SEARCH_CONFIG_VERSION_SO52);
 
     // eine Checksumme an den Anfang
-    INT32 nCheckSum = CalcCheckSum(m_aParams, FM_SEARCH_CONFIG_VERSION_SO52);
+    INT32 nCheckSum = CalcCheckSum(m_aParams, FM_SEARCH_CONFIG_VERSION_SO60);
     *aRecord << nCheckSum;
 
     (*aRecord).WriteByteString(m_aParams.strHistory, gsl_getSystemTextEncoding());
@@ -257,14 +299,20 @@ BOOL FmSearchConfigItem::Store(SvStream& rStore)
     nBitField |= (INT16(m_aParams.bRegular          & 0x0001)) << 7;
     nBitField |= (INT16(m_aParams.bApproxSearch     & 0x0001)) << 8;
     nBitField |= (INT16(m_aParams.bLevRelaxed       & 0x0001)) << 9;
+
+    // version 5.2
     nBitField |= (INT16(m_aParams.nSearchForType    & 0x0003)) << 10;
-        // because of nSearchForType this is format version 5.2
+    // version 6.0
+    nBitField |= (INT16(m_aParams.bIgnoreWidthCJK   & 0x0001)) << 12;
+    nBitField |= (INT16(m_aParams.bSoundsLikeCJK    & 0x0001)) << 13;
 
     *aRecord << nBitField;
 
     *aRecord << m_aParams.nLevOther;
     *aRecord << m_aParams.nLevShorter;
     *aRecord << m_aParams.nLevLonger;
+
+    *aRecord << m_aParams.nTransliterationFlags;
 
     return TRUE;
 }
@@ -286,6 +334,15 @@ void FmSearchConfigItem::UseDefault()
     m_aParams.nLevOther = 2;
     m_aParams.nLevShorter = 2;
     m_aParams.nLevLonger = 2;
+
+    m_aParams.bIgnoreWidthCJK = sal_False;
+    m_aParams.bSoundsLikeCJK = sal_False;
+    m_aParams.nTransliterationFlags =
+            TransliterationModules_ignoreSpace_ja_JP
+        |   TransliterationModules_ignoreMiddleDot_ja_JP
+        |   TransliterationModules_ignoreProlongedSoundMark_ja_JP
+        |   TransliterationModules_ignoreSeparator_ja_JP
+        |   TransliterationModules_IGNORE_CASE;
 
     SetDefault(TRUE);
 }

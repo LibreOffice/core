@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrccfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ public:
     INT16   nLevOther;
     INT16   nLevShorter;
     INT16   nLevLonger;
+    INT32   nTransliterationFlags;
 
     BOOL    bAllFields : 1;
     BOOL    bUseFormatter : 1;
@@ -109,6 +110,9 @@ public:
         // die letzten 3 schliessen sich gegenseitig aus !
     // fuer Levenshtein-Suche :
     BOOL    bLevRelaxed : 1;
+
+    BOOL    bIgnoreWidthCJK : 1;
+    BOOL    bSoundsLikeCJK : 1;
 
 public:
     // Vergleich nur unter Beachtung der persistenten Eigenschaften !
