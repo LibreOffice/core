@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:40:29 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ italian ] = "Dimensioni";
     Text[ danish ] = "Størrelse";
     Text[ swedish ] = "Storlek";
-    Text[ polish ] = "Wielko?æ";
+    Text[ polish ] = "Wielkoœæ";
     Text[ portuguese_brazilian ] = "Size";
     Text[ japanese ] = "»²½Þ";
     Text[ korean ] = "Å©±â";
@@ -282,4 +282,5 @@ Image IMG_SVT_FOLDER
 };
 
 // eof ------------------------------------------------------------------------
+
 
