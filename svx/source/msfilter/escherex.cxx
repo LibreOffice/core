@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-29 12:43:31 $
+ *  last change: $Author: sj $ $Date: 2001-05-09 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ void EscherPropertyContainer::CreateLineProperties(
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) ), sal_False ) )
     {
-        PolyPolygon aPolyPoly( ImplGetPolyPolygon( aAny ) );
+        PolyPolygon aPolyPoly( GetPolyPolygon( aAny ) );
         if ( aPolyPoly.Count() )
         {
             const Polygon& rPoly = aPolyPoly[ 0 ];
@@ -560,7 +560,7 @@ void EscherPropertyContainer::CreateLineProperties(
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineEnd"  ) ), sal_False ) )
     {
-        PolyPolygon aPolyPoly( ImplGetPolyPolygon( aAny ) );
+        PolyPolygon aPolyPoly( GetPolyPolygon( aAny ) );
         if ( aPolyPoly.Count() )
         {
             const Polygon& rPoly = aPolyPoly[ 0 ];
@@ -994,7 +994,31 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     return bRetValue;
 }
 
-PolyPolygon EscherPropertyContainer::ImplGetPolyPolygon( const ::com::sun::star::uno::Any& rAny ) const
+PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape )
+{
+    PolyPolygon aRetPolyPoly;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXPropSet;
+    ::com::sun::star::uno::Any aAny( rXShape->queryInterface(
+        ::getCppuType( (const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >*) 0 ) ));
+
+    String sPolyPolygonBezier( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygonBezier" ) );
+    String sPolyPolygon     ( RTL_CONSTASCII_USTRINGPARAM( "PolyPolygon" ) );
+    String sPolygon         ( RTL_CONSTASCII_USTRINGPARAM( "Polygon" ) );
+
+    if ( aAny >>= aXPropSet )
+    {
+        sal_Bool bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygonBezier, sal_True );
+        if ( !bHasProperty )
+            bHasProperty = EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolyPolygon, sal_True );
+        if ( !bHasProperty )
+            EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sPolygon, sal_True );
+        if ( bHasProperty )
+            aRetPolyPoly = GetPolyPolygon( aAny );
+    }
+    return aRetPolyPoly;
+}
+
+PolyPolygon EscherPropertyContainer::GetPolyPolygon( const ::com::sun::star::uno::Any& rAny )
 {
     sal_Bool bNoError = sal_True;
 
@@ -1139,7 +1163,7 @@ sal_Bool EscherPropertyContainer::CreatePolygonProperties(
                         ( bBezier ) ? sPolyPolygonBezier : sPolyPolygon, sal_True );
         if ( bRetValue )
         {
-            aPolyPolygon = ImplGetPolyPolygon( aAny );
+            aPolyPolygon = GetPolyPolygon( aAny );
             bRetValue = aPolyPolygon.Count() != 0;
         }
     }
