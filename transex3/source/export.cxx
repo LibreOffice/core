@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-30 09:43:17 $
+ *  last change: $Author: nf $ $Date: 2001-10-19 10:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2465,7 +2465,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     sLine.SearchAndReplace( "\"", "< \"" );
                 }
             }
-            while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex < nMaxIndex )) {
+            while( PrepareTextToMerge( sLine, nList, nListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
                 ByteString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
