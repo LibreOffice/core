@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.8 2000-11-16 16:33:58 cl Exp $
+	$Id: drawing.mod,v 1.9 2000-11-20 09:06:23 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -68,7 +68,7 @@
 <!ENTITY % presentation-style-name "presentation:style-name %styleName; #IMPLIED">
 <!ENTITY % presentation-classes "(title|outline|subtitle|text|graphic|object|chart|table|orgchart|page|notes)" >
 <!-- ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED" -->
-<!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED presentation:placeholder (true|false) #IMPLIED">
+<!ENTITY % presentation-class "presentation:class %presentation-classes; #IMPLIED presentation:placeholder (true|false) #IMPLIED presentation:user-transformed (true|false) #IMPLIED">
 
 <!-- Drawing shapes -->
 <!ELEMENT draw:rect %draw-text;>
