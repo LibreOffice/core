@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 18:09:54 $
+ *  last change: $Author: dvo $ $Date: 2002-02-04 17:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,11 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
+#include <com/sun/star/text/WritingMode2.hpp>
+#endif
+
+#include <comphelper/types.hxx>
 
 #ifndef _SVX_UNOMID_HXX
 #include <unomid.hxx>
@@ -3925,24 +3930,76 @@ SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
 sal_Bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
                                              BYTE )
 {
-    sal_Bool bRet;
-    sal_Int16 nVal = -1;
-    rVal >>= nVal;
-    if( nVal >= FRMDIR_HORI_LEFT_TOP && nVal <= FRMDIR_ENVIRONMENT )
+    sal_Int32 nVal = ::comphelper::getEnumAsINT32( rVal );
+
+    // translate WritingDirection2 into SvxFrameDirection
+    enum SvxFrameDirection eVal;
+    sal_Bool bRet = sal_True;
+    switch( nVal )
     {
-        bRet = sal_True;
-        SetValue( (SvxFrameDirection)nVal );
+        case text::WritingMode_LR_TB:
+            eVal = FRMDIR_HORI_LEFT_TOP;
+            break;
+        case text::WritingMode_RL_TB:
+            eVal = FRMDIR_HORI_RIGHT_TOP;
+            break;
+        case text::WritingMode_TB_RL:
+            eVal = FRMDIR_VERT_TOP_RIGHT;
+            break;
+        case text::WritingMode_TB_LR:
+            eVal = FRMDIR_VERT_TOP_LEFT;
+            break;
+        case text::WritingMode_PAGE:
+            eVal = FRMDIR_ENVIRONMENT;
+            break;
+        default:
+            bRet = sal_False;
+            break;
     }
-    else
-        bRet = sal_False;
+
+    // set value (if valid)
+    if( bRet )
+    {
+        SetValue( eVal );
+    }
+
     return bRet;
 }
 
 sal_Bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
                                             BYTE ) const
 {
-    sal_Int16 nValue = GetValue();
-    rVal <<= nValue;
-    return sal_True;
+    // translate SvxFrameDirection into WritingDirection2
+    enum text::WritingMode eVal;
+    sal_Bool bRet = sal_True;
+    switch( GetValue() )
+    {
+        case FRMDIR_HORI_LEFT_TOP:
+            eVal = text::WritingMode_LR_TB;
+            break;
+        case FRMDIR_HORI_RIGHT_TOP:
+            eVal = text::WritingMode_RL_TB;
+            break;
+        case FRMDIR_VERT_TOP_RIGHT:
+            eVal = text::WritingMode_TB_RL;
+            break;
+        case FRMDIR_VERT_TOP_LEFT:
+            eVal = text::WritingMode_TB_LR;
+            break;
+        case FRMDIR_ENVIRONMENT:
+            eVal = text::WritingMode_PAGE;
+            break;
+        default:
+            DBG_ERROR("Unknown SvxFrameDirection value!");
+            bRet = sal_False;
+            break;
+    }
+
+    // return value + error state
+    if( bRet )
+    {
+        rVal <<= eVal;
+    }
+    return bRet;
 }
 
