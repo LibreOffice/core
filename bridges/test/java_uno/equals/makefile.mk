@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:34:40 $
+#   last change: $Author: vg $ $Date: 2003-05-22 08:41:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,13 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+# Make sure TestBed.class is found under $(CLASSDIR)$/test:
+.IF "$(XCLASSPATH)" == ""
+XCLASSPATH := $(CLASSDIR)$/test
+.ELSE
+XCLASSPATH !:= $(XCLASSPATH)$(PATH_SEPERATOR)$(CLASSDIR)$/test
+.ENDIF
+
 DLLPRE = # no leading "lib" on .so files
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
@@ -99,8 +106,8 @@ EXEC_CLASSPATH = \
 
 $(MISC)$/$(TARGET).rdb: types.idl
     - rm $@
-    - mkdir $(MISC)$/$(TARGET)
-    - mkdir $(MISC)$/$(TARGET)$/inc
+    - $(MKDIR) $(MISC)$/$(TARGET)
+    - $(MKDIR) $(MISC)$/$(TARGET)$/inc
     idlc -I$(SOLARIDLDIR) -O$(MISC)$/$(TARGET) $<
     regmerge $(MISC)$/$(TARGET).rdb /UCR $(MISC)$/$(TARGET)$/types.urd
     cppumaker -BUCR -C -O$(MISC)$/$(TARGET)$/inc $@ -X$(SOLARBINDIR)$/types.rdb
@@ -110,8 +117,9 @@ $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 
 $(BIN)$/testequals$(SCRIPTEXT): $(BIN)$/testequals_services.rdb
     echo java -classpath \
-        ..$/class$(PATH_SEPERATOR)..$/class$/java_uno.jar$(PATH_SEPERATOR)\
-$(EXEC_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/sandbox.jar \
+        ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
+..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH)$(PATH_SEPERATOR)\
+$(SOLARBINDIR)$/sandbox.jar \
         test.java_uno.equals.TestEquals $(SOLARBINDIR)$/types.rdb \
         testequals_services.rdb > $@
     $(GIVE_EXEC_RIGHTS) $@
