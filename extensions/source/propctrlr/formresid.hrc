@@ -1,0 +1,275 @@
+/*************************************************************************
+ *
+ *  $RCSfile: formresid.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-01-12 11:35:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#define _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+
+#ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
+#include "propresid.hrc"
+#endif
+
+// -----------------------------------------------------------------------
+// - Strings
+// -----------------------------------------------------------------------
+
+#define RID_STR_FORMS                       ( RID_FORMBROWSER_START +   1 )
+#define RID_STR_PROPTITLE_DBGRID            ( RID_FORMBROWSER_START +   2 )
+#define RID_STR_PROPTITLE_PATTERNFIELD      ( RID_FORMBROWSER_START +   3 )
+#define RID_STR_PROPTITLE_CURRENCYFIELD     ( RID_FORMBROWSER_START +   4 )
+#define RID_STR_PROPTITLE_NUMERICFIELD      ( RID_FORMBROWSER_START +   5 )
+#define RID_STR_PROPTITLE_TIMEFIELD         ( RID_FORMBROWSER_START +   6 )
+#define RID_STR_PROPTITLE_DATEFIELD         ( RID_FORMBROWSER_START +   7 )
+#define RID_STR_PROPTITLE_FILECONTROL       ( RID_FORMBROWSER_START +   8 )
+#define RID_STR_PROPTITLE_IMAGECONTROL      ( RID_FORMBROWSER_START +   9 )
+#define RID_STR_PROPTITLE_IMAGEBUTTON       ( RID_FORMBROWSER_START +  10 )
+#define RID_STR_PROPTITLE_COMBOBOX          ( RID_FORMBROWSER_START +  11 )
+#define RID_STR_PROPTITLE_LISTBOX           ( RID_FORMBROWSER_START +  12 )
+#define RID_STR_PROPTITLE_FORMATTED         ( RID_FORMBROWSER_START +  13 )
+#define RID_STR_PROPTITLE_EDIT              ( RID_FORMBROWSER_START +  14 )
+#define RID_STR_PROPTITLE_GROUPBOX          ( RID_FORMBROWSER_START +  15 )
+#define RID_STR_PROPTITLE_FIXEDTEXT         ( RID_FORMBROWSER_START +  16 )
+#define RID_STR_PROPTITLE_CHECKBOX          ( RID_FORMBROWSER_START +  17 )
+#define RID_STR_PROPTITLE_RADIOBUTTON       ( RID_FORMBROWSER_START +  18 )
+#define RID_STR_PROPTITLE_PUSHBUTTON        ( RID_FORMBROWSER_START +  19 )
+#define RID_STR_PROPTITLE_HIDDENCONTROL     ( RID_FORMBROWSER_START +  30 )
+#define RID_STR_PROPTITLE_UNKNOWNCONTROL    ( RID_FORMBROWSER_START +  31 )
+
+#define RID_STR_NAME                        ( RID_FORMBROWSER_START +  32 )
+#define RID_STR_LABEL                       ( RID_FORMBROWSER_START +  33 )
+#define RID_STR_LABELCONTROL                ( RID_FORMBROWSER_START +  34 )
+#define RID_STR_MAXTEXTLEN                  ( RID_FORMBROWSER_START +  35 )
+#define RID_STR_EDITMASK                    ( RID_FORMBROWSER_START +  36 )
+#define RID_STR_LITERALMASK                 ( RID_FORMBROWSER_START +  37 )
+#define RID_STR_STRICTFORMAT                ( RID_FORMBROWSER_START +  38 )
+#define RID_STR_ENABLED                     ( RID_FORMBROWSER_START +  39 )
+#define RID_STR_READONLY                    ( RID_FORMBROWSER_START +  40 )
+#define RID_STR_PRINTABLE                   ( RID_FORMBROWSER_START +  41 )
+#define RID_STR_CONTROLSOURCE               ( RID_FORMBROWSER_START +  42 )
+#define RID_STR_TABSTOP                     ( RID_FORMBROWSER_START +  43 )
+#define RID_STR_TABINDEX                    ( RID_FORMBROWSER_START +  44 )
+#define RID_STR_DATASOURCE                  ( RID_FORMBROWSER_START +  45 )
+#define RID_STR_CURSORSOURCE                ( RID_FORMBROWSER_START +  46 )
+#define RID_STR_CURSORSOURCETYPE            ( RID_FORMBROWSER_START +  47 )
+#define RID_STR_FILTER_CRITERIA             ( RID_FORMBROWSER_START +  48 )
+#define RID_STR_SORT_CRITERIA               ( RID_FORMBROWSER_START +  49 )
+#define RID_STR_ALLOW_ADDITIONS             ( RID_FORMBROWSER_START +  50 )
+#define RID_STR_ALLOW_EDITS                 ( RID_FORMBROWSER_START +  51 )
+#define RID_STR_ALLOW_DELETIONS             ( RID_FORMBROWSER_START +  52 )
+#define RID_STR_DATAENTRY                   ( RID_FORMBROWSER_START +  53 )
+#define RID_STR_NAVIGATION                  ( RID_FORMBROWSER_START +  54 )
+#define RID_STR_CYCLE                       ( RID_FORMBROWSER_START +  55 )
+#define RID_STR_VALUE                       ( RID_FORMBROWSER_START +  56 )
+#define RID_STR_VALUESTEP                   ( RID_FORMBROWSER_START +  59 )
+#define RID_STR_DECIMAL_ACCURACY            ( RID_FORMBROWSER_START +  61 )
+#define RID_STR_SHOWTHOUSANDSEP             ( RID_FORMBROWSER_START +  62 )
+#define RID_STR_REFVALUE                    ( RID_FORMBROWSER_START +  63 )
+#define RID_STR_CURRENCYSYMBOL              ( RID_FORMBROWSER_START +  64 )
+#define RID_STR_CURRSYM_POSITION            ( RID_FORMBROWSER_START +  65 )
+#define RID_STR_DATEMIN                     ( RID_FORMBROWSER_START +  66 )
+#define RID_STR_DATEMAX                     ( RID_FORMBROWSER_START +  67 )
+#define RID_STR_DATEFORMAT                  ( RID_FORMBROWSER_START +  68 )
+#define RID_STR_DATE_SHOW_CENTURY           ( RID_FORMBROWSER_START +  69 )
+#define RID_STR_TIMEMIN                     ( RID_FORMBROWSER_START +  71 )
+#define RID_STR_TIMEMAX                     ( RID_FORMBROWSER_START +  72 )
+#define RID_STR_TIMEFORMAT                  ( RID_FORMBROWSER_START +  73 )
+#define RID_STR_VALUEMIN                    ( RID_FORMBROWSER_START +  75 )
+#define RID_STR_VALUEMAX                    ( RID_FORMBROWSER_START +  76 )
+#define RID_STR_FORMATKEY                   ( RID_FORMBROWSER_START +  78 )
+#define RID_STR_CLASSID                     ( RID_FORMBROWSER_START +  80 )
+#define RID_STR_HEIGHT                      ( RID_FORMBROWSER_START +  81 )
+#define RID_STR_WIDTH                       ( RID_FORMBROWSER_START +  82 )
+#define RID_STR_BOUNDCOLUMN                 ( RID_FORMBROWSER_START +  83 )
+#define RID_STR_LISTSOURCETYPE              ( RID_FORMBROWSER_START +  84 )
+#define RID_STR_LISTSOURCE                  ( RID_FORMBROWSER_START +  85 )
+#define RID_STR_LISTINDEX                   ( RID_FORMBROWSER_START +  86 )
+#define RID_STR_STRINGITEMLIST              ( RID_FORMBROWSER_START +  87 )
+#define RID_STR_DEFAULTVALUE                ( RID_FORMBROWSER_START +  88 )
+#define RID_STR_FONT                        ( RID_FORMBROWSER_START +  89 )
+#define RID_STR_ALIGN                       ( RID_FORMBROWSER_START +  90 )
+#define RID_STR_ROWHEIGHT                   ( RID_FORMBROWSER_START +  91 )
+#define RID_STR_BACKGROUNDCOLOR             ( RID_FORMBROWSER_START +  92 )
+#define RID_STR_FILLCOLOR                   ( RID_FORMBROWSER_START +  93 )
+#define RID_STR_LINECOLOR                   ( RID_FORMBROWSER_START +  95 )
+#define RID_STR_BORDER                      ( RID_FORMBROWSER_START +  96 )
+#define RID_STR_DROPDOWN                    ( RID_FORMBROWSER_START +  97 )
+#define RID_STR_AUTOCOMPLETE                ( RID_FORMBROWSER_START +  98 )
+#define RID_STR_LINECOUNT                   ( RID_FORMBROWSER_START +  99 )
+#define RID_STR_MULTILINE                   ( RID_FORMBROWSER_START + 101 )
+#define RID_STR_MULTISELECTION              ( RID_FORMBROWSER_START + 102 )
+#define RID_STR_HARDLINEBREAKS              ( RID_FORMBROWSER_START + 103 )
+#define RID_STR_HSCROLL                     ( RID_FORMBROWSER_START + 104 )
+#define RID_STR_VSCROLL                     ( RID_FORMBROWSER_START + 105 )
+#define RID_STR_SPIN                        ( RID_FORMBROWSER_START + 106 )
+#define RID_STR_BUTTONTYPE                  ( RID_FORMBROWSER_START + 107 )
+#define RID_STR_TARGET_URL                  ( RID_FORMBROWSER_START + 108 )
+#define RID_STR_TARGET_FRAME                ( RID_FORMBROWSER_START + 109 )
+#define RID_STR_SUBMIT_ACTION               ( RID_FORMBROWSER_START + 110 )
+#define RID_STR_SUBMIT_TARGET               ( RID_FORMBROWSER_START + 111 )
+#define RID_STR_SUBMIT_METHOD               ( RID_FORMBROWSER_START + 112 )
+#define RID_STR_SUBMIT_ENCODING             ( RID_FORMBROWSER_START + 113 )
+#define RID_STR_DEFAULT_CHECKED             ( RID_FORMBROWSER_START + 114 )
+#define RID_STR_DEFAULT_BUTTON              ( RID_FORMBROWSER_START + 115 )
+#define RID_STR_IMAGE_URL                   ( RID_FORMBROWSER_START + 116 )
+#define RID_STR_DEFAULT_SELECT_SEQ          ( RID_FORMBROWSER_START + 117 )
+#define RID_STR_ECHO_CHAR                   ( RID_FORMBROWSER_START + 118 )
+#define RID_STR_EMPTY_IS_NULL               ( RID_FORMBROWSER_START + 119 )
+#define RID_STR_TRISTATE                    ( RID_FORMBROWSER_START + 120 )
+#define RID_STR_MASTERFIELDS                ( RID_FORMBROWSER_START + 121 )
+#define RID_STR_SLAVEFIELDS                 ( RID_FORMBROWSER_START + 122 )
+#define RID_STR_NAVIGATIONBAR               ( RID_FORMBROWSER_START + 123 )
+#define RID_STR_RECORDMARKER                ( RID_FORMBROWSER_START + 124 )
+#define RID_STR_FILTERPROPOSAL              ( RID_FORMBROWSER_START + 125 )
+#define RID_STR_TAG                         ( RID_FORMBROWSER_START + 126 )
+#define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 127 )
+#define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 128 )
+#define RID_STR_BORDER_TYPE                 ( RID_FORMBROWSER_START + 129 )
+#define RID_STR_COMMAND_TYPE                ( RID_FORMBROWSER_START + 130 )
+#define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 131 )
+#define RID_STR_LISTSOURCE_TYPE             ( RID_FORMBROWSER_START + 132 )
+#define RID_STR_ALIGNMENT                   ( RID_FORMBROWSER_START + 133 )
+#define RID_STR_ENUM_BUTTONTYPE             ( RID_FORMBROWSER_START + 134 )
+#define RID_STR_ENUM_SUBMIT_METHOD          ( RID_FORMBROWSER_START + 135 )
+#define RID_STR_ENUM_SUBMIT_ENCODING        ( RID_FORMBROWSER_START + 136 )
+#define RID_STR_DATEFORMAT_LIST             ( RID_FORMBROWSER_START + 137 )
+#define RID_STR_TIMEFORMAT_LIST             ( RID_FORMBROWSER_START + 138 )
+#define RID_STR_ENUM_CHECKED                ( RID_FORMBROWSER_START + 139 )
+#define RID_STR_ENUM_CYCLE                  ( RID_FORMBROWSER_START + 140 )
+#define RID_STR_ENUM_NAVIGATION             ( RID_FORMBROWSER_START + 141 )
+#define RID_STR_EVT_APPROVEACTIONPERFORMED  ( RID_FORMBROWSER_START + 142 )
+#define RID_STR_EVT_ACTIONPERFORMED         ( RID_FORMBROWSER_START + 143 )
+#define RID_STR_EVT_CHANGED                 ( RID_FORMBROWSER_START + 144 )
+#define RID_STR_EVT_TEXTCHANGED             ( RID_FORMBROWSER_START + 145 )
+#define RID_STR_EVT_ITEMSTATECHANGED        ( RID_FORMBROWSER_START + 146 )
+#define RID_STR_EVT_FOCUSGAINED             ( RID_FORMBROWSER_START + 147 )
+#define RID_STR_EVT_FOCUSLOST               ( RID_FORMBROWSER_START + 148 )
+#define RID_STR_EVT_KEYTYPED                ( RID_FORMBROWSER_START + 149 )
+#define RID_STR_EVT_KEYUP                   ( RID_FORMBROWSER_START + 150 )
+#define RID_STR_EVT_MOUSEENTERED            ( RID_FORMBROWSER_START + 151 )
+#define RID_STR_EVT_MOUSEDRAGGED            ( RID_FORMBROWSER_START + 152 )
+#define RID_STR_EVT_MOUSEMOVED              ( RID_FORMBROWSER_START + 153 )
+#define RID_STR_EVT_MOUSEPRESSED            ( RID_FORMBROWSER_START + 154 )
+#define RID_STR_EVT_MOUSERELEASED           ( RID_FORMBROWSER_START + 155 )
+#define RID_STR_EVT_MOUSEEXITED             ( RID_FORMBROWSER_START + 156 )
+#define RID_STR_EVT_APPROVERESETTED         ( RID_FORMBROWSER_START + 157 )
+#define RID_STR_EVT_RESETTED                ( RID_FORMBROWSER_START + 158 )
+#define RID_STR_EVT_SUBMITTED               ( RID_FORMBROWSER_START + 159 )
+#define RID_STR_EVT_BEFOREUPDATE            ( RID_FORMBROWSER_START + 160 )
+#define RID_STR_EVT_AFTERUPDATE             ( RID_FORMBROWSER_START + 161 )
+#define RID_STR_EVT_LOADED                  ( RID_FORMBROWSER_START + 162 )
+#define RID_STR_EVT_RELOADING               ( RID_FORMBROWSER_START + 163 )
+#define RID_STR_EVT_RELOADED                ( RID_FORMBROWSER_START + 164 )
+#define RID_STR_EVT_UNLOADING               ( RID_FORMBROWSER_START + 165 )
+#define RID_STR_EVT_UNLOADED                ( RID_FORMBROWSER_START + 166 )
+#define RID_STR_EVT_CONFIRMDELETE           ( RID_FORMBROWSER_START + 167 )
+#define RID_STR_EVT_APPROVEROWCHANGE        ( RID_FORMBROWSER_START + 168 )
+#define RID_STR_EVT_ROWCHANGE               ( RID_FORMBROWSER_START + 169 )
+#define RID_STR_EVT_POSITIONING             ( RID_FORMBROWSER_START + 170 )
+#define RID_STR_EVT_POSITIONED              ( RID_FORMBROWSER_START + 171 )
+#define RID_STR_EVT_APPROVEPARAMETER        ( RID_FORMBROWSER_START + 172 )
+#define RID_STR_EVT_ERROROCCURED            ( RID_FORMBROWSER_START + 173 )
+#define RID_STR_EVENTS                      ( RID_FORMBROWSER_START + 174 )
+#define RID_STR_ESCAPE_PROCESSING           ( RID_FORMBROWSER_START + 175 )
+
+// -----------------------------------------------------------------------
+// - Dialogs
+// -----------------------------------------------------------------------
+
+#define RID_DLG_SELECTLABELCONTROL          ( RID_PROPCONTROLLER_START +  0 )
+
+
+// -----------------------------------------------------------------------
+// - Dialogs
+// -----------------------------------------------------------------------
+
+#define RID_SVXDLG_FMFONT                   18013
+
+
+// -----------------------------------------------------------------------
+// - ImageLists
+// -----------------------------------------------------------------------
+
+#define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
+
+
+// -----------------------------------------------------------------------
+// - ImageList - local ids
+// -----------------------------------------------------------------------
+// HACK HACK HACK
+// as long as we have no real property browser, but this outsourcing only,
+// we do not duplicate images. Instead we do some hard coding for the image ids
+#define RID_SVXIMG_FIXEDTEXT                        10597
+#define RID_SVXIMG_GROUPBOX                         10598
+#define RID_SVXIMG_FORMS                            18013
+#define RID_SVXIMG_FORM                             10593
+#define RID_SVXIMG_COLLAPSEDNODE                    18002
+#define RID_SVXIMG_EXPANDEDNODE                     18003
+
+
+
+#endif // _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 09.01.01 16:03:30  fs
+ ************************************************************************/
+
