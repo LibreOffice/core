@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-11 12:53:01 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #endif
 
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 
 using namespace ::com::sun::star;
