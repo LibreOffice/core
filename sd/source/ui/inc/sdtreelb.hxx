@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:22:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ protected:
     void                    DragFinished( sal_uInt8 nDropAction );
 
     String                  GetObjectName( const SdrObject* pObj ) const;
-
+    void                    CloseBookmarkDoc();
                             DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
 
 public:
@@ -230,7 +230,6 @@ public:
     List*                   GetBookmarkList( USHORT nType );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
-    void                    CloseBookmarkDoc();
 
     BOOL                    IsLinkableSelected() const { return bLinkableSelected; }
 
