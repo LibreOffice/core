@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:58:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void DrawViewShell::ExecEffectWin( SfxRequest& rReq )
 
         case SID_SLIDE_CHANGE_ASSIGN:
         {
-            AssignFromSlideChangeWindow();
+            AssignFromSlideChangeWindow(GetEditMode());
         }
         break;
 
