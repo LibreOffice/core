@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
+ *  last change: $Author: fs $ $Date: 2001-07-19 11:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,16 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
 
 
 //------------------------------------------------------------------------------
+sal_Bool OColumnSettings::isDefaulted() const
+{
+    return  !m_aAlignment.hasValue()
+        &&  !m_aWidth.hasValue()
+        &&  !m_aFormatKey.hasValue()
+        &&  !m_aRelativePosition.hasValue()
+        &&  !m_bHidden;
+}
+
+//------------------------------------------------------------------------------
 sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode)
 {
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, m_aAlignment);
@@ -673,9 +683,10 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
             else
             {   // no -> create one
 
-                // the configuration does not support different types of operations in one transaction, so we must commit
-                // before and after we create the new node, to ensure, that every transaction we ever do contains only
-                // one type of operation (insert, remove, update)
+                if (pCurrentSettings->isDefaulted())
+                    // no need to write the configuration data: it's all in it's default state
+                    continue;
+
                 aColumnNode = _rLocation.createNode(sCurrent);
                 if (!aColumnNode.isValid())
                 {
