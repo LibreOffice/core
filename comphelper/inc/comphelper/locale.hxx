@@ -2,9 +2,9 @@
  *
  *  $RCSfile: locale.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:58:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ class Locale
         static const Locale X_DEFAULT();
         static const Locale X_COMMENT();
         static const Locale X_TRANSLATE();
+        static const Locale X_NOTRANSLATE();
         static const Locale ZH_CN();
         static const Locale ZH_TW();
 
@@ -194,6 +195,14 @@ class Locale
     // interface
 
     public :
+
+        //---------------------------------------
+        /** @short  needed by outside users!
+
+            @descr  Otherwise it wouldnt be possible to use
+                    any instance of such Locale static ...
+         */
+        Locale();
 
         //---------------------------------------
         /** @short      construct a Locale from an ISO formated string value.
@@ -397,6 +406,38 @@ class Locale
         static ::std::vector< ::rtl::OUString >::const_iterator getFallback(const ::std::vector< ::rtl::OUString >& lISOList     ,
                                                                             const ::rtl::OUString&                  sReferenceISO)
             throw(MalFormedLocaleException);
+
+        //---------------------------------------
+        /** @short      search for the next possible fallback locale.
+
+            @descr      Instead of getFallback(vector<>, string) this method
+                        uses the given locale and decide by using an algorithm
+                        which locale can be the next possible one.
+
+                        Algorithm:
+                        - if locale has country return language only
+                        - if locale different "en-US" return "en-US"
+                        - if locale "en-US" return "en"
+
+            @param      aLocale [in/out]!
+                        the incoming value will be used to start
+                        search for a possible fallback ...
+                        and in case such fallback was found this parameter
+                        will be used for return too.
+
+            @return     TRUE if the parameter aLocale contains a new fallback value;
+                        FALSE otherwise.
+         */
+        static sal_Bool getFallback(Locale& aLocale);
+
+        //---------------------------------------
+        /** @short      assign elements of another locale
+                        to this instance.
+
+            @param      rCopy
+                        another locale object.
+         */
+        void operator=(const Locale& rCopy);
 
         //---------------------------------------
         /** @short      check if two Locale objects are equals.
