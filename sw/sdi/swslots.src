@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 21:03:52 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8422,7 +8422,7 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName [ english ] =  "Am Zeichen verankern";
     SlotName[ english_us ] = "Anchor to Character";
     SlotName[ portuguese ] = "Ancorar como carбcter";
-    SlotName[ russian ] = "Привязать как знак";
+    SlotName[ russian ] = "Привязать к знаку";
     SlotName[ dutch ] = "Aan teken verankeren";
     SlotName[ french ] = "Ancrage au caractиre";
     SlotName[ spanish ] = "Anclar al carбcter";
@@ -8450,7 +8450,7 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName [ english ] =  "Anchor as character";
     SlotName[ english_us ] = "Anchor as Character";
     SlotName[ portuguese ] = "Вncora no carбcter";
-    SlotName[ russian ] = "Привязать к знаку";
+    SlotName[ russian ] = "Привязать как знак";
     SlotName[ dutch ] = "Aan teken verankeren";
     SlotName[ french ] = "Ancrage comme caractиre";
     SlotName[ spanish ] = "Anclar como carбcter";
@@ -9495,7 +9495,7 @@ SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
     SlotName [ english ] =  "Number recognition";
     SlotName[ english_us ] = "Number Recognition";
     SlotName[ portuguese ] = "Number recognition";
-    SlotName[ russian ] = "Number recognition";
+    SlotName[ russian ] = "Распознавание чисел";
     SlotName[ greek ] = "Number recognition";
     SlotName[ dutch ] = "Herkenning van getallen";
     SlotName[ french ] = "Reconnaissance des nombres";
@@ -9520,7 +9520,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName [ english ] =  "Update Charts";
     SlotName[ english_us ] = "Update Charts";
     SlotName[ portuguese ] = "Update Charts";
-    SlotName[ russian ] = "Update Charts";
+    SlotName[ russian ] = "Обновить диаграммы";
     SlotName[ greek ] = "Update Charts";
     SlotName[ dutch ] = "Diagrammen actualiseren";
     SlotName[ french ] = "Actualiser les diagrammes";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
