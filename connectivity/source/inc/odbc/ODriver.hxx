@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODriver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace connectivity
 
                 typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::sdbc::XDriver, ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
-        class ODBCDriver : public ODriver_BASE
+        class SAL_NO_VTABLE ODBCDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                            m_aMutex;

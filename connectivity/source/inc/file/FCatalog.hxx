@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace connectivity
     namespace file
     {
         class OConnection;
-        class OFileCatalog : public connectivity::sdbcx::OCatalog
+        class SAL_NO_VTABLE OFileCatalog : public connectivity::sdbcx::OCatalog
         {
         protected:
             OConnection*                                        m_pConnection;

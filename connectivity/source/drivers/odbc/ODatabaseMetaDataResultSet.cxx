@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,11 @@
 #ifndef _CONNECTIVITY_OTOOLS_HXX_
 #include "odbc/OTools.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 
 using namespace connectivity::odbc;
@@ -938,7 +943,7 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const ::rtl::OUS
     else
         pSchemaPat = NULL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1030,7 +1035,7 @@ void ODatabaseMetaDataResultSet::openColumnPrivileges(  const Any& catalog, cons
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1062,7 +1067,7 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1125,7 +1130,7 @@ void ODatabaseMetaDataResultSet::openProcedureColumns(  const Any& catalog,     
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1157,7 +1162,7 @@ void ODatabaseMetaDataResultSet::openProcedures(const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1185,7 +1190,7 @@ void ODatabaseMetaDataResultSet::openSpecialColumns(sal_Bool _bRowVer,const Any&
 
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1222,8 +1227,8 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
     m_bFreeHandle = sal_True;
 
     ::rtl::OString aPKQ,aPKO,aPKN, aFKQ, aFKO, aFKN;
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
-    aFKQ = ::rtl::OUStringToOString(connectivity::getString(catalog2),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
+    aFKQ = ::rtl::OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
                 *pPKO = schema && schema->getLength() ? ::rtl::OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
@@ -1270,7 +1275,7 @@ void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN,aCOL;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1298,7 +1303,7 @@ void ODatabaseMetaDataResultSet::openTablePrivileges(const Any& catalog, const :
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schemaPattern,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,
@@ -1327,7 +1332,7 @@ void ODatabaseMetaDataResultSet::openIndexInfo( const Any& catalog, const ::rtl:
     m_bFreeHandle = sal_True;
     ::rtl::OString aPKQ,aPKO,aPKN;
 
-    aPKQ = ::rtl::OUStringToOString(connectivity::getString(catalog),m_nTextEncoding);
+    aPKQ = ::rtl::OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     aPKO = ::rtl::OUStringToOString(schema,m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && aPKQ.getLength() ? aPKQ.getStr()  : NULL,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,11 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -1542,11 +1547,11 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
                 }
                 break;
                         case TypeClass_DOUBLE:
-                updateDouble(columnIndex,connectivity::getDouble(x));
+                updateDouble(columnIndex,comphelper::getDouble(x));
                 break;
                         case TypeClass_CHAR:
                         case TypeClass_STRING:
-                updateString(columnIndex,connectivity::getString(x));
+                updateString(columnIndex,comphelper::getString(x));
                 break;
                         case TypeClass_ENUM:
             default:
@@ -1789,6 +1794,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
     }
     return bRet;
 }
+
 // -------------------------------------------------------------------------
 void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
@@ -1804,10 +1810,10 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
             throw ::com::sun::star::uno::Exception();
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            setFetchDirection(connectivity::getINT32(rValue));
+            setFetchDirection(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHSIZE:
-            setFetchSize(connectivity::getINT32(rValue));
+            setFetchSize(comphelper::getINT32(rValue));
             break;
         default:
             ;

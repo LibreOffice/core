@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,21 +128,22 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include "connectivity/dbconversion.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ucb;
-using namespace cppu;
+using namespace ::cppu;
 using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;

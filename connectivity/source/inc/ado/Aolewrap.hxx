@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,32 @@
 #include <osl/thread.h>
 #endif
 
-
+namespace rtl
+{
+    class OUString;
+}
 namespace connectivity
 {
     namespace ado
     {
+        class WpBase
+        {
+        protected:
+            IDispatch* pIUnknown;
+        public:
+            WpBase();
+            WpBase(IDispatch* pInt);
+            //inline
+            WpBase& operator=(const WpBase& rhs);
+            WpBase& operator=(IDispatch* rhs);
+            WpBase(const WpBase& aWrapper);
+            virtual ~WpBase();
+            void clear();
+
+
+            sal_Bool IsValid() const;
+            operator IDispatch*();
+        };
         //////////////////////////////////////////////////////////////////////////
         //
         // Template-Klasse WpOLEBase<class T>
@@ -89,38 +110,31 @@ namespace connectivity
         // virtueller Methoden und mit Inlining.
 
         //------------------------------------------------------------------------
-        template<class T> class WpOLEBase
+        template<class T> class WpOLEBase : public WpBase
         {
 
         protected:
+            //  typename T::ADOType;
             T* pInterface;
 
         public:
 
-            WpOLEBase();
-            WpOLEBase(T* pInt);
+            WpOLEBase(){}
+            WpOLEBase(T* pInt) : WpBase(pInt),pInterface(pInt){}
 
 
             //inline
             WpOLEBase<T>& operator=(const WpOLEBase<T>& rhs)
             {
-                if (rhs.pInterface != pInterface)
-                {
-                    if (pInterface) pInterface->Release();
-                    pInterface = rhs.pInterface;
-                    if (pInterface) pInterface->AddRef();
-                }
+                WpBase::operator=(rhs);
+                pInterface = rhs.pInterface;
                 return *this;
             };
 
             WpOLEBase<T>& operator=(T* rhs)
             {
-                if (pInterface != rhs)
-                {
-                    if (pInterface) pInterface->Release();
-                    pInterface = rhs;
-                    if (pInterface) pInterface->AddRef();
-                }
+                WpBase::operator=(rhs);
+                pInterface = rhs.pInterface;
                 return *this;
             }
 
@@ -131,45 +145,10 @@ namespace connectivity
 
             virtual ~WpOLEBase()
             {
-                if (pInterface)
-                {
-                    pInterface->Release();
-                    pInterface = NULL;
-                }
             }
 
-            inline void clear()
-            {
-                if (pInterface)
-                {
-                    pInterface->Release();
-                    pInterface = NULL;
-                }
-            }
-
-
-            inline sal_Bool IsValid() const {return pInterface != NULL;};
-            operator IDispatch*() { return pInterface; }
-            operator T*() { return pInterface; }
+            operator T*() { return static_cast<T*>(pInterface); }
         };
-
-
-        template<class T> WpOLEBase<T>::WpOLEBase<T>()
-        {
-            pInterface = NULL;
-        };
-
-
-        template<class T> WpOLEBase<T>::WpOLEBase<T>(T* pInt)
-        {
-            pInterface = pInt;
-        };
-        // kein AddRef(), da
-        // der nach Konvention von der erz. Methode
-        // schon durchgeführt wurde.
-
-
-
 
 
         //////////////////////////////////////////////////////////////////////////

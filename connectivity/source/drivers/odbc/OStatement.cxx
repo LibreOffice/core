@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,11 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 #define THROW_SQL(x) \
     OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
@@ -1015,34 +1020,34 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
-            setQueryTimeOut(connectivity::getINT32(rValue));
+            setQueryTimeOut(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_MAXFIELDSIZE:
-            setMaxFieldSize(connectivity::getINT32(rValue));
+            setMaxFieldSize(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_MAXROWS:
-            setMaxRows(connectivity::getINT32(rValue));
+            setMaxRows(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_CURSORNAME:
-            setCursorName(connectivity::getString(rValue));
+            setCursorName(comphelper::getString(rValue));
             break;
         case PROPERTY_ID_RESULTSETCONCURRENCY:
-            setResultSetConcurrency(connectivity::getINT32(rValue));
+            setResultSetConcurrency(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_RESULTSETTYPE:
-            setResultSetType(connectivity::getINT32(rValue));
+            setResultSetType(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            setFetchDirection(connectivity::getINT32(rValue));
+            setFetchDirection(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHSIZE:
-            setFetchSize(connectivity::getINT32(rValue));
+            setFetchSize(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
             //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            setUsingBookmarks(connectivity::getBOOL(rValue));
+            setUsingBookmarks(comphelper::getBOOL(rValue));
             break;
         default:
             ;

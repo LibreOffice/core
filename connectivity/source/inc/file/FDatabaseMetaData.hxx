@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace connectivity
         //************ Class: ODatabaseMetaData
         //**************************************************************
 
-        class ODatabaseMetaData :   public  ODatabaseMetaDataBase
+        class SAL_NO_VTABLE ODatabaseMetaData : public  ODatabaseMetaDataBase
         {
         protected:
             OConnection* m_pConnection; // I need the native class not only the interface

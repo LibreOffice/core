@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:50 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,9 @@ typedef struct _ADOKey Key;
 typedef struct _ADOTable Table;
 #endif  /* __Table_FWD_DEFINED__ */
 
-#ifndef _ADOINT_H_
 #include <adoint.h>
-#endif
 
-#ifndef _ADOCTINT_H_
-#include <ado/adoctint.h>
-#endif
+#include <ado/ADOCTINT.H>
 
 
 #ifndef _CONNECTIVITY_ADO_AOLEWRAP_HXX_

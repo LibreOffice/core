@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,9 +246,9 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OResultSet :  public  comphelper::OBaseMutex,
-                            public  OResultSet_BASE,
-                            public  ::comphelper::OPropertyContainer,
-                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
+                                                public  OResultSet_BASE,
+                                                public  ::comphelper::OPropertyContainer,
+                                                public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
         protected:
@@ -464,7 +464,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);
-            BOOL OpenImpl();
+            virtual BOOL OpenImpl();
 
             sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
             void setParameterRow(const OValueRow& _rParaRow) { m_aParameterRow = _rParaRow; }

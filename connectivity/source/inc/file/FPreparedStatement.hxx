@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace connectivity
     namespace file
     {
 
-        class OPreparedStatement :  public  OStatement_BASE2,
+        class SAL_NO_VTABLE OPreparedStatement :    public  OStatement_BASE2,
                                     public  ::com::sun::star::sdbc::XPreparedStatement,
                                     public  ::com::sun::star::sdbc::XParameters,
                                     public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -215,7 +220,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
     if( t.pEnv ){
         jvalue args[4];
         // temporaere Variable initialisieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         args[3].l = convertwchar_tToJavaString(t.pEnv,columnNamePattern);
@@ -250,7 +255,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
     if( t.pEnv ){
         jvalue args[3];
         // temporaere Variable initialisieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
 
@@ -296,7 +301,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         }else
             args[3].l = 0;
         // temporaere Variable initialisieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
 
@@ -331,7 +336,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedureColumns(
     {
         jvalue args[4];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,procedureNamePattern);
         args[3].l = convertwchar_tToJavaString(t.pEnv,columnNamePattern);
@@ -367,7 +372,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedures( const
     {
         jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,procedureNamePattern);
         // temporaere Variable initialisieren
@@ -399,7 +404,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
     if( t.pEnv ){
         jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         // temporaere Variable initialisieren
@@ -662,7 +667,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getExportedKeys(
     if( t.pEnv ){
     jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         // temporaere Variable initialisieren
@@ -694,7 +699,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getImportedKeys(
     if( t.pEnv ){
     jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         // temporaere Variable initialisieren
@@ -726,7 +731,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getPrimaryKeys(
     if( t.pEnv ){
     jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         // temporaere Variable initialisieren
@@ -759,7 +764,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     if( t.pEnv ){
     jvalue args[5];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         args[3].z = unique;
@@ -794,7 +799,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     if( t.pEnv ){
         jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
 
@@ -827,7 +832,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
     if( t.pEnv ){
         jvalue args[3];
         // Parameter konvertieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
 
@@ -862,10 +867,10 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
     if( t.pEnv ){
         jvalue args[6];
         // Parameter konvertieren
-        args[0].l = primaryCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(primaryCatalog)) : 0;
+        args[0].l = primaryCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(primaryCatalog)) : 0;
         args[1].l = primarySchema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,primarySchema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,primaryTable);
-        args[3].l = foreignCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(foreignCatalog)) : 0;
+        args[3].l = foreignCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(foreignCatalog)) : 0;
         args[4].l = foreignSchema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,foreignSchema);
         args[5].l = convertwchar_tToJavaString(t.pEnv,foreignTable);
         // temporaere Variable initialisieren
@@ -3217,7 +3222,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     if( t.pEnv ){
         jvalue args[4];
         // temporaere Variable initialisieren
-        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,connectivity::getString(catalog)) : 0;
+        args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
         args[2].l = convertwchar_tToJavaString(t.pEnv,typeNamePattern);
         jintArray pArray = t.pEnv->NewIntArray(types.getLength());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:09 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace connectivity
 
 
         // operands that the parsetree generate
-        class OOperand : public OCode
+        class SAL_NO_VTABLE OOperand : public OCode
         {
         protected:
             sal_Int32 m_eDBType;

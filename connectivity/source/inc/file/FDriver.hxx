@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDriver.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace connectivity
                                                     ::com::sun::star::lang::XServiceInfo,
                                                     ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
 
-        class OFileDriver : public ODriver_BASE
+        class SAL_NO_VTABLE OFileDriver : public ODriver_BASE
         {
         protected:
             ::osl::Mutex                                        m_aMutex;

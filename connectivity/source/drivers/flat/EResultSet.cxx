@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 09:13:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,15 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace cppu;
+using namespace ::cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -168,7 +173,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark),sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark),sal_True);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
@@ -179,7 +184,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(OFileTable::FILE_BOOKMARK,connectivity::getINT32(bookmark)+rows,sal_True);
+    return Move(OFileTable::FILE_BOOKMARK,comphelper::getINT32(bookmark)+rows,sal_True);
 }
 
 // -------------------------------------------------------------------------
@@ -203,7 +208,7 @@ sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( S
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    return connectivity::getINT32(bookmark);
+    return comphelper::getINT32(bookmark);
 }
 // -------------------------------------------------------------------------
 IPropertyArrayHelper* OFlatResultSet::createArrayHelper( ) const

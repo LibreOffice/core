@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,11 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -1241,19 +1245,19 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     {
         case PROPERTY_ID_RESULTSETCONCURRENCY:
             if(!isPrepared())
-                setResultSetConcurrency(connectivity::getINT32(rValue));
+                setResultSetConcurrency(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_RESULTSETTYPE:
             if(!isPrepared())
-                setResultSetType(connectivity::getINT32(rValue));
+                setResultSetType(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_FETCHDIRECTION:
             if(!isPrepared())
-                setFetchDirection(connectivity::getINT32(rValue));
+                setFetchDirection(comphelper::getINT32(rValue));
             break;
         case PROPERTY_ID_USEBOOKMARKS:
             if(!isPrepared())
-                setUsingBookmarks(connectivity::getBOOL(rValue));
+                setUsingBookmarks(comphelper::getBOOL(rValue));
             break;
         default:
             OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);

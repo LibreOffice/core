@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,11 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace dbtools;
 using namespace connectivity::parse;

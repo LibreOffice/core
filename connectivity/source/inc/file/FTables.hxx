@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTables.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:28 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,12 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+
 namespace connectivity
 {
     namespace file
     {
-        class OTables : public sdbcx::OCollection
+        class SAL_NO_VTABLE OTables : public sdbcx::OCollection
         {
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:53 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@
 #include "TConnection.hxx"
 #endif
 
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
+using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-18 08:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
+#endif
 
 
 namespace connectivity
@@ -92,7 +95,7 @@ namespace connectivity
                                                 ::com::sun::star::lang::XUnoTunnel
                                             > OMetaConnection_BASE;
 
-    class OMetaConnection : public OMetaConnection_BASE
+    class SAL_NO_VTABLE OMetaConnection : public OMetaConnection_BASE
     {
     protected:
         ::osl::Mutex        m_aMutex;
