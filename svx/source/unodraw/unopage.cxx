@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <rtl/memory.h>
 
 #include "svdobj.hxx"
+#include "svdoole2.hxx"
 #include "svdpage.hxx"
 #include "svdmodel.hxx"
 #include "svdview.hxx"
@@ -674,7 +675,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         if( pObj && !pObj->IsEmptyPresObj() )
                         {
                             SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
-                            const SvInfoObject *pInfo = pPersist->Find( pObj->GetName() );
+                            const SvInfoObject *pInfo = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
                             DBG_ASSERT( pInfo, "no info object for OLE object found" );
 
                             const SvGlobalName aClassId( pInfo->GetClassName() );

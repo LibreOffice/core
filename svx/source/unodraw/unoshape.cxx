@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: er $ $Date: 2001-08-28 13:51:05 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1258,48 +1258,49 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                         if( aClassName.MakeId( aCLSID ) )
                         {
                             SvGlobalName aClassName;
+
                             if( aClassName.MakeId( aCLSID ) )
                             {
                                 // create storage and inplace object
-                                String aEmptyStr;
-                                SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-                                SvInPlaceObjectRef aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor);
+                                String              aEmptyStr;
+                                SvStorageRef        aStor( new SvStorage( aEmptyStr, STREAM_STD_READWRITE ) );
+                                SvInPlaceObjectRef  aIPObj( &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor) );
+                                SvPersist*          pPersist = pModel->GetPersist();
+                                String              aPersistName;
+                                OUString            aTmpStr;
+                                Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
+                                sal_Bool            bOk = sal_False;
 
-                                SvPersist* pPersist = pModel->GetPersist();
+                                if( aAny >>= aTmpStr )
+                                    aPersistName = aTmpStr;
 
-                                String aName = getName();
-
-                                sal_Bool bOk = sal_False;
-                                // if we already have a shape name check if its a unique
-                                // storage name
-                                if( aName.Len() && !pPersist->Find( aName ) )
+                                // if we already have a shape name check if its a unique storage name
+                                if( aPersistName.Len() && !pPersist->Find( aPersistName ) )
                                 {
-                                    SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aName );
-                                    bOk = pPersist->Move( xSub, aName );
+                                    SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aPersistName );
+                                    bOk = pPersist->Move( xSub, aPersistName );
                                 }
                                 else
                                 {
                                     // generate a unique name
+                                    String aStr( aPersistName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") ) );
 
-                                    aName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") );
-                                    String aStr;
-                                    sal_Int32 i = 1;
-                                    HACK(Wegen Storage Bug 46033)
                                     // for-Schleife wegen Storage Bug 46033
-                                    for( sal_Int16 n = 0; n < 100; n++ )
+                                    for( sal_Int32 i = 1, n = 0; n < 100; n++ )
                                     {
                                         do
                                         {
-                                            aStr = aName;
-                                            aStr += String::CreateFromInt32( i );
-                                            i++;
-                                        } while ( pPersist->Find( aStr ) );
+                                            aStr = aPersistName;
+                                            aStr += String::CreateFromInt32( i++ );
+                                        }
+                                        while ( pPersist->Find( aStr ) );
 
-                                        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aStr );
+                                        SvInfoObjectRef xSub( new SvEmbeddedInfoObject( aIPObj, aStr ) );
+
                                         if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
                                         {
                                             bOk = sal_True;
-                                            aName = aStr;
+                                            aPersistName = aStr;
                                             break;
                                         }
                                     }
@@ -1308,12 +1309,13 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                                 DBG_ASSERT( bOk, "could not create move ole stream!" )
 
                                 if( bOk )
-                                    pObj->SetName( aName );
+                                {
+                                    aAny <<= ( aTmpStr = aPersistName );
+                                    setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+                                }
 
-                                ((SdrOle2Obj*)pObj)->SetObjRef(aIPObj);
-
-                                Rectangle aRect( ( (SdrOle2Obj*) pObj)->GetLogicRect() );
-                                aIPObj->SetVisAreaSize( aRect.GetSize() );
+                                static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
+                                aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
 
                                 return;
                             }
@@ -1678,22 +1680,27 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
     if( pObj && pObj->ISA(SdrOle2Obj))
     {
         rHexCLSID = rtl::OUString();
-        if (((SdrOle2Obj*)pObj)->IsEmpty())
+
+        if( static_cast< SdrOle2Obj* >( pObj )->IsEmpty() )
         {
             SvPersist* pPersist = pModel->GetPersist();
-            if (pPersist)
+
+            if( pPersist )
             {
-                SvInfoObject * pEle = pPersist->Find( ((SdrOle2Obj*)pObj)->GetName() );
-                if (pEle)
+                SvInfoObject * pEle = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+
+                if( pEle )
                 {
                     aClassName = pEle->GetClassName();
                     rHexCLSID = aClassName.GetHexName();
                 }
             }
         }
+
         if (!rHexCLSID.getLength())
         {
             const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
+
             if (rIPRef.Is() )
             {
                 aClassName = rIPRef->GetClassName();
@@ -1701,6 +1708,7 @@ const SvGlobalName SvxShape::GetClassName_Impl(rtl::OUString& rHexCLSID)
             }
         }
     }
+
     return aClassName;
 }
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-08-28 13:52:13 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 09:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,22 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
         throw IllegalArgumentException();
 #endif
     }
+    else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_OLE2_PERSISTNAME ) ) )
+    {
+        OUString aPersistName;
+
+        if( aValue >>= aPersistName )
+        {
+            SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+
+            if( pOle )
+                pOle->SetPersistName( aPersistName );
+
+            return;
+        }
+
+        throw IllegalArgumentException();
+    }
 
     SvxShape::setPropertyValue( aPropertyName, aValue );
 }
@@ -180,9 +196,9 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 
     if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ThumbnailGraphicURL" ) ) )
     {
-        OUString aURL;
-
+        OUString    aURL;
         SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+
         if( pOle )
         {
             Graphic* pGraphic = pOle->GetGraphic();
@@ -209,6 +225,16 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
         }
         return makeAny( aURL );
     }
+    else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_OLE2_PERSISTNAME ) ) )
+    {
+        OUString    aPersistName;
+        SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
+
+        if( pOle )
+            aPersistName = pOle->GetPersistName();
+
+        return makeAny( aPersistName );
+    }
 
     return SvxShape::getPropertyValue( PropertyName );
 }
@@ -217,50 +243,52 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
 sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 {
 #ifndef SVX_LIGHT
-    const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
-    if(rIPRef.Is() )
+    const SvInPlaceObjectRef& rIPRef = static_cast< SdrOle2Obj* >( pObj )->GetObjRef();
+
+    if( rIPRef.Is() )
         return sal_False;
 
     // create storage and inplace object
-    String aEmptyStr;
-    SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-    SvInPlaceObjectRef aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor);
+    String              aEmptyStr;
+    SvStorageRef        aStor( new SvStorage( aEmptyStr, STREAM_STD_READWRITE ) );
+    SvInPlaceObjectRef  aIPObj( &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor) );
+    SvPersist*          pPersist = pModel->GetPersist();
+    sal_Bool            bOk = sal_False;
+    String              aPersistName;
+    OUString            aTmpStr;
+    Any                 aAny( getPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ) ) );
 
-    SvPersist* pPersist = pModel->GetPersist();
+    if( aAny >>= aTmpStr )
+        aPersistName = aTmpStr;
 
-    String aName = getName();
-
-    sal_Bool bOk = sal_False;
     // if we already have a shape name check if its a unique
     // storage name
-    if( aName.Len() && !pPersist->Find( aName ) )
+    if( aPersistName.Len() && !pPersist->Find( aPersistName ) )
     {
-        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aName );
-        bOk = pPersist->Move( xSub, aName );
+        SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aPersistName );
+        bOk = pPersist->Move( xSub, aPersistName );
     }
     else
     {
         // generate a unique name
+        String aStr( aPersistName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") ) );
 
-        aName = String( RTL_CONSTASCII_USTRINGPARAM("Object ") );
-        String aStr;
-        sal_Int32 i = 1;
-        HACK(Wegen Storage Bug 46033)
         // for-Schleife wegen Storage Bug 46033
-        for( sal_Int16 n = 0; n < 100; n++ )
+        for( sal_uInt32 i = 1, n = 0; n < 100; n++ )
         {
             do
             {
-                aStr = aName;
-                aStr += String::CreateFromInt32( i );
-                i++;
-            } while ( pPersist->Find( aStr ) );
+                aStr = aPersistName;
+                aStr += String::CreateFromInt32( i++ );
+            }
+            while( pPersist->Find( aStr ) );
 
-            SvInfoObjectRef xSub = new SvEmbeddedInfoObject( aIPObj, aStr );
+            SvInfoObjectRef xSub( new SvEmbeddedInfoObject( aIPObj, aStr ) );
+
             if( pPersist->Move( xSub, aStr ) ) // Eigentuemer Uebergang
             {
                 bOk = sal_True;
-                aName = aStr;
+                aPersistName = aStr;
                 break;
             }
         }
@@ -269,12 +297,13 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     DBG_ASSERT( bOk, "could not create move ole stream!" )
 
     if( bOk )
-        pObj->SetName( aName );
+    {
+        aAny <<= ( aTmpStr = aPersistName );
+        setPropertyValue( OUString::createFromAscii( UNO_NAME_OLE2_PERSISTNAME ), aAny );
+    }
 
-    ((SdrOle2Obj*)pObj)->SetObjRef(aIPObj);
-
-    Rectangle aRect( ( (SdrOle2Obj*) pObj)->GetLogicRect() );
-    aIPObj->SetVisAreaSize( aRect.GetSize() );
+    static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
+    aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
 
     return bOk;
 #else
