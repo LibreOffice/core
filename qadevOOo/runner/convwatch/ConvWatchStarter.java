@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:08:44 $
+ *  last change: $Date: 2004-12-10 16:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,21 +120,21 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
         {
             // MUST PARAMETER
             // INPUTFILE ----------
-            String sINPATH = (String)param.get( PropertyName.INPUT_PATH );
+            String sINPATH = (String)param.get( PropertyName.DOC_COMPARATOR_INPUT_PATH );
             boolean bQuit = false;
             if (sINPATH == null || sINPATH.length() == 0)
             {
-                log.println("Please set input path (path to documents) " + PropertyName.INPUT_PATH + "=path.");
+                log.println("Please set input path (path to documents) " + PropertyName.DOC_COMPARATOR_INPUT_PATH + "=path.");
                 bQuit = true;
             }
             else
             {
-                log.println("found " + PropertyName.INPUT_PATH + " " + sINPATH);
+                log.println("found " + PropertyName.DOC_COMPARATOR_INPUT_PATH + " " + sINPATH);
                 m_sInputPath = sINPATH;
             }
 
             // REFERENCE_PATH ----------
-            String sREF = (String)param.get( PropertyName.REFERENCE_PATH );
+            String sREF = (String)param.get( PropertyName.DOC_COMPARATOR_REFERENCE_PATH );
             if (sREF == null || sREF.length() == 0)
             {
                 // log.println("Please set reference file (path to good documents) REFERENCEFILE=path.");
@@ -143,20 +143,20 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             }
             else
             {
-                log.println("found " + PropertyName.REFERENCE_PATH + " " + sREF);
+                log.println("found " + PropertyName.DOC_COMPARATOR_REFERENCE_PATH + " " + sREF);
                 m_sReferencePath = sREF;
             }
 
             // OUTPUT_PATH ----------
-            String sOUT = (String)param.get( PropertyName.OUTPUT_PATH );
+            String sOUT = (String)param.get( PropertyName.DOC_COMPARATOR_OUTPUT_PATH );
             if (sOUT == null || sOUT.length() == 0)
             {
-                log.println("Please set output path (path to a temp directory) " + PropertyName.OUTPUT_PATH + "=path.");
+                log.println("Please set output path (path to a temp directory) " + PropertyName.DOC_COMPARATOR_OUTPUT_PATH + "=path.");
                 bQuit = true;
             }
             else
             {
-                log.println("found " + PropertyName.OUTPUT_PATH + " " + sOUT);
+                log.println("found " + PropertyName.DOC_COMPARATOR_OUTPUT_PATH + " " + sOUT);
                 m_sOutputPath = sOUT;
             }
 
@@ -168,13 +168,13 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
 
 
             // DIFF_PATH ----------
-            String sDIFF = (String)param.get( PropertyName.DIFF_PATH );
+            String sDIFF = (String)param.get( PropertyName.DOC_COMPARATOR_DIFF_PATH );
             if (sDIFF == null || sDIFF.length() == 0)
             {
             }
             else
             {
-                log.println("found " + PropertyName.DIFF_PATH + " " + sDIFF);
+                log.println("found " + PropertyName.DOC_COMPARATOR_DIFF_PATH + " " + sDIFF);
                 m_sDiffPath = sDIFF;
             }
 
@@ -196,11 +196,23 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
         {
             ArrayList aList = new ArrayList();
             // Tools from ImageMagick
+            if (! OSHelper.isWindows())
+            {
             aList.add( "composite -version" );
             aList.add( "identify -version" );
 
             // Ghostscript
             aList.add( "gs -version" );
+            }
+            else
+            {
+                aList.add( "composite.exe -version" );
+                aList.add( "identify.exe -version" );
+
+                // Ghostscript
+                aList.add( "gswin32c.exe -version" );
+            }
+
             return aList.toArray();
         }
 
@@ -249,7 +261,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                     for (int i=0;i<aList.length;i++)
                     {
                         String sEntry = (String)aList[i];
-                        log.println("------------------------------------------------------------");
+                        log.println("- next file is: ------------------------------");
                         log.println(sEntry);
 
                         String sNewSubDir = FileHelper.removeFirstDirectorysAndBasenameFrom(sEntry, m_sInputPath);
@@ -320,20 +332,36 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                 sStatusRunThrough = "FAILED, FAILED";
             }
 
-            // Status
+            // -------------------- Status --------------------
             String fs = System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sInputFile);
             String sFilenameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
-            String sHTMLFile;
+            String sLink;
+            String sLinkDD;
+            String sLinkName;
+            String sLinkDDName;
+            String sHTMLPrefix = aGTA.getHTMLOutputPrefix();
             if (_sNewSubDir.length() > 0)
             {
-                sHTMLFile = _sNewSubDir + fs + sFilenameNoSuffix + ".html";
+                sLink   = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + sFilenameNoSuffix + ".ini";
+                sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
             }
             else
             {
-                sHTMLFile = sFilenameNoSuffix + ".html";
+                sLink = sHTMLPrefix   /* + "/cw.php?inifile=" */ + _sOutputPath + fs + sFilenameNoSuffix + ".ini";
+                sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
             }
-            _aHTMLoutput.indexLine( sHTMLFile, sStatusRunThrough, sStatusMessage );
+            sLinkName = sFilenameNoSuffix;
+            sLinkDDName = sFilenameNoSuffix + " (DiffDiff)";
+
+            if (_sDiffPath != null && _sDiffPath.length() > 0)
+            {
+                _aHTMLoutput.indexLine( sLinkDD, sLinkDDName, sLink, sLinkName, sStatusRunThrough, sStatusMessage );
+            }
+            else
+            {
+                _aHTMLoutput.indexLine( sLink, sLinkName, "", "", sStatusRunThrough, sStatusMessage );
+            }
 
             // Office shutdown
             aProvider.closeExistingOffice(param, true);
