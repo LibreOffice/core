@@ -2,9 +2,9 @@
  *
  *  $RCSfile: retstrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:05:00 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,14 @@ void RetStream::Write( SbxValue &aValue )
 
 void RetStream::Write( SmartId* pId )
 {
-    if ( pId->IsNumeric() )
-        Write( pId->GetNum() );
-    else
+    DBG_ASSERT( !pId->HasString() || !pId->HasNumeric(), "SmartId contains Number and String. using String only." )
+    if ( pId->HasString() )
     {
         String aTmp( pId->GetStr() );
         Write( &aTmp );
     }
+    else
+        Write( pId->GetNum() );
 }
 
 
