@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:36:41 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 00:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String WEBDIALOG
     Text[ french ] = "Aide";
     Text[ spanish ] = "Ay~uda";
     Text[ finnish ] = "~Help";
-    Text[ italian ] = "~Help";
+    Text[ italian ] = "~?";
     Text[ danish ] = "~Help";
     Text[ swedish ] = "~Hjälp";
     Text[ polish ] = "Po~moc";
@@ -549,6 +549,7 @@ String WEBERROR + 7
     Text[ catalan ] = "An error occurred while running the AutoPilot.";
     Text[ finnish ] = "Automaattisen ohjauksen suorituksessa on ilmennyt virhe.";
 };
+
 
 
 
