@@ -1,4 +1,4 @@
-    <node oor:name="TIF - Tag Image File" oor:op="replace">
+    <node oor:name="TIF - Tag Image File" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>tif_Tag_Image_File</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
