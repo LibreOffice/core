@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: hr $ $Date: 2004-08-02 15:19:59 $
-#*    $Revision: 1.15 $
+#*    last change       $Author: obo $ $Date: 2004-08-11 14:06:47 $
+#*    $Revision: 1.16 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -339,18 +339,26 @@ interface Application : Module
         StateMethod = MiscState_Impl ;
     ]
 
-     //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
     SID_HELP_SUPPORTPAGE
     [
         ExecMethod = MiscExec_Impl ;
     ]
 
-     //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
     SID_RECENTFILELIST
     [
     ]
+
+    //---------------------------------------------------------------------
     SID_AVAILABLE_TOOLBARS
     [
+    ]
+
+    //---------------------------------------------------------------------
+    SID_HELP_TUTORIALS
+    [
+        ExecMethod = MiscExec_Impl ;
     ]
 }
 
