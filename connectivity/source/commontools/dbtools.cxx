@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:27:04 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ Reference< XConnection> findConnection(const Reference< XInterface >& xParent)
     {
         Reference< XChild> xChild(xParent, UNO_QUERY);
         if (xChild.is())
-            return findConnection(xChild->getParent());
+            xConnection = findConnection(xChild->getParent());
     }
     return xConnection;
 }
@@ -548,70 +548,18 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
 //------------------------------------------------------------------------------
 ::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName)
 {
+    ::rtl::OUString sName = _rName;
     if(_rQuote.getLength() && _rQuote.toChar() != ' ')
-        return _rQuote + _rName + _rQuote;
-    return _rName;
+        sName = _rQuote + _rName + _rQuote;
+    return sName;
 }
 
 //------------------------------------------------------------------------------
 ::rtl::OUString quoteTableName(const Reference< XDatabaseMetaData>& _rxMeta, const ::rtl::OUString& _rName)
 {
-    ::rtl::OUString sQuote = _rxMeta->getIdentifierQuoteString();
-    ::rtl::OUString sQuotedName;
-    ::rtl::OUString aTableName(_rName);
-
-    static ::rtl::OUString s_sEmptyString;
-
-    sal_Unicode aGenericSep = '.';
-
-    if (_rxMeta->supportsCatalogsInDataManipulation())
-    {
-        sal_Unicode aSeparator = aGenericSep;
-        ::rtl::OUString sCatalogSep = _rxMeta->getCatalogSeparator();
-        if (sCatalogSep.getLength())
-            aSeparator = sCatalogSep[0];
-
-        sal_Int32 nIndex = 0;
-        ::rtl::OUString aFirstToken = aTableName.getToken(0, aSeparator
-#if SUPD > 630
-            , nIndex
-#endif
-            );
-        if( nIndex != -1 ) // one or more tokens follow
-        {
-            ::rtl::OUString aDatabaseName( aFirstToken );
-            sQuotedName += quoteName(sQuote, aDatabaseName);
-            sQuotedName = sQuotedName.concat(::rtl::OUString(&aSeparator, 1));
-            aTableName = aTableName.replaceAt(0, aDatabaseName.getLength() + 1, s_sEmptyString);
-        }
-
-    }
-    if (_rxMeta->supportsSchemasInDataManipulation())
-    {
-        sal_Int32 nIndex = 0;
-        ::rtl::OUString aFirstToken( aTableName.getToken( 0, aGenericSep
-#if SUPD > 630
-            , nIndex
-#endif
-            ) );
-        ::rtl::OUString aSecondToken( nIndex != -1 ? aTableName.getToken( 1, aGenericSep
-#if SUPD > 630
-            , nIndex
-#endif
-            ) : ::rtl::OUString() );
-        if (nIndex != -1 && aSecondToken.getLength())
-        {
-            static ::rtl::OUString s_aGenericSep(&aGenericSep, 1);
-            // need a method on the OUString to cancat a single unicode character ....
-            sQuotedName += quoteName(sQuote, aFirstToken);
-            sQuotedName = sQuotedName.concat(s_aGenericSep);
-            sQuotedName += quoteName(sQuote, aSecondToken);
-        }
-        else
-            sQuotedName += quoteName(sQuote, aTableName);
-    }
-    else
-        sQuotedName += quoteName(sQuote, aTableName);
+    ::rtl::OUString sCatalog,sSchema,sTable,sQuotedName;
+    qualifiedNameComponents(_rxMeta,_rName,sCatalog,sSchema,sTable);
+    composeTableName(_rxMeta,sCatalog,sSchema,sTable,sQuotedName,sal_True);
 
     return sQuotedName;
 }
@@ -1273,6 +1221,9 @@ void showError(const SQLExceptionInfo& _rInfo,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/05/17 07:27:04  oj
+ *  #86528# size changes
+ *
  *  Revision 1.25  2001/05/14 11:53:31  oj
  *  #86528# lower size need
  *
