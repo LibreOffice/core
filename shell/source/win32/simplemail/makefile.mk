@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 17:32:09 $
+#   last change: $Author: rt $ $Date: 2004-06-17 15:43:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,11 +82,12 @@ SLOFILES=$(SLO)$/smplmailentry.obj\
          $(SLO)$/smplmailsuppl.obj\
          $(SLO)$/simplemapi.obj
                         
-SHL1TARGET=$(TARGET)
+SHL1TARGET=$(TARGET).uno
 
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
-            $(SALLIB)
+            $(SALLIB)\
+            advapi32.lib
 
 SHL1LIBS=
         
@@ -99,6 +100,19 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
+# --- mapimailer --------------------------------------------------------
+
+TARGETTYPE=CUI
+
+OBJFILES=   $(OBJ)$/senddoc.obj\
+            $(OBJ)$/simplemapi.obj
+
+APP1TARGET=senddoc
+APP1OBJS=$(OBJFILES)
+APP1STDLIBS=kernel32.lib\
+            $(SALLIB)
+            
+APP1DEF=$(MISC)$/$(APP1TARGET).def
 
 # --- Targets ------------------------------------------------------
 
