@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:08:04 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 13:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,26 +631,15 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     MASKCOLOR_MAGENTA
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+CheckBox RID_HELP_ONSTARTUP_BOX
+{
+    HelpId = HID_HELP_ONSTARTUP_BOX;
+    Hide = TRUE;
+    TabStop = TRUE;
+    Size = MAP_APPFONT ( 200 , 10 ) ;
+};
+String RID_HELP_ONSTARTUP_TEXT
+{
+    Text [ en-US ] = "~Display %PRODUCTNAME %MODULENAME Help at Startup";
+};
 
