@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-10-19 11:00:36 $
+ *  last change: $Author: as $ $Date: 2000-10-24 13:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,14 +372,13 @@ class FrameContainer
             @seealso    class Desktop
             @seealso    class AsyncQuit
 
-            @param      "aMode", with these mode you can set default time values for different shutdown scenes at timer
+            @param      "xDesktop", reference to the desktop which sould be terminated on timer end.
             @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void enableQuitTimer(   const   REFERENCE< XDESKTOP >&  xDesktop    ,
-                                const   TAsyncQuitMode&         aMode       );
+        void enableQuitTimer( const REFERENCE< XDESKTOP >& xDesktop );
         void disableQuitTimer();
 
     //-------------------------------------------------------------------------------------------------------------
