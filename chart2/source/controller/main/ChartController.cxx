@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 15:35:04 $
+ *  last change: $Author: iha $ $Date: 2003-11-15 08:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ void SAL_CALL ChartController
 ::impl_deleteView()
         throw(uno::RuntimeException)
 {
-    if( m_pDrawViewWrapper->IsTextEdit() )
+    if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
         this->EndTextEdit();
 
     delete m_pChartView; m_pChartView = NULL;
