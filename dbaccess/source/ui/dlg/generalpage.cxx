@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 16:05:04 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 07:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,7 @@ namespace dbaui
             _rCoreAttrs.Put(SfxStringItem(DSID_PASSWORD, m_sUserPassword));
             bChangedSomething = sal_True;
         }
-        if(!m_nCacheSize)
+        if(m_nCacheSize)
         {
             _rCoreAttrs.Put(SfxInt32Item(DSID_CONN_CACHESIZE, m_nCacheSize));
             bChangedSomething = sal_True;
@@ -1382,6 +1382,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/08/07 16:05:04  fs
+ *  #88431# commitURL: use the pure (untranslated) URL
+ *
  *  Revision 1.20  2001/08/07 15:57:43  fs
  *  #88431# centralized methods for setting/retrieving the URL in m_aConnection - this way we can translate URLs so that they're displayed in a decoded version
  *
