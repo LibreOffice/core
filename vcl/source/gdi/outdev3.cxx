@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 16:31:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-20 15:44:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,9 +1502,11 @@ ImplDevFontListData::~ImplDevFontListData()
     // release all physical font faces
     while( mpFirst )
     {
-        ImplFontData* pFontData = mpFirst;
-        mpFirst = mpFirst->GetNextFace();
-        delete pFontData;
+        ImplFontData* pFace = mpFirst;
+        mpFirst = pFace->GetNextFace();
+#if 0 // HOTFIX for SRC680m48 !!!!
+        delete pFace;
+#endif
     }
 }
 
@@ -1677,7 +1679,7 @@ void ImplDevFontListData::GetFontHeights( std::set<int>& rHeights ) const
 void ImplDevFontListData::UpdateCloneFontList( ImplDevFontList& rDevFontList,
     bool bScalable, bool bEmbeddable ) const
 {
-    for(ImplFontData* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
+    for( ImplFontData* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
         if( bScalable && !pFace->IsScalable() )
             continue;
