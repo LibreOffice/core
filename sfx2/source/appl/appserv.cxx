@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
+ *  last change: $Author: pb $ $Date: 2001-07-12 03:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_ORGANIZER:
         {
             SfxTemplateOrganizeDlg  *pDlg =
-                new SfxTemplateOrganizeDlg(GetTopWindow());
+                new SfxTemplateOrganizeDlg(NULL);
             pDlg->Execute();
             delete pDlg;
             bDone = TRUE;
