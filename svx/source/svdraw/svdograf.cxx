@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,8 +500,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
 
         // setup crop rectangle in pixel
         Rectangle aCropRect( aCropLeftTop.Width(), aCropLeftTop.Height(),
-                             aSrcSize.Width() - aCropRightBottom.Width(),
-                             aSrcSize.Height() - aCropRightBottom.Height() );
+                             aSrcSizePixel.Width() - aCropRightBottom.Width(),
+                             aSrcSizePixel.Height() - aCropRightBottom.Height() );
 
         // #105641# Also crop animations
         if( aTransGraphic.IsAnimated() )
