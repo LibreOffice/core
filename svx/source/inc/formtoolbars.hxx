@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:24:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef IMPROVEFORMS_SVX_SOURCE_INC_FORMTOOLBARS_HXX
-#define IMPROVEFORMS_SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#define SVX_SOURCE_INC_FORMTOOLBARS_HXX
 
 /** === begin UNO includes === **/
 /** === end UNO includes === **/
@@ -91,7 +91,19 @@ namespace svxform
                         m_xLayouter;
 
     public:
-        FormToolboxes( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+        /** constructs an instance
+            @param _rxFrame
+                the frame to analyze
+            @param _eDocType
+                the type of the document in <arg>_rxFrame</arg>. May be eUnknownDocumentType, in this
+                case, it will be determined automatically.
+                If you, for whatever reason, already know the document type, then you can pass it here
+                for performance reasons
+        */
+        FormToolboxes(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
+            DocumentType _eDocType
+        );
 
     public:
         /** retrieves the URI for the toolbox associated with the given slot, depending
@@ -113,5 +125,5 @@ namespace svxform
 } // namespace svxform
 //........................................................................
 
-#endif // IMPROVEFORMS_SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#endif // SVX_SOURCE_INC_FORMTOOLBARS_HXX
 
