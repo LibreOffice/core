@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
+ *  last change: $Author: oj $ $Date: 2001-10-16 09:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,13 +445,13 @@ sal_Bool IsFormComponent( const SdrObject& rObj )
 //------------------------------------------------------------------------
 sal_Bool IsFormComponentList( const SdrMarkList& rMarkList )
 {
-    SdrObject* pObj;
     sal_uInt32 nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount==0 )
         return sal_False;
 
-    for( sal_uInt32 i=0; i<nMarkCount; i++ )
+    SdrObject* pObj;
+    for( sal_uInt32 i=0; i<nMarkCount; ++i )
     {
         pObj = rMarkList.GetMark(i)->GetObj();
         if( !IsFormComponent(*pObj) )
@@ -1829,12 +1829,15 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                     bEnable = sal_True;
                     Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), UNO_QUERY);
                     sal_Bool bIsNew     = ::comphelper::getBOOL(xNavSet->getPropertyValue(FM_PROP_ISNEW));
+                    sal_Bool bIsFinal   = ::comphelper::getBOOL(xNavSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
                     sal_Int32  nCount   = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
                     if (bIsNew)
-                        nCount++;
+                        ++nCount;
 
                     aValue = String::CreateFromInt32(sal_uInt32(nCount));
+                    if(!bIsFinal)
+                        aValue += String::CreateFromAscii(" *");
                 }
                 rSet.Put(SfxStringItem(nWhich, aValue));
             }   break;
