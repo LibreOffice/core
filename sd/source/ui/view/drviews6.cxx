@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:03:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,7 +669,6 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_SHAPE_TYPE:
-        case SID_FONTWORK_SHAPE_TYPES:
         case SID_FONTWORK_ALIGNMENT:
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         case SID_FONTWORK_CHARACTER_SPACING:
