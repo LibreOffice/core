@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:31 $
+ *  last change: $Author: cd $ $Date: 2001-07-30 08:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,6 @@
 
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
 #endif
 
 #ifndef _EDITSTAT_HXX //autogen
@@ -479,85 +473,6 @@ BOOL __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
     ImpSetMousePointer( eTarget );
     return pEditView->MouseButtonUp( rMEvt );
 }
-
-#ifndef TF_SVDATA
-
-void OutlinerView::ImpDrag( const MouseEvent& rMEvt )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    PointerStyle ePtrStyle;
-
-    bBeginDragAtMove        = FALSE;
-    bInDragMode             = TRUE;
-    ParagraphList* pPList   = pOwner->pParaList;
-    Window* pWindow         = pEditView->GetWindow();
-
-    Point aCurPosRef= pWindow->PixelToLogic(aDDStartPosPix,pOwner->GetRefMapMode());
-    nDDCurPara      = pEditView->GetParagraph( aDDStartPosPix );
-    nDDStartPara    = nDDCurPara;
-
-    Paragraph* pPara = pPList->GetParagraph( nDDStartPara );
-    DBG_ASSERT(pPara,"Drag:No StartPara")
-    nDDStartParaVisChildCount = 0;
-    if ( pPList->HasVisibleChilds( pPara ) )
-        nDDStartParaVisChildCount += pPList->GetChildCount( pPara );
-
-    nDDStartDepth = pPList->GetParagraph(nDDCurPara)->GetDepth();
-
-    // Scroll-Borders in Win-Koordinaten umrechnen
-    Point aTempPtWin = Point(OL_SCROLL_LRBORDERWIDTHPIX, OL_SCROLL_TBBORDERWIDTHPIX);
-    aTempPtWin = pWindow->PixelToLogic( aTempPtWin );
-    nDDScrollLRBorderWidthWin = aTempPtWin.X();
-    nDDScrollTBBorderWidthWin = aTempPtWin.Y();
-
-    Point aDocPos = ImpGetDocPos( rMEvt.GetPosPixel() );
-
-    // Feststellen, ob Einruecktiefe oder Hoehe geaendert werden soll
-    Point aPosPix( rMEvt.GetPosPixel() );
-    long nDX = aPosPix.X() - aDDStartPosPix.X();
-    if ( nDX < 0 )
-        nDX *= -1;
-    long nDY = aPosPix.Y() - aDDStartPosPix.Y();
-    if ( nDY < 0 )
-        nDY *= -1;
-
-    // MT 07/00: Old implementation was never OK!
-    // Change like in PPT: Only with one Paragraph valid
-    // => possible positions see SvxNumBulletItem
-//  if ( nDX > nDY )
-//  {
-//      bDDChangingDepth = TRUE;
-//      ImpSetHorTabArr();
-//      nDDCurDepth = ImpGetDepthArrIdx( aDocPos.X() );
-//      ePtrStyle = POINTER_ESIZE;
-//  }
-//  else
-    {
-        bDDChangingDepth = FALSE;
-        ePtrStyle = POINTER_SSIZE;
-    }
-
-    aDDStartPosRef = aCurPosRef;
-    pEditView->HideCursor();
-    ImpShowDDCursor();
-    Region aReg;    // fuer MAC
-    Pointer aPtr( ePtrStyle );
-    DragServer::Clear();
-    // !!!HACK selektierten Text in DragServer stellen, solange
-    // Malte noch kein "PutInDragServer" o.ae. zur Verfuegung stellt
-    DragServer::CopyString(pEditView->GetSelected());
-    USHORT nDragOptions = DRAG_ALL;
-    if ( IsReadOnly() )
-        nDragOptions &= ~DRAG_MOVEABLE;
-    pWindow->ExecuteDrag( aPtr, aPtr, nDragOptions, &aReg );
-    ImpHideDDCursor();
-    pEditView->ShowCursor( TRUE );
-    delete pHorTabArrDoc;
-    pHorTabArrDoc = 0;
-    bInDragMode = FALSE;
-}
-
-#endif // TF_SVDATA
 
 void OutlinerView::ImpHideDDCursor()
 {
@@ -1064,134 +979,6 @@ Point OutlinerView::ImpGetDocPos( const Point& rPosPixel )
     return aCurPosDoc;
 }
 
-#ifndef TF_SVDATA
-
-BOOL __EXPORT OutlinerView::QueryDrop( DropEvent& rDEvt )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    BOOL bRetVal = TRUE;
-
-    if ( IsReadOnly() )
-        return FALSE;
-
-    if ( !bInDragMode )
-        return pEditView->QueryDrop( rDEvt );
-
-    if( rDEvt.IsLeaveWindow() )
-    {
-        ImpHideDDCursor();
-        return FALSE;
-    }
-
-    Point aCurPosDoc = ImpGetDocPos( rDEvt.GetPosPixel() );
-
-    ImpDragScroll( rDEvt.GetPosPixel() );
-
-    if ( bDDChangingDepth )
-    {
-        // NIY
-    }
-    else
-    {
-        ULONG nNewPara = ImpGetInsertionPara( rDEvt.GetPosPixel() );
-        ULONG nMaxPara = nDDStartPara+nDDStartParaVisChildCount+1;
-        Range aRange( nDDStartPara, nMaxPara );
-        if ( aRange.IsInside( nNewPara ) ||
-                (nMaxPara==pOwner->pParaList->GetParagraphCount() &&
-                 nNewPara == LIST_APPEND ))
-            bRetVal = FALSE;
-        if ( !bDDCursorVisible || nNewPara != nDDCurPara )
-        {
-            ImpHideDDCursor();
-            nDDCurPara = nNewPara;
-            ImpShowDDCursor();
-        }
-    }
-    return bRetVal;
-}
-
-BOOL __EXPORT OutlinerView::Drop( const DropEvent& rDEvt )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-
-    // beim ersten Paint/KeyInput/Drop wird aus einem leeren Outliner ein
-    // Outliner mit genau einem Absatz
-    if( pOwner->bFirstParaIsEmpty )
-        pOwner->Insert( String() );
-
-    if ( !bInDragMode )
-    {
-        //  if( !ImpIsRemovingPages() )
-        if ( ImpCalcSelectedPages( FALSE ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
-            return FALSE;
-        // UpdateMode auf False ist im Drop ist verboten
-        pOwner->pEditEngine->SetUpdateMode( FALSE );
-        pOwner->bPasting = TRUE;
-        ESelection aSel = pEditView->GetDropPos();
-        Paragraph* pPara = pOwner->pParaList->GetParagraph(aSel.nStartPara);
-        DBG_ASSERT(pPara,"DropTarget not found");
-        USHORT nOldFlags = pPara->nFlags;
-        pPara->nFlags |= PARAFLAG_DROPTARGET;
-        // leere Absaetze nach dem Drop voll attributieren, da die
-        // EditEngine in diesem Fall die Para-Attribs der Drop-Source
-        // uebernimmt
-        if( pOwner->pEditEngine->GetTextLen( aSel.nStartPara ) == 0 )
-            pPara->nFlags |= PARAFLAG_DROPTARGET_EMPTY;
-        BOOL bDone = pEditView->Drop( rDEvt );
-        pOwner->bPasting = FALSE;
-        if ( !bDone )
-        {
-            pPara->nFlags = nOldFlags;
-            pOwner->pEditEngine->SetUpdateMode( TRUE );
-            return FALSE;
-        }
-        pOwner->ImpDropped( this );
-        pOwner->pEditEngine->SetUpdateMode( TRUE );
-        return TRUE;
-    }
-    ImpHideDDCursor();
-
-    long nStart, nEnd, nDiff;
-
-    if ( bDDChangingDepth )
-    {
-        nEnd = (long)nDDCurDepth;
-        nStart = (long)nDDStartDepth;
-        nDiff = nEnd - nStart;
-        AdjustDepth( (short)nDiff );
-    }
-    else
-    {
-        Paragraph* pTemp = pOwner->pParaList->GetParagraph( nDDStartPara );
-        nStart = (long)(pOwner->pParaList->GetVisPos( pTemp ));
-        if ( nDDCurPara != LIST_APPEND )
-        {
-            pTemp = pOwner->pParaList->GetParagraph( nDDCurPara );
-            nEnd = (long)(pOwner->pParaList->GetVisPos( pTemp ));
-        }
-        else
-        {
-            nEnd = (long)(pOwner->pParaList->GetParagraphCount());
-            nEnd++;
-        }
-        if ( nEnd > nStart )
-        {
-            // Berechnen, um wieviel sichtbare Absaetze der
-            // _Block_ nach unten verschoben werden muss
-            nStart += (long)nDDStartParaVisChildCount;
-            nDiff = nEnd - nStart;
-            nDiff--;
-        }
-        else
-            nDiff = nEnd - nStart;
-
-        AdjustHeight( nDiff );
-    }
-    return TRUE;
-}
-
-#endif // TF_SVDATA
-
 // MT 05/00: Wofuer dies ImpXXXScroll, sollte das nicht die EditEngine machen???
 
 void OutlinerView::ImpDragScroll( const Point& rPosPix )
@@ -1541,13 +1328,6 @@ void OutlinerView::Command( const CommandEvent& rCEvt )
 
     if( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && bBeginDragAtMove )
     {
-#ifndef TF_SVDATA
-        // ImpDrag braucht Abstand von MouseButtonDown-Position
-        Point aPos( pEditView->GetWindow()->GetPointerPosPixel() );
-        aPos = pEditView->GetWindow()->ScreenToOutputPixel( aPos );
-        MouseEvent aEvt( aPos );
-        ImpDrag( aEvt );
-#endif
     }
     else
         pEditView->Command( rCEvt );
