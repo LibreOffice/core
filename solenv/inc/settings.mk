@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.137 $
+#   $Revision: 1.138 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:46:33 $
+#   last change: $Author: rt $ $Date: 2003-09-22 07:38:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1085,6 +1085,10 @@ RSCFLAGS=-s
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) -D$(REMOTEDEF) $(JAVADEF)
 .ELSE
 RSCDEFS=-D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -DSUPD=$(UPD) -DBUILD=$(BUILD) $(JAVADEF)
+.ENDIF
+
+.IF "$(BUILD_SPECIAL)!=""
+RSCDEFS+=-DBUILD_SPECIAL=$(BUILD_SPECIAL)
 .ENDIF
 
 .IF "$(rscres)"!=""
