@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 17:32:15 $
+ *  last change: $Author: sj $ $Date: 2000-11-20 08:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1613,10 +1613,10 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                 switch ( nFlyDirection )
                 {
                     case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_LINES;     // Horizontal
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRIPES;     // Horizontal
                     break;
                     case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_LINES;       // Vertical
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_STRIPES;   // Vertical
                     break;
                 }
             }
@@ -1626,10 +1626,10 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                 switch ( nFlyDirection )
                 {
                     case 0x0:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_LEFT;   // vertikal
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_HORIZONTAL_CHECKERBOARD;  // vertikal
                     break;
                     case 0x1:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_WAVYLINE_FROM_TOP;    // horizontal
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_CHECKERBOARD;    // horizontal
                     break;
                 }
             }
@@ -1718,28 +1718,28 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                         eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM;
                     break;
                     case 0x4:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LEFT;   // von oben links
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERLEFT;  // von oben links
                     break;
                     case 0x5:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_TOP;    // von oben rechts
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT; // von oben rechts
                     break;
                     case 0x6:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_BOTTOM; // von unten links
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERLEFT; // von unten links
                     break;
                     case 0x7:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_RIGHT;  // von unten rechts
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT; // von unten rechts
                     break;
                     case 0x8:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // verkürzt von links
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT; // verkürzt von links
                     break;
                     case 0x9:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL;    // verkürzt von unten
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM;// verkürzt von unten
                     break;
                     case 0xa:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // verkürzt von rechts
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT;// verkürzt von rechts
                     break;
                     case 0xb:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL;    // verkürzt von oben
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_MOVE_SHORT_FROM_TOP;  // verkürzt von oben
                     break;
                     case 0xc:
                     {
@@ -1784,28 +1784,25 @@ SvStream& operator>>(SvStream& rIn, PptAnimationInfoAtom& rAtom)
                         eRetval = ::com::sun::star::presentation::AnimationEffect_FADE_TO_CENTER;   // Verkleinern von unterem Bildschirm
                     break;
                     case 0x16:
-                    {
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // quer dehnen
-                        rSpeed = ::com::sun::star::presentation::AnimationSpeed_SLOW;
-                    }
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_STRETCH; // quer dehnen
                     break;
                     case 0x17:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // von links dehnen
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_LEFT;    // von links dehnen
                     break;
                     case 0x18:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL;    // von oben dehnen
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_TOP;     // von oben dehnen
                     break;
                     case 0x19:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_HORIZONTAL;  // von rechts dehnen
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_RIGHT;   // von rechts dehnen
                     break;
                     case 0x1a:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_OPEN_VERTICAL;    // von unten dehnen
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_STRETCH_FROM_BOTTOM;  // von unten dehnen
                     break;
                     case 0x1b:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_CLOCKWISE;        // Rotieren
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_VERTICAL_ROTATE;      // Rotieren
                     break;
                     case 0x1c:
-                        eRetval = ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT;   // Spirale
+                        eRetval = ::com::sun::star::presentation::AnimationEffect_SPIRALOUT_LEFT;       // Spirale
                     break;
                 }
             }
