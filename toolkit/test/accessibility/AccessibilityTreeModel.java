@@ -97,12 +97,25 @@ public class AccessibilityTreeModel
         mnLockCount -= 1;
         System.out.println ("unlocking: " + mnLockCount);
         if (mnLockCount == 0)
-        {
             fireTreeStructureChanged (
                 new TreeModelEvent (this,
                     new TreePath (aNodeHint.createPath())));
-        }
     }
+
+
+
+
+    /** Inform all listeners (especially the renderer) of a change of the
+        tree's structure.
+        @param aNode This node specifies the sub tree in which all changes
+        take place.
+    */
+    public void FireTreeStructureChanged (AccessibleTreeNode aNode)
+    {
+    }
+
+
+
 
     public Object getRoot()
     {
@@ -323,8 +336,8 @@ public class AccessibilityTreeModel
                 if (maXAccessibleToNode.get (xChild) == null)
                 {
                     registerAccListener (aChild);
-                maXAccessibleToNode.put (xChild, aChild);
-                addToCanvas (aChild);
+                    maXAccessibleToNode.put (xChild, aChild);
+                    addToCanvas (aChild);
                 }
                 bRet = true;
             }
@@ -339,7 +352,12 @@ public class AccessibilityTreeModel
         return bRet;
     }
 
-    protected AccessibleTreeNode getNode (XAccessible xAccessible)
+
+
+
+    /** Return the tree node that is associated with the given accessible object.
+    */
+    public AccessibleTreeNode getNode (XAccessible xAccessible)
     {
         return (AccessibleTreeNode)maXAccessibleToNode.get (xAccessible);
     }
@@ -416,19 +434,30 @@ public class AccessibilityTreeModel
     /** Create a TreeModelEvent object that informs listeners that one child
         has been removed from or inserted into its parent.
     */
-    protected TreeModelEvent createEvent (XAccessible xParent, XAccessible xChild)
+    public TreeModelEvent createEvent (XAccessible xParent, XAccessible xChild)
     {
-        // get parent node and create the tree path
         AccessibleTreeNode aParentNode = (AccessibleTreeNode)maXAccessibleToNode.get (xParent);
-        System.out.println (xParent);
-        Object[] aPathToParent = createPath (aParentNode);
+        return createEvent (aParentNode, xParent);
+    }
 
+    public TreeModelEvent createEvent (AccessibleTreeNode aParentNode, XAccessible xChild)
+    {
         AccessibleTreeNode aChildNode = null;
         if (xChild != null)
             aChildNode = (AccessibleTreeNode)maXAccessibleToNode.get (xChild);
+        return createEvent (aParentNode, aChildNode);
+    }
+
+
+
+    protected TreeModelEvent createEvent (AccessibleTreeNode aParentNode, AccessibleTreeNode aChildNode)
+    {
+        Object[] aPathToParent = createPath (aParentNode);
+
         int nIndexInParent = -1;
-        if (xChild != null)
+        if (aChildNode != null)
             nIndexInParent = aParentNode.indexOf (aChildNode);
+        System.out.println (aChildNode + " " + nIndexInParent);
 
         if (nIndexInParent == -1)
             // This event may be passed only to treeStructureChanged of the listeners.
@@ -441,6 +470,9 @@ public class AccessibilityTreeModel
                 new int[] {nIndexInParent},
                 new Object[] {aChildNode} );
     }
+
+
+
 
     /** Create a TreeModelEvent that indicates changes at those children of
         the specified node with the specified indices.

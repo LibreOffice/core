@@ -43,18 +43,9 @@ public class AccessibilityWorkBench
         MessageInterface,
         XTerminateListener
 {
-    public static final String msVersion = "v1.4";
+    public static final String msVersion = "v1.5";
     public String msFileName;
     public String msOptionsFileName = ".AWBrc";
-
-    /*WinFilename
-        //        = "file:///d|/tmp/impress-test-document.sxi";
-        = "file:///d|/tmp/writer-test-document.sxw";
-        //        = "file:///d|/tmp/calc-test-document.sxc";
-    final public String sUnxFilename
-        = "file:///tmp/impress-test-document.sxi";
-        //= "file:///tmp/draw-test-document.sxd";
-    */
 
     public static void main (String args[])
     {
@@ -379,19 +370,10 @@ public class AccessibilityWorkBench
         maCanvas.clear();
 
         AccessibilityTreeModel aModel = null;
-        // create new model (with new documents)
-        if (maTree.getModel() instanceof AccessibilityTreeModel)
-        {
-            aModel = (AccessibilityTreeModel)maTree.getModel();
-            aModel.setRoot (createTreeModelRoot());
-        }
-        else
-        {
-            System.out.println ("creating new tree model");
-            aModel = new AccessibilityTreeModel (createTreeModelRoot(), this, this);
-            aModel.setCanvas (maCanvas);
-            maTree.setModel (aModel);
-        }
+        System.out.println ("creating new tree model");
+        aModel = new AccessibilityTreeModel (createTreeModelRoot(), this, this);
+        aModel.setCanvas (maCanvas);
+        maTree.setModel (aModel);
 
         if (office != null)
         {
@@ -399,13 +381,20 @@ public class AccessibilityWorkBench
             if (office.getDesktop() != null)
                 office.getDesktop().addTerminateListener (this);
 
-            // Add top window listener.
-            /*
             XExtendedToolkit xToolkit = office.getExtendedToolkit();
+            // Remove old top window listener.
+            if (maTopWindowListener != null)
+                xToolkit.removeTopWindowListener (maTopWindowListener);
+            // Add top window listener.
             if (xToolkit != null)
-                xToolkit.addTopWindowListener (
-                    new TopWindowListener (aModel, office));
-            */
+            {
+                println ("registering at extended toolkit");
+                maTopWindowListener = new TopWindowListener (aModel, office);
+                xToolkit.addTopWindowListener (maTopWindowListener);
+                maTopWindowListener.Initialize ();
+            }
+            else
+                maTopWindowListener = null;
         }
 
         mbInitialized = true;
@@ -516,6 +505,9 @@ public class AccessibilityWorkBench
     {
         // create root node
         VectorNode aRoot = new VectorNode ("Accessibility Tree", null);
+        if (maTopWindowListener != null)
+            maTopWindowListener.Initialize ();
+        /*
         try
         {
             XDesktop xDesktop = office.getDesktop();
@@ -555,7 +547,7 @@ public class AccessibilityWorkBench
             System.out.println ("caught exception while getting document names: " + e);
             e.printStackTrace();
         }
-
+        */
         return aRoot;
     }
 
@@ -663,4 +655,6 @@ public class AccessibilityWorkBench
         msMessage;
     private boolean
         mbInitialized;
+    private TopWindowListener
+        maTopWindowListener;
 }
