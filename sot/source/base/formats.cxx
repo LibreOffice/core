@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:54:49 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 10:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,7 @@ USHORT SotExchange::GetExchangeAction(
 // - new style GetExchange methods -
 // ---------------------------------
 
-static sal_Bool HasFormat_Impl( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
+sal_Bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, ULONG nId )
 {
     DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
     DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
@@ -1566,12 +1566,12 @@ static USHORT GetTransferableAction_Impl(
                 rFormat = nId;
 
                 if( ( !nOnlyTestFormat || nOnlyTestFormat == nId ) &&
-                    HasFormat_Impl( rDataFlavorExVector, nId ) &&
+                    IsFormatSupported( rDataFlavorExVector, nId ) &&
                     ( !pArray->nContextCheckId || CheckTransferableContext_Impl( pxTransferable, *pArray ) ) )
                 {
                     if( pxTransferable && (*pxTransferable).is() && ( SOT_FORMAT_FILE_LIST == rFormat ) )
                     {
-                        if( HasFormat_Impl( rDataFlavorExVector, SOT_FORMAT_FILE ) )
+                        if( IsFormatSupported( rDataFlavorExVector, SOT_FORMAT_FILE ) )
                         {
                             DataFlavor aFileListFlavor;
                             SotExchange::GetFormatDataFlavor( SOT_FORMAT_FILE_LIST, aFileListFlavor );
@@ -1749,7 +1749,8 @@ USHORT SotExchange::GetExchangeAction(
 
                 aVector.push_back( aFlavorEx );
 
-                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) && !HasFormat_Impl( aVector, SOT_FORMAT_GDIMETAFILE ) )
+                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) &&
+                    !IsFormatSupported( aVector, SOT_FORMAT_GDIMETAFILE ) )
                 {
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                     {
