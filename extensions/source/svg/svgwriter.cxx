@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:23:31 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,14 +165,14 @@ ANY SAL_CALL SVGWriter::queryInterface( const NMSP_UNO::Type & rType ) throw( NM
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGWriter::acquire() throw( NMSP_UNO::RuntimeException )
+void SAL_CALL SVGWriter::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGWriter::release() throw( NMSP_UNO::RuntimeException )
+void SAL_CALL SVGWriter::release() throw()
 {
     OWeakObject::release();
 }

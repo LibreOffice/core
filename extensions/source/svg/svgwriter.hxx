@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:53 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ public:
 
     // XInterface
     virtual ANY SAL_CALL                    queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL                   acquire() throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL                   release() throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL                   acquire() throw();
+    virtual void SAL_CALL                   release() throw();
 
     // XSVGWriter
     virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgprinter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 15:23:31 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,14 +287,14 @@ ANY SAL_CALL SVGPrinter::queryInterface( const NMSP_UNO::Type & rType ) throw( N
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGPrinter::acquire() throw( NMSP_UNO::RuntimeException )
+void SAL_CALL SVGPrinter::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL SVGPrinter::release() throw( NMSP_UNO::RuntimeException )
+void SAL_CALL SVGPrinter::release() throw()
 {
     OWeakObject::release();
 }
