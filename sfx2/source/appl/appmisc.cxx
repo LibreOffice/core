@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 10:56:55 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 11:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,20 +1174,17 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 
 PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
 {
-//  String aPath;
     PopupMenu** ppMenu;
     String sKey;
     switch( nSID )
     {
         case SID_NEWDOCDIRECT:
             ppMenu = &pNewMenu;
-//            sKey = SvtPathOptions().GetNewMenuPath();
             sKey = BOOKMARK_NEWMENU;
             break;
         case SID_AUTOPILOTMENU:
             ppMenu = &pAutoPilotMenu;
             sKey = BOOKMARK_WIZARDMENU;
-//            sKey = SvtPathOptions().GetAutoPilotPath();
             break;
         default:
             ppMenu = 0;
@@ -1195,21 +1192,18 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
             break;
     }
 
-//    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sKey, sKey );
     if( ppMenu && ( !*ppMenu || bNew ) )
     {
-//        INetURLObject aObj( sKey );
-//      String aURL = aObj.GetMainURL();
         if ( *ppMenu )
             delete *ppMenu;
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xDesktop(
-                ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY );
+        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+        if ( !pViewFrame )
+            pViewFrame = pViewFrame->GetFirst();
+
         ::framework::MenuConfiguration aConf( ::comphelper::getProcessServiceFactory() );
-        *ppMenu = aConf.CreateBookmarkMenu( xDesktop, sKey );
-//              new SfxBmkMenu( aURL, aURL );
-//      (*ppMenu)->Initialize();
+        *ppMenu = aConf.CreateBookmarkMenu( pViewFrame->GetFrame()->GetFrameInterface(), sKey );
     }
+
     return ppMenu ? *ppMenu : NULL;
 }
 
