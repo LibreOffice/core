@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 09:57:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,6 +1237,8 @@ OBoundControlModel::OBoundControlModel(
     ,m_eControlValueChangeInstigator( eOther )
     ,m_bIsCurrentValueValid( sal_True )
     ,m_bTransferingValue( sal_False )
+    ,m_bBindingControlsRO( sal_False )
+    ,m_bBindingControlsEnable( sal_False )
 {
     DBG_CTOR(frm_OBoundControlModel, NULL);
 
@@ -1878,17 +1880,49 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
 //------------------------------------------------------------------------------
 void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt ) throw(RuntimeException)
 {
-    // TODO: check how this works with external bindings
-    OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::propertyChange: Hey, I have an external binding, so how this?" );
-        // if we have an external value binding, then we should *not* be a property change
-        // listener at an sdb::Column
-
-    // Bei Wertaenderung neu initialisieren
+    // if the DBColumn value changed, transfer it to the control
     if ( evt.PropertyName.equals( PROPERTY_VALUE ) )
     {
+        OSL_ENSURE( evt.Source == m_xField, "OBoundControlModel::propertyChange: value changes from components other than our database colum?" );
         osl::MutexGuard aGuard(m_aMutex);
         if ( m_bForwardValueChanges && m_xColumn.is() )
             transferDbValueToControl();
+    }
+    else
+    {
+        OSL_ENSURE( evt.Source == m_xExternalBinding, "OBoundControlModel::propertyChange: where did this come from?" );
+
+        // our binding has properties which can control properties of ourself
+        ::rtl::OUString sBindingControlledProperty;
+        bool bForwardToLabelControl = false;
+        if ( evt.PropertyName.equals( PROPERTY_READONLY ) )
+        {
+            sBindingControlledProperty = PROPERTY_READONLY;
+#if FS_PRIV_DEBUG
+            sal_Bool bValue = sal_False;
+            OSL_VERIFY( evt.NewValue >>= bValue );
+            setPropertyValue( PROPERTY_BACKGROUNDCOLOR, makeAny( sal_Int32( bValue ? 0xFF0000 : 0xFFFFFF ) ) );
+            setPropertyValue( PROPERTY_TEXTCOLOR, makeAny( sal_Int32( bValue ? 0x000000 : 0x00000 ) ) );
+#endif
+        }
+        else if ( evt.PropertyName.equals( PROPERTY_RELEVANT ) )
+        {
+            sBindingControlledProperty = PROPERTY_ENABLED;
+            bForwardToLabelControl = true;
+        }
+        else
+            return;
+
+        try
+        {
+            setPropertyValue( sBindingControlledProperty, evt.NewValue );
+            if ( bForwardToLabelControl && m_xLabelControl.is() )
+                m_xLabelControl->setPropertyValue( sBindingControlledProperty, evt.NewValue );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+        }
     }
 }
 
@@ -2467,10 +2501,35 @@ void OBoundControlModel::connectExternalValueBinding( const Reference< XValueBin
     // remember this new binding
     m_xExternalBinding = _rxBinding;
 
-    // add as value listener so we get notified when the value changes
-    Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
-    if ( xModifiable.is() )
-        xModifiable->addModifyListener( this );
+    try
+    {
+        // add as value listener so we get notified when the value changes
+        Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
+        if ( xModifiable.is() )
+            xModifiable->addModifyListener( this );
+
+        // add as property change listener for some (possibly present) properties we're
+        // interested in
+        Reference< XPropertySet > xBindingProps( m_xExternalBinding, UNO_QUERY );
+        Reference< XPropertySetInfo > xBindingPropsInfo( xBindingProps.is() ? xBindingProps->getPropertySetInfo() : Reference< XPropertySetInfo >() );
+        if ( xBindingPropsInfo.is() )
+        {
+            if ( xBindingPropsInfo->hasPropertyByName( PROPERTY_READONLY ) )
+            {
+                xBindingProps->addPropertyChangeListener( PROPERTY_READONLY, this );
+                m_bBindingControlsRO = sal_True;
+            }
+            if ( xBindingPropsInfo->hasPropertyByName( PROPERTY_RELEVANT ) )
+            {
+                xBindingProps->addPropertyChangeListener( PROPERTY_RELEVANT, this );
+                m_bBindingControlsEnable = sal_True;
+            }
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OBoundControlModel::connectExternalValueBinding: caught an exception!" );
+    }
 
     // tell the derivee
     onConnectedExternalValue();
@@ -2504,9 +2563,17 @@ void OBoundControlModel::disconnectExternalValueBinding( )
         Reference< XModifyBroadcaster > xModifiable( m_xExternalBinding, UNO_QUERY );
         if ( xModifiable.is() )
             xModifiable->removeModifyListener( this );
+
+        // remove as property change listener
+        Reference< XPropertySet > xBindingProps( m_xExternalBinding, UNO_QUERY );
+        if ( m_bBindingControlsRO )
+            xBindingProps->removePropertyChangeListener( PROPERTY_READONLY, this );
+        if ( m_bBindingControlsEnable )
+            xBindingProps->removePropertyChangeListener( PROPERTY_RELEVANT, this );
     }
-    catch( const RuntimeException& )
+    catch( const Exception& )
     {
+        OSL_ENSURE( sal_False, "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -2635,7 +2702,7 @@ void OBoundControlModel::transferControlValueToExternal( )
 }
 
 // -----------------------------------------------------------------------------
-Any OBoundControlModel::translateExternalValueToControlValue( )
+Any OBoundControlModel::translateExternalValueToControlValue( ) const
 {
     OSL_PRECOND( m_bSupportsExternalBinding && hasExternalValueBinding(),
         "OBoundControlModel::translateExternalValueToControlValue: precondition not met!" );
@@ -2667,7 +2734,7 @@ Any OBoundControlModel::translateExternalValueToControlValue( )
 }
 
 //------------------------------------------------------------------------------
-Any OBoundControlModel::translateControlValueToExternalValue( )
+Any OBoundControlModel::translateControlValueToExternalValue( ) const
 {
     return getControlValue( );
 }
@@ -2675,7 +2742,7 @@ Any OBoundControlModel::translateControlValueToExternalValue( )
 //------------------------------------------------------------------------------
 Any OBoundControlModel::translateControlValueToValidatableValue( ) const
 {
-    return getControlValue();
+    return translateControlValueToExternalValue();
 }
 
 //------------------------------------------------------------------------------
