@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:57:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2628,7 +2628,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         //Rahmen nur zu selektieren versuchen, wenn
                         //der Pointer bereits entsprechend geschaltet wurde
                         if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
-                            !SFX_APP()->IsDispatcherLocked() &&
+                            !GetView().GetViewFrame()->GetDispatcher()->IsLocked() &&
                             !bExecDrawTextLink)
                         {
                             // #107513#
@@ -4775,7 +4775,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     UpdatePointer( aDocPos, 0 );
 
     if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
-        !SFX_APP()->IsDispatcherLocked() )
+        !GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
     {
         // #107513#
         // Test if there is a draw object at that position and if it should be selected.
