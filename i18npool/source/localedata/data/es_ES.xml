@@ -19,22 +19,22 @@
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
-<LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+<LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator> de </LongDateDaySeparator>
 <LongDateMonthSeparator> de </LongDateMonthSeparator>
 <LongDateYearSeparator> </LongDateYearSeparator>
 </Separators>
 <Markers>
-<QuotationStart>‘</QuotationStart>
-<QuotationEnd>’</QuotationEnd>
-<DoubleQuotationStart>“</DoubleQuotationStart>
-<DoubleQuotationEnd>”</DoubleQuotationEnd>
+<QuotationStart>‚</QuotationStart>
+<QuotationEnd>‘</QuotationEnd>
+<DoubleQuotationStart>„</DoubleQuotationStart>
+<DoubleQuotationEnd>“</DoubleQuotationEnd>
 </Markers>
 <TimeAM>AM</TimeAM>
 <TimePM>PM</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT>
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Pts-40A]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>D/MM/AA</FormatCode>
 <DefaultName></DefaultName>
@@ -180,19 +180,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$Pts-40A] #.##0;-[$Pts-40A] #.##0</FormatCode>
+<FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$Pts-40A] #.##0;-[$Pts-40A] #.##0</FormatCode>
+<FormatCode>#.##0 [CURRENCY];-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$Pts-40A] #.##0;[RED]-[$Pts-40A] #.##0</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$Pts-40A] #.##0;[RED]-[$Pts-40A] #.##0</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -200,7 +200,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$Pts-40A] #.##0;[RED]-[$Pts-40A] #.##0</FormatCode>
+<FormatCode>#.##0 [CURRENCY];[RED]-#.##0 [CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -255,11 +255,11 @@
 <trueWord>verdadero</trueWord>
 <falseWord>falso</falseWord>
 <quarter1Word>1er trimestre</quarter1Word>
-<quarter2Word>2° trimestre</quarter2Word>
+<quarter2Word>2º trimestre</quarter2Word>
 <quarter3Word>3er trimestre</quarter3Word>
-<quarter4Word>4° trimestre</quarter4Word>
-<aboveWord>más arriba</aboveWord>
-<belowWord>más adelante</belowWord>
+<quarter4Word>4º trimestre</quarter4Word>
+<aboveWord>arriba</aboveWord>
+<belowWord>abajo</belowWord>
 <quarter1Abbreviation>T1</quarter1Abbreviation>
 <quarter2Abbreviation>T2</quarter2Abbreviation>
 <quarter3Abbreviation>T3</quarter3Abbreviation>
