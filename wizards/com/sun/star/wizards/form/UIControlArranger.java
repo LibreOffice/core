@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-26 20:43:21 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  */
 package com.sun.star.wizards.form;
-
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataEntrySetter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 13:33:11 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,19 +101,19 @@ public class DataEntrySetter{
       );
       chknomodification = CurUnoDialog.insertCheckBox("chknomodification", null,
         new String[] {"Height", "HelpURL",  "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-        new Object[] {UIConsts.INTEGERS[8], "HID:34463", sNoModification, new Integer(103), new Integer(62), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(189)}
+        new Object[] {UIConsts.INTEGERS[8], "HID:34463", sNoModification, new Integer(108), new Integer(62), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(189)}
       );
       chknodeletion = CurUnoDialog.insertCheckBox("chknodeletion", null,
         new String[] {"Height", "HelpURL",  "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-        new Object[] {UIConsts.INTEGERS[8], "HID:34464", sNoDeletion, new Integer(103), new Integer(74), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(189)}
+        new Object[] {UIConsts.INTEGERS[8], "HID:34464", sNoDeletion, new Integer(108), new Integer(74), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(189)}
       );
       chknoaddition = CurUnoDialog.insertCheckBox("chknoaddition", null,
         new String[] {"Height", "HelpURL",  "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-        new Object[] {UIConsts.INTEGERS[8], "HID:34465", sNoAddition, new Integer(103), new Integer(86), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(191)}
+        new Object[] {UIConsts.INTEGERS[8], "HID:34465", sNoAddition, new Integer(108), new Integer(86), new Short((short)0),IDataStep, new Short(curtabindex++), new Integer(191)}
       );
       CurUnoDialog.insertLabel("lbldontdisplayExistingData",
         new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-        new Object[] { new Integer(8), sdontdisplayExistingData, new Integer(107), new Integer(33),IDataStep, new Short(curtabindex++), new Integer(134)}
+        new Object[] { new Integer(8), sdontdisplayExistingData, new Integer(108), new Integer(33),IDataStep, new Short(curtabindex++), new Integer(134)}
       );
     }
 
