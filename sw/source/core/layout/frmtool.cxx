@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:08:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,7 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                         static_cast<SwDrawContact*>(GetUserCall( pSdrObj ));
                     if ( !pNew->GetAnchorFrm() )
                     {
-                        pFrm->AppendDrawObj( *(pNew->GetAnchoredObj()) );
+                        pFrm->AppendDrawObj( *(pNew->GetAnchoredObj( 0L )) );
                     }
                     // OD 19.06.2003 #108784# - add 'virtual' drawing object,
                     // if necessary. But control objects have to be excluded.
