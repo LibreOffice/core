@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstyles.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 03:24:50 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,75 +76,17 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
-            Text = "Zellvorlagen" ;
-            Text [ ENGLISH ] = "Cell Styles" ;
-            Text [ norwegian ] = "Celletyper" ;
-            Text [ italian ] = "Modelli di cella" ;
-            Text [ portuguese_brazilian ] = "Estilos da cÈlula" ;
-            Text [ portuguese ] = "Estilos de cÈlulas" ;
-            Text [ finnish ] = "Solun tyylit" ;
-            Text [ danish ] = "Celletypografier" ;
-            Text [ french ] = "Styles de cellule" ;
-            Text [ swedish ] = "Cellformatmallar" ;
-            Text [ dutch ] = "Celopmaakprofielen" ;
-            Text [ spanish ] = "Estilos de celda" ;
-            Text [ english_us ] = "Cell Styles" ;
-            Text[ chinese_simplified ] = "ÂçïÂÖÉÊ†ºÊ†∑Âºè";
-            Text[ russian ] = "—ÚËÎË ˇ˜ÂÈÍË";
-                Text[ polish ] = "Style komÛrki";
-                Text[ japanese ] = "„Çª„É´„Çπ„Çø„Ç§„É´";
-                Text[ chinese_traditional ] = "ÂÑ≤Â≠òÊ†ºÊ®£Âºè";
-                Text[ arabic ] = "√‰„«ÿ «·Œ·«Ì«";
-                Text[ dutch ] = "Celopmaakprofielen";
-                Text[ chinese_simplified ] = "ÂçïÂÖÉÊ†ºÊ†∑Âºè";
-                Text[ greek ] = "”ÙıÎ ÍÂÎÈÔ˝";
-                Text[ korean ] = "ÏÖÄ Ïä§ÌÉÄÏùº";
-                Text[ turkish ] = "H¸cre BiÁemi";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Estils de cel∑la";
-                Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
-                Text[ czech ] = "Styly bunƒõk";
-                Text[ hebrew ] = "Zellvorlagen";
-                Text[ hindi ] = "Cell Styles";
-                Text[ slovak ] = "≈†t√Ωly buniek";
-            };
+            Text [ de ] = "Zellvorlagen" ;
+            Text [ en-US ] = "Cell Styles" ;
+};
         SfxStyleFamilyItem
         {
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
-            Text = "Seitenvorlagen" ;
-            Text [ ENGLISH ] = "Page Styles" ;
-            Text [ norwegian ] = "Sidetyper" ;
-            Text [ italian ] = "Modelli di pagina" ;
-            Text [ portuguese_brazilian ] = "Estilos da p·gina" ;
-            Text [ portuguese ] = "Estilos de p·gina" ;
-            Text [ finnish ] = "Sivujen tyylit" ;
-            Text [ danish ] = "Sidetypografier" ;
-            Text [ french ] = "Styles de page" ;
-            Text [ swedish ] = "Sidformatmallar" ;
-            Text [ dutch ] = "Pagina-opmaakprofielen" ;
-            Text [ spanish ] = "Estilos de p·gina" ;
-            Text [ english_us ] = "Page Styles" ;
-            Text[ chinese_simplified ] = "È°µÈù¢Ê†∑Âºè";
-            Text[ russian ] = "—ÚËÎË ÒÚ‡ÌËˆ˚";
-                Text[ polish ] = "Style strony";
-                Text[ japanese ] = "„Éö„Éº„Ç∏„Çπ„Çø„Ç§„É´";
-                Text[ chinese_traditional ] = "È†ÅÈù¢Ê®£Âºè";
-                Text[ arabic ] = "√‰„«ÿ ’›Õ…";
-                Text[ dutch ] = "Pagina-opmaakprofielen";
-                Text[ chinese_simplified ] = "È°µÈù¢Ê†∑Âºè";
-                Text[ greek ] = "–Ò¸Ùı· ÛÂÎﬂ‰·Ú";
-                Text[ korean ] = "ÌéòÏù¥ÏßÄ Ïä§ÌÉÄÏùº";
-                Text[ turkish ] = "Sayfa BiÁemleri";
-                Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Estils de p‡gina";
-                Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡∏´‡∏ô‡πâ‡∏≤";
-                Text[ czech ] = "Styly str√°nky";
-                Text[ hebrew ] = "Seitenvorlagen";
-                Text[ hindi ] = "Page Styles";
-                Text[ slovak ] = "≈†t√Ωly str√°nky";
-            };
+            Text [ de ] = "Seitenvorlagen" ;
+            Text [ en-US ] = "Page Styles" ;
+};
     };
 
     //  style family images are now taken from an ImageList
@@ -154,13 +96,11 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         Prefix = "sf";
         MaskColor = STD_MASKCOLOR ;
         IdList = { 1; 2; };
-        IdCount = 2;
-    };
+};
     ImageList 2 // == BMP_COLOR_HIGHCONTRAST + 1
     {
         Prefix = "sfh";
         MaskColor = SC_HC_MASKCOLOR ;
         IdList = { 1; 2; };
-        IdCount = 2;
-    };
+};
 };
