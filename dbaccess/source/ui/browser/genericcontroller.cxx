@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-21 17:51:14 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ using namespace ::comphelper;
 
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-    :OGenericUnoController_BASE(m_aMutex)
+    :OGenericUnoController_COMPBASE(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_xMultiServiceFacatory(_rM)
     ,m_bCurrentlyModified(sal_False)
@@ -196,7 +196,7 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
 //------------------------------------------------------------------------------
 IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
 {
-    if(!OGenericUnoController_BASE::rBHelper.bInDispose)
+    if(!OGenericUnoController_COMPBASE::rBHelper.bInDispose)
         InvalidateFeature_Impl();
     return 0L;
 }
@@ -251,30 +251,30 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 //------------------------------------------------------------------------------
 Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    Any aReturn = OGenericUnoController_BASE::queryInterface(_rType);
+    Any aReturn = OGenericUnoController_COMPBASE::queryInterface(_rType);
     if (!aReturn.hasValue())
-        aReturn = OGenericUnoController_BASE2::queryInterface(_rType);
+        aReturn = OGenericUnoController_CTRBASE::queryInterface(_rType);
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::acquire(  ) throw ()
 {
-    OGenericUnoController_BASE::acquire();
+    OGenericUnoController_COMPBASE::acquire();
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL OGenericUnoController::release(  ) throw ()
 {
-    OGenericUnoController_BASE::release();
+    OGenericUnoController_COMPBASE::release();
 }
 
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OGenericUnoController::getTypes(  ) throw (RuntimeException)
 {
     return ::comphelper::concatSequences(
-        OGenericUnoController_BASE::getTypes(),
-        OGenericUnoController_BASE2::getTypes()
+        OGenericUnoController_COMPBASE::getTypes(),
+        OGenericUnoController_CTRBASE::getTypes()
     );
 }
 
@@ -739,13 +739,13 @@ void OGenericUnoController::disposing()
 // -----------------------------------------------------------------------
 void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener)
 {
-    OGenericUnoController_BASE::addEventListener(aListener);
+    OGenericUnoController_COMPBASE::addEventListener(aListener);
 }
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener)
 {
-    OGenericUnoController_BASE::removeEventListener(aListener);
+    OGenericUnoController_COMPBASE::removeEventListener(aListener);
 }
 
 //------------------------------------------------------------------------------
