@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-30 13:40:36 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 13:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@ class INetImage
     Size            aSizePixel;
 
 protected:
+    String          CopyExchange() const;
+    void            PasteExchange( const String& rString );
+
     void            SetImageURL( const String& rS )     { aImageURL = rS; }
     void            SetTargetURL( const String& rS )    { aTargetURL = rS; }
     void            SetTargetFrame( const String& rS )  { aTargetFrame = rS; }
@@ -105,9 +108,6 @@ public:
                     INetImage()
                     {}
 
-    String          CopyExchange() const;
-    void            PasteExchange( const String& rString );
-
     const String&   GetImageURL() const { return aImageURL; }
     const String&   GetTargetURL() const { return aTargetURL; }
     const String&   GetTargetFrame() const { return aTargetFrame; }
@@ -119,6 +119,10 @@ public:
     BOOL            Copy( SotDataMemberObject& rObj ) const;
     BOOL            CopyFormats( SotDataObject& rObj ) const;
     BOOL            Paste( SotDataObject& rObj, ULONG nFormat );
+
+    // Im-/Export
+    sal_Bool Write( SvStream& rOStm, ULONG nFormat ) const;
+    sal_Bool Read( SvStream& rIStm, ULONG nFormat );
 };
 
 #endif // #ifndef _INETIMG_HXX
