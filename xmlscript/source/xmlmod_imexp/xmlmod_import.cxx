@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 09:14:57 $
+ *  last change: $Author: ab $ $Date: 2001-08-09 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ OUString ModuleElement::getLocalName()
 sal_Int32 ModuleElement::getUid()
     throw (RuntimeException)
 {
-    return XMLNS_DIALOGS_UID;
+    return XMLNS_SCRIPT_UID;
 }
 //__________________________________________________________________________________________________
 Reference< xml::sax2::XExtendedAttributes > ModuleElement::getAttributes()
