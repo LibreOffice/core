@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:11:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
                 {
                     // even if the listener complains ignore it for now
                    }
+
+                if ( m_bDisposed )
+                    return;
             }
 
             rGuard.reset();
