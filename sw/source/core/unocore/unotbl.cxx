@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:32:28 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1667,7 +1667,7 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS);
+        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     return bRet;
 }
@@ -1683,7 +1683,7 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
     {
         SwUnoTableCrsr* pTblCrsr = *pUnoCrsr;
         lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS);
+        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, FALSE, FALSE);
     }
     return bRet;
 }
