@@ -364,28 +364,40 @@ public class InformationWriter
     }
 
 
+    /** Show a textual representation of the accessibility subtree rooted in
+        xRoot.
+    */
     public boolean showAccessibilityTree (XAccessible xRoot, int depth)
     {
-        if ( ! showAccessibility (xRoot, depth))
-            return false;
-
-        String sIndent = "";
-        for (int i=0; i<depth; i++)
-            sIndent += "    ";
-
-        //  Iterate over children and show them.
-        XAccessibleContext xContext = xRoot.getAccessibleContext();
-        if (xContext != null)
+        try
         {
-            int n = xContext.getAccessibleChildCount();
-            for (int i=0; i<n; i++)
+            if ( ! showAccessibility (xRoot, depth))
+                return false;
+
+            String sIndent = "";
+            for (int i=0; i<depth; i++)
+                sIndent += "    ";
+
+            //  Iterate over children and show them.
+            XAccessibleContext xContext = xRoot.getAccessibleContext();
+            if (xContext != null)
             {
-                println (sIndent + "child " + i + " :");
-                showAccessibilityTree (xContext.getAccessibleChild(i),depth+1);
+                int n = xContext.getAccessibleChildCount();
+                for (int i=0; i<n; i++)
+                {
+                    println (sIndent + "child " + i + " :");
+                    showAccessibilityTree (xContext.getAccessibleChild(i),depth+1);
+                }
             }
+            else
+                println ("Accessible object has no context");
         }
-        else
-            println ("Accessible object has no context");
+        catch (Exception e)
+        {
+            System.out.println (
+                "caught exception in showAccessibleTree : " + e);
+            return false;
+        }
 
         return true;
     }
