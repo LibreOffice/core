@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-13 17:24:54 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@ int SAL_CALL main( int argc, char** argv )
         fprintf(stdout, "%s: compile '%s' ... \n",
             options.getProgramName().getStr(), files[i].getStr());
         nErrors = compileFile(sysFileName);
+
+        if ( idlc()->getWarningCount() )
+            fprintf(stdout, "%s: detected %d warnings compiling file '%s'\n",
+                    options.getProgramName().getStr(), idlc()->getWarningCount(),
+                    files[i].getStr(), options.prepareVersion().getStr());
+
         if ( nErrors )
         {
             OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
