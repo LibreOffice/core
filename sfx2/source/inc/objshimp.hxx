@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 09:03:13 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@ class SfxJSDocument;
 class SfxJSDocumentManager;
 #endif
 class SvIPCClient;
+class SfxDialogLibraryContainer;
+class SfxScriptLibraryContainer;
+
 struct SfxObjectShell_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xFilter;
@@ -100,6 +103,8 @@ struct SfxObjectShell_Impl
     SfxConfigManager*   pCfgMgr;
     SfxInPlaceObject*   pInPlaceObj;        // das dazugeh"orige SO2-Objekt, falls this ein SfxInPlaceObject ist
     BasicManager*       pBasicMgr;          // Doc-BASIC oder 0
+    SfxScriptLibraryContainer* pBasicLibContainer;
+    SfxDialogLibraryContainer* pDialogLibContainer;
     SfxProgress*        pProgress;
     String              aTitle;
     DateTime            nTime;
@@ -171,6 +176,8 @@ struct SfxObjectShell_Impl
         bPasswd( sal_False),
         pInPlaceObj( 0),
         pBasicMgr( 0),
+        pBasicLibContainer( 0 ),
+        pDialogLibContainer( 0 ),
         pProgress( 0),
         nVisualDocumentNumber( USHRT_MAX),
         bIsSaving( sal_False),

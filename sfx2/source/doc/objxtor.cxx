@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:54:06 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@
 #include "appuno.hxx"
 #include "sfxsids.hrc"
 #include "basmgr.hxx"
+#include "dlgcont.hxx"
+#include "scriptcont.hxx"
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::script;
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -249,6 +254,10 @@ SfxObjectShell::~SfxObjectShell()
     // Basic-Manager zerst"oren
     if ( pImp->pBasicMgr )
         DELETEX(pImp->pBasicMgr);
+    if( pImp->pBasicLibContainer )
+        pImp->pBasicLibContainer->release();
+    if( pImp->pDialogLibContainer )
+        pImp->pDialogLibContainer->release();
 
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
@@ -570,6 +579,24 @@ sal_Bool SfxObjectShell::HasBasic() const
 
 //--------------------------------------------------------------------
 
+Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
+{
+    Reference< XLibraryContainer > xRet
+        = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
+    return xRet;
+}
+
+//--------------------------------------------------------------------
+
+Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
+{
+    Reference< XLibraryContainer > xRet
+        = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
+    return xRet;
+}
+
+//--------------------------------------------------------------------
+
 StarBASIC* SfxObjectShell::GetBasic() const
 {
     return GetBasicManager()->GetLib(0);
@@ -603,6 +630,7 @@ void SfxObjectShell::InitBasicManager_Impl
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicMgr, "Lokaler BasicManager bereits vorhanden");
 
     pImp->bBasicInitialized = TRUE;
+    SfxBasicManager* pSfxBasicManager;
     if ( pStor )
     {
         String aOldURL = INetURLObject::GetBaseURL();
@@ -625,7 +653,7 @@ void SfxObjectShell::InitBasicManager_Impl
 #else
         String aAppBasicDir = SvtPathOptions().GetBasicPath();
 #endif
-        pImp->pBasicMgr = new SfxBasicManager( *pStor, pAppBasic, &aAppBasicDir );
+        pImp->pBasicMgr = pSfxBasicManager = new SfxBasicManager( *pStor, pAppBasic, &aAppBasicDir );
         if ( pImp->pBasicMgr->HasErrors() )
         {
             // handle errors
@@ -654,8 +682,26 @@ void SfxObjectShell::InitBasicManager_Impl
         // create new BASIC-manager
         StarBASIC *pBas = new StarBASIC(pAppBasic);
         pBas->SetFlag( SBX_EXTSEARCH );
-        pImp->pBasicMgr = new SfxBasicManager( pBas );
+        pImp->pBasicMgr = pSfxBasicManager = new SfxBasicManager( pBas );
     }
+
+    // Basic container
+    SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
+        ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager );
+    pBasicCont->acquire();  // Hold via UNO
+    pImp->pBasicLibContainer = pBasicCont;
+
+    // Dialog container
+    SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( pStor );
+    pDialogCont->acquire(); // Hold via UNO
+    pImp->pDialogLibContainer = pDialogCont;
+
+    BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
+    pBasMgrImpl->pScriptCont = pBasicCont;
+    pBasMgrImpl->pDialogCont = pDialogCont;
+    pBasMgrImpl->pDocShell = this;
+    pSfxBasicManager->SetImpl( pBasMgrImpl );
+
 
     // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
     StarBASIC *pBas = pImp->pBasicMgr->GetLib(0);
@@ -672,6 +718,21 @@ void SfxObjectShell::InitBasicManager_Impl
     SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent );
     xUnoObj->SetFlag( SBX_DONTSTORE );
     pBas->Insert( xUnoObj );
+
+    // Basic container
+    Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
+    Any aBasicCont;
+    aBasicCont <<= xBasicCont;
+    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
+    pBas->Insert( xUnoObj );
+
+    // Dialog container
+    Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
+    Any aDialogCont;
+    aDialogCont <<= xDialogCont;
+    xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDialogCont );
+    pBas->Insert( xUnoObj );
+
 
     // Modify-Flag wird bei MakeVariable gesetzt
     pBas->SetModified( bWasModified );
