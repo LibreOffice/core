@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:15:17 $
+ *  last change: $Author: hr $ $Date: 2004-12-14 11:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
             setFTPUser(aURL.GetUser(), aURL.GetPass());
 
         //do not show password and user in url
-        if(aURL.GetUser().Len()!=0 || aURL.GetPass().Len()!=0 )
+        if(aURL.GetUser().getLength()!=0 || aURL.GetPass().getLength()!=0 )
             aURL.SetUserAndPass(aEmptyStr,aEmptyStr);
     }
 
