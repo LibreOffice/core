@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:44:00 $
+ *  last change: $Author: vg $ $Date: 2001-07-20 20:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese ] = "Outros parâmetros";
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
-        Text[ dutch ] = "Verdere opties";
+        Text[ dutch ] = "Verdere instellingen";
         Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -926,7 +926,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ portuguese ] = "Outros parâmetros";
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
-        Text[ dutch ] = "Verdere opties";
+        Text[ dutch ] = "Verdere instellingen";
         Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -1519,7 +1519,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ portuguese ] = "Outros parâmetros";
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
-        Text[ dutch ] = "Verdere opties";
+        Text[ dutch ] = "Verdere instellingen";
         Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -2058,7 +2058,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese ] = "Outros parâmetros";
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
-        Text[ dutch ] = "Verdere opties";
+        Text[ dutch ] = "Verdere instellingen";
         Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -2762,6 +2762,7 @@ Image RID_SVXBMP_HLDOCNTP
     ImageBitmap = Bitmap { File = "hldocntp.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
