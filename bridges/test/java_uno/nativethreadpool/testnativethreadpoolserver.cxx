@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testnativethreadpoolserver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:52:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,12 @@ sal_Int32 Server::get() throw (css::uno::RuntimeException) {
     }
     css::uno::Reference< test::javauno::nativethreadpool::XSource > source;
     try {
+        // Use "127.0.0.1" instead of "localhost", see #i32281#:
         source
             = css::uno::Reference< test::javauno::nativethreadpool::XSource >(
                 css::bridge::UnoUrlResolver::create(context)->resolve(
                     rtl::OUString::createFromAscii(
-                        "uno:socket,host=localhost,port=3831;urp;test")),
+                        "uno:socket,host=127.0.0.1,port=3831;urp;test")),
                 css::uno::UNO_QUERY_THROW);
     } catch (css::connection::NoConnectException & e) {
         throw css::lang::WrappedTargetRuntimeException(

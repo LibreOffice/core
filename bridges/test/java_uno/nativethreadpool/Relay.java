@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Relay.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:52:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,10 @@ public final class Relay implements XRelay, XSource {
         new Thread() {
             public void run() {
                 try {
+                    // Use "127.0.0.1" instead of "localhost", see #i32281#:
                     factory.createBridge(
                         "", "urp",
-                        acceptor.accept("socket,host=localhost,port=3831"),
+                        acceptor.accept("socket,host=127.0.0.1,port=3831"),
                         new XInstanceProvider() {
                             public Object getInstance(String instanceName) {
                                 return Relay.this;
