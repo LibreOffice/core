@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-21 21:18:22 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 19:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
     Text[ greek ] = "≈ÙÈÍ›ÙÂÚ";                         \
     Text[ korean ] = "ÎùºÎ≤®";  \
     Text[ turkish ] = "Etiket"; \
-    Text[ catalan ] = "Etiquetas";
+    Text[ catalan ] = "Etiquetes";
 
 #define BUSINESS_CARD_STRING \
     Text = "Visitenkarten" ;                            \
@@ -112,7 +112,7 @@
     Text[ arabic ] = "»ÿ«ﬁ«  «·“Ì«—…";  \
     Text[ finnish ] = "Business cards"; \
     Text[ turkish ] = "Business cards"; \
-    Text[ catalan ] = "Business cards";
+    Text[ catalan ] = "Targetes de visita";
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
@@ -213,7 +213,7 @@ TabDialog DLG_LAB
                 Text[ korean ] = "ÏÑúÏãù";
                 Text[ turkish ] = "Format";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Formato";
+                Text[ catalan ] = "Formata";
                 Text[ finnish ] = "Muoto";
             };
             PageItem
@@ -241,7 +241,7 @@ TabDialog DLG_LAB
                 Text[ korean ] = "ÏòµÏÖò";
                 Text[ language_user1 ] = " ";
                 Text[ turkish ] = "SeÁenekler";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "Opcions";
                 Text[ finnish ] = "Asetukset";
             };
         };
@@ -277,7 +277,7 @@ TabDialog DLG_LAB
         Text[ arabic ] = "«·Ê«”ÿ…";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ka˝t";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Mitj‡";
         Text[ finnish ] = "Normaali";
     };
 };
@@ -386,7 +386,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "Îç∞Ïù¥ÌÑ∞Î≤†Ïù¥Ïä§";
         Text[ turkish ] = "Veritaban˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Base de datos";
+        Text[ catalan ] = "~Base de dades";
     };
     ListBox LB_DATABASE
     {
@@ -535,7 +535,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "Í≥ÑÏÜç(~C)";
         Text[ turkish ] = "Sonsuz form";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cont~inuo";
+        Text[ catalan ] = "S~ense fi";
     };
     RadioButton BTN_SHEET
     {
@@ -632,7 +632,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "Ïú†Ìòï(~T)";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipo";
+        Text[ catalan ] = "~Tipus";
     };
     ListBox BOX_TYPE
     {
@@ -676,7 +676,7 @@ TabPage TP_LAB_LAB
         Text[ korean ] = "ÏÑúÏãù";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Formata";
     };
 };
 #define WIDTH  100
@@ -747,7 +747,7 @@ String STR_DOC_TITLE
     Text[ korean ] = "ÎùºÎ≤®";
     Text[ turkish ] = "Etiket";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Etiquetas";
+    Text[ catalan ] = "Etiquetes";
 };
 String STR_CUSTOM
 {
@@ -849,7 +849,7 @@ TabPage TP_VISITING_CARDS
         Text[ arabic ] = "«·„Õ ÊÌ« ";
         Text[ turkish ] = "›Áerik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Contenido";
+        Text[ catalan ] = "Contingut";
         Text[ finnish ] = "Sis‰ltˆ";
     };
     Window WIN_EXAMPLE
@@ -1154,7 +1154,7 @@ TabPage TP_PRIVATE_DATA
         Text[ french ] = "TÈlÈphone/Portable";
         Text[ spanish ] = "TelÈfono/MÛvil";
         Text[ italian ] = "Tel./Cell.";
-        Text[ danish ] = "Phone/Mobile";
+        Text[ danish ] = "Telefon/Mobil";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/KomÛrka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
@@ -1273,7 +1273,7 @@ TabPage TP_BUSINESS_DATA
         Text[ french ] = "CoordonnÈes professionnelles";
         Text[ spanish ] = "Datos del trabajo";
         Text[ italian ] = "Dati lavoro";
-        Text[ danish ] = "Forretningsdata";
+        Text[ danish ] = "Arbejdsrelaterede data";
         Text[ swedish ] = "Aff‰rsdata";
         Text[ polish ] = "Dane s≥uøbowe";
         Text[ portuguese_brazilian ] = "Business data";
@@ -1551,7 +1551,7 @@ TabPage TP_BUSINESS_DATA
         Text[ french ] = "TÈlÈphone/Portable";
         Text[ spanish ] = "TelÈfono/MÛvil";
         Text[ italian ] = "Tel./Cell.";
-        Text[ danish ] = "Phone/Mobile";
+        Text[ danish ] = "Telefon/Mobil";
         Text[ swedish ] = "Telefon/Mobil";
         Text[ polish ] = "Telefon/KomÛrka";
         Text[ portuguese_brazilian ] = "Phone/Mobile";
