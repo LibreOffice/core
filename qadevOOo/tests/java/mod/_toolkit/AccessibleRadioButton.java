@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-05-28 10:03:36 $
+ *  last change:$Date: 2003-09-08 13:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,14 @@ package mod._toolkit;
 
 import java.io.PrintWriter;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.util.XURLTransformer;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
@@ -84,13 +79,20 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
 import com.sun.star.accessibility.XAccessibleValue;
 import com.sun.star.awt.XExtendedToolkit;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.URL;
+import com.sun.star.util.XCloseable;
+import com.sun.star.util.XURLTransformer;
 
 /**
  * Test for object that implements the following interfaces :
@@ -135,7 +137,7 @@ public class AccessibleRadioButton extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -158,7 +160,7 @@ public class AccessibleRadioButton extends TestCase {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
-            xTextDoc.dispose();
+            closeDoc();
         }
     }
 
@@ -209,12 +211,12 @@ public class AccessibleRadioButton extends TestCase {
 
         if (xTextDoc != null) {
             log.println("dispose a text document");
-            xTextDoc.dispose();
+            closeDoc();
             xTextDoc = null;
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -238,7 +240,7 @@ public class AccessibleRadioButton extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface)((XMultiServiceFactory)tParam.getMSF()).createInstance
+            XInterface transf = (XInterface)( (XMultiServiceFactory) tParam.getMSF()).createInstance
                 ("com.sun.star.util.URLTransformer");
             urlTransf = (XURLTransformer)UnoRuntime.queryInterface
                 (XURLTransformer.class, transf);
@@ -261,7 +263,7 @@ public class AccessibleRadioButton extends TestCase {
 
         XInterface oObj = null;
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)tParam.getMSF()).createInstance
+            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF()).createInstance
                 ("com.sun.star.awt.Toolkit") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
@@ -347,6 +349,19 @@ public class AccessibleRadioButton extends TestCase {
             Thread.currentThread().sleep(2000) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
+        }
+    }
+
+    protected void closeDoc() {
+        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                    XCloseable.class, xTextDoc);
+
+        try {
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("Couldn't close document " + e.getMessage());
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("Couldn't close document " + e.getMessage());
         }
     }
 
