@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ String MN_TEXT_POPUPMENU
     Text[ turkish ] = "Metin";
     Text[ catalan ] = "Text";
     Text[ thai ] = "ข้อความ";
+    Text[ czech ] = "Text";
+    Text[ hebrew ] = "‮טקסט‬";
+    Text[ hindi ] = "टेक्स्ट्";
 };
 
 
@@ -125,6 +128,9 @@ String MN_TAB_POPUPMENU
     Text[ turkish ] = "Tablo";
     Text[ catalan ] = "Taula";
     Text[ thai ] = "ตาราง";
+    Text[ czech ] = "Tabulka";
+    Text[ hebrew ] = "‮טבלה‬";
+    Text[ hindi ] = "सारणी";
 };
 
 Menu MN_TAB_POPUPMENU
@@ -158,7 +164,7 @@ Menu MN_TAB_POPUPMENU
             Text [ English ] = "Grid lines" ;
             Text [ norwegian ] = "Rutenettlinjer" ;
             Text [ italian ] = "Limte tabella" ;
-            Text [ portuguese_brazilian ] = "Linhas da Grade" ;
+            Text [ portuguese_brazilian ] = "Limites da Tabela" ;
             Text [ portuguese ] = "~Limites da tabela" ;
             Text [ finnish ] = "Taulukon rajat" ;
             Text [ danish ] = "Tabelgr�nse" ;
@@ -169,7 +175,7 @@ Menu MN_TAB_POPUPMENU
             Text [ english_us ] = "Table Limits" ;
             Text[ chinese_simplified ] = "表格边界";
             Text[ russian ] = "������� �������";
-            Text[ polish ] = "Obramowanie tabeli";
+            Text[ polish ] = "Siatka tabeli";
             Text[ japanese ] = "表の境界";
             Text[ chinese_traditional ] = "表格邊界";
             Text[ arabic ] = "���� ������";
@@ -178,6 +184,9 @@ Menu MN_TAB_POPUPMENU
             Text[ turkish ] = "Tablo s�n�rlamalar�";
             Text[ catalan ] = "~L�mits de la taula";
             Text[ thai ] = "ขีดจำกัดตาราง";
+            Text[ czech ] = "Limity tabulky";
+            Text[ hebrew ] = "‮גבולות טבלה‬";
+            Text[ hindi ] = "सारणी सीमा";
         };
         MenuItem
         {
@@ -195,8 +204,8 @@ Menu MN_TAB_POPUPMENU
             Text[ italian ] = "Riconoscim~ento numeri";
             Text[ danish ] = "Talgenkendelse";
             Text[ swedish ] = "Talig~enk�nning";
-            Text[ polish ] = "Rozpoznawanie liczb";
-            Text[ portuguese_brazilian ] = "Number recognition";
+            Text[ polish ] = "Rozpoznawanie ~liczb";
+            Text[ portuguese_brazilian ] = "Reconhecer dados ~num�ricos";
             Text[ japanese ] = "数字の認識(~N)";
             Text[ korean ] = "숫자 인식(~N)";
             Text[ chinese_simplified ] = "数字识别(~N)";
@@ -206,6 +215,9 @@ Menu MN_TAB_POPUPMENU
             Text[ catalan ] = "~Reconeixement de n�mero";
             Text[ finnish ] = "~Lukujen tunnistus";
             Text[ thai ] = "จดจำ~ตัวเลข";
+            Text[ czech ] = "Rozpoznávání čísel";
+            Text[ hebrew ] = "‮זיהוי מספרים‬";
+            Text[ hindi ] = "~संख्या पहचान";
         };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
@@ -239,6 +251,9 @@ String MN_FRM_POPUPMENU
     Text[ turkish ] = "�er�eve";
     Text[ catalan ] = "Marc";
     Text[ thai ] = "กรอบ";
+    Text[ czech ] = "Rámec";
+    Text[ hebrew ] = "‮מסגרת‬";
+    Text[ hindi ] = "फ्रेम ";
 };
 
 Menu MN_FRM_POPUPMENU
@@ -260,7 +275,7 @@ String MN_DRAW_POPUPMENU
     Text [ English ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Grafico" ;
-    Text [ portuguese_brazilian ] = "Gr?fico" ;
+    Text [ portuguese_brazilian ] = "Figura" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Grafiikka" ;
     Text [ danish ] = "Grafik" ;
@@ -280,6 +295,9 @@ String MN_DRAW_POPUPMENU
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Imatge";
     Text[ thai ] = "กราฟิค";
+    Text[ czech ] = "Obrázek";
+    Text[ hebrew ] = "Grafik";
+    Text[ hindi ] = "सुचित्र";
 };
 
 Menu MN_DRAW_POPUPMENU
@@ -308,7 +326,7 @@ String MN_DRAWFORM_POPUPMENU
     Text = "Kontrollfeld" ;
     Text [ English ] = "Control field" ;
     Text [ english_us ] = "Control" ;
-    Text [ portuguese_brazilian ] = "Kontrollfeld" ;
+    Text [ portuguese_brazilian ] = "Controle" ;
     Text [ swedish ] = "Kontrollf�lt" ;
     Text [ danish ] = "Kontrolelement" ;
     Text [ italian ] = "Campo di controllo" ;
@@ -318,7 +336,7 @@ String MN_DRAWFORM_POPUPMENU
     Text [ portuguese ] = "Controlo" ;
     Text[ chinese_simplified ] = "控制";
     Text[ russian ] = "������� ����������";
-    Text[ polish ] = "Pole kontrolne";
+    Text[ polish ] = "Formant";
     Text[ japanese ] = "コントロール";
     Text[ chinese_traditional ] = "控制項";
     Text[ arabic ] = "���� ����";
@@ -328,6 +346,9 @@ String MN_DRAWFORM_POPUPMENU
     Text[ catalan ] = "Control";
     Text[ finnish ] = "Ohjausobjekti";
     Text[ thai ] = "ควบคุม";
+    Text[ czech ] = "Ovládací prvek";
+    Text[ hebrew ] = "Kontrollfeld";
+    Text[ hindi ] = "नियंत्रण";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -361,10 +382,10 @@ String MN_DRWTXT_POPUPMENU
     Text [ swedish ] = "Ritobjekt text" ;
     Text [ danish ] = "Tegneobjekt tekst" ;
     Text [ portuguese ] = "Texto do objecto de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
+    Text [ portuguese_brazilian ] = "Texto do objeto de desenho" ;
     Text[ chinese_simplified ] = "绘图对象 文字";
     Text[ russian ] = "����� ������������ �������";
-    Text[ polish ] = "Tekst w obiekcie graficznym";
+    Text[ polish ] = "Tekst w obiekcie rysunkowym";
     Text[ japanese ] = "図形描画オブジェクトのテキスト";
     Text[ chinese_traditional ] = "繪圖物件 文字";
     Text[ arabic ] = "�� ���� �����";
@@ -374,6 +395,9 @@ String MN_DRWTXT_POPUPMENU
     Text[ catalan ] = "Text de l'objecte de dibuix";
     Text[ finnish ] = "Piirrosobjektin teksti";
     Text[ thai ] = "วาดข้อความวัตถุ";
+    Text[ czech ] = "Text kresby";
+    Text[ hebrew ] = "Zeichenobjekt Text";
+    Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -397,7 +421,7 @@ String MN_GRF_POPUPMENU
     Text [ English ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gr?fico" ;
+    Text [ portuguese_brazilian ] = "Figura" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Grafiikka" ;
     Text [ danish ] = "Grafik" ;
@@ -417,6 +441,9 @@ String MN_GRF_POPUPMENU
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Imatge";
     Text[ thai ] = "กราฟิค";
+    Text[ czech ] = "Obrázek";
+    Text[ hebrew ] = "Grafik";
+    Text[ hindi ] = "सुचित्र";
 };
 
 Menu MN_GRF_POPUPMENU
@@ -464,6 +491,9 @@ String MN_OLE_POPUPMENU
     Text[ turkish ] = "Nesne";
     Text[ catalan ] = "Objecte";
     Text[ thai ] = "วัตถุ";
+    Text[ czech ] = "Objekt";
+    Text[ hebrew ] = "‮אוביקט‬";
+    Text[ hindi ] = "वस्तु";
 };
 
 
@@ -494,10 +524,10 @@ String MN_PPREVIEW_POPUPMENU
     Text [ swedish ] = "Ritobjekt text" ;
     Text [ danish ] = "Tegneobjekt" ;
     Text [ portuguese ] = "Texto do objecto de desenho" ;
-    Text [ portuguese_brazilian ] = "Zeichenobjekt Text" ;
+    Text [ portuguese_brazilian ] = "Texto do objeto de desenho" ;
     Text[ chinese_simplified ] = "绘图对象 文字";
     Text[ russian ] = "����� ������������ �������";
-    Text[ polish ] = "Tekst w obiekcie graficznym";
+    Text[ polish ] = "Tekst w obiekcie rysunkowym";
     Text[ japanese ] = "図形描画オブジェクトのテキスト";
     Text[ chinese_traditional ] = "繪圖物件 文字";
     Text[ arabic ] = "�� ���� �����";
@@ -507,6 +537,9 @@ String MN_PPREVIEW_POPUPMENU
     Text[ catalan ] = "Text de l'objecte de dibuix";
     Text[ finnish ] = "Piirrosobjektin teksti";
     Text[ thai ] = "วาดวัตถุข้อความ";
+    Text[ czech ] = "Text kresby";
+    Text[ hebrew ] = "Zeichenobjekt Text";
+    Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -526,7 +559,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ french ] = "Page pr�c�dente" ;
             Text [ swedish ] = "F�reg�ende sida" ;
             Text [ danish ] = "Forrige side" ;
-            Text [ portuguese_brazilian ] = "Vorherige Seite" ;
+            Text [ portuguese_brazilian ] = "P�gina Anterior" ;
             Text [ portuguese ] = "P�gina anterior" ;
             Text[ chinese_simplified ] = "上一页";
             Text[ russian ] = "���������� ��������";
@@ -540,6 +573,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ catalan ] = "P�gina anterior";
             Text[ finnish ] = "Edellinen sivu";
             Text[ thai ] = "หน้าก่อน";
+            Text[ czech ] = "Předchozí strana";
+            Text[ hebrew ] = "‮הדף הקודם‬";
+            Text[ hindi ] = "पिछला पृष्ठ";
         };
         MenuItem
         {
@@ -555,7 +591,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ french ] = "Page suivante" ;
             Text [ swedish ] = "N�sta sida" ;
             Text [ danish ] = "N�ste side" ;
-            Text [ portuguese_brazilian ] = "N?chste Seite" ;
+            Text [ portuguese_brazilian ] = "Pr�xima P�gina" ;
             Text [ portuguese ] = "P�gina seguinte" ;
             Text[ chinese_simplified ] = "下一页";
             Text[ russian ] = "��������� ��������";
@@ -569,6 +605,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ catalan ] = "P�gina seg�ent";
             Text[ finnish ] = "Seuraava sivu";
             Text[ thai ] = "หน้าถัดไป";
+            Text[ czech ] = "Další stránka";
+            Text[ hebrew ] = "‮הדף הבא‬";
+            Text[ hindi ] = "अगला पृष्ठ";
         };
         MenuItem
         {
@@ -590,10 +629,10 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ swedish ] = "Skriv ut f�rhandsgranskning" ;
             Text [ danish ] = "Udskriv sidevisning" ;
             Text [ portuguese ] = "Imprimir Ver p�gina" ;
-            Text [ portuguese_brazilian ] = "Drucken Seitenansicht" ;
+            Text [ portuguese_brazilian ] = "Imprimir" ;
             Text[ chinese_simplified ] = "打印页面预览";
             Text[ russian ] = "������";
-            Text[ polish ] = "Drukuj widok strony";
+            Text[ polish ] = "Drukuj";
             Text[ japanese ] = "印刷プレビュー";
             Text[ chinese_traditional ] = "列印頁面檢視";
             Text[ arabic ] = "������� ��� ��������";
@@ -604,6 +643,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ catalan ] = "Imprimeix";
             Text[ finnish ] = "Tulosta";
             Text[ thai ] = "พิมพ์";
+            Text[ czech ] = "Tisk";
+            Text[ hebrew ] = "‮הדפסה‬";
+            Text[ hindi ] = "छपाई";
         };
         MenuItem
         {
@@ -612,7 +654,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text = "Druckoptionen" ;
             Text [ ENGLISH ] = "Print options" ;
             Text[ italian ] = "Opzioni di stampa";
-            Text[ portuguese_brazilian ] = "Print options";
+            Text[ portuguese_brazilian ] = "Op��es de Impress�o";
             Text[ portuguese ] = "Op��es de impress�o";
             Text[ danish ] = "Udskriftsindstillinger";
             Text[ french ] = "Options d'impression";
@@ -632,6 +674,9 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ catalan ] = "Opcions de impressi�";
             Text[ finnish ] = "Tulostusasetukset";
             Text[ thai ] = "ตัวเลือกการพิมพ์";
+            Text[ czech ] = "Volby tisku";
+            Text[ hebrew ] = "Druckoptionen";
+            Text[ hindi ] = "छपाई विकल्प";
         };
         SEPARATOR ;
         MenuItem
@@ -645,7 +690,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Close Preview";
             Text[ dutch ] = "Close Preview";
             Text[ french ] = "Fermer l'aper�u";
-            Text[ spanish ] = "Cerrar Vista preliminar";
+            Text[ spanish ] = "Cerrar la vista preliminar";
             Text[ finnish ] = "Close Preview";
             Text[ italian ] = "Chiudi anteprima";
             Text[ danish ] = "Close Preview";
@@ -656,13 +701,37 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ korean ] = "미리 보기 닫기";
             Text[ chinese_simplified ] = "关闭页面预览";
             Text[ chinese_traditional ] = "關閉預覽";
-            Text[ turkish ] = "Close Preview";
+            Text[ turkish ] = "�nizlemeyi Kapat";
             Text[ arabic ] = "Close Preview";
             Text[ catalan ] = "Close Preview";
             Text[ thai ] = "Close Preview";
+            Text[ czech ] = "Zavřít náhled";
+            Text[ hebrew ] = "‮סגירת תצוגה מקדימה‬";
+            Text[ hindi ] = "Close Preview";
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
