@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 16:12:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 13:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,10 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    bRowHeaderOpen;
     sal_Bool                    mbShowProgress : 1;
     sal_Int32                   nOpenRow;
+    sal_Int32                   nProgressReference;
+    sal_Int32                   nProgressValue;
+    sal_Int32                   nProgressObjects;
+    sal_Int32                   nOldProgressValue;
     sal_Int16                   nCurrentTable;
     std::vector<sal_Int32>      nLastColumns;
     std::vector<sal_Int32>      nLastRows;

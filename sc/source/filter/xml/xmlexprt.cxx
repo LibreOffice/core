@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 16:12:59 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 13:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #endif
 #ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #include <rtl/ustring>
@@ -277,7 +280,12 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
     aGroupColumns(*this, sXML_table_column_group),
     aGroupRows(*this, sXML_table_row_group),
     aExportDataPilot(*this),
-    aExportDatabaseRanges(*this)
+    aExportDatabaseRanges(*this),
+    nProgressReference(0),
+    nProgressValue(0),
+    nProgressObjects(0),
+    nOldProgressValue(0)
+
 {
     pDoc = ScXMLConverter::GetScDocument( xTempModel );
     DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
@@ -325,7 +333,99 @@ ScXMLExport::~ScXMLExport()
 void ScXMLExport::_ExportMeta()
 {
     SvXMLExport::_ExportMeta();
-
+    sal_Int32 nCellCount(pDoc->GetCellCount());
+    sal_Int32 nTableCount(0);
+    sal_Int32 nShapesCount(0);
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
+    if ( xSpreadDoc.is() )
+    {
+        uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+        uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+        if ( xIndex.is() )
+        {
+            nTableCount = xIndex->getCount();
+            aCellStyles.AddNewTable(nTableCount - 1);
+            aTableShapes.resize(nTableCount);
+            for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+            {
+                uno::Any aTable = xIndex->getByIndex(nTable);
+                uno::Reference<sheet::XSpreadsheet> xTable;
+                if (aTable>>=xTable)
+                {
+                    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
+                    if (xDrawPageSupplier.is())
+                    {
+                        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                        uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+                        if (xShapesIndex.is())
+                        {
+                            sal_Int32 nShapes = xShapesIndex->getCount();
+                            for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
+                            {
+                                uno::Any aShape = xShapesIndex->getByIndex(nShape);
+                                uno::Reference<drawing::XShape> xShape;
+                                if (aShape >>= xShape)
+                                {
+                                    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                                    if( xShapeProp.is() )
+                                    {
+                                        uno::Any aPropAny = xShapeProp->getPropertyValue(
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ) ) );
+                                        sal_Int16 nLayerID;
+                                        if( aPropAny >>= nLayerID )
+                                        {
+                                            if( nLayerID == SC_LAYER_INTERN )
+                                                CollectInternalShape( xShape );
+                                            else
+                                            {
+                                                SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+                                                if (pShapeImp)
+                                                {
+                                                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                                                    if (pSdrObj)
+                                                    {
+                                                        GetShapeExport()->collectShapeAutoStyles(xShape);
+                                                        nShapesCount++;
+                                                        if (ScDrawLayer::GetAnchor(pSdrObj) == SCA_CELL)
+                                                        {
+                                                            if (pDoc)
+                                                            {
+                                                                awt::Point aPoint = xShape->getPosition();
+                                                                awt::Size aSize = xShape->getSize();
+                                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                                                ScRange aRange = pDoc->GetRange(nTable, aRectangle);
+                                                                ScMyShape aMyShape;
+                                                                aMyShape.aAddress = aRange.aStart;
+                                                                aMyShape.aEndAddress = aRange.aEnd;
+                                                                aMyShape.nIndex = nShape;
+                                                                aShapesContainer.AddNewShape(aMyShape);
+                                                                SetLastColumn(nTable, aRange.aStart.Col());
+                                                                SetLastRow(nTable, aRange.aStart.Row());
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            aTableShapes[nTable].push_back(nShape);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    nProgressObjects = nCellCount + nShapesCount + nTableCount;
+    nProgressReference = 2 * nProgressObjects;
+    nProgressValue = nProgressReference / 10;
+    nProgressReference += nProgressValue;
+    GetProgressBarHelper()->SetReference(nProgressReference);
+    GetProgressBarHelper()->SetValue(nProgressValue);
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -908,6 +1008,7 @@ void ScXMLExport::FillColumnRowGroups()
 
 void ScXMLExport::_ExportContent()
 {
+    nOldProgressValue = nProgressValue;
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
     {
@@ -1034,12 +1135,15 @@ void ScXMLExport::_ExportContent()
                         nEqualCells = 0;
                     }
                 }
+                if (nProgressValue < nOldProgressValue + nProgressObjects)
+                    GetProgressBarHelper()->SetValue(++nProgressValue);
             }
         }
         WriteNamedExpressions(xSpreadDoc);
         aExportDatabaseRanges.WriteDatabaseRanges(xSpreadDoc);
         aExportDataPilot.WriteDataPilots(xSpreadDoc);
         WriteConsolidation();
+        GetProgressBarHelper()->SetValue(nProgressReference);
     }
 }
 
@@ -1082,6 +1186,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 
 void ScXMLExport::_ExportAutoStyles()
 {
+    nOldProgressValue = nProgressValue;
     rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
     rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
     rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
@@ -1119,7 +1224,7 @@ void ScXMLExport::_ExportAutoStyles()
                             aTableStyles.push_back(sName);
                         }
                     }
-                    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
+/*                  uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
                     if (xDrawPageSupplier.is())
                     {
                         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -1181,7 +1286,7 @@ void ScXMLExport::_ExportAutoStyles()
                                 }
                             }
                         }
-                    }
+                    }*/
                     uno::Reference<sheet::XCellFormatRangesSupplier> xCellFormatRanges ( xTable, uno::UNO_QUERY );
                     if ( xCellFormatRanges.is() )
                     {
@@ -1281,6 +1386,8 @@ void ScXMLExport::_ExportAutoStyles()
                                                     }
                                                 }
                                             }
+                                            if (nProgressValue < nOldProgressValue + nProgressObjects)
+                                                GetProgressBarHelper()->SetValue(++nProgressValue);
                                         }
                                     }
                                 }
@@ -1427,6 +1534,8 @@ void ScXMLExport::_ExportAutoStyles()
                         }
                     }
                 }
+                if (nProgressValue < nOldProgressValue + nProgressObjects)
+                    GetProgressBarHelper()->SetValue(++nProgressValue);
             }
             GetPageExport()->collectAutoStyles(sal_True);
 
@@ -1444,6 +1553,8 @@ void ScXMLExport::_ExportAutoStyles()
             GetChartExport()->exportAutoStyles();
 
             GetPageExport()->exportAutoStyles();
+
+            GetProgressBarHelper()->SetValue(nOldProgressValue + nProgressObjects);
         }
     }
 }
@@ -1765,6 +1876,9 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         }
     }
     WriteShapes(aCell);
+    if (!bIsEmpty)
+        if (nProgressValue < nOldProgressValue + nProgressObjects)
+            GetProgressBarHelper()->SetValue(++nProgressValue);
 }
 
 void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
