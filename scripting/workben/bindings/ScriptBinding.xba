@@ -952,19 +952,25 @@ sub PopulateScriptList( lang as String, loc as String )
 		storage = scriptstoragemgr.getScriptStorage( scriptStorageID )
 		implementations() = storage.getAllImplementations()
 		length = UBOUND( implementations() )
-
+		reservedScriptTag = &quot;_$&quot;
     	if ( length &gt; -1 ) then
     		dim tempDisplayList( length ) as new com.sun.star.beans.PropertyValue
 			for n = LBOUND( implementations() ) to UBOUND( implementations() )
-				if ( lang = implementations( n ).getLanguage() ) then
-					if ( detailedView ) then
-						tempDisplayList( n ).Name = implementations( n ).getLogicalName() + &quot; [&quot; + implementations( n ).getFunctionName() + &quot;]&quot;  
-						tempDisplayList( n ).Value = implementations( n )
-					else
-						tempDisplayList( n ).Name = implementations( n ).getLogicalName()
-						tempDisplayList( n ).Value = implementations( n )
+				logicalName = implementations( n ).getLogicalName()
+				firstTwoChars = LEFT( logicalName, 2 )
+				&apos;Only display scripts whose logicalnames don&apos;t begin with &quot;_$&quot;
+				if ( firstTwoChars &lt;&gt; reservedScriptTag ) then
+					if ( lang = implementations( n ).getLanguage() ) then
+						if ( detailedView ) then
+							tempDisplayList( n ).Name = logicalName _
+								+ &quot; [&quot; + logicalName + &quot;]&quot;  
+							tempDisplayList( n ).Value = implementations( n )
+						else
+							tempDisplayList( n ).Name = logicalName
+							tempDisplayList( n ).Value = implementations( n )
+						endif
+						scriptList.addItem( tempDisplayList( n ).Name, n )
 					endif
-					scriptList.addItem( tempDisplayList( n ).Name, n )
 				endif
 			next n
 		endif
