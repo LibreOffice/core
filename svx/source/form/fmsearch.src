@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-04 18:39:58 $
+ *  last change: $Author: fs $ $Date: 2001-12-12 11:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1001,7 +1001,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
 
 String RID_STR_SEARCH_OVERFLOW
 {
-    Text = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt" ;
+    Text = "Überlauf, Suche wurde am Anfang fortgesetzt;Überlauf, Suche wurde am Ende forgesetzt" ;
     Text [ ENGLISH ] = "Überlauf, Suche wurde am Anfang forgesetzt;Überlauf, Suche wurde am Ende forgesetzt" ;
     Text[ italian ] = "Overflow, la ricerca è stata proseguita dall'inizio;Overflow, la ricerca è stata proseguita dalla fine";
     Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang forgesetzt;?berlauf, Suche wurde am Ende forgesetzt";
