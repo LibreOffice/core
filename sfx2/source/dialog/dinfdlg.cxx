@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:11:08 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,26 @@
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
+#include <tools/intn.hxx>
+#include <tools/datetime.hxx>
 
 #include <memory>
 
 #ifndef GCC
 #pragma hdrstop
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
+#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
+#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
 #endif
 
 #include "dinfdlg.hxx"
@@ -99,10 +114,17 @@
 #include "request.hxx"
 #include "exptypes.hxx"
 #include "helper.hxx"
+#include "objsh.hxx"
+#include "docfile.hxx"
+#include "../doc/storagehelper.hxx"
 
 #include "sfx.hrc"
 #include "dinfdlg.hrc"
 #include "sfxlocal.hrc"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -525,6 +547,62 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 
 //------------------------------------------------------------------------
 
+namespace
+{
+    uno::Reference < embed::XStorage > GetCurrentStorage( bool* _pReadOnly = NULL )
+    {
+        uno::Reference < embed::XStorage > xStore;
+
+        SfxObjectShell* pDoc = SfxObjectShell::Current();
+        if( pDoc )
+        {
+            SfxMedium*  pMedium = pDoc->GetMedium();
+            if( pMedium && pMedium->GetName().Len() )
+            {
+                // HACK: No Storage API befoer CWS MAV09
+                rtl::OUString aDocFileNameURL = pMedium->GetName();
+                xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
+                        aDocFileNameURL, embed::ElementModes::READ, comphelper::getProcessServiceFactory() );
+                if( _pReadOnly )
+                    *_pReadOnly = pMedium->IsReadOnly();
+            }
+        }
+        return xStore;
+    }
+
+    String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
+    {
+        LocaleDataWrapper aWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+
+        Date aDate( _nDate );
+        Time aTime( _nTime );
+        String aStr( aWrapper.getDate( aDate ) );
+        aStr.AppendAscii( ", " );
+        aStr += aWrapper.getTime( aTime );
+        return aStr;
+    }
+
+    // copy from xmlsecurity/source/dialog/resourcemanager.cxx
+    String GetContentPart( const String& _rRawString, const String& _rPartId )
+    {
+        String      s;
+
+        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
+        if( nContStart != STRING_NOTFOUND )
+        {
+            nContStart += _rPartId.Len();
+            ++nContStart;                   // now it's start of content, directly after Id
+
+            xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+
+            s = String( _rRawString, nContStart, nContEnd - nContStart );
+        }
+
+        return s;
+    }
+
+}
+
 SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) :
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFODOC ), rItemSet ),
@@ -548,6 +626,9 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aTimeLogValFt   ( this, ResId( FT_TIMELOG_VAL ) ),
     aChangeFt       ( this, ResId( FT_CHANGE ) ),
     aChangeValFt    ( this, ResId( FT_CHANGE_VAL ) ),
+    aSignedFt       ( this, ResId( FT_SIGNED ) ),
+    aSignedValFt    ( this, ResId( FT_SIGNED_VAL ) ),
+    aSignatureBtn   ( this, ResId( BTN_SIGNATURE ) ),
     aDocNoFt        ( this, ResId( FT_DOCNO ) ),
     aDocNoValFt     ( this, ResId( FT_DOCNO_VAL ) ),
     aPrintFt        ( this, ResId( FT_PRINT ) ),
@@ -560,13 +641,18 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aTemplValFt     ( this, ResId( FT_TEMPL_VAL ) ),
 
     aUnknownSize    ( ResId( STR_UNKNOWNSIZE ) ),
+    aMultiSignedStr ( ResId( STR_MULTSIGNED ) ),
 
     bEnableUseUserData  ( FALSE ),
     bHandleDelete       ( FALSE )
 
 {
     FreeResource();
+
+    ImplUpdateSignatures();
+
     aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
+    aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
 }
 
 //------------------------------------------------------------------------
@@ -586,6 +672,51 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
     aDocNoValFt.SetText( '1' );
     bHandleDelete = TRUE;
     return 0;
+}
+
+IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
+{
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
+    if( pDoc )
+    {
+        pDoc->SignDocumentContent();
+
+        ImplUpdateSignatures();
+    }
+
+
+
+    return 0;
+}
+
+void SfxDocumentPage::ImplUpdateSignatures()
+{
+    Reference < embed::XStorage > xStore = GetCurrentStorage();
+    if( xStore.is() )
+    {
+        Reference< security::XDocumentDigitalSignatures > xD(
+            comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
+
+        if( xD.is() )
+        {
+            String s;
+            Sequence< security::DocumentSignaturesInformation > aInfos;
+            aInfos = xD->VerifyDocumentContentSignatures( xStore );
+            if( aInfos.getLength() > 1 )
+            {
+                s = aMultiSignedStr;
+            }
+            else if( aInfos.getLength() == 1 )
+            {
+                String aCN_Id( String::CreateFromAscii( "CN" ) );
+                const security::DocumentSignaturesInformation& rInfo = aInfos[ 0 ];
+                s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
+                s.AppendAscii( ", " );
+                s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
+            }
+            aSignedValFt.SetText( s );
+        }
+    }
 }
 
 //------------------------------------------------------------------------
