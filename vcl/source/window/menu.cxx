@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:19:35 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -2201,7 +2200,8 @@ Size Menu::ImplCalcSize( Window* pWin )
             ImplControlValue aVal;
             Region aNativeBounds;
             Region aNativeContent;
-            Region aCtrlRegion( Rectangle( Point( 0, 0 ), Size( 100, 15 ) ) );
+            Point tmp( 0, 0 );
+            Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
             if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
@@ -4837,7 +4837,8 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
                         aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
-                        Region aBgRegion( Rectangle( Point(0,0), GetOutputSizePixel() ) );
+                        Point tmp(0,0);
+                        Region aBgRegion( Rectangle( tmp, GetOutputSizePixel() ) );
                         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
                                            aBgRegion,
                                            CTRL_STATE_ENABLED,
