@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ TimeStamp getExpirationTime( vos::OTimer const& aTimer )
 
 // -------------------------------------------------------------------------
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 static
 void checkTimerStarted( vos::OTimer const& aTimer, TimeStamp const& _aLimit)
 {
