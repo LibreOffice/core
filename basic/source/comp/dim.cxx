@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-05-04 14:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ void SbiParser::TypeDecl( SbiSymDef& rDef )
                         {
                             aCompleteName += aDotStr;
                             Next();
-                            if( Peek() == SYMBOL )
+                            SbiToken eTok = Peek();
+                            if( eTok == SYMBOL || IsKwd( eTok ) )
                             {
                                 Next();
                                 aCompleteName += aSym;
