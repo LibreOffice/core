@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="2" dlg:help-url="HID:34400">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="DlgFormDB" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:page="1" dlg:help-url="HID:34400">
  <dlg:bulletinboard>
   <dlg:text dlg:id="lblSelFields" dlg:tab-index="0" dlg:left="154" dlg:top="70" dlg:width="110" dlg:height="8" dlg:page="1" dlg:value="lblSelFields"/>
   <dlg:menulist dlg:id="lstDatabases" dlg:tab-index="1" dlg:left="6" dlg:top="51" dlg:width="110" dlg:height="12" dlg:page="1" dlg:help-url="HID:34410" dlg:spin="true">
@@ -46,9 +46,11 @@
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:menulist dlg:id="lstFields" dlg:tab-index="17" dlg:left="6" dlg:top="81" dlg:width="110" dlg:height="70" dlg:page="1" dlg:help-url="HID:34420" dlg:multiselection="true">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tools.Listbox.FormMoveSelected" script:language="StarBasic"/>
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Tools.Listbox.FormSetMoveRights" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:menulist dlg:id="lstSelFields" dlg:tab-index="18" dlg:left="154" dlg:top="81" dlg:width="110" dlg:height="70" dlg:page="1" dlg:help-url="HID:34421" dlg:multiselection="true">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tools.Listbox.FormRemoveSelected" script:language="StarBasic"/>
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="Tools.Listbox.FormSetMoveRights" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:text dlg:id="lblStyles" dlg:tab-index="19" dlg:left="150" dlg:top="39" dlg:width="114" dlg:height="8" dlg:page="2" dlg:value="lblStyles"/>
