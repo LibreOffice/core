@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-29 18:26:35 $
+#   last change: $Author: hjs $ $Date: 2001-10-30 16:26:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -223,7 +223,8 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES)
     @+-$(RM) $(MISC)$/$(TARFILE_NAME).patch.tmp >& $(NULLDEV)
     @+-$(RM) $(TARFILE_NAME).patch.bak >& $(NULLDEV)
 #ignore returncode of 1 (indicates differences...)	
-    +-diff -rc $(MISC)$/$(TARFILE_ROOTDIR) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > $(MISC)$/$(TARFILE_NAME).patch.tmp
+# hard coded again to get the same directory level as before. quite ugly...
+    +-cd $(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(TARFILE_NAME).patch.tmp
     @+-mv $(TARFILE_NAME).patch $(TARFILE_NAME).patch.bak >& $(NULLDEV)
     @+-mv $(MISC)$/$(TARFILE_NAME).patch.tmp $(TARFILE_NAME).patch >& $(NULLDEV)
     @+echo still some problems with win32 generated patches...
