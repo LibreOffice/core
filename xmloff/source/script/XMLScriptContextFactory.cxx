@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLScriptContextFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ SvXMLImportContext * XMLScriptContextFactory::CreateContext
  const Reference<XAttributeList> & xAttrList,
  XMLEventsImportContext * rEvents,
  const OUString & rApiEventName,
- const OUString & rLanguage)
+ const OUString & rApiLanguage)
 {
     OUString sURLVal;
 

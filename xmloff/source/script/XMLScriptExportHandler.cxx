@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLScriptExportHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include "xmltoken.hxx"
 #endif
 
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -102,12 +105,15 @@ XMLScriptExportHandler::~XMLScriptExportHandler()
 
 void XMLScriptExportHandler::Export(
     SvXMLExport& rExport,
-    const OUString& rEventName,
+    const OUString& rEventQName,
     Sequence<PropertyValue> & rValues,
     sal_Bool bUseWhitespace)
 {
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE, XML_SCRIPT);
-    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventName);
+
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
+                         rExport.GetNamespaceMap().GetQNameByKey(
+                             XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
+    rExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, rEventQName);
 
     sal_Int32 nCount = rValues.getLength();
     for(sal_Int32 i = 0; i < nCount; i++)
@@ -121,6 +127,7 @@ void XMLScriptExportHandler::Export(
         // else: disregard
     }
 
-    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT,
+    SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT,
+                                   XML_EVENT_LISTENER,
                                    bUseWhitespace, sal_False);
 }
