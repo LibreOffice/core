@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:25:03 $
+ *  last change: $Author: cp $ $Date: 2002-01-20 20:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-
-
-#ifdef UNX
-#include <cstdarg>
-#include <jni.h>
-
-#define String XLIB_String
-#define Window XLIB_Window
-#define Time XLIB_Time
-#define Font XLIB_Font
-#define KeyCode XLIB_KeyCode
-#define Region XLIB_Region
-#define Cursor XLIB_Cursor
-#include <jawt_md.h>
-#include <X11/Xatom.h>
-#undef String
-#undef Window
-#undef Time
-#undef Font
-#undef KeyCode
-#undef Region
-#undef Cursor
-#endif
 
 #include "sjapplet_impl.hxx"
 
@@ -150,280 +125,77 @@ struct EmbeddedWindow {
     void dispose(JNIEnv * pEnv);
 };
 
-static Atom getStateAtom(Display* pDisplay)
-{
-    static Atom nWM_State = XInternAtom (pDisplay, "WM_STATE", False);
-    return nWM_State;
-}
-
-static XLIB_Window getAppletWindow(Display* pDisplay, XLIB_Window window) {
-    /*  Find the shell to reparent. */
-    sal_Bool found = sal_False;
-    XLIB_Window aRoot;
-    do
-    {
-        int nCount;
-        Atom *pAtom = XListProperties(pDisplay, window, &nCount);
-        for (int i = 0; i < nCount && !found; ++i)
-            found = (pAtom[i] == XA_WM_HINTS);
-
-        XFree(pAtom);
-
-        if(found)
-            break;
-
-        XLIB_Window* pChildren = NULL;
-        unsigned int nChildren = 0;
-        XQueryTree( pDisplay, window,
-                    &aRoot, &window, &pChildren, &nChildren );
-        XFree( pChildren );
-    }
-    while (window != aRoot);
-
-    return window != aRoot ? window : None;
-}
-
-#ifdef DEBUG
-
-static void spaces(int count) {
-    for(int i = 0; i < count; ++ i)
-        fprintf(stderr, "    ");
-}
-
-static void displayTree(Display * display, XLIB_Window window, int dp) {
-    XLIB_Window root_return, parent_return, * children_return;
-    unsigned int nchildren_returnw;
-
-    XQueryTree(display, window,
-               &root_return, &parent_return,  &children_return, &nchildren_returnw);
-
-    spaces(dp); fprintf(stderr, "RootWindow %x\n", root_return);
-    spaces(dp); fprintf(stderr, "ParentWindow %x\n", parent_return);
-    for(int i = 0; i < nchildren_returnw; ++ i) {
-        spaces(dp); fprintf(stderr, " child #%i %x\n", i, children_return[i]);
-
-        displayTree(display, children_return[i], dp + 1);
-    }
-}
-#endif
-
-extern "C" {
-    static Bool withdrawPredicate( Display* pDisplay, XEvent* pEvent, XPointer arg )
-    {
-        Bool bRet = False;
-        if( pEvent->type == PropertyNotify
-            && pEvent->xproperty.window == (XLIB_Window)arg
-            && pEvent->xproperty.atom == getStateAtom( pDisplay )
-            )
-        {
-            if( pEvent->xproperty.state == PropertyDelete )
-            {
-#ifdef DEBUG
-                fprintf( stderr, "window 0x%x changed to WithdrawnState (WM_STATE deleted)\n", (XLIB_Window)arg );
-#endif
-                bRet = True;
-            }
-            else
-            {
-                Atom aType;
-                int format;
-                unsigned long items, bytes;
-                unsigned char* prop = NULL;
-                if( XGetWindowProperty( pDisplay, (XLIB_Window)arg, getStateAtom(pDisplay),
-                                        0, 1, False, getStateAtom(pDisplay),
-                                        &aType, &format, &items, &bytes, &prop ) == 0
-                    && prop
-                    && format == 32
-                    )
-                {
-#ifdef DEBUG
-                    const char* pState = "<unknown>";
-                    switch( *(sal_uInt32*)prop )
-                    {
-                        case 0: pState = "Withdrawn";break;
-                        case 1: pState = "Normal";break;
-                        case 2: pState = "Iconic";break;
-                    }
-                    fprintf( stderr, "window 0x%x changed to %sState\n",
-                             (XLIB_Window)arg,
-                             pState );
-#endif
-                    if( *(sal_uInt32*)prop == 0 )
-                        bRet = True;
-
-                    XFree( prop );
-                }
-            }
-        }
-        return bRet;
-    }
-}
-
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
 {
-    // create a canvas
-    jclass jcCanvas = pEnv->FindClass("java/awt/Canvas");                                                      testJavaException(pEnv);
-    jmethodID jmCanvas_rinit = pEnv->GetMethodID(jcCanvas, "<init>", "()V" );                                  testJavaException(pEnv);
+    jclass jcToolkit = pEnv->FindClass("java/awt/Toolkit");                         testJavaException(pEnv);
+    jmethodID jmToolkit_getDefaultToolkit = pEnv->GetStaticMethodID(
+                        jcToolkit, "getDefaultToolkit", "()Ljava/awt/Toolkit;" );   testJavaException(pEnv);
+    pEnv->CallStaticObjectMethod(jcToolkit, jmToolkit_getDefaultToolkit);           testJavaException(pEnv);
 
-    jobject joCanvas = pEnv->AllocObject(jcCanvas);                                                            testJavaException(pEnv);
-    pEnv->CallVoidMethod(joCanvas, jmCanvas_rinit);                                                            testJavaException(pEnv);
-
-    jmethodID jmCanvas_setSize = pEnv->GetMethodID(jcCanvas, "setSize", "(II)V" );                             testJavaException(pEnv);
-    pEnv->CallVoidMethod(joCanvas, jmCanvas_setSize, 50, 50);                                                  testJavaException(pEnv);
-
-    jmethodID jmCanvas_show = pEnv->GetMethodID(jcCanvas, "show", "()V" );                                     testJavaException(pEnv);
-    pEnv->CallVoidMethod(joCanvas, jmCanvas_show);                                                             testJavaException(pEnv);
-
-
-    // create window and add the canvas
-    jclass jcFrame  = pEnv->FindClass("java/awt/Frame");                                                       testJavaException(pEnv);
-    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V" );                                    testJavaException(pEnv);
-
-    jobject joFrame = pEnv->AllocObject(jcFrame);                                                              testJavaException(pEnv);
-    pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                                                              testJavaException(pEnv);
-
-    jclass jcWindow = pEnv->FindClass("java/awt/Window");                                                      testJavaException(pEnv);
-    jmethodID jmWindow_rinit = pEnv->GetMethodID(jcWindow, "<init>", "(Ljava/awt/Frame;)V" );                  testJavaException(pEnv);
-
-    jobject joWindow = pEnv->AllocObject(jcWindow);                                                            testJavaException(pEnv);
-    pEnv->CallVoidMethod(joWindow, jmWindow_rinit, joFrame);                                                   testJavaException(pEnv);
-
-//  joWindow = joFrame;
-
-    jmethodID jmWindow_setLayout = pEnv->GetMethodID(jcWindow, "setLayout", "(Ljava/awt/LayoutManager;)V");    testJavaException(pEnv);
-    pEnv->CallVoidMethod(joWindow, jmWindow_setLayout, 0);                                                     testJavaException(pEnv);
-
-    jmethodID jmWindow_setSize = pEnv->GetMethodID(jcWindow, "setSize", "(II)V");                              testJavaException(pEnv);
-    pEnv->CallVoidMethod(joWindow, jmWindow_setSize, 1, 1);                                                    testJavaException(pEnv);
-
-    jmethodID jmWindow_add = pEnv->GetMethodID(jcWindow, "add", "(Ljava/awt/Component;)Ljava/awt/Component;"); testJavaException(pEnv);
-    pEnv->CallObjectMethod(joWindow, jmWindow_add, joCanvas);                                                  testJavaException(pEnv);
-
-    jmethodID jmWindow_show = pEnv->GetMethodID(jcWindow, "show", "()V");                                      testJavaException(pEnv);
-    pEnv->CallVoidMethod(joWindow, jmWindow_show);                                                             testJavaException(pEnv);
-
-
-
-
-    typedef jboolean (JNICALL * fptr_JAWT_GetAWT)( JNIEnv * env, JAWT * awt );
-    fptr_JAWT_GetAWT s_fGetAWT = 0;
-
-    _jawt.load(OUString(RTL_CONSTASCII_USTRINGPARAM("libjawt.so")));
-
-    OUString aSymName( RTL_CONSTASCII_USTRINGPARAM("JAWT_GetAWT") );
-    s_fGetAWT = (fptr_JAWT_GetAWT)_jawt.getSymbol(aSymName);
-    if(!s_fGetAWT) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - JAWT_GetAWT not found")), Reference<XInterface>());
-
-    JAWT awt;
-    awt.version = JAWT_VERSION_1_3;
-    if ((*s_fGetAWT)(pEnv, &awt) == JNI_FALSE)
-        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - wrong awt version")), Reference<XInterface>());
-
-    // get the drawing surface
-    JAWT_DrawingSurface * ds = (*awt.GetDrawingSurface)(pEnv, joCanvas);
-    if (!ds)
-        throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurface")), Reference<XInterface>());
-
-    jint lock = 0;
-    JAWT_DrawingSurfaceInfo * dsi = NULL;
-    JAWT_X11DrawingSurfaceInfo * dsi_x11 = NULL;
-    try {
-        lock = ds->Lock(ds); // lock the drawing surface
-        if ((lock & JAWT_LOCK_ERROR))
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't lock DrawingSurface")), Reference<XInterface>());
-
-        dsi = ds->GetDrawingSurfaceInfo(ds); // get the drawing surface info
-        if (!dsi)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurfaceInfo")), Reference<XInterface>());
-
-        // get the platform-specific drawing info and reparent
-        JAWT_X11DrawingSurfaceInfo * dsi_x11 = (JAWT_X11DrawingSurfaceInfo *)dsi->platformInfo;
-        XLIB_Window window = dsi_x11->drawable;
-
-        XLIB_Window appletWindow = getAppletWindow(dsi_x11->display, window);
-        if(appletWindow==None)
-            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - can't find AppletWindow")), Reference<XInterface>());
-
-#ifdef DEBUG
-        fprintf(stderr, "+++++++++++++ the parent %x\n", pEnvData->aWindow);
-        displayTree(dsi_x11->display, pEnvData->aWindow, 0);
-
-        fprintf(stderr, "+++++++++++++ the child %x\n", appletWindow);
-        displayTree(dsi_x11->display, appletWindow, 0);
-#endif
-
-        XWithdrawWindow( dsi_x11->display, appletWindow, DefaultScreen( dsi_x11->display ) );
-#ifdef DEBUG
-        fprintf( stderr, "enter wait (Withdraw)\n" );
-#endif
-        XEvent aEvent;
-        XIfEvent( dsi_x11->display, &aEvent, withdrawPredicate, (XPointer)appletWindow );
-
-#ifdef DEBUG
-        fprintf( stderr, "leave wait (Withdraw)\n" );
-#endif
-        XReparentWindow(dsi_x11->display, appletWindow, pEnvData->aWindow, 0, 0);
-        XMapWindow( dsi_x11->display, appletWindow );
-
-#ifdef DEBUG
-        fprintf(stderr, "------------- the child %x\n", appletWindow);
-        displayTree(dsi_x11->display, appletWindow, 0);
-#endif
-
-        ds->FreeDrawingSurfaceInfo(dsi);
-        ds->Unlock(ds);
-        awt.FreeDrawingSurface(ds);
-    }
-    catch(...) {
-        if(dsi)
-            ds->FreeDrawingSurfaceInfo(dsi);
-
-        if (!(lock & JAWT_LOCK_ERROR))
-            ds->Unlock(ds);
-
-        awt.FreeDrawingSurface(ds);
-
-        throw;
+    jclass jcMotifAppletViewer = pEnv->FindClass(
+                        "sun/plugin/navig/motif/MotifAppletViewer");                testJavaException(pEnv);
+    if(pEnv->ExceptionOccurred())
+    {
+        pEnv->ExceptionClear();
+        jcMotifAppletViewer = pEnv->FindClass(
+                        "sun/plugin/viewer/MNetscapePluginContext");                testJavaException(pEnv);
     }
 
-    jmethodID jmWindow_removeAll = pEnv->GetMethodID(jcWindow, "removeAll", "()V"); testJavaException(pEnv);
-    pEnv->CallVoidMethod(joWindow, jmWindow_removeAll);                             testJavaException(pEnv);
+    jclass jcClassLoader = pEnv->FindClass("java/lang/ClassLoader");                testJavaException(pEnv);
+    jmethodID jmClassLoader_loadLibrary = pEnv->GetStaticMethodID(
+                        jcClassLoader, "loadLibrary",
+                        "(Ljava/lang/Class;Ljava/lang/String;Z)V" );                testJavaException(pEnv);
+    jstring jsplugin = pEnv->NewStringUTF("javaplugin_jni");                        testJavaException(pEnv);
+    pEnv->CallStaticVoidMethod(jcClassLoader, jmClassLoader_loadLibrary,
+                        jcMotifAppletViewer, jsplugin, JNI_FALSE);                  testJavaException(pEnv);
 
-    _joWindow = pEnv->NewGlobalRef(joWindow);
+    jmethodID jmMotifAppletViewer_getWidget = pEnv->GetStaticMethodID(
+                        jcMotifAppletViewer, "getWidget", "(IIIII)I" );             testJavaException(pEnv);
+    jint ji_widget = pEnv->CallStaticIntMethod(jcMotifAppletViewer,
+                        jmMotifAppletViewer_getWidget, pEnvData->aWindow,
+                        0, 0, 1, 1);                                                testJavaException(pEnv);
+
+    jclass jcFrame  = pEnv->FindClass("sun/awt/motif/MEmbeddedFrame");              testJavaException(pEnv);
+    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" );        testJavaException(pEnv);
+
+    jobject joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
+    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong)ji_widget);                 testJavaException(pEnv);
+
+    _joWindow = pEnv->NewGlobalRef(joFrame);
 }
 
 #else
 
 struct EmbeddedWindow {
-    jobject _joWindow;
+jobject _joWindow;
 
-    EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException);
-    void dispose(JNIEnv * pEnv);
+EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException);
+void dispose(JNIEnv * pEnv);
 };
 
 
 #ifdef WNT
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
 {
-    jclass jcFrame = pEnv->FindClass("sun/awt/windows/WEmbeddedFrame");     testJavaException(pEnv);
-    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(I)V"); testJavaException(pEnv);
+jclass jcFrame = pEnv->FindClass("sun/awt/windows/WEmbeddedFrame");     testJavaException(pEnv);
+jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(I)V"); testJavaException(pEnv);
 
-    jobject joFrame = pEnv->AllocObject(jcFrame);                           testJavaException(pEnv);
-    pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->hWnd);     testJavaException(pEnv);
+jobject joFrame = pEnv->AllocObject(jcFrame);                           testJavaException(pEnv);
+pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->hWnd);     testJavaException(pEnv);
 
-    _joWindow = pEnv->NewGlobalRef(joFrame);
+_joWindow = pEnv->NewGlobalRef(joFrame);
 }
 
 #else
 
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
 {
-    jclass jcFrame = pEnv->FindClass("java/awt/Frame");                     testJavaException(pEnv);
-    jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V");  testJavaException(pEnv);
-    joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
-    pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                           testJavaException(pEnv);
+jclass jcFrame = pEnv->FindClass("java/awt/Frame");                     testJavaException(pEnv);
+jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V");  testJavaException(pEnv);
+joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
+pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                           testJavaException(pEnv);
 
-    _joWindow = pEnv->NewGlobalRef(joFrame);
+_joWindow = pEnv->NewGlobalRef(joFrame);
 }
 
 #endif
@@ -432,27 +204,27 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
 
 void EmbeddedWindow::dispose(JNIEnv * pEnv)
 {
-    jclass jcWindow = pEnv->FindClass("java/awt/Window");                        testJavaException(pEnv);
-    jmethodID jmWindow_dispose = pEnv->GetMethodID(jcWindow, "dispose", "()V" ); testJavaException(pEnv);
+jclass jcWindow = pEnv->FindClass("java/awt/Window");                        testJavaException(pEnv);
+jmethodID jmWindow_dispose = pEnv->GetMethodID(jcWindow, "dispose", "()V" ); testJavaException(pEnv);
 
-    pEnv->CallVoidMethod(_joWindow, jmWindow_dispose);                           testJavaException(pEnv);
-    pEnv->DeleteGlobalRef(_joWindow);
+pEnv->CallVoidMethod(_joWindow, jmWindow_dispose);                           testJavaException(pEnv);
+pEnv->DeleteGlobalRef(_joWindow);
 
-    _joWindow = 0;
+_joWindow = 0;
 }
 
 
 
 SjApplet2_Impl::SjApplet2_Impl()  throw(com::sun::star::uno::RuntimeException)
-    :   _pJVM(NULL),
-        _joAppletExecutionContext(0),
-        _jcAppletExecutionContext(0)
+:   _pJVM(NULL),
+    _joAppletExecutionContext(0),
+    _jcAppletExecutionContext(0)
 
 {}
 
 SjApplet2_Impl::~SjApplet2_Impl() throw() {
-    if (_joAppletExecutionContext) {
-        TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
+if (_joAppletExecutionContext) {
+    TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
 
         _pEmbeddedWindow->dispose(jenv.pEnv);
         delete _pEmbeddedWindow;
