@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-26 11:24:22 $
+ *  last change: $Author: ab $ $Date: 2001-06-29 15:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2247,6 +2247,11 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                 catch( RuntimeException& e2 )
                 {
                     StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
+                }
+                catch( IllegalArgumentException& e3 )
+                {
+                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
+                        implGetExceptionMsg( e3, aIllegalArgumentExceptionName ) );
                 }
             }
         }
