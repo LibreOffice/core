@@ -1,0 +1,2 @@
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
