@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtrans.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 14:26:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKe
 
             const Sequence< OUString > & rSNL = ClipboardManager_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+            sal_Int32 nPos;
+            for ( nPos = rSNL.getLength(); nPos--; )
                 xNewKey->createKey( pArray[nPos] );
 
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
