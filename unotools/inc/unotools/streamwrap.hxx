@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamwrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 09:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,8 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 
 class SvStream;
