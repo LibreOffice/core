@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-22 21:21:28 $
+ *  last change: $Author: rt $ $Date: 2002-01-23 21:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ Resource RID_SVXERRCODE
         Text [ spanish ] = "No se puede crear el diccionario personal $(ARG1)." ;
         Text [ french ] = "Impossible d'installer le dictionnaire $(ARG1)." ;
         Text [ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden aangelegd." ;
-        Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte skapas." ;
+        Text [ swedish ] = "Den personliga ordlistan $(ARG1) kan inte skapas." ;
         Text [ danish ] = "Det er ikke muligt at oprette den personlige ordbog $(ARG1)." ;
         Text [ portuguese ] = "Impossível criar o dicionário pessoal $(ARG1)." ;
         Text [ portuguese_brazilian ] = "Das pers?liche W?terbuch $(ARG1) kann nicht angelegt werden." ;
