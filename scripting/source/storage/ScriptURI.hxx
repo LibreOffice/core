@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:40 $
+ *  last change: $Author: dfoster $ $Date: 2003-07-22 14:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ class ScriptURI
 public:
     ScriptURI( const ::rtl::OUString& scriptURI )
         throw ( css::lang::IllegalArgumentException );
-    ~ScriptURI()  SAL_THROW ( () );
+    virtual ~ScriptURI()  SAL_THROW ( () );
 
     /**
      *  This function returns the location of the script
