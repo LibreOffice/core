@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-02 14:54:02 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ typedef enum {
 } preedit_status_t;
 
 typedef struct {
-    SalFrame           *pFrame;
+    SalFrame*           pFrame;
     Bool                bIsMultilingual;
     preedit_status_t    eState;
     preedit_text_t      aText;
