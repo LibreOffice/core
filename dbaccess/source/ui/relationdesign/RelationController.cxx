@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:07:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,11 +427,11 @@ short ORelationController::saveModified()
     return nSaved;
 }
 // -----------------------------------------------------------------------------
-void ORelationController::AddSupportedFeatures()
+void ORelationController::describeSupportedFeatures()
 {
-    OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]   = SID_RELATION_ADD_RELATION;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddTable")]  = ID_BROWSER_ADDTABLE;
+    OJoinController::describeSupportedFeatures();
+    implDescribeSupportedFeature( ".uno:DBAddRelation", SID_RELATION_ADD_RELATION, CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:DBAddTable", ID_BROWSER_ADDTABLE, CommandGroup::EDIT );
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadData()
