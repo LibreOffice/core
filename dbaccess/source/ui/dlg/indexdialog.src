@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_NEW;
                 HelpId = HID_DLGIDX_NEWINDEX;
                 Command = ".index:createNew";
-                Text = "neuer Index" ;
+                Text = "Neuer Index" ;
                 Text [ english ] = "new index" ;
                 Text [ english_us ] = "New Index" ;
                 Text[ portuguese ] = "Novo índice";
@@ -202,7 +202,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_DROP;
                 HelpId = HID_DLGIDX_DROPINDEX;
                 Command = ".index:dropCurrent";
-                Text = "aktuellen Index löschen" ;
+                Text = "Aktuellen Index löschen" ;
                 Text [ english ] = "drop current index" ;
                 Text [ english_us ] = "Delete Current Index" ;
                 Text[ portuguese ] = "Eliminar índice activo";
@@ -231,7 +231,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RENAME;
                 HelpId = HID_DLGIDX_RENAMEINDEX;
                 Command = ".index:renameCurrent";
-                Text = "aktuellen Index umbenennen" ;
+                Text = "Aktuellen Index umbenennen" ;
                 Text [ english ] = "rename current index" ;
                 Text [ english_us ] = "Rename Current Index" ;
                 Text[ portuguese ] = "Mudar nome a índice activo";
@@ -260,7 +260,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_SAVE;
                 HelpId = HID_DLGIDX_SAVEINDEX;
                 Command = ".index:saveCurrent";
-                Text = "aktuellen Index speichern" ;
+                Text = "Aktuellen Index speichern" ;
                 Text [ english ] = "save current index" ;
                 Text [ english_us ] = "Save Current Index" ;
                 Text[ portuguese ] = "Guardar índice activo";
@@ -289,7 +289,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RESET;
                 HelpId = HID_DLGIDX_RESETINDEX;
                 Command = ".index:resetCurrent";
-                Text = "aktuellen Index zurücksetzen" ;
+                Text = "Aktuellen Index zurücksetzen" ;
                 Text [ english ] = "reset current index" ;
                 Text [ english_us ] = "Reset Current Index" ;
                 Text[ portuguese ] = "Restaurar índice activo";
@@ -852,6 +852,15 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2003/03/19 17:52:25  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
+ *  Revision 1.31.2.3.8.1  2003/03/18 09:22:57  oj
+ *  #96296# change from small letter in capital
+ *
+ *  Revision 1.31.2.3.2.1  2003/02/27 09:22:21  oj
+ *  #96296# change from small letter in capital
+ *
  *  Revision 1.31.2.3  2003/02/23 12:01:01  nf
  *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
  *
