@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:51:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3676,90 +3676,6 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
             pDoc->Insert( *pPam, SwFmtPageDesc( pPgDsc ));
         }
         break;
-
-    case RTF_V:
-        if( 0 != nTokenValue )
-        {
-            // alles ueberlesen bis dieses wieder abgeschaltet wird. Durch
-            // plain in der Gruppe oder durch V0
-            String sHiddenTxt;
-            String sXE;
-            std::stack<bool> minicontexts;
-            minicontexts.push(false);
-            int nOpenHiddens = 1;
-            do {
-                switch( nToken = GetNextToken() )
-                {
-                case '}':
-                    minicontexts.pop();
-                    if (minicontexts.empty())
-                    {
-                        // die Klammer wird noch gebraucht!
-                        SkipToken( -1 );
-                    }
-                    break;
-                case '{':
-                    minicontexts.push(minicontexts.top());
-                    break;
-                case RTF_V:
-                    if( nTokenValue )
-                        ++nOpenHiddens;
-                    else if (!--nOpenHiddens && minicontexts.size() == 2)
-                    {
-                        // das wars
-                        minicontexts.pop();
-                    }
-                    break;
-                case RTF_U:
-                    {
-                        String &rWhich = minicontexts.top() ? sXE : sHiddenTxt;
-                        if (nTokenValue)
-                            rWhich += (sal_Unicode)nTokenValue;
-                        else
-                            rWhich += aToken;
-                    }
-                    break;
-                case RTF_TEXTTOKEN:
-                    {
-                        String &rWhich = minicontexts.top() ? sXE : sHiddenTxt;
-                        rWhich += aToken;
-                    }
-                    break;
-                case RTF_PLAIN:
-                    if (!nOpenHiddens && minicontexts.size() == 2)
-                    {
-                        minicontexts.pop();
-                        SkipToken( -1 );
-                    }
-                    break;
-                case RTF_SUBENTRYINDEX:
-                    if (minicontexts.top() == true)
-                        sXE += ':';
-                    break;
-                case RTF_XE:
-                    minicontexts.top() = true;
-                    break;
-                }
-            } while (!minicontexts.empty() && IsParserWorking());
-
-            if (sHiddenTxt.Len())
-            {
-                SwHiddenTxtField aFld( (SwHiddenTxtFieldType*)
-                            pDoc->GetSysFldType( RES_HIDDENTXTFLD ),
-                            TRUE, aEmptyStr, sHiddenTxt, TRUE );
-
-                pDoc->Insert( *pPam, SwFmtFld( aFld ) );
-            }
-
-            if (sXE.Len())
-            {
-                sXE.Insert('\"', 0);
-                sXE.Append('\"');
-                sw::ms::ImportXE(*pDoc, *pPam, sXE);
-            }
-        }
-        break;
-
     case RTF_CS:
         {
             SwCharFmt* pFmt = aCharFmtTbl.Get( nTokenValue );
