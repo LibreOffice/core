@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:58:14 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             {
                 UnoActionContext aAction(pFmt->GetDoc());
                 sal_Bool bVal = *(sal_Bool*)aValue.getValue();
-                pFmt->GetDoc()->SetHeadlineRepeat( *pTable, bVal);
+                pFmt->GetDoc()->SetRowsToRepeat( *pTable, bVal ? 1 : 0 );  // TODO MULTIHEADER
             }
         }
         break;
@@ -378,7 +378,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
         case  FN_TABLE_HEADLINE_REPEAT:
         {
             SwTable* pTable = SwTable::FindTable( pFmt );
-            BOOL bTemp = pTable->IsHeadlineRepeat();
+            BOOL bTemp = pTable->GetRowsToRepeat() > 0;  // TODO MULTIHEADER
             aRet.setValue(&bTemp, ::getCppuBooleanType());
         }
         break;
@@ -2083,7 +2083,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
     if(GetProperty(UNO_NAME_REPEAT_HEADLINE, pRepHead ))
     {
         sal_Bool bVal = *(sal_Bool*)pRepHead->getValue();
-        ((SwTable&)rTbl).SetHeadlineRepeat(bVal);
+        ((SwTable&)rTbl).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO MULTIHEADER
     }
 
     uno::Any* pBackColor    = 0;
@@ -2489,12 +2489,11 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
                 pDoc->DeleteAndJoin(aPam);
                 aPam.DeleteMark();
             }
-            pTable = pDoc->InsertTable(
+            pTable = pDoc->InsertTable( SwInsertTableOptions( tabopts::HEADLINE | tabopts::DEFAULT_BORDER | tabopts::SPLIT_LAYOUT, 0 ),
                                         *aPam.GetPoint(),
                                         nRows,
                                         nColumns,
-                                        HORI_FULL,
-                                        HEADLINE|DEFAULT_BORDER|SPLIT_LAYOUT);
+                                        HORI_FULL );
             if(pTable)
             {
                 // hier muessen die Properties des Descriptors ausgewertet werden
