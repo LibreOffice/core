@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.133 $
+#   $Revision: 1.134 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-10 13:15:25 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:00:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1032,8 +1032,8 @@ SCPDEFS+=-DISO_CODE=$(L10N_framework)
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
-SCPDEFS+=-DLIBSTDCPP3=$(LIBSTDCPP3) -DSHORTSTDCPP3=$(SHORTSTDCPP3)
-.ENDIF			# "$(LIBSTDCPP3)"!=""
+SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3)
+.ENDIF			# "$(SHORTSTDCPP3)"!=""
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
@@ -1265,6 +1265,11 @@ COMID=$(COM)
 
 # --- extend new environment ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
+
+# flags required for crashdump feature
+.IF "$(ENABLE_CRASHDUMP)"!=""
+CFLAGS+=$(CFLAGSCRASHDUMP)
+.ENDIF          # "$(ENABLE_CRASHDUMP)"!=""
 
 .IF "$(profile)"!=""
 CDEFS+= $(CDEFSPROF)
