@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 19:51:16 $
+ *  last change: $Author: mtg $ $Date: 2001-12-04 17:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ protected:
 public:
     CRC32();
     ~CRC32();
-    void SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
+
+    sal_Int32 SAL_CALL updateStream (::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > & xStream)
         throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL updateByte (sal_Int8 nByte)
         throw(::com::sun::star::uno::RuntimeException);

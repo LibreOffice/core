@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:13:09 $
+ *  last change: $Author: mtg $ $Date: 2001-12-04 17:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,13 @@
  *
  ************************************************************************/
 #ifndef _CRC32_HXX
-#include "CRC32.hxx"
+#include <CRC32.hxx>
 #endif
 #ifndef _ZLIB_H
 #include <external/zlib/zlib.h>
 #endif
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -124,20 +121,18 @@ void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
     nCRC = crc32(nCRC, (const unsigned char*)b.getConstArray(),b.getLength());
 }
 
-void SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
+sal_Int32 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
     throw ( RuntimeException )
 {
-    Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
-    if ( xSeek.is() )
+    sal_Int32 nLength, nTotal = 0;
+    Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
+    do
     {
-        sal_Int32 nLength = n_ConstBufferSize;
-        sal_Int64 nCurrentPos = xSeek->getPosition();
-        Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
-        while ( nLength >= n_ConstBufferSize )
-        {
-            nLength = xStream->readBytes ( aSeq, n_ConstBufferSize );
-            updateSegment ( aSeq, 0, nLength );
-        }
-        xSeek->seek ( nCurrentPos );
+        nLength = xStream->readBytes ( aSeq, n_ConstBufferSize );
+        updateSegment ( aSeq, 0, nLength );
+        nTotal += nLength;
     }
+    while ( nLength == n_ConstBufferSize );
+
+    return nTotal;
 }
