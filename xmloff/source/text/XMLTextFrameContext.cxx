@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:28:36 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 11:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,8 +640,8 @@ XMLTextFrameContext::XMLTextFrameContext(
         aAny.setValue( &bSyncHeight, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( sIsSyncHeightToWidth, aAny );
     }
-    if( xPropSetInfo->hasPropertyByName( sSizeType ) && bMinHeight ||
-         nHeight > 0 || nRelHeight > 0 )
+    if( xPropSetInfo->hasPropertyByName( sSizeType ) &&
+        (bMinHeight || nHeight > 0 || nRelHeight > 0 ) )
     {
         sal_Int16 nSizeType =
             (bMinHeight && XML_TEXT_FRAME_TEXTBOX == nType) ? SizeType::MIN
