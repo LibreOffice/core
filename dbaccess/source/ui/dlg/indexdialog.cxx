@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:02:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,8 +347,7 @@ namespace dbaui
 
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         sal_Bool bSelectedAnything = NULL != pSelected;
-        m_aActions.EnableItem(ID_INDEX_DROP, bSelectedAnything);
-        m_aActions.EnableItem(ID_INDEX_RENAME, bSelectedAnything);
+
 
         if (pSelected)
         {
@@ -356,12 +355,15 @@ namespace dbaui
             OIndexCollection::const_iterator aSelectedPos = reinterpret_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
             m_aActions.EnableItem(ID_INDEX_SAVE, aSelectedPos->isModified() || aSelectedPos->isNew());
             m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() || aSelectedPos->isNew());
+            bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
         }
         else
         {
             m_aActions.EnableItem(ID_INDEX_SAVE, sal_False);
             m_aActions.EnableItem(ID_INDEX_RESET, sal_False);
         }
+        m_aActions.EnableItem(ID_INDEX_DROP, bSelectedAnything);
+        m_aActions.EnableItem(ID_INDEX_RENAME, bSelectedAnything);
     }
 
     //------------------------------------------------------------------
