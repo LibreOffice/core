@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-19 11:58:47 $
+ *  last change: $Author: pl $ $Date: 2002-09-02 15:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ sal_EqualHosts( const OUString& Host1, const OUString& Host2)
 {
     oslSocketAddr pHostAddr1;
     oslSocketAddr pHostAddr2;
-    BOOL bEqualAddress;
+    BOOL bEqualAddress = FALSE;
 
     if ( Host1.toChar() >= '0' && Host1.toChar() <= '9' )
         pHostAddr1 = osl_createInetSocketAddr( Host1.pData, 0 );
@@ -450,10 +450,13 @@ sal_EqualHosts( const OUString& Host1, const OUString& Host2)
     else
         pHostAddr2 = osl_resolveHostname( Host2.pData );
 
-    bEqualAddress = osl_isEqualSocketAddr( pHostAddr1, pHostAddr2 ) ? TRUE : FALSE;
+    if( pHostAddr1 && pHostAddr2 )
+        bEqualAddress = osl_isEqualSocketAddr( pHostAddr1, pHostAddr2 ) ? TRUE : FALSE;
 
-    osl_destroySocketAddr( pHostAddr1 );
-    osl_destroySocketAddr( pHostAddr2 );
+    if( pHostAddr1 )
+        osl_destroySocketAddr( pHostAddr1 );
+    if( pHostAddr2 )
+        osl_destroySocketAddr( pHostAddr2 );
 
     return bEqualAddress;
 }
