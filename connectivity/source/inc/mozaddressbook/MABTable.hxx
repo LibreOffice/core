@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-27 10:02:08 $
+ *  last change: $Author: wvd $ $Date: 2001-07-19 14:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,16 +92,13 @@ namespace connectivity
         typedef ::std::map< ::rtl::OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>,
                         comphelper::UStringMixLess > OContainer;
-        // WvD
         static sal_Int32 const m_nNR_OF_FIELDS = 37;
-        // WvD
 
         class OMozabTable : public OMozabTable_BASE
         {
         private:
-            // WvD
             //static sal_Int32 const m_nNR_OF_FIELDS = 37;
-            // WvD
+            const OMozabColumnAlias & m_aColumnAlias;
             OMozabQuery             *m_xQuery;
             ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
             ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
@@ -164,8 +161,9 @@ namespace connectivity
 
             // returns a copy of this object
             OMozabTable* clone() const;
+        const OMozabColumnAlias & getColumnAlias() const
+                          { return (m_aColumnAlias); }
 
-            // WvD
         };
     }
 }
