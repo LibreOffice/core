@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-11 15:43:11 $
+#   last change: $Author: vg $ $Date: 2002-09-16 13:17:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.62 $ ';
+$id_str = ' $Revision: 1.63 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -292,7 +292,7 @@ sub dmake_dir {
         cwd();
         $! = 0;
         system ("$dmake");
-        &print_error("dmake - $!") if ($!);
+        &print_error("dmake - " . lc($!)) if ($!);
         if ($? && ($? != -1) && (!$child)) {
             &print_error("Error $? occurred while making $BuildDir");
         };
@@ -445,6 +445,10 @@ sub CorrectPath {
     return $_;
 };
 
+sub check_dmake {
+    my $dmake = `which dmake`;
+    &print_error("dmake - no such file or directory") if (!-x $dmake);
+};
 
 #
 # Get platform-dependent commands
@@ -453,15 +457,19 @@ sub get_commands {
     my $arg = '';
     # Setting alias for dmake
     $dmake = 'dmake';
-    while ($arg = pop(@dmake_args)) {
-        $dmake .= ' '.$arg;
-    };
+    &check_dmake if ($ENV{GUI} eq 'UNX');
+
     if ($cmd_file) {
         if ($ENV{GUI} eq 'UNX') {
+            &check_dmake;
             $check_error_string = "if \"\$?\" != \"0\" exit\n";
         } else {
             $check_error_string = "if \"\%?\" != \"0\" quit\n";
         };
+    };
+
+    while ($arg = pop(@dmake_args)) {
+        $dmake .= ' '.$arg;
     };
 };
 
