@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-29 12:51:53 $
+ *  last change: $Author: af $ $Date: 2002-04-29 13:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,21 +477,13 @@ void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    if (rEventObject == mpShapeTreeInfo->GetControllerBroadcaster())
-
-    // Release the child containers.
-    if (mpChildrenManager != NULL)
+    if (rEventObject.Source == mpShapeTreeInfo->GetControllerBroadcaster())
     {
-        delete mpChildrenManager;
-        mpChildrenManager = NULL;
+        // The disposing of a model should be handled elsewhere.  But to be
+        // on the safe side we remove all of our children.
+        ClearAccessibleShapeList ();
+        SetShapeList (NULL);
     }
-    if (mpText != NULL)
-    {
-        delete mpText;
-        mpText = NULL;
-    }
-
-    // Not yet interested in disposing events.
 }
 
 
