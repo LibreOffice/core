@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:49:26 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,11 @@ OEvaluateSet* OOperand::preProcess(OBoolOperator* pOp, OOperand* pRight)
 {
     return NULL;
 }
-
+// -----------------------------------------------------------------------------
+OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
+    : OOperand(_rType)
+    , m_nRowPos(_nPos)
+{}
 //------------------------------------------------------------------
 void OOperandRow::bindValue(OValueRow _pRow)
 {
@@ -143,7 +147,12 @@ void OOperandRow::bindValue(OValueRow _pRow)
     m_pRow = _pRow;
     (*m_pRow)[m_nRowPos].setBound(sal_True);
 }
-
+// -----------------------------------------------------------------------------
+void OOperandRow::setValue(const ::com::sun::star::uno::Any& _rVal)
+{
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
+    (*m_pRow)[m_nRowPos] = _rVal;
+}
 //------------------------------------------------------------------
 Any OOperandRow::getValue() const
 {
@@ -191,8 +200,8 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 }
 
 //------------------------------------------------------------------
-OOperandParam::OOperandParam(OSQLParseNode* pNode, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns)
-    : OOperandRow(_xParamColumns->size(), DataType::VARCHAR)         // Standard-Typ
+OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
+    : OOperandRow(_nPos, DataType::VARCHAR)      // Standard-Typ
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");

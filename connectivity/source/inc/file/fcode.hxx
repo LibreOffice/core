@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:28:05 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,15 +135,11 @@ namespace connectivity
         protected:
             OValueRow   m_pRow;
 
-            OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType) : OOperand(_rType)
-                                                              , m_nRowPos(_nPos){}
+            OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType);
         public:
             sal_uInt16 getRowPos() const {return m_nRowPos;}
             virtual ::com::sun::star::uno::Any getValue() const;
-            virtual void setValue(const ::com::sun::star::uno::Any& _rVal)
-            {
-                (*m_pRow)[m_nRowPos] = _rVal;
-            }
+            virtual void setValue(const ::com::sun::star::uno::Any& _rVal);
             void bindValue(OValueRow _pRow);                        // Bindung an den Wert, den der Operand repräsentiert
 
             TYPEINFO();
@@ -183,7 +179,7 @@ namespace connectivity
         class OOperandParam : public OOperandRow
         {
         public:
-            OOperandParam(connectivity::OSQLParseNode* pNode, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
+            OOperandParam(connectivity::OSQLParseNode* pNode, sal_Int32 _nPos);
             void describe(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns);
 
             TYPEINFO();

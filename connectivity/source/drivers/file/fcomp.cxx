@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:03:36 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs
                      // : m_rCursor(rCurs)
                      : m_pAnalyzer(pAnalyzer)
                      , m_bORCondition(FALSE)
+                     , m_nParamCounter(0)
 {
     DBG_CTOR(OPredicateCompiler,NULL);
 }
@@ -131,6 +132,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     if (!pSQLParseNode)
         return;
 
+    m_nParamCounter = 0;
     // Parse Tree analysieren (je nach Statement-Typ)
     // und Zeiger auf WHERE-Klausel setzen:
     OSQLParseNode * pWhereClause = NULL;
@@ -450,7 +452,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
     {
-        pOperand = new OOperandParam(pPredicateNode, m_aParameterColumns);
+        pOperand = new OOperandParam(pPredicateNode, ++m_nParamCounter);
     }
     else if (pPredicateNode->getNodeType() == SQL_NODE_STRING ||
              pPredicateNode->getNodeType() == SQL_NODE_INTNUM ||

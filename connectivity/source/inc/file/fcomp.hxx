@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-25 08:26:21 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 08:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace connectivity
             OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
             ::vos::ORef< connectivity::OSQLColumns> m_aParameterColumns;
             OSQLAnalyzer*                           m_pAnalyzer;
+            sal_Int32                               m_nParamCounter;
             sal_Bool                                m_bORCondition;
 
         public:
