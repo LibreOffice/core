@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:10 $
+ *  last change: $Author: nn $ $Date: 2000-10-13 15:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,16 @@ void ScViewFunc::EnterData( USHORT nCol, USHORT nRow, USHORT nTab, const EditTex
             ScEditAttrTester aTester( &aEngine );
             bSimple = !aTester.NeedsObject();
             bCommon = aTester.NeedsCellAttr();
+
+            // formulas have to be recognized even if they're formatted
+            // (but commmon attributes are still collected)
+
+            if ( !bSimple && aEngine.GetParagraphCount() == 1 )
+            {
+                String aParStr = aEngine.GetText( (USHORT) 0 );
+                if ( aParStr.GetChar(0) == '=' )
+                    bSimple = TRUE;
+            }
 
             if (bCommon)                // Attribute fuer Tabelle
             {
