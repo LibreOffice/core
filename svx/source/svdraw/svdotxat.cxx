@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-11 10:20:14 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 08:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,12 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
             {
                 if ( GetStyleSheet() )
                 {
-                    if( nPara > 0 && eTextKind == OBJ_OUTLINETEXT && GetObjInventor() == SdrInventor )
+                    if( eTextKind == OBJ_OUTLINETEXT && GetObjInventor() == SdrInventor )
                     {
                         String aNewStyleSheetName( GetStyleSheet()->GetName() );
                         aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
                         aNewStyleSheetName += String::CreateFromInt32( rOutliner.GetDepth( nPara ) );
+
                         SfxStyleSheetBasePool* pStylePool = pModel!=NULL ? pModel->GetStyleSheetPool() : NULL;
                         SfxStyleSheet* pNewStyle = (SfxStyleSheet*) pStylePool->Find( aNewStyleSheetName, GetStyleSheet()->GetFamily() );
                         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
