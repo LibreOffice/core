@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:06:23 $
+ *  last change: $Author: dbo $ $Date: 2001-10-26 07:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,34 +61,72 @@
 #ifndef _UNO_LBNAMES_H_
 #define _UNO_LBNAMES_H_
 
-/** A java 1.1 compatible virtual machine
-*/
-#define UNO_LB_JAVA_NAMESPACE   java
-#define UNO_LB_JAVA             "java"
-/** ANSI C compilers
-*/
-#define UNO_LB_C_NAMESPACE      c_uno
-#define UNO_LB_C                "c"
-/** Miscrosoft VC++ 4.2 - 6.0 compiler; RTTI is not supported
-*/
-#define UNO_LB_MSCI_NAMESPACE   msci
-#define UNO_LB_MSCI             "msci"
-/** GCC 2 with RTTI or compatible; RTTI is not supported
-*/
-#define UNO_LB_GCC2_NAMESPACE   gcc2
-#define UNO_LB_GCC2             "gcc2"
-/** GCC 3 with RTTI or compatible; RTTI is not supported
-*/
-#define UNO_LB_GCC3_NAMESPACE   gcc3
-#define UNO_LB_GCC3             "gcc3"
-/** WorkShop Compiler 5.0 or compatible; RTTI is not supported
-*/
-#define UNO_LB_SUNPRO5_NAMESPACE sunpro5
-#define UNO_LB_SUNPRO5           "sunpro5"
+#ifdef __cplusplus
 
-/** Binary C UNO
-*/
-#define UNO_LB_UNO_NAMESPACE    uno
-#define UNO_LB_UNO              "uno"
+/* environment type names for supported compilers */
+#if defined (_MSC_VER)
+#if (_MSC_VER < 1000)
+#error "ms visual c++ version must be at least 4.2"
+#elif (_MSC_VER < 1100) // MSVC 4.x
+#pragma warning( disable: 4290 )
+#define __CPPU_ENV msci
+#elif (_MSC_VER < 1400) // MSVC 5-7
+#define __CPPU_ENV msci
+#else
+#error "ms visual c++ version must be between 4.2 and 7.x"
+#endif /* (_MSC_VER < 1000) */
+/* sunpro cc */
+#elif defined (__SUNPRO_CC)
+#if (__SUNPRO_CC < 0x500)
+#error "sunpro cc must be at least 5.x"
+#elif (__SUNPRO_CC < 0x600)
+#define __CPPU_ENV sunpro5
+#else
+#error "sunpro cc version must be 5.x"
+#endif /* defined (__SUNPRO_CC) */
+/* g++ 2.x, 3.0 */
+#elif defined (__GNUC__)
+#if (__GNUC__ == 2 && __GNUC_MINOR__ == 91)
+#define __CPPU_ENV gcc2
+#elif (__GNUC__ == 2 && __GNUC_MINOR__ == 95)
+#define __CPPU_ENV gcc2
+#elif (__GNUC__ == 2)
+#error "Tested gcc 2 versions are 2.91 and 2.95.  Patch uno/lbnames.h to try your gcc 2 version."
+#elif (__GNUC__ == 3 && __GNUC_MINOR__ == 0)
+#define __CPPU_ENV gcc3
+#elif (__GNUC__ == 3)
+#error "Tested gcc 3 version is 3.0.  Patch uno/lbnames.h to try your gcc 3 version."
+#else
+#error "Supported gcc majors are 2 and 3.  Unsupported gcc major version."
+#endif /* defined (__GNUC__) */
+#endif /* defined (_MSC_VER) */
+
+#if (! defined (CPPU_ENV) && defined (__CPPU_ENV))
+#define CPPU_ENV __CPPU_ENV
+#endif
+
+#ifdef CPPU_ENV
+/* test: whether given CPPU_ENV matches expected one */
+#if (CPPU_ENV != __CPPU_ENV)
+#error "CPPU_ENV: unexpected env!"
+#endif
+
+#define CPPU_STRINGIFY_EX( x ) #x
+#define CPPU_STRINGIFY( x ) CPPU_STRINGIFY_EX( x )
+/** Name for C++ compiler/ platform, e.g. "gcc3", "msci" */
+#define CPPU_CURRENT_LANGUAGE_BINDING_NAME CPPU_STRINGIFY( CPPU_ENV )
+
+#else
+#error "No supported C++ compiler environment."
+#endif /* CPPU_ENV */
+
+#endif /** __cplusplus */
+
+/** Environment type name for binary C UNO. */
+#define UNO_LB_UNO "uno"
+/** Environment type name for ANSI C compilers. */
+#define UNO_LB_C "c"
+/** Environment type name for java 1.1 compatible virtual machine. */
+#define UNO_LB_JAVA "java"
 
 #endif
