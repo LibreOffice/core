@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
+#   last change: $Author: vg $ $Date: 2002-01-30 14:54:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,12 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
 
 EXCEPTIONSFILES= \
         $(SLO)$/sdoutl.obj  \
-        $(SLO)$/drviews8.obj
+        $(SLO)$/drviews1.obj \
+        $(SLO)$/drviews5.obj \
+        $(SLO)$/drviews8.obj \
+        $(SLO)$/drviewsa.obj \
+        $(SLO)$/outlnvsh.obj \
+        $(SLO)$/slidvish.obj
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
