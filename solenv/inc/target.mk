@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-15 17:18:40 $
+#   last change: $Author: hjs $ $Date: 2002-01-24 12:43:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2435,6 +2435,15 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 
 .INCLUDE : tg_jar.mk
 
+
+# ----------------------------------
+# auto update of local environment
+# ----------------------------------
+
+.IF "$(SOLARVERSION)"!="$(SHARED_SOLARVERSION)"
+.INCLUDE .IGNORE : $(SOLAR_ENV_ROOT)$/etools$/env_up.mk
+.ENDIF			# "$(SOLARVERSION)"!="$(SHARED_SOLARVERSION)"
+
 # ----------------------------------
 # - NOPCH - files ohne PCH -
 # ----------------------------------
@@ -2610,8 +2619,8 @@ OTHERTARGET : $(OTHER)
 # - diverse kill commands -
 # -------------------------
 
-$(TMP)\makedt.don:
-    @$(TOUCH) $(TMP)\makedt.don
+"$(TMP)$/makedt.don":
+    @$(TOUCH) $(TMP)$/makedt.don
 
 do_copy_mk .IGNORE .SILENT :
     @+-$(MKDIR) $(OS2_SOLENV_INC) >& $(NULLDEV)
@@ -2645,31 +2654,31 @@ killbin:
     
 .ELSE			# "$(GUI)"=="WNT"
 .IF "$(SHL1TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL1TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL1TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL2TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL2TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL2TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL3TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL3TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL3TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL4TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL4TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL4TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL5TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL5TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL5TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL6TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL6TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL6TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL7TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL7TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL7TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL8TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL8TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL8TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(SHL9TARGET)"!=""
-    @+-$(RM) $(LB)/$(SHL9TARGET)$(DLLPOST)
+    @+-$(RM) $(LB)/$(DLLPRE)$(SHL9TARGET)$(DLLPOST)
 .ENDIF
 .IF "$(APP1TARGET)"!=""
     @+-$(RM) $(BIN)/$(APP1TARGET)$(EXECPOST)
@@ -2740,16 +2749,56 @@ killsrs:
     @+echo srsfiles weg!
 
 killres:
-.IF "$(RESFILES)" != ""
-    +$(RM) $(RESFILES)
-.ENDIF
-    @+echo res files weg!
+.IF "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
+    +$(RM) $(RESLIB1TARGETN) $(RESLIB2TARGETN) $(RESLIB3TARGETN) $(RESLIB4TARGETN) $(RESLIB5TARGETN) $(RESLIB6TARGETN) $(RESLIB7TARGETN) $(RESLIB8TARGETN) $(RESLIB9TARGETN)
+    @+echo resource files removed!
+.ELSE			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
+    @+echo no resource files defined!
+.ENDIF			# "$(RESLIB1TARGETN)$(RESLIB2TARGETN)$(RESLIB3TARGETN)$(RESLIB4TARGETN)$(RESLIB5TARGETN)$(RESLIB6TARGETN)$(RESLIB7TARGETN)$(RESLIB8TARGETN)$(RESLIB9TARGETN)"!=""
 
 killdef:
 .IF "$(DEFTARGETN)" != ""
     +$(RM) $(DEFTARGETN)
 .ENDIF
     @+echo deffiles weg!
+
+killlib:
+.IF "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
+    +$(RM) $(LIB1TARGETN) $(LIB2TARGETN) $(LIB3TARGETN) $(LIB4TARGETN) $(LIB5TARGETN) $(LIB6TARGETN) $(LIB7TARGETN) $(LIB8TARGETN) $(LIB9TARGETN)
+.IF "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
+    +$(RM) $(LIB1ARCHIV) $(LIB2ARCHIV) $(LIB3ARCHIV) $(LIB4ARCHIV) $(LIB5ARCHIV) $(LIB6ARCHIV) $(LIB7ARCHIV) $(LIB8ARCHIV) $(LIB9ARCHIV)
+.ENDIF			# "$(LIB1ARCHIV)$(LIB2ARCHIV)$(LIB3ARCHIV)$(LIB4ARCHIV)$(LIB5ARCHIV)$(LIB6ARCHIV)$(LIB7ARCHIV)$(LIB8ARCHIV)$(LIB9ARCHIV)"!=""
+    @+echo lib/archive files removed!
+.ENDIF			# "$(LIB1TARGETN)$(LIB2TARGETN)$(LIB3TARGETN)$(LIB4TARGETN)$(LIB5TARGETN)$(LIB6TARGETN)$(LIB7TARGETN)$(LIB8TARGETN)$(LIB9TARGETN)"!=""
+.IF "$(SLOTARGET)$(OBJTARGET)"!=""
+    +$(RM) $(SLOTARGET) $(OBJTARGET)
+    @+echo default lib files removed!
+.ENDIF			# "$(SLOTARGET)$(OBJTARGET)"!=""
+.IF "$(SVXLIGHTSLOTARGET)$(SVXLIGHTOBJTARGET)"!=""
+    +$(RM) $(SVXLIGHTSLOTARGET) $(SVXLIGHTOBJTARGET)
+.ENDIF			# "$(SVXLIGHTSLOTARGET)$(SVXLIGHTOBJTARGET)"!=""
+    @+echo done!
+
+clean_misc :
+.IF "$(MISC)"!=""
+    +rm -rf $(MISC)$/*
+    @+echo misc is gone!
+.ELSE			# "$(MISC)"!=""
+    @+echo can\'t be done! $$(MISC) not defined.
+.ENDIF			# "$(MISC)"!=""
+
+clean_all :
+.IF "$(OUT)"!=""
+.IF "$(GUI)"=="UNX"
+    +test -f $(PRJ)$/prj/build.lst && rm -rf $(OUT)
+.ELSE			# "$(GUI)"=="UNX"
+    +if exist $(PRJ)$/prj/build.lst del /sxyz $(OUT)
+.ENDIF			# "$(GUI)"=="UNX"
+    @+echo local output tree is gone!
+.ELSE			# "$(OUT)"!=""
+    @+echo can\'t be done! $$(OUT) not defined.
+.ENDIF			# "$(OUT)"!=""
+
 
 SRCALLTARGET:	\
         $(OS2_COPY_MK)		\
