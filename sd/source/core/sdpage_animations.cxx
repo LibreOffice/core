@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:17:30 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,3 +351,14 @@ void SdPage::onParagraphRemoving( ::Outliner* pOutliner, Paragraph* pPara, SdrOb
         mpMainSequence->disposeTextRange( makeAny( aTarget ) );
     }
 }
+
+/** callback from the sd::View when an object just left text edit mode */
+void SdPage::onEndTextEdit( SdrObject* pObj )
+{
+    if( pObj && mpMainSequence.get() )
+    {
+        Reference< XShape > xObj( pObj->getUnoShape(), UNO_QUERY );
+        mpMainSequence->onTextChanged( xObj );
+    }
+}
+
