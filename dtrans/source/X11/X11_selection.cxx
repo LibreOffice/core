@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:25:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,7 +1050,17 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         if( it->second->m_aTypes.getLength() && ! it->second->m_bHaveUTF16 )
         {
             Sequence< sal_Int8 > aData;
-            if( it->second->m_bHaveCompound &&
+            if( it->second->m_aUTF8Type != None &&
+                getPasteData( selection,
+                              it->second->m_aUTF8Type,
+                              aData )
+                )
+            {
+              OUString aRet( (const sal_Char*)aData.getConstArray(), aData.getLength(), RTL_TEXTENCODING_UTF8 );
+              rData = Sequence< sal_Int8 >( (sal_Int8*)aRet.getStr(), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
+              bSuccess = true;
+            }
+            else if( it->second->m_bHaveCompound &&
                 getPasteData( selection,
                               m_nCOMPOUNDAtom,
                               aData )
@@ -1226,6 +1236,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
     bool bSuccess = false;
     bool bHaveUTF16 = false;
+    Atom aUTF8Type = None;
     bool bHaveCompound = false;
     bool bHaveText = false;
     Sequence< sal_Int8 > aAtoms;
@@ -1336,6 +1347,10 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                         bHaveUTF16 = true;
                         pFlavors->DataType = getCppuType( (OUString*)0 );
                     }
+                    else if( pFlavors->MimeType.getToken( 0, ';', nIndex ).compareToAscii( "charset=utf-8" ) == 0 )
+                    {
+                        aUTF8Type = *pAtoms;
+                    }
                 }
                 pFlavors++;
                 *pNativeTypes++ = *pAtoms;
@@ -1374,6 +1389,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 it->second->m_aNativeTypes      = aNativeTypes;
                 it->second->m_nLastTimestamp    = time( NULL );
                 it->second->m_bHaveUTF16        = bHaveUTF16;
+                it->second->m_aUTF8Type         = aUTF8Type;
                 it->second->m_bHaveCompound     = bHaveCompound;
             }
             else
@@ -1382,6 +1398,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 it->second->m_aNativeTypes      = Sequence< Atom >();
                 it->second->m_nLastTimestamp    = 0;
                 it->second->m_bHaveUTF16        = false;
+                it->second->m_aUTF8Type         = None;
                 it->second->m_bHaveCompound     = false;
             }
         }
