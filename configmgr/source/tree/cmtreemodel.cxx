@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2001-12-07 18:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,12 +215,9 @@ void SubtreeChange::dispatch(ChangeTreeModification& _anAction)
 void SubtreeChange::forEachChange(ChangeTreeAction& _anAction) const
 {
     ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_aChanges.begin();
-    for(;aIter != m_aChanges.end();)
+    while (aIter != m_aChanges.end())
     {
-        ::std::map< ::rtl::OUString,Change* >::const_iterator aNextIter = aIter;
-        ++aNextIter;
-        aIter->second->dispatch(_anAction);
-        aIter = aNextIter;
+        (aIter++)->second->dispatch(_anAction);
     }
 }
 
@@ -228,8 +225,10 @@ void SubtreeChange::forEachChange(ChangeTreeAction& _anAction) const
 void SubtreeChange::forEachChange(ChangeTreeModification& _anAction)
 {
     ::std::map< ::rtl::OUString,Change* >::const_iterator aIter = m_aChanges.begin();
-    for(;aIter != m_aChanges.end();++aIter)
-        aIter->second->dispatch(_anAction);
+    while (aIter != m_aChanges.end())
+    {
+        (aIter++)->second->dispatch(_anAction);
+    }
 }
 
 //--------------------------------------------------------------------------
