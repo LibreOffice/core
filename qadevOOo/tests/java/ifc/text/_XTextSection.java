@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextSection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:07 $
+ *  last change:$Date: 2003-09-08 11:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.XTextSection;
 import lib.MultiMethodTest;
+
+import com.sun.star.text.XTextSection;
 
 /**
  * Testing <code>com.sun.star.text.XTextSection</code>
@@ -85,7 +86,6 @@ public class _XTextSection extends MultiMethodTest {
      */
     public void _getChildSections(){
         boolean bResult = false;
-        XTextSection oSection[] = null;
         XTextSection oSect[] = oObj.getChildSections();
         if (oSect.length > 0){
             bResult = true;
