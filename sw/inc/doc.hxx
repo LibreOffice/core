@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-21 12:38:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,10 +1121,19 @@ public:
         // sie noch nicht, dann erzuege sie
         // Ist der String-Pointer definiert, dann erfrage nur die
         // Beschreibung der Attribute, !! es legt keine Vorlage an !!
+    // ...Simple to prevent ambiguity with GetPageDescFromPool
+    SwTxtFmtColl* GetTxtCollFromPoolSimple(sal_uInt16 nId,
+                                           BOOL bRegardLanguage)
+    {
+        return GetTxtCollFromPool
+            ( nId, 0, SFX_ITEM_PRESENTATION_COMPLETE, SFX_MAPUNIT_TWIP,
+              SFX_MAPUNIT_TWIP, bRegardLanguage);
+    }
     SwTxtFmtColl* GetTxtCollFromPool( sal_uInt16 nId, String* pDescription = 0,
         SfxItemPresentation ePres = SFX_ITEM_PRESENTATION_COMPLETE,
         SfxMapUnit eCoreMetric = SFX_MAPUNIT_TWIP,
-        SfxMapUnit ePresMetric = SFX_MAPUNIT_TWIP );
+        SfxMapUnit ePresMetric = SFX_MAPUNIT_TWIP,
+        BOOL bRegardLanguage = TRUE );
         // return das geforderte automatische  Format - Basis-Klasse !
     SwFmt* GetFmtFromPool( sal_uInt16 nId, String* pDescription = 0,
         SfxItemPresentation ePres = SFX_ITEM_PRESENTATION_COMPLETE,
@@ -1139,7 +1148,16 @@ public:
     SwPageDesc* GetPageDescFromPool( sal_uInt16 nId, String* pDescription = 0,
         SfxItemPresentation ePres = SFX_ITEM_PRESENTATION_COMPLETE,
         SfxMapUnit eCoreMetric = SFX_MAPUNIT_TWIP,
-        SfxMapUnit ePresMetric = SFX_MAPUNIT_TWIP );
+        SfxMapUnit ePresMetric = SFX_MAPUNIT_TWIP,
+        BOOL bRegardLanguage = TRUE );
+    // ...Simple to prevent ambiguity with GetPageDescFromPool
+    SwPageDesc* GetPageDescFromPoolSimple( sal_uInt16 nId,
+                                           BOOL bRegardLanguage)
+    {
+        return GetPageDescFromPool
+            ( nId, 0, SFX_ITEM_PRESENTATION_COMPLETE, SFX_MAPUNIT_TWIP,
+              SFX_MAPUNIT_TWIP, bRegardLanguage);
+    }
     SwNumRule* GetNumRuleFromPool( sal_uInt16 nId, String* pDescription = 0,
         SfxItemPresentation ePres = SFX_ITEM_PRESENTATION_COMPLETE,
         SfxMapUnit eCoreMetric = SFX_MAPUNIT_TWIP,
@@ -1243,7 +1261,8 @@ public:
     SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
     void DelPageDesc( sal_uInt16 i );
-    sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0 );
+    sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
+                             BOOL bRegardLanguage = TRUE);
 
         // Methoden fuer die Verzeichnisse:
         // - Verzeichnismarke einfuegen loeschen travel
