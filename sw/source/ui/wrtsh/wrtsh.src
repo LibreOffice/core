@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:01:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ String STR_SPLITNODE_UNDO
     TEXT [ italian ] = "Nuovo paragrafo" ;
     TEXT [ portuguese_brazilian ] = "novo Parágrafo" ;
     TEXT [ portuguese ] = "Novo parágrafo" ;
-    TEXT [ finnish ] = "uusi kappale" ;
+    TEXT [ finnish ] = "Uusi kappale" ;
     TEXT [ danish ] = "nyt afsnit" ;
     TEXT [ french ] = "Nouveau paragraphe" ;
     TEXT [ swedish ] = "Nytt stycke" ;
@@ -214,7 +214,7 @@ String STR_MOVE_UNDO
     TEXT [ italian ] = "Sposta" ;
     TEXT [ portuguese_brazilian ] = "Mover" ;
     TEXT [ portuguese ] = "Mover" ;
-    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ finnish ] = "Siirrä" ;
     TEXT [ danish ] = "Flyt" ;
     TEXT [ french ] = "Déplacer" ;
     TEXT [ swedish ] = "Flytta" ;
@@ -388,7 +388,7 @@ String STR_INSERT_GLOSSARY
     TEXT [ italian ] = "Inserisci testo automatico" ;
     TEXT [ portuguese_brazilian ] = "Inserir Texto Automático" ;
     TEXT [ portuguese ] = "Inserir AutoTexto" ;
-    TEXT [ finnish ] = "Lisää automaattiteksti" ;
+    TEXT [ finnish ] = "Lisää automaattinen teksti" ;
     TEXT [ danish ] = "Indsæt AutoTekst" ;
     TEXT [ french ] = "Insérer un AutoTexte" ;
     TEXT [ swedish ] = "Infoga AutoText" ;
@@ -533,7 +533,7 @@ String STR_INSTABLE_UNDO
     TEXT [ italian ] = "Inserisci tabella" ;
     TEXT [ portuguese_brazilian ] = "Insere uma tabela" ;
     TEXT [ portuguese ] = "Inserir tabela" ;
-    TEXT [ finnish ] = "Lisää taulukon" ;
+    TEXT [ finnish ] = "Lisää taulukko" ;
     TEXT [ danish ] = "Indsæt tabel" ;
     TEXT [ french ] = "Insérer un tableau" ;
     TEXT [ swedish ] = "Infoga tabell" ;
@@ -562,7 +562,7 @@ String STR_TEXTTOTABLE_UNDO
     TEXT [ italian ] = "Converti testo in tabella." ;
     TEXT [ portuguese_brazilian ] = "Converter texto em tabela" ;
     TEXT [ portuguese ] = "Converter texto -> tabela" ;
-    TEXT [ finnish ] = "Muunna teksti taulukoksi" ;
+    TEXT [ finnish ] = "Muunna teksti -> taulukko" ;
     TEXT [ danish ] = "Konverter tekst til tabel" ;
     TEXT [ french ] = "Convertir texte en tableau" ;
     TEXT [ swedish ] = "Konvertera text till tabell" ;
@@ -678,7 +678,7 @@ String STR_INSERT_PAGE_BREAK_UNDO
     TEXT [ italian ] = "Interruzione di pagina fissa" ;
     TEXT [ portuguese_brazilian ] = "Quebra forçada de página" ;
     TEXT [ portuguese ] = "Quebra de página fixa" ;
-    TEXT [ finnish ] = "Pysyvä sivunvaihto" ;
+    TEXT [ finnish ] = "Suora sivunvaihto" ;
     TEXT [ danish ] = "Hårdt sideskift" ;
     TEXT [ french ] = "Saut de page forcé" ;
     TEXT [ swedish ] = "Hård sidbrytning" ;
@@ -707,7 +707,7 @@ String STR_INSERT_COLUMN_BREAK_UNDO
     TEXT [ italian ] = "Interruzione di colonna fissa" ;
     TEXT [ portuguese_brazilian ] = "Quebra forçada de coluna" ;
     TEXT [ portuguese ] = "Quebra de coluna fixa" ;
-    TEXT [ finnish ] = "Pysyvä sarakkeenvaihto" ;
+    TEXT [ finnish ] = "Suora sarakevaihto" ;
     TEXT [ danish ] = "Hårdt spalteskift" ;
     TEXT [ french ] = "Saut de colonne forcé" ;
     TEXT [ swedish ] = "Hård kolumnbrytning" ;
@@ -812,6 +812,7 @@ String STR_DRAG_AND_COPY
     Text[ turkish ] = "Kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Copiar";
+    Text[ finnish ] = "Kopioi";
 };
 String STR_DRAG_AND_MOVE
 {
@@ -839,6 +840,7 @@ String STR_DRAG_AND_MOVE
     Text[ turkish ] = "Taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar";
+    Text[ finnish ] = "Siirrä";
 };
 String STR_INSERT_RULER
 {
@@ -866,6 +868,7 @@ String STR_INSERT_RULER
     Text[ turkish ] = "Cetvel ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar regla";
+    Text[ finnish ] = "Lisää kohdistin";
 };
 String STR_INSERT_CHART
 {
@@ -893,6 +896,7 @@ String STR_INSERT_CHART
     Text[ turkish ] = "%PRODUCTNAME Chart ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar %PRODUCTNAME Chart";
+    Text[ finnish ] = "Lisää tuotteen %PRODUCTNAME kaavio";
 };
 String STR_INSERTFLY
 {
@@ -902,7 +906,7 @@ String STR_INSERTFLY
     TEXT [ italian ] = "Inserisci cornice" ;
     TEXT [ portuguese_brazilian ] = "Inserir moldura" ;
     TEXT [ portuguese ] = "Inserir moldura" ;
-    TEXT [ finnish ] = "Lisää kehyksen" ;
+    TEXT [ finnish ] = "Lisää kehys" ;
     TEXT [ danish ] = "Indsæt ramme" ;
     TEXT [ french ] = "Insérer un cadre" ;
     TEXT [ swedish ] = "Infoga ram" ;
@@ -960,7 +964,7 @@ String STR_AUTOFORMAT
     TEXT [ italian ] = "Formattazione automatica" ;
     TEXT [ portuguese_brazilian ] = "Auto Formatação" ;
     TEXT [ portuguese ] = "AutoFormato" ;
-    TEXT [ finnish ] = "Automaattimuoto" ;
+    TEXT [ finnish ] = "Automaattinen muotoilu" ;
     TEXT [ danish ] = "AutoFormat" ;
     TEXT [ french ] = "AutoFormat" ;
     TEXT [ swedish ] = "Autoformat" ;
@@ -1047,7 +1051,7 @@ String STR_INSERTSECTION
     TEXT [ italian ] = "Inserisci area" ;
     TEXT [ portuguese_brazilian ] = "Inserir seção" ;
     TEXT [ portuguese ] = "Inserir secção" ;
-    TEXT [ finnish ] = "Lisää osa" ;
+    TEXT [ finnish ] = "Lisää osio" ;
     TEXT [ danish ] = "Indsæt område" ;
     TEXT [ french ] = "Insérer une section" ;
     TEXT [ swedish ] = "Infoga område" ;
@@ -1076,7 +1080,7 @@ String STR_DELETESECTION
     TEXT [ italian ] = "Elimina area" ;
     TEXT [ portuguese_brazilian ] = "Apagar seção" ;
     TEXT [ portuguese ] = "Eliminar categoria" ;
-    TEXT [ finnish ] = "Poista osa" ;
+    TEXT [ finnish ] = "Poista osio" ;
     TEXT [ danish ] = "Slet område" ;
     TEXT [ french ] = "Supprimer la section" ;
     TEXT [ swedish ] = "Radera kategori" ;
@@ -1105,7 +1109,7 @@ String STR_CHANGESECTION
     TEXT [ italian ] = "Cambia area" ;
     TEXT [ portuguese_brazilian ] = "Mudar seção" ;
     TEXT [ portuguese ] = "Alterar secção" ;
-    TEXT [ finnish ] = "Vaihda osa" ;
+    TEXT [ finnish ] = "Muokkaa osiota" ;
     TEXT [ danish ] = "Modificer område" ;
     TEXT [ french ] = "Modifier section" ;
     TEXT [ swedish ] = "Ändra område" ;
@@ -1152,6 +1156,7 @@ String STR_CHANGESECTPASSWD
     Text[ turkish ] = "Þifre korumasýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar contraseña";
+    Text[ finnish ] = "Muuta salasanasuojausta";
 };
 String STR_CHANGEDEFATTR
 {
@@ -1161,7 +1166,7 @@ String STR_CHANGEDEFATTR
     TEXT [ italian ] = "Cambia valori predefiniti" ;
     TEXT [ portuguese_brazilian ] = "Mudar padrões" ;
     TEXT [ portuguese ] = "Alterar valores padrão" ;
-    TEXT [ finnish ] = "Muuta oletuksia" ;
+    TEXT [ finnish ] = "Muokkaa oletusarvoja" ;
     TEXT [ danish ] = "Modificer standardværdier" ;
     TEXT [ french ] = "Changement des valeurs standard" ;
     TEXT [ swedish ] = "Ändra standardvärden" ;
@@ -1190,7 +1195,7 @@ String STR_OUTLINE_LR
     TEXT [ italian ] = "Graduare struttura" ;
     TEXT [ portuguese_brazilian ] = "Promover vazado" ;
     TEXT [ portuguese ] = "Escalonar esquema" ;
-    TEXT [ finnish ] = "Korota jäsennys" ;
+    TEXT [ finnish ] = "Pienennä jäsennyksen sisennystä" ;
     TEXT [ danish ] = "Inddel disposition" ;
     TEXT [ french ] = "Échelonner la structure" ;
     TEXT [ swedish ] = "Dela in disposition" ;
@@ -1219,7 +1224,7 @@ String STR_OUTLINE_UD
     TEXT [ italian ] = "Sposta struttura" ;
     TEXT [ portuguese_brazilian ] = "Mover vazado" ;
     TEXT [ portuguese ] = "Mover esquema" ;
-    TEXT [ finnish ] = "Siirrä jäsennys" ;
+    TEXT [ finnish ] = "Siirrä ääriviivaa" ;
     TEXT [ danish ] = "Flyt disposition" ;
     TEXT [ french ] = "Déplacer le plan" ;
     TEXT [ swedish ] = "Flytta disposition" ;
@@ -1277,7 +1282,7 @@ String STR_NUMUPDOWN
     TEXT [ italian ] = "Sposta numerazione" ;
     TEXT [ portuguese_brazilian ] = "Mover Numeração" ;
     TEXT [ portuguese ] = "Escalonar numeração" ;
-    TEXT [ finnish ] = "Korota numerointi" ;
+    TEXT [ finnish ] = "Siirrä numerointi" ;
     TEXT [ danish ] = "Inddel nummerering" ;
     TEXT [ french ] = "Échelonner la numérotation" ;
     TEXT [ swedish ] = "Flernivånumrering" ;
@@ -1324,6 +1329,7 @@ String STR_MOVENUM
     Text[ turkish ] = "Paragraflarý taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplazar párrafos";
+    Text[ finnish ] = "Siirrä kappaleita";
 };
 String STR_INSERTDRAW
 {
@@ -1351,6 +1357,7 @@ String STR_INSERTDRAW
     Text[ turkish ] = "Çizim nesnesi ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar objeto de dibujo";
+    Text[ finnish ] = "Lisää piirrosobjekti";
 };
 String STR_NUMORNONUM
 {
@@ -1378,6 +1385,7 @@ String STR_NUMORNONUM
     Text[ turkish ] = "Numara açýk/kapalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número activado/desactivado";
+    Text[ finnish ] = "Numerot On/Off";
 };
 String STR_INC_LEFTMARGIN
 {
@@ -1405,6 +1413,7 @@ String STR_INC_LEFTMARGIN
     Text[ turkish ] = "Girintiyi büyüt";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aumentar sangría";
+    Text[ finnish ] = "Lisää sisennystä";
 };
 String STR_DEC_LEFTMARGIN
 {
@@ -1432,6 +1441,7 @@ String STR_DEC_LEFTMARGIN
     Text[ turkish ] = "Girintiyi küçült";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Disminuir sangría";
+    Text[ finnish ] = "Vähennä sisennystä";
 };
 String STR_INSERTLABEL
 {
@@ -1459,6 +1469,7 @@ String STR_INSERTLABEL
     Text[ turkish ] = "Etiket ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar etiqueta";
+    Text[ finnish ] = "Lisää kuvaotsikko";
 };
 String STR_SETNUMRULESTART
 {
@@ -1486,6 +1497,7 @@ String STR_SETNUMRULESTART
     Text[ turkish ] = "Numaralamayý yeniden baþlat";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Reiniciar numeración";
+    Text[ finnish ] = "Aloita numerointi uudestaan";
 };
 String STR_CHANGEFTN
 {
@@ -1513,6 +1525,7 @@ String STR_CHANGEFTN
     Text[ turkish ] = "Dipnotu deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar nota al pie";
+    Text[ finnish ] = "Muokkaa alaviitettä";
 };
 String STR_REDLINE
 {
@@ -1545,6 +1558,7 @@ String STR_ACCEPT_REDLINE
     Text[ turkish ] = "Deðiþiklikleri kaydet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aceptar modificación";
+    Text[ finnish ] = "Hyväksy muutokset";
 };
 String STR_REJECT_REDLINE
 {
@@ -1572,6 +1586,7 @@ String STR_REJECT_REDLINE
     Text[ turkish ] = "Deðiþikliði reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rechazar modificación";
+    Text[ finnish ] = "Hylkää muutos";
 };
 String STR_SPLIT_TABLE
 {
@@ -1599,6 +1614,7 @@ String STR_SPLIT_TABLE
     Text[ turkish ] = "Tabloyu böl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Dividir tabla";
+    Text[ finnish ] = "Jaa taulukko";
 };
 String STR_DONTEXPAND
 {
@@ -1626,6 +1642,7 @@ String STR_DONTEXPAND
     Text[ turkish ] = "Özniteliði durdur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Detener atributo";
+    Text[ finnish ] = "Pysäytä ominaisuus";
 };
 String STR_AUTOCORRECT
 {
@@ -1653,6 +1670,7 @@ String STR_AUTOCORRECT
     Text[ turkish ] = "Otomatik düzeltme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoCorrección";
+    Text[ finnish ] = "Automaattinen korjaus";
 };
 String STR_MERGE_TABLE
 {
@@ -1680,6 +1698,7 @@ String STR_MERGE_TABLE
     Text[ turkish ] = "Tabloyu birleþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "unir tablas";
+    Text[ finnish ] = "Yhdistä taulukko";
 };
 
 String STR_TRANSLITERATE
@@ -1705,6 +1724,7 @@ String STR_TRANSLITERATE
     TEXT[ turkish ] = "Change case";
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑÝ ßÈíÑÉ Ãæ ÕÛíÑÉ";
     TEXT[ catalan ] = "Mayúsculas/minúsculas";
+    TEXT[ finnish ] = "Groß-/Kleinschreibung";
 };
 
 String STR_DELNUM
@@ -1762,6 +1782,7 @@ String STR_DRAWUNDO
     Text[ turkish ] = "Çizim nesneleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Objetos de dibujo";
+    Text[ finnish ] = "Piirrosobjektit";
 };
 String STR_DRAWGROUP
 {
@@ -1789,6 +1810,7 @@ String STR_DRAWGROUP
     Text[ turkish ] = "Çizim nesnelerini grupla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Agrupar objetos de dibujo";
+    Text[ finnish ] = "Ryhmittele piirrosobjektit";
 };
 String STR_DRAWUNGROUP
 {
@@ -1816,6 +1838,7 @@ String STR_DRAWUNGROUP
     Text[ turkish ] = "Nesne grubunu çöz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Resolver objeto de grupo";
+    Text[ finnish ] = "Pura piirrosobjektien ryhmitys";
 };
 String STR_DRAWDELETE
 {
@@ -1843,6 +1866,7 @@ String STR_DRAWDELETE
     Text[ turkish ] = "Çizim nesnelerini sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar objetos de dibujo";
+    Text[ finnish ] = "Poista piirrosobjektit";
 };
 String STR_REREAD
 {
@@ -1870,6 +1894,7 @@ String STR_REREAD
     Text[ turkish ] = "Grafiði deðiþtirmek";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Reemplazar imagen";
+    Text[ finnish ] = "Korvaa grafiikka";
 };
 String STR_DELGRF
 {
@@ -1897,6 +1922,7 @@ String STR_DELGRF
     Text[ turkish ] = "Grafiði sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar imagen";
+    Text[ finnish ] = "Poista kuvat";
 };
 String STR_DELOLE
 {
@@ -1924,6 +1950,7 @@ String STR_DELOLE
     Text[ turkish ] = "Nesneyi sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar objeto";
+    Text[ finnish ] = "Poista objekti";
 };
 String STR_TABLE_ATTR
 {
@@ -1951,6 +1978,7 @@ String STR_TABLE_ATTR
     Text[ turkish ] = "Tablo özniteliklerini kullan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar atributos de la tabla";
+    Text[ finnish ] = "Käytä taulukkomääritteitä";
 };
 String STR_TABLE_AUTOFMT
 {
@@ -1978,6 +2006,7 @@ String STR_TABLE_AUTOFMT
     Text[ turkish ] = "Otomatik formatlama Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato tabla";
+    Text[ finnish ] = "Automaattinen taulukon muotoilu";
 };
 String STR_TABLE_INSCOL
 {
@@ -2121,6 +2150,7 @@ String STR_TABLE_MERGE
     Text[ turkish ] = "Hücreyi birleþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Unir celdas";
+    Text[ finnish ] = "Yhdistä solut";
 };
 String STR_TABLE_NUMFORMAT
 {
@@ -2148,6 +2178,7 @@ String STR_TABLE_NUMFORMAT
     Text[ turkish ] = "Hücreyi formatla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formatear celda";
+    Text[ finnish ] = "Muotoile solu";
 };
 String STR_INSERT_TOX
 {
@@ -2175,6 +2206,7 @@ String STR_INSERT_TOX
     Text[ turkish ] = "Dizin ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar índice";
+    Text[ finnish ] = "Lisää hakemisto";
 };
 String STR_CLEAR_TOX_RANGE
 {
@@ -2202,6 +2234,7 @@ String STR_CLEAR_TOX_RANGE
     Text[ turkish ] = "Dizini kaldýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar directorio";
+    Text[ finnish ] = "Poista hakemisto";
 };
 String STR_TABLE_TBLCPYTBL
 {
@@ -2229,6 +2262,7 @@ String STR_TABLE_TBLCPYTBL
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Copiar tabla";
+    Text[ finnish ] = "Kopioi taulukko";
 };
 String STR_TABLE_CPYTBL
 {
@@ -2256,6 +2290,7 @@ String STR_TABLE_CPYTBL
     Text[ turkish ] = "Tabloyu kopyala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Copiar tabla";
+    Text[ finnish ] = "Kopioi taulukko";
 };
 String STR_INS_FROM_SHADOWCRSR
 {
@@ -2283,6 +2318,7 @@ String STR_INS_FROM_SHADOWCRSR
     Text[ turkish ] = "Ýmleci ayarla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Poner cursor";
+    Text[ finnish ] = "Määritä osoitin";
 };
 String STR_UNDO_CHAIN
 {
@@ -2310,6 +2346,7 @@ String STR_UNDO_CHAIN
     Text[ turkish ] = "Metin kutularýný baðla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Conectar marcos de texto";
+    Text[ finnish ] = "Linkitä tekstikehykset";
 };
 String STR_UNDO_UNCHAIN
 {
@@ -2337,6 +2374,7 @@ String STR_UNDO_UNCHAIN
     Text[ turkish ] = "Metin kutusu baðlantýlarýný çöz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Deshacer el vínculo de los marcos de texto.";
+    Text[ finnish ] = "Poista tekstikehysten linkki";
 };
 String STR_UNDO_FTNINFO
 {
@@ -2364,6 +2402,7 @@ String STR_UNDO_FTNINFO
     Text[ turkish ] = "Dipnot ayarlarýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar opciones de nota al pie";
+    Text[ finnish ] = "Muokkaa alaviiteasetuksia";
 };
 String STR_UNDO_ENDNOTEINFO
 {
@@ -2391,6 +2430,7 @@ String STR_UNDO_ENDNOTEINFO
     Text[ turkish ] = "Sonnot ayarlarýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar configuración de notas finales";
+    Text[ finnish ] = "Muokkaa loppuhuomautuksen asetuksia";
 };
 String STR_UNDO_COMPAREDOC
 {
@@ -2418,6 +2458,7 @@ String STR_UNDO_COMPAREDOC
     Text[ turkish ] = "Belgeyi karþýlaþtýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comparar documento";
+    Text[ finnish ] = "Vertaa asiakirjaa";
 };
 String STR_UNDO_SETFLYFRMFMT
 {
@@ -2445,6 +2486,7 @@ String STR_UNDO_SETFLYFRMFMT
     Text[ turkish ] = "Çerçeve biçimi uygula";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aplicar estilo de marco";
+    Text[ finnish ] = "Käytä kehystyyliä";
 };
 String STR_UNDO_SETRUBYATTR
 {
@@ -2469,6 +2511,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ turkish ] = "Set phonetic Symbols";
     Text[ arabic ] = "ÊÚííä ÑãæÒ ÕæÊíÉ";
     Text[ catalan ] = "Aplicar símbolos fonéticos";
+    Text[ finnish ] = "Phonetische Symbole setzen";
 };
 String STR_INSERT_FOOTNOTE
 {
@@ -2496,6 +2539,7 @@ String STR_INSERT_FOOTNOTE
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar nota al pie";
+    Text[ finnish ] = "Lisää alaviite";
 };
 String STR_INSERT_URLBTN
 {
@@ -2523,6 +2567,7 @@ String STR_INSERT_URLBTN
     Text[ turkish ] = "URL düðmesi ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar botón URL";
+    Text[ finnish ] = "Lisää URL-painike";
 };
 String STR_INSERT_URLTXT
 {
@@ -2550,6 +2595,7 @@ String STR_INSERT_URLTXT
     Text[ turkish ] = "Hyperlink ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar hiperenlace";
+    Text[ finnish ] = "Lisää hyperlinkki";
 };
 String STR_DELETE_INVISIBLECNTNT
 {
@@ -2575,6 +2621,7 @@ String STR_DELETE_INVISIBLECNTNT
     Text[ turkish ] = "Görünmez içeriði kaldýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "eliminar contenido invisible";
+    Text[ finnish ] = "poista näkymätön sisältö";
 };
 
 String STR_DDEERROR_APP1
@@ -2611,7 +2658,7 @@ String STR_DDEERROR_APP2
     TEXT [ italian ] = "] non risponde" ;
     TEXT [ portuguese_brazilian ] = "] não responde" ;
     TEXT [ portuguese ] = "] não responde." ;
-    TEXT [ finnish ] = "] ei vastaa" ;
+    TEXT [ finnish ] = "] ei vastaa." ;
     TEXT [ danish ] = "] svarer ikke" ;
     TEXT [ french ] = "] ne répond pas" ;
     TEXT [ swedish ] = "]  svarar inte" ;
@@ -2640,7 +2687,7 @@ String STR_DDEERROR_DATA1
     TEXT [ italian ] = "Dati per [" ;
     TEXT [ portuguese_brazilian ] = "Dados para [" ;
     TEXT [ portuguese ] = "Os dados para [" ;
-    TEXT [ finnish ] = "Tietoja kohteeseen [" ;
+    TEXT [ finnish ] = "Tiedot [" ;
     TEXT [ danish ] = "Dataene til [" ;
     TEXT [ french ] = "Les données pour [" ;
     TEXT [ swedish ] = "Data till [" ;
@@ -2666,7 +2713,7 @@ String STR_DDEERROR_DATA2
     TEXT [ italian ] = "]" ;
     TEXT [ portuguese_brazilian ] = "] não podem ser obtidos" ;
     TEXT [ portuguese ] = "] não podem ser determinados." ;
-    TEXT [ finnish ] = "] ei saatu" ;
+    TEXT [ finnish ] = "] ei ole saatavilla" ;
     TEXT [ danish ] = "] kan ikke bestemmes" ;
     TEXT [ french ] = "] ne peuvent pas être obtenues" ;
     TEXT [ swedish ] = "] kan inte bestämmas" ;
@@ -2695,7 +2742,7 @@ String STR_DDEERROR_LINK1
     TEXT [ italian ] = "Collegamento con [" ;
     TEXT [ portuguese_brazilian ] = "Ligação para [" ;
     TEXT [ portuguese ] = "A ligação a [" ;
-    TEXT [ finnish ] = "Linkkiä kohteeseen [" ;
+    TEXT [ finnish ] = "Linkki [" ;
     TEXT [ danish ] = "Kæden til [" ;
     TEXT [ french ] = "Le lien à [" ;
     TEXT [ swedish ] = "Länk till [" ;
@@ -2721,7 +2768,7 @@ String STR_DDEERROR_LINK2
     TEXT [ italian ] = "]" ;
     TEXT [ portuguese_brazilian ] = "] não pode ser estabelecido" ;
     TEXT [ portuguese ] = "] não pode ser estabelecido." ;
-    TEXT [ finnish ] = "] ei voi muodostaa" ;
+    TEXT [ finnish ] = "] ei ole muodostettavissa" ;
     TEXT [ danish ] = "] kan ikke oprettes" ;
     TEXT [ french ] = "] ne peut pas être établi" ;
     TEXT [ swedish ] = "] kan inte etableras" ;
