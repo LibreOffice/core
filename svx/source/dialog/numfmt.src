@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:15:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         StringList [ portuguese_brazilian ] =
         {
-                < "Automaticamente" ; Default ; > ;
+                < "Automático" ; Default ; > ;
         };
         StringList [ japanese ] =
         {
@@ -998,7 +998,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ english_us ] = "So~urce format" ;
         Text[ portuguese ] = "Formato da fonte";
         Text[ russian ] = "Èñõîäíûé ôîğìàò";
-        Text[ greek ] = "So~urce format";
+        Text[ greek ] = "ÌïñöŞ ğñïİ~ëåõóçò";
         Text[ dutch ] = "Br~onformaat";
         Text[ french ] = "Format de la so~urce";
         Text[ spanish ] = "Formato de fuente";
@@ -1210,7 +1210,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ italian ] = "In modo automatico";
         Text[ swedish ] = "Automatiskt";
         Text[ polish ] = "Automatycznie";
-        Text[ portuguese_brazilian ] = "~Automático";
+        Text[ portuguese_brazilian ] = "Automático";
         Text[ japanese ] = "è‡ªå‹•";
         Text[ korean ] = "ìë™";
         Text[ turkish ] = "Otomatik";
@@ -1248,6 +1248,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ slovak ] = "FormÃ¡t ÄÃ­sla";
 };
  // ********************************************************************** EOF
+
 
 
 
