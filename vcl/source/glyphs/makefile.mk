@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hdu $ $Date: 2000-11-10 17:21:29 $
+#   last change: $Author: hdu $ $Date: 2001-02-15 16:04:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,13 @@ SLOFILES=\
             $(SLO)$/gcach_vdev.obj		\
             $(SLO)$/gcach_ftyp.obj
 
+.ENDIF
+
+.IF "$(GUI)" == "UNX"
+SLOFILES=\
+            $(SLO)$/glyphcache.obj		\
+            $(SLO)$/gcach_vdev.obj		\
+            $(SLO)$/gcach_ftyp.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
