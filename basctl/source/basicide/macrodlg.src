@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:29:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,11 @@ ModalDialog RID_MACROCHOOSER
         Text[ danish ] = "Macros ~in ";
         Text[ swedish ] = "Existerande makron ~i:";
         Text[ polish ] = "Macros ~in ";
-        Text[ portuguese_brazilian ] = "Macros ~in ";
-        Text[ japanese ] = "マクロのある場所";
-        Text[ korean ] = "기존 매크로 위치:";
-        Text[ chinese_simplified ] = "现有的宏：";
-        Text[ chinese_traditional ] = "現有的巨集位置：";
+        Text[ portuguese_brazilian ] = "Macros ~em";
+        Text[ japanese ] = "マクロのある場所(~I)";
+        Text[ korean ] = "기존 매크로 위치(~I):";
+        Text[ chinese_simplified ] = "现有的宏(~I)：";
+        Text[ chinese_traditional ] = "現有的巨集位置(~I)：";
         Text[ turkish ] = "Varolan Makrolar ~��inde";
         Text[ arabic ] = "Macros ~in ";
         Text[ catalan ] = "Macros ~in ";
@@ -226,11 +226,11 @@ ModalDialog RID_MACROCHOOSER
         Text[ danish ] = "Save m~acros in";
         Text[ swedish ] = "S~para makro i";
         Text[ polish ] = "Save m~acros in";
-        Text[ portuguese_brazilian ] = "Save m~acros in";
-        Text[ japanese ] = "マクロの保存先";
-        Text[ korean ] = "매크로 저장 위치";
-        Text[ chinese_simplified ] = "另存宏的位置";
-        Text[ chinese_traditional ] = "另存巨集的位置";
+        Text[ portuguese_brazilian ] = "Salvar m~acros em ";
+        Text[ japanese ] = "マクロの保存先(~A)";
+        Text[ korean ] = "매크로 저장 위치(~A)";
+        Text[ chinese_simplified ] = "另存宏的位置(~A)";
+        Text[ chinese_traditional ] = "另存巨集的位置(~A)";
         Text[ turkish ] = "Makrolar� ~i�ine kaydet";
         Text[ arabic ] = "Save m~acros in";
         Text[ catalan ] = "Save m~acros in";
@@ -368,7 +368,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ japanese ] = "割り当て(~A)...";
         Text[ chinese_traditional ] = "指定(~A)...";
         Text[ arabic ] = "�����...";
-        Text[ greek ] = "������������...";
+        Text[ greek ] = "�������...";
         Text[ korean ] = "할당(~A)...";
         Text[ turkish ] = "~Ata...";
         Text[ catalan ] = "~Assigna...";
@@ -430,11 +430,11 @@ ModalDialog RID_MACROCHOOSER
         Text[ danish ] = "New ~libary";
         Text[ swedish ] = "Nytt ~bibliotek";
         Text[ polish ] = "New ~libary";
-        Text[ portuguese_brazilian ] = "New ~libary";
-        Text[ japanese ] = "新しいライブラリ";
-        Text[ korean ] = "새 라이브러리";
-        Text[ chinese_simplified ] = "新建程序库";
-        Text[ chinese_traditional ] = "新建程式庫";
+        Text[ portuguese_brazilian ] = "Nova bib~lioteca";
+        Text[ japanese ] = "新しいライブラリ(~L)";
+        Text[ korean ] = "새 라이브러리(~L)";
+        Text[ chinese_simplified ] = "新建程序库(~L)";
+        Text[ chinese_traditional ] = "新建程式庫(~L)";
         Text[ turkish ] = "Yeni ~K�t�phane";
         Text[ arabic ] = "New ~libary";
         Text[ catalan ] = "New ~libary";
@@ -462,11 +462,11 @@ ModalDialog RID_MACROCHOOSER
         Text[ danish ] = "New M~odule";
         Text[ swedish ] = "Ny m~odul";
         Text[ polish ] = "New M~odule";
-        Text[ portuguese_brazilian ] = "New M~odule";
-        Text[ japanese ] = "新しいモジュール";
-        Text[ korean ] = "새 모듈";
-        Text[ chinese_simplified ] = "新建模块";
-        Text[ chinese_traditional ] = "新建模組";
+        Text[ portuguese_brazilian ] = "N~ovo m�dulo";
+        Text[ japanese ] = "新しいモジュール(~O)";
+        Text[ korean ] = "새 모듈(~O)";
+        Text[ chinese_simplified ] = "新建模块(~O)";
+        Text[ chinese_traditional ] = "新建模組(~O)";
         Text[ turkish ] = "Yeni ~Mod�l";
         Text[ arabic ] = "New M~odule";
         Text[ catalan ] = "New M~odule";
@@ -784,8 +784,8 @@ String RID_STR_RECORD
     Text[ chinese_simplified ] = "存盘(~S)";
     Text[ russian ] = "����������";
     Text[ polish ] = "Zarejestruj";
-    Text[ japanese ] = "保存";
-    Text[ chinese_traditional ] = "儲存";
+    Text[ japanese ] = "保存(~S)";
+    Text[ chinese_traditional ] = "儲存(~S)";
     Text[ arabic ] = "�����";
     Text[ greek ] = "�������";
     Text[ korean ] = "저장(~S)";
@@ -797,6 +797,7 @@ String RID_STR_RECORD
     Text[ hindi ] = "~संचित करो";
     Text[ slovak ] = "~Uložiť";
 };
+
 
 
 
