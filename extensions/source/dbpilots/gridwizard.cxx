@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:40:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OGridFieldsSelection::commitPage(COMMIT_REASON _eReason)
+    sal_Bool OGridFieldsSelection::commitPage(IWizardPage::COMMIT_REASON _eReason)
     {
         if (!OGridPage::commitPage(_eReason))
             return sal_False;
