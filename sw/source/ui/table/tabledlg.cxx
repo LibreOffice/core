@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-04 15:38:38 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 10:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,12 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-#ifndef _SVX_BORDER_HXX //autogen
-#include <svx/border.hxx>
-#endif
-#ifndef _SVX_BACKGRND_HXX //autogen
-#include <svx/backgrnd.hxx>
-#endif
+//CHINA001 #ifndef _SVX_BORDER_HXX //autogen
+//CHINA001 #include <svx/border.hxx>
+//CHINA001 #endif
+//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
+//CHINA001 #include <svx/backgrnd.hxx>
+//CHINA001 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
@@ -175,6 +175,10 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
+#include <svx/svxids.hrc> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 #ifdef DEBUG_TBLDLG
 void DbgTblRep(SwTableRep* pRep)
@@ -208,25 +212,25 @@ void DbgTblRep(SwTableRep* pRep)
 
 };
 
-void DbgTColumn(TColumn* pTColumn, USHORT nCount)
-{
-    for(USHORT i = 0; i < nCount; i++)
-    {
-        String sMsg(i);
-        sMsg += pTColumn[i].bVisible ? " v " : " h ";
-        sMsg += pTColumn[i].nWidth;
-        DBG_ERROR(sMsg)
-    }
-}
+//CHINA001 void DbgTColumn(TColumn* pTColumn, USHORT nCount)
+//CHINA001 {
+//CHINA001 for(USHORT i = 0; i < nCount; i++)
+//CHINA001 {
+//CHINA001 String sMsg(i);
+//CHINA001 sMsg += pTColumn[i].bVisible ? " v " : " h ";
+//CHINA001 sMsg += pTColumn[i].nWidth;
+//CHINA001 DBG_ERROR(sMsg)
+//CHINA001  }
+//CHINA001 }
 #endif
 
 
 #ifdef DEBUG_TBLDLG
 #define DEBUG_TBLDLG_TABLEREP(pRep) DbgTblRep(pRep)
-#define DEBUG_TBLDLG_TCOLUMN(pTColumn, nCount) DbgTColumn(pTColumn, nCount)
+//CHINA001 #define DEBUG_TBLDLG_TCOLUMN(pTColumn, nCount) DbgTColumn(pTColumn, nCount)
 #else
 #define DEBUG_TBLDLG_TABLEREP
-#define DEBUG_TBLDLG_TCOLUMN
+//CHINA001 #define DEBUG_TBLDLG_TCOLUMN
 #endif
 
 SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) :
@@ -1471,12 +1475,14 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
         pShell(pSh)
 {
     FreeResource();
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
     nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
     AddTabPage(TP_FORMAT_TABLE, &SwFormatTablePage::Create, 0 );
     AddTabPage(TP_TABLE_TEXTFLOW, &SwTextFlowPage::Create, 0 );
     AddTabPage(TP_TABLE_COLUMN, &SwTableColumnPage::Create, 0 );
-    AddTabPage(TP_BACKGROUND,   SvxBackgroundTabPage::Create,   0);
-    AddTabPage(TP_BORDER,       SvxBorderTabPage::Create,       0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND, SvxBackgroundTabPage::Create,   0);
+    AddTabPage(TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 ); //CHINA001 AddTabPage(TP_BORDER,     SvxBorderTabPage::Create,       0);
 }
 
 
@@ -1484,18 +1490,23 @@ SwTableTabDlg::SwTableTabDlg(Window* pParent, SfxItemPool& ,
 ------------------------------------------------------------------------*/
 void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//CHINA001
     if( TP_BACKGROUND == nId )
     {
         //ShowTblControl() zuerst rufen, wegen HTMLMode
-        ((SvxBackgroundTabPage&)rPage).ShowTblControl();
+        //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowTblControl();
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_TBLCTL));
         if(!( nHtmlMode & HTMLMODE_ON ) ||
             nHtmlMode & HTMLMODE_SOME_STYLES)
-            ((SvxBackgroundTabPage&)rPage).ShowSelector();
-
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
+            //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
+        rPage.PageCreated(aSet);
     }
     else if(TP_BORDER == nId)
     {
-        ((SvxBorderTabPage&)rPage).SetSWMode(SW_BORDER_MODE_TABLE);
+        //CHINA001 ((SvxBorderTabPage&)rPage).SetSWMode(SW_BORDER_MODE_TABLE);
+        aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_TABLE));
+        rPage.PageCreated(aSet);
     }
     else if(TP_TABLE_TEXTFLOW == nId)
     {
@@ -1508,145 +1519,145 @@ void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 
 /*-----------------20.08.96 09.43-------------------
 --------------------------------------------------*/
-SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
-    : nTblWidth(0),
-    nSpace(0),
-    nLeftSpace(0),
-    nRightSpace(0),
-    nAlign(0),
-    nWidthPercent(0),
-    bLineSelected(FALSE),
-    bComplex(bCplx),
-    bWidthChanged(FALSE),
-    bColsChanged(FALSE)
-{
-    nAllCols = nColCount = rTabCol.Count();
-    pTColumns = new TColumn[ nColCount + 1 ];
-    SwTwips nStart = 0,
-            nEnd;
-    for( USHORT i = 0; i < nAllCols; ++i )
-    {
-        nEnd  = rTabCol[ i ] - rTabCol.GetLeft();
-        pTColumns[ i ].nWidth = nEnd - nStart;
-        pTColumns[ i ].bVisible = !rTabCol.IsHidden(i);
-        if(!pTColumns[ i ].bVisible)
-            nColCount --;
-        nStart = nEnd;
-    }
-    pTColumns[ nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
-    pTColumns[ nAllCols ].bVisible = TRUE;
-    nColCount++;
-    nAllCols++;
-}
-
-/*-----------------20.08.96 09.43-------------------
---------------------------------------------------*/
-SwTableRep::~SwTableRep()
-{
-    delete[] pTColumns;
-}
-
-/*-----------------20.08.96 13.33-------------------
---------------------------------------------------*/
-BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
-{
-    long nOldLeft = rTabCols.GetLeft(),
-         nOldRight = rTabCols.GetRight();
-
-    BOOL bSingleLine = FALSE;
-    USHORT i;
-
-    for ( i = 0; i < rTabCols.Count(); ++i )
-        if(!pTColumns[i].bVisible)
-        {
-            bSingleLine = TRUE;
-            break;
-        }
-
-DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
-
-    SwTwips nPos = 0;
-    SwTwips nLeft = GetLeftSpace();
-    rTabCols.SetLeft(nLeft);
-    if(bSingleLine)
-    {
-        // die unsichtbaren Trenner werden aus den alten TabCols genommen
-        // die sichtbaren kommen aus pTColumns
-        TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
-        SwTwips nStart = 0,
-                nEnd;
-        USHORT i;
-        for(i = 0; i < nAllCols - 1; i++)
-        {
-            nEnd  = rTabCols[i] - rTabCols.GetLeft();
-            pOldTColumns[i].nWidth = nEnd - nStart;
-            pOldTColumns[i].bVisible = !rTabCols.IsHidden(i);
-            nStart = nEnd;
-        }
-        pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
-        pOldTColumns[nAllCols - 1].bVisible = TRUE;
-
-DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
-
-        USHORT nOldPos = 0;
-        USHORT nNewPos = 0;
-        SwTwips nOld = 0;
-        SwTwips nNew = 0;
-        BOOL bOld = FALSE;
-        BOOL bFirst = TRUE;
-        i = 0;
-
-        while ( i < nAllCols -1 )
-        {
-            while((bFirst || bOld ) && nOldPos < nAllCols )
-            {
-                nOld += pOldTColumns[nOldPos].nWidth;
-                nOldPos++;
-                if(!pOldTColumns[nOldPos - 1].bVisible)
-                    break;
-            }
-            while((bFirst || !bOld ) && nNewPos < nAllCols )
-            {
-                nNew += pTColumns[nNewPos].nWidth;
-                nNewPos++;
-                if(pOldTColumns[nNewPos - 1].bVisible)
-                    break;
-            }
-            bFirst = FALSE;
-            // sie muessen sortiert eingefuegt werden
-            bOld = nOld < nNew;
-            nPos = USHORT(bOld ? nOld : nNew);
-            rTabCols[i] = nPos + nLeft;
-            rTabCols.SetHidden( i, bOld );
-            i++;
-        }
-        rTabCols.SetRight(nLeft + nTblWidth);
-
-        delete[] pOldTColumns;
-    }
-    else
-    {
-        for ( i = 0; i < nAllCols - 1; ++i )
-        {
-            nPos += pTColumns[i].nWidth;
-            rTabCols[i] = nPos + rTabCols.GetLeft();
-            rTabCols.SetHidden( i, !pTColumns[i].bVisible );
-            rTabCols.SetRight(nLeft + pTColumns[nAllCols - 1].nWidth + nPos);
-        }
-    }
-
-// Rundungsfehler abfangen
-    if(Abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
-        rTabCols.SetLeft(nOldLeft);
-
-    if(Abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
-        rTabCols.SetRight(nOldRight);
-
-    if(GetRightSpace() >= 0 &&
-            rTabCols.GetRight() > rTabCols.GetRightMax())
-        rTabCols.SetRight(rTabCols.GetRightMax());
-    return bSingleLine;
-}
+//CHINA001 SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
+//CHINA001  : nTblWidth(0),
+//CHINA001  nSpace(0),
+//CHINA001  nLeftSpace(0),
+//CHINA001  nRightSpace(0),
+//CHINA001  nAlign(0),
+//CHINA001  nWidthPercent(0),
+//CHINA001  bLineSelected(FALSE),
+//CHINA001  bComplex(bCplx),
+//CHINA001  bWidthChanged(FALSE),
+//CHINA001  bColsChanged(FALSE)
+//CHINA001 {
+//CHINA001  nAllCols = nColCount = rTabCol.Count();
+//CHINA001  pTColumns = new TColumn[ nColCount + 1 ];
+//CHINA001  SwTwips nStart = 0,
+//CHINA001          nEnd;
+//CHINA001  for( USHORT i = 0; i < nAllCols; ++i )
+//CHINA001  {
+//CHINA001      nEnd  = rTabCol[ i ] - rTabCol.GetLeft();
+//CHINA001      pTColumns[ i ].nWidth = nEnd - nStart;
+//CHINA001      pTColumns[ i ].bVisible = !rTabCol.IsHidden(i);
+//CHINA001      if(!pTColumns[ i ].bVisible)
+//CHINA001          nColCount --;
+//CHINA001      nStart = nEnd;
+//CHINA001  }
+//CHINA001  pTColumns[ nAllCols ].nWidth = rTabCol.GetRight() - rTabCol.GetLeft() - nStart;
+//CHINA001  pTColumns[ nAllCols ].bVisible = TRUE;
+//CHINA001  nColCount++;
+//CHINA001  nAllCols++;
+//CHINA001}
+//CHINA001
+//CHINA001/*-----------------20.08.96 09.43-------------------
+//CHINA001--------------------------------------------------*/
+//CHINA001SwTableRep::~SwTableRep()
+//CHINA001{
+//CHINA001    delete[] pTColumns;
+//CHINA001}
+//CHINA001
+//CHINA001/*-----------------20.08.96 13.33-------------------
+//CHINA001--------------------------------------------------*/
+//CHINA001BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
+//CHINA001{
+//CHINA001  long nOldLeft = rTabCols.GetLeft(),
+//CHINA001       nOldRight = rTabCols.GetRight();
+//CHINA001
+//CHINA001  BOOL bSingleLine = FALSE;
+//CHINA001  USHORT i;
+//CHINA001
+//CHINA001  for ( i = 0; i < rTabCols.Count(); ++i )
+//CHINA001      if(!pTColumns[i].bVisible)
+//CHINA001      {
+//CHINA001          bSingleLine = TRUE;
+//CHINA001          break;
+//CHINA001      }
+//CHINA001
+//CHINA001DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
+//CHINA001
+//CHINA001  SwTwips nPos = 0;
+//CHINA001  SwTwips nLeft = GetLeftSpace();
+//CHINA001  rTabCols.SetLeft(nLeft);
+//CHINA001  if(bSingleLine)
+//CHINA001  {
+//CHINA001      // die unsichtbaren Trenner werden aus den alten TabCols genommen
+//CHINA001      // die sichtbaren kommen aus pTColumns
+//CHINA001      TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
+//CHINA001      SwTwips nStart = 0,
+//CHINA001              nEnd;
+//CHINA001        USHORT i;
+//CHINA001        for(i = 0; i < nAllCols - 1; i++)
+//CHINA001      {
+//CHINA001          nEnd  = rTabCols[i] - rTabCols.GetLeft();
+//CHINA001          pOldTColumns[i].nWidth = nEnd - nStart;
+//CHINA001          pOldTColumns[i].bVisible = !rTabCols.IsHidden(i);
+//CHINA001          nStart = nEnd;
+//CHINA001      }
+//CHINA001      pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
+//CHINA001      pOldTColumns[nAllCols - 1].bVisible = TRUE;
+//CHINA001
+//CHINA001DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
+//CHINA001
+//CHINA001      USHORT nOldPos = 0;
+//CHINA001      USHORT nNewPos = 0;
+//CHINA001      SwTwips nOld = 0;
+//CHINA001      SwTwips nNew = 0;
+//CHINA001      BOOL bOld = FALSE;
+//CHINA001      BOOL bFirst = TRUE;
+//CHINA001      i = 0;
+//CHINA001
+//CHINA001      while ( i < nAllCols -1 )
+//CHINA001      {
+//CHINA001          while((bFirst || bOld ) && nOldPos < nAllCols )
+//CHINA001          {
+//CHINA001              nOld += pOldTColumns[nOldPos].nWidth;
+//CHINA001              nOldPos++;
+//CHINA001              if(!pOldTColumns[nOldPos - 1].bVisible)
+//CHINA001                  break;
+//CHINA001          }
+//CHINA001          while((bFirst || !bOld ) && nNewPos < nAllCols )
+//CHINA001          {
+//CHINA001              nNew += pTColumns[nNewPos].nWidth;
+//CHINA001              nNewPos++;
+//CHINA001              if(pOldTColumns[nNewPos - 1].bVisible)
+//CHINA001                  break;
+//CHINA001          }
+//CHINA001          bFirst = FALSE;
+//CHINA001          // sie muessen sortiert eingefuegt werden
+//CHINA001          bOld = nOld < nNew;
+//CHINA001          nPos = USHORT(bOld ? nOld : nNew);
+//CHINA001          rTabCols[i] = nPos + nLeft;
+//CHINA001          rTabCols.SetHidden( i, bOld );
+//CHINA001          i++;
+//CHINA001      }
+//CHINA001      rTabCols.SetRight(nLeft + nTblWidth);
+//CHINA001
+//CHINA001        delete[] pOldTColumns;
+//CHINA001  }
+//CHINA001  else
+//CHINA001  {
+//CHINA001      for ( i = 0; i < nAllCols - 1; ++i )
+//CHINA001      {
+//CHINA001          nPos += pTColumns[i].nWidth;
+//CHINA001          rTabCols[i] = nPos + rTabCols.GetLeft();
+//CHINA001          rTabCols.SetHidden( i, !pTColumns[i].bVisible );
+//CHINA001          rTabCols.SetRight(nLeft + pTColumns[nAllCols - 1].nWidth + nPos);
+//CHINA001      }
+//CHINA001  }
+//CHINA001
+//CHINA001// Rundungsfehler abfangen
+//CHINA001  if(Abs((long)nOldLeft - (long)rTabCols.GetLeft()) < 3)
+//CHINA001      rTabCols.SetLeft(nOldLeft);
+//CHINA001
+//CHINA001  if(Abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
+//CHINA001      rTabCols.SetRight(nOldRight);
+//CHINA001
+//CHINA001  if(GetRightSpace() >= 0 &&
+//CHINA001          rTabCols.GetRight() > rTabCols.GetRightMax())
+//CHINA001      rTabCols.SetRight(rTabCols.GetRightMax());
+//CHINA001  return bSingleLine;
+//CHINA001}
 
 
 
