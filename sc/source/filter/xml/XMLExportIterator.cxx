@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 18:28:50 $
+ *  last change: $Author: sab $ $Date: 2002-04-12 08:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ sal_Bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj) const
     else if( aPosition.Row != rDetObj.aPosition.Row )
         return (aPosition.Row < rDetObj.aPosition.Row);
     else
-        return (aPosition.Column != rDetObj.aPosition.Column);
+        return (aPosition.Column < rDetObj.aPosition.Column);
 }
 
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
@@ -495,7 +495,7 @@ sal_Bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp) const
     else if( aPosition.Row != rDetOp.aPosition.Row )
         return (aPosition.Row < rDetOp.aPosition.Row);
     else
-        return (aPosition.Column != rDetOp.aPosition.Column);
+        return (aPosition.Column < rDetOp.aPosition.Column);
 }
 
 ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :

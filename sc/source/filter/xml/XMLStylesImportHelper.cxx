@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
+ *  last change: $Author: sab $ $Date: 2002-04-12 08:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,35 +425,40 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     {
         sal_uInt32 nStartCol(rRange.aStart.Col());
         sal_uInt32 nEndCol(rRange.aEnd.Col());
-        ScMyStylesSet::iterator aPrevItr = aColDefaultStyles[nStartCol];
-        DBG_ASSERT(aColDefaultStyles.size() > nEndCol, "to much columns");
-        for (sal_uInt32 i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
+        if (aColDefaultStyles.size() > nStartCol)
         {
-            if (aPrevItr != aColDefaultStyles[i])
+            ScMyStylesSet::iterator aPrevItr = aColDefaultStyles[nStartCol];
+            DBG_ASSERT(aColDefaultStyles.size() > nEndCol, "to much columns");
+            for (sal_uInt32 i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); i++)
             {
-                DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
+                if (aPrevItr != aColDefaultStyles[i])
+                {
+                    DBG_ASSERT(aPrevItr != aCellStyles.end(), "no column default style")
+                    ScRange aRange(rRange);
+                    aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
+                    aRange.aEnd.SetCol(static_cast<sal_uInt16>(i - 1));
+                    if (pPrevStyleName)
+                        delete pPrevStyleName;
+                    pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
+                    AddSingleRange(aRange);
+                    nStartCol = i;
+                    aPrevItr = aColDefaultStyles[i];
+                }
+            }
+            if (aPrevItr != aCellStyles.end())
+            {
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
-                aRange.aEnd.SetCol(static_cast<sal_uInt16>(i - 1));
                 if (pPrevStyleName)
                     delete pPrevStyleName;
                 pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
                 AddSingleRange(aRange);
-                nStartCol = i;
-                aPrevItr = aColDefaultStyles[i];
             }
-        }
-        if (aPrevItr != aCellStyles.end())
-        {
-            ScRange aRange(rRange);
-            aRange.aStart.SetCol(static_cast<sal_uInt16>(nStartCol));
-            if (pPrevStyleName)
-                delete pPrevStyleName;
-            pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
-            AddSingleRange(aRange);
+            else
+                DBG_ERRORFILE("no column default style");
         }
         else
-            DBG_ERROR("no column default style");
+            DBG_ERRORFILE("to much columns");
     }
     else
     {
