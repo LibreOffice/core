@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,7 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
-#include <alloca.h>
-#elif MACOSX
-#include <sys/types.h>
-#include <sys/malloc.h>
-#else
-#include <malloc.h>
-#endif
+#include <sal/alloca.h>
 
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
