@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:27:50 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,10 @@
 /** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
 #define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
 
+/** Expands to a temporary String, created from an ASCII character array. */
+#define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
+/** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
+#define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 
 // Read from bitfields --------------------------------------------------------
 
