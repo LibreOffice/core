@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:40:42 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2479,10 +2479,10 @@ bool Content::renameData(
         OSL_ENSURE( false, "Caught IOException!" );
         return false;
     }
-    catch ( embed::StorageWTException const & )
+    catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWTException!" );
+        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2535,10 +2535,10 @@ bool Content::removeData()
         OSL_ENSURE( false, "Caught IOException!" );
         return false;
     }
-    catch ( embed::StorageWTException const & )
+    catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWTException!" );
+        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
         return false;
     }
 
@@ -2604,10 +2604,10 @@ bool Content::copyData( const Uri & rSourceUri )
         OSL_ENSURE( false, "Caught IOException!" );
         return false;
     }
-    catch ( embed::StorageWTException const & )
+    catch ( embed::StorageWrappedTargetException const & )
     {
         // wraps other exceptions
-        OSL_ENSURE( false, "Caught StorageWTException!" );
+        OSL_ENSURE( false, "Caught StorageWrappedTargetException!" );
         return false;
     }
 
