@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:34:55 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "ÏÖÄ ÏôºÏ™ΩÏúºÎ°ú Ïù¥Îèô(~L)";
         Text[ turkish ] = "H¸creleri s~ola ta˛˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DesplaÁa les cel?les cap a ~l'esquerra";
+        Text[ catalan ] = "DesplaÁa les cel.les cap a ~l'esquerra";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÄ‡∏ã‡∏•‡∏•‡πå‡πÑ‡∏õ‡∏ó‡∏≤‡∏á~‡∏ã‡πâ‡∏≤‡∏¢";
     };
     RadioButton BTN_CELLSUP
@@ -226,7 +226,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "ÏÖÄ ÏúÑÏ™ΩÏúºÎ°ú Ïù¥Îèô(~U)";
         Text[ turkish ] = "H¸creleri y~ukar˝ya ta˛˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DesplaÁa les cel?les cap am~unt";
+        Text[ catalan ] = "DesplaÁa les cel.les cap am~unt";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÄ‡∏ã‡∏•‡∏•‡πå~‡∏Ç‡∏∂‡πâ‡∏ô";
     };
     FixedLine FL_FRAME
@@ -240,7 +240,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "SelecÁ„o" ;
         Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "VÊlg" ;
         Text [ french ] = "SÈlection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
@@ -269,7 +269,7 @@ ModalDialog RID_SCDLG_DELCELL
     Text[ korean ] = "ÏÖÄ ÏÇ≠Ï†ú";
     Text[ turkish ] = "H¸creleri sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Suprimeix les cel∑les";
+    Text[ catalan ] = "Suprimeix les cel.les";
     Text[ thai ] = "‡∏•‡∏ö‡πÄ‡∏ã‡∏•‡∏•‡πå";
 };
 ModalDialog RID_SCDLG_INSCELL
@@ -405,7 +405,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "ÏÖÄ Ïò§Î•∏Ï™ΩÏúºÎ°ú Ïù¥Îèô(~R)";
         Text[ turkish ] = "H¸creleri s ~aa ta˛˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DesplaÁa les cel∑les cap a la d~reta";
+        Text[ catalan ] = "DesplaÁa les cel.les cap a la d~reta";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÄ‡∏ã‡∏•‡∏•‡πå‡πÑ‡∏õ‡∏ó‡∏≤‡∏á‡∏Ç~‡∏ß‡∏≤";
     };
     RadioButton BTN_CELLSDOWN
@@ -436,7 +436,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "ÏÖÄ ÏïÑÎûòÎ°ú Ïù¥Îèô(~D)";
         Text[ turkish ] = "H¸creleri ~a˛a˝ ta˛˝";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DesplaÁa les cel∑les cap a~vall";
+        Text[ catalan ] = "DesplaÁa les cel.les cap a~vall";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÄ‡∏ã‡∏•‡∏•‡πå~‡∏•‡∏á";
     };
     FixedLine FL_FRAME
@@ -450,7 +450,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "SelecÁ„o" ;
         Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "VÊlg" ;
         Text [ french ] = "SÈlection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
@@ -479,7 +479,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text[ korean ] = "ÏÖÄ ÏÇΩÏûÖ";
     Text[ turkish ] = "H¸cre ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix les cel∑les";
+    Text[ catalan ] = "Insereix les cel.les";
     Text[ thai ] = "‡πÅ‡∏ó‡∏£‡∏Å‡πÄ‡∏ã‡∏•‡∏•‡πå";
 };
 
@@ -788,7 +788,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "SelecÁ„o" ;
         Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "VÊlg" ;
         Text [ french ] = "SÈlection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
@@ -1058,6 +1058,23 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ ENGLISH ] = "O~bjects" ;
         Text [ english_us ] = "O~bjects" ;
         TabStop = TRUE ;
+        Text[ portuguese ] = "O~bjects";
+        Text[ russian ] = "O~bjects";
+        Text[ greek ] = "O~bjects";
+        Text[ dutch ] = "O~bjects";
+        Text[ french ] = "O~bjects";
+        Text[ spanish ] = "O~bjects";
+        Text[ finnish ] = "O~bjects";
+        Text[ italian ] = "O~bjects";
+        Text[ danish ] = "O~bjects";
+        Text[ swedish ] = "O~bjects";
+        Text[ polish ] = "O~bjects";
+        Text[ japanese ] = "O~bjects";
+        Text[ korean ] = "O~bjects";
+        Text[ chinese_simplified ] = "O~bjects";
+        Text[ chinese_traditional ] = "O~bjects";
+        Text[ turkish ] = "O~bjects";
+        Text[ arabic ] = "O~bjects";
     };
     CheckBox BTN_INSNOTES
     {
@@ -1101,7 +1118,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ portuguese_brazilian ] = "Op??s" ;
         Text [ portuguese ] = "SelecÁ„o" ;
         Text [ finnish ] = "Valinta" ;
-        Text [ danish ] = "Udvalg" ;
+        Text [ danish ] = "VÊlg" ;
         Text [ french ] = "SÈlection" ;
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
@@ -1320,7 +1337,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "Îπà ÏÖÄ ÎÑòÏñ¥Í∞ÄÍ∏∞(~K)";
         Text[ turkish ] = "~Bo˛ h¸creleri atla";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ome~t les cel∑les buides";
+        Text[ catalan ] = "Ome~t les cel.les buides";
         Text[ finnish ] = "O~hita tyhj‰t solut";
         Text[ thai ] = "‡∏Ç‡πâ‡∏≤~‡∏°‡πÄ‡∏ã‡∏•‡∏•‡πå‡∏ó‡∏µ‡πà‡∏ß‡πà‡∏≤‡∏á";
     };
@@ -1524,7 +1541,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ greek ] = "ÃÂÙ·ÍﬂÌÁÛÁ ÍÂÎÈ˛Ì";
         Text[ korean ] = "ÏÖÄ Ïù¥Îèô";
         Text[ turkish ] = "H¸creleri ta˛˝";
-        Text[ catalan ] = "Mou les cel∑les";
+        Text[ catalan ] = "Mou les cel.les";
         Text[ finnish ] = "Siirr‰ solut";
         Text[ thai ] = "‡πÄ‡∏•‡∏∑‡πà‡∏≠‡∏ô‡πÄ‡∏ã‡∏•‡∏•‡πå";
     };
@@ -2069,7 +2086,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text [ spanish ] = "Valor ~predetermin." ;
         Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
-        Text [ danish ] = "StandardvÊrdi" ;
+        Text [ danish ] = "~StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
         Text[ polish ] = "WartoúÊ domyúlna";
@@ -2196,7 +2213,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text [ spanish ] = "Valor ~predetermin." ;
         Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
-        Text [ danish ] = "StandardvÊrdi" ;
+        Text [ danish ] = "~StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
         Text[ language_user1 ] = " ";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
@@ -2322,7 +2339,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text [ spanish ] = "Valor ~predetermin." ;
         Text [ french ] = "Valeur par dÈfaut" ;
         Text [ swedish ] = "~Standardv‰rde" ;
-        Text [ danish ] = "StandardvÊrdi" ;
+        Text [ danish ] = "~StandardvÊrdi" ;
         Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
         Text[ polish ] = "WartoúÊ domyúlna";
@@ -2367,7 +2384,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text [ portuguese_brazilian ] = "Op??s" ;
     Text [ portuguese ] = "~SelecÁ„o" ;
     Text [ finnish ] = "Valitse" ;
-    Text [ danish ] = "VÊlg" ;
+    Text [ danish ] = "~VÊlg" ;
     Text [ french ] = "~SÈlection" ;
     Text [ swedish ] = "Urv~al" ;
     Text [ dutch ] = "~Selectie" ;
@@ -2550,7 +2567,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese_brazilian ] = "~Dia" ;
         Text [ portuguese ] = "~Dia" ;
         Text [ finnish ] = "P‰i~v‰" ;
-        Text [ danish ] = "Dag" ;
+        Text [ danish ] = "~Dag" ;
         Text [ french ] = "~Jour" ;
         Text [ swedish ] = "~Dag" ;
         Text [ dutch ] = "~Dag" ;
@@ -2920,7 +2937,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ portuguese_brazilian ] = "Da~ta" ;
         Text [ portuguese ] = "Da~ta" ;
         Text [ finnish ] = "P‰iv‰~m‰‰r‰" ;
-        Text [ danish ] = "~Dato" ;
+        Text [ danish ] = "Da~to" ;
         Text [ french ] = "Date" ;
         Text [ swedish ] = "Da~tum" ;
         Text [ dutch ] = "~Datum" ;
@@ -3587,7 +3604,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text [ french ] = "CrÈer un nom ‡ partir de" ;
         Text [ dutch ] = "Namen definiÎren uit" ;
         Text [ swedish ] = "Skapa namn frÂn" ;
-        Text [ danish ] = "Opret navn af" ;
+        Text [ danish ] = "Opret navn ud fra" ;
         Text [ portuguese_brazilian ] = "Namen erzeugen aus" ;
         Text [ portuguese ] = "Criar nomes a partir de" ;
         Text[ chinese_simplified ] = "ÂàõÂª∫ÂêçÁß∞‰ªé";
