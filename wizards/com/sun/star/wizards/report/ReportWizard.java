@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-31 15:07:01 $
+ *  last change: $Author: bc $ $Date: 2002-05-31 16:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,7 @@ public class ReportWizard {
             DBMetaData.createDBLink(CurDBMetaData.DataSource, sStorePath);
             if (bUseTemplate == true){
             PropertyValue[] oEmptyArgs = new PropertyValue[0];
-            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop );
+            XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
             CurReportDocument.oComponent = (Object) xComponentLoader.loadComponentFromURL(sStorePath, "_blank", 0, oEmptyArgs);
             CurReportDocument.ReportTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, CurReportDocument.oComponent);
             ReportDocument.initializeReportDocument(xGlobalMSF, CurReportDocument);
@@ -710,6 +710,13 @@ public class ReportWizard {
     public static void setUpSortList(){
     try{
     short iCurState = 0;
+    MaxSortIndex = -1;
+    for (int i = 0; i < 4; i++){
+        if (xSortListBox[i].getSelectedItemPos() > 0)
+        MaxSortIndex += 1;
+        else
+        break;
+    }
         CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
         for (int i=0;i<=MaxSortIndex;i++){
             CurDBMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
@@ -718,8 +725,6 @@ public class ReportWizard {
         CurDBMetaData.SortFieldNames[i][1] = "ASC";
         else
         CurDBMetaData.SortFieldNames[i][1] = "DESC";
-
-//            CurDBMetaData.SortFieldNames[i][1] = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "cmdSort_" + new Integer(i+1).toString(), "Tag");
         }
     }
     catch( Exception exception ){
@@ -954,9 +959,6 @@ public class ReportWizard {
     catch( Exception exception ){
         exception.printStackTrace(System.out);
     }}
-
-
-
 
 
     public static void fillThirdStep(int iPage){
