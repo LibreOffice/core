@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 17:27:41 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1572,18 +1572,16 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule )
     SetImages( rToolBox, pModule, FALSE );
 }
 
-void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHiContrast )
+void SfxImageManager::SetImagesForceSize( ToolBox& rToolBox, SfxModule* pModule, BOOL bHiContrast, BOOL bLarge )
 {
-    BOOL bBig = ( pData->nSet == SFX_SYMBOLS_LARGE );
-
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
     ImageList *pList=0;
     if ( pModule )
-        pList = pModule->GetImageList_Impl( bBig, bHiContrast );
+        pList = pModule->GetImageList_Impl( bLarge, bHiContrast );
 
     ImageList *pUserImageList   = bHiContrast ? pImp->m_pHCUserImageList : pImp->m_pUserImageList;
-    ImageList *pWorkImageList   = GetImageList( bBig, bHiContrast );
+    ImageList *pWorkImageList   = GetImageList( bLarge, bHiContrast );
     USHORT nCount = rToolBox.GetItemCount();
     for (USHORT n=0; n<nCount; n++)
     {
@@ -1609,6 +1607,12 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHi
                 DBG_ERROR( "invalid item-type in toolbox config" );
         }
     }
+}
+
+void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHiContrast )
+{
+    BOOL bBig = ( pData->nSet == SFX_SYMBOLS_LARGE );
+    SetImagesForceSize( rToolBox, pModule, bHiContrast, bBig );
 }
 
 //-------------------------------------------------------------------------
