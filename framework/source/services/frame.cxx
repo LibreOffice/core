@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 14:26:52 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 09:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,6 +1184,9 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
+        if ( !pWindow )
+            pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
+
         if( pWindow != NULL && isTop() )
         {
             Application::SetDefModalDialogParent( pWindow );
