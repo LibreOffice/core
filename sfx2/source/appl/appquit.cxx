@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 15:54:10 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@
 #include "bmkmenu.hxx"
 #include "objsh.hxx"
 #include "dlgcont.hxx"
+#include "scriptcont.hxx"
 #include <misccfg.hxx>
 
 #ifndef PRODUCT
@@ -278,6 +279,9 @@ void SfxApplication::Deinitialize()
     if ( pImp->pBasicMgr && pImp->pBasicMgr->IsModified() )
         SaveBasicManager();
 
+    SaveBasicContainer();
+    SaveDialogContainer();
+
     bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
@@ -308,8 +312,10 @@ void SfxApplication::Deinitialize()
     DELETEZ(pMenuMgr);
     DELETEZ(pAcceleratorMgr);
     DELETEZ( pImp->pBasicMgr );
-    if( pImp->pDialogContainer )
-        pImp->pDialogContainer->release();
+    if( pImp->pBasicLibContainer )
+        pImp->pBasicLibContainer->release();
+    if( pImp->pDialogLibContainer )
+        pImp->pDialogLibContainer->release();
 
     SvFactory::ClearDemandObjects();
     bInExit = FALSE;

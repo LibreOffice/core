@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-09 11:03:00 $
+ *  last change: $Author: ab $ $Date: 2001-03-28 11:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@
 #include "appimp.hxx"
 #include "basmgr.hxx"
 #include "dlgcont.hxx"
+#include "scriptcont.hxx"
 #include "helper.hxx"
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
@@ -533,11 +534,6 @@ SbxVariable* SfxConstants_Impl::Find
 //=========================================================================
 sal_uInt16 SfxApplication::SaveBasicManager() const
 {
-    // Save Dialog Container
-    sal_Bool bComplete = sal_False;
-    if( pImp->pDialogContainer )
-        pImp->pDialogContainer->storeLibraries( bComplete );
-
     // MT: #47347# AppBasicDir ist jetzt ein PATH!
     // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
     // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
@@ -564,6 +560,26 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     }
 
     return (sal_uInt16)aStor->GetError();
+}
+
+//--------------------------------------------------------------------
+sal_uInt16 SfxApplication::SaveDialogContainer() const
+{
+    // Save Dialog Container
+    sal_Bool bComplete = sal_False;
+    if( pImp->pDialogLibContainer )
+        pImp->pDialogLibContainer->storeLibraries( bComplete );
+    return 0;
+}
+
+//--------------------------------------------------------------------
+sal_uInt16 SfxApplication::SaveBasicContainer() const
+{
+    // Save Dialog Container
+    sal_Bool bComplete = sal_False;
+    if( pImp->pBasicLibContainer )
+        pImp->pBasicLibContainer->storeLibraries( bComplete );
+    return 0;
 }
 
 //--------------------------------------------------------------------
@@ -764,17 +780,39 @@ BasicManager* SfxApplication::GetBasicManager()
         pBas->Insert( xUnoObj );
         //pBas->setRoot( xDesktop );
 
-        // Dialog container
-        SfxDialogContainer* pDlgCont = new SfxDialogContainer( sal_True );
-        pDlgCont->acquire();    // Hold via UNO
-        pImp->pDialogContainer = pDlgCont;
-        pSfxBasicManager->SetDialogContainer( pImp->pDialogContainer );
+        // Basic container
+        SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer
+            ( DEFINE_CONST_UNICODE( "StarBasic" ), pSfxBasicManager );
+        pBasicCont->acquire();  // Hold via UNO
+        pImp->pBasicLibContainer = pBasicCont;
 
-        Reference< XLibraryContainer > xDlgCont = static_cast< XLibraryContainer* >( pDlgCont );
-        Any aDlgCont;
-        aDlgCont <<= xDlgCont;
-        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDlgCont );
+        // Dialog container
+        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer();
+        pDialogCont->acquire(); // Hold via UNO
+        pImp->pDialogLibContainer = pDialogCont;
+
+        BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
+        pBasMgrImpl->pScriptCont = pBasicCont;
+        pBasMgrImpl->pDialogCont = pDialogCont;
+        pSfxBasicManager->SetImpl( pBasMgrImpl );
+
+
+        Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
+        Any aBasicCont;
+        aBasicCont <<= xBasicCont;
+        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("BasicLibraries"), aBasicCont );
         pBas->Insert( xUnoObj );
+
+        Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
+        Any aDialogCont;
+        aDialogCont <<= xDialogCont;
+        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDialogCont );
+        pBas->Insert( xUnoObj );
+
+        SbxVariableRef pGlobal = new SbxVariable( SbxOBJECT, pBas );
+        pGlobal->SetFlag( SBX_DONTSTORE );
+        pGlobal->SetName( String( DEFINE_CONST_UNICODE("GlobalScope") ) );
+        pBas->Insert( pGlobal );
 
         // Konstanten
 //ASDBG     RegisterBasicConstants( "so", aConstants, sizeof(aConstants)/sizeof(SfxConstant) );
@@ -791,7 +829,16 @@ BasicManager* SfxApplication::GetBasicManager()
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
     Reference< XLibraryContainer > xRet
-        = static_cast< XLibraryContainer* >( pImp->pDialogContainer );
+        = static_cast< XLibraryContainer* >( pImp->pDialogLibContainer );
+    return xRet;
+}
+
+//--------------------------------------------------------------------
+
+Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
+{
+    Reference< XLibraryContainer > xRet
+        = static_cast< XLibraryContainer* >( pImp->pBasicLibContainer );
     return xRet;
 }
 
