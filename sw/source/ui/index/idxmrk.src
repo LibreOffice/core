@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:27:33 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,10 +1217,10 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ portuguese ] = "A entrada bibliogrбfica jб existe no documento com dados diferentes. ";
     MESSAGE[ russian ] = "Эта запись библиографии с некоторыми отличными данными уже содержится в документе. Вы хотите согласовать содержащиеся записи?";
     MESSAGE[ greek ] = "З кбфбчюсйуз вйвлйпиЮкзт хрЬсчей Юдз уфп Эггсбцп ме дйбцпсефйкЬ дедпмЭнб. ИЭлефе нб ецбсмпуфпэн фб нЭб дедпмЭнб;";
-    MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. ";
+    MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. Wilt u de bestaande items aanpassen?";
     MESSAGE[ french ] = "L'entrйe de bibliographie existe dйjа en relation avec des donnйes diffйrentes dans le document. Voulez-vous ajuster les entrйes existantes ?";
     MESSAGE[ spanish ] = "La entrada bibliogrбfica existe ya con datos diferentes en el documento. їDesea ajustar las entradas ya existentes?";
-    MESSAGE[ italian ] = "La voce bibliografica и giа presente nel documento con dati diversi. ";
+    MESSAGE[ italian ] = "La voce bibliografica и giа presente nel documento con dati diversi. Volete adattare le voci giа contenute?";
     MESSAGE[ danish ] = "Litteraturlisteelementet er allerede indeholdt i dokumentet med afvigende data. ";
     MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns dдr?";
     MESSAGE[ polish ] = "Dokument zawiera juї wpis bibliograficzny, ale z innymi danymi. Dopasowaж zawarte wpisy?";
