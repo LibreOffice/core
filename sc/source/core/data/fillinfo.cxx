@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:55:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
 inline BOOL ScDocument::RowHidden( SCROW nRow, SCTAB nTab )
 {
-    return ( pTab[nTab]->pRowFlags[nRow] & CR_HIDDEN ) != 0;
+    return ( pTab[nTab]->pRowFlags->GetValue(nRow) & CR_HIDDEN ) != 0;
 }
 
 
