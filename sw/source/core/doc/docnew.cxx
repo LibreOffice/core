@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:40:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ SwDoc::SwDoc() :
     pUpdtFlds( new SwDocUpdtFld() ),
     pFldTypes( new SwFldTypes() ),
     pPrt( 0 ),
+    pVirDev( 0 ),
     pPrtData( 0 ),
     pGlossaryDoc( 0 ),
     pOutlineRule( 0 ),
@@ -403,15 +404,6 @@ SwDoc::SwDoc() :
     pMacroTable = new SvxMacroTableDtor;
 
     /*
-     * Builds and sets the virtual device
-     */
-    pVirDev = new VirtualDevice( 1 );
-    pVirDev->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
-    MapMode aMapMode( pVirDev->GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
-    pVirDev->SetMapMode( aMapMode );
-
-    /*
      * Defaultformate und DefaultFormatsammlungen (FmtColl)
      * werden an der Position 0 in das jeweilige Array eingetragen.
      * Die Formate der FmtColls sind von den Defaultformaten
@@ -490,7 +482,7 @@ SwDoc::SwDoc() :
     short nUseVirtualDev = aOptions.IsUsePrtDevice()
         ? PrinterIndependentLayout::DISABLED
         : PrinterIndependentLayout::HIGH_RESOLUTION;
-    SetUseVirtualDevice( nUseVirtualDev );
+    _SetUseVirtualDevice( nUseVirtualDev );
     SetParaSpaceMax( aOptions.IsAddSpacing(), aOptions.IsAddSpacingAtPages() );
     SetAddParaSpacingToTableCells( aOptions.IsAddTableSpacing() );
     SetUseFormerLineSpacing( aOptions.IsUseLineSpacing() );
@@ -743,8 +735,8 @@ void SwDoc::SetJobsetup( const JobSetup &rJobSetup )
             bDataChanged = TRUE;
         }
     }
-    if ( com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() &&
-         bDataChanged )
+    if ( bDataChanged &&
+         com::sun::star::document::PrinterIndependentLayout::DISABLED == IsUseVirtualDevice() )
         PrtDataChanged();
 }
 
@@ -799,6 +791,10 @@ VirtualDevice& SwDoc::_GetVirDev() const
 SfxPrinter& SwDoc::_GetPrt() const
 {
     ASSERT( ! pPrt, "Do not call _GetPrt(), call GetPrt() instead" )
+
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( false, "Printer will be created!" )
+#endif
 
     // wir erzeugen einen default SfxPrinter.
     // Das ItemSet wird vom Sfx geloescht!
