@@ -2,7 +2,7 @@
 
     $Workfile:   _VIEWSH.SDI  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_viewsh.sdi,v 1.5 2001-06-25 13:42:52 os Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_viewsh.sdi,v 1.6 2001-07-09 09:36:07 os Exp $
 
     Beschreibung:   allgemeine interfaces fuer View
 
@@ -459,6 +459,11 @@ interface BaseTextEditView : View
         ExecMethod = Execute ;
         StateMethod = GetState;
     ]
+    SID_READONLY_MODE // ole : no, status : no
+    [
+        StateMethod = GetState ;
+    ]
+
 }
 
 interface GlobalContents : Collection

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
+ *  last change: $Author: os $ $Date: 2001-07-09 09:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,9 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case  SID_VIEW_DATA_SOURCE_BROWSER:
                 rSet.Put( SfxBoolItem( nWhich, GetViewFrame()->HasChildWindow( SID_BROWSER ) ) );
+            break;
+            case SID_READONLY_MODE:
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->HasReadonlySel()));
             break;
         }
         nWhich = aIter.NextWhich();
