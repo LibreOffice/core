@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:03:25 $
+ *  last change: $Author: er $ $Date: 2002-11-28 17:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4277,14 +4277,16 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
             {
                 bFound = FALSE;
                 String aCellStr;
-                nField = nDBCol1;
-                while (!bFound && (nField <= nDBCol2))
+                ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
+                while (!bFound && (aLook.Col() <= nDBCol2))
                 {
-                    pDok->GetString(nField, nDBRow1, nDBTab1, aCellStr);
+                    ScBaseCell* pCell = GetCell( aLook );
+                    GetCellString( aCellStr, pCell );
                     bFound = ScGlobal::pTransliteration->isEqual( aCellStr, aStr );
                     if (!bFound)
-                        nField++;
+                        aLook.IncCol();
                 }
+                nField = aLook.Col();
             }
             if (bFound)
             {
