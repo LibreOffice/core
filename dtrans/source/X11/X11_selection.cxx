@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-12 19:05:41 $
+ *  last change: $Author: pl $ $Date: 2001-12-21 13:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,14 +1930,14 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
         Window root = rMessage.type == MotionNotify ? rMessage.xmotion.root : rMessage.xcrossing.root;
         m_nDragTimestamp = rMessage.type == MotionNotify ? rMessage.xmotion.time : rMessage.xcrossing.time;
 
+        aGuard.clear();
         if( rMessage.type == MotionNotify )
         {
-            aGuard.clear();
             bForce = updateDragAction( rMessage.xmotion.state );
         }
         updateDragWindow( root_x, root_y, root );
-
         aGuard.reset();
+
         if( m_nCurrentProtocolVersion >= 0 && m_aDropProxy != None )
         {
             aGuard.clear();
@@ -2849,6 +2849,12 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
 
 void SelectionManager::dispatchEvent( int millisec )
 {
+#ifdef DEBUG
+//     int* pTest = *(int**)&m_aMutex;
+//     if( pTest[8] != 0 )
+//         abort();
+#endif
+
     pollfd aPollFD;
     XEvent event;
 
