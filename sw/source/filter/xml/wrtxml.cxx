@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:05:07 $
+ *  last change: $Author: mib $ $Date: 2001-03-07 15:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ sal_uInt32 WriteThroughComponent(
     const sal_Char* pComponentName,
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bBlockMode)
+    sal_Bool bBlockMode )
 {
     ASSERT(xOutputStream.is(), "I really need an output stream!");
     ASSERT(xComponent.is(), "Need component!");
@@ -204,7 +204,8 @@ sal_uInt32 WriteThroughComponent(
     const sal_Char* pComponentName,
     const Sequence<Any> & rArguments,
     const Sequence<beans::PropertyValue> & rMediaDesc,
-    sal_Bool bBlockMode)
+    sal_Bool bBlockMode,
+    sal_Bool bCompress=sal_True )
 {
     ASSERT(NULL != pStorage, "Need storage!");
     ASSERT(NULL != pStreamName, "Need stream name!");
@@ -216,9 +217,25 @@ sal_uInt32 WriteThroughComponent(
     OUString sStreamName = OUString::createFromAscii(pStreamName);
     xDocStream = pStorage->OpenStream( sStreamName,
                                        STREAM_WRITE | STREAM_SHARE_DENYWRITE );
+    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
     if (! xDocStream.Is())
         return ERR_SWG_WRITE_ERROR;
-    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
+
+    xDocStream->SetSize( 0 );
+
+    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+    uno::Any aAny;
+    aAny <<= aMime;
+    xDocStream->SetProperty( aPropName, aAny );
+
+    if( !bCompress )
+    {
+        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
+        sal_Bool bFalse = sal_False;
+        aAny.setValue( &bFalse, ::getBooleanCppuType() );
+        xDocStream->SetProperty( aPropName, aAny );
+    }
 
     // set buffer and create outputstream
     xDocStream->SetBufferSize( 16*1024 );
@@ -310,7 +327,7 @@ sal_uInt32 SwXMLWriter::_Write()
             WriteThroughComponent(
                 pStg, xModelComp, "meta.xml", xServiceFactory,
                 "com.sun.star.comp.Writer.XMLMetaExporter",
-                aEmptyArgs, aProps, bBlock );
+                aEmptyArgs, aProps, bBlock, sal_False );
 
         WriteThroughComponent(
             pStg, xModelComp, "styles.xml", xServiceFactory,
@@ -387,11 +404,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.19 2001-03-06 11:05:07 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.20 2001-03-07 15:23:07 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/03/06 11:05:07  mib
+      organizer support
+
       Revision 1.18  2001/03/02 21:02:30  dvo
       - changed: content and styles are written as separate streams
 
