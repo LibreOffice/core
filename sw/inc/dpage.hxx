@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: os $ $Date: 2000-11-27 07:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,12 @@
 
 class SdrPageGridFrameList;
 class SwDrawDocument;
+class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
 {
-    SdrPageGridFrameList *pGridLst;
+    SdrPageGridFrameList*   pGridLst;
+    SwDoc&                  rDoc;
 
 public:
     SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage=FALSE);
@@ -92,6 +94,8 @@ public:
     virtual void SetLinkData( const String& rLinkName, const String& rLinkData );
 
     BOOL RequestHelp( Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 };
 
 #endif     // _DPAGE_HXX

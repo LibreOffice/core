@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:44:04 $
+ *  last change: $Author: os $ $Date: 2000-11-27 07:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
 #endif
@@ -143,11 +146,18 @@
 #ifndef _GRFATR_HXX
 #include <grfatr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::frame;
 
 SwDPage::SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
-    pGridLst( 0 )
+    pGridLst( 0 ),
+    rDoc(rNewModel.GetDoc())
 {
 }
 
@@ -369,6 +379,15 @@ Bug 29593: QuickHelp immer an der MausPosition anzeigen (besonders unter OS/2)
         bWeiter = !FmFormPage::RequestHelp( pWindow, pView, rEvt );
 
     return bWeiter;
+}
+/* -----------------------------27.11.00 07:35--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference< XInterface > SwDPage::createUnoPage()
+{
+    Reference<XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
+    Reference<XDrawPageSupplier> xPageSupp(xModel, UNO_QUERY);
+    return xPageSupp->getDrawPage();
 }
 
 
