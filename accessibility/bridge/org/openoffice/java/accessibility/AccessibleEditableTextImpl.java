@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ package org.openoffice.java.accessibility;
 import com.sun.star.awt.*;
 import com.sun.star.style.*;
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.AccessibleTextType;
-import drafts.com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.AccessibleTextType;
+import com.sun.star.accessibility.XAccessibleEditableText;
 
 import javax.accessibility.AccessibleText;
 import javax.swing.text.StyleConstants;

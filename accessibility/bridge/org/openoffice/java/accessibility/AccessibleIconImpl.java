@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleIconImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.XAccessibleImage;
+import com.sun.star.accessibility.XAccessibleImage;
 
 /**
  */
