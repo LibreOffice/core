@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 07:40:10 $
+ *  last change: $Author: cd $ $Date: 2002-04-24 11:07:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
             {
                 case MENUITEM_STRING:
                 {
-                    SfxMenuControl *pMnuCtrl;
+                    SfxMenuControl *pMnuCtrl=0;
                     String aCmd( pSVMenu->GetItemCommand( nId ) );
                     if ( aCmd.CompareToAscii("slot:", 5) == 0 )
                     {
@@ -468,50 +468,45 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         pSVMenu->SetItemCommand( nId, String() );
                         aCmd.Erase();
                     }
-
+/*
                     if ( aCmd.Len() )
                     {
-                        if ( aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bWasHighContrast ) );
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId,
-                            *pSVMenu, *pBindings, this );
+                        // try to create control via comand name
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId, *pSVMenu, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.C40_INSERT( SfxMenuControl,
-                                                pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId),
-                                            pSVMenu->GetHelpText(nId), *pBindings);
-                        }
-                        else
-                        {
-                            pMnuCtrl = (pItems+nPos);
-                            pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId),
-                                    pSVMenu->GetHelpText(nId), *pBindings);
+                            rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
+                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
                         }
                     }
-                    else
+*/
+                    if ( !pMnuCtrl )
                     {
-                        pMnuCtrl = SfxMenuControl::CreateControl(nId,
-                            *pSVMenu, *pBindings);
-
+                        // try to create control via Id
+                        pMnuCtrl = SfxMenuControl::CreateControl(nId, *pSVMenu, *pBindings);
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
-                            rCtrlArr.C40_INSERT( SfxMenuControl,
-                                                    pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId),
-                                            pSVMenu->GetHelpText(nId), *pBindings);
+                            rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
+                            (pItems+nPos)->Bind( 0, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
                         }
                         else
+                            // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId),
-                                    pSVMenu->GetHelpText(nId), *pBindings);
+                        pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId), pSVMenu->GetHelpText(nId), *pBindings);
+                    }
 
-//                        if ( !pSVMenu->GetPopupMenu( nId ) && aOptions.IsMenuIconsEnabled() )
-                        if (  aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast ) );
+                    if ( aOptions.IsMenuIconsEnabled() )
+                    {
+                        // try to get image via URL
+//                        Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bWasHighContrast );
+//                        if ( !aImage )
+                            // try to get image via Id
+                        Image aImage = pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast );
+                        if ( !!aImage )
+                            pSVMenu->SetItemImage( nId, aImage );
                     }
 
                     if ( !IsItemHidden_Impl(nId, bOleServer, bMac) )
@@ -570,10 +565,10 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
         PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
         if ( /*!pPopup &&*/ pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRING && bIcons )
         {
-            String aCmd( pSVMenu->GetItemCommand( nId ) );
-            if ( aCmd.Len() )
-                pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
-            else
+//            String aCmd( pSVMenu->GetItemCommand( nId ) );
+//            if ( aCmd.Len() )
+//                pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
+//            else
                 pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
         }
         else if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE && !bIcons )
@@ -608,10 +603,10 @@ void SfxVirtualMenu::UpdateImages()
             PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
             if ( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE )
             {
-                String aCmd( pSVMenu->GetItemCommand( nId ) );
-                if ( aCmd.Len() )
-                    pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
-                else
+//                String aCmd( pSVMenu->GetItemCommand( nId ) );
+//                if ( aCmd.Len() )
+//                    pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
+//                else
                     pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
             }
         }
@@ -691,7 +686,7 @@ void SfxVirtualMenu::BindControllers()
     {
         SfxMenuControl* pCtrl = rCtrlArr[nPos];
         USHORT nId = pCtrl->GetId();
-        if ( !pSVMenu->GetItemCommand(nId).Len() )
+//        if ( !pSVMenu->GetItemCommand(nId).Len() )
             pCtrl->ReBind();
     }
 
@@ -917,7 +912,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 {
     USHORT nId = (USHORT) pMenu->GetCurItemId();
     DBG_OUTF( ("SfxVirtualMenu %lx selected %u from %lx", this, nId, pMenu) );
-
+/*
     if ( pSVMenu->GetItemCommand( nId ).Len() )
     {
         SfxMenuCtrlArr_Impl& rCtrlArr = GetAppCtrl_Impl();
@@ -932,7 +927,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
             }
         }
     }
-
+*/
     if ( nId >= START_ITEMID_WINDOWLIST && nId <= END_ITEMID_WINDOWLIST )
     {
         SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;

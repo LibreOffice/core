@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
+ *  last change: $Author: cd $ $Date: 2002-04-24 11:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,24 +282,27 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     SfxApplication *pSfxApp = SFX_APP();
     if ( rSlot.IsMode(SFX_SLOT_FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
     {
-        // ggf. Recording anwerfen
-        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
-                GetFrame()->GetFrame()->GetFrameInterface(),
-                com::sun::star::uno::UNO_QUERY);
+        if ( GetFrame() )
+        {
+            // ggf. Recording anwerfen
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                    GetFrame()->GetFrame()->GetFrameInterface(),
+                    com::sun::star::uno::UNO_QUERY);
 
-        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-                xFrame,
-                com::sun::star::uno::UNO_QUERY);
+            com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                    xFrame,
+                    com::sun::star::uno::UNO_QUERY);
 
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
-        aProp >>= xSupplier;
-        if(xSupplier.is())
-            xRecorder = xSupplier->getDispatchRecorder();
+            com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+            aProp >>= xSupplier;
+            if(xSupplier.is())
+                xRecorder = xSupplier->getDispatchRecorder();
 
-        if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
-            rReq.Record_Impl( rShell, rSlot, xRecorder );
+            if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
+                rReq.Record_Impl( rShell, rSlot, xRecorder );
+        }
 
         // ggf. die Bindings locken (MI: warum?)
         SfxBindings *pBindings = GetBindings();
