@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:49:22 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@
 #ifndef _W4WFLT_HXX
 #include <w4wflt.hxx>           // AutoDetect
 #endif
-#ifndef _IODETECT_HXX
-#include <iodetect.hxx>
-#endif
 #ifndef _HINTS_HXX //autogen
 #include <hints.hxx>
 #endif
@@ -186,6 +183,11 @@
 #include <swerror.h>
 #endif
 
+#ifndef _IODETECT_CXX
+#include <iodetect.cxx>
+#endif
+
+
 using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -193,13 +195,10 @@ using namespace com::sun::star::uno;
 SwRead ReadRtf = 0, ReadAscii = 0, ReadSwg = 0, ReadSw3 = 0,
         ReadHTML = 0, ReadXML = 0;
 
-inline BOOL IsDocShellRegistered() { return 0 != SwDocShell::_GetInterface(); }
-
-IO_DETECT_IMPL1
-IO_DETECT_IMPL2
-IO_DETECT_IMPL3
-IO_DETECT_IMPL4
-
+bool IsDocShellRegistered()
+{
+    return 0 != SwDocShell::_GetInterface();
+}
 
 inline void _SetFltPtr( USHORT& rPos, SwRead pReader
                         , const sal_Char* pNm
