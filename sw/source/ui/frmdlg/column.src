@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ TabPage TP_COLUMN
         Text[ english_us ] = "Evenly distribute contents ~to all columns";
         Text[ portuguese ] = "~Distribuir conteϊdo em todas as colunas por igual";
         Text[ russian ] = "Πΰροπεδελθςό πΰβνξμεπνξ ρξδεπ~ζθμξε βξ βρευ ρςξλαφΰυ";
-        Text[ greek ] = "Ίση κατανομή του περιεχομένου σε όλες τις στήλες";
+        Text[ greek ] = "Ισοκατανομή των περιεχομένων σε όλες τις στήλες";
         Text[ dutch ] = "Inhoud gelijkmatig verdelen over ~kolommen";
         Text[ french ] = "Rιpartition rιguliθre du contenu sur toutes les colonnes";
         Text[ spanish ] = "D~istribuciσn uniforme del contenido sobre todas las columnas";
@@ -158,10 +158,10 @@ TabPage TP_COLUMN
         Text[ swedish ] = "Fφrdela innehεll jδmnt φver ~alla kolumner";
         Text[ polish ] = "R~oz³σΏ zawartoζ rσwnomiernie we wszystkich kolumnach";
         Text[ portuguese_brazilian ] = "Distribuiηγo uniforme do conteϊdo em todas as colunas";
-        Text[ japanese ] = "ε†…ε®Ήγ‚’ε„ζ®µγ«ε‡η­‰ι…ε†γ™γ‚‹";
-        Text[ korean ] = "λ‚΄μ©μ„ κ° λ‹¨μ— κ· λ“±ν•κ² λ°°μΉ";
-        Text[ chinese_simplified ] = "ε―Ήη§°θ°ƒζ•΄ζ ε®½";
-        Text[ chinese_traditional ] = "ε°η¨±θªΏζ•΄ζ¬„ε―¬";
+        Text[ japanese ] = "ε†…ε®Ήγ‚’ε„ζ®µγ«ε‡η­‰ι…ε†γ™γ‚‹(~T)";
+        Text[ korean ] = "λ‚΄μ©μ„ κ° λ‹¨μ— κ· λ“±ν•κ² λ°°μΉ(~T)";
+        Text[ chinese_simplified ] = "ε―Ήη§°θ°ƒζ•΄ζ ε®½(~T)";
+        Text[ chinese_traditional ] = "ε°η¨±θªΏζ•΄ζ¬„ε―¬(~T)";
         Text[ arabic ] = "ΚζÒνΪ ΗαγΝΚζνΗΚ Ϊαμ ία ΗαΓΪγΟΙ ΘΗαΚΣΗζν";
         Text[ turkish ] = "έηeriπi s~όtunlara dengeli olarak daπύtύn";
         Text[ catalan ] = "Distribueix el contingut uniformement a totes les columnes";
@@ -182,7 +182,7 @@ TabPage TP_COLUMN
         Text[ english_us ] = "Settings";
         Text[ portuguese ] = "Predefiniηυes";
         Text[ russian ] = "Σρςΰνξβκθ";
-        Text[ greek ] = "Προεπιλογή";
+        Text[ greek ] = "Ρυθμίσεις";
         Text[ dutch ] = "Instellingen";
         Text[ french ] = "Dιfinitions";
         Text[ spanish ] = "Columnas";
@@ -539,7 +539,7 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ΗαδζΪ";
         Text[ dutch ] = "~Type";
         Text[ chinese_simplified ] = "η±»ε‹(~L)";
-        Text[ greek ] = "Τύ~πος";
+        Text[ greek ] = "~Γραμμή";
         Text[ korean ] = "μΆ…λ¥(~L)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Satύr";
@@ -707,7 +707,7 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ΗαΗΡΚέΗΪ";
         Text[ dutch ] = "Hoo~gte";
         Text[ chinese_simplified ] = "ι«εΊ¦(~E)";
-        Text[ greek ] = "Ύψος";
+        Text[ greek ] = "Ύ~ψος";
         Text[ korean ] = "λ†’μ΄(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Yόkseklik";
@@ -759,7 +759,7 @@ TabPage TP_COLUMN
         Text[ arabic ] = "ΗαγζΦΪ";
         Text[ dutch ] = "~Positie";
         Text[ chinese_simplified ] = "δ½η½®(~P)";
-        Text[ greek ] = "Θέση";
+        Text[ greek ] = "~Θέση";
         Text[ korean ] = "μ„μΉ(~P)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Konum";
@@ -906,7 +906,7 @@ TabPage TP_COLUMN
         StringList [ greek ] =
         {
             < "Πάνω" ; Default ; > ;
-            < "Κεντραρισμένα" ; Default ; > ;
+            < "Στο κέντρο" ; Default ; > ;
             < "Κάτω" ; Default ; > ;
         };
         StringList [ korean ] =
@@ -1059,16 +1059,16 @@ TabPage TP_COLUMN
         Text[ danish ] = "~Tekstretning";
         Text[ swedish ] = "Text~riktning";
         Text[ polish ] = "Text ~direction";
-        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥";
-        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘";
-        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘";
+        Text[ japanese ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
+        Text[ korean ] = "ν…μ¤νΈ λ°©ν–¥(~D)";
+        Text[ chinese_simplified ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
+        Text[ chinese_traditional ] = "ζ–‡ε­—ζ–Ήε‘(~D)";
         Text[ turkish ] = "Metin ~yφnlendirmesi";
         Text[ arabic ] = "Text ~direction";
         Text[ czech ] = "SmΔ›r textu";
         Text[ hebrew ] = "β€®Χ›Χ™Χ•Χ•Χ ΧΧ§Χ΅Χβ€¬";
         Text[ catalan ] = "Text ~direction";
-        Text[ portuguese_brazilian ] = "Text ~direction";
+        Text[ portuguese_brazilian ] = "Orientaηγo do texto";
         Text[ thai ] = "Text ~direction";
         Text[ hindi ] = "Text ~direction";
         Text[ slovak ] = "S~mer textu";
@@ -1106,9 +1106,9 @@ TabPage TP_COLUMN
     };
     StringList [ language_user1 ] =
     {
-         < "Link; Links nach rechts" ; 0; > ;
-        < "Rech; Rechts nach links" ; 1; > ;
-        < "Eins; Einstellungen des όbergeordneten Objektes verwenden" ; 4; > ;
+         < "; Link; Links nach rechts" ; 0; > ;
+        < "; Rech; Rechts nach links" ; 1; > ;
+        < "; Eins; Einstellungen des όbergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ korean ] =
     {
@@ -1226,9 +1226,9 @@ TabPage TP_COLUMN
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "Left-to-right" ; 0; > ;
-        < "Right-to-left" ; 1; > ;
-        < "Use superordinate object settings" ; 4; > ;
+         < "Da esquerda para a direita" ; 0; > ;
+        < "Da direita para a esquerda" ; 1; > ;
+        < "Usar as propriedades do objeto superior" ; 4; > ;
     };
     StringList [ thai ] =
     {
@@ -1305,7 +1305,7 @@ ModalDialog DLG_COLUMN
         Left = TRUE ;
         Text[ english_us ] = "~Apply to";
         Text[ portuguese ] = "~Aplicar em";
-        Text[ greek ] = "Εφ~αρμογή σε:";
+        Text[ greek ] = "Εφ~αρμογή σε";
         Text[ dutch ] = "~Toepassen op";
         Text[ french ] = "Appliquer ΰ";
         Text[ spanish ] = "~Aplicar a";
@@ -1354,11 +1354,11 @@ ModalDialog DLG_COLUMN
         };
         StringList [ language_user1 ] =
         {
-            < "Sele; Selektion" ;           LISTBOX_SELECTION; > ;
+            < "; Sele; Selektion" ;             LISTBOX_SELECTION; > ;
             < " " ;     LISTBOX_SECTION     ; > ;
-            < "Sele; Selektierte Bereiche" ;  LISTBOX_SECTIONS  ; > ;
-            < "Rahm; Rahmen" ;                  LISTBOX_FRAME       ; > ;
-            < "Seit; Seitenvorlage:" ;          LISTBOX_PAGE        ; > ;
+            < "; Sele; Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
+            < "; Rahm; Rahmen" ;                LISTBOX_FRAME       ; > ;
+            < "; Seit; Seitenvorlage:" ;        LISTBOX_PAGE        ; > ;
         };
         StringList [ english_us ] =
         {
@@ -1379,9 +1379,9 @@ ModalDialog DLG_COLUMN
         StringList [ greek ] =
         {
             < "Επιλογή" ;           LISTBOX_SELECTION; > ;
-            < "Τρέχων περιοχή" ;    LISTBOX_SECTION     ; > ;
-            < "Επιλεγμένες περιοχές" ;  LISTBOX_SECTIONS    ; > ;
-            < "Περίγραμμα" ;                LISTBOX_FRAME       ; > ;
+            < "Τρέχουσα ενότητα" ;      LISTBOX_SECTION     ; > ;
+            < "Επιλεγμένες ενότητες" ;  LISTBOX_SECTIONS    ; > ;
+            < "Πλαίσιο" ;               LISTBOX_FRAME       ; > ;
             < "Πρότυπο σελίδας: " ;         LISTBOX_PAGE        ; > ;
         };
         StringList [ dutch ] =
@@ -1588,6 +1588,7 @@ ModalDialog DLG_COLUMN
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤¤ΰ¤‚ΰ¤­ΰ¥‡ΰ¤‚";
     Text[ slovak ] = "StΔΊpce";
 };
+
 
 
 
