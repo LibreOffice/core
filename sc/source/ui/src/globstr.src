@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:02:05 $
+ *  last change: $Author: er $ $Date: 2001-05-29 18:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4300,6 +4300,60 @@ Resource RID_GLOBSTR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "#NOMBRE?";
     };
+    String STR_NO_ADDIN
+    {
+        Text = "#ADDIN?" ;
+        Text [ ENGLISH ] = "#ADDIN?" ;
+        Text [ norwegian ] = "#ADDIN?" ;
+        Text [ italian ] = "#ADDIN?" ;
+        Text [ portuguese_brazilian ] = "#ADDIN?" ;
+        Text [ portuguese ] = "#ADDIN?" ;
+        Text [ french ] = "#ADDIN?" ;
+        Text [ dutch ] = "#ADDIN?" ;
+        Text [ spanish ] = "#ADDIN?" ;
+        Text [ danish ] = "#ADDIN?" ;
+        Text [ swedish ] = "#ADDIN?" ;
+        Text [ finnish ] = "NAME?" ;
+        Text [ english_us ] = "#ADDIN?" ;
+        Text[ chinese_simplified ] = "#ADDIN?";
+        Text[ russian ] = "#ADDIN?";
+        Text[ polish ] = "#ADDIN?";
+        Text[ japanese ] = "#ADDIN?";
+        Text[ chinese_traditional ] = "#ADDIN?";
+        Text[ arabic ] = "#ADDIN?";
+        Text[ greek ] = "#ADDIN?";
+        Text[ korean ] = "#ADDIN?";
+        Text[ turkish ] = "#ADDIN?";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#ADDIN?";
+    };
+    String STR_NO_MACRO
+    {
+        Text = "#MAKRO?" ;
+        Text [ ENGLISH ] = "#MACRO?" ;
+        Text [ norwegian ] = "#MACRO?" ;
+        Text [ italian ] = "#MACRO?" ;
+        Text [ portuguese_brazilian ] = "#MACRO?" ;
+        Text [ portuguese ] = "#MACRO?" ;
+        Text [ french ] = "#MACRO?" ;
+        Text [ dutch ] = "#MACRO?" ;
+        Text [ spanish ] = "#MACRO?" ;
+        Text [ danish ] = "#MACRO?" ;
+        Text [ swedish ] = "#MACRO?" ;
+        Text [ finnish ] = "NAME?" ;
+        Text [ english_us ] = "#MACRO?" ;
+        Text[ chinese_simplified ] = "#MACRO?";
+        Text[ russian ] = "#MACRO?";
+        Text[ polish ] = "#MACRO?";
+        Text[ japanese ] = "#MACRO?";
+        Text[ chinese_traditional ] = "#MACRO?";
+        Text[ arabic ] = "#MACRO?";
+        Text[ greek ] = "#MACRO?";
+        Text[ korean ] = "#MACRO?";
+        Text[ turkish ] = "#MACRO?";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "#MACRO?";
+    };
     String STR_UNDO_THESAURUS
     {
         Text = "Thesaurus" ;
@@ -5852,6 +5906,60 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Hata: Geçersiz ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: Nombre no válido";
+    };
+    String STR_LONG_ERR_NO_ADDIN
+    {
+        Text = "Fehler: AddIn nicht gefunden" ;
+        Text [ ENGLISH ] = "Error: AddIn not found" ;
+        Text [ norwegian ] = "Error: AddIn not found" ;
+        Text [ italian ] = "Error: AddIn not found" ;
+        Text [ portuguese_brazilian ] = "Error: AddIn not found" ;
+        Text [ portuguese ] = "Error: AddIn not found" ;
+        Text [ finnish ] = "Error: AddIn not found" ;
+        Text [ danish ] = "Error: AddIn not found" ;
+        Text [ french ] = "Error: AddIn not found" ;
+        Text [ swedish ] = "Error: AddIn not found" ;
+        Text [ dutch ] = "Error: AddIn not found" ;
+        Text [ spanish ] = "Error: AddIn not found" ;
+        Text [ english_us ] = "Error: AddIn not found" ;
+        Text[ chinese_simplified ] = "Error: AddIn not found";
+        Text[ russian ] = "Error: AddIn not found";
+        Text[ polish ] = "Error: AddIn not found";
+        Text[ japanese ] = "Error: AddIn not found";
+        Text[ chinese_traditional ] = "Error: AddIn not found";
+        Text[ arabic ] = "Error: AddIn not found";
+        Text[ greek ] = "Error: AddIn not found";
+        Text[ korean ] = "Error: AddIn not found";
+        Text[ turkish ] = "Error: AddIn not found";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: AddIn not found";
+    };
+    String STR_LONG_ERR_NO_MACRO
+    {
+        Text = "Fehler: Makro nicht gefunden" ;
+        Text [ ENGLISH ] = "Error: Macro not found" ;
+        Text [ norwegian ] = "Error: Macro not found" ;
+        Text [ italian ] = "Error: Macro not found" ;
+        Text [ portuguese_brazilian ] = "Error: Macro not found" ;
+        Text [ portuguese ] = "Error: Macro not found" ;
+        Text [ finnish ] = "Error: Macro not found" ;
+        Text [ danish ] = "Error: Macro not found" ;
+        Text [ french ] = "Error: Macro not found" ;
+        Text [ swedish ] = "Error: Macro not found" ;
+        Text [ dutch ] = "Error: Macro not found" ;
+        Text [ spanish ] = "Error: Macro not found" ;
+        Text [ english_us ] = "Error: Macro not found" ;
+        Text[ chinese_simplified ] = "Error: Macro not found";
+        Text[ russian ] = "Error: Macro not found";
+        Text[ polish ] = "Error: Macro not found";
+        Text[ japanese ] = "Error: Macro not found";
+        Text[ chinese_traditional ] = "Error: Macro not found";
+        Text[ arabic ] = "Error: Macro not found";
+        Text[ greek ] = "Error: Macro not found";
+        Text[ korean ] = "Error: Macro not found";
+        Text[ turkish ] = "Error: Macro not found";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Error: Macro not found";
     };
     String STR_LONG_ERR_NO_REF
     {

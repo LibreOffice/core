@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:22:57 $
+ *  last change: $Author: er $ $Date: 2001-05-29 18:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,8 @@ String ScGlobal::GetErrorString(USHORT nErrNumber)
         case NOVALUE     : nErrNumber = STR_NV_STR; break;
         case errNoRef    : nErrNumber = STR_NO_REF_TABLE; break;
         case errNoName   : nErrNumber = STR_NO_NAME_REF; break;
+        case errNoAddin  : nErrNumber = STR_NO_ADDIN; break;
+        case errNoMacro  : nErrNumber = STR_NO_MACRO; break;
         case errDoubleRef:
         case errNoValue  : nErrNumber = STR_NO_VALUE; break;
 
@@ -541,6 +543,12 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
         break;
         case errNoName:
             nErrNumber = STR_LONG_ERR_NO_NAME;
+        break;
+        case errNoAddin:
+            nErrNumber = STR_LONG_ERR_NO_ADDIN;
+        break;
+        case errNoMacro:
+            nErrNumber = STR_LONG_ERR_NO_MACRO;
         break;
         case errNoValue:
             nErrNumber = STR_LONG_ERR_NO_VALUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-05-02 14:55:17 $
+ *  last change: $Author: er $ $Date: 2001-05-29 18:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,10 @@
 #define errTrackFromCircRef     528
 // Interpreter internal: existing cell has no value but value queried
 #define errCellNoValue          529
+// Interpreter: needed AddIn not found
+#define errNoAddin              530
+// Interpreter: needed Macro not found
+#define errNoMacro              531
 
 #define NOVALUE                 0x7fff
 

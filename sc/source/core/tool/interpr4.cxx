@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-05-02 14:57:35 $
+ *  last change: $Author: er $ $Date: 2001-05-29 18:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2135,7 +2135,7 @@ void ScInterpreter::ScExternal()
     {
         while( nParamCount-- )
             Pop();
-        SetError(errNoName);
+        SetError( errNoAddin );
         PushInt(0);
     }
 }
@@ -2177,7 +2177,7 @@ void ScInterpreter::ScMacro()
     SbxVariable* pVar = pRoot->Find( aMacro, SbxCLASS_METHOD );
     if( !pVar || pVar->GetType() == SbxVOID || !pVar->ISA(SbMethod) )
     {
-        SetError( errNoName );
+        SetError( errNoMacro );
         pSfxApp->LeaveBasicCall();
         return;
     }
