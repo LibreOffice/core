@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlLogin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:22:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetLoginElemTokenMap();
 
-    Reference<XPropertySet> xDataSource(rImport.GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xDataSource(rImport.getDataSource());
 
     sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);

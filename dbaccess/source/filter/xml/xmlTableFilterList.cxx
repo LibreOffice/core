@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlTableFilterList.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:23:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:41:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,15 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
     return pContext;
 }
 // -----------------------------------------------------------------------------
+ODBFilter& OXMLTableFilterList::GetOwnImport()
+{
+    return static_cast<ODBFilter&>(GetImport());
+}
+
+// -----------------------------------------------------------------------------
 void OXMLTableFilterList::EndElement()
 {
-    Reference<XPropertySet> xDataSource(GetImport().GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xDataSource(GetOwnImport().getDataSource());
     if ( xDataSource.is() )
     {
         if ( !m_aPatterns.empty() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlTableFilterList.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:23:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,13 @@
 
 namespace dbaxml
 {
+    class ODBFilter;
     class OXMLTableFilterList : public SvXMLImportContext
     {
         ::std::vector< ::rtl::OUString> m_aPatterns;
         ::std::vector< ::rtl::OUString> m_aTypes;
+
+        ODBFilter& GetOwnImport();
     public:
 
         OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx,
