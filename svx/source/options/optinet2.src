@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-04-06 15:40:57 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:36:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "~Http Proxy" ;
         Text [ English ] = "Http Pro~xy" ;
-        Text [ english_us ] = "~Http proxy" ;
+        Text [ english_us ] = "Ht~tp proxy" ;
         Text [ italian ] = "Pro~xy Http" ;
         Text [ spanish ] = "~Http Proxy" ;
         Text [ french ] = "~Proxy Http" ;
@@ -557,7 +557,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT( 236, 10 );
         Text = "~Automatisch" ;
         Text [ English ] = "~Auto" ;
-        Text [ english_us ] = "Aut~omatic" ;
+        Text [ english_us ] = "~Automatic" ;
         Text [ italian ] = "~Automatico" ;
         Text [ spanish ] = "~Automático" ;
         Text [ french ] = "~Automatique" ;
@@ -678,10 +678,10 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 0 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 0 og 255." ;
-        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
+        Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 0 e 255." ;
         Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 0 y 255." ;
-        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
-        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
+        Text [ french ] = " ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 0 et 255." ;
+        Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 0 en 255 aan." ;
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 0 äî 255.";
@@ -702,9 +702,9 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 1 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 1 og 255." ;
-        Text [ italian ] = "non è un valore valido per questo campo. Digitare un valore compreso tra 0 e 255." ;
+        Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 1 e 255." ;
         Text [ spanish ] = "no es una entrada válida para este campo. Por favor escriba un valor entre 1 y 255." ;
-        Text [ french ] = "ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
+        Text [ french ] = " ne répond pas aux critères fixés pour ce champ. Vous devez saisir une valeur comprise entre 1 et 255." ;
         Text [ dutch ] = "is geen geldig item voor dit veld. Geef een waarde tussen 1 en 255 aan." ;
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
@@ -864,7 +864,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text = "~Und" ;
         Text [ English ] = "~And" ;
         Text [ dutch ] = "~En" ;
-        Text [ english_us ] = "A~nd" ;
+        Text [ english_us ] = "And" ;
         Text [ italian ] = "E" ;
         Text [ spanish ] = "~Y" ;
         Text [ french ] = "~Et" ;
@@ -973,7 +973,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Size = MAP_APPFONT ( LABEL_LEN , 10 ) ;
         Text = "Su~ffix" ;
         Text [ English ] = "Suffi~x" ;
-        Text [ english_us ] = "Suffi~x" ;
+        Text [ english_us ] = "Su~ffix" ;
         Text [ portuguese_brazilian ] = "Su~ffix" ;
         Text [ swedish ] = "Su~ffix" ;
         Text [ danish ] = "Suffiks" ;
@@ -1298,6 +1298,24 @@ TabPage RID_SVXPAGE_INET_SEARCH
     {
         Text = "Möchten Sie die aktuelle Änderung übernehmen?" ;
         Text [ English ] = "Do you want to accept the current modification?" ;
+        Text[ english_us ] = "Do you want to accept the current modification?";
+        Text[ portuguese ] = "Aceitar a modificação actual?";
+        Text[ russian ] = "Âû õîòèòå ïğèíÿòü òåêóùåå èçìåíåíèå?";
+        Text[ greek ] = "Do you want to accept the current modification?";
+        Text[ dutch ] = "Do you want to accept the current modification?";
+        Text[ french ] = "Do you want to accept the current modification?";
+        Text[ spanish ] = "¿Desea aplicar la modificación actual?";
+        Text[ italian ] = "Volete applicare le modifiche?";
+        Text[ danish ] = "Do you want to accept the current modification?";
+        Text[ swedish ] = "Vill du överta den aktuella ändringen?";
+        Text[ polish ] = "Przej¹æ aktualn¹ zmianê?";
+        Text[ portuguese_brazilian ] = "Do you want to accept the current modification?";
+        Text[ japanese ] = "Do you want to accept the current modification?";
+        Text[ korean ] = "Do you want to accept the current modification?";
+        Text[ chinese_simplified ] = "Do you want to accept the current modification?";
+        Text[ chinese_traditional ] = "Do you want to accept the current modification?";
+        Text[ turkish ] = "Do you want to accept the current modification?";
+        Text[ arabic ] = "Do you want to accept the current modification?";
     };
     Text[ turkish ] = "Ara";
     Text[ language_user1 ] = " ";
@@ -1342,7 +1360,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ spanish ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde" ;
         Text [ french ] = "Exécuter les scripts %PRODUCTNAME Basic de" ;
         Text [ dutch ] = "%PRODUCTNAME Basic-scripts uitvoeren van" ;
-        Text [ portuguese ] = "Executar scripts StarBasic de" ;
+        Text [ portuguese ] = "Executar scripts do%PRODUCTNAME Basic de" ;
         Text[ chinese_simplified ] = "Ö´ĞĞ %PRODUCTNAME Basic ½Å±¾Î»ÖÃ";
         Text[ russian ] = "Âûïîëíèòü ñêğèïòû %PRODUCTNAME Basic èç";
         Text[ polish ] = "Wykonaj skrypty %PRODUCTNAME Basic z";
@@ -1461,7 +1479,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ spanish ] = "Script %PRODUCTNAME Basic" ;
         Text [ french ] = "Script %PRODUCTNAME Basic" ;
         Text [ dutch ] = "%PRODUCTNAME Basic-Script" ;
-        Text [ portuguese ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ portuguese ] = "Script %PRODUCTNAME Basic" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Basic ½Å±¾";
         Text[ russian ] = "Ñêğèïò %PRODUCTNAME Basic";
         Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
@@ -1531,7 +1549,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Text = "~nie ausführen" ;
         Text [ English ] = "execute ~never" ;
-        Text [ english_us ] = "~Never execute" ;
+        Text [ english_us ] = "Ne~ver execute" ;
         Text [ portuguese_brazilian ] = "~nie  ausführen" ;
         Text [ swedish ] = "utför al~drig" ;
         Text [ danish ] = "udfør aldrig" ;
@@ -1567,7 +1585,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ spanish ] = "ADVERTENCIA: ¡Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!" ;
         Text [ french ] = "ATTENTION : Les scripts %PRODUCTNAME Basic provenant de l'Internet seront exécutés sans vérification !" ;
         Text [ dutch ] = "PAS OP: %PRODUCTNAME Basic scripts uit Internet worden zonder controle uitgevoerd." ;
-        Text [ portuguese ] = "ATENÇÃO: os scripts %PRODUCTNAME Basic da Internet serão executados sem verificação!" ;
+        Text [ portuguese ] = "ATENÇÃO: os scripts do %PRODUCTNAME Basic da Internet serão executados sem verificação!" ;
         Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ %PRODUCTNAME Basic ½Å±¾²»ĞèÓÃ»§¼ì²é¾Í»áÖ±½Ó×Ô¶¯Ö´ĞĞ£¡";
         Text[ russian ] = "ÂÍÈÌÀÍÈÅ: Ñêğèïòû %PRODUCTNAME Basic èç Èíòåğíåòà âûïîëíÿşòñÿ áåç ïğîâåğêè!";
         Text[ polish ] = "UWAGA: Skrypty %PRODUCTNAME Basic z Internetu bêd¹ wykonywane bez potwierdzenia!";
@@ -1595,7 +1613,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ spanish ] = "Los scripts %PRODUCTNAME Basic se ejecutarán sólo a partir de los directorios de la lista." ;
         Text [ french ] = "Les scripts %PRODUCTNAME Basic seront exécutés seulement à partir des répertoires de la liste." ;
         Text [ dutch ] = "%PRODUCTNAME Basic-scripts worden alleen uitgevoerd vanuit mappen uit de lijst." ;
-        Text [ portuguese ] = "Os scripts %PRODUCTNAME Basic são apenas executados a partir de directórios da lista." ;
+        Text [ portuguese ] = "Os scripts do %PRODUCTNAME Basic são apenas executados a partir de directórios da lista." ;
         Text[ chinese_simplified ] = "Ö»Ö´ĞĞÁĞ±í¼ÇÂ¼ÖĞµÄ %PRODUCTNAME Basic ½Å±¾¡£";
         Text[ russian ] = "Ñêğèïòû %PRODUCTNAME Basic âûïîëíÿşòñÿ òîëüêî èç êàòàëîãîâ ñïèñêà.";
         Text[ polish ] = "Skrypty %PRODUCTNAME Basic wykonane bêd¹ tylko z katalogów list.";
@@ -1623,7 +1641,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ spanish ] = "No se ejecutan ningún script de %PRODUCTNAME Basic." ;
         Text [ french ] = "Aucun script %PRODUCTNAME Basic ne sera exécuté." ;
         Text [ dutch ] = "Er worden geen %PRODUCTNAME Basic-scripts uitgevoerd." ;
-        Text [ portuguese ] = "Não serão executados nenhuns scripts %PRODUCTNAME Basic." ;
+        Text [ portuguese ] = "Os scripts do %PRODUCTNAME Basic não serão executados." ;
         Text[ chinese_simplified ] = "²»Ö´ĞĞ %PRODUCTNAME Basic ½Å±¾¡£";
         Text[ russian ] = "Ñêğèïòû %PRODUCTNAME Basic âûïîëíåíû íå áóäóò.";
         Text[ polish ] = "Skrypty %PRODUCTNAME Basic nie bêd¹ wykonywane.";
@@ -1756,7 +1774,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ swedish ] = "Tänk på att Du även stänger av\nJavascript tillsammans med Java.\n\nVill Du trots det stänga av Java?";
         Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e po wy³¹czeniu Javy \nywy³¹czony zostanie równie¿ JavaScript. \n\nCzy mimo to wy³¹czyæ Javê?";
         Text[ portuguese_brazilian ] = "Please note that with Java\nyou disable Javascript as well.\n\nDo you want to disable Java anyway?";
-        Text[ japanese ] = "Java‚¾‚¯‚Å‚È‚­\nJavaScript‚àì“®‚µ‚È‚­‚È‚é‚±‚Æ‚ğl‚¦‚Ä‰º‚³‚¢B\n\nJava‚ğ½²¯ÁµÌ‚É‚µ‚Ü‚·‚©?";
+        Text[ japanese ] = "Java ‚¾‚¯‚Å‚È‚­\nJavaScript ‚àì“®‚µ‚È‚­‚È‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B\n\nJava ‚ğµÌ‚ÉØ‚è‘Ö‚¦‚Ü‚·‚©B";
         Text[ chinese_simplified ] = "Çë×¢Òâ£ºÔÚÊ§»îJava\nÊ±»áÍ¬Ê±Ê§»îJavascript¡£\n\nÄú»¹ÊÇÒªÊ§»îJava £¿";
         Text[ chinese_traditional ] = "½Ğ±zµù·NÃö³¬¤F Java ¤ä´©¡A\n¤]´N¤£¯à°÷¨Ï¥ÎJavascript ¥\\¯à¡C\n\nÁÙ¬O­nÃö³¬ Java ¡H";
         Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãäå ÈÅÛáÇŞß áÜ Java\nÊŞæã ÈÅÛáÇŞ Javascript ÃíÖÇğ.\n\nåá ÊÑíÏ ÅÛáÇŞ Java ÈÇáÑÛã ãä Ğáß¿";
