@@ -71,4 +71,22 @@
         <status value="beta"/>
         <supported-service>com.sun.star.xml.XMLExportFilter</supported-service>
     </component-description>
+    <component-description>
+                <author>TL</author>
+                <name>SmGraphicAccessible</name>
+                <description>The accessible view of a formula documents visual representation.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+                <supported-service>drafts.com.sun.star.formula.AccessibleFormulaView</supported-service>
+    </component-description>
+    <component-description>
+                <author>TL</author>
+                <name>SmEditAccessible</name>
+                <description>The accessible view of a formula documents command text.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta"/>
+                <supported-service>drafts.com.sun.star.formula.AccessibleFormulaText</supported-service>
+    </component-description>
 </module-description>
