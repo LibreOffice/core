@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-06 05:03:52 $
+ *  last change: $Author: sab $ $Date: 2002-08-13 17:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
     uno::Sequence<sal_Int32> aSequence;
     if (mpViewShell && mpViewShell->GetViewData())
     {
-        aSequence.realloc(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+        aSequence.realloc(maRange.aEnd.Row() - maRange.aStart.Row() + 1);
         const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
         sal_Int32* pSequence = aSequence.getArray();
         sal_Int32 nCount(0);
@@ -384,7 +384,7 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nRow )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
@@ -398,7 +398,7 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
@@ -445,10 +445,15 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
 }
 
 sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-                    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0) ||
+        (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
+        throw lang::IndexOutOfBoundsException();
+
     sal_Bool bResult(sal_False);
     if (mpViewShell)
     {
