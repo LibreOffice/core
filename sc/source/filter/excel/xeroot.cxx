@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:34:44 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( GetRoot() ) );
     mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( GetRoot() ) );
     mrExpData.mpXFBuffer.reset( new XclExpXFBuffer( GetRoot() ) );
-    mrExpData.mpTabIdBuffer.reset( new XclExpTabIdBuffer( GetDoc() ) );
+    mrExpData.mpTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
     mrExpData.mpLinkManager.reset( new XclExpLinkManager( GetRoot() ) );
 
     mrExpData.mpXFBuffer->InitDefaults();
@@ -140,9 +140,9 @@ XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
     return *mrExpData.mpXFBuffer;
 }
 
-XclExpTabIdBuffer& XclExpRoot::GetTabIdBuffer() const
+XclExpTabInfo& XclExpRoot::GetTabInfo() const
 {
-    return *mrExpData.mpTabIdBuffer;
+    return *mrExpData.mpTabInfo;
 }
 
 XclExpLinkManager& XclExpRoot::GetLinkManager() const
