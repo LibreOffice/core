@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-17 18:06:16 $
+ *  last change: $Author: mt $ $Date: 2002-06-11 13:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ Window* Window::ImplGetDlgWindow( USHORT nIndex, USHORT nType,
 // -----------------------------------------------------------------------
 
 static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode cCharCode,
-                                    USHORT nFormStart, USHORT nFormEnd )
+                                    USHORT nFormStart, USHORT nFormEnd, BOOL bCheckEnable = TRUE )
 {
     DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
                 "Window::ImplFindAccelWindow() - rIndex not in Form" );
@@ -364,9 +364,9 @@ static Window* ImplFindAccelWindow( Window* pParent, USHORT& rIndex, xub_Unicode
             break;
 
         if ( i < nFormEnd )
-            pWindow = ImplGetNextWindow( pParent, i, i, TRUE );
+            pWindow = ImplGetNextWindow( pParent, i, i, bCheckEnable );
         else
-            pWindow = ImplGetChildWindow( pParent, nFormStart, i, TRUE );
+            pWindow = ImplGetChildWindow( pParent, nFormStart, i, bCheckEnable );
     }
 
     return NULL;
@@ -1013,7 +1013,8 @@ Window* Window::GetLabelFor() const
                                              nIndex,
                                              nAccel,
                                              nFormStart,
-                                             nFormEnd );
+                                             nFormEnd,
+                                             FALSE );
         }
     }
     else
@@ -1069,7 +1070,8 @@ Window* Window::GetLabeledBy() const
                                                        i,
                                                        nAccel,
                                                        nFormStart,
-                                                       nFormEnd ) )
+                                                       nFormEnd,
+                                                       FALSE ) )
                     {
                         pWindow = pSWindow;
                         break;
