@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:53:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
         Text[ portuguese ] = "Ou foi impossνvel carregar a biblioteca #lib# do programa ou esta estα com defeito. A configuraηγo da fonte de dados ODBC nγo estα disponνvel.";
         Text[ russian ] = "Νεβξημξζνξ ηΰγπσηθςό αθαλθξςεκσ οπξγπΰμμϋ #lib# (βεπξÿςνξ ξνΰ οξβπεζδενΰ). Νΰρςπξικΰ θρςξχνθκΰ δΰννϋυ ODBC νεδξρςσονΰ.";
-        Text[ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η διαμόρφωση των προελεύσεων των δεδομένων του ODBC δεν ? ";
+        Text[ greek ] = "Δεν ήταν δυνατή η φόρτωση της βιβλιοθήκης προγραμμάτων #lib# ή είναι κατεστραμμένη. Η ρύθμιση διαμόρφωσης της προέλευσης δεδομένων ODBC δεν είναι διαθέσιμη.";
         Text[ dutch ] = "De programmabibliotheek #lib# kan niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
         Text[ french ] = "La bibliothθque de programme #lib# n'a pas pu κtre chargιe ou est dιfectueuse. La configuration de la source de donnιes ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizαs estι daρada. La configuraciσn de fuente de datos ODBC no estα disponible.";
@@ -240,7 +240,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ danish ] = "Programbiblioteket #lib# kunne ikke indlζses eller er beskadiget. Den valgte ODBC-datakildekonfiguration er ikke tilgζngelig.";
         Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller sε δr det defekt. Konfigurationen av ODBC-datakδllor δr inte tillgδnglig.";
         Text[ polish ] = "Nie moΏna za³adowaζ biblioteki programu #lib# albo jest ona uszkodzona. Konfiguracja rσd³a danych ODBC jest niemoΏliwa.";
-        Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar a biblioteca de programa #lib# ou entγo ela estα corrompida. A confguraηγo da fonte de dados ODBC nγo estα disponνvel. ";
+        Text[ portuguese_brazilian ] = "Nγo foi possνvel carregar a biblioteca de programa #lib# ou entγo ela estα corrompida. A configuraηγo da fonte de dados ODBC nγo estα disponνvel. ";
         Text[ japanese ] = "#lib# γƒ—γƒ­γ‚°γƒ©γƒ γƒ©γ‚¤γƒ–γƒ©γƒªγ‚’θª­γΏθΎΌγ‚γªγ‹γ£γγ‹γ€γΎγγ―γγ‚θ‡ªδ½“γ«γƒγƒ©γƒ–γƒ«γγ‚γ‚γΎγ™γ€‚ODBC γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚Ήγ®θ¨­ε®γ―γ§γγΎγ›γ‚“γ€‚";
         Text[ korean ] = "ν”„λ΅κ·Έλ¨ λΌμ΄λΈλ¬λ¦¬ #lib#μ„(λ¥Ό) λ΅λ“ν•  μ μ—†κ±°λ‚ λΌμ΄λΈλ¬λ¦¬μ— μ¤λ¥κ°€ μμµλ‹λ‹¤. ODBC λ°μ΄ν„° μ›λ³Έ μ„¤μ •μ„ ν•  μ μ—†μµλ‹λ‹¤.";
         Text[ chinese_simplified ] = "ζ— ζ³•θ£…ε…¥η¨‹εΊεΊ“ #lib# ζ–ε·²η»ζεγ€‚ζ— ζ³•ι…η½® ODBC ζ•°ζ®ζΊγ€‚";
@@ -266,6 +266,13 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35.8.1  2003/07/03 14:44:13  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.35  2003/06/13 12:53:52  hr
+ *  INTEGRATION: CWS rcmerge (1.34.24); FILE MERGED
+ *  2003/06/12 10:57:54 gh 1.34.24.1: final Merge RC
+ *
  *  Revision 1.34.24.1  2003/06/12 10:57:54  gh
  *  final Merge RC
  *
@@ -399,6 +406,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
