@@ -43,6 +43,8 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCellRange;
+import com.sun.star.table.XTableColumns;
+import com.sun.star.table.XTableRows;
 import com.sun.star.text.XTextTable;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -57,6 +59,9 @@ public class RecordTable{
     public XCellRange xCellRange;
     public XTextTable xTextTable;
     private TextTableHandler oTextTableHandler;
+    public XTableColumns xTableColumns;
+    public XTableRows xTableRows;
+
 
 
     public RecordTable(TextTableHandler _oTextTableHandler){
@@ -64,7 +69,7 @@ public class RecordTable{
         this.oTextTableHandler = _oTextTableHandler;
         String[] TableNames = oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
         XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
-        if (xAllTextTables.hasByName(ReportDocument.TBLRECORDSECTION)){
+        if ((xAllTextTables.hasByName(ReportDocument.TBLRECORDSECTION)) || (xAllTextTables.hasByName(ReportDocument.COPYOFTBLRECORDSECTION))){
             Object oTable;
             if (xAllTextTables.hasByName(ReportDocument.COPYOFTBLRECORDSECTION))
                 oTable = xAllTextTables.getByName(ReportDocument.COPYOFTBLRECORDSECTION);
@@ -79,6 +84,8 @@ public class RecordTable{
             xTableName = (XNamed) UnoRuntime.queryInterface(XNamed.class, xTextTable);
             xTableName.setName(ReportDocument.TBLRECORDSECTION);
         }
+        xTableRows = xTextTable.getRows();
+        xTableColumns = xTextTable.getColumns();
         xCellRange = (XCellRange) UnoRuntime.queryInterface(XCellRange.class, xTextTable);
     }
     catch(Exception exception){
