@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:25:49 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,11 +278,13 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
         }
 
-        Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
-        GetPageView()->RedrawOneLayer( _nLayerID, _rRect.SVRect(),
+        //#110094#-3
+        //Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
+        GetPageView()->InitRedraw( _nLayerID, _rRect.SVRect(),
                         pOutDev,
-                        GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0,
-                        &aLnk );
+                        GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
+        //#110094#-3
+        //,&aLnk );
 
         // OD 29.08.2002 #102450#
         // reset background color of the outliner
@@ -298,68 +300,69 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
     }
 }
 
-
-IMPL_LINK( SwViewImp, PaintDispatcher, SdrPaintProcRec *, pRec )
-{
-    SdrObject *pObj = pRec->pObj;
-
-    //Controls muessen im Control-Layer liegen. Dort duerfen aber auch
-    //Gruppenobjekte oder mit Controls gruppierte Objekte liegen.
-    ASSERT( FmFormInventor != pObj->GetObjInventor() ||
-            GetShell()->GetDoc()->GetControlsId() == pObj->GetLayer(),
-            "PaintDispatcher: Wrong Layer" );
-
-    if ( !SwFlyFrm::IsPaint( pObj, GetShell() ) )
-        return 0;
-
-    if ( pObj->IsWriterFlyFrame() )
-    {
-        const SdrLayerID nHellId = GetShell()->GetDoc()->GetHellId();
-        if( pObj->GetLayer() == nHellId )
-        {
-            //Fuer Rahmen in der Hoelle gelten andere Regeln:
-            //1. Rahmen mit einem Parent werden nie direkt, sondern von ihren
-            //   Parents gepaintet.
-            //1a.Es sei denn, der Parent steht nicht in der Hoelle.
-            //2. Rahmen mit Childs painten zuerst die Childs in
-            //   umgekehrter Z-Order.
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-            const FASTBOOL bInFly = pFly->GetAnchor()->IsInFly();
-            if ( !bInFly ||
-                 (bInFly && pFly->GetAnchor()->FindFlyFrm()->
-                                   GetVirtDrawObj()->GetLayer() != nHellId))
-                PaintFlyChilds( pFly, pRec->rOut, pRec->rInfoRec );
-        }
-        else
-            pObj->Paint( pRec->rOut, pRec->rInfoRec );
-    }
-    else
-    {
-        SwRect aTmp( pRec->rInfoRec.aDirtyRect );
-
-        OutputDevice *pOut = pRec->rOut.GetOutDev();
-        pOut->Push( PUSH_CLIPREGION );
-        pOut->IntersectClipRegion( aTmp.SVRect() );
-
-        //Um zu verhindern, dass der Dispatcher fr jedes Gruppenobjekt
-        //gerufen wird, muessen wir die Struktur manipulieren
-        //(Absprache mit JOE).
-        const Link *pSave = 0;
-        if ( pObj->IsGroupObject() )
-        {
-            pSave = pRec->rInfoRec.pPaintProc;
-            ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = 0;
-        }
-
-        pObj->Paint( pRec->rOut, pRec->rInfoRec );
-
-        if ( pSave )
-            ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = pSave;
-
-        pOut->Pop();
-    }
-    return 0;
-}
+//#110094#-3
+// not necessary, see bugid
+//IMPL_LINK( SwViewImp, PaintDispatcher, SdrPaintProcRec *, pRec )
+//{
+//  SdrObject *pObj = pRec->pObj;
+//
+//  //Controls muessen im Control-Layer liegen. Dort duerfen aber auch
+//  //Gruppenobjekte oder mit Controls gruppierte Objekte liegen.
+//  ASSERT( FmFormInventor != pObj->GetObjInventor() ||
+//          GetShell()->GetDoc()->GetControlsId() == pObj->GetLayer(),
+//          "PaintDispatcher: Wrong Layer" );
+//
+//  if ( !SwFlyFrm::IsPaint( pObj, GetShell() ) )
+//      return 0;
+//
+//  if ( pObj->IsWriterFlyFrame() )
+//  {
+//        const SdrLayerID nHellId = GetShell()->GetDoc()->GetHellId();
+//      if( pObj->GetLayer() == nHellId )
+//      {
+//          //Fuer Rahmen in der Hoelle gelten andere Regeln:
+//          //1. Rahmen mit einem Parent werden nie direkt, sondern von ihren
+//          //   Parents gepaintet.
+//          //1a.Es sei denn, der Parent steht nicht in der Hoelle.
+//          //2. Rahmen mit Childs painten zuerst die Childs in
+//          //   umgekehrter Z-Order.
+//          SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+//          const FASTBOOL bInFly = pFly->GetAnchor()->IsInFly();
+//          if ( !bInFly ||
+//               (bInFly && pFly->GetAnchor()->FindFlyFrm()->
+//                                GetVirtDrawObj()->GetLayer() != nHellId))
+//              PaintFlyChilds( pFly, pRec->rOut, pRec->rInfoRec );
+//      }
+//      else
+//          pObj->Paint( pRec->rOut, pRec->rInfoRec );
+//  }
+//  else
+//  {
+//      SwRect aTmp( pRec->rInfoRec.aDirtyRect );
+//
+//      OutputDevice *pOut = pRec->rOut.GetOutDev();
+//      pOut->Push( PUSH_CLIPREGION );
+//      pOut->IntersectClipRegion( aTmp.SVRect() );
+//
+//      //Um zu verhindern, dass der Dispatcher fr jedes Gruppenobjekt
+//      //gerufen wird, muessen wir die Struktur manipulieren
+//      //(Absprache mit JOE).
+//      const Link *pSave = 0;
+//      if ( pObj->IsGroupObject() )
+//      {
+//          pSave = pRec->rInfoRec.pPaintProc;
+//          ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = 0;
+//      }
+//
+//      pObj->Paint( pRec->rOut, pRec->rInfoRec );
+//
+//      if ( pSave )
+//          ((SdrPaintInfoRec&)pRec->rInfoRec).pPaintProc = pSave;
+//
+//      pOut->Pop();
+//  }
+//    return 0;
+//}
 
 /*************************************************************************
 |*
@@ -384,7 +387,7 @@ void SwViewImp::PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
     {
         SdrObject *pObj = pPage->GetObj( i );
         SwFlyFrm *pF;
-        if ( pObj->IsWriterFlyFrame() )
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
             pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         else
         {
@@ -400,7 +403,7 @@ void SwViewImp::PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
         for ( UINT32 j = i; j > pFlyObj->GetOrdNumDirect(); --j )
         {
             SdrObject *pObj = pPage->GetObj( j );
-            if ( pObj->IsWriterFlyFrame() )
+            if ( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pF = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                 if ( pF->GetAnchor()->FindFlyFrm() == pFly )
@@ -412,13 +415,14 @@ void SwViewImp::PaintFlyChilds( SwFlyFrm *pFly, ExtOutputDevice& rOut,
                 if( pFrm && pFrm->FindFlyFrm() == pFly )
                 {
                     pOut->Push( PUSH_LINECOLOR );
-                    pObj->Paint( rOut, rInfoRec );
+                    pObj->SingleObjectPainter( rOut, rInfoRec ); // #110094#-17
                     pOut->Pop();
                 }
             }
         }
     }
-    pFlyObj->Paint( rOut, rInfoRec );
+
+    pFlyObj->SingleObjectPainter( rOut, rInfoRec ); // #110094#-17
 }
 
 /*************************************************************************
@@ -499,7 +503,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     for( ULONG nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
-        if( !pObj->IsWriterFlyFrame() )
+        if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             //Teilfix(26793): Objekte, die in Rahmen verankert sind, brauchen
             //nicht angepasst werden.
@@ -523,7 +527,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            const Rectangle aBound( pObj->GetBoundRect() );
+            const Rectangle aBound( pObj->GetCurrentBoundRect() );
             if ( !aRect.IsInside( aBound ) )
             {
                 Size aSz;
