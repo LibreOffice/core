@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:42:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,6 +752,7 @@ private:
     XclExpString                sName;
     XclExpString                sComment;
     static XclExpString         sUsername;
+    UINT8                       nProtected;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
     inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
