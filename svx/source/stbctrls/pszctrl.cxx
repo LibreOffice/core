@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 11:22:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,8 +375,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
         if (!nSelect)
             nSelect = PSZ_FUNC_NONE;
         FunctionPopup_Impl aMenu( nSelect );
-        if ( aMenu.Execute( &GetStatusBar(),
-                            GetStatusBar().OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ) )
+        if ( aMenu.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel() ) )
         {
             nSelect = aMenu.GetSelected();
             if (nSelect)
