@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:57:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,69 +120,69 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
-// class SvxShowText =====================================================
-
-class SvxShowText : public Control
-{
-public:
-                    SvxShowText( Window* pParent,
-                                 const ResId& rResId,
-                                 BOOL bCenter = FALSE );
-                    ~SvxShowText();
-
-    void            SetFont( const Font& rFont );
-    void            SetText( const String& rText );
-
-protected:
-    virtual void    Paint( const Rectangle& );
-
-private:
-    long            mnY;
-    BOOL            mbCenter;
-
-};
+//CHINA001 // class SvxShowText =====================================================
+//CHINA001
+//CHINA001 class SvxShowText : public Control
+//CHINA001 {
+//CHINA001 public:
+//CHINA001 SvxShowText( Window* pParent,
+//CHINA001 const ResId& rResId,
+//CHINA001 BOOL bCenter = FALSE );
+//CHINA001 ~SvxShowText();
+//CHINA001
+//CHINA001 void            SetFont( const Font& rFont );
+//CHINA001 void            SetText( const String& rText );
+//CHINA001
+//CHINA001 protected:
+//CHINA001 virtual void    Paint( const Rectangle& );
+//CHINA001
+//CHINA001 private:
+//CHINA001 long            mnY;
+//CHINA001 BOOL            mbCenter;
+//CHINA001
+//CHINA001 };
 
 // class SvxCharMapData ==================================================
 
-class SvxCharMapData
-{
-public:
-                    SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_ );
-
-    void            SetCharFont( const Font& rFont );
-
-private:
-friend class SvxCharacterMap;
-    SfxModalDialog* mpDialog;
-
-    SvxShowCharSet  aShowSet;
-//    Edit            aShowText;
-    SvxShowText     aShowText;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aDeleteBtn;
-    FixedText       aFontText;
-    ListBox         aFontLB;
-    FixedText       aSubsetText;
-    ListBox         aSubsetLB;
-    FixedText       aSymbolText;
-    SvxShowText     aShowChar;
-    FixedText       aCharCodeText;
-
-    Font            aFont;
-    BOOL            bOne;
-    const SubsetMap* pSubsetMap;
-
-    DECL_LINK( OKHdl, OKButton* );
-    DECL_LINK( FontSelectHdl, ListBox* );
-    DECL_LINK( SubsetSelectHdl, ListBox* );
-    DECL_LINK( CharDoubleClickHdl, Control* pControl );
-    DECL_LINK( CharSelectHdl, Control* pControl );
-    DECL_LINK( CharHighlightHdl, Control* pControl );
-    DECL_LINK( CharPreSelectHdl, Control* pControl );
-    DECL_LINK( DeleteHdl, PushButton* pBtn );
-};
+//CHINA001 class SvxCharMapData
+//CHINA001 {
+//CHINA001 public:
+//CHINA001 SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_ );
+//CHINA001
+//CHINA001 void            SetCharFont( const Font& rFont );
+//CHINA001
+//CHINA001 private:
+//CHINA001 friend class SvxCharacterMap;
+//CHINA001 SfxModalDialog* mpDialog;
+//CHINA001
+//CHINA001 SvxShowCharSet  aShowSet;
+//CHINA001 //    Edit            aShowText;
+//CHINA001 SvxShowText     aShowText;
+//CHINA001 OKButton        aOKBtn;
+//CHINA001 CancelButton    aCancelBtn;
+//CHINA001 HelpButton      aHelpBtn;
+//CHINA001 PushButton      aDeleteBtn;
+//CHINA001 FixedText       aFontText;
+//CHINA001 ListBox         aFontLB;
+//CHINA001 FixedText       aSubsetText;
+//CHINA001 ListBox         aSubsetLB;
+//CHINA001 FixedText       aSymbolText;
+//CHINA001 SvxShowText     aShowChar;
+//CHINA001 FixedText       aCharCodeText;
+//CHINA001
+//CHINA001 Font            aFont;
+//CHINA001 BOOL            bOne;
+//CHINA001 const SubsetMap* pSubsetMap;
+//CHINA001
+//CHINA001 DECL_LINK( OKHdl, OKButton* );
+//CHINA001 DECL_LINK( FontSelectHdl, ListBox* );
+//CHINA001 DECL_LINK( SubsetSelectHdl, ListBox* );
+//CHINA001 DECL_LINK( CharDoubleClickHdl, Control* pControl );
+//CHINA001 DECL_LINK( CharSelectHdl, Control* pControl );
+//CHINA001 DECL_LINK( CharHighlightHdl, Control* pControl );
+//CHINA001 DECL_LINK( CharPreSelectHdl, Control* pControl );
+//CHINA001 DECL_LINK( DeleteHdl, PushButton* pBtn );
+//CHINA001 };
 
 
 // -----------------------------------------------------------------------
@@ -955,50 +955,50 @@ void SvxShowText::SetText( const String& rText )
 SvxShowText::~SvxShowText()
 {}
 
-// class SvxCharacterMap =================================================
-
-SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_CHARMAP ) ),
-    mpCharMapData( new SvxCharMapData( this, bOne ) )
-{
-    FreeResource();
-}
-
-// -----------------------------------------------------------------------
-
-SvxCharacterMap::~SvxCharacterMap()
-{
-    delete mpCharMapData;
-}
-
-// -----------------------------------------------------------------------
-
-const Font& SvxCharacterMap::GetCharFont() const
-{
-    return mpCharMapData->aFont;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxCharacterMap::SetChar( sal_Unicode c )
-{
-    mpCharMapData->aShowSet.SelectCharacter( c );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Unicode SvxCharacterMap::GetChar() const
-{
-    return mpCharMapData->aShowSet.GetSelectCharacter();
-}
-
-// -----------------------------------------------------------------------
-
-String SvxCharacterMap::GetCharacters() const
-{
-    return mpCharMapData->aShowText.GetText();
-}
-
+//CHINA001 // class SvxCharacterMap =================================================
+//CHINA001
+//CHINA001 SvxCharacterMap::SvxCharacterMap( Window* pParent, BOOL bOne ) :
+//CHINA001 SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_CHARMAP ) ),
+//CHINA001 mpCharMapData( new SvxCharMapData( this, bOne ) )
+//CHINA001 {
+//CHINA001 FreeResource();
+//CHINA001 }
+//CHINA001
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 SvxCharacterMap::~SvxCharacterMap()
+//CHINA001 {
+//CHINA001 delete mpCharMapData;
+//CHINA001 }
+//CHINA001
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 const Font& SvxCharacterMap::GetCharFont() const
+//CHINA001 {
+//CHINA001 return mpCharMapData->aFont;
+//CHINA001 }
+//CHINA001
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 void SvxCharacterMap::SetChar( sal_Unicode c )
+//CHINA001 {
+//CHINA001 mpCharMapData->aShowSet.SelectCharacter( c );
+//CHINA001 }
+//CHINA001
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 sal_Unicode SvxCharacterMap::GetChar() const
+//CHINA001 {
+//CHINA001 return mpCharMapData->aShowSet.GetSelectCharacter();
+//CHINA001 }
+//CHINA001
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 String SvxCharacterMap::GetCharacters() const
+//CHINA001 {
+//CHINA001 return mpCharMapData->aShowText.GetText();
+//CHINA001 }
+//CHINA001
 // =======================================================================
 
 SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
@@ -1091,14 +1091,14 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_ )
     aShowText.SetPosPixel( Point( nLeftEdge+4, aShowText.GetPosPixel().Y() ) );
 }
 
-// -----------------------------------------------------------------------
-
-void SvxCharacterMap::DisableFontSelection()
-{
-    mpCharMapData->aFontText.Disable();
-    mpCharMapData->aFontLB.Disable();
-}
-
+//CHINA001 // -----------------------------------------------------------------------
+//CHINA001
+//CHINA001 void SvxCharacterMap::DisableFontSelection()
+//CHINA001 {
+//CHINA001 mpCharMapData->aFontText.Disable();
+//CHINA001 mpCharMapData->aFontLB.Disable();
+//CHINA001 }
+//CHINA001
 // -----------------------------------------------------------------------
 
 void SvxCharMapData::SetCharFont( const Font& rFont )
@@ -1120,10 +1120,10 @@ void SvxCharMapData::SetCharFont( const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-void SvxCharacterMap::SetCharFont( const Font& rFont )
-{
-    mpCharMapData->SetCharFont( rFont );
-}
+//CHINA001 void SvxCharacterMap::SetCharFont( const Font& rFont )
+//CHINA001 {
+//CHINA001 mpCharMapData->SetCharFont( rFont );
+//CHINA001 }
 
 // -----------------------------------------------------------------------
 
