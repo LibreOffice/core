@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:52:41 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 08:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,6 @@
 #include "editutil.hxx"
 #include "scextopt.hxx"
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -192,33 +189,33 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     beans::PropertyValue* pSettings = rSettings.getArray();
     if (pSettings)
     {
-        pSettings[SC_CURSOR_X].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_cursor_position_x));
+        pSettings[SC_CURSOR_X].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURSORPOSITIONX));
         pSettings[SC_CURSOR_X].Value <<= sal_Int32(nCurX);
-        pSettings[SC_CURSOR_Y].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_cursor_position_y));
+        pSettings[SC_CURSOR_Y].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CURSORPOSITIONY));
         pSettings[SC_CURSOR_Y].Value <<= sal_Int32(nCurY);
-        pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal_split_mode));
+        pSettings[SC_HORIZONTAL_SPLIT_MODE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSPLITMODE));
         pSettings[SC_HORIZONTAL_SPLIT_MODE].Value <<= sal_Int16(eHSplitMode);
-        pSettings[SC_VERTICAL_SPLIT_MODE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_vertical_split_mode));
+        pSettings[SC_VERTICAL_SPLIT_MODE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VERTICALSPLITMODE));
         pSettings[SC_VERTICAL_SPLIT_MODE].Value <<= sal_Int16(eVSplitMode);
-        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal_split_position));
+        pSettings[SC_HORIZONTAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSPLITPOSITION));
         if (eHSplitMode == SC_SPLIT_FIX)
             pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
         else
             pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= nHSplitPos;
-        pSettings[SC_VERTICAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_vertical_split_position));
+        pSettings[SC_VERTICAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VERTICALSPLITPOSITION));
         if (eVSplitMode == SC_SPLIT_FIX)
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
         else
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= nVSplitPos;
-        pSettings[SC_ACTIVE_SPLIT_RANGE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_active_split_range));
+        pSettings[SC_ACTIVE_SPLIT_RANGE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVESPLITRANGE));
         pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eWhichActive);
-        pSettings[SC_POSITION_LEFT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_position_left));
+        pSettings[SC_POSITION_LEFT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_POSITIONLEFT));
         pSettings[SC_POSITION_LEFT].Value <<= sal_Int32(nPosX[SC_SPLIT_LEFT]);
-        pSettings[SC_POSITION_RIGHT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_position_right));
+        pSettings[SC_POSITION_RIGHT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_POSITIONRIGHT));
         pSettings[SC_POSITION_RIGHT].Value <<= sal_Int32(nPosX[SC_SPLIT_RIGHT]);
-        pSettings[SC_POSITION_TOP].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_position_top));
+        pSettings[SC_POSITION_TOP].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_POSITIONTOP));
         pSettings[SC_POSITION_TOP].Value <<= sal_Int32(nPosY[SC_SPLIT_TOP]);
-        pSettings[SC_POSITION_BOTTOM].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_position_bottom));
+        pSettings[SC_POSITION_BOTTOM].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_POSITIONBOTTOM));
         pSettings[SC_POSITION_BOTTOM].Value <<= sal_Int32(nPosY[SC_SPLIT_BOTTOM]);
     }
 }
@@ -234,55 +231,55 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         rtl::OUString sName(aSettings[i].Name);
-        if (sName.compareToAscii(sXML_cursor_position_x) == 0)
+        if (sName.compareToAscii(SC_CURSORPOSITIONX) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nCurX = static_cast<sal_uInt16>(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_cursor_position_y) == 0)
+        else if (sName.compareToAscii(SC_CURSORPOSITIONY) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nCurY = static_cast<sal_uInt16>(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_horizontal_split_mode) == 0)
+        else if (sName.compareToAscii(SC_HORIZONTALSPLITMODE) == 0)
         {
             aSettings[i].Value >>= nTemp16;
             eHSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
-        else if (sName.compareToAscii(sXML_vertical_split_mode) == 0)
+        else if (sName.compareToAscii(SC_VERTICALSPLITMODE) == 0)
         {
             aSettings[i].Value >>= nTemp16;
             eVSplitMode = static_cast<ScSplitMode>(nTemp16);
         }
-        else if (sName.compareToAscii(sXML_horizontal_split_position) == 0)
+        else if (sName.compareToAscii(SC_HORIZONTALSPLITPOSITION) == 0)
         {
             aSettings[i].Value >>= nTempPosY;
         }
-        else if (sName.compareToAscii(sXML_vertical_split_position) == 0)
+        else if (sName.compareToAscii(SC_VERTICALSPLITPOSITION) == 0)
         {
             aSettings[i].Value >>= nTempPosX;
         }
-        else if (sName.compareToAscii(sXML_active_split_range) == 0)
+        else if (sName.compareToAscii(SC_ACTIVESPLITRANGE) == 0)
         {
             aSettings[i].Value >>= nTemp16;
             eWhichActive = static_cast<ScSplitPos>(nTemp16);
         }
-        else if (sName.compareToAscii(sXML_position_left) == 0)
+        else if (sName.compareToAscii(SC_POSITIONLEFT) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nPosX[SC_SPLIT_LEFT] = static_cast<sal_uInt16>(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_position_right) == 0)
+        else if (sName.compareToAscii(SC_POSITIONRIGHT) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nPosX[SC_SPLIT_RIGHT] = static_cast<sal_uInt16>(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_position_top) == 0)
+        else if (sName.compareToAscii(SC_POSITIONTOP) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nPosY[SC_SPLIT_TOP] = static_cast<sal_uInt16>(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_position_bottom) == 0)
+        else if (sName.compareToAscii(SC_POSITIONBOTTOM) == 0)
         {
             aSettings[i].Value >>= nTemp32;
             nPosY[SC_SPLIT_BOTTOM] = static_cast<sal_uInt16>(nTemp32);
@@ -2132,7 +2129,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
                     aAny <<= aTableViewSettings;
                     xNameContainer->insertByName(sName, aAny);
                 }
-                pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_tables));
+                pSettings[SC_TABLE_VIEWSETTINGS].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLES));
                 pSettings[SC_TABLE_VIEWSETTINGS].Value <<= xNameContainer;
             }
         }
@@ -2140,22 +2137,22 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
         String sName;
         GetDocument()->GetName( nTabNo, sName );
         rtl::OUString sOUName(sName);
-        pSettings[SC_ACTIVE_TABLE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_active_table));
+        pSettings[SC_ACTIVE_TABLE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
         pSettings[SC_ACTIVE_TABLE].Value <<= sOUName;
-        pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_horizontal_scrollbar_width));
+        pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_HORIZONTALSCROLLBARWIDTH));
         pSettings[SC_HORIZONTAL_SCROLL_BAR_WIDTH].Value <<= sal_Int32(pView->GetTabBarWidth());
         sal_Int32 nZoomValue ((aZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
         sal_Int32 nPageZoomValue ((aPageZoomY.GetNumerator() * 100) / aZoomY.GetDenominator());
-        pSettings[SC_ZOOM_TYPE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_zoom_type));
+        pSettings[SC_ZOOM_TYPE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMTYPE));
         pSettings[SC_ZOOM_TYPE].Value <<= sal_Int16(pView->GetZoomType());
-        pSettings[SC_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_zoom_value));
+        pSettings[SC_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ZOOMVALUE));
         pSettings[SC_ZOOM_VALUE].Value <<= nZoomValue;
-        pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_page_view_zoom_value));
+        pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
 
         sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
-        pSettings[SC_VIEWSETTINGS_COUNT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_view_id));
-        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_view)));
+        pSettings[SC_VIEWSETTINGS_COUNT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEWID));
+        rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VIEW)));
         SvXMLUnitConverter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
         pSettings[SC_VIEWSETTINGS_COUNT].Value <<= sBuffer.makeStringAndClear();
     }
@@ -2169,7 +2166,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     for (sal_Int32 i = 0; i < nCount; i++)
     {
         rtl::OUString sName(rSettings[i].Name);
-        if (sName.compareToAscii(sXML_tables) == 0)
+        if (sName.compareToAscii(SC_TABLES) == 0)
         {
             uno::Reference<container::XNameContainer> xNameContainer;
             if ((rSettings[i].Value >>= xNameContainer) && xNameContainer->hasElements())
@@ -2189,7 +2186,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 }
             }
         }
-        else if (sName.compareToAscii(sXML_active_table) == 0)
+        else if (sName.compareToAscii(SC_ACTIVETABLE) == 0)
         {
             rtl::OUString sName;
             if(rSettings[i].Value >>= sName)
@@ -2200,17 +2197,17 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                     nTabNo = nTab;
             }
         }
-        else if (sName.compareToAscii(sXML_horizontal_scrollbar_width) == 0)
+        else if (sName.compareToAscii(SC_HORIZONTALSCROLLBARWIDTH) == 0)
         {
             if (rSettings[i].Value >>= nTemp32)
                 pView->SetTabBarWidth(nTemp32);
         }
-        else if (sName.compareToAscii(sXML_zoom_type) == 0)
+        else if (sName.compareToAscii(SC_ZOOMTYPE) == 0)
         {
             if (rSettings[i].Value >>= nTemp16)
                 pView->SetZoomType(SvxZoomType(nTemp16));
         }
-        else if (sName.compareToAscii(sXML_zoom_value) == 0)
+        else if (sName.compareToAscii(SC_ZOOMVALUE) == 0)
         {
             if (rSettings[i].Value >>= nTemp32)
             {
@@ -2218,7 +2215,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 aZoomX = aZoomY = aZoom;
             }
         }
-        else if (sName.compareToAscii(sXML_page_view_zoom_value) == 0)
+        else if (sName.compareToAscii(SC_PAGEVIEWZOOMVALUE) == 0)
         {
             if (rSettings[i].Value >>= nTemp32)
             {
@@ -2226,7 +2223,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
                 aPageZoomX = aPageZoomY = aZoom;
             }
         }
-        // sXML_view_id has to parse and use by mba
+        // SC_VIEWID has to parse and use by mba
     }
     if (nCount)
         RecalcPixPos();

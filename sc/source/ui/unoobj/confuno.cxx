@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:32:01 $
+ *  last change: $Author: sab $ $Date: 2001-03-29 08:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,13 +89,13 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_SHEETTABS),    0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNO_SNAPTOGRID),   0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDVIS),      0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDRESX),     0,  &getCppuType((sal_Int32*)0),        0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDRESY),     0,  &getCppuType((sal_Int32*)0),        0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDSUBX),     0,  &getCppuType((sal_Int32*)0),        0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDSUBY),     0,  &getCppuType((sal_Int32*)0),        0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDSYNC),     0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_SNAPTORASTER), 0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERVIS),    0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERRESX),   0,  &getCppuType((sal_Int32*)0),        0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERRESY),   0,  &getCppuType((sal_Int32*)0),        0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERSUBX),   0,  &getCppuType((sal_Int32*)0),        0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERSUBY),   0,  &getCppuType((sal_Int32*)0),        0},
+        {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -198,19 +198,19 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
-                if ( aPropertyName.compareToAscii( SC_UNO_SNAPTOGRID ) == 0 )
+                if ( aPropertyName.compareToAscii( SC_UNO_SNAPTORASTER ) == 0 )
                     aGridOpt.SetUseGridSnap( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDVIS ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERVIS ) == 0 )
                     aGridOpt.SetGridVisible( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDRESX ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERRESX ) == 0 )
                     aGridOpt.SetFldDrawX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDRESY ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERRESY ) == 0 )
                     aGridOpt.SetFldDrawY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSUBX ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSUBX ) == 0 )
                     aGridOpt.SetFldDivisionX( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSUBY ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSUBY ) == 0 )
                     aGridOpt.SetFldDivisionY( static_cast <sal_uInt32> ( ScUnoHelpFunctions::GetInt32FromAny( aValue ) ) );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSYNC ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSYNC ) == 0 )
                     aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
                 else
                     throw beans::UnknownPropertyException();
@@ -252,19 +252,19 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
-                if ( aPropertyName.compareToAscii( SC_UNO_SNAPTOGRID ) == 0 )
+                if ( aPropertyName.compareToAscii( SC_UNO_SNAPTORASTER ) == 0 )
                     ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetUseGridSnap() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDVIS ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERVIS ) == 0 )
                     ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetGridVisible() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDRESX ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERRESX ) == 0 )
                     aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawX() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDRESY ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERRESY ) == 0 )
                     aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDrawY() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSUBX ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSUBX ) == 0 )
                     aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionX() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSUBY ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSUBY ) == 0 )
                     aRet <<= static_cast<sal_Int32> ( aGridOpt.GetFldDivisionY() );
-                else if ( aPropertyName.compareToAscii( SC_UNO_GRIDSYNC ) == 0 )
+                else if ( aPropertyName.compareToAscii( SC_UNO_RASTERSYNC ) == 0 )
                     ScUnoHelpFunctions::SetBoolInAny( aRet, aGridOpt.GetSynchronize() );
                 else
                     throw beans::UnknownPropertyException();
