@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-08-03 13:44:33 $
+ *  last change: $Author: er $ $Date: 2001-08-06 10:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,21 +123,48 @@ public:
                         xub_StrLen nStart, xub_StrLen nEnd,
                         ::com::sun::star::uno::Sequence <long>* pOffset );
 
+    /** Does not only return true if the two strings are equal per this
+        translation but also if one string matches the start of the other, i.e.
+        equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 )
+        returns true and nMatch:=1 and nMatch2:=3
+     */
     sal_Bool equals(
         const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
-
-    sal_Bool equals( const String& rStr1, const String& rStr2 ) const
-        {
-            sal_Int32 nMatch1, nMatch2;
-            return equals( rStr1, 0, rStr1.Len(), nMatch1, rStr2, 0, rStr2.Len(), nMatch2 );
-        }
 
     sal_Int32 compareSubstring(
         const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
         const String& rStr2, sal_Int32 nOff2, sal_Int32 nLen2 ) const;
 
     sal_Int32 compareString( const String& rStr1, const String& rStr2 ) const;
+
+
+    // helpers
+
+    /** If two strings are really equal as per this translation, and not just
+        one string is matching the start of the other. Use this method instead
+        of compareString()==0 because it is much faster.
+     */
+    sal_Bool isEqual( const String& rStr1, const String& rStr2 ) const
+        {
+            sal_Int32 nMatch1, nMatch2;
+            sal_Bool bMatch = equals(
+                rStr1, 0, rStr1.Len(), nMatch1,
+                rStr2, 0, rStr2.Len(), nMatch2 );
+            return bMatch && nMatch1 == nMatch2 && nMatch1 == rStr1.Len() &&
+                nMatch2 == rStr2.Len();
+        }
+
+    /** If string rStr1 matches the start of string rStr2, i.e. "a" in "aaa"
+     */
+    sal_Bool isMatch( const String& rStr1, const String& rStr2 ) const
+        {
+            sal_Int32 nMatch1, nMatch2;
+            sal_Bool bMatch = equals(
+                rStr1, 0, rStr1.Len(), nMatch1,
+                rStr2, 0, rStr2.Len(), nMatch2 );
+            return bMatch && nMatch1 <= nMatch2 && nMatch1 == rStr1.Len();
+        }
 };
 
 // ............................................................................
