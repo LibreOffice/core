@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:47:28 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,10 +265,19 @@ FASTBOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
 void SwUnoTableCrsr::MakeBoxSels()
 {
     const SwCntntNode* pCNd;
+    bool bMakeTblCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
             0 != ( pCNd = GetCntntNode() ) && pCNd->GetFrm() &&
             0 != ( pCNd = GetCntntNode(FALSE) ) && pCNd->GetFrm() )
-        GetDoc()->GetRootFrm()->MakeTblCrsrs( *this );
+        bMakeTblCrsrs = GetDoc()->GetRootFrm()->MakeTblCrsrs( *this );
+
+    if ( !bMakeTblCrsrs )
+    {
+        SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
+        USHORT nCount = 0;
+        while( nCount < rTmpBoxes.Count() )
+            DeleteBox( nCount );
+    }
 
     if( IsChgd() )
     {
