@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "OutlineBulletDlg.hxx"
+
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -88,8 +90,8 @@
 #include <svx/svdmark.hxx>
 #endif
 
-#ifndef _SD_SDVIEW_HXX
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
 #endif
 
 #ifndef _SVDOBJ_HXX //autogen
@@ -109,11 +111,12 @@
 #endif
 
 #include "glob.hrc"
-#include "dlgolbul.hxx"
 #include "dlgolbul.hrc"
 //#include "enumdlg.hxx"
 #include "bulmaper.hxx"
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -121,11 +124,14 @@
 |*
 \************************************************************************/
 
-SdOutlineBulletDlg::SdOutlineBulletDlg( Window* pParent, const SfxItemSet* pAttr, SdView* pView ) :
-        SfxTabDialog    ( pParent, SdResId(TAB_OUTLINEBULLET) ),
-        aInputSet       ( *pAttr ),
-        bTitle          ( FALSE ),
-        pSdView         ( pView )
+OutlineBulletDlg::OutlineBulletDlg(
+    ::Window* pParent,
+    const SfxItemSet* pAttr,
+    ::sd::View* pView )
+    : SfxTabDialog  ( pParent, SdResId(TAB_OUTLINEBULLET) ),
+      aInputSet     ( *pAttr ),
+      bTitle            ( FALSE ),
+      pSdView           ( pView )
 {
     FreeResource();
 
@@ -223,12 +229,12 @@ SdOutlineBulletDlg::SdOutlineBulletDlg( Window* pParent, const SfxItemSet* pAttr
 
 }
 
-SdOutlineBulletDlg::~SdOutlineBulletDlg()
+OutlineBulletDlg::~OutlineBulletDlg()
 {
     delete pOutputSet;
 }
 
-void SdOutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void OutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch ( nId )
     {
@@ -253,7 +259,7 @@ void SdOutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     }
 }
 
-const SfxItemSet* SdOutlineBulletDlg::GetOutputItemSet()
+const SfxItemSet* OutlineBulletDlg::GetOutputItemSet()
 {
     SfxItemSet aSet( *SfxTabDialog::GetOutputItemSet() );
     pOutputSet->Put( aSet );
@@ -280,6 +286,4 @@ const SfxItemSet* SdOutlineBulletDlg::GetOutputItemSet()
     return pOutputSet;
 }
 
-
-
-
+} // end of namespace sd
