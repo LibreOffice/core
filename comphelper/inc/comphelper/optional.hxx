@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optional.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:59:13 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,40 +62,24 @@
 #if ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)
 #define INCLUDED_COMPHELPER_OPTIONAL_HXX
 
+// #if ! defined(INCLUDED_CPPUHELPER_BOOSTUNO_HXX)
+// #include "cppuhelper/boostuno.hxx"
+// #endif
+#if ! defined(_COM_SUN_STAR_BEANS_OPTIONAL_HPP_)
 #include "com/sun/star/beans/Optional.hpp"
+#endif
 #include "boost/optional.hpp"
-#include "boost/type_traits.hpp"
-#include "boost/static_assert.hpp"
-
-//=== static (compile time) assertions for C++-UNO:
-// TODO: move to cppu?
-
-#if defined(__SUNPRO_CC)
-#define CPPU_STATIC_ASSERT_HAS_GETCPPUTYPE(THE_TYPE)
-#else
-#define CPPU_STATIC_ASSERT_HAS_GETCPPUTYPE(THE_TYPE) \
-do { \
-static_cast< ::com::sun::star::uno::Type const & (SAL_CALL *)( \
-THE_TYPE const * ) >(&getCppuType); \
-} while (0)
-#endif // defined(__SUNPRO_CC)
-
-#define CPPU_STATIC_ASSERT_IS_UNOTYPE(THE_TYPE) \
-CPPU_STATIC_ASSERT_HAS_GETCPPUTYPE(THE_TYPE); \
-BOOST_STATIC_ASSERT( (! ::boost::is_same<THE_TYPE, bool>::value) )
 
 namespace comphelper {
 
-//=== helpers and conversions for beans::Optional<T> from/to boost::optional<T>:
+/// Object generators for boost::optional<T>, beans::Optional<T>:
 
-/// Object generator for boost::optional<T>
 template <typename T>
 inline ::boost::optional<T> make_optional( T const & v )
 {
     return ::boost::optional<T>(v);
 }
 
-/// specialization: Object generator for boost::optional< beans::Optional<T> >
 template <typename T>
 inline ::boost::optional<T> make_optional(
     ::com::sun::star::beans::Optional<T> const & o )
@@ -106,27 +90,33 @@ inline ::boost::optional<T> make_optional(
         return ::boost::optional<T>();
 }
 
-/// Object generator for beans::Optional<T>
 template <typename T>
 inline ::com::sun::star::beans::Optional<T> makeOptional( T const & v )
 {
-    CPPU_STATIC_ASSERT_IS_UNOTYPE(T);
+//     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
     return ::com::sun::star::beans::Optional<T>(true, v);
 }
 
-/// specialization: Object generator for beans::Optional< boost::optional<T> >
 template <typename T>
 inline ::com::sun::star::beans::Optional<T> makeOptional(
     ::boost::optional<T> const & o )
 {
-    CPPU_STATIC_ASSERT_IS_UNOTYPE(T);
+//     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
     if (o)
         return ::com::sun::star::beans::Optional<T>(true, *o);
     else
         return ::com::sun::star::beans::Optional<T>();
 }
 
-/// specialization: Object generator for beans::Optional<bool>
+inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional(
+    ::boost::optional<bool> const & o )
+{
+    if (o)
+        return ::com::sun::star::beans::Optional<sal_Bool>(true, *o);
+    else
+        return ::com::sun::star::beans::Optional<sal_Bool>();
+}
+
 inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional( bool v )
 {
     return ::com::sun::star::beans::Optional<sal_Bool>(true, v);
@@ -134,5 +124,5 @@ inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional( bool v )
 
 } // namespace comphelper
 
-#endif
+#endif // ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)
 
