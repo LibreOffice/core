@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:11:44 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ String STR_NOSTARTPRINTER
     TEXT [ portuguese ] = "Foi impossível iniciar a impressora.\nPor favor, verifique a configuração da impressora." ;
     TEXT [ finnish ] = "Kirjoitinta ei voi käynnistää.\nTarkista kirjoittimen asetukset." ;
     TEXT [ danish ] = "Det var ikke muligt at starte printeren.\nKontroller venligst din printerkonfiguration." ;
-    TEXT [ french ] = "Démarrage de l'imprimante impossible.\nVeuillez contrôler le branchement de l'imprimante." ;
+    TEXT [ french ] = "Impossible de démarrer l'imprimante !\nVérifiez-en la configuration." ;
     TEXT [ swedish ] = "Det gick inte att starta skrivaren.\nKontrollera skrivarkonfigurationen." ;
     TEXT [ dutch ] = "Printer kon niet worden gestart.\nControleer de configuratie van uw printer." ;
     TEXT [ spanish ] = "No se puede iniciar la impresora.\nPor favor verifique la configuración de su impresora." ;
@@ -432,7 +432,7 @@ String STR_PRINT_NEWSIZE
     Text [ english_us ] = "The page size has been modified.\nShould the new settings be saved\nin the active document?" ;
     Text [ italian ] = "Sono state modificate le dimensioni della pagina.\nTrasferire le impostazioni cambiate nel documento?" ;
     Text [ spanish ] = "El tamaño de la página se ha modificado.\n¿Desea aplicar las modificaciones al documento\nactual?" ;
-    Text [ french ] = "Vous avez modifié le format de la page.\nVoulez-vous enregistrer les paramètres modifiés dans le \ndocument?" ;
+    Text [ french ] = "Le format de la page a changé.\nVoulez-vous appliquer les paramètres modifiés\ndans le document ?" ;
     Text [ dutch ] = "U heeft het paginaformaat veranderd.\nWilt u deze verandering in uw\ndocument overnemen?" ;
     Text [ swedish ] = "Du har ändrat sidstorleken.\nSka de ändrade inställningarna\növertas till dokumentet?" ;
     Text [ danish ] = "Sidestørrelsen er blevet ændret.\nSkal ændringerne overtages i dokumentet?" ;
@@ -457,7 +457,7 @@ String STR_PRINT_NEWORISIZE
     Text [ english_us ] = "The page size and orientation have been modified\n. Would you like to  save the new settings in the\nactive document?" ;
     Text [ italian ] = "Sia le dimensioni della pagina che l'orientamento sono stati cambiati.\nTrasferire le impostazioni\ncambiate nel documento?" ;
     Text [ spanish ] = "El tamaño y orientación de la página se han modificado\n. ¿Desea aplicar las modificaciones al\ndocumento actual?" ;
-    Text [ french ] = "Vous avez changé le format et l'\norientation\n de la page. Voulez-vous enregistrer les paramètres modifiés\n dans le \ndocument?" ;
+    Text [ french ] = "Le format et l'orientation de la page\nont changé. Voulez-vous appliquer\nles  paramètres modifiés\ndans le document?" ;
     Text [ swedish ] = "Du har ändrat sidstorleken och\nsidorienteringen.Ska\nde ändrade inställningarna övertas\ntill dokumentet?" ;
     Text [ danish ] = "Sidestørrelsen og sideretningen er blevet ændret.\nSkal ændringerne overtages i dokumentet?" ;
     Text [ portuguese_brazilian ] = "Sie haben die Seitengröße und die\nSeitenorientierung geändert. Sollen\ndie geänderten Einstellungen in das\nDokument übernommen werden?" ;
@@ -587,14 +587,14 @@ InfoBox MSG_CANT_CLOSE
     Message = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
     Message [ English ] = "Can't close the document,\na print job is running." ;
     Message [ english_us ] = "The document cannot be closed because a\n print job is being carried out." ;
-    Message [ italian ] = "Non è possibile chiudere il documento poiché,\nc'è una stampa in corso." ;
+    Message [ italian ] = "Non è possibile chiudere il documento poiché\nc'è una stampa in corso." ;
     Message [ spanish ] = "El documento no se puede cerrar por ahora\nya que todavía se está imprimiendo." ;
     Message [ french ] = "Impossible de fermer le document :\nl'imprimante est encore active." ;
     Message [ dutch ] = "Het document kan op het moment niet worden gesloten,\ndaar er nog een afdrukopdracht wordt uitgevoerd." ;
     Message [ swedish ] = "Dokumentet kan inte stängas för tillfället\neftersom ett utskriftsuppdrag fortfarande utförs." ;
     Message [ danish ] = "Det er for tiden ikke muligt at afslutte programmet,\nfordi et udskriftsjob udføres." ;
     Message [ portuguese_brazilian ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
-    Message [ portuguese ] = "De momento é impossível fechar o documento,\n por ainda estar a ser impresso." ;
+    Message [ portuguese ] = "De momento é impossível fechar o documento,\n uma vez que a impressora ainda está activa." ;
     Message[ chinese_simplified ] = "Ä¿Ç°ÎŞ·¨¹Ø±ÕÕâ¸öÎÄ¼ş£¬\nÒòÎªÕıÔÚÖ´ĞĞÒ»¸ö´òÓ¡ÈÎÎñ¡£";
     Message[ russian ] = "Çàêğûòü ıòîò äîêóìåíò â íàñòîÿùèé ìîìåíò íåâîçìîæíî,\nïîñêîëüêó âûïîëíÿåòñÿ åùå îäíî çàäàíèå ïå÷àòè.";
     Message[ polish ] = "Dokumentu nie mo¿na na razie zamkn¹æ,\nponiewa¿ wykonywane jest polecenie wydruku.";
