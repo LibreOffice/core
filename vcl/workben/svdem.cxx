@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:50 $
+ *  last change: $Author: mm $ $Date: 2001-02-22 16:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,38 @@
 #include <wrkwin.hxx>
 #include <msgbox.hxx>
 
+#include <sal/main.h>
+
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 // -----------------------------------------------------------------------
 
+void Main();
+/*
 class MyApp : public Application
 {
 public:
-    void        Main();
+    void        Main()
+    {
+        ::Main();
+    }
 };
 
 MyApp aMyApp;
+*/
 
 // -----------------------------------------------------------------------
+
+
+SAL_IMPLEMENT_MAIN()
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMS;
+    InitVCL( xMS );
+    Main();
+    DeInitVCL();
+    return 0;
+}
+
 
 class MyWin : public WorkWindow
 {
@@ -90,14 +111,13 @@ public:
 };
 
 // -----------------------------------------------------------------------
-
-void MyApp::Main()
+void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
     aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCL - Workbench" ) ) );
     aMainWin.Show();
 
-    Execute();
+    Application::Execute();
 }
 
 // -----------------------------------------------------------------------
