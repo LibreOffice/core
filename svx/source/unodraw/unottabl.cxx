@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 
 #include "svdmodel.hxx"
 #include "xflhtit.hxx"
+#include "unomid.hxx"
 
 #ifndef _SVX_UNONAMEITEMTABLE_HXX_
 #include "UnoNameItemTable.hxx"
@@ -106,7 +107,7 @@ public:
 };
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
-: SvxUnoNameItemTable( pModel, XATTR_FILLFLOATTRANSPARENCE )
+: SvxUnoNameItemTable( pModel, XATTR_FILLFLOATTRANSPARENCE, MID_FILLGRADIENT )
 {
 }
 
