@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTPDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:11:42 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,26 @@ package com.sun.star.wizards.web;
 import java.util.List;
 import java.util.Vector;
 
-import com.sun.star.awt.*;
+import com.sun.star.awt.PushButtonType;
+import com.sun.star.awt.XButton;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XFixedText;
+import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ucb.*;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.ucb.AuthenticationRequest;
+import com.sun.star.ucb.InteractiveAugmentedIOException;
+import com.sun.star.ucb.InteractiveNetworkConnectException;
+import com.sun.star.ucb.InteractiveNetworkResolveNameException;
+import com.sun.star.ucb.OpenCommandArgument2;
+import com.sun.star.ucb.OpenMode;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.UCB;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
 import com.sun.star.wizards.web.data.CGPublish;
@@ -264,15 +279,15 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
             new Object[] { INTEGERS[8], resources.resln2_value, "ln2", INTEGERS[6], new Integer(68), new Short((short) 7), new Integer(210)});
         btnTestConnection = insertButton("btnConnect", "connect",
             PROPNAMES_BUTTON,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_40 });
+            new Object[] { INTEGER_14, "HID:" + HID_FTP_TEST, resources.resbtnConnect_value, "btnConnect", INTEGER_12, new Integer(80), new Short((short) 8), INTEGER_50 });
 
         imgStatus = insertImage("imgStatus",
             new String[] { "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Tabstop", "Width" },
-            new Object[] { new Short((short) 0), INTEGER_14, new Integer(58), new Integer(80), Boolean.FALSE, Boolean.FALSE, INTEGER_14 });
+            new Object[] { new Short((short) 0), INTEGER_14, new Integer(68), new Integer(80), Boolean.FALSE, Boolean.FALSE, INTEGER_14 });
 
         lblStatus = insertLabel("lblStatus",
             PROPNAMES_LABEL,
-            new Object[] { INTEGERS[8], resources.resFTPDisconnected, "lblStatus", new Integer(76), new Integer(82), new Short((short) 9), new Integer(109)});
+            new Object[] { INTEGERS[8], resources.resFTPDisconnected, "lblStatus", new Integer(86), new Integer(82), new Short((short) 9), new Integer(99)});
 
         ln3 = insertFixedLine("ln3",
             PROPNAMES_LABEL,
@@ -287,15 +302,15 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID {
 
         btnOK = insertButton("btnOK", null,
             PROPNAMES_BUTTON2,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(175), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_40 });
+            new Object[] { INTEGER_14, "HID:" + HID_FTP_OK, resources.resbtnOK_value, "btnOK", new Integer(165), new Integer(142), new Short((short) PushButtonType.OK_value), new Short((short) 13), INTEGER_50 });
 
         btnCancel = insertButton("btnCancel",
             null, PROPNAMES_BUTTON2,
-            new Object[] { INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(133), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_40 });
+            new Object[] { INTEGER_14, "HID:" + HID_FTP_CANCEL, resources.resbtnCancel_value, "btnCancel", new Integer(113), new Integer(142), new Short((short) PushButtonType.CANCEL_value), new Short((short) 14), INTEGER_50 });
 
         btnHelp = insertButton("btnHelp", null,
             PROPNAMES_BUTTON2 ,
-            new Object[] { INTEGER_14,"",  resources.resbtnHelp_value, "btnHelp", new Integer(87), new Integer(142), new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_40 });
+            new Object[] { INTEGER_14,"",  resources.resbtnHelp_value, "btnHelp", new Integer(57), new Integer(142), new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_50 });
 
     }
 
