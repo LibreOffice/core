@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:21:01 $
+ *  last change: $Author: fs $ $Date: 2001-03-16 16:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::i18n;
 using namespace ::dbtools;
 
 // .........................................................................
@@ -443,6 +444,11 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
             xDatasourceContainer->addContainerListener(this);
         else
             DBG_ERROR("SbaTableQueryBrowser::Construct: the DatabaseContext should allow us to be a listener!");
+
+        // the collator for the string compares
+        m_xCollator = Reference< XCollator >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.Collator")), UNO_QUERY);
+        if (m_xCollator.is())
+            m_xCollator->loadDefaultCollator(Application::GetSettings().GetLocale(), 0);
     }
     catch(Exception&)
     {
@@ -474,6 +480,8 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
         // fill view with data
         m_pTreeModel = new DBTreeListModel;
+        m_pTreeModel->SetSortMode(SortAscending);
+        m_pTreeModel->SetCompareHdl(LINK(this, SbaTableQueryBrowser, OnTreeEntryCompare));
         m_pTreeView->setModel(m_pTreeModel);
         m_pTreeView->setSelectHdl(LINK(this, SbaTableQueryBrowser, OnSelectEntry));
         initializeTreeModel();
@@ -2922,6 +2930,7 @@ void SbaTableQueryBrowser::showExplorer()
 
     InvalidateFeature(ID_BROWSER_EXPLORER);
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::secureConnection(SvLBoxEntry* _pDSEntry,void* pDSData,Reference<XConnection>& _xConnection)
 {
@@ -2944,6 +2953,40 @@ sal_Bool SbaTableQueryBrowser::secureConnection(SvLBoxEntry* _pDSEntry,void* pDS
 
     return _xConnection.is();
 }
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortData )
+{
+    SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
+    SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
+    DBG_ASSERT(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
+
+    SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pRightTextItem = static_cast<SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    DBG_ASSERT(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
+
+    String sLeftText = pLeftTextItem->GetText();
+    String sRightText = pRightTextItem->GetText();
+
+    sal_Int32 nCompareResult = 0;   // equal by default
+
+    if (m_xCollator.is())
+    {
+        try
+        {
+            nCompareResult = m_xCollator->compareString(sLeftText, sRightText);
+        }
+        catch(Exception&)
+        {
+        }
+    }
+    else
+        // default behaviour if we do not have a collator -> do the simple string compare
+        nCompareResult = sLeftText.CompareTo(sRightText);
+
+    return nCompareResult;
+}
+
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
