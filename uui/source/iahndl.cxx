@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:52:07 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,12 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include "com/sun/star/container/NoSuchElementException.hpp"
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MERGERECOVERYREQUEST_HPP_
+#include <com/sun/star/configuration/backend/MergeRecoveryRequest.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_STRATUMCREATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/StratumCreationException.hpp>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include "osl/diagnose.h"
@@ -1061,6 +1067,41 @@ UUIInteractionHandler::handle(
                 nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
                 aArguments.push_back(aBadPartnershipException.Partnership);
             }
+            handleErrorRequest(star::task::InteractionClassification_ERROR,
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
+        }
+
+        star::configuration::backend::MergeRecoveryRequest aMergeRecoveryRequest;
+        if (aAnyRequest >>= aMergeRecoveryRequest)
+        {
+            ErrCode nErrorCode = aMergeRecoveryRequest.IsRemovalRequest
+                ? ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE
+                : ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE;
+
+            std::vector< rtl::OUString > aArguments;
+            aArguments.push_back(aMergeRecoveryRequest.ErrorLayerId);
+
+            handleErrorRequest(star::task::InteractionClassification_ERROR,
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
+        }
+
+        star::configuration::backend::StratumCreationException aStratumCreationException;
+        if (aAnyRequest >>= aStratumCreationException)
+        {
+            const ErrCode nErrorCode = ERRCODE_UUI_CONFIGURATION_BACKENDMISSING;
+
+            rtl::OUString aStratum = aStratumCreationException.StratumData;
+            if (aStratum.getLength() == 0) aStratum = aStratumCreationException.StratumService;
+
+            std::vector< rtl::OUString > aArguments;
+            aArguments.push_back(aStratum);
+
             handleErrorRequest(star::task::InteractionClassification_ERROR,
                                nErrorCode,
                                aArguments,
@@ -2513,10 +2554,13 @@ char const UUIInteractionHandler::m_aImplementationName[]
 star::uno::Sequence< rtl::OUString >
 UUIInteractionHandler::getSupportedServiceNames_static()
 {
-    star::uno::Sequence< rtl::OUString > aNames(2);
+    star::uno::Sequence< rtl::OUString > aNames(3);
     aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.task.InteractionHandler"));
+    // added to indicate support for configuration.backend.MergeRecoveryRequest
     aNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.backend.InteractionHandler"));
+    aNames[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.uui.InteractionHandler"));
          // for backwards compatibility
     return aNames;
