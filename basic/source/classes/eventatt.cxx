@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2002-01-18 11:53:30 $
+ *  last change: $Author: hjs $ $Date: 2002-04-16 15:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,7 +588,7 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
-#ifndef SVX_LIGHT
+#ifndef NO_XMLSCRIPT
     Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     if( !xMSF.is() )
         return;
