@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:35 $
+ *  last change: $Author: nn $ $Date: 2002-12-05 11:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,10 +583,12 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         SvInPlaceObjectRef refObj( &refOleObj );
         if( refObj.Is() )
             return PasteObject( rPos, refObj );
-    }
 
-    // Ich geb auf! Soll hier noch ne MsgBox hin?
-    return FALSE;
+        // #105851# If an OLE object can't be created, insert a URL button
+
+        GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_STRING, &rPos );
+        return TRUE;
+    }
 }
 
 BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
