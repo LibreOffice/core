@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:26:11 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
 #include "extensio.hrc"
 #endif
+#ifndef _SVTOOLS_LOCALRESACCESS_HXX_
+#include <svtools/localresaccess.hxx>
+#endif
 
 //............................................................................
 namespace pcr
@@ -134,176 +137,192 @@ namespace pcr
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-                        String( ModuleRes( uinameres ) ), nPos++, helpid, flags )
+            String( ModuleRes( RID_STR_##uinameres ) ), nPos++, HID_PROP_##helpid, flags )
+
+#define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
+    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
+
+#define DEF_INFO_2( ident, uinameres, helpid, flag1, flag2 ) \
+    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 )
+
+#define DEF_INFO_3( ident, uinameres, helpid, flag1, flag2, flag3 ) \
+    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 )
+
+#define DEF_INFO_4( ident, uinameres, helpid, flag1, flag2, flag3, flag4 ) \
+    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 )
 
     sal_uInt16              OFormPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OFormPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
     const OPropertyInfoImpl* OFormPropertyInfoService::getPropertyInfo()
     {
-        sal_uInt16 nPos=1;
-        if (s_pPropertyInfos == NULL)
+        if ( s_pPropertyInfos )
+            return s_pPropertyInfos;
+
+        OModuleResourceClient aResourceAccess;
+        // this ensures that we have our resource file loaded
+
+        sal_uInt16 nPos = 1;
+
+        static OPropertyInfoImpl __READONLY_DATA aPropertyInfos[] =
         {
-            OModuleResourceClient aResourceAccess;
-            // this ensures that we have our resource file loaded
+        /*
+        DEF_INFO_?( propname and id,   resoure id,         help id,           flags ),
+        */
+        DEF_INFO_2( NAME,              NAME,               NAME,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( TITLE,             TITLE,              TITLE,             FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE ),
+        DEF_INFO_1( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE ),
+        DEF_INFO_2( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( LITERALMASK,       LITERALMASK,        LITERALMASK,       FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( STRICTFORMAT,      STRICTFORMAT,       STRICTFORMAT,      FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( ENABLED,           ENABLED,            ENABLED,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( READONLY,          READONLY,           READONLY,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( PRINTABLE,         PRINTABLE,          PRINTABLE,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( STEP,              STEP,               STEP,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( TABSTOP,           TABSTOP,            TABSTOP,           FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_2( TABINDEX,          TABINDEX,           TABINDEX,          FORM_VISIBLE, DIALOG_VISIBLE ),
 
-            // somewhat ugly ... but this way we easily ensure that the
-            static OPropertyInfoImpl __READONLY_DATA aPropertyInfos[] =
-            {
-                DEF_INFO( NAME,             RID_STR_NAME,               HID_PROP_NAME,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TITLE,            RID_STR_TITLE,              HID_PROP_TITLE,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( LABEL,            RID_STR_LABEL,              HID_PROP_LABEL,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( CONTROLLABEL,     RID_STR_LABELCONTROL,       HID_PROP_CONTROLLABEL,              PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( TEXT,             RID_STR_TEXT,               HID_PROP_TEXT,                                             PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( MAXTEXTLEN,       RID_STR_MAXTEXTLEN,         HID_PROP_MAXTEXTLEN,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( EDITMASK,         RID_STR_EDITMASK,           HID_PROP_EDITMASK,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( LITERALMASK,      RID_STR_LITERALMASK,        HID_PROP_LITERALMASK,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( STRICTFORMAT,     RID_STR_STRICTFORMAT,       HID_PROP_STRICTFORMAT,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( ENABLED,          RID_STR_ENABLED,            HID_PROP_ENABLED,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( READONLY,         RID_STR_READONLY,           HID_PROP_READONLY,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( PRINTABLE,        RID_STR_PRINTABLE,          HID_PROP_PRINTABLE,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( STEP,             RID_STR_STEP,               HID_PROP_STEP,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TABSTOP,          RID_STR_TABSTOP,            HID_PROP_TABSTOP,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TABINDEX,         RID_STR_TABINDEX,           HID_PROP_TABINDEX,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_4( BOUND_CELL,        BOUND_CELL,         BOUND_CELL,        FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ACTUATING ),
+        DEF_INFO_4( CELL_EXCHANGE_TYPE,CELL_EXCHANGE_TYPE, CELL_EXCHANGE_TYPE,FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ENUM ),
+        DEF_INFO_4( LIST_CELL_RANGE,   LIST_CELL_RANGE,    LIST_CELL_RANGE,   FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ACTUATING ),
+        DEF_INFO_3( CONTROLSOURCE,     CONTROLSOURCE,      CONTROLSOURCE,     FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_3( DATASOURCE,        DATASOURCE,         DATASOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_4( COMMANDTYPE,       CURSORSOURCETYPE,   CURSORSOURCETYPE,  FORM_VISIBLE, DATA_PROPERTY, ENUM, ACTUATING ),
+        DEF_INFO_3( COMMAND,           CURSORSOURCE,       CURSORSOURCE,      FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_3( ESCAPE_PROCESSING, ESCAPE_PROCESSING,  ESCAPE_PROCESSING, FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_2( FILTER,            FILTER,             FILTER,            FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( SORT,              SORT_CRITERIA,      SORT_CRITERIA,     FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( MASTERFIELDS,      MASTERFIELDS,       MASTERFIELDS,      FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( DETAILFIELDS,      SLAVEFIELDS,        SLAVEFIELDS,       FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( ALLOWADDITIONS,    ALLOW_ADDITIONS,    ALLOW_ADDITIONS,   FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( ALLOWEDITS,        ALLOW_EDITS,        ALLOW_EDITS,       FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( ALLOWDELETIONS,    ALLOW_DELETIONS,    ALLOW_DELETIONS,   FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( INSERTONLY,        DATAENTRY,          DATAENTRY,         FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_3( NAVIGATION,        NAVIGATION,         NAVIGATION,        FORM_VISIBLE, DATA_PROPERTY, ENUM ),
+        DEF_INFO_3( CYCLE,             CYCLE,              CYCLE,             FORM_VISIBLE, DATA_PROPERTY, ENUM ),
+        DEF_INFO_2( EMPTY_IS_NULL,     EMPTY_IS_NULL,      EMPTY_IS_NULL,     FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( FILTERPROPOSAL,    FILTERPROPOSAL,     FILTERPROPOSAL,    FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_4( LISTSOURCETYPE,    LISTSOURCETYPE,     LISTSOURCETYPE,    FORM_VISIBLE, DATA_PROPERTY, ACTUATING, ENUM ),
+        DEF_INFO_3( LISTSOURCE,        LISTSOURCE,         LISTSOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_2( BOUNDCOLUMN,       BOUNDCOLUMN,        BOUNDCOLUMN,       FORM_VISIBLE, DATA_PROPERTY ),
 
-                DEF_INFO( BOUND_CELL,       RID_STR_BOUND_CELL,         HID_PROP_BOUND_CELL,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
-                DEF_INFO( CELL_EXCHANGE_TYPE,RID_STR_CELL_EXCHANGE_TYPE,HID_PROP_CELL_EXCHANGE_TYPE,        PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
-                DEF_INFO( LIST_CELL_RANGE,  RID_STR_LIST_CELL_RANGE,    HID_PROP_LIST_CELL_RANGE,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY|PROP_FLAG_VIRTUAL_PROP),
-                DEF_INFO( CONTROLSOURCE,    RID_STR_CONTROLSOURCE,      HID_PROP_CONTROLSOURCE,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( DATASOURCE,       RID_STR_DATASOURCE,         HID_PROP_DATASOURCE,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( COMMANDTYPE,      RID_STR_CURSORSOURCETYPE,   HID_PROP_CURSORSOURCETYPE,          PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( COMMAND,          RID_STR_CURSORSOURCE,       HID_PROP_CURSORSOURCE,              PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( ESCAPE_PROCESSING,RID_STR_ESCAPE_PROCESSING,  HID_PROP_ESCAPE_PROCESSING,         PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( FILTER_CRITERIA,  RID_STR_FILTER_CRITERIA,    HID_PROP_FILTER_CRITERIA,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( SORT,             RID_STR_SORT_CRITERIA,      HID_PROP_SORT_CRITERIA,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( ALLOWADDITIONS,   RID_STR_ALLOW_ADDITIONS,    HID_PROP_ALLOW_ADDITIONS,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( ALLOWEDITS,       RID_STR_ALLOW_EDITS,        HID_PROP_ALLOW_EDITS,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( ALLOWDELETIONS,   RID_STR_ALLOW_DELETIONS,    HID_PROP_ALLOW_DELETIONS,           PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( INSERTONLY,       RID_STR_DATAENTRY,          HID_PROP_DATAENTRY,                 PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( NAVIGATION,       RID_STR_NAVIGATION,         HID_PROP_NAVIGATION,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( CYCLE,            RID_STR_CYCLE,              HID_PROP_CYCLE,                     PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( EMPTY_IS_NULL,    RID_STR_EMPTY_IS_NULL,      HID_PROP_EMPTY_IS_NULL,             PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( FILTERPROPOSAL,   RID_STR_FILTERPROPOSAL,     HID_PROP_FILTERPROPOSAL,            PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( BOUNDCOLUMN,      RID_STR_BOUNDCOLUMN,        HID_PROP_BOUNDCOLUMN,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( LISTSOURCETYPE,   RID_STR_LISTSOURCETYPE,     HID_PROP_LISTSOURCETYPE,            PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( LISTSOURCE,       RID_STR_LISTSOURCE,         HID_PROP_LISTSOURCE,                PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( MASTERFIELDS,     RID_STR_MASTERFIELDS,       HID_PROP_MASTERFIELDS,              PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
-                DEF_INFO( DETAILFIELDS,     RID_STR_SLAVEFIELDS,        HID_PROP_SLAVEFIELDS,               PROP_FLAG_FORM_VISIBLE                         |PROP_FLAG_DATA_PROPERTY),
+        DEF_INFO_1( HIDDEN_VALUE,      VALUE,              HIDDEN_VALUE,      FORM_VISIBLE ),
+        DEF_INFO_1( VALUE,             VALUE,              VALUE,             DIALOG_VISIBLE ),
+        DEF_INFO_2( VALUEMIN,          VALUEMIN,           VALUEMIN,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( VALUEMAX,          VALUEMAX,           VALUEMAX,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( VALUESTEP,         VALUESTEP,          VALUESTEP,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( DEFAULT_VALUE,     DEFAULTVALUE,       DEFAULT_LONG_VALUE,FORM_VISIBLE ),
+        DEF_INFO_2( DECIMAL_ACCURACY,  DECIMAL_ACCURACY,   DECIMAL_ACCURACY,  FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( SHOWTHOUSANDSEP,   SHOWTHOUSANDSEP,    SHOWTHOUSANDSEP,   FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( HIDDEN_VALUE,     RID_STR_VALUE,              HID_PROP_HIDDEN_VALUE,              PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( VALUE,            RID_STR_VALUE,              HID_PROP_VALUE,                                            PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( VALUEMIN,         RID_STR_VALUEMIN,           HID_PROP_VALUEMIN,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( VALUEMAX,         RID_STR_VALUEMAX,           HID_PROP_VALUEMAX,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( VALUESTEP,        RID_STR_VALUESTEP,          HID_PROP_VALUESTEP,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_VALUE,    RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_LONG_VALUE,        PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( DECIMAL_ACCURACY, RID_STR_DECIMAL_ACCURACY,   HID_PROP_DECIMAL_ACCURACY,          PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SHOWTHOUSANDSEP,  RID_STR_SHOWTHOUSANDSEP,    HID_PROP_SHOWTHOUSANDSEP,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( REFVALUE,          REFVALUE,           REFVALUE,          FORM_VISIBLE ),
+        DEF_INFO_2( CURRENCYSYMBOL,    CURRENCYSYMBOL,     CURRENCYSYMBOL,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( CURRSYM_POSITION,  CURRSYM_POSITION,   CURRSYM_POSITION,  FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( REFVALUE,         RID_STR_REFVALUE,           HID_PROP_REFVALUE,                  PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( CURRENCYSYMBOL,   RID_STR_CURRENCYSYMBOL,     HID_PROP_CURRENCYSYMBOL,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( CURRSYM_POSITION, RID_STR_CURRSYM_POSITION,   HID_PROP_CURRSYM_POSITION,          PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( DATE,              DATE,               DATE,              DIALOG_VISIBLE ),
+        DEF_INFO_2( DATEMIN,           DATEMIN,            DATEMIN,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( DATEMAX,           DATEMAX,            DATEMAX,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( DATEFORMAT,        DATEFORMAT,         DATEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_1( DEFAULT_DATE,      DEFAULTDATE,        DEFAULT_DATE,      FORM_VISIBLE ),
 
-                DEF_INFO( DATE,             RID_STR_DATE,               HID_PROP_DATE,                                             PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DATEMIN,          RID_STR_DATEMIN,            HID_PROP_DATEMIN,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DATEMAX,          RID_STR_DATEMAX,            HID_PROP_DATEMAX,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DATEFORMAT,       RID_STR_DATEFORMAT,         HID_PROP_DATEFORMAT,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_DATE,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_DATE,              PROP_FLAG_FORM_VISIBLE                         ),
+        DEF_INFO_1( TIME,              TIME,               TIME,              DIALOG_VISIBLE ),
+        DEF_INFO_2( TIMEMIN,           TIMEMIN,            TIMEMIN,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( TIMEMAX,           TIMEMAX,            TIMEMAX,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( TIMEFORMAT,        TIMEFORMAT,         TIMEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_1( DEFAULT_TIME,      DEFAULTTIME,        DEFAULT_TIME,      FORM_VISIBLE ),
 
-                DEF_INFO( TIME,             RID_STR_TIME,               HID_PROP_TIME,                                             PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TIMEMIN,          RID_STR_TIMEMIN,            HID_PROP_TIMEMIN,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TIMEMAX,          RID_STR_TIMEMAX,            HID_PROP_TIMEMAX,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TIMEFORMAT,       RID_STR_TIMEFORMAT,         HID_PROP_TIMEFORMAT,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_TIME,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_TIME,              PROP_FLAG_FORM_VISIBLE                         ),
+        DEF_INFO_1( EFFECTIVE_VALUE,   VALUE,              VALUE,             DIALOG_VISIBLE ),
+        DEF_INFO_2( EFFECTIVE_MIN,     VALUEMIN,           EFFECTIVEMIN,      FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( EFFECTIVE_MAX,     VALUEMAX,           EFFECTIVEMAX,      FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( EFFECTIVE_DEFAULT, DEFAULTVALUE,       EFFECTIVEDEFAULT,  FORM_VISIBLE ),
+        DEF_INFO_2( FORMATKEY,         FORMATKEY,          FORMATKEY,         FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( EFFECTIVE_VALUE,  RID_STR_VALUE,              HID_PROP_VALUE,                                            PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( EFFECTIVE_MIN,    RID_STR_VALUEMIN,           HID_PROP_EFFECTIVEMIN,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( EFFECTIVE_MAX,    RID_STR_VALUEMAX,           HID_PROP_EFFECTIVEMAX,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( EFFECTIVE_DEFAULT,RID_STR_DEFAULTVALUE,       HID_PROP_EFFECTIVEDEFAULT,          PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( FORMATKEY,        RID_STR_FORMATKEY,          HID_PROP_FORMATKEY,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_2( PROGRESSVALUE,     PROGRESSVALUE,      PROGRESSVALUE,     FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( PROGRESSVALUE_MIN, PROGRESSVALUE_MIN,  PROGRESSVALUE_MIN, FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( PROGRESSVALUE_MAX, PROGRESSVALUE_MAX,  PROGRESSVALUE_MAX, FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( PROGRESSVALUE,    RID_STR_PROGRESSVALUE,      HID_PROP_PROGRESSVALUE,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( PROGRESSVALUE_MIN,RID_STR_PROGRESSVALUE_MIN,  HID_PROP_PROGRESSVALUE_MIN,         PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( PROGRESSVALUE_MAX,RID_STR_PROGRESSVALUE_MAX,  HID_PROP_PROGRESSVALUE_MAX,         PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( SCROLLVALUE,       SCROLLVALUE,        SCROLLVALUE,       DIALOG_VISIBLE ),
+        DEF_INFO_2( SCROLLVALUE_MIN,   SCROLLVALUE_MIN,    SCROLLVALUE_MIN,   FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( SCROLLVALUE_MAX,   SCROLLVALUE_MAX,    SCROLLVALUE_MAX,   FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,FORM_VISIBLE ),
+        DEF_INFO_2( LINEINCREMENT,     LINEINCREMENT,      LINEINCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( BLOCKINCREMENT,    BLOCKINCREMENT,     BLOCKINCREMENT,    FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( SCROLLVALUE,      RID_STR_SCROLLVALUE,        HID_PROP_SCROLLVALUE,                                      PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SCROLLVALUE_MIN,  RID_STR_SCROLLVALUE_MIN,    HID_PROP_SCROLLVALUE_MIN,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SCROLLVALUE_MAX,  RID_STR_SCROLLVALUE_MAX,    HID_PROP_SCROLLVALUE_MAX,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_SCROLLVALUE,RID_STR_DEFAULT_SCROLLVALUE,HID_PROP_DEFAULT_SCROLLVALUE,     PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( LINEINCREMENT,    RID_STR_LINEINCREMENT,      HID_PROP_LINEINCREMENT,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( BLOCKINCREMENT,   RID_STR_BLOCKINCREMENT,     HID_PROP_BLOCKINCREMENT,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( SPINVALUE,        VALUE,               SPINVALUE,         DIALOG_VISIBLE ),
+        DEF_INFO_2( SPINVALUE_MIN,    VALUEMIN,            SPINVALUE_MIN,     FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( SPINVALUE_MAX,    VALUEMAX,            SPINVALUE_MAX,     FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( DEFAULT_SPINVALUE,DEFAULTVALUE,        DEFAULT_SPINVALUE, FORM_VISIBLE ),
+        DEF_INFO_2( SPININCREMENT,    VALUESTEP,           SPININCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( SPINVALUE,        RID_STR_VALUE,              HID_PROP_SPINVALUE,                                        PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SPINVALUE_MIN,    RID_STR_VALUEMIN,           HID_PROP_SPINVALUE_MIN,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SPINVALUE_MAX,    RID_STR_VALUEMAX,           HID_PROP_SPINVALUE_MAX,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_SPINVALUE,RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULT_SPINVALUE,         PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SPININCREMENT,    RID_STR_VALUESTEP,          HID_PROP_SPININCREMENT,             PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_2( SPIN,              SPIN,               SPIN,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( REPEAT,            REPEAT,             REPEAT,            FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_2( REPEAT_DELAY,      REPEAT_DELAY,       REPEAT_DELAY,      FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( VISIBLESIZE,       VISIBLESIZE,        VISIBLESIZE,       FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( ORIENTATION,       ORIENTATION,        ORIENTATION,       FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
 
-                DEF_INFO( SPIN,             RID_STR_SPIN,               HID_PROP_SPIN,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( REPEAT,           RID_STR_REPEAT,             HID_PROP_REPEAT,                    PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( REPEAT_DELAY,     RID_STR_REPEAT_DELAY,       HID_PROP_REPEAT_DELAY,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( VISIBLESIZE,      RID_STR_VISIBLESIZE,        HID_PROP_VISIBLESIZE,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( ORIENTATION,      RID_STR_ORIENTATION,        HID_PROP_ORIENTATION,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( CLASSID,           CLASSID,            CLASSID,           FORM_VISIBLE ),
+        DEF_INFO_2( HEIGHT,            HEIGHT,             HEIGHT,            FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( WIDTH,             WIDTH,              WIDTH,             FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( POSITIONX,         POSITIONX,          POSITIONX,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( POSITIONY,         POSITIONY,          POSITIONY,         FORM_VISIBLE, DIALOG_VISIBLE ),
 
-                DEF_INFO( CLASSID,          RID_STR_CLASSID,            HID_PROP_CLASSID,                   PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( HEIGHT,           RID_STR_HEIGHT,             HID_PROP_HEIGHT,                    PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( WIDTH,            RID_STR_WIDTH,              HID_PROP_WIDTH,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( POSITIONX,        RID_STR_POSITIONX,          HID_PROP_POSITIONX,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( POSITIONY,        RID_STR_POSITIONY,          HID_PROP_POSITIONY,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
+        DEF_INFO_1( LISTINDEX,         LISTINDEX,          LISTINDEX,         FORM_VISIBLE ),
+        DEF_INFO_3( STRINGITEMLIST,    STRINGITEMLIST,     STRINGITEMLIST,    FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_1( DEFAULT_TEXT,      DEFAULTTEXT,        DEFAULTVALUE,      FORM_VISIBLE ),
+        DEF_INFO_2( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_1( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE ),
+        DEF_INFO_2( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( SYMBOLCOLOR,       SYMBOLCOLOR,        SYMBOLCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( FILLCOLOR,         FILLCOLOR,          FILLCOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( LINECOLOR,         LINECOLOR,          LINECOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( BORDER,            BORDER,             BORDER,            FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_3( DROPDOWN,          DROPDOWN,           DROPDOWN,          FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_2( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_2( WORDBREAK,         WORDBREAK,          WORDBREAK,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( MULTISELECTION,    MULTISELECTION,     MULTISELECTION,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_4( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, VIRTUAL_PROP, ENUM ),
+        DEF_INFO_2( HSCROLL,           HSCROLL,            HSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( VSCROLL,           VSCROLL,            VSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM ),
+        DEF_INFO_2( PUSHBUTTONTYPE,    PUSHBUTTONTYPE,     PUSHBUTTONTYPE,    DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_2( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, ACTUATING ),
+        DEF_INFO_1( TARGET_FRAME,      TARGET_FRAME,       TARGET_FRAME,      FORM_VISIBLE ),
+        DEF_INFO_1( SUBMIT_ACTION,     SUBMIT_ACTION,      SUBMIT_ACTION,     FORM_VISIBLE ),
+        DEF_INFO_1( SUBMIT_TARGET,     SUBMIT_TARGET,      SUBMIT_TARGET,     FORM_VISIBLE ),
+        DEF_INFO_3( SUBMIT_ENCODING,   SUBMIT_ENCODING,    SUBMIT_ENCODING,   FORM_VISIBLE, ACTUATING, ENUM ),
+        DEF_INFO_2( SUBMIT_METHOD,     SUBMIT_METHOD,      SUBMIT_METHOD,     FORM_VISIBLE, ENUM ),
+        DEF_INFO_2( STATE,             STATE,              STATE,             DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_2( DEFAULTCHECKED,    DEFAULT_CHECKED,    DEFAULT_CHECKED,   FORM_VISIBLE, ENUM ),
+        DEF_INFO_2( DEFAULTBUTTON,     DEFAULT_BUTTON,     DEFAULT_BUTTON,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( IMAGE_URL,         IMAGE_URL,          IMAGE_URL,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_3( IMAGEALIGN,        IMAGE_ALIGN,        IMAGE_ALIGN,       FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_2( SCALEIMAGE,        SCALEIMAGE,         SCALEIMAGE,        FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( DEFAULT_SELECT_SEQ,DEFAULT_SELECT_SEQ, DEFAULT_SELECT_SEQ,FORM_VISIBLE ),
+        DEF_INFO_1( SELECTEDITEMS,     SELECTEDITEMS,      SELECTEDITEMS,     DIALOG_VISIBLE ),
+        DEF_INFO_2( ECHO_CHAR,         ECHO_CHAR,          ECHO_CHAR,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( TRISTATE,          TRISTATE,           TRISTATE,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_1( HASNAVIGATION,     NAVIGATION,         NAVIGATIONBAR,     FORM_VISIBLE ),
+        DEF_INFO_1( RECORDMARKER,      RECORDMARKER,       RECORDMARKER,      FORM_VISIBLE ),
+        DEF_INFO_2( TAG,               TAG,                TAG,               FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( HELPTEXT,          HELPTEXT,           HELPTEXT,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE )
+        };
 
-                DEF_INFO( LISTINDEX,        RID_STR_LISTINDEX,          HID_PROP_LISTINDEX,                 PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( STRINGITEMLIST,   RID_STR_STRINGITEMLIST,     HID_PROP_STRINGITEMLIST,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_TEXT,     RID_STR_DEFAULTVALUE,       HID_PROP_DEFAULTVALUE,              PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( FONT_NAME,        RID_STR_FONT,               HID_PROP_FONT,                      PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( ALIGN,            RID_STR_ALIGN,              HID_PROP_ALIGN,                     PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( ROWHEIGHT,        RID_STR_ROWHEIGHT,          HID_PROP_ROWHEIGHT,                 PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( BACKGROUNDCOLOR,  RID_STR_BACKGROUNDCOLOR,    HID_PROP_BACKGROUNDCOLOR,           PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SYMBOLCOLOR,      RID_STR_SYMBOLCOLOR,        HID_PROP_SYMBOLCOLOR,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( FILLCOLOR,        RID_STR_FILLCOLOR,          HID_PROP_FILLCOLOR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( LINECOLOR,        RID_STR_LINECOLOR,          HID_PROP_LINECOLOR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( BORDER,           RID_STR_BORDER,             HID_PROP_BORDER,                    PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DROPDOWN,         RID_STR_DROPDOWN,           HID_PROP_DROPDOWN,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( AUTOCOMPLETE,     RID_STR_AUTOCOMPLETE,       HID_PROP_AUTOCOMPLETE,              PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( LINECOUNT,        RID_STR_LINECOUNT,          HID_PROP_LINECOUNT,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( MULTI,            RID_STR_MULTILINE,          HID_PROP_MULTILINE,                 PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( MULTILINE,        RID_STR_MULTILINE,          HID_PROP_MULTILINE,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( MULTISELECTION,   RID_STR_MULTISELECTION,     HID_PROP_MULTISELECTION,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( HSCROLL,          RID_STR_HSCROLL,            HID_PROP_HSCROLL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( VSCROLL,          RID_STR_VSCROLL,            HID_PROP_VSCROLL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( BUTTONTYPE,       RID_STR_BUTTONTYPE,         HID_PROP_BUTTONTYPE,                PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( PUSHBUTTONTYPE,   RID_STR_PUSHBUTTONTYPE,     HID_PROP_PUSHBUTTONTYPE,                                   PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TARGET_URL,       RID_STR_TARGET_URL,         HID_PROP_TARGET_URL,                PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( TARGET_FRAME,     RID_STR_TARGET_FRAME,       HID_PROP_TARGET_FRAME,              PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SUBMIT_ACTION,    RID_STR_SUBMIT_ACTION,      HID_PROP_SUBMIT_ACTION,             PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SUBMIT_TARGET,    RID_STR_SUBMIT_TARGET,      HID_PROP_SUBMIT_TARGET,             PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SUBMIT_METHOD,    RID_STR_SUBMIT_METHOD,      HID_PROP_SUBMIT_METHOD,             PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SUBMIT_ENCODING,  RID_STR_SUBMIT_ENCODING,    HID_PROP_SUBMIT_ENCODING,           PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( STATE,            RID_STR_STATE,              HID_PROP_STATE,                                            PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULTCHECKED,   RID_STR_DEFAULT_CHECKED,    HID_PROP_DEFAULT_CHECKED,           PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( DEFAULTBUTTON,    RID_STR_DEFAULT_BUTTON,     HID_PROP_DEFAULT_BUTTON,            PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( IMAGE_URL,        RID_STR_IMAGE_URL,          HID_PROP_IMAGE_URL,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( IMAGEALIGN,       RID_STR_ALIGN,              HID_PROP_IMAGE_ALIGN,               PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( SCALEIMAGE,       RID_STR_SCALEIMAGE,         HID_PROP_SCALEIMAGE,                PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( DEFAULT_SELECT_SEQ,RID_STR_DEFAULT_SELECT_SEQ,HID_PROP_DEFAULT_SELECT_SEQ,        PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( SELECTEDITEMS,    RID_STR_SELECTEDITEMS,      HID_PROP_SELECTEDITEMS,                                    PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( ECHO_CHAR,        RID_STR_ECHO_CHAR,          HID_PROP_ECHO_CHAR,                 PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( TRISTATE,         RID_STR_TRISTATE,           HID_PROP_TRISTATE,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( HASNAVIGATION,    RID_STR_NAVIGATION,         HID_PROP_NAVIGATIONBAR,             PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( RECORDMARKER,     RID_STR_RECORDMARKER,       HID_PROP_RECORDMARKER,              PROP_FLAG_FORM_VISIBLE                         ),
-                DEF_INFO( TAG,              RID_STR_TAG,                HID_PROP_TAG,                       PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( HELPTEXT,         RID_STR_HELPTEXT,           HID_PROP_HELPTEXT,                  PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE),
-                DEF_INFO( HELPURL,          RID_STR_HELPURL,            HID_PROP_HELPURL,                   PROP_FLAG_FORM_VISIBLE|PROP_FLAG_DIALOG_VISIBLE)
-            };
+        s_pPropertyInfos = const_cast<OPropertyInfoImpl*>(aPropertyInfos);
+        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
 
-            s_pPropertyInfos = const_cast<OPropertyInfoImpl*>(aPropertyInfos);
-            s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
+        // sort
+        qsort((void*) aPropertyInfos,
+                s_nCount,
+                sizeof(OPropertyInfoImpl),
+                &PropertyInfoCompare);
 
-            // sort
-            qsort((void*) aPropertyInfos,
-                 s_nCount,
-                 sizeof(OPropertyInfoImpl),
-                 &PropertyInfoCompare);
-
-        }
         return s_pPropertyInfos;
     }
 
@@ -343,70 +362,97 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OFormPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
+    ::std::vector< String > OFormPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
-        String sSeparatedList;
-        switch (_nId)
+        OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
+            "OFormPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
+
+        sal_Int16 nCommaSeparatedListResId = 0;
+        sal_Int16 nStringItemsResId = 0;
+        switch ( _nId )
         {
             case PROPERTY_ID_IMAGEALIGN:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SIDE_ALIGN));
+                nCommaSeparatedListResId = RID_STR_ENUM_SIDE_ALIGN;
                 break;
             case PROPERTY_ID_BORDER:
-                sSeparatedList = String(ModuleRes(RID_STR_BORDER_TYPE));
+                nCommaSeparatedListResId = RID_STR_BORDER_TYPE;
                 break;
             case PROPERTY_ID_COMMANDTYPE:
-                sSeparatedList = String(ModuleRes(RID_STR_COMMAND_TYPE));
+                nStringItemsResId = RID_RSC_ENUM_COMMAND_TYPE;
                 break;
             case PROPERTY_ID_LISTSOURCETYPE:
-                sSeparatedList = String(ModuleRes(RID_STR_LISTSOURCE_TYPE));
+                nCommaSeparatedListResId = RID_STR_LISTSOURCE_TYPE;
                 break;
             case PROPERTY_ID_ALIGN:
-                sSeparatedList = String(ModuleRes(RID_STR_ALIGNMENT));
+                nCommaSeparatedListResId = RID_STR_ALIGNMENT;
                 break;
             case PROPERTY_ID_BUTTONTYPE:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_BUTTONTYPE));
+                nCommaSeparatedListResId = RID_STR_ENUM_BUTTONTYPE;
                 break;
             case PROPERTY_ID_PUSHBUTTONTYPE:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_PUSHBUTTONTYPE));
+                nCommaSeparatedListResId = RID_STR_ENUM_PUSHBUTTONTYPE;
                 break;
             case PROPERTY_ID_SUBMIT_METHOD:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SUBMIT_METHOD));
+                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_METHOD;
                 break;
             case PROPERTY_ID_SUBMIT_ENCODING:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SUBMIT_ENCODING));
+                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_ENCODING;
                 break;
             case PROPERTY_ID_DATEFORMAT:
-                sSeparatedList = String(ModuleRes(RID_STR_DATEFORMAT_LIST));
+                nCommaSeparatedListResId = RID_STR_DATEFORMAT_LIST;
                 break;
             case PROPERTY_ID_TIMEFORMAT:
-                sSeparatedList = String(ModuleRes(RID_STR_TIMEFORMAT_LIST));
+                nCommaSeparatedListResId = RID_STR_TIMEFORMAT_LIST;
                 break;
             case PROPERTY_ID_DEFAULTCHECKED:
             case PROPERTY_ID_STATE:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_CHECKED));
+                nCommaSeparatedListResId = RID_STR_ENUM_CHECKED;
                 break;
             case PROPERTY_ID_CYCLE:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_CYCLE));
+                nCommaSeparatedListResId = RID_STR_ENUM_CYCLE;
                 break;
             case PROPERTY_ID_NAVIGATION:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_NAVIGATION));
+                nCommaSeparatedListResId = RID_STR_ENUM_NAVIGATION;
                 break;
             case PROPERTY_ID_TARGET_FRAME:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SUBMIT_TARGET));
+                nCommaSeparatedListResId = RID_STR_ENUM_SUBMIT_TARGET;
                 break;
             case PROPERTY_ID_ORIENTATION:
-                sSeparatedList = String(ModuleRes(RID_STR_ENUM_ORIENTATION));
+                nCommaSeparatedListResId = RID_STR_ENUM_ORIENTATION;
                 break;
             case PROPERTY_ID_CELL_EXCHANGE_TYPE:
-                sSeparatedList = String( ModuleRes( RID_STR_ENUM_CELL_EXCHANGE_TYPE ) );
+                nCommaSeparatedListResId = RID_STR_ENUM_CELL_EXCHANGE_TYPE;
                 break;
+            case PROPERTY_ID_SHOW_SCROLLBARS:
+                nStringItemsResId = RID_RSC_ENUM_SCROLLBARS;
+                break;
+            default:
+                OSL_ENSURE( sal_False, "OFormPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
         }
 
-        sal_Int32 nTokens = sSeparatedList.GetTokenCount(';');
-        Sequence< ::rtl::OUString > aReturn(nTokens);
-        ::rtl::OUString* pReturn = aReturn.getArray();
-        for (sal_Int32 i=0; i<nTokens; ++i, ++pReturn)
-            *pReturn = sSeparatedList.GetToken((sal_uInt16)i);
+        ::std::vector< String > aReturn;
+
+        if ( nCommaSeparatedListResId )
+        {
+            String sSeparatedList = String( ModuleRes( nCommaSeparatedListResId ) );
+            xub_StrLen nTokens = sSeparatedList.GetTokenCount(';');
+            aReturn.reserve( nTokens );
+            for ( xub_StrLen i = 0; i < nTokens; ++i )
+                aReturn.push_back( sSeparatedList.GetToken( i ) );
+        }
+        else if ( nStringItemsResId )
+        {
+            ModuleRes aResId( nStringItemsResId );
+            ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
+
+            sal_Int16 i = 1;
+            ResId aLocalId( i );
+            while ( aEnumStrings.IsAvailableRes( aLocalId.SetRT( RSC_STRING ) ) )
+            {
+                aReturn.push_back( String( aLocalId ) );
+                aLocalId = ResId( ++i );
+            }
+        }
 
         return aReturn;
     }
