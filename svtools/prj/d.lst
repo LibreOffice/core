@@ -27,8 +27,11 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\bin\svt?????.sym %_DEST%\bin%_EXT%\svt?????.sym
 ..\%__SRC%\bin\svl?????.dll %_DEST%\bin%_EXT%\svl?????.dll
 ..\%__SRC%\bin\bmp.* %_DEST%\bin%_EXT%\bmp.*
+..\%__SRC%\bin\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
 ..\%__SRC%\bin\bmp %_DEST%\bin%_EXT%\bmp
+..\%__SRC%\bin\bmpgui %_DEST%\bin%_EXT%\bmpgui
 ..\%__SRC%\res\bmp.* %_DEST%\bin%_EXT%\bmp.*
+..\%__SRC%\res\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
 ..\%__SRC%\misc\svt?????.map %_DEST%\bin%_EXT%\svt?????.map
 ..\%__SRC%\lib\libsvt?????.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\libsvl?????.so %_DEST%\lib%_EXT%\*

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.16 $
+#*  $Revision: 1.17 $
 #*
-#*  last change: $Author: kz $ $Date: 2001-05-09 14:58:27 $
+#*  last change: $Author: ka $ $Date: 2001-05-10 13:57:54 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -260,6 +260,26 @@ DEF2NAME=	$(SHL2TARGET)
 DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt $(SLB)$/svl.lib
 DEFLIB2NAME=svl
 DEF2DES =SvTools lite
+
+# --- bmpgui application --------------------------------------------------
+
+APP1TARGET	=	bmpgui
+APP1BASE	=	0x10000000
+APP1DEPN	=   $(L)$/itools.lib  $(SVLIBDEPEND)
+APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
+                $(OBJ)$/bmpcore.obj	
+            
+APP1STDLIBS	=	$(SVLIB)		\
+                $(TOOLSLIB)		\
+                $(VOSLIB) 		\
+                $(SALLIB)
+
+.IF "$(GUI)"!="UNX"
+APP1STDLIBS+= svtool.lib
+.ELSE
+APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
+APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
