@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:41:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,11 +1271,11 @@ String STR_COLL_HEADER
     TEXT[ chinese_simplified ] = "(ÑùÊ½£º ";
     TEXT[ russian ] = "(Øàáëîí:  ";
     TEXT[ polish ] = "(Szablon:   ";
-    TEXT[ japanese ] = "(ÃİÌßÚ°Ä: ";
+    TEXT[ japanese ] = " (ÃİÌßÚ°ÄF ";
     TEXT[ chinese_traditional ] = "(¼Ë¦¡¡G ";
     TEXT[ arabic ] = "(ÇáŞÇáÈ: ";
     TEXT[ greek ] = "(Ğñüôõğï: ";
-    TEXT[ korean ] = " (ÅÛÇÃ¸´: ";
+    TEXT[ korean ] = " ( ¼­½ÄÆÄÀÏ: ";
     TEXT[ turkish ] = "(Şablon: ";
     TEXT[ language_user1 ] = " ";
 };
