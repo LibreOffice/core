@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:46:04 $
+#   last change: $Author: hr $ $Date: 2003-04-28 17:13:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,7 +145,7 @@ APP1STDLIBS+=-lC
 
 .INCLUDE :  target.mk
 
-.IF "$(OS)$(CPU)"=="SOLARISS" || "$(OS)$(CPU)"=="NETBSDS"
+.IF "$(OS)$(CPU)"=="SOLARISS" || "$(OS)$(CPU)"=="NETBSDS" || "$(OS)$(CPU)"=="LINUXS"
 
 $(SLO)$/interlck.obj: $(SLO)$/interlck.o
      touch $(SLO)$/interlck.obj
