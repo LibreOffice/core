@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:31:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
@@ -306,7 +309,7 @@ IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter
 // -----------------------------------------------------------------------------
 void ODBExport::exportDataSource()
 {
-    Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xProp(getDataSource());
     if ( xProp.is() )
     {
         ::rtl::OUString sValue;
@@ -589,7 +592,7 @@ void ODBExport::exportSequence(const Sequence< ::rtl::OUString>& _aValue
                             ,::xmloff::token::XMLTokenEnum _eTokenFilter
                             ,::xmloff::token::XMLTokenEnum _eTokenType)
 {
-    Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xProp(getDataSource());
     Sequence< ::rtl::OUString> aValue;
     if ( _aValue.getLength() )
     {
@@ -607,7 +610,7 @@ void ODBExport::exportSequence(const Sequence< ::rtl::OUString>& _aValue
 // -----------------------------------------------------------------------------
 void ODBExport::exportLogin()
 {
-    Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xProp(getDataSource());
     ::rtl::OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
     if ( sValue.getLength() )
@@ -842,7 +845,7 @@ void ODBExport::exportReports()
 // -----------------------------------------------------------------------------
 void ODBExport::exportQueries(sal_Bool _bExportContext)
 {
-    Reference<XQueryDefinitionsSupplier> xSup(GetModel(),UNO_QUERY);
+    Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
     if ( xSup.is() )
     {
         Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
@@ -861,7 +864,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
 // -----------------------------------------------------------------------------
 void ODBExport::exportTables(sal_Bool _bExportContext)
 {
-    Reference<XTablesSupplier> xSup(GetModel(),UNO_QUERY);
+    Reference<XTablesSupplier> xSup(getDataSource(),UNO_QUERY);
     if ( xSup.is() )
     {
         Reference< XNameAccess > xCollection = xSup->getTables();
@@ -969,7 +972,7 @@ sal_uInt32 ODBExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
 // -----------------------------------------------------------------------------
 void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
-    Reference<XQueryDefinitionsSupplier> xSup(GetModel(),UNO_QUERY);
+    Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
     if ( xSup.is() )
     {
         Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
@@ -1007,7 +1010,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 // -----------------------------------------------------------------------------
 void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
 {
-    Reference<XPropertySet> xProp(GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xProp(getDataSource());
     if ( xProp.is() )
     {
         sal_Int32 nLength = aProps.getLength();
@@ -1081,8 +1084,10 @@ SvXMLAutoStylePoolP* ODBExport::CreateAutoStylePool()
 // -----------------------------------------------------------------------------
 void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException)
 {
-    Reference<XPropertySet> xProp(xDoc,UNO_QUERY);
-    Reference< XNumberFormatsSupplier > xNum(xProp->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
+    Reference<XOfficeDatabaseDocument> xOfficeDoc(xDoc,UNO_QUERY_THROW);
+    m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
+    OSL_ENSURE(m_xDataSource.is(),"DataSource is NULL!");
+    Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
     SetNumberFormatsSupplier(xNum);
     SvXMLExport::setSourceDocument(xDoc);
 }
