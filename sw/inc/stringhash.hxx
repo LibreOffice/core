@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringhash.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-11 16:02:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@ struct StringHash
             h = (h*39) + *(pEndStr++);
         }
         return h;
+    }
+
+    size_t operator() (const String & rStr) const
+    {
+        return (*this)(&rStr);
     }
 };
 
