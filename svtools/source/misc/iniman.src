@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  $RCSfile: iniman.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svtools.hrc"
+
+ErrorBox ERRBOX_CHECK_PLZ
+{
+    BUTTONS = WB_OK ;
+    Message = "Die eingegebene Postleitzahl ist ungültig.\nSie muss mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
+    Message [ English ] = "Die eingegebene Postleitzahl ist ungültig.\nSie muß mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
+    Message[ italian ] = "Il C.A.P. specificato non è valido.\nDeve iniziare con un numero o con una lettera e\npuò contenere soltanto numeri, lettere, spazi vuoti e trattini.";
+    Message[ portuguese_brazilian ] = "Die eingegebene Postleitzahl ist ungültig.\nSie muß mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
+    Message[ portuguese ] = "O código postal especificado está incorrecto.\nEste tem que começar por um algarismo ou uma letra e só pode conter algarismos, letras, espaços em branco e hífens.";
+    Message[ danish ] = "Det angivne postnummer er ugyldigt.\nDet skal begynde med et tal eller bogstav og\nmå kun indeholde tal, bogstaver, mellemrum og bindestreger.";
+    Message[ french ] = "Le code postal indiqué est incorrect.\nIl doit commencer par un chiffre ou une lettre et\ncontenir uniquement des chiffres, lettres, espaces ou traits d'union.";
+    Message[ swedish ] = "Det angivna postnumret är ogiltigt.\nDet måste börja med en siffra eller en bokstav och\nfår bara innehålla siffror, bokstäver, mellanslag och bindestreck.";
+    Message[ dutch ] = "Deze postcode is ongeldig.\nMoet beginnen met een cijfer of een letter en\nmag alleen cijfers, letters, spaties en verbindingsstreepjes bevatten.";
+    Message[ spanish ] = "El código postal indicado no es válido.\nDebe comenzar con un número o una letra y\nsolo puede contener números, letras, espacios y guiones.";
+    Message[ english_us ] = "The ZIP code specified is invalid.\nA ZIP code should begin with a number (or in some cases a letter) and\ncan only contain numbers, letters, spaces and dashes.";
+    Message[ chinese_simplified ] = "ÄúÊäÈëµÄÓÊÕş±àÂëÎŞĞ§¡£\nÓÊÕş±àÂë±ØĞëÓÉÒ»¸öÊı×Ö»òÒ»¸ö×ÖÄ¸¿ªÍ·£¬\nÇÒÖ»ÄÜ¹»°üº¬Êı×Ö£¬×ÖÄ¸£¬¿Õ¸ñ·ûºÍÁ¬×Ö·û¡£";
+    Message[ russian ] = "Ââåäåííûé ïî÷òîâûé èíäåêñ íåïğàâèëåí.\nÎí äîëæåí íà÷èíàòüñÿ ñ öèôğû èëè áóêâû è\nìîæåò ñîäåğæàòü òîëüêî öèôğû, áóêâû, ïğîáåëû è ğàçäåëèòåëüíûå øòğèõè.";
+    Message[ polish ] = "Wpisany kod pocztowy jest nieprawid³owy.\nMusi siê on zaczynaæ cyfr¹ lub liter¹ i \nmo¿e zawieraæ tylko cyfry, litery, spacje i kreski.";
+    Message[ japanese ] = "“ü—Í‚µ‚½—X•Ö”Ô†‚Í•s“KØ‚Å‚·B\n”š‚Ü‚½‚Í•¶š‚Ån‚ß‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñ\n”š‚Æ•¶š‚Æ½Íß°½‚¨‚æ‚ÑÀŞ¯¼­‚Ì‚İg—p‚Å‚«‚Ü‚·B";
+    Message[ arabic ] = "ÇáÑãÒ ÇáÈÑíÏí ¡ÇáĞí ŞãÊ ÈÅÏÎÇáå¡ ÛíÑ ÕÇáÍ.\níÌÈ Ãä íÈÏÃ ÈÑŞã Ãæ ÈÍÑİ¡\næíÌÈ Ãä íÍÊæí İŞØ Úáì ÃÑŞÇã¡ ÃÍÑİ¡ ÃÍÑİ ãÓÇİÉ¡ æÔÑØ İÇÕáÉ.";
+    Message[ chinese_traditional ] = "±z¿é¤Jªº¶l»¼°Ï¸¹µL®Ä¡C\n¶l»¼°Ï¸¹¥²¶·¥Ñ¤@­Ó¼Æ¦r©Î¤@­Ó¦r¥À¶}©l¡A\n¦Ó¥B¥u¯à¬O¼Æ¦r¡A¦r¥À¡AªÅ®æ©M³s¦r²Å¡C";
+    Message[ greek ] = "Ï ôá÷õäñïìéêüò êùäéêüò ğïõ åéóÜãáôå äåí åßíáé İãêõñïò.\nĞñİğåé íá îåêéíÜ ìå İíá øçößï Ş ìå İíá ãñÜììá êáé\nìğïñåß íá ğåñéİ÷åé ìüíï øçößá, ãñÜììáôá, êåíÜ êáé äéá÷ùñéóôéêİò ãñáììİò.";
+    Message[ korean ] = "ÀÔ·ÂÇÑ ¿ìÆí¹øÈ£°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.\n¿ìÆí¹øÈ£´Â ¼ıÀÚ³ª ¾ËÆÄºªÀ¸·Î ½ÃÀÛÇØ¾ß ÇÏ¸ç \n¼ıÀÚ³ª ¾ËÆÄºª, ½ºÆäÀÌ½º ±×¸®°í ´ë½Ã·Î¸¸ ÀÌ·ç¾îÁ®¾ß ÇÕ´Ï´Ù.";
+    Message[ turkish ] = "Girilen posta kodu geçerli değil.\nPosta kodu bir rakam ya da harf ile başlamalı ve yalnızca\nrakam, harf, boşluk ve ayırma çizgileri içermeli.";
+    Message[ language_user1 ] = " ";
+};
+
+
