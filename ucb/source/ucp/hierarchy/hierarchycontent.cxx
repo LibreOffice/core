@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-02 10:28:47 $
+ *  last change: $Author: kso $ $Date: 2000-12-04 11:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ void HierarchyContent::setPropertyValues(
     if ( nChanged > 0 )
     {
         // Save changes, if content was already made persistent.
-        if ( m_eState == PERSISTENT )
+        if ( !bExchange && ( m_eState == PERSISTENT ) )
             storeData();
 
         aChanges.realloc( nChanged );

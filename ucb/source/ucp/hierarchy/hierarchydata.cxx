@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-28 11:09:16 $
+ *  last change: $Author: kso $ $Date: 2000-12-04 11:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
  *************************************************************************/
 
+// Commit every single write operation vs. commit multiple write operations
+#define MULTI_COMMIT
+
 #ifndef _HIERARCHYDATA_HXX
 #include "hierarchydata.hxx"
 #endif
@@ -129,17 +132,8 @@ struct HierarchyEntry::iterator_Impl
 //=========================================================================
 //=========================================================================
 
-#if SUPD>604
-
 #define HIERARCHY_ROOT_DB_KEY           "/org.openoffice.ucb.Hierarchy/Root"
 #define HIERARCHY_ROOT_DB_KEY_LENGTH    34
-
-#else
-
-#define HIERARCHY_ROOT_DB_KEY           "/com.sun.star.ucb.Hierarchy/Root"
-#define HIERARCHY_ROOT_DB_KEY_LENGTH    32
-
-#endif
 
 //=========================================================================
 HierarchyEntry::HierarchyEntry( const Reference< XMultiServiceFactory >& rSMgr,
@@ -514,10 +508,10 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
                         xContainer->insertByName(
                                             aKey, makeAny( xNameReplace ) );
 
-        // SEE BELOW! At the moment, each single change must be committed.
-
+#ifndef MULTI_COMMIT
                     // Commit changes.
                     xBatch->commitChanges();
+#endif
 
 #if 0
     // Doesn't work. According to FS possibly never will ...
@@ -551,7 +545,7 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
                                     UNO_QUERY );
 
                             VOS_ENSURE( xRootHierAccess.is(),
-                                        "HierarchyEntry::getData - No root!" );
+                                        "HierarchyEntry::setData - No root!" );
 
                             if ( xRootHierAccess.is() )
                             {
@@ -640,9 +634,7 @@ sal_Bool HierarchyEntry::setData( const OUString& rOldPath,
                     }
 #endif
 
-#if 0
-    // Transaction with more then one change do not work at the moment!!!
-
+#ifdef MULTI_COMMIT
                     if ( !rxBatch.is() )
                     {
                         // Commit changes.
@@ -716,29 +708,28 @@ sal_Bool HierarchyEntry::setData(
 //=========================================================================
 sal_Bool HierarchyEntry::move( const OUString& rNewURL )
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     OUString aNewPath = createPathFromHierarchyURL( rNewURL );
 
     if ( aNewPath == m_aPath )
         return sal_True;
 
+#if 0
+       // In the "near future"... ( not yet implemented in config db )
+
+       - get update access for m_aPath
+       - update access -> XNamed
+       - xNamed::setName( newName )
+       - updateaccess commit
+#else
     if ( aNewPath.compareTo( m_aPath, aNewPath.lastIndexOf( '/' ) + 1 ) != 0 )
     {
         VOS_ENSURE( sal_False,
-                    "HierarchyEntry::move - "
-                    "Only move inside one directory allowed!" );
+                    "HierarchyEntry::move - Only rename implemented!" );
         return sal_False;
     }
 
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-#if 0
-    // In the near future...
-
-    - get update access for m_aPath
-    - update access -> XNamed
-    - xNamed::setName( newName )
-    - updateaccess commit
-#else
     //////////////////////////////////////////////////////////////////////
     // (1) Get old entry...
     //////////////////////////////////////////////////////////////////////
@@ -751,9 +742,10 @@ sal_Bool HierarchyEntry::move( const OUString& rNewURL )
         // (2) Insert entry at new location. Fail, if another entry with
         //     same key already exists...
         //////////////////////////////////////////////////////////////////
+        aTitle <<= aNewPath.copy( aNewPath.lastIndexOf( '/' ) + 1 );
         if ( setData( m_aPath,     // old path
                       aNewPath,    // new path
-                      aTitle,
+                      aTitle,      // new title
                       aTargetURL,
                       sal_True,    // create, if not exists
                       sal_True,    // fail, if exists
