@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:07:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,10 +489,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 --------------------------------------------------*/
 int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *pSet)
 {
-    if(pOutlineDlg)
-        pOutlineDlg->SetActNumLevel(nActNumLvl);
-//  else
-//      ((SwNumBulletTabDialog*)GetTabDialog())->SetActNumLevel(nActNumLvl);
+    SwOutlineTabDialog::SetActNumLevel(nActNumLvl);
     if(pSet)
         FillItemSet(*pSet);
     return TRUE;
@@ -529,9 +526,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
     else if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_ACT_NUMBER, FALSE, &pItem))
         pSaveNum = ((SwUINumRuleItem*)pItem)->GetNumRule();
 
-    nActNumLvl =
-        pOutlineDlg ? pOutlineDlg->GetActNumLevel() : 0;
-//      ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
+    nActNumLvl = SwOutlineTabDialog::GetActNumLevel();
     USHORT nMask = 1;
     aLevelLB.SetUpdateMode(FALSE);
     aLevelLB.SetNoSelection();
