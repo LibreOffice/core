@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-26 11:55:26 $
+ *  last change: $Author: pl $ $Date: 2001-07-03 16:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2419,30 +2419,42 @@ IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 {
     Display        *pDisplay   = pEvent->display;
-    XLIB_Window     hWM_Parent = pEvent->parent;
+    XLIB_Window     hWM_Parent;
     XLIB_Window     hRoot, *Children, hDummy;
     unsigned int    nChildren, n;
     BOOL            bNone = pDisplay_->GetProperties()
                             & PROPERTY_SUPPORT_WM_Parent_Pixmap_None;
     static const char* pDisableStackingCheck = getenv( "SAL_DISABLE_STACKING_CHECK" );
 
+    /*
+     *  #89186# don't rely on the new parent from the event.
+     *  the event may be "out of date", that is the window manager
+     *  window may not exist anymore. This can happen if someone
+     *  shows a frame and hides it again quickly (not that that would
+     *  be very sensible)
+     */
+    hWM_Parent = GetShellWindow();
+    do
+    {
+        XQueryTree( pDisplay,
+                    hWM_Parent,
+                    &hRoot,
+                    &hDummy,
+                    &Children,
+                    &nChildren );
+        if( hDummy != hRoot )
+        {
+            hWM_Parent = hDummy;
+            if( bNone )
+                XSetWindowBackgroundPixmap( pDisplay, hWM_Parent, None );
+        }
+        if( Children )
+            XFree( Children );
+    } while( hDummy != hRoot );
+
     if( hStackingWindow_ == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
     {
         hStackingWindow_ = hWM_Parent;
-        do
-        {
-            XQueryTree( pDisplay,
-                        hStackingWindow_,
-                        &hRoot,
-                        &hDummy,
-                        &Children,
-                        &nChildren );
-            if( hDummy != hRoot )
-                hStackingWindow_ = hDummy;
-            if( Children )
-                XFree( Children );
-        } while( hDummy != hRoot );
-
         XSelectInput( pDisplay, hStackingWindow_, StructureNotifyMask );
     }
 
@@ -2455,26 +2467,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
         return 0;
     }
 
-    if( !pEvent->x && !pEvent->y )
-    {
-        if( bNone )
-            XSetWindowBackgroundPixmap( pDisplay, hWM_Parent, None );
-
-        XQueryTree( GetXDisplay(),
-                    hWM_Parent,
-                    &hRoot,
-                    &hWM_Parent,
-                    &Children,
-                    &nChildren );
-
-        XFree( Children );
-    }
-
-    if( hWM_Parent == hRoot )
-        hWM_Parent = pEvent->parent;
-    else if( bNone )
-        XSetWindowBackgroundPixmap( pDisplay, hWM_Parent, None );
-
+#ifdef NC_EVENTS
     XQueryTree( pDisplay,
                 hWM_Parent,
                 &hRoot,
@@ -2492,12 +2485,12 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
         pDisplay_->PrintEvent( "HandleReparentEvent", (XEvent*)pEvent );
     }
 #endif
-#ifdef NC_EVENTS
     for( n = 0; n < nChildren; n++ )
         if( Children[n] != hShell_ && Children[n] != pEvent->parent )
             XSelectInput( pDisplay, Children[n], NC_EVENTS );
-#endif
     XFree( Children );
+#endif
+
     if( !XTranslateCoordinates( GetXDisplay(),
                                 XtWindow( hShell_ ),
                                 hWM_Parent,
