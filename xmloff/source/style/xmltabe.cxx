@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,12 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     // leader-char
     if( ' ' != pTabStop->FillChar && 0 != pTabStop->FillChar )
     {
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_STYLE,
+                      GetXMLToken('.' == pTabStop->FillChar ? XML_DOTTED
+                                                               : XML_SOLID) );
+
         sBuffer.append( pTabStop->FillChar );
-        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_CHAR,
+        rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEADER_TEXT,
                                sBuffer.makeStringAndClear() );
     }
 
