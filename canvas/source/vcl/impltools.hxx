@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impltools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:13:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 11:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,21 +128,21 @@ namespace com { namespace sun { namespace star { namespace drawing
     struct HomogenMatrix3;
 } } } }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace geometry
+namespace com { namespace sun { namespace star { namespace geometry
 {
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
-} } } } }
+} } } }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     struct RenderState;
     struct ViewState;
     class  XCanvas;
     class  XBitmap;
     class  XPolyPolygon2D;
-} } } } }
+} } } }
 
 
 namespace vclcanvas
@@ -151,11 +151,11 @@ namespace vclcanvas
     {
         ::basegfx::B2DPolyPolygon
         polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
-                                       ::drafts::com::sun::star::rendering::XPolyPolygon2D >& );
+                                       ::com::sun::star::rendering::XPolyPolygon2D >& );
 
         ::BitmapEx
         bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
-                             ::drafts::com::sun::star::rendering::XBitmap >& );
+                             ::com::sun::star::rendering::XBitmap >& );
 
         /** Setup VCL font and output position
 
@@ -163,8 +163,8 @@ namespace vclcanvas
          */
         bool setupFontTransform( ::Point&                                                   o_rPoint,
                                  ::Font&                                                    io_rVCLFont,
-                                 const ::drafts::com::sun::star::rendering::ViewState&      viewState,
-                                 const ::drafts::com::sun::star::rendering::RenderState&    renderState,
+                                 const ::com::sun::star::rendering::ViewState&      viewState,
+                                 const ::com::sun::star::rendering::RenderState&    renderState,
                                  ::OutputDevice&                                            rOutDev );
 
 
@@ -229,13 +229,13 @@ namespace vclcanvas
             const bool      mbMappingWasEnabled;
         };
 
-        ::Point mapRealPoint2D( const ::drafts::com::sun::star::geometry::RealPoint2D&  rPoint,
-                                const ::drafts::com::sun::star::rendering::ViewState&   rViewState,
-                                const ::drafts::com::sun::star::rendering::RenderState& rRenderState );
+        ::Point mapRealPoint2D( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
+                                const ::com::sun::star::rendering::ViewState&   rViewState,
+                                const ::com::sun::star::rendering::RenderState& rRenderState );
 
         ::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
-                                      const ::drafts::com::sun::star::rendering::ViewState&     rViewState,
-                                      const ::drafts::com::sun::star::rendering::RenderState&   rRenderState );
+                                      const ::com::sun::star::rendering::ViewState&     rViewState,
+                                      const ::com::sun::star::rendering::RenderState&   rRenderState );
 
         enum ModulationMode
         {
@@ -244,8 +244,8 @@ namespace vclcanvas
         };
 
         ::BitmapEx transformBitmap( const BitmapEx&                                         rBitmap,
-                                    const ::drafts::com::sun::star::rendering::ViewState&   rViewState,
-                                    const ::drafts::com::sun::star::rendering::RenderState& rRenderState,
+                                    const ::com::sun::star::rendering::ViewState&   rViewState,
+                                    const ::com::sun::star::rendering::RenderState& rRenderState,
                                     ModulationMode                                          eModulationMode=MODULATE_NONE );
 
     }
