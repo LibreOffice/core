@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-28 18:23:05 $
+ *  last change: $Author: sj $ $Date: 2000-11-29 14:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,8 +409,8 @@ const String* Collection::GetById( sal_uInt32 nId )
 
 sal_uInt32 ConnectorListEntry::GetClosestPoint( const Polygon& rPoly, const ::com::sun::star::awt::Point& rPoint )
 {
-    sal_uInt32 nCount = rPoly.GetSize();
-    sal_uInt32 nClosest = nCount;
+    sal_uInt16 nCount = rPoly.GetSize();
+    sal_uInt16 nClosest = nCount;
     double fDist = (sal_uInt32)0xffffffff;
     while( nCount-- )
     {
@@ -786,7 +786,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
 
     if ( pStrm )
     {
-        pStrm->SeekRel( - ( nSize - 4 ) );
+        pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
         *pStrm << (sal_uInt32)( nSize - 8 );
         pStrm->SeekRel( nSize - 8 );
     }
@@ -808,7 +808,7 @@ sal_uInt32 PPTWriter::ImplProgTagContainer( SvStream* pStrm, SvMemoryStream* pBi
         nSize += ImplProgBinaryTagContainer( pStrm, pBinTagStrm );
         if ( pStrm )
         {
-            pStrm->SeekRel( - ( nSize - 4 ) );
+            pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
             *pStrm << (sal_uInt32)( nSize - 8 );
             pStrm->SeekRel( nSize - 8 );
         }
@@ -834,7 +834,7 @@ sal_uInt32 PPTWriter::ImplDocumentListContainer( SvStream* pStrm )
 
     if ( pStrm )
     {
-        pStrm->SeekRel( - ( nSize - 4 ) );
+        pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
         *pStrm << (sal_uInt32)( nSize - 8 );
         pStrm->SeekRel( nSize - 8 );
     }
@@ -974,7 +974,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
             mp_EscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
             const String* pEntry = maFontCollection.GetById( i );
             sal_uInt32 nFontLen = pEntry->Len();
-            for ( sal_uInt32 n = 0; n < 34; n++ )
+            for ( sal_uInt16 n = 0; n < 34; n++ )
             {
                 sal_Unicode nUniCode = 0;
                 if ( ( n < 31 ) && ( n < nFontLen ) )
@@ -1048,7 +1048,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                             *mpStrm << pSoundFile->GetChar( k ) << (sal_uInt8)0;
                                     }
                                 }
-                                ByteString aString( i + 1 );
+                                ByteString aString( ByteString::CreateFromInt32( i + 1 ) );
                                 mp_EscherEx->AddAtom( aString.Len() * 2, EPP_CString, 0, 2 );
                                 for ( k = 0; k < aString.Len(); k++ )
                                     *mpStrm << aString.GetChar( k ) << (sal_uInt8)0;
@@ -1406,7 +1406,7 @@ void PPTWriter::ImplWriteLineBundle( sal_Bool bEdge )
                 {
                     _Escher_LineDashing eDash = _Escher_LineSolid;
                     ::com::sun::star::drawing::LineDash* pLineDash = (::com::sun::star::drawing::LineDash*)mAny.getValue();
-                    sal_uInt32 nDistance = pLineDash->Distance << 1;
+                    sal_Int32 nDistance = pLineDash->Distance << 1;
                     switch ( pLineDash->Style )
                     {
                         case ::com::sun::star::drawing::DashStyle_ROUND :
@@ -1416,7 +1416,7 @@ void PPTWriter::ImplWriteLineBundle( sal_Bool bEdge )
                     }
                     if ( ((!(pLineDash->Dots )) || (!(pLineDash->Dashes )) ) || ( pLineDash->DotLen == pLineDash->DashLen ) )
                     {
-                        sal_uInt32 nLen = pLineDash->DotLen;
+                        sal_Int32 nLen = pLineDash->DotLen;
                         if ( pLineDash->Dashes )
                             nLen = pLineDash->DashLen;
 
@@ -1550,49 +1550,53 @@ void PPTWriter::ImplWriteTextBundle( sal_Bool bDisableAutoGrowHeight )
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextVerticalAdjust" ) ) ) )
         {
             ::com::sun::star::drawing::TextVerticalAdjust eVA;
-            mAny >>= eVA;
-            switch ( eVA )
+            if ( mAny >>= eVA )
             {
-                case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
-                    eAnchor = _Escher_AnchorMiddle;
-                break;
+                switch ( eVA )
+                {
+                    case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
+                        eAnchor = _Escher_AnchorMiddle;
+                    break;
 
-                case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
-                    eAnchor = _Escher_AnchorBottom;
-                break;
+                    case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
+                        eAnchor = _Escher_AnchorBottom;
+                    break;
 
-                default :
-                case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
-                    eAnchor = _Escher_AnchorTop;
-                break;
+                    default :
+                    case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
+                        eAnchor = _Escher_AnchorTop;
+                    break;
+                }
             }
         }
         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "TextHorizontalAdjust" ) ) ) )
         {
             ::com::sun::star::drawing::TextHorizontalAdjust eTA;
-            mAny >>= eTA;
-            switch ( eTA )
+            if ( mAny >>= eTA )
             {
-                case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
+                switch ( eTA )
                 {
-                    switch( eAnchor )
+                    case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
                     {
-                        case _Escher_AnchorMiddle :
-                            eAnchor = _Escher_AnchorMiddleCentered;
-                        break;
-                        case _Escher_AnchorBottom :
-                            eAnchor = _Escher_AnchorBottomCentered;
-                        break;
-                        case _Escher_AnchorTop :
-                            eAnchor = _Escher_AnchorTopCentered;
-                        break;
+                        switch( eAnchor )
+                        {
+                            case _Escher_AnchorMiddle :
+                                eAnchor = _Escher_AnchorMiddleCentered;
+                            break;
+                            case _Escher_AnchorBottom :
+                                eAnchor = _Escher_AnchorBottomCentered;
+                            break;
+                            case _Escher_AnchorTop :
+                                eAnchor = _Escher_AnchorTopCentered;
+                            break;
+                        }
                     }
+                    break;
+                    case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
+                    case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
+                    case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
+                    break;
                 }
-                break;
-                case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
-                case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
-                case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
-                break;
             }
         }
 /*
@@ -1994,13 +1998,13 @@ void PPTWriter::ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoi
     double  fCos = cos( (double)mnAngle * F_PI18000 );
     double  fSin = sin( (double)mnAngle * F_PI18000 );
 
-    double  nWidthHalf = maRect.GetWidth() / 2;
-    double  nHeightHalf = maRect.GetHeight() / 2;
+    double  fWidthHalf = maRect.GetWidth() / 2;
+    double  fHeightHalf = maRect.GetHeight() / 2;
 
-    sal_Int32 nXDiff = fCos * nWidthHalf + fSin * (-nHeightHalf);
-    sal_Int32 nYDiff = - ( fSin * nWidthHalf - fCos * ( -nHeightHalf ) );
+    double  fXDiff = fCos * fWidthHalf + fSin * (-fHeightHalf);
+    double  fYDiff = - ( fSin * fWidthHalf - fCos * ( -fHeightHalf ) );
 
-    maRect.Move( -( nWidthHalf - nXDiff ), - ( nHeightHalf + nYDiff ) );
+    maRect.Move( (sal_Int32)( -( fWidthHalf - fXDiff ) ), (sal_Int32)(  - ( fHeightHalf + fYDiff ) ) );
 
     if ( ( mnAngle > 4500 && mnAngle <= 13500 ) || ( mnAngle > 22500 && mnAngle <= 31500 ) )
     {
@@ -2008,7 +2012,7 @@ void PPTWriter::ImplFlipBoundingBox( const ::com::sun::star::awt::Point& rRefPoi
         // BoundingBox bereits senkrecht. Daher muss diese VOR
         // DER ROTATION flachgelegt werden.
         ::com::sun::star::awt::Point
-            aTopLeft( maRect.Left() + nWidthHalf - nHeightHalf, maRect.Top() + nHeightHalf - nWidthHalf );
+            aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ), (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
         Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
         maRect = Rectangle( Point( aTopLeft.X, aTopLeft.Y ), aNewSize );
     }
@@ -2574,7 +2578,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
             const ::com::sun::star::beans::PropertyValue* pPropValue = aPropertySequence.getArray();
 
-            sal_Int16 nCount = aPropertySequence.getLength();
+            sal_Int32 nCount = aPropertySequence.getLength();
             if ( nCount )
             {
                 bExtendedParameters = TRUE;
@@ -2586,9 +2590,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                 nMappedNumType = 0;
 
-                for ( sal_Int16 i = 0; i < nCount; i++ )
+                for ( sal_Int32 i = 0; i < nCount; i++ )
                 {
-                    sal_Int16 nQuickIndex = i;
+                    sal_Int32 nQuickIndex = i;
 
                     const void* pValue = pPropValue[ i ].Value.getValue();
                     if ( pValue )
@@ -2733,8 +2737,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             {
                                 if ( aPropName == "LeftMargin" )
                                 {
-                                    nTextOfs = *( (sal_Int32*)pValue );
-                                    nTextOfs /= 4.40972;
+                                    nTextOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
                                     continue;
                                 }
                             }
@@ -2743,8 +2746,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             {
                                 if ( aPropName == "FirstLineOffset" )
                                 {
-                                    nBulletOfs = *( (sal_Int32*)pValue );
-                                    nBulletOfs /= 4.40972;
+                                    nBulletOfs = (sal_Int16)( *( (sal_Int32*)pValue ) / 4.40972 );
                                     continue;
                                 }
                             }
@@ -2785,18 +2787,18 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     nBulletRealSize = 100;
                     if ( aBuGraSize.Width() && aBuGraSize.Height() )
                     {
-                        sal_Int32 nCharHeight = 24;
+                        double fCharHeight = 24;
                         PortionObj* pPortion = (PortionObj*)First();
                         if ( pPortion )
-                            nCharHeight = pPortion->mnCharHeight;
+                            fCharHeight = pPortion->mnCharHeight;
 
-                        sal_Int32 nLen = aBuGraSize.Width();
-                        if ( aBuGraSize.Height() > nLen )
-                            nLen = aBuGraSize.Height();
+                        double fLen = aBuGraSize.Width();
+                        if ( aBuGraSize.Height() > fLen )
+                            fLen = aBuGraSize.Height();
 
-                        nCharHeight = (double)nCharHeight * 25.40;
-                        double fQuo = (double)nLen / (double)nCharHeight;
-                        nBulletRealSize = 100 * fQuo;
+                        fCharHeight = fCharHeight * 25.40;
+                        double fQuo = fLen / fCharHeight;
+                        nBulletRealSize = (sal_Int16)( 100 * fQuo );
                         if ( (sal_uInt16)nBulletRealSize > 400 )
                             nBulletRealSize = 400;
                     }
@@ -3172,7 +3174,7 @@ void TextObj::Write( SvStream* pStrm )
     for ( void* pPtr = First(); pPtr; pPtr = Next() )
         ((ParagraphObj*)pPtr)->Write( pStrm );
     nSize = pStrm->Tell() - nPos;
-    pStrm->SeekRel( - ( nSize - 4 ) );
+    pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
     *pStrm << (sal_uInt32)( nSize - 8 );
     pStrm->SeekRel( nSize - 8 );
 }
@@ -3220,7 +3222,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
         ImplWriteParagraphs( rOut, aTextObj, mnTextStyle );
         ImplWritePortions( rOut, aTextObj );
         nSize = rOut.Tell() - nPos;
-        rOut.SeekRel( - ( nSize - 4 ) );
+        rOut.SeekRel( - ( (sal_Int32)nSize - 4 ) );
         rOut << (sal_uInt32)( nSize - 8 );
         rOut.SeekRel( nSize - 8 );
 
@@ -3314,7 +3316,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                             {
                                 nParaFlags |= nMask << 16;
                                 nNumberingRule[ nDepth << 1 ] = pPara->nTextOfs;
-                                nNumberingRule[ ( nDepth << 1 ) + 1 ] = pPara->nBulletOfs;
+                                nNumberingRule[ ( nDepth << 1 ) + 1 ] = (sal_Int16)pPara->nBulletOfs;
                             }
                         }
                     }
@@ -3323,10 +3325,10 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
             nParaFlags >>= 16;
 
             sal_uInt32  nDefaultTabSize = ImplMapSize( ::com::sun::star::awt::Size( 2011, 1 ) ).Width;
-            sal_Int32   nDefaultTabs = abs( maRect.GetWidth() ) / nDefaultTabSize;
+            sal_uInt32  nDefaultTabs = abs( maRect.GetWidth() ) / nDefaultTabSize;
             if ( nTabs )
-                nDefaultTabs -= ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize;
-            if ( nDefaultTabs < 0 )
+                nDefaultTabs -= (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize );
+            if ( (sal_Int32)nDefaultTabs < 0 )
                 nDefaultTabs = 0;
 
             sal_uInt32 nTabCount = nTabs + nDefaultTabs;
@@ -3349,7 +3351,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                 if ( nTextRulerAtomFlags & 4 )
                 {
                     *pRuleOut << (sal_uInt16)nTabCount;
-                    for ( sal_uInt32 i = 0; i < nTabs; i++ )
+                    for ( i = 0; i < nTabs; i++ )
                     {
                         sal_uInt16 nPosition = (sal_uInt16)( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
                         sal_uInt16 nType;
@@ -3368,7 +3370,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
 
                     sal_uInt32 nWidth = 1;
                     if ( nTabs )
-                        nWidth += ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
+                        nWidth += (sal_Int32)( ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize ) );
                     nWidth *= nDefaultTabSize;
                     for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                         *pRuleOut << nWidth;
@@ -3381,7 +3383,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                         *pRuleOut << nNumberingRule[ ( i << 1 ) + 1 ];
                 }
                 sal_uInt32 nBufSize = pRuleOut->Tell() - nPos;
-                pRuleOut->SeekRel( - ( nBufSize - 4 ) );
+                pRuleOut->SeekRel( - ( (sal_Int32)nBufSize - 4 ) );
                 *pRuleOut << (sal_uInt32)( nBufSize - 8 );
                 pRuleOut->SeekRel( nBufSize - 8 );
             }
@@ -3441,7 +3443,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                     rExtBuStr << (sal_uInt32)0 << (sal_uInt32)0;
                 }
                 sal_uInt32 nSize = ( rExtBuStr.Tell() - nPos ) - 8;
-                rExtBuStr.SeekRel( - ( nSize + 4 ) );
+                rExtBuStr.SeekRel( - ( (sal_Int32)nSize + 4 ) );
                 rExtBuStr << nSize;
                 rExtBuStr.SeekRel( nSize );
             }
@@ -3473,7 +3475,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
         {
             ::com::sun::star::drawing::PolyPolygonBezierCoords* pSourcePolyPolygon
                 = (::com::sun::star::drawing::PolyPolygonBezierCoords*)mAny.getValue();
-            sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
+            sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->Coordinates.getLength();
 
             // Zeiger auf innere sequences holen
             ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->Coordinates.getArray();
@@ -3482,7 +3484,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
             if ( ! ( pOuterSequence && pOuterFlags ) )
                 return;
 
-            sal_Int32  a, b, nInnerSequenceCount;
+            sal_uInt16  a, b, nInnerSequenceCount;
             ::com::sun::star::awt::Point* pArray;
 
             // dies wird ein Polygon set
@@ -3500,7 +3502,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
 
                 if ( pArray && pFlags )
                 {
-                    nInnerSequenceCount = pInnerSequence->getLength();
+                    nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                     aPolygon = Polygon( nInnerSequenceCount );
                     for( b = 0; b < nInnerSequenceCount; b++)
                     {
@@ -3520,7 +3522,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
         {
             ::com::sun::star::drawing::PointSequenceSequence* pSourcePolyPolygon
                 = (::com::sun::star::drawing::PointSequenceSequence*)mAny.getValue();
-            sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->getLength();
+            sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
 
             // Zeiger auf innere sequences holen
             ::com::sun::star::drawing::PointSequence* pOuterSequence = pSourcePolyPolygon->getArray();
@@ -3545,7 +3547,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
                 }
                 return;
             }
-            sal_Int32 a, b, nInnerSequenceCount;
+            sal_uInt16 a, b, nInnerSequenceCount;
             ::com::sun::star::awt::Point* pArray;
 
             // dies wird ein Polygon set
@@ -3558,7 +3560,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
                 // Zeiger auf Arrays holen
                 if ( pArray = pInnerSequence->getArray() )
                 {
-                    nInnerSequenceCount = pInnerSequence->getLength();
+                    nInnerSequenceCount = (sal_uInt16)pInnerSequence->getLength();
                     aPolygon = Polygon( nInnerSequenceCount );
                     for( b = 0; b < nInnerSequenceCount; b++)
                     {
@@ -3570,7 +3572,7 @@ void PPTWriter::ImplWriteAny( sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPol
             }
         }
     }
-    sal_Int32 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
+    sal_uInt16 i, j, k, nPoints, nBezPoints, nPolyCount = aPolyPolygon.Count();
 
     Rectangle   aGeoRect( aPolyPolygon.GetBoundRect() );
 
@@ -4342,8 +4344,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
     if ( nAction == 2 )     // run program Action
     {
-        rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 0x20 ) << (sal_uInt32)( aFile.Len() * 2 );
-        for ( sal_Int32 i = 0; i < aFile.Len(); i++ )
+        sal_uInt16 i, nLen = aFile.Len();
+        rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 0x20 ) << (sal_uInt32)( nLen * 2 );
+        for ( i = 0; i < nLen; i++ )
             rSt << aFile.GetChar( i );
     }
 
@@ -4726,11 +4729,11 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     mnAngle = ( 36000 - ( mnAngle % 36000 ) );
                 if ( ( mnAngle > 4500 && mnAngle <= 13500 ) || ( mnAngle > 22500 && mnAngle <= 31500 ) )
                 {
-                    double  nWidthHalf = maRect.GetWidth() / 2;
-                    double  nHeightHalf = maRect.GetHeight() / 2;
+                    double  fWidthHalf = maRect.GetWidth() / 2;
+                    double  fHeightHalf = maRect.GetHeight() / 2;
 
-                    Point aTopLeft( maRect.Left() + nWidthHalf - nHeightHalf,
-                                        maRect.Top() + nHeightHalf - nWidthHalf );
+                    Point aTopLeft( (sal_Int32)( maRect.Left() + fWidthHalf - fHeightHalf ),
+                                        (sal_Int32)( maRect.Top() + fHeightHalf - fWidthHalf ) );
                     Size    aNewSize( maRect.GetHeight(), maRect.GetWidth() );
                     maRect = Rectangle( aTopLeft, aNewSize );
                 }
@@ -4740,7 +4743,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 mp_EscherEx->AddOpt( _Escher_Prop_Rotation, mnAngle );
                 mnAngle = 0;
 
-                sal_uInt32 nAdjCount;
+                sal_uInt16 nAdjCount;
                 for ( nAdjCount = 0; nAdjCount < aAdjustmentList.Count(); nAdjCount++ )
                     mp_EscherEx->AddOpt( _Escher_Prop_adjustValue + nAdjCount, (sal_uInt32)aAdjustmentList.GetObject( nAdjCount ) );
 
@@ -4972,7 +4975,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
 
                 if ( aControlName.Len() )
                 {
-                    sal_uInt32 i, nBufSize;
+                    sal_uInt16 i, nBufSize;
                     nBufSize = ( aControlName.Len() + 1 ) << 1;
                     sal_uInt8* pBuf = new sal_uInt8[ nBufSize ];
                     sal_uInt8* pTmp = pBuf;
@@ -5057,7 +5060,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                         mp_EscherEx->BeginCount();
                         mp_EscherEx->AddOpt( _Escher_Prop_cxstyle, _Escher_cxstyleCurved );
                         mp_EscherEx->AddOpt( _Escher_Prop_adjustValue, nAdjustValue1 );
-                        mp_EscherEx->AddOpt( _Escher_Prop_adjust2Value, -nAdjustValue2 );
+                        mp_EscherEx->AddOpt( _Escher_Prop_adjust2Value, -(sal_Int32)nAdjustValue2 );
                     }
                     break;
 
@@ -5758,7 +5761,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
             {
                 double fDist = hypot( maRect.GetWidth(), maRect.GetHeight() );
                 maRect = Rectangle( Point( aTextRefPoint.X, aTextRefPoint.Y ),
-                                        Point( aTextRefPoint.X + fDist, aTextRefPoint.Y - 1 ) );
+                                        Point( (sal_Int32)( aTextRefPoint.X + fDist ), aTextRefPoint.Y - 1 ) );
                 SHAPE_TEXT( FALSE );
                 mp_EscherEx->AddOpt( _Escher_Prop_fNoLineDrawDash, 0x90000 );
                 mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x100000 );
@@ -5899,15 +5902,15 @@ sal_Bool PPTWriter::ImplGetGraphic( ::com::sun::star::uno::Reference< ::com::sun
                 {
                     if ( bMirrored || mnAngle )
                     {
-                        mnAngle = ( mnAngle + 5 ) / 10;
+                        sal_uInt16 nAngle = (sal_uInt16)( ( mnAngle + 5 ) / 10 );
                         pGraphicAttr = new GraphicAttr;
-                        pGraphicAttr->SetRotation( mnAngle );
+                        pGraphicAttr->SetRotation( nAngle );
                         if ( bMirrored )
                             pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
-                        if ( mnAngle )  // ppoint does not rotate graphics !
+                        if ( nAngle )   // ppoint does not rotate graphics !
                         {
                             Polygon aPoly( maRect );
-                            aPoly.Rotate( maRect.TopLeft(), mnAngle );
+                            aPoly.Rotate( maRect.TopLeft(), nAngle );
                             maRect = aPoly.GetBoundRect();
                             mnAngle = 0;
                         }
