@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 17:25:06 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 10:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1901,6 +1901,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
         // Daten am Medium updaten
         SfxItemSet *pSet = GetMedium()->GetItemSet();
+        pSet->ClearItem( SID_REFERER );
         pSet->ClearItem( SID_POSTDATA );
         pSet->ClearItem( SID_TEMPLATE );
         pSet->ClearItem( SID_DOC_READONLY );
