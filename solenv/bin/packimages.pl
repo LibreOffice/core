@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:35:32 $
+#   last change: $Author: hjs $ $Date: 2004-10-01 16:01:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ my $do_rebuild = 0;          # is rebuilding zipfile required?
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.6 $ ';
+my $id_str = ' $Revision: 1.7 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -284,7 +284,9 @@ sub is_file_newer
     return 1 if $reference_stamp == 0;
 
     foreach ( sort keys %{$test_hash_ref} ) {
-        my $path = $test_hash_ref->{$_} . "/$_";
+        my $path = $test_hash_ref->{$_};
+        $path .= "/" if "$path" ne "";
+        $path .= "$_";
         print_message("checking '$path' ...") if $extra_verbose;
         my $mtime = (stat($path))[9];
         return 1 if $reference_stamp < $mtime;
@@ -317,8 +319,9 @@ sub replace_file
 {
     my $source_file = shift;
     my $dest_file = shift;
+    my $result = 0;
 
-    my $result = unlink($dest_file) if -f $dest_file;
+    $result = unlink($dest_file) if -f $dest_file;
     if ( $result != 1 && -f $dest_file ) {
         unlink $source_file;
         print_error("couldn't remove '$dest_file'",1);
