@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:22:36 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 14:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,9 @@
 #ifndef _SVT_UNOIFACE_HXX
 #include <unoiface.hxx>
 #endif
-#include <filedlg.hxx>
-#include <filectrl.hxx>
+#include "filedlg.hxx"
+#include "filectrl.hxx"
+#include "roadmap.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -176,6 +177,11 @@ Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::Windo
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( TRUE );
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
+    }
+    else if (aServiceName.EqualsIgnoreCaseAscii("roadmap") )
+    {
+        pWindow = new ::svt::ORoadmap( pParent, WB_DIALOGCONTROL);
+        *ppNewComp = new SVTXRoadmap;
     }
     else if ( aServiceName.EqualsIgnoreCaseAscii( "ProgressBar" ) )
     {
@@ -1363,7 +1369,6 @@ void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Referen
         m_pCurrentSupplier->release();
     m_pCurrentSupplier = pNew;
     m_pCurrentSupplier->acquire();
-
     if (pField)
     {
         // den aktuellen Value mit hinueberretten
@@ -1414,6 +1419,321 @@ void SVTXFormattedField::NotifyTextListeners()
         GetTextListeners().textChanged( aEvent );
     }
 }
+
+
+//  ----------------------------------------------------
+//  class SVTXRoadmap
+//  ----------------------------------------------------
+
+using namespace svt;
+
+// --------------------------------------------------------------------------------------
+SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
+{
+}
+
+// --------------------------------------------------------------------------------------
+SVTXRoadmap::~SVTXRoadmap()
+{
+}
+
+// --------------------------------------------------------------------------------------
+void SVTXRoadmap::SetWindow( Window* _pWindow )
+{
+    VCLXWindow::SetWindow(_pWindow);
+}
+
+void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_ROADMAP_ITEMSELECTED:
+        {
+            ::vos::OGuard aGuard( GetMutex() );
+            ::svt::ORoadmap* pField = GetRoadmap();
+            if ( pField )
+            {
+                sal_Int16 CurItemID = pField->GetCurrentRoadmapItemID();
+                ::com::sun::star::awt::ItemEvent aEvent;
+                aEvent.Selected = CurItemID;
+                aEvent.Highlighted = CurItemID;
+                aEvent.ItemId = CurItemID;
+                maItemListeners.itemStateChanged( aEvent );
+            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+        }
+        break;
+    }
+}
+
+
+void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRoadmapItem;
+        xRoadmapItem = evt.Source;
+        sal_Int32 nID;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
+        aValue >>= nID;
+
+        ::com::sun::star::uno::Any rVal = evt.NewValue;
+        evt.NewValue >>= rVal;
+        ::rtl::OUString sPropertyName = evt.PropertyName;
+        if ( sPropertyName.equals(::rtl::OUString::createFromAscii( "Enabled" ) ) )
+        {
+            sal_Bool bEnable;
+            evt.NewValue >>= bEnable;
+            pField->EnableRoadmapItem( (RoadmapTypes::ItemId)nID , bEnable );
+        }
+        else if ( sPropertyName.equals(::rtl::OUString::createFromAscii( "Label" ) ) )
+        {
+            ::rtl::OUString sLabel;
+            evt.NewValue >>= sLabel;
+            pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
+        }
+        else if  ( sPropertyName.equals(::rtl::OUString::createFromAscii( "ID" ) ) )
+        {
+            sal_Int32 nNewID;
+            evt.NewValue >>= nNewID;
+            evt.OldValue >>= nID;
+            pField->ChangeRoadmapItemID( (RoadmapTypes::ItemId)nID, (RoadmapTypes::ItemId)nNewID );
+        }
+    //    else
+            // Todo: handle Interactive appropriately
+    }
+}
+
+
+void SVTXRoadmap::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maItemListeners.addInterface( l );
+}
+
+void SVTXRoadmap::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maItemListeners.removeInterface( l );
+}
+
+
+IMPLEMENT_FORWARD_XINTERFACE2( SVTXRoadmap, VCLXWindow, SVTXRoadmap_Base )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SVTXRoadmap, VCLXWindow, SVTXRoadmap_Base )
+
+
+RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent )
+{
+    RMItemData CurRMItemData;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRoadmapItem;
+    _rEvent.Element >>= xRoadmapItem;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
+    if ( xPropertySet.is() )
+    {
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Label" ));
+        aValue >>= CurRMItemData.Label;
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "ID" ));
+        aValue >>= CurRMItemData.n_ID;
+        aValue = xPropertySet->getPropertyValue(::rtl::OUString::createFromAscii( "Enabled" ));
+        aValue >>= CurRMItemData.b_Enabled;
+    }
+    return CurRMItemData;;
+}
+
+
+void SVTXRoadmap::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        RMItemData CurItemData = GetRMItemData(  _rEvent );
+        sal_Int32 InsertIndex;
+        _rEvent.Accessor >>= InsertIndex;
+        pField->InsertRoadmapItem( InsertIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
+    }
+}
+
+void SVTXRoadmap::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        sal_Int32 DelIndex;
+        _rEvent.Accessor >>= DelIndex;
+        pField->DeleteRoadmapItem(DelIndex);
+//        pField->GetCurrentRoadmapItem()
+//        setProperty(::rtl::OUString.createFromAscii( "CurrentItem" )aAny,
+    }
+}
+
+void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent )throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        RMItemData CurItemData = GetRMItemData(  _rEvent );
+        sal_Int32 ReplaceIndex;
+        _rEvent.Accessor >>= ReplaceIndex;
+        pField->ReplaceRoadmapItem( ReplaceIndex, CurItemData.Label, (RoadmapTypes::ItemId)CurItemData.n_ID, CurItemData.b_Enabled );
+    }
+}
+
+
+
+// --------------------------------------------------------------------------------------
+void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch (nPropType)
+        {
+            case BASEPROPERTY_COMPLETE:
+            {
+                sal_Bool b;
+                Value >>= b;
+                pField->SetRoadmapComplete( b);
+            }
+            break;
+
+            case BASEPROPERTY_ACTIVATED:
+            {
+                   sal_Bool b;
+                Value >>= b;
+                pField->SetRoadmapInteractive( b);
+            }
+            break;
+
+            case BASEPROPERTY_CURRENTITEMID:
+            {
+                   sal_Int32 nId;
+                Value >>= nId;
+                pField->SelectRoadmapItemByID( (RoadmapTypes::ItemId)nId );
+            }
+            break;
+
+            case BASEPROPERTY_TEXT:
+            {
+                   ::rtl::OUString aStr;
+                Value >>= aStr;
+                pField->SetText( aStr );
+                pField->Invalidate();
+            }
+            break;
+
+            default:
+                VCLXWindow::setProperty( PropertyName, Value );
+                break;
+        }
+
+    }
+    else
+        VCLXWindow::setProperty( PropertyName, Value );
+}
+
+
+// --------------------------------------------------------------------------------------
+::com::sun::star::uno::Any SVTXRoadmap::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aReturn;
+
+    ::svt::ORoadmap* pField = GetRoadmap();
+    if ( pField )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch (nPropType)
+        {
+            case BASEPROPERTY_COMPLETE:
+                aReturn <<= pField->IsRoadmapComplete();
+                break;
+            case BASEPROPERTY_ACTIVATED:
+                aReturn <<= pField->IsRoadmapInteractive();
+                break;
+            case BASEPROPERTY_CURRENTITEMID:
+                aReturn <<= pField->GetCurrentRoadmapItemID();
+                break;
+            default:
+                aReturn <<= VCLXWindow::getProperty(PropertyName);
+                break;
+        }
+    }
+    return aReturn;
+}
+
+
+
+void SVTXRoadmap::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.Init( Width, Height );
+}
+
+void SVTXRoadmap::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const unsigned long*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
+}
+
+
+void SVTXRoadmap::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
+    ImplUpdateImage( sal_True );
+}
+
+void SVTXRoadmap::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const unsigned long*) ProducerData.getConstArray(), Offset, Scansize );
+    ImplUpdateImage( sal_True );
+}
+
+void SVTXRoadmap::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.Completed( Status );
+
+    // Controls sollen angemeldet bleiben...
+//  Producer->removeConsumer( this );
+
+    ImplUpdateImage( sal_True );
+}
+
+
+void SVTXRoadmap::ImplUpdateImage( sal_Bool bGetNewImage )
+{
+
+    ::svt::ORoadmap* pControl = (::svt::ORoadmap*) GetWindow();
+    if ( pControl )
+    {
+        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
+        if ( bOK )
+            pControl->SetRoadmapBitmap( maBitmap );
+    }
+}
+
+
+
+
 
 //  ----------------------------------------------------
 //  class SVTXNumericField
