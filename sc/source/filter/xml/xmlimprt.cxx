@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
+ *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,23 +197,23 @@ static __FAR_DATA SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_title,   XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
-    { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
+    { XML_NAMESPACE_TABLE, sXML_title,  XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
+    { XML_NAMESPACE_TABLE, sXML_display,    XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_title,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
-    { XML_NAMESPACE_TEXT, sXML_display,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
-    { XML_NAMESPACE_TEXT, sXML_message_type,    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
+    { XML_NAMESPACE_TABLE, sXML_title,          XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
+    { XML_NAMESPACE_TABLE, sXML_display,            XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
+    { XML_NAMESPACE_TABLE, sXML_message_type,   XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
     XML_TOKEN_MAP_END
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_name,    XML_TOK_ERROR_MACRO_ATTR_NAME       },
-    { XML_NAMESPACE_TEXT, sXML_execute, XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
+    { XML_NAMESPACE_TABLE, sXML_name,   XML_TOK_ERROR_MACRO_ATTR_NAME       },
+    { XML_NAMESPACE_TABLE, sXML_execute,    XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
     XML_TOKEN_MAP_END
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 06:35:57 $
+ *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,15 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
+#include <com/sun/star/sheet/ValidationAlertStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_VALIDATIONTYPE_HPP_
+#include <com/sun/star/sheet/ValidationType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
 
 class ScXMLImport;
 
@@ -109,6 +118,12 @@ class ScXMLContentValidationContext : public SvXMLImportContext
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    void GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle);
+    void SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const;
+    void GetCondition(const rtl::OUString& sCondition, rtl::OUString& sFormula1, rtl::OUString& sFormula2,
+        com::sun::star::sheet::ValidationType& aValidationType,
+        com::sun::star::sheet::ConditionOperator& aOperator);
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-11 15:44:49 $
+ *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,6 +803,8 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                      xCondition->setSourcePosition(aValidation.aBaseCellAddress);
                 }
             }
+            aAny <<= xPropertySet;
+            xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)), aAny);
         }
     }
 }
@@ -917,6 +919,8 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
 void ScXMLTableRowCellContext::EndElement()
 {
     if (bHasTextImport)
+    {
+        GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
             OUString sEmpty;
@@ -924,6 +928,7 @@ void ScXMLTableRowCellContext::EndElement()
                 GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
                 sal_True );
         }
+    }
     GetScImport().GetTextImport()->ResetCursor();
     if (!bHasSubTable)
     {

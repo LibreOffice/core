@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 06:35:57 $
+ *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,185 @@ SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nP
     return pContext;
 }
 
+void ScXMLContentValidationContext::GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle)
+{
+    if (sMessageType.compareToAscii("macro") == 0)
+        aAlertStyle = sheet::ValidationAlertStyle_MACRO;
+    else if (sMessageType.compareToAscii(sXML_stop) == 0)
+        aAlertStyle = sheet::ValidationAlertStyle_STOP;
+    else if (sMessageType.compareToAscii(sXML_warning) == 0)
+        aAlertStyle = sheet::ValidationAlertStyle_WARNING;
+    else if (sMessageType.compareToAscii(sXML_information) == 0)
+        aAlertStyle = sheet::ValidationAlertStyle_INFO;
+}
+
+void ScXMLContentValidationContext::SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const
+{
+    sal_Int32 i = 0;
+    sal_Bool bString = sal_False;
+    sal_Int32 nBrakes = 0;
+    while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
+    {
+        if (sFormulas[i] == '(')
+            nBrakes++;
+        if (sFormulas[i] == ')')
+            nBrakes--;
+        if (sFormulas[i] == '"')
+            bString = !bString;
+        i++;
+    }
+    if (sFormulas[i] == ',')
+    {
+        sFormula1 = sFormulas.copy(0, i);
+        sFormula2 = sFormulas.copy(i + 1);
+    }
+}
+
+void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondition, rtl::OUString& sFormula1, rtl::OUString& sFormula2,
+        com::sun::star::sheet::ValidationType& aValidationType,
+        com::sun::star::sheet::ConditionOperator& aOperator)
+{
+    rtl::OUString sCondition = sTempCondition;
+    if (sCondition.getLength())
+    {
+        // ToDo: erase all blanks in the condition, but not in formulas or strings
+        rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
+        rtl::OUString scell_content_is_date(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date"));
+        rtl::OUString scell_content_is_time(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time"));
+        rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
+        rtl::OUString scell_content_text_length(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length"));
+        rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_not_between"));
+        rtl::OUString scell_content_is_whole_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number"));
+        rtl::OUString scell_content_is_decimal_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number"));
+        rtl::OUString scell_content_text_length_is_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-between"));
+        rtl::OUString scell_content_text_length_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-not-between"));
+        sal_Int32 i = 0;
+        sal_Bool bAnd(sal_True);
+        while (sCondition[i] != '(' && i < sCondition.getLength())
+            i++;
+        if (sCondition[i] == '(')
+        {
+            if (i != scell_content_text_length.getLength() &&
+                i != scell_content_text_length_is_between.getLength() &&
+                i != scell_content_text_length_is_not_between.getLength())
+            {
+                if (i == scell_content_is_time.getLength())
+                {
+                    rtl::OUString sTemp = sCondition.copy(0, i);
+                    if (sTemp == scell_content_is_time)
+                        aValidationType = sheet::ValidationType_TIME;
+                    else
+                        aValidationType = sheet::ValidationType_DATE;
+                }
+                else if (i == scell_content_is_whole_number.getLength())
+                    aValidationType = sheet::ValidationType_WHOLE;
+                else if (i == scell_content_is_decimal_number.getLength())
+                    aValidationType = sheet::ValidationType_DECIMAL;
+                sCondition = sCondition.copy(i + 2);
+                rtl::OUString sTemp = sCondition.copy(0, 5);
+                if (sTemp.compareToAscii(" and ") == 0)
+                    sCondition = sCondition.copy(5);
+                else
+                    bAnd = sal_False;
+            }
+            if (sCondition.getLength() && bAnd)
+            {
+                i = 0;
+                while (sCondition[i] != '(' && i < sCondition.getLength())
+                    i++;
+                if (sCondition[i] == '(')
+                {
+                    sCondition = sCondition.copy(i + 1);
+                    if (i == scell_content_is_between.getLength() ||
+                        i == scell_content_text_length_is_between.getLength())
+                    {
+                        if (i == scell_content_text_length_is_between.getLength())
+                            aValidationType = sheet::ValidationType_TEXT_LEN;
+                        aOperator = sheet::ConditionOperator_BETWEEN;
+                        sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                        SetFormulas(sCondition, sFormula1, sFormula2);
+                    }
+                    else if (i == scell_content_is_not_between.getLength() ||
+                        i == scell_content_text_length_is_not_between.getLength())
+                    {
+                        if (i == scell_content_text_length_is_not_between.getLength())
+                            aValidationType = sheet::ValidationType_TEXT_LEN;
+                        aOperator = sheet::ConditionOperator_NOT_BETWEEN;
+                        sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                        SetFormulas(sCondition, sFormula1, sFormula2);
+                    }
+                    else if (i == scell_content.getLength() ||
+                        i == scell_content_text_length.getLength())
+                    {
+                        if (i == scell_content_text_length.getLength())
+                            aValidationType = sheet::ValidationType_TEXT_LEN;
+                        sCondition = sCondition.copy(1);
+                        switch (sCondition[0])
+                        {
+                            case '<' :
+                            {
+                                if (sCondition[1] == '=')
+                                {
+                                    aOperator = sheet::ConditionOperator_LESS_EQUAL;
+                                    sCondition = sCondition.copy(2);
+                                }
+                                else
+                                {
+                                    aOperator = sheet::ConditionOperator_LESS;
+                                    sCondition = sCondition.copy(1);
+                                }
+                            }
+                            break;
+                            case '>' :
+                            {
+                                if (sCondition[1] == '=')
+                                {
+                                    aOperator = sheet::ConditionOperator_GREATER_EQUAL;
+                                    sCondition = sCondition.copy(2);
+                                }
+                                else
+                                {
+                                    aOperator = sheet::ConditionOperator_GREATER;
+                                    sCondition = sCondition.copy(1);
+                                }
+                            }
+                            break;
+                            case '=' :
+                            {
+                                aOperator = sheet::ConditionOperator_EQUAL;
+                                sCondition = sCondition.copy(1);
+                            }
+                            break;
+                            case '!' :
+                            {
+                                aOperator = sheet::ConditionOperator_NOT_EQUAL;
+                                sCondition = sCondition.copy(1);
+                            }
+                            break;
+                        }
+                        sFormula1 = sCondition;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void ScXMLContentValidationContext::EndElement()
 {
+    ScMyImportValidation aValidation;
+    aValidation.sName = sName;
+    aValidation.sImputTitle = sHelpTitle;
+    aValidation.sImputMessage = sHelpMessage;
+    aValidation.sErrorTitle = sErrorTitle;
+    aValidation.sErrorMessage = sErrorMessage;
+    GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
+    GetScImport().GetCellFromString(sBaseCellAddress, aValidation.aBaseCellAddress);
+    GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
+    aValidation.bShowErrorMessage = bDisplayError;
+    aValidation.bShowImputMessage = bDisplayHelp;
+    aValidation.bIgnoreBlanks = bAllowEmptyCell;
+    GetScImport().AddValidation(aValidation);
 }
 
 void ScXMLContentValidationContext::SetHelpMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const sal_Bool bDisplay)
