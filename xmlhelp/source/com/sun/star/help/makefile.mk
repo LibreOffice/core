@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-12-03 18:08:05 $
+#*    last change       $Author: abi $ $Date: 2000-12-12 14:09:08 $
 #*
-#*    $Revision: 1.7 $
+#*    $Revision: 1.8 $
 #*
 #*    $Logfile:$
 #*
@@ -29,12 +29,14 @@ CLASSGENDIR		= $(OUT)$/classgen
 RDB		 		= $(SOLARBINDIR)$/applicat.rdb
 JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
-COPYSCRIPT = \
-    $(BIN)$/helpserver.sh
+UNIXTEXT= \
+    $(MISC)$/helpserver.sh
 
 ALL:	            \
-    $(COPYSCRIPT)	\
+    $(UNIXTEXT)	\
     ALLTAR
+
+
 
 $(BIN)$/helpserver.sh: helpserver.sh
     +$(COPY) helpserver.sh $(BIN)
@@ -65,7 +67,8 @@ JAVACLASSFILES = \
     $(CLASSDIR)$/$(PACKAGE)$/HelpIndexer.class                  \
     $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
     $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
-    $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class
+    $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class                    \
+    $(CLASSDIR)$/$(PACKAGE)$/dummy.class
 
 
 JARCLASSDIRS	= com
