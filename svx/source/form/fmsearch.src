@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2002-01-11 07:36:35 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ portuguese ] = "Impossível encontrar registos de dados correspondentes às indicações fornecidas!";
     Message[ danish ] = "Der blev ikke fundet nogen dataposter, som svarer til dine angivelser!";
     Message[ french ] = "Aucun enregistrement trouvé qui corresponde à vos indications !";
-    Message[ swedish ] = "Inga dataposter har hittats som passar till Dina angivelser!";
+    Message[ swedish ] = "Inga dataposter som passar till dina uppgifter har hittats!";
     Message[ dutch ] = "Er werden geen records gevonden die bij de vermelde gegevens passen !";
     Message[ spanish ] = "¡No se encontró ningún registro de datos adecuado a su información!";
     Message[ english_us ] = "No records corresponding to your data found!";
@@ -1006,17 +1006,17 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ portuguese_brazilian ] = "?berlauf, Suche wurde am Anfang fortgesetzt;?berlauf, Suche wurde am Ende fortgesetzt";
     Text[ portuguese ] = "Transbordo - Localizar continua pelo início;Transbordo - Localizar continua pelo final.";
     Text[ danish ] = "Overløb, søgning blev fortsat ved begyndelsen;Overløb, søgningen blev fortsat ved slutningen";
-    Text[ french ] = "Débordement ; la recherche a été poursuivie vers le haut;Débordement ; la recherche a été poursuivie vers le bas";
-    Text[ swedish ] = "Spill, Sökningen fortsätts från början;Spill, Sökningen fortsätts från slutet";
+    Text[ french ] = "Débordement - la recherche a continué au début;Débordement - la recherche a continué à la fin";
+    Text[ swedish ] = "Spill, sökningen fortsatte från början;spill, sökningen fortsatte från slutet";
     Text[ dutch ] = "Overloop, zoeken werd voortgezet aan het begin; Overloop, zoeken werd voortgezet aan het einde";
-    Text[ spanish ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa por el final";
+    Text[ spanish ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa desde el final";
     Text[ english_us ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
-    Text[ chinese_simplified ] = "æº¢å€¼,æœå¯»ä»èµ·å§‹ä½ç½®ç»§ç»­;æº¢å€¼,æœå¯»ä»ç»“æŸä½ç½®ç»§ç»­";
+    Text[ chinese_simplified ] = "è¶…è¿‡,ä»èµ·å§‹ä½ç½®æ¥ç€æœå¯»;è¶…è¿‡,ä»ç»“æŸä½ç½®æ¥ç€æœå¯»";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â íà÷àëå;Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â êîíöå";
     Text[ polish ] = "Przepe³nienie, Kontynuuj wyszukiwanie na pocz¹tku;Przepe³nienie, Kontynuuj wyszukiwanie na koñcu";
     Text[ japanese ] = "ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã€æ¤œç´¢ã¯æœ€åˆã§ç¶šè¡Œ;ã‚ªãƒ¼ãƒãƒ¼ãƒ•ãƒ­ãƒ¼ã€æ¤œç´¢ã¯æœ€å¾Œã§ç¶šè¡Œ";
-    Text[ chinese_traditional ] = "æº¢å€¼,æœå°‹å¾èµ·å§‹ä½ç½®ç¹¼çºŒ;æº¢å€¼,æœå°‹å¾çµå°¾ä½ç½®ç¹¼çºŒ";
+    Text[ chinese_traditional ] = "è¶…é,æ¥è‘—å¾èµ·å§‹ä½ç½®æœå°‹;è¶…é,æ¥è‘—å¾çµå°¾ä½ç½®æœå°‹";
     Text[ arabic ] = "İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáÈÏÇíÉ; İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáäåÇíÉ";
     Text[ greek ] = "Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôçí áñ÷Ş,Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôï ôİëïò";
     Text[ korean ] = "ì˜¤ë²„í”Œë¡œ- ì°¾ê¸°ê°€ ì‹œì‘ ë¶€ë¶„ë¶€í„° ì§„í–‰ë˜ì—ˆìŒ;ì˜¤ë²„í”Œë¡œ-ì°¾ê¸°ê°€ ëì—ì„œë¶€í„° ì§„í–‰ë˜ì—ˆìŒ";
