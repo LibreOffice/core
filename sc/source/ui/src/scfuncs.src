@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:25:58 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -41140,7 +41140,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ english_us ] = "Converts a value according to a conversion table in the configuration (calc.xml).";
             Text[ portuguese ] = "Converte um valor partindo da tabela de conversão disponível na configuração (calc.xml).";
             Text[ russian ] = "Ïğåîáğàçóåò çíà÷åíèå íà îñíîâàíèè òàáëèöû ïğåîáğàçîâàíèé èç êîíôèãóğàöèè (calc.xml).";
-            Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
+            Text[ dutch ] = "Berekent een waarde aan de hand van een omrekeningstabel uit de configuratie (calc.xml).";
             Text[ french ] = "Convertit une valeur à l'aide de la table de conversion provenant de la configuration.";
             Text[ spanish ] = "Convierte un valor en base a una tabla de conversión de la configuración (calc.xml).";
             Text[ italian ] = "Converte un valore in base a una tabella di conversione della configurazione (calc.xml).";
@@ -41152,7 +41152,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ chinese_simplified ] = "°´ÕÕÒ»¸öÅäÖÃÎÄ¼ş(calc.xml)µÄ»»Ëã±íÀ´»»ËãÄ³Ò»¸öÊıÖµ¡£";
             Text[ chinese_traditional ] = "®Ú¾Ú¤@­Ó°t¸mÀÉ®×(calc.xml)ªº´«ºâªí¨ÓÂà´«¤@­Ó¼Æ­È¡C";
             Text[ arabic ] = "ÊÍæá ŞíãÉ ÊÈÚÇğ áÅÏÎÇá İí ÌÏæá convert.ini.";
-            Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
+            Text[ dutch ] = "Berekent een waarde aan de hand van een omrekeningstabel uit de configuratie (calc.xml).";
             Text[ chinese_simplified ] = "°´ÕÕÒ»¸öÅäÖÃÎÄ¼ş(calc.xml)µÄ»»Ëã±íÀ´»»ËãÄ³Ò»¸öÊıÖµ¡£";
             Text[ greek ] = "Ìåôáôñİğåé ìéá ôéìŞ óıìöùíá ìå ìéá êáôá÷şñéóç ôïõ ğßíáêá convert.ini.";
             Text[ korean ] = "convert.ini¿¡ ÀÖ´Â Ç×¸ñ¿¡µû¶ó °ªÀ» Ç¥·Î º¯È¯";
@@ -41562,5 +41562,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
