@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSQLMessageDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 11:43:28 $
+ *  last change:$Date: 2004-11-02 11:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 /**
@@ -134,12 +135,54 @@ public class OSQLMessageDialog extends TestCase {
 
         oObj = (XInterface) oInterface;
 
+        // create XWindow for Object relations...
+        com.sun.star.awt.XToolkit xToolkit = null;
+
+        try{
+            xToolkit = (com.sun.star.awt.XToolkit)UnoRuntime.queryInterface(
+                        com.sun.star.awt.XToolkit.class,
+            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.awt.Toolkit") );
+        } catch (com.sun.star.uno.Exception e){
+            log.println("could not create instacne of 'com.sun.star.awt.Toolkit'" );
+            throw new StatusException("could not create instacne of 'com.sun.star.awt.Toolkit'", e) ;
+        }
+
+        // Describe the properties of the container window.
+        com.sun.star.awt.WindowDescriptor aDescriptor =
+        new com.sun.star.awt.WindowDescriptor();
+
+        aDescriptor.Type              = com.sun.star.awt.WindowClass.TOP ;
+        aDescriptor.WindowServiceName = "window" ;
+        aDescriptor.ParentIndex       = -1;
+        aDescriptor.Parent            = null;
+        aDescriptor.Bounds            = new com.sun.star.awt.Rectangle(0,0,0,0);
+
+        aDescriptor.WindowAttributes  =
+        com.sun.star.awt.WindowAttribute.BORDER    |
+        com.sun.star.awt.WindowAttribute.MOVEABLE  |
+        com.sun.star.awt.WindowAttribute.SIZEABLE  |
+        com.sun.star.awt.WindowAttribute.CLOSEABLE ;
+
+        com.sun.star.awt.XWindowPeer xPeer = null;
+        try{
+
+            xPeer = xToolkit.createWindow(aDescriptor) ;
+
+        } catch (com.sun.star.lang.IllegalArgumentException e){
+            log.println("could not create window" );
+            throw new StatusException("could not create window", e) ;
+        }
+
+        com.sun.star.awt.XWindow xWindow = (com.sun.star.awt.XWindow)UnoRuntime.queryInterface (
+        com.sun.star.awt.XWindow .class, xPeer);
+
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
         log.println("add ObjectRelations err1 and err2 for 'ErrorMessageDialog'");
         tEnv.addObjRelation("ERR1",err1);
         tEnv.addObjRelation("ERR2",err2);
+        tEnv.addObjRelation("ERR_XWindow", xWindow);
 
         return tEnv;
     } // finish method getTestEnvironment
