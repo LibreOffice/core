@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-10 18:21:57 $
+ *  last change: $Author: pl $ $Date: 2002-11-22 16:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,10 +130,6 @@ static const int nXdndProtocolRevision = 4;
 
 // mapping between mime types (or what the office thinks of mime types)
 // and X convention types
-// for clipboard and primary selections there is only a convention for text
-// that the encoding name of the text is taken as type in all capitalized letters
-// the convention for Xdnd is mime types as specified by the corresponding
-// RFC's with the addition that text/plain without charset tag contains iso8859-1
 struct NativeTypeEntry
 {
     Atom            nAtom;
@@ -142,11 +138,18 @@ struct NativeTypeEntry
     int             nFormat;            // the corresponding format
 };
 
+// the convention for Xdnd is mime types as specified by the corresponding
+// RFC's with the addition that text/plain without charset tag contains iso8859-1
+// sadly some applications (e.g. gtk) do not honor the mimetype only rule,
+// so for compatibility add UTF8_STRING
 static NativeTypeEntry aXdndConversionTab[] =
 {
-    { 0, "text/plain;charset=iso8859-1", "text/plain", 8 }
+    { 0, "text/plain;charset=iso8859-1", "text/plain", 8 },
+    { 0, "text/plain;charset=utf-8", "UTF8_STRING", 8 }
 };
 
+// for clipboard and primary selections there is only a convention for text
+// that the encoding name of the text is taken as type in all capitalized letters
 static NativeTypeEntry aNativeConversionTab[] =
 {
     { 0, "text/plain;charset=utf-16", "ISO10646-1", 16 },
@@ -799,6 +802,35 @@ void SelectionManager::convertTypeToNative( const OUString& rType, Atom selectio
 
 // ------------------------------------------------------------------------
 
+void SelectionManager::getNativeTypeList( const Sequence< DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection )
+{
+    rOutTypeList.clear();
+
+    int nFormat;
+    int nFlavors = rTypes.getLength();
+    const DataFlavor* pFlavors = rTypes.getConstArray();
+    bool bHaveText = false;
+    for( int i = 0; i < nFlavors; i++ )
+    {
+        if( pFlavors[i].MimeType.compareToAscii( "text/plain", 10 ) == 0)
+            bHaveText = true;
+        else
+            convertTypeToNative( pFlavors[i].MimeType, targetselection, nFormat, rOutTypeList );
+    }
+    if( bHaveText )
+    {
+        if( targetselection != m_nXdndSelection )
+        {
+            // only mimetypes should go into Xdnd type list
+            rOutTypeList.push_front( XA_STRING );
+            rOutTypeList.push_front( m_nCOMPOUNDAtom );
+        }
+        convertTypeToNative( OUString::createFromAscii( "text/plain;charset=utf-8" ), targetselection, nFormat, rOutTypeList, true );
+    }
+}
+
+// ------------------------------------------------------------------------
+
 OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, int& rFormat )
 {
     NativeTypeEntry* pTab = selection == m_nXdndSelection ? aXdndConversionTab : aNativeConversionTab;
@@ -1257,25 +1289,9 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 aGuard.reset();
 
                 ::std::list< Atom > aConversions;
-                int i, nFormat;
-                int nFlavors = aFlavors.getLength();
-                const DataFlavor* pFlavors = aFlavors.getConstArray();
-                bool bHaveText = false;
-                for( i = 0; i < nFlavors; i++ )
-                {
-                    if( pFlavors[i].MimeType.compareToAscii( "text/plain", 10 ) == 0)
-                        bHaveText = true;
-                    else
-                        convertTypeToNative( pFlavors[i].MimeType, rRequest.selection, nFormat, aConversions );
-                }
-                if( bHaveText )
-                {
-                    aConversions.push_front( XA_STRING );
-                    aConversions.push_front( m_nCOMPOUNDAtom );
-                    convertTypeToNative( OUString::createFromAscii( "text/plain;charset=utf-8" ), rRequest.selection, nFormat, aConversions, true );
-                }
+                getNativeTypeList( aFlavors, aConversions, rRequest.selection );
 
-                int nTypes = aConversions.size();
+                int i, nTypes = aConversions.size();
                 Atom* pTypes = (Atom*)alloca( nTypes * sizeof( Atom ) );
                 std::list< Atom >::const_iterator it;
                 for( i = 0, it = aConversions.begin(); i < nTypes; i++, ++it )
@@ -2028,6 +2044,11 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.UserAction = getUserDragAction();
             dsde.DropAction = DNDConstants::ACTION_NONE;
             m_bDropSuccess = rMessage.xclient.data.l[1] & 1 ? true : false;
+#ifdef DEBUG
+            fprintf( stderr, "status drop action: accept = %s, %s\n",
+                     m_bDropSuccess ? "true" : "false",
+                     OUStringToOString( getString( rMessage.xclient.data.l[4] ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
             if( rMessage.xclient.data.l[1] & 1 )
             {
                 if( m_nCurrentProtocolVersion > 1 )
@@ -2549,10 +2570,8 @@ void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
                 aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
                 memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
                 // fill in data types
-                int format;
                 ::std::list< Atom > aConversions;
-                for( int nFlavor = 0; nFlavor < m_aDragFlavors.getLength(); nFlavor++ )
-                    convertTypeToNative( m_aDragFlavors.getConstArray()[nFlavor].MimeType, m_nXdndSelection, format, aConversions );
+                getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
                 if( aConversions.size() > 3 )
                     aEvent.xclient.data.l[1] |= 1;
                 ::std::list< Atom >::const_iterator type_it = aConversions.begin();
@@ -2686,9 +2705,7 @@ void SelectionManager::startDrag(
 
         ::std::list< Atom > aConversions;
         ::std::list< Atom >::const_iterator type_it;
-        int format;
-        for( int i = 0; i < m_aDragFlavors.getLength(); i++ )
-            convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format, aConversions );
+        getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
         int nTypes = aConversions.size();
         Atom* pTypes = (Atom*)alloca( sizeof(Atom)*nTypes );
@@ -2878,12 +2895,12 @@ void SelectionManager::transferablesFlavorsChanged()
     MutexGuard aGuard(m_aMutex);
 
     m_aDragFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
-    int format, i;
+    int i;
 
     ::std::list< Atom > aConversions;
     ::std::list< Atom >::const_iterator type_it;
-    for( i = 0; i < m_aDragFlavors.getLength(); i++ )
-        convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format, aConversions );
+
+    getNativeTypeList( m_aDragFlavors, aConversions, m_nXdndSelection );
 
     int nTypes = aConversions.size();
     Atom* pTypes = (Atom*)alloca( sizeof(Atom)*aConversions.size() );
