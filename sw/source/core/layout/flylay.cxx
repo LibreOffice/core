@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 15:20:18 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,11 @@
 #ifndef _ENVIRONMENTOFANCHOREDOBJECT_HXX
 #include <environmentofanchoredobject.hxx>
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
-#ifdef ACCESSIBLE_LAYOUT
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
@@ -117,7 +120,6 @@
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
-#endif
 #endif
 
 /*************************************************************************
@@ -138,29 +140,33 @@ SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 SwFlyFreeFrm::~SwFlyFreeFrm()
 {
     //und Tschuess.
-    if( GetPage() )
+    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+    if( GetPageFrm() )
     {
         if( GetFmt()->GetDoc()->IsInDtor() )
         {
             // --> OD 2004-06-04 #i29879# - remove also to-frame anchored Writer
             // fly frame from page.
             const bool bRemoveFromPage =
-                    GetPage()->GetSortedObjs() &&
+                    GetPageFrm()->GetSortedObjs() &&
                     ( IsFlyAtCntFrm() ||
                       ( GetAnchorFrm() && GetAnchorFrm()->IsFlyFrm() ) );
             if ( bRemoveFromPage )
             {
-                GetPage()->GetSortedObjs()->Remove( GetVirtDrawObj() );
+                GetPageFrm()->GetSortedObjs()->Remove( *this );
             }
         }
         else
         {
-            SwRect aTmp( AddSpacesToFrm() );
-            SwFlyFreeFrm::NotifyBackground( GetPage(), aTmp, PREP_FLY_LEAVE );
+            SwRect aTmp( GetObjRectWithSpaces() );
+            SwFlyFreeFrm::NotifyBackground( GetPageFrm(), aTmp, PREP_FLY_LEAVE );
         }
     }
 }
 
+// --> OD 2004-06-29 #i28701#
+TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
+// <--
 /*************************************************************************
 |*
 |*  SwFlyFreeFrm::NotifyBackground()
@@ -201,14 +207,15 @@ void SwFlyFreeFrm::MakeAll()
 
     if ( !GetAnchorFrm() || IsLocked() || IsColLocked() )
         return;
-    if( !GetPage() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
+    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+    if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
     {
         SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
         SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
         if( pPage )
-            pPage->SwPageFrm::AppendFly( this );
+            pPage->AppendFlyToPage( this );
     }
-    if( !GetPage() )
+    if( !GetPageFrm() )
         return;
 
     Lock(); //Der Vorhang faellt
@@ -221,8 +228,8 @@ void SwFlyFreeFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
-            SWRECTFN( this )
-            const SwFmtFrmSize *pSz;
+        SWRECTFN( this )
+        const SwFmtFrmSize *pSz;
         {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
 
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
@@ -539,6 +546,9 @@ SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     bLayout = TRUE;
 }
 
+// --> OD 2004-06-29 #i28701#
+TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
+// <--
 /*************************************************************************
 |*
 |*  SwFlyLayFrm::Modify()
@@ -574,8 +584,9 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
         //Abmelden, Seite besorgen, an den entsprechenden LayoutFrm
         //haengen.
-        SwRect aOld( AddSpacesToFrm() );
-        SwPageFrm *pOldPage = GetPage();
+        SwRect aOld( GetObjRectWithSpaces() );
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        SwPageFrm *pOldPage = GetPageFrm();
         AnchorFrm()->RemoveFly( this );
 
         if( FLY_PAGE == pAnch->GetAnchorId() )
@@ -607,7 +618,8 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     pTmp->AppendFly( this );
             }
         }
-        if ( pOldPage && pOldPage != GetPage() )
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        if ( pOldPage && pOldPage != GetPageFrm() )
             NotifyBackground( pOldPage, aOld, PREP_FLY_LEAVE );
         SetCompletePaint();
         InvalidateAll();
@@ -626,7 +638,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 |*
 |*************************************************************************/
 
-void SwPageFrm::AppendFly( SwFlyFrm *pNew )
+void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 {
     if ( !pNew->GetVirtDrawObj()->IsInserted() )
         FindRootFrm()->GetDrawPage()->InsertObject(
@@ -642,7 +654,7 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
     }
 
-    const SdrObjectPtr pObj = pNew->GetVirtDrawObj();
+    SdrObject* pObj = pNew->GetVirtDrawObj();
     ASSERT( pNew->GetAnchorFrm(), "Fly without Anchor" );
     const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
@@ -662,12 +674,15 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         InvalidateFlyCntnt();
 
         if ( !pSortedObjs )
-            pSortedObjs = new SwSortDrawObjs();
-        if ( !pSortedObjs->Insert( pObj ) )
+            pSortedObjs = new SwSortedObjs();
+        if ( !pSortedObjs->Insert( *pNew ) )
             ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
 
-        ((SwFlyFreeFrm*)pNew)->SetPage( this );
+        // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
+        pNew->SetPageFrm( this );
         pNew->InvalidatePage( this );
+        // OD 2004-05-17 #i28701#
+        pNew->UnlockPosition();
 
         // Notify accessible layout. That's required at this place for
         // frames only where the anchor is moved. Creation of new frames
@@ -681,17 +696,23 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         }
     }
 
-    if( pNew->GetDrawObjs() )
+    // --> OD 2004-06-09 #i28701# - correction: consider also drawing objects
+    if ( pNew->GetDrawObjs() )
     {
-        SwDrawObjs &rObjs = *pNew->GetDrawObjs();
+        SwSortedObjs &rObjs = *pNew->GetDrawObjs();
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
-            SdrObject *pO = rObjs[i];
-            if( pO->ISA(SwVirtFlyDrawObj) )
+            SwAnchoredObject* pObj = rObjs[i];
+            if ( pObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                if( pFly->IsFlyFreeFrm() && !((SwFlyFreeFrm*)pFly)->GetPage() )
-                    SwPageFrm::AppendFly( pFly );
+                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
+                // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+                if ( pFly->IsFlyFreeFrm() && !pFly->GetPageFrm() )
+                    AppendFlyToPage( pFly );
+            }
+            else if ( pObj->ISA(SwAnchoredDrawObject) )
+            {
+                AppendDrawObjToPage( *pObj );
             }
         }
     }
@@ -706,7 +727,7 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
 |*
 |*************************************************************************/
 
-void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
+void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
     const UINT32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
     FindRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
@@ -741,12 +762,13 @@ void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
     //gerade 'laeuft'
     if ( pSortedObjs )
     {
-        pSortedObjs->Remove( pToRemove->GetVirtDrawObj() );
+        pSortedObjs->Remove( *pToRemove );
         if ( !pSortedObjs->Count() )
         {   DELETEZ( pSortedObjs );
         }
     }
-    ((SwFlyFreeFrm*)pToRemove)->SetPage( 0 );
+    // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
+    pToRemove->SetPageFrm( 0L );
 }
 
 /*************************************************************************
@@ -789,10 +811,9 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 
     //Die FlyColl kann bereits weg sein, weil der DTor der Seite
     //gerade 'laeuft'
-    const SdrObjectPtr pObj = pToMove->GetVirtDrawObj();
     if ( pSortedObjs )
     {
-        pSortedObjs->Remove( pObj );
+        pSortedObjs->Remove( *pToMove );
         if ( !pSortedObjs->Count() )
         {   DELETEZ( pSortedObjs );
         }
@@ -800,14 +821,17 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
 
     //Anmelden
     if ( !pDest->GetSortedObjs() )
-        pDest->pSortedObjs = new SwSortDrawObjs();
-    if ( !pDest->GetSortedObjs()->Insert( pObj ) )
+        pDest->pSortedObjs = new SwSortedObjs();
+    if ( !pDest->GetSortedObjs()->Insert( *pToMove ) )
         ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
 
-    ((SwFlyFreeFrm*)pToMove)->SetPage( pDest );
+    // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
+    pToMove->SetPageFrm( pDest );
     pToMove->InvalidatePage( pDest );
     pToMove->SetNotifyBack();
     pDest->InvalidateFlyCntnt();
+    // OD 2004-05-17 #i28701#
+    pToMove->UnlockPosition();
 
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
@@ -819,117 +843,111 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
                                   ->AddAccessibleFrm( pToMove );
     }
+
+    // --> OD 2004-06-09 #i28701# - correction: move lowers of Writer fly frame
+    if ( pToMove->GetDrawObjs() )
+    {
+        SwSortedObjs &rObjs = *pToMove->GetDrawObjs();
+        for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
+        {
+            SwAnchoredObject* pObj = rObjs[i];
+            if ( pObj->ISA(SwFlyFrm) )
+            {
+                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
+                if ( pFly->IsFlyFreeFrm() )
+                {
+                    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+                    SwPageFrm* pPageFrm = pFly->GetPageFrm();
+                    if ( pPageFrm )
+                        pPageFrm->MoveFly( pFly, pDest );
+                    else
+                        pDest->AppendFlyToPage( pFly );
+                }
+            }
+            else if ( pObj->ISA(SwAnchoredDrawObject) )
+            {
+                RemoveDrawObjFromPage( *pObj );
+                pDest->AppendDrawObjToPage( *pObj );
+            }
+        }
+    }
 }
 
 /*************************************************************************
 |*
-|*  SwPageFrm::AppendDrawObject(), RemoveDrawObject()
+|*  SwPageFrm::AppendDrawObjToPage(), RemoveDrawObjFromPage()
 |*
-|*  Ersterstellung      MA 09. Jan. 95
-|*  Letzte Aenderung    MA 31. Jul. 96
+|*  --> OD 2004-07-02 #i28701# - new methods
 |*
 |*************************************************************************/
-
-void SwPageFrm::AppendDrawObj( SwDrawContact *pNew )
+void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 {
-    if ( GetUpper() )
-        ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
-
-    const SdrObjectPtr pObj = pNew->GetMaster();
-    ASSERT( pNew->GetAnchorFrm(), "Contact without Anchor" );
-    SwFlyFrm *pFly = pNew->GetAnchorFrm()->FindFlyFrm();
-    if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
+    if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
-        if ( pObj->GetPage() )
-            pObj->GetPage()->SetObjectOrdNum( pObj->GetOrdNumDirect(), nNewNum);
-        else
-            pObj->SetOrdNum( nNewNum );
-    }
-
-    if ( FLY_IN_CNTNT == pNew->GetFmt()->GetAnchor().GetAnchorId() )
+        ASSERT( false,
+                "SwPageFrm::AppendDrawObjToPage(..) - anchored object of unexcepted type -> object not appended" );
         return;
-
-    if ( !pSortedObjs )
-        pSortedObjs = new SwSortDrawObjs();
-    if ( !pSortedObjs->Insert( pObj ) )
-    {
-#ifndef PRODUCT
-        USHORT nIdx;
-        ASSERT( pSortedObjs->Seek_Entry( pObj, &nIdx ),
-                "Fly nicht in Sorted eingetragen." );
-#endif
     }
-    pNew->ChgPage( this );
 
-    // OD 2004-03-31 #i26791# - invalidate page in order to force a reformat of
-    // object layout of the page.
-    InvalidateFlyLayout();
-}
-
-// OD 20.05.2003 #108784# - adding 'virtual' drawing object to page frame
-void SwPageFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
-                                   SwDrawVirtObj* _pDrawVirtObj )
-{
     if ( GetUpper() )
     {
         ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
     }
 
-    ASSERT( _pDrawVirtObj->GetAnchorFrm(), "virtual draw contact without anchor" );
-    const SwFlyFrm* pFly = _pDrawVirtObj->GetAnchorFrm()->FindFlyFrm();
-    if ( pFly && _pDrawVirtObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
+    ASSERT( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
+    const SwFlyFrm* pFlyFrm = _rNewObj.GetAnchorFrm()->FindFlyFrm();
+    if ( pFlyFrm &&
+         _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
     {
-        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
-        if ( _pDrawVirtObj->GetPage() )
-            _pDrawVirtObj->GetPage()->SetObjectOrdNum( _pDrawVirtObj->GetOrdNumDirect(), nNewNum);
+        UINT32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect() + 1;
+        if ( _rNewObj.GetDrawObj()->GetPage() )
+            _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum(
+                            _rNewObj.GetDrawObj()->GetOrdNumDirect(), nNewNum);
         else
-            _pDrawVirtObj->SetOrdNum( nNewNum );
+            _rNewObj.DrawObj()->SetOrdNum( nNewNum );
     }
 
-    if ( FLY_IN_CNTNT == _pDrawContact->GetFmt()->GetAnchor().GetAnchorId() )
+    if ( FLY_IN_CNTNT == _rNewObj.GetFrmFmt().GetAnchor().GetAnchorId() )
     {
         return;
     }
 
     if ( !pSortedObjs )
     {
-        pSortedObjs = new SwSortDrawObjs();
+        pSortedObjs = new SwSortedObjs();
     }
-    if ( !pSortedObjs->Insert( _pDrawVirtObj ) )
+    if ( !pSortedObjs->Insert( _rNewObj ) )
     {
 #ifndef PRODUCT
-        USHORT nIdx;
-        ASSERT( pSortedObjs->Seek_Entry( _pDrawVirtObj, &nIdx ),
-                "Fly nicht in Sorted eingetragen." );
+        ASSERT( pSortedObjs->Contains( _rNewObj ),
+                "Drawing object not appended into list <pSortedObjs>." );
 #endif
     }
-    _pDrawVirtObj->SetPageFrm( this );
+    _rNewObj.SetPageFrm( this );
 
-    // OD 2004-04-05 #i26791# - invalidate page in order to force a reformat of
-    // object layout of the page.
+    // invalidate page in order to force a reformat of object layout of the page.
     InvalidateFlyLayout();
 }
 
-void SwPageFrm::RemoveDrawObj( SwDrawContact *pToRemove )
+void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 {
-    //Auch Zeichengebundene muessen hier leider durchlaufen, weil beim
-    //setzen des Attributes zuerst das Attribut gesetzt und dann das Modify
-    //versendet wird.
+    if ( !_rToRemoveObj.ISA(SwAnchoredDrawObject) )
+    {
+        ASSERT( false,
+                "SwPageFrm::RemoveDrawObjFromPage(..) - anchored object of unexcepted type -> object not removed" );
+        return;
+    }
 
-    //Die FlyColl kann bereits weg sein, weil der DTor der Seite
-    //gerade 'laeuft'
     if ( pSortedObjs )
     {
-        const SdrObjectPtr *pDel = pSortedObjs->GetData();
-        pSortedObjs->Remove( pToRemove->GetMaster() );
+        pSortedObjs->Remove( _rToRemoveObj );
         if ( !pSortedObjs->Count() )
         {
             DELETEZ( pSortedObjs );
         }
         if ( GetUpper() )
         {
-            if ( FLY_IN_CNTNT != pToRemove->GetFmt()->GetAnchor().GetAnchorId() )
+            if ( FLY_IN_CNTNT != _rToRemoveObj.GetFrmFmt().GetAnchor().GetAnchorId() )
             {
                 ((SwRootFrm*)GetUpper())->SetSuperfluous();
                 InvalidatePage();
@@ -937,31 +955,7 @@ void SwPageFrm::RemoveDrawObj( SwDrawContact *pToRemove )
             ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
         }
     }
-    pToRemove->ChgPage( 0 );
-}
-
-// OD 20.05.2003 #108784# - remove 'virtual' drawing object from page frame.
-void SwPageFrm::RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
-                                   SwDrawVirtObj* _pDrawVirtObj )
-{
-    if ( pSortedObjs )
-    {
-        pSortedObjs->Remove( _pDrawVirtObj );
-        if ( !pSortedObjs->Count() )
-        {
-            DELETEZ( pSortedObjs );
-        }
-        if ( GetUpper() )
-        {
-            if ( FLY_IN_CNTNT != _pDrawContact->GetFmt()->GetAnchor().GetAnchorId() )
-            {
-                ((SwRootFrm*)GetUpper())->SetSuperfluous();
-                InvalidatePage();
-            }
-            ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
-        }
-    }
-    _pDrawVirtObj->SetPageFrm( 0 );
+    _rToRemoveObj.SetPageFrm( 0 );
 }
 
 /*************************************************************************
@@ -982,11 +976,11 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
     //Wenn ein Fly uebergeben wurde, so benutzen wir diesen, ansonsten wird
     //mit dem Format einer erzeugt.
     if ( pFly )
-        SwFrm::AppendFly( pFly );
+        AppendFly( pFly );
     else
     {   ASSERT( pFmt, ":-( kein Format fuer Fly uebergeben." );
         pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this );
-        SwFrm::AppendFly( pFly );
+        AppendFly( pFly );
         ::RegistFlys( this, pFly );
     }
     return pFly;
@@ -1003,24 +997,32 @@ SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
 // OD 22.09.2003 #i18732# - adjustments for following text flow or not
 // AND alignment at 'page areas' for to paragraph/to character anchored objects
 // OD 06.11.2003 #i22305# - adjustment for following text flow
-// or not for to frame anchored objects
-// OD 2004-06-02 #???# - Because the calculation of the position of the
+// for to frame anchored objects
+// OD 2004-06-02 #i29778# - Because the calculation of the position of the
 // floating screen object (Writer fly frame or drawing object) doesn't perform
 // a calculation on its upper frames and its anchor frame, a calculation of
 // the upper frames in this method no longer sensible.
+// --> OD 2004-07-06 #i28701# - if document compatibility option 'Consider
+// wrapping style influence on object positioning' is ON, the clip area
+// corresponds to the one as the object doesn't follows the text flow.
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
 {
     BOOL bRet = TRUE;
     if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
     {
-        const SwFlyFrm *pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
+        const SwFlyFrm* pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
         const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
+        // --> OD 2004-07-06 #i28701#
+        const bool bConsiderWrapOnObjPos =
+                                pFly->GetFmt()->GetDoc()->ConsiderWrapOnObjPos();
+        // <--
         const SwFmtVertOrient &rV = pFly->GetFmt()->GetVertOrient();
         if( pFly->IsFlyLayFrm() )
         {
             const SwFrm* pClip;
             // OD 06.11.2003 #i22305#
-            if ( !bFollowTextFlow )
+            // --> OD 2004-07-06 #i28701#
+            if ( !bFollowTextFlow || bConsiderWrapOnObjPos )
             {
                 pClip = pFly->GetAnchorFrm()->FindPageFrm();
             }
@@ -1052,8 +1054,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         {
             // OD 22.09.2003 #i18732# - consider following text flow or not
             // AND alignment at 'page areas'
-            const SwFrm* pVertPosOrientFrm =
-                    static_cast<const SwFlyAtCntFrm*>(pFly)->GetVertPosOrientFrm();
+            const SwFrm* pVertPosOrientFrm = pFly->GetVertPosOrientFrm();
             if ( !pVertPosOrientFrm )
             {
                 ASSERT( false,
@@ -1061,7 +1062,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 pVertPosOrientFrm = pFly->GetAnchorFrm();
             }
 
-            if ( !bFollowTextFlow )
+            if ( !bFollowTextFlow || bConsiderWrapOnObjPos )
             {
                 const SwLayoutFrm* pClipFrm = pVertPosOrientFrm->FindPageFrm();
                 rRect = bMove ? pClipFrm->GetUpper()->Frm()
