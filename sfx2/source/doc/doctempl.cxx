@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:53:46 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,12 +297,11 @@ public:
 
 using namespace ::DocTempl;
 
-DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* );
-
 // ------------------------------------------------------------------------
 
 class RegionData_Impl
 {
+    DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* );
     const SfxDocTemplate_Impl*  mpParent;
     EntryList_Impl              maEntries;
     OUString                    maTitle;
