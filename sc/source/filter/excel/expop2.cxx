@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:01:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,17 +102,12 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData ):
     pExcRoot = mpRD;
     pExcRoot->pDoc = GetDocPtr();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
-    pExcRoot->pScNameList = new ScRangeName;
     pExcRoot->bCellCut = FALSE;
     pExcRoot->eHauptDateiTyp = Biff5;
     pExcRoot->eDateiTyp = Biff5;
-    pExcRoot->nColMax = static_cast<SCCOL>(XCL_COLMAX);
-    pExcRoot->nRowMax = static_cast<SCROW>(EXC5_ANZROW);
-
     pExcRoot->pCharset = &eZielChar;
 
     // options from configuration
-
     ScFilterOptions aFilterOpt;
     pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
@@ -182,7 +177,6 @@ ExportBiff8::ExportBiff8( XclExpRootData& rExpData ) :
 {
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
-    pExcRoot->nRowMax = static_cast<SCROW>(XCL8_ROWMAX);
     pExcRoot->pEscher = new XclEscher( GetDoc().GetTableCount(), *pExcRoot );
 }
 
