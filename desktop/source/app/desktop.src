@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-17 00:03:17 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 16:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ String STR_RECOVER_QUERY
     Text[ chinese_simplified ] = "要修复这个文件 \"$1\" ？";
     Text[ russian ] = "������������ ���� \"$1\"?";
     Text[ polish ] = "Odtworzy� plik \"$1\"?";
-    Text[ japanese ] = "ﾌｧｲﾙ \"$1\" を復元しますか。";
+    Text[ japanese ] = "ファイル \"$1\" を復元しますか。";
     Text[ chinese_traditional ] = "要修復檔案<$1>？";
     Text[ arabic ] = "�� ���� ������� ����� \"$1\"�";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
@@ -106,7 +106,7 @@ String STR_RECOVER_TITLE
     Text[ chinese_simplified ] = "修复文件";
     Text[ russian ] = "�������������� �����";
     Text[ polish ] = "Odtwarzanie plik�w";
-    Text[ japanese ] = "ﾌｧｲﾙの復元";
+    Text[ japanese ] = "ファイルの復元";
     Text[ chinese_traditional ] = "修復檔案";
     Text[ arabic ] = "������� ���";
     Text[ dutch ] = "Herstel bestand";
@@ -135,7 +135,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ chinese_simplified ] = "真是非常抱歉。刚才的操作引发了一个无法排除的错误。\n修改过的文件已经保存。\n在下一次启动程序时很可能重新恢复这些文件。";
     Message[ russian ] = "��������� ������������ ������.\n\n��� ���������� ����� ����� ���������\n� �� ����� ����� ������������ ��� ���������\n������� ���������.";
     Message[ polish ] = "Wyst�pi� nieodwracalny b��d.\n\nWszystkie zmodyfikowane pliki zosta�y jednak\nzabezpieczone i zostan� prawdopodobnie przywr�cone przy nast�pnym uruchomieniu programu.\n.";
-    Message[ japanese ] = "除去できないｴﾗｰが発生しました。\n\n変更したﾌｧｲﾙはすべて保存されているので\n次のﾌﾟﾛｸﾞﾗﾑ起動で復元されるはずです。";
+    Message[ japanese ] = "除去できないエラーが発生しました。\n\n変更したファイルはすべて保存されているので\n次のプログラム起動で復元されるはずです。";
     Message[ chinese_traditional ] = "真是非常抱歉。剛才的動作引發了一個無法排除的錯誤。\n先前修改過的檔案已經儲存。\n在下一次啟動程式時很可能重新恢復這些檔案。";
     Message[ arabic ] = "��� ��� ��� ���� �������.\n\n�� ��� ���� ������� ���� �� ������ǡ \n���� ���� ��������� ��� �����\n ����� ��������.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
@@ -165,8 +165,8 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
     Text[ swedish ] = "Det g�r inte att starta programmet. ";
     Text[ polish ] = "Uruchomienie aplikacji nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The program cannot be started. ";
-    Text[ japanese ] = "ﾌﾟﾛｸﾞﾗﾑは起動できません。";
-    Text[ korean ] = "The program cannot be started. ";
+    Text[ japanese ] = "プログラムは起動できません。";
+    Text[ korean ] = "프로그램을 시작할 수 없습니다.";
     Text[ chinese_simplified ] = "无法启动该应用程序。";
     Text[ chinese_traditional ] = "無法啓動這個應用程式。";
     Text[ turkish ] = "The program cannot be started. ";
@@ -191,8 +191,8 @@ String STR_BOOTSTRAP_ERR_DIR_MISSING
     Text[ swedish ] = "Konfigurationss�kv�gen \"$1\" hittades inte.";
     Text[ polish ] = "Nie znaleziono �cie�ki konfiguracyjnej \"$1\".";
     Text[ portuguese_brazilian ] = "The configuration directory \"$1\" is missing.";
-    Text[ japanese ] = "設定ﾊﾟｽ \"$1\" はありません。";
-    Text[ korean ] = "The configuration directory \"$1\" is missing.";
+    Text[ japanese ] = "設定パス \"$1\" はありません。";
+    Text[ korean ] = "구성 디렉토리 \"$1\"을(를)이 없습니다.";
     Text[ chinese_simplified ] = "无法找到配置路径 \"$1\"。";
     Text[ chinese_traditional ] = "沒有找到配置路徑 \"$1\" 。";
     Text[ turkish ] = "The configuration directory \"$1\" is missing.";
@@ -217,8 +217,8 @@ String STR_BOOTSTRAP_ERR_PATH_INVALID
     Text[ swedish ] = "Installationss�kv�gen �r ogiltig.";
     Text[ polish ] = "�cie�ka instalacyjna jest nieprawid�owa.";
     Text[ portuguese_brazilian ] = "The installation path is invalid.";
-    Text[ japanese ] = "ｲﾝｽﾄｰﾙﾊﾟｽは無効です。";
-    Text[ korean ] = "The installation path is invalid.";
+    Text[ japanese ] = "インストールパスは無効です。";
+    Text[ korean ] = "설치 경로가 올바르지 않습니다.";
     Text[ chinese_simplified ] = "安装路径无效。";
     Text[ chinese_traditional ] = "這個安裝路徑無效。";
     Text[ turkish ] = "The installation path is invalid.";
@@ -243,8 +243,8 @@ String STR_BOOTSTRAP_ERR_NO_PATH
     Text[ swedish ] = "Det gick inte att best�mma installationss�kv�gen.";
     Text[ polish ] = "Ustalenie �cie�ki instalacyjnej nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "The installation path is not available.";
-    Text[ japanese ] = "ｲﾝｽﾄｰﾙﾊﾟｽは指定できませんでした。";
-    Text[ korean ] = "The installation path is not available.";
+    Text[ japanese ] = "インストールパスは指定できませんでした。";
+    Text[ korean ] = "설치 경로를 사용할 수 없습니다.";
     Text[ chinese_simplified ] = "无法确定安装路径。";
     Text[ chinese_traditional ] = "無法確定這個安裝路徑。";
     Text[ turkish ] = "The installation path is not available.";
@@ -269,8 +269,8 @@ String STR_BOOTSTRAP_ERR_INTERNAL
     Text[ swedish ] = "Det har uppst�tt ett internt fel.";
     Text[ polish ] = "Wyst�pi� wewn�trzny b��d.";
     Text[ portuguese_brazilian ] = "An internal failure occurred.";
-    Text[ japanese ] = "内部ｴﾗｰが発生しました。";
-    Text[ korean ] = "An internal failure occurred.";
+    Text[ japanese ] = "内部エラーが発生しました。";
+    Text[ korean ] = "내부 오류가 발생했습니다.";
     Text[ chinese_simplified ] = "出现了一个内部的错误。";
     Text[ chinese_traditional ] = "發生一個不明的內部錯誤。";
     Text[ turkish ] = "An internal failure occurred.";
@@ -295,8 +295,8 @@ String STR_BOOTSTRAP_ERR_FILE_CORRUPT
     Text[ swedish ] = "Konfigurationsfilen \"$1\" �r skadad.";
     Text[ polish ] = "Plik konfiguracyjny \"$1\" jest uszkodzony.";
     Text[ portuguese_brazilian ] = "The configuration file \"$1\" is corrupt.";
-    Text[ japanese ] = "設定ﾌｧｲﾙ \"$1\" は破損しています。";
-    Text[ korean ] = "The configuration file \"$1\" is corrupt.";
+    Text[ japanese ] = "設定ファイル \"$1\" は破損しています。";
+    Text[ korean ] = "구성 파일 \"$1\"이(가) 손상되었습니다.";
     Text[ chinese_simplified ] = "配置文件 \"$1\" 已经损坏。";
     Text[ chinese_traditional ] = "配置檔案 \"$1\" 已經損壞。";
     Text[ turkish ] = "The configuration file \"$1\" is corrupt.";
@@ -321,8 +321,8 @@ String STR_BOOTSTRAP_ERR_FILE_MISSING
     Text[ swedish ] = "Konfigurationsfilen \"$1\" hittades inte.";
     Text[ polish ] = "Nie znaleziono pliku konfiguracyjnego \"$1\".";
     Text[ portuguese_brazilian ] = "The configuration file \"$1\" is missing.";
-    Text[ japanese ] = "設定ﾌｧｲﾙ \"$1\" はありません。";
-    Text[ korean ] = "The configuration file \"$1\" is missing.";
+    Text[ japanese ] = "設定ファイル \"$1\" はありません。";
+    Text[ korean ] = "구성 파일 \"$1\"이(가) 없습니다.";
     Text[ chinese_simplified ] = "无法找到配置文件 \"$1\" 。";
     Text[ chinese_traditional ] = "沒有找到配置檔案 \"$1\" 。";
     Text[ turkish ] = "The configuration file \"$1\" is missing.";
@@ -347,8 +347,8 @@ String STR_BOOTSTRAP_ERR_NO_SUPPORT
     Text[ swedish ] = "Konfigurationsfilen \"$1\" underst�der inte den h�r versionen.";
     Text[ polish ] = "Plik konfiguracyjny \"$1\" nie obs�uguje danej wersji.";
     Text[ portuguese_brazilian ] = "The main configuration file \"$1\" does not support the current version.";
-    Text[ japanese ] = "設定ﾌｧｲﾙ \"$1\" はこのﾊﾞｰｼﾞｮﾝを支援しません。";
-    Text[ korean ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ japanese ] = "設定ファイル \"$1\" はこのバージョンを支援しません。";
+    Text[ korean ] = "주 구성 파일 \"$1\"에서 현재 버전을 지원하지 않습니다.";
     Text[ chinese_simplified ] = "配置文件 \"$1\" 不支持这个版本。";
     Text[ chinese_traditional ] = "配置檔案 \"$1\" 不支援這個版本。";
     Text[ turkish ] = "The main configuration file \"$1\" does not support the current version.";
@@ -373,8 +373,8 @@ String STR_BOOTSTRAP_ERR_NO_SERVICE
     Text[ swedish ] = "Komponenthanteraren �r inte tillg�nglig.";
     Text[ polish ] = "Brak dost�pu do mened�era komponent�w.";
     Text[ portuguese_brazilian ] = "The service manager is not available.";
-    Text[ japanese ] = "ｺﾝﾎﾟｰﾈﾝﾄﾏﾈｰｼﾞｬｰは使用できません。";
-    Text[ korean ] = "The service manager is not available.";
+    Text[ japanese ] = "コンポーネントマネージャーは使用できません。";
+    Text[ korean ] = "서비스 관리자를 사용할 수 없습니다.";
     Text[ chinese_simplified ] = "无法使用程序元件管理器。";
     Text[ chinese_traditional ] = "程式元件管理員不存在。";
     Text[ turkish ] = "The service manager is not available.";
@@ -399,8 +399,8 @@ String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
     Text[ swedish ] = "Det g�r inte att skapa konfigurationshanteraren.";
     Text[ polish ] = "Utworzenie mened�era konfiguracyjnego nie jest mo�liwe.";
     Text[ portuguese_brazilian ] = "The configuration service is not available.";
-    Text[ japanese ] = "設定ﾏﾈｰｼﾞｬｰは作成できません。";
-    Text[ korean ] = "The configuration service is not available.";
+    Text[ japanese ] = "設定マネージャーは作成できません。";
+    Text[ korean ] = "구성 서비스를 사용할 수 없습니다.";
     Text[ chinese_simplified ] = "无法生成配置服务管理器。";
     Text[ chinese_traditional ] = "無法建立配置管理員。";
     Text[ turkish ] = "The configuration service is not available.";
@@ -425,8 +425,8 @@ String STR_ASK_START_SETUP_REPAIR
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan repareras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu naprawy zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to repair installation?";
-    Text[ japanese ] = "ｲﾝｽﾄｰﾙの修復をするのにｾｯﾄｱｯﾌﾟｱﾌﾟﾘｹｰｼｮﾝを開始しますか。";
-    Text[ korean ] = "Start setup application to repair installation?";
+    Text[ japanese ] = "インストールの修復をするのにセットアップアプリケーションを開始しますか。";
+    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 복구하겠습니까?";
     Text[ chinese_simplified ] = "要启动安装程序来修补您原先的安装？";
     Text[ chinese_traditional ] = "要啓動安裝程式，修復已經安裝的應用程式？";
     Text[ turkish ] = "Start setup application to repair installation?";
@@ -451,8 +451,8 @@ String STR_ASK_START_SETUP
     Text[ swedish ] = "Ska setupprogrammet startas s� att din installation kan kontrolleras?";
     Text[ polish ] = "Uruchomi� aplikacj� instalacyjn� w celu sprawdzenia zainstalowanego programu?";
     Text[ portuguese_brazilian ] = "Start setup application to check installation?";
-    Text[ japanese ] = "ｲﾝｽﾄｰﾙを確認するのにｾｯﾄｱｯﾌﾟｱﾌﾟﾘｹｰｼｮﾝを開始しますか。";
-    Text[ korean ] = "Start setup application to check installation?";
+    Text[ japanese ] = "インストールを確認するのにセットアップアプリケーションを開始しますか。";
+    Text[ korean ] = "설치 응용 프로그램을 시작하여 설치를 검사하겠습니까?";
     Text[ chinese_simplified ] = "要启动安装程序来检查您原先的安装？";
     Text[ chinese_traditional ] = "要啓動安裝程式，檢查已安裝的應用程式？";
     Text[ turkish ] = "Start setup application to check installation?";
@@ -477,14 +477,15 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ swedish ] = "Det gick inte att starta setupprogrammet automatiskt! Starta det manuellt.";
     Text[ polish ] = "Automatyczne uruchomienie aplikacji instalacyjnej nie powiod�o si�! Nale�y uruchomi� j� r�cznie.";
     Text[ portuguese_brazilian ] = "Couldn't start setup application! Please start it manually.";
-    Text[ japanese ] = "ｾｯﾄｱｯﾌﾟｱﾌﾟﾘｹｰｼｮﾝは自動開始できませんでした。手動で開始してください。";
-    Text[ korean ] = "Couldn't start setup application! Please start it manually.";
+    Text[ japanese ] = "セットアップアプリケーションは自動開始できませんでした。手動で開始してください。";
+    Text[ korean ] = "설치 응용 프로그램을 시작하지 못했습니다! 설치 응용 프로그램을 수동으로 시작하십시오.";
     Text[ chinese_simplified ] = "无法自动启动安装程序！请手动启动。";
     Text[ chinese_traditional ] = "無法自動啓動安裝程式！請手動啓動安裝程式。";
     Text[ turkish ] = "Couldn't start setup application! Please start it manually.";
     Text[ arabic ] = "Couldn't start setup application! Please start it manually.";
     Text[ catalan ] = "Couldn't start setup application! Please start it manually.";
 };
+
 
 
 
