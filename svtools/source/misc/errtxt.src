@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 15:29:24 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 10:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ Resource RID_ERRCTX
         Text [ french ] = "Avertissement" ;
         Text [ swedish ] = "Varning" ;
         Text [ danish ] = "Advarsel" ;
-        Text [ portuguese ] = "Aviso" ;
+        Text [ portuguese ] = "Advertκncia" ;
         Text [ portuguese_brazilian ] = "Warnung" ;
         Text[ chinese_simplified ] = "Ύ―Έζ";
         Text[ russian ] = "Οπεδσοπεζδενθε";
@@ -138,7 +138,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
         Text[ chinese_simplified ] = "$(ERR)·ΆΙϊΤΪΧ°ΘλΡωΚ½$(ARG1)Κ±";
         Text[ greek ] = "$(ERR) κατά τη φόρτωση του προτύπου $(ARG1)";
-        Text[ korean ] = "Ό­½ΔΖΔΐΟ $(ARG1)ΐ» ·ΞµεΗΟ΄ψΑί $(ERR)";
+        Text[ korean ] = "Ό­½ΔΖΔΐΟ $(ARG1)ΐ»£¨Έ¦£© ·ΞµεΗΟ΄ψΑί $(ERR)";
         Text[ turkish ] = "$(ARG1) ώablonu yόklenirken $(ERR)";
         Text[ language_user1 ] = " ";
     };
@@ -163,7 +163,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
         Text[ chinese_simplified ] = "΄ζΕΜΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την αποθήκευσητου εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)Έ¦ ΐϊΐεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ΐϊΐεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
     };
@@ -188,7 +188,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1)";
         Text[ chinese_simplified ] = "΄ζΕΜΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την αποθήκευσητου εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)Έ¦ ΐϊΐεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ΐϊΐεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi kaydedilirken $(ERR)";
         Text[ language_user1 ] = " ";
     };
@@ -239,7 +239,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon";
         Text[ chinese_simplified ] = "ΤΪΈ²Π΄ΡωΚ½ΞΔµµ$(ARG1)Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά την εγγραφή του εγγράφου $(ARG1) ως πρότυπο";
-        Text[ korean ] = "Ή®Ό­$(ARG1)Έ¦ Ό­½ΔΖΔΐΟ·Ξ ±β·ΟΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© Ό­½ΔΖΔΐΟ·Ξ ±β·ΟΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi ώablon olarak yazύlύrken $(ERR)";
         Text[ language_user1 ] = " ";
     };
@@ -315,7 +315,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij openen van document $(ARG1)";
         Text[ chinese_simplified ] = "Χ°ΘλΞΔµµ $(ARG1) Κ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά το φόρτωμα του εγγράφου $(ARG1)";
-        Text[ korean ] = "Ή®Ό­$(ARG1)Έ¦ ·ΞµεΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Ή®Ό­$(ARG1)ΐ»£¨Έ¦£© ·ΞµεΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi yόklenirken $(ERR)";
         Text[ language_user1 ] = " ";
     };
@@ -393,7 +393,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij openen van een rubriek";
         Text[ chinese_simplified ] = "΄ςΏª·ΦΐΰΜυΔΏΚ±·ΆΙϊ $(ERR)";
         Text[ greek ] = "$(ERR) κατά το άνοιγμα μιας κατηγορίας";
-        Text[ korean ] = "ΗΧΈρΐ» ΐό°³ΗΟ΄ψ Αί $(ERR)";
+        Text[ korean ] = "Η¥Α¦Έ¦΅΅ΐό°³ΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "Giriώi aηarken $(ERR)";
     };
     String ERRCTX_SFX_LOADBASIC
@@ -474,7 +474,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Object bestaat niet";
         Text[ chinese_simplified ] = "²»΄ζΤΪµΔ¶ΤΟσ";
         Text[ greek ] = "Μη υπαρκτό αντικείμενο";
-        Text[ korean ] = "Ύψ΄Β °³ΓΌ";
+        Text[ korean ] = "ΑΈΐηΗΟΑφ΅΅ΎΚ΄Β °³ΓΌ";
         Text[ turkish ] = "Mevcut olmayan nesne";
     };
     String ERRCODE_CLASS_ALREADYEXISTS
@@ -499,7 +499,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Object bestaat reeds";
         Text[ chinese_simplified ] = "¶ΤΟσÒΡΎ­΄ζΤΪ";
         Text[ greek ] = "Το αντικείμενο υπάρχει ήδη";
-        Text[ korean ] = "°³ΓΌ°΅ ΐΜΉΜ ΐΦΐ½";
+        Text[ korean ] = "°³ΓΌ°΅ ΐΜΉΜ ΑΈΐηΗΤ";
         Text[ turkish ] = "Nesne mevcut";
     };
     String ERRCODE_CLASS_ACCESS
@@ -524,7 +524,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Geen toegang tot object";
         Text[ chinese_simplified ] = "²»ΔάΉ»¶ΑΘ΅¶ΤΟσ";
         Text[ greek ] = "Δεν είναι δυνατόν να γίνει πρόσβαση στο αντικείμενο.";
-        Text[ korean ] = "°³ΓΌΏ΅ ΎΧΌΌ½Ί ΈψΗΤ";
+        Text[ korean ] = "°³ΓΌΏ΅ ΑΆ±Ω ΈψΗΤ";
         Text[ turkish ] = "Nesneye eriώim saπlanamύyor";
     };
     String ERRCODE_CLASS_PATH
@@ -725,7 +725,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Onbekend";
         Text[ chinese_simplified ] = "²»Γχ";
         Text[ greek ] = "Άγνωστο";
-        Text[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐ½";
+        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφ ΎΚΐ½";
         Text[ turkish ] = "Bilinmiyor";
     };
     String ERRCODE_CLASS_VERSION
@@ -901,7 +901,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "BASIC syntax error";
         Text[ chinese_simplified ] = "BASIC Σο·¨΄νΞσ";
         Text[ greek ] = "Σφάλμα σύνταξης BASIC";
-        Text[ korean ] = "BASIC Ή®ΐε Ώΐ·ω";
+        Text[ korean ] = "BASIC ±ΈΉ® Ώΐ·ω";
         Text[ turkish ] = "BASIC sφz dizimi hatasύ";
     };
     String 1
@@ -1104,7 +1104,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Het aangegeven apparaat bestaat niet.";
         Text[ chinese_simplified ] = "ΦΈ¶¨µΔΙθ±ΈΞήΠ§";
         Text[ greek ] = "Η καθορισμένη συσκευή δεν είναι έγκυρη";
-        Text[ korean ] = "ΑφΑ¤µΘ ΐεΔ΅°΅ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΑφΑ¤µΘ ΐεΔ΅΄Β ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belirtilen cihaz geηerli deπil";
     };
     String ERRCODE_IO_ACCESSDENIED
@@ -1129,7 +1129,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Er bestaat geen recht op toegang\n tot object.";
         Text[ chinese_simplified ] = "Θ±ΙΩ¶ΑΘ΅Θ¨ΐϋ£¬\nΞή·¨¶ΑΘ΅ΥβΈφ¶ΤΟσ";
         Text[ greek ] = "Η πρόσβαση στο αντικείμενο δεν είναι δυνατή\nλόγω έλλειψης δικαιωμάτων";
-        Text[ korean ] = "»ηΏλΐΪ ±ΗΗΡΐΜ ΎψΎξ °³ΓΌΏ΅\nΎΧΌΌ½ΊΗÒ Όφ Ύψΐ½";
+        Text[ korean ] = "»ηΏλΐΪ ±ΗΗΡΐΜ ΎψΎξ °³ΓΌΏ΅\nΑΆ±ΩΗÒ Όφ Ύψΐ½";
         Text[ turkish ] = "Gerekli eriώim haklarύnύn olmamasύ nedeniyle \nnesneye eriώim saπlanamύyor";
     };
     String ERRCODE_IO_LOCKVIOLATION
@@ -1154,7 +1154,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Fout bij gelijktijdige toegang tot object";
         Text[ chinese_simplified ] = "ΤΪΝ¬Κ±¶ΑΘ΅ΥβΈφ¶ΤΟσΚ±·ΆΙϊ΄νΞσ";
         Text[ greek ] = "Σφάλμα κατά την κοινή πρόσβαση στο αντικείμενο";
-        Text[ korean ] = "°³ΓΌΏ΅ °ψΐ― ΎΧΌΌ½ΊΗÒ ¶§ Ώΐ·ω";
+        Text[ korean ] = "°³ΓΌΏ΅ °ψµΏ΅΅ΑΆ±Ω½ΓΏ΅ Ώΐ·ω";
         Text[ turkish ] = "Nesneye eriώimde bir paylaώύm hatasύ oluώtu";
     };
     String ERRCODE_IO_OUTOFSPACE
@@ -1179,7 +1179,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Onvoldoende opslagruimte";
         Text[ chinese_simplified ] = "Ιθ±ΈΙΟµΔΏΙΣΓΏΥΌδÒΡΎ­ΣΓΝκ";
         Text[ greek ] = "Δεν είναι διαθέσιμος περισσότερος χώρος στη συσκευή";
-        Text[ korean ] = "ΐεΔ΅Ώ΅ ΄υ ΐΜ»σ ΐΜΏλ °ψ°£ΐΜ Ύψΐ½";
+        Text[ korean ] = "ΐεΔ΅Ώ΅ ΄υ ΐΜ»σ °ψ°£ΐΜ Ύψΐ½";
         Text[ turkish ] = "Cihazda yeterli alan kalmadύ";
     };
     String ERRCODE_IO_ISWILDCARD
@@ -1204,7 +1204,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Deze opdracht kan niet worden uitgevoerd bij bestanden \ndie wildcards bevatten";
         Text[ chinese_simplified ] = "Ξή·¨ΤΪΊ¬ΣΠΝ¨Εδ·ϋµΔ\nΞΔΌώΦΠΦ΄ΠΠΥβΈφ²ΩΧχ";
         Text[ greek ] = "Αυτή η λειτουργία δεν είναι δυνατόν να εφαρμοστεί σε αρχεία τα οποία \n περιέχουν χαρακτήρες μπαλαντέρ";
-        Text[ korean ] = "ΐΜ ΐΫµΏΐΊ ΏΝΐΟµε Δ«µεΈ¦ ΖχΗΤΗΟ΄Β ΖΔΐΟ \n Ώ΅Ό­ µΏΐΫµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΏΝΐΟµε Δ«µε°΅ ΖχΗΤµΘ ΖΔΐΟ \n Ώ΅Ό­ ΌφΗΰµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem, genel arama karakterleri\n iηeren dosyalar όzerinde gerηekleώtirilemiyor";
     };
     String ERRCODE_IO_NOTSUPPORTED
@@ -1229,7 +1229,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Deze opdracht wordt niet ondersteund door het bestaande besturingssysteem";
         Text[ chinese_simplified ] = "µ±Η°µΔ²ΩΧχΖ½Μ¨²»Φ§³ΦΥβΈφ²ΩΧχ";
         Text[ greek ] = "Η λειτουργία αυτή δεν υποστηρίζεται σε αυτό το λειτουργικό σύστημα";
-        Text[ korean ] = "ΐΜ ΐΫµΏΐΊ ΐΜ ΏΐΖΫ·ΉΐΜΖΓ ½Γ½ΊΕΫ»σΏ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ µΏΐΫΐΊ ΐΜ ΏξΏµΓΌΑ¦Ώ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Bu iώlem, iώletim sistemi tarafύndan desteklenmiyor";
     };
     String ERRCODE_IO_TOOMANYOPENFILES
@@ -1279,7 +1279,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden gelezen";
         Text[ chinese_simplified ] = "Ξή·¨¶ΑΘ΅ΥβΈφΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση του αρχείου";
-        Text[ korean ] = "µ¥ΐΜΕΝ°΅ ΖΔΐΟ·Ξ ΊΞΕΝ ΐΠΗτ ΑϊΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΏ΅Ό­ ΐΠΐ»Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosyadan veri okunamadύ";
     };
     String ERRCODE_IO_CANTWRITE
@@ -1304,7 +1304,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨Π΄ΘλΥβΈφΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατή η εγγραφή του αρχείου";
-        Text[ korean ] = "ΖΔΐΟΐΜ ΎµΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΏ΅ ΎµΌφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya yazύlamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -1330,7 +1330,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De opdracht kon niet worden uitgevoerd bij gebrek aan vrij geheugen.";
         Text[ chinese_simplified ] = "ÒςΞªΔΪ΄ζ²»Χγ¶ψΞή·¨Φ΄ΠΠΥβΈφ²ΩΧχ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία λόγω έλλειψης μνήμης";
-        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΨ, ΐΫµΏΐΜ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΈήΈπΈ® ΊΞΑ·ΐΈ·Ξ ΐΞΗΨ, µΏΐΫΐΜ ½ΗΗΰµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem, bellek yetersizliπi nedeniyle yόrόtόlemedi";
     };
     String ERRCODE_IO_CANTSEEK
@@ -1355,7 +1355,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De zoekopdracht kon niet worden uitgevoerd";
         Text[ chinese_simplified ] = "Ξή·¨Φ΄ΠΠΛΡΡ°²ΩΧχ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία αναζήτησης";
-        Text[ korean ] = "Γ£±β ΐΫµΏΐΜ ½ΗΗΰµΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Γ£±β µΏΐΫΐΜ ½ΗΗΰµΙΌφ Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Arama iώlemi yόrόtόlemedi";
     };
     String ERRCODE_IO_CANTTELL
@@ -1380,7 +1380,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De bestandsopdracht TELL kon niet worden uitgevoerd";
         Text[ chinese_simplified ] = "Ξή·¨Φ΄ΠΠ tell ΓόΑξ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εκτελεστεί η λειτουργία \"Tell\"";
-        Text[ korean ] = "Tell ΐΫΎχΐ» ½ΗΗΰΗΟΑφ ΈψΗίΐ½";
+        Text[ korean ] = "Tell ΐΫΎχΐ» ½ΗΗΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω";
         Text[ turkish ] = "Tell iώlemi yόrόtόlemedi";
     };
     String ERRCODE_IO_WRONGVERSION
@@ -1405,7 +1405,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand heeft verkeerde versie";
         Text[ chinese_simplified ] = "ΞΔΌώµΔ°ζ±ΎΞήΠ§";
         Text[ greek ] = "Λάθος έκδοση του αρχείου";
-        Text[ korean ] = "ΐίΈψµΘ ΖΔΐΟ ΉφΑ―";
+        Text[ korean ] = "Ζ²Έ° ΖΔΐΟ Ήφΐό";
         Text[ turkish ] = "Yanlύώ dosya sόrόmό";
     };
     String ERRCODE_IO_WRONGFORMAT
@@ -1455,7 +1455,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De bestandsnaam bevat ongeoorloofde tekens";
         Text[ chinese_simplified ] = "ΞΔΌώΓϋΦΠΊ¬ΣΠΞήΠ§µΔΧΦ·ϋ";
         Text[ greek ] = "Το όνομα του αρχείου περιέχει μη έγκυρους χαρακτήρες";
-        Text[ korean ] = "ΖΔΐΟΐΜΈ§Ώ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ Ή®ΐΪ°΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐΜΈ§Ώ΅ ΗγΏλµΗΑφ ΎΚΐΊ Ή®ΐΪ°΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya adύ geηersiz karakterler iηeriyor";
     };
     String ERRCODE_IO_UNKNOWN
@@ -1530,7 +1530,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Bestand kon niet worden gemaakt";
         Text[ chinese_simplified ] = "Ξή·¨½¨ΑΆΥβΈφΞΔΌώ";
         Text[ greek ] = "Το αρχείο δεν ήταν δυνατόν να δημιουργηθεί";
-        Text[ korean ] = "ΖΔΐΟΐΜ ΈΈµιΎξ ΑϊΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΖΔΐΟΐ» ΈΈµιΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Dosya oluώturulamadύ";
     };
     String ERRCODE_IO_INVALIDPARAMETER
@@ -1555,7 +1555,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Activiteit uitgevoerd met ongeldige parameter.";
         Text[ chinese_simplified ] = "ΚΉΣΓÒ»ΈφΞήΠ§µΔ²ΞΚύΖτ¶―ΑΛΥβΈφ²ΩΧχ";
         Text[ greek ] = "Η λειτουργία εκκίνησε με μη έγκυρη παράμετρο";
-        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΖΔ¶σΉΜΕΝ ΗΟΏ΅Ό­ ΐΫµΏΐΜ ½ΓΐΫµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΖΔ¶σΉΜΕΝ·Ξ ΐΫµΏΐΜ ½ΓΐΫµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έώlem geηersiz bir parametre ile baώlatύldύ.";
     };
     String ERRCODE_IO_ABORT
@@ -1730,7 +1730,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Lezen van documentinfo niet mogelijk.\nDocumentformaat onbekend of geen documentinfo\nvoorhanden";
         Text[ chinese_simplified ] = "Ξή·¨¶Α³φΥβΈφΞΔΌώµΔΞΔµµΠΕΟΆ£¬\nÒςΞªΥβΈφΞΔµµΠΕΟΆµΔΈρΚ½²»Γχ»ςΞΔµµΠΕΟΆ²»΄ζΤΪ\n";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει ανάγνωση των πληροφοριών του εγγράφου από το αρχείο\nείτε επειδή είναι άγνωστη η μορφή του εγγράφου πληροφοριών\n ή επειδή δεν υπάρχουν πληροφορίες για το έγγραφο.";
-        Text[ korean ] = "ΎΛΌφ Ύψ΄Β Ή®Ό­ Ό­½ΔΐΜ°Ε³ª  \nΉ®Ό­ Α¤ΊΈ°΅ ΑΈΐηΗΟΑφ ΎΚ±β ¶§Ή®Ώ΅ ΖΔΐΟ·Ξ ΊΞΕΝ Ή®Ό­ΐΗ Α¤ΊΈΈ¦\nΐΠΐ»Όφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΛ·ΑΑ®΅΅ΐΦΑφΎΚΐΊ Ή®Ό­ Ό­½ΔΐΜ°Ε³ª  \nΉ®Ό­ Α¤ΊΈ°΅ ΑΈΐηΗΟΑφ ΎΚ±β ¶§Ή®Ώ΅ ΖΔΐΟΏ΅Ό­΅΅Ή®Ό­ΐΗ Α¤ΊΈΈ¦\nΐΠΐ»Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Belge bilgileri formatύ, bilinmediπi ya da belge\nbilgisi mevcut olmadύπύ iηin\ndosyadan okunamadύ\n";
     };
     String ERRCODE_SFX_ALREADYOPEN
@@ -1780,7 +1780,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Foutief wachtwoord";
         Text[ chinese_simplified ] = "ΚδΘλΑΛÒ»Έφ΄νΞσµΔΓάΒλ";
         Text[ greek ] = "Ορίστηκε εσφαλμένος κωδικός πρόσβασης";
-        Text[ korean ] = "ΐίΈψµΘ ΖΠ½ΊΏφµε°΅ ΐΤ·ΒµΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ζ²Έ°΅΅ΖΠ½ΊΏφµε°΅ ΐΤ·ΒµΗΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Girilen ώifre yanlύώ";
         Text[ language_user1 ] = " ";
     };
@@ -1857,7 +1857,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Computernaam $(ARG1) kon niet worden herleid";
         Text[ chinese_simplified ] = "Ξή·¨ΥÒµ½ΌΖΛγ»ϊµΨΦ· $(ARG1)";
         Text[ greek ] = "Δεν ήταν δυνατόν γίνει ανάλυση του ονόματος του υπολογιστή $(ARG1)";
-        Text[ korean ] = "Θ£½ΊΖ® ΐΜΈ§ $(ARG1)ΐΜ Θ®ΐΞµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Θ£½ΊΖ® ΐΜΈ§ $(ARG1)ΐ» Θ®ΐΞΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "$(ARG1) sunucu adύ ηφzόlemedi";
     };
     String ERRCODE_INET_CONNECT
@@ -1882,7 +1882,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Er kon geen Internet-verbinding met $(ARG1) tot stand worden gebracht.";
         Text[ chinese_simplified ] = "Ξή·¨ΊΝ $(ARG1) ½¨ΑΆΉϊΌΚ»¥ΑªΝψΑ¬½Σ";
         Text[ greek ] = "Δεν ήταν δυνατόν να πραγματοποιηθεί η σύνδεση Internet με το $(ARG1).";
-        Text[ korean ] = "$(ARG1)Ώ΅ ΐΞΕΝ³έ Ώ¬°αΐ» ΗΟΑφ ΈψΗίΐ½";
+        Text[ korean ] = "$(ARG1)Ώ΅ ΐΞΕΝ³έ Ώ¬°αΐ» ±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω";
         Text[ turkish ] = "$(ARG1) Internet baπlantύsύ oluώturulamadύ";
     };
     String ERRCODE_INET_READ
@@ -2010,7 +2010,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Opmaakprofiel $(ARG1) vervangen?";
         Text[ chinese_simplified ] = "ÒªΈόΜζΡωΚ½ $(ARG1) £Ώ";
         Text[ greek ] = "Να αντικατασταθεί το στυλ $(ARG1);";
-        Text[ korean ] = "ΐ―Ηό$(ARG1)ΐ»(Έ¦)  ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+        Text[ korean ] = "½ΊΕΈΐΟ$(ARG1)ΐ»(Έ¦)  ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "$(ARG1) biηimi deπiώtirilsin mi?";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
     };
@@ -2116,7 +2116,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Er kon geen link worden gecreλerd.";
         Text[ chinese_simplified ] = "Ξή·¨Ιϊ³ΙΑ΄½Σ";
         Text[ greek ] = "Δεν ήταν δυνατόν να δημιουργηθεί η σύνδεση";
-        Text[ korean ] = "Ώ¬°αΐΜ ΈΈµιΎξΑφΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ώ¬°αΐ» ΈΈµιΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Baπlantύ oluώturulamadύ";
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
@@ -2141,7 +2141,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Ongeldig link-formaat";
         Text[ chinese_simplified ] = "ΞήΠ§µΔΑ΄½ΣΈρΚ½";
         Text[ greek ] = "Η μορφή της σύνδεσης δεν είναι έγκυρη.";
-        Text[ korean ] = "Ώ¬°αΐΗ Ό­½ΔΐΜΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "Ώ¬°αΐΗ ΖχΈΛΐΜ΅΅ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Baπlantύnύn formatύ geηerli deπil";
     };
     String ERRCODE_SFX_WRONGICONFILE
@@ -2191,7 +2191,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Configuration van pictogram kan niet worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨΄ζΕΜΝΌ±κΟΤΚΎµΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτεί η διαμόρφωση της εμφάνισης των συμβόλων";
-        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐΜ ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐ» ΐϊΐεΗÒ΅΅Όφ΅΅Ύψ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Simge gφrόntόleme konfigόrasyonu kaydedilemiyor";
     };
     String ERRCODE_SFX_CANTDELICONFILE
@@ -2216,7 +2216,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Configuratie van pictogram kon niet worden gewist.";
         Text[ chinese_simplified ] = "Ξή·¨ΙΎ³ύΝΌ±κΟΤΚΎµΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να διαγραφεί η διαμόρφωση της εμφάνισης των συμβόλων";
-        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐΜ »θΑ¦µΗΎϊ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΎΖΐΜΔά ΊΈ±β ±ΈΌΊΐ» »θΑ¦ΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Simge gφrόntόleme konfigόrasyonu silinemedi.";
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
@@ -2241,7 +2241,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De naam van de inhoud kon niet worden gewijzigd.";
         Text[ chinese_simplified ] = "Ξή·¨ΦΨΓόΓϋΔΪΘέ";
         Text[ greek ] = "Το περιεχόμενο δεν ήταν δυνατόν να μετονομαστεί.";
-        Text[ korean ] = "³»Ώλ ΐΜΈ§ ΉΩ²Ω±β°΅ ΎΘµΛ΄Ο΄Ω.";
+        Text[ korean ] = "³»Ώλ ΐΜΈ§ΐ»΅΅Ί―°ζΗΟΑφ΅΅ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "έηerik yeniden adlandύrύlamadύ";
     };
     String ERRCODE_SFX_INVALIDBMKPATH
@@ -2291,7 +2291,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen";
         Text[ chinese_simplified ] = "Ξή·¨΄ζΕΜÒªΎΦ²Ώ΄Ά΄ζ URL µΨΦ·µΔΕδΦΓΞΔΌώ";
         Text[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτεί η διαμόρφωση των URL που πρόκειται να αποθηκευτούν τοπικά";
-        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΘ URLΐΗ ±ΈΌΊΐΜ ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΙ URL ±ΈΌΊΐ» ΐϊΐεΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'Lerin konfigόrasyonu kaydedilemedi";
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
@@ -2316,7 +2316,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De configuratie van de URLs kon niet lokaal worden opgeslagen daar het formaat ongeldig is.";
         Text[ chinese_simplified ] = "ΎΦ²Ώ΄Ά΄ζ URL µΨΦ·µΔΕδΦΓΞΔΌώΈρΚ½ΞήΠ§";
         Text[ greek ] = "Η μορφή των ρυθμίσεων του URL, το οποίο πρόκειται να αποθηκευτεί τοπικά, δεν είναι έγκυρη.";
-        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΘ URLΐΗ ±ΈΌΊΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "·ΞΔΓΏ΅ ΐϊΐεµΙ URL ±ΈΌΊΐΊ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Yerel olarak kaydedilecek URL'lerin konfigόrasyon formatύ geηerli deπil";
     };
     String ERRCODE_SFX_NODOCUMENT
@@ -2417,7 +2417,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Het item kon niet worden hersteld";
         Text[ chinese_simplified ] = "Ξή·¨ΠήΈ΄ΥβΈφΜυΔΏ";
         Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η επαναφορά της καταχώρισης";
-        Text[ korean ] = "ΗΧΈρΐ» ΊΉ±ΈΗÒ Όφ Ύψΐ½";
+        Text[ korean ] = "ΐΤ·Βΐ» ΊΉ±ΈΗÒ Όφ Ύψΐ½";
         Text[ turkish ] = "Giriώ geri yόklenemedi";
     };
     String ERRCODE_IO_NAMETOOLONG
@@ -2593,7 +2593,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "De server mag niet leeg zijn.";
         Text[ chinese_simplified ] = "·ώΞρΖχ²»ΏΙÒΤΏΥΘ±";
         Text[ greek ] = "Ο διακομιστής δεν επιτρέπεται να είναι κενός";
-        Text[ korean ] = "Ό­Ήφ°΅ ΊρΎξΌ­΄Β ΎΘµΚ";
+        Text[ korean ] = "Ό­Ήφ°΅ ΊρΎξ΅΅ΐΦΎξΌ­΄Β ΎΘµΚ";
         Text[ turkish ] = "Sunucu boώ olmamalύdύr";
     };
     String ERRCODE_SFX_NO_ABOBOX
@@ -2668,7 +2668,7 @@ Resource RID_ERRHDL
         Text[ dutch ] = "Functie niet mogelijk. Pad bevat actuele directory";
         Text[ chinese_simplified ] = "Ξή·¨Φ΄ΠΠΉ¦Δά£ΊΒ·Ύ¶Ί¬ΣΠµ±Η°µΔΔΏΒΌ";
         Text[ greek ] = "Δεν είναι δυνατόν να εκτελεστεί η λειτουργία: Η διαδρομή περιέχει τον τρέχων κατάλογο";
-        Text[ korean ] = "±β΄Ι ΊÒ°΅΄Ι: °ζ·Ξ°΅ Ηφΐη µπ·ΊΕδΈ® ΖχΗΤ";
+        Text[ korean ] = "±β΄Ι ΊÒ°΅΄Ι: °ζ·ΞΏ΅ Ηφΐη µπ·ΊΕδΈ® ΖχΗΤ";
         Text[ turkish ] = "έώlev olanaklύ deπil: Veri yolu yόrόrlόkteki dizini iηeriyor";
     };
     String ERRCODE_IO_NOTSAMEDEVICE
