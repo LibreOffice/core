@@ -2,9 +2,9 @@
 #
 #   $RCSfile: featurecomponent.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:32:20 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:49:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,6 +167,71 @@ sub create_featurecomponent_table_from_registry_collector
 }
 
 #################################################################################
+# Collecting all feature that are listed in the featurecomponent table.
+#################################################################################
+
+sub collect_all_feature
+{
+    my ($featurecomponenttable) = @_;
+
+    my @allfeature = ();
+
+    for ( my $i = 3; $i <= $#{$featurecomponenttable}; $i++ )   # beginning in line 4
+    {
+        my $oneline = ${$featurecomponenttable}[$i];
+
+        if ( $oneline =~ /^\s*(\S+)\s+(\S+)\s*$/ )
+        {
+            my $feature = $1;
+
+            if (! installer::existence::exists_in_array($feature, \@allfeature)) { push(@allfeature, $feature); }
+        }
+    }
+
+    return \@allfeature;
+}
+
+#################################################################################
+# On Win98 and Win Me there seems to be the problem, that maximum 817
+# components can be added to a feature. Even if Windows Installer 2.0
+# is used.
+#################################################################################
+
+sub check_number_of_components_at_feature
+{
+    my ($featurecomponenttable) = @_;
+
+    my $infoline = "\nChecking number of components at features. Maximum is 817 (for Win 98 and Win Me)\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    my $allfeature = collect_all_feature($featurecomponenttable);
+
+    for ( my $i = 0; $i <= $#{$allfeature}; $i++ )
+    {
+        my $onefeature = ${$allfeature}[$i];
+        my $featurecomponents = 0;
+
+        for ( my $j = 0; $j <= $#{$featurecomponenttable}; $j++ )
+        {
+            if ( ${$featurecomponenttable}[$j] =~ /^\s*\Q$onefeature\E\s+(\S+)\s*$/ ) { $featurecomponents++; }
+        }
+
+        if ( $featurecomponents > 816 )
+        {
+            installer::exiter::exit_program("ERROR: More than 816 components ($featurecomponents) at feature $onefeature. This causes problems on Win 98 and Win Me!", "check_number_of_components_at_feature");
+        }
+
+        # Logging the result
+
+        $infoline = "Number of components at feature $onefeature : $featurecomponents\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    $infoline = "\n";
+    push(@installer::globals::logfileinfo, $infoline);
+}
+
+#################################################################################
 # Creating the file FeatureC.idt dynamically
 # Content:
 # Feature Component
@@ -197,6 +262,10 @@ sub create_featurecomponent_table
     create_featurecomponent_table_from_registry_collector(\@featurecomponenttable, $registryref);
 
     # Additional components have to be added here
+
+    # Checking, whether there are more than 817 components at a feature
+
+    check_number_of_components_at_feature(\@featurecomponenttable);
 
     # Saving the file
 
