@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:49:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#ifdef SVX_LIGHT
-#define SV_DECL_SDROLELINK_DEFINED
-#define SdrOleLinkRef SdrOleLink*
-#else
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
 #endif
@@ -78,14 +74,12 @@
 #ifndef _SFX_INTERNO_HXX
 #include <sfx2/interno.hxx>
 #endif
-#endif
 #ifndef _SVDPAGV_HXX
 #include <svdpagv.hxx>
 #endif
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
 #endif
-#ifndef SVX_LIGHT
 #ifndef _IPCLIENT_HXX //autogen
 #include <so3/ipclient.hxx>
 #endif
@@ -94,7 +88,6 @@
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
-#endif
 #endif
 
 #include <sot/formats.hxx>
@@ -120,10 +113,7 @@
 #include <svtools/urihelper.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #include "svdpagv.hxx"
-#endif
-
 #include "svdmodel.hxx"
 #include "svdio.hxx"
 #include "svdglob.hxx"  // Stringcache
@@ -137,25 +127,10 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef SVX_LIGHT
-
-#ifndef _SOT_STORAGE_HXX
-#include <sot/storage.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-
-// warning: these things are copied from so3/source/inplace/plugin.cxx
-SvGlobalName aPlgInName( 0x4caa7761, 0x6b8b, 0x11cf, 0x89,0xca,0x0,0x80,0x29,0xe4,0xb0,0xb1 );
-#define PLUGIN_VERS 2
-
-#else
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
 SO2_DECL_REF(SvInPlaceObject)
 #endif
-#endif // SVX_LIGHT
 
 class SdrOle2ObjImpl
 {
@@ -213,22 +188,17 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, FASTBOOL bFrame_)
 {
     bInDestruction = FALSE;
     Init();
-#ifndef SVX_LIGHT
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
-#endif // !SVX_LIGHT
 
     bFrame=bFrame_;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
-#ifndef SVX_LIGHT
     if (rIPRef.Is() &&
         (rIPRef->GetMiscStatus() & SVOBJ_MISCSTATUS_NOTRESIZEABLE) )
     {
         SetResizeProtect(TRUE);
     }
-
-#endif // !SVX_LIGHT
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( *ppObjRef ) )
@@ -242,22 +212,18 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     bInDestruction = FALSE;
     Init();
 
-#ifndef SVX_LIGHT
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
-#endif
 
     mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
-#ifndef SVX_LIGHT
     if (rIPRef.Is() &&
         (rIPRef->GetMiscStatus() & SVOBJ_MISCSTATUS_NOTRESIZEABLE) )
     {
         SetResizeProtect(TRUE);
     }
-#endif // !SVX_LIGHT
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( *ppObjRef ) )
@@ -272,22 +238,18 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     bInDestruction = FALSE;
     Init();
 
-#ifndef SVX_LIGHT
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
-#endif
 
     mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
-#ifndef SVX_LIGHT
     if (rIPRef.Is() &&
         (rIPRef->GetMiscStatus() & SVOBJ_MISCSTATUS_NOTRESIZEABLE) )
     {
         SetResizeProtect(TRUE);
     }
-#endif
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( *ppObjRef ) )
@@ -314,21 +276,22 @@ void SdrOle2Obj::Init()
 SdrOle2Obj::~SdrOle2Obj()
 {
     bInDestruction = TRUE;
-#ifndef SVX_LIGHT
     // Aus Cache entfernen
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
-#endif // !SVX_LIGHT
+
+    SvInPlaceObjectRef aRef( *ppObjRef );
 
     Disconnect();
 
-#ifndef SVX_LIGHT
-    if (pModel!=NULL) {
+    if(pModel && aRef.Is())
+    {
         SvPersist* pPers=pModel->GetPersist();
-        if (pPers!=NULL && ppObjRef->Is()) {
-            pPers->Remove(*ppObjRef);
+        if(pPers!=NULL)
+        {
+            pPers->Remove(aRef);
         }
     }
-#endif
+    aRef.Clear();
 
     delete ppObjRef;
 
@@ -341,14 +304,12 @@ SdrOle2Obj::~SdrOle2Obj()
     if(mpImpl->pGraphicObject!=NULL)
         delete mpImpl->pGraphicObject;
 
-#ifndef SVX_LIGHT
     if(pModifyListener)
     {
         pModifyListener->invalidate();
         pModifyListener->release();
         pModifyListener = NULL;
     }
-#endif
     delete mpImpl;
 }
 
@@ -387,7 +348,6 @@ FASTBOOL SdrOle2Obj::IsEmpty() const
 
 void SdrOle2Obj::Connect()
 {
-#ifndef SVX_LIGHT
     if(pModel && mpImpl->aPersistName.Len())
     {
         SvPersist* pPers=pModel->GetPersist();
@@ -447,15 +407,12 @@ void SdrOle2Obj::Connect()
             xBC->addModifyListener( xListener );
         }
     }
-
-#endif // SVX_LIGHT
 }
 
 // -----------------------------------------------------------------------------
 
 void SdrOle2Obj::Disconnect()
 {
-#ifndef SVX_LIGHT
     if( !IsEmpty() && mpImpl->aPersistName.Len() )
     {
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
@@ -468,23 +425,35 @@ void SdrOle2Obj::Disconnect()
 
     if (pModel && mpImpl->aPersistName.Len() )
     {
-        if ( ppObjRef->Is() )
-            (*ppObjRef)->DoClose();
-
-        SvPersist* pPers = pModel->GetPersist();
-
-        if (pPers)
+        if( pModel->IsInDestruction() )
         {
-            SvInfoObject* pInfo = pPers->Find(mpImpl->aPersistName);
+            *ppObjRef = NULL;
+        }
+        else
+        {
+            SvPersist* pPers = pModel->GetPersist();
 
-            if (pInfo)
-                pInfo->SetDeleted(TRUE);
+            if (pPers)
+            {
+                SvInfoObject* pInfo = pPers->Find(mpImpl->aPersistName);
+
+                if (pInfo)
+                {
+                    pInfo->SetDeleted(TRUE);
+                    pInfo->SetObj(0);
+                }
+            }
+
+            if ( ppObjRef->Is() )
+                (*ppObjRef)->DoClose();
         }
 
         // Aus Cache entfernen
         GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
+
+        if ( ppObjRef->Is() )
+            ppObjRef->Clear();
     }
-#endif // SVX_LIGHT
 }
 
 // -----------------------------------------------------------------------------
@@ -496,16 +465,16 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     if( bChg )
         Disconnect(); // mit dem alten Namen
 
-#ifndef SVX_LIGHT
     if( pModel && pNewModel )
     {
         SvPersist* pDestPers = pNewModel->GetPersist();
         SvPersist* pSrcPers  = pModel->GetPersist();
 
         if( pDestPers && pSrcPers && ( pDestPers != pSrcPers ) )
+        {
             ImpCopyObject( *pSrcPers, *pDestPers, mpImpl->aPersistName );
+        }
     }
-#endif
 
     SdrRectObj::SetModel( pNewModel );
 
@@ -532,17 +501,16 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
 void SdrOle2Obj::SetObjRef(const SvInPlaceObjectRef& rNewObjRef)
 {
     Disconnect();
+
     *ppObjRef=rNewObjRef;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
 
-#ifndef SVX_LIGHT
     if (rIPRef.Is() &&
         (rIPRef->GetMiscStatus() & SVOBJ_MISCSTATUS_NOTRESIZEABLE) )
     {
         SetResizeProtect(TRUE);
     }
-#endif // !SVX_LIGHT
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( *ppObjRef ) )
@@ -637,7 +605,6 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
 
     if (ppObjRef->Is())
     {
-#ifndef SVX_LIGHT
         if( !bSizProt && (*ppObjRef)->GetMiscStatus() & SVOBJ_MISCSTATUS_NOTRESIZEABLE )
             ( (SdrOle2Obj*) this)->bSizProt = TRUE;
 
@@ -693,14 +660,6 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
                 pOut->DrawLine(aPoly[1],aPoly[3]);
             }
         }
-#else
-        if (rInfoRec.pPV!=NULL)
-        {
-            SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
-            pSdrView->DoConnect((SdrOle2Obj*) this);
-        }
-#endif // SVX_LIGHT
-
     }
     else if ( pGraphic )
     {
@@ -831,7 +790,6 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
 
     if( pModel && rObj.GetModel() )
     {
-#ifndef SVX_LIGHT
         SvPersist* pDestPers = pModel->GetPersist();
         SvPersist* pSrcPers = rObj.GetModel()->GetPersist();
 
@@ -845,7 +803,6 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
                     (*ppObjRef)->SetVisArea( (*rOle2Obj.ppObjRef)->GetVisArea() );
             }
         }
-#endif
 
         Connect();
     }
@@ -855,7 +812,6 @@ void SdrOle2Obj::ImpAssign( const SdrObject& rObj, SdrPage* pNewPage, SdrModel* 
 
 void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, String& rPersistName )
 {
-#ifndef SVX_LIGHT
     SvInfoObject* pInfo = rSrcPersist.Find( rPersistName );
 
     if( pInfo != NULL )
@@ -884,7 +840,6 @@ void SdrOle2Obj::ImpCopyObject( SvPersist& rSrcPersist, SvPersist& rDstPersist, 
 
         *ppObjRef = &rDstPersist.GetObject( rPersistName );
     }
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -923,7 +878,6 @@ FASTBOOL SdrOle2Obj::HasSpecialDrag() const
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {
-#ifndef SVX_LIGHT
     GetObjRef();    // try to load inplace object
     SvInPlaceObjectRef& rIPRef=*ppObjRef;
 
@@ -977,7 +931,6 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             }
         }
     }
-#endif // SVX_LIGHT
 }
 
 // -----------------------------------------------------------------------------
@@ -1044,7 +997,6 @@ FASTBOOL SdrOle2Obj::HasGDIMetaFile() const
 
 const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
 {
-#ifndef SVX_LIGHT
     if( mpImpl->pMetaFile )
     {
         delete ((SdrOle2Obj*)this)->mpImpl->pMetaFile;
@@ -1069,7 +1021,6 @@ const GDIMetaFile* SdrOle2Obj::GetGDIMetaFile() const
                 delete pNewMtf;
         }
     }
-#endif // SVX_LIGHT
     return mpImpl->pMetaFile;
 }
 
@@ -1196,8 +1147,6 @@ BOOL SdrOle2Obj::Unload()
     else
         bUnloaded = TRUE;
 
-#ifndef SVX_LIGHT
-
     if (pModel && ppObjRef && ppObjRef->Is() &&
         SVOBJ_MISCSTATUS_ALWAYSACTIVATE != (*ppObjRef)->GetMiscStatus() &&
         1 < (*ppObjRef)->GetRefCount()                                  &&
@@ -1222,10 +1171,6 @@ BOOL SdrOle2Obj::Unload()
         }
     }
 
-#else
-    *ppObjRef = NULL;
-#endif // !SVX_LIGHT
-
     return bUnloaded;
 }
 
@@ -1233,7 +1178,6 @@ BOOL SdrOle2Obj::Unload()
 
 void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
 {
-#ifndef SVX_LIGHT
     mpImpl->aPersistName = OUString::createFromAscii( "Object " );
     String aStr( mpImpl->aPersistName );
     USHORT i = 1;
@@ -1244,14 +1188,12 @@ void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
         aStr += String::CreateFromInt32(++i);
     }
     mpImpl->aPersistName = aStr;
-#endif
 }
 
 // -----------------------------------------------------------------------------
 
 const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
 {
-#ifndef SVX_LIGHT
     if ( !ppObjRef->Is() && pModel && pModel->GetPersist() && !pModel->GetPersist()->IsHandsOff() )
     {
         // #107645#
@@ -1336,26 +1278,6 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
         GetSdrGlobalData().GetOLEObjCache().InsertObj((SdrOle2Obj*) this);
     }
 
-#else
-
-    if( !ppObjRef->Is() )
-    {
-        SotStorage* pStor = pModel->GetModelStorage();
-        SotStorageRef xSt;
-        if( pStor)
-        {
-            xSt = pStor->OpenSotStorage( mpImpl->aPersistName );
-
-            if( xSt.Is() )
-            {
-                *ppObjRef = SvInPlaceObject::Load( xSt );
-                if( *ppObjRef && ppObjRef->Is() )
-                    (*ppObjRef)->SetSizeAndPos( GetLogicRect() );
-            }
-        }
-    }
-
-#endif // !SVX_LIGHT
     return *ppObjRef;
 }
 
@@ -1365,7 +1287,6 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
 {
     uno::Reference< frame::XModel > xModel;
 
-#ifndef SVX_LIGHT
     if( pModel )
     {
         SvInPlaceObjectRef xSvIPO( GetObjRef() );
@@ -1378,177 +1299,9 @@ uno::Reference< frame::XModel > SdrOle2Obj::getXModel() const
                 xModel = pShell->GetModel();
         }
     }
-#endif
 
     return xModel;
 }
 
 // -----------------------------------------------------------------------------
 
-#ifdef SVX_LIGHT
-
-#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
-#include <com/sun/star/awt/XTopWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
-#include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
-#include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTOOLKIT_HPP_
-#include <com/sun/star/awt/XToolkit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PLUGIN_XPLUGINMANAGER_HPP_
-#include <com/sun/star/plugin/XPluginManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_PLUGIN_PLUGINMODE_HPP_
-#include <com/sun/star/plugin/PluginMode.hpp>
-#endif
-
-// here comes a dummy implementation for the SvInPlaceObject that is used
-// to display plugins inside the StarOffice Player
-
-SvInPlaceObject::SvInPlaceObject()
-: pURL( NULL ),
-  nPlugInMode( 0 )
-{
-}
-
-// -----------------------------------------------------------------------------
-
-SvInPlaceObject::~SvInPlaceObject()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-// this method is called from the views DoConnect method
-// Only the view knows the parent window for the plugin
-void SvInPlaceObject::CreatePlugin( uno::Reference< awt::XToolkit > xToolkit,
-                                    uno::Reference< awt::XWindowPeer > xPeer )
-{
-    if( xPlugin.is() )
-        return;
-
-    if( pURL )
-    {
-        ULONG nCount = aCmdList.Count();
-        uno::Sequence< OUString > aCmds( nCount ), aArgs( nCount );
-        OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
-        for( ULONG i = 0; i < nCount; i++ )
-        {
-            SvCommand & rCmd = aCmdList.GetObject( i );
-            pCmds[i] = rCmd.GetCommand();
-            pArgs[i] = rCmd.GetArgument();
-        }
-
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        if( xFactory.is() )
-        {
-            uno::Reference< plugin::XPluginManager > xPMgr( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager")), uno::UNO_QUERY );
-
-            INT16 nMode = nPlugInMode == PLUGIN_EMBEDED ? plugin::PluginMode::EMBED : plugin::PluginMode::FULL;
-
-            if (xPMgr.is() )
-                xPlugin = xPMgr->createPluginFromURL( xPMgr->createPluginContext(), nMode, aCmds, aArgs, xToolkit, xPeer, pURL->GetMainURL( INetURLObject::NO_DECODE ) );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-void SvInPlaceObject::SetSizeAndPos( const Rectangle& rRect )
-{
-    uno::Reference< awt::XWindow > xWindow( xPlugin, uno::UNO_QUERY );
-
-    if( xWindow.is() )
-    {
-        xWindow->setPosSize(rRect.getX(),rRect.getY(),rRect.getWidth(),rRect.getHeight(),awt::PosSize::POSSIZE);
-        xWindow->setVisible(TRUE);
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-SvInPlaceObject* SvInPlaceObject::Load( SotStorageRef xSt )
-{
-    SvInPlaceObject* pIPO = new SvInPlaceObject();
-
-    String aFileName("plugin", gsl_getSystemTextEncoding());
-    SotStorageStreamRef xStm = xSt->OpenSotStream( aFileName, STREAM_STD_READ );
-    xStm->SetVersion( xStm->GetVersion() );
-    xStm->SetBufferSize( 8192 );
-
-    BYTE nVer = 0;
-    *xStm >> nVer;
-    if( nVer == 1 || nVer == PLUGIN_VERS )
-    {
-        *xStm >> pIPO->nPlugInMode;
-        // Background gibt es nicht mehr
-        if( pIPO->nPlugInMode == (USHORT)PLUGIN_BACKGROUND )
-            pIPO->nPlugInMode = (USHORT)PLUGIN_EMBEDED;
-
-        *xStm >> pIPO->aCmdList;
-        DBG_ASSERT( !pIPO->pURL, "pURL exists in load" )
-        BYTE bURLExist;
-        *xStm >> bURLExist;
-        if( bURLExist )
-        {
-            if( nVer == 1 )
-            {
-                // pIPO->pURL = new INetURLObject;
-                // UNICODE: *xStm >> *pIPO->pURL;
-                // old operator >> removed some versions ago, reconstructiong from older version
-                ByteString aURL;
-
-                xStm->ReadByteString( aURL );
-                pIPO->pURL = new INetURLObject( aURL );
-
-                // Ignore, not necessary
-                BOOL bStrict;
-                *xStm >> bStrict;
-            }
-            else
-            {
-                String aURL;
-                // UNICODE: *xStm >> aURL;
-                xStm->ReadByteString(aURL);
-                pIPO->pURL = new INetURLObject( ::URIHelper::SmartRelToAbs( aURL, FALSE,
-                                                                            INetURLObject::WAS_ENCODED,
-                                                                            INetURLObject::DECODE_UNAMBIGUOUS ) );
-            }
-        }
-        // UNICODE: *xStm >> pIPO->aMimeType;
-        xStm->ReadByteString(pIPO->aMimeType);
-    }
-    else
-        xStm->SetError( ERRCODE_IO_WRONGVERSION );
-
-    if( xStm->GetError() != 0 )
-    {
-        delete pIPO;
-        pIPO = NULL;
-    }
-
-    return pIPO;
-}
-
-// -----------------------------------------------------------------------------
-
-// destroys the plugin for this inplace dummy
-void SvInPlaceObject::DoDisconnect()
-{
-    if( xPlugin.is() )
-    {
-        uno::Reference< lang::XComponent > xComp( xPlugin, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-        xPlugin = NULL;
-    }
-}
-
-#endif
