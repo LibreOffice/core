@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-31 09:54:01 $
+ *  last change: $Author: cl $ $Date: 2002-10-28 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_FONTFAMILY_HPP_
+#include <com/sun/star/awt/FontFamily.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP_
+#include <com/sun/star/awt/FontPitch.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
@@ -72,6 +78,11 @@
 #ifndef _COM_SUN_STAR_TEXT_SIZETYPE_HPP_
 #include <com/sun/star/text/SizeType.hpp>
 #endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include "XMLFontStylesContext.hxx"
 #endif
@@ -224,6 +235,83 @@ void XMLTextImportPropertyMapper::FontFinished(
     }
 }
 
+/** since the properties "CharFontFamilyName", "CharFontStyleName", "CharFontFamily",
+    "CharFontPitch" and "CharFontSet" and theire CJK and CTL counterparts are only
+    usable as a union, we add defaults to all values that are not set as long as we
+    have an "CharFontFamilyName"
+
+    #99928# CL */
+void XMLTextImportPropertyMapper::FontDefaultsCheck(
+                                        XMLPropertyState* pFontFamilyName,
+                                        XMLPropertyState* pFontStyleName,
+                                        XMLPropertyState* pFontFamily,
+                                        XMLPropertyState* pFontPitch,
+                                        XMLPropertyState* pFontCharSet,
+                                        XMLPropertyState** ppNewFontStyleName,
+                                        XMLPropertyState** ppNewFontFamily,
+                                        XMLPropertyState** ppNewFontPitch,
+                                        XMLPropertyState** ppNewFontCharSet ) const
+{
+    if( pFontFamilyName )
+    {
+        OUString sEmpty;
+        Any aAny;
+
+        if( !pFontStyleName )
+        {
+            aAny <<= sEmpty;
+    #ifndef PRODUCT
+                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                                pFontFamilyName->mnIndex + 1 );
+                DBG_ASSERT( nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL,
+                            "wrong property context id" );
+    #endif
+                *ppNewFontStyleName = new XMLPropertyState( pFontFamilyName->mnIndex + 1,
+                                                       aAny );
+        }
+
+        if( !pFontFamily )
+        {
+            aAny <<= (sal_Int16)com::sun::star::awt::FontFamily::DONTKNOW;
+
+    #ifndef PRODUCT
+                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                                pFontFamilyName->mnIndex + 2 );
+                DBG_ASSERT( nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL,
+                            "wrong property context id" );
+    #endif
+                *ppNewFontFamily = new XMLPropertyState( pFontFamilyName->mnIndex + 2,
+                                                       aAny );
+        }
+
+        if( !pFontPitch )
+        {
+            aAny <<= (sal_Int16)com::sun::star::awt::FontPitch::DONTKNOW;
+    #ifndef PRODUCT
+                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                                pFontFamilyName->mnIndex + 3 );
+                DBG_ASSERT( nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL,
+                            "wrong property context id" );
+    #endif
+                *ppNewFontPitch = new XMLPropertyState( pFontFamilyName->mnIndex + 3,
+                                                       aAny );
+        }
+
+        if( pFontFamilyName || !pFontCharSet )
+        {
+            aAny <<= (sal_Int16)gsl_getSystemTextEncoding();
+    #ifndef PRODUCT
+                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
+                                                pFontFamilyName->mnIndex + 4 );
+                DBG_ASSERT( nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL,
+                            "wrong property context id" );
+    #endif
+                *ppNewFontCharSet = new XMLPropertyState( pFontFamilyName->mnIndex + 4,
+                                                       aAny );
+        }
+    }
+}
+
 void XMLTextImportPropertyMapper::finished(
             ::std::vector< XMLPropertyState >& rProperties,
             sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
@@ -236,16 +324,28 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pFontFamily = 0;
     XMLPropertyState* pFontPitch = 0;
     XMLPropertyState* pFontCharSet = 0;
+    XMLPropertyState* pNewFontStyleName = 0;
+    XMLPropertyState* pNewFontFamily = 0;
+    XMLPropertyState* pNewFontPitch = 0;
+    XMLPropertyState* pNewFontCharSet = 0;
     XMLPropertyState* pFontFamilyNameCJK = 0;
     XMLPropertyState* pFontStyleNameCJK = 0;
     XMLPropertyState* pFontFamilyCJK = 0;
     XMLPropertyState* pFontPitchCJK = 0;
     XMLPropertyState* pFontCharSetCJK = 0;
+    XMLPropertyState* pNewFontStyleNameCJK = 0;
+    XMLPropertyState* pNewFontFamilyCJK = 0;
+    XMLPropertyState* pNewFontPitchCJK = 0;
+    XMLPropertyState* pNewFontCharSetCJK = 0;
     XMLPropertyState* pFontFamilyNameCTL = 0;
     XMLPropertyState* pFontStyleNameCTL = 0;
     XMLPropertyState* pFontFamilyCTL = 0;
     XMLPropertyState* pFontPitchCTL = 0;
     XMLPropertyState* pFontCharSetCTL = 0;
+    XMLPropertyState* pNewFontStyleNameCTL = 0;
+    XMLPropertyState* pNewFontFamilyCTL = 0;
+    XMLPropertyState* pNewFontPitchCTL = 0;
+    XMLPropertyState* pNewFontCharSetCTL = 0;
     XMLPropertyState* pAllBorderDistance = 0;
     XMLPropertyState* pBorderDistances[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pNewBorderDistances[4] = { 0, 0, 0, 0 };
@@ -480,9 +580,95 @@ void XMLTextImportPropertyMapper::finished(
         pVertOrientRelAsChar->mnIndex = -1;
     }
 
+    FontDefaultsCheck( pFontFamilyName,
+                       pFontStyleName, pFontFamily, pFontPitch, pFontCharSet,
+                       &pNewFontStyleName, &pNewFontFamily, &pNewFontPitch, &pNewFontCharSet );
+
+    FontDefaultsCheck( pFontFamilyNameCJK,
+                       pFontStyleNameCJK, pFontFamilyCJK, pFontPitchCJK, pFontCharSetCJK,
+                       &pNewFontStyleNameCJK, &pNewFontFamilyCJK, &pNewFontPitchCJK, &pNewFontCharSetCJK );
+
+    FontDefaultsCheck( pFontFamilyNameCTL,
+                       pFontStyleNameCTL, pFontFamilyCTL, pFontPitchCTL, pFontCharSetCTL,
+                       &pNewFontStyleNameCTL, &pNewFontFamilyCTL, &pNewFontPitchCTL, &pNewFontCharSetCTL );
+
+
     // insert newly created properties. This inavlidates all iterators!
     // Most of the pXXX variables in this method are iterators and will be
     // invalidated!!!
+
+    if( pNewFontStyleName )
+    {
+        rProperties.push_back( *pNewFontStyleName );
+        delete pNewFontStyleName;
+    }
+
+    if( pNewFontFamily )
+    {
+        rProperties.push_back( *pNewFontFamily );
+        delete pNewFontFamily;
+    }
+
+    if( pNewFontPitch )
+    {
+        rProperties.push_back( *pNewFontPitch );
+        delete pNewFontPitch;
+    }
+
+    if( pNewFontCharSet )
+    {
+        rProperties.push_back( *pNewFontCharSet );
+        delete pNewFontCharSet;
+    }
+
+    if( pNewFontStyleNameCJK )
+    {
+        rProperties.push_back( *pNewFontStyleNameCJK );
+        delete pNewFontStyleNameCJK;
+    }
+
+    if( pNewFontFamilyCJK )
+    {
+        rProperties.push_back( *pNewFontFamilyCJK );
+        delete pNewFontFamilyCJK;
+    }
+
+    if( pNewFontPitchCJK )
+    {
+        rProperties.push_back( *pNewFontPitchCJK );
+        delete pNewFontPitchCJK;
+    }
+
+    if( pNewFontCharSetCJK )
+    {
+        rProperties.push_back( *pNewFontCharSetCJK );
+        delete pNewFontCharSetCJK;
+    }
+
+    if( pNewFontStyleNameCTL)
+    {
+        rProperties.push_back( *pNewFontStyleNameCTL );
+        delete pNewFontStyleNameCTL;
+    }
+
+    if( pNewFontFamilyCTL )
+    {
+        rProperties.push_back( *pNewFontFamilyCTL );
+        delete pNewFontFamilyCTL;
+    }
+
+    if( pNewFontPitchCTL )
+    {
+        rProperties.push_back( *pNewFontPitchCTL );
+        delete pNewFontPitchCTL;
+    }
+
+    if( pNewFontCharSetCTL )
+    {
+        rProperties.push_back( *pNewFontCharSetCTL );
+        delete pNewFontCharSetCTL;
+    }
+
     for( i=0; i<4; i++ )
     {
         if( pNewBorderDistances[i] )
