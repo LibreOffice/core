@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-13 20:14:48 $
+ *  last change: $Author: kz $ $Date: 2001-08-08 09:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,16 +104,16 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ dutch ] = "Bestandsformaat";
         Text[ spanish ] = "Formato de archivo";
         Text[ english_us ] = "File format";
-        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
+        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ russian ] = "Ôîğìàò ôàéëà";
         Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "Ì§²Ù‚Ì‘®";
-        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡";
+        Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®æ›¸å¼";
+        Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
         Text[ dutch ] = "Bestandsformaat";
-        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½";
+        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
         Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
-        Text[ korean ] = "ÆÄÀÏ ¼­½Ä";
+        Text[ korean ] = "íŒŒì¼ ì„œì‹";
         Text[ turkish ] = "Dosya formatı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato de archivo";
@@ -135,17 +135,17 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ dutch ] = "~Binair";
         Text[ spanish ] = "~Binario";
         Text[ english_us ] = "~Binary";
-        Text[ chinese_simplified ] = "¶şÔª(~B)";
+        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
         Text[ russian ] = "Áèíàğíûé";
         Text[ polish ] = "Binarny";
-        Text[ japanese ] = "ÊŞ²ÅØ(~B)";
+        Text[ japanese ] = "ï¾Šï¾ï½²ï¾…ï¾˜(~B)";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¤G¤¸(~B)";
+        Text[ chinese_traditional ] = "äºŒå…ƒ(~B)";
         Text[ arabic ] = "ËäÇÆí";
         Text[ dutch ] = "~Binair";
-        Text[ chinese_simplified ] = "¶şÔª(~B)";
+        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
         Text[ greek ] = "Äõáäéêü";
-        Text[ korean ] = "¹ÙÀÌ³Ê¸®(~B)";
+        Text[ korean ] = "ë°”ì´ë„ˆë¦¬(~B)";
         Text[ turkish ] = "İkili";
         Text[ catalan ] = "~Binario";
         Text[ finnish ] = "~Binääri";
@@ -166,16 +166,16 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ dutch ] = "~Tekst";
         Text[ spanish ] = "~Texto";
         Text[ english_us ] = "~Text";
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "Ã·½Ä(~T)";
-        Text[ chinese_traditional ] = "¤å¦r(~T)";
+        Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
         Text[ arabic ] = "ÇáäÕ";
         Text[ dutch ] = "~Tekst";
-        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
+        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
         Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "ÅØ½ºÆ®(~T)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Texto";
@@ -189,20 +189,21 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ swedish ] = "PGM alternativ";
     Text[ dutch ] = "PGM-opties";
     Text[ spanish ] = "Opciones PGM";
-    Text[ chinese_simplified ] = "PGM Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PGM é€‰é¡¹";
     Text[ russian ] = "Ïàğàìåòğû PGM";
     Text[ polish ] = "Opcje PGM";
-    Text[ japanese ] = "PGM µÌß¼®İ";
-    Text[ chinese_traditional ] = "PGM¿ï¶µ";
+    Text[ japanese ] = "PGM ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+    Text[ chinese_traditional ] = "PGMé¸é …";
     Text[ arabic ] = "PGM ÎíÇÑÇÊ";
     Text[ dutch ] = "PGM-opties";
-    Text[ chinese_simplified ] = "PGM Ñ¡Ïî";
+    Text[ chinese_simplified ] = "PGM é€‰é¡¹";
     Text[ greek ] = "Åğéëïãİò PGM";
-    Text[ korean ] = "PGM ¿É¼Ç";
+    Text[ korean ] = "PGM ì˜µì…˜";
     Text[ turkish ] = "PGM seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones PGM";
     Text[ finnish ] = "PGM-asetukset";
 };
+
 
 
