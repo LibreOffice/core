@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:21:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
     {
         ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
 
-        table::CellRangeAddress aAdr = getVisibleRange();       //! Hilfsfunktion mit ScRange?
+        table::CellRangeAddress aAdr(getVisibleRange());        //! Hilfsfunktion mit ScRange?
         ScRange aRange( (SCCOL)aAdr.StartColumn, (SCROW)aAdr.StartRow, aAdr.Sheet,
                         (SCCOL)aAdr.EndColumn, (SCROW)aAdr.EndRow, aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
@@ -379,10 +379,10 @@ uno::Reference<awt::XControl> SAL_CALL ScViewPaneBase::getControl(
                     SdrUnoObj* pFormObj = PTR_CAST( SdrUnoObj, pPage->GetObj(i) );
                     if ( pFormObj )
                     {
-                        uno::Reference<awt::XControlModel> xCM = pFormObj->GetUnoControlModel();
+                        uno::Reference<awt::XControlModel> xCM(pFormObj->GetUnoControlModel());
                         if ( xCM.is() && xModel == xCM )
                         {
-                            xRet = pFormObj->GetUnoControl( pWin );
+                            xRet.set(pFormObj->GetUnoControl( pWin ));
                             break;
                         }
                     }
@@ -442,7 +442,7 @@ uno::Any SAL_CALL ScViewPaneObj::queryInterface( const uno::Type& rType )
 {
     //  ScViewPaneBase has everything except OWeakObject
 
-    uno::Any aRet = ScViewPaneBase::queryInterface( rType );
+    uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
         aRet = OWeakObject::queryInterface( rType );
     return aRet;
@@ -514,7 +514,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
 
-    uno::Any aRet = ScViewPaneBase::queryInterface( rType );
+    uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
         aRet = SfxBaseController::queryInterface( rType );
     return aRet;
@@ -564,11 +564,11 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        uno::Sequence<uno::Type> aViewPaneTypes = ScViewPaneBase::getTypes();
+        uno::Sequence<uno::Type> aViewPaneTypes(ScViewPaneBase::getTypes());
         long nViewPaneLen = aViewPaneTypes.getLength();
         const uno::Type* pViewPanePtr = aViewPaneTypes.getConstArray();
 
-        uno::Sequence<uno::Type> aControllerTypes = SfxBaseController::getTypes();
+        uno::Sequence<uno::Type> aControllerTypes(SfxBaseController::getTypes());
         long nControllerLen = aControllerTypes.getLength();
         const uno::Type* pControllerPtr = aControllerTypes.getConstArray();
 
@@ -668,8 +668,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     //! Type of aSelection can be some specific interface instead of XInterface
 
     BOOL bRet = FALSE;
-    uno::Reference<uno::XInterface> xInterface;
-    aSelection >>= xInterface;
+    uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( !xInterface.is() )  //clear all selections
     {
         ScDrawView* pDrawView = pViewSh->GetScDrawView();
@@ -791,9 +790,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     sal_Bool bAllMarked(sal_True);
                     for ( long i = 0; i < nCount; i++ )
                     {
-                        uno::Reference<drawing::XShape> xShapeInt;
-                        uno::Any aAny = xShapeColl->getByIndex(i);
-                        aAny >>= xShapeInt;
+                        uno::Reference<drawing::XShape> xShapeInt(xShapeColl->getByIndex(i), uno::UNO_QUERY);
                         if (xShapeInt.is())
                         {
                             SvxShape* pShape = SvxShape::getImplementation( xShapeInt );
@@ -862,7 +859,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                 //  Zurueckgegeben wird XInterfaceRef, das muss das UsrObject-XInterface sein
 
                 SvxShapeCollection* pShapes = new SvxShapeCollection();
-                uno::Reference<uno::XInterface> xRet = static_cast<cppu::OWeakObject*>(pShapes);
+                uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pShapes));
 
                 for (ULONG i=0; i<nMarkCount; i++)
                 {
@@ -874,9 +871,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                             pShapes->add(xShape);
                     }
                 }
-                uno::Any aAny;
-                aAny <<= xRet;
-                return aAny;
+                return uno::makeAny(xRet);
             }
         }
 
@@ -918,10 +913,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         }
     }
 
-    uno::Reference<uno::XInterface> xRet = static_cast<cppu::OWeakObject*>(pObj);
-    uno::Any aAny;
-    aAny <<= xRet;
-    return aAny;
+    return uno::makeAny(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj)));
 }
 
 
@@ -954,7 +946,7 @@ void ScTabViewObj::setPrinterName(const rtl::OUString& PrinterName)
         SfxPrinter* pPrinter = pViewSh->GetPrinter(TRUE);
         if (pPrinter)
         {
-            String aString = PrinterName;
+            String aString(PrinterName);
             SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
             if (pNewPrinter->IsKnown())
                 pViewSh->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
@@ -1017,13 +1009,12 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XViewPane> xPane = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((USHORT)nIndex));
     if (xPane.is())
-        aAny <<= xPane;
+        return uno::makeAny(xPane);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType() throw(uno::RuntimeException)
@@ -1411,7 +1402,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
             if (!pViewSh->GetViewData()->IsPagebreakMode())
             {
                 ScModule* pScMod = SC_MOD();
-                ScAppOptions aNewOpt = pScMod->GetAppOptions();
+                ScAppOptions aNewOpt(pScMod->GetAppOptions());
                 aNewOpt.SetZoom( nZoom );
                 aNewOpt.SetZoomType( pViewSh->GetViewData()->GetView()->GetZoomType() );
                 pScMod->SetAppOptions( aNewOpt );
@@ -1644,7 +1635,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
             aWinStart = pWin->GetPosPixel();
 
         ScViewData* pViewData = pViewSh->GetViewData();
-        Point aSplit = pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, TRUE );
+        Point aSplit(pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, TRUE ));
         aSplit += aWinStart;
 
         pViewSh->SplitAtPixel( aSplit, TRUE, TRUE );
@@ -1683,7 +1674,7 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
 void ScTabViewObj::SelectionChanged()
 {
     lang::EventObject aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( USHORT n=0; n<aSelectionListeners.Count(); n++ )
         (*aSelectionListeners[n])->selectionChanged( aEvent );
 }
@@ -1696,8 +1687,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTabViewObj::getPropertySetInf
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -1708,14 +1699,14 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
         ScViewData* pViewData = pViewSh->GetViewData();
         const ScViewOptions& rOldOpt = pViewSh->GetViewData()->GetOptions();
-        ScViewOptions aNewOpt = rOldOpt;
+        ScViewOptions aNewOpt(rOldOpt);
 
         if ( aString.EqualsAscii( SC_UNO_COLROWHDR ) || aString.EqualsAscii( OLD_UNO_COLROWHDR ) )
             aNewOpt.SetOption( VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -1814,7 +1805,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1905,7 +1896,7 @@ void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const ::rtl::OUString&
 void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     for ( USHORT n=0; n<aPropertyChgListeners.Count(); n++ )
         (*aPropertyChgListeners[n])->propertyChange( aEvent );
 }
@@ -1929,7 +1920,7 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
         for (long i = 0; i < nPropCount; i++)
         {
             const beans::PropertyValue& rProp = pPropArray[i];
-            String aPropName = rProp.Name;
+            String aPropName(rProp.Name);
 
             if (aPropName.EqualsAscii( SC_UNONAME_CLOSEONUP ))
                 bCloseOnButtonUp = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
@@ -2014,7 +2005,7 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
 void ScTabViewObj::RangeSelDone( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
     for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
@@ -2024,7 +2015,7 @@ void ScTabViewObj::RangeSelDone( const String& rText )
 void ScTabViewObj::RangeSelAborted( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
     for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
@@ -2034,7 +2025,7 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
 void ScTabViewObj::RangeSelChanged( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
-    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+    aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
     for ( USHORT n=0; n<aRangeChgListeners.Count(); n++ )
