@@ -1,5 +1,5 @@
 <!--
-	$Id: form.mod,v 1.7 2001-03-20 13:53:02 fs Exp $
+	$Id: form.mod,v 1.8 2001-04-18 09:38:24 fs Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -90,7 +90,7 @@
 <!ATTLIST form:form form:master-fields CDATA #IMPLIED>
 <!ATTLIST form:form form:navigation-mode %navigation; #IMPLIED>
 <!ATTLIST form:form form:order CDATA #IMPLIED>
-<!ATTLIST form:form form:tab-cycle %cycles; "records" >
+<!ATTLIST form:form form:tab-cycle %cycles; %IMPLIED>
 
 <!ELEMENT office:forms (form:form*)>
 <!ATTLIST office:forms form:automatic-focus %boolean; "false">
