@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:27:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-10 07:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,22 +90,22 @@
 #include <rtl/crc.h>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include <svx/xlnstit.hxx>
+#include <xlnstit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX
-#include <svx/xlnedit.hxx>
+#include <xlnedit.hxx>
 #endif
 #ifndef _SVX_XLNSTWIT_HXX
-#include <svx/xlnstwit.hxx>
+#include <xlnstwit.hxx>
 #endif
 #ifndef _SVX_XLNEDWIT_HXX
-#include <svx/xlnedwit.hxx>
+#include <xlnedwit.hxx>
 #endif
 #ifndef _SVX_XLNSTCIT_HXX
-#include <svx/xlnstcit.hxx>
+#include <xlnstcit.hxx>
 #endif
 #ifndef _SVX_XLNEDCIT_HXX
-#include <svx/xlnedcit.hxx>
+#include <xlnedcit.hxx>
 #endif
 
 struct SvxMSDffVertPair
