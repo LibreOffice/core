@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConversionDictionaryType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:14:25 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,10 @@ module com { module sun { module star { module linguistic2 {
 */
 constants ConversionDictionaryType
 {
-    /** Dictionary type for the conversion between Hanja and Hangul
+    /** Dictionary type for the conversion between Hangul and Hanja
     */
-    const short HANJA_HANGUL        = 1;
+    const short HANGUL_HANJA        = 1;
 
-    /** Dictionary type for the conversion between Simplified and Traditional
-    Chinese.
-    */
-    const short SCHINESE_TCHINESE   = 2;
 };
 
 //=============================================================================
