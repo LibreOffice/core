@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 14:57:47 $
+ *  last change: $Author: nn $ $Date: 2001-02-16 18:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,10 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
         }
 
         //  Paint passiert beim SetLayer
+
+        //  #84073# check mark list now instead of later in a timer
+        CheckMarked();
+        MarkListHasChanged();
     }
 }
 
