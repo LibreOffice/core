@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-31 15:42:54 $
+ *  last change: $Author: nf $ $Date: 2002-04-30 13:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ BOOL LngParser::CreateSDF(
     ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
     ByteString sActFileName(
         sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
-    sActFileName.ToLowerAscii();
+//  sActFileName.ToLowerAscii();
 
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 

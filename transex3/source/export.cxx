@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-04 13:44:01 $
+ *  last change: $Author: nf $ $Date: 2002-04-30 13:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = ByteString( argv[ i ]);
-                    sPrj.ToLowerAscii(); // the project
+//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -290,7 +290,7 @@ extern FILE *GetNextFile()
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-            sActFileName.ToLowerAscii();
+//          sActFileName.ToLowerAscii();
 
             fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 

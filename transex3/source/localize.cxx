@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: svesik $ $Date: 2002-03-17 23:12:26 $
+ *  last change: $Author: nf $ $Date: 2002-04-30 13:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -603,6 +603,20 @@ BOOL SourceTreeLocalizer::ExecuteMerge()
 
                 ByteString sPrj( sOldFileName.GetToken( 0, '#' ));
                 ByteString sFile( sOldFileName.GetToken( 1, '#' ));
+
+                //
+                // Hack: Special handling for known misspelled file names (lowercase problem)
+                //
+
+                sFile.SearchAndReplace(
+                    "source\\adabas\\adabasnewdb.src",
+                    "source\\adabas\\AdabasNewDb.src"
+                );
+
+                //
+                // end Hack
+                //
+
                 ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
 
                 if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
