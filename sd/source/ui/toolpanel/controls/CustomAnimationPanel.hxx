@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPanel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:26:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef SD_TOOLPANEL_CONTROLS_CUSTOM_ANIMATION_PANEL_HXX
 #define SD_TOOLPANEL_CONTROLS_CUSTOM_ANIMATION_PANEL_HXX
 
-#include "../SubToolPanel.hxx"
+#include "taskpane/SubToolPanel.hxx"
 
 namespace sd {
 class ViewShellBase;
@@ -70,6 +70,7 @@ class ViewShellBase;
 
 namespace sd { namespace toolpanel {
 class TreeNode;
+class ControlFactory;
 } }
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -82,6 +83,8 @@ public:
         TreeNode* pParent,
         ViewShellBase& rBase);
     virtual ~CustomAnimationPanel (void);
+
+    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
 
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
