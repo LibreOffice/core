@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,10 @@
 #define SC_UNONAME_FUNCTION         "Function"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
+#define SC_UNONAME_REFERENCE        "Reference"
+#define SC_UNONAME_AUTOSHOW         "AutoShowInfo"
+#define SC_UNONAME_SORTINFO         "SortInfo"
+#define SC_UNONAME_LAYOUTINFO       "LayoutInfo"
 
 //  data pilot item
 #define SC_UNONAME_SHOWDETAIL       "ShowDetail"
@@ -545,6 +549,11 @@
 #define SC_UNO_REPEATIF             "RepeatIfEmpty"
 #define SC_UNO_DATADESC             "DataDescription"
 #define SC_UNO_NUMBERFO             "NumberFormat"
+//  (preliminary:)
+#define SC_UNO_REFVALUE             "ReferenceValue"
+#define SC_UNO_SORTING              "Sorting"
+#define SC_UNO_AUTOSHOW             "AutoShow"
+#define SC_UNO_LAYOUT               "Layout"
 
 // data pilot descriptor
 #define SC_UNO_IGNEMPROWS           "IgnoreEmptyRows"
