@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 16:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ void OAdabasConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    ::comphelper::disposeComponent(Reference< XTablesSupplier >(m_xCatalog));
+    Reference< XTablesSupplier > xTableSupplier(m_xCatalog);
+    ::comphelper::disposeComponent(xTableSupplier);
 
     m_xCatalog = WeakReference< XTablesSupplier >();
 
