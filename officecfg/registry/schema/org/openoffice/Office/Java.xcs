@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-18 15:22:49 $
+ *  last change: $Author: jl $ $Date: 2002-07-08 11:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,13 @@
 <oor:component-schema oor:name="Java" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
   <component>
     <group oor:name="VirtualMachine">
+      <!-- Responsible: JL -->
+      <info>
+        <desc xml:lang="en-US">Provides information used to initialize a Java Virtual Machine. </desc>
+      </info>
       <prop oor:name="Home" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <!-- Notice: Default: depends on Java installation path -->
         <value>NULL</value>
         <info>
@@ -77,7 +80,6 @@
       <prop oor:name="Version" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <!-- Notice: Default: depends on version used -->
         <value>NULL</value>
         <info>
@@ -88,7 +90,6 @@
       <prop oor:name="RunTimeLib" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Specifies the JVM shared library that is used.</desc>
         </info>
@@ -96,7 +97,6 @@
       <prop oor:name="SystemClassPath" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Contains jars of the Office intallation and may also contain other jars or folders.</desc>
         </info>
@@ -104,7 +104,6 @@
       <prop oor:name="Enable" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <value>true</value>
         <info>
           <desc xml:lang="en-US">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
@@ -114,7 +113,6 @@
       <prop oor:name="Security" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
         <value>true</value>
         <info>
@@ -125,7 +123,6 @@
       <prop oor:name="NetAccess" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
         <info>
           <desc xml:lang="en-US">Determines if and to what extent java applets are allowed to access the network.</desc>
@@ -152,7 +149,6 @@
       <prop oor:name="UserClassPath" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
         <info>
           <desc xml:lang="en-US">Additional java classes or jars which are contained in the classpath 
@@ -163,7 +159,6 @@
       <prop oor:name="Debug" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -171,7 +166,6 @@
       <prop oor:name="DebugPort" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -179,7 +173,6 @@
       <prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -187,7 +180,6 @@
       <prop oor:name="Verbose" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US"> Deprecated.</desc>
         </info>
@@ -195,7 +187,6 @@
       <prop oor:name="NativeStackSize" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -203,7 +194,6 @@
       <prop oor:name="JavaStackSize" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -211,7 +201,6 @@
       <prop oor:name="VerifyMode" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -236,7 +225,6 @@
       <prop oor:name="MinHeapSize" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -244,7 +232,6 @@
       <prop oor:name="MaxHeapSize" oor:type="xs:int">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated</desc>
         </info>
@@ -252,7 +239,6 @@
       <prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -260,7 +246,6 @@
       <prop oor:name="EnableClassGC" oor:type="xs:boolean">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -268,8 +253,6 @@
       <prop oor:name="VMType" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
-        <!-- UIHints: Explorer - Bookmarks - Java - JavaSetup -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -281,20 +264,26 @@
       <prop oor:name="EnvironmentType" oor:type="xs:string">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Indicates if a JRE or SDK is used.</desc>
         </info>
         <constraints>
-          <enumeration oor:value="JDK"/>
-          <enumeration oor:value="JRE"/>
+          <enumeration oor:value="JDK">
+            <info>
+              <desc xml:lang="en-US">The Virtual Machine comes from a JDKxxx or j2sdkxxx installation. </desc>
+            </info>
+	  </enumeration>
+          <enumeration oor:value="JRE" >
+            <info>
+              <desc xml:lang="en-US">The Virtual Machine comes from a JRExxx installation. </desc>
+            </info>
+          </enumeration>
         </constraints>
       </prop>
       <prop oor:name="JavaLibPath" oor:type="xs:string">
         <!-- Platform: UNIX -->
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Contains directories which contain shared libraries which are used by the
 	  Java runtime library.</desc>
@@ -303,17 +292,18 @@
       <prop oor:name="Properties" oor:type="oor:string-list">
         <!-- OldPath: Java -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated</desc>
         </info>
       </prop>
     </group>
     <group oor:name="Install">
+      <info>
+        <desc xml:lang="en-US">Provides information which are used by jvmsetup. </desc>
+      </info>
       <prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
         </info>
@@ -321,7 +311,6 @@
       <prop oor:name="VerifiedVersion" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">A space separated list of verified Java versions.</desc>
         </info>
@@ -329,7 +318,6 @@
       <prop oor:name="Version" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">The version of the JRE which is provided by the setup.</desc>
         </info>
@@ -337,7 +325,6 @@
       <prop oor:name="Vendor" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">The vendor of the JRE package.</desc>
         </info>
@@ -345,7 +332,6 @@
       <prop oor:name="RequiredVersion" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">All Java installations with a lower version will be 
 	  ignored by the Java setup  (jvmsetup.exe).</desc>
@@ -354,7 +340,6 @@
       <prop oor:name="InstallationPackage" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Specifies the JRE package which can be installed during the Java setup.</desc>
         </info>
@@ -362,7 +347,6 @@
       <prop oor:name="ExcludeVersion" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Contains a  space separated list of Java versions which should
 	   be ignored by the Java setup (jvmsetup.exe).</desc>
@@ -371,7 +355,6 @@
       <prop oor:name="AdditionalSearchPath" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Deprecated.</desc>
         </info>
@@ -379,7 +362,6 @@
       <prop oor:name="AdditionalClasspath" oor:type="xs:string">
         <!-- OldPath: Install -->
         <!-- OldLocation: java.ini -->
-        <!-- Responsible: JL -->
         <info>
           <desc xml:lang="en-US">Contains the Office's jar files. The Java setup uses it to form the SystemClasspath.</desc>
         </info>
