@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: pl $ $Date: 2000-09-21 14:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include "gfxlink.hxx"
 #include "cvtgrf.hxx"
 
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
+
 // -----------
 // - GfxLink -
 // -----------
@@ -101,7 +105,7 @@ GfxLink::GfxLink( const String& rPath, GfxLinkType nType )
 
         aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Size" ) ) >>= nFileSize;
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ::com::sun::star::ucb::CommandAbortedException& rE )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
@@ -370,7 +374,7 @@ ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
                     aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                 }
-                catch( ::com::sun::star::ucb::CommandAbortedException& )
+                catch( ::com::sun::star::ucb::CommandAbortedException& rE )
                 {
                     DBG_ERRORFILE( "CommandAbortedException" );
                 }
@@ -399,7 +403,7 @@ ImpSwap::~ImpSwap()
             aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
         }
-        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        catch( ::com::sun::star::ucb::CommandAbortedException& rE )
         {
             DBG_ERRORFILE( "CommandAbortedException" );
         }
