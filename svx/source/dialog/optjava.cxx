@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:14 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     sHeader += String( ResId( STR_HEADER_FEATURES ) );
     sHeader += '\t';
     m_aJavaList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
+
+    m_aJavaList.SetHelpId( HID_OPTIONS_JAVA_LIST );
 
     FreeResource();
 
