@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 08:39:44 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,8 +541,6 @@ void _SfxMacroTabPage::SelectEvent( const String & rEventName, USHORT nEventId )
 }
 
 
-/*  */
-
 SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* pTbPg, const String& rLanguage )
 {
     SvStringsDtor* pNew = new SvStringsDtor;
@@ -612,7 +610,6 @@ SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage* pTbPg,
     return pNew;
 }
 
-/*  */
 
 SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId,
                                 const SfxItemSet& rSet )
@@ -623,6 +620,7 @@ SfxMacroTabPage::SfxMacroTabPage( Window* pParent, const ResId& rResId,
     pAssignPB = new PushButton( this, SfxResId(PB_ASSIGN) );
     pDeletePB = new PushButton( this, SfxResId(PB_DELETE) );
     pScriptTypeLB = new ListBox(this, SfxResId(LB_SCRIPTTYPE) );
+    pScriptTypeLB->Hide();
     pMacroGB = new FixedLine( this, SfxResId(GB_MACRO) );
     pGroupLB = new SfxConfigGroupListBox_Impl( this, SfxResId(LB_GROUP) );
     pMacroLB = new SfxConfigFunctionListBox_Impl( this, SfxResId(LB_MACROS) );
@@ -645,39 +643,6 @@ SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
     return new SfxMacroTabPage( pParent, SfxResId( RID_SFX_TP_MACROASSIGN), rAttrSet );
 }
 
-/*  */
-
-SfxSmallMacroTabPage::SfxSmallMacroTabPage( Window* pParent, const ResId& rResId,
-                                const SfxItemSet& rSet )
-    : _SfxMacroTabPage( pParent, rResId, rSet )
-{
-    pEventGB = new FixedLine(this, SfxResId(GB_EVENT) );
-    pEventLB = new SvTabListBox(this, SfxResId(LB_EVENT) );
-    pAssignPB = new PushButton( this, SfxResId(PB_ASSIGN) );
-    pDeletePB = new PushButton( this, SfxResId(PB_DELETE) );
-    pScriptTypeLB = new ListBox(this, SfxResId(LB_SCRIPTTYPE) );
-    pMacroGB = new FixedLine( this, SfxResId(GB_MACRO) );
-    pGroupLB = new SfxConfigGroupListBox_Impl( this, SfxResId(LB_GROUP) );
-    pMacroLB = new SfxConfigFunctionListBox_Impl( this, SfxResId(LB_MACROS) );
-    pMacroStr = new String( SfxResId(STR_MACROS) );
-#if SUPD<582
-    pJavaStr = new String( SfxResId(STR_JAVASCRIPT) );
-    pJavaED = new MultiLineEdit( this, SfxResId(ED_JAVASCRIPT) );
-#endif
-    FreeResource();
-//  SetExchangeSupport();
-
-    InitAndSetHandler();
-
-    ScriptChanged( String(SfxResId(STR_BASICNAME)) );
-}
-
-SfxTabPage* SfxSmallMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
-{
-    return new SfxMacroTabPage( pParent, SfxResId( RID_SFX_SMALLTP_MACROASSIGN), rAttrSet );
-}
-
-/*  */
 
 SfxMacroAssignDlg::SfxMacroAssignDlg( Window* pParent, SfxItemSet& rSet )
     : SfxSingleTabDialog( pParent, rSet, 0 )
