@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-19 17:31:23 $
+#   last change: $Author: hjs $ $Date: 2000-12-19 18:01:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -290,6 +290,9 @@ UNOIDLDBTARGET=$(OUT)$/ucr$/$(PRJNAME).db
 .IF "$(URDDOC)" != ""
 UNOIDLDBDOCFILES:=$(subst,$/ucr$/,$/ucrdoc$/ $(UNOIDLDBFILES))
 UNOIDLDBDOCTARGET=$(OUT)$/ucrdoc$/$(PRJNAME)_doc.db
+.IF "$(UNOIDLDBREGS)"!=""
+UNOIDLDBDOCREGS=$(foreach,i,$(UNOIDLDBREGS) $(i:d)$(i:b)_doc$(i:e))
+.ENDIF			# "$(UNOIDLDBREGS)"!=""
 .ENDIF			# "$(URDDOC)" != ""
 .IF "$(UPDATER)"!=""
 # SOLARREGDB=$(SOLARBINDIR)$/registry.db
@@ -2149,7 +2152,7 @@ $(UNOIDLDBTARGET) : $(UNOIDLDBFILES)
 .IF "$(UNOIDLDBDOCTARGET)"!=""
 $(UNOIDLDBDOCTARGET) : $(UNOIDLDBDOCFILES)
     +-$(RM) $@
-    +regmerge $@ / @$(mktmp $(UNOIDLDBDOCFILES))
+    +regmerge $@ / @$(mktmp $(UNOIDLDBDOCFILES) $(UNOIDLDBDOCREGS))
 .IF "$(LOCALREGDB)"!=""
     +regmerge $(LOCALREGDB) / $@
 .ENDIF
