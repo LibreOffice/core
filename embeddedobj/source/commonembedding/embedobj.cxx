@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:43:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,16 @@
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDCLIENT_HPP_
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XINPLACECLIENT_HPP_
+#include <com/sun/star/embed/XInplaceClient.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XWINDOWSUPPLIER_HPP_
+#include <com/sun/star/embed/XWindowSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
@@ -104,6 +114,26 @@
 
 using namespace ::com::sun::star;
 
+awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2 )
+{
+    awt::Rectangle aResult;
+
+    OSL_ENSURE( aRect1.Width >= 0 && aRect2.Width >= 0 && aRect1.Height >= 0 && aRect2.Height >= 0,
+                "Offset must not be less then zero!" );
+
+    aResult.X = aRect1.X > aRect2.X ? aRect1.X : aRect2.X;
+    aResult.Y = aRect1.Y > aRect2.Y ? aRect1.Y : aRect2.Y;
+
+    sal_Int32 nRight1 = aRect1.X + aRect1.Width;
+    sal_Int32 nBottom1 = aRect1.Y + aRect1.Height;
+    sal_Int32 nRight2 = aRect2.X + aRect2.Width;
+    sal_Int32 nBottom2 = aRect2.Y + aRect2.Height;
+    aResult.Width = ( nRight1 < nRight2 ? nRight1 : nRight2 ) - aResult.X;
+    aResult.Height = ( nBottom1 < nBottom2 ? nBottom1 : nBottom2 ) - aResult.Y;
+
+    return aResult;
+}
+
 #define NOTIFY_LISTERNERS(_rListeners,T,T1,T2,method)                                     \
     uno::Sequence< uno::Reference< uno::XInterface > > aListenerSeq = _rListeners.getElements(); \
                                                                                   \
@@ -135,6 +165,39 @@ sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
             return m_aVerbTable[nInd][1];
 
     throw lang::IllegalArgumentException(); // TODO: unexpected verb provided
+}
+
+//----------------------------------------------
+void OCommonEmbeddedObject::Deactivate()
+{
+    uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    //MBA if ( !xModif.is() )
+    //MBA    throw uno::RuntimeException();
+
+    if ( !m_xClientSite.is() )
+        throw embed::WrongStateException(); //TODO: client site is not set!
+
+    // store document if it is modified
+    if ( xModif.is() && xModif->isModified() )
+    {
+        try {
+            m_xClientSite->saveObject();
+        }
+        catch( embed::ObjectSaveVetoException& )
+        {
+        }
+        catch( uno::Exception& e )
+        {
+            throw embed::StorageWrappedTargetException(
+                ::rtl::OUString::createFromAscii( "The client could not store the object!" ),
+                uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                uno::makeAny( e ) );
+        }
+    }
+
+    m_pDocHolder->CloseFrame();
+
+    m_xClientSite->visibilityChanged( sal_False );
 }
 
 //----------------------------------------------
@@ -198,21 +261,33 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         {
             if ( m_bIsLink )
             {
-                m_pDocHolder->SetDocument( LoadLink_Impl(), m_bReadOnly );
+                m_pDocHolder->SetComponent( LoadLink_Impl(), m_bReadOnly );
             }
             else
             {
-                // in case embedded object is in loaded state the contents must
-                // be stored in the related storage and the storage
-                // must be created already
+                uno::Reference < embed::XEmbedPersist > xPersist( static_cast < embed::XClassifiedObject* > (this), uno::UNO_QUERY );
+                if ( xPersist.is() )
+                {
+                    // in case embedded object is in loaded state the contents must
+                    // be stored in the related storage and the storage
+                    // must be created already
+                    if ( !m_xObjectStorage.is() )
+                        throw io::IOException(); //TODO: access denied
 
-                if ( !m_xObjectStorage.is() )
-                    throw io::IOException(); //TODO: access denied
-
-                m_pDocHolder->SetDocument( LoadDocumentFromStorage_Impl( m_xObjectStorage ), m_bReadOnly );
+                    m_pDocHolder->SetComponent( LoadDocumentFromStorage_Impl( m_xObjectStorage ), m_bReadOnly );
+                }
+                else
+                {
+                    // objects without persistence will be initialized internally
+                    uno::Sequence < uno::Any > aArgs(1);
+                    aArgs[0] <<= uno::Reference < embed::XEmbeddedObject >( this );
+                    uno::Reference< util::XCloseable > xDocument(
+                            m_xFactory->createInstanceWithArguments( GetDocumentServiceName(), aArgs ), uno::UNO_QUERY );
+                    m_pDocHolder->SetComponent( xDocument, m_bReadOnly );
+                }
             }
 
-            if ( !m_pDocHolder->GetDocument().is() )
+            if ( !m_pDocHolder->GetComponent().is() )
                 embed::UnreachableStateException(); //TODO: can't open document
 
             m_nObjectState = nNextState;
@@ -232,17 +307,105 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
             m_nObjectState = nNextState;
         }
-        else if ( nNextState == embed::EmbedStates::ACTIVE )
+        else
         {
-            if ( !m_xClientSite.is() )
-                throw embed::WrongStateException(); //TODO: client site is not set!
+            if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
+            {
+                if ( !m_xClientSite.is() )
+                    throw embed::WrongStateException(); //TODO: client site is not set!
 
-            // create frame and load document in the frame
-            m_pDocHolder->Show();
+                uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+                if ( xInplaceClient.is() && xInplaceClient->canInplaceActivate() )
+                {
+                    xInplaceClient->activatingInplace();
+
+                    uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY );
+                    if ( !xClientWindowSupplier.is() )
+                        throw uno::RuntimeException(); // TODO: the inplace client implementation must support XWinSupp
+
+                    m_xClientWindow = xClientWindowSupplier->getWindow();
+                    m_aOwnRectangle = xInplaceClient->getPlacement();
+                    m_aClipRectangle = xInplaceClient->getClipRectangle();
+                    awt::Rectangle aRectangleToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
+
+                    // create own window based on the client window
+                    // place and resize the window according to the rectangles
+                    uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY );
+                    if ( !xClientWindowPeer.is() )
+                        throw uno::RuntimeException(); // TODO: the container window must support the interface
+
+                    // dispatch provider may not be provided
+                    uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+                    sal_Bool bOk = m_pDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
+                    m_nObjectState = nNextState;
+                    if ( !bOk )
+                    {
+                        SwitchStateTo_Impl( embed::EmbedStates::RUNNING );
+                        throw embed::WrongStateException(); //TODO: can't activate inplace
+                    }
+                }
+                else
+                    throw embed::WrongStateException(); //TODO: can't activate inplace
+            }
+            else if ( nNextState == embed::EmbedStates::ACTIVE )
+            {
+                if ( !m_xClientSite.is() )
+                    throw embed::WrongStateException(); //TODO: client site is not set!
+
+                // create frame and load document in the frame
+                m_pDocHolder->Show();
+
+                m_xClientSite->visibilityChanged( sal_True );
+                m_nObjectState = nNextState;
+            }
+            else
+            {
+                OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
+                throw uno::RuntimeException(); // TODO
+            }
+        }
+    }
+    else if ( m_nObjectState == embed::EmbedStates::INPLACE_ACTIVE )
+    {
+        if ( nNextState == embed::EmbedStates::RUNNING )
+        {
+            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
+            if ( !xInplaceClient.is() )
+                throw uno::RuntimeException();
 
             m_xClientSite->visibilityChanged( sal_True );
 
+            xInplaceClient->deactivatedInplace();
+            Deactivate();
             m_nObjectState = nNextState;
+        }
+        else if ( nNextState == embed::EmbedStates::UI_ACTIVE )
+        {
+            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
+            // TODO:
+            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xContainerLM =
+                        xInplaceClient->getLayoutManager();
+            if ( xContainerLM.is() )
+            {
+                // dispatch provider may not be provided
+                uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
+
+                // TODO/LATER: wrong order of calls; but with the correct order the statusbar is set to the wrong place
+                sal_Bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP );
+                xInplaceClient->activatingUI();
+
+                if ( bOk )
+                {
+                    m_nObjectState = nNextState;
+                }
+                else
+                {
+                    xInplaceClient->deactivatedUI();
+                    throw embed::WrongStateException(); //TODO: can't activate UI
+                }
+            }
+            else
+                throw embed::WrongStateException(); //TODO: can't activate UI
         }
         else
         {
@@ -254,43 +417,34 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     {
         if ( nNextState == embed::EmbedStates::RUNNING )
         {
-            uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
-            if ( !xModif.is() )
-                throw uno::RuntimeException();
-
-            if ( !m_xClientSite.is() )
-                throw embed::WrongStateException(); //TODO: client site is not set!
-
-            // store document if it is modified
-            if ( xModif->isModified() )
-            {
-                try {
-                    m_xClientSite->saveObject();
-                }
-                catch( embed::ObjectSaveVetoException& )
-                {
-                }
-                catch( uno::Exception& e )
-                {
-                    throw embed::StorageWrappedTargetException(
-                        ::rtl::OUString::createFromAscii( "The client could not store the object!" ),
-                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
-                        uno::makeAny( e ) );
-                }
-            }
-
-            m_pDocHolder->CloseFrame();
-
-            m_xClientSite->visibilityChanged( sal_False );
-            // when Hide() method is fixed the frame will not be closed but hided
-            // m_pDocHolder->Hide();
-
+            Deactivate();
             m_nObjectState = nNextState;
         }
         else
         {
             OSL_ENSURE( sal_False, "Unacceptable state switch!\n" );
             throw uno::RuntimeException(); // TODO
+        }
+    }
+    else if ( m_nObjectState == embed::EmbedStates::UI_ACTIVE )
+    {
+        if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
+        {
+            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
+            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xContainerLM =
+                        xInplaceClient->getLayoutManager();
+
+            sal_Bool bOk = sal_False;
+            if ( xContainerLM.is() )
+                   bOk = m_pDocHolder->HideUI( xContainerLM );
+
+            if ( bOk )
+            {
+                m_nObjectState = nNextState;
+                   xInplaceClient->deactivatedUI();
+            }
+            else
+                throw embed::WrongStateException(); //TODO: can't activate UI
         }
     }
     else
@@ -344,7 +498,13 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
         // in case the object is already in requested state
         if ( m_nObjectState == nNewState )
+        {
+            // if active object is activated again, bring it's window to top
+            if ( m_nObjectState == embed::EmbedStates::ACTIVE )
+                m_pDocHolder->Show();
+
             return;
+        }
 
         sal_Int32 nOldState = m_nObjectState;
 
@@ -424,7 +584,21 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
     // for internal documents this call is just a duplicate of changeState
-    changeState( ConvertVerbToState_Impl( nVerbID ) );
+    sal_Int32 nNewState = -1;
+    try
+    {
+        nNewState = ConvertVerbToState_Impl( nVerbID );
+    }
+    catch( uno::Exception& )
+    {}
+
+    if ( nNewState == -1 )
+    {
+        // TODO/LATER: Save Copy as... verb ( -8 ) is implemented by container
+        // TODO/LATER: check if the verb is a supported one and if it is produce related operation
+    }
+    else
+        changeState( nNewState );
 }
 
 //----------------------------------------------
@@ -440,20 +614,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSuppor
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    uno::Sequence< embed::VerbDescriptor > aResult;
-    sal_Int32 nResLen = 0;
-
-    // verbs list will be set on initialization depending from document type
-    for ( sal_Int32 nStatesInd = 0; nStatesInd < m_aAcceptedStates.getLength(); nStatesInd++ )
-        for ( sal_Int32 nVerbInd = 0; nVerbInd < m_aVerbTable.getLength(); nVerbInd++ )
-            if ( m_aVerbTable[nVerbInd][1] == m_aAcceptedStates[nStatesInd] )
-            {
-                aResult.realloc( ++nResLen );
-                // TODO: fill the whole structure
-                aResult[nResLen-1].VerbID = m_aVerbTable[nVerbInd][0];
-            }
-
-    return aResult;
+    return m_aObjectVerbs;
 }
 
 //----------------------------------------------
@@ -542,9 +703,7 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    return 0;
-    // TODO:
-    // the status information must be filled in from configuration during object contruction
+    return m_nMiscStatus;
 }
 
 //----------------------------------------------
