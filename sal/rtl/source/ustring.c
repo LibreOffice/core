@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:36:36 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 11:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
     sal_Int32 nLen;
     rtl_math_doubleToUString(
         &pResult, 0, 0, f, rtl_math_StringFormat_G,
-        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xx"), '.', 0, 0,
-        sal_True);
+        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0,
+        0, sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
     rtl_copyMemory(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));

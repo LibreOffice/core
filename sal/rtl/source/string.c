@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-04 15:36:32 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 11:01:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
     sal_Int32 nLen;
     rtl_math_doubleToString(
         &pResult, 0, 0, f, rtl_math_StringFormat_G,
-        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xx"), '.', 0, 0,
+        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', 0, 0,
         sal_True);
     nLen = pResult->length;
     OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);

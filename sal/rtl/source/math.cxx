@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 10:47:49 $
+ *  last change: $Author: sb $ $Date: 2002-11-05 11:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,9 @@ inline void doubleToString(StringT ** pResult,
             p--;
     }
 
-    // print the exponent (dreistellig)
+    // Print the exponent ('E', followed by '+' or '-', followed by exactly
+    // three digits).  The code in rtl_[u]str_valueOf{Float|Double} relies on
+    // this format.
     if( eFormat == rtl_math_StringFormat_E )
     {
         if ( p == pBuf )
