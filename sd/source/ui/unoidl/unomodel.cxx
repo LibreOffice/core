@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:28:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,10 +1980,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     // exporting object interactions to pdf
 
                                     // if necessary, the master page interactions will be exported first
+                                    sal_Bool bIsBackgroundObjectsVisible;   // SJ: #i39428# IsBackgroundObjectsVisible not available for Draw
                                     const rtl::OUString sIsBackgroundObjectsVisible( RTL_CONSTASCII_USTRINGPARAM( "IsBackgroundObjectsVisible" ) );
-                                    sal_Bool bIsBackgroundObjectsVisible;
-                                    aAny = xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible );
-                                    if ( ( aAny >>= bIsBackgroundObjectsVisible ) && bIsBackgroundObjectsVisible )
+                                    if ( mbImpressDoc && ( xPagePropSet->getPropertyValue( sIsBackgroundObjectsVisible ) >>= bIsBackgroundObjectsVisible ) && bIsBackgroundObjectsVisible )
                                     {
                                         uno::Reference< drawing::XMasterPageTarget > xMasterPageTarget( xPage, uno::UNO_QUERY );
                                         if ( xMasterPageTarget.is() )
@@ -2016,7 +2015,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     }
 
                                     // exporting transition effects to pdf
-                                    if ( pPDFExtOutDevData->GetIsExportTransitionEffects() )
+                                    if ( mbImpressDoc && pPDFExtOutDevData->GetIsExportTransitionEffects() )    // SJ: #i39428# TransitionEffects not available for Draw
                                     {
                                         const rtl::OUString sEffect( RTL_CONSTASCII_USTRINGPARAM( "Effect" ) );
                                         const rtl::OUString sSpeed ( RTL_CONSTASCII_USTRINGPARAM( "Speed" ) );
