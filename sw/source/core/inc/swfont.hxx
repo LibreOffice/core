@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-19 09:29:17 $
+ *  last change: $Author: fme $ $Date: 2001-05-10 06:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,8 +353,8 @@ public:
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
-    USHORT GetPropWidth() { return aSub[nActual].GetPropWidth(); }
-    USHORT GetOrientation() { return aSub[nActual].GetOrientation(); }
+    USHORT GetPropWidth() const { return aSub[nActual].GetPropWidth(); }
+    USHORT GetOrientation() const { return aSub[nActual].GetOrientation(); }
 
     inline const XubString& GetName( const BYTE nWhich ) const
         { return aSub[nWhich].GetName(); }
