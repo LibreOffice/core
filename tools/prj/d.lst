@@ -2,7 +2,7 @@ mkdir: %_DEST%\bin%_EXT%\remote
 mkdir: %_DEST%\inc%_EXT%\bootstrp
 mkdir: %_DEST%\inc%_EXT%\tools
 mkdir: %_DEST%\lib%_EXT%\remote
-mkdir: %_DEST%\inc%_EXT%\testSHL
+mkdir: %_DEST%\inc%_EXT%\testshl
 
 
 ..\%__SRC%\bin\remote\tl?????.dll %_DEST%\bin%_EXT%\remote\tl?????.dll
@@ -28,7 +28,7 @@ mkdir: %_DEST%\inc%_EXT%\testSHL
 ..\%__SRC%\misc\tl?????.map %_DEST%\bin%_EXT%\tl?????.map
 ..\%__SRC%\slb\btstrpsh.lib %_DEST%\lib%_EXT%\btstrpsh.lib
 ..\%__SRC%\lib\tstutil.lib %_DEST%\lib%_EXT%\tstutil.lib
-..\%__SRC%\bin\testSHL.exe %_DEST%\bin%_EXT%\testSHL.exe
+..\%__SRC%\bin\testshl.exe %_DEST%\bin%_EXT%\testshl.exe
 
 hedabu: ..\win\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
 hedabu: ..\%__SRC%\inc\dll.hxx %_DEST%\inc%_EXT%\tools\dll.hxx
@@ -147,7 +147,7 @@ hedabu: ..\inc\sasyncfn.hxx %_DEST%\inc%_EXT%\tools\sasyncfn.hxx
 hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx
 hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
 
-..\testSHL\inc\*.hxx %_DEST%\inc%_EXT%\testSHL\*.hxx
+..\testshl\inc\*.hxx %_DEST%\inc%_EXT%\testshl\*.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
