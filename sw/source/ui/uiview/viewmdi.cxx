@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 10:49:32 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 18:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,36 +86,70 @@
 #include <sfx2/request.hxx>
 #endif
 
-
-#include "swmodule.hxx"
-#include "view.hxx"
-#include "wrtsh.hxx"
-#include "viewopt.hxx"
-#include "frmatr.hxx"
-#include "globals.hrc"
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _VIEW_HXX
+#include <view.hxx>
+#endif
+#ifndef _WRTSH_HXX
+#include <wrtsh.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _FRMATR_HXX
+#include <frmatr.hxx>
+#endif
 #ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
 #endif
-#include "uitool.hxx"
-#include "cmdid.h"
-#include "edtwin.hxx"
-#include "pagedesc.hxx"
-#include "bookmrk.hxx"
-#include "fldbas.hxx"
-#include "workctrl.hxx"
-#include "usrpref.hxx"
-#include "scroll.hxx"
-#include "wview.hxx"
-#include "view.hrc"
-#include "ribbar.hrc"
-#include "helpid.h"
-
-#if SUPD<631
-#define SVX_ZOOM_PAGEWIDTH_NOBORDER 4
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+#ifndef _EDTWIN_HXX
+#include <edtwin.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
+#ifndef _BOOKMRK_HXX
+#include <bookmrk.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _WORKCTRL_HXX
+#include <workctrl.hxx>
+#endif
+#ifndef _USRPREF_HXX
+#include <usrpref.hxx>
+#endif
+#ifndef _SCROLL_HXX
+#include <scroll.hxx>
+#endif
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
 #endif
 
-USHORT          SwView::nMoveType = NID_PGE;
-BYTE            SwView::nActMark = 0;
+#ifndef _CMDID_H
+#include <cmdid.h>
+#endif
+#ifndef _VIEW_HRC
+#include <view.hrc>
+#endif
+#ifndef _RIBBAR_HRC
+#include <ribbar.hrc>
+#endif
+#ifndef _HELPID_H
+#include <helpid.h>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
+
+USHORT  SwView::nMoveType = NID_PGE;
+BYTE    SwView::nActMark = 0;
 
 #define VIEW_IMAGECOLOR COL_LIGHTBLUE
 
@@ -125,8 +159,10 @@ void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, BOOL bViewOnly )
 }
 
 void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
-                            short nFactor, BOOL bViewOnly )
+                        short nFactor, BOOL bViewOnly )
 {
+    BOOL bUnLockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( TRUE );
     pWrtShell->LockPaint();
     {
     ACT_KONTEXT(pWrtShell);
@@ -246,6 +282,8 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType((BYTE)eZoomType);
     }
     pWrtShell->UnlockPaint();
+    if( bUnLockView )
+        pWrtShell->LockView( FALSE );
 //  eZoom = eZoomType;
 }
 
@@ -731,6 +769,9 @@ void SwView::SetImageButtonColor(Color& rColor)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/04/27 10:49:32  os
+    new zoom type for preview added
+
     Revision 1.3  2001/04/09 09:46:35  os
     #85859# some option dialog errors fixed
 
