@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:23:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1716,10 +1716,10 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 
             //
-            //      Autofilter - Knoepfe
+            //      AutoFilter buttons
             //
 
-    if ( !bDouble && !bFormulaMode )                //! auf rechte Taste abfragen ???
+    if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
     {
         ScMergeFlagAttr* pAttr = (ScMergeFlagAttr*)
                                     pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
@@ -1795,11 +1795,11 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
             //
-            //      Szenario-Auswahl
+            //      scenario selection
             //
 
     ScRange aScenRange;
-    if ( HasScenarioButton( aPos, aScenRange ) )
+    if ( rMEvt.IsLeft() && HasScenarioButton( aPos, aScenRange ) )
     {
         DoScenarioMenue( aScenRange );
         return;
