@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 13:33:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-11 05:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "∫ﬁ≤z∏ÍÆ∆∑Ω(~D)...";  \
     Text[ turkish ] = "administrate ~data sources ..."; \
     Text[ arabic ] = "≈œ«—… „’«œ— «·»Ì«‰« ..."; \
-    Text[ finnish ] = "~Datenquellen verwalten ...";
+    Text[ finnish ] = "~Datenquellen verwalten ...";    \
+    Text[ catalan ] = "Administrate ~Data Sources...";
     Text[ catalan ] = "Administrate ~Data Sources...";
 
 #define MID_CLOSECONN   \
@@ -729,7 +730,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "µ≤ßÙ≥sΩu(~N)";   \
     Text[ turkish ] = "~close connection";  \
     Text[ arabic ] = "ﬁÿ⁄ «·« ’«·"; \
-    Text[ finnish ] = "Verbindung s~chlieﬂen";
+    Text[ finnish ] = "Verbindung s~chlieﬂen";  \
+    Text[ catalan ] = "Disco~nnect";
     Text[ catalan ] = "Disco~nnect";
 
 #define MID_REFRESHCONN \
@@ -755,7 +757,8 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ chinese_traditional ] = "≠´∑s≥sΩu(~R)";   \
     Text[ turkish ] = "~refresh connection";    \
     Text[ arabic ] = " ÕœÌÀ «·« ’«·";   \
-    Text[ finnish ] = "Verbindung e~rneuern";
+    Text[ finnish ] = "Verbindung e~rneuern";   \
+    Text[ catalan ] = "~Refresh Connection";
     Text[ catalan ] = "~Refresh Connection";
 
 #define MITEMS_DEFAULT  \
