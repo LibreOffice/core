@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-10 11:04:52 $
+ *  last change: $Author: oj $ $Date: 2001-01-25 08:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace connectivity;
@@ -231,7 +234,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 }
 
 //------------------------------------------------------------------
-OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
 
@@ -245,7 +248,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
           // odbc date
           (SQL_ISRULE(pPredicateNode->getChild(2),set_fct_spec) && SQL_ISPUNCTUATION(pPredicateNode->getChild(2)->getChild(0),"{"))))
     {
-        //  m_rCursor.aStatus.SetStatementTooComplex();
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
         return NULL;
     }
 
@@ -298,12 +301,9 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
                             pConst->getValue() >>= aVal;
                             pConst->setValue(makeAny(aVal.toDouble()));
                         }
-                        catch( ... )
+                        catch( Exception&)
                         {
-//                          m_rCursor.aStatus.Set(SQL_STAT_ERROR,
-//                                      String::CreateFromAscii("S1C00"),
-//                                      m_rCursor.aStatus.CreateErrorMessage(String(OResId(STR_STAT_SQL_DATATYPE_MISMATCH))),
-//                                      0, String() );
+                            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
                         }
                     }   break;
                     case DataType::TINYINT:
@@ -311,10 +311,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
                     case DataType::INTEGER:
                     case DataType::BIT:
                         ;
-//                      m_rCursor.aStatus.Set(SQL_STAT_ERROR,
-//                                      String::CreateFromAscii("S1C00"),
-//                                      m_rCursor.aStatus.CreateErrorMessage(String(OResId(STR_STAT_SQL_DATATYPE_MISMATCH))),
-//                                      0, String() );
+                        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
                 }
             }
         }
@@ -323,13 +320,13 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)
 }
 
 //------------------------------------------------------------------
-OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
     if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
     {
-        //  m_rCursor.aStatus.SetInvalidStatement();
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
         return NULL;
     }
 
@@ -348,20 +345,20 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING || SQL_ISRULE(pAtom,parameter)))
     {
-        //  m_rCursor.aStatus.SetInvalidStatement();
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
         return NULL;
     }
     if (pOptEscape->count() != 0)
     {
         if (pOptEscape->count() != 2)
         {
-            //  m_rCursor.aStatus.SetInvalidStatement();
+            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
             return NULL;
         }
         OSQLParseNode *pEscNode = pOptEscape->getChild(1);
         if (pEscNode->getNodeType() != SQL_NODE_STRING)
         {
-            //  m_rCursor.aStatus.SetInvalidStatement();
+            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
             return NULL;
         }
         else
@@ -378,11 +375,11 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
 }
 
 //------------------------------------------------------------------
-OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     if (!SQL_ISRULE(pPredicateNode->getChild(0),column_ref))
     {
-        //  m_rCursor.aStatus.SetInvalidStatement();
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
         return NULL;
     }
 
@@ -406,7 +403,7 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode)
     return NULL;
 }
 //------------------------------------------------------------------
-OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
+OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     OOperand* pOperand = NULL;
 
@@ -430,12 +427,12 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
                 pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol); //new OOperandAttr(pCol);
             else
             {
-                //  m_rCursor.aStatus.SetInvalidStatement();
+                ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
             }
         }
-        catch(Exception &e)
+        catch(Exception &)
         {
-            OSL_ENSHURE(0,"OPredicateCompiler::execute_Operand Exception");
+            OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
         }
     }
     else if (SQL_ISRULE(pPredicateNode,parameter))
@@ -482,20 +479,17 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
             }
             catch( Exception & )
             {
-                OSL_ENSHURE(0,"OPredicateCompiler::execute_Operand Exception");
-//              m_rCursor.aStatus.Set(SQL_STAT_ERROR,
-//                          String::CreateFromAscii("S1C00"),
-//                          m_rCursor.aStatus.CreateErrorMessage(String(OResId(STR_STAT_SQL_DATATYPE_MISMATCH))),
-//                          0, String() );
+                OSL_ENSURE(0,"OPredicateCompiler::execute_Operand Exception");
+                ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Datatype mismatch"),NULL);
             }
         }
         else
             ;
-            //  m_rCursor.aStatus.SetStatementTooComplex();
+            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
     }
     else
     {
-        //  m_rCursor.aStatus.SetStatementTooComplex();
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
     }
     if (pOperand)
         m_aCodeList.push_back(pOperand);

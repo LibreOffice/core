@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
+ *  last change: $Author: oj $ $Date: 2001-01-25 08:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ void OOp_ISNULL::Exec(OCodeStack& rCodeStack)
 sal_Bool OOp_ISNULL::operate(const OOperand* pOperand, const OOperand*) const
 {
     Any aRet(pOperand->getValue());
-    return !aRet.hasValue() || !aRet.getValue();
+    return !aRet.hasValue();
 }
 
 //------------------------------------------------------------------
@@ -352,8 +352,6 @@ sal_Bool OOp_LIKE::operate(const OOperand* pLeft, const OOperand* pRight) const
     Any aRH(pRight->getValue());
 
     if (!aLH.hasValue() || !aRH.hasValue())
-        bMatch = TRUE;
-    else if (!aLH.getValue())
         bMatch = sal_False;
     else
     {

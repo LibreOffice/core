@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2001-01-25 08:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ namespace connectivity
             }
 
         protected:
-            OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode);
-            OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode);
-            OOperand* execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode);
-            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode);
+            OOperand* execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OOperand* execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         private:
             //  OCursor& Cursor() const;
