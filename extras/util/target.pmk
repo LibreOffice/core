@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tv $ $Date: 2001-01-26 13:18:30 $
+#   last change: $Author: tv $ $Date: 2001-01-26 15:28:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,6 @@ INSO_PORTUGUESE_TARGET          = inso03
 INSO_SPANISH_TARGET             = inso34
 INSO_SWEDISH_TARGET             = inso46
 
-CONFIG_SERVER_TARGET            = cfgsrv
 CONFIG_SERVER_NOLANG_TARGET     = cfgsrvnolang
 CONFIG_SERVER_BITMAP_UNX_TARGET = cfgsrvbitmapunx
 CONFIG_SERVER_DOCLANG_TARGET    = cfgsrvdoclang
