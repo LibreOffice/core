@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,6 +1126,16 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     xDicList = Reference< XDictionaryList >( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())
     {
+        // keep references to all **currently** available dictionaries,
+        // since the diclist may get changed meanwhile (e.g. through the API).
+        // We want the dialog to operate on the same set of dictionaries it
+        // was started with.
+        // Also we have to take care to not loose the last reference when
+        // someone else removes a dictionary from the list.
+        // removed dics will be replaced by NULL new entries be added to the end
+        // Thus we may use indizes as consistent references.
+        aDics = xDicList->getDictionaries();
+
         UpdateDicBox_Impl();
     }
     else
@@ -1387,43 +1397,63 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 // ----------------------------------------------------------------------
 
+ULONG SvxLinguTabPage::GetDicUserData( const Reference< XDictionary > &rxDic, USHORT nIdx )
+{
+    ULONG nRes = 0;
+    DBG_ASSERT( rxDic.is(), "dictionary not supplied" );
+    if (rxDic.is())
+    {
+        Reference< frame::XStorable > xStor( rxDic, UNO_QUERY );
+
+        ULONG nUserData = 0;
+        BOOL bChecked = rxDic->isActive();
+        BOOL bEditable = !xStor.is() || !xStor->isReadonly();
+        BOOL bDeletable = bEditable;
+        BOOL bNegativ = rxDic->getDictionaryType() == DictionaryType_NEGATIVE;
+
+        nRes = DicUserData( nIdx,
+                bChecked, bEditable, bDeletable ).GetUserData();
+    }
+    return nRes;
+}
+
+
+void SvxLinguTabPage::AddDicBoxEntry(
+        const Reference< XDictionary > &rxDic,
+        USHORT nIdx )
+{
+    aLinguDicsCLB.SetUpdateMode(FALSE);
+
+    String aTxt( ::GetDicInfoStr( rxDic->getName(),
+                        SvxLocaleToLanguage( rxDic->getLocale() ),
+                        DictionaryType_NEGATIVE == rxDic->getDictionaryType() ) );
+    aLinguDicsCLB.InsertEntry( aTxt );  // append at end
+    SvLBoxEntry* pEntry = aLinguDicsCLB.GetEntry( aLinguDicsCLB.GetEntryCount() - 1 );
+    DBG_ASSERT( pEntry, "failed to add entry" );
+    if (pEntry)
+    {
+        DicUserData aData( GetDicUserData( rxDic, nIdx ) );
+        pEntry->SetUserData( (void *) aData.GetUserData() );
+        lcl_SetCheckButton( pEntry, aData.IsChecked() );
+    }
+
+    aLinguDicsCLB.SetUpdateMode(TRUE);
+}
+
+// ----------------------------------------------------------------------
+
 void SvxLinguTabPage::UpdateDicBox_Impl()
 {
     aLinguDicsCLB.SetUpdateMode(FALSE);
     aLinguDicsCLB.Clear();
 
-    SvLBoxTreeList *pModel = aLinguDicsCLB.GetModel();
-    SvLBoxEntry* pEntry = NULL;
-
-    aDics = xDicList->getDictionaries();
     INT32 nDics  = aDics.getLength();
     const Reference< XDictionary > *pDic = aDics.getConstArray();
     for (INT32 i = 0;  i < nDics;  ++i)
     {
         const Reference< XDictionary > &rDic = pDic[i];
         if (rDic.is())
-        {
-            Reference< frame::XStorable > xStor( rDic, UNO_QUERY );
-
-            ULONG nUserData = 0;
-            BOOL bChecked = rDic->isActive();
-            BOOL bEditable = !xStor.is() || !xStor->isReadonly();
-            BOOL bDeletable = bEditable;
-            BOOL bNegativ = rDic->getDictionaryType() == DictionaryType_NEGATIVE;
-            String aTxt( ::GetDicInfoStr( rDic->getName(),
-                                SvxLocaleToLanguage( rDic->getLocale() ),
-                                bNegativ ) );
-
-            aLinguDicsCLB.InsertEntry(aTxt);
-            SvLBoxEntry* pEntry = aLinguDicsCLB.GetEntry(i);
-
-//          pEntry = CreateEntry( aTxt, CBCOL_FIRST );
-            nUserData = DicUserData( (USHORT)i,
-                    bChecked, bEditable, bDeletable ).GetUserData();
-            pEntry->SetUserData( (void *)nUserData );
-//  pModel->Insert( pEntry );
-            lcl_SetCheckButton( pEntry, bChecked );
-        }
+            AddDicBoxEntry( rDic, (USHORT)i );
     }
 
     aLinguDicsCLB.SetUpdateMode(TRUE);
@@ -1698,12 +1728,19 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     {
         Reference< XSpellChecker1 > xSpellChecker1;
         SvxNewDictionaryDialog aDlg( this,  xSpellChecker1);
-
-        Reference< XDictionary1 >  xNewDic;
+        Reference< XDictionary >  xNewDic;
         if ( aDlg.Execute() == RET_OK )
-            xNewDic = aDlg.GetNewDictionary();
+            xNewDic = Reference< XDictionary >( aDlg.GetNewDictionary(), UNO_QUERY );
         if ( xNewDic.is() )
-            UpdateDicBox_Impl();
+        {
+            // add new dics to the end
+            INT32 nLen = aDics.getLength();
+            aDics.realloc( nLen + 1 );
+
+            aDics.getArray()[ nLen ] = xNewDic;
+
+            AddDicBoxEntry( xNewDic, (USHORT) nLen );
+        }
     }
     else if (&aLinguDicsEditPB == pBtn)
     {
@@ -1723,10 +1760,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     SvxEditDictionaryDialog aDlg( this,
                             xDic->getName(), xSpellChecker1 );
                     aDlg.Execute();
-
-                    USHORT nOldPos = aLinguDicsCLB.GetSelectEntryPos();
-                    UpdateDicBox_Impl();
-                    aLinguDicsCLB.SelectEntryPos( nOldPos );
                 }
             }
         }
@@ -1768,7 +1801,27 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                                 KillFile_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                             }
                         }
-                        UpdateDicBox_Impl();
+
+                        aDics.getArray()[ nDicPos ] = 0;
+
+                        // remove entry from checklistbox
+                        ULONG nCnt = aLinguDicsCLB.GetEntryCount();
+                        for (ULONG i = 0;  i < nCnt;  ++i)
+                        {
+                            SvLBoxEntry *pEntry = aLinguDicsCLB.GetEntry( i );
+                            DBG_ASSERT( pEntry, "missing entry" );
+                            if (pEntry)
+                            {
+                                DicUserData aData( (ULONG) pEntry->GetUserData() );
+                                if (aData.GetEntryId() == nDicPos )
+                                {
+                                    aLinguDicsCLB.RemoveEntry( (USHORT) i );
+                                    break;
+                                }
+                            }
+                        }
+                        DBG_ASSERT( nCnt > aLinguDicsCLB.GetEntryCount(),
+                                "remove failed ?");
                     }
                 }
             }
