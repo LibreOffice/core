@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:44:49 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 09:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ String RID_COMMON_START + 4
     Text[ ar ] = "The drawing could not be created.<BR>Please check if the module 'StarOffice Draw' is installed.";
     Text[ ca ] = "The drawing could not be created.<BR>Please check if the module 'StarOffice Draw' is installed.";
     Text[ th ] = "The drawing could not be created.<BR>Please check if the module 'StarOffice Draw' is installed.";
-    Text[ cs ] = "Kresba nemohla bÃœt vytvoÅena.<BR>ProsÃ­m, pÅesvÄdÄ?te se, ÅŸe je modul 'StarOffice Draw' nainstalovÃ¡n.";
+    Text[ cs ] = "Kresba nemohla bÃœt vytvoÅena.<BR>ProsÃ­m, pÅesvÄdÄ?te se, ÅŸe je modul 'StarOffice Draw' nainstalovÃ�¡n.";
     Text[ he ] = "Die Zeichnung konnte nicht erzeugt werden.<BR>ÃberprÃŒfen Sie bitte, ob das Modul 'StarOffice Draw' installiert ist.";
     Text[ hi ] = "The drawing could not be created.<BR>Please check if the module 'StarOffice Draw' is installed.";
     Text[ sk ] = "Kresba nemohla byÅ¥ vytvorenÃ¡.<BR>ProsÃ­m preverte Ä?i je modul 'StarOffice Draw' nainÅ¡talovanÃœ.";
@@ -855,7 +855,7 @@ String RID_DB_COMMON_START + 6
     Text[ fi ] = "Ohjatun toiminnon ohjauksen suorituksessa on ilmennyt virhe. Ohjattu toiminto lopetetaan.";
     Text[ th ] = "เกิดข้อผิดพลาดขณะใช้งานการนำร่องอัตโนมัติ  การนำร่องอัตโนมัติจะยุติ";
     Text[ cs ] = "Při běhu průvodce došlo k chybě. Průvodce musí být ukončen.";
-    Text[ he ] = "‮ארעה שגיאה בזמן פעולת הטייס האוטומטי. הטייס יופסק.‬";
+    Text[ he ] = "‮ארעה שג�אה בזמן פעולת הטייס האוטומטי. הטייס יופסק.‬";
     Text[ hi ] = "An error occurred while running the AutoPilot. The AutoPilot will be terminated.";
     Text[ sk ] = "Počas behu Sprievodcu sa vyskytla chyba. Sprievodca bude ukončený.";
     Text[ hu ] = "A Tündér futtatása közben hiba lépett fel, ezért az bezárult.";
@@ -991,7 +991,7 @@ String RID_DB_COMMON_START + 11
     Text[ th ] = "ชื่อเรื่องต้องไม่มีระยะห่างหรือตัวอักขระพิเศษใด ๆ";
     Text[ cs ] = "Název nesmí obsahovat žádné mezery ani jiné zvláštní znaky.";
     Text[ he ] = "‮רווחים ותווים מיוחדים אסורים בכותרות.‬";
-    Text[ hi ] = "शीर्षक का नाम में खाली स्थान अथवा विशेष अक्षरों को नहीं भर सकते है ।";
+    Text[ hi ] = "शीर्षक का नाम में खाली स्थान अथवा विà��ेष अक्षरों को नहीं भर सकते है ।";
     Text[ sk ] = "Nadpis nesmie obsahovať žiadne medzery ani iné zvláštne znaky.";
     Text[ hu ] = "A cím nem tartalmazhat szóközt vagy különleges karaktert.";
     Text[ sl ] = "Naslov ne sme vsebovati presledkov ali posebnih znakov.";
@@ -1910,7 +1910,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ ja ] = ": オプショングループの作成";
     Text[ zh ] = "：制作选项小组";
     Text[ zh-TW ] = "：建立選項群組";
-    Text[ ar ] = ": ����� ������ ������";
+    Text[ ar ] = ": ��Ô�� ������ ������";
     Text[ nl ] = ": optiegroep aanmaken";
     Text[ zh ] = "：制作选项小组";
     Text[ el ] = ": ���������� ������ ��������";
@@ -3872,7 +3872,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ fi ] = ": Luo";
     Text[ th ] = ": สร้าง";
     Text[ cs ] = "Rozvržení dat";
-    Text[ he ] = "‮עיצוב פריסת הנתונים‬";
+    Text[ he ] = "‮עיצוב פריסת �נתונים‬";
     Text[ hi ] = ": उत्पन्न करो";
     Text[ sk ] = "Rozloženie dát";
     Text[ hu ] = "Adatok elrendezése";
@@ -6718,7 +6718,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ fi ] = "Valitun kent�n sis�lt� n�ytet��n luetteloruudussa, jos linkitetyt kent�t ovat identtiset.";
     Text[ th ] = "เนื้อหาของเขตข้อมูลที่เลือกจะถูกแสดงในกล่องรายการถ้าเขตข้อมูลที่เชื่อมโยงเหมือนกัน";
     Text[ cs ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu, pokud jsou propojená pole identická.";
-    Text[ he ] = "‮תוכן השדה הנבחר יוצג בתיבת הרשימה בתנאי שהשדות המקושרים זהים.‬";
+    Text[ he ] = "‮תוכן השדה הנבחר יוצג בתיבת הרשימה בתנאי שהשדות המ�§ושרים זהים.‬";
     Text[ hi ] = "अगर लिंक किया हुआ क्षेत्र समान है ,तो चुने हुए क्षेत्र का विषयों सूची बॉक्स में दिखलाया जाएगा ।";
     Text[ sk ] = "Obsah vybraného poľa bude zobrazený v zozname ak sú pripojené polia rovnaké.";
     Text[ hu ] = "A listapanelben a kiválasztott mező tartalma jelenik meg, ha az összekapcsolt mezők azonosak.";
@@ -7118,7 +7118,7 @@ String RID_LETTERWIZARDDIALOG_START + 18
 
 String RID_LETTERWIZARDDIALOG_START + 19
 {
-    Text [ de ] = "F�r Versendeadresse Benutzerdaten  verwenden";
+    Text [ de ] = "F�r Versendeadresse Benutzerdaten verwenden";
     Text [ en-US] = "~Use user data for return address";
 };
 
@@ -7323,7 +7323,7 @@ String RID_LETTERWIZARDDIALOG_START + 52
 String RID_LETTERWIZARDDIALOG_START + 53
 {
     Text [ de ] = "Bitte w�hlen Sie den Typ und das Seitendesign des Briefs";
-    Text [ en-US] = "Please choose the  type of letter and page design";
+    Text [ en-US] = "Please choose the type of letter and page design";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 54
@@ -7436,14 +7436,68 @@ String RID_LETTERWIZARDROADMAP_START + 6
 //====================== Letter Wizard Language Start
 String RID_LETTERWIZARDLANGUAGE_START + 1
 {
-    Text [ de ] = "US American";
+    Text [ de ] = "US-Amerikanisch";
     Text [ en-US] = "US American";
 };
 
 String RID_LETTERWIZARDLANGUAGE_START + 2
 {
-    Text [ de ] = "German";
+    Text [ de ] = "Deutsch";
     Text [ en-US] = "German";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 3
+{
+    Text [ de ] = "Franz�sisch";
+    Text [ en-US] = "French";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 4
+{
+    Text [ de ] = "Spanisch";
+    Text [ en-US] = "Spanish";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 5
+{
+    Text [ de ] = "Italienisch";
+    Text [ en-US] = "Italian";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 6
+{
+    Text [ de ] = "Portugiesisch";
+    Text [ en-US] = "Portuguese";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 7
+{
+    Text [ de ] = "Schwedisch";
+    Text [ en-US] = "Swedish";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 8
+{
+    Text [ de ] = "Japanisch";
+    Text [ en-US] = "Japanese";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 9
+{
+    Text [ de ] = "Koreanisch";
+    Text [ en-US] = "Korean";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 10
+{
+    Text [ de ] = "Chinesisch (Vereinfacht)";
+    Text [ en-US] = "Chinese (Simplified)";
+};
+
+String RID_LETTERWIZARDLANGUAGE_START + 11
+{
+    Text [ de ] = "Chinesisch (Traditionell)";
+    Text [ en-US] = "Chinese (Traditional)";
 };
 
 
@@ -7510,7 +7564,7 @@ String RID_FAXWIZARDDIALOG_START + 9
 
 String RID_FAXWIZARDDIALOG_START + 10
 {
-    Text [ de ] = "F�r Absenderadresse Benutzerdaten  verwenden";
+    Text [ de ] = "F�r Absenderadresse Benutzerdaten verwenden";
     Text [ en-US] = "~Use user data for return address";
 };
 
@@ -7815,7 +7869,7 @@ String RID_WEBWIZARDDIALOG_START +1
 String RID_WEBWIZARDDIALOG_START +2
 {
     Text [ en-US  ] = "This Web Wizard is to aid you in publishing documents on the Internet.\n\nIt will convert the documents so that they can be viewed by a web browser. In addition, it will generate a Table of Contents page with links for easy access to the documents. The Web Wizard will also allow you to customize the design and layout of your web site.\n\nYou will be able to keep the documents you have published on the web up-to-date and add or remove documents at any time.";
-    Text [ de ] = "Der Web-Assistent hilft Ihnen Dokumente im Internet zu publizieren. \n\nIhre Dokumente werden so konvertiert, dass sie in einem Internet-Browser angezeigt werden k�nnen. Weiterhin wird  ein Inhaltsverzeichnis erstellt, das Verkn�pfungen auf Ihre einzelnen Dokumente enth�lt und einen einfachen Zugriff auf diese  erm�glicht.\n\nDer Web-Assistent gibt Ihnen weiterhin die M�glichkeit, das Layout und Design der Webseite zu �ndern.\n\nSie werden jederzeit in der Lage sein, die Dokumente, die Sie im Internet ver�ffentlicht haben, zu pflegen und auf Stand zu halten sowie Dokumente hinzuzuf�gen oder zu entfernen.";
+    Text [ de ] = "Der Web-Assistent hilft Ihnen Dokumente im Internet zu publizieren. \n\nIhre Dokumente werden so konvertiert, dass sie in einem Internet-Browser angezeigt werden k�nnen. Weiterhin wird ein Inhaltsverzeichnis erstellt, das Verkn�pfungen auf Ihre einzelnen Dokumente enth�lt und einen einfachen Zugriff auf diese erm�glicht.\n\nDer Web-Assistent gibt Ihnen weiterhin die M�glichkeit, das Layout und Design der Webseite zu �ndern.\n\nSie werden jederzeit in der Lage sein, die Dokumente, die Sie im Internet ver�ffentlicht haben, zu pflegen und auf Stand zu halten sowie Dokumente hinzuzuf�gen oder zu entfernen.";
 };
 
 String RID_WEBWIZARDDIALOG_START +4
@@ -7965,7 +8019,7 @@ String RID_WEBWIZARDDIALOG_START +33
 
 String RID_WEBWIZARDDIALOG_START +34
 {
-    Text [ en-US  ] = "~Save settings  (recommended)";
+    Text [ en-US  ] = "~Save settings (recommended)";
     Text [ de ] = "~Einstellungen speichern (empfohlen)";
 };
 
@@ -8067,8 +8121,8 @@ String RID_WEBWIZARDDIALOG_START +56
 
 String RID_WEBWIZARDDIALOG_START +57
 {
-    Text [ en-US  ] = "N~o. of pages";
-    Text [ de ] = "N~r. der Seiten";
+    Text [ en-US  ] = "Number ~of pages";
+    Text [ de ] = "Seitenanzahl";
 };
 
 String RID_WEBWIZARDDIALOG_START +58
@@ -8079,8 +8133,8 @@ String RID_WEBWIZARDDIALOG_START +58
 
 String RID_WEBWIZARDDIALOG_START +59
 {
-    Text [ en-US  ] = "Click 'Preview' to see a preview in your default browser:";
-    Text [ de ] = "Klicken Sie auf 'Vorschau', um eine Vorschau des Inhaltverzeichnises in Ihrem Standard-Browser zu sehen:";
+    Text [ en-US  ] = "Click 'Preview' to see a preview in your browser:";
+    Text [ de ] = "Klicken Sie auf 'Vorschau', um eine Vorschau in Ihrem Browser zu sehen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +60
@@ -8092,13 +8146,13 @@ String RID_WEBWIZARDDIALOG_START +60
 String RID_WEBWIZARDDIALOG_START +61
 {
     Text [ en-US  ] = "Include the following information for each document in the table of contents:";
-    Text [ de ] = "Aufnehmen der folgenden  Elemente in das Inhaltsverzeichnisses eines Dokumentes:";
+    Text [ de ] = "Folgende  Elemente in dem Inhaltsverzeichnis eines Dokumentes anzeigen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +62
 {
     Text [ en-US  ] = "Optimize the layout for screen resolution:";
-    Text [ de ] = "Layout optimieren f�r Bildschirmaufl�sung:";
+    Text [ de ] = "Layout f�r Bildschirmaufl�sung optimieren:";
 };
 
 String RID_WEBWIZARDDIALOG_START +64
@@ -8143,6 +8197,7 @@ String RID_WEBWIZARDDIALOG_START +73
     Text [ de ] = "Das FTP Ziel '%FILENAME' ist eine Datei.";
 };
 
+
 String RID_WEBWIZARDDIALOG_START +74
 {
     Text [ en-US  ] = "The local target '%FILENAME' is a file.";
@@ -8158,19 +8213,19 @@ String RID_WEBWIZARDDIALOG_START +75
 String RID_WEBWIZARDDIALOG_START +76
 {
     Text [ en-US  ] = "The FTP target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
-    Text [ de ] = "Das FTP-Zielverzeichnis '%FILENAME' ist nicht leer.  Einige Dateien k�nnen �berschrieben werden. M�chten Sie fortfahren?";
+    Text [ de ] = "Das FTP-Zielverzeichnis '%FILENAME' ist nicht leer. Einige Dateien k�nnen �berschrieben werden. M�chten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +77
 {
     Text [ en-US  ] = "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
-    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' ist nicht leer.  Einige Dateien k�nnen �berschrieben werden. M�chten Sie fortfahren?";
+    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' ist nicht leer. Einige Dateien k�nnen �berschrieben werden. M�chten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +78
 {
     Text [ en-US  ] = "Settings already exist under the given name. Do you want to overwrite the existing settings? ";
-    Text [ de ] = "Einstellungen mit diesem Namen existieren bereits.  M�chten Sie diese �berschreiben?";
+    Text [ de ] = "Einstellungen mit diesem Namen existieren bereits. M�chten Sie diese �berschreiben?";
 };
 
 String RID_WEBWIZARDDIALOG_START +79
@@ -8224,7 +8279,7 @@ String RID_WEBWIZARDDIALOG_START +87
 String RID_WEBWIZARDDIALOG_START +88
 {
     Text [ en-US  ] = "Publishing to FTP destination...";
-    Text [ de ] = "Ver�ffentlichen per  FTP...";
+    Text [ de ] = "Ver�ffentlichen per FTP...";
 };
 
 String RID_WEBWIZARDDIALOG_START +89
@@ -8295,7 +8350,7 @@ String RID_WEBWIZARDDIALOG_START +103
 
 String RID_WEBWIZARDDIALOG_START +104
 {
-    Text [ en-US  ] = "Your web site was created successfully ino: %FILENAME";
+    Text [ en-US  ] = "Your web site was created successfully into: %FILENAME";
     Text [ de ] = "Ihre Webseite wurde erfolgreich erstellt in: %FILENAME";
 };
 
@@ -8320,7 +8375,7 @@ String RID_WEBWIZARDDIALOG_START +107
 String RID_WEBWIZARDDIALOG_START +108
 {
     Text [ en-US  ] = "An error occurred while gathering document information for '%FILENAME'. ";
-    Text [ de ] = "Ein Fehler ist beim Zusammenstellen der Dokumentinfo f�r  '%FILENAME' aufgetreten. ";
+    Text [ de ] = "Ein Fehler ist beim Zusammenstellen der Dokumentinfo f�r '%FILENAME' aufgetreten. ";
 };
 
 String RID_WEBWIZARDDIALOG_START +109
@@ -8380,7 +8435,7 @@ String RID_WEBWIZARDDIALOG_START +117
 String RID_WEBWIZARDDIALOG_START +118
 {
     Text [ en-US  ] = "Loading Web Wizard Settings...";
-    Text [ de ] = "Einstellungen des Web-Assistents werden geladen...";
+    Text [ de ] = "Einstellungen des Web-Assistenten werden geladen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +119
@@ -8397,8 +8452,8 @@ String RID_WEBWIZARDDIALOG_START +120
 
 String RID_WEBWIZARDDIALOG_START +121
 {
-    Text [ en-US  ] = "MyArchive";
-    Text [ de ] = "MeineArchive";
+    Text [ en-US  ] = "My Archive";
+    Text [ de ] = "Mein Archive";
 };
 
 String RID_WEBWIZARDDIALOG_START +122
@@ -8476,7 +8531,7 @@ String RID_WEBWIZARDDIALOG_START +134
 String RID_WEBWIZARDDIALOG_START +135
 {
     Text [ en-US  ] = "Web Wizard Settings";
-    Text [ de ] = "Web Wizard Einstellungen";
+    Text [ de ] = "Web-Assistent Einstellungen";
 };
 
 String RID_WEBWIZARDDIALOG_START +136
@@ -8523,8 +8578,8 @@ String RID_WEBWIZARDDIALOG_START +142
 
 String RID_WEBWIZARDDIALOG_START +143
 {
-    Text [ en-US  ] = "Publishing via FTP proxy is not supported.";
-    Text [ de ] = "Das Ver�ffentlichen mittels eines FTP-Proxys wird nicht unterst�tzt.";
+    Text [ en-US  ] = "Publishing via FTP Proxy is not supported.";
+    Text [ de ] = "Ver�ffentlichung �ber einen FTP-Proxy wird nicht unterst�tzt.";
 };
 
 String RID_WEBWIZARDDIALOG_START +144
@@ -8576,6 +8631,14 @@ String RID_WEBWIZARDDIALOG_START +151
 };
 
 
+String RID_WEBWIZARDDIALOG_START +152
+{
+    Text [ en-US  ] = "File not found. Would you like to specify a new file location?";
+    Text [ de ] = "Die Datei wurde nicht gefunden. M�chten Sie einen neuen Speicherort definieren?";
+};
+
+
+
 // ============================================================================
 // =================         WEB WIZARD FTP DIALOG RESOURCES      =============
 // ============================================================================
@@ -8616,7 +8679,7 @@ String RID_WEBWIZARDDIALOG_FTP +4
 String RID_WEBWIZARDDIALOG_FTP +5
 {
     Text [ en-US  ] = "~Server name or IP address:";
-    Text [ de ] = "~Servername oder IP Adresse:   ";
+    Text [ de ] = "~Servername oder IP Adresse:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +6
@@ -8706,14 +8769,14 @@ String RID_WEBWIZARDDIALOG_FTP +18
 
 String RID_AGENDAWIZARDDIALOG_START +1
 {
-    Text [en-US ] = "Agenda  Wizard";
+    Text [en-US ] = "Agenda Wizard";
     Text [ de ] = "Tagesordnungsassistent";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +2
 {
     Text [en-US ] = "Make ~manual changes to this agenda template";
-    Text [ de ] = "Eingene  Ver�nderungen an der Dokumentvorlage vornehmen";
+    Text [ de ] = "Eingene Ver�nderungen an der Dokumentvorlage vornehmen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +3
@@ -8742,7 +8805,7 @@ String RID_AGENDAWIZARDDIALOG_START +6
 
 String RID_AGENDAWIZARDDIALOG_START +7
 {
-    Text [en-US ] = "Please select the  headings you wish to include in your agenda template";
+    Text [en-US ] = "Please select the headings you wish to include in your agenda template";
     Text [ de ] = "Bitte w�hlen Sie die �berschriften aus, die die Tagesordnung beinhalten soll";
 };
 
@@ -8779,7 +8842,7 @@ String RID_AGENDAWIZARDDIALOG_START +12
 String RID_AGENDAWIZARDDIALOG_START +13
 {
     Text [en-US ] = "This wizard helps you to create an agenda template. The template can then be used to create an agenda whenever needed.";
-    Text [ de ] = "Dieser Assistent hilft Ihnen eine Dokumentvorlage f�r Tagesordnungen zu erstellen.  Diese Vorlage kann als Basis f�r Tagesordnungen, wann immer ben�tigt, benutzt werden.";
+    Text [ de ] = "Dieser Assistent hilft Ihnen eine Dokumentvorlage f�r Tagesordnungen zu erstellen. Diese Vorlage kann als Basis f�r Tagesordnungen, wann immer ben�tigt, benutzt werden.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +14
@@ -8803,7 +8866,7 @@ String RID_AGENDAWIZARDDIALOG_START + 16
 String RID_AGENDAWIZARDDIALOG_START +17
 {
     Text [en-US ] = "Placeholders will be used in empty fields. You can replace placeholders with text later.";
-    Text [ de ] = "F�r leere Felder werden Platzhalter  verwendet. Sie k�nnen sie sp�ter durch Text ersetzen.";
+    Text [ de ] = "F�r leere Felder werden Platzhalter verwendet. Sie k�nnen sie sp�ter durch Text ersetzen.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +18
@@ -8886,8 +8949,8 @@ String RID_AGENDAWIZARDDIALOG_START +30
 
 String RID_AGENDAWIZARDDIALOG_START +31
 {
-    Text [en-US ] = "The  agenda template will include placeholders for the names of the selected people. When creating an agenda from the template, you can replace these placeholder with the appropriate names.";
-    Text [ de ] = "Die Vorlage wird Platzhalter f�r alle ausgew�hlten Namen beinhalten.  Beim Erstellen einer Tagesordnung von der Vorlage, k�nnen sie die Platzhalter durch entsprechende Namen ersetzen ";
+    Text [en-US ] = "The agenda template will include placeholders for the names of the selected people. When creating an agenda from the template, you can replace these placeholder with the appropriate names.";
+    Text [ de ] = "Die Vorlage wird Platzhalter f�r alle ausgew�hlten Namen beinhalten. Beim Erstellen einer Tagesordnung von der Vorlage, k�nnen sie die Platzhalter durch entsprechende Namen ersetzen ";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +32
