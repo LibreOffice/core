@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:18:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,13 +249,13 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         while( pWin )
         {
             WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? (WorkWindow *) pWin : NULL;
-            if( pWorkWin && pWorkWin->mbReallyVisible && pWorkWin->mbFullScreenMode )
+            if( pWorkWin && pWorkWin->mpWindowImpl->mbReallyVisible && pWorkWin->mbFullScreenMode )
             {
                 bIgnoreTaskbar = true;
                 break;
             }
             else
-                pWin = pWin->mpParent;
+                pWin = pWin->mpWindowImpl->mpParent;
         }
     }
 
@@ -1213,9 +1213,9 @@ HWND ImplGetParentHwnd( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( !pFrame || !pFrame->GetInstance())
         return ::GetParent( hWnd );
-    Window *pRealParent = ((Window*)pFrame->GetInstance())->mpRealParent;
+    Window *pRealParent = ((Window*)pFrame->GetInstance())->mpWindowImpl->mpRealParent;
     if( pRealParent )
-        return static_cast<WinSalFrame*>(pRealParent->mpFrame)->mhWnd;
+        return static_cast<WinSalFrame*>(pRealParent->mpWindowImpl->mpFrame)->mhWnd;
     else
         return ::GetParent( hWnd );
 
@@ -3052,7 +3052,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         // hopefully we will not receive the corresponding button up before this
         // button down arrives again
         Window *pWin = (Window*) pFrame->GetInstance();
-        if( pWin && pWin->mpFrameData->mnFocusId )
+        if( pWin && pWin->mpWindowImpl->mpFrameData->mnFocusId )
         {
             ImplPostMessage( hWnd, nMsg, wParam, lParam );
             return 1;
