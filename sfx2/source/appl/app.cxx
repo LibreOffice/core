@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:02:01 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,13 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
+
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -212,6 +219,7 @@
 #include "appimp.hxx"
 #include "imestatuswindow.hxx"
 #include "module.hxx"
+#include "sfxdlg.hxx"
 
 #ifdef DBG_UTIL
 #include "tbxctrl.hxx"
@@ -1297,6 +1305,7 @@ void SfxApplication::Invalidate( USHORT nId )
 
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
 {
     // get basctl dllname
@@ -1315,6 +1324,72 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
     long nRet = pSymbol( pBasic );
 
     return nRet;
+}
+
+sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
+{
+    sal_Bool result = FALSE;
+
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::lang::XMultiServiceFactory > xSMgr =
+            ::comphelper::getProcessServiceFactory();
+
+    ::com::sun::star::uno::Reference
+        < ::com::sun::star::uri::XUriReferenceFactory >
+            xFactory( xSMgr->createInstance(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.uri.UriReferenceFactory" ) ),
+                ::com::sun::star::uno::UNO_QUERY );
+
+    if ( xFactory.is() )
+    {
+        try
+        {
+            ::com::sun::star::uno::Reference
+                < ::com::sun::star::uri::XVndSunStarScriptUrl >
+                    xUrl( xFactory->parse( rScriptURL ),
+                        ::com::sun::star::uno::UNO_QUERY );
+
+            if ( xUrl.is() )
+            {
+                result = TRUE;
+            }
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& re )
+        {
+            // ignore, will just return FALSE
+        }
+    }
+    return result;
+}
+
+::rtl::OUString
+SfxApplication::ChooseScript()
+{
+    ::rtl::OUString aScriptURL;
+
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    if ( pFact )
+    {
+        OSL_TRACE("create selector dialog");
+
+          AbstractScriptSelectorDialog* pDlg =
+            pFact->CreateScriptSelectorDialog( NULL );
+
+        OSL_TRACE("done, now exec it");
+
+          USHORT nRet = pDlg->Execute();
+
+        OSL_TRACE("has returned");
+
+        if ( nRet == RET_OK )
+        {
+            aScriptURL = pDlg->GetScriptURL();
+        }
+
+          delete pDlg;
+    }
+    return aScriptURL;
 }
 
 ::rtl::OUString SfxApplication::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
@@ -1337,5 +1412,23 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pBasic )
     ::rtl::OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
+}
+
+void SfxApplication::MacroOrganizer( INT16 nTabId )
+{
+    // get basctl dllname
+    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
+    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
+    ::rtl::OUString aLibName( sLibName );
+
+    // load module
+    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+
+    // get symbol
+    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
+    basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getSymbol( handleMod, aSymbol.pData );
+
+    // call basicide_choose_macro in basctl
+    pSymbol( nTabId );
 }
 
