@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:06:03 $
+ *  last change: $Author: sab $ $Date: 2001-06-13 17:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
+#ifndef __SGI_STL_SET
+#include <set>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -120,10 +124,23 @@ using namespace ::com::sun::star;
 
 //-------------------------------------------------------------------------
 
+struct LessuInt32
+{
+    sal_Bool operator() (const sal_uInt32 rValue1, const sal_uInt32 rValue2) const
+    {
+        return rValue1 < rValue2;
+    }
+};
+
+typedef std::set< sal_uInt32, LessuInt32 >  SvXMLuInt32Set;
+
 class SvXMLNumUsedList_Impl
 {
-    SvULongs    aUsed;
-    SvULongs    aWasUsed;
+    SvXMLuInt32Set              aUsed;
+    SvXMLuInt32Set              aWasUsed;
+    SvXMLuInt32Set::iterator    aCurrentUsedPos;
+    sal_uInt32                  nUsedCount;
+    sal_uInt32                  nWasUsedCount;
 
 public:
             SvXMLNumUsedList_Impl();
@@ -133,6 +150,9 @@ public:
     sal_Bool    IsUsed( sal_uInt32 nKey ) const;
     sal_Bool    IsWasUsed( sal_uInt32 nKey ) const;
     void        Export();
+
+    sal_Bool    GetFirstUsed(sal_uInt32& nKey);
+    sal_Bool    GetNextUsed(sal_uInt32& nKey);
 
     void GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed);
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
@@ -144,7 +164,9 @@ public:
 //! SvXMLNumUsedList_Impl should be optimized!
 //
 
-SvXMLNumUsedList_Impl::SvXMLNumUsedList_Impl()
+SvXMLNumUsedList_Impl::SvXMLNumUsedList_Impl() :
+    nUsedCount(0),
+    nWasUsedCount(0)
 {
 }
 
@@ -154,55 +176,95 @@ SvXMLNumUsedList_Impl::~SvXMLNumUsedList_Impl()
 
 void SvXMLNumUsedList_Impl::SetUsed( sal_uInt32 nKey )
 {
-    if ( !IsUsed( nKey ) && !IsWasUsed(nKey) )
-        aUsed.Insert( nKey, aUsed.Count() );
+    if ( !IsWasUsed(nKey) )
+    {
+        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aUsed.insert( nKey );
+        if (aPair.second)
+            nUsedCount++;
+    }
 }
 
 sal_Bool SvXMLNumUsedList_Impl::IsUsed( sal_uInt32 nKey ) const
 {
-    sal_uInt16 nCount = aUsed.Count();
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
-        if ( aUsed[i] == nKey )
-            return sal_True;
-
-    return sal_False;
+    SvXMLuInt32Set::iterator aItr = aUsed.find(nKey);
+    return (aItr != aUsed.end());
 }
 
 sal_Bool SvXMLNumUsedList_Impl::IsWasUsed( sal_uInt32 nKey ) const
 {
-    sal_uInt16 nCount = aWasUsed.Count();
-    for ( sal_uInt16 i = 0; i < nCount; i++ )
-        if ( aWasUsed[i] == nKey )
-            return sal_True;
-
-    return sal_False;
+    SvXMLuInt32Set::iterator aItr = aWasUsed.find(nKey);
+    return (aItr != aWasUsed.end());
 }
 
 void SvXMLNumUsedList_Impl::Export()
 {
-    sal_uInt16 nCount = aUsed.Count();
-    for (sal_uInt16 i = 0; i < nCount; i++)
-        aWasUsed.Insert( aUsed[i], aWasUsed.Count());
-    aUsed.Remove(0, nCount);
+    SvXMLuInt32Set::iterator aItr = aUsed.begin();
+    while (aItr != aUsed.end())
+    {
+        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *aItr );
+        if (aPair.second)
+            nWasUsedCount++;
+        aItr++;
+    }
+    aUsed.clear();
+    nUsedCount = 0;
+}
+
+sal_Bool SvXMLNumUsedList_Impl::GetFirstUsed(sal_uInt32& nKey)
+{
+    sal_Bool bRet(sal_False);
+    aCurrentUsedPos = aUsed.begin();
+    if(nUsedCount)
+    {
+        DBG_ASSERT(aCurrentUsedPos != aUsed.end(), "something went wrong");
+        nKey = *aCurrentUsedPos;
+        bRet = sal_True;
+    }
+    return bRet;
+}
+
+sal_Bool SvXMLNumUsedList_Impl::GetNextUsed(sal_uInt32& nKey)
+{
+    sal_Bool bRet(sal_False);
+    if (aCurrentUsedPos != aUsed.end())
+    {
+        aCurrentUsedPos++;
+        if (aCurrentUsedPos != aUsed.end())
+        {
+            nKey = *aCurrentUsedPos;
+            bRet = sal_True;
+        }
+    }
+    return bRet;
 }
 
 void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
 {
-    sal_Int32 nCount(aWasUsed.Count());
-    rWasUsed.realloc(nCount);
+    rWasUsed.realloc(nWasUsedCount);
     sal_Int32* pWasUsed = rWasUsed.getArray();
     if (pWasUsed)
-        for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
-            *pWasUsed = aWasUsed[i];
+    {
+        SvXMLuInt32Set::iterator aItr = aWasUsed.begin();
+        while (aItr != aWasUsed.end())
+        {
+            *pWasUsed = *aItr;
+            aItr++;
+            pWasUsed++;
+        }
+    }
 }
 
 void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
 {
-    DBG_ASSERT(aWasUsed.Count() == 0, "WasUsed should be empty");
+    DBG_ASSERT(nWasUsedCount == 0, "WasUsed should be empty");
     sal_Int32 nCount(rWasUsed.getLength());
     const sal_Int32* pWasUsed = rWasUsed.getConstArray();
     for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
-        aWasUsed.Insert(*pWasUsed, i);
+    {
+        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
+        if (aPair.second)
+            nWasUsedCount++;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -935,7 +997,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
 //  test if all date elements match the system settings
 
-sal_Bool lcl_MatchesSystemDate( SvNumberformat& rFormat, sal_uInt16 nPart, sal_Bool bLongSysDate )
+sal_Bool lcl_MatchesSystemDate( const SvNumberformat& rFormat, sal_uInt16 nPart, sal_Bool bLongSysDate )
 {
     sal_Bool bMatch = sal_True;
     International aIntl( rFormat.GetLanguage() );
@@ -1071,7 +1133,7 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
 //  export one part (condition)
 //
 
-void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKey,
+void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
                                             sal_uInt16 nPart, sal_Bool bDefPart )
 {
     //! for the default part, pass the coditions from the other parts!
@@ -1551,7 +1613,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
 //  export one format
 //
 
-void SvXMLNumFmtExport::ExportFormat_Impl( SvNumberformat& rFormat, sal_uInt32 nKey )
+void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey )
 {
     sal_uInt16 nUsedParts = 0;
     sal_uInt16 nPart;
@@ -1579,30 +1641,43 @@ void SvXMLNumFmtExport::Export( const SvXMLNamespaceMap& rNamespaceMap, sal_Bool
 
     pNamespaceMap = &rNamespaceMap;
 
-    SvUShorts aLanguages;
-    pFormatter->GetUsedLanguages( aLanguages );
-    sal_uInt16 nLangCount = aLanguages.Count();
-    for (sal_uInt16 nLangPos=0; nLangPos<nLangCount; nLangPos++)
+    sal_uInt32 nKey;
+    const SvNumberformat* pFormat = NULL;
+    sal_Bool bNext(pUsedList->GetFirstUsed(nKey));
+    while(bNext)
     {
-        LanguageType nLang = aLanguages[nLangPos];
-
-        sal_uInt32 nStandard;
-        SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
-                                        NUMBERFORMAT_ALL, nStandard, nLang );
-        SvNumberformat* pFormat = rTable.First();
-        while (pFormat)
+        pFormat = pFormatter->GetEntry(nKey);
+        if(pFormat)
+            ExportFormat_Impl( *pFormat, nKey );
+        bNext = pUsedList->GetNextUsed(nKey);
+    }
+    if (!bIsAutoStyle)
+    {
+        SvUShorts aLanguages;
+        pFormatter->GetUsedLanguages( aLanguages );
+        sal_uInt16 nLangCount = aLanguages.Count();
+        for (sal_uInt16 nLangPos=0; nLangPos<nLangCount; nLangPos++)
         {
-            sal_uInt32 nKey = rTable.GetCurKey();
-            if ( (!bIsAutoStyle &&( pFormat->GetType() & NUMBERFORMAT_DEFINED )) ||
-                 pUsedList->IsUsed( nKey ) )
-            {
-                //  user-defined and used formats are exported
-                ExportFormat_Impl( *pFormat, nKey );
-                // if it is a user-defined Format it will be added else nothing will hapen
-                pUsedList->SetUsed(nKey);
-            }
+            LanguageType nLang = aLanguages[nLangPos];
 
-            pFormat = rTable.Next();
+            sal_uInt32 nStandard;
+            SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
+                                            NUMBERFORMAT_DEFINED, nStandard, nLang );
+            SvNumberformat* pFormat = rTable.First();
+            while (pFormat)
+            {
+                sal_uInt32 nKey(rTable.GetCurKey());
+                if (!pUsedList->IsUsed(nKey))
+                {
+                    DBG_ASSERT((pFormat->GetType() & NUMBERFORMAT_DEFINED) != 0, "a not user defined numberformat found");
+                    //  user-defined and used formats are exported
+                    ExportFormat_Impl( *pFormat, nKey );
+                    // if it is a user-defined Format it will be added else nothing will hapen
+                    pUsedList->SetUsed(nKey);
+                }
+
+                pFormat = rTable.Next();
+            }
         }
     }
     pUsedList->Export();
@@ -1612,13 +1687,21 @@ void SvXMLNumFmtExport::Export( const SvXMLNamespaceMap& rNamespaceMap, sal_Bool
 
 OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 {
-    DBG_ASSERT(pUsedList->IsUsed(nKey) || pUsedList->IsWasUsed(nKey), "There is no written Data-Style");
-    return lcl_CreateStyleName( nKey, 0, sal_True, sPrefix );
+    if(pUsedList->IsUsed(nKey) || pUsedList->IsWasUsed(nKey))
+        return lcl_CreateStyleName( nKey, 0, sal_True, sPrefix );
+    else
+    {
+        DBG_ERROR("There is no written Data-Style");
+        return rtl::OUString();
+    }
 }
 
 void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 {
-    pUsedList->SetUsed( nKey );
+    if (pFormatter->GetEntry(nKey))
+        pUsedList->SetUsed( nKey );
+    else
+        DBG_ERROR("no existing Numberformat found with this key");
 }
 
 void SvXMLNumFmtExport::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
