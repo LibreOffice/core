@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-23 21:19:26 $
+ *  last change: $Author: kz $ $Date: 2002-01-29 21:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3822,7 +3822,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ swedish ] = "Infoga fast mellanrum";
     SlotName[ polish ] = "Wstaw spacj� chronion�";
     SlotName[ portuguese_brazilian ] = "InsertNonBreakingSpace";
-    SlotName[ japanese ] = "保護スペースの挿入";
+    SlotName[ japanese ] = "保護されたスペースの挿入";
     SlotName[ chinese_simplified ] = "插入保护的空格字符";
     SlotName[ chinese_traditional ] = "插入保護的空格字元";
     SlotName[ arabic ] = "����� ��� ����� ����";
