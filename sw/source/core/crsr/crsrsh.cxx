@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:57:51 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
     {
         pFrm = pCNd->GetFrm( &rPt, 0, FALSE )->GetUpper();
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
-            pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetAnchor()
+            pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
                                     : pFrm->GetUpper();
     }
     return pFrm;
