@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-29 09:36:52 $
+ *  last change: $Author: fs $ $Date: 2001-02-12 13:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,14 +385,16 @@ void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, 
 void OGenericUnoController::InvalidateFeature_Impl()
 {
     sal_Bool bEmpty = sal_True;
+    FeaturePair aNextFeature;
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
         bEmpty = m_aFeaturesToInvalidate.empty();
+        if (!bEmpty)
+            aNextFeature = m_aFeaturesToInvalidate.front();
     }
     while(!bEmpty)
     {
-        FeaturePair aPair = m_aFeaturesToInvalidate.front();
-        if(aPair.nId == -1)
+        if(aNextFeature.nId == -1)
             InvalidateAll_Impl();
         else
         {
@@ -401,20 +403,22 @@ void OGenericUnoController::InvalidateFeature_Impl()
             SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             for(;aIter != m_aSupportedFeatures.end();++aIter)
             {
-                if(aIter->second == aPair.nId)
+                if(aIter->second == aNextFeature.nId)
                 {
-                    ImplBroadcastFeatureState(aIter->first,aPair.xListener, aPair.bForceBroadcast);
+                    ImplBroadcastFeatureState(aIter->first,aNextFeature.xListener, aNextFeature.bForceBroadcast);
                     bFound = sal_True;
                     break;
                 }
             }
             if(!bFound)
-                ImplInvalidateTBItem(aPair.nId, GetState(aPair.nId));
+                ImplInvalidateTBItem(aNextFeature.nId, GetState(aNextFeature.nId));
         }
         {
             ::osl::MutexGuard aGuard( m_aFeatureMutex);
             m_aFeaturesToInvalidate.pop_front();
             bEmpty = m_aFeaturesToInvalidate.empty();
+            if (!bEmpty)
+                aNextFeature = m_aFeaturesToInvalidate.front();
         }
     }
 }
