@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:04:37 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,6 +481,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < "Var (नमूना)" ; Default ; > ;
             < "VarP (जनसंख्या)" ; Default ; > ;
         };
+    StringList [ slovak ] =
+    {
+         < "Súčet" ; Default ; > ;
+        < "Počet" ; Default ; > ;
+        < "Priemer" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Počet (iba čísla)" ; Default ; > ;
+        < "ŠtandOdch (vzorka)" ; Default ; > ;
+        < "ŠtandOdchP (populácia)" ; Default ; > ;
+        < "Var (výber)" ; Default ; > ;
+        < "VarP (populácia)" ; Default ; > ;
+    };
     };
     Edit ED_DATA_AREA
     {
@@ -529,6 +543,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     ImageButton RB_DEST_AREA
     {
@@ -563,6 +578,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     ListBox LB_DATA_AREA
     {
@@ -620,6 +636,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Funkce";
         Text[ hebrew ] = "Be~rechnungsvorschrift";
         Text[ hindi ] = "~फंक्शन्";
+        Text[ slovak ] = "~Funkcia";
     };
     FixedText FT_CONSAREAS
     {
@@ -653,6 +670,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Oblasti konsolidace";
         Text[ hebrew ] = "~Konsolidierungsbereiche";
         Text[ hindi ] = "~एकत्रित की हुयी विस्तीर्ण";
+        Text[ slovak ] = "Oblasti konsolidá~cie";
     };
     FixedText FT_DATA_AREA
     {
@@ -686,6 +704,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Zdrojová oblast dat";
         Text[ hebrew ] = "Quelldaten~bereich";
         Text[ hindi ] = "~मूल ड़ॉटा विस्तीर्ण";
+        Text[ slovak ] = "Oblasť ~zdrojových dát";
     };
     FixedText FT_DEST_AREA
     {
@@ -719,6 +738,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Kopírovat výsledky do";
         Text[ hebrew ] = "Er~gebnis ausgeben ab";
         Text[ hindi ] = "~में नतीजों की प्रतिलिपि";
+        Text[ slovak ] = "Výsledky kopí~rovania do";
     };
     CheckBox BTN_BYROW
     {
@@ -753,6 +773,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Popisky řádků";
         Text[ hebrew ] = "Ze~ilenbeschriftungen";
         Text[ hindi ] = "~पंक्ति लेबिलें";
+        Text[ slovak ] = "Popisky ~riadkov";
     };
     CheckBox BTN_BYCOL
     {
@@ -787,6 +808,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Záhlaví sloupců";
         Text[ hebrew ] = "S~paltenbeschriftungen";
         Text[ hindi ] = "स्तं~भ शीर्षकें";
+        Text[ slovak ] = "Záhlavie stĺpc~ov";
     };
     FixedLine FL_CONSBY
     {
@@ -820,6 +842,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Konsolidovat podle";
         Text[ hebrew ] = "Konsolidieren nach";
         Text[ hindi ] = "Consolidate by";
+        Text[ slovak ] = "Konsolidovať";
     };
     FixedLine FL_SEP
     {
@@ -858,6 +881,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Volby";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
+        Text[ slovak ] = "Nastavenia";
     };
     CheckBox BTN_REFS
     {
@@ -866,7 +890,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text = "Mit Quelldaten ~verbinden" ;
         Text [ ENGLISH ] = "Re~ference source data" ;
         Text [ norwegian ] = "Re~feranse kildedata" ;
-        Text [ italian ] = "Collega con dati origine" ;
+        Text [ italian ] = "Collega con dati sorgente" ;
         Text [ portuguese_brazilian ] = "Vincu~lar aos dados de origem" ;
         Text [ portuguese ] = "~Ligar aos dados da fonte" ;
         Text [ finnish ] = "Linkki l�hdetietoihin" ;
@@ -892,6 +916,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Odkaz na zdrojová data";
         Text[ hebrew ] = "Mit Quelldaten ~verbinden";
         Text[ hindi ] = "मूल ड़ॉटा को ~लिंक करो";
+        Text[ slovak ] = "Od~kaz na zdrojové dáta";
     };
     OKButton BTN_OK
     {
@@ -953,6 +978,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     PushButton BTN_ADD
     {
@@ -987,6 +1013,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ czech ] = "Přidat";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "Prid~ať";
     };
     Text[ chinese_simplified ] = "合并计算";
     Text[ russian ] = "����������";
@@ -1003,7 +1030,10 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ czech ] = "Konsolidovat";
     Text[ hebrew ] = "Konsolidieren";
     Text[ hindi ] = "एकत्रित करो";
+    Text[ slovak ] = "Konsolidovať";
 };
+
+
 
 
 
