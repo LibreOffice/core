@@ -13,6 +13,7 @@ DIRLIST = \
     $(DESTDIREXAMPLES)		 	\
     $(DESTDIRCPPEXAMPLES)		 	\
     $(DESTDIRCPPEXAMPLES)$/officeclient 	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter 	\
     $(DESTDIRJAVAEXAMPLES)		 	\
     $(DESTDIRJAVAEXAMPLES)$/draw		\
     $(DESTDIRJAVAEXAMPLES)$/calc		\
@@ -52,6 +53,19 @@ CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/makefile.mk      		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/officeclient$/exports.dxp
+
+CPP_GENERICXMLFILTER= \
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericfilter.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLExportFilter.cxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLExportFilter.hxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLImportFilter.cxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLImportFilter.hxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLFilter.cxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/GenericXMLFilter.hxx	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericxmlfilter.xml	\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/README           		\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/Makefile         		\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/exports.dxp
 
 JAVA_DRAW= \
     $(DESTDIRJAVAEXAMPLES)$/draw$/SDraw.java	   		\
@@ -221,6 +235,7 @@ OLE_EXAMPLES_DELPHI_INSERTTABLES= \
 
 EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
+    $(CPP_GENERICXMLFILTER) \
     $(JAVA_DRAW)        \
     $(JAVA_CALC)        \
     $(JAVA_CALC_CHARTTYPECHANGE)        \
