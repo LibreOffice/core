@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 22:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ void Inflater::init (sal_Bool bNowrap)
     pStream = new z_stream;
     /* memset to 0 to set zalloc/opaque etc */
     memset (pStream, 0, sizeof(*pStream));
-    sal_Int16 nRes;
+    sal_Int32 nRes;
     nRes = inflateInit2(pStream, bNowrap ? -MAX_WBITS : MAX_WBITS);
     switch (nRes)
     {
@@ -235,9 +235,9 @@ void SAL_CALL Inflater::end(  )
     pStream = NULL;
 }
 
-sal_Int16 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  &rBuffer, sal_Int16 nNewOffset, sal_Int16 nNewLength)
+sal_Int32 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
-    sal_Int16 nResult;
+    sal_Int32 nResult;
     pStream->next_in   = (unsigned char*) sInBuffer.getConstArray()+ nOffset;
     pStream->avail_in  = nLength;
     pStream->next_out  = (unsigned char*) rBuffer.getArray() + nNewOffset;
@@ -252,7 +252,7 @@ sal_Int16 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  
         case Z_OK:
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
-            return nLength - pStream->avail_out;
+            return nNewLength - pStream->avail_out;
         case Z_NEED_DICT:
             bNeedDict = sal_True;
             nOffset += nLength - pStream->avail_in;

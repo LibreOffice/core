@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 22:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,10 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         case DEFLATED:
             if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
                 pNonConstEntry->nCrc == -1)
-                pNonConstEntry->nFlag |= 8;
+                pNonConstEntry->nFlag = 8;
             else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
                 pNonConstEntry->nCrc != -1)
-                pNonConstEntry->nFlag &= 8;
+                pNonConstEntry->nFlag = 0;
             pNonConstEntry->nVersion = 20;
             break;
         case STORED:
@@ -131,7 +131,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
             else if (pNonConstEntry->nCompressedSize == -1)
                 pNonConstEntry->nCompressedSize = pNonConstEntry->nSize;
             pNonConstEntry->nVersion = 10;
-            pNonConstEntry->nFlag   &= 8;
+            pNonConstEntry->nFlag = 0;
             break;
     }
     pNonConstEntry->nOffset = aChucker.getPosition();
@@ -161,17 +161,17 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 {
                     if (pEntry->nSize != aDeflater.getTotalIn())
                     {
-                        // boom
                         DBG_ERROR("Invalid entry size");
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
-                        // boom
-                        DBG_ERROR("Invalid entry compressed size");
+                        //DBG_ERROR("Invalid entry compressed size");
+                        // Different compression strategies make the merit of this
+                        // test somewhat dubious
+                        pEntry->nCompressedSize = aDeflater.getTotalOut();
                     }
                     if (pEntry->nCrc != aCRC.getValue())
                     {
-                        // boom
                         DBG_ERROR("Invalid entry CRC-32");
                     }
                 }
@@ -185,12 +185,6 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 aDeflater.reset();
                 break;
             case STORED:
-                {
-                sal_uInt32 na= pEntry->nCrc;
-                sal_uInt32 nb = aCRC.getValue();
-                int i=0;
-                }
-
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
                     // boom
@@ -246,7 +240,7 @@ void SAL_CALL ZipOutputStream::finish(  )
 }
 void ZipOutputStream::doDeflate()
 {
-    sal_Int16 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
+    sal_Int32 nLength = aDeflater.doDeflateSegment(aBuffer, 0, aBuffer.getLength());
     if (nLength > 0 )
     {
         aChucker.writeBytes(aBuffer);
