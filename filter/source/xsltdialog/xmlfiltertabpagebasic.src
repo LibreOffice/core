@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:08:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_simplified ] = "筛选器名称";
         Text[ chinese_traditional ] = "篩選器名稱";
         Text[ slovak ] = "Názov filtra";
+        Text[ portuguese_brazilian ] = "Nome do filtro";
     };
 
     Edit ED_XML_FILTER_NAME
@@ -175,6 +176,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_simplified ] = "文件类型名称";
         Text[ chinese_traditional ] = "檔案類型名稱";
         Text[ slovak ] = "Názov\ntypu súboru";
+        Text[ portuguese_brazilian ] = "Nome \nTipo de arquivo";
     };
 
     Edit ED_XML_INTERFACE_NAME
@@ -202,6 +204,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ chinese_simplified ] = "文件扩展名";
         Text[ chinese_traditional ] = "檔案副檔名";
         Text[ slovak ] = "Prípona k súboru";
+        Text[ portuguese_brazilian ] = "Extens�o do arquivo";
     };
 
     Edit ED_XML_EXTENSION
@@ -236,7 +239,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
         Text[ czech ] = "Komentáře";
         Text[ danish ] = "Kommentar";
         Text[ polish ] = "Komentarz";
-        Text[ portuguese_brazilian ] = "Observa��es";
+        Text[ portuguese_brazilian ] = "Coment�rios";
         Text[ turkish ] = "A��klama";
         Text[ arabic ] = "�����";
         Text[ hebrew ] = "‮הערות‬";
@@ -275,6 +278,7 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     Text[ thai ] = "ทั่วไป";
     Text[ slovak ] = "Všeobecné";
 };
+
 
 
 
