@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:15:46 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,13 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MIN,   PROPERTY_ID_PROGRESSVALUE_MIN,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MIN)),nPos++, 0),
                 OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MAX,   PROPERTY_ID_PROGRESSVALUE_MAX,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MAX)),nPos++, 0),
 
+                OPropertyInfoImpl(PROPERTY_SCROLLVALUE,         PROPERTY_ID_SCROLLVALUE,        sal_True,  String(ModuleRes(RID_STR_SCROLLVALUE)),      nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_SCROLLVALUE_MAX,     PROPERTY_ID_SCROLLVALUE_MAX,    sal_True,  String(ModuleRes(RID_STR_SCROLLVALUE_MAX)),  nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_LINEINCREMENT,       PROPERTY_ID_LINEINCREMENT,      sal_True,  String(ModuleRes(RID_STR_LINEINCREMENT)),    nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_BLOCKINCREMENT,      PROPERTY_ID_BLOCKINCREMENT,     sal_True,  String(ModuleRes(RID_STR_BLOCKINCREMENT)),   nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_VISIBLESIZE,         PROPERTY_ID_VISIBLESIZE,        sal_True,  String(ModuleRes(RID_STR_VISIBLESIZE)),      nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_ORIENTATION,         PROPERTY_ID_ORIENTATION,        sal_True,  String(ModuleRes(RID_STR_ORIENTATION)),      nPos++, 0),
+
                 OPropertyInfoImpl(PROPERTY_CLASSID,             PROPERTY_ID_CLASSID,            sal_False, String(ModuleRes(RID_STR_CLASSID)),          nPos++, HID_PROP_CLASSID),
                 OPropertyInfoImpl(PROPERTY_HEIGHT,              PROPERTY_ID_HEIGHT,             sal_True,  String(ModuleRes(RID_STR_HEIGHT)),           nPos++, HID_PROP_HEIGHT),
                 OPropertyInfoImpl(PROPERTY_WIDTH,               PROPERTY_ID_WIDTH,              sal_True,  String(ModuleRes(RID_STR_WIDTH)),            nPos++, HID_PROP_WIDTH),
@@ -348,6 +355,9 @@ namespace pcr
             case PROPERTY_ID_TARGET_FRAME:
                 sSeparatedList = String(ModuleRes(RID_STR_ENUM_SUBMIT_TARGET));
                 break;
+            case PROPERTY_ID_ORIENTATION:
+                sSeparatedList = String(ModuleRes(RID_STR_ENUM_ORIENTATION));
+                break;
         }
 
         sal_Int32 nTokens = sSeparatedList.GetTokenCount(';');
@@ -479,6 +489,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/04/26 09:15:46  tbe
+ *  added progressbar properties
+ *
  *  Revision 1.8  2001/03/07 14:34:44  tbe
  *  added step property
  *

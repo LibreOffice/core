@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:16:34 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,12 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE,          "ProgressValue");
     PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MIN,      "ProgressValueMin");
     PCR_CONSTASCII_STRING( PROPERTY_PROGRESSVALUE_MAX,      "ProgressValueMax");
+    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE,            "ScrollValue");
+    PCR_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MAX,        "ScrollValueMax");
+    PCR_CONSTASCII_STRING( PROPERTY_LINEINCREMENT,          "LineIncrement");
+    PCR_CONSTASCII_STRING( PROPERTY_BLOCKINCREMENT,         "BlockIncrement");
+    PCR_CONSTASCII_STRING( PROPERTY_VISIBLESIZE,            "VisibleSize");
+    PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
@@ -261,6 +267,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/04/26 09:16:34  tbe
+ *  added progressbar properties
+ *
  *  Revision 1.6  2001/03/21 15:40:37  fs
  *  #82696# +FontWordLineMode
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:14:59 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,7 @@ namespace pcr
                 case PROPERTY_ID_BUTTONTYPE:
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
+                case PROPERTY_ID_ORIENTATION:
                 {
                     if (m_pPropertyInfo)
                     {
@@ -723,6 +724,7 @@ namespace pcr
                 case PROPERTY_ID_BUTTONTYPE:
                 case PROPERTY_ID_SUBMIT_METHOD:
                 case PROPERTY_ID_SUBMIT_ENCODING:
+                case PROPERTY_ID_ORIENTATION:
                     if (m_pPropertyInfo)
                     {
                         Sequence< ::rtl::OUString > aEnumStrings = m_pPropertyInfo->getPropertyEnumRepresentations(_nPropId);
@@ -2248,6 +2250,7 @@ namespace pcr
                     case PROPERTY_ID_TARGET_FRAME:
                     case PROPERTY_ID_DEFAULT_CHECKED:
                     case PROPERTY_ID_LISTSOURCETYPE:
+                    case PROPERTY_ID_ORIENTATION:
                     {
                         Sequence< ::rtl::OUString > aEnumValues = m_pPropertyInfo->getPropertyEnumRepresentations(nPropId);
                         const ::rtl::OUString* pStart = aEnumValues.getConstArray();
@@ -2778,6 +2781,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/04/26 09:14:59  tbe
+ *  colortable for fillcolor
+ *
  *  Revision 1.16  2001/04/26 06:32:03  fs
  *  #86017# limit the decimal accuracy to 20
  *
