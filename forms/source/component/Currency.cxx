@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:55:58 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void OCurrencyModel::implConstruct()
 DBG_NAME( OCurrencyModel )
 //------------------------------------------------------------------
 OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD, sal_False )
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( OCurrencyModel, NULL );
@@ -221,11 +221,17 @@ IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
 StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_CURRENCYFIELD;
-    pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_CURRENCYFIELD;
+    sal_Int32 nOldLen = aSupported.getLength();
+    aSupported.realloc( nOldLen + 4 );
+    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+
+    *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
+    *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
+
+    *pStoreTo++ = FRM_SUN_COMPONENT_CURRENCYFIELD;
+    *pStoreTo++ = FRM_SUN_COMPONENT_DATABASE_CURRENCYFIELD;
+
     return aSupported;
 }
 
@@ -241,20 +247,13 @@ void OCurrencyModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(9)
+    BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
         // Value auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
-        DECL_PROP2(CLASSID,     sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(NAME,        ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,     ::rtl::OUString,                BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,   BOUND,READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
-    FRM_END_PROP_HELPER();
+    END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
