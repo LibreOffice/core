@@ -316,6 +316,7 @@ hedabu: ..\inc\defaultoptions.hxx %_DEST%\inc%_EXT%\svtools\defaultoptions.hxx
 hedabu: ..\inc\printwarningoptions.hxx %_DEST%\inc%_EXT%\svtools\printwarningoptions.hxx
 hedabu: ..\inc\printoptions.hxx %_DEST%\inc%_EXT%\svtools\printoptions.hxx
 hedabu: ..\inc\dynamicmenuoptions.hxx %_DEST%\inc%_EXT%\svtools\dynamicmenuoptions.hxx
+hedabu: ..\inc\compatibility.hxx %_DEST%\inc%_EXT%\svtools\compatibility.hxx
 hedabu: ..\inc\syslocaleoptions.hxx %_DEST%\inc%_EXT%\svtools\syslocaleoptions.hxx
 hedabu: ..\inc\localresaccess.hxx %_DEST%\inc%_EXT%\svtools\localresaccess.hxx
 hedabu: ..\inc\wizardmachine.hxx %_DEST%\inc%_EXT%\svtools\wizardmachine.hxx
