@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 18:39:14 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
     mrXOut( rXOut ),
     mbCommentWritten( false )
 {
-    const SfxItemSet& rSet = rObj.GetItemSet();
+    const SfxItemSet& rSet = rObj.GetMergedItemSet();
     XFillStyle eFillStyle( ITEMVALUE( rFillItemSet, XATTR_FILLSTYLE, XFillStyleItem ) );
     XGradient aGradient( ITEMVALUE( rFillItemSet, XATTR_FILLGRADIENT, XFillGradientItem ) );
     XHatch aHatch( ITEMVALUE( rFillItemSet, XATTR_FILLHATCH, XFillHatchItem ) );
