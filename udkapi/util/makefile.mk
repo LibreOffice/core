@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mi $ $Date: 2002-11-04 09:43:03 $
+#   last change: $Author: mi $ $Date: 2002-11-08 12:31:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,4 +105,11 @@ UNOIDLDBFILES= \
 
 .INCLUDE :  target.mk
 
+ALLTAR: autodoc
+
+autodoc: $(OUT)$/misc$/udkapi.autodoc
+
+$(OUT)$/misc$/udkapi.autodoc: 
+    $(shell sed "p" $(OUT)$/misc$/*.idls | tr "[:cntrl:] " "\n\n" | sed -e "/^$$/d" -e "s/^/-f /" >$@)
+    echo "$@ done"
 

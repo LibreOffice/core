@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-06 12:26:02 $
+#   last change: $Author: mi $ $Date: 2002-11-08 12:31:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,4 +59,11 @@
 #
 #
 #*************************************************************************
+
+$(OUT)$/misc$/$(TARGET).idls: makefile.mk
+    +$(RM) $@
+    +$(TYPE) $(mktmp $(foreach,i,$(IDLFILES) $(PACKAGE)$/$i)) >>$@
+
+ALLTAR: $(OUT)$/misc$/$(TARGET).idls
+
 
