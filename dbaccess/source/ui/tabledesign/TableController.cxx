@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:03:59 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 09:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,7 @@ void OTableController::doEditIndexes()
     if (!xIndexes.is())
         return;
 
-    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getORB(),isConnected() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
+    DbaIndexDialog aDialog(getView(), aFieldNames, xIndexes, getConnection(),getORB(),isConnected() ? getConnection()->getMetaData()->getMaxColumnsInIndex() : sal_Int32(0));
     if (RET_OK != aDialog.Execute())
         return;
 
