@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceTypeDescription2.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:00:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ interface XTypeDescription;
    <p>This type supersedes <type>XServiceTypeDescription</type>, which only
    supports obsolete, accumulation-based services.</p>
 
-   @since OOo2.0.0
+   @since OOo 2.0.0
  */
 interface XServiceTypeDescription2: XServiceTypeDescription {
     /**
