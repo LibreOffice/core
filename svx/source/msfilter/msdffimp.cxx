@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:02:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3410,6 +3410,17 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 pObj = pOrgObj = 0;
             }
 
+            // Distance of Textbox to it's surrounding Autoshape
+            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
+            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
+            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
+            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+
+            ScaleEmu( nTextLeft );
+            ScaleEmu( nTextRight );
+            ScaleEmu( nTextTop );
+            ScaleEmu( nTextBottom );
+
             INT32 nTextRotationAngle=0;
             bool bVerticalText = false;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
@@ -3444,12 +3455,39 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 switch (nTextRotationAngle)
                 {
                     case 9000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextBottom;
+                            nTextRight = nOldTextTop;
+                            nTextTop = nOldTextLeft;
+                            nTextBottom = nOldTextRight;
+                        }
+                        break;
                     case 27000:
                         {
                             long nWidth = rTextRect.GetWidth();
                             rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
                             rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextTop;
+                            nTextRight = nOldTextBottom;
+                            nTextTop = nOldTextRight;
+                            nTextBottom = nOldTextLeft;
                         }
+                        break;
                     default:
                         break;
                 }
@@ -3457,18 +3495,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
-
-            // Distance of Textbox to it's surrounding Autoshape
-            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
-            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
-            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
-            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
-
-            ScaleEmu( nTextLeft );
-            ScaleEmu( nTextRight );
-            ScaleEmu( nTextTop );
-            ScaleEmu( nTextBottom );
-
 
             // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
             // hier rausrechnen
