@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:44:12 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,12 @@
  *
  ************************************************************************/
 
+#include "morphdlg.hxx"
 
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
-#include "morphdlg.hxx"
 #include "morphdlg.hrc"
 
 #ifndef _CONFIG_HXX
@@ -89,6 +89,8 @@
 #include <svtools/itempool.hxx>
 #endif
 
+namespace sd {
+
 
 /******************************************************************************/
 
@@ -109,7 +111,7 @@
 |*
 \******************************************************************************/
 
-SdMorphDlg::SdMorphDlg( Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
+MorphDlg::MorphDlg( ::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2 ) :
             ModalDialog     ( pParent, SdResId( DLG_MORPH ) ),
             aBtnOK          ( this, SdResId( BTN_OK ) ),
             aBtnCancel      ( this, SdResId( BTN_CANCEL ) ),
@@ -149,7 +151,7 @@ SdMorphDlg::SdMorphDlg( Window* pParent, const SdrObject* pObj1, const SdrObject
 |*
 \******************************************************************************/
 
-SdMorphDlg::~SdMorphDlg()
+MorphDlg::~MorphDlg()
 {
 }
 
@@ -160,7 +162,7 @@ SdMorphDlg::~SdMorphDlg()
 |*
 \******************************************************************************/
 
-void SdMorphDlg::LoadSettings()
+void MorphDlg::LoadSettings()
 {
     SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
@@ -187,7 +189,7 @@ void SdMorphDlg::LoadSettings()
 
 // -----------------------------------------------------------------------------
 
-void SdMorphDlg::SaveSettings() const
+void MorphDlg::SaveSettings() const
 {
     SvStorageStreamRef xOStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
@@ -203,3 +205,4 @@ void SdMorphDlg::SaveSettings() const
     }
 }
 
+} // end of namespace sd
