@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aryattrs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,7 @@ Get_TypeKey( const ary::CodeEntity & i_rCe )
 bool
 Ce_IsInternal( const ary::CodeEntity & i_rCe )
 {
-    const ary::info::CodeInfo *
-        pInfo = dynamic_cast< const ary::info::CodeInfo* >( &i_rCe.Info() );
-     return pInfo != 0
-                ?   pInfo->IsInternal()
-                :   false;
+    return NOT i_rCe.IsVisible();
 }
 
 const char *

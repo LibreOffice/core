@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_index.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_vari.hxx>
 #include <ary/cpp/c_enuval.hxx>
+#include <ary/info/codeinfo.hxx>
+#include "aryattrs.hxx"
 #include "hd_chlst.hxx"
 #include "hd_docu.hxx"
 #include "html_kit.hxx"
@@ -310,6 +312,9 @@ PageMaker_Index::Write_CeIndexEntry( const ary::CodeEntity & i_rCe,
                                      const char *            i_sType,
                                      const char *            i_sOwnerType )
 {
+    if ( Ce_IsInternal(i_rCe) )
+        return;
+
     static csv::StreamStr aQualification(500);
 
     const ary::CodeEntity & rOwner = Env().Gate().Ref_Ce(i_rCe.Owner());
