@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:22:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,10 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
@@ -277,6 +281,7 @@ class Desktop   :   // interfaces
                     public  css::frame::XComponentLoader         ,
                     public  css::frame::XTasksSupplier           ,
                     public  css::frame::XDispatchProvider        ,
+                    public  css::frame::XDispatchProviderInterception,
                     public  css::frame::XFramesSupplier          ,   // => XFrame => XComponent
                     public  css::frame::XDispatchResultListener  ,   // => XEventListener
                     public  css::task::XInteractionHandler       ,
@@ -327,6 +332,10 @@ class Desktop   :   // interfaces
                                                                                                                           const ::rtl::OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) throw( css::uno::RuntimeException          );
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const css::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) throw( css::uno::RuntimeException          );
+
+        // XDispatchProviderInterception
+        virtual void                                                                SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) throw( css::uno::RuntimeException);
+        virtual void                                                                SAL_CALL releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) throw( css::uno::RuntimeException);
 
         //  XFramesSupplier
         virtual css::uno::Reference< css::frame::XFrames >                          SAL_CALL getFrames                  (                                                                                 ) throw( css::uno::RuntimeException          );
