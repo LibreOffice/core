@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:02:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 2*FIXEDTEXT_HEIGHT ) ;
-        Text[ de ] = "Soll der Assistent die Datenbank in % PRODUCTNAME anmelden?";
+        Text[ de ] = "Soll der Assistent die Datenbank in %PRODUCTNAME anmelden?";
         Text[ en-US ] = "Do you want the wizard to register the database in %PRODUCTNAME?" ;
         WordBreak = TRUE ;
     };
@@ -356,7 +356,7 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_RB_REGISTERDATASOURCE;
         Pos = MAP_APPFONT (START_X + 6 , 45 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
-        Text[ de ] = "~Ja, die Datenbank soll angemeldet werden.";
+        Text[ de ] = "~Ja, die Datenbank soll angemeldet werden";
         Text[ en-US ] = "~Yes, register the database for me" ;
     };
 
@@ -366,8 +366,8 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_RB_DONTREGISTERDATASOURCE ;
         Pos = MAP_APPFONT (START_X + 6, 57 )  ;
         Size = MAP_APPFONT ( 208 , 8 ) ;
-        Text[ de ] = "Nein, die Datenbank soll nicht angemeldet werden.";
-        Text[ en-US ] = "N~o, do not register the database." ;
+        Text[ de ] = "Nein, die Datenbank soll nicht angemeldet werden";
+        Text[ en-US ] = "N~o, do not register the database" ;
     };
 
     FixedText FT_ADDITIONALSETTINGS
@@ -383,8 +383,8 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS ;
         Pos = MAP_APPFONT (START_X +10, 118 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X , 8 ) ;
-        Text[ de ] = "Die Datenbank zum  ~Bearbeiten öffnen.";
-        Text[ en-US ] = "Open the database for editing." ;
+        Text[ de ] = "Die Datenbank zum  ~Bearbeiten öffnen";
+        Text[ en-US ] = "Open the database for editing" ;
     };
 
     CheckBox CB_STARTTABLEWIZARD
@@ -392,8 +392,8 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD ;
         Pos = MAP_APPFONT (START_X + 10, 130 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 8 ) ;
-        Text[ de ] = "Eine ~Tabelle mit Hilfe des Tabellen-Assistenten erstellen.";
-        Text[ en-US ] = "Create tables using the  table wizard." ;
+        Text[ de ] = "Eine ~Tabelle mit Hilfe des Tabellen-Assistenten erstellen";
+        Text[ en-US ] = "Create tables using the  table wizard" ;
     };
 
 
@@ -587,7 +587,7 @@ TabPage PAGE_DBWIZARD_ADABAS
 
 
     String STR_ADABAS_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie den Namen der Adabas D Datenbank ein, zu der eine Verbindung erstellt werden soll. Klicken Sie 'Durchsuchen...' um eine %PRODUCTNAME bekannte Adabas D Datenbanken auszuwählen.";
+        Text[ de ] = "Bitte geben Sie den Namen der Adabas D Datenbank ein, zu der eine Verbindung erstellt werden soll. Klicken Sie 'Suchen' um eine %PRODUCTNAME bekannte Adabas D Datenbanken auszuwählen.";
         Text[ en-US ] = "Enter the name of the Adabas D database you want to connect to.\nClick 'Browse...' to select an Adabas D database that is already registered in %PRODUCTNAME." ;
     };
 
@@ -609,8 +609,8 @@ TabPage PAGE_DBWIZARD_ADO
     };
 
     String STR_ADO_HELPTEXT{
-        Text[ de ] = "Geben Sie bitte den URL ein, um eine Verbindung zu einer ADO-Datenquelle zu erstellen.\nKlicken Sie 'Mehr...', um Hersteller-spezifische Einstellungen vorzunehmen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
-        Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'More...' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
+        Text[ de ] = "Geben Sie bitte den URL ein, um eine Verbindung zu einer ADO-Datenquelle zu erstellen.\nKlicken Sie 'Suchen', um Hersteller-spezifische Einstellungen vorzunehmen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
+        Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
     AUTO_HELP_BROWSECONTROLGROUP(5, HID_PAGE_DBWIZARD_ADO_ET_ADOURL)
@@ -632,11 +632,21 @@ TabPage PAGE_DBWIZARD_ODBC
     };
 
     String STR_ODBC_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie den Namen der ODBC-Datenquelle ein, um eine Verbindung herzustellen.\nKlicken Sie auf 'Durchsuchen...' um eine %PRODUCTNAME bekannte ODBC-Datenquelle auszuwählen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
+        Text[ de ] = "Bitte geben Sie den Namen der ODBC-Datenquelle ein, um eine Verbindung herzustellen.\nKlicken Sie auf 'Suchen' um eine %PRODUCTNAME bekannte ODBC-Datenquelle auszuwählen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
     AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_ODBC_ET_NAMEOFODBCDATASOURCE)
+};
+
+TabPage PAGE_DBWIZARD_USERDEFINED
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
+    Hide = TRUE ;
+
+    AUTO_HELP_BROWSECONTROLGROUP(6, HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE)
 };
 
 
@@ -693,7 +703,7 @@ TabPage PAGE_DBWIZARD_ORACLE
 
     String STR_ORACLE_HELPTEXT{
         Text[ de ] = "Bitte geben Sie die benötigten Information ein, um per JDBC eine Verbindung zu einer Oracle-Datenbank herzustellen.Bitte beachsten Sie, dass  eine JDBC-Treiberklasse auf ihrem System installiert und %PRODUCTNAME bekannt sein muss.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
-        Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
+        Text[ en-US ] = "Please enter the required information to connect to an Oracle database. Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
     AUTOHELP_JDBCCONTROLGROUP(HID_PAGE_DBWIZARD_ORACLE_ET_ORACLEDBNAME)
@@ -715,8 +725,8 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
 
 
     String STR_SPREADSHEET_HELPTEXT{
-        Text[ de ] = "Klicken Sie auf 'Durchsuchen...' um auf Daten aus %PRODUCTNAME Tabellen-Dokumente oder Microsoft Excel Arbeitsmappen zu zugreifen.\n%Productname greift auf die Daten der Tabellendokumente nur lesend zu.";
-        Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
+        Text[ de ] = "Klicken Sie auf 'Suchen' um auf Daten aus %PRODUCTNAME Tabellen-Dokumente oder Microsoft Excel Arbeitsmappen zu zugreifen.\n%PRODUCTNAME greift auf die Daten der Tabellendokumente nur lesend zu.";
+        Text[ en-US ] = "Click 'Browse' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
     };
 
 
