@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,9 @@ public:
         ::com::sun::star::uno::Sequence< ::rtl::OUString>           getQueryFields();
         ::rtl::OUString                     getQueryField();
         void                        startQueryWith(const ::rtl::OUString& rQuery);
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        getParser();
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >&         getParser() { return xParser; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                    getForm()   { return xForm; }
 
 //      void                        saveGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & xDbForm);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadGridModel(const ::rtl::OUString& rName);
