@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:45:30 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#include <vcl/toolbox.hxx>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>  // fuer Pathfinder
@@ -508,11 +509,6 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
             pBox->CheckItem(FN_GLOBAL_SAVE_CONTENT, !bSave );
         }
         break;
-        case FN_CREATE_NAVIGATION:
-        {
-            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), TRUE);
-        }
-        break;
     }
 
     if (nFuncId)
@@ -552,6 +548,12 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
     const USHORT nId = pBox->GetCurItemId();
     switch (nId)
     {
+        case FN_CREATE_NAVIGATION:
+        {
+            CreateNavigationTool(pBox->GetItemRect(FN_CREATE_NAVIGATION), TRUE);
+        }
+        break;
+
         case FN_DROP_REGION:
         {
             PopupMenu *pMenu = new PopupMenu;
@@ -1035,6 +1037,11 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     SfxImageManager* pImgMan = SfxImageManager::GetImageManager( SW_MOD() );
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
+
+    aContentToolBox.SetItemBits( FN_CREATE_NAVIGATION, aContentToolBox.GetItemBits( FN_CREATE_NAVIGATION ) | TIB_DROPDOWNONLY );
+    aContentToolBox.SetItemBits( FN_DROP_REGION, aContentToolBox.GetItemBits( FN_DROP_REGION ) | TIB_DROPDOWNONLY );
+    aContentToolBox.SetItemBits( FN_OUTLINE_LEVEL, aContentToolBox.GetItemBits( FN_OUTLINE_LEVEL ) | TIB_DROPDOWNONLY );
+
     if(IsGlobalDoc())
     {
         SwView *pActView = GetCreateView();
