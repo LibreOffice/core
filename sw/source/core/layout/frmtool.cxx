@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:11:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2410,6 +2410,9 @@ void MA_FASTCALL lcl_RemoveObjsFromPage( SwFrm* _pFrm )
         // --> OD 2004-11-29 #115759# - reset member, at which the anchored
         // object orients its vertical position
         pObj->ClearVertPosOrientFrm();
+        // <--
+        // --> OD 2005-03-03 #i43913#
+        pObj->ResetLayoutProcessBools();
         // <--
         // --> OD 2004-11-29 #115759# - remove also lower objects of as-character
         // anchored Writer fly frames from page
