@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-28 14:46:52 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,11 @@
 // #105722#
 #ifndef _SVDOPATH_HXX
 #include "svdopath.hxx"
+#endif
+
+// #i13033#
+#ifndef _E3D_SCENE3D_HXX
+#include "scene3d.hxx"
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2022,12 +2027,48 @@ BOOL SdrMarkView::EnterMarkedGroup()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// #i13033#
+// Helper method for building the transitive hull of all selected
+// objects
+void SdrMarkView::ImplCollectCompleteSelection(SdrObject* pObj)
+{
+    sal_Bool bIsGroup(pObj->IsGroupObject());
+
+    if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+        bIsGroup = sal_False;
+
+    if(bIsGroup)
+    {
+        SdrObjList* pList = pObj->GetSubList();
+
+        for(sal_uInt32 a(0L); a < pList->GetObjCount(); a++)
+        {
+            SdrObject* pObj2 = pList->GetObj(a);
+            ImplCollectCompleteSelection(pObj2);
+        }
+    }
+    else
+    {
+        maAllMarkedObjects.Insert(pObj, LIST_APPEND);
+    }
+}
+
 void SdrMarkView::ForceEdgesOfMarkedNodes()
 {
     if (bEdgesOfMarkedNodesDirty) {
         aEdgesOfMarkedNodes.Clear();
         aMarkedEdgesOfMarkedNodes.Clear();
-        aMarkedEdges.Clear();
+
+        // #i13033#
+        // Build transitive hull of complete selection in maAllMarkedObjects
+        maAllMarkedObjects.Clear();
+
+        for(sal_uInt32 a(0L); a < aMark.GetMarkCount(); a++)
+        {
+            SdrObject* pObj = aMark.GetMark(a)->GetObj();
+            ImplCollectCompleteSelection(pObj);
+        }
+
         bEdgesOfMarkedNodesDirty=FALSE;
         aMark.ForceSort();
         ULONG nMarkAnz=aMark.GetMarkCount();
@@ -2053,13 +2094,9 @@ void SdrMarkView::ForceEdgesOfMarkedNodes()
                     }
                 }
             }
-            if (pNode->IsEdge()) {
-                aMarkedEdges.InsertEntry(*aMark.GetMark(nm)); // alle markierten Edges merken
-            }
         }
         aEdgesOfMarkedNodes.ForceSort();
         aMarkedEdgesOfMarkedNodes.ForceSort();
-        aMarkedEdges.ForceSort();
     }
 }
 
@@ -2071,7 +2108,11 @@ void SdrMarkView::MarkListHasChanged()
     bEdgesOfMarkedNodesDirty=TRUE;
     aEdgesOfMarkedNodes.Clear();
     aMarkedEdgesOfMarkedNodes.Clear();
-    aMarkedEdges.Clear();
+
+    // #i13033#
+    // Forget transitive hull of complete selection
+    maAllMarkedObjects.Clear();
+
     bMarkedObjRectDirty=TRUE;
     bMarkedPointsRectsDirty=TRUE;
 #ifndef SVX_LIGHT
