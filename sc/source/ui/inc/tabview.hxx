@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@ public:
     void            UpdateLayerLocks();
 
     void            UpdateDrawTextOutliner();
+    void            DigitLanguageChanged();
 
     void            UpdateInputLine();
 
