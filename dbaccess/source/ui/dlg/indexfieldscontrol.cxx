@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:23:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,9 @@ namespace dbaui
     //------------------------------------------------------------------
     DbCellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
     {
+        if (!IsEnabled())
+            return NULL;
+
         ConstIndexFieldsIterator aRow;
         sal_Bool bNewField = !implGetFieldDesc(_nRow, aRow);
 
@@ -505,6 +508,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:23:31  fs
+ *  initial checkin - index design dialog and friends
+ *
  *
  *  Revision 1.0 07.03.01 14:26:26  fs
  ************************************************************************/
