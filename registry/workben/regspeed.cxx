@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regspeed.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:22:43 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ int _cdecl main( int argc, char * argv[] )
             printf("\n %d keys oeffnen und schliessen dauert ... ", (S1 * S2 * S3));
             aTimer.start();
 
-            for (i=0; i < S1; i++)
+            for (sal_Int32 i=0; i < S1; i++)
             {
                 keyName1 = OUString::createFromAscii("/");
                 keyName1 += sName1;
