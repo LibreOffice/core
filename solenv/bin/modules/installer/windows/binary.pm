@@ -2,9 +2,9 @@
 #
 #   $RCSfile: binary.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:18:25 $
+#   last change: $Author: rt $ $Date: 2004-12-16 10:45:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ use installer::files;
 use installer::globals;
 
 ###########################################################################################################
-# Updating the table Binary dynamically with all files from @installer::globals::binarytablefiles
+# Updating the table Binary dynamically with all files from $binarytablefiles
 # Content:
 # Name  Data
 # s72   v0
@@ -76,7 +76,7 @@ use installer::globals;
 
 sub update_binary_table
 {
-    my ($languageidtdir, $filesref) = @_;
+    my ($languageidtdir, $filesref, $binarytablefiles) = @_;
 
     my $binaryidttablename = $languageidtdir . $installer::globals::separator . "Binary.idt";
     my $binaryidttable = installer::files::read_file($binaryidttablename);
@@ -84,11 +84,9 @@ sub update_binary_table
     # Only the iconfiles, that are used in the shortcut table for the
     # FolderItems (entries in Windows startmenu) are added into the icon table.
 
-    for ( my $i = 0; $i <= $#installer::globals::binarytablefiles; $i++ )
+    for ( my $i = 0; $i <= $#{$binarytablefiles}; $i++ )
     {
-        my $binaryfilegid = $installer::globals::binarytablefiles[$i];
-
-        my $binaryfile = installer::existence::get_specified_file($filesref, $binaryfilegid);
+        my $binaryfile = ${$binarytablefiles}[$i];
         my $binaryfilename = $binaryfile->{'Name'};
         my $binaryfiledata = $binaryfilename;
 

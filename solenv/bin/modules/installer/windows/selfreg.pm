@@ -2,9 +2,9 @@
 #
 #   $RCSfile: selfreg.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:20:23 $
+#   last change: $Author: rt $ $Date: 2004-12-16 10:46:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,37 +65,8 @@ package installer::windows::selfreg;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::worker;
 use installer::windows::idtglobal;
-
-##############################################################
-# Returning the unique file name for the selfreg table.
-##############################################################
-
-sub get_selfreg_file
-{
-    my ( $filesref, $filename ) = @_;
-
-    my $foundfile = 0;
-    my $uniquefilename = "";
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $name = $onefile->{'Name'};
-
-        if ( $name eq $filename )
-        {
-            $uniquefilename = $onefile->{'uniquename'};
-            $foundfile = 1;
-            last;
-        }
-    }
-
-    # It does not need to exist. For example products that do not contain the libraries.
-    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
-
-    return $uniquefilename;
-}
 
 ##############################################################
 # Returning the cost for the selfreg table.
@@ -103,7 +74,7 @@ sub get_selfreg_file
 
 sub get_selfreg_cost
 {
-    my ( $filename ) = @_;
+    my ( $onefile ) = @_;
 
     return "0";
 }
@@ -123,23 +94,18 @@ sub create_selfreg_table
 
     installer::windows::idtglobal::write_idt_header(\@selfregtable, "selfreg");
 
-    # Registering all libraries listed in @installer::globals::selfreglibraries
+    # Registering all libraries with flag "SELFREG"
 
-    for ( my $i = 0; $i <= $#installer::globals::selfreglibraries; $i++ )
+    my $selfregfiles = installer::worker::collect_all_items_with_special_flag($filesref, "SELFREG");
+
+    for ( my $i = 0; $i <= $#{$selfregfiles}; $i++ )
     {
-        my $libraryname = $installer::globals::selfreglibraries[$i];
-
-        my $filename = "";
-
-        $filename = get_selfreg_file($filesref, $libraryname);
-
-        if ( $filename eq "" ) { next; }    # library not part of this product
+        my $onefile = ${$selfregfiles}[$i];
 
         my %selfreg = ();
 
-        $selfreg{'File_'} = $filename;
-
-        $selfreg{'Cost'} = get_selfreg_cost($libraryname);
+        $selfreg{'File_'} = $onefile->{'uniquename'};
+        $selfreg{'Cost'} = get_selfreg_cost($onefile);
 
         my $oneline = $selfreg{'File_'} . "\t" . $selfreg{'Cost'} . "\n";
 
