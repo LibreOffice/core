@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglbldc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:03:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,6 @@
 
 
 SV_IMPL_OP_PTRARR_SORT( SwGlblDocContents, SwGlblDocContentPtr )
-
-void SwEditShell::SetGlobalDoc( BOOL bFlag )
-{
-    GetDoc()->SetGlobalDoc( bFlag );
-}
 
 BOOL SwEditShell::IsGlobalDoc() const
 {
@@ -429,16 +424,6 @@ BOOL SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     EndCrsrMove();
     return TRUE;
 }
-
-// erzeuge Anhand der Outlines Teildokumente
-BOOL SwEditShell::GenerateGlobalDoc( const String& rPath,
-                                const SwTxtFmtColl* pSplitColl )
-{
-    SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-    return GetDoc()->GenerateGlobalDoc( rPath, pSplitColl );
-}
-
-/*  */
 
 SwGlblDocContent::SwGlblDocContent( ULONG nPos )
 {
