@@ -4,3 +4,4 @@
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\misc\*.hid %_DEST%\bin%_EXT%\*.hid
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
