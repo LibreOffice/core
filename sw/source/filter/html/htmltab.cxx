@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:28:29 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ class HTMLTable
     sal_Bool bBordersSet;               // die Umrandung wurde bereits gesetzt
     sal_Bool bForceFrame;
     sal_Bool bTableAdjustOfTag;         // stammt nTableAdjust aus <TABLE>?
-    sal_Bool bHeadlineRepeat;           // Ueberschrift wiederholen
+    sal_uInt32 nHeadlineRepeat;         // repeating rows
     sal_Bool bIsParentHead;
     sal_Bool bHasParentSection;
     sal_Bool bMakeTopSubTable;
@@ -1077,7 +1077,7 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     bInhLeftBorder = sal_False; bInhRightBorder = sal_False;
     bBordersSet = sal_False;
     bForceFrame = sal_False;
-    bHeadlineRepeat = sal_False;
+    nHeadlineRepeat = 0;
 
     nLeftMargin = 0;
     nRightMargin = 0;
@@ -2470,7 +2470,8 @@ inline void HTMLTable::CloseSection( sal_Bool bHead )
     if( nCurRow>0 && nCurRow<=nRows )
         ((*pRows)[nCurRow-1])->SetEndOfGroup();
     if( bHead /*&& nCurRow==1*/ )
-        bHeadlineRepeat = sal_True;
+//      bHeadlineRepeat = sal_True;
+        nHeadlineRepeat = nCurRow;
 }
 
 void HTMLTable::OpenRow( SvxAdjust eAdjust, SwVertOrient eVertOri,
@@ -2938,7 +2939,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( GetBGBrush() )
             pSwTable->GetFrmFmt()->SetAttr( *GetBGBrush() );
 
-        ((SwTable *)pSwTable)->SetHeadlineRepeat( bHeadlineRepeat );
+        ((SwTable *)pSwTable)->SetRowsToRepeat( nHeadlineRepeat );
         ((SwTable *)pSwTable)->GCLines();
 
         sal_Bool bIsInFlyFrame = pContext && pContext->GetFrmFmt();
@@ -4064,8 +4065,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 // gesetzt)
                 ASSERT( !pPam->GetPoint()->nContent.GetIndex(),
                         "Der Absatz hinter der Tabelle ist nicht leer!" );
-                const SwTable* pSwTable = pDoc->InsertTable( *pPam->GetPoint(),
-                                                         1, 1, HORI_LEFT );
+                const SwTable* pSwTable = pDoc->InsertTable(
+                        SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
+                        *pPam->GetPoint(), 1, 1, HORI_LEFT );
 
                 if( bForceFrame )
                 {
