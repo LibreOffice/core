@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-06 09:36:09 $
+ *  last change: $Author: cd $ $Date: 2001-07-09 13:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
 }
 #endif
 
-#ifdef PROFILE
+#ifdef TIMELOG
 #define RTL_LOGFILE_TRACE( string )  \
              rtl_logfile_trace( "%06lu %lu | : %s\n", \
                                 osl_getGlobalTimer(), \
@@ -120,5 +120,5 @@ void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... );
 #define RTL_LOGFILE_TRACE1( frmt, arg1 ) ((void)0)
 #define RTL_LOGFILE_TRACE2( frmt, arg1 , arg2 ) ((void)0)
 #define RTL_LOGFILE_TRACE3( frmt, arg1 , arg2 , arg3 ) ((void)0)
-#endif // PROFILE
+#endif // TIMELOG
 #endif
