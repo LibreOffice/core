@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-19 15:12:00 $
+#   last change: $Author: hr $ $Date: 2003-03-26 17:23:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,6 @@ LIBTARGET=NO
 
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
-BOOTSTRAP_SERVICE=FALSE
 
 # --- Settings ---
 
@@ -78,42 +77,26 @@ BOOTSTRAP_SERVICE=FALSE
 
 # --- Files ---
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
-
-.IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
-UNOUCROUT=	$(OUT)$/inc$/comprehensive
-INCPRE+=	$(OUT)$/inc$/comprehensive
-CPPUMAKERFLAGS += -C
-.ELSE
-UNOUCROUT=	$(OUT)$/inc
-.ENDIF
-
 #RTTI on
 .IF "$(OS)" == "WNT"
 CFLAGS+= -GR
 .ENDIF
 
 
-# UNOTYPES= com.sun.star.lang.XInitialization \
 #---------------------------------------------------------------------------
 # Build the test library which is loaded by the 
 # RealDynamicLoader
 
-SLOFILES= \
-        $(SLO)$/samplelib.obj
+SLOFILES=	$(SLO)$/samplelib.obj
 
-LIB1TARGET=$(SLB)$/$(TARGET1).lib
-LIB1OBJFILES= \
-        $(SLO)$/samplelib.obj
+LIB1TARGET=	$(SLB)$/$(TARGET1).lib
+LIB1OBJFILES=	$(SLOFILES)
 
 
 SHL1TARGET=	$(TARGET1)
 
 SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET1)
@@ -121,34 +104,21 @@ SHL1LIBS=	$(SLB)$/$(TARGET1).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME =$(TARGET1)
+DEFLIB1NAME=	$(TARGET1)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
 #DEF1EXPORTFILE=	exports.dxp
 
 # ------------------------------------------------------------------------------
 
-APP1NOSAL=TRUE
+OBJFILES=	$(OBJ)$/loader.obj
 
 APP1TARGET=	$(TARGET)
-
-APP1OBJS=	$(OBJ)$/loader.obj
-
-#LIBCIMT=msvcrtd.lib
-            
+APP1OBJS=	$(OBJFILES)
 
 APP1STDLIBS= \
-    $(SALLIB) \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB)
-
-APP1LIBS=	$(LB)$/isalhelper.lib
-
-
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
-.ENDIF
+    $(SALHELPERLIB)	\
+    $(SALLIB)
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
@@ -156,10 +126,7 @@ APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 .INCLUDE : target.mk
 
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo __CT>>$@
-
-
