@@ -20385,3 +20385,9 @@ _real@8@400cfa00000000000000
 ??0?$Reference@VXOutputStream@io@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
 ?SvxDrawingLayerExport@@YAEPAVSdrModel@@V?$Reference@VXOutputStream@io@star@sun@com@@@uno@star@sun@com@@V?$Reference@VXComponent@lang@star@sun@com@@@3456@@Z
 ?SvxDrawingLayerImport@@YAEPAVSdrModel@@V?$Reference@VXInputStream@io@star@sun@com@@@uno@star@sun@com@@V?$Reference@VXComponent@lang@star@sun@com@@@3456@@Z
+?GetAttribs@EditEngine@@QBE?AVSfxItemSet@@GGGE@Z
+?GetModelStream@GalleryTheme@@QAEEKAAVSotStorageStreamRef@@E@Z
+?InsertModelStream@GalleryTheme@@QAEEABVSotStorageStreamRef@@K@Z
+?GetReducedString@@YA?AVString@@ABVINetURLObject@@K@Z
+?Read@GalleryCodec@@QAEXAAVSvStream@@@Z
+?Write@GalleryCodec@@QAEXAAVSvStream@@@Z
