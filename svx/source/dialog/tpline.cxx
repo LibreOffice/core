@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: hr $ $Date: 2001-06-25 17:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1692,7 +1692,7 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         {
             SVX_TRACE(213,ByteString( "SVX_SYMBOLTYPE_ Brush lesen, wird aus Datei generiert" ) );
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;//wie Gallery, Graphic ist im Item enthalten
-            SvxOpenGraphicDialog aGrfDlg(SVX_RESSTR(RID_STR_EDIT_GRAPHIC));
+            SvxOpenGraphicDialog aGrfDlg(SVX_RES(RID_STR_EDIT_GRAPHIC));
             aGrfDlg.EnableLink(sal_False);
             aGrfDlg.AsLink(sal_False);
             if( !aGrfDlg.Execute() )
