@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:07:16 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@
 #include <docary.hxx>
 #endif
 #ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
+#include <sfx2/app.hxx>
 #endif
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
