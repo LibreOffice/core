@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-27 08:44:20 $
+ *  last change: $Author: os $ $Date: 2002-04-02 07:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,12 +492,12 @@
 #define HID_SVXDLG_FILTER_WARNING               (HID_SVX_START + 427)
 
 #define HID_TRANS_POSITION_SIZE                 (HID_SVX_START + 428)
-
+#define HID_OPTIONS_COLORCONFIG                 (HID_SVX_START + 429)
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END HID_GALLERY_LISTVIEW
+#define ACT_SVX_HID_END HID_OPTIONS_COLORCONFIG
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file

@@ -54,6 +54,7 @@ hedabu: ..\inc\svdfield.hxx %_DEST%\inc%_EXT%\svx\svdfield.hxx
 hedabu: ..\inc\svxitems.hrc %_DEST%\inc%_EXT%\svx\svxitems.hrc
 hedabu: ..\inc\multipat.hxx %_DEST%\inc%_EXT%\svx\multipat.hxx
 hedabu: ..\inc\fontlb.hxx %_DEST%\inc%_EXT%\svx\fontlb.hxx
+hedabu: ..\inc\optcolor.hxx %_DEST%\inc%_EXT%\svx\optcolor.hxx
 hedabu: ..\inc\optgrid.hxx %_DEST%\inc%_EXT%\svx\optgrid.hxx
 hedabu: ..\inc\svddef.hxx %_DEST%\inc%_EXT%\svx\svddef.hxx
 hedabu: ..\inc\svdfppt.hxx %_DEST%\inc%_EXT%\svx\svdfppt.hxx
@@ -67,6 +68,7 @@ hedabu: ..\inc\akrnitem.hxx %_DEST%\inc%_EXT%\svx\akrnitem.hxx
 hedabu: ..\inc\algitem.hxx %_DEST%\inc%_EXT%\svx\algitem.hxx
 hedabu: ..\inc\align.hxx %_DEST%\inc%_EXT%\svx\align.hxx
 hedabu: ..\inc\asiancfg.hxx %_DEST%\inc%_EXT%\svx\asiancfg.hxx
+hedabu: ..\inc\colorcfg.hxx %_DEST%\inc%_EXT%\svx\colorcfg.hxx
 hedabu: ..\inc\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
 hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
 hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
