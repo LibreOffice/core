@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:59:58 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <vcl/jobset.hxx>
 #include <tools/poly.hxx>
 #include <vcl/salbtype.hxx>
-#include <so3/embobj.hxx>
 #include <vcl/bmpacc.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
