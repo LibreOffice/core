@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:50:32 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,7 +938,6 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
  * bRotate  - Rotate the character if character rotation is set
  *************************************************************************/
 
-#ifdef BIDI
 void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
                       SwRect& rRect, const Color* pCol, sal_Unicode cChar,
                       BYTE nOptions )
@@ -949,12 +948,6 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
     // rRect is given in absolute coordinates
     if ( rInf.GetTxtFrm()->IsRightToLeft() )
         rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
-#else
-void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
-                      SwRect& rRect, const Color* pCol, sal_Unicode cChar,
-                      sal_Bool bCenter, sal_Bool bRotate )
-{
-#endif
     if ( rInf.GetTxtFrm()->IsVertical() )
         rInf.GetTxtFrm()->SwitchVerticalToHorizontal( rRect );
 
@@ -1016,6 +1009,9 @@ void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
         const BYTE nAct = pFnt->GetActual();
         aFontSize.Height() = ( 100 * pFnt->GetSize( nAct ).Height() ) / nFactor;
         aFontSize.Width() = ( 100 * pFnt->GetSize( nAct).Width() ) / nFactor;
+
+        if ( !aFontSize.Width() && !aFontSize.Height() )
+            break;
 
         pFnt->SetSize( aFontSize, nAct );
 
@@ -1658,8 +1654,15 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
                                             const xub_StrLen nEnd )
 {
     cHookChar = 0;
-    const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     xub_StrLen i = nStart;
+
+    //
+    // Used for decimal tab handling:
+    //
+    const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
+    const xub_Unicode cTabSep = ',' == cTabDec ? '.' : ',';
+    bool bNumFound = false;
+    const bool bTabCompat = GetVsh()->IsTabCompat();
 
     // Removed for i7288. bSkip used to be passed from SwFldPortion::Format
     // as IsFollow(). Therefore more than one special character was not
@@ -1692,13 +1695,38 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             break;
 
         default:
-            if( cTabDec == cPos )
+            if ( cTabDec )
             {
-                ASSERT( cPos, "Unexspected end of string" );
-                if( cPos ) // robust
+                if( cTabDec == cPos )
                 {
-                    cHookChar = cPos;
-                    return i;
+                    ASSERT( cPos, "Unexpected end of string" );
+                    if( cPos ) // robust
+                    {
+                        cHookChar = cPos;
+                        return i;
+                    }
+                }
+
+                //
+                // Compatibility: First non-digit character behind a
+                // a digit character becomes the hook character
+                //
+                if ( bTabCompat )
+                {
+                    if ( ( 0x2F < cPos && cPos < 0x3A ) ||
+                         ( bNumFound && cPos == cTabSep ) )
+                    {
+                        bNumFound = true;
+                    }
+                    else
+                    {
+                        if ( bNumFound )
+                        {
+                            cHookChar = cPos;
+                            SetTabDecimal( cPos );
+                            return i;
+                        }
+                    }
                 }
             }
         }
