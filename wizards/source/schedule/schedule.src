@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:33:44 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ Text[ swedish ] = "Beräkna helgdagar";
     Text[ russian ] = "Âêëş÷èòü ïğàçäíèêè â êàëåíäàğü";
     Text[ greek ] = "Õğïëïãéóìüò çìåñşí áñãßáò";
     Text[ danish ] = "Beregn helligdage";
-    Text[ polish ] = "Oblicz dni œwi¹teczne";
+    Text[ polish ] = "Oblicz dni ?wi¹teczne";
     Text[ portuguese_brazilian ] = "Add Holidays to Calendar";
     Text[ japanese ] = "j“ú‚ğ”‚¦‚é";
     Text[ korean ] = "°øÈŞÀÏ¡¡°è»ê£¡";
@@ -360,7 +360,7 @@ Text[ swedish ] = "Beräkna helgdagar för";
     Text[ russian ] = "Äîáàâèòü ïğàçäíèêè äëÿ";
     Text[ greek ] = "Õğïëïãéóìüò çìåñşí áñãßáò ãéá";
     Text[ danish ] = "Beregn helligdage for";
-    Text[ polish ] = "Obliczenie dni œwi¹tecznych dla";
+    Text[ polish ] = "Obliczenie dni ?wi¹tecznych dla";
     Text[ portuguese_brazilian ] = "Add holidays for";
     Text[ japanese ] = "j“ú‚ğ”‚¦‚é‘ÎÛ";
     Text[ korean ] = "°øÈŞÀÏ¡¡°è»ê";
@@ -780,7 +780,7 @@ Text[ dutch ] = "Algemene feestdagen";
 Text[ swedish ] = "Allmänna helgdagar";
     Text[ russian ] = "Îáùåñòâåííûå ïğàçäíèêè";
     Text[ danish ] = "Almindelige helligdage";
-    Text[ polish ] = "Ogólne dni œwi¹teczne";
+    Text[ polish ] = "Ogólne dni ?wi¹teczne";
     Text[ chinese_traditional ] = "¤@¯ë¸`°²¤é";
     Text[ arabic ] = "ÚØáÇÊ ÚÇãÉ";
     Text[ greek ] = "Ãåíéêİò áñãßåò";
@@ -1041,7 +1041,7 @@ Text[ swedish ] = "Oktober";
     Text[ russian ] = "Îêòÿáğü";
     Text[ greek ] = "Ïêôùâñßïõ";
     Text[ danish ] = "Oktober";
-    Text[ polish ] = "PaŸdziernik";
+    Text[ polish ] = "Pa?dziernik";
     Text[ portuguese_brazilian ] = "October";
     Text[ japanese ] = "10Œ";
     Text[ korean ] = "10¿ù";
