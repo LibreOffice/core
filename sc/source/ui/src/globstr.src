@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:37:17 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Arrastrar y colocar" ;
         Text [ danish ] = "Træk-og-slip" ;
         Text [ swedish ] = "Dra-och-släpp" ;
-        Text [ finnish ] = "Drag&Drop" ;
+        Text [ finnish ] = "Vedä ja pudota" ;
         Text [ english_us ] = "Drag and Drop" ;
         Text[ chinese_simplified ] = "ÍÏ·Å";
         Text[ russian ] = "Ïåðåòàñêèâàíèå";
@@ -211,7 +211,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Sposta" ;
         Text [ portuguese_brazilian ] = "Mover" ;
         Text [ portuguese ] = "Mover" ;
-        Text [ finnish ] = "Lisää" ;
+        Text [ finnish ] = "Siirrä" ;
         Text [ danish ] = "Flyt" ;
         Text [ french ] = "Déplacer" ;
         Text [ swedish ] = "Flytta" ;
@@ -320,7 +320,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Attributi/Linee" ;
         Text [ portuguese_brazilian ] = "Atributos/Linhas" ;
         Text [ portuguese ] = "Atributos/Linhas" ;
-        Text [ finnish ] = "Määritteet/Viivat" ;
+        Text [ finnish ] = "Määritteet/rivit" ;
         Text [ danish ] = "Attributter/Linjer" ;
         Text [ french ] = "Attributs/lignes" ;
         Text [ swedish ] = "Attribut/Linjer" ;
@@ -347,7 +347,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Larghezza colonna" ;
         Text [ portuguese_brazilian ] = "Largura da Coluna" ;
         Text [ portuguese ] = "Largura da coluna" ;
-        Text [ finnish ] = "Sarakeleveys" ;
+        Text [ finnish ] = "Sarakkeen leveys" ;
         Text [ danish ] = "Kolonnebredde" ;
         Text [ french ] = "Largeur de colonne" ;
         Text [ swedish ] = "Kolumnbredd" ;
@@ -374,7 +374,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Larghezza colonna ottimale" ;
         Text [ portuguese_brazilian ] = "Largura Ideal da Coluna" ;
         Text [ portuguese ] = "Largura ideal da coluna" ;
-        Text [ finnish ] = "Sopivin sarakeleveys" ;
+        Text [ finnish ] = "Optimaalinen sarakkeen leveys" ;
         Text [ danish ] = "Optimal kolonnebredde" ;
         Text [ french ] = "Largeur de colonne optimale" ;
         Text [ swedish ] = "optimal kolumnbredd" ;
@@ -402,7 +402,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Altezza riga" ;
         Text [ portuguese_brazilian ] = "Altura da Fileira" ;
         Text [ portuguese ] = "Altura da linha" ;
-        Text [ finnish ] = "Rivikorkeus" ;
+        Text [ finnish ] = "Rivin korkeus" ;
         Text [ danish ] = "Rækkehøjde" ;
         Text [ french ] = "Hauteur de ligne" ;
         Text [ swedish ] = "Radhöjd" ;
@@ -430,7 +430,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Altezza riga ottimale" ;
         Text [ portuguese_brazilian ] = "Altura Ideal da Fileira" ;
         Text [ portuguese ] = "Altura ideal da linha" ;
-        Text [ finnish ] = "Sopivin rivikorkeus" ;
+        Text [ finnish ] = "Optimaalinen rivikorkeus" ;
         Text [ danish ] = "Optimal rækkehøjde" ;
         Text [ french ] = "Hauteur de ligne optimale" ;
         Text [ swedish ] = "optimal radhöjd" ;
@@ -458,7 +458,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riempimento" ;
         Text [ portuguese_brazilian ] = "Preenchimento automático" ;
         Text [ portuguese ] = "Preencher" ;
-        Text [ finnish ] = "Automaattitäyttö" ;
+        Text [ finnish ] = "Täytä" ;
         Text [ danish ] = "Fyld" ;
         Text [ french ] = "Remplir" ;
         Text [ swedish ] = "Fyll" ;
@@ -540,7 +540,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Formattazione automatica" ;
         Text [ portuguese_brazilian ] = "Auto Formatação" ;
         Text [ portuguese ] = "AutoFormato" ;
-        Text [ finnish ] = "Automaattimuoto" ;
+        Text [ finnish ] = "Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat" ;
         Text [ french ] = "AutoFormat" ;
         Text [ swedish ] = "Autoformat" ;
@@ -621,7 +621,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Digitazione" ;
         Text [ portuguese_brazilian ] = "Inserção" ;
         Text [ portuguese ] = "Entrada" ;
-        Text [ finnish ] = "Syöttö" ;
+        Text [ finnish ] = "Syötä" ;
         Text [ danish ] = "Input" ;
         Text [ french ] = "Saisie" ;
         Text [ swedish ] = "Inmatning" ;
@@ -649,7 +649,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Inserisci interruzione colonna" ;
         Text [ portuguese_brazilian ] = "Inserir Quebra de Coluna" ;
         Text [ portuguese ] = "Inserir quebra de coluna" ;
-        Text [ finnish ] = "Lisää sarakkeenvaihto" ;
+        Text [ finnish ] = "Lisää sarakevaihto" ;
         Text [ danish ] = "Indsæt spalteskift" ;
         Text [ french ] = "Insérer un saut de colonne" ;
         Text [ swedish ] = "Infoga kolumnbrytning" ;
@@ -677,7 +677,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Elimina interruzione colonna" ;
         Text [ portuguese_brazilian ] = "Apagar Quebra de Coluna" ;
         Text [ portuguese ] = "Eliminar quebra de coluna" ;
-        Text [ finnish ] = "Poista sarakkeenvaihto" ;
+        Text [ finnish ] = "Poista sarakevaihto" ;
         Text [ danish ] = "Slet spalteskift" ;
         Text [ french ] = "Supprimer le saut de colonne" ;
         Text [ swedish ] = "Radera kolumnbrytning" ;
@@ -760,7 +760,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Mostra dettaglio" ;
         Text [ portuguese_brazilian ] = "Abrir Esboço" ;
         Text [ portuguese ] = "Mostrar detalhe" ;
-        Text [ finnish ] = "Avaa jäsennys" ;
+        Text [ finnish ] = "Näytä tiedot" ;
         Text [ danish ] = "Vis detaljer" ;
         Text [ french ] = "Afficher les détails" ;
         Text [ swedish ] = "Visa detalj" ;
@@ -787,7 +787,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nascondi dettaglio" ;
         Text [ portuguese_brazilian ] = "Fechar Esboço" ;
         Text [ portuguese ] = "Ocultar detalhes" ;
-        Text [ finnish ] = "Sulje jäsennys" ;
+        Text [ finnish ] = "Piilota tiedot" ;
         Text [ danish ] = "Skjul detaljer" ;
         Text [ french ] = "Masquer les détails" ;
         Text [ swedish ] = "Dölj detalj" ;
@@ -814,7 +814,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Raggruppa" ;
         Text [ portuguese_brazilian ] = "Criar Esboço" ;
         Text [ portuguese ] = "Agrupar" ;
-        Text [ finnish ] = "Tee jäsennys" ;
+        Text [ finnish ] = "Ryhmä" ;
         Text [ danish ] = "Gruppering" ;
         Text [ french ] = "Grouper" ;
         Text [ swedish ] = "Gruppering" ;
@@ -841,7 +841,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Elimina struttura" ;
         Text [ portuguese_brazilian ] = "Apagar Esboço" ;
         Text [ portuguese ] = "Desagrupar" ;
-        Text [ finnish ] = "Poista jäsennys" ;
+        Text [ finnish ] = "Pura ryhmä" ;
         Text [ danish ] = "Ophæv gruppering" ;
         Text [ french ] = "Dissocier" ;
         Text [ swedish ] = "Upphäv gruppering" ;
@@ -896,7 +896,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Mostra dettaglio" ;
         Text [ portuguese_brazilian ] = "Abrir Esboço" ;
         Text [ portuguese ] = "Mostrar detalhe" ;
-        Text [ finnish ] = "Avaa jäsennys" ;
+        Text [ finnish ] = "Näytä tiedot" ;
         Text [ danish ] = "Vis detaljer" ;
         Text [ french ] = "Afficher les détails" ;
         Text [ swedish ] = "Visa detalj" ;
@@ -923,7 +923,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nascondi dettaglio" ;
         Text [ portuguese_brazilian ] = "Fechar Esboço" ;
         Text [ portuguese ] = "Ocultar detalhes" ;
-        Text [ finnish ] = "Sulje jäsennys" ;
+        Text [ finnish ] = "Piilota tiedot" ;
         Text [ danish ] = "Skjul detaljer" ;
         Text [ french ] = "Masquer les détails" ;
         Text [ swedish ] = "Dölj detalj" ;
@@ -950,7 +950,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Rimuovi tutte le strutture" ;
         Text [ portuguese_brazilian ] = "Remover Todos os Vazados" ;
         Text [ portuguese ] = "Remover esquema" ;
-        Text [ finnish ] = "Poista kaikki jäsennykset" ;
+        Text [ finnish ] = "Tyhjennä ääriviiva" ;
         Text [ danish ] = "Fjern disposition" ;
         Text [ french ] = "Supprimer le plan" ;
         Text [ swedish ] = "Ta bort disposition" ;
@@ -978,7 +978,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Struttura automatica" ;
         Text [ portuguese_brazilian ] = "Auto Esboço" ;
         Text [ portuguese ] = "AutoEsquema" ;
-        Text [ finnish ] = "Automaattijäsennys" ;
+        Text [ finnish ] = "Automaattinen rajaus" ;
         Text [ danish ] = "AutoDisposition" ;
         Text [ french ] = "AutoPlan" ;
         Text [ swedish ] = "AutoDisposition" ;
@@ -1032,7 +1032,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Ordina" ;
         Text [ portuguese_brazilian ] = "Ordenar" ;
         Text [ portuguese ] = "Ordenar" ;
-        Text [ finnish ] = "Lajittelu" ;
+        Text [ finnish ] = "Lajittele" ;
         Text [ danish ] = "Sorter" ;
         Text [ french ] = "Trier" ;
         Text [ swedish ] = "Sortera" ;
@@ -1059,7 +1059,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Filtra" ;
         Text [ portuguese_brazilian ] = "Consulta" ;
         Text [ portuguese ] = "Filtro" ;
-        Text [ finnish ] = "Kysely" ;
+        Text [ finnish ] = "Suodatin" ;
         Text [ danish ] = "Filtrer" ;
         Text [ french ] = "Filtrer" ;
         Text [ swedish ] = "Filtrera" ;
@@ -1087,7 +1087,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Modifica aree database" ;
         Text [ portuguese_brazilian ] = "Modificar Área da Base de Dados" ;
         Text [ portuguese ] = "Modificar área da base de dados" ;
-        Text [ finnish ] = "Muokkaa tietokanta-aluetta" ;
+        Text [ finnish ] = "Muuta tietokanta-aluetta" ;
         Text [ danish ] = "Modificer databaseområde" ;
         Text [ french ] = "Modifier plages de base de données" ;
         Text [ swedish ] = "Ändra databasområden" ;
@@ -1114,7 +1114,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Importa" ;
         Text [ portuguese_brazilian ] = "Importar Dados" ;
         Text [ portuguese ] = "Importar" ;
-        Text [ finnish ] = "Tuo tietoja" ;
+        Text [ finnish ] = "Tuodaan" ;
         Text [ danish ] = "Importerer" ;
         Text [ french ] = "Importer" ;
         Text [ swedish ] = "Importera" ;
@@ -1157,6 +1157,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Aralýðý güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar área";
+        Text[ finnish ] = "Päivitä alue";
     };
     String STR_UNDO_GRAFEDIT
     {
@@ -1182,6 +1183,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Grafik düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar imagen";
+        Text[ finnish ] = "Muokkaa kuvaa";
     };
     String STR_UNDO_LISTNAMES
     {
@@ -1207,6 +1209,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Adlarý sýrala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alistar nombres";
+        Text[ finnish ] = "Luettelonimet";
     };
     String STR_UNDO_PIVOT_NEW
     {
@@ -1232,6 +1235,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablosu oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear tabla del Piloto de Datos";
+        Text[ finnish ] = "Luo tietojen ohjaustaulukko";
     };
     String STR_UNDO_PIVOT_MODIFY
     {
@@ -1257,6 +1261,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablosunu düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificar tabla del Piloto de Datos";
+        Text[ finnish ] = "Muokkaa tietojen ohjaustalukkoa";
     };
     String STR_UNDO_PIVOT_DELETE
     {
@@ -1283,6 +1288,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablosunu sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar tabla del Piloto de Datos";
+        Text[ finnish ] = "Poista tietojen ohjaustaulukko";
     };
     String STR_UNDO_CONSOLIDATE
     {
@@ -1308,6 +1314,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Birleþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Consolidar";
+        Text[ finnish ] = "Yhdistä";
     };
     String STR_UNDO_USESCENARIO
     {
@@ -1333,6 +1340,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Senaryoyu uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar escenario";
+        Text[ finnish ] = "Käytä skenaariota";
     };
     String STR_UNDO_MAKESCENARIO
     {
@@ -1358,6 +1366,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Senaryo oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear escenario";
+        Text[ finnish ] = "Luo skenaario";
     };
     String STR_UNDO_EDITSCENARIO
     {
@@ -1383,6 +1392,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Senaryoyu düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar escenario";
+        Text[ finnish ] = "Muokkaa skenaariota";
     };
     String STR_UNDO_APPLYCELLSTYLE
     {
@@ -1408,6 +1418,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Hücre biçimini uygula";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aplicar estilo de celda";
+        Text[ finnish ] = "Käytä solun tyyli";
     };
     String STR_UNDO_EDITCELLSTYLE
     {
@@ -1432,6 +1443,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Edit cell style";
         Text[ arabic ] = "ÊÍÑíÑ äãØ ÇáÎáíÉ";
         Text[ catalan ] = "Editar estilo de celda";
+        Text[ finnish ] = "Muokkaa solun tyyliä";
     };
     String STR_UNDO_APPLYPAGESTYLE
     {
@@ -1456,6 +1468,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Apply page style";
         Text[ arabic ] = "ÊÚííä äãØ ÇáÕÝÍÉ";
         Text[ catalan ] = "Aplicar estilo de página";
+        Text[ finnish ] = "Käytä sivun tyyliä";
     };
     String STR_UNDO_EDITPAGESTYLE
     {
@@ -1480,6 +1493,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Edit page style";
         Text[ arabic ] = "ÊÍÑíÑ äãØ ÇáÕÝÍÉ";
         Text[ catalan ] = "Editar estilo de página";
+        Text[ finnish ] = "Muokkaa sivun tyyliä";
     };
     String STR_UNDO_DETADDPRED
     {
@@ -1506,6 +1520,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Öncekini izle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rastro a los precedentes";
+        Text[ finnish ] = "Jäljitä edeltäjät";
     };
     String STR_UNDO_DETDELPRED
     {
@@ -1532,6 +1547,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Öncekinin izini sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rastro al precedente";
+        Text[ finnish ] = "Poista edeltäjä";
     };
     String STR_UNDO_DETADDSUCC
     {
@@ -1557,6 +1573,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sonrakini izle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rastro al sucesor";
+        Text[ finnish ] = "Jäljitä seuraajat";
     };
     String STR_UNDO_DETDELSUCC
     {
@@ -1582,6 +1599,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sonrakinin izini sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar rastro al sucesor";
+        Text[ finnish ] = "Poista seuraaja";
     };
     String STR_UNDO_DETADDERROR
     {
@@ -1607,6 +1625,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Hatayý izle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rastro al error";
+        Text[ finnish ] = "Jäljitä virhe";
     };
     String STR_UNDO_DETDELALL
     {
@@ -1632,6 +1651,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tüm izleri sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar todos los rastros";
+        Text[ finnish ] = "Poista kaikki jäljet";
     };
     String STR_UNDO_DETINVALID
     {
@@ -1658,6 +1678,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Geçersiz verileri iþaretle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marcar los datos no válidos";
+        Text[ finnish ] = "Merkitse virheelliset tiedot";
     };
     String STR_UNDO_DETREFRESH
     {
@@ -1683,6 +1704,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ýzleri güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar rastros";
+        Text[ finnish ] = "Päivitä jäljet";
     };
     String STR_UNDO_CHARTDATA
     {
@@ -1709,6 +1731,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Þemanýn veri aralýðýný deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificar área de datos del diagrama";
+        Text[ finnish ] = "Vuokkaa kaavion tietoaluetta";
     };
     String STR_UNDO_ORIGINALSIZE
     {
@@ -1719,7 +1742,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Dimensione originale" ;
         Text [ portuguese_brazilian ] = "Tamanho real" ;
         Text [ portuguese ] = "Tamanho real" ;
-        Text [ finnish ] = "Todellinen koko" ;
+        Text [ finnish ] = "Alkuperäinen koko" ;
         Text [ danish ] = "Oprindelig størrelse" ;
         Text [ french ] = "Taille d'origine" ;
         Text [ swedish ] = "Orginalstorlek" ;
@@ -1763,6 +1786,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baðlantýyý güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar vínculo";
+        Text[ finnish ] = "Päivitä linkki";
     };
     String STR_UNDO_REMOVELINK
     {
@@ -1789,6 +1813,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baðlantýyý kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar vínculo";
+        Text[ finnish ] = "Poista linkki";
     };
     String STR_UNDO_INSERTAREALINK
     {
@@ -1815,6 +1840,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baðlantý ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar vínculo";
+        Text[ finnish ] = "Lisää linkki";
     };
     String STR_UNDO_ENTERMATRIX
     {
@@ -1841,6 +1867,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Matris formulü ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar fórmula matriz";
+        Text[ finnish ] = "Lisää matriisikaava";
     };
     String STR_UNDO_SHOWNOTE
     {
@@ -1866,6 +1893,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Notu görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar nota";
+        Text[ finnish ] = "Näytä huomautus";
     };
     String STR_UNDO_HIDENOTE
     {
@@ -1891,6 +1919,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Notu gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar nota";
+        Text[ finnish ] = "Piilota huomautus";
     };
     String STR_UNDO_EDITNOTE
     {
@@ -1916,6 +1945,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Notu düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar nota";
+        Text[ finnish ] = "Muokkaa huomautusta";
     };
     String STR_UNDO_DEC_INDENT
     {
@@ -1941,6 +1971,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Girintiyi küçült";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reducir sangría";
+        Text[ finnish ] = "Vähennä sisennystä";
     };
     String STR_UNDO_INC_INDENT
     {
@@ -1967,6 +1998,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Girintiyi büyüt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aumentar sangría";
+        Text[ finnish ] = "Lisää sisennystä";
     };
     String STR_UNDO_PROTECT_TAB
     {
@@ -1993,6 +2025,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Proteger hoja";
+        Text[ finnish ] = "Suojaa lomake";
     };
     String STR_UNDO_UNPROTECT_TAB
     {
@@ -2018,6 +2051,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablo korumasýný kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desproteger hoja";
+        Text[ finnish ] = "Poista lomakkeen suojaus";
     };
     String STR_UNDO_PROTECT_DOC
     {
@@ -2044,6 +2078,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belgeyi koru";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Proteger documento";
+        Text[ finnish ] = "Suojaa asiakirja";
     };
     String STR_UNDO_UNPROTECT_DOC
     {
@@ -2069,6 +2104,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belge korumasýný kaldýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desproteger documento";
+        Text[ finnish ] = "Poista asiakirjan suojaus";
     };
     String STR_UNDO_PRINTRANGES
     {
@@ -2094,6 +2130,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazdýrma aralýðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Áreas de impresión";
+        Text[ finnish ] = "Tulostusalue";
     };
     String STR_UNDO_REMOVEBREAKS
     {
@@ -2120,6 +2157,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sayfa sonlarýný sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar saltos de página";
+        Text[ finnish ] = "Poista sivunvaihdot";
     };
     String STR_UNDO_PRINTSCALE
     {
@@ -2146,6 +2184,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ölçeði deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificar escala";
+        Text[ finnish ] = "Muuta skaalaus";
     };
     String STR_UNDO_DRAG_BREAK
     {
@@ -2171,6 +2210,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sayfa sonunu taþý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazar salto de página";
+        Text[ finnish ] = "Siirrä sivunvaihtoa";
     };
     String STR_UNDO_RANGENAMES
     {
@@ -2196,6 +2236,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Aralýk adlarýný düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Editar nombres de área";
+        Text[ finnish ] = "Muokkaa alueiden nimiä";
     };
     String STR_UNDO_TRANSLITERATE
     {
@@ -2221,6 +2262,7 @@ Resource RID_GLOBSTR
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑÝ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
         Text[ catalan ] = "Change case";
+        Text[ finnish ] = "Groß-/Kleinschreibung";
     };
     String STR_DB_NONAME
     {
@@ -2273,6 +2315,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ýçe aktar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importación";
+        Text[ finnish ] = "Tuo";
     };
     String STR_MSSG_DOSUBTOTALS_0
     {
@@ -2282,7 +2325,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "%PRODUCTNAME Calc" ;
         Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc" ;
         Text [ portuguese ] = "%PRODUCTNAME Calc" ;
-        Text [ finnish ] = "StarCalc" ;
+        Text [ finnish ] = "%PRODUCTNAME! Calc" ;
         Text [ danish ] = "%PRODUCTNAME Calc" ;
         Text [ french ] = "%PRODUCTNAME Calc" ;
         Text [ swedish ] = "%PRODUCTNAME Calc" ;
@@ -2338,7 +2381,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile inserire riga" ;
         Text [ portuguese_brazilian ] = "Não consigo inserir a linha" ;
         Text [ portuguese ] = "Impossível inserir linhas" ;
-        Text [ finnish ] = "Riviä ei voi lisätä" ;
+        Text [ finnish ] = "Rivien lisääminen ei onnistu" ;
         Text [ danish ] = "Kan ikke indsætte rækker" ;
         Text [ french ] = "Insertion de lignes impossible" ;
         Text [ swedish ] = "Kan ej infoga rad" ;
@@ -2366,7 +2409,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non c'è niente da fare" ;
         Text [ portuguese_brazilian ] = "Nada a fazer" ;
         Text [ portuguese ] = "Não tenho operações para executar" ;
-        Text [ finnish ] = "Ei tehtävää" ;
+        Text [ finnish ] = "Ei suoritettavia toimintoja" ;
         Text [ danish ] = "Ingen operationer til at udføre" ;
         Text [ french ] = "Aucune opération à exécuter" ;
         Text [ swedish ] = "Inga operationer att utföra" ;
@@ -2394,7 +2437,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "L' area non contiene intestazioni per le colonne.\nUsare la prima riga come intestazione colonna?" ;
         Text [ portuguese_brazilian ] = "Esta área não contém cabeçalhos de colunas.\nUsar a primeira linha como cabeçalhos de colunas?" ;
         Text [ portuguese ] = "Esta área não contém cabeçalhos de colunas.\nUtilizar a primeira linha como cabeçalho de coluna?" ;
-        Text [ finnish ] = "Tällä alueella ei ole sarakeotsikoita.\nKäytetäänkö ensimmäistä riviä sarakeotsikoina?" ;
+        Text [ finnish ] = "Alue ei sisällä sarakeotsikoita.\nHaluatko ensimmäistä riviä käytettävän sarakeotsikkona?" ;
         Text [ danish ] = "Dette område indeholder ikke kolonneoverskrifter.\nSkal den første række bruges som kolonneoverskrift?" ;
         Text [ french ] = "Cette plage ne contient aucun en-tête de colonne.\nVoulez-vous utiliser le contenu de la première ligne en guise d'en-têtes ?" ;
         Text [ swedish ] = "Området innehåller inga kolumnhuvuden.\nSkall första raden användas som kolumnhuvud?" ;
@@ -2421,7 +2464,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore durante l'importazione dei dati!" ;
         Text [ portuguese_brazilian ] = "Erro ao importar dados!" ;
         Text [ portuguese ] = "Erro ao importar dados!" ;
-        Text [ finnish ] = "Virhe tietoja tuotaessa!" ;
+        Text [ finnish ] = "Virhe tietoja tuotaessa." ;
         Text [ danish ] = "Fejl ved import!" ;
         Text [ french ] = "Erreur lors de l'import des données !" ;
         Text [ swedish ] = "Fel vid import av data!" ;
@@ -2464,6 +2507,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "'#' veritabaný açýlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo abrir la base de datos '#'.";
+        Text[ finnish ] = "Tietokantaa '' ei voitu avata.";
     };
     String STR_QUERY_NOTFOUND
     {
@@ -2489,6 +2533,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "'#' sorgusu açýlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La consulta '#' no se pudo abrir.";
+        Text[ finnish ] = "Kyselyä '' ei voitu avata.";
     };
     String STR_DATABASE_ABORTED
     {
@@ -2514,6 +2559,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veritabaný içe aktarýmý iptal edildi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La importación de la base de datos ha sido cancelada.";
+        Text[ finnish ] = "Tietokannan tuonti on päättynyt.";
     };
     String STR_PROGRESS_IMPORT
     {
@@ -2540,6 +2586,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "# veri kümesi içe aktarýldý...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "# registros importados...";
+        Text[ finnish ] = " tietuetta tuotu";
     };
     String STR_MSSG_MAKEOUTLINE_0
     {
@@ -2550,7 +2597,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile raggruppare" ;
         Text [ portuguese_brazilian ] = "Agrupamento impossível" ;
         Text [ portuguese ] = "Impossível agrupar." ;
-        Text [ finnish ] = "Ryhmää ei voi tehdä" ;
+        Text [ finnish ] = "Ryhmittely ei onnistu" ;
         Text [ danish ] = "Gruppering er ikke mulig" ;
         Text [ french ] = "Impossible de grouper" ;
         Text [ swedish ] = "Gruppering inte möjlig" ;
@@ -2578,7 +2625,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile separare" ;
         Text [ portuguese_brazilian ] = "Desagrupamento impossível" ;
         Text [ portuguese ] = "Impossível desfazer grupo" ;
-        Text [ finnish ] = "Ryhmää ei voi purkaa" ;
+        Text [ finnish ] = "Ryhmän purkaminen ei onnistu" ;
         Text [ danish ] = "Det er ikke muligt at ophæve" ;
         Text [ french ] = "Dissociation impossible" ;
         Text [ swedish ] = "Omöjligt att upphäva" ;
@@ -2606,7 +2653,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile inserire da selezione multipla" ;
         Text [ portuguese_brazilian ] = "Inserção em multi seleção impossível" ;
         Text [ portuguese ] = "Inserção em multiselecção impossível" ;
-        Text [ finnish ] = "Monivalintaan ei voi lisätä" ;
+        Text [ finnish ] = "Lisääminen monivalintaan ei onnistu" ;
         Text [ danish ] = "Det er ikke muligt at indsætte i multimarkeringer" ;
         Text [ french ] = "Insertion impossible dans la sélection multiple" ;
         Text [ swedish ] = "Det är inte möjligt att infoga i multimarkering" ;
@@ -2633,7 +2680,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non inserire celle in celle raggruppate!" ;
         Text [ portuguese_brazilian ] = "Inserção de células mescladas em células mescladas desencontradas!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
-        Text [ finnish ] = "Yhdistettyjen solujen lisäys yhdistettyihin soluihin epäonnistui!" ;
+        Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty." ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
         Text [ french ] = "Insertion de cellules fusionnées dans d'autres cellules fusionnées : échec !" ;
         Text [ swedish ] = "Inte tillåtet att överlappa sammanfattade celler!" ;
@@ -2660,7 +2707,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non inserire celle in celle raggruppate!" ;
         Text [ portuguese_brazilian ] = "Inserção de células mescladas em células mescladas desencontradas!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
-        Text [ finnish ] = "Yhdistettyjen solujen lisäys yhdistettyihin soluihin epäonnistui!" ;
+        Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty." ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
         Text [ french ] = "Insertion de cellules fusionnées dans d'autres cellules fusionnées : échec !" ;
         Text [ swedish ] = "Inte tillåtet att överlappa sammanfattade celler!" ;
@@ -2687,7 +2734,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Bordo non su selezione multipla" ;
         Text [ portuguese_brazilian ] = "Borda sem multi seleção" ;
         Text [ portuguese ] = "Contorno incompatível com a multiselecção." ;
-        Text [ finnish ] = "Monivalinnassa ei ole reunaviivaa" ;
+        Text [ finnish ] = "Reunojen lisääminen monivalintaan ei onnistu" ;
         Text [ danish ] = "Ramme ikke på multimarkering" ;
         Text [ french ] = "Bordure incompatible avec la sélection multiple" ;
         Text [ swedish ] = "Ej multimarkering för kantlinje" ;
@@ -2715,7 +2762,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile inserire nelle aree unite" ;
         Text [ portuguese_brazilian ] = "Não é possível inserir em faixas mescladas" ;
         Text [ portuguese ] = "Impossível inserir em áreas intercaladas." ;
-        Text [ finnish ] = "Yhdistettyihin alueisiin ei voi lisätä" ;
+        Text [ finnish ] = "Yhdistettyihin alueisiin liittäminen ei ole mahdollista" ;
         Text [ danish ] = "Kan ikke indsætte i flettede områder" ;
         Text [ french ] = "Insertion impossible dans des plages contant des cellules fusionnées" ;
         Text [ swedish ] = "Kan inte infoga i sammanfattade områden" ;
@@ -2743,7 +2790,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Impossibile cancellare nelle aree unite" ;
         Text [ portuguese_brazilian ] = "Não é possível apagar em faixas mescladas" ;
         Text [ portuguese ] = "Impossível eliminar em áreas intercaladas" ;
-        Text [ finnish ] = "Yhdistettyjä alueita ei voi poistaa" ;
+        Text [ finnish ] = "Yhdistetyistä alueista poistaminen ei ole mahdollista" ;
         Text [ danish ] = "Kan ikke slette i flettede områder" ;
         Text [ french ] = "Suppression impossible dans des plages contant des cellules fusionnées" ;
         Text [ swedish ] = "Kan inte radera från sammanfattade områden" ;
@@ -2770,7 +2817,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non inserire celle raggruppate in celle raggruppate!" ;
         Text [ portuguese_brazilian ] = "Inserção de células em células mescladas desencontrada!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
-        Text [ finnish ] = "Solujen lisäys yhdistettyihin soluihin epäonnistui!" ;
+        Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty" ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
         Text [ french ] = "Insertion de cellules dans des cellules fusionnées : échec !" ;
         Text [ swedish ] = "Inte tillåtet att överlappa sammanfattade celler!" ;
@@ -2814,6 +2861,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Birleþtirilmiþ hücre içeren aralýklar yalnýzca formatsýz olarak sýralanabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Áreas con celdas fusionadas solo se pueden ordenar sin formato.";
+        Text[ finnish ] = "Yhdistettyjä soluja sisältävät alueet voi järjestää vain ilman muotoja.";
     };
     String STR_MSSG_SEARCHANDREPLACE_0
     {
@@ -2839,6 +2887,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Aranan terim bulunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se encontró la expresión buscada.";
+        Text[ finnish ] = "Hakuavainta ei löytynyt.";
     };
     String STR_MSSG_SOLVE_0
     {
@@ -2848,7 +2897,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Ricerca del valore di destinazione riuscita.\n" ;
         Text [ portuguese_brazilian ] = "Busca de objetivo bem sucedida.\n" ;
         Text [ portuguese ] = "Procura do valor de destino bem sucedida.\n" ;
-        Text [ finnish ] = "Tavoitehaku onnistui.\n" ;
+        Text [ finnish ] = "Tuloksen haku onnistui.\n" ;
         Text [ danish ] = "Målsøgningen lykkedes.\n" ;
         Text [ french ] = "Recherche de valeur cible réussie.\n" ;
         Text [ swedish ] = "Målsökning lyckades.\n" ;
@@ -2930,7 +2979,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Ricerca del valore di destinazione senza esito.\n" ;
         Text [ portuguese_brazilian ] = "Busca de objetivo mal sucedida.\n" ;
         Text [ portuguese ] = "Procura do valor de destino sem êxito.\n" ;
-        Text [ finnish ] = "Tavoitehaku epäonnistui.\n" ;
+        Text [ finnish ] = "Tuloksen haku ei onnistunut.\n" ;
         Text [ danish ] = "Målsøgning lykkedes ikke.\n" ;
         Text [ french ] = "Échec de la recherche de valeur cible.\n" ;
         Text [ swedish ] = "Målsökning lyckades inte.\n" ;
@@ -2957,7 +3006,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non è stato trovato alcun valore esatto.\n" ;
         Text [ portuguese_brazilian ] = "Valor exato desencontrado." ;
         Text [ portuguese ] = "Impossível encontrar valor exacto.\n" ;
-        Text [ finnish ] = "Tarkkaa arvoa ei löytynyt." ;
+        Text [ finnish ] = "Tarkkaa arvoa ei löytynyt. \n" ;
         Text [ danish ] = "Det var ikke muligt at finde en eksakt værdi.\n" ;
         Text [ french ] = "Impossible de trouver une valeur exacte.\n" ;
         Text [ swedish ] = "Inget exakt värde har hittats.\n" ;
@@ -3040,7 +3089,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Totale" ;
         Text [ portuguese_brazilian ] = "Total" ;
         Text [ portuguese ] = "Soma total" ;
-        Text [ finnish ] = "Summa" ;
+        Text [ finnish ] = "Yhteensä" ;
         Text [ danish ] = "Total" ;
         Text [ french ] = "Total" ;
         Text [ swedish ] = "Totalt" ;
@@ -3110,6 +3159,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazým denetimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ortografía";
+        Text[ finnish ] = "Oikeinkirjoituksen tarkistus";
     };
     String STR_TABLE_UND
     {
@@ -3119,7 +3169,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "E" ;
         Text [ portuguese_brazilian ] = "E" ;
         Text [ portuguese ] = "E" ;
-        Text [ finnish ] = "JA" ;
+        Text [ finnish ] = "AND" ;
         Text [ danish ] = "OG" ;
         Text [ french ] = "ET" ;
         Text [ swedish ] = "OCH" ;
@@ -3146,7 +3196,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "O" ;
         Text [ portuguese_brazilian ] = "OU" ;
         Text [ portuguese ] = "OU" ;
-        Text [ finnish ] = "TAI" ;
+        Text [ finnish ] = "OR" ;
         Text [ danish ] = "ELLER" ;
         Text [ french ] = "OU" ;
         Text [ swedish ] = "ELLER" ;
@@ -3173,7 +3223,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Tabella" ;
         Text [ portuguese_brazilian ] = "Tabela" ;
         Text [ portuguese ] = "Folha" ;
-        Text [ finnish ] = "Taulukko" ;
+        Text [ finnish ] = "Lomake" ;
         Text [ danish ] = "Ark" ;
         Text [ french ] = "Feuille" ;
         Text [ swedish ] = "Tabell" ;
@@ -3200,7 +3250,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "- spostare all'ultima posizione -" ;
         Text [ portuguese_brazilian ] = "- mova para última posição -" ;
         Text [ portuguese ] = "- mover para última posição -" ;
-        Text [ finnish ] = "- siirrä viimeiseksi  -" ;
+        Text [ finnish ] = "- siirrä loppusijaintiin -" ;
         Text [ danish ] = "- flyt til slutningen -" ;
         Text [ french ] = "- placer en dernière position -" ;
         Text [ swedish ] = "- flytta till slutet -" ;
@@ -3227,7 +3277,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non implementato in questa build!" ;
         Text [ portuguese_brazilian ] = "Não implementado nesta estrutura!" ;
         Text [ portuguese ] = "Não implementado nesta estrutura!" ;
-        Text [ finnish ] = "Toimintoa ei ole vielä toteutettu!" ;
+        Text [ finnish ] = "Ei käytössä tässä koontiversiossa." ;
         Text [ danish ] = "Ikke implementeret i denne version." ;
         Text [ french ] = "Pas disponible dans cette version !" ;
         Text [ swedish ] = "Inte implementerad i denna Build!" ;
@@ -3259,7 +3309,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "#REF!" ;
         Text [ danish ] = "#REF!" ;
         Text [ swedish ] = "#REF!" ;
-        Text [ finnish ] = "#REF!" ;
+        Text [ finnish ] = "REF!" ;
         Text [ english_us ] = "#REF!" ;
         Text[ chinese_simplified ] = "#REF!";
         Text[ russian ] = "#ÑÑÛË!";
@@ -3282,7 +3332,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "L'area dati deve contenere almeno una fila di dati." ;
         Text [ portuguese_brazilian ] = "Área de dados inválida (pelo menos uma fileira de dados necessária)." ;
         Text [ portuguese ] = "O intervalo de dados deve ter pelo menos uma linha de dados." ;
-        Text [ finnish ] = "Sopimaton tietoalue (ainakin yksi tietorivi tarvitaan)." ;
+        Text [ finnish ] = "Tietoalueella on oltava vähintään yksi rivi." ;
         Text [ danish ] = "Dataområdet skal mindst indeholde en datarække." ;
         Text [ french ] = "Toute plage de données doit contenir au moins une ligne !" ;
         Text [ swedish ] = "Dataområdet måste innehålla minst en datarad." ;
@@ -3310,7 +3360,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "La tabella DataPilot deve contenere almeno una voce" ;
         Text [ portuguese_brazilian ] = "The Data Pilot Table must contain at least one entry." ;
         Text [ portuguese ] = "O Piloto de Dados deve ter pelo menos uma entrada." ;
-        Text [ finnish ] = "Taulukossa on oltava ainakin yksi tieto." ;
+        Text [ finnish ] = "Tietojen ohjauksen taulukossa on oltava vähintään yksi merkintä." ;
         Text [ danish ] = "DataPilot-tabellen skal mindst indeholde et element." ;
         Text [ french ] = "La table du DataPilote doit contenir au moins une entrée !" ;
         Text [ swedish ] = "Datapilot-tabellen måste innehålla minst en post." ;
@@ -3381,6 +3431,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablosu oluþturma hatasý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error al crear la tabla del Piloto de Datos.";
+        Text[ finnish ] = "Virhe luotaessa tietojen ohjaustaulukkoa.";
     };
     String STR_PIVOT_OVERLAP
     {
@@ -3407,6 +3458,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablolarý basamaklanamaz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Las tablas del Piloto de Datos no se deben superponer.";
+        Text[ finnish ] = "Tietojen ohjaustaulukot eivät voi olla päällekkäin.";
     };
     String STR_PIVOT_NOTEMPTY
     {
@@ -3433,6 +3485,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Hedef aralýðý boþ deðil. Mevcut içeriðin üzerine yazýlsýn mý?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El área destino no está vacía. ¿Desea sobrescribirlo?";
+        Text[ finnish ] = "Kohdealue ei ole tyhjä. Korvataanko nykyinen sisältö?";
     };
     String STR_DATAPILOT_SUBTOTAL
     {
@@ -3457,6 +3510,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ arabic ] = "íÍÊæí ÇáäØÇÞ ÇáãÕÏÑí Úáì ãÌÇãíÚ ÝÑÚíÉ ÞÏ ÊÍÑÝ ÇáäÊíÌÉ. åá ÊÑíÏ ÇÓÊÎÏÇãå Úáì ÇáÑÛã ãä Ðáß¿";
         Text[ catalan ] = "El área fuente contiene resultados parciales que pueden falsificar los resultados. ¿Desea usarlo de todas formas?";
+        Text[ finnish ] = "Der Quellbereich enthält Teilergebnisse, die das Ergebnis verfälschen können. Soll er trotzdem verwendet werden?";
     };
     String STR_PIVOT_PROGRESS
     {
@@ -3482,6 +3536,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu tablosu oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear tabla del Piloto de Datos";
+        Text[ finnish ] = "Luo tietojen ohjaustaulukko";
     };
     String STR_PIVOT_TOTAL
     {
@@ -3491,7 +3546,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Totale" ;
         Text [ portuguese_brazilian ] = "Total" ;
         Text [ portuguese ] = "Total" ;
-        Text [ finnish ] = "Summa" ;
+        Text [ finnish ] = "Yhteensä" ;
         Text [ danish ] = "Total" ;
         Text [ french ] = "Total" ;
         Text [ swedish ] = "Totalt" ;
@@ -3626,7 +3681,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "MAX" ;
         Text [ portuguese_brazilian ] = "MAX" ;
         Text [ portuguese ] = "MÁX" ;
-        Text [ finnish ] = "MAX" ;
+        Text [ finnish ] = "Enint" ;
         Text [ danish ] = "MAKS" ;
         Text [ french ] = "MAX" ;
         Text [ swedish ] = "MAX" ;
@@ -3653,7 +3708,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "MIN" ;
         Text [ portuguese_brazilian ] = "MIN" ;
         Text [ portuguese ] = "MÍN" ;
-        Text [ finnish ] = "MIN" ;
+        Text [ finnish ] = "Väh" ;
         Text [ danish ] = "MIN" ;
         Text [ french ] = "MIN" ;
         Text [ swedish ] = "MIN" ;
@@ -3707,7 +3762,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "CONTA.VALORI" ;
         Text [ portuguese_brazilian ] = "CONTAGEM2" ;
         Text [ portuguese ] = "CONTAR.VAL" ;
-        Text [ finnish ] = "COUNT2" ;
+        Text [ finnish ] = "COUNTA" ;
         Text [ danish ] = "TÆLV" ;
         Text [ french ] = "NBVAL" ;
         Text [ swedish ] = "ANTALV" ;
@@ -3842,7 +3897,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Tabella" ;
         Text [ portuguese_brazilian ] = "Tabela" ;
         Text [ portuguese ] = "Folha" ;
-        Text [ finnish ] = "Taulukko" ;
+        Text [ finnish ] = "Lomake" ;
         Text [ danish ] = "Ark" ;
         Text [ french ] = "Feuille" ;
         Text [ swedish ] = "Tabell" ;
@@ -3869,7 +3924,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Colonna" ;
         Text [ portuguese_brazilian ] = "Coluna" ;
         Text [ portuguese ] = "Coluna" ;
-        Text [ finnish ] = "Sarake" ;
+        Text [ finnish ] = "Sarake " ;
         Text [ danish ] = "Kolonne" ;
         Text [ french ] = "Colonne" ;
         Text [ swedish ] = "Kolumn" ;
@@ -3950,7 +4005,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Carica documento" ;
         Text [ portuguese_brazilian ] = "Carregar documento" ;
         Text [ portuguese ] = "Carregar documento" ;
-        Text [ finnish ] = "Lue asiakirja" ;
+        Text [ finnish ] = "Lataa asiakirja" ;
         Text [ danish ] = "Indlæs dokument" ;
         Text [ french ] = "Charger un document" ;
         Text [ swedish ] = "Ladda dokument" ;
@@ -4004,7 +4059,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "<riferimento tabella sconosciuto>" ;
         Text [ portuguese_brazilian ] = "<referência de tabela desconhecida>" ;
         Text [ portuguese ] = "<referência de tabela desconhecida>" ;
-        Text [ finnish ] = "<tuntematon taulukkoviittaus>" ;
+        Text [ finnish ] = "<tuntematon taulukkoviite>" ;
         Text [ danish ] = "<ukendt tabelreference>" ;
         Text [ french ] = "<référence de feuille de calcul inconnue>" ;
         Text [ swedish ] = "<okänd tabellreferens>" ;
@@ -4060,7 +4115,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riferimento tabella non valido." ;
         Text [ portuguese_brazilian ] = "Referência de tabela inválida." ;
         Text [ portuguese ] = "Referência de folha incorrecta." ;
-        Text [ finnish ] = "Virheellinen taulukkoviittaus." ;
+        Text [ finnish ] = "Virheellinen lomakeviite." ;
         Text [ danish ] = "Ugyldig arkreference." ;
         Text [ french ] = "Référence de feuille incorrecte." ;
         Text [ swedish ] = "Ogiltig tabellreferens." ;
@@ -4088,7 +4143,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Ricerca non valida trovata in quest'area." ;
         Text [ portuguese_brazilian ] = "Nenhuma consulta válida encontrada nesta área." ;
         Text [ portuguese ] = "Esta área não contém nenhuma consulta válida." ;
-        Text [ finnish ] = "Tällä alueella ei ole kelvollista kyselyä." ;
+        Text [ finnish ] = "Tämä alue ei sisällä kelvollista kyselyä." ;
         Text [ danish ] = "Dette område indeholder ingen gyldig forespørgsel." ;
         Text [ french ] = "Aucune requête correcte n'a pu être détectée dans cette section." ;
         Text [ swedish ] = "Detta område innehåller ingen giltig sökning." ;
@@ -4116,7 +4171,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Quest'area non contiene dati importati." ;
         Text [ portuguese_brazilian ] = "Nenhum dado importado encontrado nesta área." ;
         Text [ portuguese ] = "Esta área não contém dados importados." ;
-        Text [ finnish ] = "Tällä alueella ei ole tuotuja tietoja." ;
+        Text [ finnish ] = "Tämä alue ei sisällä tuotuja tietoja." ;
         Text [ danish ] = "Dette område indeholder ingen importerede data." ;
         Text [ french ] = "Aucune donnée importée dans cette plage." ;
         Text [ swedish ] = "Det här området innehåller inga importerade data." ;
@@ -4144,7 +4199,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Questa funzione non funziona con selezioni multiple." ;
         Text [ portuguese_brazilian ] = "Esta função não funciona com seleções multíplas." ;
         Text [ portuguese ] = "Esta função não pode ser usada com selecções múltiplas." ;
-        Text [ finnish ] = "Tämä toiminto ei koske monivalintaa." ;
+        Text [ finnish ] = "Tätä toimintoa ei voi käyttää useita osia sisältäviin valintoihin." ;
         Text [ danish ] = "Det er ikke muligt at anvende denne funktion på multimarkeringer." ;
         Text [ french ] = "Cette fonction est incompatible avec la sélection multiple" ;
         Text [ swedish ] = "Denna funktion fungerar inte med multimarkeringar." ;
@@ -4172,7 +4227,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riempire serie..." ;
         Text [ portuguese_brazilian ] = "Séries de Preenchimento..." ;
         Text [ portuguese ] = "Preencher série..." ;
-        Text [ finnish ] = "Täytä sarja..." ;
+        Text [ finnish ] = "Täytä rivi" ;
         Text [ danish ] = "Fyld serie..." ;
         Text [ french ] = "Remplissage de série..." ;
         Text [ swedish ] = "Fyll serie..." ;
@@ -4199,7 +4254,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Filtro sconosciuto: " ;
         Text [ portuguese_brazilian ] = "Filtro desconhecido: " ;
         Text [ portuguese ] = "Filtro desconhecido: " ;
-        Text [ finnish ] = "Tuntematon suodin: " ;
+        Text [ finnish ] = "Tuntematon suodatin: " ;
         Text [ danish ] = "Ukendt filter: " ;
         Text [ french ] = "Filtre inconnu : " ;
         Text [ swedish ] = "Okänt filter:  " ;
@@ -4231,7 +4286,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "#NOMBRE?" ;
         Text [ danish ] = "#NAVN?" ;
         Text [ swedish ] = "#NAMN?" ;
-        Text [ finnish ] = "#NAME?" ;
+        Text [ finnish ] = "NAME?" ;
         Text [ english_us ] = "#NAME?" ;
         Text[ chinese_simplified ] = "#NAME?";
         Text[ russian ] = "#ÈÌß?";
@@ -4269,6 +4324,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Eþanlamlýlar sözlüðü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sinónimos";
+        Text[ finnish ] = "Synonyymisanasto";
     };
     String STR_FILL_TAB
     {
@@ -4279,7 +4335,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riempi tabella" ;
         Text [ portuguese_brazilian ] = "Tabelas de Preenchimento" ;
         Text [ portuguese ] = "Preencher folhas" ;
-        Text [ finnish ] = "Täytä taulukot" ;
+        Text [ finnish ] = "Täytä lomakkeet" ;
         Text [ danish ] = "Fyld ark" ;
         Text [ french ] = "Remplissage feuilles" ;
         Text [ swedish ] = "Fyll tabeller" ;
@@ -4306,7 +4362,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "#VALORE!" ;
         Text [ portuguese_brazilian ] = "#VALOR!" ;
         Text [ portuguese ] = "#VALOR!" ;
-        Text [ finnish ] = "#ARVO!" ;
+        Text [ finnish ] = "VALUE!" ;
         Text [ danish ] = "#VÆRDI!" ;
         Text [ french ] = "#VALEUR !" ;
         Text [ swedish ] = "#VÄRDE!" ;
@@ -4333,7 +4389,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Aggiungere aree selezionate allo scenario?" ;
         Text [ portuguese_brazilian ] = "Acrescentar áreas selecionadas ao cenário atual?" ;
         Text [ portuguese ] = "Adicionar áreas seleccionadas ao cenário activo?" ;
-        Text [ finnish ] = "Lisätäänkö valitut alueet nykyiseen hahmotelmaan?" ;
+        Text [ finnish ] = "Lisätäänkö valinnat nykyiseen skenaarioon?" ;
         Text [ danish ] = "Tilføje markerede områder til scenariet?" ;
         Text [ french ] = "Ajouter les plages sélectionnées au scénario en cours ?" ;
         Text [ swedish ] = "Utöka scenario med de markerade områdena?" ;
@@ -4361,7 +4417,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Per creare un nuovo scenario si dovranno selezionare le aree di scenario desiderate." ;
         Text [ portuguese_brazilian ] = "Para criar um novo cenário é precisoselecionar as áreas de cenário desejadas" ;
         Text [ portuguese ] = "Para criar um cenário é necessário seleccionar as áreas de cenário desejadas." ;
-        Text [ finnish ] = "Kun teet uuden hahmotelman, sinun pitää valita sen alueet" ;
+        Text [ finnish ] = "Skenaarioalueet on valittava, jotta voitaisiin luoda uusi skenaario." ;
         Text [ danish ] = "For at oprette et nyt scenario skal du markere scenarieområderne." ;
         Text [ french ] = "Pour créer un nouveau scénario, vous devez sélectionner les plages du scénario." ;
         Text [ swedish ] = "Om Du vill skapa ett nytt scenario måste du markera scenarioområdena." ;
@@ -4388,7 +4444,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nessun'area selezionata." ;
         Text [ portuguese_brazilian ] = "Nenhuma área selecionada." ;
         Text [ portuguese ] = "Nenhuma área seleccionada." ;
-        Text [ finnish ] = "Alueita ei ole valittu." ;
+        Text [ finnish ] = "Aluetta ei ole valittu." ;
         Text [ danish ] = "Ingen områder er markeret." ;
         Text [ french ] = "Aucune plage n'a été sélectionnée." ;
         Text [ swedish ] = "Inget område markerat." ;
@@ -4415,7 +4471,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nome tabella già esistente." ;
         Text [ portuguese_brazilian ] = "O nome da tabela já existe." ;
         Text [ portuguese ] = "Este nome já existe." ;
-        Text [ finnish ] = "Taulukon nimi on jo määritetty." ;
+        Text [ finnish ] = "Tämä nimi on jo käytössä." ;
         Text [ danish ] = "Dette arknavn eksisterer allerede." ;
         Text [ french ] = "Ce nom existe déjà." ;
         Text [ swedish ] = "Det här tabellnamnet finns redan." ;
@@ -4443,7 +4499,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nome tabella non valido." ;
         Text [ portuguese_brazilian ] = "Nome de tabela inválido." ;
         Text [ portuguese ] = "Nome da folha incorrecto." ;
-        Text [ finnish ] = "Virheellinen taulukon nimi." ;
+        Text [ finnish ] = "Virheellinen lomakkeen nimi." ;
         Text [ danish ] = "Ugyldigt arknavn." ;
         Text [ french ] = "Nom de feuille incorrect." ;
         Text [ swedish ] = "Ogiltigt tabellnamn." ;
@@ -4470,7 +4526,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Scenario" ;
         Text [ portuguese_brazilian ] = "Cenário" ;
         Text [ portuguese ] = "Cenário" ;
-        Text [ finnish ] = "Hahmotelma" ;
+        Text [ finnish ] = "Skenaario" ;
         Text [ danish ] = "Scenario" ;
         Text [ french ] = "Scénario" ;
         Text [ swedish ] = "Scenario" ;
@@ -4497,7 +4553,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "DataPilot" ;
         Text [ portuguese_brazilian ] = "Data Pilot" ;
         Text [ portuguese ] = "Piloto de Dados" ;
-        Text [ finnish ] = "???" ;
+        Text [ finnish ] = "Tietojen ohjaus" ;
         Text [ danish ] = "DataPilot" ;
         Text [ french ] = "DataPilote" ;
         Text [ swedish ] = "Datapilot" ;
@@ -4552,7 +4608,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "ContaNumeri" ;
         Text [ portuguese_brazilian ] = "Contagem" ;
         Text [ portuguese ] = "Contar números" ;
-        Text [ finnish ] = "Määrä" ;
+        Text [ finnish ] = "Laske" ;
         Text [ danish ] = "Tæl" ;
         Text [ french ] = "Nombre" ;
         Text [ swedish ] = "Antal" ;
@@ -4595,6 +4651,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "CountA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cantidad2";
+        Text[ finnish ] = "LaskeA";
     };
     String STR_FUN_TEXT_AVG
     {
@@ -4631,7 +4688,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Max" ;
         Text [ portuguese_brazilian ] = "Max" ;
         Text [ portuguese ] = "Máx." ;
-        Text [ finnish ] = "Suurin" ;
+        Text [ finnish ] = "Enint" ;
         Text [ danish ] = "Maks" ;
         Text [ french ] = "Max" ;
         Text [ swedish ] = "Max" ;
@@ -4658,7 +4715,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Min" ;
         Text [ portuguese_brazilian ] = "Min" ;
         Text [ portuguese ] = "Mín." ;
-        Text [ finnish ] = "Pienin" ;
+        Text [ finnish ] = "Väh" ;
         Text [ danish ] = "Min" ;
         Text [ french ] = "Min" ;
         Text [ swedish ] = "Min" ;
@@ -4685,7 +4742,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Prodotto" ;
         Text [ portuguese_brazilian ] = "Produto" ;
         Text [ portuguese ] = "Produto" ;
-        Text [ finnish ] = "Tulo" ;
+        Text [ finnish ] = "Tuote" ;
         Text [ danish ] = "Produkt" ;
         Text [ french ] = "Produit" ;
         Text [ swedish ] = "Produkt" ;
@@ -4712,7 +4769,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Dev.St" ;
         Text [ portuguese_brazilian ] = "StDev" ;
         Text [ portuguese ] = "DesvP" ;
-        Text [ finnish ] = "Keskihaj" ;
+        Text [ finnish ] = "StDev" ;
         Text [ danish ] = "Stdafv" ;
         Text [ french ] = "Ecartype" ;
         Text [ swedish ] = "StdAv" ;
@@ -4739,7 +4796,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Varianza" ;
         Text [ portuguese_brazilian ] = "Var" ;
         Text [ portuguese ] = "Variância" ;
-        Text [ finnish ] = "Varianssi" ;
+        Text [ finnish ] = "Var" ;
         Text [ danish ] = "Varians" ;
         Text [ french ] = "Var" ;
         Text [ swedish ] = "Varians" ;
@@ -4783,7 +4840,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Non è stato trovato nessun diagramma in questa posizione." ;
         Text [ portuguese_brazilian ] = "Nenhum gráfico nesta posição." ;
         Text [ portuguese ] = "Nenhum gráfico encontrado nesta posição." ;
-        Text [ finnish ] = "Tässä kohdassa ei ole kaaviota." ;
+        Text [ finnish ] = "Tästä sijainnista ei löytynyt kaaviota." ;
         Text [ danish ] = "Der blev ikke fundet et diagram på denne position.." ;
         Text [ french ] = "Aucun diagramme trouvé à cet emplacement" ;
         Text [ swedish ] = "Inget diagram i denna position." ;
@@ -4810,7 +4867,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "In questa punto non è stata  trovata una tabella DataPilot" ;
         Text [ portuguese_brazilian ] = "No Data Pilot Table at this position." ;
         Text [ portuguese ] = "Não existe Piloto de Dados nesta posição." ;
-        Text [ finnish ] = "Tässä kohdassa ei ole pivot-taulukkoa." ;
+        Text [ finnish ] = "Tästä sijainnista ei löytynyt tietojen ohjaustaulukkoa." ;
         Text [ danish ] = "Der blev ikke fundet en DataPilot-tabel på denne position." ;
         Text [ french ] = "Aucun tableau du DataPilote n'a été trouvé à cet emplacement." ;
         Text [ swedish ] = "Ingen Datapilot-tabell hittades vid denna position." ;
@@ -4842,7 +4899,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Err:" ;
         Text [ danish ] = "Err:" ;
         Text [ swedish ] = "Err:" ;
-        Text [ finnish ] = "Err:" ;
+        Text [ finnish ] = "Virhe:" ;
         Text [ english_us ] = "Err:" ;
         Text[ chinese_simplified ] = "´íÎó:";
         Text[ russian ] = "Îøèáêà:";
@@ -4865,7 +4922,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "#N/A" ;
         Text [ portuguese ] = "#ND" ;
         Text [ danish ] = "#IKKE.TILGÆNGELIG" ;
-        Text [ finnish ] = "#EI OLE" ;
+        Text [ finnish ] = "N/A" ;
          //      Text[danish_wrong] = "#IKKE TILGÆNGELIG";       /* zu lang, muss in eine Zelle passen */
         Text [ french ] = "#NA" ;
         Text [ swedish ] = "#Saknas" ;
@@ -4893,7 +4950,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "#REF!" ;
         Text [ portuguese ] = "#REF!" ;
         Text [ danish ] = "#REF!" ;
-        Text [ finnish ] = "#REF" ;
+        Text [ finnish ] = "REF!" ;
          //      Text[danish_wrong] = "#IKKE TILGÆNGELIG";       /* zu lang, muss in eine Zelle passen */
         Text [ french ] = "#REF!" ;
         Text [ swedish ] = "#REF!" ;
@@ -4948,7 +5005,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Area di stampa non valida" ;
         Text [ portuguese_brazilian ] = "Área de impressão inválida" ;
         Text [ portuguese ] = "Área de impressão não válida" ;
-        Text [ finnish ] = "Sopimaton tulostusalue" ;
+        Text [ finnish ] = "Virheellinen tulostusalue" ;
         Text [ danish ] = "Ugyldigt udskriftsområde" ;
         Text [ french ] = "Zone d'impression non valide" ;
         Text [ swedish ] = "Ogiltigt utskriftsområde" ;
@@ -4975,7 +5032,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Modello di pagina" ;
         Text [ portuguese_brazilian ] = "Estilo da Página" ;
         Text [ portuguese ] = "Estilo de página" ;
-        Text [ finnish ] = "Sivutyyli" ;
+        Text [ finnish ] = "Sivun tyyli" ;
         Text [ danish ] = "Sidetypografi" ;
         Text [ french ] = "Style de page" ;
         Text [ swedish ] = "Sidformatmall" ;
@@ -5002,7 +5059,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riga d'intestazione" ;
         Text [ portuguese_brazilian ] = "Cabeçalho" ;
         Text [ portuguese ] = "Cabeçalho" ;
-        Text [ finnish ] = "Yläteksti" ;
+        Text [ finnish ] = "Yläotsikko" ;
         Text [ danish ] = "Sidehoved" ;
         Text [ french ] = "En-tête" ;
         Text [ swedish ] = "Sidhuvud" ;
@@ -5030,7 +5087,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Piè di pagina" ;
         Text [ portuguese_brazilian ] = "Rodapé" ;
         Text [ portuguese ] = "Rodapé" ;
-        Text [ finnish ] = "Alateksti" ;
+        Text [ finnish ] = "Alaselite" ;
         Text [ danish ] = "Sidefod" ;
         Text [ french ] = "Pied de page" ;
         Text [ swedish ] = "Sidfot" ;
@@ -5057,7 +5114,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Attributi di testo" ;
         Text [ portuguese_brazilian ] = "Atributos de Texto" ;
         Text [ portuguese ] = "Atributos de texto" ;
-        Text [ finnish ] = "Tekstimääritteet" ;
+        Text [ finnish ] = "Tekstin ominaisuudet" ;
         Text [ danish ] = "Tekstattributter" ;
         Text [ french ] = "Attributs de texte" ;
         Text [ swedish ] = "Textattribut" ;
@@ -5111,7 +5168,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Pagina" ;
         Text [ portuguese_brazilian ] = "PAGINA" ;
         Text [ portuguese ] = "PÁGINA" ;
-        Text [ finnish ] = "SIVU" ;
+        Text [ finnish ] = "PAGE" ;
         Text [ danish ] = "SIDE" ;
         Text [ french ] = "PAGE" ;
         Text [ swedish ] = "SIDA" ;
@@ -5138,7 +5195,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "PAGINE" ;
         Text [ portuguese_brazilian ] = "PAGINAS" ;
         Text [ portuguese ] = "PÁGINAS" ;
-        Text [ finnish ] = "SIVUJA" ;
+        Text [ finnish ] = "PAGES" ;
         Text [ danish ] = "SIDER" ;
         Text [ french ] = "PAGES" ;
         Text [ swedish ] = "SIDOR" ;
@@ -5165,7 +5222,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "DATA" ;
         Text [ portuguese_brazilian ] = "DATA" ;
         Text [ portuguese ] = "DATA" ;
-        Text [ finnish ] = "PÄIVÄ" ;
+        Text [ finnish ] = "DATE" ;
         Text [ danish ] = "DATO" ;
         Text [ french ] = "DATE" ;
         Text [ swedish ] = "DATUM" ;
@@ -5192,7 +5249,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "ORARIO" ;
         Text [ portuguese_brazilian ] = "HORA" ;
         Text [ portuguese ] = "HORA" ;
-        Text [ finnish ] = "AIKA" ;
+        Text [ finnish ] = "TIME" ;
         Text [ danish ] = "TID" ;
         Text [ french ] = "TEMPS" ;
         Text [ swedish ] = "TID" ;
@@ -5219,7 +5276,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "FILE" ;
         Text [ portuguese_brazilian ] = "ARQUIVO" ;
         Text [ portuguese ] = "FICHEIRO" ;
-        Text [ finnish ] = "TIEDOSTO" ;
+        Text [ finnish ] = "FILE" ;
         Text [ danish ] = "FIL" ;
         Text [ french ] = "FICHIER" ;
         Text [ swedish ] = "FIL" ;
@@ -5246,7 +5303,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "TABELLA" ;
         Text [ portuguese_brazilian ] = "TABELA" ;
         Text [ portuguese ] = "FOLHA" ;
-        Text [ finnish ] = "TAULUKKO" ;
+        Text [ finnish ] = "SHEET" ;
         Text [ danish ] = "TABEL" ;
         Text [ french ] = "FEUILLE" ;
         Text [ swedish ] = "TABELL" ;
@@ -5317,6 +5374,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belge salt okunur kipte açýldý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo abierto es solo de lectura.";
+        Text[ finnish ] = "Asiakirja avattu vain luku -tilassa.";
     };
     String STR_MATRIXFRAGMENTERR
     {
@@ -5353,6 +5411,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Matrislerin bir kýsmý deðiþtirilemiyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede modificar parte de la matriz.";
+        Text[ finnish ] = "Osaa matriisista ei voi muokata.";
     };
     String STR_PAGEHEADER
     {
@@ -5362,7 +5421,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Riga d'intestazione" ;
         Text [ portuguese_brazilian ] = "Cabeçalho da Página" ;
         Text [ portuguese ] = "Cabeçalho" ;
-        Text [ finnish ] = "Sivun yläteksti" ;
+        Text [ finnish ] = "Yläotsikko" ;
         Text [ danish ] = "Sidehoved" ;
         Text [ french ] = "En-tête" ;
         Text [ swedish ] = "Sidhuvud" ;
@@ -5390,7 +5449,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Piè di pagina" ;
         Text [ portuguese_brazilian ] = "Rodapé da Página" ;
         Text [ portuguese ] = "Linha de rodapé" ;
-        Text [ finnish ] = "Sivun alateksti" ;
+        Text [ finnish ] = "Alaselite" ;
         Text [ danish ] = "Sidefod" ;
         Text [ french ] = "Pied de page" ;
         Text [ swedish ] = "Sidfot" ;
@@ -5418,7 +5477,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: argomento non ammesso" ;
         Text [ portuguese_brazilian ] = "Erro: Argumento Ilegal" ;
         Text [ portuguese ] = "Erro: argumento não válido" ;
-        Text [ finnish ] = "Virhe: Väärä argumentti" ;
+        Text [ finnish ] = "Virhe: virheellinen argumentti" ;
         Text [ danish ] = "Fejl: ugyldigt argument" ;
         Text [ french ] = "Erreur : argument non valable" ;
         Text [ swedish ] = "Fel: ogiltigt argument" ;
@@ -5473,7 +5532,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: operazione a virgola mobile non ammessa" ;
         Text [ portuguese_brazilian ] = "Erro: operação de ponto flutuante ilegal" ;
         Text [ portuguese ] = "Erro: operação da vírgula flutuante incorrecta" ;
-        Text [ finnish ] = "Virhe: Virheellinen liukulukuoperaatio" ;
+        Text [ finnish ] = "Virhe: virheellinen irrallisen pisteen toiminto" ;
         Text [ danish ] = "Fejl: ugyldig flydende kommaoperation" ;
         Text [ french ] = "Erreur : opération à virgule flottante non valide" ;
         Text [ swedish ] = "Fel: ogiltig flyttalsoperation" ;
@@ -5501,7 +5560,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: carattere non ammesso" ;
         Text [ portuguese_brazilian ] = "Erro: caractere ilegal" ;
         Text [ portuguese ] = "Erro: carácter não válido" ;
-        Text [ finnish ] = "Virhe: Virheelllinen merkki" ;
+        Text [ finnish ] = "Virhe: virheellinen merkki" ;
         Text [ danish ] = "Fejl: ugyldigt tegn" ;
         Text [ french ] = "Erreur : caractère non valable" ;
         Text [ swedish ] = "Fel: ogiltigt tecken" ;
@@ -5529,7 +5588,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: punto e virgola non ammesso" ;
         Text [ portuguese_brazilian ] = "Erro: ponto-e-vírgula ilegal" ;
         Text [ portuguese ] = "Erro: ponto e vírgula incorrectos" ;
-        Text [ finnish ] = "Virhe: Virheellinen puolipiste" ;
+        Text [ finnish ] = "Virhe: virheellinen puolipiste" ;
         Text [ danish ] = "Fejl: ugyldigt semikolon" ;
         Text [ french ] = "Erreur : point virgule non valide" ;
         Text [ swedish ] = "Fel: ogiltigt semikolon" ;
@@ -5556,7 +5615,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: parentesi mancante" ;
         Text [ portuguese_brazilian ] = "Erro: falta par" ;
         Text [ portuguese ] = "Erro nos parênteses" ;
-        Text [ finnish ] = "Virhe: Pari puuttuu" ;
+        Text [ finnish ] = "Virhe: sulkeissa" ;
         Text [ danish ] = "Fejl i parantesen" ;
         Text [ french ] = "Erreur : paire manquante" ;
         Text [ swedish ] = "Fel: par fattas" ;
@@ -5583,7 +5642,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: manca l'operatore" ;
         Text [ portuguese_brazilian ] = "Erro: operador esperado" ;
         Text [ portuguese ] = "Erro: falta operador" ;
-        Text [ finnish ] = "Virhe: Operaattori puuttuu" ;
+        Text [ finnish ] = "Virhe: puuttuva operaattori" ;
         Text [ danish ] = "Fejl: manglende operator" ;
         Text [ french ] = "Erreur : opérateur manquant" ;
         Text [ swedish ] = "Fel: operator saknas" ;
@@ -5610,7 +5669,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: manca la variabile" ;
         Text [ portuguese_brazilian ] = "Erro: Variable expected" ;
         Text [ portuguese ] = "Erro: falta variável" ;
-        Text [ finnish ] = "Virhe: Muuttuja puuttuu" ;
+        Text [ finnish ] = "Virhe: puuttuva muuttuja" ;
         Text [ danish ] = "Fejl: manglende variabel" ;
         Text [ french ] = "Erreur : variable manquante" ;
         Text [ swedish ] = "Fel: variabel saknas" ;
@@ -5637,7 +5696,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: formula troppo lunga" ;
         Text [ portuguese_brazilian ] = "Erro: transbordo de fórmula" ;
         Text [ portuguese ] = "Erro: fórmula grande demais" ;
-        Text [ finnish ] = "Virhe: Kaava on liian pitkä" ;
+        Text [ finnish ] = "Virhe: liian pitkä kaava" ;
         Text [ danish ] = "Fejl: for lang formel" ;
         Text [ french ] = "Erreur : formule trop longue" ;
         Text [ swedish ] = "Fel: formel för lång" ;
@@ -5664,7 +5723,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: stringa troppo lunga" ;
         Text [ portuguese_brazilian ] = "Erro: transbordo de cadeia" ;
         Text [ portuguese ] = "Erro: cadeia de caracteres demasiado extensa" ;
-        Text [ finnish ] = "Virhe: Merkkijono on liian pitkä" ;
+        Text [ finnish ] = "Virhe: merkkijonon ylivuoto" ;
         Text [ danish ] = "Fejl: streng er for lang" ;
         Text [ french ] = "Erreur : chaîne de caractères trop longue" ;
         Text [ swedish ] = "Fel: Strängspill" ;
@@ -5692,7 +5751,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: overflow interno" ;
         Text [ portuguese_brazilian ] = "Erro: transbordo interno" ;
         Text [ portuguese ] = "Erro: excesso de capacidade interna" ;
-        Text [ finnish ] = "Virhe: Sisäinen ylivuoto" ;
+        Text [ finnish ] = "Virhe: sisäinen ylivuoto" ;
         Text [ danish ] = "Fejl: internt overløb" ;
         Text [ french ] = "Erreur : dépassement des capacités internes" ;
         Text [ swedish ] = "Fel: internt spill" ;
@@ -5719,7 +5778,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "errore di sintassi interno" ;
         Text [ portuguese_brazilian ] = "erro interno de sintaxe" ;
         Text [ portuguese ] = "Erro de sintaxe interno" ;
-        Text [ finnish ] = "sisäinen syntaksivirhe" ;
+        Text [ finnish ] = "Sisäinen syntaksivirhe" ;
         Text [ danish ] = "Intern syntaksfejl" ;
         Text [ french ] = "Erreur de syntaxe interne" ;
         Text [ swedish ] = "Internt syntaxfel" ;
@@ -5747,7 +5806,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: riferimento circolare" ;
         Text [ portuguese_brazilian ] = "Erro: referência circular" ;
         Text [ portuguese ] = "Erro: referência circular" ;
-        Text [ finnish ] = "Virhe: Kehäviittaus" ;
+        Text [ finnish ] = "Virhe: takaisin viittaava viite" ;
         Text [ danish ] = "Fejl: circulær reference" ;
         Text [ french ] = "Erreur : référence circulaire" ;
         Text [ swedish ] = "Fel: cirkulär referens" ;
@@ -5775,7 +5834,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: nome non ammesso" ;
         Text [ portuguese_brazilian ] = "Erro: Nome Ilegal" ;
         Text [ portuguese ] = "Erro: nome incorrecto" ;
-        Text [ finnish ] = "Virhe: Virheellien nimi" ;
+        Text [ finnish ] = "Virhe: virheellinen nimi" ;
         Text [ danish ] = "Fejl: ugyldigt navn" ;
         Text [ french ] = "Erreur : nom incorrect" ;
         Text [ swedish ] = "Fel: ogiltigt namn" ;
@@ -5831,6 +5890,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Hata: Geçersiz referans";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error: Referencia no válida";
+        Text[ finnish ] = "Virhe: ei kelvollinen viite";
     };
     String STR_LONG_ERR_NO_CONV
     {
@@ -5840,7 +5900,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: il calcolo non converge" ;
         Text [ portuguese_brazilian ] = "Erro: a computação não converge" ;
         Text [ portuguese ] = "Erro: o processo de cálculo não converge" ;
-        Text [ finnish ] = "Virhe: Laskenta ei suppene" ;
+        Text [ finnish ] = "Virhe: lasku ei suppene" ;
         Text [ danish ] = "Fejl: beregningen konvergerer ikke" ;
         Text [ french ] = "Erreur : le calcul ne converge pas" ;
         Text [ swedish ] = "Fel: beräkningen konvergerar inte" ;
@@ -5867,7 +5927,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: senza risultato" ;
         Text [ portuguese_brazilian ] = "Erro: Sem Resultado" ;
         Text [ portuguese ] = "Erro: sem resultado" ;
-        Text [ finnish ] = "Virhe: Ei tulosta" ;
+        Text [ finnish ] = "Virhe: ei tulosta" ;
         Text [ danish ] = "Fejl: intet resultat" ;
         Text [ french ] = "Erreur : sans résultat" ;
         Text [ swedish ] = "Fel: inget resultat" ;
@@ -5895,7 +5955,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Errore: valore non disponibile" ;
         Text [ portuguese_brazilian ] = "Erro: Valor não disponível" ;
         Text [ portuguese ] = "Erro: valor não disponível" ;
-        Text [ finnish ] = "Virhe: Arvo ei ole käytettävissä" ;
+        Text [ finnish ] = "Virhe: arvo ei ole käytettävissä" ;
         Text [ danish ] = "Fejl: værdi er ikke tilgængelig" ;
         Text [ french ] = "Erreur : valeur non disponible" ;
         Text [ swedish ] = "Fel: värde ej tillgängligt" ;
@@ -5922,7 +5982,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "%s o simile..." ;
         Text [ portuguese_brazilian ] = "Something like %s" ;
         Text [ portuguese ] = "%s ou semelhante" ;
-        Text [ finnish ] = "Something like %s" ;
+        Text [ finnish ] = "%s tai vastaava" ;
         Text [ danish ] = "%s eller lignende" ;
         Text [ french ] = "%s ou similaire" ;
         Text [ swedish ] = "%s eller liknande" ;
@@ -5949,7 +6009,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Colore griglia" ;
         Text [ portuguese_brazilian ] = "Cor da Grade" ;
         Text [ portuguese ] = "Cor da grelha" ;
-        Text [ finnish ] = "Taustaruudukon väri" ;
+        Text [ finnish ] = "Ruudukon väri" ;
         Text [ danish ] = "Gitterfarve" ;
         Text [ french ] = "Couleur de la grille" ;
         Text [ swedish ] = "Gitterfärg" ;
@@ -5976,7 +6036,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Spostare il contenuto delle celle nascoste nella prima cella?" ;
         Text [ portuguese_brazilian ] = "Move the contents of the hidden cells into the first cell?" ;
         Text [ portuguese ] = "Deseja mover o conteúdo das células ocultas para a primeira célula?" ;
-        Text [ finnish ] = "Move the contents of the hidden cells into the first cell?" ;
+        Text [ finnish ] = "Siirretäänkö piilotettujen solujen sisältö ensimmäiseen soluun?" ;
         Text [ danish ] = "Skal den skjulte celles indhold flyttes til den første celle?" ;
         Text [ french ] = "Déplacer le contenu des cellules cachées dans la première cellule ?" ;
         Text [ swedish ] = "Skall de dolda cellernas innehåll flyttas till den första cellen?" ;
@@ -6003,7 +6063,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Filtro" ;
         Text [ portuguese_brazilian ] = "Filtro" ;
         Text [ portuguese ] = "Filtro" ;
-        Text [ finnish ] = "Suodin" ;
+        Text [ finnish ] = "Suodatin" ;
         Text [ danish ] = "Filter" ;
         Text [ french ] = "Filtre" ;
         Text [ swedish ] = "Filter" ;
@@ -6030,7 +6090,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "L'area dati di destinazione non esiste." ;
         Text [ portuguese_brazilian ] = "The target data area does not exist." ;
         Text [ portuguese ] = "A área da base de dados de destino não existe." ;
-        Text [ finnish ] = "The target data area does not exist." ;
+        Text [ finnish ] = "Kohdetietokanta-aluetta ei ole." ;
         Text [ danish ] = "Måldatabaseområdet eksisterer ikke." ;
         Text [ french ] = "La plage cible de la base de données n'existe pas." ;
         Text [ swedish ] = "Måldatabasområdet existerar inte." ;
@@ -6058,7 +6118,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Incremento non valido" ;
         Text [ portuguese_brazilian ] = "Invalid increment" ;
         Text [ portuguese ] = "Incremento não válido" ;
-        Text [ finnish ] = "Invalid increment" ;
+        Text [ finnish ] = "Virheellinen lisäys" ;
         Text [ danish ] = "Ugyldig trinvidde" ;
         Text [ french ] = "Précision incorrecte" ;
         Text [ swedish ] = "Ogiltig steglängd" ;
@@ -6085,7 +6145,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "OPERAZIONE.MULTIPLA" ;
         Text [ portuguese_brazilian ] = "TABLEOPERATION" ;
         Text [ portuguese ] = "OPERAÇÃO.MÚLTIPLA" ;
-        Text [ finnish ] = "TABLEOPERATION" ;
+        Text [ finnish ] = "MULTIPLE.OPERATIONS" ;
         Text [ danish ] = "MULTIOPERATION" ;
         Text [ french ] = "OPERATION.MULTIPLE" ;
         Text [ swedish ] = "MULTIPEL.OPERATION" ;
@@ -6112,7 +6172,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Operazione multipla" ;
         Text [ portuguese_brazilian ] = "Tableoperation" ;
         Text [ portuguese ] = "Operação múltipla" ;
-        Text [ finnish ] = "Tableoperation" ;
+        Text [ finnish ] = "Useita toimintoja" ;
         Text [ danish ] = "Multioperation" ;
         Text [ french ] = "Opération multiple" ;
         Text [ swedish ] = "Multipel räkneoperation" ;
@@ -6142,7 +6202,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Nome immesso non valido.\nImpossibile creare la formattazione automatica desiderata.\nScegliete un nome diverso." ;
         Text [ portuguese_brazilian ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
         Text [ portuguese ] = "O nome fornecido não é válido.\nImpossível criar o AutoFormato.\nEscolha outro nome." ;
-        Text [ finnish ] = "You entered an invalid name.\nThe desired AutoFormat could not be createdTry again using a different name." ;
+        Text [ finnish ] = "Olet syöttänyt virheellisen nimen.\nAutomaattista muotoilua ei voitu luoda. \nYritä uudelleen käyttämällä eri nimeä." ;
         Text [ danish ] = "Du har angivet et ugyldigt navn.\nDet var ikke muligt at oprette det ønskede AutoFormat\nVælg et andet navn." ;
         Text [ french ] = "Vous avez indiqué un nom incorrect.\nImpossible de créer l'AutoFormat.\nChoisissez un autre nom." ;
         Text [ swedish ] = "Du har angett ett ogiltigt namn.\nDet gick inte att skapa autoformatet.\nVälj ett annat namn." ;
@@ -6174,7 +6234,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Área" ;
         Text [ danish ] = "Område" ;
         Text [ swedish ] = "Område" ;
-        Text [ finnish ] = "Area" ;
+        Text [ finnish ] = "Alue" ;
         Text [ ENGLISH_US ] = "Range" ;
         Text[ chinese_simplified ] = "ÇøÓò";
         Text[ russian ] = "Îáëàñòü";
@@ -6201,7 +6261,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Sí" ;
         Text [ danish ] = "Ja" ;
         Text [ swedish ] = "Ja" ;
-        Text [ finnish ] = "Yes" ;
+        Text [ finnish ] = "Kyllä" ;
         Text [ english_us ] = "Yes" ;
         Text[ chinese_simplified ] = "ÊÇ";
         Text[ russian ] = "Äà";
@@ -6228,7 +6288,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "No" ;
         Text [ danish ] = "Nej" ;
         Text [ swedish ] = "Nej" ;
-        Text [ finnish ] = "No" ;
+        Text [ finnish ] = "Ei" ;
         Text [ english_us ] = "No" ;
         Text[ chinese_simplified ] = "·ñ";
         Text[ russian ] = "Íåò";
@@ -6255,7 +6315,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Protección" ;
         Text [ danish ] = "Beskyttelse" ;
         Text [ swedish ] = "Skydd" ;
-        Text [ finnish ] = "Protection" ;
+        Text [ finnish ] = "Suojaus" ;
         Text [ english_us ] = "Protection" ;
         Text[ chinese_simplified ] = "±£»¤";
         Text[ russian ] = "Çàùèòà";
@@ -6282,7 +6342,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Fórmulas" ;
         Text [ danish ] = "Formler" ;
         Text [ swedish ] = "Formler" ;
-        Text [ finnish ] = "Formulas" ;
+        Text [ finnish ] = "Kaavat" ;
         Text [ english_us ] = "Formulas" ;
         Text[ chinese_simplified ] = "¹«Ê½";
         Text[ russian ] = "Ôîðìóëû";
@@ -6309,7 +6369,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Ocultar" ;
         Text [ danish ] = "Skjul" ;
         Text [ swedish ] = "Dölj" ;
-        Text [ finnish ] = "Hide" ;
+        Text [ finnish ] = "Piilota" ;
         Text [ english_us ] = "Hide" ;
         Text[ chinese_simplified ] = "ÒþÈë";
         Text[ russian ] = "Ñêðûòü";
@@ -6336,7 +6396,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Imprimir" ;
         Text [ danish ] = "Udskriv" ;
         Text [ swedish ] = "Skriv ut" ;
-        Text [ finnish ] = "Print" ;
+        Text [ finnish ] = "Tulosta" ;
         Text [ english_us ] = "Print" ;
         Text[ chinese_simplified ] = "´òÓ¡";
         Text[ russian ] = "Ïå÷àòü";
@@ -6366,7 +6426,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Para poder aplicar el AutoFormato\nes necesario marcar un área en la tabla\nde por lo menos 3x3 celdas." ;
         Text [ danish ] = "For at kunne anvende AutoFormat,\nskal et tabelområde på mindst\n3x3 celler være markeret." ;
         Text [ swedish ] = "För att du ska kunna använda autoformatet\nmåste ett tabellområde på minst\n3x3 celler vara markerat." ;
-        Text [ finnish ] = "You have to select an table area of at least\n3x3 cells, to apply an AutoFormat" ;
+        Text [ finnish ] = "Jotta automaattista muotoilua voi käyttää,\non valittava vähintään 3x3 solun\nkokoinen taulukkoalue." ;
         Text [ english_us ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
         Text[ chinese_simplified ] = "ÎªÁËÊ¹ÓÃ×Ô¶¯¸ñÊ½£¬\nÄú±ØÐëÖÁÉÙÑ¡ÖÐÁË\n3x3 ¹¤×÷±íÇøÓò¡£";
         Text[ russian ] = "Äëÿ âîçìîæíîñòè ïðèìåíåíèÿ àâòîôîðìàòà\níåîáõîäèìî âûäåëèòü îáëàñòü òàáëèöû êàê ìèíèìóì\n3x3 ÿ÷ååê.";
@@ -6388,7 +6448,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "(a cascata)" ;
         Text [ portuguese_brazilian ] = "(em cascata)" ;
         Text [ portuguese ] = "(em cascata)" ;
-        Text [ finnish ] = " (limittäin)" ;
+        Text [ finnish ] = "(sisäkkäin)" ;
         Text [ danish ] = "(indskudt)" ;
         Text [ french ] = "(en cascade)" ;
         Text [ swedish ] = "(sammanflätad)" ;
@@ -6415,7 +6475,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "(opzionale)" ;
         Text [ portuguese_brazilian ] = "(opcional)" ;
         Text [ portuguese ] = "(opcional)" ;
-        Text [ finnish ] = " (valinnainen)" ;
+        Text [ finnish ] = "(valinnainen)" ;
         Text [ danish ] = "(valgfri)" ;
         Text [ french ] = "(facultatif)" ;
         Text [ swedish ] = "(valfri)" ;
@@ -6442,7 +6502,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "(richiesto)" ;
         Text [ portuguese_brazilian ] = "(exigido)" ;
         Text [ portuguese ] = "(necessário)" ;
-        Text [ finnish ] = " (pakollinen)" ;
+        Text [ finnish ] = "(vaaditaan)" ;
         Text [ danish ] = "(obligatorisk)" ;
         Text [ french ] = "(requis)" ;
         Text [ swedish ] = "(nödvändig)" ;
@@ -6497,7 +6557,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Modifica funzione" ;
         Text [ portuguese_brazilian ] = "Edit Function" ;
         Text [ portuguese ] = "Editar função" ;
-        Text [ finnish ] = "Edit Function" ;
+        Text [ finnish ] = "Muokkaa funktiota" ;
         Text [ danish ] = "Rediger funktion" ;
         Text [ french ] = "Éditer une fonction" ;
         Text [ swedish ] = "Redigera funktion" ;
@@ -6568,6 +6628,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Seçilen tablolarý silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea eliminar las hojas seleccionadas?";
+        Text[ finnish ] = "Haluatko varmasti poistaa valitun lomakkeen tai valitut lomakkeet?";
     };
     String STR_QUERY_DELSCENARIO
     {
@@ -6593,6 +6654,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Seçilen senaryoyu silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Está seguro de querer eliminar el escenario seleccionado?";
+        Text[ finnish ] = "Haluatko varmasti poistaa valitun skenaarion?";
     };
     String STR_EXPORT_ASCII_WARNING
     {
@@ -6619,6 +6681,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Eþanlamlar sözlüðü mevcut deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El diccionario de sinónimos no está disponible";
+        Text[ finnish ] = "Synonyymisanasto ei ole käytettävissä.";
     };
     String STR_IMPORT_ERROR
     {
@@ -6645,6 +6708,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazý denetimi mevcut deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La revisión de ortografía no está disponible";
+        Text[ finnish ] = "Oikeinkirjoituksen tarkistus ei ole käytettävissä";
     };
     String STR_IMPORT_ASCII
     {
@@ -6670,6 +6734,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Metin içe aktarýmý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importar texto";
+        Text[ finnish ] = "Tuo tekstitiedostot";
     };
     String STR_EXPORT_ASCII
     {
@@ -6695,6 +6760,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dýþa aktar (metin)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Exportación de texto";
+        Text[ finnish ] = "Tekstitiedostojen vienti";
     };
     String STR_IMPORT_LOTUS
     {
@@ -6720,6 +6786,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Lotus içe aktarýmý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importación Lotus";
+        Text[ finnish ] = "Tuo Lotus-tiedostot";
     };
     String STR_IMPORT_DBF
     {
@@ -6745,6 +6812,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "DBase içe aktarýmý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importación DBase";
+        Text[ finnish ] = "Tuo DBase-tiedostot";
     };
     String STR_EXPORT_DBF
     {
@@ -6769,6 +6837,7 @@ Resource RID_GLOBSTR
         Text[ arabic ] = "ÊÕÏíÑDBase ";
         Text[ turkish ] = "Dýþa aktar (DBase)";
         Text[ catalan ] = "Exportación DBase";
+        Text[ finnish ] = "DBase-vienti";
     };
     String STR_EXPORT_DIF
     {
@@ -6794,6 +6863,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dýþa aktar (Dif)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Exportar Dif";
+        Text[ finnish ] = "Dif-vienti";
     };
     String STR_IMPORT_DIF
     {
@@ -6819,6 +6889,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dif içe aktarýmý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Importar Dif";
+        Text[ finnish ] = "Dif-tuonti";
     };
     String STR_STYLENAME_STANDARD
     {
@@ -6832,7 +6903,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese ] = "Padrão" ;
-        Text [ portuguese_brazilian ] = "Standard" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàðò";
         Text[ polish ] = "Domyœlnie";
@@ -6844,6 +6915,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Predeterminado";
+        Text[ finnish ] = "Oletusarvo";
     };
     String STR_STYLENAME_RESULT
     {
@@ -6924,6 +6996,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Encabezado";
+        Text[ finnish ] = "Otsikko";
     };
     String STR_STYLENAME_HEADLINE1
     {
@@ -6950,6 +7023,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baþlýk1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Encabezado1";
+        Text[ finnish ] = "Otsikko1";
     };
     String STR_STYLENAME_REPORT
     {
@@ -6975,6 +7049,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Rapor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe";
+        Text[ finnish ] = "Raportti";
     };
     String STR_STYLENAME_REPORT1
     {
@@ -7000,6 +7075,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Rapor1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Informe1";
+        Text[ finnish ] = "Raportti1";
     };
     String STR_IMPORT_EXCEL_WARNING
     {
@@ -7026,6 +7102,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "denetim için mevcut deðil.\nKurulumu kontrol edip\ngerekirse istenen dili yükleyin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no está disponible para la verificación.\nRevise por favor su instalación\ne instale, si es necesario, el idioma deseado.";
+        Text[ finnish ] = "ei ole käytettävissä oikeinkirjoituksen tarkistusta varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
     };
     String STR_THESAURUS_NO_STRING
     {
@@ -7052,6 +7129,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Eþanlamlýlar sözlüðü yalnýzca metin hücrelerinde kullanýlabilir!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡Búsqueda de sinónimos solo posible en celdas de texto!";
+        Text[ finnish ] = "Synonyymisanastoa voi käyttää vain tekstisoluissa.";
     };
     String STR_SPELLING_BEGIN_TAB
     {
@@ -7078,6 +7156,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazým denetimi tablo baþýndan devam ettirilsin mi?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea que se continúe la revisión ortográfica al comienzo de la hoja?";
+        Text[ finnish ] = "Jatketaanko oikeinkirjoituksen tarkistusta tämänhetkisen lomakkeen alusta?";
     };
     String STR_SPELLING_NO_LANG
     {
@@ -7104,6 +7183,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "eþanlamlýlar sözlüðü için mevcut deðil. \nKurulumu kontrol edip  \ngerekirse istenilen dili yükleyin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "no está disponible para el diccionario de sinónimos.\n Verifique por favor su instalación e instale en caso \nnecesario el idioma deseado.";
+        Text[ finnish ] = "ei ole käytettävissä synonyymisanastoa varten.\nTarkista asennetut osat ja asenna haluttu kieli.\n";
     };
     String STR_SPELLING_STOP_OK
     {
@@ -7130,6 +7210,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Bu tablonun yazým denetimi tamamlandý!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡Se ha finalizado la revisión ortográfica de esta hoja!";
+        Text[ finnish ] = "Tämän lomakkeen oikeinkirjoituksen tarkistus on valmis.";
     };
     String STR_NOLANGERR
     {
@@ -7155,6 +7236,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dil seçilmedi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ningún idioma especificado";
+        Text[ finnish ] = "Kieltä ei ole asetettu";
     };
     String STR_UNDO_INSERT_TAB
     {
@@ -7181,6 +7263,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablo ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar hoja";
+        Text[ finnish ] = "Lisää lomake";
     };
     String STR_UNDO_DELETE_TAB
     {
@@ -7207,6 +7290,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar hoja";
+        Text[ finnish ] = "Poista lomakkeet";
     };
     String STR_UNDO_RENAME_TAB
     {
@@ -7232,6 +7316,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu yeniden adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cambiar nombre a la hoja";
+        Text[ finnish ] = "Nimeä lomake uudelleen";
     };
     String STR_UNDO_MOVE_TAB
     {
@@ -7257,6 +7342,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablolarý taþý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desplazar hojas";
+        Text[ finnish ] = "Siirrä lomakkeita";
     };
     String STR_UNDO_COPY_TAB
     {
@@ -7282,6 +7368,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu kopyala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copiar hoja";
+        Text[ finnish ] = "Kopioi lomake";
     };
     String STR_UNDO_APPEND_TAB
     {
@@ -7308,6 +7395,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablo ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Añadir hoja";
+        Text[ finnish ] = "Liitä lomake";
     };
     String STR_UNDO_SHOWTAB
     {
@@ -7333,6 +7421,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar hoja";
+        Text[ finnish ] = "Näytä lomake";
     };
     String STR_UNDO_HIDETAB
     {
@@ -7358,6 +7447,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tabloyu gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar hoja";
+        Text[ finnish ] = "Piilota lomake";
     };
     String STR_CHART_MAINTITLE
     {
@@ -7383,6 +7473,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ana baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título principal";
+        Text[ finnish ] = "Pääotsikko";
     };
     String STR_CHART_SUBTITLE
     {
@@ -7408,6 +7499,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Alt baþlýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subtítulo";
+        Text[ finnish ] = "Aliotsikko";
     };
     String STR_CHART_XTITLE
     {
@@ -7433,6 +7525,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "X-Eksen deðeri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título del eje X";
+        Text[ finnish ] = "~X-akselin otsikko";
     };
     String STR_CHART_YTITLE
     {
@@ -7458,6 +7551,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Y-Eksen deðeri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título del eje Y";
+        Text[ finnish ] = "~Y-akselin otsikko";
     };
     String STR_CHART_ZTITLE
     {
@@ -7483,6 +7577,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Z-Eksen deðeri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título del eje Z";
+        Text[ finnish ] = "~Z-akselin otsikko";
     };
     String STR_ABSREFLOST
     {
@@ -7509,6 +7604,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yeni tabloda bulunan diðer tablolar ile ilgili mutlak referanslar doðru olmayabilir!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La nueva tabla contiene referencias absolutas a otras tablas que posiblemente no son correctas.";
+        Text[ finnish ] = "Uusi taulukko sisältää toisiin taulukoihin kohdistuvia absoluuttisia viitteitä, jotka saattavat olla virheellisiä.";
     };
     String STR_NAMECONFLICT
     {
@@ -7535,6 +7631,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ad eþleþmesi nedeniyle hedef belgede mevcut bir aralýk adý deðiþtirildi!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡Debido a la igualdad de nombres se ha alterado el nombre existente de un área del documento!";
+        Text[ finnish ] = "Identtisten nimien takia kohdeasiakirjassa ollutta aluenimeä on muutettu.";
     };
     String STR_ERR_AUTOFILTER
     {
@@ -7561,6 +7658,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Otomatik filtre kullanýlamaz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El AutoFiltro no es posible";
+        Text[ finnish ] = "Automaattinen suodatus ei ole mahdollista";
     };
     String STR_MSSG_SEARCHANDREPLACE_1
     {
@@ -7587,6 +7685,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "%PRODUCTNAME Calc tablonun baþýna kadar aradý. Aramaya tablo sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el comienzo de la hoja. ¿Desea continuar la búsqueda por el final?";
+        Text[ finnish ] = "%PRODUCTNAME Calc on tehnyt haun lomakkeen alkuun asti. Haluatko jatkaa hakua loppuun?";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
@@ -7613,6 +7712,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "%PRODUCTNAME Calc tablonun sonuna kadar aradý. Aramaya tablo baþýndan devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el final de la hoja. ¿Desea continuar la búsqueda desde el comienzo?";
+        Text[ finnish ] = "%PRODUCTNAME Calc on tehnyt haun lomakkeen loppuun asti. Haluatko jatkaa hakua alkuun?";
     };
     String STR_MSSG_SEARCHANDREPLACE_3
     {
@@ -7638,6 +7738,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ara ve deðiþtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Buscar y reemplazar";
+        Text[ finnish ] = "Etsi ja korvaa";
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
@@ -7663,6 +7764,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "%PRODUCTNAME Calc belgenin baþýna kadar aradý. Aramaya belge sonunda devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el principio del documento.¿Desea continuar la búsqueda por el final del documento?";
+        Text[ finnish ] = "%PRODUCTNAME Calc on tehnyt haun asiakirjan alkuun asti. Haluatko jatkaa hakua loppuun?";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
@@ -7688,6 +7790,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "%PRODUCTNAME Calc belgenin sonuna kadar aradý. Aramaya belge baþýndan devam etmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%PRODUCTNAME Calc ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio del documento?";
+        Text[ finnish ] = "%PRODUCTNAME Calc on tehnyt haun asiakirjan loppuun asti. Haluatko jatkaa hakua alkuun?";
     };
     String STR_CREATENAME_REPLACE
     {
@@ -7713,6 +7816,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Mevcut # tanýmý deðiþtirilsin mi?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Reemplazar la presente definición de #?";
+        Text[ finnish ] = "Korvataanko kohteen  tämänhetkinen määritelmä?";
     };
     String STR_CREATENAME_MARKERR
     {
@@ -7739,6 +7843,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Aralýk adlarý için geçersiz seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección incorrecta para nombre de área";
+        Text[ finnish ] = "Virheellinen aluenimien valinta";
     };
     String STR_CONSOLIDATE_ERR1
     {
@@ -7765,6 +7870,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Referanslar, kaynak verilerinin üstünde eklenemez.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Referencias no pueden ser insertadas encima de los datos fuente.";
+        Text[ finnish ] = "Viitteitä ei voi lisätä lähdetietojen yläpuolelle.";
     };
     String STR_SCENARIO_NOTFOUND
     {
@@ -7790,6 +7896,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Senaryo bulunamadý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se ha encontrado el escenario";
+        Text[ finnish ] = "Skenaariota ei löytynyt";
     };
     String STR_QUERY_DELENTRY
     {
@@ -7816,6 +7923,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "# giriþini gerçekten silmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea realmente eliminar la entrada #?";
+        Text[ finnish ] = "Haluatko varmasti poistaa merkinnän ?";
     };
     String STR_VOBJ_OBJECT
     {
@@ -7841,6 +7949,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Nesne/Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objetos/Imágenes";
+        Text[ finnish ] = "Objektit/grafiikka";
     };
     String STR_VOBJ_CHART
     {
@@ -7866,6 +7975,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Þema";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Diagramas";
+        Text[ finnish ] = "Kaaviot";
     };
     String STR_VOBJ_DRAWINGS
     {
@@ -7891,6 +8001,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Çizim nesnesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objetos de dibujo";
+        Text[ finnish ] = "Piirrosobjektit";
     };
     String STR_VOBJ_MODE_SHOW
     {
@@ -7916,6 +8027,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mostrar";
+        Text[ finnish ] = "Näytä";
     };
     String STR_VOBJ_MODE_HIDE
     {
@@ -7941,6 +8053,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar";
+        Text[ finnish ] = "Piilota";
     };
     String STR_VOBJ_MODE_DUMMY
     {
@@ -7966,6 +8079,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Genel arama karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comodín";
+        Text[ finnish ] = "Paikkamerkit";
     };
     String STR_SCATTR_PAGE_TOPDOWN
     {
@@ -7991,6 +8105,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yukardan aþaðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De arriba hacia abajo";
+        Text[ finnish ] = "Ylhäältä alas";
     };
     String STR_SCATTR_PAGE_LEFTRIGHT
     {
@@ -8016,6 +8131,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Soldan saða";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "De izquierda a derecha";
+        Text[ finnish ] = "Vasemmalta oikealle";
     };
     String STR_SCATTR_PAGE_NOTES
     {
@@ -8041,6 +8157,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Not";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Notas";
+        Text[ finnish ] = "Huomautukset";
     };
     String STR_SCATTR_PAGE_GRID
     {
@@ -8066,6 +8183,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Kýlavuz çizgiler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cuadrícula";
+        Text[ finnish ] = "Ruudukko";
     };
     String STR_SCATTR_PAGE_HEADERS
     {
@@ -8092,6 +8210,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Satýr ve sütun baþlýklarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Títulos de filas/columnas";
+        Text[ finnish ] = "Rivi- ja sarakeotsikot";
     };
     String STR_SCATTR_PAGE_FORMULAS
     {
@@ -8117,6 +8236,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Formül";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fórmulas";
+        Text[ finnish ] = "Kaavat";
     };
     String STR_SCATTR_PAGE_NULLVALS
     {
@@ -8142,6 +8262,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sýfýr deðeri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valores cero";
+        Text[ finnish ] = "Nolla-arvot";
     };
     String STR_SCATTR_PAGE_PRINTDIR
     {
@@ -8167,6 +8288,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazdýrma yönü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dirección de impresión";
+        Text[ finnish ] = "Tulostussuunta";
     };
     String STR_SCATTR_PAGE_FIRSTPAGENO
     {
@@ -8192,6 +8314,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ýlk sayfa numarasý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Primer número de página";
+        Text[ finnish ] = "Ensimmäisen sivun numero";
     };
     String STR_SCATTR_PAGE_SCALE
     {
@@ -8216,6 +8339,7 @@ Resource RID_GLOBSTR
         Text[ arabic ] = "Çáßá Åáì  [%]";
         Text[ turkish ] = "Tümünü [%]";
         Text[ catalan ] = "Todo en [%]";
+        Text[ finnish ] = "Kaikki -> [%]";
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
     {
@@ -8241,6 +8365,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Azm. sayfa sayýsý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Núm. máx. de páginas";
+        Text[ finnish ] = "Sivujen enimmäismäärä";
     };
     String STR_DOC_STAT
     {
@@ -8250,7 +8375,7 @@ Resource RID_GLOBSTR
         TEXT [ italian ] = "Statistiche" ;
         TEXT [ portuguese_brazilian ] = "EstatÝstica" ;
         TEXT [ portuguese ] = "Estatística" ;
-        TEXT [ finnish ] = "Tilasto" ;
+        TEXT [ finnish ] = "Tiedot" ;
         TEXT [ danish ] = "Statistik" ;
         TEXT [ french ] = "Statistique" ;
         TEXT [ swedish ] = "Statistik" ;
@@ -8294,6 +8419,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Baðlantý güncellenemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo actualizar el vínculo.";
+        Text[ finnish ] = "Linkkiä ei voitu päivittää.";
     };
     String STR_LINKERRORFILE
     {
@@ -8319,6 +8445,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dosya:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Archivo:";
+        Text[ finnish ] = "Tiedosto:";
     };
     String STR_LINKERRORTAB
     {
@@ -8344,6 +8471,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablo:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hoja:";
+        Text[ finnish ] = "Lomake:";
     };
     String STR_OVERVIEW
     {
@@ -8370,6 +8498,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Genel bakýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Resumen";
+        Text[ finnish ] = "Yleiskuva";
     };
     String STR_DOC_INFO
     {
@@ -8395,6 +8524,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belge bilgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Información del documento";
+        Text[ finnish ] = "Asiakirjatiedot";
     };
     String STR_DOC_CREATED
     {
@@ -8420,6 +8550,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Oluþturuldu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Creado el";
+        Text[ finnish ] = "Luotu";
     };
     String STR_DOC_MODIFIED
     {
@@ -8446,6 +8577,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Deðiþtirilen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificado";
+        Text[ finnish ] = "Muokattu";
     };
     String STR_DOC_PRINTED
     {
@@ -8471,6 +8603,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazdýrýlan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impreso";
+        Text[ finnish ] = "Tulostettu";
     };
     String STR_DOC_THEME
     {
@@ -8496,6 +8629,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Konu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tema";
+        Text[ finnish ] = "Aihe";
     };
     String STR_DOC_KEYWORDS
     {
@@ -8522,6 +8656,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Anahtar sözcükler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Palabras clave";
+        Text[ finnish ] = "Avainsanat";
     };
     String STR_DOC_COMMENT
     {
@@ -8547,6 +8682,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Açýklamalar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Observaciones";
+        Text[ finnish ] = "Kommentit";
     };
     String STR_BY
     {
@@ -8572,6 +8708,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yazdýran";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "de";
+        Text[ finnish ] = "/";
     };
     String STR_ON
     {
@@ -8597,6 +8734,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "tarih";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "en";
+        Text[ finnish ] = "on";
     };
     String STR_RELOAD_TABLES
     {
@@ -8624,6 +8762,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Bu dosyada baþka dosyalara baðlantýlar mevcut.\nBaðlantýlar güncellensin mi?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Este archivo está vinculado a otros archivos.\n¿Desea usted actualizarlos?";
+        Text[ finnish ] = "Tämä tiedosto sisältää linkkejä toisiin tiedostoihin.\nPäivitetänkö linkit?";
     };
     String STR_REIMPORT_AFTER_LOAD
     {
@@ -8650,6 +8789,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Bu dosya, sonuçlarý kaydedilmeyen sorgular içeriyor.\nBU sorgular yinelensin mi?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Este archivo contiene consultas cuyos resultados no se guardaron.\n¿Desea repetir las consultas?";
+        Text[ finnish ] = "Tämä tiedosto sisältää kyselyitä. Kyselyiden tuloksia ei tallennettu.\nHaluatko suorittaa kyselyt uudelleen?";
     };
     String STR_FILTER_TOOMANY
     {
@@ -8675,6 +8815,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Koþul sayýsý çok fazla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Demasiadas condiciones";
+        Text[ finnish ] = "Liian monta ehtoa";
     };
     String STR_INSERT_FULL
     {
@@ -8701,6 +8842,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Dolu hücreler, sayfa dýþýna\ntaþýnamaz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No es posible desplazar celdas llenas\nfuera de la hoja.";
+        Text[ finnish ] = "Täytettyjä soluja ei voi siirtää\nlomakkeen ulkopuolelle.";
     };
     String STR_TABINSERT_ERROR
     {
@@ -8727,6 +8869,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablo eklenemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo insertar la tabla.";
+        Text[ finnish ] = "Taulukkoa ei voitu lisätä.";
     };
     String STR_TABREMOVE_ERROR
     {
@@ -8752,6 +8895,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Tablolar silinemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron eliminar las hojas de cálculo";
+        Text[ finnish ] = "Lomakkeita ei voitu poistaa.";
     };
     String STR_PASTE_ERROR
     {
@@ -8778,6 +8922,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Pano içeriði eklenemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo pegar el contenido del portapapeles.";
+        Text[ finnish ] = "Leikepöydän sisältöä ei voitu lisätä.";
     };
     String STR_PASTE_FULL
     {
@@ -8804,6 +8949,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sayfada ekleme için yeterli alan yok.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se puede insertar más allá de la página.";
+        Text[ finnish ] = "Lomakkeella ei ole tarpeeksi tilaa tähän lisäämiseen.";
     };
     String STR_PASTE_BIGGER
     {
@@ -8829,6 +8975,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Pano içeriði, seçilen alandan daha büyük.\nYine de eklemek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El contenido del portapapeles es mayor que el área seleccionada.\n¿Desea insertarla de todas formas?";
+        Text[ finnish ] = "Leikepöydän sisältö on valittua aluetta suurempi.\nHaluatko kuitenkin lisätä sen?";
     };
     String STR_ERR_NOREF
     {
@@ -8854,6 +9001,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Referans bulunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se encontraron referencias.";
+        Text[ finnish ] = "Viitteitä ei löytynyt.";
     };
     String STR_ERR_LINKOVERLAP
     {
@@ -8880,6 +9028,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Kaynak ve hedef aralýðý örtüþmemelidir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área de origen y de destino no deben superponerse.";
+        Text[ finnish ] = "Lähde ja kohde eivät saa olla päällekkäin.";
     };
     String STR_GRAPHICNAME
     {
@@ -8905,6 +9054,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imagen";
+        Text[ finnish ] = "Kuvat";
     };
     String STR_INVALIDNAME
     {
@@ -8931,6 +9081,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Geçersiz ad.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre no válido.";
+        Text[ finnish ] = "Virheellinen nimi.";
     };
     String STR_VALID_MACRONOTFOUND
     {
@@ -8956,6 +9107,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Seçilen makro bulunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La macro seleccionada no se encontró.";
+        Text[ finnish ] = "Valittua makroa ei löydy.";
     };
     String STR_VALID_DEFERROR
     {
@@ -8982,6 +9134,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Girilen deðer geçerli deðil.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor no válido.";
+        Text[ finnish ] = "Virheellinen arvo.";
     };
     String STR_PROGRESS_CALCULATING
     {
@@ -9007,6 +9160,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "hesaplanýyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "calcular";
+        Text[ finnish ] = "lasketaan";
     };
     String STR_PROGRESS_SORTING
     {
@@ -9032,6 +9186,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "sýralanýyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ordenar";
+        Text[ finnish ] = "lajitellaan";
     };
     String STR_PROGRESS_HEIGHTING
     {
@@ -9058,6 +9213,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Satýr yüksekliklerini ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ajustar altura de filas";
+        Text[ finnish ] = "Sovita rivikorkeus";
     };
     String STR_PROGRESS_COMPARING
     {
@@ -9083,6 +9239,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Karþýlaþtýr #";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comparar #";
+        Text[ finnish ] = "Vertaa ";
     };
     String STR_DETINVALID_OVERFLOW
     {
@@ -9109,6 +9266,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Azami geçersiz hücre sayýsý aþýldý.\nGeçersiz hücrelerin tümüü seçilmedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El número máximo de celdas no válidas se ha excedido.\nNo se marcaron todas las celdas no válidas.";
+        Text[ finnish ] = "Virheellisten solujen enimmäismäärä on ylitetty.\nKaikkia virheellisiä soluja ei ole merkitty.";
     };
     String STR_QUICKHELP_DELETE
     {
@@ -9135,6 +9293,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ýçerikleri sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar contenidos";
+        Text[ finnish ] = "Poista sisällöt";
     };
     String STR_QUICKHELP_REF
     {
@@ -9160,6 +9319,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "%1 Sa x %2 Sü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "%1 F x %2 C";
+        Text[ finnish ] = "%1 R  x %2 C";
     };
     String STR_FUNCTIONLIST_MORE
     {
@@ -9185,6 +9345,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Diðer...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Otros...";
+        Text[ finnish ] = "Lisää";
     };
     String STR_ERR_INVALID_AREA
     {
@@ -9211,6 +9372,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Geçersiz aralýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Referencia no válida";
+        Text[ finnish ] = "Virheellinen alue";
     };
      // Vorlagen fuer Pivottabellen
     String STR_PIVOT_STYLE_INNER
@@ -9237,6 +9399,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu deðeri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Piloto de Datos Valor";
+        Text[ finnish ] = "Tietojen ohjauksen arvo";
     };
     String STR_PIVOT_STYLE_RESULT
     {
@@ -9262,6 +9425,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu sonucu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Piloto de Datos Resultado";
+        Text[ finnish ] = "Tietojen ohjauksen tulokset";
     };
     String STR_PIVOT_STYLE_CATEGORY
     {
@@ -9287,6 +9451,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu kategorisi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Categoría del Piloto de Datos";
+        Text[ finnish ] = "Tietojen ohjausluokka";
     };
     String STR_PIVOT_STYLE_TITLE
     {
@@ -9312,6 +9477,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu baþlýðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Piloto de Datos Título";
+        Text[ finnish ] = "Tietojen ohjauksen otsikko";
     };
     String STR_PIVOT_STYLE_FIELDNAME
     {
@@ -9337,6 +9503,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu alaný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Piloto de Datos Campo";
+        Text[ finnish ] = "Tietojen ohjauskenttä";
     };
     String STR_PIVOT_STYLE_TOP
     {
@@ -9362,6 +9529,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Veri pilotu köþesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Piloto de Datos Ángulo";
+        Text[ finnish ] = "Tietojen ohjauskulma";
     };
     String STR_OPERATION_FILTER
     {
@@ -9387,6 +9555,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Filtro";
+        Text[ finnish ] = "Suodatin";
     };
     String STR_OPERATION_SORT
     {
@@ -9412,6 +9581,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Sýralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ordenar";
+        Text[ finnish ] = "Lajittele";
     };
     String STR_OPERATION_SUBTOTAL
     {
@@ -9437,6 +9607,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Ara toplam";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subtotales";
+        Text[ finnish ] = "Välisummat";
     };
     String STR_OPERATION_NONE
     {
@@ -9462,6 +9633,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ninguno";
+        Text[ finnish ] = "Ei mitään";
     };
     String STR_IMPORT_REPLACE
     {
@@ -9487,6 +9659,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "# içeriðini deðiþtirmek istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Desea reemplazar el contenido de #?";
+        Text[ finnish ] = "Haluatko korvata kohteen  sisällön?";
     };
     String STR_TIP_WIDTH
     {
@@ -9512,6 +9685,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Geniþlik:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ancho:";
+        Text[ finnish ] = "Leveys:";
     };
     String STR_TIP_HEIGHT
     {
@@ -9538,6 +9712,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Yükseklik:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Altura:";
+        Text[ finnish ] = "Korkeus:";
     };
     String STR_TIP_HIDE
     {
@@ -9563,6 +9738,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Gizle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ocultar";
+        Text[ finnish ] = "Piilota";
     };
     String STR_ERR_INSERTOBJ
     {
@@ -9588,6 +9764,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Nesne eklenemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo insertar el objeto.";
+        Text[ finnish ] = "Objektia ei voitu lisätä.";
     };
     String STR_CHANGED_BLANK
     {
@@ -9613,6 +9790,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "<boþ>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<vacío>";
+        Text[ finnish ] = "<tyhjä>";
     };
     String STR_CHANGED_CELL
     {
@@ -9638,6 +9816,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "#1 hücresi, '#2' iken '#3' olarak deðiþtirildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Celda #1 cambiada de '#2' a '#3' ";
+        Text[ finnish ] = "Solu 1 muutettu kohteesta '2' kohteeseen '3'";
     };
     String STR_CHANGED_INSERT
     {
@@ -9663,6 +9842,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "#1 eklendi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "#1 insertada";
+        Text[ finnish ] = "1 lisätty";
     };
     String STR_CHANGED_DELETE
     {
@@ -9688,6 +9868,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "#1 silindi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "#1 eliminada";
+        Text[ finnish ] = "1poistettu";
     };
     String STR_CHANGED_MOVE
     {
@@ -9713,6 +9894,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Aralýk taþýndý; eski konum #1 yeni konum #2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área desplazada de #1 a #2";
+        Text[ finnish ] = "Alue siirretty kohteesta 1 kohteeseen 2";
     };
     String STR_END_REDLINING_TITLE
     {
@@ -9738,6 +9920,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Kaydý durdur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Finalizar registro";
+        Text[ finnish ] = "Lopeta nauhoitus";
     };
     String STR_END_REDLINING
     {
@@ -9763,6 +9946,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Bu iþlem ile deðiþikliklerin izlenmesi sona erdirilecek.\nDaha önceki deðiþiklikler ile ilgili tüm bilgiler kaybolacak.\n\nKayýt durdurulsun mu?\n\n";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esta acción finalizará la grabación de modificaciones.\nCualquier información sobre modificaciones se perderá.\n\n¿Desea finalizar la grabación?\n\n";
+        Text[ finnish ] = "Tämän toiminnon myötä nauhoitus lopetetaan.\nKaikki tiedot muutoksista menetetään.\n\\Lopetetaanko nauhoitus?\n\n";
     };
     String STR_CLOSE_ERROR_LINK
     {
@@ -9788,6 +9972,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belge, baðlantý güncellemesi yapýlýrken kapatýlamaz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento no se puede cerrar mientras se esté actualizando un vínculo.";
+        Text[ finnish ] = "Asiakirjaa ei voi sulkea, kun linkkiä päivitetään.";
     };
     String STR_UNDO_RESIZEMATRIX
     {
@@ -9813,6 +9998,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Matri alanýný ayarla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Hacer coincidir área de matriz";
+        Text[ finnish ] = "Sovita matriisialue";
     };
     String STR_TIP_RESIZEMATRIX
     {
@@ -9838,6 +10024,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Matris formulü %1 Sa x %2 Sü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fórmula matriz %1 F x %2 C";
+        Text[ finnish ] = "Matriisikaava %1 R  x %2 C";
     };
     String STR_MACRO_WARNING
     {
@@ -9863,6 +10050,7 @@ Resource RID_GLOBSTR
         Text[ turkish ] = "Belgede makro iþlev çaðrýlarý içeriyor.\nMakrolar çalýþtýrýlsýn mý?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento contiene llamadas de macro.\n¿Desea ejecutarlas?";
+        Text[ finnish ] = "Tämä asiakirja sisältää makrotoimintokutsuja.\nHaluatko suorittaa ne?";
     };
     /*
     String STR_
