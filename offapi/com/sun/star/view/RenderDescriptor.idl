@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RenderDescriptor.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:16:01 $
+ *  last change: $Author: ka $ $Date: 2002-08-19 15:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,13 @@ service RenderDescriptor
     /** specifies the number of pages that can be rendered
      */
     [property] long PageCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the range of pages that are currently selected and that
+    should be rendered if rendering of a page selection is chosen
+     */
+    [property] string PageSelectionRange;
 };
 
 //=============================================================================
@@ -106,6 +113,9 @@ service RenderDescriptor
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2002/08/13 11:16:01  ka
+    #101570#: added XRenderable
+
 =============================================================================*/
 
 #endif
