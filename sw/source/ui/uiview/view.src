@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:52:22 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ chinese_simplified ] = "ΤΪΉ¤Ύί/Ρ΅Οξ/΄ςΣ΅»ϊ΄¦Γ»ΣΠΙθ¶¨΄«Υζ΄ςΣ΅»ϊ΅£";
     Message[ russian ] = "Β Ρεπβθρ/Οΰπΰμεςπϋ/Οεχΰςό τΰκρ-οπθνςεπ νε σρςΰνξβλεν.";
     Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has³em Narzκdzia/Opcje/Drukuj.";
-    Message[ japanese ] = "Fax—pΜίΨέΐ‚ΝΒ°Ω¨µΜίΌ®έ¨σό‚Εέ’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
+    Message[ japanese ] = "Fax ΜίΨέΐ‚ΝΒ°Ω¨µΜίΌ®έ¨σό‚Εέ’θ‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
     Message[ chinese_traditional ] = "¦b¤u¨γ/Ώο¶µ/Ύχ¦LªνΎχ³B¨S¦³³]©w¦C¦L¶Η―uªΊΕX°Κ³n¥σ΅C";
     Message[ arabic ] = "ανΣΚ εδΗί ΕΪΟΗΟΗΚ ΨΗΘΪΙ έΗίΣ ΚΝΚ \"ΓΟζΗΚ/ΞνΗΡΗΚ/ΨΘΗΪΙ\".";
     Message[ greek ] = "Δεν έχει οριστεί εκτυπωτής για fax στο κατάλογο Εργαλεία/Επιλογές/Εκτύπωση.";
