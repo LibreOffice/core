@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-06 20:11:55 $
+ *  last change: $Author: kz $ $Date: 2002-08-16 20:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2296,17 +2296,17 @@ QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
     Message[ russian ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ greek ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ dutch ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ french ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
+    Message[ french ] = "Vous �tes en train d'essayer de supprimer toutes les colonnes de la table. Or, une table ne peut exister sans colonne. Voulez-vous supprimer la table de la base de donn�es ? Si tel n'est pas le cas, la table restera inchang�e.";
     Message[ spanish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ finnish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ italian ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
+    Message[ italian ] = "Volete eliminare tutte le colonne della tabella. Una tabella, per essere tale, dev'essere composta anche da colonne. Volete eliminare l'intera tabella dal database? In caso contrario la tabella non subir� cambiamenti.";
     Message[ danish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ swedish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
+    Message[ swedish ] = "Du f�rs�ker att radera alla kolumner i tabellen. Det g�r inte att ha en tabell utan kolumner. Vill du radera tabellen fr�n databasen? Om inte, kommer tabellen inte att �ndras.";
     Message[ polish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ japanese ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ korean ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ chinese_simplified ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-    Message[ chinese_traditional ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
+    Message[ korean ] = "사용자께서는 지금 모든 열을 삭제하시려고 합니다. 열이 없으면 테이블을 작성하실 수 없습니다. 테이블을 데이터베이스로부터 삭제하시겠습니까? 삭제하지 않을 경우 테이블은 변경없이 유지됩니다.";
+    Message[ chinese_simplified ] = "您正在试图删除表格之中的所有的列。一个表格至少必须含有一列。要删除这个表格吗？否则，就不会更改这个表格的内容。";
+    Message[ chinese_traditional ] = "您正在試圖刪除表格之中的所有欄位。一個表格至少必須具有一個欄位。您要刪除這個表格嗎？否則，就不會變更這個表格。";
     Message[ turkish ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
     Message[ arabic ] = "You are trying to delete all columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
 };
@@ -2320,18 +2320,18 @@ String STR_AUTOINCREMENT_VALUE
     Text[ russian ] = "A~uto-increment statement";
     Text[ greek ] = "A~uto-increment statement";
     Text[ dutch ] = "A~uto-increment statement";
-    Text[ french ] = "A~uto-increment statement";
+    Text[ french ] = "Expression d'auto-incr�ment";
     Text[ spanish ] = "A~uto-increment statement";
     Text[ finnish ] = "A~uto-increment statement";
-    Text[ italian ] = "A~uto-increment statement";
+    Text[ italian ] = "Espressione incremento automatico";
     Text[ danish ] = "A~uto-increment statement";
-    Text[ swedish ] = "A~uto-increment statement";
+    Text[ swedish ] = "A~uto-inkrementsats";
     Text[ polish ] = "A~uto-increment statement";
     Text[ portuguese_brazilian ] = "A~uto-increment statement";
-    Text[ japanese ] = "A~uto-increment statement";
-    Text[ korean ] = "A~uto-increment statement";
-    Text[ chinese_simplified ] = "A~uto-increment statement";
-    Text[ chinese_traditional ] = "A~uto-increment statement";
+    Text[ japanese ] = "オートインクリメント命令文";
+    Text[ korean ] = "자동 증가량 문장";
+    Text[ chinese_simplified ] = "自动递增陈述";
+    Text[ chinese_traditional ] = "自動遞增陳述";
     Text[ turkish ] = "A~uto-increment statement";
     Text[ arabic ] = "A~uto-increment statement";
     Text[ catalan ] = "A~uto-increment statement";
@@ -2346,18 +2346,18 @@ String STR_HELP_AUTOINCREMENT_VALUE
     Text[ russian ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ greek ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ dutch ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ french ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
+    Text[ french ] = "Saisissez une expression SQL pour le champ d'auto-incr�ment.\n\nCette expression sera directement transf�r�e vers la base de donn�es au moment de la cr�ation de la table.";
     Text[ spanish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ finnish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ italian ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
+    Text[ italian ] = "Indicate un'espressione SQL per il campo Incremento automatico.\n\\Questa espressione verr� importata direttamente nel database non appena sar� creata la tabella.";
     Text[ danish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ swedish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
+    Text[ swedish ] = "Ange SQL-satsen f�r Auto-inkrementf�ltet h�r.\n\nDen h�r satsen �verf�rs direkt till databasen n�r tabellen skapas.";
     Text[ polish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ portuguese_brazilian ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ japanese ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ korean ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ chinese_simplified ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
-    Text[ chinese_traditional ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
+    Text[ korean ] = "자동 증가량 필드를 위해 SOL 문장을 여기에 입력해주십시오.\n\n 이 문장은 테이블이 만들어지면 데이터베이스로 곧 전송될 것입니다.";
+    Text[ chinese_simplified ] = "在此输入一个用于自动递增字段的 SQL 陈述。\n\n在生成表格的同时，这个陈述就会被直接传给数据库。";
+    Text[ chinese_traditional ] = "在此輸入一個用於自動遞增欄位的 SQL 陳述。\n\n在產生表格的同時，這個陳述就會被直接傳給資料庫。";
     Text[ turkish ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ arabic ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
     Text[ catalan ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
