@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:04:25 $
+#   last change: $Author: vg $ $Date: 2003-04-17 16:06:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,10 +80,6 @@ USE_LDUMP2=TRUE
 #	nmake		 	-	swdll
 
 DESK=T
-
-.IF "$(prjpch)" != ""
-CDEFS=$(CDEFS) -DPRECOMPILED
-.ENDIF
 
 .IF "$(GUI)" == "WIN"
 RESLIBSPLIT1NAME=sw
