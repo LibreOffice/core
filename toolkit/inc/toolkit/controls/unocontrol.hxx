@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:52:24 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
@@ -94,12 +97,22 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef _TOOLKIT_HELPER_MUTEXANDBROADCASTHELPER_HXX_
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_
 #include <toolkit/helper/listenermultiplexer.hxx>
+#endif
 
+#ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 struct UnoControlComponentInfos
 {
@@ -128,6 +141,7 @@ class UnoControl :  public ::com::sun::star::awt::XControl,
                     public ::com::sun::star::beans::XPropertiesChangeListener,
                     public ::com::sun::star::lang::XServiceInfo,
                     public ::com::sun::star::lang::XTypeProvider,
+                    public ::drafts::com::sun::star::accessibility::XAccessible,
                     public ::cppu::OWeakAggObject
 {
 private:
@@ -146,6 +160,9 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >    mxModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >        mxGraphics;
+
+    ::com::sun::star::uno::WeakReferenceHelper
+                                        maAccessibleContext;    /// our most recent XAccessibleContext instance
 
     sal_Bool                            mbDisposePeer;
     sal_Bool                            mbUpdatingModel;
@@ -168,6 +185,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
     virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
+
+    void                                                                        disposeAccessibleContext();
 
 public:
                 UnoControl();
@@ -241,6 +260,9 @@ public:
     ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XAccessible
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 

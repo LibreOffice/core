@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-08 13:57:50 $
+ *  last change: $Author: fs $ $Date: 2002-04-26 14:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,18 @@
 #include <vos/mutex.hxx>
 #endif
 
+#ifndef TOOLKIT_ACCESSIBLE_CONTROL_CONTEXT_HXX
+#include <toolkit/controls/accessiblecontrolcontext.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+
+using ::drafts::com::sun::star::accessibility::XAccessibleContext;
+using ::drafts::com::sun::star::accessibility::XAccessible;
 
 WorkWindow* lcl_GetDefaultWindow()
 {
@@ -320,6 +327,24 @@ getCppuType( ( Reference< XPropertiesChangeListener>* ) NULL ),
 getCppuType( ( Reference< XServiceInfo>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
+void UnoControl::disposeAccessibleContext()
+{
+    Reference< XComponent > xContextComp( maAccessibleContext.get(), UNO_QUERY );
+    if ( xContextComp.is() )
+    {
+        try
+        {
+            xContextComp->removeEventListener( this );
+            xContextComp->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
+        }
+        maAccessibleContext = NULL;
+    }
+}
+
 void UnoControl::dispose(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -329,6 +354,9 @@ void UnoControl::dispose(  ) throw(RuntimeException)
         mxPeer->dispose();
         mxPeer = NULL;
     }
+
+    // dispose and release our AccessibleContext
+    disposeAccessibleContext();
 
     EventObject aDisposeEvent;
     aDisposeEvent.Source = static_cast< XAggregation* >( this );
@@ -461,8 +489,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
 void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    // kommt von xModel, bei "Multible Inheritance" nicht unterschiedliche
-    // Typen vergleichen.
+    // bei "Multible Inheritance" nicht unterschiedliche Typen vergleichen.
 
     if( mxModel == rEvt.Source )
     {
@@ -472,6 +499,11 @@ void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 
         DBG_ASSERT( !mxModel.is(), "UnoControl::disposing: invalid dispose behaviour!" );
         mxModel.clear();
+    }
+    else if ( maAccessibleContext.get() == rEvt.Source )
+    {
+        // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
+        maAccessibleContext = NULL;
     }
 }
 
@@ -1015,9 +1047,20 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
     Reference< XWindow > xWindow;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
+        if ( bOn == mbDesignMode )
+            return;
+
+        // remember this
         mbDesignMode = bOn;
         xWindow = xWindow.query( mxPeer );
+
+        // dispose our current AccessibleContext, if we have one
+        // (changing the design mode implies having a new implementation for this context,
+        // so the old one must be declared DEFUNC)
+        disposeAccessibleContext();
     }
+
+    // and ajust the visibility of our window
     if ( xWindow.is() )
         xWindow->setVisible( !bOn );
 }
@@ -1059,5 +1102,36 @@ Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(Runti
     return Sequence< ::rtl::OUString >();
 }
 
+// ------------------------------------------------------------------------
+Reference< XAccessibleContext > SAL_CALL UnoControl::getAccessibleContext(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
 
+    Reference< XAccessibleContext > xCurrentContext( maAccessibleContext.get(), UNO_QUERY );
+    if ( !xCurrentContext.is() )
+    {
+        if ( !mbDesignMode )
+        {   // in alive mode, use the AccessibleContext of the peer
+            Reference< XAccessible > xPeerAcc( mxPeer, UNO_QUERY );
+            if ( xPeerAcc.is() )
+                xCurrentContext = xPeerAcc->getAccessibleContext( );
+        }
+        else
+            // in design mode, use a fallback
+            xCurrentContext = ::toolkit::OAccessibleControlContext::create( this );
+
+        maAccessibleContext = xCurrentContext;
+
+        // get notified when the context is disposed
+        Reference< XComponent > xContextComp( xCurrentContext, UNO_QUERY );
+        if ( xContextComp.is() )
+            xContextComp->addEventListener( this );
+        // In an ideal world, this is not necessary - there the object would be released as soon as it has been
+        // disposed, and this our weak reference would be empty, too.
+        // But 'til this ideal world comes (means we do never have any refcount/lifetime bugs anymore), we
+        // need to listen for disposal and reset our weak reference then.
+    }
+
+    return xCurrentContext;
+}
 
