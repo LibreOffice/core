@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-16 13:51:19 $
+ *  last change: $Author: mt $ $Date: 2002-07-19 08:58:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,7 +509,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
     // read to a temp string first, read text encoding and
     // convert later to stay compatible to fileformat
     ByteString aTempString;
-    rtl_TextEncoding aTempEncoding;
+    rtl_TextEncoding aTempEncoding = RTL_TEXTENCODING_MS_1252;  // #101493# Init for old documents
     rStm.ReadByteString(aTempString);
 
     rStm >> nFrameMarker;
