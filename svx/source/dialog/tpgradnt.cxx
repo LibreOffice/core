@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:17:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+// include ---------------------------------------------------------------
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
