@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-11 05:14:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String STR_SFX_FILEDLG_ACTUALVERSION
     Text[ korean ] = "ÇöÀç ¹öÀü";
     Text[ turkish ] = "Yürürlükteki sürüm";
     Text[ catalan ] = "Current version";
+    Text[ finnish ] = "Aktuelle Version";
 };
 
 String STR_SFX_EXPLORERFILE_INSERT
@@ -97,23 +98,24 @@ String STR_SFX_EXPLORERFILE_INSERT
     Text [ English ] = "Insert" ;
     Text [ portuguese ] = "Inserir" ;
     Text [ english_us ] = "Insert" ;
-    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese_brazilian ] = "Einf?en" ;
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
     Text [ italian ] = "Inserisci" ;
     Text [ spanish ] = "Insertar" ;
     Text [ french ] = "Insérer" ;
     Text [ dutch ] = "Invoegen" ;
-    Text[ chinese_simplified ] = "²åÈë";
+    Text[ chinese_simplified ] = "ÌùÉÏ";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
     Text[ japanese ] = "‘}“ü";
-    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ chinese_traditional ] = "¶K¤W";
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ greek ] = "ÅéóáãùãŞ";
     Text[ korean ] = "»ğÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ catalan ] = "Insert";
+    Text[ finnish ] = "Einfügen";
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
@@ -122,23 +124,24 @@ String STR_SFX_EXPLORERFILE_BUTTONINSERT
     Text [ English ] = "~Insert" ;
     Text [ portuguese ] = "~Inserir" ;
     Text [ english_us ] = "~Insert" ;
-    Text [ portuguese_brazilian ] = "~Einfügen" ;
+    Text [ portuguese_brazilian ] = "~Einf?en" ;
     Text [ swedish ] = "~Infoga" ;
     Text [ danish ] = "~Indsæt" ;
     Text [ italian ] = "~Inserici" ;
     Text [ spanish ] = "~Insertar" ;
     Text [ french ] = "~Insérer" ;
     Text [ dutch ] = "~Invoegen" ;
-    Text[ chinese_simplified ] = "²åÈë(~I)";
+    Text[ chinese_simplified ] = "ÌùÉÏ(~I)";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
     Text[ japanese ] = "‘}“ü(~I)";
-    Text[ chinese_traditional ] = "´¡¤J(~I)";
+    Text[ chinese_traditional ] = "¶K¤W(~I)";
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ greek ] = "~ÅéóáãùãŞ";
     Text[ korean ] = "»ğÀÔ(~I)";
     Text[ turkish ] = "Ekle";
     Text[ catalan ] = "~Insert";
+    Text[ finnish ] = "~Einfügen";
 };
 
 String STR_SFX_IMPORT_ALL
@@ -166,6 +169,7 @@ String STR_SFX_IMPORT_ALL
     Text[ korean ] = "<¸ğµç ¼­½Ä>";
     Text[ turkish ] = "<Tüm formatlar>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<All formats>";
 };
 
 //******************************************************************** EOF
