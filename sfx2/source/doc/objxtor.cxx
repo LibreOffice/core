@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 12:41:01 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 15:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include "arrdecl.hxx"
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 #ifndef _SV_RESARY_HXX
 #include <vcl/resary.hxx>
 #endif
@@ -69,6 +73,9 @@
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -725,6 +732,8 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     ResStringArray aEventNames( SfxResId( EVENT_NAMES_ARY ) );
     USHORT nCount = aEventNames.Count();
 

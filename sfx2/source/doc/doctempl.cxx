@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-16 12:10:55 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 15:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,21 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
 #endif
+
 #ifndef _SV_RESARY_HXX
 #include <vcl/resary.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -3473,6 +3482,8 @@ void SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL, OUString& aTitl
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::ReadFolderList()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
     ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
 
