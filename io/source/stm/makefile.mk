@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:21:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,17 @@
 PRJ=..$/..
 
 PRJNAME=io
-TARGET=stm
+TARGET = streams.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = stm
 COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+DLLPRE =
 # --- Files --------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
@@ -87,7 +88,7 @@ SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/opump.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = stm.map
 
 SHL1STDLIBS= \
         $(SALLIB) 	 \
