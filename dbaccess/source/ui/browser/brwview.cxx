@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ using namespace ::com::sun::star::form;
 //  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 
 namespace
@@ -124,7 +125,7 @@ namespace
                 Reference<XChild> xChild(xGrid->getModel(),UNO_QUERY);
                 Reference<XLoadable> xLoad;
                 if(xChild.is())
-                    xLoad = Reference<XLoadable>(xChild->getParent(),UNO_QUERY);
+                    xLoad.set(xChild->getParent(),UNO_QUERY);
                 bGrabFocus = xLoad.is() && xLoad->isLoaded();
             }
         }
@@ -174,15 +175,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         // get the VCL-control
         m_pVclControl = NULL;
-        Reference< ::com::sun::star::awt::XWindowPeer >  xPeer = m_xGrid->getPeer();
-        if (xPeer.is())
-        {
-            SbaXGridPeer* pPeer = SbaXGridPeer::getImplementation(xPeer);
-            if (pPeer)
-                m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
-
-            ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::AddWindow));
-        }
+        getVclControl();
 
         DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
@@ -195,12 +188,10 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 // -------------------------------------------------------------------------
 UnoDataBrowserView::~UnoDataBrowserView()
 {
-
-    ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-    m_pVclControl = NULL;
-
-    delete m_pSplitter;
-    m_pSplitter = NULL;
+    {
+        ::std::auto_ptr<Splitter> aTemp(m_pSplitter);
+        m_pSplitter = NULL;
+    }
     setTreeView(NULL);
 
     if ( m_pStatus )
@@ -209,8 +200,13 @@ UnoDataBrowserView::~UnoDataBrowserView()
         m_pStatus = NULL;
     }
 
-    ::comphelper::disposeComponent(m_xGrid);
-    ::comphelper::disposeComponent(m_xMe);
+    try
+    {
+        ::comphelper::disposeComponent(m_xGrid);
+        ::comphelper::disposeComponent(m_xMe);
+    }
+    catch(Exception)
+    {}
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
@@ -236,10 +232,8 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
         if (m_pTreeView)
         {
             ::dbaui::notifySystemWindow(this,m_pTreeView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-
-            Window* pDeleteIt = m_pTreeView;
+            ::std::auto_ptr<Window> aTemp(m_pTreeView);
             m_pTreeView = NULL;
-            delete pDeleteIt;
         }
         m_pTreeView = _pTreeView;
         if ( m_pTreeView )
@@ -347,8 +341,32 @@ sal_uInt16 UnoDataBrowserView::ViewColumnCount() const
 {
     return m_pVclControl ? m_pVclControl->GetViewColCount() : 0;
 }
+// -----------------------------------------------------------------------------
+SbaGridControl* UnoDataBrowserView::getVclControl() const
+{
+    if ( !m_pVclControl )
+    {
+        OSL_ENSURE(m_xGrid.is(),"Grid not set!");
+        if ( m_xGrid.is() )
+        {
+            Reference< ::com::sun::star::awt::XWindowPeer >  xPeer = m_xGrid->getPeer();
+            if ( xPeer.is() )
+            {
+                SbaXGridPeer* pPeer = SbaXGridPeer::getImplementation(xPeer);
+                UnoDataBrowserView* pTHIS = const_cast<UnoDataBrowserView*>(this);
+                if ( pPeer )
+                {
+                    m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
+                    pTHIS->startComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
+                }
 
-//------------------------------------------------------------------
+                ::dbaui::notifySystemWindow(pTHIS,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+            }
+        }
+    }
+    return m_pVclControl;
+}
+// -----------------------------------------------------------------------------
 void UnoDataBrowserView::GetFocus()
 {
     ODataView::GetFocus();
@@ -366,6 +384,13 @@ void UnoDataBrowserView::GetFocus()
         if(!bGrabFocus && m_pTreeView && m_pTreeView->IsVisible() )
             m_pTreeView->GrabFocus();
     }
+}
+// -----------------------------------------------------------------------------
+void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+{
+    stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
+    ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    m_pVclControl = NULL;
 }
 // -------------------------------------------------------------------------
 long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
@@ -407,7 +432,3 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
         m_pView->showStatus(String());
 }
 // -----------------------------------------------------------------------------
-
-
-
-
