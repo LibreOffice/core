@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:46:46 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,9 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
             }
             if(bAbsorb)
             {
+                //!! scan for CR characters and inserting the paragraph breaks
+                //!! has to be done in the called function.
+                //!! Implemented in SwXTextRange::DeleteAndInsert
                 xTextRange->setString(aString);
             }
             else
@@ -332,8 +335,27 @@ void SwXText::insertString(const uno::Reference< XTextRange > & xTextRange,
                 SwPaM aInsertPam(*pPos);
                 sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
                 GetDoc()->DoGroupUndo(sal_False);
-                if(!GetDoc()->Insert(aInsertPam, aString ))
-                    DBG_ERROR("Text wurde nicht eingefuegt");
+
+                // scan for CR characters in order to insert paragraph breaks
+                // at those positions by calling SplitNode
+                OUString aTxt;
+                sal_Int32 nStartIdx = 0;
+                sal_Int32 nIdx = aString.indexOf( '\r', nStartIdx );
+                while (nIdx > 0)
+                {
+                    DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
+                    aTxt = aString.copy( nStartIdx, nIdx - nStartIdx );
+                    if (aTxt.getLength() && !GetDoc()->Insert( aInsertPam, aTxt ))
+                        DBG_ERROR( "insert string failed" );
+                    if (!GetDoc()->SplitNode( *aInsertPam.GetPoint() ))
+                        DBG_ERROR( "SplitNode failed" );
+                    nStartIdx = nIdx + 1;
+                    nIdx = aString.indexOf( '\r', nStartIdx );
+                }
+                aTxt = aString.copy( nStartIdx );
+                if (aTxt.getLength() && !GetDoc()->Insert( aInsertPam, aTxt ))
+                    DBG_ERROR( "insert string failed" );
+
                 GetDoc()->DoGroupUndo(bGroupUndo);
             }
         }
