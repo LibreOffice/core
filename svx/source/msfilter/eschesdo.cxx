@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 14:06:27 $
+ *  last change: $Author: sj $ $Date: 2000-11-28 18:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #endif
 
 #include <cppuhelper/extract.hxx>
@@ -514,35 +520,36 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj )
         ESCHER_AnchorText   eAnchor = ESCHER_AnchorTop;
         UINT32              nTextAttr = 0x40004;    // rotate text with shape
 
-        VerticalAlignment* pVAlign =
-            ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextVerticalAdjust") ) )
-                ? (VerticalAlignment*)rObj.GetUsrAny().getValue()
-                : NULL;
-        if ( pVAlign )
+
+        if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextVerticalAdjust") ) )
         {
-            switch ( *pVAlign )
+            ::com::sun::star::drawing::TextVerticalAdjust eVA;
+            rObj.GetUsrAny() >>= eVA;
+            switch ( eVA )
             {
-                case VerticalAlignment_MIDDLE :
+                case 1 :    // ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
                     eAnchor = ESCHER_AnchorMiddle;
                 break;
 
-                case VerticalAlignment_BOTTOM :
+                case 2 :    // ::com::sun::star::drawing::TextVerticalAdjust_BOTTOM :
                     eAnchor = ESCHER_AnchorBottom;
                 break;
 
                 default :
-                case VerticalAlignment_TOP :
+                case 0 :    // ::com::sun::star::drawing::TextVerticalAdjust_TOP :
                     eAnchor = ESCHER_AnchorTop;
                 break;
             }
         }
         if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("TextHorizontalAdjust") ) )
         {
-            switch ( *(TextAdjust*)rObj.GetUsrAny().getValue() )
+            ::com::sun::star::drawing::TextHorizontalAdjust eTA;
+            rObj.GetUsrAny() >>= eTA;
+            switch ( eTA )
             {
-                case TextAdjust_CENTER :
-                case TextAdjust_RIGHT :
-                case TextAdjust_LEFT :
+                case 1 :    // ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
+                case 2 :    // ::com::sun::star::drawing::TextHorizontalAdjust_RIGHT :
+                case 0 :    // ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
                 {
                     switch( eAnchor )
                     {
@@ -558,9 +565,8 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj )
                     }
                 }
                 break;
-                case TextAdjust_STRETCH :
-                case TextAdjust_BLOCK :
-                break;
+                case 3 :    // ::com::sun::star::drawing::TextHorizontalAdjust_BLOCK :
+                 break;
             }
         }
 /*
