@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectanimator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:43:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,10 @@ namespace sdr
 
             if(aFindResult != maAnimationStates.end())
             {
+                // #114376# remember content for next call
+                AnimationState* pErasedState = *aFindResult;
                 maAnimationStates.erase(aFindResult);
-                RemoveEvent(*aFindResult);
+                RemoveEvent(pErasedState);
             }
         }
 
