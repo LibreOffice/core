@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:44:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "~संपादन...";
+        Text[ slovak ] = "~Upraviť...";
     };
     MultiListBox LB_BOOK
     {
@@ -159,6 +160,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Slovníky";
         Text[ hebrew ] = "‮מילונים‬";
         Text[ hindi ] = "शब्दकोश";
+        Text[ slovak ] = "Slovníky";
     };
     CheckBox BTN_CAPS
     {
@@ -195,6 +197,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Slova velkými písmeny";
         Text[ hebrew ] = "‮מילים בעלות ראשיות גדולות‬";
         Text[ hindi ] = "~केपिटल शब्द";
+        Text[ slovak ] = "Slová ~veľkými písmenami";
     };
     CheckBox BTN_NUMS
     {
@@ -231,6 +234,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Slova s číslicemi ";
         Text[ hebrew ] = "‮מילים עם מספרים‬";
         Text[ hindi ] = "संख्या सहित ~शब्द ";
+        Text[ slovak ] = "Slová s číslica~mi ";
     };
     CheckBox BTN_UPLOW
     {
@@ -267,6 +271,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Rozlišovat velká/malá ";
         Text[ hebrew ] = "‮רגישות לאותיות גדולות\\קטנות‬";
         Text[ hindi ] = "~केस सचेतन ";
+        Text[ slovak ] = "~Rozlišovať veľké/malé ";
     };
     FixedLine GB_AUDIT
     {
@@ -302,6 +307,7 @@ TabPage RID_SFXPAGE_SPELL
         Text[ czech ] = "Kontrola";
         Text[ hebrew ] = "‮בדיקה‬";
         Text[ hindi ] = "जाँच";
+        Text[ slovak ] = "Kontrola";
     };
     Text[ chinese_simplified ] = "拼写检查";
     Text[ russian ] = "�������� ����������";
@@ -318,8 +324,11 @@ TabPage RID_SFXPAGE_SPELL
     Text[ czech ] = "Kontrola pravopisu";
     Text[ hebrew ] = "‮בדיקת איות‬";
     Text[ hindi ] = "अक्षर की जाँच";
+    Text[ slovak ] = "Kontrola pravopisu";
 };
  // ********************************************************************** EOF
+
+
 
 
 
