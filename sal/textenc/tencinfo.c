@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: pl $ $Date: 2000-11-20 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
         { "unicode", aUnixCharsetUNICODETab },
         { "sunolcursor", aUnixCharsetSymbolTab },
         { "sunolglyph", aUnixCharsetSymbolTab },
+        { "iso10646", aUnixCharsetUNICODETab },
 /*        { "ksc5601.1992", },          */
 /*        { "tis620.2553",  },          */
 /*        { "sunudcja.1997",  },        */
@@ -956,6 +957,8 @@ const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncodin
     const ImplTextEncodingData* pData = Impl_getTextEncodingData( eTextEncoding );
     if ( pData )
         return pData->mpBestUnixCharset;
+    else if( eTextEncoding == RTL_TEXTENCODING_UNICODE )
+        return "iso10646-1";
     else
         return 0;
 }
