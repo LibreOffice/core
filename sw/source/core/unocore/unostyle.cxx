@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:46:22 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,7 +1323,8 @@ BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( RuntimeExcep
 {
     BOOL bRet = C2U("com.sun.star.style.Style") == rServiceName;
     if(!bRet && SFX_STYLE_FAMILY_CHAR == eFamily)
-        bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
+        bRet = !rServiceName.compareToAscii("com.sun.star.style.CharacterStyle")||
+               !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesAsian")||
                !rServiceName.compareToAscii("com.sun.star.style.CharacterPropertiesComplex");
     if(!bRet && SFX_STYLE_FAMILY_PARA == eFamily)
@@ -1332,7 +1333,8 @@ BOOL SwXStyle::supportsService(const OUString& rServiceName) throw( RuntimeExcep
                (C2U("com.sun.star.style.ParagraphPropertiesAsian") == rServiceName) ||
                (C2U("com.sun.star.style.ParagraphPropertiesComplex") == rServiceName);
     if(!bRet && SFX_STYLE_FAMILY_PAGE == eFamily)
-        bRet = (C2U("com.sun.star.style.PageProperties") == rServiceName);
+        bRet = (C2U("com.sun.star.style.PageStyle") == rServiceName)||
+               (C2U("com.sun.star.style.PageProperties") == rServiceName);
 
     return  bRet;
 }
@@ -1349,21 +1351,23 @@ Sequence< OUString > SwXStyle::getSupportedServiceNames(void) throw( RuntimeExce
             nCount++;
     }
     else if(SFX_STYLE_FAMILY_CHAR == eFamily)
-        nCount = 4;
+        nCount = 5;
     else if(SFX_STYLE_FAMILY_PAGE == eFamily)
-        nCount = 2;
+        nCount = 3;
     Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.style.Style");
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            pArray[1] = C2U("com.sun.star.style.CharacterProperties");
-            pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
-            pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+            pArray[1] = C2U("com.sun.star.style.CharacterStyle");
+            pArray[2] = C2U("com.sun.star.style.CharacterProperties");
+            pArray[3] = C2U("com.sun.star.style.CharacterPropertiesAsian");
+            pArray[4] = C2U("com.sun.star.style.CharacterPropertiesComplex");
         break;
         case SFX_STYLE_FAMILY_PAGE:
-            pArray[1] = C2U("com.sun.star.style.PageProperties");
+            pArray[1] = C2U("com.sun.star.style.PageStyle");
+            pArray[2] = C2U("com.sun.star.style.PageProperties");
         break;
         case SFX_STYLE_FAMILY_PARA:
             pArray[1] = C2U("com.sun.star.style.ParagraphStyle");
@@ -2137,13 +2141,12 @@ put_itemset:
 /* -----------------------------18.04.01 13:29--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXStyle::setPropertyValues(
-    const Sequence< OUString >& rPropertyNames,
-    const Sequence< Any >& rValues )
-        throw(PropertyVetoException, IllegalArgumentException,
-                WrappedTargetException, RuntimeException)
+void SAL_CALL SwXStyle::SetPropertyValues_Impl(
+    const uno::Sequence< OUString >& rPropertyNames,
+    const uno::Sequence< Any >& rValues )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     if ( !m_pDoc )
         throw RuntimeException();
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
@@ -2200,6 +2203,29 @@ void SwXStyle::setPropertyValues(
     }
     if(aBaseImpl.HasItemSet())
         aBaseImpl.pNewBase->SetItemSet(aBaseImpl.GetItemSet());
+}
+
+void SwXStyle::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& rValues )
+        throw(PropertyVetoException, IllegalArgumentException,
+                WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // workaround for bad designed API
+    try
+    {
+        SetPropertyValues_Impl( rPropertyNames, rValues );
+    }
+    catch (UnknownPropertyException &rException)
+    {
+        // wrap the original (here not allowed) exception in
+        // a WrappedTargetException that gets thrown instead.
+        WrappedTargetException aWExc;
+        aWExc.TargetException <<= rException;
+        throw aWExc;
+    }
 }
 
 Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
@@ -2353,10 +2379,10 @@ query_itemset:
 /* -----------------------------19.04.01 09:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< Any > SwXStyle::getPropertyValues(
-    const Sequence< OUString >& rPropertyNames ) throw(RuntimeException)
+uno::Sequence< Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
+        const uno::Sequence< OUString > & rPropertyNames )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     if ( !m_pDoc )
         throw RuntimeException();
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
@@ -2440,6 +2466,31 @@ Sequence< Any > SwXStyle::getPropertyValues(
     }
     return aRet;
 }
+/* -----------------------------04.11.03 09:26--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXStyle::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames ) throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues;
+
+    // workaround for bad designed API
+    try
+    {
+        aValues = GetPropertyValues_Impl( rPropertyNames );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+    catch (WrappedTargetException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+
+    return aValues;
+}
 /*-- 18.04.01 13:07:29---------------------------------------------------
   -----------------------------------------------------------------------*/
 void SwXStyle::addPropertiesChangeListener(
@@ -2475,9 +2526,10 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& rValue
         WrappedTargetException,
         RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     const Sequence<OUString> aProperties(&rPropertyName, 1);
     const Sequence<Any> aValues(&rValue, 1);
-    setPropertyValues(aProperties, aValues);
+    SetPropertyValues_Impl( aProperties, aValues );
 }
 /*-- 17.12.98 08:26:53---------------------------------------------------
 
@@ -2485,8 +2537,9 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& rValue
 Any SwXStyle::getPropertyValue(const OUString& rPropertyName)
     throw( UnknownPropertyException, lang::WrappedTargetException, RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     const Sequence<OUString> aProperties(&rPropertyName, 1);
-    return getPropertyValues(aProperties).getConstArray()[0];
+    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
 
 }
 /*-- 17.12.98 08:26:53---------------------------------------------------
@@ -2950,12 +3003,12 @@ SwXPageStyle::~SwXPageStyle()
 /* -----------------------------18.04.01 13:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXPageStyle::setPropertyValues(
-    const Sequence< OUString >& rPropertyNames,
-    const Sequence< Any >& rValues )
-        throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
+    const uno::Sequence< OUString >& rPropertyNames,
+    const uno::Sequence< Any >& rValues )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     if(!GetDoc())
         throw RuntimeException();
     SfxItemPropertySet& aPropSet = aSwMapProvider.GetPropertySet(PROPERTY_SET_PAGE_STYLE);
@@ -3158,14 +3211,35 @@ void SwXPageStyle::setPropertyValues(
     if(aBaseImpl.HasItemSet())
         aBaseImpl.pNewBase->SetItemSet(aBaseImpl.GetItemSet());
 }
-/* -----------------------------18.04.01 13:50--------------------------------
 
- ---------------------------------------------------------------------------*/
-Sequence< Any > SwXPageStyle::getPropertyValues(
-    const Sequence< OUString >& rPropertyNames )
-        throw(RuntimeException)
+void SwXPageStyle::setPropertyValues(
+    const Sequence< OUString >& rPropertyNames,
+    const Sequence< Any >& rValues )
+        throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // workaround for bad designed API
+    try
+    {
+        SetPropertyValues_Impl( rPropertyNames, rValues );
+    }
+    catch (UnknownPropertyException &rException)
+    {
+        // wrap the original (here not allowed) exception in
+        // a WrappedTargetException that gets thrown instead.
+        WrappedTargetException aWExc;
+        aWExc.TargetException <<= rException;
+        throw aWExc;
+    }
+}
+/* -----------------------------04.11.03 13:50--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Sequence< Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
+        const uno::Sequence< OUString >& rPropertyNames )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+{
     if(!GetDoc())
         throw RuntimeException();
 
@@ -3373,14 +3447,41 @@ MakeObject:
     }
     return aRet;
 }
+/* -----------------------------18.04.01 13:50--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXPageStyle::getPropertyValues(
+    const Sequence< OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues;
+
+    // workaround for bad designed API
+    try
+    {
+        aValues = GetPropertyValues_Impl( rPropertyNames );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+    catch (WrappedTargetException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+
+    return aValues;
+}
 /*-- 17.12.98 08:43:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(
     UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     const Sequence<OUString> aProperties(&rPropertyName, 1);
-    return getPropertyValues(aProperties).getConstArray()[0];
+    return GetPropertyValues_Impl(aProperties).getConstArray()[0];
 }
 /*-- 17.12.98 08:43:36---------------------------------------------------
 
@@ -3392,9 +3493,10 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& rV
         lang::WrappedTargetException,
         RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     const Sequence<OUString> aProperties(&rPropertyName, 1);
     const Sequence<Any> aValues(&rValue, 1);
-    setPropertyValues(aProperties, aValues);
+    SetPropertyValues_Impl( aProperties, aValues );
 }
 /* -----------------12.01.99 15:31-------------------
  * Liefert den StartNode des Headers oder Footers der
