@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-06 07:35:55 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 08:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,7 @@ void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
     if( pNewItem && nWhich == SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT )
     {
         if( pOutlinerParaObject )
-            pOutlinerParaObject->SetVertical( !( (SfxBoolItem*) pNewItem )->GetValue() );
+            SetVerticalWriting( !( (SfxBoolItem*) pNewItem )->GetValue() );
     }
 
     SdrAttrObj::ItemChange( nWhich, pNewItem );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-02 11:47:47 $
+ *  last change: $Author: dl $ $Date: 2001-03-06 08:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,6 +1686,10 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
         pOutlinerParaObject=NULL;
     }
     pOutlinerParaObject=pTextObject;
+
+    if( pOutlinerParaObject )
+        mpObjectItemSet->Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
+
     SetTextSizeDirty();
     bPortionInfoChecked=FALSE;
     if (IsTextFrame() && (IsAutoGrowHeight() || IsAutoGrowWidth())) { // Textrahmen anpassen!
