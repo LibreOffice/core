@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 15:33:58 $
+#   last change: $Author: hr $ $Date: 2004-09-09 10:59:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=util
 # --- Targets ------------------------------------------------------
 
 $(MISC)$/$(TARGET)_delzip :
-    +-$(RM) $(BIN)$/registry{$(alllangiso)}.zip	
+    +-$(RM) $(BIN)$/registry_{$(alllangiso)}.zip	
     +-$(RM) $(COMMON_OUTPUT)$/bin$/registry_{$(alllangiso)}.zip
 
 $(BIN)$/registry_{$(alllangiso)}.zip : $(MISC)$/$(TARGET)_delzip
