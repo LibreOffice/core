@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:23:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Workday
         {
-            Text [ de ] = "Liefert die fortlaufende Zahl des Datums, dass vor oder nach einer bestimmten Anzahl von Arbeitstagen liegt.";
+            Text [ de ] = "Liefert die fortlaufende Zahl des Datums, das vor oder nach einer bestimmten Anzahl von Arbeitstagen liegt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the serial number of the date before or after a specified number of workdays";
         };
