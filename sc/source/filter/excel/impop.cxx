@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:47 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,11 @@
 #include "editutil.hxx"
 #include "filtopt.hxx"
 #include "scerrors.hxx"
+#include "unonames.hxx"
+
+#ifndef SC_FAPIHELPER_HXX
+#include "fapihelper.hxx"
+#endif
 
 #ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
@@ -2222,6 +2227,9 @@ void ImportExcel::PostDocLoad( void )
                 pOleSize->aEnd.Col(), pOleSize->aEnd.Row(), pExcRoot->pExtDocOpt->nActTab ) );
             GetDoc().SetVisibleTab( pExcRoot->pExtDocOpt->nActTab );
         }
+
+        // #111099# open forms in alive mode (has no effect, if no controls in document)
+        pDocObj->setPropertyValue( CREATE_OUSTRING( SC_UNO_APPLYFMDES ), ::comphelper::makeBoolAny( sal_False ) );
     }
 
     pD->SetExtDocOptions( pExcRoot->pExtDocOpt );
