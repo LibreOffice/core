@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 14:12:35 $
+ *  last change: $Author: os $ $Date: 2002-09-06 13:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,7 +1503,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         // Curosr in den sichtbaren Bereich scrollen
         if( bHasFocus && eFlags & SwCrsrShell::SCROLLWIN &&
             (HasSelection() || eFlags & SwCrsrShell::READONLY ||
-             !IsCrsrReadonly()) )
+             !IsCrsrReadonly() || GetViewOptions()->IsSelectionInReadonly()) )
         {
             //JP 30.04.99:  damit das EndAction, beim evtuellen Scrollen, den
             //      SV-Crsr nicht wieder sichtbar macht, wird hier das Flag
