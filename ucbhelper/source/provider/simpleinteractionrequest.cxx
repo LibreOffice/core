@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleinteractionrequest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
+ *  last change: $Author: kso $ $Date: 2001-11-22 11:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ SimpleInteractionRequest::SimpleInteractionRequest(
 
     uno::Sequence< uno::Reference< task::XInteractionContinuation > >
         aContinuations( nLength );
+
+    nLength = 0;
 
     if ( xAbort.is() )
         aContinuations[ nLength++ ] = xAbort;
