@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-27 17:16:23 $
+ *  last change: $Author: ssa $ $Date: 2002-12-03 14:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,11 +1117,18 @@ void SalFrame::SetTitle( const XubString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "SalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
+    // #102847#, #102978#
+    // release solar mutex if we're calling the main thread
+    // same as for SetWindowPos
+    ULONG nCount = 0;
+    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
+        nCount = Application::ReleaseSolarMutex();
     if ( !SetWindowTextW( maFrameData.mhWnd, rTitle.GetBuffer() ) )
     {
         ByteString aAnsiTitle = ImplSalGetWinAnsiString( rTitle );
         SetWindowTextA( maFrameData.mhWnd, aAnsiTitle.GetBuffer() );
     }
+    Application::AcquireSolarMutex( nCount );
 }
 
 // -----------------------------------------------------------------------
