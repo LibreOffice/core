@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:22:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,13 @@
 #include <svtools/graphictools.hxx>
 #endif
 
+#ifndef _ZLIB_H
+#ifdef SYSTEM_ZLIB
+#include <zlib.h>
+#else
 #include <external/zlib/zlib.h>
+#endif
+#endif
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
