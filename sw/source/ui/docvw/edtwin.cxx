@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:14:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,7 @@
 #ifndef _VCL_CMDEVT_H //autogen
 #include <vcl/cmdevt.h>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _ARGS_HXX //autogen
 #include <svtools/args.hxx>
 #endif
