@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-13 15:55:03 $
+ *  last change: $Author: cl $ $Date: 2002-01-14 13:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ public:
 
     void    SetPaperBin(USHORT nBin) { nPaperBin = nBin; }
     USHORT  GetPaperBin() const { return nPaperBin; }
-    void        SetOrientation(const Orientation eOrient) { eOrientation = eOrient; }
-    Orientation GetOrientation() const { return eOrientation; }
+    virtual void        SetOrientation(Orientation eOrient);
+    virtual Orientation GetOrientation() const;
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2002-01-04 13:24:47 $
+ *  last change: $Author: cl $ $Date: 2002-01-14 13:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2924,7 +2924,27 @@ void SdPage::AdjustBackgroundSize()
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
+void SdPage::SetOrientation( Orientation eOrient)
+{
+    eOrientation = eOrient;
+}
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
+Orientation SdPage::GetOrientation() const
+{
+    return eOrientation;
+}
 
 /*************************************************************************
 |*
