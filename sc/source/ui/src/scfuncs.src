@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 17:19:28 $
+ *  last change: $Author: kz $ $Date: 2001-12-19 17:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3122,7 +3122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Datum_1" ;
             Text [ english ] = "start_date" ;
             Text [ norwegian ] = "Datum 1" ;
-            Text [ italian ] = "Data 1 " ;
+            Text [ italian ] = "Data 1" ;
             Text [ portuguese_brazilian ] = "Datum 1" ;
             Text [ portuguese ] = "Data_1" ;
             Text [ finnish ] = "Päivämäärä_1" ;
@@ -3793,7 +3793,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ganze Zahl für die Stunde." ;
             Text [ english ] = "is a number from 0 to 23 representing the hour." ;
             Text [ norwegian ] = "Ganze Zahl für die Stunde." ;
-            Text [ italian ] = "Numero intero compreso tra 0 e 23 che rappresenta l'ora." ;
+            Text [ italian ] = "Numero intero che rappresenta l'ora." ;
             Text [ portuguese_brazilian ] = "Ganze Zahl f? die Stunde." ;
             Text [ portuguese ] = "é um número inteiro entre 0 e 23 que representa a hora." ;
             Text [ finnish ] = "Tunteja kuvaava muuttuja." ;
@@ -3852,7 +3852,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ganze Zahl für die Minute." ;
             Text [ english ] = "is a number from 0 to 59 representing the minute." ;
             Text [ norwegian ] = "Ganze Zahl für die Minute." ;
-            Text [ italian ] = "Numero intero compreso tra 0 e 59 che rappresenta i minuti." ;
+            Text [ italian ] = "Numero intero che rappresenta il minuto." ;
             Text [ portuguese_brazilian ] = "Ganze Zahl f? die Minute." ;
             Text [ portuguese ] = "é um número inteiro entre 0 e 59 que representa o minuto." ;
             Text [ finnish ] = "Minuutteja kuvaava muuttuja." ;
@@ -3911,7 +3911,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Ganze Zahl für die Sekunde." ;
             Text [ english ] = "is a number from 0 to 59 representing the second." ;
             Text [ norwegian ] = "Ganze Zahl für die Sekunde." ;
-            Text [ italian ] = "è un numero intero compreso tra 0 e 59 che rappresenta i secondi." ;
+            Text [ italian ] = "Un numero intero che rappresenta i secondi." ;
             Text [ portuguese_brazilian ] = "Ganze Zahl f? die Sekunde." ;
             Text [ portuguese ] = "é um número inteiro entre 0 e 59 que representa o segundo." ;
             Text [ finnish ] = "Sekunteja kuvaava muuttuja." ;
@@ -3945,7 +3945,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Bestimmt aus einem Text in einem möglichen Zeiteingabeformat eine fortlaufende Zahl." ;
             Text [ english ] = "Returns the serial number of the time represented by time_text." ;
             Text [ norwegian ] = "Bestimmt aus einem Text in einem möglichen Zeiteingabeformat eine fortlaufende Zahl." ;
-            Text [ italian ] = "Restituisce il numero seriale dell'ora rappresentata da ora." ;
+            Text [ italian ] = "Restituisce il numero seriale dell'ora rappresentata da un testo." ;
             Text [ portuguese_brazilian ] = "Bestimmt aus einem Text in einem m?lichen Zeiteingabeformat eine fortlaufende Zahl." ;
             Text [ portuguese ] = "Converte uma hora em forma de texto para um núm_série. " ;
             Text [ finnish ] = "Palauttaa mahdollisen tekstiaikamerkintämuodon järjestysnumeron." ;
@@ -3980,7 +3980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Text" ;
             Text [ english ] = "time_text" ;
             Text [ norwegian ] = "Text" ;
-            Text [ italian ] = "ora" ;
+            Text [ italian ] = "Testo" ;
             Text [ portuguese_brazilian ] = "Text" ;
             Text [ portuguese ] = "Texto_hora" ;
             Text [ finnish ] = "teksti" ;
@@ -16215,7 +16215,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Der Wert, dessen Hyperbelsinus berechnet werden soll." ;
             Text [ english ] = "is any real number." ;
             Text [ norwegian ] = "Der Wert, dessen Hyperbelsinus berechnet werden soll." ;
-            Text [ italian ] = "è un numero reale qualsiasi." ;
+            Text [ italian ] = "Il valore per il quale si vuole calcolare il seno iperbolico." ;
             Text [ portuguese_brazilian ] = "Der Wert, dessen Hyperbelsinus berechnet werden soll." ;
             Text [ portuguese ] = "é qualquer número real." ;
             Text [ finnish ] = "Arvo, jonka hyperbolinen sini lasketaan." ;
@@ -32196,7 +32196,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der beobachteten Daten." ;
             Text [ english ] = "is the range of data that contains observations to test against expected values." ;
             Text [ norwegian ] = "Die Matrix der beobachteten Daten." ;
-            Text [ italian ] = "La matrice dei dati ossarvati." ;
+            Text [ italian ] = "La matrice dei dati osservati." ;
             Text [ portuguese_brazilian ] = "Die Matrix der beobachteten Daten." ;
             Text [ portuguese ] = "é o intervalo de dados que contém observações para serem comparadas com os valores esperados." ;
             Text [ finnish ] = "Tutkittu tietomatriisi." ;
@@ -37622,7 +37622,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wandelt eine Codezahl in ein Zeichen oder Buchstaben um." ;
             Text [ english ] = "Returns the character specified by the code number." ;
             Text [ norwegian ] = "Wandelt eine Codezahl in ein Zeichen oder Buchstaben um." ;
-            Text [ italian ] = "Restituisce il carattere specificato dal numero di codice." ;
+            Text [ italian ] = "Converte un codice nel numero o lettera corrispondente." ;
             Text [ portuguese_brazilian ] = "Wandelt eine Codezahl in ein Zeichen oder Buchstaben um." ;
             Text [ portuguese ] = "Devolve o carácter especificado pelo número de código." ;
             Text [ finnish ] = "Muuntaa koodiluvun merkiksi tai kirjaimeksi." ;
@@ -37818,7 +37818,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Verbindet Texte zu einem einzigen." ;
             Text [ english ] = "Joins several text items into one text item." ;
             Text [ norwegian ] = "Verbindet Texte zu einem einzigen." ;
-            Text [ italian ] = "Unisce fino a 30 diversi testi." ;
+            Text [ italian ] = "Unisce diversi testi in uno solo." ;
             Text [ portuguese_brazilian ] = "Verbindet Texte zu einem einzigen." ;
             Text [ portuguese ] = "Agrupa vários textos num só." ;
             Text [ finnish ] = "Yhdistää tekstiosia yhdeksi tekstiksi." ;
@@ -37883,7 +37883,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Text für die Textverkettung." ;
             Text [ english ] = "are 1 to 30 text items to be joined into a single text item." ;
             Text [ norwegian ] = "Text für die Textverkettung." ;
-            Text [ italian ] = "sono gli elementi di testo da unire in un unico elemento." ;
+            Text [ italian ] = "Testo da unire." ;
             Text [ portuguese_brazilian ] = "Text f? die Textverkettung." ;
             Text [ portuguese ] = "é 1 de 30  textos a serem agrupados num único." ;
             Text [ finnish ] = "Yhdistettävä teksti." ;
@@ -38288,7 +38288,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung." ;
             Text [ english ] = "Returns the number of the character at which a specific character or text string is first found, reading from left to right." ;
             Text [ norwegian ] = "Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung." ;
-            Text [ italian ] = "Cerca una stringa di testo all'interno di un'altra stringa non tenendo conto di maiuscole/minuscole." ;
+            Text [ italian ] = "Cerca una stringa di testo all'interno di un testo non tenendo conto di maiuscole/minuscole." ;
             Text [ portuguese_brazilian ] = "Sucht ein Teilwort in einem Text ohne Ber?ksichtigung von Gro?- und Kleinschreibung." ;
             Text [ portuguese ] = "Localiza um valor de texto dentro de outro, sem fazer a distinção entre maiúsculas e minúsculas." ;
             Text [ finnish ] = "Etsii tekstiarvoa toisen tekstin sisältä (ei kirjainkoon erottelua)." ;
@@ -38323,7 +38323,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Suchtext" ;
             Text [ english ] = "find_text" ;
             Text [ norwegian ] = "Suchtext" ;
-            Text [ italian ] = "stringa" ;
+            Text [ italian ] = "Cerca testo" ;
             Text [ portuguese_brazilian ] = "Suchtext" ;
             Text [ portuguese ] = "texto_a_localizar" ;
             Text [ finnish ] = "etsi_teksti" ;
@@ -38352,7 +38352,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, der gesucht wird." ;
             Text [ english ] = "is the text you want to find." ;
             Text [ norwegian ] = "Der Text, der gesucht wird." ;
-            Text [ italian ] = "è il testo che si desidera trovare." ;
+            Text [ italian ] = "Il testo da trovare." ;
             Text [ portuguese_brazilian ] = "Der Text, der gesucht wird." ;
             Text [ portuguese ] = "é o texto que deseja localizar." ;
             Text [ finnish ] = "Haettava teksti." ;
@@ -38410,7 +38410,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, in dem gesucht wird." ;
             Text [ english ] = "is the text in which you want to search for find_text." ;
             Text [ norwegian ] = "Der Text, in dem gesucht wird." ;
-            Text [ italian ] = "è il testo all'interno del quale si desidera effettuare la ricerca di testo." ;
+            Text [ italian ] = "Il testo all'interno del quale si desidera effettuare la ricerca." ;
             Text [ portuguese_brazilian ] = "Der Text, in dem gesucht wird." ;
             Text [ portuguese ] = "é o texto que contém o texto que deseja localizar." ;
             Text [ finnish ] = "Teksti, josta haetaan." ;
@@ -38439,7 +38439,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Position" ;
             Text [ english ] = "start_num" ;
             Text [ norwegian ] = "Position" ;
-            Text [ italian ] = "inizio" ;
+            Text [ italian ] = "Posizione" ;
             Text [ portuguese_brazilian ] = "Position" ;
             Text [ portuguese ] = "Posição_inicial" ;
             Text [ finnish ] = "sijainti" ;
@@ -38468,7 +38468,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Position im Text, ab der gesucht wird" ;
             Text [ english ] = "is the character number in within_text, counting from the left, at which you want to start searching." ;
             Text [ norwegian ] = "Die Position im Text, ab der gesucht wird" ;
-            Text [ italian ] = "è il numero del carattere in stringa, a partire da sinistra, dal quale si desidera iniziare la ricerca." ;
+            Text [ italian ] = "La posizione del testo a partire dalla quale si desidera iniziare la ricerca." ;
             Text [ portuguese_brazilian ] = "Die Position im Text, ab der gesucht wird" ;
             Text [ portuguese ] = "especifica a posição do texto a partir da qual será iniciada a procura." ;
             Text [ finnish ] = "Haun aloituskohta tekstissä." ;
@@ -38896,7 +38896,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wandelt einen Text in eine Zahl um." ;
             Text [ english ] = "Converts text to a number." ;
             Text [ norwegian ] = "Wandelt einen Text in eine Zahl um." ;
-            Text [ italian ] = "Converte testo in un numero." ;
+            Text [ italian ] = "Converte un testo in un numero." ;
             Text [ portuguese_brazilian ] = "Verwandelt einen Text in eine Zahl um." ;
             Text [ portuguese ] = "Converte um texto em número." ;
             Text [ finnish ] = "Muuntaa tekstin luvuksi." ;
@@ -38994,7 +38994,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wandelt eine Zahl gemäß einer Formatangabe in einen Text um." ;
             Text [ english ] = "Converts a value to text in a specific number format." ;
             Text [ norwegian ] = "Wandelt eine Zahl gemäß einer Formatangabe in einen Text." ;
-            Text [ italian ] = "Converte un valore in un testo conformemente a un formato indicato." ;
+            Text [ italian ] = "Converte un numero in un testo in base a un formato indicato." ;
             Text [ portuguese_brazilian ] = "Wandelt eine Zahl gem?? einer Formatangabe in einen Text." ;
             Text [ portuguese ] = "Converte um número em texto de acordo com um determinado formato." ;
             Text [ finnish ] = "Muuntaa luvun tekstiksi määritetyn muodon perusteella." ;
@@ -39058,7 +39058,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Zahlenwert, der umgewandelt wird." ;
             Text [ english ] = "is a numeric value, a formula that evaluates to a numeric value, or a reference to a cell containing a numeric value." ;
             Text [ norwegian ] = "Der Zahlenwert, der umgewandelt wird." ;
-            Text [ italian ] = "è un valore numerico che viene convertito." ;
+            Text [ italian ] = "Il valore numerico che viene convertito." ;
             Text [ portuguese_brazilian ] = "Der Zahlwert, der umgewandelt wird." ;
             Text [ portuguese ] = "é um valor numérico a ser convertido." ;
             Text [ finnish ] = "Muunnettava numeerinen arvo." ;
@@ -39149,7 +39149,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wandelt einen Wert in einen Text." ;
             Text [ english ] = "Returns the text referred to by value." ;
             Text [ norwegian ] = "Wandelt einen Wert in einen Text." ;
-            Text [ italian ] = "Converte un numero in una stringa vuota." ;
+            Text [ italian ] = "Converte un valore in un testo." ;
             Text [ portuguese_brazilian ] = "Wandelt einen Wert in einen Text." ;
             Text [ portuguese ] = "Converte um valor em texto." ;
             Text [ finnish ] = "Muuntaa arvon tekstiksi." ;
@@ -39184,7 +39184,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "Numero" ;
+            Text [ italian ] = "Valore" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "arvo" ;
@@ -39213,7 +39213,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Wert, der umgewandelt wird." ;
             Text [ english ] = "is the value you want to test." ;
             Text [ norwegian ] = "Der Wert, der umgewandelt wird." ;
-            Text [ italian ] = "è il valore che si desidera convertire.." ;
+            Text [ italian ] = "Il valore che si desidera convertire.." ;
             Text [ portuguese_brazilian ] = "Der Wert, der umgewandelt wird." ;
             Text [ portuguese ] = "é o valor a converter." ;
             Text [ finnish ] = "Muunnettava arvo." ;
@@ -39797,7 +39797,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, dessen Länge bestimmt wird." ;
             Text [ english ] = "is the text whose length you want to find." ;
             Text [ norwegian ] = "Der Text, dessen Länge bestimmt wird." ;
-            Text [ italian ] = "è il testo di cui si desidera conoscere la lunghezza." ;
+            Text [ italian ] = "Il testo di cui si desidera conoscere la lunghezza." ;
             Text [ portuguese_brazilian ] = "Der Text, dessen L?nge bestimmt wird." ;
             Text [ portuguese ] = "é o texto do qual deseja definir o comprimento." ;
             Text [ finnish ] = "Teksti, jonka pituus määritetään." ;
@@ -40050,7 +40050,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, dessen Endteilwort bestimmt wird." ;
             Text [ english ] = "is the text string containing the characters you want to extract." ;
             Text [ norwegian ] = "Der Text, dessen Endteilwort bestimmt wird." ;
-            Text [ italian ] = "è la stringa di testo che contiene i caratteri che si desidera estrarre." ;
+            Text [ italian ] = "Il testo da cui si vuole estrarre la stringa finale." ;
             Text [ portuguese_brazilian ] = "Der Text, dessen Endteilwort bestimmt wird." ;
             Text [ portuguese ] = "é a cadeia de texto contendo os caracteres a extrair." ;
             Text [ finnish ] = "Teksti, josta osittaiset tekstin loppuosat poimitaan." ;
@@ -40079,7 +40079,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Anzahl" ;
             Text [ english ] = "num_chars" ;
             Text [ norwegian ] = "Anzahl" ;
-            Text [ italian ] = "Numero" ;
+            Text [ italian ] = "Numero caratteri" ;
             Text [ portuguese_brazilian ] = "Anzahl" ;
             Text [ portuguese ] = "Núm_de_caracteres" ;
             Text [ finnish ] = "luku" ;
@@ -40142,7 +40142,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Bestimmt ein Teilwort eines Textes." ;
             Text [ english ] = "Returns a specific number of characters from a text string, starting at the position you specify." ;
             Text [ norwegian ] = "Bestimmt ein Teilwort eines Textes." ;
-            Text [ italian ] = "Restituisce una stringa parziale di un testo a partire dalla posizione e di lunghezza specificate." ;
+            Text [ italian ] = "Restituisce una stringa parziale di un testo." ;
             Text [ portuguese_brazilian ] = "Bestimmt ein Teilwort eines Textes." ;
             Text [ portuguese ] = "Devolve um número específico de caracteres de uma cadeia de texto." ;
             Text [ finnish ] = "Palauttaa osittaisen tekstiosan tekstistä." ;
@@ -40206,7 +40206,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, dessen Teilwort bestimmt wird." ;
             Text [ english ] = "is the text string containing the characters you want to extract." ;
             Text [ norwegian ] = "Der Text, dessen Teilwort bestimmt wird." ;
-            Text [ italian ] = "è la stringa di testo che contiene i caratteri che si desidera estrarre." ;
+            Text [ italian ] = "Il testo che contiene i caratteri che si desidera estrarre." ;
             Text [ portuguese_brazilian ] = "Der Text, dessen Teilwort bestimmt wird." ;
             Text [ portuguese ] = "é a cadeia do texto contendo os caracteres que deseja extrair." ;
             Text [ finnish ] = "Teksti, josta osittaiset tekstiosat poimitaan." ;
@@ -40235,7 +40235,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Anfang" ;
             Text [ english ] = "start_num" ;
             Text [ norwegian ] = "Anfang" ;
-            Text [ italian ] = "inizio" ;
+            Text [ italian ] = "Posizione" ;
             Text [ portuguese_brazilian ] = "Anfang" ;
             Text [ portuguese ] = "Núm_inicial" ;
             Text [ finnish ] = "aloita" ;
@@ -40264,7 +40264,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Position, ab der das Teilwort bestimmt wird." ;
             Text [ english ] = "is the position of the first character you want to extract in text." ;
             Text [ norwegian ] = "Die Position, ab der das Teilwort bestimmt wird." ;
-            Text [ italian ] = "è la posizione del primo carattere che si desidera estrarre da testo." ;
+            Text [ italian ] = "La posizione a partire dalla quale si desidera estrarre il testo." ;
             Text [ portuguese_brazilian ] = "Die Position, ab der das Teilwort bestimmt wird." ;
             Text [ portuguese ] = "é a posição do primeiro carácter do texto a ser extraído." ;
             Text [ finnish ] = "Kohta, josta osittaiset tekstiosat poimitaan." ;
@@ -40293,7 +40293,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Anzahl" ;
             Text [ english ] = "num_chars" ;
             Text [ norwegian ] = "Anzahl" ;
-            Text [ italian ] = "Numero" ;
+            Text [ italian ] = "Numero caratteri" ;
             Text [ portuguese_brazilian ] = "Anzahl" ;
             Text [ portuguese ] = "Núm_caracteres" ;
             Text [ finnish ] = "luku" ;
@@ -40323,7 +40323,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Anzahl der Zeichen für das Teilwort." ;
             Text [ english ] = "specifies how many characters to return from text." ;
             Text [ norwegian ] = "Die Anzahl der Zeichen für das Teilwort." ;
-            Text [ italian ] = "specifica il numero di caratteri che devono essere restituiti da testo." ;
+            Text [ italian ] = "Il numero di caratteri per il testo." ;
             Text [ portuguese_brazilian ] = "Die Anzahl der Zeichen f? das Teilwort." ;
             Text [ portuguese ] = "indica a quantidade de caracteres a extrair do texto." ;
             Text [ finnish ] = "Tekstin merkkien määrä." ;
@@ -40420,7 +40420,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Der Text, der wiederholt wird." ;
             Text [ english ] = "is the text you want to repeat." ;
             Text [ norwegian ] = "Der Text, der wiederholt wird." ;
-            Text [ italian ] = "è il testo che si desidera ripetere." ;
+            Text [ italian ] = "Il testo che si desidera ripetere." ;
             Text [ portuguese_brazilian ] = "Der Text, der wiederholt wird." ;
             Text [ portuguese ] = "é o texto a ser repetido." ;
             Text [ finnish ] = "Toistettava teksti." ;
@@ -40604,7 +40604,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Suchtext" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Suchtext" ;
-            Text [ italian ] = "cerca_testo" ;
+            Text [ italian ] = "Cerca testo" ;
             Text [ portuguese_brazilian ] = "Suchtext" ;
             Text [ portuguese ] = "Texto_antigo" ;
             Text [ finnish ] = "etsi_teksti" ;
@@ -40662,7 +40662,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Textersatz" ;
             Text [ english ] = "???" ;
             Text [ norwegian ] = "Textersatz" ;
-            Text [ italian ] = "nuovo_testo" ;
+            Text [ italian ] = "Nuovo testo" ;
             Text [ portuguese_brazilian ] = "Textersatz" ;
             Text [ portuguese ] = "Novo_texto" ;
             Text [ finnish ] = "uusi teksti" ;
@@ -41562,6 +41562,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
 #if defined(U2S)
 #undef U2S
 #endif
+
 
 
 
