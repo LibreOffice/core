@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 11:28:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:51:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,11 @@
  *
  ************************************************************************/
 
-// include ---------------------------------------------------------------
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+// include ---------------------------------------------------------------
 
 #define ITEMID_TABSTOP  0
 #define ITEMID_LRSPACE  0
@@ -103,6 +105,7 @@
 #include <sfx2/request.hxx> //CHINA001
 #include <svxids.hrc> //add CHINA001
 #include <svtools/intitem.hxx> //add CHINA001
+
 
 // class TabWin_Impl -----------------------------------------------------
 
