@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:51:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 21:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ namespace comphelper
     }
 
     //-------------------------------------------------------------------------
-    /** Copy from a plain C/C++ array into a Sequence
+    /** Copy from a plain C/C++ array into a Sequence.
 
         @tpl SrcType
         Array element type. Must be assignable to DstType
@@ -248,7 +248,7 @@ namespace comphelper
         @param i_pArray
         Valid pointer to at least num elements of type SrcType
 
-        @param num
+        @param nNum
         Number of array elements to copy
 
         @return the resulting Sequence
@@ -258,11 +258,11 @@ namespace comphelper
         values will be truncated. There's currently no measure to
         prevent or detect precision loss, overflow or truncation.
      */
-    template < typename SrcType, typename DstType >
-    ::com::sun::star::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, int num )
+    template < typename DstType, typename SrcType >
+    ::com::sun::star::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
-        ::com::sun::star::uno::Sequence< DstType > result( num );
-        ::std::copy( i_pArray, i_pArray+num, result.getArray() );
+        ::com::sun::star::uno::Sequence< DstType > result( nNum );
+        ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
         return result;
     }
 
@@ -289,10 +289,10 @@ namespace comphelper
         will be truncated. There's currently no measure to prevent or
         detect precision loss, overflow or truncation.
      */
-    template < typename SrcType, typename DstType >
+    template < typename DstType, typename SrcType >
     DstType* sequenceToArray( DstType* io_pArray, const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
-        ::std::copy( i_Sequence.getArray(), i_Sequence.getArray()+i_Sequence.getLength(), io_pArray );
+        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), io_pArray );
         return io_pArray;
     }
 
@@ -313,12 +313,13 @@ namespace comphelper
 
         @return the generated Sequence
 
-        @attention when copying from e.g. a vector<double> to a
-        Sequence<int>, no proper rounding will be performed, but the
-        values will be truncated. There's currently no measure to
-        prevent or detect precision loss, overflow or truncation.
+        @attention this function always performs a copy. Furthermore,
+        when copying from e.g. a vector<double> to a Sequence<int>, no
+        proper rounding will be performed, but the values will be
+        truncated. There's currently no measure to prevent or detect
+        precision loss, overflow or truncation.
      */
-    template < typename SrcType, typename DstType >
+    template < typename DstType, typename SrcType >
     ::com::sun::star::uno::Sequence< DstType > containerToSequence( const SrcType& i_Container )
     {
         ::com::sun::star::uno::Sequence< DstType > result( i_Container.size() );
@@ -344,16 +345,17 @@ namespace comphelper
 
         @return a pointer to the generated container
 
-        @attention when copying from e.g. a Sequence<double> to a
-        vector<int>, no proper rounding will be performed, but the
-        values will be truncated. There's currently no measure to
-        prevent or detect precision loss, overflow or truncation.
+        @attention this function always performs a copy. Furthermore,
+        when copying from e.g. a Sequence<double> to a vector<int>, no
+        proper rounding will be performed, but the values will be
+        truncated. There's currently no measure to prevent or detect
+        precision loss, overflow or truncation.
      */
-    template < typename SrcType, typename DstType >
+    template < typename DstType, typename SrcType >
     DstType sequenceToContainer( const ::com::sun::star::uno::Sequence< SrcType >& i_Sequence )
     {
         DstType result( i_Sequence.getLength() );
-        ::std::copy( i_Sequence.getArray(), i_Sequence.getArray()+i_Sequence.getLength(), result.begin() );
+        ::std::copy( i_Sequence.getConstArray(), i_Sequence.getConstArray()+i_Sequence.getLength(), result.begin() );
         return result;
     }
 
