@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:24:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,22 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
             pSdOutliner->StartConversion(nSourceLanguage, nTargetLanguage, pTargetFont, nOptions, bIsInteractive );
     }
 
-    pView->EndUndo();
+    // Due to changing between edit mode, notes mode, and handout mode the
+    // view has most likely changed.  Get the new one.
+    pViewShell = pBase->GetMainViewShell();
+    if (pViewShell != NULL)
+    {
+        pView = pViewShell->GetView();
+        pWindow = pViewShell->GetActiveWindow();
+    }
+    else
+    {
+        pView;
+        pWindow = NULL;
+    }
+
+    if (pView != NULL)
+        pView->EndUndo();
 }
 
 } // end of namespace
