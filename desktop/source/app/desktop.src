@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: lo $ $Date: 2002-09-30 15:54:21 $
+ *  last change: $Author: ghiggins $ $Date: 2002-10-09 12:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,33 +696,6 @@ String STR_ASK_START_SETUP_MANUALLY
     Text[ turkish ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ arabic ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
     Text[ catalan ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. ";
-};
-
-String STR_SSO_REQUEST
-{
-    Text = "Bitte geben Sie Ihren Benutzernamen und Kennwort zum Zugriff auf Ihre pers�nlichen Einstellungen ein. ";
-    Text[ ENGLISH ] = "Please enter you user name and password for accessing your personal settings. ";
-    Text[ english_us ] = "Please enter your user name and password for accessing your personal settings. ";
-    Text[ portuguese ] = "Please enter you Single Signon username and password. ";
-    Text[ russian ] = "Please enter you Single Signon username and password. ";
-    Text[ greek ] = "Please enter you Single Signon username and password. ";
-    Text[ dutch ] = "Please enter you Single Signon username and password. ";
-    Text[ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour acc�der � vos param�tres personnels. ";
-    Text[ spanish ] = "Introduzca el nombre de usuario y la contrase�a para acceder a la configuraci�n personalizada.";
-    Text[ finnish ] = "Please enter you Single Signon username and password. ";
-    Text[ italian ] = "Indicate il nome utente e la password per accedere alle impostazioni personalizzate. ";
-    Text[ danish ] = "Please enter you Single Signon username and password. ";
-    Text[ swedish ] = "Ange ditt anv�ndarnamn och l�senord f�r att f� tillg�ng till dina personliga inst�llningar. ";
-    Text[ polish ] = "Please enter you Single Signon username and password. ";
-    Text[ portuguese_brazilian ] = "Please enter your user name and password for accessing your personal settings. ";
-    Text[ japanese ] = "ユーザーの個人設定へアクセスするためのユーザー名とパスワードを入力してください。";
-    Text[ korean ] = "사용자 개인 설정에 액세스하려면 사용자 이름과 암호를 입력해주십시오. ";
-    Text[ chinese_simplified ] = "请输入您的使用名和密码，以便读取您的个人的设定。";
-    Text[ chinese_traditional ] = "請鍵入您的使用名及密碼，以存取您的個人的設定。";
-    Text[ turkish ] = "Please enter you Single Signon username and password. ";
-    Text[ arabic ] = "Please enter you Single Signon username and password. ";
-    Text[ catalan ] = "Please enter your user name and password for accessing your personal settings. ";
-    Text[ thai ] = "Please enter your user name and password for accessing your personal settings. ";
 };
 
 String STR_SSO_RELOGIN
