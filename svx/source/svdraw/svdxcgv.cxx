@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:55:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ SdrExchangeView::SdrExchangeView(SdrModel* pModel1, OutputDevice* pOut):
 {
 }
 
-SdrExchangeView::SdrExchangeView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrExchangeView::SdrExchangeView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrObjEditView(pModel1,pXOut)
 {
 }
@@ -665,7 +665,7 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
         if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
         {
             VirtualDevice   aOut;
-            ExtOutputDevice aXOut( &aOut);
+            XOutputDevice aXOut( &aOut);
             SdrPaintInfoRec aInfoRec;
             GDIMetaFile     aMtf;
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
