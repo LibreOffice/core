@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-02 14:27:40 $
+ *  last change: $Author: ama $ $Date: 2001-06-13 11:02:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1838,6 +1838,8 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                         SetCompletePaint();
                         InvalidatePage();
                     }
+                    if( GetUpper()->IsHeaderFrm() || GetUpper()->IsFooterFrm() )
+                        GetUpper()->InvalidateSize();
                 }
                 Frm().SSize().*pDirection += nGrow;
                 Prt().SSize().*pDirection += nGrow;
