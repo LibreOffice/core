@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:47:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,24 +896,6 @@ UINT32 SwWW8Writer::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
             nOrdNum += pModel->GetPage( 0 )->GetObjCount();
     }
     return nOrdNum;
-}
-
-static bool lcl_IsFlyInFlyHere(const SwFrmFmt* pFmt, ULONG nStart, ULONG nEnd)
-{
-    bool bRet = false;
-    const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-    const SwPosition* pAPos;
-    ULONG nIdx;
-    if( ( pAnchor->GetAnchorId() == FLY_AT_CNTNT ||
-        pAnchor->GetAnchorId() == FLY_AT_FLY ||
-        pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
-        0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-        nStart <= ( nIdx = pAPos->nNode.GetIndex()) &&
-        nIdx < nEnd )
-    {
-        bRet = true;
-    }
-    return bRet;
 }
 
 void SwWW8Writer::AppendFlyInFlys(const sw::Frame& rFrmFmt,
