@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: vg $ $Date: 2004-09-07 11:32:13 $
+#   last change: $Author: vg $ $Date: 2004-09-15 12:40:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.115 $ ';
+    $id_str = ' $Revision: 1.116 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -127,9 +127,9 @@
 
     $QuantityToBuild = 0;
 # delete $pid when not needed
-    %projects_deps_hash = ();    # hash of undependent projects,
+    %projects_deps_hash = ();   # hash of projects with no dependencies,
                                 # that could be built now
-    %broken_build = ();            # hash of hashes of the modules,
+    %broken_build = ();         # hash of hashes of the modules,
                                 # where build was broken (error occurred)
     %folders_hashes = ();
     %running_children = ();
@@ -158,11 +158,11 @@
     $dlv_switch = '';
     $child = 0;
     %processes_hash = ();
-    %module_annonced = ();
-    $prepare = ''; # prepare for following incompartible build
+    %module_announced = ();
+    $prepare = ''; # prepare for following incompatible build
     $ignore = '';
     @ignored_errors = ();
-    %incompartibles = ();
+    %incompatibles = ();
     %force_deliver = ();
     $only_platform = ''; # the only platform to prepare
     $only_common = ''; # the only common output tree to delete when preparing
@@ -170,7 +170,7 @@
     $maximal_processes = 0; # the max number of the processes run
     %modules_types = (); # modules types ('mod', 'img', 'lnk') hash
     %platforms = (); # platforms available or being working with
-    %platforms_to_copy = (); # copy otput trees for the platforms when --prepare
+    %platforms_to_copy = (); # copy output trees for the platforms when --prepare
     $tmp_dir = ''; # temp directory for checkout
 ### main ###
 
@@ -248,7 +248,7 @@
         foreach (@ignored_errors) {
             print STDERR "\t$_\n";
         };
-        print STDERR "\nERROR: please check these directories and build the correspondent module(s) anew!!\n\n";
+        print STDERR "\nERROR: please check these directories and build the corresponding module(s) anew!!\n\n";
         do_exit(1);
     };
     &finish_logging;
@@ -318,7 +318,7 @@ sub BuildAll {
         my ($Prj, $PrjDir, $orig_prj);
         &GetParentDeps( $CurrentPrj, \%global_deps_hash);
         &prepare_build_from(\%global_deps_hash) if ($build_from);
-        &prepare_incompartible_build(\%global_deps_hash) if ($incompartible);
+        &prepare_incompatible_build(\%global_deps_hash) if ($incompatible);
         if ($build_from_opt || $build_since) {
             &prepare_build_from_opt(\%global_deps_hash);
         };
@@ -328,19 +328,19 @@ sub BuildAll {
             return;
         };
         while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
-            if (!defined $module_annonced{$Prj}) {
+            if (!defined $module_announced{$Prj}) {
                 print $new_line;
                 my $module_type = &module_classify($Prj);
 
-                &print_annonce($Prj) if ($module_type eq 'lnk');
-                &print_annonce($Prj . '.incomp') if ($module_type eq 'img');
+                &print_announce($Prj) if ($module_type eq 'lnk');
+                &print_announce($Prj . '.incomp') if ($module_type eq 'img');
                 if ($module_type eq 'mod') {
                     if (scalar keys %broken_build) {
                         print $echo . "Skipping project $Prj because of error(s)\n";
                         &RemoveFromDependencies($Prj, \%global_deps_hash);
                         next;
                     };
-                    &print_annonce($Prj);
+                    &print_announce($Prj);
                     $PrjDir = &CorrectPath($StandDir.$Prj);
                     &mark_force_deliver($Prj, $PrjDir) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
                     &get_deps_hash($Prj, \%LocalDepsHash);
@@ -364,7 +364,7 @@ sub BuildAll {
 };
 
 #
-# Start build given project
+# Start build on a given project
 #
 sub dmake_dir {
     my ($folder_nick, $BuildDir, $new_BuildDir, $OldBuildDir, $error_code);
@@ -473,7 +473,7 @@ sub get_prj_platform {
 
 #
 # Getting hashes of all internal dependencies and additional
-# infos for given project
+# information for given project
 #
 sub get_deps_hash {
     my ($dummy, $module_to_build, $module_path);
@@ -541,7 +541,7 @@ sub get_deps_hash {
 };
 
 #
-# mark platform in order to proof if alias is used according to specs
+# mark platform in order to prove if alias has been used according to specs
 #
 sub mark_platform {
     my $prj_alias = shift;
@@ -577,7 +577,9 @@ sub check_dmake {
 #        };
         return;
     };
-    &print_error('dmake - no such file or directory');
+    my $error_message = 'dmake: Command not found.';
+    $error_message .= ' Please rerun bootstrap' if (!defined $log);
+    &print_error($error_message);
 };
 
 #
@@ -648,7 +650,7 @@ sub get_stand_dir {
 };
 
 #
-# Picks project which can be build now from hash and deletes it from hash
+# Picks project which can be built now from hash and then deletes it from hash
 #
 sub PickPrjToBuild {
     my ($Prj, $DepsHash);
@@ -666,9 +668,9 @@ sub CheckPlatform {
     my $Platform = shift;
     return 1 if ($Platform eq 'all');
     return 1 if (($ENV{GUI} eq 'WIN') && ($Platform eq 'w'));
-    return 1 if    (($ENV{GUI} eq 'UNX') && ($Platform eq 'u'));
-    return 1 if    (($ENV{GUI} eq 'MAC') && ($Platform eq 'm'));
-    return 1 if    (($ENV{GUI} eq 'OS2') && ($Platform eq 'p'));
+    return 1 if (($ENV{GUI} eq 'UNX') && ($Platform eq 'u'));
+    return 1 if (($ENV{GUI} eq 'MAC') && ($Platform eq 'm'));
+    return 1 if (($ENV{GUI} eq 'OS2') && ($Platform eq 'p'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
                        (($Platform eq 'w') || ($Platform eq 'n')));
     return 0;
@@ -738,7 +740,7 @@ sub check_deps_hash {
 };
 
 #
-# Find undependent project
+# Find project with no dependencies left.
 #
 sub FindIndepPrj {
     my ($Prj, @Prjs, @PrjDeps, $Dependencies, $i);
@@ -778,7 +780,7 @@ sub GetDependenciesArray {
     $string = $DepString;
     $prj = shift;
     while ($DepString !~ /^NULL/o) {
-        &print_error("Project $prj has wrong written dependencies string:\n $string") if (!$DepString);
+        &print_error("Project $prj has wrongly written dependencies string:\n $string") if (!$DepString);
         $DepString =~ /(\S+)\s*/o;
         $ParentPrj = $1;
         $DepString = $';
@@ -786,14 +788,14 @@ sub GetDependenciesArray {
             $ParentPrj = $`;
             if (($prj_platform{$ParentPrj} ne $1) &&
                 ($prj_platform{$ParentPrj} ne 'all')) {
-                &print_error ("$ParentPrj\.$1 is a wrong dependency identifier!\nCheck if it is platform dependent");
+                &print_error ("$ParentPrj\.$1 is a wrongly dependency identifier!\nCheck if it is platform dependent");
             };
             $AliveDependencies{$ParentPrj}++ if (&CheckPlatform($1));
             push(@Dependencies, $ParentPrj);
         } else {
             if ((exists($prj_platform{$ParentPrj})) &&
                 ($prj_platform{$ParentPrj} ne 'all') ) {
-                &print_error("$ParentPrj is a wrong used dependency identifier!\nCheck if it is platform dependent");
+                &print_error("$ParentPrj is a wrongly used dependency identifier!\nCheck if it is platform dependent");
             };
             push(@Dependencies, $ParentPrj);
         };
@@ -838,23 +840,23 @@ sub usage {
     print STDERR "\nbuild\n";
     print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [-- dmake_options] \n";
     print STDERR "Example:    build --from sfx2\n";
-    print STDERR "                - build projects including current one from sfx2\n";
+    print STDERR "                     - build projects including current one from sfx2\n";
     print STDERR "Example:    build --all:sfx2\n";
-    print STDERR "                - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
-    print STDERR "Keys:        --all        - build all projects from very beginning till current one\n";
-    print STDERR "        --from        - build all projects dependent from the specified (including it) till current one\n";
-    print STDERR "        --mode OOo        - build only projects needed for OpenOffice.org\n";
-    print STDERR "        --prepare- clear all projects for incompartible build from prj_name till current one [for platform] (cws version)\n";
+    print STDERR "                     - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
+    print STDERR "Keys:   --all        - build all projects from very beginning till current one\n";
+    print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
+    print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
+    print STDERR "        --prepare-   - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "        --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
-    print STDERR "        --since        - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
-    print STDERR "        --show        - show what is going to be built\n";
-    print STDERR "        --file        - generate command file file_name\n";
+    print STDERR "        --since      - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
+    print STDERR "        --show       - show what is going to be built\n";
+    print STDERR "        --file       - generate command file file_name\n";
     print STDERR "        --deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
-    print STDERR "        -P            - start multiprocessing build, with number of processes passed (UNIXes only)\n";
-    print STDERR "        --dlv_switch    - use deliver with the switch specified\n";
-    print STDERR "        --help        - print help info\n";
-    print STDERR "        --ignore    - force tool to ignore errors\n";
-    print STDERR "Default:            - build current project\n";
+    print STDERR "        -P           - start multiprocessing build, with number of processes passed (UNIXes only)\n";
+    print STDERR "        --dlv_switch - use deliver with the switch specified\n";
+    print STDERR "        --help       - print help info\n";
+    print STDERR "        --ignore     - force tool to ignore errors\n";
+    print STDERR "Default:             - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
 
@@ -935,17 +937,17 @@ sub get_options {
         $QuantityToBuild = 0;
         &print_error('-P switch is disabled for windows!\n');
     };
-    $incompartible = scalar keys %incompartibles;
-    if ($prepare && !$incompartible) {
+    $incompatible = scalar keys %incompatibles;
+    if ($prepare && !$incompatible) {
         &print_error("--prepare is for use with --from switch only!\n");
     };
     if ($QuantityToBuild && $ignore) {
         &print_error("Cannot ignore errors in multiprocessing build");
     };
-#    if ($incompartible && (!defined $ENV{CWS_WORK_STAMP})) {
+#    if ($incompatible && (!defined $ENV{CWS_WORK_STAMP})) {
 #        print "-incomp_from switch is implemented for cws only!\n";
 #        print "Ignored...";
-#        $incompartible = '';
+#        $incompatible = '';
 #    };
     if ($only_platform) {
         $only_common = 'common';
@@ -1056,7 +1058,7 @@ sub BuildDependent {
     my $child_nick = '';
     $running_children{$dependencies_hash} = 0 if (!defined $running_children{$dependencies_hash});
     while ($child_nick = &PickPrjToBuild($dependencies_hash)) {
-        if (($QuantityToBuild)) { # multyprocessing not for $BuildAllParents (-all etc)!!
+        if (($QuantityToBuild)) { # multiprocessing not for $BuildAllParents (-all etc)!!
             do {
                 &handle_dead_children;
                 return if (defined $broken_modules_hashes{$dependencies_hash});
@@ -1119,13 +1121,13 @@ sub build_multiprocessing {
             my $module_type = &module_classify($Prj);
 
             if ($module_type eq 'lnk') {
-                &print_annonce($Prj);
+                &print_announce($Prj);
                 &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             };
 
             if ($module_type eq 'img') {
-                &print_annonce($Prj . '.incomp');
+                &print_announce($Prj . '.incomp');
                 &RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             }
@@ -1152,7 +1154,7 @@ sub build_multiprocessing {
 
 sub mp_success_exit {
     print STDERR "\nMultiprocessing build is finished\n";
-    print STDERR "Maximal number of processes run: $maximal_processes\n";
+    print STDERR "Maximum number of processes run: $maximal_processes\n";
     do_exit(0);
 };
 
@@ -1170,7 +1172,7 @@ sub build_actual_queue {
                 splice (@$build_queue, $i, 1);
                 next;
             };
-            &annonce_module($Prj) if (!(defined $module_annonced{$Prj}));
+            &announce_module($Prj) if (!(defined $module_announced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
             &BuildDependent($projects_deps_hash{$Prj});
@@ -1194,19 +1196,19 @@ sub build_actual_queue {
 #
 # Print announcement for module just started
 #
-sub annonce_module {
+sub announce_module {
     my $Prj = shift;
-    &print_annonce($Prj);
-    $module_annonced{$Prj}++;
+    &print_announce($Prj);
+    $module_announced{$Prj}++;
 };
 
-sub print_annonce {
+sub print_announce {
     my $Prj = shift;
     my $text;
     if ($Prj =~ /\.lnk$/o) {
         $text = "Skipping link to $`\n";
     } elsif ($Prj =~ /(\.incomp)$/o) {
-        return if (defined $module_annonced{$`});
+        return if (defined $module_announced{$`});
         $text = "Skipping incomplete $`\n";
     } else {
         $text = "Building project $Prj\n";
@@ -1231,12 +1233,14 @@ sub are_all_dependent {
 #
 sub checkout_module {
     my ($prj_name, $image, $path) = @_;
+    return if (!defined($ENV{CWS_WORK_STAMP}));
     $path = $StandDir if (!$path);
     my $cws = Cws->new();
     $cws->child($ENV{CWS_WORK_STAMP});
     $cws->master($ENV{WORK_STAMP});
     my $cvs_module = &get_cvs_module($cws, $prj_name);
-    &print_error("Cannot get cvs_module!!") if (!$cvs_module);
+
+    &print_error("Cannot get cvs_module for $prj_name") if (!$cvs_module);
     my ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag) = $cws->get_tags();
 
     $cvs_module->verbose(1);
@@ -1251,7 +1255,7 @@ sub checkout_module {
     if (!-d &CorrectPath($path.$prj_name)) {
         $cvs_module->checkout($path, '', '');
         if (!-d &CorrectPath($path.$prj_name)) {
-            &print_error ("Cannot checkout $prj_name. Check if you have login to server");
+            &print_error ("Cannot checkout $prj_name. Check if you have to login to server");
         };
     };
     return if ($image);
@@ -1440,7 +1444,7 @@ sub get_workspace_lst
 }
 
 #
-# Procedure clears up module for incompartible build
+# Procedure clears up module for incompatible build
 #
 sub ensure_clear_module {
     my $Prj = shift;
@@ -1449,8 +1453,8 @@ sub ensure_clear_module {
         &clear_module($$Prj);
         my $lnk_name = $$Prj.'.lnk';
         if (-e ($StandDir.$lnk_name)) {
-            print "Last checkout for $$Prj seems to be interrupted...\n";
-            print "Check it out again...\n";
+            print "Last checkout for $$Prj seems to have been interrupted...\n";
+            print "Checking it out again...\n";
             $module_type = 'lnk';
             $$Prj = $lnk_name;
         } else {
@@ -1534,20 +1538,24 @@ sub retrieve_parents_string {
         my $parens_string = GetParentsString("$solver_inc_dir/build.lst");
         if ($parens_string) {
             print " ok\n";
-            $module_annonced{$module}++;
+            $module_announced{$module}++;
             return $parens_string
         };
     };
-    print " failed... ";
-    print "fetching from CVS...";
-    $tmp_dir = $ENV{TMP} . '/';
+    print " failed...\n";
+    print "Fetching from CVS... ";
+    if( defined($ENV{TMP}) ) {
+       $tmp_dir = $ENV{TMP} . '/';
+    } else {
+       $tmp_dir = '/tmp/';
+    }
     $tmp_dir .= $$ while (-d $tmp_dir);
     eval {mkpath($tmp_dir)};
-    print_error("cannot create temporary directory for checkout in $ENV{TMP}") if ($@);
+    print_error("Cannot create temporary directory for checkout in $tmp_dir") if ($@);
     $tmp_dir .= '/';
     checkout_module($module, 'image', $tmp_dir);
-    # no need to annonce this module
-    $module_annonced{$module}++;
+    # no need to announce this module
+    $module_announced{$module}++;
     my $parent_string = GetParentsString($tmp_dir . $module);
     print " ok\n";
     eval {mkpath($solver_inc_dir) if (-e $solver_inc_dir);
@@ -1567,7 +1575,7 @@ sub retrieve_parents_string {
 };
 
 #
-# This precedure checks if the module has build.lst file
+# This procedure checks if the module has build.lst file
 #
 sub has_build_lst {
     my $prj_dir = shift;
@@ -1602,24 +1610,24 @@ sub check_modules {
 
 #
 # Removes projects which it is not necessary to build
-# in incompartible build
+# in incompatible build
 #
-sub prepare_incompartible_build {
+sub prepare_incompatible_build {
     my ($prj, $deps_hash);
     $deps_hash = shift;
-    foreach (keys %incompartibles) {
+    foreach (keys %incompatibles) {
         my $incomp_prj = $_;
         $incomp_prj .= '.lnk' if (!defined $$deps_hash{$_});
-        delete $incompartibles{$_};
-        $incompartibles{$incomp_prj} = $$deps_hash{$incomp_prj};
+        delete $incompatibles{$_};
+        $incompatibles{$incomp_prj} = $$deps_hash{$incomp_prj};
         delete $$deps_hash{$incomp_prj};
     }
     while ($prj = &PickPrjToBuild($deps_hash)) {
         &RemoveFromDependencies($prj, $deps_hash);
-        &RemoveFromDependencies($prj, \%incompartibles);
+        &RemoveFromDependencies($prj, \%incompatibles);
     };
-    foreach (keys %incompartibles) {
-        $$deps_hash{$_} = $incompartibles{$_};
+    foreach (keys %incompatibles) {
+        $$deps_hash{$_} = $incompatibles{$_};
     };
     if ($build_from_opt) {
         &prepare_build_from_opt($deps_hash);
@@ -1726,7 +1734,7 @@ sub get_incomp_projects {
                 &print_error("-from switch collision") if ($build_from_opt);
                 $build_from_opt = $';
             };
-            $incompartibles{$option}++;
+            $incompatibles{$option}++;
         };
     };
 };
