@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:38:54 $
+ *  last change: $Author: pb $ $Date: 2000-10-13 08:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,14 @@
  *
  *
  ************************************************************************/
+
  // include ---------------------------------------------------------------
+
 #include "dialogs.hrc"
 #include "srchdlg.hrc"
- // pragma ----------------------------------------------------------------
 
  // Strings ---------------------------------------------------------------
+
 String RID_SVXSTR_SEARCH_STYLES
 {
     Text = "einschlieﬂlich ~Vorlagen" ;
@@ -142,7 +144,9 @@ String RID_SVXSTR_REPLACE
     Text[ turkish ] = "(Dei˛tir)";
     Text[ language_user1 ] = " ";
 };
+
  // RID_SVXDLG_SEARCH -----------------------------------------------------
+
 ModelessDialog RID_SVXDLG_SEARCH
 {
     HelpId = SID_SEARCH_DLG ;
@@ -163,6 +167,16 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ dutch ] = "Zoeken & vervangen" ;
     Text [ spanish ] = "Buscar y reemplazar" ;
     Text [ english_us ] = "Find & Replace" ;
+    Text[ chinese_simplified ] = "À——∞∫Õ∏¸ÃÊ";
+    Text[ russian ] = "Õ‡ÈÚË Ë «‡ÏÂÌËÚ¸";
+    Text[ polish ] = "Znajdü & ZamieÒ";
+    Text[ japanese ] = "åüçıÇ∆íuä∑";
+    Text[ chinese_traditional ] = "¥Mß‰©M¥¿•N";
+    Text[ arabic ] = "»ÕÀ Ê«” »œ«·";
+    Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ Í·È ¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
+    Text[ korean ] = "√£±‚øÕ πŸ≤Ÿ±‚";
+    Text[ turkish ] = "Ara ve dei˛tir";
+    Text[ language_user1 ] = " ";
     Moveable = TRUE ;
     FixedText FT_SEARCH
     {
@@ -211,17 +225,15 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     GroupBox GB_SEARCH_ATTR
     {
-        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
         Size = MAP_APPFONT ( 179 , 24 ) ;
     };
     FixedText FT_SEARCH_ATTR
     {
-        Pos = MAP_APPFONT ( 10 , 24 ) ;
+        Pos = MAP_APPFONT ( 10 , 26 ) ;
         Size = MAP_APPFONT ( 171 , 16 ) ;
         WordBreak = TRUE ;
-#ifndef VCL
         Hide = TRUE ;
-#endif
     };
     MultiLineEdit ED_SEARCH_FORMATS
     {
@@ -229,9 +241,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Size = MAP_APPFONT ( 171 , 16 ) ;
         ReadOnly = TRUE ;
         IgnoreTab = TRUE ;
-#ifdef VCL
         Hide = TRUE ;
-#endif
     };
     FixedText FT_REPLACE
     {
@@ -280,33 +290,28 @@ ModelessDialog RID_SVXDLG_SEARCH
     };
     GroupBox GB_REPLACE_ATTR
     {
-        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 179 , 24 ) ;
     };
     FixedText FT_REPLACE_ATTR
     {
-        Pos = MAP_APPFONT ( 10 , 66 ) ;
+        Pos = MAP_APPFONT ( 10 , 68 ) ;
         Size = MAP_APPFONT ( 171 , 16 ) ;
         WordBreak = TRUE ;
-#ifndef VCL
         Hide = TRUE ;
-#endif
     };
     MultiLineEdit ED_REPLACE_FORMATS
     {
-        Pos = MAP_APPFONT ( 10 , 66 ) ;
+        Pos = MAP_APPFONT ( 10 , 68 ) ;
         Size = MAP_APPFONT ( 171 , 16 ) ;
         ReadOnly = TRUE ;
         IgnoreTab = TRUE ;
-#ifdef VCL
         Hide = TRUE ;
-#endif
     };
     CheckBox BTN_CELLS
     {
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 87 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Nur ganze W~ˆrter : Nur ganze W~˜rter */
         Text = "Nur ganze W~ˆrter" ;
         Text [ ENGLISH ] = "Whole Wor~ds Only" ;
         Text [ norwegian ] = "Kun Hele O~rd" ;
@@ -365,7 +370,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 87 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? R¸c~kw‰rts : R≥c~kwırts */
         Text = "R¸c~kw‰rts" ;
         Text [ ENGLISH ] = "Bac~kwards" ;
         Text [ norwegian ] = "Bako~ver" ;
@@ -424,7 +428,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 87 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Re~gul‰rer Ausdruck : Re~gulırer Ausdruck */
         Text = "Re~gul‰rer Ausdruck" ;
         Text [ ENGLISH ] = "Re~gular Expressions" ;
         Text [ norwegian ] = "Va~nlige Uttrykk" ;
@@ -483,7 +486,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 192 , 103 ) ;
         Size = MAP_APPFONT ( 81 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~ƒhnlichkeitssuche : ~éhnlichkeitssuche */
         Text = "~ƒhnlichkeitssuche" ;
         Text [ English ] = "Similarity Search" ;
         TabStop = TRUE ;
@@ -920,7 +922,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 246 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? S~chlieﬂen : S~chlieòen */
         Text = "S~chlieﬂen" ;
         Text [ ENGLISH ] = "~Close" ;
         Text [ norwegian ] = "~Lukk" ;
@@ -956,7 +957,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 246 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Zus‰tze : ~Zusıtze */
         Text = "~Zus‰tze" ;
         Text [ English ] = "~More" ;
         Text [ norwegian ] = "~Mer" ;
@@ -1098,15 +1098,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ korean ] = "¿¸√º ºø∏∏(~E)";
         Text[ turkish ] = "Yaln˝zca ~tam h¸creler";
     };
-    Text[ chinese_simplified ] = "À——∞∫Õ∏¸ÃÊ";
-    Text[ russian ] = "Õ‡ÈÚË Ë «‡ÏÂÌËÚ¸";
-    Text[ polish ] = "Znajdü & ZamieÒ";
-    Text[ japanese ] = "åüçıÇ∆íuä∑";
-    Text[ chinese_traditional ] = "¥Mß‰©M¥¿•N";
-    Text[ arabic ] = "»ÕÀ Ê«” »œ«·";
-    Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ Í·È ¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
-    Text[ korean ] = "√£±‚øÕ πŸ≤Ÿ±‚";
-    Text[ turkish ] = "Ara ve dei˛tir";
-    Text[ language_user1 ] = " ";
 };
+
  // ********************************************************************** EOF
+
