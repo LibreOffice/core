@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-21 16:44:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 #include <psprint/strhelper.hxx>
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <ieeefp.h> // finite
 #include <alloca.h>
 #endif
@@ -667,7 +667,7 @@ int getValueOfDouble( char* pBuffer, double f, int nPrecision )
     int exponent = log10( f );
     if( exponent < 4 && exponent > -4 )
         exponent = 0;
-    f /= pow( 10, exponent );
+    f /= pow( 10, (double) exponent );
 
     int nInt = f;
     f -= nInt;
