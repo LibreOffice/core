@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:44 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,15 @@ inline Any SAL_CALL makeAny( const C & value ) SAL_THROW( () )
     return Any( &value, ::getCppuType( &value ) );
 }
 
+// additionally specialized for C++ bool
+//______________________________________________________________________________
+template<>
+inline Any SAL_CALL makeAny( bool const & value ) SAL_THROW( () )
+{
+    sal_Bool b = value;
+    return Any( &b, ::getCppuBooleanType() );
+}
+
 //__________________________________________________________________________________________________
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () )
@@ -221,7 +230,7 @@ inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny,
 {
     if (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass)
     {
-        value = (* reinterpret_cast< const sal_Bool * >( rAny.pData ) != sal_False);
+        value = (* reinterpret_cast< const sal_Bool * >( &rAny.pReserved ) != sal_False);
         return sal_True;
     }
     return sal_False;
@@ -232,6 +241,32 @@ inline sal_Bool SAL_CALL operator == ( const Any & rAny, const sal_Bool & value 
     return (typelib_TypeClass_BOOLEAN == rAny.pType->eTypeClass &&
             (value != sal_False) == (* reinterpret_cast< const sal_Bool * >( &rAny.pReserved ) != sal_False));
 }
+
+//______________________________________________________________________________
+template<>
+inline sal_Bool SAL_CALL operator >>= ( Any const & rAny, bool & value )
+    SAL_THROW( () )
+{
+    if (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN)
+    {
+        value = *reinterpret_cast< sal_Bool const * >(
+            &rAny.pReserved ) != sal_False;
+        return true;
+    }
+    return false;
+}
+
+//______________________________________________________________________________
+template<>
+inline sal_Bool SAL_CALL operator == ( Any const & rAny, bool const & value )
+    SAL_THROW( () )
+{
+    return (rAny.pType->eTypeClass == typelib_TypeClass_BOOLEAN &&
+            (value ==
+             (*reinterpret_cast< sal_Bool const * >( &rAny.pReserved )
+              != sal_False)));
+}
+
 // byte
 //__________________________________________________________________________________________________
 inline sal_Bool SAL_CALL operator >>= ( const ::com::sun::star::uno::Any & rAny, sal_Int8 & value ) SAL_THROW( () )
