@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:20:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,11 @@ class SvxRTFParser : public SvRTFParser
     void BuildWhichTbl();
 
 protected:
+    virtual void EnterEnvironment();
+    virtual void LeaveEnvironment();
+    virtual void ResetPard();
+    virtual void InsertPara() = 0;
+
 
     String& DelCharAtEnd( String& rStr, const sal_Unicode cDel );
 
@@ -325,7 +330,6 @@ protected:
     void SetAllAttrOfStk();     // end all Attr. and set it into doc
 
 
-    virtual void InsertPara() = 0;
     virtual void InsertText() = 0;
     virtual void MovePos( int bForward = TRUE ) = 0;
     virtual void SetEndPrevPara( SvxNodeIdx*& rpNodePos,
