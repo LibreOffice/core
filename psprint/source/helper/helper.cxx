@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 14:10:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,3 +450,36 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
 
     return bSuccess;
 }
+
+void psp::normPath( OString& rPath )
+{
+    char buf[PATH_MAX];
+    ByteString aPath( rPath );
+
+    // double slashes and slash at end are probably
+    // removed by realpath anyway, but since this runs
+    // on many different platforms let's play it safe
+    while( aPath.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND )
+        ;
+    if( aPath.Len() > 0 && aPath.GetChar( aPath.Len()-1 ) == '/' )
+        aPath.Erase( aPath.Len()-1 );
+
+    if( realpath( aPath.GetBuffer(), buf ) )
+        rPath = buf;
+    else
+        rPath = aPath;
+}
+
+void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
+{
+    normPath( rPath );
+    sal_Int32 nIndex = rPath.lastIndexOf( '/' );
+    if( nIndex > 0 )
+        rDir = rPath.copy( 0, nIndex );
+    else if( nIndex == 0 ) // root dir
+        rDir = rPath.copy( 0, 1 );
+    if( rPath.getLength() > nIndex+1 )
+        rBase = rPath.copy( nIndex+1 );
+}
+
+
