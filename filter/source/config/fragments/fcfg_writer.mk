@@ -1,3 +1,5 @@
+all_fragments+=writer
+
 # -----------------------------------------------
 # count = 33
 T4_WRITER = \
@@ -92,6 +94,6 @@ CONTENTHANDLERS_4fcfg_writer = $(foreach,i,$(C4_WRITER) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_writer = \
     $(TYPES_4fcfg_writer) \
-    $(FILTERS_4fcfg_writer) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_writer) \
     $(CONTENTHANDLERS_4fcfg_writer)
