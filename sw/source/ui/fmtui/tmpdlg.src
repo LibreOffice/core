@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:19:15 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 23:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,12 +347,12 @@ TabDialog DLG_TEMPLATE_2
                 Identifier = TP_PARA_ASIAN;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
-                Text[ english_us ] = "Asian typography";
+                Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Asian typography";
                 Text[ russian ] = "Asian typography";
                 Text[ greek ] = "Asian typography";
                 Text[ dutch ] = "Asian typography";
-                Text[ french ] = "Asian typography";
+                Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Asian typography";
                 Text[ italian ] = "Asian typography";
                 Text[ danish ] = "Asian typography";
