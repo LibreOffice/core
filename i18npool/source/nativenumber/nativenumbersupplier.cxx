@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:29:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             if (useOffset)
                 offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
             sal_Int32 count = 0, index;
+            sal_Int32 i;
 
             OUString numberChar, multiplierChar, decimalChar, minusChar;
             numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
@@ -347,7 +348,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             decimalChar = OUString(DecimalChar, NumberChar_Count);
             minusChar = OUString(MinusChar, NumberChar_Count);
 
-            for (sal_Int32 i = 0; i < nCount; i++) {
+            for ( i = 0; i < nCount; i++) {
                 if ((index = multiplierChar.indexOf(str[i])) >= 0) {
                     if (count == 0 || !isNumber(newStr->buffer[count-1])) { // add 1 in front of multiplier
                         newStr->buffer[count] = NUMBER_ONE;
