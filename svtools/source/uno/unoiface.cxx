@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:07:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,19 @@
 #ifndef _PRGSBAR_HXX
 #include <prgsbar.hxx>
 #endif
+
+namespace
+{
+    static void lcl_setWinBits( Window* _pWindow, WinBits _nBits, sal_Bool _bSet )
+    {
+        WinBits nStyle = _pWindow->GetStyle();
+        if ( _bSet )
+            nStyle |= _nBits;
+        else
+            nStyle &= ~_nBits;
+        _pWindow->SetStyle( nStyle );
+    }
+}
 
 //  ----------------------------------------------------
 //  help function for the toolkit...
@@ -490,11 +503,14 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
                     pMultiLineEdit->SetMaxTextLen( n );
             }
             break;
-            case BASEPROPERTY_FOCUSSELECTIONHIDE:
+            case BASEPROPERTY_HIDEINACTIVESELECTION:
             {
                 sal_Bool b;
                 if ( Value >>= b )
+                {
                     pMultiLineEdit->EnableFocusSelectionHide( b );
+                    lcl_setWinBits( pMultiLineEdit, WB_NOHIDESELECTION, !b );
+                }
             }
             break;
             default:
@@ -672,6 +688,32 @@ IMPL_XTYPEPROVIDER_START( VCLXFileControl )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
+void SAL_CALL VCLXFileControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    FileControl* pControl = (FileControl*)GetWindow();
+    if ( pControl )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+        {
+            sal_Bool bValue( sal_False );
+            OSL_VERIFY( Value >>= bValue );
+
+            lcl_setWinBits( pControl, WB_NOHIDESELECTION, !bValue );
+            lcl_setWinBits( &pControl->GetEdit(), WB_NOHIDESELECTION, !bValue );
+        }
+        break;
+
+        default:
+            VCLXWindow::setProperty( PropertyName, Value );
+            break;
+        }
+    }
+}
 
 void VCLXFileControl::SetWindow( Window* pWindow )
 {
