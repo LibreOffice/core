@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:22:06 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 10:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1371,7 +1371,13 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             SwRect aTmpRect;
             pFrm->GetCharRect( aTmpRect, *GetPoint() );
             aPt = aTmpRect.Pos();
+#ifdef VERTICAL_LAYOUT
+            nUpDownX = pFrm->IsVertical() ?
+                       aPt.Y() - pFrm->Frm().Top() :
+                       aPt.X() - pFrm->Frm().Left();
+#else
             nUpDownX = aPt.X() - pFrm->Frm().Left();
+#endif
         }
 
         // Bei Fussnoten ist auch die Bewegung in eine andere Fussnote erlaubt.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:22:06 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 10:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,10 +1223,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 SwCrsrMoveState aTmpState( MV_NONE );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
-#ifndef VERTICAL_LAYOUT
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
                     ASSERT( !this, "GetCharRect failed." );
-#endif
             }
 //          ALIGNRECT( aCharRect );
 
@@ -1448,7 +1446,13 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         if( !(eFlags & SwCrsrShell::UPDOWN ))   // alte Pos. von Up/Down loeschen
         {
             pFrm->Calc();
+#ifdef VERTICAL_LAYOUT
+            nUpDownX = pFrm->IsVertical() ?
+                       aCharRect.Top() - pFrm->Frm().Top() :
+                       aCharRect.Left() - pFrm->Frm().Left();
+#else
             nUpDownX = aCharRect.Left() - pFrm->Frm().Left();
+#endif
         }
 
         // Curosr in den sichtbaren Bereich scrollen
