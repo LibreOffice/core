@@ -228,8 +228,12 @@ EXAMPLESLIST= \
     $(JAVA_TODO)                   \
     $(JAVA_WRITERSELECTOR)         \
     $(BASIC_EXAMPLES)              \
-    $(OLE_EXAMPLES)
+    $(OLE_EXAMPLES)                \
+    $(DESTDIREXAMPLES)$/examples.html   \
+    $(DESTDIRJAVAEXAMPLES)$/debugging_java.html
+    
 
+    
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
@@ -254,6 +258,10 @@ convert_links :
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
+
+$(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/examples$/examples.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRCPPEXAMPLES)$/% : $(PRJ)$/examples$/cpp$/% $(DIRLIST) $(BIN)$/$(UDKNAME).zip
     +-rm -f $@ >& $(NULLDEV)
