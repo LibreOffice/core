@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:15:49 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ String STR_CHAPTERFLD
     TEXT [ English ] = "Chapter" ;
     TEXT [ norwegian ] = "Chapter" ;
     TEXT [ italian ] = "Capitolo" ;
-    TEXT [ portuguese_brazilian ] = "CapÌtulo" ;
+    TEXT [ portuguese_brazilian ] = "Cap?tulo" ;
     TEXT [ portuguese ] = "CapÌtulo" ;
     TEXT [ finnish ] = "Luku" ;
     TEXT [ danish ] = "Kapitel" ;
@@ -239,7 +239,7 @@ String STR_PAGENUMBERFLD
     TEXT [ English ] = "Page number" ;
     TEXT [ norwegian ] = "Sidenummer" ;
     TEXT [ italian ] = "Numero pagina" ;
-    TEXT [ portuguese_brazilian ] = "N˙mero de p·gina" ;
+    TEXT [ portuguese_brazilian ] = "N?ero de p?gina" ;
     TEXT [ portuguese ] = "N˙mero de p·gina" ;
     TEXT [ finnish ] = "Sivunumerot" ;
     TEXT [ danish ] = "Sidetal" ;
@@ -266,7 +266,7 @@ String STR_DOCSTATFLD
     TEXT [ English ] = "Statistics" ;
     TEXT [ norwegian ] = "Statistics" ;
     TEXT [ italian ] = "Statistiche" ;
-    TEXT [ portuguese_brazilian ] = "EstatÌstica" ;
+    TEXT [ portuguese_brazilian ] = "Estat?stica" ;
     TEXT [ portuguese ] = "EstatÌstica" ;
     TEXT [ finnish ] = "Tiedot" ;
     TEXT [ danish ] = "Statistik" ;
@@ -376,7 +376,7 @@ String STR_SETFLD
     TEXT [ English ] = "Set variable" ;
     TEXT [ norwegian ] = "Set variable" ;
     TEXT [ italian ] = "Imposta variabile" ;
-    TEXT [ portuguese_brazilian ] = "Definir vari·vel" ;
+    TEXT [ portuguese_brazilian ] = "Definir vari?vel" ;
     TEXT [ portuguese ] = "Definir vari·vel" ;
     TEXT [ finnish ] = "M‰‰rit‰ muuttuja" ;
     TEXT [ danish ] = "Definer variabel" ;
@@ -387,7 +387,7 @@ String STR_SETFLD
     TEXT [ english_us ] = "Set variable" ;
     TEXT[ chinese_simplified ] = "…Ë∂®±‰¡ø";
     TEXT[ russian ] = "”ÒÚ‡ÌÓ‚ËÚ¸ ÔÂÂÏÂÌÌÛ˛";
-    TEXT[ polish ] = "Osadü zmiennπ";
+    TEXT[ polish ] = "Osad? zmiennπ";
     TEXT[ japanese ] = "ïœêîÇÃê›íË";
     TEXT[ chinese_traditional ] = "≥]©w≈‹∂q";
     TEXT[ arabic ] = " ⁄ÌÌ‰ „ €Ì—…";
@@ -403,7 +403,7 @@ String STR_GETFLD
     TEXT [ English ] = "Show variable" ;
     TEXT [ norwegian ] = "Show variable" ;
     TEXT [ italian ] = "Mostra variabile" ;
-    TEXT [ portuguese_brazilian ] = "Mostrar vari·vel" ;
+    TEXT [ portuguese_brazilian ] = "Mostrar vari?vel" ;
     TEXT [ portuguese ] = "Mostrar vari·vel" ;
     TEXT [ finnish ] = "N‰yt‰ muuttuja" ;
     TEXT [ danish ] = "Vis variabel" ;
@@ -430,7 +430,7 @@ String STR_FORMELFLD
     TEXT [ English ] = "Insert equation" ;
     TEXT [ norwegian ] = "Insert equation" ;
     TEXT [ italian ] = "Inserisci formula" ;
-    TEXT [ portuguese_brazilian ] = "Inserir equaÁ„o" ;
+    TEXT [ portuguese_brazilian ] = "Inserir equa??o" ;
     TEXT [ portuguese ] = "Inserir fÛrmula" ;
     TEXT [ finnish ] = "Lis‰‰ kaava" ;
     TEXT [ danish ] = "IndsÊt formel" ;
@@ -568,7 +568,7 @@ String STR_DDEFLD
     TEXT [ English ] = "DDE link" ;
     TEXT [ norwegian ] = "DDE link" ;
     TEXT [ italian ] = "Campo DDE" ;
-    TEXT [ portuguese_brazilian ] = "LigaÁ„o do DDE" ;
+    TEXT [ portuguese_brazilian ] = "Liga??o do DDE" ;
     TEXT [ portuguese ] = "Campo DDE" ;
     TEXT [ finnish ] = "DDE-kentt‰" ;
     TEXT [ danish ] = "DDE-felt" ;
@@ -622,7 +622,7 @@ String STR_SEQFLD
     TEXT [ English ] = "Sequence" ;
     TEXT [ norwegian ] = "Sequence" ;
     TEXT [ italian ] = "Sequenza" ;
-    TEXT [ portuguese_brazilian ] = "SequÍncia" ;
+    TEXT [ portuguese_brazilian ] = "Sequ?ncia" ;
     TEXT [ portuguese ] = "SequÍncia" ;
     TEXT [ finnish ] = "Numeroalue" ;
     TEXT [ danish ] = "Sekvensnummererering" ;
@@ -658,7 +658,7 @@ String STR_SETREFPAGEFLD
     Text [ portuguese_brazilian ] = "Seitenvariable setzen" ;
     Text[ chinese_simplified ] = "…Ë∂®“≥√Ê±‰ ˝";
     Text[ russian ] = "”ÒÚ‡ÌÓ‚ËÚ¸ ÔÂÂÏÂÌÌ˚Â ÒÚ‡ÌËˆ";
-    Text[ polish ] = "Osadü zmiennπ strony";
+    Text[ polish ] = "Osad? zmiennπ strony";
     Text[ japanese ] = "Õﬂ∞ºﬁïœêîÇÃê›íË";
     Text[ chinese_traditional ] = "≥]©w≠∂≠±≈‹∂q";
     Text[ arabic ] = " ⁄ÌÌ‰ „ €Ì—… ’›Õ…";
@@ -782,7 +782,7 @@ String STR_SETREFFLD
     TEXT [ English ] = "Set reference" ;
     TEXT [ norwegian ] = "Set reference" ;
     TEXT [ italian ] = "Imposta riferimento" ;
-    TEXT [ portuguese_brazilian ] = "Definir referÍncia" ;
+    TEXT [ portuguese_brazilian ] = "Definir refer?ncia" ;
     TEXT [ portuguese ] = "Definir referÍncia" ;
     TEXT [ finnish ] = "M‰‰rit‰ viite" ;
     TEXT [ danish ] = "Definer reference" ;
@@ -793,7 +793,7 @@ String STR_SETREFFLD
     TEXT [ english_us ] = "Set Reference" ;
     TEXT[ chinese_simplified ] = "…Ë∂®“˝”√";
     TEXT[ russian ] = "”ÒÚ‡ÌÓ‚ËÚ¸ ÒÒ˚ÎÍÛ";
-    TEXT[ polish ] = "Okreúl odwo≥anie";
+    TEXT[ polish ] = "Okre?l odwo≥anie";
     TEXT[ japanese ] = "éQè∆ÇÃê›íË";
     TEXT[ chinese_traditional ] = "≥]©w∞—∑”";
     TEXT[ arabic ] = " ⁄ÌÌ‰ „—Ã⁄";
@@ -809,7 +809,7 @@ String STR_GETREFFLD
     TEXT [ English ] = "Insert reference" ;
     TEXT [ norwegian ] = "Insert reference" ;
     TEXT [ italian ] = "Inserisci riferimento" ;
-    TEXT [ portuguese_brazilian ] = "Inserir referÍncia" ;
+    TEXT [ portuguese_brazilian ] = "Inserir refer?ncia" ;
     TEXT [ portuguese ] = "Inserir referÍncia" ;
     TEXT [ finnish ] = "Lis‰‰ viite" ;
     TEXT [ danish ] = "IndsÊt reference" ;
@@ -866,7 +866,7 @@ String STR_DBNEXTSETFLD
     TEXT [ English ] = "Next Set" ;
     TEXT [ norwegian ] = "Next Set" ;
     TEXT [ italian ] = "Record dati successivo" ;
-    TEXT [ portuguese_brazilian ] = "Definir prÛximo" ;
+    TEXT [ portuguese_brazilian ] = "Definir pr?imo" ;
     TEXT [ portuguese ] = "Registo seguinte" ;
     TEXT [ finnish ] = "Seuraava tietue" ;
     TEXT [ danish ] = "NÊste datapost" ;
@@ -920,7 +920,7 @@ String STR_DBSETNUMBERFLD
     TEXT [ English ] = "Setnumber" ;
     TEXT [ norwegian ] = "Setnumber" ;
     TEXT [ italian ] = "Numero record dati" ;
-    TEXT [ portuguese_brazilian ] = "Definir n˙mero" ;
+    TEXT [ portuguese_brazilian ] = "Definir n?ero" ;
     TEXT [ portuguese ] = "N˙mero do registo" ;
     TEXT [ finnish ] = "Tietueen numero" ;
     TEXT [ danish ] = "Datapostnummer" ;
@@ -947,7 +947,7 @@ String STR_PREVPAGEFLD
     TEXT [ English ] = "Prev Page" ;
     TEXT [ norwegian ] = "Prev Page" ;
     TEXT [ italian ] = "Pagina precedente" ;
-    TEXT [ portuguese_brazilian ] = "Examinar P·gina" ;
+    TEXT [ portuguese_brazilian ] = "Examinar P?gina" ;
     TEXT [ portuguese ] = "P·gina anterior" ;
     TEXT [ finnish ] = "Edellinen sivu" ;
     TEXT [ danish ] = "Forrige side" ;
@@ -974,7 +974,7 @@ String STR_NEXTPAGEFLD
     TEXT [ English ] = "Next Page" ;
     TEXT [ norwegian ] = "Neste side" ;
     TEXT [ italian ] = "Pagina successiva" ;
-    TEXT [ portuguese_brazilian ] = "PrÛxima P·gina" ;
+    TEXT [ portuguese_brazilian ] = "Pr?ima P?gina" ;
     TEXT [ portuguese ] = "P·gina seguinte" ;
     TEXT [ finnish ] = "Seuraava sivu" ;
     TEXT [ danish ] = "NÊste side" ;
@@ -1031,7 +1031,7 @@ String STR_USERFLD
     TEXT [ English ] = "User field" ;
     TEXT [ norwegian ] = "User field" ;
     TEXT [ italian ] = "Campo utente" ;
-    TEXT [ portuguese_brazilian ] = "Campo do usu·rio" ;
+    TEXT [ portuguese_brazilian ] = "Campo do usu?rio" ;
     TEXT [ portuguese ] = "Campo do utilizador" ;
     TEXT [ finnish ] = "K‰ytt‰j‰kentt‰" ;
     TEXT [ danish ] = "Brugerdefineret felt" ;
@@ -1058,7 +1058,7 @@ String STR_POSTITFLD
     TEXT [ English ] = "Note" ;
     TEXT [ norwegian ] = "Merknad" ;
     TEXT [ italian ] = "Nota" ;
-    TEXT [ portuguese_brazilian ] = "ObservaÁ„o" ;
+    TEXT [ portuguese_brazilian ] = "Observa??o" ;
     TEXT [ portuguese ] = "AnotaÁ„o" ;
     TEXT [ finnish ] = "Huomautus" ;
     TEXT [ danish ] = "Note" ;
@@ -1137,7 +1137,7 @@ String STR_HIDDENPARAFLD
     TEXT [ English ] = "Hidden paragraph" ;
     TEXT [ norwegian ] = "Hidden paragraph" ;
     TEXT [ italian ] = "Paragrafo vuoto" ;
-    TEXT [ portuguese_brazilian ] = "Par·grafo vazio" ;
+    TEXT [ portuguese_brazilian ] = "Par?grafo vazio" ;
     TEXT [ portuguese ] = "Par·grafo oculto" ;
     TEXT [ finnish ] = "Piilotettu kappale" ;
     TEXT [ danish ] = "Skjult afsnit" ;
@@ -1167,7 +1167,7 @@ String STR_DOCINFOFLD
     TEXT [ English ] = "Document info" ;
     TEXT [ norwegian ] = "Document info" ;
     TEXT [ italian ] = "Info documento" ;
-    TEXT [ portuguese_brazilian ] = "InformaÁıes sobre o documento" ;
+    TEXT [ portuguese_brazilian ] = "Informa??s sobre o documento" ;
     TEXT [ portuguese ] = "Info. sobre documento" ;
     TEXT [ finnish ] = "Asiakirjatiedot" ;
     TEXT [ danish ] = "Dokumentinfo" ;
@@ -1387,7 +1387,7 @@ String FLD_STAT_PARA
     TEXT [ English ] = "Paragraphs" ;
     TEXT [ norwegian ] = "Paragraphs" ;
     TEXT [ italian ] = "Paragrafi" ;
-    TEXT [ portuguese_brazilian ] = "Par·grafos" ;
+    TEXT [ portuguese_brazilian ] = "Par?grafos" ;
     TEXT [ portuguese ] = "Par·grafos" ;
     TEXT [ finnish ] = "Kappaleet" ;
     TEXT [ danish ] = "Afsnit" ;
@@ -1414,7 +1414,7 @@ String FLD_STAT_GRF
     TEXT [ English ] = "Graphics" ;
     TEXT [ norwegian ] = "Grafikker" ;
     TEXT [ italian ] = "Immagini" ;
-    TEXT [ portuguese_brazilian ] = "Gr·ficos" ;
+    TEXT [ portuguese_brazilian ] = "Gr?ficos" ;
     TEXT [ portuguese ] = "Imagens" ;
     TEXT [ finnish ] = "Kuvat" ;
     TEXT [ danish ] = "Grafik" ;
@@ -1468,7 +1468,7 @@ String FLD_STAT_PAGE
     TEXT [ English ] = "Pages" ;
     TEXT [ norwegian ] = "Pages" ;
     TEXT [ italian ] = "Pagine" ;
-    TEXT [ portuguese_brazilian ] = "P·ginas" ;
+    TEXT [ portuguese_brazilian ] = "P?ginas" ;
     TEXT [ portuguese ] = "P·ginas" ;
     TEXT [ finnish ] = "Sivut" ;
     TEXT [ danish ] = "Sider" ;
@@ -1692,7 +1692,7 @@ String FLD_EU_LAND
     TEXT [ English ] = "Country" ;
     TEXT [ norwegian ] = "Country" ;
     TEXT [ italian ] = "Paese" ;
-    TEXT [ portuguese_brazilian ] = "PaÌs" ;
+    TEXT [ portuguese_brazilian ] = "Pa?s" ;
     TEXT [ portuguese ] = "PaÌs" ;
     TEXT [ finnish ] = "Valtio" ;
     TEXT [ danish ] = "Land" ;
@@ -1757,7 +1757,7 @@ String FLD_EU_ORT
     TEXT [ english_us ] = "City" ;
     TEXT[ chinese_simplified ] = "Œª÷√";
     TEXT[ russian ] = "√ÓÓ‰";
-    TEXT[ polish ] = "MiejscowoúÊ";
+    TEXT[ polish ] = "Miejscowo?Ê";
     TEXT[ japanese ] = "èBñºÅAìsìπï{åßñº";
     TEXT[ chinese_traditional ] = "¶Ï∏m";
     TEXT[ arabic ] = "«·„œÌ‰…";
@@ -1773,7 +1773,7 @@ String FLD_EU_TITEL
     TEXT [ English ] = "Titel" ;
     TEXT [ norwegian ] = "Tittel" ;
     TEXT [ italian ] = "Titolo" ;
-    TEXT [ portuguese_brazilian ] = "TÌtilo" ;
+    TEXT [ portuguese_brazilian ] = "T?tilo" ;
     TEXT [ portuguese ] = "TÌtulo" ;
     TEXT [ finnish ] = "Otsikko" ;
     TEXT [ danish ] = "Titel" ;
@@ -1800,7 +1800,7 @@ String FLD_EU_POS
     TEXT [ English ] = "Position" ;
     TEXT [ norwegian ] = "Posisjon" ;
     TEXT [ italian ] = "Posizione" ;
-    TEXT [ portuguese_brazilian ] = "PosiÁ„o" ;
+    TEXT [ portuguese_brazilian ] = "Posi??o" ;
     TEXT [ portuguese ] = "PosiÁ„o" ;
     TEXT [ finnish ] = "Sijainti" ;
     TEXT [ danish ] = "Stilling" ;
@@ -2057,7 +2057,7 @@ String FMT_FF_PATHNAME
     TEXT [ english_us ] = "Path/File name" ;
     TEXT[ chinese_simplified ] = "¬∑æ∂/Œƒº˛√˚";
     TEXT[ russian ] = "œÛÚ¸/»Ïˇ Ù‡ÈÎ‡";
-    TEXT[ polish ] = "åcieøka/Nazwa pliku";
+    TEXT[ polish ] = "?cieøka/Nazwa pliku";
     TEXT[ japanese ] = " ﬂΩ/Ãß≤Ÿñº";
     TEXT[ chinese_traditional ] = "∏ÙÆ|©M¿…Æ◊¶W";
     TEXT[ arabic ] = "«·„”«—/«”„ «·„·›";
@@ -2084,7 +2084,7 @@ String FMT_FF_PATH
     TEXT [ english_us ] = "Path" ;
     TEXT[ chinese_simplified ] = "¬∑æ∂";
     TEXT[ russian ] = "œÛÚ¸";
-    TEXT[ polish ] = "åcieøka";
+    TEXT[ polish ] = "?cieøka";
     TEXT[ japanese ] = " ﬂΩ";
     TEXT[ chinese_traditional ] = "∏ÙÆ|";
     TEXT[ arabic ] = "«·„”«—";
@@ -2154,7 +2154,7 @@ String FMT_CHAPTER_NAME
     TEXT [ English ] = "Chapter name" ;
     TEXT [ norwegian ] = "Chapter name" ;
     TEXT [ italian ] = "Nome capitolo" ;
-    TEXT [ portuguese_brazilian ] = "Nome do capÌtulo" ;
+    TEXT [ portuguese_brazilian ] = "Nome do cap?tulo" ;
     TEXT [ portuguese ] = "Nome do capÌtulo" ;
     TEXT [ finnish ] = "Luvun nimi" ;
     TEXT [ danish ] = "Kapitelnavn" ;
@@ -2181,7 +2181,7 @@ String FMT_CHAPTER_NO
     TEXT [ English ] = "Chapter number" ;
     Text [ portuguese ] = "N˙mero do capÌtulo" ;
     Text [ english_us ] = "Chapter number" ;
-    Text [ portuguese_brazilian ] = "N˙mero do capÌtulo" ;
+    Text [ portuguese_brazilian ] = "N?ero do cap?tulo" ;
     Text [ swedish ] = "Kapitelnummer" ;
     Text [ danish ] = "Kapitelnummer" ;
     Text [ italian ] = "Numero capitolo" ;
@@ -2234,7 +2234,7 @@ String FMT_CHAPTER_NAMENO
     TEXT [ English ] = "Chapter number and name" ;
     Text [ portuguese ] = "N˙mero e nome do capÌtulo" ;
     Text [ english_us ] = "Chapter number and name" ;
-    Text [ portuguese_brazilian ] = "N˙mero e nome" ;
+    Text [ portuguese_brazilian ] = "N?ero e nome" ;
     Text [ swedish ] = "Kapitelnummer och namn" ;
     Text [ danish ] = "Kapitelnummer og navn" ;
     Text [ italian ] = "Numero di capitolo e nome" ;
@@ -2333,7 +2333,7 @@ String FMT_NUM_ARABIC
     TEXT [ English ] = "Arabic (1 2 3)" ;
     TEXT [ norwegian ] = "Arabic (1 2 3)" ;
     TEXT [ italian ] = "Arabi (1 2 3)" ;
-    TEXT [ portuguese_brazilian ] = "Ar·bico (1 2 3)" ;
+    TEXT [ portuguese_brazilian ] = "Ar?bico (1 2 3)" ;
     TEXT [ portuguese ] = "Ar·be (1 2 3)" ;
     TEXT [ finnish ] = "Arabialaiset (1 2 3)" ;
     TEXT [ danish ] = "Arabisk (1 2 3)" ;
@@ -2360,7 +2360,7 @@ String FMT_NUM_PAGEDESC
     TEXT [ English ] = "As Page Style" ;
     TEXT [ norwegian ] = "As Page Style" ;
     TEXT [ italian ] = "Come modello di pagina" ;
-    TEXT [ portuguese_brazilian ] = "Como Estilo de P·gina" ;
+    TEXT [ portuguese_brazilian ] = "Como Estilo de P?gina" ;
     TEXT [ portuguese ] = "Como estilo de p·gina" ;
     TEXT [ finnish ] = "Sivutyylin‰" ;
     TEXT [ danish ] = "Som sidetypografi" ;
@@ -2443,7 +2443,7 @@ String FMT_AUTHOR_SCUT
     TEXT [ English ] = "Short name" ;
     TEXT [ norwegian ] = "Short name" ;
     TEXT [ italian ] = "Iniziali" ;
-    TEXT [ portuguese_brazilian ] = "AbreviaÁ„o" ;
+    TEXT [ portuguese_brazilian ] = "Abrevia??o" ;
     TEXT [ portuguese ] = "Iniciais" ;
     TEXT [ finnish ] = "Nimikirjaimet" ;
     TEXT [ danish ] = "Initialer" ;
@@ -2768,7 +2768,7 @@ String FMT_REF_TEXT
     TEXT [ English ] = "Reference" ;
     TEXT [ norwegian ] = "Reference" ;
     TEXT [ italian ] = "Testo di riferimento" ;
-    TEXT [ portuguese_brazilian ] = "ReferÍncia" ;
+    TEXT [ portuguese_brazilian ] = "Refer?ncia" ;
     TEXT [ portuguese ] = "ReferÍncia" ;
     TEXT [ finnish ] = "Viite" ;
     TEXT [ danish ] = "Referencetekst" ;
@@ -2795,7 +2795,7 @@ String FMT_REF_PAGE
     TEXT [ English ] = "Page" ;
     TEXT [ norwegian ] = "Page" ;
     TEXT [ italian ] = "Pagina" ;
-    TEXT [ portuguese_brazilian ] = "P·gina" ;
+    TEXT [ portuguese_brazilian ] = "P?gina" ;
     TEXT [ portuguese ] = "P·gina" ;
     TEXT [ finnish ] = "Sivu" ;
     TEXT [ danish ] = "Side" ;
@@ -2822,7 +2822,7 @@ String FMT_REF_CHAPTER
     TEXT [ English ] = "Chapter" ;
     TEXT [ norwegian ] = "Chapter" ;
     TEXT [ italian ] = "Capitolo" ;
-    TEXT [ portuguese_brazilian ] = "CapÌtulo" ;
+    TEXT [ portuguese_brazilian ] = "Cap?tulo" ;
     TEXT [ portuguese ] = "CapÌtulo" ;
     TEXT [ finnish ] = "Luku" ;
     TEXT [ danish ] = "Kapitel" ;
@@ -2875,7 +2875,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT [ English ] = "As Page Style" ;
     TEXT [ norwegian ] = "As Page Style" ;
     TEXT [ italian ] = "Come modello di pagina" ;
-    TEXT [ portuguese_brazilian ] = "Como Estilo de P·gina" ;
+    TEXT [ portuguese_brazilian ] = "Como Estilo de P?gina" ;
     TEXT [ portuguese ] = "Como estilo de p·gina" ;
     TEXT [ finnish ] = "Sivutyylin‰" ;
     TEXT [ danish ] = "Som sidetypografi" ;
@@ -3063,7 +3063,7 @@ String FMT_MARK_GRAFIC
     Text [ English ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gr·fico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuvat" ;
     Text [ danish ] = "Grafik" ;
@@ -3184,7 +3184,7 @@ String STR_COND
     TEXT [ English ] = "Conditio~n" ;
     TEXT [ norwegian ] = "VilkÂr" ;
     TEXT [ italian ] = "Condizione" ;
-    TEXT [ portuguese_brazilian ] = "condiÁ„o" ;
+    TEXT [ portuguese_brazilian ] = "condi??o" ;
     TEXT [ portuguese ] = "~CondiÁ„o" ;
     TEXT [ finnish ] = "~Ehto" ;
     TEXT [ danish ] = "Betingelse" ;
@@ -3211,7 +3211,7 @@ String STR_TEXT
     TEXT [ English ] = "Then,Else" ;
     TEXT [ norwegian ] = "Then,Else" ;
     TEXT [ italian ] = "Poi, altrimenti" ;
-    TEXT [ portuguese_brazilian ] = "Entao,Sen„o" ;
+    TEXT [ portuguese_brazilian ] = "Entao,Sen?o" ;
     TEXT [ portuguese ] = "Ent„o, Sen„o" ;
     TEXT [ finnish ] = "Sitten, Muuten" ;
     TEXT [ danish ] = "SÂ, Ellers" ;
@@ -3238,7 +3238,7 @@ String STR_DDE_CMD
     TEXT [ English ] = "DDE instruction" ;
     TEXT [ norwegian ] = "DDE instruction" ;
     TEXT [ italian ] = "Istruzione DDE" ;
-    TEXT [ portuguese_brazilian ] = "InstruÁıes do DDE" ;
+    TEXT [ portuguese_brazilian ] = "Instru??s do DDE" ;
     TEXT [ portuguese ] = "InstruÁıes DDE" ;
     TEXT [ finnish ] = "DDE-lauseke" ;
     TEXT [ danish ] = "DDE-sÊtning" ;
@@ -3371,7 +3371,7 @@ String STR_SETNO
     TEXT [ English ] = "Setnumber" ;
     TEXT [ norwegian ] = "Setnumber" ;
     TEXT [ italian ] = "Numero di record" ;
-    TEXT [ portuguese_brazilian ] = "Definir n˙mero" ;
+    TEXT [ portuguese_brazilian ] = "Definir n?ero" ;
     TEXT [ portuguese ] = "N˙mero de registo" ;
     TEXT [ finnish ] = "Tietueen numero" ;
     TEXT [ danish ] = "Datapostnummer" ;
@@ -3436,7 +3436,7 @@ String STR_VALUE
     Text [ english_us ] = "Value" ;
     Text[ chinese_simplified ] = " ˝÷µ";
     Text[ russian ] = "«Ì‡˜ÂÌËÂ";
-    Text[ polish ] = ", WartoúÊ  ";
+    Text[ polish ] = ", Warto?Ê  ";
     Text[ japanese ] = "íl";
     Text[ chinese_traditional ] = "º∆≠»";
     Text[ arabic ] = "«·ﬁÌ„…";
@@ -3452,7 +3452,7 @@ String STR_FORMULA
     TEXT [ English ] = "Formula" ;
     Text [ portuguese ] = "FÛrmula" ;
     Text [ english_us ] = "Formula" ;
-    Text [ portuguese_brazilian ] = "FÛrmula do Texto" ;
+    Text [ portuguese_brazilian ] = "F?mula do Texto" ;
     Text [ swedish ] = "Formel" ;
     Text [ danish ] = "Formel" ;
     Text [ italian ] = "Formula" ;
@@ -3478,7 +3478,7 @@ String STR_LEVEL
     TEXT [ English ] = "Level" ;
     TEXT [ norwegian ] = "Level" ;
     TEXT [ italian ] = "Livello " ;
-    TEXT [ portuguese_brazilian ] = "NÌvel" ;
+    TEXT [ portuguese_brazilian ] = "N?vel" ;
     TEXT [ portuguese ] = "NÌvel " ;
     TEXT [ finnish ] = "Kerros " ;
     TEXT [ danish ] = "Niveau" ;
