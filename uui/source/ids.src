@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:44:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,29 +1449,29 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK)
     {
-        Text = "Das Objekt kann im Verzeichnis $(ARG2) nicht angelegt werden";
-        Text[english] = "The object could not be created in directory $(ARG2)";
-        Text[ english_us ] = "The object cannot be created in directory $(ARG2)";
-        Text[ portuguese ] = "Impossível criar o objecto no directório $(ARG2).";
-        Text[ russian ] = "Íåâîçìîæíî ñîçäàòü îáúåêò â êàòàëîãå $(ARG2)";
-        Text[ greek ] = "The object could not be created in directory $(ARG2)";
-        Text[ dutch ] = "Het object kan niet in directory $(ARG2) worden gemaakt";
-        Text[ french ] = "Impossible de créer l'objet dans le répertoire $(ARG2) !";
-        Text[ spanish ] = "No se puede crear el objeto en el directorio $(ARG2).";
-        Text[ finnish ] = "Kohdetta ei voi luoda hakemistoon $(ARG2).";
-        Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG2)";
-        Text[ danish ] = "Objektet kan ikke oprettes i biblioteket $(ARG2)";
-        Text[ swedish ] = "Det går inte att skapa objektet i katalogen $(ARG2)";
-        Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG2) nie jest mo¿liwe";
-        Text[ portuguese_brazilian ] = "The object could not be created in directory $(ARG2)";
-        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ãƒ•ã‚©ãƒ«ãƒ€ $(ARG2) ã«æ ¼ç´ã§ãã¾ã›ã‚“ã€‚";
-        Text[ korean ] = "ë””ë ‰í† ë¦¬ $(ARG2)ì— ê°œì²´ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "æ— æ³•åœ¨ç›®å½• $(ARG2) å†…æ–°å»ºå¯¹è±¡ã€‚";
-        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ç›®éŒ„ $(ARG2) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶";
-        Text[ turkish ] = "The object could not be created in directory $(ARG2)";
-        Text[ arabic ] = "The object could not be created in directory $(ARG2)";
-        Text[ catalan ] = "L'objecte no es pot crear en el directori $(ARG2)";
-        Text[ thai ] = "The object cannot be created in directory $(ARG2)";
+        Text = "Das Objekt kann im Verzeichnis $(ARG1) nicht angelegt werden";
+        Text[english] = "The object could not be created in directory $(ARG1)";
+        Text[ english_us ] = "The object cannot be created in directory $(ARG1)";
+        Text[ portuguese ] = "Impossível criar o objecto no directório $(ARG1).";
+        Text[ russian ] = "Íåâîçìîæíî ñîçäàòü îáúåêò â êàòàëîãå $(ARG1)";
+        Text[ greek ] = "The object could not be created in directory $(ARG1)";
+        Text[ dutch ] = "Het object kan niet in directory $(ARG1) worden gemaakt";
+        Text[ french ] = "Impossible de créer l'objet dans le répertoire $(ARG1) !";
+        Text[ spanish ] = "No se puede crear el objeto en el directorio $(ARG1).";
+        Text[ finnish ] = "Kohdetta ei voi luoda hakemistoon $(ARG1).";
+        Text[ italian ] = "Impossibile creare l'oggetto nella cartella $(ARG1)";
+        Text[ danish ] = "Objektet kan ikke oprettes i biblioteket $(ARG1)";
+        Text[ swedish ] = "Det går inte att skapa objektet i katalogen $(ARG1)";
+        Text[ polish ] = "Utworzenie obiektu w katalogu $(ARG1) nie jest mo¿liwe";
+        Text[ portuguese_brazilian ] = "The object could not be created in directory $(ARG1)";
+        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ãƒ•ã‚©ãƒ«ãƒ€ $(ARG1) ã«æ ¼ç´ã§ãã¾ã›ã‚“ã€‚";
+        Text[ korean ] = "ë””ë ‰í† ë¦¬ $(ARG1)ì— ê°œì²´ì„(ë¥¼) ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
+        Text[ chinese_simplified ] = "æ— æ³•åœ¨ç›®å½• $(ARG1) å†…æ–°å»ºå¯¹è±¡ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•åœ¨ç›®éŒ„ $(ARG1) ä¹‹ä¸‹å»ºç«‹ç‰©ä»¶";
+        Text[ turkish ] = "The object could not be created in directory $(ARG1)";
+        Text[ arabic ] = "The object could not be created in directory $(ARG1)";
+        Text[ catalan ] = "L'objecte no es pot crear en el directori $(ARG1)";
+        Text[ thai ] = "The object cannot be created in directory $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
