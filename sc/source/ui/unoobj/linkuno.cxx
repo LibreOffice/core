@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:21:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ void SAL_CALL ScSheetLinkObj::removeRefreshListener(
 void ScSheetLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source.set((cppu::OWeakObject*)this);
     for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
@@ -242,8 +242,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSheetLinkObj::getPropertySetI
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -254,7 +254,7 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     rtl::OUString aValStr;
     if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
     {
@@ -290,7 +290,7 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const rtl::OUString& aProper
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     uno::Any aRet;
     if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
         aRet <<= getFileName();
@@ -324,8 +324,7 @@ void ScSheetLinkObj::setFileName(const rtl::OUString& rNewName)
         //  pLink->Refresh mit neuem Dateinamen bringt SvxLinkManager durcheinander
         //  darum per Hand die Tabellen umsetzen und Link per UpdateLinks neu erzeugen
 
-        String aNewStr = rNewName;
-        aNewStr = ScGlobal::GetAbsDocName( aNewStr, pDocShell );
+        String aNewStr(ScGlobal::GetAbsDocName( String(rNewName), pDocShell ));
 
         //  zuerst Tabellen umsetzen
 
@@ -369,7 +368,7 @@ void ScSheetLinkObj::setFilter(const rtl::OUString& Filter)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        String aFilterStr = Filter;
+        String aFilterStr(Filter);
         pLink->Refresh( aFileName, aFilterStr, NULL, pLink->GetRefreshDelay() );
     }
 }
@@ -390,7 +389,7 @@ void ScSheetLinkObj::setFilterOptions(const rtl::OUString& FilterOptions)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        String aOptStr = FilterOptions;
+        String aOptStr(FilterOptions);
         pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr, pLink->GetRefreshDelay() );
     }
 }
@@ -470,7 +469,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const rtl::OUString& aName
 
     if (pDocShell)
     {
-        String aNameStr = aName;
+        String aNameStr(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -510,7 +509,7 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException)
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             if (pDoc->IsLinked(nTab))
             {
-                String aLinkDoc = pDoc->GetLinkDoc( nTab );
+                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 StrData* pData = new StrData(aLinkDoc);
                 if (aNames.Insert(pData))
                     ++nCount;
@@ -526,13 +525,12 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<beans::XPropertySet> xLink = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<beans::XPropertySet> xLink(GetObjectByIndex_Impl(nIndex));
     if (xLink.is())
-        aAny <<= xLink;
+        return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType() throw(uno::RuntimeException)
@@ -552,13 +550,12 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<beans::XPropertySet> xLink = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<beans::XPropertySet> xLink(GetObjectByName_Impl(aName));
     if (xLink.is())
-        aAny <<= xLink;
+        return uno::makeAny(xLink);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
@@ -569,7 +566,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
 
     if (pDocShell)
     {
-        String aNameStr = aName;
+        String aNameStr(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTabCount = pDoc->GetTableCount();
@@ -577,7 +574,7 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
             if (pDoc->IsLinked(nTab))
             {
                 //! case-insensitiv ???
-                String aLinkDoc = pDoc->GetLinkDoc( nTab );
+                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 if ( aLinkDoc == aNameStr )
                     return TRUE;
             }
@@ -605,7 +602,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
         {
             if (pDoc->IsLinked(nTab))
             {
-                String aLinkDoc = pDoc->GetLinkDoc( nTab );
+                String aLinkDoc(pDoc->GetLinkDoc( nTab ));
                 StrData* pData = new StrData(aLinkDoc);
                 if (aNames.Insert(pData))
                     pAry[nPos++] = aLinkDoc;
@@ -688,11 +685,11 @@ void ScAreaLinkObj::Modify_Impl( const rtl::OUString* pNewFile, const rtl::OUStr
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
     {
-        String aFile    = pLink->GetFile();
-        String aFilter  = pLink->GetFilter();
-        String aOptions = pLink->GetOptions();
-        String aSource  = pLink->GetSource();
-        ScRange aDest   = pLink->GetDestArea();
+        String aFile    (pLink->GetFile());
+        String aFilter  (pLink->GetFilter());
+        String aOptions (pLink->GetOptions());
+        String aSource  (pLink->GetSource());
+        ScRange aDest   (pLink->GetDestArea());
         ULONG nRefresh  = pLink->GetRefreshDelay();
 
         //! Undo fuer Loeschen
@@ -778,7 +775,7 @@ void SAL_CALL ScAreaLinkObj::removeRefreshListener(
 void ScAreaLinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source.set((cppu::OWeakObject*)this);
     for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
@@ -789,8 +786,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAreaLinkObj::getPropertySetIn
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -801,7 +798,7 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     rtl::OUString aValStr;
     if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
     {
@@ -837,7 +834,7 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const rtl::OUString& aPropert
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     uno::Any aRet;
     if ( aNameString.EqualsAscii( SC_UNONAME_LINKURL ) )
         aRet <<= getFileName();
@@ -1001,10 +998,10 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
     ScUnoGuard aGuard;
     if (pDocShell)
     {
-        String aFileStr   = aFileName;
-        String aFilterStr = aFilter;
-        String aOptionStr = aFilterOptions;
-        String aSourceStr = aSourceArea;
+        String aFileStr   (aFileName);
+        String aFilterStr (aFilter);
+        String aOptionStr (aFilterOptions);
+        String aSourceStr (aSourceArea);
         ScAddress aDestAddr( (SCCOL)aDestPos.Column, (SCROW)aDestPos.Row, aDestPos.Sheet );
 
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
@@ -1063,13 +1060,12 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XAreaLink> xLink = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XAreaLink> xLink(GetObjectByIndex_Impl(nIndex));
     if (xLink.is())
-        aAny <<= xLink;
+        return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScAreaLinksObj::getElementType() throw(uno::RuntimeException)
@@ -1223,7 +1219,7 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
 void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
-    aEvent.Source = (cppu::OWeakObject*)this;
+    aEvent.Source.set((cppu::OWeakObject*)this);
     for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
         (*aRefreshListeners[n])->refreshed( aEvent );
 }
@@ -1271,7 +1267,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const rtl::OUString& aName)
 {
     if (pDocShell)
     {
-        String aNamStr = aName;
+        String aNamStr(aName);
         String aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -1311,13 +1307,12 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDDELink> xLink = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XDDELink> xLink(GetObjectByIndex_Impl(nIndex));
     if (xLink.is())
-        aAny <<= xLink;
+        return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType() throw(uno::RuntimeException)
@@ -1337,13 +1332,12 @@ uno::Any SAL_CALL ScDDELinksObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XDDELink> xLink = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<sheet::XDDELink> xLink(GetObjectByName_Impl(aName));
     if (xLink.is())
-        aAny <<= xLink;
+        return uno::makeAny(xLink);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno::RuntimeException)
@@ -1374,7 +1368,7 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     if (pDocShell)
     {
-        String aNamStr = aName;
+        String aNamStr(aName);
         String aAppl, aTopic, aItem;
 
         ScDocument* pDoc = pDocShell->GetDocument();
