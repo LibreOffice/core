@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:28:40 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,12 @@ std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccessRef const& _aCachedNode
     return aNewChange;
 }
 // -----------------------------------------------------------------------------
-/*
+#if 0
 std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
                                                      sal_Int16 _nMinLevels)  CFG_UNO_THROW_ALL()
 {
-    TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo* /);
+    TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo*/);
 
     CFG_TRACE_INFO_NI("cache manager: cache miss. going to load the node");
     rtl::Reference< OTreeLoader > xLoader = pInfo->getNewLoaderWithoutPending(_aAbsoluteSubtreePath, _nMinLevels, _xOptions, m_xBackend.get());
@@ -163,16 +163,16 @@ std::auto_ptr<ISubtree> TreeManager::loadNodeFromSession( AbsolutePath const& _a
 
     return pResponse;
 }
-*/
+#endif
 // -----------------------------------------------------------------------------
 
 class OInvalidateTreeThread: public vos::OThread
 {
     typedef backend::ICachedDataProvider CacheManager;
     typedef rtl::Reference< CacheManager > CacheManagerRef;
-    RequestOptions      m_aOptions;
     CacheManagerRef     m_rTreeManager;
     Name                m_aComponentName;
+    RequestOptions      m_aOptions;
 
 public:
     OInvalidateTreeThread(CacheManager* _rTreeManager,  Name const & _aComponentName,
