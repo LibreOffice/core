@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:07:20 $
+ *  last change: $Author: oj $ $Date: 2002-11-15 13:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,15 +151,7 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
             aOwnTypes.push_back(*pBegin);
         }
     }
-    //  return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
-    Sequence< Type > aRet(aOwnTypes.size());
-    sal_Int32 i=0;
-    for (::std::vector<Type>::iterator aIter = aOwnTypes.begin(); aOwnTypes.end(); ++aIter,++i)
-    {
-        aRet[i] = *aIter;
-    }
-
-    return aRet;//Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 // -----------------------------------------------------------------------------
 
