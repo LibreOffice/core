@@ -41,7 +41,7 @@ ul	unoil\com\sun\star\ui\dialogs			nmake	-	all	ul_ui_dialogs ul_genall NULL
 ul	unoil\com\sun\star\view				nmake	-	all	ul_view ul_awt NULL
 ul	unoil\com\sun\star\ui				nmake	-	all	ul_ui ul_awt ul_view NULL
 ul	unoil\com\sun\star\xml				nmake	-	all	ul_xml ul_xml_sax ul_genall NULL
-ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax NULL
+ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax ul_genall NULL
 ul	unoil\drafts\com\sun\star\accessibility		nmake	-	all	ul_accessibility ul_awt NULL
 ul	unoil\drafts\com\sun\star\accessibility\bridge nmake	-	all	ul_accessbridge ul_accessibility NULL
 ul	unoil\drafts\com\sun\star\awt		nmake	-	all	ul_awt_drafts ul_awt NULL
