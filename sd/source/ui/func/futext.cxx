@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:41:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1424,8 +1424,6 @@ BOOL FuText::DeleteDefaultText()
 
 void FuText::ObjectChanged()
 {
-    if (pTextObj)
-        pTextObj->SetEmptyPresObj(FALSE);
 }
 
 /*************************************************************************
