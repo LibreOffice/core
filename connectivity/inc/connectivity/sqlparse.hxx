@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-17 08:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ namespace connectivity
         void error(char *fmt);
         int SQLlex();
 #ifdef YYBISON
-        inline void setParseTree(OSQLParseNode * pNewParseTree) {m_pParseTree = pNewParseTree;}
+        void setParseTree(OSQLParseNode * pNewParseTree);
 
         // Is the parse in a special mode?
         // Predicate chack is used to check a condition for a field
