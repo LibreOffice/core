@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
+ *  last change: $Author: jb $ $Date: 2001-12-17 16:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1869,7 +1869,7 @@ AnyNodeRef getLocalDescendant(Tree const& aTree, NodeRef const& aNode, RelativeP
 
     if ( identifiesLocalValue(aTree,aNestedNode,aRemainingPath) )
     {
-        ValueRef aValue = aTree.getChildValue(aNode,rPath.getLocalName().getName());
+        ValueRef aValue = aTree.getChildValue(aNestedNode,rPath.getLocalName().getName());
         OSL_ASSERT(aTree.isValidNode(aValue));
         return AnyNodeRef(aValue);
     }
