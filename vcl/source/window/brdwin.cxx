@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:21:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #ifndef _SV_METRIC_HXX
 #include <metric.hxx>
@@ -1775,20 +1778,20 @@ void ImplBorderWindow::ImplInit( Window* pParent,
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
 
-    mbBorderWin         = TRUE;
+    mpWindowImpl->mbBorderWin       = TRUE;
     mbSmallOutBorder    = FALSE;
     if ( nTypeStyle & BORDERWINDOW_STYLE_FRAME )
     {
         if( nStyle & WB_OWNERDRAWDECORATION )
         {
-            mbOverlapWin    = TRUE;
-            mbFrame         = TRUE;
+            mpWindowImpl->mbOverlapWin  = TRUE;
+            mpWindowImpl->mbFrame       = TRUE;
             mbFrameBorder   = TRUE;
         }
         else
         {
-            mbOverlapWin    = TRUE;
-            mbFrame         = TRUE;
+            mpWindowImpl->mbOverlapWin  = TRUE;
+            mpWindowImpl->mbFrame       = TRUE;
             mbFrameBorder   = FALSE;
             // closeable windows may have a border as well, eg. system floating windows without caption
             if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
@@ -1797,7 +1800,7 @@ void ImplBorderWindow::ImplInit( Window* pParent,
     }
     else if ( nTypeStyle & BORDERWINDOW_STYLE_OVERLAP )
     {
-        mbOverlapWin    = TRUE;
+        mpWindowImpl->mbOverlapWin  = TRUE;
         mbFrameBorder   = TRUE;
     }
     else
@@ -1985,12 +1988,12 @@ void ImplBorderWindow::Resize()
                                               WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
         }
 
-        GetBorder( pClientWindow->mnLeftBorder, pClientWindow->mnTopBorder,
-                   pClientWindow->mnRightBorder, pClientWindow->mnBottomBorder );
-        pClientWindow->ImplPosSizeWindow( pClientWindow->mnLeftBorder,
-                                          pClientWindow->mnTopBorder,
-                                          aSize.Width()-pClientWindow->mnLeftBorder-pClientWindow->mnRightBorder,
-                                          aSize.Height()-pClientWindow->mnTopBorder-pClientWindow->mnBottomBorder,
+        GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
+                   pClientWindow->mpWindowImpl->mnRightBorder, pClientWindow->mpWindowImpl->mnBottomBorder );
+        pClientWindow->ImplPosSizeWindow( pClientWindow->mpWindowImpl->mnLeftBorder,
+                                          pClientWindow->mpWindowImpl->mnTopBorder,
+                                          aSize.Width()-pClientWindow->mpWindowImpl->mnLeftBorder-pClientWindow->mpWindowImpl->mnRightBorder,
+                                          aSize.Height()-pClientWindow->mpWindowImpl->mnTopBorder-pClientWindow->mpWindowImpl->mnBottomBorder,
                                           WINDOW_POSSIZE_X | WINDOW_POSSIZE_Y |
                                           WINDOW_POSSIZE_WIDTH | WINDOW_POSSIZE_HEIGHT );
     }
@@ -2031,7 +2034,7 @@ void ImplBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        if ( !mbFrame || (GetStyle() & WB_OWNERDRAWDECORATION) )
+        if ( !mpWindowImpl->mbFrame || (GetStyle() & WB_OWNERDRAWDECORATION) )
             UpdateView( TRUE, ImplGetWindow()->GetOutputSizePixel() );
     }
 
@@ -2044,7 +2047,7 @@ void ImplBorderWindow::InitView()
 {
     if ( mbSmallOutBorder )
         mpBorderView = new ImplSmallBorderWindowView( this );
-    else if ( mbFrame )
+    else if ( mpWindowImpl->mbFrame )
     {
         if( mbFrameBorder )
             mpBorderView = new ImplStdBorderWindowView( this );
@@ -2087,8 +2090,8 @@ void ImplBorderWindow::UpdateView( BOOL bNewView, const Size& rNewOutSize )
     Window* pClientWindow = ImplGetClientWindow();
     if ( pClientWindow )
     {
-        GetBorder( pClientWindow->mnLeftBorder, pClientWindow->mnTopBorder,
-                   pClientWindow->mnRightBorder, pClientWindow->mnBottomBorder );
+        GetBorder( pClientWindow->mpWindowImpl->mnLeftBorder, pClientWindow->mpWindowImpl->mnTopBorder,
+                   pClientWindow->mpWindowImpl->mnRightBorder, pClientWindow->mpWindowImpl->mnBottomBorder );
     }
     GetBorder( nLeftBorder, nTopBorder, nRightBorder, nBottomBorder );
     if ( aOldSize.Width() || aOldSize.Height() )
