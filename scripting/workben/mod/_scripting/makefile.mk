@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: toconnor $ $Date: 2002-11-20 14:11:25 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:55:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET  = testcase
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
-JARFILES        = sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar $(CLASSPATH)
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar $(CLASSPATH)
 JAVAFILES       = $(foreach,j,$(shell ls | grep java) $j)
 
 # --- Targets ------------------------------------------------------
