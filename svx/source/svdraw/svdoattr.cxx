@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 13:52:16 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 14:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1596,20 +1596,7 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
             pItem = ImplCheckFillGradientItem( pItem, pModel );
             break;
         case XATTR_FILLFLOATTRANSPARENCE:
-            if(((XFillFloatTransparenceItem*)pItem)->IsEnabled())
-            {
-                // normal checks
-                pItem = ImplCheckFillFloatTransparenceItem( pItem, pModel );
-            }
-            else
-            {
-                // clear this item, it's for disabling
-                if(mpObjectItemSet)
-                    mpObjectItemSet->ClearItem(nWhich);
-
-                // do not set it at all
-                pItem = 0L;
-            }
+            pItem = ImplCheckFillFloatTransparenceItem( pItem, pModel );
             break;
         case XATTR_FILLHATCH:
             pItem = ImplCheckFillHatchItem( pItem, pModel );
@@ -1617,17 +1604,12 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
         }
 
         // set item
-        if(pItem)
-        {
-            ((SdrAttrObj*)this)->ImpForceItemSet();
-            mpObjectItemSet->Put(*pItem);
-        }
+        ((SdrAttrObj*)this)->ImpForceItemSet();
+        mpObjectItemSet->Put(*pItem);
 
         // delete item if it was a generated one
-        if(pItem && pItem != pNewItem)
-        {
+        if(pItem != pNewItem)
             delete (SfxPoolItem*)pItem;
-        }
     }
     else
     {
