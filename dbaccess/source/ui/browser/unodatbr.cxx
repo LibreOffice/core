@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 12:05:21 $
+ *  last change: $Author: oj $ $Date: 2001-10-29 14:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3489,6 +3489,9 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 {
+    // disable inplace editing because this timer could bring this frame back to front
+    m_pTreeView->getListBox()->CancelPendingEdit();
+
     Point aPosition;
     SvLBoxEntry* pEntry = NULL;
     SvLBoxEntry* pOldSelection = NULL;
@@ -3684,8 +3687,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     aContextMenu.RemoveDisabledEntries();
 
     sal_Bool bReopenConn = sal_False;
-    // disable inplace editing because this timer could bring this frame back to front
-    m_pTreeView->getListBox()->EnableInplaceEditing( sal_False );
 
     USHORT nPos = aContextMenu.Execute(m_pTreeView->getListBox(), aPosition);
 
@@ -3858,8 +3859,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
         }
         break;
     }
-
-    m_pTreeView->getListBox()->EnableInplaceEditing( sal_True );
 
     return sal_True;    // handled
 }
