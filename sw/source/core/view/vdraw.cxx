@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:11:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,9 +280,11 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
         //#110094#-3
         //Link aLnk( LINK( this, SwViewImp, PaintDispatcher ) );
+        pOutDev->Push( PUSH_LINECOLOR ); // #114231#
         GetPageView()->InitRedraw( _nLayerID, _rRect.SVRect(),
                         pOutDev,
                         GetShell()->IsPreView() ? SDRPAINTMODE_ANILIKEPRN : 0);
+        pOutDev->Pop();
         //#110094#-3
         //,&aLnk );
 
