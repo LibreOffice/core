@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:22:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
+#include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#endif
 
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
@@ -90,6 +93,9 @@
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
+#ifndef SC_XENAME_HXX
+#include "xename.hxx"
+#endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
@@ -101,6 +107,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::awt::XControlModel;
+using ::com::sun::star::script::ScriptEventDescriptor;
 
 // ============================================================================
 
@@ -117,7 +124,7 @@ XclExpCtrlLinkHelper::~XclExpCtrlLinkHelper()
 void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
 {
     if( GetTabInfo().IsExportTab( rCellLink.Tab() ) )
-        mxCellLink = GetFormulaCompiler().CreateCellRefFormula( rCellLink, false );
+        mxCellLink = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, rCellLink );
     else
         mxCellLink.reset();
 }
@@ -125,7 +132,7 @@ void XclExpCtrlLinkHelper::SetCellLink( const ScAddress& rCellLink )
 void XclExpCtrlLinkHelper::SetSourceRange( const ScRange& rSrcRange )
 {
     if( (rSrcRange.aStart.Tab() == rSrcRange.aEnd.Tab()) && GetTabInfo().IsExportTab( rSrcRange.aStart.Tab() ) )
-        mxSrcRange = GetFormulaCompiler().CreateRangeRefFormula( rSrcRange, false );
+        mxSrcRange = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CONTROL, rSrcRange );
     else
         mxSrcRange.reset();
     mnEntryCount = static_cast< sal_uInt16 >( rSrcRange.aEnd.Col() - rSrcRange.aStart.Col() + 1 );
@@ -138,6 +145,13 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const XclExpTokenA
     rTokArr.WriteArray( rStrm );
     if( nFmlaSize & 1 )             // pad to 16-bit
         rStrm << sal_uInt8( 0 );
+}
+
+void XclExpCtrlLinkHelper::WriteFormulaSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId, const XclExpTokenArray& rTokArr ) const
+{
+    rStrm.StartRecord( nSubRecId, (rTokArr.GetSize() + 5) & ~1 );
+    WriteFormula( rStrm, rTokArr );
+    rStrm.EndRecord();
 }
 
 // ----------------------------------------------------------------------------
@@ -527,10 +541,37 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     }
 }
 
+bool XclExpObjTbxCtrl::SetMacroLink( const ScriptEventDescriptor& rEvent )
+{
+    if( rEvent.ListenerType.getLength() && (rEvent.ListenerType == XclTbxControlHelper::GetListenerType( mnObjType )) &&
+        rEvent.EventMethod.getLength() && (rEvent.EventMethod == XclTbxControlHelper::GetEventMethod( mnObjType )) &&
+        (rEvent.ScriptType == XclTbxControlHelper::GetScriptType()) )
+    {
+        // macro name is stored in a NAME record, and referred to by a formula containing a tNameXR token
+        String aMacroName( XclTbxControlHelper::GetXclMacroName( rEvent.ScriptCode ) );
+        if( aMacroName.Len() )
+        {
+            sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
+            sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( aMacroName, false );
+            mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
+            return true;
+        }
+    }
+    return false;
+}
+
 void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 {
     switch( mnObjType )
     {
+        // *** Push buttons, labels ***
+
+        case EXC_OBJ_CMO_BUTTON:
+        case EXC_OBJ_CMO_LABEL:
+            // ftMacro - macro link
+            WriteMacroSubRec( rStrm );
+        break;
+
         // *** Check boxes, option buttons ***
 
         case EXC_OBJ_CMO_CHECKBOX:
@@ -546,8 +587,10 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             rStrm << nStyle;
             rStrm.EndRecord();
 
+            // ftMacro - macro link
+            WriteMacroSubRec( rStrm );
             // ftCblsFmla subrecord - cell link
-            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTCBLSFMLA );
+            WriteCellLinkSubRec( rStrm, EXC_ID_OBJ_FTCBLSFMLA );
         }
         break;
 
@@ -571,8 +614,10 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             mbScrollHor = false;
             WriteSbs( rStrm );
 
+            // ftMacro - macro link
+            WriteMacroSubRec( rStrm );
             // ftSbsFmla subrecord - cell link
-            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
+            WriteCellLinkSubRec( rStrm, EXC_ID_OBJ_FTSBSFMLA );
 
             // ftLbsData - source data range and box properties
             sal_uInt16 nStyle = mbMultiSel ? EXC_OBJ_LBS_SEL_MULTI : EXC_OBJ_LBS_SEL_SIMPLE;
@@ -602,7 +647,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             }
             else if( mnObjType == EXC_OBJ_CMO_COMBOBOX )
             {
-                rStrm << sal_uInt16( 0 ) << mnLineCount;
+                rStrm << EXC_OBJ_LBS_COMBO_STD << mnLineCount;
             }
 
             rStrm.EndRecord();
@@ -616,9 +661,10 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
         {
             // ftSbs subrecord - scroll bars
             WriteSbs( rStrm );
-
+            // ftMacro - macro link
+            WriteMacroSubRec( rStrm );
             // ftSbsFmla subrecord - cell link
-            WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
+            WriteCellLinkSubRec( rStrm, EXC_ID_OBJ_FTSBSFMLA );
         }
         break;
 
@@ -626,6 +672,9 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
         case EXC_OBJ_CMO_GROUPBOX:
         {
+            // ftMacro - macro link
+            WriteMacroSubRec( rStrm );
+
             // ftGboData subrecord - group box properties
             sal_uInt16 nStyle = 0;
             ::set_flag( nStyle, EXC_OBJ_GBO_FLAT, mbFlatBorder );
@@ -639,14 +688,16 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-void XclExpObjTbxCtrl::WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId )
+void XclExpObjTbxCtrl::WriteMacroSubRec( XclExpStream& rStrm )
+{
+    if( mxMacroLink.is() )
+        WriteFormulaSubRec( rStrm, EXC_ID_OBJ_FTMACRO, *mxMacroLink );
+}
+
+void XclExpObjTbxCtrl::WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId )
 {
     if( const XclExpTokenArray* pCellLink = GetCellLinkTokArr() )
-    {
-        rStrm.StartRecord( nSubRecId, 0 );
-        WriteFormula( rStrm, *pCellLink );
-        rStrm.EndRecord();
-    }
+        WriteFormulaSubRec( rStrm, nSubRecId, *pCellLink );
 }
 
 void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
