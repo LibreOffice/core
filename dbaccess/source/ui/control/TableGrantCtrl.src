@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:10:39 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,265 +65,49 @@
 
 String STR_TABLE_PRIV_NAME
 {
-    Text = "Tabellename";
-    Text[ENGLISH] = "Tablename";
-    Text[ english_us ] = "Table name";
-    Text[ portuguese ] = "Nome da tabela";
-    Text[ russian ] = "Èìÿ òàáëèöû";
-    Text[ greek ] = "¼íïìá ğßíáêá";
-    Text[ dutch ] = "Tabelnaam";
-    Text[ french ] = "Nom de la table";
-    Text[ spanish ] = "Nombre de tabla";
-    Text[ italian ] = "Nome tabella";
-    Text[ danish ] = "Tabelnavn";
-    Text[ swedish ] = "Tabellnamn";
-    Text[ polish ] = "Nazywanie tabeli";
-    Text[ portuguese_brazilian ] = "Nome da tabela";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«å";
-    Text[ korean ] = "í…Œì´ë¸” ì´ë¦„";
-    Text[ chinese_simplified ] = "è¡¨æ ¼åç§°";
-    Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±";
-    Text[ arabic ] = "ÇÓã ÇáÌÏæá";
-    Text[ turkish ] = "Tablo ismi";
-    Text[ finnish ] = "Taulun nimi";
-    Text[ catalan ] = "Nom de la taula";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "NÃ¡zev tabulky";
-    Text[ hebrew ] = "Tabellename";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤¨à¤¾à¤®";
-    Text[ slovak ] = "NÃ¡zov tabuÄ¾ky";
-    Text[ hungarian ] = "TÃ¡bla neve";
-    Text[ slovenian ] = "Ime tabele";
+    Text [ de ] = "Tabellename";
+    Text [ en-US ] = "Table name";
 };
 
 String STR_TABLE_PRIV_INSERT
 {
-    Text = "Daten einfügen";
-    Text[ENGLISH] = "Insert data";
-    Text[ english_us ] = "Insert data";
-    Text[ portuguese ] = "Inserir dados";
-    Text[ russian ] = "Äîáàâëåíèå";
-    Text[ greek ] = "ÅéóáãùãŞ äåäïìİíùí";
-    Text[ dutch ] = "Gegevens invoegen";
-    Text[ french ] = "Insérer des données";
-    Text[ spanish ] = "Insertar datos";
-    Text[ finnish ] = "Lisää tietoja";
-    Text[ italian ] = "Inserisci dati";
-    Text[ danish ] = "Indsæt data";
-    Text[ swedish ] = "Infoga data";
-    Text[ polish ] = "Wstawianie danych";
-    Text[ portuguese_brazilian ] = "Inserir dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®æŒ¿å…¥";
-    Text[ korean ] = "ë°ì´í„° ì‚½ì…";
-    Text[ chinese_simplified ] = "æ’å…¥æ•°æ®";
-    Text[ chinese_traditional ] = "æ’å…¥è³‡æ–™";
-    Text[ turkish ] = "Veri Ekle";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ catalan ] = "Inserta";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "VloÅ¾it data";
-    Text[ hebrew ] = "Daten einfÃ¼gen";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ dÃ¡ta";
-    Text[ hungarian ] = "Adat beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavljanje podatkov";
+    Text [ de ] = "Daten einfügen";
+    Text [ en-US ] = "Insert data";
 };
 
 String STR_TABLE_PRIV_DELETE
 {
-    Text = "Daten löschen";
-    Text[ENGLISH] = "Delete data";
-    Text[ english_us ] = "Delete data";
-    Text[ portuguese ] = "Eliminar";
-    Text[ russian ] = "Óäàëåíèå";
-    Text[ greek ] = "ÄéáãñáöŞ äåäïìİíùí";
-    Text[ dutch ] = "Gegevens wissen";
-    Text[ french ] = "Supprimer les données";
-    Text[ spanish ] = "Borrar datos";
-    Text[ finnish ] = "Poista tietoja";
-    Text[ italian ] = "Elimina dati";
-    Text[ danish ] = "Slet data";
-    Text[ swedish ] = "Radera data";
-    Text[ polish ] = "Usuwanie danych";
-    Text[ portuguese_brazilian ] = "Excluir dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®å‰Šé™¤";
-    Text[ korean ] = "ë°ì´í„° ì‚­ì œ";
-    Text[ chinese_simplified ] = "åˆ é™¤æ•°æ®";
-    Text[ chinese_traditional ] = "åˆªé™¤è³‡æ–™";
-    Text[ turkish ] = "Veri Sil";
-    Text[ arabic ] = "ÍĞİ";
-    Text[ catalan ] = "Elimina";
-    Text[ thai ] = "à¸¥à¸šà¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Odstranit data";
-    Text[ hebrew ] = "Daten lÃ¶schen";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¤¿à¤Ÿà¤¾à¤“";
-    Text[ slovak ] = "OdstrÃ¡niÅ¥ dÃ¡ta";
-    Text[ hungarian ] = "Adatok tÃ¶rlÃ©se";
-    Text[ slovenian ] = "Brisanje podatkov";
+    Text [ de ] = "Daten löschen";
+    Text [ en-US ] = "Delete data";
 };
 
 String STR_TABLE_PRIV_UPDATE
 {
-    Text = "Daten ändern";
-    Text[ENGLISH] = "Update data";
-    Text[ english_us ] = "Modify data";
-    Text[ portuguese ] = "Modificar dados";
-    Text[ russian ] = "Ğåäàêòèğîâàíèå";
-    Text[ greek ] = "Ôñïğïğïßçóç äåäïìİíùí";
-    Text[ dutch ] = "Gegevens wijzigen";
-    Text[ french ] = "Modifier les données";
-    Text[ spanish ] = "Modificar datos";
-    Text[ finnish ] = "Muuta tietoja";
-    Text[ italian ] = "Cambia dati";
-    Text[ danish ] = "Modificer data";
-    Text[ swedish ] = "Ändra data";
-    Text[ polish ] = "Modyfikowanie dane";
-    Text[ portuguese_brazilian ] = "Modificar dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®å¤‰æ›´";
-    Text[ korean ] = "ë°ì´í„° ìˆ˜ì •";
-    Text[ chinese_simplified ] = "æ›´æ”¹æ•°æ®";
-    Text[ chinese_traditional ] = "è®Šæ›´è³‡æ–™";
-    Text[ turkish ] = "Veri Değiştir";
-    Text[ arabic ] = "ÊÚÏíá";
-    Text[ catalan ] = "Modifica";
-    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Upravit data";
-    Text[ hebrew ] = "Daten Ã¤ndern";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¸à¥à¤§à¤¾à¤°à¥‹";
-    Text[ slovak ] = "UpraviÅ¥ dÃ¡ta";
-    Text[ hungarian ] = "Adatok mÃ³dosÃ­tÃ¡sa";
-    Text[ slovenian ] = "Spreminjanje podatkov";
+    Text [ de ] = "Daten ändern";
+    Text [ en-US ] = "Modify data";
 };
 
 String STR_TABLE_PRIV_ALTER
 {
-    Text = "Struktur ändern";
-    Text[ENGLISH] = "Alter";
-    Text[ english_us ] = "Alter structure";
-    Text[ portuguese ] = "Modificar estrutura";
-    Text[ russian ] = "Èçìåíèòü ñòğóêòóğó";
-    Text[ greek ] = "ÁëëáãŞ äïìŞò";
-    Text[ dutch ] = "Structuur wijzigen";
-    Text[ french ] = "Modifier la structure";
-    Text[ spanish ] = "Modificar estructura";
-    Text[ italian ] = "Cambia struttura";
-    Text[ danish ] = "Modificer struktur";
-    Text[ swedish ] = "Ändra struktur";
-    Text[ polish ] = "Zmiana struktury";
-    Text[ portuguese_brazilian ] = "Alterar estrutura";
-    Text[ japanese ] = "æ§‹æˆã®å¤‰æ›´";
-    Text[ korean ] = "êµ¬ì¡° ìˆ˜ì •";
-    Text[ chinese_simplified ] = "æ›´æ”¹æ„é€ ";
-    Text[ chinese_traditional ] = "è®Šæ›´çµæ„";
-    Text[ arabic ] = "ÊÚÏíá ÇáÈäíÉ";
-    Text[ turkish ] = "Diğer Yapı";
-    Text[ finnish ] = "Muuta rakennetta";
-    Text[ catalan ] = "Modifica l'estructura";
-    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡";
-    Text[ czech ] = "ZmÄ›nit strukturu";
-    Text[ hebrew ] = "Struktur Ã¤ndern";
-    Text[ hindi ] = "à¤¬à¤¨à¤¾à¤µà¤Ÿ à¤¬à¤¦à¤²à¤¨à¤¾";
-    Text[ slovak ] = "ZmeniÅ¥ Å¡truktÃºru";
-    Text[ hungarian ] = "StruktÃºra mÃ³dosÃ­tÃ¡sa";
-    Text[ slovenian ] = "Spreminjanje strukture";
+    Text [ de ] = "Struktur ändern";
+    Text [ en-US ] = "Alter structure";
 };
 String STR_TABLE_PRIV_SELECT
 {
-    Text = "Daten lesen";
-    Text[ENGLISH] = "Select data";
-    Text[ english_us ] = "Read data";
-    Text[ portuguese ] = "Ler dados";
-    Text[ russian ] = "×òåíèå";
-    Text[ greek ] = "ÁíÜãíùóç äåäïìİíùí";
-    Text[ dutch ] = "Gegevens lezen";
-    Text[ french ] = "Lire les données";
-    Text[ spanish ] = "Leer datos";
-    Text[ finnish ] = "Lue tietoja";
-    Text[ italian ] = "Leggi dati";
-    Text[ danish ] = "Læs data";
-    Text[ swedish ] = "Läs data";
-    Text[ polish ] = "Odczyt danych";
-    Text[ portuguese_brazilian ] = "Ler dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿å–ã‚Š";
-    Text[ korean ] = "ë°ì´í„° ì½ê¸°";
-    Text[ chinese_simplified ] = "è¯»å–æ•°æ®";
-    Text[ chinese_traditional ] = "è®€å–è³‡æ–™";
-    Text[ turkish ] = "Veri oku";
-    Text[ arabic ] = "ŞÑÇÁÉ";
-    Text[ catalan ] = "Llegeix";
-    Text[ thai ] = "à¸­à¹ˆà¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "ÄŒÃ­st data";
-    Text[ hebrew ] = "Daten lesen";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤ªà¤¢à¥‹";
-    Text[ slovak ] = "ÄŒÃ­taÅ¥ Ãºdaje";
-    Text[ hungarian ] = "Adatok olvasÃ¡sa";
-    Text[ slovenian ] = "Branje podatkov";
+    Text [ de ] = "Daten lesen";
+    Text [ en-US ] = "Read data";
 };
 
 String STR_TABLE_PRIV_REFERENCE
 {
-    Text = "References ändern";
-    Text[ENGLISH] = "References";
-    Text[english_us] = "Modify references";
-    Text[ portuguese ] = "Modificar referências";
-    Text[ russian ] = "Èçìåíèòü ññûëêè";
-    Text[ greek ] = "Ôñïğïğïßçóç ğáñáğïìğşí";
-    Text[ dutch ] = "Referenties wijzigen";
-    Text[ french ] = "Modifier les références";
-    Text[ spanish ] = "Modificar referencias";
-    Text[ italian ] = "Cambia riferimenti";
-    Text[ danish ] = "Modificer referencer";
-    Text[ swedish ] = "Ändra referenser";
-    Text[ polish ] = "Modyfikowanie odwo³añ";
-    Text[ portuguese_brazilian ] = "Modificar referências";
-    Text[ japanese ] = "å‚ç…§ã®å¤‰æ›´";
-    Text[ korean ] = "ì°¸ì¡° ìˆ˜ì •";
-    Text[ chinese_simplified ] = "æ›´æ”¹å¼•ç”¨";
-    Text[ chinese_traditional ] = "è®Šæ›´å¼•ç”¨";
-    Text[ arabic ] = "ÊÚÏíá ÇáãÑÇÌÚ";
-    Text[ turkish ] = "Ayarları değiştir";
-    Text[ finnish ] = "Muuta viitteitä";
-    Text[ catalan ] = "Modifica les referències";
-    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
-    Text[ czech ] = "Upravit odkazy";
-    Text[ hebrew ] = "References Ã¤ndern";
-    Text[ hindi ] = "à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¤¸à¥à¤§à¤¾à¤°à¥‹";
-    Text[ slovak ] = "UpraviÅ¥ odkazy";
-    Text[ hungarian ] = "HivatkozÃ¡sok mÃ³dosÃ­tÃ¡sa";
-    Text[ slovenian ] = "Spreminjanje sklicev";
+    Text [ de ] = "References ändern";
+    Text [ en-US ] = "Modify references";
 };
 
 String STR_TABLE_PRIV_DROP
 {
-    Text = "Struktur löschen";
-    Text[ENGLISH] = "Drop structure";
-    Text[ english_us ] = "Drop structure";
-    Text[ portuguese ] = "Eliminar estrutura";
-    Text[ russian ] = "Óäàëèòü ñòğóêòóğó";
-    Text[ greek ] = "Áğüññéøç äïìŞò";
-    Text[ dutch ] = "Structuur wissen";
-    Text[ french ] = "Supprimer la structure";
-    Text[ spanish ] = "Borrar la estructura";
-    Text[ finnish ] = "Pudota rakenne";
-    Text[ italian ] = "Elimina struttura";
-    Text[ danish ] = "Slet struktur";
-    Text[ swedish ] = "Radera struktur";
-    Text[ polish ] = "Usuwanie struktury";
-    Text[ portuguese_brazilian ] = "Excluir estrutura";
-    Text[ japanese ] = "æ§‹é€ ä½“ã®å‰Šé™¤";
-    Text[ korean ] = "êµ¬ì¡° ì‚­ì œ";
-    Text[ chinese_simplified ] = "åˆ é™¤ç»“æ„";
-    Text[ chinese_traditional ] = "åˆªé™¤çµæ§‹";
-    Text[ turkish ] = "Yapıyı durdur";
-    Text[ arabic ] = "Droping";
-    Text[ catalan ] = "Elimina l'estructura";
-    Text[ thai ] = "à¸›à¸¥à¹ˆà¸­à¸¢à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡";
-    Text[ czech ] = "Zahodit strukturu";
-    Text[ hebrew ] = "Struktur lÃ¶schen";
-    Text[ hindi ] = "à¤¬à¤¨à¤¾à¤µà¤Ÿ à¤—à¤¿à¤°à¤¾à¤“";
-    Text[ slovak ] = "StrÃ¡nkovanie";
-    Text[ hungarian ] = "StruktÃºra tÃ¶rlÃ©se";
-    Text[ slovenian ] = "OvrÅ¾i strukturo";
+    Text [ de ] = "Struktur löschen";
+    Text [ en-US ] = "Drop structure";
 };
 
 
