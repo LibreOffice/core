@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-27 15:17:07 $
+ *  last change: $Author: kso $ $Date: 2002-10-02 13:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
-#include <cppuhelper/servicefactory.hxx>
+#ifndef _CPPUHELPER_BOOTSTRAP_HXX_
+#include <cppuhelper/bootstrap.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -98,7 +98,6 @@
 #ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
-
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
@@ -1159,31 +1158,29 @@ void MyApp::Main()
     // Initialize local Service Manager and basic services.
     //////////////////////////////////////////////////////////////////////
 
-    OStartupInfo aInfo;
-    OUString aExeName;
-    if ( aInfo.getExecutableFile( aExeName )
-                            != OStartupInfo::E_None )
-    {
-        DBG_ERROR( "Error getting Executable file name!" );
-        return;
-    }
-
-    OUString aReadOnlyRegFile
-        = aExeName.copy( 0, aExeName.lastIndexOf( '/' ) + 1 );
-    OUString aWritableRegFile
-        = aReadOnlyRegFile;
-    aReadOnlyRegFile += OUString::createFromAscii( "applicat.rdb" );
-    aWritableRegFile += OUString::createFromAscii( "ucbexplorer.rdb" );
-
     Reference< XMultiServiceFactory > xFac;
     try
     {
-        xFac = cppu::createRegistryServiceFactory(
-                                    aWritableRegFile, aReadOnlyRegFile );
+        Reference< XComponentContext > xCtx(
+            cppu::defaultBootstrap_InitialComponentContext() );
+        if ( !xCtx.is() )
+        {
+            DBG_ERROR( "Error creating initial component context!" );
+            return;
+        }
+
+        xFac = Reference< XMultiServiceFactory >(
+            xCtx->getServiceManager(), UNO_QUERY );
+
+        if ( !xFac.is() )
+        {
+            DBG_ERROR( "No service manager!" );
+            return;
+        }
     }
     catch ( com::sun::star::uno::Exception const & )
     {
-        DBG_ERROR( "Error creating RegistryServiceFactory!" );
+        DBG_ERROR( "Exception during creation of initial component context!" );
         return;
     }
 
