@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:13:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
 
     // extract the descriptor
-    ::rtl::OUString sDatasouce, sCommand, sFieldName;
+    ::rtl::OUString sDatasouce, sCommand, sFieldName,sDatabaseLocation,sConnnectionResource;
     sal_Int32       nCommandType = CommandType::COMMAND;
     Reference< XPreparedStatement >     xStatement;
     Reference< XResultSet >             xResultSet;
@@ -430,6 +430,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     ODataAccessDescriptor aColumn = OColumnTransferable::extractColumnDescriptor(aDroppedData);
     if (aColumn.has(daDataSource))  aColumn[daDataSource]   >>= sDatasouce;
+    if (aColumn.has(daDatabaseLocation))    aColumn[daDatabaseLocation] >>= sDatabaseLocation;
+    if (aColumn.has(daConnectionResource))  aColumn[daConnectionResource] >>= sConnnectionResource;
     if (aColumn.has(daCommand))     aColumn[daCommand]      >>= sCommand;
     if (aColumn.has(daCommandType)) aColumn[daCommandType]  >>= nCommandType;
     if (aColumn.has(daColumnName))  aColumn[daColumnName]   >>= sFieldName;
@@ -544,11 +546,14 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //------------------------------------------------------------------------------
 IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
 {
-    ::rtl::OUString             sDatasouce, sCommand, sFieldName;
+    ::rtl::OUString             sCommand, sFieldName,sURL;
     sal_Int32                   nCommandType = CommandType::COMMAND;
     Reference< XPropertySet >   xField;
     Reference< XConnection >    xConnection;
-    m_pImpl->aDropData[daDataSource]    >>= sDatasouce;
+
+    ::rtl::OUString sDatasouce = m_pImpl->aDropData.getDataSource();
+    if ( !sDatasouce.getLength() && m_pImpl->aDropData.has(daConnectionResource) )
+        m_pImpl->aDropData[daConnectionResource]    >>= sURL;
     m_pImpl->aDropData[daCommand]       >>= sCommand;
     m_pImpl->aDropData[daCommandType]   >>= nCommandType;
     m_pImpl->aDropData[daColumnName]    >>= sFieldName;
@@ -780,7 +785,12 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
         if (xForm.is())
         {
             if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).getLength())
-                xForm->setPropertyValue(FM_PROP_DATASOURCE, makeAny(sDatasouce));
+            {
+                if ( sDatasouce.getLength() )
+                    xForm->setPropertyValue(FM_PROP_DATASOURCE, makeAny(sDatasouce));
+                else
+                    xForm->setPropertyValue(FM_PROP_URL, makeAny(sURL));
+            }
 
             if (!::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).getLength())
             {
@@ -941,25 +951,22 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     sal_Bool bChecked = sal_False;
     if (bMarked)
     {
-        SfxPoolItem* pItem = NULL;
 
         SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
         SfxItemState eState = SFX_ITEM_UNKNOWN;
         // ask the bindings of the current view frame (which should be the one we're residing in) for the state
         if (pCurrentFrame)
-            eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
-        else
-            DBG_ERROR("FmGridHeader::PreExecuteColumnContextMenu : no current view frame -> no bindings !");
-
-        if (eState >= SFX_ITEM_AVAILABLE)
         {
-            if (pItem)
+            SfxPoolItem* pItem = NULL;
+            eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
+
+            if (eState >= SFX_ITEM_AVAILABLE && pItem )
             {
                 bChecked = pItem->ISA(SfxBoolItem) && ((SfxBoolItem*)pItem)->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);
             }
+            delete pItem;
         }
-        delete pItem;
     }
 }
 
