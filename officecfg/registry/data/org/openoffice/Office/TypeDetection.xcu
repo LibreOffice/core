@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: as $ $Date: 2002-11-21 13:41:45 $
+ *  last change: $Author: cl $ $Date: 2002-11-22 12:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,14 @@
       </prop>
       <prop oor:name="Data">
         <value>0,image/svg+xml,,,svg,0,</value>
+      </prop>
+    </node>
+    <node oor:name="graphic_SWF" oor:op="replace">
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Macromedia Flash (SWF)</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>0,,,,swf,0</value>
       </prop>
     </node>
     <node oor:name="pwp_PlaceWare" oor:op="replace">
@@ -5430,6 +5438,28 @@
       </prop>
       <prop oor:name="Data">
         <value>0,svg_Scalable_Vector_Graphics,com.sun.star.drawing.DrawingDocument,,1026,,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="draw_flash_Export" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Macromedia Flash (SWF)</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>3,graphic_SWF,com.sun.star.drawing.DrawingDocument,com.sun.star.comp.Impress.FlashExportFilter,524354,,0,,</value>
+      </prop>
+    </node>
+    <node oor:name="impress_flash_Export" oor:op="replace">
+      <prop oor:name="Installed">
+        <value>false</value>
+      </prop>
+      <prop oor:name="UIName">
+        <value xml:lang="en-US">Macromedia Flash (SWF)</value>
+      </prop>
+      <prop oor:name="Data">
+        <value>3,graphic_SWF,com.sun.star.presentation.PresentationDocument,com.sun.star.comp.Impress.FlashExportFilter,524354,,0,,</value>
       </prop>
     </node>
     <node oor:name="impress_svg_Export" oor:op="replace">
