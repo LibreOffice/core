@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:25:50 $
+ *  last change: $Author: dr $ $Date: 2002-04-02 08:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,9 +528,7 @@ void BrowseBox::ExpandRowSelection( const BrowserMouseEvent& rEvt )
         Range aJustifiedRange( aSelRange );
         aJustifiedRange.Justify();
 
-        BOOL bSelectThis =
-            ( bSelect && !aJustifiedRange.IsInside( rEvt.GetRow() ) ) ||
-            ( !bSelect && aJustifiedRange.IsInside( rEvt.GetRow() ) );
+        BOOL bSelectThis = ( bSelect != aJustifiedRange.IsInside( rEvt.GetRow() ) );
 
         if ( aJustifiedRange.IsInside( rEvt.GetRow() ) )
         {

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2001-08-14 12:12:56 $
+#   last change: $Author: dr $ $Date: 2002-04-02 08:56:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=   \
             $(SLO)$/editbrowsebox.obj  \
             $(SLO)$/brwbox1.obj  \
             $(SLO)$/brwbox2.obj  \
+            $(SLO)$/brwbox3.obj  \
             $(SLO)$/brwhead.obj  \
             $(SLO)$/datwin.obj
 

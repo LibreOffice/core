@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 11:25:50 $
+ *  last change: $Author: dr $ $Date: 2002-04-02 08:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <vcl/sound.hxx>
 #include "brwhead.hxx"
 #include "datwin.hxx"
+
 #include <algorithm>
 
 #pragma hdrstop
@@ -1682,14 +1683,14 @@ void BrowseBox::SelectAll()
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SelectRow( long nRow, BOOL bSelect, BOOL bExpand )
+void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     if ( !bMultiSelection )
     {
         // deselecting is impossible, selecting via cursor
-        if ( bSelect )
+        if ( _bSelect )
             GoToRow(nRow, FALSE);
         return;
     }
@@ -1710,7 +1711,7 @@ void BrowseBox::SelectRow( long nRow, BOOL bSelect, BOOL bExpand )
 
     // set new selection
     if ( !bHideSelect &&
-         ( (bMultiSelection && uRow.pSel->GetTotalRange().Max() >= nRow && uRow.pSel->Select(nRow,bSelect)) ||
+         ( (bMultiSelection && uRow.pSel->GetTotalRange().Max() >= nRow && uRow.pSel->Select(nRow,_bSelect)) ||
            (!bMultiSelection && ( uRow.nSel = nRow ) != BROWSER_ENDOFSELECTION ) ) )
     {
         // Handle-Column nicht highlighten
@@ -1745,7 +1746,7 @@ long BrowseBox::GetSelectRowCount() const
 
 //-------------------------------------------------------------------
 
-void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL bSelect, BOOL bMakeVisible )
+void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVisible )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
@@ -1754,7 +1755,7 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL bSelect, BOOL bMakeVisi
 
     if ( !bMultiSelection )
     {
-        if ( bSelect )
+        if ( _bSelect )
             GoToColumnId( pCols->GetObject(nNewColPos)->GetId(), bMakeVisible );
         return;
     }
@@ -1861,6 +1862,15 @@ BOOL BrowseBox::IsColumnSelected( USHORT nColumnId ) const
 
     return pColSel ? pColSel->IsSelected( GetColumnPos(nColumnId) ) :
                      nCurColId == nColumnId;
+}
+
+//-------------------------------------------------------------------
+
+sal_Bool BrowseBox::IsAllSelected() const
+{
+    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
+
+    return bMultiSelection && uRow.pSel->IsAllSelected();
 }
 
 //-------------------------------------------------------------------

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.33 $
+#*  $Revision: 1.34 $
 #*
-#*  last change: $Author: hjs $ $Date: 2002-02-05 17:39:59 $
+#*  last change: $Author: dr $ $Date: 2002-04-02 08:56:18 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -104,6 +104,7 @@ LIB7TARGET= $(SLB)$/svt.lib
 LIB7FILES=	\
         $(SLB)$/misc2.lib		\
         $(SLB)$/items2.lib		\
+        $(SLB)$/accessibility.lib	\
         $(SLB)$/browse.lib		\
         $(SLB)$/ctrl.lib		\
         $(SLB)$/dialogs.lib 	\

@@ -329,6 +329,13 @@ hedabu: ..\inc\inettbc.hxx %_DEST%\inc%_EXT%\svtools\inettbc.hxx
 
 hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 
+hedabu: ..\inc\AccessibleBrowseBoxObjType.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxObjType.hxx
+hedabu: ..\inc\AccessibleBrowseBoxBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxBase.hxx
+hedabu: ..\inc\AccessibleBrowseBox.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBox.hxx
+hedabu: ..\inc\AccessibleBrowseBoxTableBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTableBase.hxx
+hedabu: ..\inc\AccessibleBrowseBoxTable.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTable.hxx
+hedabu: ..\inc\AccessibleBrowseBoxHeaderBar.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderBar.hxx
+
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 
