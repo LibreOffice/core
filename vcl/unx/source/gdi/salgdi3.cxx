@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-30 16:42:15 $
+ *  last change: $Author: pl $ $Date: 2002-05-02 13:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,8 @@ bool SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen, int
             rStop = nPos + FAX_END_TOKEN_LENGTH;
             bStopped = true;
         }
-        int nStart = rStart + bStarted ? FAX_PHONE_TOKEN_LENGTH : 0;
-        int nStop = rStop - bStopped ? FAX_END_TOKEN_LENGTH : 0;
+        int nStart = rStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
+        int nStop = rStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
         aPhoneNumber += aPhone.Copy( nStart, nStop - nStart );
         if( ! bIsCollecting )
         {
