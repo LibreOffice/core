@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-05-27 13:46:16 $
+ *  last change:$Date: 2003-09-08 12:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,8 @@
 
 package mod._sw;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.style.XStyle;
-import com.sun.star.style.XStyleFamiliesSupplier;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,8 +72,17 @@ import util.ParagraphDsc;
 import util.SOfficeFactory;
 import util.TableDsc;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.XStyle;
+import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 
 /**
@@ -123,7 +123,7 @@ public class SwXHeadFootText extends TestCase {
     * Creates text document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
         try {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
@@ -160,13 +160,8 @@ public class SwXHeadFootText extends TestCase {
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         XPropertySet PropSet;
-        XPropertySetInfo PropSetInfo;
         XNameAccess PageStyles = null;
         XStyle StdStyle = null;
-        XText oText = null;
-        XText oHeader = null;
-        XText oHeadFootTxt = null;
-        int i, x;
 
         log.println( "creating a test environment" );
         XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
@@ -200,6 +195,8 @@ public class SwXHeadFootText extends TestCase {
             log.println( "Switching on footer" );
             PropSet.setPropertyValue("FooterIsOn", new Boolean(true));
             log.println( "Get header text" );
+            oObj = (XText) UnoRuntime.queryInterface(
+                        XText.class, PropSet.getPropertyValue("HeaderText"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set/get propertyValue...", e);
@@ -214,9 +211,6 @@ public class SwXHeadFootText extends TestCase {
             throw new StatusException("Couldn't set/get propertyValue...", e);
         }
 
-        // get the bodytext of textdocument here
-        oObj = xTextDoc.getText();
-
         log.println( "creating a new environment for bodytext object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
 
@@ -224,14 +218,13 @@ public class SwXHeadFootText extends TestCase {
         ParagraphDsc pDsc = new ParagraphDsc();
         tEnv.addObjRelation( "PARA", new InstCreator( xTextDoc, pDsc ) );
 
-        log.println( "adding TextDocument as mod relation to environment" );
-        tEnv.addObjRelation("TEXTDOC", xTextDoc);
-
         log.println( "adding InstDescriptor object" );
         TableDsc tDsc = new TableDsc( 6, 4 );
 
         log.println( "adding InstCreator object" );
         tEnv.addObjRelation( "XTEXTINFO", new InstCreator( xTextDoc, tDsc ) );
+
+        tEnv.addObjRelation( "TEXT", oObj);
 
         return tEnv;
     } // finish method getTestEnvironment
