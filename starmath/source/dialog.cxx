@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,9 +1538,9 @@ void SmShowCharset::Paint(const Rectangle&)
         int x = (i % nColumns) * nLen;
         int y = (i / nColumns) * nLen;
 
+        XubString aChar((xub_Unicode) i);
         Size aTextSize(GetTextWidth(aChar), GetTextHeight());
 
-        XubString aChar((xub_Unicode) i);
         DrawText(Point(x + (nLen - aTextSize.Width())  / 2,
                        y + (nLen - aTextSize.Height()) / 2), aChar);
     }
