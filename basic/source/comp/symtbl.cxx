@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:35 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ void SbiProcDef::SetType( SbxDataType t )
 
 void SbiProcDef::Match( SbiProcDef* pOld )
 {
-    SbiSymDef* po, *pn;
+    SbiSymDef* po, *pn=NULL;
     // Parameter 0 ist der Funktionsname
     USHORT i;
     for( i = 1; i < aParams.GetSize(); i++ )
