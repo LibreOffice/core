@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_stgelems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:16:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,11 +91,11 @@ ParentStorageHolder::ParentStorageHolder(
             const uno::Reference< embed::XStorage > & xParentStorage,
             const rtl::OUString & rUri )
 : m_xParentStorage( xParentStorage ),
-  m_bParentStorageIsRoot( false )
+  m_bParentIsRootStorage( false )
 {
     Uri aUri( rUri );
-    if ( aUri.isDocument() ) // This correct; aUri.isRoot() is not!
-        m_bParentStorageIsRoot = true;
+    if ( aUri.isDocument() )
+        m_bParentIsRootStorage = true;
 }
 
 //=========================================================================
@@ -116,7 +116,8 @@ Storage::Storage( const uno::Reference< lang::XMultiServiceFactory > & xSMgr,
   m_xWrappedStorage( xStorageToWrap ),
   m_xWrappedTransObj( xStorageToWrap, uno::UNO_QUERY ), // optional interface
   m_xWrappedComponent( xStorageToWrap, uno::UNO_QUERY ),
-  m_xWrappedTypeProv( xStorageToWrap, uno::UNO_QUERY )
+  m_xWrappedTypeProv( xStorageToWrap, uno::UNO_QUERY ),
+  m_bIsDocumentStorage( Uri( rUri ).isDocument() )
 {
     OSL_ENSURE( m_xWrappedStorage.is(),
                 "Storage::Storage: No storage to wrap!" );
@@ -172,20 +173,24 @@ Storage::~Storage()
     if ( m_xAggProxy.is() )
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 
-    if ( m_xWrappedComponent.is() )
+    // Never dispose a document storage. Not owner!
+    if ( !isDocumentStorage() )
     {
-        // "Auto-dispose"...
-        try
+        if ( m_xWrappedComponent.is() )
         {
-            m_xWrappedComponent->dispose();
-        }
-        catch ( lang::DisposedException const & )
-        {
-            // might happen.
-        }
-        catch ( ... )
-        {
-            OSL_ENSURE( false, "Storage::~Storage - Caught exception!" );
+            // "Auto-dispose"...
+            try
+            {
+                m_xWrappedComponent->dispose();
+            }
+            catch ( lang::DisposedException const & )
+            {
+                // might happen.
+            }
+            catch ( ... )
+            {
+                OSL_ENSURE( false, "Storage::~Storage - Caught exception!" );
+            }
         }
     }
 }
@@ -579,7 +584,7 @@ void SAL_CALL Storage::commit()
         {
             m_xWrappedTransObj->commit();
 
-            if ( !isRootParentStorage() )
+            if ( !isParentARootStorage() )
             {
                 uno::Reference< embed::XTransactedObject > xParentTA(
                     xParentStorage, uno::UNO_QUERY );
@@ -608,7 +613,7 @@ void SAL_CALL Storage::revert()
         {
             m_xWrappedTransObj->revert();
 
-            if ( !isRootParentStorage() )
+            if ( !isParentARootStorage() )
             {
                 uno::Reference< embed::XTransactedObject > xParentTA(
                     xParentStorage, uno::UNO_QUERY );
