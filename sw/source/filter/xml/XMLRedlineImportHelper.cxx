@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-11-30 17:38:02 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 //
 // XTextRangeOrNodeIndexPosition: store a position into the text
 // *either* as an XTextRange or as an SwNodeIndex. The reason is that
-// me must store either pointers to StartNodes (because redlines may
+// we must store either pointers to StartNodes (because redlines may
 // start on start nodes) or to a text position, and there appears to
 // be no existing type that could do both. Things are complicated by
 // the matter that (e.g in section import) we delete a few characters,
@@ -627,12 +627,11 @@ void XMLRedlineImportHelper::AdjustStartNodeCursor(
     sal_Bool bStart,
     Reference<XTextRange> & rRange)
 {
-    DBG_ASSERT(bStart,"End nodes not supported. Can't happen anyway, can it?");
-    if (!bStart)
-        return;
-
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // start + end nodes are treated the same. For either it's
+    // necessary that the target node already exists.
 
     RedlineMapType::iterator aFind = aRedlineMap.find(rId);
     if (aRedlineMap.end() != aFind)
