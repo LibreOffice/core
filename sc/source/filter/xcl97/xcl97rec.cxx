@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:44:25 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     meRotation( xlTxoRot_Default )
 {
     // additional alignment and orientation items
-    const SfxItemSet& rItemSet = rTextObj.GetItemSet();
+    const SfxItemSet& rItemSet = rTextObj.GetMergedItemSet();
 
     // horizontal alignment
     switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
