@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-08-07 12:50:13 $
+ *  last change: $Author: ssa $ $Date: 2001-11-06 10:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,9 @@ SalInstance* CreateSalInstance()
     SalData* pSalData = GetSalData();
 
     // determine the windows version
+    aSalShlData.mbW40 = 0;
+    aSalShlData.mbWNT = 0;
+    aSalShlData.mbWXP = 0;
     WORD nVer = (WORD)GetVersion();
     aSalShlData.mnVersion = (((WORD)LOBYTE(nVer)) * 100) + HIBYTE(nVer);
     if ( aSalShlData.mnVersion >= W95_VERSION )
@@ -456,7 +459,12 @@ SalInstance* CreateSalInstance()
     if ( GetVersionEx( &aVerInfo ) )
     {
         if ( aVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
+        {
             aSalShlData.mbWNT = 1;
+            // Windows XP ?
+            if ( aVerInfo.dwMajorVersion == 5 && aVerInfo.dwMinorVersion == 1 )
+                aSalShlData.mbWXP = 1;
+        }
     }
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
