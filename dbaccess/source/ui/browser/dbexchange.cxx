@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 08:32:13 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,9 @@ namespace dbaui
         ,m_pHtml(NULL)
         ,m_pRtf(NULL)
     {
-        getDescriptor()[daSelection]    <<= _rSelectedRows;
-        getDescriptor()[daCursor]       <<= _rxResultSet;
+        getDescriptor()[daSelection]        <<= _rSelectedRows;
+        getDescriptor()[daBookmarkSelection]<<= sal_False;  // by definition, it's the indicies
+        getDescriptor()[daCursor]           <<= _rxResultSet;
         addCompatibleSelectionDescription( _rSelectedRows );
     }
 
