@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:35:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 12:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3763,28 +3763,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         // will be handled by the base class
         break;
 
-    case COMMAND_EXTTEXTINPUTPOS:
-        if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
-        {
-            bCallBase = FALSE;
-            rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
-        }
-        else
-        {
-            SwExtTextInput* pInput = rSh.GetExtTextInput();
-            const CommandExtTextInputPosData* pData = rCEvt.GetExtTextInputPosData();
-            if( pInput && pData )
-            {
-                const Point aPt( rSh.GetCharRect().Pos() );
-                Rectangle* pRects = pInput->GetPosInputData( *pData, &aPt );
-                SetExtTextInputPos( pData->GetFirstPos(),
-                                    pData->GetChars(), pRects );
-                delete pRects;
-                bCallBase = FALSE;
-            }
-        }
-        break;
-
 #ifdef DBG_UTIL
         default:
             ASSERT( !this, "unknown command." );
@@ -3958,6 +3936,9 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.3  2000/10/25 15:35:11  jp
+        use CharClass/BreakIt instead of old WordSelection
+
         Revision 1.2  2000/10/05 12:13:21  jp
         should change: remove image
 
