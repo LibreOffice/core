@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 10:50:08 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 12:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
     Text[ JAPANESE ] = "ÇÕÇﬂçûÇ›ñ|ñÛ";
-    Text[ DUTCH ] = "Vertaling";
+    Text[ DUTCH ] = "Inplace translation";
     Text[ POLISH ] = "Nowe t≥umaczenie";
     Text[ PORTUGUESE_BRAZILIAN ] = "Inplace Translation";
     Text[ RUSSIAN ] = "ÕÓ‚˚È ÔÂÂ‚Ó‰";
