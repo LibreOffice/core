@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:30:04 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,54 +97,12 @@ class SvStorage;
 
 class ScBaseCell;
 class ScRangeList;
-class ScConditionalFormat;
 class ScDBData;
 
 class ScfSimpleProgressBar;
 
 class XclImpStream;
 class XclImpAutoFilterBuffer;
-
-class XclImpWebQueryBuffer;
-
-
-
-class ExcCondForm : private ExcRoot, private XclImpRoot
-{
-    private:
-        UINT16                  nNumOfConds;
-        UINT16                  nCondCnt;
-        UINT16                  nCol;
-        UINT16                  nRow;
-        ScRangeList*            pRangeList;
-
-        ScConditionalFormat*    pScCondForm;
-    protected:
-    public:
-                                ExcCondForm( RootData* p, const XclImpRoot& rRoot );
-        virtual                 ~ExcCondForm();
-
-        void                    Read( XclImpStream& rIn );
-        void                    ReadCf( XclImpStream& rIn, ExcelToSc& rFormConverter, sal_uInt32 nListIndex );
-        void                    Apply( void );
-};
-
-
-
-
-class ExcCondFormList : protected List
-{
-    private:
-    protected:
-    public:
-        virtual                 ~ExcCondFormList();
-        inline void             Append( ExcCondForm* pNew );
-
-                                List::Count;
-
-        void                    Apply( void );
-};
-
 
 
 
@@ -156,9 +114,6 @@ class ImportExcel8 : public ImportExcel
         XclImpPivotTableList    aPivotTabList;
         XclImpPivotTable*       pCurrPivTab;
         XclImpPivotCache*       pCurrPivotCache;
-
-        ExcCondForm*            pActCondForm;
-        ExcCondFormList*        pCondFormList;
 
         XclImpAutoFilterBuffer* pAutoFilterBuffer;  // ranges for autofilter and advanced filter
 
@@ -208,8 +163,6 @@ class ImportExcel8 : public ImportExcel
         void                    SXVdex( void );                 // 0x0100
         void                    Label( void );                  // 0x0204
 
-        void                    Condfmt( void );                // 0x01B0
-        void                    Cf( void );                     // 0x01B1
         void                    Txo( void );                    // 0x01B6
         void                    Hlink( void );                  // 0x01B8
         void                    Codename( BOOL bWBGlobals );    // 0x01BA
@@ -318,17 +271,6 @@ public:
     inline void                 IncrementActiveAF() { nAFActiveCount++; }
     inline BOOL                 UseUnNamed() { return nAFActiveCount == 1; }
 };
-
-
-
-
-//___________________________________________________________________
-// inlines
-
-inline void ExcCondFormList::Append( ExcCondForm* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
 
 #endif
 
