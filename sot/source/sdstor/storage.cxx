@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-20 14:12:19 $
+ *  last change: $Author: mba $ $Date: 2000-11-20 12:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <storinfo.hxx>
 #include <storage.hxx>
 
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #ifndef _TOOLS_FSYS_HXX
 #include <tools/fsys.hxx>
 #endif
@@ -71,6 +74,8 @@
 #include <tools/cachestr.hxx>
 #endif
 #include <tools/debug.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/localfilehelper.hxx>
 #pragma hdrstop
 
 /************** class SotStorageStream ***********************************/
@@ -137,7 +142,7 @@ SotStorageStream::SotStorageStream( const String & rName, StreamMode nMode,
     DBG_ASSERT( !nStorageMode,"StorageModes ignored" )
 }
 
-SotStorageStream::SotStorageStream( StorageStream * pStm )
+SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
 {
     if( STREAM_WRITE & pStm->GetMode() )
         bIsWritable = TRUE;
@@ -455,39 +460,74 @@ void SotStorage::TestMemberInvariant( BOOL bPrint )
     , bIsRoot( FALSE )                      \
     , bDelStm( FALSE )                      \
     , nVersion( SOFFICE_FILEFORMAT_NOW )    \
-    , pTmpStg( NULL )   \
     , pOwnStg( NULL )   \
     , pStorStm( NULL )
 
 SotStorage::SotStorage()
     INIT_SotStorage()
 {
+    // ??? What's this ???
 }
 
 #define ERASEMASK  ( STREAM_TRUNC | STREAM_WRITE | STREAM_SHARE_DENYALL )
 
-SotStorage::SotStorage( const String & rName, StreamMode nMode,
-                     StorageMode nStorageMode )
+SotStorage::SotStorage( const String & rName, StreamMode nMode, StorageMode nStorageMode )
     INIT_SotStorage()
 {
     aName = rName; // Namen merken
-    // Sicherheitshalber wird die Storage File geloescht, wenn
-    // sie neu erzeugt werden soll
-    if( aName.Len() && ( ( nMode & ERASEMASK ) == ERASEMASK ) )
+    if( aName.Len() )
     {
-        osl::File::remove( rName );
+        // named storage
+        if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
+            // ???
+            osl::File::remove( rName );
+
+        String aURL;
+        INetURLObject aObj( rName );
+        if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+        {
+            String aURL;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rName, aURL );
+            aObj.SetURL( aURL );
+        }
+
+        pStorStm = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), nMode );
+        if ( pStorStm )
+        {
+            // try as UCBStorage, next try as OLEStorage
+            if ( UCBStorage::IsStorageFile( pStorStm ) )
+            {
+                // UCBStorage always works directly on the UCB content, so discard the stream first
+                DELETEZ( pStorStm );
+                DBG_ASSERT( (nStorageMode & STORAGE_TRANSACTED), "No direct mode supported!" );
+                pOwnStg = new UCBStorage( rName, nMode );
+            }
+            else
+            {
+                // OLEStorage can be opened with a stream
+                pOwnStg = new Storage( *pStorStm, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+                bDelStm = TRUE;
+            }
+        }
+        else
+        {
+            pOwnStg = new Storage( rName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+            SetError( ERRCODE_IO_NOTSUPPORTED );
+        }
+    }
+    else
+    {
+        // temporary storage
+        // try as UCBStorage, next try as OLEStorage ( how to check which one is desired ?! )
+        pOwnStg = new Storage( rName, nMode, (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        aName = pOwnStg->GetName();
     }
 
-    pTmpStg = new Storage( aName, nMode,
-                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
-    pOwnStg = pTmpStg;
-    if( !aName.Len() )
-        aName = pOwnStg->GetName();
     ULONG nErr = pOwnStg->GetError();
     SetError( nErr );
 }
 
-SotStorage::SotStorage( Storage * pStor )
+SotStorage::SotStorage( BaseStorage * pStor )
     INIT_SotStorage()
 {
     aName = pStor->GetName(); // Namen merken
@@ -502,14 +542,24 @@ SotStorage::SotStorage( SvStream & rStm )
     INIT_SotStorage()
 {
     SetError( rStm.GetError() );
-    pOwnStg = new Storage( rStm, FALSE );
+
+    // try as UCBStorage, next try as OLEStorage
+    if ( UCBStorage::IsStorageFile( pStorStm ) )
+        pOwnStg = new UCBStorage( rStm, FALSE );
+    else
+        pOwnStg = new Storage( rStm, FALSE );
 }
 
 SotStorage::SotStorage( SvStream * pStm, BOOL bDelete )
     INIT_SotStorage()
 {
     SetError( pStm->GetError() );
-    pOwnStg = new Storage( *pStm, FALSE );
+
+    // try as UCBStorage, next try as OLEStorage
+    if ( UCBStorage::IsStorageFile( pStorStm ) )
+        pOwnStg = new UCBStorage( *pStm, FALSE );
+    else
+        pOwnStg = new Storage( *pStm, FALSE );
 
     ULONG nError = pOwnStg->GetError();
     if ( nError != SVSTREAM_OK )
@@ -559,11 +609,13 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
 *************************************************************************/
 BOOL SotStorage::IsStorageFile( const String & rFileName )
 {
+    /** code for new storages must come first! **/
     return Storage::IsStorageFile( rFileName );
 }
 
 BOOL SotStorage::IsStorageFile( SvStream* pStream )
 {
+    /** code for new storages must come first! **/
     if ( pStream )
     {
         long nPos = pStream->Tell();
@@ -778,7 +830,7 @@ SotStorageStream * SotStorage::OpenSotStream( const String & rEleName,
         // egal was kommt, nur exclusiv gestattet
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = pOwnStg->GetError();
-        StorageStream * p = pOwnStg->OpenStream( rEleName, nMode,
+        BaseStorageStream * p = pOwnStg->OpenStream( rEleName, nMode,
                             (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStm = new SotStorageStream( p );
         if( !nE )
@@ -806,7 +858,7 @@ SotStorage * SotStorage::OpenSotStorage( const String & rEleName,
     {
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = pOwnStg->GetError();
-        Storage * p = pOwnStg->OpenStorage( rEleName, nMode,
+        BaseStorage * p = pOwnStg->OpenStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStor = new SotStorage( p );
         if( !nE )
