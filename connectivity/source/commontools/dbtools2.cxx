@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:53:16 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,13 +820,14 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
         OSL_ENSURE(0,"Exception catched!");
     }
 }
+
 // -----------------------------------------------------------------------------
-Reference< XConnection > getActiveConnectionFromParent(const Reference< XInterface >& _xChild)
+bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
 {
-    Reference< XConnection >  xConnection;
+    bool bIsEmbedded = false;
     try
     {
-        Reference< XModel > xModel = lcl_getXModel(_xChild);
+        Reference< XModel > xModel = lcl_getXModel( _rxComponent );
 
         if ( xModel.is() )
         {
@@ -843,8 +844,11 @@ Reference< XConnection > getActiveConnectionFromParent(const Reference< XInterfa
                     const PropertyValue* pContextEnd  = pContextIter + aDocumentContext.getLength();
                     for(;pContextIter != pContextEnd;++pContextIter)
                     {
-                        if ( pContextIter->Name.equalsAscii("ActiveConnection") && (pContextIter->Value >>= xConnection) && xConnection.is() )
+                        if (  pContextIter->Name.equalsAscii( "ActiveConnection" )
+                        && ( pContextIter->Value >>= _rxActualConnection )
+                        )
                         {
+                            bIsEmbedded = true;
                             break;
                         }
                     }
@@ -857,8 +861,9 @@ Reference< XConnection > getActiveConnectionFromParent(const Reference< XInterfa
     {
         // not intereseted in
     }
-    return xConnection;
+    return bIsEmbedded;
 }
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
