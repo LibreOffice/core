@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:29:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_SVXSTR_ALL_FILES
     Text[ korean ] = "<¸ðµç ÆÄÀÏ>";
     Text[ turkish ] = "<Tüm dosyalar>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<Todos los archivos>";
 };
 Resource RID_SVXRES_IMPORTGRAPHIC
 {
@@ -115,6 +116,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "<¸ðµç ¼­½Ä>";
         Text[ turkish ] = "<Tüm formatlar>";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "<Todos los formatos>";
     };
     String STR_UNKNOWN_FORMAT
     {
@@ -141,6 +143,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ÆÄÀÏ ¼­½Ä!";
         Text[ turkish ] = "Bilinmeyen dosya formatý!";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "¡Formato de archivo desconocido!";
     };
     String STR_PATH_NOT_FOUND1
     {
@@ -167,6 +170,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "µð·ºÅä¸® '";
         Text[ turkish ] = "Dizin '";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El directorio '";
     };
     String STR_PATH_NOT_FOUND2
     {
@@ -193,6 +197,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "' °¡(ÀÌ) ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "' mevcut deðil.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "' no existe.";
     };
     String STR_FLT_BMP
     {
@@ -235,6 +240,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù";
         TEXT[ turkish ] = "Grafik dosyasý açýlamýyor";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No es posible abrir el archivo gráfico";
     };
     String STR_GRFILTER_IOERROR
     {
@@ -261,6 +267,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀ» ÀÐÀ» ¼ö ¾ø½À´Ï´Ù";
         TEXT[ turkish ] = "Grafik dosyasý okunamýyor";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No es posible leer el archivo gráfico";
     };
     String STR_GRFILTER_FORMATERROR
     {
@@ -287,6 +294,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ±×·¡ÇÈ¼­½Ä";
         TEXT[ turkish ] = "Bilinmeyen grafik formatý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Formato de imagen desconocido";
     };
     String STR_GRFILTER_VERSIONERROR
     {
@@ -313,6 +321,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀÇ ¹öÀüÀº Áö¿øµÇÁö ¾ÊÀ½";
         TEXT[ turkish ] = "Grafik dosyasýnýn sürümü desteklenmiyor";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No se apoya la versión del archivo gráfico";
     };
     String STR_GRFILTER_FILTERERROR
     {
@@ -339,6 +348,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "±×·¡ÇÈÇÊÅÍ¸¦ Ã£Áö ¸øÇßÀ½";
         TEXT[ turkish ] = "Grafik filtresi bulunamadý";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No se encontró el filtro de imágenes";
     };
     String STR_GRFILTER_TOOBIG
     {
@@ -365,6 +375,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ korean ] = "±×·¡ÇÈ »ðÀÔÀ» À§ÇÑ ¸Þ¸ð¸®°¡ ºÎÁ·ÇÕ´Ï´Ù";
         TEXT[ turkish ] = "Grafiðin eklenmesi için yeterli bellek mevcut deðil";
         TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "No hay suficiente memoria para insertar la imagen";
     };
     String STR_PROPERTIES
     {
@@ -391,6 +402,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "µî·ÏÁ¤º¸(~P)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Prop~iedades...";
     };
     String STR_HOME
     {
@@ -417,6 +429,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "±âº»";
         Text[ turkish ] = "~Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterminado";
     };
     String STR_LINK
     {
@@ -443,6 +456,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "¿¬°á(~L)";
         Text[ turkish ] = "~Baðlantý oluþtur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vincular";
     };
     String STR_PREVIEW
     {
@@ -469,6 +483,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "¹Ì¸® º¸±â(~E)";
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Previsualización";
     };
     String STR_FILTER
     {
@@ -493,6 +508,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ korean ] = "ÇÊÅÍ(~F)...";
         Text[ turkish ] = "Fi~ltre...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Filtro...";
     };
 };
  // ********************************************************************** EOF
