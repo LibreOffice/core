@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 11:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,8 +1373,7 @@ uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 7, "com.sun.star.drawing.AreaShapeDescriptor",
-                            "com.sun.star.drawing.AreaShape",
+    addToSequence( aSeq, 6, "com.sun.star.drawing.AreaShape",
                             "com.sun.star.drawing.GraphicObjectShapeDescriptor",
                             "com.sun.star.drawing.GraphicObjectShape",
                             "com.sun.star.drawing.Text",
