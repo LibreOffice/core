@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alpha.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:04:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -169,7 +168,110 @@ BOOL AlphaMask::Expand( ULONG nDX, ULONG nDY, BYTE* pInitTransparency )
 BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc )
 {
-    return Bitmap::CopyPixel( rRectDst, rRectSrc, (Bitmap*) pAlphaSrc );
+    // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
+    // this optimization is possible because the palettes of AlphaMasks are always identical (8bit GreyPalette, see ctor)
+
+    const Size  aSizePix( GetSizePixel() );
+    Rectangle   aRectDst( rRectDst );
+    BOOL        bRet = FALSE;
+
+    aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
+
+    if( !aRectDst.IsEmpty() )
+    {
+        if( pAlphaSrc && ( *pAlphaSrc != *this ) )
+        {
+            Bitmap*         pSrc = (Bitmap*) pAlphaSrc;
+            const Size      aCopySizePix( pSrc->GetSizePixel() );
+            Rectangle       aRectSrc( rRectSrc );
+
+            aRectSrc.Intersection( Rectangle( Point(), aCopySizePix ) );
+
+            if( !aRectSrc.IsEmpty() )
+            {
+                BitmapReadAccess* pReadAcc = pSrc->AcquireReadAccess();
+
+                if( pReadAcc )
+                {
+                    BitmapWriteAccess* pWriteAcc = AcquireWriteAccess();
+
+                    if( pWriteAcc )
+                    {
+                        const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                        const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                        const long  nSrcEndX = aRectSrc.Left() + nWidth;
+                        const long  nSrcEndY = aRectSrc.Top() + nHeight;
+                        long        nDstY = aRectDst.Top();
+
+                        for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                            for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                                pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPixel( nSrcY, nSrcX ) );
+
+                        ReleaseAccess( pWriteAcc );
+                        bRet = ( nWidth > 0L ) && ( nHeight > 0L );
+                    }
+
+                    pSrc->ReleaseAccess( pReadAcc );
+                }
+            }
+        }
+        else
+        {
+            Rectangle aRectSrc( rRectSrc );
+
+            aRectSrc.Intersection( Rectangle( Point(), aSizePix ) );
+
+            if( !aRectSrc.IsEmpty() && ( aRectSrc != aRectDst ) )
+            {
+                BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
+
+                if( pWriteAcc )
+                {
+                    const long  nWidth = Min( aRectSrc.GetWidth(), aRectDst.GetWidth() );
+                    const long  nHeight = Min( aRectSrc.GetHeight(), aRectDst.GetHeight() );
+                    const long  nSrcX = aRectSrc.Left();
+                    const long  nSrcY = aRectSrc.Top();
+                    const long  nSrcEndX1 = nSrcX + nWidth - 1L;
+                    const long  nSrcEndY1 = nSrcY + nHeight - 1L;
+                    const long  nDstX = aRectDst.Left();
+                    const long  nDstY = aRectDst.Top();
+                    const long  nDstEndX1 = nDstX + nWidth - 1L;
+                    const long  nDstEndY1 = nDstY + nHeight - 1L;
+
+                    if( ( nDstX <= nSrcX ) && ( nDstY <= nSrcY ) )
+                    {
+                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                                pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                    }
+                    else if( ( nDstX <= nSrcX ) && ( nDstY >= nSrcY ) )
+                    {
+                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( long nX = nSrcX, nXN = nDstX; nX <= nSrcEndX1; nX++, nXN++ )
+                                pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                    }
+                    else if( ( nDstX >= nSrcX ) && ( nDstY <= nSrcY ) )
+                    {
+                        for( long nY = nSrcY, nYN = nDstY; nY <= nSrcEndY1; nY++, nYN++ )
+                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                                pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                    }
+                    else
+                    {
+                        for( long nY = nSrcEndY1, nYN = nDstEndY1; nY >= nSrcY; nY--, nYN-- )
+                            for( long nX = nSrcEndX1, nXN = nDstEndX1; nX >= nSrcX; nX--, nXN-- )
+                                pWriteAcc->SetPixel( nYN, nXN, pWriteAcc->GetPixel( nY, nX ) );
+                    }
+
+                    ReleaseAccess( pWriteAcc );
+                    bRet = TRUE;
+                }
+            }
+        }
+    }
+
+    return bRet;
+
 }
 
 // -----------------------------------------------------------------------------
