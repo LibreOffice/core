@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:18:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ namespace dbaccess
 
         void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        ::rtl::OUString getIdentifierQuoteString() const;
     public:
         virtual ~OCacheSet();
         // late constructor
