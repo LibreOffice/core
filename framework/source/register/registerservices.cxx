@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:42:28 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,14 @@
 #include <services/sessionlistener.hxx>
 #endif
 
+#ifndef __FRAMEWORK_UIELEMENT_LOGOIMAGESTATUSBARCONTROLLER_HXX_
+#include <uielement/logoimagestatusbarcontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UIELEMENT_LOGOTEXTSTATUSBARCONTROLLER_HXX_
+#include <uielement/logotextstatusbarcontroller.hxx>
+#endif
+
 #ifndef __FRAMEWORK_UIELEMENT_NEWMENUCONTROLLER_HXX_
 #include <uielement/newmenucontroller.hxx>
 #endif
@@ -326,6 +334,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::UICategoryDescription                   )
                         COMPONENTINFO( ::framework::StatusbarControllerFactory              )
                         COMPONENTINFO( ::framework::SessionListener                         )
+                        COMPONENTINFO( ::framework::LogoImageStatusbarController            )
+                        COMPONENTINFO( ::framework::LogoTextStatusbarController             )
                         COMPONENTINFO( ::framework::NewMenuController                       )
                     )
 
@@ -372,9 +382,11 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
                         IFFACTORY( ::framework::UICategoryDescription                   )   else
-                        IFFACTORY( ::framework::SessionListener                         )
-else
+                        IFFACTORY( ::framework::SessionListener                         )   else
                         IFFACTORY( ::framework::StatusbarControllerFactory              )   else
+                        IFFACTORY( ::framework::SessionListener                         )   else
+                        IFFACTORY( ::framework::LogoImageStatusbarController            )   else
+                        IFFACTORY( ::framework::LogoTextStatusbarController             )   else
                         IFFACTORY( ::framework::NewMenuController                       )
             )
 
