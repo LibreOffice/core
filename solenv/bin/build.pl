@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2002-02-25 17:36:53 $
+#   last change: $Author: vg $ $Date: 2002-02-25 17:43:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.46 $ ';
+$id_str = ' $Revision: 1.47 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -736,7 +736,7 @@ sub get_switch_options {
     my $option = '';
     while ($option = shift @ARGV) {
         if (!($option =~ /^-/)) {
-            $string .= $option;
+            $string .= '-' . $option;
             $string .= ' ';
         } else {
             unshift(@ARGV, $option);
