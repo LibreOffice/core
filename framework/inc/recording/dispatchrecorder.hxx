@@ -67,7 +67,12 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
+#include <vector>
+
 namespace framework{
+
+struct DispatchStatement;
+typedef ::std::vector < DispatchStatement > DispatchStatementList;
 
 class DispatchRecorder
     : private ThreadHelpBase
@@ -79,8 +84,7 @@ class DispatchRecorder
     // private member
     private:
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR        ;
-        ::rtl::OUStringBuffer                                  m_aScriptBuffer;
-        ::rtl::OUString                                        m_sScript      ;
+        DispatchStatementList                                  m_aStatements;
         sal_Int32                                              m_nRecordingID ;
 
     // public interface
@@ -102,9 +106,9 @@ class DispatchRecorder
 
     // private functions
     private:
-        void SAL_CALL implts_recordMacro( const css::util::URL& aURL,
+        void SAL_CALL implts_recordMacro( const ::rtl::OUString& aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                sal_Bool bAsComment );
+                                                sal_Bool bAsComment, ::rtl::OUStringBuffer& );
 }; // class DispatcRecorder
 
 } // namespace framework

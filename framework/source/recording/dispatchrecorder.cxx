@@ -49,6 +49,20 @@ DEFINE_INIT_SERVICE(
     }
 )
 
+struct DispatchStatement
+{
+    ::rtl::OUString aCommand;
+    css::uno::Sequence < css::beans::PropertyValue > aArgs;
+    sal_Bool bIsComment;
+
+    DispatchStatement( const ::rtl::OUString& rCmd, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, sal_Bool bComment )
+        : aCommand( rCmd )
+        , bIsComment( bComment )
+        {
+            aArgs = rArgs;
+        }
+};
+
 //***********************************************************************
 DispatchRecorder::DispatchRecorder( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
         : ThreadHelpBase     ( &Application::GetSolarMutex() )
@@ -67,23 +81,6 @@ DispatchRecorder::~DispatchRecorder()
 void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException )
 {
     /* SAFE{ */
-    WriteGuard aWriteLock(m_aLock);
-
-    LOG_ASSERT2(m_aScriptBuffer.getLength()>0, "DispatchRecorder::startRecording()", "start without end called ... append new macro to old one!")
-    m_aScriptBuffer.ensureCapacity(10000);
-
-    m_aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
-    m_aScriptBuffer.appendAscii("rem define variables\n");
-    m_aScriptBuffer.appendAscii("dim document   as object\n");
-    m_aScriptBuffer.appendAscii("dim dispatcher as object\n");
-    m_aScriptBuffer.appendAscii("dim parser     as object\n");
-    m_aScriptBuffer.appendAscii("dim url        as new com.sun.star.util.URL\n");
-    m_aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
-    m_aScriptBuffer.appendAscii("rem get access to the document\n");
-    m_aScriptBuffer.appendAscii("document = ThisComponent.CurrentController.Frame\n");
-    m_aScriptBuffer.appendAscii("parser   = createUnoService(\"com.sun.star.util.URLTransformer\")\n\n");
-
-    m_nRecordingID = 1;
     /* } */
 }
 
@@ -91,14 +88,34 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    implts_recordMacro(aURL,lArguments,sal_False);
+    //implts_recordMacro(aURL,lArguments,sal_False);
+    sal_Int32 nSize = m_aStatements.size();
+    if ( nSize && aURL.Complete.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
+    {
+        DispatchStatementList::reverse_iterator pLast = m_aStatements.rbegin();
+        if ( pLast->aCommand.compareToAscii(".uno:InsertText") == COMPARE_EQUAL )
+        {
+            ::rtl::OUString aStr;
+            ::rtl::OUString aNew;
+            pLast->aArgs[0].Value >>= aStr;
+            lArguments[0].Value >>= aNew;
+            aStr += aNew;
+            pLast->aArgs[0].Value <<= aStr;
+            return;
+        }
+    }
+
+    DispatchStatement aStatement( aURL.Complete, lArguments, sal_False );
+    m_aStatements.push_back( aStatement );
 }
 
 //*************************************************************************
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    implts_recordMacro(aURL,lArguments,sal_True);
+    //implts_recordMacro(aURL,lArguments,sal_True);
+    DispatchStatement aStatement( aURL.Complete, lArguments, sal_True );
+    m_aStatements.push_back( aStatement );
 }
 
 //*************************************************************************
@@ -106,7 +123,7 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 {
     /* SAFE{ */
     WriteGuard aWriteLock(m_aLock);
-    m_sScript = m_aScriptBuffer.makeStringAndClear();
+    m_aStatements.clear();
     /* } */
 }
 
@@ -114,8 +131,27 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 ::rtl::OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException )
 {
     /* SAFE{ */
-    ReadGuard aReadLock(m_aLock);
-    return m_sScript;
+    WriteGuard aWriteLock(m_aLock);
+    ::rtl::OUStringBuffer aScriptBuffer;
+    aScriptBuffer.ensureCapacity(10000);
+    m_nRecordingID = 1;
+
+    aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
+    aScriptBuffer.appendAscii("rem define variables\n");
+    aScriptBuffer.appendAscii("dim document   as object\n");
+    aScriptBuffer.appendAscii("dim dispatcher as object\n");
+    aScriptBuffer.appendAscii("dim parser     as object\n");
+    aScriptBuffer.appendAscii("dim url        as new com.sun.star.util.URL\n");
+    aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
+    aScriptBuffer.appendAscii("rem get access to the document\n");
+    aScriptBuffer.appendAscii("document = ThisComponent.CurrentController.Frame\n");
+    aScriptBuffer.appendAscii("parser   = createUnoService(\"com.sun.star.util.URLTransformer\")\n\n");
+
+    std::vector< DispatchStatement>::iterator p;
+    for ( p = m_aStatements.begin(); p != m_aStatements.end(); p++ )
+        implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
+    ::rtl::OUString sScript = aScriptBuffer.makeStringAndClear();
+    return sScript;
     /* } */
 }
 
@@ -182,6 +218,11 @@ static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgume
         aArgumentBuffer.append     (sVal);
         aArgumentBuffer.appendAscii("\"");
     }
+    else if (aValue.getValueTypeClass() == css::uno::TypeClass_ENUM )
+    {
+        sal_Int32 nVal = *(sal_Int32*)aValue.getValue();
+        aArgumentBuffer.append((sal_Int32)nVal);
+    }
     else if (aValue.getValueType() == ::getCppuType((const css::uno::Sequence < css::uno::Any >*)0) )
     {
         css::uno::Sequence < css::uno::Any > aSeq;
@@ -202,12 +243,11 @@ static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgume
     }
 }
 
-void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
+void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                          sal_Bool bAsComment )
+                                                          sal_Bool bAsComment, ::rtl::OUStringBuffer& aScriptBuffer )
 {
     ::rtl::OUStringBuffer aArgumentBuffer(1000);
-    ::rtl::OUStringBuffer aScriptBuffer(1000);
     ::rtl::OUString       sArrayName;
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
@@ -268,7 +308,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
     if(bAsComment)
         aArgumentBuffer.appendAscii("rem ");
     aScriptBuffer.appendAscii("url.Complete = \"");
-    aScriptBuffer.append     (aURL.Complete);
+    aScriptBuffer.append     (aURL);
     aScriptBuffer.appendAscii("\"\n");
     if(bAsComment)
         aArgumentBuffer.appendAscii("rem ");
@@ -292,7 +332,6 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
     aScriptBuffer.appendAscii("\n");
 
     /* SAFE { */
-    m_aScriptBuffer.append(aScriptBuffer.makeStringAndClear());
     m_nRecordingID++;
     /* } */
 }
