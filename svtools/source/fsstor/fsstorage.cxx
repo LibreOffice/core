@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fsstorage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2004-12-01 13:03:17 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,10 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
     if ( ::utl::UCBContentHelper::IsFolder( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
         throw io::IOException();
 
+    if ( ( nOpenMode & embed::ElementModes::NOCREATE )
+      && !::utl::UCBContentHelper::IsDocument( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+        throw io::IOException(); // TODO:
+
     uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
     uno::Reference< io::XStream > xResult;
     try
@@ -697,8 +701,10 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         throw io::IOException(); // TODO:
 
     sal_Bool bFolderExists = ::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) );
-    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
+    if ( ( nStorageMode & embed::ElementModes::NOCREATE ) && !bFolderExists )
+        throw io::IOException(); // TODO:
 
+    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv; // TODO: provide InteractionHandler if any
     uno::Reference< embed::XStorage > xResult;
     try
     {
@@ -714,6 +720,9 @@ uno::Reference< embed::XStorage > SAL_CALL FSStorage::openStorageElement(
         }
         else if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
             throw io::IOException(); // TODO: access denied
+
+        if ( !::utl::UCBContentHelper::IsFolder( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
+            throw io::IOException(); // there is no such folder
 
         ::ucb::Content aResultContent( aFolderURL.GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv );
         xResult = uno::Reference< embed::XStorage >(

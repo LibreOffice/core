@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fsfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2004-12-01 13:03:17 $
+ *  last change: $Author: as $ $Date: 2004-12-07 13:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         throw uno::Exception(); // TODO: illegal argument
     }
 
-    if ( nStorageMode & embed::ElementModes::WRITE )
+    if ( ( nStorageMode & embed::ElementModes::WRITE ) && !( nStorageMode & embed::ElementModes::NOCREATE ) )
         FSStorage::MakeFolderNoUI( aURL, sal_False );
     else if ( !::utl::UCBContentHelper::IsFolder( aURL ) )
         throw io::IOException(); // there is no such folder
