@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:42:11 $
+#   last change: $Author: obr $ $Date: 2001-01-26 13:03:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,6 +177,8 @@ IDLFILES=\
     XDevice.idl\
     XDialog.idl\
     XDisplayBitmap.idl\
+    XDisplayConnection.idl\
+    XEventHandler.idl\
     XFileDialog.idl\
     XFixedText.idl\
     XFocusListener.idl\
