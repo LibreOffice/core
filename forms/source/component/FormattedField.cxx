@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 16:21:50 $
+ *  last change: $Author: oj $ $Date: 2002-06-24 11:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1217,7 +1217,7 @@ sal_Bool OFormattedModel::_commit()
 void OFormattedModel::_onValueChanged()
 {
     if (m_bNumeric)
-        m_aSaveValue <<= m_xColumn->getDouble();
+        m_aSaveValue <<= DBTypeConversion::getValue(m_xColumn, m_aNullDate, m_nKeyType); // #100056# OJ
     else
         m_aSaveValue <<= m_xColumn->getString();
 
