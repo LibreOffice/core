@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:07:44 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <tools/svwin.h>
 #endif
 #include "rtl/tencinfo.h"
-
-#define _SV_SALDATA_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
