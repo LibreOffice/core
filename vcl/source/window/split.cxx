@@ -1,10 +1,11 @@
+
 /*************************************************************************
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:39:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +60,8 @@
  *
  ************************************************************************/
 
-#define _SV_SPLIT_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
@@ -84,8 +83,8 @@
 #ifndef _SV_GRADIENT_HXX
 #include <gradient.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
 #include <lineinfo.hxx>
@@ -667,7 +666,6 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     Splitter *pSibling = ImplFindSibling();
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     USHORT nCode = aKeyCode.GetCode();
-    BOOL bForwardKey = FALSE;
     switch ( nCode )
     {
         case KEY_UP:
