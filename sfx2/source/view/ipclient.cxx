@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:35:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,6 +917,21 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
             try
             {
                 m_pImp->m_xObject->doVerb( nVerb );
+            }
+            catch ( embed::UnreachableStateException& )
+            {
+                if ( nVerb == 0 )
+                {
+                    // a workaround for the default verb, usually makes sence for alien objects
+                    try
+                    {
+                        m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
+                    }
+                    catch ( uno::Exception& )
+                    {
+                        nError = ERRCODE_SO_GENERALERROR;
+                    }
+                }
             }
             catch ( uno::Exception& )
             {
