@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:05:08 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:28:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,7 +165,9 @@ LIB1FILES+=  \
             $(SLB)$/zcodec.lib      \
             $(SLB)$/inet.lib
 
-SHL1STDLIBS += $(ZLIB3RDLIB)
+SHL1STDLIBS += $(ZLIB3RDLIB) \
+               $(UCBHELPERLIB) \
+               $(CPPULIB)
 
 LIB1FILES+=  $(SLB)$/dll.lib
 
