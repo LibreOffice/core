@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 11:52:36 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <sfx2/objsh.hxx>
 #include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 #include "global.hxx"
 #include "globstr.hrc"
@@ -139,9 +143,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
     aComment += String( ScResId( STR_ON ) );
     aComment += ' ';
-    aComment += ScGlobal::pScInternational->GetDate( Date() );
+    aComment += ScGlobal::pLocaleData->getDate( Date() );
     aComment.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-    aComment += ScGlobal::pScInternational->GetTime( Time() );
+    aComment += ScGlobal::pLocaleData->getTime( Time() );
 
     aEdComment  .SetText( aComment );
     aEdName     .SetText( rName );

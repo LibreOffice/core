@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:33:31 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,10 @@
 
 #include <svx/svdtrans.hxx>
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
 #include "colrowba.hxx"
 #include "document.hxx"
 #include "scmod.hxx"
@@ -370,11 +374,10 @@ String lcl_MetricString( long nTwips, const String& rText )
         FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
 
         long nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
-        String aNum = ScGlobal::pScInternational->GetNum( nUserVal, 2 );
 
         String aStr = rText;
         aStr += ' ';
-        aStr += aNum;
+        aStr += ScGlobal::pLocaleData->getNum( nUserVal, 2 );
         aStr += ' ';
         aStr += SdrFormatter::GetUnitStr(eUserMet);
 

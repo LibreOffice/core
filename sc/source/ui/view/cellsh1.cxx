@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:18:10 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,7 +1592,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 String aNoteStr = ((const SfxStringItem&)pReqArgs->
                                     Get( SID_RANGE_NOTETEXT )).GetValue();
-                String aDateStr = ScGlobal::pScInternational->GetDate( Date() );
+                String aDateStr = ScGlobal::pLocaleData->getDate( Date() );
                 String aAuthorStr = aUserOpt.GetID();
                 ScPostIt aNote( aNoteStr, aDateStr, aAuthorStr );
 

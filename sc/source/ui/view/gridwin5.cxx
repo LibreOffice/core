@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-19 16:59:28 $
+ *  last change: $Author: er $ $Date: 2001-01-31 19:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
+
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
 
 
 // INCLUDE ---------------------------------------------------------------
@@ -220,9 +224,9 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 DateTime aDT = pFound->GetDateTime();
                 aTrackText  = pFound->GetUser();
                 aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ", " ));
-                aTrackText += ScGlobal::pScInternational->GetDate(aDT);
+                aTrackText += ScGlobal::pLocaleData->getDate(aDT);
                 aTrackText += ' ';
-                aTrackText += ScGlobal::pScInternational->GetTime(aDT);
+                aTrackText += ScGlobal::pLocaleData->getTime(aDT);
                 aTrackText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ":\n" ));
                 String aComStr=pFound->GetComment();
                 if(aComStr.Len()>0)
