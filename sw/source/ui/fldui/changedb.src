@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:58:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ spanish ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple." ;
         Text [ french ] = "Cette boîte de dialogue vous permet d'échanger les bases de données auxquelles vous accédez dans vos documents par des champs de formulaire. Vous pouvez exécuter une seule modification par saisie. La liste de gauche permet une sélection multiple." ;
         Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
-        Text [ swedish ] = "I denna dialog kan man byta ut de databaser, som kan nås via databasfältet i Ditt dokument, mot andra databaser. Man kan bara göra en ändring åt gången. I den vänstra listen finns möjlighet till multipel markering." ;
+        Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multipel markering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
         Text [ portuguese_brazilian ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
         Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opções." ;
