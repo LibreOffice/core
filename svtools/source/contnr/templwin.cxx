@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 08:29:39 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 11:37:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
     String aURL = pFileWin->GetSelectedFile();
     sal_Bool bIsFolder = ( aURL.Len() == 0 || ::utl::UCBContentHelper::IsFolder( aURL ) );
     aToolBox.EnableItem( TI_DOCTEMPLATE_PRINT, !bIsFolder );
-    if ( !bIsFolder )
+    if ( !bIsFolder && INetURLObject( aURL ).GetProtocol() != INET_PROT_PRIVATE )
         pFrameWin->OpenFile( aURL, sal_True, sal_False );
     return 0;
 }
