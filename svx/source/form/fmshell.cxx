@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:22:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 //------------------------------------------------------------------------
 sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    if ( GetImpl()->m_bPreparedClose )
+    if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
         // 2002-11-12 #104702# - fs@openoffice.org
         return sal_True;
@@ -636,7 +636,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     {
                         case RET_NO:
                             bModified = sal_False;
-                            GetImpl()->m_bPreparedClose = sal_True;
+                            GetImpl()->didPrepareClose( sal_True );
                             break;
 
                         case RET_CANCEL:
@@ -716,21 +716,21 @@ sal_Bool FmFormShell::HasUIFeature( sal_uInt32 nFeature )
             || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_DBFORMS )
             )
     {
-        bResult = ( GetImpl()->m_eDocumentType == eDatabaseForm );
+        bResult = ( GetImpl()->getDocumentType() == eDatabaseForm );
     }
     else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_XFORMS )
             || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_XFORMS )
             || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_XFORMS )
             )
     {
-        bResult = ( GetImpl()->m_eDocumentType == eElectronicForm );
+        bResult = ( GetImpl()->getDocumentType() == eElectronicForm );
     }
     else if (  ( nFeature & FM_UI_FEATURE_TB_CONTROLS_GENERIC )
             || ( nFeature & FM_UI_FEATURE_TB_MORECONTROLS_GENERIC )
             || ( nFeature & FM_UI_FEATURE_TB_FORMDESIGN_GENERIC )
             )
     {
-        bResult = ( GetImpl()->m_eDocumentType != eDatabaseForm ) && ( GetImpl()->m_eDocumentType != eElectronicForm );
+        bResult = ( GetImpl()->getDocumentType() != eDatabaseForm ) && ( GetImpl()->getDocumentType() != eElectronicForm );
     }
 
     return bResult;
@@ -930,7 +930,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_MORE_CONTROLS:
         case SID_FM_FORM_DESIGN_TOOLS:
         {
-            FormToolboxes aToolboxAccess( GetImpl()->m_xAttachedFrame );
+            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
             aToolboxAccess.toggleToolbox( nSlot );
             rReq.Done();
         }
@@ -1222,7 +1222,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_MORE_CONTROLS:
             case SID_FM_FORM_DESIGN_TOOLS:
             {
-                FormToolboxes aToolboxAccess( GetImpl()->m_xAttachedFrame );
+                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible( nWhich ) ) );
             }
             break;
@@ -1477,10 +1477,13 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             switch (nWhich)
             {
             case SID_FM_VIEW_AS_GRID:
-                if (GetImpl()->m_xAttachedFrame.is() && GetImpl()->getNavController().is())
+                if (GetImpl()->getHostFrame().is() && GetImpl()->getNavController().is())
                 {
                     bEnable = sal_True;
-                    sal_Bool bDisplayingCurrent = GetImpl()->getInternalForm(Reference< ::com::sun::star::form::XForm > (GetImpl()->getNavController()->getModel(), UNO_QUERY)) == GetImpl()->m_xExternalDisplayedForm;
+                    sal_Bool bDisplayingCurrent =
+                        GetImpl()->getInternalForm(
+                            Reference< XForm >( GetImpl()->getNavController()->getModel(), UNO_QUERY )
+                        ) == GetImpl()->getExternallyDisplayedForm();
                     rSet.Put(SfxBoolItem(nWhich, bDisplayingCurrent));
                 }
                 break;
