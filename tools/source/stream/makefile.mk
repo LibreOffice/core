@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+#   last change: $Author: obr $ $Date: 2000-12-19 11:47:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,6 @@ SLOFILES=   $(SLO)$/stream.obj   \
             $(SLO)$/vcompat.obj	 
 
 .IF "$(UPDATER)" != ""
-.IF "$(GUI)" != "MAC"
-OBJFILES=   $(OBJ)$/stdstrm.obj
-.ENDIF
 
 OBJFILES+=	$(OBJ)$/stream.obj    \
             $(OBJ)$/strmsys.obj   \
