@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:59:31 $
+ *  last change: $Author: bm $ $Date: 2000-12-13 17:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ using namespace com::sun::star;
 #define XML_SCH_TYPE_REGRESSION_TYPE        ( XML_SCH_TYPES_START + 2 )
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
 // copyied from draw
-#define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 4 )
-#define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 5 )
-#define XML_SCH_TYPE_FILLSTYLE              ( XML_SCH_TYPES_START + 6 )
-#define XML_SCH_TYPE_TEXT_CROSSEDOUT        ( XML_SCH_TYPES_START + 7 )
+#define XML_SCH_TYPE_STROKE                 ( XML_SCH_TYPES_START + 20 )
+#define XML_SCH_TYPE_LINEJOIN               ( XML_SCH_TYPES_START + 21 )
+#define XML_SCH_TYPE_FILLSTYLE              ( XML_SCH_TYPES_START + 22 )
+#define XML_SCH_TYPE_TEXT_CROSSEDOUT        ( XML_SCH_TYPES_START + 23 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
@@ -216,9 +216,9 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "ConstantErrorHigh", CHART, error_upper_limit, XML_TYPE_DOUBLE ),
     MAP_SPECIAL( "ErrorIndicator", CHART, error_upper_indicator, XML_TYPE_NUMBER, ERROR_UPPER_INDICATOR ),  // convert one constant
     MAP_SPECIAL( "ErrorIndicator", CHART, error_lower_indicator, XML_TYPE_NUMBER, ERROR_LOWER_INDICATOR ),  // to two bools
-//      MAP_ENTRY( "ErrorCategory", CHART,          SCHATTR_STAT_KIND_ERROR,        &::getCppuType((const chart::ChartErrorCategory*)0), 0, 0 },\
-//      MAP_ENTRY( "PercentageError", CHART,                SCHATTR_STAT_PERCENT,           &::getCppuType((const double*)0),   0, 0 },\
-//      MAP_ENTRY( "RegressionCurves", CHART,           SCHATTR_STAT_REGRESSTYPE,       &::getCppuType((const chart::ChartRegressionCurveType*)0), 0, 0 }
+      MAP_ENTRY( "ErrorCategory", CHART, error_category, XML_SCH_TYPE_ERROR_CATEGORY ),
+      MAP_ENTRY( "PercentageError", CHART, error_percentage, XML_TYPE_DOUBLE ),
+      MAP_ENTRY( "RegressionCurves", CHART, regression_type, XML_SCH_TYPE_REGRESSION_TYPE ),
 
     // series/data-point properties
     MAP_SPECIAL( "DataCaption", CHART, data_label_number, XML_TYPE_NUMBER, DATA_LABEL_NUMBER ), // convert one constant
@@ -251,10 +251,12 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     { "FillStyle",      XML_NAMESPACE_DRAW, sXML_fill,                      XML_SCH_TYPE_FILLSTYLE, 0 },
     { "FillColor",      XML_NAMESPACE_DRAW, sXML_fill_color,                XML_TYPE_COLOR, 0 },
     { "FillGradientName",   XML_NAMESPACE_DRAW, sXML_fill_gradient_name,    XML_TYPE_STRING, 0 },
+    { "FillGradientStepCount",  XML_NAMESPACE_DRAW, sXML_gradient_step_count,   XML_TYPE_NUMBER, 0 },
     { "FillHatchName",  XML_NAMESPACE_DRAW, sXML_fill_hatch_name,           XML_TYPE_STRING, 0 },
     { "FillBitmapName", XML_NAMESPACE_DRAW, sXML_fill_image_name,           XML_TYPE_STRING, 0 },
     { "FillTransparence",   XML_NAMESPACE_DRAW, sXML_transparency,          XML_TYPE_PERCENT16, 0 },
     { "FillTransparenceName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
+    { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name, XML_TYPE_STRING, 0 },
 
     // text attributes
 
@@ -267,6 +269,35 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     { "CharPosture",    XML_NAMESPACE_FO,       sXML_font_style,            XML_TYPE_TEXT_POSTURE, 0 },
     { "CharUnderline",  XML_NAMESPACE_STYLE,    sXML_text_underline,        XML_TYPE_TEXT_UNDERLINE, 0 },
     { "CharWeight",     XML_NAMESPACE_FO,       sXML_font_weight,           XML_TYPE_TEXT_WEIGHT, 0 },
+
+    // 3D geometry attributes
+    { "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, sXML_horizontal_segments,   XML_TYPE_NUMBER, 0 },
+    { "D3DVerticalSegments",            XML_NAMESPACE_DR3D, sXML_vertical_segments,     XML_TYPE_NUMBER, 0 },
+    { "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, sXML_edge_rounding,         XML_TYPE_PERCENT, 0 },
+    { "D3DBackscale",                   XML_NAMESPACE_DR3D, sXML_back_scale,            XML_TYPE_PERCENT, 0 },
+    { "D3DEndAngle",                    XML_NAMESPACE_DR3D, sXML_end_angle,             XML_TYPE_NUMBER, 0 },
+    { "D3DDepth",                       XML_NAMESPACE_DR3D, sXML_depth,                 XML_TYPE_MEASURE, 0 },
+//      { "D3DDoubleSided",                 XML_NAMESPACE_DR3D, sXML_backface_culling,      XML_SD_TYPE_BACKFACE_CULLING, 0 },
+
+    // 3D lighting attributes
+//      { "D3DNormalsKind",                 XML_NAMESPACE_DR3D, sXML_normals_kind,          XML_SD_TYPE_NORMALS_KIND, 0 },
+//      { "D3DNormalsInvert",               XML_NAMESPACE_DR3D, sXML_normals_direction,     XML_SD_TYPE_NORMALS_DIRECTION, 0 },
+
+    // 3D texture attributes
+//      { "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_x, XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 },
+//      { "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, sXML_tex_generation_mode_y, XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 },
+//      { "D3DTextureKind",                 XML_NAMESPACE_DR3D, sXML_tex_kind,              XML_SD_TYPE_TEX_KIND, 0 },
+//      { "D3DTextureMode",                 XML_NAMESPACE_DR3D, sXML_tex_mode,              XML_SD_TYPE_TEX_MODE, 0 },
+    { "D3DTextureFilter",               XML_NAMESPACE_DR3D, sXML_tex_filter,            XML_TYPE_BOOL, 0 },
+
+    // 3D material attributes
+    { "D3DMaterialColor",               XML_NAMESPACE_DR3D, sXML_diffuse_color,         XML_TYPE_COLOR, 0 },
+    { "D3DMaterialEmission",            XML_NAMESPACE_DR3D, sXML_emissive_color,        XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecular",            XML_NAMESPACE_DR3D, sXML_specular_color,        XML_TYPE_COLOR, 0 },
+    { "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, sXML_shininess,             XML_TYPE_PERCENT, 0 },
+
+    // 3D shadow attributes
+    { "D3DShadow3D",                    XML_NAMESPACE_DR3D, sXML_shadow,                XML_TYPE_BOOL, 0 },
 
     MAP_ENTRY_END
 };
@@ -300,7 +331,7 @@ SvXMLEnumMapEntry aXMLChartRegressionCurveTypeEnumMap[] =
     { sXML_logarithmic, chart::ChartRegressionCurveType_LOGARITHM },
     { sXML_exponential, chart::ChartRegressionCurveType_EXPONENTIAL },
     { sXML_polynomial,  chart::ChartRegressionCurveType_POLYNOMIAL },
-    { sXML_power,       chart::ChartRegressionCurveType_POWER }
+    { sXML_monomial,    chart::ChartRegressionCurveType_POWER }
 };
 
 SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
@@ -746,4 +777,3 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
 void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
 }
-
