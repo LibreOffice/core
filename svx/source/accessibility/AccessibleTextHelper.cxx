@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-06 14:06:17 $
+ *  last change: $Author: thb $ $Date: 2002-06-07 12:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,10 +208,16 @@ namespace accessibility
         void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (uno::RuntimeException);
 
         void SetOffset( const Point& );
-        const Point& GetOffset() const { return maOffset; } // Strictly correct only with locked solar mutex!
+        Point GetOffset() const { ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset ); return aPoint; }
 
         void SetChildrenOffset( sal_Int32 nOffset );
-        sal_Int32 GetChildrenOffset() const { return mnStartIndex; }
+        sal_Int32 GetChildrenOffset() const
+        {
+            // Strictly correct only with locked solar mutex, // but
+            // here we rely on the fact that sal_Int32 access is
+            // atomic
+            return mnStartIndex;
+        }
 
         sal_Bool IsSelected() const;
 
@@ -284,9 +290,6 @@ namespace accessibility
         // edit mode!
         void UpdateSelection( const ESelection& );
 
-        /// our current offset to the containing shape/cell (guarded by solar mutex)
-        Point maOffset;
-
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
         // pointer!
@@ -302,7 +305,8 @@ namespace accessibility
         sal_Int32 mnFirstVisibleChild;
         sal_Int32 mnLastVisibleChild;
 
-        // offset to add to all our children
+        // offset to add to all our children (unguarded, relying on
+        // the fact that sal_Int32 access is atomic)
         sal_Int32 mnStartIndex;
 
         // the object handling our children (guarded by solar mutex)
@@ -320,6 +324,9 @@ namespace accessibility
         // must be before maStateListeners, has to live longer
         mutable ::osl::Mutex maMutex;
 
+        /// our current offset to the containing shape/cell (guarded by maMutex)
+        Point maOffset;
+
         // handles our event listeners (guarded by maMutex)
         ::cppu::OInterfaceContainerHelper maStateListeners;
 
@@ -332,7 +339,6 @@ namespace accessibility
     //------------------------------------------------------------------------
 
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl( const uno::Reference< XAccessible >& rInterface ) :
-        maOffset(0,0),
         mxFrontEnd( rInterface ),
         maLastSelection( EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND,EE_PARA_NOT_FOUND ),
         mnFirstVisibleChild( -1 ),
@@ -341,6 +347,7 @@ namespace accessibility
         mbInNotify( sal_False ),
         mbGroupHasFocus( sal_False ),
         mbThisHasFocus( sal_False ),
+        maOffset(0,0),
         maStateListeners( maMutex )
     {
     }
@@ -527,8 +534,8 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper_Impl::HaveFocus() throw (::com::sun::star::uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
+        // No locking of solar mutex here, since we rely on the fact
+        // that sal_Bool access is atomic
         return mbThisHasFocus;
     }
 
@@ -675,7 +682,12 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::SetOffset( const Point& rPoint )
     {
-        maOffset = rPoint;
+        // guard against non-atomic access to maOffset data structure
+        {
+            ::osl::MutexGuard aGuard( maMutex );
+            maOffset = rPoint;
+        }
+
         maParaManager.SetEEOffset( rPoint );
 
         // in all cases, check visibility afterwards.
@@ -1234,15 +1246,11 @@ namespace accessibility
     // XAccessibleContext
     sal_Int32 SAL_CALL AccessibleTextHelper_Impl::getAccessibleChildCount() throw (uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
         i -= GetChildrenOffset();
 
         if( 0 > i || i > getAccessibleChildCount() ||
@@ -1333,12 +1341,12 @@ namespace accessibility
     {
     }
 
-    SvxEditSource& AccessibleTextHelper::GetEditSource() const throw (uno::RuntimeException)
+    const SvxEditSource& AccessibleTextHelper::GetEditSource() const throw (uno::RuntimeException)
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        SvxEditSource& aEditSource = mpImpl->GetEditSource();
+        const SvxEditSource& aEditSource = mpImpl->GetEditSource();
 
         mpImpl->CheckInvariants();
 
@@ -1415,16 +1423,16 @@ namespace accessibility
 #endif
     }
 
-    const Point& AccessibleTextHelper::GetOffset() const
+    Point AccessibleTextHelper::GetOffset() const
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        const Point& rRef = mpImpl->GetOffset();
+        Point aPoint( mpImpl->GetOffset() );
 
         mpImpl->CheckInvariants();
 
-        return rRef;
+        return aPoint;
 #else
         return mpImpl->GetOffset();
 #endif
@@ -1475,6 +1483,8 @@ namespace accessibility
 
     sal_Bool AccessibleTextHelper::IsSelected() const
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
@@ -1491,6 +1501,8 @@ namespace accessibility
     // XAccessibleContext
     sal_Int32 AccessibleTextHelper::GetChildCount() throw (uno::RuntimeException)
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
@@ -1506,6 +1518,8 @@ namespace accessibility
 
     uno::Reference< XAccessible > AccessibleTextHelper::GetChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
@@ -1548,6 +1562,8 @@ namespace accessibility
     // XAccessibleComponent
     uno::Reference< XAccessible > AccessibleTextHelper::GetAt( const awt::Point& aPoint ) throw (uno::RuntimeException)
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
