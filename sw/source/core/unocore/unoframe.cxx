@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hjs $ $Date: 2002-02-08 13:17:31 $
+ *  last change: $Author: os $ $Date: 2002-03-19 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2184,9 +2184,9 @@ void SAL_CALL SwXTextFrame::release(  )throw()
 uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
     throw (RuntimeException)
 {
-    uno::Any aRet = SwXText::queryInterface(aType);
+    uno::Any aRet = SwXFrame::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType())
-        aRet = SwXFrame::queryInterface(aType);
+        aRet = SwXText::queryInterface(aType);
     if(aRet.getValueType() == ::getCppuVoidType())
         aRet = SwXTextFrameBaseClass::queryInterface(aType);
     return aRet;
@@ -2466,6 +2466,19 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
         nRet = SwXText::getSomething( rId );
 
     return nRet;
+}
+/* -----------------------------19.03.2002 16:43------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Any SwXTextFrame::getPropertyValue(const OUString& rPropertyName)
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
+            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+        return SwXText::getPropertyValue(rPropertyName);
+    else
+        return SwXFrame::getPropertyValue(rPropertyName);
 }
 /******************************************************************
  *  SwXTextGraphicObject
