@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:19:03 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,6 +807,11 @@ ModelessDialog RID_SVXDLG_IMAP
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editor del mapa d'imatge";
     Text[ finnish ] = "Kuvakartan editori";
+    Text[ thai ] = "ฉบับภาพแผนที่";
+    Text[ czech ] = "Editor obrázkových map";
+    Text[ hebrew ] = "ImageMap-Editor";
+    Text[ hindi ] = "ImageMap Editor";
+    Text[ slovak ] = "Editor obrázkových máp";
 
     FixedText RID_SVXCTL_FT_TARGET
     {
@@ -825,7 +830,6 @@ ModelessDialog RID_SVXDLG_IMAP
         DropDown = TRUE ;
         HScroll = TRUE ;
     };
-    Text[ thai ] = "ฉบับภาพแผนที่";
 
 
 #define IMAPDLG_IDLIST \
@@ -863,10 +867,6 @@ ModelessDialog RID_SVXDLG_IMAP
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
         IMAPDLG_IDLIST
     };
-    Text[ czech ] = "Editor obrázkových map";
-    Text[ hebrew ] = "ImageMap-Editor";
-    Text[ hindi ] = "ImageMap Editor";
-    Text[ slovak ] = "Editor obrázkových máp";
 };
 Control RID_SVXCTL_IMAP
 {
