@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 12:41:56 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@ namespace dbaccess
         sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate) const;
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
+        // clear only the parameter columns
+        void clearParametersCollection();
 
         ::rtl::OUString getStatementPart(::std::const_mem_fun_t< const ::connectivity::OSQLParseNode*,::connectivity::OSQLParseTreeIterator>& _aGetFunctor);
         void setQuery_Impl( const ::rtl::OUString& command );
