@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:42:26 $
+#   last change: $Author: rt $ $Date: 2004-05-17 16:11:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        SwBitArray.cxx \
         bparr.cxx \
         breakit.cxx \
         calc.cxx \
@@ -90,6 +91,7 @@ CXXFILES = \
         tabcol.cxx
 
 SLOFILES =  \
+        $(SLO)$/SwBitArray.obj \
         $(SLO)$/bparr.obj \
         $(SLO)$/breakit.obj \
         $(SLO)$/calc.obj \
