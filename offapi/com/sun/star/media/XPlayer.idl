@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPlayer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:42:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,14 @@
 #ifndef __com_sun_star_media_XPlayer_idl__
 #define __com_sun_star_media_XPlayer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
 #ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
 #endif
 #ifndef __com_sun_star_media_XPlayerWindow_idl__
 #include <com/sun/star/media/XPlayerWindow.idl>
+#endif
+#ifndef __com_sun_star_media_XFrameGrabber_idl__
+#include <com/sun/star/media/XFrameGrabber.idl>
 #endif
 
 module com {  module sun {  module star {  module media {
@@ -112,6 +112,8 @@ interface XPlayer : ::com::sun::star::uno::XInterface
     ::com::sun::star::awt::Size getPreferredPlayerWindowSize();
 
     ::com::sun::star::media::XPlayerWindow createPlayerWindow( [in] sequence< any > aArguments );
+
+    ::com::sun::star::media::XFrameGrabber createFrameGrabber();
 };
 
 }; }; }; };
