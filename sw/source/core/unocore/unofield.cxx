@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 14:15:27 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 15:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,6 +1788,8 @@ SwXTextField::SwXTextField(const SwFmtFld& rFmt, SwDoc* pDc) :
             case DS_OLE:  m_nServiceId = SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT; break;
         }
     }
+    if (pDc)
+        pDc->GetUnoCallBack()->Add(this);
 }
 /*-- 14.12.98 11:37:15---------------------------------------------------
 
@@ -1824,9 +1826,9 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< XPropertySet > & 
 uno::Reference< XPropertySet >  SwXTextField::getTextFieldMaster(void) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SwFieldType* pType = GetFldType();
-    if(!pType)
+    if(!GetRegisteredIn())
         throw uno::RuntimeException();
+    SwFieldType* pType = pFmtFld->GetFld()->GetTyp();
     SwXFieldMaster* pMaster = (SwXFieldMaster*)
                 SwClientIter(*pType).First(TYPE(SwXFieldMaster));
     if(!pMaster)
@@ -2312,6 +2314,7 @@ void SwXTextField::attachToRange(
         delete pFld;
 
         m_pDoc = pDoc;
+        m_pDoc->GetUnoCallBack()->Add(this);
         m_bIsDescriptor = sal_False;
         DELETEZ(m_pProps);
         if(m_bCallUpdate)
@@ -2319,7 +2322,6 @@ void SwXTextField::attachToRange(
     }
     else
         throw IllegalArgumentException();
-
 }
 /*-- 14.12.98 11:37:18---------------------------------------------------
 
@@ -2425,7 +2427,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
     if(pField)
     {
         // Sonderbehandlung Serienbrieffeld
-        sal_uInt16 nWhich = GetFldType()->Which();
+        sal_uInt16 nWhich = pFmtFld->GetFld()->GetTyp()->Which();
         if( RES_DBFLD == nWhich &&
             (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME) ||
                 COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME)||
@@ -2757,13 +2759,25 @@ uno::Sequence< OUString > SwXTextField::getSupportedServiceNames(void) throw( un
     pArray[1] = C2U("com.sun.star.text.TextContent");
     return aRet;
 }
+
+void SwXTextField::Invalidate()
+{
+    if (GetRegisteredIn())
+    {
+        ((SwModify*)GetRegisteredIn())->Remove(this);
+        aLstnrCntnr.Disposing();
+        pFmtFld = 0;
+        m_pDoc = 0;
+    }
+}
+
 /* -----------------14.12.98 12:00-------------------
  *
  * --------------------------------------------------*/
 void SwXTextField::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-    if(!GetFldType())
+    if(!GetRegisteredIn())
     {
         aLstnrCntnr.Disposing();
         m_pDoc = 0;
@@ -2774,18 +2788,8 @@ void SwXTextField::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
   -----------------------------------------------------------------------*/
 const SwField*  SwXTextField::GetField() const
 {
-    SwFieldType* pType = GetFldType();
-    if(pType && pFmtFld)
-    {
-        // simpler Test: das Feld wird am Typ gesucht
-        SwClientIter aIter(*pType);
-        SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-        do
-        {
-            if(pFld == pFmtFld)
-                return pFld->GetFld();
-        }while(pFld && 0 != (pFld = (SwFmtFld*)aIter.Next()));
-    }
+    if(GetRegisteredIn() && pFmtFld)
+        return  pFmtFld->GetFld();
     return 0;
 }
 /******************************************************************
