@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:27:53 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,8 +1113,8 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
 /* ======================================================================= */
 
 /* constAsciiStr must be a "..." or char const aFoo[] = "..." */
-#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1
-#define RTL_CONSTASCII_LENGTH( constAsciiStr ) (sizeof( constAsciiStr )-1)
+#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)sizeof(constAsciiStr)-1)
+#define RTL_CONSTASCII_LENGTH( constAsciiStr ) ((sal_Int32)(sizeof(constAsciiStr)-1))
 
 /* ======================================================================= */
 
