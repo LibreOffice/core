@@ -1,13 +1,8 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\bin\smath3.exe %_DEST%\bin%_EXT%\smath3.exe
-..\%__SRC%\bin\smath3.sym %_DEST%\bin%_EXT%\smath3.sym
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\xml\*.xml %_DEST%\xml\*.xml
-..\%__SRC%\misc\smath3.csv %_DEST%\inc%_EXT%\smath3.csv
-..\%__SRC%\bin\smslots.tlb %_DEST%\bin%_EXT%\smslots.tlb
 ..\%__SRC%\bin\sm?????.dll %_DEST%\bin%_EXT%\sm?????.dll
 ..\%__SRC%\bin\smd?????.dll %_DEST%\bin%_EXT%\smd?????.dll
 ..\%__SRC%\bin\sm?????.res %_DEST%\bin%_EXT%\sm?????.res
@@ -18,5 +13,3 @@ mkdir: %_DEST%\inc%_EXT%\starmath
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
