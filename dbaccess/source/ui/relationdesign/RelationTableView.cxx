@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 11:33:40 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void ORelationTableView::ReSync()
             continue;
         }
 
-        GetTabConnList()->push_back(new ORelationTableConnection(this, pTabConnData));
+        addConnection( new ORelationTableConnection(this, pTabConnData) );
     }
 
     if(!GetTabWinMap()->empty())
@@ -273,8 +273,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pSourceWin = (OTableWindow*)jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = (OTableWindow*)jxdDest.pListBox->GetTabWin();
 
-    ::std::vector<OTableConnection*>::const_iterator aIter = GetTabConnList()->begin();
-    for(;aIter != GetTabConnList()->end();++aIter)
+    ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
+    for(;aIter != getTableConnections()->end();++aIter)
     {
         OTableConnection* pFirst = *aIter;
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||
@@ -335,10 +335,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
             {
                 //////////////////////////////////////////////////////////////////////
                 // UI-Object in ConnListe eintragen
-                getDesignView()->getController()->getTableConnectionData()->push_back( pTabConnData );
-                ORelationTableConnection* pTabConn = new ORelationTableConnection( this, pTabConnData );
-                GetTabConnList()->push_back( pTabConn);
-                Invalidate();
+                addConnection( new ORelationTableConnection( this, pTabConnData ) );
             }
             else
                 delete pTabConnData;
@@ -377,7 +374,7 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 
             case RET_NO:
                 // tried at least one update, but did not succeed -> the original connection is lost
-                RemoveConnection( pConnection );
+                RemoveConnection( pConnection ,sal_True);
                 break;
 
             case RET_CANCEL:
@@ -406,14 +403,9 @@ void ORelationTableView::AddNewRelation()
         {
             // already updated by the dialog
             // dem Dokument bekanntgeben
-            getDesignView()->getController()->getTableConnectionData()->push_back(pNewConnData);
-
-            // das reale Connection-Objekt (bis jetzt haben wir nur die Datas)
-            ORelationTableConnection* pTabConn = new ORelationTableConnection(this, pNewConnData);
-            GetTabConnList()->push_back(pTabConn);
-
+            addConnection( new ORelationTableConnection(this, pNewConnData) );
             // neu zeichnen
-            Invalidate(INVALIDATE_NOCHILDREN);
+            //  Invalidate(INVALIDATE_NOCHILDREN);
         }
         else
             delete pNewConnData;
@@ -421,15 +413,15 @@ void ORelationTableView::AddNewRelation()
 }
 
 //------------------------------------------------------------------------------
-BOOL ORelationTableView::RemoveConnection( OTableConnection* pConn )
+::std::vector<OTableConnection*>::const_iterator ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool _bDelete)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
+    ::std::vector<OTableConnection*>::const_iterator aNextPos = getTableConnections()->end();
     ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData();
-    BOOL bErg = FALSE;
     try
     {
-        if (bErg = pTabConnData->DropRelation())
-            OJoinTableView::RemoveConnection( pConn );
+        if (pTabConnData->DropRelation())
+            aNextPos = OJoinTableView::RemoveConnection( pConn ,sal_True);
     }
     catch(SQLException& e)
     {
@@ -439,7 +431,7 @@ BOOL ORelationTableView::RemoveConnection( OTableConnection* pConn )
     {
         OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occured!");
     }
-    return bErg;
+    return aNextPos;
 }
 
 //------------------------------------------------------------------------------
@@ -518,10 +510,8 @@ void ORelationTableView::lookForUiActivities()
         if (aRelDlg.Execute() == RET_OK)
         {
             // already updated by the dialog
-            getDesignView()->getController()->getTableConnectionData()->push_back( m_pCurrentlyTabConnData);
-            ORelationTableConnection* pTabConn = new ORelationTableConnection( this, m_pCurrentlyTabConnData );
-            GetTabConnList()->push_back( pTabConn);
-            Invalidate(INVALIDATE_NOCHILDREN);
+            addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );
+            //  Invalidate(INVALIDATE_NOCHILDREN);
         }
         else
             delete m_pCurrentlyTabConnData;
