@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 09:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,60 +394,57 @@ void FormattedFieldElement::endElement()
     }
 
     // format spec
-    try
+    OUString sFormat( _xAttributes->getValueByUidName(
+        XMLNS_DIALOGS_UID,
+        OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
+    if (sFormat.getLength())
     {
-        OUString sFormat( _xAttributes->getValueByUidName(
-            XMLNS_DIALOGS_UID,
-            OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
-        if (! sFormat.getLength())
-        {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("missing format-code attribute!") ),
-                Reference< XInterface >(), Any() );
-        }
+        lang::Locale locale;
+
         OUString sLocale( _xAttributes->getValueByUidName(
             XMLNS_DIALOGS_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
-        if (! sLocale.getLength())
+        if (sLocale.getLength())
         {
-            throw xml::sax::SAXException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("missing format-locale attribute!") ),
-                Reference< XInterface >(), Any() );
-        }
-
-        // split locale
-        lang::Locale locale;
-        sal_Int32 semi0 = sLocale.indexOf( ';' );
-        if (semi0 < 0) // no semi at all, just try language
-        {
-            locale.Language = sLocale;
-        }
-        else
-        {
-            sal_Int32 semi1 = sLocale.indexOf( ';', semi0 +1 );
-            if (semi1 > semi0) // language;country;variant
+            // split locale
+            sal_Int32 semi0 = sLocale.indexOf( ';' );
+            if (semi0 < 0) // no semi at all, just try language
             {
-                locale.Language = sLocale.copy( 0, semi0 );
-                locale.Country = sLocale.copy( semi0 +1, semi1 - semi0 -1 );
-                locale.Variant = sLocale.copy( semi1 +1 );
+                locale.Language = sLocale;
             }
-            else // try language;country
+            else
             {
-                locale.Language = sLocale.copy( 0, semi0 );
-                locale.Country = sLocale.copy( semi0 +1 );
+                sal_Int32 semi1 = sLocale.indexOf( ';', semi0 +1 );
+                if (semi1 > semi0) // language;country;variant
+                {
+                    locale.Language = sLocale.copy( 0, semi0 );
+                    locale.Country = sLocale.copy( semi0 +1, semi1 - semi0 -1 );
+                    locale.Variant = sLocale.copy( semi1 +1 );
+                }
+                else // try language;country
+                {
+                    locale.Language = sLocale.copy( 0, semi0 );
+                    locale.Country = sLocale.copy( semi0 +1 );
+                }
             }
         }
 
         Reference< XComponentContext > xContext( _pImport->getComponentContext() );
-//          Reference< util::XNumberFormatter > xFormatter( xContext->getServiceManager()->createInstanceWithContext(
-//              OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter") ), xContext ), UNO_QUERY );
-//          OSL_ASSERT( xFormatter.is() );
-//          Reference< util::XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier() );
         Reference< util::XNumberFormatsSupplier > xSupplier( xContext->getServiceManager()->createInstanceWithContext(
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ), xContext ), UNO_QUERY );
-
         Reference< util::XNumberFormats > xFormats( xSupplier->getNumberFormats() );
-        sal_Int32 nKey = xFormats->addNew( sFormat, locale );
+
+        sal_Int32 nKey;
+        try
+        {
+            nKey = xFormats->addNew( sFormat, locale );
+        }
+        catch (util::MalformedNumberFormatException & exc)
+        {
+            OSL_ENSURE( 0, "### util::MalformedNumberFormatException occured!" );
+            // rethrow
+            throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
+        }
 
         ctx.getControlModel()->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ),
@@ -455,12 +452,6 @@ void FormattedFieldElement::endElement()
         ctx.getControlModel()->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ),
             makeAny( nKey ) );
-    }
-    catch (util::MalformedNumberFormatException & exc)
-    {
-        OSL_ENSURE( 0, "### util::MalformedNumberFormatException occured!" );
-        // rethrow
-        throw xml::sax::SAXException( exc.Message, Reference< XInterface >(), Any() );
     }
 
     ctx.importEvents( _events );

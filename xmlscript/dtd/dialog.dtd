@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.18 2001-09-19 08:46:32 dbo Exp $
+        $Id: dialog.dtd,v 1.19 2001-09-19 09:42:25 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -326,8 +326,8 @@
 			     dlg:tabstop %boolean; #IMPLIED
 			     dlg:readonly %boolean; #IMPLIED
 			     dlg:align (left|center|right) #IMPLIED
-			     dlg:format-code CDATA #REQUIRED
-			     dlg:format-locale CDATA #REQUIRED
+			     dlg:format-code CDATA #IMPLIED
+			     dlg:format-locale CDATA #IMPLIED
 			     dlg:strict-format %boolean; #IMPLIED
 			     dlg:value-default CDATA #IMPLIED
 			     dlg:value-max %numeric; #IMPLIED

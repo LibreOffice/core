@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-09-19 09:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -745,12 +745,16 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
 
     // format spec
     sal_Int32 nKey;
-    Reference< util::XNumberFormatsSupplier > xSupplier;
-    OSL_VERIFY( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ) ) >>= nKey );
-    OSL_VERIFY( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ) ) >>= xSupplier );
-    addNumberFormatAttr(
-        xSupplier->getNumberFormats()->getByKey( nKey ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatKey") ) ) >>= nKey)
+    {
+        Reference< util::XNumberFormatsSupplier > xSupplier;
+        if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ) ) >>= xSupplier)
+        {
+            addNumberFormatAttr(
+                xSupplier->getNumberFormats()->getByKey( nKey ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value-min") ) );
+        }
+    }
 
     readEvents();
 }
