@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicTestCase.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-26 14:53:52 $
+ *  last change:$Date: 2003-11-18 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ public class BasicTestCase extends TestCase {
         }
 
         TestEnvironment tEnv = new TestEnvironment(new XInterface(){});
-        tEnv.addObjRelation("objectCreated", new Boolean(bObjectWasCreated));
+        tEnv.addObjRelation("objectCreated", Boolean.valueOf(bObjectWasCreated));
         tEnv.addObjRelation("BasicHandler", oBasicHandler);
         return tEnv;
     }
