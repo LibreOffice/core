@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:21:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,9 +277,6 @@ OutlineView::OutlineView (
         FillOutliner();
     }
 
-    pWindow->GrabFocus();
-
-    Application::AddEventListener( LINK( this, OutlineView, AppEventListenerHdl ) );
 }
 
 /*************************************************************************
@@ -290,7 +287,7 @@ OutlineView::OutlineView (
 
 OutlineView::~OutlineView()
 {
-    Application::RemoveEventListener( LINK( this, OutlineView, AppEventListenerHdl ) );
+    DisconnectFromApplication();
 
     if( mpProgress )
         delete mpProgress;
@@ -321,6 +318,26 @@ OutlineView::~OutlineView()
     DBG_ASSERT(!pSelectedParas, "Absatzliste nicht geloescht");
     DBG_ASSERT(!pOldParaOrder, "Absatzliste nicht geloescht");
 }
+
+
+
+
+void OutlineView::ConnectToApplication (void)
+{
+    pOutlineViewShell->GetActiveWindow()->GrabFocus();
+    Application::AddEventListener(LINK(this, OutlineView, AppEventListenerHdl));
+}
+
+
+
+
+void OutlineView::DisconnectFromApplication (void)
+{
+    Application::RemoveEventListener(LINK(this, OutlineView, AppEventListenerHdl));
+}
+
+
+
 
 /*************************************************************************
 |*
