@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-23 10:01:41 $
+ *  last change: $Author: os $ $Date: 2001-05-09 09:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,11 +335,11 @@ Sequence< Any > SwXParagraph::getPropertyValues(
         Any* pValues = aValues.getArray();
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
+        SwParaSelection aParaSel(pUnoCrsr);
+        SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
+        SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
-            SwParaSelection aParaSel(pUnoCrsr);
-            SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-            SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
             pMap = SfxItemPropertyMap::GetByName(pMap, pPropertyNames[nProp]);
             if(pMap)
             {
@@ -349,7 +349,7 @@ Sequence< Any > SwXParagraph::getPropertyValues(
                     BOOL bDone = FALSE;
                     PropertyState eTemp;
                     bDone = SwUnoCursorHelper::getCrsrPropertyValue(
-                                pMap, *pUnoCrsr, rAttrSet, pValues[nProp], eTemp );
+                                pMap, *pUnoCrsr, rAttrSet, pValues[nProp], eTemp, rTxtNode.GetTxtNode() );
                     if(!bDone)
                         pValues[nProp] = aPropSet.getPropertyValue(*pMap, rAttrSet);
                 }

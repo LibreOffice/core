@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:12:42 $
+ *  last change: $Author: os $ $Date: 2001-05-09 09:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                                         , SwPaM& rPam
                                         , const SfxItemSet& rSet
                                         , Any& rAny
-                                        , PropertyState& eState )
+                                        , PropertyState& eState
+                                        , const SwTxtNode* pNode  )
 {
 
     eState = PropertyState_DIRECT_VALUE;
@@ -221,7 +222,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
     {
         case FN_UNO_PARA_CHAPTER_NUMBERING_LEVEL:
         {
-            SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FALSE);
+            SwFmtColl* pFmt = 0;
+            if(pNode)
+                pFmt = pNode->GetFmtColl();
+            else
+                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FALSE);
             sal_Int8 nRet = -1;
             if(pFmt && ((SwTxtFmtColl*)pFmt)->GetOutlineLevel() != NO_NUMBERING)
                 nRet = ((SwTxtFmtColl*)pFmt)->GetOutlineLevel();
@@ -232,7 +237,12 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
         case FN_UNO_PARA_STYLE :
         {
             String sVal;
-            SwFmtColl* pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID);
+            SwFmtColl* pFmt = 0;
+            if(pNode)
+                pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID
+                            ? pNode->GetFmtColl() : &pNode->GetAnyFmtColl();
+            else
+                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == pMap->nWID);
             if(pFmt)
                 sVal = SwXStyleFamilies::GetProgrammaticName(pFmt->GetName(), SFX_STYLE_FAMILY_PARA);
             rAny <<= OUString(sVal);

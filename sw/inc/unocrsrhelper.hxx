@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 12:22:50 $
+ *  last change: $Author: os $ $Date: 2001-05-09 09:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@ namespace SwUnoCursorHelper
                                         , SwPaM& rPam
                                         , const SfxItemSet& rSet
                                         , com::sun::star::uno::Any& rAny
-                                        , com::sun::star::beans::PropertyState& eState );
+                                        , com::sun::star::beans::PropertyState& eState
+                                        , const SwTxtNode* pNode = 0 );
 
     String                      GetCurPageStyle(SwPaM& rPaM);
 
