@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxalign.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#ifndef _AEITEM_HXX
+#include <svtools/aeitem.hxx>
 #endif
 #pragma hdrstop
 
@@ -75,7 +75,7 @@
 #include <tools/shl.hxx>
 #endif
 
-SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxEnumItem);
+SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 
 /*************************************************************************
 |*
@@ -83,9 +83,9 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxEnumItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
+SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
 
-    SfxToolBoxControl( nId, rTbx, rBindings )
+    SfxToolBoxControl( nSlotId, nId, rTbx )
 
 {
 }
@@ -113,6 +113,9 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {
     if ( GetId() == SID_OBJECT_ALIGN )
     {
+        rtl::OUString aTbxResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ));
+        createAndPositionSubToolBar( aTbxResName );
+/*
         SvxPopupWindowTbxMgr* pWin =
             new SvxPopupWindowTbxMgr( GetId(), this,
                                       SVX_RES( RID_SVXTBX_ALIGNMENT ),
@@ -122,6 +125,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
         pWin->StartSelection();
         pWin->Show();
         return pWin;
+*/
     }
     return NULL;
 }
