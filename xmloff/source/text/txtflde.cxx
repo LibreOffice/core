@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:47:17 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,8 +1421,11 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DOCINFO_SUBJECT:
     case FIELD_ID_DOCINFO_KEYWORDS:
     case FIELD_ID_DOCINFO_SAVE_AUTHOR:
-        ProcessBoolean(sXML_fixed,
-                       GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            ProcessBoolean(sXML_fixed,
+                           GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
+        }
         ExportElement(MapDocInfoFieldName(nToken), sPresentation);
         break;
 

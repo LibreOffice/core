@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-30 16:44:19 $
+ *  last change: $Author: nn $ $Date: 2001-05-31 18:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1785,36 +1785,41 @@ void XMLSimpleDocInfoImportContext::ProcessAttribute(
 void XMLSimpleDocInfoImportContext::PrepareField(
     const Reference<XPropertySet> & rPropertySet)
 {
-    Any aAny;
-    aAny.setValue(&bFixed, ::getBooleanCppuType() );
-    rPropertySet->setPropertyValue(sPropertyFixed, aAny);
-
-    // set Content and CurrentPresentation (if fixed)
-    if (bFixed)
+    //  title field in Calc has no Fixed property
+    Reference<XPropertySetInfo> xPropertySetInfo(rPropertySet->getPropertySetInfo());
+    if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
     {
-        // in organizer-mode or styles-only-mode, only force update
-        if (GetImport().GetTextImport()->IsOrganizerMode() ||
-            GetImport().GetTextImport()->IsStylesOnlyMode()   )
+        Any aAny;
+        aAny.setValue(&bFixed, ::getBooleanCppuType() );
+        rPropertySet->setPropertyValue(sPropertyFixed, aAny);
+
+        // set Content and CurrentPresentation (if fixed)
+        if (bFixed)
         {
-            ForceUpdate(rPropertySet);
-        }
-        else
-        {
-            // set content (author, if that's the name) and current
-            // presentation
-            aAny <<= GetContent();
-
-            if (bFixed && bHasAuthor)
+            // in organizer-mode or styles-only-mode, only force update
+            if (GetImport().GetTextImport()->IsOrganizerMode() ||
+                GetImport().GetTextImport()->IsStylesOnlyMode()   )
             {
-                rPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+                ForceUpdate(rPropertySet);
             }
-
-            if (bFixed && bHasContent)
+            else
             {
-                rPropertySet->setPropertyValue(sPropertyContent, aAny);
-            }
+                // set content (author, if that's the name) and current
+                // presentation
+                aAny <<= GetContent();
 
-            rPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+                if (bFixed && bHasAuthor)
+                {
+                    rPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+                }
+
+                if (bFixed && bHasContent)
+                {
+                    rPropertySet->setPropertyValue(sPropertyContent, aAny);
+                }
+
+                rPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+            }
         }
     }
 }
