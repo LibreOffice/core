@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
+ *  last change: $Author: dbo $ $Date: 2002-04-11 16:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,7 @@ FilePermission::FilePermission(
                 getWorkingDir().pData, perm.URL.pData, &out.pData );
             m_url = (osl_File_E_None == rc ? out : perm.URL); // fallback
         }
+#ifdef SAL_W32
         // correct win drive letters
         if (9 < m_url.getLength() && '|' == m_url[ 9 ]) // file:///X|
         {
@@ -397,6 +398,7 @@ FilePermission::FilePermission(
             // common case in API is a ':' (sal), so convert '|' to ':'
             m_url = m_url.replaceAt( 9, 1, s_colon );
         }
+#endif
     }
 }
 //__________________________________________________________________________________________________
@@ -417,8 +419,13 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
     if (demanded.m_allFiles)
         return false;
 
+#ifdef SAL_W32
+    if (m_url.equalsIgnoreAsciiCase( demanded.m_url ))
+        return true;
+#else
     if (m_url.equals( demanded.m_url ))
         return true;
+#endif
     if (m_url.getLength() > demanded.m_url.getLength())
         return false;
     // check /- wildcard: all files and recursive in that path
@@ -427,7 +434,13 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
-        return (0 == demanded.m_url.compareTo( m_url, len ));
+#ifdef SAL_W32
+        return (0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                    demanded.m_url.pData->buffer, len, m_url.pData->buffer, len ));
+#else
+        return (0 == ::rtl_ustr_reverseCompare_WithLength(
+                    demanded.m_url.pData->buffer, len, m_url.pData->buffer, len ));
+#endif
     }
     // check /* wildcard: all files in that path (not recursive!)
     if (1 < m_url.getLength() &&
@@ -435,8 +448,15 @@ bool FilePermission::implies( Permission const & perm ) const SAL_THROW( () )
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
-        return ((0 == demanded.m_url.compareTo( m_url, len )) &&
+#ifdef SAL_W32
+        return ((0 == ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                     demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
                 (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper pathes
+#else
+        return ((0 == ::rtl_ustr_reverseCompare_WithLength(
+                     demanded.m_url.pData->buffer, len, m_url.pData->buffer, len )) &&
+                (0 > demanded.m_url.indexOf( '/', len ))); // in addition, no deeper pathes
+#endif
     }
     return false;
 }
