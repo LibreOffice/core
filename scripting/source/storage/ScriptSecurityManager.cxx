@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-03-04 18:34:54 $
+ *  last change: $Author: dfoster $ $Date: 2003-03-05 11:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,49 +213,26 @@ throw ( RuntimeException )
             rtl::OUString path = scriptStorageURL.copy( 0, scriptStorageURL.lastIndexOf( '/' ) );
             OSL_TRACE( "no of elts in path list = %d",
                 (int)m_secureURL.getLength() );
-            bool match = false;
-            OSL_TRACE("document path: %s",
-                ::rtl::OUStringToOString( path,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-            int length = m_secureURL.getLength();
-            for( int j = 0; j < length ; j++ )
+            bool match = isSecureURL( path );
+            if( match &&  ( m_warning == sal_True ) )
             {
-                OSL_TRACE("path list element: %s",
-                    ::rtl::OUStringToOString( m_secureURL[j],
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-#ifdef WIN32
-                OSL_TRACE("case insensitive comparison");
-                if( path.equalsIgnoreAsciiCase( m_secureURL[j] ) )
-#else
-                OSL_TRACE("case sensitive comparison");
-                if( path.equals( m_secureURL[j] ) )
-#endif
+                OUString dummyStr;
+                OSL_TRACE("path match & warning dialog");
+                int result = (int)executeDialog( dummyStr );
+                OSL_TRACE("result = %d", (int)result);
+                if ( (result&1) == 1 )
                 {
-                    match = true;
-                    if( m_warning == sal_True )
-                    {
-                        OUString dummyStr;
-                        OSL_TRACE("path match & warning dialog");
-                        int result = (int)executeDialog( dummyStr );
-                        OSL_TRACE("result = %d", (int)result);
-                        if ( (result&1) == 1 )
-                        {
-                            newPerm.execPermission=sal_True;
-                        }
-                    }
-                    else
-                    {
-                        OSL_TRACE("path match & no warning dialog");
-                        newPerm.execPermission=sal_True;
-                    }
-                    break;
+                    newPerm.execPermission=sal_True;
                 }
-            }
-            if ( match == true )
-            {
                 break;
             }
-            if( m_confirmationRequired == sal_True )
+            else if ( match )
+            {
+                OSL_TRACE("path match & no warning dialog");
+                newPerm.execPermission=sal_True;
+                break;
+            }
+            else if( m_confirmationRequired == sal_True )
             {
                 OSL_TRACE("no path match & confirmation dialog");
                 int result = (int)executeDialog( path );
@@ -310,6 +287,35 @@ throw ( RuntimeException )
     }
 
     m_permissionSettings[ scriptStorageURL ] = newPerm;
+}
+
+bool ScriptSecurityManager::isSecureURL( const OUString & path )
+{
+    bool match = false;
+    OSL_TRACE( "no of elts in path list = %d",
+        (int)m_secureURL.getLength() );
+    OSL_TRACE("document path: %s",
+        ::rtl::OUStringToOString( path,
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+    int length = m_secureURL.getLength();
+    for( int j = 0; j < length ; j++ )
+    {
+        OSL_TRACE("path list element: %s",
+            ::rtl::OUStringToOString( m_secureURL[j],
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+#ifdef WIN32
+        OSL_TRACE("case insensitive comparison");
+        if( path.equalsIgnoreAsciiCase( m_secureURL[j] ) )
+#else
+        OSL_TRACE("case sensitive comparison");
+        if( path.equals( m_secureURL[j] ) )
+#endif
+        {
+            match = true;
+            break;
+        }
+    }
+    return match;
 }
 
 short ScriptSecurityManager::executeDialog( const OUString & path )
@@ -380,14 +386,11 @@ sal_Bool ScriptSecurityManager::checkPermission( const OUString & scriptStorageU
             }
             else
             {
-                OSL_TRACE( "permission refused - 1" );
+                OSL_TRACE( "permission refused" );
                 Any aPermission;
                 security::RuntimePermission permission;
-                OSL_TRACE( "permission refused - 2" );
                 permission.Name = OUString::createFromAscii( "execute" ).concat( scriptStorageURL );
-                OSL_TRACE( "permission refused - 3" );
                 aPermission <<= permission;
-                OSL_TRACE( "permission refused - 4" );
                 throw security::AccessControlException(
                     OUString::createFromAscii( "ScriptSecurityManager::checkPermission: no execute permission for URL" ).concat( scriptStorageURL ),
                     Reference< XInterface > (), aPermission );

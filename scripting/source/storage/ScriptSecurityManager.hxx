@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSecurityManager.hxx,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-03-04 12:33:32 $
+*  last change: $Author: dfoster $ $Date: 2003-03-05 11:36:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -112,6 +112,7 @@ private:
         throw (css::uno::RuntimeException);
     void addToSecurePaths ( const rtl::OUString & path )
         throw (css::uno::RuntimeException);
+    bool isSecureURL( const rtl::OUString & path );
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     sal_Bool m_confirmationRequired;
     sal_Bool m_warning;
