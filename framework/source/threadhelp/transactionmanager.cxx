@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-19 16:08:35 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ TransactionManager& TransactionManager::getGlobalTransactionManager()
         if( pManager == NULL )
         {
 // [ed] 6/16/02 Avoid static member data on OS X to work around compiler bugs
-#ifdef MACOSX
+#if defined(MACOSX) && (__GNUC__ < 3)
             // Create the new manager and set it for return on static variable.
             pManager = new TransactionManager();
 #else
