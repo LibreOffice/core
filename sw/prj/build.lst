@@ -1,4 +1,4 @@
-sw	sw	:	connectivity offmgr NULL
+sw	sw	:	connectivity offmgr sch NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									get		-	all	sw_inc NULL
 sw	sw\prj									get		-	all	sw_prj NULL
