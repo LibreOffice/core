@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-02-25 12:22:39 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
+#endif
+#ifndef _SV_TOOLBOX_HXX
+#include <vcl/toolbox.hxx>
 #endif
 // .........................................................................
 namespace dbaui
@@ -1005,6 +1008,56 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
         }
     }
     return bRet;
+}
+// -----------------------------------------------------------------------------
+void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,Window*> _rMemFunc)
+{
+    OSL_ENSURE(_pWindow,"Window can not be null!");
+    Window* pParent = _pWindow->GetParent();
+    while(pParent && !pParent->IsSystemWindow())
+    {
+        pParent = pParent->GetParent();
+    }
+    if ( pParent && pParent->IsSystemWindow())
+    {
+        SystemWindow* pSystemWindow = static_cast<SystemWindow*>(pParent);
+        _rMemFunc(pSystemWindow->GetTaskPaneList(),(_pToRegister));
+    }
+}
+// -----------------------------------------------------------------------------
+void adjustToolBoxSize(ToolBox* _pToolBox)
+{
+    // adjust the toolbox size, otherwise large bitmaps don't fit into
+    Size aOldSize = _pToolBox->GetSizePixel();
+    Size aSize = _pToolBox->CalcWindowSizePixel();
+    if ( !aSize.Width() )
+        aSize.Width() = aOldSize.Width();
+    else if ( !aSize.Height() )
+        aSize.Height() = aOldSize.Height();
+
+    Size aTbSize = _pToolBox->GetSizePixel();
+    if (aSize.Width() && aSize.Width() != aTbSize.Width() ||
+            aSize.Height() && aSize.Height() != aTbSize.Height())
+    {
+        _pToolBox->SetPosSizePixel( _pToolBox->GetPosPixel(), aSize );
+        _pToolBox->Invalidate();
+    }
+}
+// -----------------------------------------------------------------------------
+sal_Bool isHiContrast(Window* _pWindow)
+{
+    OSL_ENSURE(_pWindow,"Window must be not null!");
+    Window* pIter = _pWindow;
+    //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
+    while( pIter )
+    {
+        const Color& aColor = pIter->GetBackground().GetColor();
+        if ( aColor.GetColor() == COL_TRANSPARENT )
+            pIter = pIter->GetParent();
+        else
+            break;
+    }
+    return pIter && pIter->GetBackground().GetColor().IsDark();
 }
 // .........................................................................
 }
