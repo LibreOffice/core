@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 22:19:05 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,13 @@ String STR_MENU_CFGITEM
     TEXT[ korean ] = "ë©”ë‰´";
     TEXT[ turkish ] = "Mönü";
     TEXT[ catalan ] = "Menú";
+};
+
+String STR_MENU_ADDONS
+{
+    TEXT = "~Add-Ons" ;
+    TEXT [ English ] = "~Add-Ons" ;
+    TEXT [ english_us ] = "~Add-Ons" ;
 };
 
 Menu MN_CLIPBOARDFUNCS
