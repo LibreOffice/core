@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 10:32:09 $
+ *  last change: $Author: os $ $Date: 2001-07-03 11:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ static const sal_Char cRubyAdjust[] = "RubyAdjust";
 static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
 static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
-static const sal_Char cPhoneticSymbols[] = "Phonetic Symbols";
+static const sal_Char cRubies[] = "Rubies";
 /* -----------------------------09.01.01 17:24--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -258,7 +258,8 @@ void SvxRubyDialog::Activate()
     SfxModelessDialog::Activate();
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
-    aStylistPB.Enable(eState < SFX_ITEM_AVAILABLE || !pState || !((SfxBoolItem*)pState)->GetValue());
+    sal_Bool bEnable = (eState < SFX_ITEM_AVAILABLE) || !pState || !((SfxBoolItem*)pState)->GetValue();
+    aStylistPB.Enable(bEnable);
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame()->GetController();
@@ -453,8 +454,8 @@ void SvxRubyDialog::Update()
         aAdjustLB.SetNoSelection();
     if(nPosition > -1)
         aPositionLB.SelectEntryPos(nPosition ? 1 : 0);
-    if(bCharStyleEqual && !sCharStyleName.getLength())
-        sCharStyleName = C2U(cPhoneticSymbols);
+    if(!nLen || bCharStyleEqual && !sCharStyleName.getLength())
+        sCharStyleName = C2U(cRubies);
     if(sCharStyleName.getLength())
     {
         for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
@@ -687,6 +688,10 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
  ---------------------------------------------------------------------------*/
 void RubyPreview::Paint( const Rectangle& rRect )
 {
+    Font aRubyFont = GetFont();
+    Font aSaveFont(aRubyFont);
+    aRubyFont.SetHeight(aRubyFont.GetHeight() * 70 / 100);
+
     Size aWinSize = GetOutputSize();
     Rectangle aRect(Point(0, 0), aWinSize);
     SetFillColor( Color( COL_WHITE ) );
@@ -697,7 +702,9 @@ void RubyPreview::Paint( const Rectangle& rRect )
 
     long nTextHeight = GetTextHeight();
     long nBaseWidth = GetTextWidth(sBaseText);
+    SetFont(aRubyFont);
     long nRubyWidth = GetTextWidth(sRubyText);
+    SetFont(aSaveFont);
 
     USHORT nAdjust = rParentDlg.aAdjustLB.GetSelectEntryPos();
     //use center if no adjustment is available
@@ -725,19 +732,23 @@ void RubyPreview::Paint( const Rectangle& rRect )
     long nYOutput, nOutTextWidth;
     String sOutputText;
 
+
     if(bRubyStretch)
     {
         DrawText( Point( nLeftStart , nYBase),  sBaseText );
         nYOutput = nYRuby;
         sOutputText = sRubyText;
         nOutTextWidth = nRubyWidth;
+        SetFont(aRubyFont);
     }
     else
     {
+        SetFont(aRubyFont);
         DrawText( Point( nLeftStart , nYRuby),  sRubyText );
         nYOutput = nYBase;
         sOutputText = sBaseText;
         nOutTextWidth = nBaseWidth;
+        SetFont(aSaveFont);
     }
 
     switch(nAdjust)
@@ -777,8 +788,8 @@ void RubyPreview::Paint( const Rectangle& rRect )
         case RubyAdjust_CENTER:
             DrawText( Point( nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText );
         break;
-
     }
+    SetFont(aSaveFont);
 }
 /* -----------------------------16.02.01 15:12--------------------------------
 
