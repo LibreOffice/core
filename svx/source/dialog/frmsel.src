@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-03-21 11:40:28 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,226 @@ Resource RID_SVXSTR_BORDER_CONTROL
             < "Horizontal border line within table" ; 5; > ;       //SVX_FRMSELLINE_HOR,
             < "Vertical  border line within table" ; 6; > ;       //SVX_FRMSELLINE_VER
         };
+    ItemList [ language_user1 ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ english_us ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ russian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ greek ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ dutch ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ french ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ spanish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ finnish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ italian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ danish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ swedish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ polish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ japanese ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ korean ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ turkish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ arabic ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ catalan ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
     };
     StringArray ARR_DESCRIPTIONS
     {
@@ -110,6 +330,226 @@ Resource RID_SVXSTR_BORDER_CONTROL
             < "Horizontal border line within table" ; 5; > ;       //SVX_FRMSELLINE_HOR,
             < "Vertical border line within table" ; 6; > ;       //SVX_FRMSELLINE_VER
         };
+    ItemList [ language_user1 ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ english_us ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ russian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ greek ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ dutch ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ french ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ spanish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ finnish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ italian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ danish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ swedish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ polish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ japanese ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ korean ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ turkish ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ arabic ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ catalan ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "Umrandungseinstellung" ; 0; > ;
+        < "Linke Umrandungslinie" ; 1; > ;
+        < "Rechte Umrandungslinie" ; 2; > ;
+        < "Obere Umrandungslinie" ; 3; > ;
+        < "Untere Umrandungslinie" ; 4; > ;
+        < "Horizontale Umrandungslinie" ; 5; > ;
+        < "Vertikale Umrandungslinie" ; 6; > ;
+    };
     };
 };
 
