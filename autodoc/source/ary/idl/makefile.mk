@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 14:11:33 $
+#   last change: $Author: rt $ $Date: 2004-07-12 15:20:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ OBJFILES= \
     $(OBJ)$/i_attribute.obj     \
     $(OBJ)$/i_ce.obj            \
     $(OBJ)$/i_ce2s.obj          \
+    $(OBJ)$/i_comrela.obj       \
     $(OBJ)$/i_constant.obj      \
     $(OBJ)$/i_constgroup.obj    \
     $(OBJ)$/i_enum.obj          \
@@ -96,6 +97,8 @@ OBJFILES= \
     $(OBJ)$/i_reposypart.obj    \
     $(OBJ)$/i_service.obj       \
     $(OBJ)$/i_singleton.obj     \
+    $(OBJ)$/i_siservice.obj     \
+    $(OBJ)$/i_sisingleton.obj   \
     $(OBJ)$/i_strconst.obj      \
     $(OBJ)$/i_struct.obj        \
     $(OBJ)$/i_structelem.obj    \

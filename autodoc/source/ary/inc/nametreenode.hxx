@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nametreenode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ class NameTreeNode
 
 #if 0
 //  Prototypes have to be left out, because of a VC++ 6 compiler bug
-//     ( compiler reports ambigious overload ).
+//     ( compiler reports ambiguous overload ).
 
 template <class FIND_NODE>
 typename FIND_NODE::id_type
