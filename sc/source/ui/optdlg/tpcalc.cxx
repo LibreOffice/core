@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:12:12 $
+ *  last change: $Author: er $ $Date: 2001-02-02 13:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,9 @@ BOOL ScTpCalcOptions::GetEps( double& rEps )
     int nErrno;
     const sal_Unicode* pEnd;
     rEps = SolarMath::StringToDouble( aStr.GetBuffer(),
-        *ScGlobal::pScInternational, nErrno, &pEnd );
+        ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
+        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+        nErrno, &pEnd );
     BOOL bOk = ( nErrno == 0 && *pEnd == '\0' && rEps > 0.0 );
 
     if ( bOk )

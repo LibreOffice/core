@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-01-15 16:30:01 $
+ *  last change: $Author: er $ $Date: 2001-02-02 13:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@
 #include <svx/flditem.hxx>
 #undef ITEMID_FIELD
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+
 
 // ohne sc.hrc: error C2679: binary '=' : no operator defined which takes a
 // right-hand operand of type 'const class String (__stdcall *)(class ScResId)'
@@ -204,11 +208,11 @@ FltError ScExportHTML( SvStream& rStrm, ScDocument* pDoc,
 }
 
 
-void lcl_AddStamp( String& rStr, const SfxStamp& rStamp, International& rInter )
+void lcl_AddStamp( String& rStr, const SfxStamp& rStamp, const LocaleDataWrapper& rLoc )
 {
     const DateTime& rDateTime   = rStamp.GetTime();
-    String          aStrDate    = rInter.GetDate( rDateTime );
-    String          aStrTime    = rInter.GetTime( rDateTime );
+    String          aStrDate    = rLoc.getDate( rDateTime );
+    String          aStrTime    = rLoc.getTime( rDateTime );
 
     rStr += GLOBSTR( STR_BY );
     APPEND_SPACE( rStr );
@@ -411,7 +415,6 @@ ULONG ScHTMLExport::Write()
 
 void ScHTMLExport::WriteHeader()
 {
-    International&   rInter     = *ScGlobal::pScInternational;
     SfxDocumentInfo& rInfo      = pDoc->GetDocumentShell()->GetDocInfo();
     String           aStrOut;
 
@@ -426,7 +429,7 @@ void ScHTMLExport::WriteHeader()
         OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
         aStrOut  = GLOBSTR( STR_DOC_PRINTED );
         aStrOut.AppendAscii( ": " );
-        lcl_AddStamp( aStrOut, rInfo.GetPrinted(), rInter );
+        lcl_AddStamp( aStrOut, rInfo.GetPrinted(), *ScGlobal::pLocaleData );
         OUT_COMMENT( aStrOut );
     }
     //----------------------------------------------------------
