@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:04:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,13 @@ ScProtectionAttr*           pAttrUnprot;            // ->  " memory.cxx    "
 extern FormCache*           pValueFormCache;        // -> in memory.cxx initialisiert
 FormCache*                  pValueFormCache;
 
-UINT16                      LotusRangeList::nEingCol;
-UINT16                      LotusRangeList::nEingRow;
+SCCOL                       LotusRangeList::nEingCol;
+SCROW                       LotusRangeList::nEingRow;
 
 
 
 
-void PutFormString( UINT16 nCol, UINT16 nRow, UINT16 nTab, sal_Char* pString )
+void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 {
     // Label-Format-Auswertung
     DBG_ASSERT( pString != NULL, "PutFormString(): pString == NULL" );
@@ -162,7 +162,7 @@ void PutFormString( UINT16 nCol, UINT16 nRow, UINT16 nTab, sal_Char* pString )
 
 
 
-void SetFormat( UINT16 nCol, UINT16 nRow, UINT16 nTab, BYTE nFormat, BYTE nSt )
+void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, BYTE nFormat, BYTE nSt )
 {
     //  PREC:   nSt = Standard-Dezimalstellenanzahl
     pDoc->ApplyAttr( nCol, nRow, nTab, *( pValueFormCache->GetAttr( nFormat, nSt ) ) );
@@ -454,14 +454,14 @@ void LotusRange::MakeHash( void )
     //                   ********       nColE
     //     ****************             nRowS
     // ****************                 nRowE
-    nHash = nColStart;
-    nHash += nColEnd << 6;
-    nHash += ( ( UINT32 ) nRowStart ) << 12;
-    nHash += ( ( UINT32 ) nRowEnd ) << 16;
+    nHash =  static_cast<UINT32>(nColStart);
+    nHash += static_cast<UINT32>(nColEnd) << 6;
+    nHash += static_cast<UINT32>(nRowStart) << 12;
+    nHash += static_cast<UINT32>(nRowEnd ) << 16;
 }
 
 
-LotusRange::LotusRange( UINT16 nCol, UINT16 nRow )
+LotusRange::LotusRange( SCCOL nCol, SCROW nRow )
 {
     nColStart = nColEnd = nCol;
     nRowStart = nRowEnd = nRow;
@@ -470,7 +470,7 @@ LotusRange::LotusRange( UINT16 nCol, UINT16 nRow )
 }
 
 
-LotusRange::LotusRange( UINT16 nCS, UINT16 nRS, UINT16 nCE, UINT16 nRE )
+LotusRange::LotusRange( SCCOL nCS, SCROW nRS, SCCOL nCE, SCROW nRE )
 {
     nColStart = nCS;
     nColEnd = nCE;
