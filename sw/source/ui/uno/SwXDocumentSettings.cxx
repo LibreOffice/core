@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-07-30 11:22:24 $
+ *  last change: $Author: os $ $Date: 2001-08-01 12:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,13 +277,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_PRINTER_NAME:
         {
             //the printer must be created
-            SfxPrinter *pPrinter = pDoc->GetPrt ( sal_True );
+            SfxPrinter *pPrinter = mpDoc->GetPrt ( sal_True );
             OUString sPrinterName;
-            if (*pValues >>= sPrinterName )
+            if (rValue >>= sPrinterName )
             {
                 SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                 if (pNewPrinter->IsKnown())
-                    pDoc->SetPrt ( pNewPrinter );
+                    mpDoc->SetPrt ( pNewPrinter );
                 else
                     delete pNewPrinter;
             }
