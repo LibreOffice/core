@@ -14,6 +14,18 @@
         <supported-service> com.sun.star.sdbc.Driver    </supported-service>
         <service-dependency>    ... </service-dependency>
     </component-description>
+    <component-description>
+        <Author>Wind Li</Author>
+        <Name>com.sun.star.comp.mozilla.MozillaBootstrap</Name>
+        <Description>
+            This is the implementation of the MozillaBootstrap for sdbc-mozab bridge and xmlsec.
+        </Description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service> com.sun.star.mozilla.MozillaBootstrap</supported-service>
+        <service-dependency>    ... </service-dependency>
+    </component-description>
         <project-build-dependency>  cppuhelper  </project-build-dependency>
         <project-build-dependency>  cppu        </project-build-dependency>
         <project-build-dependency>  sal         </project-build-dependency>
