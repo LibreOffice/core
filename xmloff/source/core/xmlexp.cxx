@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-01 14:17:28 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 14:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,6 +693,11 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                 if( !(rValue >>= sOrigFileName ) )
                     return sal_False;
             }
+            else if (rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterName" ) ) )
+            {
+                if( !(rValue >>= sFilterName ) )
+                    return sal_False;
+            }
         }
 
 #ifdef TIMELOG
@@ -729,6 +734,19 @@ void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
     Sequence<OUString> aEmptySeq;
     SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
 }
+
+::rtl::OUString SAL_CALL SvXMLExport::getName(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return sFilterName;
+}
+
+void SAL_CALL SvXMLExport::setName( const ::rtl::OUString& aName )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    // do nothing, because it is not possible to set the FilterName
+}
+
 
 // XServiceInfo
 OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeException)
