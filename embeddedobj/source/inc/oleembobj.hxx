@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:09:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,17 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
 
     sal_Bool m_bIsLink;
 
+    // TODO/LATER: may need to cache more than one aspect in future
+    sal_Bool m_bHasCachedSize; // the object has cached size
+    sal_Bool m_bHasSizeToSet;  // the object has cached size that should be set to OLE component
     ::com::sun::star::awt::Size m_aCachedSize;
+    sal_Int64 m_nCachedAspect;
+
+    // cache the status of the object
+    // TODO/LATER: may need to cache more than one aspect in future
+    sal_Bool m_bGotStatus;
+    sal_Int64 m_nStatus;
+    sal_Int64 m_nStatusAspect;
 
     // embedded object related stuff
     ::rtl::OUString m_aEntryName;
