@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:20:19 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,13 @@ import com.sun.star.lib.uno.helper.PropertySet;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.UnoRuntime;
+
+import com.sun.star.lang.XMultiComponentFactory;
+
+import com.sun.star.ucb.XSimpleFileAccess;
+
 
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
@@ -103,9 +110,17 @@ public class ScriptBrowseNode extends PropertySet
         this.name = name;
         this.parent = parent;
         ScriptMetaData data = null;
+        XSimpleFileAccess xSFA = null;
+        XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
+        XMultiComponentFactory xFac = xCtx.getServiceManager();
         try
         {
             data = (ScriptMetaData)parent.getByName( name );
+            xSFA = ( XSimpleFileAccess)
+                UnoRuntime.queryInterface( XSimpleFileAccess.class,
+                    xFac.createInstanceWithContext(
+                        "com.sun.star.ucb.SimpleFileAccess",
+                        xCtx ) );
         }
 
         // TODO fix exception types to be caught here, should we rethrow?
@@ -119,9 +134,24 @@ public class ScriptBrowseNode extends PropertySet
 
         if (provider.hasScriptEditor() == true)
         {
+
             this.editable  = true;
-            this.deletable = true;
-            this.renamable = true;
+            try
+            {
+                if ( !parent.isUnoPkg() &&
+                    !xSFA.isReadOnly( parent.getPathToParcel() ) )
+                {
+                    this.deletable = true;
+                    this.renamable = true;
+                }
+            }
+            // TODO propagate errors
+            catch ( Exception e )
+            {
+                LogUtils.DEBUG("Caught exception in creation of ScriptBrowseNode");
+                LogUtils.DEBUG( LogUtils.getTrace(e));
+            }
+
         }
 
         registerProperty("Deletable", new Type(boolean.class),
@@ -172,7 +202,6 @@ public class ScriptBrowseNode extends PropertySet
         }
         uri = data.getShortFormScriptURL();
     }
-
     // implementation of XInvocation interface
     public XIntrospectionAccess getIntrospection() {
         return null;
@@ -195,10 +224,11 @@ public class ScriptBrowseNode extends PropertySet
         {
             if (!editable)
             {
+                com.sun.star.lang.NoSupportException nse =
+                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not editable " );
                 throw new com.sun.star.reflection.InvocationTargetException(
-                    "Script not editable");
+                      "Scripting framework error editing script", null, nse );
             }
-
 
             XScriptContext ctxt =  provider.getScriptingContext();
             ScriptMetaData data = null;
@@ -206,11 +236,16 @@ public class ScriptBrowseNode extends PropertySet
             {
                 data = (ScriptMetaData)parent.getByName( name );
             }
-            // TODO fix exception types to be caught here
-            catch (  Exception e )
+            catch (  com.sun.star.container.NoSuchElementException nse )
             {
-                LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
-                throw new  com.sun.star.lang.IllegalArgumentException( "no script data for " + name );
+                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
+            }
+            catch (  com.sun.star.lang.WrappedTargetException wte )
+            {
+                // rethrow
+                throw new com.sun.star.reflection.InvocationTargetException(
+                      "Scripting framework editing script ",
+                       null, wte.TargetException );
             }
 
             provider.getScriptEditor().edit(ctxt, data);
@@ -219,110 +254,79 @@ public class ScriptBrowseNode extends PropertySet
         {
             if (!deletable)
             {
+                com.sun.star.lang.NoSupportException nse =
+                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not deletable " );
                 throw new com.sun.star.reflection.InvocationTargetException(
-                    "Script not editable");
+                      "Scripting framework error deleting script", null, nse );
             }
-
-
             try
             {
-                boolean goAhead = true;
-
-                /* prompting in svx/source/dialogs/scriptdlg.cxx
-                String prompt = "Do you really want to delete this Script?";
-                String title = "Delete Script";
-
-                // try to get a DialogFactory instance, if it fails
-                // just use a Swing JOptionPane to prompt for the name
-                try
-                {
-                    DialogFactory dialogFactory =
-                        DialogFactory.getDialogFactory();
-
-                    goAhead = dialogFactory.showConfirmDialog(title, prompt);
-                }
-                catch (Exception e)
-                {
-                    int reply = JOptionPane.showConfirmDialog(
-                        null, prompt, title, JOptionPane.YES_NO_OPTION);
-
-                    if (reply == JOptionPane.YES_OPTION)
-                    {
-                        goAhead = true;
-                    }
-                    else
-                    {
-                        goAhead = false;
-                    }
-                } */
-
-                if (goAhead == true)
-                {
-                    parent.removeByName( name );
-                    result = new Any(new Type(Boolean.class), Boolean.TRUE);
-                }
-                else
-                {
-                    result = new Any(new Type(Boolean.class), Boolean.FALSE);
-                }
+                parent.removeByName( name );
+                result = new Any(new Type(Boolean.class), Boolean.TRUE);
             }
-            // TODO Exception handling TBD
-            catch (Exception e)
+            catch (  com.sun.star.container.NoSuchElementException nse )
             {
-                LogUtils.DEBUG("** caught exception removing " + name + " ->" + e.toString() );
-                result = new Any(new Type(Boolean.class), Boolean.FALSE);
-
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error deleting script: " + e.getMessage());
+                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
             }
+            catch (  com.sun.star.lang.WrappedTargetException wte )
+            {
+                // rethrow
+                throw new com.sun.star.reflection.InvocationTargetException(
+                      "Scripting framework deleting script ",
+                       null, wte.TargetException );
+            }
+
         }
         else if (aFunctionName.equals("Renamable"))
         {
+            result = new Any(new Type(XBrowseNode.class), new XBrowseNode[0]);
             if (!renamable)
             {
+                com.sun.star.lang.NoSupportException nse =
+                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not editable " );
                 throw new com.sun.star.reflection.InvocationTargetException(
-                    "Script not renamable");
+                      "Scripting framework error renaming script", null, nse );
             }
-
 
             try
             {
-                boolean goAhead = true;
+                String newName = (String) AnyConverter.toString(aParams[0]);
+                ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
+                String oldSource = oldData.getSource();
+                LogUtils.DEBUG("remove old script");
+                parent.removeByName( name );
+                LogUtils.DEBUG("now create renamed script");
+                String languageName = newName + "." + provider.getScriptEditor().getExtension();
+                String language = provider.getName();
 
-                if (goAhead == true)
-                {
-                    String newName = (String) AnyConverter.toString(aParams[0]);
-                    ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
-                    String oldSource = oldData.getSource();
-                    LogUtils.DEBUG("remove old script");
-                    parent.removeByName( name );
-                    LogUtils.DEBUG("now create renamed script");
-                    String languageName = newName + "." + provider.getScriptEditor().getExtension();
-                    String language = provider.getName();
+                ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
 
-                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
-
-                    ScriptMetaData data = new ScriptMetaData( parent, entry, oldSource );
-                    parent.insertByName( languageName, data );
-                    uri = data.getShortFormScriptURL();
-                    name = languageName;
-                    result = new Any(new Type(XBrowseNode.class), this);
-                }
-                else
-                {
-                    result = new Any(new Type(Boolean.class), Boolean.FALSE);
-                }
+                ScriptMetaData data = new ScriptMetaData( parent, entry, oldSource );
+                parent.insertByName( languageName, data );
+                uri = data.getShortFormScriptURL();
+                name = languageName;
+                result = new Any(new Type(XBrowseNode.class), this);
             }
-            // TODO Exception handling TBD
-            catch (Exception e)
+            catch (  com.sun.star.container.NoSuchElementException nse )
             {
-                LogUtils.DEBUG("** caught exception removing " + name + " ->" + e.toString() );
-                result = new Any(new Type(Boolean.class), Boolean.FALSE);
-
-                // throw new com.sun.star.reflection.InvocationTargetException(
-                //     "Error deleting script: " + e.getMessage());
+                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
+            }
+            catch (  com.sun.star.container.ElementExistException eee )
+            {
+                // rethrow
+                throw new com.sun.star.reflection.InvocationTargetException(
+                      "Scripting framework error renaming script ",
+                       null, eee );
+            }
+            catch (  com.sun.star.lang.WrappedTargetException wte )
+            {
+                // rethrow
+                throw new com.sun.star.reflection.InvocationTargetException(
+                      "Scripting framework rename script ",
+                       null, wte.TargetException );
             }
         }
+
         else {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");
