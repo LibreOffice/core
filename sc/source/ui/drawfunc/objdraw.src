@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:19:49 $
+ *  last change: $Author: obo $ $Date: 2002-08-05 20:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@
                     Text[ chinese_simplified ] = "å·¦å³å¯¹é½(~J)";\
                     Text[ russian ] = "Ïî øèğèíå";\
                     Text[ polish ] = "~Do lewej i prawej";\
-                    Text[ japanese ] = "å‡ç­‰å‰²ä»˜(~J)";\
+                    Text[ japanese ] = "ä¸¡ç«¯æƒãˆ(~J)";\
                     Text[ chinese_traditional ] = "å·¦å³å°é½Š(~J)";\
                     Text[ arabic ] = "ÖÈØ";\
                     Text[ greek ] = "~ĞëŞñçò óôïß÷éóç";\
@@ -303,7 +303,7 @@
         Text[ korean ] = "ë§ì¶¤(~A)";\
         Text[ turkish ] = "~Hizalama";\
         Text[ language_user1 ] = " ";\
-        Text[ catalan ] = "~Alineació";\
+        Text[ catalan ] = "~Alineament";\
         Text[ thai ] = "~à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";\
     };\
     MenuItem\
