@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-11 09:44:47 $
+ *  last change: $Author: gh $ $Date: 2001-07-26 12:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,7 @@ BOOL MsgEdit::Save( const String& aName )
                 pRun = aEditTree.NextSibling( pRun );
 
             aSave.ConvertLineEnd(LINEEND_CRLF);
-            aStrm << ByteString( aSave, RTL_TEXTENCODING_UTF8 ).GetBuffer();
+            aStrm << ByteString( aSave, RTL_TEXTENCODING_IBM_850 ).GetBuffer();
 
             SvLBoxEntry *pEntry;
             while ( pRun )
