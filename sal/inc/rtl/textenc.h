@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:38:21 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 14:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_JAVA_UTF8              (RTL_TEXTENC_CAST( 90 ))
 #define RTL_TEXTENCODING_ADOBE_STANDARD         (RTL_TEXTENC_CAST( 91 ))
 #define RTL_TEXTENCODING_ADOBE_SYMBOL           (RTL_TEXTENC_CAST( 92 ))
+#define RTL_TEXTENCODING_PT154                  (RTL_TEXTENC_CAST( 93 ))
 /* ATTENTION!  Whenever some encoding is added here, make sure to update
  * rtl_isOctetTextEncoding in tencinfo.c.
  */
