@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:45:37 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ TabDialog RID_TD_ORGANIZE
             PageItem
             {
                 Identifier = RID_TP_DLG ;
-                Text [ de ] = "Dialogs" ;
+                Text [ de ] = "Dialoge" ;
                 Text [ en-US ] = "Dialogs" ;
             };
             PageItem
@@ -113,15 +113,6 @@ TabPage RID_TP_MODULS
         Text[ de ] = "M~odul" ;
         Text [ en-US ] = "M~odule" ;
     };
-    /*
-    Edit RID_EDIT
-    {
-        Pos = MAP_APPFONT ( 6 , 17 ) ;
-        Size = MAP_APPFONT ( 130 , 12 ) ;
-        TabStop = TRUE ;
-        Border = TRUE ;
-    };
-*/
     Control RID_TRLBOX
     {
         HelpId = HID_BASICIDE_MODULES_TREE ;
@@ -246,8 +237,8 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "Applikation/D~okument" ;
-        Text [ en-US ] = "Application/D~ocument";
+        Text [ de ] = "~Ort" ;
+        Text [ en-US ] = "L~ocation";
     };
     ListBox RID_LB_BASICS
     {
