@@ -1,0 +1,14 @@
+-o dbaccess.ConnectionLineAccessibility
+-o dbaccess.DBContentLoader
+-o dbaccess.OCommandDefinition
+-o dbaccess.ODatabaseContext
+-o dbaccess.ODatabaseSource
+-o dbaccess.ODatasourceAdministrationDialog
+-o dbaccess.ODatasourceBrowser
+-o dbaccess.OInteractionHandler
+-o dbaccess.OQueryDesign
+-o dbaccess.ORowSet
+-o dbaccess.OSQLMessageDialog
+-o dbaccess.SbaXGridControl
+-o dbaccess.TableWindowAccessibility
+-o dbaccess.JoinViewAccessibility
