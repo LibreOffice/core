@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 15:09:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/06/07 15:09:39  fs
+ *  #87912# redesigned the dialog
+ *
  *  Revision 1.10  2001/05/30 19:57:50  kz
  *  Merge SRC633: 30.05.01 - 21:56:52
  *
@@ -276,4 +279,5 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
