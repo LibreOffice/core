@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:57:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,5 +124,6 @@ public:
 #define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT ist aktiv
 #define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT ist aktiv
 #define SBIMG_INITCODE      0x0004  // Init-Code vorhanden
+#define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
 
 #endif
