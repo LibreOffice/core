@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-11 13:35:39 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,13 @@ sal_Bool LocalFileHelper::ConvertSystemPathToURL( const String& rName, const Str
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
-        aRet = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, rName );
+        try
+        {
+            aRet = ::ucb::getFileURLFromSystemPath( xManager, rBaseURL, rName );
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& )
+        {
+        }
     }
 
     rReturn = aRet;
@@ -130,7 +136,13 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
-        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+        try
+        {
+            aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& )
+        {
+        }
     }
 
     rReturn = aRet;
@@ -157,8 +169,14 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
 
-        rtl::OUString aBase( ::ucb::getLocalFileURL( xManager ) );
-        aRet = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
+        try
+        {
+            rtl::OUString aBase( ::ucb::getLocalFileURL( xManager ) );
+            aRet = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& )
+        {
+        }
     }
 
     rReturn = aRet;
@@ -186,8 +204,13 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
-
-        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+        try
+        {
+            aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
+        }
+        catch ( ::com::sun::star::uno::RuntimeException& )
+        {
+        }
     }
 
     rReturn = aRet;
@@ -221,11 +244,9 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
         }
         catch( ::com::sun::star::ucb::CommandAbortedException& )
         {
-//          DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( Exception& e )
+        catch( Exception& )
         {
-            DBG_ERRORFILE( "createCursor: Any other exception" );
         }
 
         if ( xResultSet.is() )
@@ -243,17 +264,14 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
             }
-            catch( ... )
+            catch( Exception& )
             {
-                DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
             }
         }
     }
-    catch( Exception& e )
+    catch( Exception& )
     {
-        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
     }
 
     if ( pFiles )
