@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptEditorForBeanShell.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 13:58:25 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:29:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -319,13 +319,14 @@ public class ScriptEditorForBeanShell
     }
 
     private void initUI() {
-        this.frame = new JFrame("BeanShell Debug Window");
+        frame = new JFrame("BeanShell Debug Window: " + filename);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         frame.addWindowListener(
             new WindowAdapter()
             {
                 public void windowClosing(WindowEvent e) {
-                    shutdown();
+                    doClose();
                 }
             }
         );
@@ -351,9 +352,35 @@ public class ScriptEditorForBeanShell
         frame.setLocation(300, 200);
     }
 
-    private void saveTextArea() {
+    private void doClose() {
+        if (view.isModified()) {
+            int result = JOptionPane.showConfirmDialog(frame,
+                "The script has been modified. " +
+                "Do you want to save the changes?");
+
+            if (result == JOptionPane.CANCEL_OPTION)
+            {
+                // don't close the window, just return
+                return;
+            }
+            else if (result == JOptionPane.YES_OPTION)
+            {
+                boolean saveSuccess = saveTextArea();
+                if (saveSuccess == false)
+                {
+                    return;
+                }
+            }
+        }
+        frame.dispose();
+        shutdown();
+    }
+
+    private boolean saveTextArea() {
+        boolean result = true;
+
         if (!view.isModified()) {
-            return;
+            return true;
         }
 
         OutputStream fos = null;
@@ -366,15 +393,18 @@ public class ScriptEditorForBeanShell
             else
             {
                 showErrorMessage(
-                    "Error saving file: couldn't open stream for file" );
+                    "Error saving script: Could not open stream for file" );
+                result = false;
             }
-
+            view.setModified(false);
        }
        catch (IOException ioe) {
-           showErrorMessage( "Error saving file: " + ioe.getMessage() );
-        }
+           showErrorMessage( "Error saving script: " + ioe.getMessage() );
+           result = false;
+       }
        catch (Exception e) {
-           showErrorMessage( "Error saving file: " + e.getMessage() );
+           showErrorMessage( "Error saving script: " + e.getMessage() );
+           result = false;
        }
         finally {
             if (fos != null) {
@@ -389,7 +419,7 @@ public class ScriptEditorForBeanShell
                 }
             }
         }
-
+        return result;
     }
 
     private void shutdown()
@@ -410,8 +440,7 @@ public class ScriptEditorForBeanShell
             }
         }
         else if (e.getActionCommand().equals("Close")) {
-            frame.dispose();
-            shutdown();
+            doClose();
         }
         else if (e.getActionCommand().equals("Save")) {
             saveTextArea();
