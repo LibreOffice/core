@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:29:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,10 +273,10 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
     BOOL bSpecialHandling = FALSE;
     E3dScene *pScene = NULL;
 
-    long nCnt = aMark.GetMarkCount();
+    long nCnt = GetMarkedObjectCount();
     for(long nObjs = 0;nObjs < nCnt;nObjs++)
     {
-        SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+        SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
         if(pObj && pObj->ISA(E3dCompoundObject))
         {
             // zugehoerige Szene
@@ -300,7 +300,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
         long nObjs;
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // zugehoerige Szene
@@ -315,21 +315,21 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
 
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dObject))
             {
                 // Objekt markieren
                 E3dObject* p3DObj = (E3dObject*)pObj;
                 p3DObj->SetSelected(TRUE);
                 pScene = p3DObj->GetScene();
-                pM = aMark.GetMark(nObjs);
+                pM = GetSdrMarkByIndex(nObjs);
             }
         }
 
         if(pScene)
         {
             // code from parent
-            ((E3dView*)this)->aMark.ForceSort();
+            SortMarkedObjects();
             pXOut->SetOutDev(&rOut);
             SdrPaintInfoRec aInfoRec;
             aInfoRec.nPaintMode|=SDRPAINTMODE_ANILIKEPRN;
@@ -350,7 +350,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
         // SelectionFlag zuruecksetzen
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // zugehoerige Szene
@@ -380,10 +380,10 @@ SdrModel* E3dView::GetMarkedObjModel() const
     BOOL bSpecialHandling = FALSE;
     E3dScene *pScene = NULL;
 
-    long nCnt = aMark.GetMarkCount();
+    long nCnt = GetMarkedObjectCount();
     for(long nObjs = 0;nObjs < nCnt;nObjs++)
     {
-        SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+        SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
         if(pObj && pObj->ISA(E3dCompoundObject))
         {
             // zugehoerige Szene
@@ -408,7 +408,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         long nObjs;
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // zugehoerige Szene
@@ -420,7 +420,7 @@ SdrModel* E3dView::GetMarkedObjModel() const
         // bei allen direkt selektierten Objekten auf selektiert setzen
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dObject))
             {
                 // Objekt markieren
@@ -431,9 +431,10 @@ SdrModel* E3dView::GetMarkedObjModel() const
 
         // Neue MarkList generieren, die die betroffenen
         // Szenen als markierte Objekte enthaelt
-        SdrMarkList aOldML(aMark); // alte Marklist merken
+        SdrMarkList aOldML(GetMarkedObjectList()); // alte Marklist merken
         SdrMarkList aNewML; // neue leere Marklist
-        ((E3dView*)this)->aMark = aNewML;
+        SdrMarkList& rCurrentMarkList = ((E3dView*)this)->GetMarkedObjectListWriteAccess();
+        rCurrentMarkList = aNewML; // ((E3dView*)this)->maMarkedObjectList = aNewML;
 
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
@@ -488,12 +489,13 @@ SdrModel* E3dView::GetMarkedObjModel() const
         }
 
         // Alte Liste wieder setzen
-        ((E3dView*)this)->aMark = aOldML;
+        // ((E3dView*)this)->maMarkedObjectList= aOldML;
+        rCurrentMarkList = aOldML;
 
         // SelectionFlag zuruecksetzen
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
             {
                 // zugehoerige Szene
@@ -772,9 +774,9 @@ BOOL E3dView::IsConvertTo3DObjPossible() const
     BOOL bGroupSelected(FALSE);
     BOOL bRetval(TRUE);
 
-    for(sal_uInt32 a=0;!bAny3D && a<aMark.GetMarkCount();a++)
+    for(sal_uInt32 a=0;!bAny3D && a<GetMarkedObjectCount();a++)
     {
-        SdrObject *pObj = aMark.GetMark(a)->GetObj();
+        SdrObject *pObj = GetMarkedObjectByIndex(a);
         if(pObj)
         {
             ImpIsConvertTo3DPossible(pObj, bAny3D, bGroupSelected);
@@ -1012,7 +1014,7 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude
 
 void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2)
 {
-    if(HasMarkedObj())
+    if(AreObjectsMarked())
     {
         // Undo anlegen
         if(bExtrude)
@@ -1078,9 +1080,9 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
 
             // SnapRect Ausdehnung mittels Spiegelung an der Rotationsachse
             // erweitern
-            for(UINT32 a=0;a<aMark.GetMarkCount();a++)
+            for(UINT32 a=0;a<GetMarkedObjectCount();a++)
             {
-                SdrMark* pMark = aMark.GetMark(a);
+                SdrMark* pMark = GetSdrMarkByIndex(a);
                 SdrObject* pObj = pMark->GetObj();
                 Rectangle aTurnRect = pObj->GetSnapRect();
                 Vector3D aRot;
@@ -1118,9 +1120,9 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
 
         // Ueber die Selektion gehen und in 3D wandeln, komplett mit
         // Umwandeln in SdrPathObject, auch Schriften
-        for(UINT32 a=0;a<aMark.GetMarkCount();a++)
+        for(UINT32 a=0;a<GetMarkedObjectCount();a++)
         {
-            SdrMark* pMark = aMark.GetMark(a);
+            SdrMark* pMark = GetSdrMarkByIndex(a);
             SdrObject* pObj = pMark->GetObj();
 
             ImpCreate3DObject(pScene, pObj, bExtrude, fDepth, aLatheMat);
@@ -1151,8 +1153,8 @@ void E3dView::ConvertMarkedObjTo3D(BOOL bExtrude, Vector3D aPnt1, Vector3D aPnt2
 
             // Szene anstelle des ersten selektierten Objektes einfuegen
             // und alle alten Objekte weghauen
-            SdrObject* pRepObj = aMark.GetMark(0)->GetObj();
-            SdrPageView* pPV = aMark.GetMark(0)->GetPageView();
+            SdrObject* pRepObj = GetMarkedObjectByIndex(0);
+            SdrPageView* pPV = GetSdrPageViewOfMarkedByIndex(0);
             MarkObj(pRepObj, pPV, TRUE);
             ReplaceObject(pRepObj, *pPV, pScene, FALSE);
             DeleteMarked();
@@ -1352,7 +1354,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     SdrDragMethod* pForcedMeth)
 {
 #ifndef SVX_LIGHT
-    if (b3dCreationActive && aMark.GetMarkCount())
+    if (b3dCreationActive && GetMarkedObjectCount())
     {
         // bestimme alle selektierten Polygone und gebe die gespiegelte Hilfsfigur aus
         if (!pMirrorPolygon && !pMirroredPolygon)
@@ -1377,15 +1379,15 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
            bOwnActionNecessary = FALSE;
         }
 
-        if(bOwnActionNecessary && aMark.GetMarkCount() >= 1)
+        if(bOwnActionNecessary && GetMarkedObjectCount() >= 1)
         {
             E3dDragConstraint eConstraint = E3DDRAG_CONSTR_XYZ;
             BOOL bThereAreRootScenes = FALSE;
             BOOL bThereAre3DObjects = FALSE;
-            long nCnt = aMark.GetMarkCount();
+            long nCnt = GetMarkedObjectCount();
             for(long nObjs = 0;nObjs < nCnt;nObjs++)
             {
-                SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+                SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                 if(pObj)
                 {
                     if(pObj->ISA(E3dScene) && ((E3dScene*)pObj)->GetScene() == pObj)
@@ -1430,7 +1432,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 
                         // die nicht erlaubten Rotationen ausmaskieren
                         eConstraint = E3dDragConstraint(eConstraint& eDragConstraint);
-                        pForcedMeth = new E3dDragRotate(*this, aMark, eDragDetail, eConstraint,
+                        pForcedMeth = new E3dDragRotate(*this, GetMarkedObjectList(), eDragDetail, eConstraint,
                                                         SvtOptions3D().IsShowFull() );
                     }
                     break;
@@ -1439,7 +1441,7 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     {
                         if(!bThereAreRootScenes)
                         {
-                            pForcedMeth = new E3dDragMove(*this, aMark, eDragDetail, eDragHdl, eConstraint,
+                            pForcedMeth = new E3dDragMove(*this, GetMarkedObjectList(), eDragDetail, eDragHdl, eConstraint,
                                                           SvtOptions3D().IsShowFull() );
                         }
                     }
@@ -1453,10 +1455,10 @@ BOOL E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     case SDRDRAG_GRADIENT:
                     default:
                     {
-                        long nCnt = aMark.GetMarkCount();
+                        long nCnt = GetMarkedObjectCount();
                         for(long nObjs = 0;nObjs < nCnt;nObjs++)
                         {
-                            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+                            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
                             if(pObj && pObj->ISA(E3dObject))
                                 ((E3dObject*) pObj)->SetDragDetail(eDragDetail);
                         }
@@ -1491,11 +1493,11 @@ BOOL E3dView::HasMarkedScene()
 
 E3dScene* E3dView::GetMarkedScene()
 {
-    ULONG nCnt = aMark.GetMarkCount();
+    ULONG nCnt = GetMarkedObjectCount();
 
     for ( ULONG i = 0; i < nCnt; i++ )
-        if ( aMark.GetMark(i)->GetObj()->ISA(E3dScene) )
-            return (E3dScene*) aMark.GetMark(i)->GetObj();
+        if ( GetMarkedObjectByIndex(i)->ISA(E3dScene) )
+            return (E3dScene*) GetMarkedObjectByIndex(i);
 
     return NULL;
 }
@@ -1564,7 +1566,7 @@ void E3dView::Start3DCreation ()
 {
     b3dCreationActive = TRUE;
 
-    if (aMark.GetMarkCount())
+    if (GetMarkedObjectCount())
     {
         // irgendwelche Markierungen ermitteln und ausschalten
         BOOL bVis = IsMarkHdlShown();
@@ -1610,10 +1612,10 @@ void E3dView::Start3DCreation ()
 
         // und dann die Markierungen oben und unten an das Objekt heften
         Rectangle aR;
-        for(UINT32 nMark = 0; nMark < aMark.GetMarkCount(); nMark++)
+        for(UINT32 nMark = 0; nMark < GetMarkedObjectCount(); nMark++)
         {
             XPolyPolygon aXPP;
-            SdrObject* pMark = aMark.GetMark(nMark)->GetObj();
+            SdrObject* pMark = GetMarkedObjectByIndex(nMark);
             pMark->TakeXorPoly(aXPP, FALSE);
             aR.Union(aXPP.GetBoundRect());
         }
@@ -1650,7 +1652,7 @@ void E3dView::Start3DCreation ()
         SetMarkHandles();
 
         if (bVis) ShowMarkHdl(NULL);
-        if (HasMarkedObj()) MarkListHasChanged();
+        if (AreObjectsMarked()) MarkListHasChanged();
 
         // SpiegelPolygone SOFORT zeigen
         CreateMirrorPolygons ();
@@ -1715,7 +1717,7 @@ void E3dView::MovAction(const Point& rPnt)
 
 void E3dView::End3DCreation(BOOL bUseDefaultValuesForMirrorAxes)
 {
-    if(HasMarkedObj())
+    if(AreObjectsMarked())
     {
         if(bUseDefaultValuesForMirrorAxes)
         {
@@ -1822,17 +1824,17 @@ E3dView::~E3dView ()
 
 void E3dView::CreateMirrorPolygons ()
 {
-    nPolyCnt         = aMark.GetMarkCount();
+    nPolyCnt         = GetMarkedObjectCount();
     pMirrorPolygon   = new XPolyPolygon [nPolyCnt];
     pMirroredPolygon = new XPolyPolygon [nPolyCnt];
     pMarkedObjs      = new SdrObject* [nPolyCnt];
-    pMyPV            = aMark.GetMark(0)->GetPageView();
+    pMyPV            = GetSdrPageViewOfMarkedByIndex(0);
 
     for (long nMark = nPolyCnt;
               nMark > 0;
         )
     {
-        SdrMark   *pMark = aMark.GetMark(-- nMark);
+        SdrMark   *pMark = GetSdrMarkByIndex(-- nMark);
         SdrObject *pObj  = pMark->GetObj();
 
         pObj->TakeXorPoly (pMirrorPolygon [nMark], FALSE);
@@ -2059,7 +2061,7 @@ void E3dView::DrawDragObj (OutputDevice *pOut,
 
 BOOL E3dView::IsBreak3DObjPossible() const
 {
-    ULONG nCount = aMark.GetMarkCount();
+    ULONG nCount = GetMarkedObjectCount();
 
     if (nCount > 0)
     {
@@ -2067,7 +2069,7 @@ BOOL E3dView::IsBreak3DObjPossible() const
 
         while (i < nCount)
         {
-            SdrObject* pObj = aMark.GetMark(i)->GetObj();
+            SdrObject* pObj = GetMarkedObjectByIndex(i);
 
             if (pObj && pObj->ISA(E3dObject))
             {
@@ -2101,12 +2103,12 @@ void E3dView::Break3DObj()
     if(IsBreak3DObjPossible())
     {
         // ALLE selektierten Objekte werden gewandelt
-        UINT32 nCount = aMark.GetMarkCount();
+        UINT32 nCount = GetMarkedObjectCount();
 
         BegUndo(String(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE)));
         for(UINT32 a=0;a<nCount;a++)
         {
-            E3dObject* pObj = (E3dObject*)aMark.GetMark(a)->GetObj();
+            E3dObject* pObj = (E3dObject*)GetMarkedObjectByIndex(a);
             BreakSingle3DObj(pObj);
         }
         DeleteMarked();
@@ -2148,12 +2150,12 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
 
 void E3dView::MergeScenes ()
 {
-    ULONG nCount = aMark.GetMarkCount();
+    ULONG nCount = GetMarkedObjectCount();
 
     if (nCount > 0)
     {
         ULONG     nObj    = 0;
-        SdrObject *pObj   = aMark.GetMark(nObj)->GetObj();
+        SdrObject *pObj   = GetMarkedObjectByIndex(nObj);
         E3dScene  *pScene = new E3dPolyScene(Get3DDefaultAttributes());
         Volume3D  aBoundVol;
         Rectangle aAllBoundRect (GetMarkedObjBoundRect ());
@@ -2245,7 +2247,7 @@ void E3dView::MergeScenes ()
 
             if (nObj < nCount)
             {
-                pObj = aMark.GetMark(nObj)->GetObj();
+                pObj = GetMarkedObjectByIndex(nObj);
             }
             else
             {
@@ -2280,7 +2282,7 @@ void E3dView::MergeScenes ()
         // richtig gerechnet wird
         pScene->InitTransformationSet();
 
-        InsertObject (pScene, *(aMark.GetMark(0)->GetPageView()));
+        InsertObject (pScene, *(GetSdrPageViewOfMarkedByIndex(0)));
 
         // SnapRects der Objekte ungueltig
         pScene->SetRectsDirty();
@@ -2300,12 +2302,12 @@ void E3dView::CheckPossibilities()
     // Weitere Flags bewerten
     if(bGroupPossible || bUnGroupPossible || bGrpEnterPossible)
     {
-        INT32 nMarkCnt = aMark.GetMarkCount();
+        INT32 nMarkCnt = GetMarkedObjectCount();
         BOOL bCoumpound = FALSE;
         BOOL b3DObject = FALSE;
         for(INT32 nObjs = 0L; (nObjs < nMarkCnt) && !bCoumpound; nObjs++)
         {
-            SdrObject *pObj = aMark.GetMark(nObjs)->GetObj();
+            SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
             if(pObj && pObj->ISA(E3dCompoundObject))
                 bCoumpound = TRUE;
             if(pObj && pObj->ISA(E3dObject))
