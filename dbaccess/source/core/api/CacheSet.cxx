@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 11:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -111,6 +114,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::io;
 //  using namespace ::cppu;
 using namespace ::osl;
 
@@ -500,7 +504,20 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::LONGVARCHAR:
                 _xParameter->setBytes(nPos,_rValue);
                 break;
-
+            case DataType::CLOB:
+                {
+                    Reference<XInputStream> xStream;
+                    _rValue.getAny() >>= xStream;
+                    _xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+                }
+                break;
+            case DataType::BLOB:
+                {
+                    Reference<XInputStream> xStream;
+                    _rValue.getAny() >>= xStream;
+                    _xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
+                }
+                break;
         }
     }
 }
@@ -569,6 +586,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.18  2001/03/15 08:19:18  fs
+    cppuhelper/extract -> comphelper/extract
+
     Revision 1.17  2001/02/14 13:18:24  oj
     impl sql stmt
 
