@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-02-26 10:26:48 $
+ *  last change: $Author: os $ $Date: 2001-03-01 12:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,7 +1030,6 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
         Any aCol = xCols->getByName(sEMailAddrFld);
         Reference< XPropertySet > xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
 
-        bInMerge = TRUE;
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
         if (!sSubject.Len())    // Kein leeres Subject wegen Automail (PB)
             sSubject = ' ';
@@ -1056,10 +1055,10 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             {
                 SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
 
-                pSfxFlt = SwIoSystem::GetFileFilter( pOrig->GetPhysicalName(),
+                pSfxFlt = SwIoSystem::GetFileFilter( pOrig->GetURLObject().GetMainURL(),
                                                         ::aEmptyStr );
 
-                String sTmpName = URIHelper::SmartRelToAbs(
+                sTmpName = URIHelper::SmartRelToAbs(
                                 utl::TempFile::CreateTempName(0) );
 
                 BOOL bCopyCompleted = TRUE;
@@ -1093,7 +1092,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
                     // alle gelinkten Bereiche/Grafiken aufs lokale FileSystem
                     // einbetten
-                    if( xDocSh->DoLoad( pOrig ) &&
+                    if( xDocSh->DoLoad( pOrig->GetStorage() ) &&
                         ((SwDocShell*)(&xDocSh))->EmbedAllLinks() )
                     {
                         xDocSh->DoSaveAs(*pMed);
@@ -1124,7 +1123,8 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             OfficeApplication* pOffApp = OFF_APP();
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, pOffApp->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, sTmpName ));
-            aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pSfxFlt->GetName() ));
+            if(pSfxFlt)
+                aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pSfxFlt->GetName() ));
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
             aReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(URL_PREFIX_PRIV_SOFFICE )));
 
@@ -1215,7 +1215,6 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             SW_MOD()->SetView(&pSh->GetView());
         }
 
-        bInMerge = FALSE;
         nMergeType = DBMGR_INSERT;
     }
     return bLoop;
@@ -1246,7 +1245,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             xColumnProp = *(Reference< XPropertySet >*)aCol.getValue();;
         }
 
-        bInMerge = TRUE;
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
 
         pSfxDispatcher->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
@@ -1364,7 +1362,6 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             SW_MOD()->SetView(&pSh->GetView());
         }
 
-        bInMerge = FALSE;
         nMergeType = DBMGR_INSERT;
     }
 
