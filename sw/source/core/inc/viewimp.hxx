@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: os $ $Date: 2001-06-20 11:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class SwViewImp
     BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
     BOOL bStopSmooth        :1;
 
-    USHORT nRestoreActions  :1; //Die Anzahl der zu restaurierenden Actions (UNO)
+    USHORT nRestoreActions  ; //Die Anzahl der zu restaurierenden Actions (UNO)
     SwRect aSmoothRect;
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
