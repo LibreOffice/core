@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-04 15:22:46 $
+ *  last change: $Author: os $ $Date: 2002-10-28 08:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
         SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
         rBind.Invalidate( SID_PASTE );
         rBind.Invalidate( FN_PASTESPECIAL );
+        rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
 }
 
