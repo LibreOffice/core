@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 14:06:40 $
+ *  last change: $Author: os $ $Date: 2002-05-24 08:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,12 +475,21 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             }
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
-                LeaveDrawCreate();
-                Point aPt(LONG_MIN, LONG_MIN);
-                //go out of the frame
-                pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
-                pWrtShell->EnterStdMode();
-                AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
+                SdrView *pSdrView = pWrtShell->GetDrawView();
+                if(pSdrView->HasMarkedObj() &&
+                    pSdrView->GetHdlList().GetFocusHdl())
+                {
+                    ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
+                }
+                else
+                {
+                    LeaveDrawCreate();
+                    Point aPt(LONG_MIN, LONG_MIN);
+                    //go out of the frame
+                    pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
+                    pWrtShell->EnterStdMode();
+                    AttrChangedNotify(pWrtShell); // ggf Shellwechsel...
+                }
             }
             else if ( GetEditWin().GetApplyTemplate() )
                 GetEditWin().SetApplyTemplate(SwApplyTemplate());
