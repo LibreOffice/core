@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteAccessContentProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-15 07:34:05 $
+ *  last change: $Author: abi $ $Date: 2002-11-05 10:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ service RemoteAccessContentProvider
         call must contain the UNO URL of the remote UCB.
 
         @descr
-        The <type>XContentProvider/type>s obtained through this interface
+        The <type>XContentProvider</type>s obtained through this interface
         implement the service <type>ContentProvider</type> and, if
         appropriate, also the interface <type>XFileIdentifierConverter</type>.
      */
