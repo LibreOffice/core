@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:53:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                             DBG_ASSERT(!pOUFormula, "here should be only one formula");
                             pOUFormula = new rtl::OUString();
                             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                                    GetKeyByAttrName( sValue, pOUFormula );
+                                    _GetKeyByAttrName( sValue, pOUFormula, sal_False );
                             if (XML_NAMESPACE_OOOC != nPrefix)
                             {
                                 delete pOUFormula;
