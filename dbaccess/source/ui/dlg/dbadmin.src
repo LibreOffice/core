@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 09:01:19 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3301,101 +3301,25 @@ String STR_CALCDOC_DOESNOTEXIST
     Text[ catalan ] = "The file \"$file$\" does not exist.";
 };
 
+String STR_HINT_READONLY_CONNECTION
+{
+    Text = "(Verbindung ist nur-lesend)";
+    Text [ english ] = "(connection is read-only)";
+    Text [ english_us ] = "(connection is read-only)";
+};
+
+String STR_HINT_CONNECTION_NOT_CAPABLE
+{
+    Text = "(nicht unterstützt von dieser Verbindung)";
+    Text [ english ] = "(not supported by this connection)";
+    Text [ english_us ] = "(not supported by this connection)";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.68  2001/07/26 22:28:25  kz
- *  Merge SRC638: 27.07.01 - 00:28:14
- *
- *  Revision 1.67  2001/07/24 20:31:37  rt
- *  Merge SRC638: 24.07.01 - 22:30:48
- *
- *  Revision 1.66  2001/07/24 06:39:56  oj
- *  #89358# enable single line for tabcontrol
- *
- *  Revision 1.65  2001/07/23 13:13:38  oj
- *  #90074# check if calc doc exists
- *
- *  Revision 1.64  2001/07/19 09:22:58  oj
- *  #89594# insert mnemonics
- *
- *  Revision 1.63  2001/07/17 20:28:54  kz
- *  Merge SRC638: 17.07.01 - 22:31:16
- *
- *  Revision 1.62  2001/07/13 21:00:57  kz
- *  Merge SRC638: 13.07.01 - 23:00:20
- *
- *  Revision 1.61  2001/06/29 02:11:31  kz
- *  Merge SRC633: 29.06.01 - 04:11:10
- *
- *  Revision 1.60  2001/06/25 08:27:18  oj
- *  #88699# new control for ldap rowcount
- *
- *  Revision 1.59  2001/06/21 21:43:36  kz
- *  Merge SRC633: 21.06.01 - 23:42:48
- *
- *  Revision 1.58  2001/06/20 07:08:33  oj
- *  #88434# new page for user admin
- *
- *  Revision 1.57  2001/06/15 21:49:59  kz
- *  Merge SRC633: 15.06.01 - 23:50:17
- *
- *  Revision 1.56  2001/06/13 22:24:42  kz
- *  Merge SRC633: 14.06.01 - 00:24:55
- *
- *  Revision 1.55  2001/06/08 22:04:38  rt
- *  Merge SRC633: 09.06.01 - 00:05:04
- *
- *  Revision 1.54  2001/06/01 19:30:31  obo
- *  Merge SRC633: 01.06.01 - 21:33:03
- *
- *  Revision 1.53  2001/05/30 19:46:04  kz
- *  Merge SRC633: 30.05.01 - 21:45:08
- *
- *  Revision 1.52  2001/05/29 15:42:38  fs
- *  #87006# use ... for items invoking a dialog
- *
- *  Revision 1.51  2001/05/29 14:34:28  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.50  2001/05/29 13:33:12  oj
- *  #87149# addressbook ui impl
- *
- *  Revision 1.49  2001/05/29 10:15:33  fs
- *  #86082# STR_UNSUPPORTED_DATASOURCE_TYPE
- *
- *  Revision 1.48  2001/05/23 14:16:42  oj
- *  #87149# new helpids
- *
- *  Revision 1.47  2001/05/18 05:13:53  kz
- *  Merge SRC632: 18.05.01 - 07:13:45 (NoBranch)
- *
- *  Revision 1.46  2001/05/14 13:22:58  fs
- *  no : at end of label texts
- *
- *  Revision 1.45  2001/05/11 05:16:20  kz
- *  Merge SRC631: 11.05.01 - 07:15:43 (NoBranch)
- *
- *  Revision 1.44  2001/05/10 13:37:57  fs
- *  #86223# table create invoked from table administration page / toolbox in query administration page
- *
- *  Revision 1.43  2001/05/08 12:08:46  fs
- *  #86224# new strings
- *
- *  Revision 1.42  2001/05/03 19:17:52  kz
- *  Merge SRC630: 03.05.01 - 21:16:46 (NoBranch)
- *
- *  Revision 1.41  2001/04/26 11:40:21  fs
- *  file is alive, again - added support for data source associated bookmarks
- *
- *  Revision 1.40  2001/04/24 08:34:27  oj
- *  wrong hid name
- *
- *  Revision 1.39  2001/04/20 13:38:06  oj
- *  #85736# new checkbox for odbc
- *
- *  Revision 1.38  2001/04/09 23:10:52  rt
- *  Merge SRC627: 10.04.01 - 01:10:15
+ *  Revision 1.69  2001/08/27 09:01:19  fs
+ *  #91538# minor spelling issues
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
