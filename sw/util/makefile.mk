@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 12:58:30 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 03:48:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ sw_res_files= \
     $(SRS)$/web.srs          \
     $(SRS)$/wizard.srs       \
     $(SRS)$/wrtsh.srs        \
-    $(SOLARRESDIR)$/sfx.srs
+    $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=sw
 RESLIB1IMAGES=$(PRJ)$/imglst $(PRJ)$/res
