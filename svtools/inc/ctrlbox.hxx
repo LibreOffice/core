@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-31 07:43:32 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 13:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,11 +291,10 @@ class LineListBox : public ListBox
     FieldUnit       eUnit;
     FieldUnit       eSourceUnit;
 
-#ifdef _CTRLBOX_CXX
     void            ImpGetLine( long nLine1, long nLine2, long nDistance, Bitmap& rBmp, XubString& rStr );
     void            ImplInit();
-#endif
     void            UpdateLineColors( void );
+    BOOL            UpdatePaintLineColor( void );       // returns TRUE if maPaintCol has changed
     inline const Color& GetPaintColor( void ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 

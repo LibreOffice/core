@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-31 07:49:06 $
+ *  last change: $Author: gt $ $Date: 2002-08-07 13:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,8 @@ void LineListBox::ImplInit()
 
     aVirDev.SetLineColor();
     aVirDev.SetMapMode( MapMode( MAP_TWIP ) );
+
+    UpdatePaintLineColor();
 }
 
 // -----------------------------------------------------------------------
@@ -557,36 +559,53 @@ long LineListBox::GetEntryDistance( USHORT nPos ) const
 
 void LineListBox::UpdateLineColors( void )
 {
-    maPaintCol = GetDisplayBackground().GetColor().IsDark()? GetSettings().GetStyleSettings().GetLabelTextColor() : aColor;
-
-    ULONG       nCount = pLineList->Count();
-    if( !nCount )
-        return;
-
-    XubString   aStr;
-    Bitmap      aBmp;
-
-    // exchange entries which containing lines
-    SetUpdateMode( FALSE );
-
-    USHORT      nSelEntry = GetSelectEntryPos();
-    for( ULONG n = 0 ; n < nCount ; ++n )
+    if( UpdatePaintLineColor() )
     {
-        ImpLineListData*    pData = pLineList->GetObject( n );
-        if( pData )
+        ULONG       nCount = pLineList->Count();
+        if( !nCount )
+            return;
+
+        XubString   aStr;
+        Bitmap      aBmp;
+
+        // exchange entries which containing lines
+        SetUpdateMode( FALSE );
+
+        USHORT      nSelEntry = GetSelectEntryPos();
+        for( ULONG n = 0 ; n < nCount ; ++n )
         {
-            // exchange listbox data
-            ListBox::RemoveEntry( USHORT( n ) );
-            ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance, aBmp, aStr );
-            ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
+            ImpLineListData*    pData = pLineList->GetObject( n );
+            if( pData )
+            {
+                // exchange listbox data
+                ListBox::RemoveEntry( USHORT( n ) );
+                ImpGetLine( pData->nLine1, pData->nLine2, pData->nDistance, aBmp, aStr );
+                ListBox::InsertEntry( aStr, aBmp, USHORT( n ) );
+            }
         }
+
+        if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
+            SelectEntryPos( nSelEntry );
+
+        SetUpdateMode( TRUE );
+        Invalidate();
     }
+}
 
-    if( nSelEntry != LISTBOX_ENTRY_NOTFOUND )
-        SelectEntryPos( nSelEntry );
+// -----------------------------------------------------------------------
 
-    SetUpdateMode( TRUE );
-    Invalidate();
+BOOL LineListBox::UpdatePaintLineColor( void )
+{
+    BOOL                    bRet = TRUE;
+    const StyleSettings&    rSettings = GetSettings().GetStyleSettings();
+    Color                   aNewCol( rSettings.GetWindowColor().IsDark()? rSettings.GetLabelTextColor() : aColor );
+
+    bRet = aNewCol != maPaintCol;
+
+    if( bRet )
+        maPaintCol = aNewCol;
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
