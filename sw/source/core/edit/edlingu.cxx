@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:27:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,8 +204,11 @@ public:
 
 class SwConvIter : public SwLinguIter
 {
+    SwHHCWrapper &rWrapper;
 public:
-    SwConvIter() {}
+    SwConvIter( SwHHCWrapper &rConvWrapper ) :
+        rWrapper( rConvWrapper )
+    {}
 
     void Start( SwEditShell *pSh, SwDocPositions eStart, SwDocPositions eEnd );
 
@@ -510,7 +513,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         // call function to find next text portion to be converted
         uno::Reference< linguistic2::XSpellChecker1 > xEmpty;
         pSh->GetDoc()->Spell( *pSh->GetCrsr(),
-                    xEmpty, pPageCnt, pPageSt, sal_True ) >>= aConvText;
+                    xEmpty, pPageCnt, pPageSt, &rWrapper ) >>= aConvText;
 
         bGoOn = GetCrsrCnt() > 1;
         if( aConvText.getLength() )
@@ -793,25 +796,24 @@ void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
  *                  SwEditShell::SpellStart
  *************************************************************************/
 
-// Selektionen sichern
 void SwEditShell::SpellStart(
         SwDocPositions eStart, SwDocPositions eEnd, SwDocPositions eCurr,
-        sal_Bool bIsConversion )
+        SwHHCWrapper *pConvWrapper )
 {
     SwLinguIter *pLinguIter = 0;
 
     // do not spell if interactive spelling is active elsewhere
-    if (!bIsConversion && !pSpellIter)
+    if (!pConvWrapper && !pSpellIter)
     {
         ASSERT( !pSpellIter, "wer ist da schon am spellen?" );
         pSpellIter = new SwSpellIter;
         pLinguIter = pSpellIter;
     }
     // do not do text conversion if it is active elsewhere
-    if (bIsConversion && !pConvIter)
+    if (pConvWrapper && !pConvIter)
     {
         ASSERT( !pConvIter, "text conversion already active!" );
-        pConvIter = new SwConvIter;
+        pConvIter = new SwConvIter( *pConvWrapper );
         pLinguIter = pConvIter;
     }
 
@@ -827,9 +829,9 @@ void SwEditShell::SpellStart(
         pLinguIter->SetCurrX( pTmp );
     }
 
-    if (!bIsConversion && pSpellIter)
+    if (!pConvWrapper && pSpellIter)
         pSpellIter->Start( this, eStart, eEnd );
-    if (bIsConversion && pConvIter)
+    if (pConvWrapper && pConvIter)
         pConvIter->Start( this, eStart, eEnd );
 }
 
@@ -837,16 +839,15 @@ void SwEditShell::SpellStart(
  *                  SwEditShell::SpellEnd
  *************************************************************************/
 
-// Selektionen wiederherstellen
-void SwEditShell::SpellEnd( sal_Bool bIsConversion )
+void SwEditShell::SpellEnd( SwHHCWrapper *pConvWrapper )
 {
-    if (!bIsConversion && pSpellIter->GetSh() == this)
+    if (!pConvWrapper && pSpellIter->GetSh() == this)
     {
         ASSERT( pSpellIter, "wo ist mein Iterator?" );
         pSpellIter->_End();
         delete pSpellIter, pSpellIter = 0;
     }
-    if (bIsConversion && pConvIter && pConvIter->GetSh() == this)
+    if (pConvWrapper && pConvIter && pConvIter->GetSh() == this)
     {
         ASSERT( pConvIter, "wo ist mein Iterator?" );
         pConvIter->_End();
@@ -862,12 +863,12 @@ void SwEditShell::SpellEnd( sal_Bool bIsConversion )
 
 uno::Any SwEditShell::SpellContinue(
         sal_uInt16* pPageCnt, sal_uInt16* pPageSt,
-        sal_Bool bIsConversion )
+        SwHHCWrapper *pConvWrapper )
 {
     uno::Any aRes;
 
-    if ((!bIsConversion && pSpellIter->GetSh() != this) ||
-        ( bIsConversion && pConvIter->GetSh() != this))
+    if ((!pConvWrapper && pSpellIter->GetSh() != this) ||
+        ( pConvWrapper && pConvIter->GetSh() != this))
         return aRes;
 
     if( pPageCnt && !*pPageCnt )
@@ -879,15 +880,15 @@ uno::Any SwEditShell::SpellContinue(
             ::StartProgress( STR_STATSTR_SPELL, 0, nEndPage, GetDoc()->GetDocShell() );
     }
 
-    ASSERT(  bIsConversion || pSpellIter, "SpellIter missing" );
-    ASSERT( !bIsConversion || pConvIter,  "ConvIter missing" );
+    ASSERT(  pConvWrapper || pSpellIter, "SpellIter missing" );
+    ASSERT( !pConvWrapper || pConvIter,  "ConvIter missing" );
     //JP 18.07.95: verhinder bei Fehlermeldungen die Anzeige der Selektionen
     //              KEIN StartAction, da damit auch die Paints abgeschaltet
     //              werden !!!!!
     ++nStartAction;
     rtl::OUString aRet;
     uno::Reference< uno::XInterface >  xRet;
-    if (bIsConversion)
+    if (pConvWrapper)
     {
         pConvIter->Continue( pPageCnt, pPageSt ) >>= aRet;
         aRes <<= aRet;
