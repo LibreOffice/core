@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mba $ $Date: 2001-11-21 12:49:54 $
+#   last change: $Author: as $ $Date: 2001-12-12 13:24:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     FramesContainer.idl\
     FrameSearchFlag.idl\
     MediaTypeDetectionHelper.idl\
+    ProtocolHandler.idl\
     Settings.idl\
     SynchronousFrameLoader.idl\
     TemplateAccess.idl\
