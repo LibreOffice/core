@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_reghelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:23:07 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 16:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -89,6 +95,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/15 15:23:07  fs
+ *  initial checkin - library-dependent wrapper for the registration helper classes
+ *
  *
  *  Revision 1.0 15.12.00 15:54:22  fs
  ************************************************************************/
