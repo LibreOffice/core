@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,7 +1240,12 @@ public:
     USHORT          GetLastChangedRow( USHORT nTab ) const;
 
     USHORT          GetNextDifferentChangedCol( USHORT nTab, USHORT nStart) const;
-    USHORT          GetNextDifferentChangedRow( USHORT nTab, USHORT nStart) const;
+
+                    // #108550#; if bCareManualSize is set then the row
+                    // heights are compared only if the manual size flag for
+                    // the row is set. If the bCareManualSize is not set then
+                    // the row heights are always compared.
+    USHORT          GetNextDifferentChangedRow( USHORT nTab, USHORT nStart, bool bCareManualSize = true) const;
 
     // returns whether to export a Default style for this col/row or not
     // nDefault is setted to one possition in the current row/col where the Default style is
