@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-23 09:54:07 $
+ *  last change: $Author: dr $ $Date: 2001-08-23 09:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ void ImportExcel::Boundsheet( void )
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nBdshtTab, FALSE );
-    else if( nFirstVisTab = 0xFFFF )
+    else if( nFirstVisTab == 0xFFFF )
         nFirstVisTab = nBdshtTab;       // first visible for WINDOW2 import
 
     pD->RenameTab( nBdshtTab, aName );
