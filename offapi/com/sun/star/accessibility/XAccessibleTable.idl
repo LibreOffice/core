@@ -1,0 +1,419 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XAccessibleTable.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:36:03 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleTable_idl__
+#define __com_sun_star_accessibility_XAccessibleTable_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+module com { module sun { module star { module accessibility {
+
+interface XAccessible;
+
+/** Implement this interface to give access to a two-dimensional table.
+
+   <p>The <type>XAccessibleTable</type> interface is used to represent
+   two-dimensional tables.  This interface combines the two interfaces
+   <code>javax.accessibility.AccessibleTable</code> and
+   <code>javax.accessibility.AccessibleExtendedTable</code> of the Java Accessibility API
+   (version 1.4).</p>
+
+   <p>All <type>XAccessible</type> objects that represent cells or
+   cell-clusters of a table have to be at the same time children of the
+   table.  This is necessary to be able to convert row and column indices
+   into child indices and vice versa with the methods
+   <member>XAccessibleTable::getAccessibleIndex</member>,
+   <member>XAccessibleTable::getAccessibleRow</member>, and
+   <member>XAccessibleTable::getAccessibleColumn</member>.</p>
+
+   <p>The range of valid coordinates for this interface are implementation
+   dependent.  However, that range includes at least the intervals from the
+   from the first row or column with the index 0 up to the last (but not
+   including) used row or column as returned by
+   <member>XAccessibleTable::getAccessibleRowCount</member> and
+   <member>XAccessibleTable::getAccessibleColumnCount</member>.  In case of
+   the Calc the current range of valid indices for retrieving data include
+   the maximal table size--256 columns and 32000 rows--minus one.</p>
+*/
+interface XAccessibleTable : ::com::sun::star::uno::XInterface
+{
+    /** Returns the number of used rows in the table.
+
+        <p>The implementation, however, may allow the access of columns
+        beyond this number.</p>
+
+        @return
+            Returns the number of used rows in the table or 0 for an empty
+            table.
+    */
+    long getAccessibleRowCount ();
+
+    /** Returns the number of used columns in the table.
+
+        <p>The implementation, however, may allow the access of columns
+        beyond this number.</p>
+
+        @return
+            Returns the number of used columns in the table or 0 for an empty
+            table.
+    */
+    long getAccessibleColumnCount ();
+
+    /** Returns the description text of the specified row in the
+        table.
+
+        @param nRow
+            The index of the row for which to retrieve the description.
+
+        @return
+            Returns the description text of the specified row in the table
+            if such a description exists.  Otherwise an empty string is
+            returned.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified row index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+
+    */
+    string getAccessibleRowDescription ([in] long nRow)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the description text of the specified column in the
+        table.
+
+        @param nColumn
+            The index of the column for which to retrieve the description.
+
+        @return
+            Returns the description text of the specified row in the table
+            if such a description exists.  Otherwise an empty string is
+            returned.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified column index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+    */
+    string getAccessibleColumnDescription ([in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the number of rows occupied by the Accessible at the
+        specified row and column in the table.
+
+        <p>The result differs from 1 if the specified cell spans multiple
+        rows.</p>
+
+        @param nRow
+            Row index of the accessible for which to return the column
+            extent.
+
+        @param nColumn
+            Column index of the accessible for which to return the column
+            extent.
+
+        @return
+            Returns the row extent of the specified cell.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified row index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+    */
+    long getAccessibleRowExtentAt ([in] long nRow, [in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the number of columns occupied by the Accessible at the
+        specified row and column in the table.
+
+        <p>The result differs from 1 if the specified cell spans multiple
+        columns.</p>
+
+        @param nRow
+            Row index of the accessible for which to return the column
+            extent.
+
+        @param nColumn
+            Column index of the accessible for which to return the column
+            extent.
+
+        @return
+            Returns the column extent of the specified.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified column index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+    */
+    long getAccessibleColumnExtentAt ([in] long nRow, [in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the row headers as an <type>XAccessibleTable</type>
+        object.
+
+        <p>Content and size of the returned table are implementation
+        dependent.</p>
+
+        @return
+            Returns allways a valid reference to an
+            <type>XAccessibleTable</type> object.
+    */
+    XAccessibleTable getAccessibleRowHeaders ();
+
+    /** Returns the column headers as an <type>XAccessibleTable</type>
+        object.
+
+        <p>Content and size of the returned table are implementation
+        dependent.</p>
+
+        @return
+            Returns allways a valid reference to an
+            <type>XAccessibleTable</type> object.
+    */
+    XAccessibleTable getAccessibleColumnHeaders ();
+
+    /** Returns a list of the indices of completely selected rows in a
+        table.
+
+        @return
+            The returned sequence contains indices of all completely
+            selected rows in the table.  This sequence is in ascending
+            order.  If no row is selected then the sequence is empty.
+    */
+    sequence<long> getSelectedAccessibleRows ();
+
+    /** Returns a list of the indices of completely selected columns in a
+        table.
+
+        @return
+            The returned sequence contains indices of all completely
+            selected columns in the table.  This sequence is in ascending
+            order.  If no column is selected then the sequence is empty.
+    */
+    sequence<long> getSelectedAccessibleColumns ();
+
+    /** Returns a boolean value indicating whether the specified row is
+        completely selected.
+
+        @param nRow
+            Index of the row for which to determine whether it is selected.
+
+        @return
+            Returns <TRUE/> if the specified row is selected completely and
+            <FALSE/> otherwise.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified row index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleRowCount()</member> - 1.
+    */
+    boolean isAccessibleRowSelected ([in] long nRow)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns a boolean value indicating whether the specified column
+        is completely selected.
+
+        @param nColumn
+            Index of the column for which to determine whether it is
+            selected.
+
+        @return
+            Returns <TRUE/> if the specified column is selected completely
+            and <FALSE/> otherwise.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified column index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+    */
+    boolean isAccessibleColumnSelected ([in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the <type>XAccessible</type> object at the specified row
+        and column in the table.
+
+        <p>This method has been renamed from the Java name
+        <code>getAccessibleAt</code> to
+        <member>XAccessibleTable::getAccessibleCellAt</member> to avoid
+        ambiguities with the
+        <member>XAccessibleComponent::getAccessibleAt</member> method when
+        accessed, for instance, from StarBasic.</p>
+
+        @param nRow
+            The row index for which to retrieve the cell.
+
+        @param nColumn
+            The column index for which to retrieve the cell.
+
+        @return
+            If both row and column index are valid then the corresponding
+            <type>XAccessible</type> object is returned that represents the
+            requested cell regardless of whether the cell is currently
+            visible (on the screen).
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the specified column and/or row index is not valid, i.e. lies not inside
+            the valide range of 0 up to
+            <member>XAccessibleTable::getAccessibleColumnCount()</member> - 1.
+    */
+    XAccessible getAccessibleCellAt ([in] long nRow, [in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the caption for the table.
+
+        @return
+            If the table has a caption then a reference to it is returned,
+            else an empty reference is returned.
+    */
+    XAccessible getAccessibleCaption ();
+
+    /** Returns the summary description of the table.
+
+        @return
+            Returns a reference to an implementation dependent
+            <type>XAccessible</type> object representing the table's summary
+            or an empty reference if the table does not support a summary.
+    */
+    XAccessible getAccessibleSummary ();
+
+    /** Returns a boolean value indicating whether the accessible at the
+        specified row and column is selected.
+
+        @param nRow
+            Row index of the cell for which to determine if the accessible
+            object that spans that cell is selected.
+
+        @param nColumn
+            Column index of the cell for which to determine if the
+            accessible object that spans that cell is selected.
+
+        @return
+            Returns <TRUE/> if the given row and column indices are valid
+            and the specified accessible object is selected.  Otherwise
+            <FALSE/> is returned.
+    */
+    boolean isAccessibleSelected ([in] long nRow, [in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns the child index of the accessible object that spans the
+        specified cell.
+
+        <p>This is the same index that would be returned by calling
+        <member>XAccessibleContext::getAccessibleIndexInParent</member> for
+        that accessible object.</p>
+
+        @param nRow
+            Row index of the accessible object for which to return the child
+            index.
+
+        @param nColumn
+            Row index of the accessible object for which to return the child
+            index.
+
+        @return
+            Child index of the specified accessible object or -1 if one or
+            both of the given indices is/are invalid.
+    */
+    long getAccessibleIndex ([in] long nRow, [in] long nColumn)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Translate the given child index into the corresponding row
+        index.
+
+        @param nChildIndex
+            Index of the child of the table for which to return the row
+            index.
+
+        @return
+            Returns the row index of the cell of the specified child or the
+            index of the first row if the child spans multiple rows.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if nChildIndex addresses an invalid row.
+    */
+    long getAccessibleRow ([in] long nChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Translate the given child index into the corresponding column
+        index.
+
+        @param nChildIndex
+            Index of the child of the table for which to return the column
+            index.
+
+        @return
+            Returns the column index of the cell of the specified child or
+            the index of the first column if the child spans multiple
+            columns.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if nChildIndex addresses an invalid column.
+    */
+    long getAccessibleColumn ([in] long nChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif
