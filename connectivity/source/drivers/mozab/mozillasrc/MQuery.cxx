@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:33:31 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 #endif
 #ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
 #include "MNSMozabProxy.hxx"
+#endif
+#include <com/sun/star/uno/Reference.hxx>
+#include <unotools/processfactory.hxx>
+#ifndef _COM_SUN_STAR_MOZILLA_XMOZILLABOOTSTRAP_HPP_
+#include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #endif
 
 #if OSL_DEBUG_LEVEL > 0
@@ -407,24 +412,46 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
     const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(nameAB.getStr());
     prefName.Append(pAddressBook);
 
-    nsCAutoString bindPrefName=prefName;
-    bindPrefName.Append(NS_LITERAL_CSTRING(".auth.dn"));
-    rv = prefs->SetCharPref (bindPrefName.get(),
-        MTypeConverter::ouStringToCCharStringAscii( bindDN.getStr() ) );
-    NS_ENSURE_SUCCESS(rv, rv);
+    if (bindDN.getLength())
+    {
+        nsCAutoString bindPrefName=prefName;
+        bindPrefName.Append(NS_LITERAL_CSTRING(".auth.dn"));
+        rv = prefs->SetCharPref (bindPrefName.get(),
+            MTypeConverter::ouStringToCCharStringAscii( bindDN.getStr() ) );
+        NS_ENSURE_SUCCESS(rv, rv);
 
-    nsCAutoString pwdPrefName=prefName;
-    pwdPrefName.Append(NS_LITERAL_CSTRING(".auth.pwd"));
-    rv = prefs->SetCharPref (pwdPrefName.get(),
-        MTypeConverter::ouStringToCCharStringAscii( password.getStr() ) );
-    NS_ENSURE_SUCCESS(rv, rv);
-
-    nsCAutoString sslPrefName=prefName;
-    sslPrefName.Append(NS_LITERAL_CSTRING(".UseSSL"));
-    rv = prefs->SetBoolPref (sslPrefName.get(),useSSL);
-    NS_ENSURE_SUCCESS(rv, rv);
+        nsCAutoString pwdPrefName=prefName;
+        pwdPrefName.Append(NS_LITERAL_CSTRING(".auth.pwd"));
+        rv = prefs->SetCharPref (pwdPrefName.get(),
+            MTypeConverter::ouStringToCCharStringAscii( password.getStr() ) );
+        NS_ENSURE_SUCCESS(rv, rv);
+    }
+    if (useSSL)
+    {
+        nsCAutoString sslPrefName=prefName;
+        sslPrefName.Append(NS_LITERAL_CSTRING(".UseSSL"));
+        rv = prefs->SetBoolPref (sslPrefName.get(),useSSL);
+        NS_ENSURE_SUCCESS(rv, rv);
+    }
     return rv;
 }
+
+//determine whether current profile is locked,any error will lead to return true
+sal_Bool isProfileLocked(OConnection* _pCon)
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap > xMozillaBootstrap;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    OSL_ENSURE( xFactory.is(), "can't get service factory" );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInstance = xFactory->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
+    OSL_ENSURE( xInstance.is(), "failed to create instance" );
+    xMozillaBootstrap = ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap >(xInstance,::com::sun::star::uno::UNO_QUERY);
+    if (_pCon)
+        return xMozillaBootstrap->isProfileLocked(_pCon->getProduct(),_pCon->getMozProfile());
+    else
+        return xMozillaBootstrap->isCurrentProfileLocked();
+}
+
 
 // -------------------------------------------------------------------------
 sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
@@ -483,7 +510,7 @@ sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
-    nsresult rv = xMProxy.StartProxy(&args);
+    nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     m_aErrorString = m_aQueryHelper->getErrorString();
     return rv;
 }
@@ -500,7 +527,7 @@ sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&rowIndex;
     args.arg3 = (void*)m_aQueryDirectory->directory;
-    nsresult rv = xMProxy.StartProxy(&args);
+    nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     m_aErrorString = m_aQueryHelper->getErrorString();
     return rv;
 
@@ -511,6 +538,9 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OSL_TRACE("IN MQuery::executeQuery()\n");
+    m_Product = _pCon->getProduct();
+    m_Profile = _pCon->getMozProfile();
+
     nsresult rv;
     MNSMozabProxy xMProxy;
     RunArgs args;
@@ -518,7 +548,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     args.argCount = 2;
     args.arg1 = (void*)this;
     args.arg2 = (void*)_pCon;
-    rv = xMProxy.StartProxy(&args);
+    rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     return rv;
 }
 // -------------------------------------------------------------------------
@@ -831,7 +861,7 @@ MQuery::resyncRow(sal_Int32 nDBRow)
     args.argCount = 2;
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&nDBRow;
-    nsresult rv = xMProxy.StartProxy(&args);
+    nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
     m_aErrorString = m_aQueryHelper->getErrorString();
     return rv;
 }
@@ -846,7 +876,7 @@ MQuery::createNewCard()
     args.argCount = 2;
     args.arg1 = (void*)m_aQueryHelper;
     args.arg2 = (void*)&nNumber;
-    nsresult rv = xMProxy.StartProxy(&args);
+    nsresult rv = xMProxy.StartProxy(&args,m_Product,m_Profile);
 
     m_aErrorString = m_aQueryHelper->getErrorString();
     NS_ENSURE_SUCCESS(rv,0);
@@ -868,7 +898,7 @@ MQuery::FreeNameMapper( MNameMapper* _ptr )
 }
 // -------------------------------------------------------------------------
 sal_Bool MQuery::
-isWritable()
+isWritable(OConnection* _pCon)
 {
     if ( !m_aQueryDirectory )
         return sal_False;
@@ -877,7 +907,7 @@ isWritable()
     nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(m_aQueryDirectory->directory, &rv);;
     if (NS_FAILED(rv))
         return sal_False;
-    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked())
+    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked(_pCon))
         return sal_False;
 
     PRBool isWriteable;
