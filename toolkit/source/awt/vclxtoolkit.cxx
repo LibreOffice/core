@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-23 12:44:15 $
+ *  last change: $Author: mt $ $Date: 2002-10-11 08:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,7 +570,8 @@ void SAL_CALL VCLXToolkit::disposing()
     {
         VCLXWindow* pParentComponent = VCLXWindow::GetImplementation( rDescriptor.Parent );
 
-        DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
+        // #103939# Don't through assertion, may be it's a system dependend window, used in ImplCreateWindow.
+        // DBG_ASSERT( pParentComponent, "ParentComponent not valid" );
 
         if ( pParentComponent )
             pParent = pParentComponent->GetWindow();
