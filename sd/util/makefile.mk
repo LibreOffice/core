@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 18:49:08 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:37:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,9 @@ RESLIB1SRSFILES=\
     $(SRS)$/core.srs			\
     $(SRS)$/html.srs			\
     $(SRS)$/sdslots.srs			\
-    $(SRS)$/accessibility.srs		\
+    $(SRS)$/accessibility.srs	\
     $(SRS)$/notes.srs			\
+    $(SRS)$/animui.srs			\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
@@ -103,6 +104,7 @@ SHL1STDLIBS+= \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
+    $(CPPCANVASLIB) \
     $(BASEGFXLIB) \
     $(GOODIESLIB) \
     $(SVTOOLLIB) \
@@ -162,6 +164,8 @@ LIB3FILES=      \
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
+            $(SLB)$/ppt.lib 		\
+            $(SLB)$/animui.lib		\
             $(SLB)$/accessibility.lib	\
             $(SLB)$/toolpanel.lib		\
             $(SLB)$/uitools.lib			\
@@ -171,7 +175,8 @@ LIB3FILES=      \
             $(SLB)$/slsview.lib			\
             $(SLB)$/slscontroller.lib	\
             $(SLB)$/slscache.lib		\
-            $(SLB)$/notes.lib		
+            $(SLB)$/notes.lib			\
+            $(SLB)$/slideshow.lib
 
 
 # sdd
