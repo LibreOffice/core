@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.28 2001-12-17 10:22:10 bm Exp $
+	$Id: chart.mod,v 1.29 2002-05-06 08:52:55 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -230,6 +230,9 @@
 	that represents the data for the whole chart
 -->
 <!ELEMENT chart:series ( chart:domain*,
+                         mean-value,
+						 regression-curve,
+						 error-indicator,
 						 chart:data-point* )>
 <!ATTLIST chart:series
 		  chart:values-cell-range-address %cell-range-address; #IMPLIED
@@ -248,6 +251,10 @@
 		  chart:style-name %styleName; #IMPLIED >
 
 <!-- statistical properties -->
+
+<!ELEMENT chart:mean-value chart:style-name %styleName; #IMPLIED >
+<!ELEMENT chart:regression-curve chart:style-name %styleName; #IMPLIED >
+<!ELEMENT chart:error-indicator chart:style-name %styleName; #IMPLIED >
 
 <!ATTLIST style:properties
 		  chart:mean-value %boolean; #IMPLIED
