@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.41 2002-01-11 16:45:00 dvo Exp $
+	$Id: text.mod,v 1.42 2002-01-17 12:32:08 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -132,19 +132,21 @@
 				   text:script |
 				   text:measure" >
 
-<!ENTITY % inline-text "(#PCDATA|
-						 text:span|text:tab-stop|text:s|text:line-break|
-						 text:footnote|text:endnote|text:a|
-						 text:bookmark|text:bookmark-start|text:bookmark-end|
-						 text:reference-mark|text:reference-mark-start|
-						 text:reference-mark-end|%fields;|%shape;|
-						 text:toc-mark-start | text:toc-mark-end | 
-						 text:toc-mark | text:user-index-mark-start |
-						 text:user-index-mark-end | text:user-index-mark |
-						 text:alphabetical-index-mark-start |
-						 text:alphabetical-index-mark-end |
-						 text:alphabetical-index-mark |
-						 %change-marks; | draw:a | text:ruby)*">
+<!ENTITY % inline-text-elements "
+				 text:span|text:tab-stop|text:s|text:line-break|
+				 text:footnote|text:endnote|text:a|
+				 text:bookmark|text:bookmark-start|text:bookmark-end|
+				 text:reference-mark|text:reference-mark-start|
+				 text:reference-mark-end|%fields;|%shape;|
+				 text:toc-mark-start | text:toc-mark-end | 
+				 text:toc-mark | text:user-index-mark-start |
+				 text:user-index-mark-end | text:user-index-mark |
+				 text:alphabetical-index-mark-start |
+				 text:alphabetical-index-mark-end |
+				 text:alphabetical-index-mark |
+				 %change-marks; | draw:a | text:ruby">
+
+<!ENTITY % inline-text "( #PCDATA | %inline-text-elements; )*">
 
 <!ELEMENT text:p %inline-text;>
 <!ELEMENT text:h %inline-text;>
@@ -159,7 +161,7 @@
 <!ELEMENT text:span %inline-text;>
 <!ATTLIST text:span text:style-name %styleName; #REQUIRED>
 
-<!ELEMENT text:a %inline-text;>
+<!ELEMENT text:a (#PCDATA | office:events | %inline-text-elements;)*>
 <!ATTLIST text:a xlink:href %uriReference; #REQUIRED>
 <!ATTLIST text:a xlink:type (simple) #FIXED "simple">
 <!ATTLIST text:a xlink:actuate (onRequest) "onRequest">
