@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-27 09:21:54 $
+#   last change: $Author: kz $ $Date: 2005-03-01 11:55:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 use File::Basename;
 use File::Path;
 use File::Copy;
+use File::Find;
 use Getopt::Long;
 
 ########################
@@ -83,7 +84,8 @@ $is_protocol_test = 0;
 $is_remove_on_error = 0;
 $is_remove_at_end = 1;
 $is_do_statistics = 0;
-$is_do_deinstall = 1;
+$is_do_deinstall = 0;
+$is_admin_installation = 1;
 $is_oo = 1;
 
 $gui = $ENV{GUI};
@@ -91,7 +93,7 @@ $temp_path = $ENV{TEMP};
 $vcsid = $ENV{VCSID};
 $sversion_saved = 0;
 $FileURLPrefix = "file:///";
-$userinstalldir = "Office";
+$userinstalldir = "UserInstallation";
 $cygwin = "cygwin";
 $prefered_lang = "en-US";
 $global_instset_mask = "";
@@ -257,7 +259,13 @@ else {
 if (defined($vcsid)) {
     $installpath_without .= $PathSeparator . $vcsid;
 }
-$installpath_without .= $PathSeparator . "office";
+if (!$is_oo) {
+    $installpath_without .= $PathSeparator . "StarOffice";
+}
+else {
+    $installpath_without .= $PathSeparator . "OpenOffice";
+}
+
 $installpath = $installpath_without . $PathSeparator;
 
 $ENV{STAR_REGISTRY}="";
@@ -280,7 +288,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.12 $ ';
+$id_str = ' $Revision: 1.13 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -515,13 +523,23 @@ sub doInstall {
             if ($gui eq $cygwin) {
                 my $convertinstallset = ConvertCygwinToWin_Shell("$installsetpath$file");
                 my $convertdestdir = ConvertCygwinToWin_Shell($dest_installdir);
-                $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
+                if ($is_admin_installation) {
+                    $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir";
+                }
+                else {
+                    $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
+                }
 
             }
             else {
-                $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+                if ($is_admin_installation) {
+                    $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir";
+                }
+                else {
+                    $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
+                }
             }
-            if (!$is_oo) {
+            if (!$is_oo and !$is_admin_installation) {
                 if ($gui eq $cygwin) {
                     my $convertdata = ConvertCygwinToWin_Shell($DATA);
                     $Command .= " TRANSFORMS=$convertdata" . "staroffice.mst";
@@ -532,19 +550,29 @@ sub doInstall {
             }
             execute_Command ($Command, $error_msiexec, $show_Message,  $command_normal);
         }
-        $Command = "$COPY_FILE \"$installsetpath" . "setup.ini" . "\" \"$dest_installdir\"";
-        execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
-        @DirArray = ();
-        getSubDirsFullPath ($dest_installdir, \@DirArray);
-        if ($#DirArray == 0) {
-            $basedir = $DirArray[0] . $PathSeparator;
+        if (!$is_admin_installation) {
+            $Command = "$COPY_FILE \"$installsetpath" . "setup.ini" . "\" \"$dest_installdir\"";
+            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
         }
-        elsif ($#DirArray == -1) {
-            print_error ($error_setup, $show_Message);
+        if ($is_admin_installation) {
+            $basedir = findBasedir($dest_installdir);
+            if ($basedir eq "") {
+                print_error ($error_setup, $show_Message);
+            }
         }
         else {
-            $basedir = $dest_installdir;
-         }
+            @DirArray = ();
+            getSubDirsFullPath ($dest_installdir, \@DirArray);
+            if ($#DirArray == 0) {
+                $basedir = $DirArray[0] . $PathSeparator;
+            }
+            elsif ($#DirArray == -1) {
+                print_error ($error_setup, $show_Message);
+            }
+            else {
+                $basedir = $dest_installdir;
+             }
+        }
     }
     elsif ($gui eq "UNX") {
         $system = `uname -s`;
@@ -626,6 +654,22 @@ sub doInstall {
          }
     }
     return ($basedir);
+}
+
+sub findBasedir {
+    my ($destdir) = @_;
+    my (@dirs);
+    local ($installeddir);
+    $installeddir = "";
+    push (@dirs, $destdir);
+    find (\&findWanted, @dirs);
+
+    sub findWanted {
+        if (-d and $_ eq "program") {
+               $installeddir=$File::Find::dir . $PathSeparator;
+        }
+    }
+    return $installeddir;
 }
 
 sub langsort {
