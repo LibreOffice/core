@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 13:02:28 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,18 @@ void SmParser::Insert(const String &rText, USHORT nPos)
     nTokenIndex += nLen;
 }
 
+
+void SmParser::Replace( USHORT nPos, USHORT nLen, const String &rText )
+{
+    DBG_ASSERT( nPos + nLen <= BufferString.Len(), "argument mismatch" );
+
+    BufferString.Replace( nPos, nLen, rText );
+    INT16  nChg = rText.Len() - nLen;
+    BufferIndex += nChg;
+    nTokenIndex += nChg;
+}
+
+
 // First character may be any alphabetic
 const sal_Int32 coStartFlags =
         KParseTokens::ANY_LETTER_OR_NUMBER |
@@ -503,6 +515,9 @@ void SmParser::NextToken()
         }
 
     } while (bCont);
+
+    // set index of current token
+    nTokenIndex = BufferIndex;
 
     CurToken.nRow   = Row;
     CurToken.nCol   = nRealStart - ColOff + 1;
@@ -2239,6 +2254,30 @@ void SmParser::Matrix()
 
 void SmParser::Special()
 {
+    //
+    // conversion of symbol names for 6.0 (XML) fileformat
+    //
+    BOOL bReplace = FALSE;
+    String &rName = CurToken.aText;
+    String aNewName;
+    if (IsImportSymbolNames())
+    {
+        const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+        aNewName = rLSD.GetUiSymbolName( rName );
+        bReplace = TRUE;
+    }
+    else if (IsExportSymbolNames())
+    {
+        const SmLocalizedSymbolData &rLSD = SM_MOD1()->GetLocSymbolData();
+        aNewName = rLSD.GetExportSymbolName( rName );
+        bReplace = TRUE;
+    }
+    if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
+    {
+        Replace( GetTokenIndex() + 1, rName.Len(), aNewName );
+        rName = aNewName;
+    }
+
     NodeStack.Push(new SmSpecialNode(CurToken));
     NextToken();
 }
@@ -2273,7 +2312,7 @@ void SmParser::Error(SmParseError eError)
 
 SmParser::SmParser()
 {
-    bConvert40To50 = FALSE;
+    bConvert40To50 = bImportSymNames = bExportSymNames = FALSE;
 }
 
 

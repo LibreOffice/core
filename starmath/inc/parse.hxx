@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-19 11:38:04 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "types.hxx"
 
 class SmNode;
+class SmDocShell;
 
 
 // TokenGroups
@@ -200,16 +201,18 @@ DECLARE_LIST(SmErrDescList, SmErrorDesc *);
 
 class SmParser
 {
-    String        BufferString;
-    SmToken       CurToken;
-    SmNodeStack   NodeStack;
-    SmErrDescList ErrDescList;
-    int           CurError;
-    xub_StrLen    BufferIndex,
-                  nTokenIndex;
-    USHORT        Row,
-                  ColOff;
-    BOOL          bConvert40To50;
+    String          BufferString;
+    SmToken         CurToken;
+    SmNodeStack     NodeStack;
+    SmErrDescList   ErrDescList;
+    int             CurError;
+    xub_StrLen      BufferIndex,
+                    nTokenIndex;
+    USHORT          Row,
+                    ColOff;
+    BOOL            bConvert40To50,
+                    bImportSymNames,
+                    bExportSymNames;
 
     // declare copy-constructor and assignment-operator private
     SmParser(const SmParser &);
@@ -220,6 +223,7 @@ protected:
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
     void            Insert(const String &rText, USHORT nPos);
+    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
 
     inline BOOL     TokenInGroup(ULONG nGroup);
 
@@ -267,6 +271,11 @@ public:
 
     BOOL         IsConvert40To50() const         { return bConvert40To50; }
     void         SetConvert40To50(BOOL bConvert) { bConvert40To50 = bConvert; }
+
+    BOOL         IsImportSymbolNames() const        { return bImportSymNames; }
+    void         SetImportSymbolNames(BOOL bVal)    { bImportSymNames = bVal; }
+    BOOL         IsExportSymbolNames() const        { return bExportSymNames; }
+    void         SetExportSymbolNames(BOOL bVal)    { bExportSymNames = bVal; }
 
     USHORT       AddError(SmParseError Type, SmNode *pNode);
 

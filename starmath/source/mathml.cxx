@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-13 11:51:38 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@ using namespace ::xmloff::token;
 
 #ifndef STARMATH_HRC
 #include <starmath.hrc>
+#endif
+#ifndef PARSE_HXX
+#include <parser.hxx>
 #endif
 
 #define IMPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter")
@@ -617,6 +620,16 @@ void SmXMLImport::endDocument(void)
             }
             String aDummy;
             pDocShell->SetText(aDummy);
+
+            // Convert symbol names
+            SmParser &rParser = pDocShell->GetParser();
+            BOOL bVal = rParser.IsImportSymbolNames();
+            rParser.SetImportSymbolNames( TRUE );
+            SmNode *pTree = rParser.Parse( aText );
+            aText = rParser.GetText();
+            delete pTree;
+            rParser.SetImportSymbolNames( bVal );
+
             pDocShell->SetText(aText);
         }
         DBG_ASSERT(pModel,"So there *was* a uno problem after all");
@@ -856,7 +869,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 }
 
 SmXMLExport::SmXMLExport(sal_uInt16 nExportFlags) : SvXMLExport(MAP_INCH, XML_MATH, nExportFlags) , pTree(0) ,
-    bSuccess(sal_False),pText(0)
+    bSuccess(sal_False)
 {}
 
 sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
@@ -878,7 +891,7 @@ sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
             SmDocShell *pDocShell =
                 static_cast<SmDocShell*>(pModel->GetObjectShell());
             pTree = pDocShell->GetFormulaTree();
-            pText = &(pDocShell->GetText());
+            aText = pDocShell->GetText();
         }
 
         GetDocHandler()->startDocument();
@@ -3250,7 +3263,7 @@ void SmXMLExport::_ExportContent()
         sal_True);
     SvXMLElementExport *pSemantics=0;
 
-    if (pText)
+    if (aText.Len())
     {
         pSemantics = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,
             sXML_semantics, sal_True, sal_True);
@@ -3258,13 +3271,33 @@ void SmXMLExport::_ExportContent()
 
     ExportNodes(pTree,0);
 
-    if (pText)
+    if (aText.Len())
     {
+        // Convert symbol names
+        uno::Reference <frame::XModel> xModel = GetModel();
+        uno::Reference <lang::XUnoTunnel> xTunnel;
+        xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+        SmModel *pModel = reinterpret_cast<SmModel *>
+            (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+        SmDocShell *pDocShell = pModel ?
+            static_cast<SmDocShell*>(pModel->GetObjectShell()) : 0;
+        DBG_ASSERT( pDocShell, "doc shell missing" );
+        if (pDocShell)
+        {
+            SmParser &rParser = pDocShell->GetParser();
+            BOOL bVal = rParser.IsExportSymbolNames();
+            rParser.SetExportSymbolNames( TRUE );
+            SmNode *pTree = rParser.Parse( aText );
+            aText = rParser.GetText();
+            delete pTree;
+            rParser.SetExportSymbolNames( bVal );
+        }
+
         AddAttribute(XML_NAMESPACE_MATH,sXML_encoding,
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
         SvXMLElementExport aAnnotation(*this,XML_NAMESPACE_MATH,
             sXML_annotation,sal_True, sal_False);
-        GetDocHandler()->characters(::rtl::OUString(pText->GetBuffer()));
+        GetDocHandler()->characters(::rtl::OUString( aText ));
     }
     delete pSemantics;
 }

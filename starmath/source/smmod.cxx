@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-02 15:37:06 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,91 @@ SmLocalizedSymbolData::SmLocalizedSymbolData() :
 SmLocalizedSymbolData::~SmLocalizedSymbolData()
 {
 }
+
+
+const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName ) const
+{
+    String aRes;
+
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
+    USHORT nCount = rExportNames.Count();
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    {
+        if (rExportName == rExportNames.GetString(i))
+        {
+            aRes = rUiNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+
+const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName ) const
+{
+    String aRes;
+
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
+    USHORT nCount = rUiNames.Count();
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    {
+        if (rUiName == rUiNames.GetString(i))
+        {
+            aRes = rExportNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+
+const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportName ) const
+{
+    String aRes;
+
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
+    USHORT nCount = rExportNames.Count();
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    {
+        if (rExportName == rExportNames.GetString(i))
+        {
+            aRes = rUiNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
+
+const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiName ) const
+{
+    String aRes;
+
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
+    USHORT nCount = rUiNames.Count();
+    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    {
+        if (rUiName == rUiNames.GetString(i))
+        {
+            aRes = rExportNames.GetString(i);
+            break;
+        }
+    }
+
+    return aRes;
+}
+
 
 /////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-28 07:19:17 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@
 #ifndef UTILITY_HXX
 #include "utility.hxx"
 #endif
-
+#ifndef _SMMOD_HXX
+#include <smmod.hxx>
+#endif
 
 #define SS_ATTR_ACCESS      0x80
 
@@ -95,11 +97,27 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-String GetExportSymbolName( const String &rUiSymbolName );
-String GetUiSymbolName( const String &rExportSymbolName );
+inline const String GetExportSymbolName( const String &rUiSymbolName )
+{
+    return SM_MOD1()->GetLocSymbolData().GetExportSymbolName( rUiSymbolName );
+}
 
-String GetExportSymbolSetName( const String &rUiSymbolSetName );
-String GetUiSymbolSetName( const String &rExportSymbolSetName );
+
+inline const String GetUiSymbolName( const String &rExportSymbolName )
+{
+    return SM_MOD1()->GetLocSymbolData().GetUiSymbolName( rExportSymbolName );
+}
+
+inline const String GetExportSymbolSetName( const String &rUiSymbolSetName )
+{
+    return SM_MOD1()->GetLocSymbolData().GetExportSymbolSetName( rUiSymbolSetName );
+}
+
+
+inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
+{
+    return SM_MOD1()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-02 15:32:10 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,13 @@ public:
 
     const ResStringArray& GetUiSymbolNamesArray() const     { return aUiSymbolNamesAry; }
     const ResStringArray& GetExportSymbolNamesArray() const { return aExportSymbolNamesAry; }
+    const String          GetUiSymbolName( const String &rExportName ) const;
+    const String          GetExportSymbolName( const String &rUiName ) const;
 
     const ResStringArray& GetUiSymbolSetNamesArray() const     { return aUiSymbolSetNamesAry; }
     const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
+    const String          GetUiSymbolSetName( const String &rExportName ) const;
+    const String          GetExportSymbolSetName( const String &rUiName ) const;
 
     const ResStringArray& GetFrench50NamesArray() const     { return aFrench50NamesAry; }
     const ResStringArray& GetFrench60NamesArray() const     { return aFrench60NamesAry; }

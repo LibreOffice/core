@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-01 14:00:04 $
+ *  last change: $Author: tl $ $Date: 2001-08-28 07:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,8 +410,7 @@ public:
     SmXMLExport(const SmNode *pIn,const rtl::OUString &rFileName,
         com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
-        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False),
-        pText(0){}
+        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False) {}
     virtual ~SmXMLExport() {};
 
     void _ExportAutoStyles() {}
@@ -450,7 +449,7 @@ protected:
     void ExportMatrix(const SmNode *pNode, int nLevel);
 private:
     const SmNode *pTree;
-    const String *pText;
+    String        aText;
     sal_Bool bSuccess;
 };
 #endif
