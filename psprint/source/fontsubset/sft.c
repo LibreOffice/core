@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 17:17:56 $
+ *  last change: $Author: pl $ $Date: 2001-07-20 09:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.6 2001-06-27 17:17:56 pl Exp $
+/* $Id: sft.c,v 1.7 2001-07-20 09:56:59 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1583,7 +1583,7 @@ int OpenTTFont(const char *fname, uint32 facenum, TrueTypeFont** ttf) /*FOLD01*/
 
     if (!fname || !*fname) return SF_BADFILE;
 
-    t = malloc(sizeof(TrueTypeFont));
+    t = calloc(1,sizeof(TrueTypeFont));
     assert(t != 0);
     t->tag = 0;
     t->fname = 0;
