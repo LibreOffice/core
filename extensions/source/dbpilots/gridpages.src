@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:52:18 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ String RID_STR_DATEPOSTFIX
     Text [ italian ] = "(Data)";
     Text [ danish ] = "(Dato)";
     Text [ swedish ] = "(Datum)";
-    Text [ polish ] = "(Data)";
+    Text [ polish ] = " (Data)";
     Text [ portuguese_brazilian ] = "(Datum)";
     Text [ japanese ] = "(“ú•t)";
     Text [ chinese_simplified ] = "(ÈÕÆÚ)";
@@ -231,7 +231,7 @@ String RID_STR_TIMEPOSTFIX
     Text [ russian ] = " (Âðåìÿ)";
     Text [ dutch ] = " (Tijd)";
     Text [ french ] = " (Heure)";
-    Text [ spanish ] = " (Hora)";
+    Text [ spanish ] = "(Hora)";
     Text [ italian ] = " (Ora)";
     Text [ danish ] = " (Klokkeslæt)";
     Text [ swedish ] = " (Tid)";
@@ -252,6 +252,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/05 14:52:18  fs
+ *  initial checkin - grid auto pilot implementations
+ *
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
