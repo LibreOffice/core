@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2000-11-14 14:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,13 @@
 #include <so3/svstor.hxx>
 #endif
 
-
 #ifndef _IODLG_HXX //autogen
 #include <sfx2/iodlg.hxx>
 #endif
 
-
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 
 LibPage::LibPage( Window * pParent ) :
         TabPage(        pParent,IDEResId( RID_TP_LIBS ) ),
@@ -411,12 +412,8 @@ void LibPage::InsertLib()
     }
     else
     {
-        // Macro-Pfad vom Ini-Manager
-        SfxIniManager* pIni = SFX_INIMANAGER()->Find( SFX_KEY_WORK_PATH );
-        if ( !pIni )
-            pIni = SFX_INIMANAGER();
-        DBG_ASSERT( pIni, "Ini?!" );
-        aPath = pIni->Get( SFX_KEY_WORK_PATH );
+        // macro path from configuration management
+        aPath = SvtPathOptions().GetWorkPath();
         aPath += DirEntry::GetAccessDelimiter();
         aFileDialogBox.SetPath( aPath );
         aFileDialogBox.SetCurFilter( String( IDEResId( RID_STR_DOC ) ) );
