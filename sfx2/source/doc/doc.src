@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-21 21:13:26 $
+ *  last change: $Author: kz $ $Date: 2002-02-28 17:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ dutch ] = "Opmaakprofielen in  ";
     Text[ chinese_simplified ] = "ζ ΌεΌζ ·εΌε¨ ";
     Text[ greek ] = "Πρότυπα μορφοποίησης στο  ";
-    Text[ korean ] = "μ„μ‹ ν…ν”λ¦Ώ";
+    Text[ korean ] = "μ„μ‹ λ¬Έμ„";
     Text[ turkish ] = "Biηimler: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilos en  ";
