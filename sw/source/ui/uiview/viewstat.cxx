@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-16 14:42:55 $
+ *  last change: $Author: os $ $Date: 2001-04-23 08:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,9 @@
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
-
+#ifndef _TOX_HXX
+#include <tox.hxx>
+#endif
 
 #ifndef _REDLENUM_HXX
 #include <redlenum.hxx>
@@ -263,8 +265,12 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_EDIT_CURRENT_TOX:
             case FN_UPDATE_CUR_TOX:
-                if(!pWrtShell->GetCurTOX())
+            {
+                const SwTOXBase* pBase = 0;
+                if(0 == (pBase = pWrtShell->GetCurTOX()) ||
+                    (FN_EDIT_CURRENT_TOX == nWhich && pBase->IsTOXBaseInReadonly()))
                     rSet.DisableItem(nWhich);
+            }
             break;
             case SID_TWAIN_SELECT:
             case SID_TWAIN_TRANSFER:
