@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 12:27:46 $
+ *  last change: $Author: mba $ $Date: 2002-09-10 17:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,16 +434,17 @@ BOOL SfxPopupWindow::Close()
     bFloating = FALSE;
     FloatingWindow::Close();
 
-    if ( SFX_APP()->IsDowning() )
+    //if ( SFX_APP()->IsDowning() )
     {
         Delete(0);
     }
+/*
     else
     {
         UnBind();
         GetpApp()->PostUserEvent(LINK(this, SfxPopupWindow, Delete) , (void*)0);
     }
-
+*/
     return TRUE;
 }
 
