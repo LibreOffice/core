@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_impress.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:20:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@ de = "%PRODUCTNAME Impress"
 en-US = "%PRODUCTNAME Impress"
 
 [STR_DESC_MODULE_PRG_IMPRESS]
-de = "Das Präsentationsmodul ermöglicht Ihnen das Erstellen eindrucksvoller Präsentationen."
-en-US = "The presentation module helps you create impressive presentations."
+de = "Erstellen und bearbeiten von Präsentationen für Dia-Vorführungen, Meetings und Web-Auftritte mit %PRODUCTNAME Impress."
+en-US = "Create and edit presentations for slideshows, meeting and Web pages by using %PRODUCTNAME Impress."
 
 [STR_NAME_MODULE_PRG_IMPRESS_BIN]
 de = "Programmodul"
