@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:35:02 $
+ *  last change: $Author: cp $ $Date: 2000-12-02 15:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ ExtendedFontStruct::GetFontStruct( sal_Unicode nChar,
             {
                 *pEncodingInOut = nEnc;
                 *pFontInOut = GetFontStruct( nEnc );
-                return True;
+                if (*pFontInOut != NULL)
+                    return True;
             }
         }
     }
