@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:18:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,6 +630,7 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
     }
     else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
     {
+        // TODO/MBA: do we need a BaseURL here?!
         bRet = SetImageMap( *mpImageMap, rFlavor );
     }
     else if( ( FORMAT_FILE == nFormat ) && mpURL )
