@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:38:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 static BOOL bCheck1 = TRUE;
 static BOOL bCheck2 = FALSE;
@@ -441,11 +443,17 @@ IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 
 IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, pButton )
 {
-    SvxCharacterMap* pMap = new SvxCharacterMap( &aDelimPB );
-    pMap->SetChar( GetDelimChar() );
-    if( RET_OK == pMap->Execute() )
-        aDelimEdt.SetText( pMap->GetChar() );
-    delete pMap;
+    //CHINA001 SvxCharacterMap* pMap = new SvxCharacterMap( &aDelimPB );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
+    {
+        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB,  ResId(RID_SVXDLG_CHARMAP));
+        DBG_ASSERT(pMap, "Dialogdiet fail!");//CHINA001
+        pMap->SetChar( GetDelimChar() );
+        if( RET_OK == pMap->Execute() )
+            aDelimEdt.SetText( pMap->GetChar() );
+        delete pMap;
+    }
     return 0;
 }
 
