@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,6 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
             return etTable;
         case etQueryContainer:
             return etQuery;
-        case etBookmarkContainer:
-            return etBookmark;
     }
     return etUnknown;
 }
@@ -123,13 +121,11 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox()->GetParent(_pEntry);
     SvLBoxEntry* pTables        = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_TABLES);
     SvLBoxEntry* pQueries       = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_QUERIES);
-    SvLBoxEntry* pBookmarks     = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_BOOKMARKS);
 
 #ifdef DBG_UTIL
     String sTest;
     if (pTables) sTest = m_pTreeView->getListBox()->GetEntryText(pTables);
     if (pQueries) sTest = m_pTreeView->getListBox()->GetEntryText(pQueries);
-    if (pBookmarks) sTest = m_pTreeView->getListBox()->GetEntryText(pBookmarks);
 #endif
 
     if (pRootEntry == _pEntry)
@@ -141,17 +137,11 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     if (pQueries == _pEntry)
         return etQueryContainer;
 
-    if (pBookmarks == _pEntry)
-        return etBookmarkContainer;
-
     if (pTables == pEntryParent)
         return etTable;
 
     if (pQueries == pEntryParent)
         return etQuery;
-
-    if (pBookmarks == pEntryParent)
-        return etBookmark;
 
     return etUnknown;
 }
@@ -215,7 +205,7 @@ String SbaTableQueryBrowser::getURL() const
 //------------------------------------------------------------------------------
 ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
 {
-    return new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) );
+    return m_bShowToolbox ? new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) ) : NULL;
 }
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::notifyHiContrastChanged()
