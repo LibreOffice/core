@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: ama $ $Date: 2001-11-30 13:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,9 +472,10 @@ public:
     long nRowWidth;
     long nWordWidth;
     long nWordAdd;
+    xub_StrLen nNoLineBreak;
     SwMinMaxArgs( OutputDevice *pOutI, ULONG& rMinI, ULONG &rMaxI, ULONG &rAbsI )
         : pOut( pOutI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
-        { nRowWidth = nWordWidth = nWordAdd = 0; }
+        { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
     void Minimum( long nNew ) { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
@@ -493,9 +494,9 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
             bClear = CH_BLANK == rTxt.GetChar( nStop );
             Boundary aBndry( pBreakIt->xBreak->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
-                             WordType::ANY_WORD, TRUE ) );
+                             WordType::DICTIONARY_WORD, TRUE ) );
             nStop = aBndry.endPos;
-            if ( nIdx <= aBndry.startPos )
+            if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
                 rArg.NewWord();
             if( nStop == nIdx )
                 ++nStop;
@@ -761,7 +762,9 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
                CH_TAB != ( cChar = aText.GetChar( nStop ) ) &&
-               CH_BREAK != cChar && !pHint )
+               CH_BREAK != cChar && CHAR_HARDBLANK != cChar &&
+               CHAR_HARDHYPHEN != cChar && CHAR_SOFTHYPHEN != cChar &&
+               !pHint )
         {
             if( ( CH_TXTATR_BREAKWORD != cChar && CH_TXTATR_INWORD != cChar )
                 || ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
@@ -788,7 +791,26 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                 aIter.SeekAndChg( ++nIdx, pOut );
             }
             break;
-
+            case CHAR_SOFTHYPHEN:
+                ++nIdx;
+            break;
+            case CHAR_HARDBLANK:
+            case CHAR_HARDHYPHEN:
+            {
+                XubString sTmp( cChar );
+                SwDrawTextInfo aDrawInf(
+                        GetDoc()->GetRootFrm() ?
+                        GetDoc()->GetRootFrm()->GetCurrShell() : 0,
+                        *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
+                aArg.nWordWidth += nAktWidth;
+                aArg.nRowWidth += nAktWidth;
+                if( (long)rAbsMin < aArg.nWordWidth )
+                    rAbsMin = aArg.nWordWidth;
+                aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
+                aArg.nNoLineBreak = nIdx++;
+            }
+            break;
             case CH_TXTATR_BREAKWORD:
             case CH_TXTATR_INWORD:
             {
@@ -857,22 +879,6 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
-                        break;
-                    }
-                    case RES_TXTATR_HARDBLANK :
-                    {
-                        XubString sTmp( pHint->GetHardBlank().GetChar() );
-                        SwDrawTextInfo aDrawInf(
-                                GetDoc()->GetRootFrm() ?
-                                GetDoc()->GetRootFrm()->GetCurrShell() : 0,
-                                *pOut, 0, sTmp, 0, 1, 0, sal_False );
-                        nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
-                        aArg.nWordWidth = nOldWidth + nAktWidth;
-                        aArg.nWordAdd = nOldAdd;
-                        aArg.nRowWidth += nAktWidth;
-                        if( (long)rAbsMin < aArg.nWordWidth )
-                            rAbsMin = aArg.nWordWidth;
-                        aArg.Minimum( aArg.nWordWidth + aArg.nWordAdd );
                         break;
                     }
                     default: aArg.nWordWidth = nOldWidth;
@@ -999,6 +1005,8 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         {
             cChar = aText.GetChar( nStop );
             if( CH_TAB == cChar || CH_BREAK == cChar ||
+                CHAR_HARDBLANK == cChar || CHAR_HARDHYPHEN == cChar ||
+                CHAR_SOFTHYPHEN == cChar ||
                ( CH_TXTATR_BREAKWORD == cChar ||  CH_TXTATR_INWORD == cChar ) &&
                ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
                 break;
@@ -1025,7 +1033,17 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         else if ( cChar == CH_TAB )
         {
             // tab receives width of one space
-            SwDrawTextInfo aDrawInf( 0, *pOut, 0, ' ', 0, 1 );
+            XubString sTmp( CH_BLANK );
+            SwDrawTextInfo aDrawInf( 0, *pOut, 0, sTmp, 0, 1 );
+            nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
+            nIdx++;
+        }
+        else if ( cChar == CHAR_SOFTHYPHEN )
+            ++nIdx;
+        else if ( cChar == CHAR_HARDBLANK || cChar == CHAR_HARDHYPHEN )
+        {
+            XubString sTmp( cChar );
+            SwDrawTextInfo aDrawInf( 0, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
             nIdx++;
         }
@@ -1047,17 +1065,6 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                     const String aTxt = pFld->GetCntnt( FALSE );
                     SwDrawTextInfo aDrawInf( 0, *pOut, 0, aTxt, 0, aTxt.Len() );
 
-                    nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
-                    break;
-                }
-                case RES_TXTATR_HARDBLANK :
-                {
-                    XubString aTxt( pHint->GetHardBlank().GetChar() );
-
-                    SwDrawTextInfo aDrawInf(
-                        GetDoc()->GetRootFrm() ?
-                        GetDoc()->GetRootFrm()->GetCurrShell() : 0,
-                        *pOut, 0, aTxt, 0, 1 );
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                     break;
                 }
