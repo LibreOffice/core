@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:10:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,10 +927,12 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_ScaleX :
                                     {
-                                        sal_Bool bTextPathScaleX;
-                                        if ( rProp.Value >>= bTextPathScaleX )
-                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_SCALE_X,
-                                                bTextPathScaleX ? GetXMLToken( XML_TRUE ) : GetXMLToken( XML_FALSE ) );
+                                        sal_Bool bScaleX;
+                                        if ( rProp.Value >>= bScaleX )
+                                        {
+                                            aStr = bScaleX ? GetXMLToken( XML_SHAPE ) : GetXMLToken( XML_PATH );
+                                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TEXT_PATH_SCALE, aStr );
+                                        }
                                     }
                                     break;
                                     case EAS_SameLetterHeights :
