@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 11:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,16 +559,26 @@ void OCopyTableWizard::loadData()
                 {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
-                        pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(50),pTypeInfo->nPrecision));
+                        {
+                            sal_Int32 nPrec = 50;
+                            if(pActFieldDescr->GetPrecision())
+                                nPrec = pActFieldDescr->GetPrecision();
+                            pActFieldDescr->SetPrecision(::std::min<sal_Int32>(nPrec,pTypeInfo->nPrecision));
+                        }
                         break;
                     default:
-                        if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
                         {
-                            pActFieldDescr->SetPrecision(5);
-                            pActFieldDescr->SetScale(0);
+                            sal_Int32 nPrec = 16;
+                            if(pActFieldDescr->GetPrecision())
+                                nPrec = pActFieldDescr->GetPrecision();
+                            if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
+                            {
+                                pActFieldDescr->SetPrecision(nPrec ? nPrec : 5);
+                                pActFieldDescr->SetScale(::std::min<sal_Int32>(pActFieldDescr->GetScale(),pTypeInfo->nMaximumScale));
+                            }
+                            else if(pTypeInfo->nPrecision)
+                                pActFieldDescr->SetPrecision(::std::min<sal_Int32>(nPrec,pTypeInfo->nPrecision));
                         }
-                        else if(pTypeInfo->nPrecision)
-                            pActFieldDescr->SetPrecision(::std::min<sal_Int32>(sal_Int32(16),pTypeInfo->nPrecision));
                 }
 
                 m_vSourceColumns[pActFieldDescr->GetName()] = pActFieldDescr;
