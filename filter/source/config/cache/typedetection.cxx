@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:46:27 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 11:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,29 +663,30 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     if (!xSMGR.is())
         return ::rtl::OUString();
 
+    ::rtl::OUString sDeepType;
     try
     {
         xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
                 xSMGR->createInstance(sDetectService),
                 css::uno::UNO_QUERY_THROW);
+
+        // start deep detection
+        // Dont forget to convert stl descriptor to its uno representation.
+
+        /* Attention!
+                You have to use an explicit instance of this uno sequence ...
+                Because its used as an in out parameter. And in case of a temp. used object
+                we will run into memory corruptions!
+        */
+        css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+        rDescriptor >> lDescriptor;
+        sDeepType = xDetector->detect(lDescriptor);
+        rDescriptor << lDescriptor;
     }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
     catch(const css::uno::Exception&)
-        {}
-    if (!xDetector.is())
-        return ::rtl::OUString();
-
-    // start deep detection
-    // Dont forget to convert stl descriptor to its uno representation.
-
-    /* Attention!
-            You have to use an explicit instance of this uno sequence ...
-            Because its used as an in out parameter. And in case of a temp. used object
-            we will run into memory corruptions!
-    */
-    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
-    rDescriptor >> lDescriptor;
-    ::rtl::OUString sDeepType = xDetector->detect(lDescriptor);
-    rDescriptor << lDescriptor;
+        { sDeepType = ::rtl::OUString(); }
 
     // analyze the results
     // a) detect service returns "" => return "" too and remove TYPE/FILTER prop from descriptor
