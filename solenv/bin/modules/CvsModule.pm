@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 11:43:12 $
+#   last change: $Author: hr $ $Date: 2004-10-11 13:45:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -666,6 +666,8 @@ sub get_root
 
     if ( $cvs_root ) {
         my ($dummy, $method, $vcsid_server, $repository) = split(/:/, $cvs_root);
+        # Remove port number from repository path;
+        $repository =~ s/^\d*//;
         my ($vcsid, $server)  = split('@', $vcsid_server);
         if ( !($method && $vcsid && $server && $repository) ) {
             carp("ERROR: can't determine CVS Server");
@@ -750,7 +752,7 @@ sub get_rcmd_root
     if ( $server =~ /$remote/o ) {
         $repository = '/shared/data/helm/cvs/repository';
         $root = ":$method:$vcsid\@$server:$repository";
-        if ( !is_valid_login($root) ) {
+        if ( !is_valid_login(":$method:$vcsid\@$server:", $repository ) ) {
             print STDERR "\nThe cvs rdiff command is broken for the OOo CVS server.\n";
             print STDERR "To fix this problem you have to issue the following cvs login command:\n\n";
             print STDERR "    cvs -d $root login\n\n";
@@ -768,7 +770,8 @@ sub get_rcmd_root
 # Needed for r-type command hack. sigh.
 sub is_valid_login
 {
-    my $root = shift;
+    my $url = shift;
+    my $repo = shift;
 
     my $home = $ENV{HOME};
     open(CVSPASSWD, "<$home/.cvspass") or return 0;
@@ -777,7 +780,7 @@ sub is_valid_login
 
     my $is_valid = 0;
     foreach (@lines) {
-        if ( $_ =~ /$root/o ) {
+        if ( $_ =~ /${url}\d*${repo}/o ) {
             $is_valid = 1;
             last;
         }
