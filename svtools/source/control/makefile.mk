@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-19 13:22:39 $
+#   last change: $Author: ka $ $Date: 2002-02-25 10:52:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,8 @@ SRCFILES=	ctrltool.src		\
 .ENDIF
 
 EXCEPTIONSFILES=\
-            $(SLO)$/filectrl2.obj
+            $(SLO)$/filectrl2.obj	\
+            $(SLO)$/valueacc.obj	
 
 SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/wizardheader.obj \
@@ -92,6 +93,7 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/stdctrl.obj  \
             $(SLO)$/stdmenu.obj  \
             $(SLO)$/valueset.obj \
+            $(SLO)$/valueacc.obj \
             $(SLO)$/tabbar.obj	 \
             $(SLO)$/headbar.obj  \
             $(SLO)$/prgsbar.obj  \

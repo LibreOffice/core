@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-04 17:01:36 $
+ *  last change: $Author: ka $ $Date: 2002-02-25 10:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,10 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#ifndef _IMAGE_HXX
-#include <vcl/image.hxx>
-#endif
 #ifndef _SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
@@ -80,59 +76,22 @@
 #include <vcl/help.hxx>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+
 #define _SV_VALUESET_CXX
 #define private public
+
 #include <valueset.hxx>
+#include "valueimp.hxx"
 
-// =======================================================================
-
-#define ITEM_OFFSET                 4
-#define ITEM_OFFSET_DOUBLE          6
-#define NAME_LINE_OFF_X             2
-#define NAME_LINE_OFF_Y             2
-#define NAME_LINE_HEIGHT            2
-#define NAME_OFFSET                 2
-#define SCRBAR_OFFSET               1
-#define VALUESET_ITEM_NONEITEM      0xFFFE
-
-#define VALUESET_SCROLL_OFFSET      4
-
-enum ValueSetItemType { VALUESETITEM_NONE, VALUESETITEM_IMAGE,
-                        VALUESETITEM_COLOR, VALUESETITEM_USERDRAW,
-                        VALUESETITEM_SPACE };
-
-struct ValueSetItem
-{
-    USHORT              mnId;
-    USHORT              mnBits;
-    ValueSetItemType    meType;
-    Image               maImage;
-    Color               maColor;
-    XubString           maText;
-    void*               mpData;
-    Rectangle           maRect;
-
-                        ValueSetItem();
-                        ~ValueSetItem();
-};
-
-DECLARE_LIST( ValueItemList, ValueSetItem* );
-
-// =======================================================================
-
-ValueSetItem::ValueSetItem()
-{
-    mnBits      = 0;
-    mpData      = NULL;
-}
-
-// -----------------------------------------------------------------------
-
-ValueSetItem::~ValueSetItem()
-{
-}
-
-// =======================================================================
+// ------------
+// - ValueSet -
+// ------------
 
 void ValueSet::ImplInit( WinBits nWinStyle )
 {
@@ -200,13 +159,28 @@ ValueSet::~ValueSet()
     if ( mpNoneItem )
         delete mpNoneItem;
 
-    ValueSetItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
-    }
+    ImplDeleteItems();
     delete mpItemList;
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSet::ImplDeleteItems()
+{
+    for( ValueSetItem* pItem = mpItemList->First(); pItem; pItem = mpItemList->Next() )
+    {
+        if( !pItem->maRect.IsEmpty() && ImplHasAccessibleListeners() )
+        {
+            ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+            aOldAny <<= pItem->GetAccessible();
+            ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+        }
+
+        delete pItem;
+    }
+
+    mpItemList->Clear();
 }
 
 // -----------------------------------------------------------------------
@@ -608,7 +582,7 @@ void ValueSet::Format()
         if ( nStyle & WB_NONEFIELD )
         {
             if ( !mpNoneItem )
-                mpNoneItem = new ValueSetItem;
+                mpNoneItem = new ValueSetItem( *this );
 
             mpNoneItem->mnId            = 0;
             mpNoneItem->meType          = VALUESETITEM_NONE;
@@ -625,6 +599,7 @@ void ValueSet::Format()
         // draw items
         ULONG nFirstItem = mnFirstLine * mnCols;
         ULONG nLastItem = nFirstItem + (mnVisLines * mnCols);
+
         if ( !mbFullMode )
         {
             // If want also draw parts of items in the last line,
@@ -635,14 +610,25 @@ void ValueSet::Format()
         }
         for ( ULONG i = 0; i < nItemCount; i++ )
         {
-            ValueSetItem* pItem = mpItemList->GetObject( i );
+            ValueSetItem*   pItem = mpItemList->GetObject( i );
+            BOOL            bFireEvent = FALSE;
 
             if ( (i >= nFirstItem) && (i < nLastItem) )
             {
+                const BOOL bWasEmpty = pItem->maRect.IsEmpty();
+
                 pItem->maRect.Left()    = x;
                 pItem->maRect.Top()     = y;
                 pItem->maRect.Right()   = pItem->maRect.Left()+nItemWidth-1;
                 pItem->maRect.Bottom()  = pItem->maRect.Top()+nItemHeight-1;
+
+                if( bWasEmpty && ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                    aNewAny <<= pItem->GetAccessible();
+                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+                }
 
                 ImplFormatItem( pItem );
 
@@ -655,7 +641,17 @@ void ValueSet::Format()
                     x += nItemWidth+nSpace;
             }
             else
+            {
+                if( !pItem->maRect.IsEmpty() && ImplHasAccessibleListeners() )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+
+                    aOldAny <<= pItem->GetAccessible();
+                    ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_CHILD_EVENT, aOldAny, aNewAny );
+                }
+
                 pItem->maRect.SetEmpty();
+            }
         }
 
         // ScrollBar anordnen, Werte setzen und anzeigen
@@ -1164,6 +1160,69 @@ ValueSetItem* ValueSet::ImplGetFirstItem()
 
 // -----------------------------------------------------------------------
 
+USHORT ValueSet::ImplGetVisibleItemCount() const
+{
+    USHORT nRet = 0;
+
+    for( sal_Int32 n = 0, nItemCount = mpItemList->Count(); n < nItemCount; n++  )
+    {
+        ValueSetItem* pItem = mpItemList->GetObject( n );
+
+        if( pItem->meType != VALUESETITEM_SPACE && !pItem->maRect.IsEmpty() )
+            nRet++;
+    }
+
+    return nRet;
+}
+
+// -----------------------------------------------------------------------
+
+ValueSetItem* ValueSet::ImplGetVisibleItem( USHORT nVisiblePos )
+{
+    ValueSetItem*   pRet = NULL;
+    USHORT          nFoundPos = 0;
+
+    for( sal_Int32 n = 0, nItemCount = mpItemList->Count(); ( n < nItemCount ) && !pRet; n++  )
+    {
+        ValueSetItem* pItem = mpItemList->GetObject( n );
+
+        if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() && ( nVisiblePos == nFoundPos++ ) )
+            pRet = pItem;
+    }
+
+    return pRet;
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
+{
+    if( nEventId )
+    {
+           ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+
+        while( aIter != mxEventListeners.end() )
+        {
+            ::drafts::com::sun::star::accessibility::AccessibleEventObject aEvtObject;
+
+            aEvtObject.EventId = nEventId;
+            aEvtObject.NewValue = rNewValue;
+            aEvtObject.OldValue = rOldValue;
+
+            (*aIter++)->notifyEvent( aEvtObject );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ValueSet::ImplHasAccessibleListeners() const
+{
+    return( mxEventListeners.size() > 0 );
+}
+
+// -----------------------------------------------------------------------
+
 IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
 {
     USHORT nNewFirstLine = (USHORT)pScrollBar->GetThumbPos();
@@ -1660,7 +1719,7 @@ void ValueSet::InsertItem( USHORT nItemId, const Image& rImage, USHORT nPos )
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
@@ -1679,7 +1738,7 @@ void ValueSet::InsertItem( USHORT nItemId, const Color& rColor, USHORT nPos )
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
@@ -1699,7 +1758,7 @@ void ValueSet::InsertItem( USHORT nItemId, const Image& rImage,
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
@@ -1720,7 +1779,7 @@ void ValueSet::InsertItem( USHORT nItemId, const Color& rColor,
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
@@ -1740,7 +1799,7 @@ void ValueSet::InsertItem( USHORT nItemId, USHORT nPos )
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
     mpItemList->Insert( pItem, (ULONG)nPos );
@@ -1758,7 +1817,7 @@ void ValueSet::InsertSpace( USHORT nItemId, USHORT nPos )
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertSpace(): ItemId already exists" );
 
-    ValueSetItem* pItem = new ValueSetItem;
+    ValueSetItem* pItem = new ValueSetItem( *this );
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_SPACE;
     mpItemList->Insert( pItem, (ULONG)nPos );
@@ -1798,17 +1857,24 @@ void ValueSet::RemoveItem( USHORT nItemId )
 
 void ValueSet::CopyItems( const ValueSet& rValueSet )
 {
-    ValueSetItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
-    }
+    ImplDeleteItems();
 
-    pItem = rValueSet.mpItemList->First();
+    ValueSetItem* pItem = rValueSet.mpItemList->First();
     while ( pItem )
     {
-        mpItemList->Insert( new ValueSetItem( *pItem ) );
+        ValueSetItem* pNewItem = new ValueSetItem( *this );
+
+        pNewItem->mnId = pItem->mnId;
+        pNewItem->mnBits = pItem->mnBits;
+        pNewItem->meType = pItem->meType;
+        pNewItem->maImage = pItem->maImage;
+        pNewItem->maColor = pItem->maColor;
+        pNewItem->maText = pItem->maText;
+        pNewItem->mpData = pItem->mpData;
+        pNewItem->maRect = pItem->maRect;
+        pNewItem->mpxAcc = NULL;
+
+        mpItemList->Insert( pNewItem );
         pItem = rValueSet.mpItemList->Next();
     }
 
@@ -1829,13 +1895,7 @@ void ValueSet::CopyItems( const ValueSet& rValueSet )
 
 void ValueSet::Clear()
 {
-    ValueSetItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
-    }
-    mpItemList->Clear();
+    ImplDeleteItems();
 
     // Variablen zuruecksetzen
     mnFirstLine     = 0;
@@ -2039,6 +2099,13 @@ void ValueSet::SelectItem( USHORT nItemId )
                 ImplHideSelect( nOldItem );
                 ImplDrawSelect();
             }
+        }
+
+        if( ImplHasAccessibleListeners() )
+        {
+            // notify listeners
+            ::com::sun::star::uno::Any aOldAny, aNewAny;
+            ImplFireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_SELECTION_EVENT, aOldAny, aNewAny );
         }
     }
 }
