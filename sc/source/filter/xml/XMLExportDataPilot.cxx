@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 11:19:44 $
+ *  last change: $Author: vg $ $Date: 2002-09-06 10:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
             return GetXMLToken(XML_TOP_VALUES);
             break;
         default:
-            DBG_ERROR("This FilterOperator is not supported.")
+            DBG_ERROR("This FilterOperator is not supported.");
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
