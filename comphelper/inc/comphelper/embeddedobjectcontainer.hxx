@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:36:11 $
+ *  last change: $Author: mav $ $Date: 2005-02-02 16:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ public:
                         ~EmbeddedObjectContainer();
 
     void                SwitchPersistence( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& );
+    void                ReleaseImageSubStorage();
 
     ::rtl::OUString     CreateUniqueObjectName();
 
