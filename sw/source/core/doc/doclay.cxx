@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:35:20 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,15 @@
 
 #pragma hdrstop
 
+#include <com/sun/star/embed/EmbedStates.hpp>
+
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 #ifndef _SFX_PROGRESS_HXX //autogen
@@ -418,20 +424,34 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
+            /*
             SwDoc* pDoc = (SwDoc*)pFmt->GetDoc();
             if( pDoc )
             {
-                SvPersist* p = pDoc->GetPersist();
+                SfxObjectShell* p = pDoc->GetPersist();
                 if( p )     // muss da sein
                 {
                     SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
                     if( aRef.Is() )
                         aRef->SetObj(0);
                 }
+            } */
+
+            // TODO/LATER: the old object closed the object, cleared all references to it, but didn't remove it from the container.
+            // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
+            uno::Reference < util::XCloseable > xClose( pOLENd->GetOLEObj().GetOleRef(), uno::UNO_QUERY );
+            if ( xClose.is() )
+            {
+                try
+                {
+                    pOLENd->GetOLEObj().GetOleRef()->changeState( embed::EmbedStates::LOADED );
+                }
+                catch ( uno::Exception& )
+                {
+                }
             }
 
-            pOLENd->GetOLEObj().GetOleRef()->DoClose();
-            pOLENd->GetOLEObj().GetOleRef().Clear();
+            pOLENd->GetOLEObj().GetOleRef() = 0;
         }
     }
 
