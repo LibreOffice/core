@@ -89,3 +89,5 @@ hedabu: ..\inc\ProgressBarHelper.hxx %_DEST%\inc%_EXT%\xmloff\ProgressBarHelper.
 hedabu: ..\inc\formlayerexport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerexport.hxx
 hedabu: ..\inc\formlayerimport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerimport.hxx
 hedabu: ..\inc\animexp.hxx %_DEST%\inc%_EXT%\xmloff\animexp.hxx
+hedabu: ..\inc\contextid.hxx %_DEST%\inc%_EXT%\xmloff\contextid.hxx
+
