@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:50:43 $
+ *  last change: $Author: tra $ $Date: 2002-06-20 08:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,16 +83,19 @@
 #include <share.h>
 #include <direct.h>
 
-#include <windows.h>
-
 #ifdef GCC
-#   include <winsock.h>
+    // windows.h includes winsock2.h
+    // if _WIN32_WINNT > 0x0400
+    // so someone cannot include winsock.h
+    // at the same time without patching
+    // windows.h
+    #include <windows.h>
 #else
-#   include <winsock2.h>
-#   include <wsipx.h>
+    // winsock2.h includes windows.h
+    #include <winsock2.h>
+    #include <wsipx.h>
 #endif
 
-#include <winbase.h>
 #include <shlobj.h>
 
 #ifndef NO_DEBUG_CRT
@@ -103,26 +106,28 @@
 #define _MAX_ENV    4096    /* maximum length of environment var */
 
 #ifdef GCC
-#   ifndef SA_FAMILY_DECL
-#       define SA_FAMILY_DECL short sa_family
-#   endif
+    #   ifndef SA_FAMILY_DECL
+    #       define SA_FAMILY_DECL short sa_family
+    #   endif
+
     typedef struct sockaddr_ipx {
         SA_FAMILY_DECL;
         char sa_netnum[4];
         char sa_nodenum[6];
         unsigned short sa_socket;
     } SOCKADDR_IPX;
-#   define NSPROTO_IPX      1000
-#   define NSPROTO_SPX      1256
-#   define NSPROTO_SPXII    1257
-#endif
+
+    #   define NSPROTO_IPX      1000
+    #   define NSPROTO_SPX      1256
+    #   define NSPROTO_SPXII    1257
+#endif // #ifdef GCC
 
 #ifdef _DLL_
-extern DWORD g_dwPlatformId;
-#define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
+    extern DWORD g_dwPlatformId;
+    #define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
 #else
-extern DWORD GetPlatformId();
-#define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
-#endif
+    extern DWORD GetPlatformId();
+    #define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
+#endif // #ifdef _DLL_
 
 
