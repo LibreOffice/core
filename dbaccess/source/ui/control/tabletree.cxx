@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 09:05:56 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 15:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,11 +487,20 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
     DBG_ASSERT(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
-    if (GetModel()->HasChilds(_pEntry))
+
+    // special emphasizing handling for the "all objects" entry
+    // 89709 - 16.07.2001 - frank.schoenheit@sun.com
+    sal_Bool bAllObjectsEntryAffected = m_bShowFirstEntry && (getAllObjectsEntry() == _pEntry);
+    if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
+        ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
+        )
     {
         OBoldListboxString* pTextItem = static_cast<OBoldListboxString*>(_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING));
         if (pTextItem)
             pTextItem->emphasize(_bChecked);
+
+        if (bAllObjectsEntryAffected)
+            InvalidateEntry(_pEntry);
     }
 
     if (_bUpdateDescendants)
@@ -535,6 +544,9 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/06/25 09:05:56  fs
+ *  #88417# insert the 'all object' entry even if there currently are no objects
+ *
  *  Revision 1.14  2001/06/05 12:39:45  fs
  *  #87680# implEmphasize corrected / #87771# UpdateTableList: ask for VIEW, TABLE and
  *
