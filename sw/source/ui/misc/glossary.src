@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 09:45:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,11 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
         Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
         Text[ polish ] = "Wyœwietl w trakcie pisania pozosta³¹ czêœæ s³owa";
-        Text[ japanese ] = "“ü—Í’†‚ÉÃ·½ÄÌŞÛ¯¸–¼‚ğƒqƒ“ƒg•\\¦‚·‚é(~D)";
+        Text[ japanese ] = "“ü—Í’†‚ÉÃ·½ÄÌŞÛ¯¸–¼‚ğËİÄ•\\¦‚·‚é(~D)";
         Text[ chinese_traditional ] = "¦Û°Ê§¹¦¨Åã¥Ü(~D)";
         Text[ arabic ] = "ÚÑÖ ÈŞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
         Text[ greek ] = "ÅìöÜíéóç ôïõ õğüëïéğïõ ôìŞìáôïò ôïõ ïíüìáôïò ùò óõìâïõëŞ êáôÜ ôçí åéóáãùãŞ";
-        Text[ korean ] = "±âÀÔÇÏ´Â µ¿¾È  Á¶¾ğÀ¸·Î¼­ ³ª¸ÓÁö ÀÌ¸§ Ç¥½Ã(~D)";
+        Text[ korean ] = "ÀÔ·Â½Ã Á¶¾ğÀ¸·Î¼­ ³ª¸ÓÁö ÀÌ¸§ Ç¥½Ã(~D)";
         Text[ turkish ] = "Giriş sırasında adın tamamını öneri olarak görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Muestra el resto del nombre como sugerencia durante la entrada";
@@ -678,7 +678,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ chinese_traditional ] = "¥N´À(¯Â¤å¦r)(~L)";
                 Text[ arabic ] = "ÇÓÊÈÏÇá (äÕ İŞØ)";
                 Text[ greek ] = "ÁíôéêáôÜóôáóç (ìüíï êåßìåíï)";
-                Text[ korean ] = "¹Ù²Ù±â (ÅØ½ºÆ® ¸¸)(~L)";
+                Text[ korean ] = "¹Ù²Ù±â (ÅØ½ºÆ®¸¸)(~L)";
                 Text[ turkish ] = "Değiştir (yalnızca metin)";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Reemplazar (sólo texto)";
@@ -1232,7 +1232,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ polish ] = "Plik ten nie zawiera ¿adnych bloków tekstu.";
     MESSAGE[ portuguese_brazilian ] = "There are no textblocks in this file.";
     MESSAGE[ japanese ] = "‚±‚ÌÌ§²Ù‚É‚ÍÃ·½ÄÌŞÛ¯¸‚ª‚ ‚è‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÀÌ ÆÄÀÏ¿¡´Â ÅØ½ºÆ®°¡ ¾ø½À´Ï´Ù. .";
+    MESSAGE[ korean ] = "ÀÌ ÆÄÀÏ¿¡´Â ÅØ½ºÆ® ¸ğµãÀÌ ¾ø½À´Ï´Ù. .";
     MESSAGE[ chinese_simplified ] = "Õâ¸öÎÄ¼şÄÚ²»°üº¬×Ô¶¯Í¼ÎÄ¼¯ÌõÄ¿¡£";
     MESSAGE[ chinese_traditional ] = "¦b³o­ÓÀÉ®×¤º¤£¦s¦b¦Û°Ê¹Ï¤å¶°±ø¥Ø¡C";
     MESSAGE[ arabic ] = "áÇ íÍÊæí åĞÇ Çáãáİ Úáì ßÊá äÕíÉ.";
@@ -1240,6 +1240,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ catalan ] = "Este archivo no contiene módulos de texto.";
     MESSAGE[ finnish ] = "Tiedostossa ei ole automaattista tekstiä.";
 };
+
 
 
 
