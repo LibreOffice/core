@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 09:12:06 $
+ *  last change: $Author: nn $ $Date: 2000-12-12 15:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <com/sun/star/sheet/DataImportMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -89,6 +90,7 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
@@ -209,7 +211,18 @@ BOOL ScDatabaseDPData::OpenDatabase()
             xRowProp->setPropertyValue(
                         rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
 
-            pImpl->xRowSet->execute();
+            uno::Reference<sdb::XCompletedExecution> xExecute( pImpl->xRowSet, uno::UNO_QUERY );
+            if ( xExecute.is() )
+            {
+                uno::Reference<task::XInteractionHandler> xHandler(
+                        comphelper::getProcessServiceFactory()->createInstance(
+                            rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                        uno::UNO_QUERY);
+                xExecute->executeWithCompletion( xHandler );
+            }
+            else
+                pImpl->xRowSet->execute();
+
             pImpl->bAtStart = TRUE;
 
             //
