@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:24:50 $
+ *  last change: $Author: rt $ $Date: 2001-11-22 23:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ String STR_DRAW_TOOLBOX
     Text[ chinese_traditional ] = "ç¹ªåœ–å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÇáÑÓã";
     Text[ turkish ] = "Çizim araç çubuğu";
-    Text[ catalan ] = "Barra de herramientas de dibujo";
+    Text[ catalan ] = "Barra d'eines de dibuix";
 };
 String STR_GRAPHIC_TOOLBOX
 {
@@ -108,7 +108,7 @@ String STR_GRAPHIC_TOOLBOX
     Text[ chinese_traditional ] = "ç¹ªåœ–å·¥å…·åˆ—/åœ–å½¢";
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÇáÑÓã/ÕæÑÉ";
     Text[ turkish ] = "Çizim araç çubuğu/grafik";
-    Text[ catalan ] = "Barra de herramientas de dibujo/Imagen";
+    Text[ catalan ] = "Barra d'eines de dibuix/imatge";
     Text[ finnish ] = "Piirrospalkki/grafiikka";
 };
 String RID_PLUGINTOOLBOX
@@ -133,7 +133,7 @@ String RID_PLUGINTOOLBOX
     Text[ chinese_traditional ] = "Plug-In åˆ—";
     Text[ arabic ] = "ÔÑíØ Plug-In";
     Text[ turkish ] = "Plug-in çubuğu";
-    Text[ catalan ] = "Barra de Plug-ins";
+    Text[ catalan ] = "Barra d'extensions";
     Text[ finnish ] = "Lisäosapalkki";
 };
 String STR_SLIDE_TOOLBOX
@@ -160,7 +160,7 @@ String STR_SLIDE_TOOLBOX
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÇáÔÑÇÆÍ";
     Text[ turkish ] = "Slayt araç çubuğu";
-    Text[ catalan ] = "Barra de herramientas para diapositivas";
+    Text[ catalan ] = "Barra d'eines per a diapositives";
 };
 String STR_OUTLINE_TOOLBOX
 {
@@ -186,7 +186,7 @@ String STR_OUTLINE_TOOLBOX
     Text[ chinese_traditional ] = "å¤§ç¶±å·¥å…·åˆ—";
     Text[ arabic ] = "ÔÑíØ ÃÏæÇÊ ÇáÊŞÓíã";
     Text[ turkish ] = "Anahat araç çubuğu";
-    Text[ catalan ] = "Barra de herramientas para esquema";
+    Text[ catalan ] = "Barra d'eines per a l'esquema";
 };
 String STR_DRAW_OBJ_TOOLBOX
 {
@@ -212,7 +212,7 @@ String STR_DRAW_OBJ_TOOLBOX
     Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
     Text[ turkish ] = "Çizim nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos de dibujo";
+    Text[ catalan ] = "Barra d'objectes de dibuix";
 };
 String STR_GRAPHIC_OBJ_TOOLBOX
 {
@@ -236,7 +236,7 @@ String STR_GRAPHIC_OBJ_TOOLBOX
     Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶åˆ—/åœ–å½¢";
     Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ/ÇáÕæÑ";
     Text[ turkish ] = "Çizim nesne çubuğu/grafik";
-    Text[ catalan ] = "Barra de objetos de dibujo/Imagen";
+    Text[ catalan ] = "Barra d'objectes de dibuix/imatge";
     Text[ finnish ] = "Piirrosobjektipalkki/grafiikka";
 };
 String STR_DRAW_OPTIONS_TOOLBOX
@@ -261,7 +261,7 @@ String STR_DRAW_OPTIONS_TOOLBOX
     Text[ chinese_traditional ] = "é¸é …åˆ—";
     Text[ arabic ] = "ÔÑíØ ÇáÎíÇÑÇÊ";
     Text[ turkish ] = "Seçenek çubuğu";
-    Text[ catalan ] = "Barra de opciones";
+    Text[ catalan ] = "Barra d'opcions";
     Text[ finnish ] = "Asetuspalkki";
 };
 String STR_GRAPHIC_OPTIONS_TOOLBOX
@@ -286,7 +286,7 @@ String STR_GRAPHIC_OPTIONS_TOOLBOX
     Text[ chinese_traditional ] = "é¸é …åˆ—/åœ–å½¢";
     Text[ arabic ] = "ÔÑíØ ÇáÎíÇÑÇÊ/ÕæÑÉ";
     Text[ turkish ] = "Seçenek çubuğu/grafik";
-    Text[ catalan ] = "Barra de opciones/Imágenes";
+    Text[ catalan ] = "Barra d'opcions/imatges";
     Text[ finnish ] = "Asetuspalkki/grafiikka";
 };
 String STR_DRAW_COMMONTASK_TOOLBOX
@@ -312,7 +312,7 @@ String STR_DRAW_COMMONTASK_TOOLBOX
     Text[ chinese_traditional ] = "ç°¡å ±";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "Sunu";
-    Text[ catalan ] = "Presentación";
+    Text[ catalan ] = "Presentació";
     Text[ finnish ] = "Esitys";
 };
 String STR_SLIDE_OBJ_TOOLBOX
@@ -339,7 +339,7 @@ String STR_SLIDE_OBJ_TOOLBOX
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÔÑíÍÉ";
     Text[ turkish ] = "Slayt nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos para diapositivas";
+    Text[ catalan ] = "Barra d'objectes per a diapositives";
 };
 String STR_BEZIER_TOOLBOX
 {
@@ -366,7 +366,7 @@ String STR_BEZIER_TOOLBOX
     Text[ chinese_traditional ] = "æ›²ç·šç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ Bézier";
     Text[ turkish ] = "Bézier nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos de Bézier";
+    Text[ catalan ] = "Barra d'objectes de Bézier";
 };
 String STR_GLUEPOINTS_TOOLBOX
 {
@@ -377,7 +377,7 @@ String STR_GLUEPOINTS_TOOLBOX
     Text [ spanish ] = "Barra de puntos de adhesión" ;
     Text [ french ] = "Barre d'objets points de collage" ;
     Text [ dutch ] = "Plakpunten-werkbalk" ;
-    Text [ swedish ] = "Fästpunktslist" ;
+    Text [ swedish ] = "Objektlist för fästpunkter" ;
     Text [ danish ] = "Klæbepunktobjektlinje" ;
     Text [ portuguese ] = "Barra de pontos de colagem" ;
     Text [ portuguese_brazilian ] = "Klebepunkteobjektleiste" ;
@@ -390,7 +390,7 @@ String STR_GLUEPOINTS_TOOLBOX
     Text[ chinese_traditional ] = "æ¥é»ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆä äŞÇØ ÇááÕŞ";
     Text[ turkish ] = "Yapıştırma noktaları nesne çubuğu";
-    Text[ catalan ] = "Barra de puntos de adhesión";
+    Text[ catalan ] = "Barra de punts d'adhesió";
     Text[ finnish ] = "Liimapisteen objektipalkki";
 };
 String STR_DRAW_TEXT_TOOLBOX
@@ -417,7 +417,7 @@ String STR_DRAW_TEXT_TOOLBOX
     Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
     Text[ turkish ] = "Metin nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos de texto";
+    Text[ catalan ] = "Barra d'objectes de text";
 };
 String STR_GRAPHIC_TEXT_TOOLBOX
 {
@@ -443,7 +443,7 @@ String STR_GRAPHIC_TEXT_TOOLBOX
     Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶åˆ—/ç¹ªåœ–";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ/ÑÓã";
     Text[ turkish ] = "Metin nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos de texto/Draw";
+    Text[ catalan ] = "Barra d'objectes de text/dibuix";
 };
 String RID_APPTITLE
 {
@@ -491,7 +491,7 @@ String STR_DEFAULTVIEW
     Text[ chinese_traditional ] = "é»˜èª";
     Text[ arabic ] = "ÇİÊÑÇÖí";
     Text[ turkish ] = "Standart";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Estàndard";
 };
 String STR_SPECIALVIEW
 {
@@ -569,7 +569,7 @@ String STR_NULL
     Text[ chinese_traditional ] = "ç„¡";
     Text[ arabic ] = "ÈÏæä";
     Text[ turkish ] = "Yok";
-    Text[ catalan ] = "Ninguno";
+    Text[ catalan ] = "Cap";
 };
 String STR_SOLID
 {
@@ -622,7 +622,7 @@ String STR_DOT
     Text[ chinese_traditional ] = "é»";
     Text[ arabic ] = "äŞÇØ";
     Text[ turkish ] = "Nokta";
-    Text[ catalan ] = "Puntos";
+    Text[ catalan ] = "Punts";
 };
 String STR_DASH
 {
@@ -648,7 +648,7 @@ String STR_DASH
     Text[ chinese_traditional ] = "ç ´æŠ˜è™Ÿ";
     Text[ arabic ] = "ÔõÑóØ";
     Text[ turkish ] = "Çizgiler";
-    Text[ catalan ] = "Trazos";
+    Text[ catalan ] = "Traçats";
 };
 String STR_DASHDOT
 {
@@ -674,7 +674,7 @@ String STR_DASHDOT
     Text[ chinese_traditional ] = "ç ´æŠ˜è™Ÿå’Œé»";
     Text[ arabic ] = "ÔõÑóØ æäŞÇØ";
     Text[ turkish ] = "Çizgiler ve noktalar";
-    Text[ catalan ] = "Trazos y puntos";
+    Text[ catalan ] = "Traçats i punts";
 };
 String STR_BLACK
 {
@@ -700,7 +700,7 @@ String STR_BLACK
     Text[ chinese_traditional ] = "é»‘è‰²";
     Text[ arabic ] = "ÃÓæÏ";
     Text[ turkish ] = "Siyah";
-    Text[ catalan ] = "Negro";
+    Text[ catalan ] = "Negre";
 };
 String STR_BLUE
 {
@@ -726,7 +726,7 @@ String STR_BLUE
     Text[ chinese_traditional ] = "è—è‰²";
     Text[ arabic ] = "ÃÒÑŞ";
     Text[ turkish ] = "Mavi";
-    Text[ catalan ] = "Azul";
+    Text[ catalan ] = "Blau";
 };
 String STR_RED
 {
@@ -752,7 +752,7 @@ String STR_RED
     Text[ chinese_traditional ] = "ç´…è‰²";
     Text[ arabic ] = "ÃÍãÑ";
     Text[ turkish ] = "Kırmızı";
-    Text[ catalan ] = "Rojo";
+    Text[ catalan ] = "Vermell";
 };
 String STR_GREEN
 {
@@ -779,7 +779,7 @@ String STR_GREEN
     Text[ chinese_traditional ] = "ç¶ è‰²";
     Text[ arabic ] = "ÃÎÖÑ";
     Text[ turkish ] = "Yeşil";
-    Text[ catalan ] = "Verde";
+    Text[ catalan ] = "Verd";
 };
 String STR_CYAN
 {
@@ -857,7 +857,7 @@ String STR_YELLOW
     Text[ chinese_traditional ] = "é»ƒè‰²";
     Text[ arabic ] = "ÃÕİÑ";
     Text[ turkish ] = "Sarı";
-    Text[ catalan ] = "Amarillo";
+    Text[ catalan ] = "Groc";
 };
 String STR_WHITE
 {
@@ -884,7 +884,7 @@ String STR_WHITE
     Text[ chinese_traditional ] = "ç™½è‰²";
     Text[ arabic ] = "ÃÈíÖ";
     Text[ turkish ] = "Beyaz";
-    Text[ catalan ] = "Blanco";
+    Text[ catalan ] = "Blanc";
 };
 String STR_BROWN
 {
@@ -910,7 +910,7 @@ String STR_BROWN
     Text[ chinese_traditional ] = "æ£•è‰²";
     Text[ arabic ] = "Èäí";
     Text[ turkish ] = "Kahverengi";
-    Text[ catalan ] = "Marrón";
+    Text[ catalan ] = "Marró";
 };
 String STR_GRAY
 {
@@ -962,7 +962,7 @@ String STR_LIGHTGRAY
     Text[ chinese_traditional ] = "æ·ºç°è‰²";
     Text[ arabic ] = "ÑãÇÏí İÇÊÍ";
     Text[ turkish ] = "Açık gri";
-    Text[ catalan ] = "Gris claro";
+    Text[ catalan ] = "Gris clar";
 };
 String STR_LIGHTBLUE
 {
@@ -988,7 +988,7 @@ String STR_LIGHTBLUE
     Text[ chinese_traditional ] = "æ·ºè—è‰²";
     Text[ arabic ] = "ÃÒÑŞ İÇÊÍ";
     Text[ turkish ] = "Açık mavi";
-    Text[ catalan ] = "Azul claro";
+    Text[ catalan ] = "Blau clar";
 };
 String STR_LIGHTGREEN
 {
@@ -1015,7 +1015,7 @@ String STR_LIGHTGREEN
     Text[ chinese_traditional ] = "æ·ºç¶ è‰²";
     Text[ arabic ] = "ÃÎÖÑ İÇÊÍ";
     Text[ turkish ] = "Açık yeşil";
-    Text[ catalan ] = "Verde claro";
+    Text[ catalan ] = "Verd clar";
 };
 String STR_LIGHTRED
 {
@@ -1041,7 +1041,7 @@ String STR_LIGHTRED
     Text[ chinese_traditional ] = "æ·ºç´…è‰²";
     Text[ arabic ] = "ÃÍãÑ İÇÊÍ";
     Text[ turkish ] = "Açık kırmızı";
-    Text[ catalan ] = "Rojo claro";
+    Text[ catalan ] = "Vermell clar";
 };
 String STR_LIGHTMAGENTA
 {
@@ -1067,7 +1067,7 @@ String STR_LIGHTMAGENTA
     Text[ chinese_traditional ] = "æ·ºç´…ç´«è‰²";
     Text[ arabic ] = "ÃÑÌæÇäí İÇÊÍ";
     Text[ turkish ] = "Eflatun";
-    Text[ catalan ] = "Magenta claro";
+    Text[ catalan ] = "Magenta clar";
 };
 String STR_LIGHTCYAN
 {
@@ -1093,7 +1093,7 @@ String STR_LIGHTCYAN
     Text[ chinese_traditional ] = "æ·ºè—ç¶ è‰²";
     Text[ arabic ] = "ÓãÇæí İÇÊÍ";
     Text[ turkish ] = "Açık camgöbeği";
-    Text[ catalan ] = "Cian claro";
+    Text[ catalan ] = "Cian clar";
 };
 String STR_BRUSH_SOLID
 {
@@ -1119,7 +1119,7 @@ String STR_BRUSH_SOLID
     Text[ chinese_traditional ] = "å……æ»¿";
     Text[ arabic ] = "ããÊáÆ";
     Text[ turkish ] = "Dolu";
-    Text[ catalan ] = "Sólido";
+    Text[ catalan ] = "Sòlid";
 };
 String STR_HORZ
 {
@@ -1145,7 +1145,7 @@ String STR_HORZ
     Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘";
     Text[ arabic ] = "ÃİŞí";
     Text[ turkish ] = "Yatay";
-    Text[ catalan ] = "Horizontal";
+    Text[ catalan ] = "Horitzontal";
 };
 String STR_VERT
 {
@@ -1197,7 +1197,7 @@ String STR_CROSS
     Text[ chinese_traditional ] = "æ–¹æ ¼çš„";
     Text[ arabic ] = "Ğæ ãÑÈÚÇÊ";
     Text[ turkish ] = "Kareli";
-    Text[ catalan ] = "Cuadriculado";
+    Text[ catalan ] = "Quadrícula";
 };
 String STR_DIAGCROSS
 {
@@ -1223,7 +1223,7 @@ String STR_DIAGCROSS
     Text[ chinese_traditional ] = "å°è§’æ–¹æ ¼";
     Text[ arabic ] = "Ğæ ãÑÈÚÇÊ ŞØÑíÉ";
     Text[ turkish ] = "Kareli (diyagonal)";
-    Text[ catalan ] = "Cuadriculado diagonal";
+    Text[ catalan ] = "Quadrícula en diagonal";
 };
 String STR_UPDIAG
 {
@@ -1275,7 +1275,7 @@ String STR_DOWNDIAG
     Text[ chinese_traditional ] = "å°è§’å‘ä¸‹";
     Text[ arabic ] = "ŞØÑí áÃÓİá";
     Text[ turkish ] = "Aşağı (diyagonal)";
-    Text[ catalan ] = "Diagonal hacia abajo";
+    Text[ catalan ] = "Diagonal cap avall";
 };
 String STR_25
 {
@@ -1379,7 +1379,7 @@ String STR_NO_BRUSH
     Text[ chinese_traditional ] = "æ²’æœ‰åœ–æ¡ˆ";
     Text[ arabic ] = "ÈÏæä äŞÔ";
     Text[ turkish ] = "Desen yok";
-    Text[ catalan ] = "Sin modelo";
+    Text[ catalan ] = "Sense model";
 };
 String STR_INSERTPAGE
 {
@@ -1406,7 +1406,7 @@ String STR_INSERTPAGE
     Text[ chinese_traditional ] = "æ’å…¥é é¢";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÉ";
     Text[ turkish ] = "Sayfa ekle";
-    Text[ catalan ] = "Insertar diapositiva";
+    Text[ catalan ] = "Inserta diapositiva";
 };
 String STR_MODIFYPAGE
 {
@@ -1431,7 +1431,7 @@ String STR_MODIFYPAGE
     Text[ chinese_traditional ] = "è®Šæ›´é é¢ç‰ˆå¼";
     Text[ arabic ] = "ÊÚÏíá ÊÎØíØ ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfa düzenini değiştir";
-    Text[ catalan ] = "Modificar página";
+    Text[ catalan ] = "Modifica la pàgina";
     Text[ finnish ] = "Muokkaa diaa";
 };
 String STR_INSERTLAYER
@@ -1459,7 +1459,7 @@ String STR_INSERTLAYER
     Text[ chinese_traditional ] = "æ’å…¥åˆ†å±¤";
     Text[ arabic ] = "ÅÏÑÇÌ ØÈŞÉ";
     Text[ turkish ] = "Düzey ekle";
-    Text[ catalan ] = "Insertar capa";
+    Text[ catalan ] = "Inserta capa";
 };
 String STR_MODIFYLAYER
 {
@@ -1486,7 +1486,7 @@ String STR_MODIFYLAYER
     Text[ chinese_traditional ] = "è®Šæ›´åˆ†å±¤";
     Text[ arabic ] = "ÊÚÏíá ÇáØÈŞÉ";
     Text[ turkish ] = "Düzeyi değiştir";
-    Text[ catalan ] = "Modificar capa";
+    Text[ catalan ] = "Modifica capa";
 };
 String STR_NO_EFFECT
 {
@@ -1512,7 +1512,7 @@ String STR_NO_EFFECT
     Text[ chinese_traditional ] = "ç„¡æ•ˆæœ";
     Text[ arabic ] = "ÈÏæä ÊÃËíÑ";
     Text[ turkish ] = "Efekt yok";
-    Text[ catalan ] = "Sin efecto";
+    Text[ catalan ] = "Sense efecte";
 };
 String STR_UNDO_SLIDE_PARAMS
 {
@@ -1538,7 +1538,7 @@ String STR_UNDO_SLIDE_PARAMS
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡åƒæ•¸";
     Text[ arabic ] = "ãÚáãÉ ÇáÔÑÇÆÍ";
     Text[ turkish ] = "Slayt parametreleri";
-    Text[ catalan ] = "Parámetro de diapositiva";
+    Text[ catalan ] = "Paràmetre de diapositiva";
 };
 String STR_UNDO_SLIDE_MOVE
 {
@@ -1564,7 +1564,7 @@ String STR_UNDO_SLIDE_MOVE
     Text[ chinese_traditional ] = "ç§»å‹•æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÅÒÇÍÉ ÇáÔÑíÍÉ";
     Text[ turkish ] = "Slaytı taşı";
-    Text[ catalan ] = "Desplazar diapositiva";
+    Text[ catalan ] = "Desplaça la diapositiva";
 };
 String STR_UNDO_CUT
 {
@@ -1590,7 +1590,7 @@ String STR_UNDO_CUT
     Text[ chinese_traditional ] = "å‰ªä¸‹";
     Text[ arabic ] = "ŞÕ";
     Text[ turkish ] = "Kes";
-    Text[ catalan ] = "Cortar";
+    Text[ catalan ] = "Talla";
 };
 String STR_UNDO_REPLACE
 {
@@ -1617,7 +1617,7 @@ String STR_UNDO_REPLACE
     Text[ chinese_traditional ] = "æ›¿ä»£";
     Text[ arabic ] = "ÇÓÊÈÏÇá";
     Text[ turkish ] = "Değiştir";
-    Text[ catalan ] = "reemplazar";
+    Text[ catalan ] = "Reemplaça";
 };
 String STR_ALIGN_LEFT
 {
@@ -1643,7 +1643,7 @@ String STR_ALIGN_LEFT
     Text[ chinese_traditional ] = "å‘å·¦å°é½Š";
     Text[ arabic ] = "ãÍÇĞÇÉ ááíÓÇÑ";
     Text[ turkish ] = "Sola hizala";
-    Text[ catalan ] = "Alinear a la izquierda";
+    Text[ catalan ] = "Alinia a la esquerra";
 };
 String STR_ALIGN_CENTER
 {
@@ -1669,7 +1669,7 @@ String STR_ALIGN_CENTER
     Text[ chinese_traditional ] = "ç½®ä¸­å°é½Š";
     Text[ arabic ] = "ÊæÓíØ";
     Text[ turkish ] = "Ortala";
-    Text[ catalan ] = "Alinear al centro";
+    Text[ catalan ] = "Alinia al centre";
 };
 String STR_ALIGN_RIGHT
 {
@@ -1695,7 +1695,7 @@ String STR_ALIGN_RIGHT
     Text[ chinese_traditional ] = "å‘å³å°é½Š";
     Text[ arabic ] = "ãÍÇĞÇÉ ááíãíä";
     Text[ turkish ] = "Sağa hizala";
-    Text[ catalan ] = "Alinear a la derecha";
+    Text[ catalan ] = "Alinia a la dreta";
 };
 String STR_ALIGN_UP
 {
@@ -1721,7 +1721,7 @@ String STR_ALIGN_UP
     Text[ chinese_traditional ] = "å‘ä¸Šå°é½Š";
     Text[ arabic ] = "ãÍÇĞÇÉ áÃÚáì";
     Text[ turkish ] = "Üste hizala";
-    Text[ catalan ] = "Alinear arriba";
+    Text[ catalan ] = "Alinia cap amunt";
 };
 String STR_ALIGN_MIDDLE
 {
@@ -1747,7 +1747,7 @@ String STR_ALIGN_MIDDLE
     Text[ chinese_traditional ] = "ç½®ä¸­å°é½Š";
     Text[ arabic ] = "ÊæÓíØ";
     Text[ turkish ] = "Ortaya hizala";
-    Text[ catalan ] = "Alinear centrado";
+    Text[ catalan ] = "Alinia centrat";
 };
 String STR_ALIGN_DOWN
 {
@@ -1773,7 +1773,7 @@ String STR_ALIGN_DOWN
     Text[ chinese_traditional ] = "å‘ä¸‹å°é½Š";
     Text[ arabic ] = "ãÍÇĞÇÉ áÃÓİá";
     Text[ turkish ] = "Alta hizala";
-    Text[ catalan ] = "Alinear abajo";
+    Text[ catalan ] = "Alinia avall";
 };
 String STR_UNDO_DRAGDROP
 {
@@ -1799,7 +1799,7 @@ String STR_UNDO_DRAGDROP
     Text[ chinese_traditional ] = "æ‹–æ›³";
     Text[ arabic ] = "ÓÍÈ æ ÅÓŞÇØ";
     Text[ turkish ] = "Sürükle ve bırak";
-    Text[ catalan ] = "Arrastrar y colocar";
+    Text[ catalan ] = "Arrosega i coloca";
 };
 String STR_INSERTGRAPHIC
 {
@@ -1826,7 +1826,7 @@ String STR_INSERTGRAPHIC
     Text[ chinese_traditional ] = "æ’å…¥åœ–å½¢";
     Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
     Text[ turkish ] = "Grafik ekle";
-    Text[ catalan ] = "Insertar imagen";
+    Text[ catalan ] = "Inserta una imatge";
 };
 String STR_LINESTYLE
 {
@@ -1852,7 +1852,7 @@ String STR_LINESTYLE
     Text[ chinese_traditional ] = "ç·šæ¢å¼æ¨£";
     Text[ arabic ] = "äãØ ÇáÎØ";
     Text[ turkish ] = "Çizgi biçimi";
-    Text[ catalan ] = "Estilo de línea";
+    Text[ catalan ] = "Estil de la línia";
 };
 String STR_DESC_LINESTYLE
 {
@@ -1879,7 +1879,7 @@ String STR_DESC_LINESTYLE
     Text[ chinese_traditional ] = "è«‹ç‚ºé€™å€‹æ–°ç·šæ¢å¼æ¨£è¼¸å…¥ä¸€å€‹åç¨±ï¼š";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáäãØ ÇáÌÏíÏ ááÎØ åäÇ:";
     Text[ turkish ] = "Yeni çizgi biçimi için bir ad girin:";
-    Text[ catalan ] = "Inserte aquí el nombre para el nuevo estilo de línea:";
+    Text[ catalan ] = "Introduei aquí el nom per al nou estil de línia:";
 };
 String STR_DEL_LINESTYLE
 {
@@ -1906,7 +1906,7 @@ String STR_DEL_LINESTYLE
     Text[ chinese_traditional ] = "åˆªé™¤ç·šæ¢å¼æ¨£";
     Text[ arabic ] = "ÍĞİ äãØ ÇáÎØ";
     Text[ turkish ] = "Çizgi biçimini sil";
-    Text[ catalan ] = "Eliminar estilo de línea";
+    Text[ catalan ] = "Elimina l'estil de línia";
 };
 String STR_ASK_DEL_LINESTYLE
 {
@@ -1933,7 +1933,7 @@ String STR_ASK_DEL_LINESTYLE
     Text[ chinese_traditional ] = "çœŸè¦åˆªé™¤ç·šæ¢å¼æ¨£ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
     Text[ turkish ] = "Çizgi biçimini gerçekten silmek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea realmente eliminar el estilo de línea?";
+    Text[ catalan ] = "Vols realment eliminar l'estil de línia?";
 };
 String STR_INVISIBLE
 {
@@ -2038,7 +2038,7 @@ String STR_AREA
     Text[ chinese_traditional ] = "å……å¡«";
     Text[ arabic ] = "ÊÚÈÆÉ";
     Text[ turkish ] = "Alan";
-    Text[ catalan ] = "Relleno";
+    Text[ catalan ] = "Àrea";
 };
 String STR_LINE
 {
@@ -2064,7 +2064,7 @@ String STR_LINE
     Text[ chinese_traditional ] = "ç·šæ¢";
     Text[ arabic ] = "ÇáÎØ";
     Text[ turkish ] = "Çizgi";
-    Text[ catalan ] = "Línea";
+    Text[ catalan ] = "Línia";
 };
 String STR_EFFECT
 {
@@ -2090,7 +2090,7 @@ String STR_EFFECT
     Text[ chinese_traditional ] = "æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ";
     Text[ turkish ] = "Efekt";
-    Text[ catalan ] = "Efecto";
+    Text[ catalan ] = "Efecte";
 };
 String STR_SLOW
 {
@@ -2116,7 +2116,7 @@ String STR_SLOW
     Text[ chinese_traditional ] = "æ…¢";
     Text[ arabic ] = "ÈØíÁ";
     Text[ turkish ] = "Yavaş";
-    Text[ catalan ] = "Lenta";
+    Text[ catalan ] = "Lent";
 };
 String STR_MEDIUM
 {
@@ -2142,7 +2142,7 @@ String STR_MEDIUM
     Text[ chinese_traditional ] = "ä¸­ç­‰";
     Text[ arabic ] = "ãÊæÓØ";
     Text[ turkish ] = "Normal";
-    Text[ catalan ] = "Media";
+    Text[ catalan ] = "Mitjà";
 };
 String STR_FAST
 {
@@ -2168,7 +2168,7 @@ String STR_FAST
     Text[ chinese_traditional ] = "å¿«é€Ÿ";
     Text[ arabic ] = "ÓÑíÚ";
     Text[ turkish ] = "Hızlı";
-    Text[ catalan ] = "Rápida";
+    Text[ catalan ] = "Ràpid";
 };
 String STR_CHANGE
 {
@@ -2194,7 +2194,7 @@ String STR_CHANGE
     Text[ chinese_traditional ] = "è½‰æ›";
     Text[ arabic ] = "ÇáÊÛííÑ";
     Text[ turkish ] = "Geçiş";
-    Text[ catalan ] = "Cambio";
+    Text[ catalan ] = "Canvi";
 };
 String STR_AUTO
 {
@@ -2220,7 +2220,7 @@ String STR_AUTO
     Text[ chinese_traditional ] = "è‡ªå‹•";
     Text[ arabic ] = "ÊáŞÇÆí";
     Text[ turkish ] = "Otomatik";
-    Text[ catalan ] = "Automático";
+    Text[ catalan ] = "Automàtic";
 };
 String STR_SEMIAUTO
 {
@@ -2244,7 +2244,7 @@ String STR_SEMIAUTO
     Text[ chinese_traditional ] = "åŠè‡ªå‹•";
     Text[ arabic ] = "äÕİ ÊáŞÇÆí";
     Text[ turkish ] = "Yarı otomatik";
-    Text[ catalan ] = "Semiautomático";
+    Text[ catalan ] = "Semiautomàtic";
     Text[ finnish ] = "Puoliautomaattinen";
 };
 String STR_MANUEL
@@ -2324,7 +2324,7 @@ String STR_BEZ_CONV_LINE
     Text[ chinese_traditional ] = "è½‰è®Šæˆç·šæ¢(~T)";
     Text[ arabic ] = "Åáì ÎØ";
     Text[ turkish ] = "Doğruya";
-    Text[ catalan ] = "~En línea";
+    Text[ catalan ] = "~En línia";
 };
 String STR_BEZ_CONV_CURVE
 {
@@ -2350,7 +2350,7 @@ String STR_BEZ_CONV_CURVE
     Text[ chinese_traditional ] = "è½‰è®Šæˆæ›²ç·š(~T)";
     Text[ arabic ] = "Åáì ãäÍäì";
     Text[ turkish ] = "Eğriye";
-    Text[ catalan ] = "~En curva";
+    Text[ catalan ] = "~En corba";
 };
  //-------------------------------------
 String STR_UNDO_BEZCONV
@@ -2377,7 +2377,7 @@ String STR_UNDO_BEZCONV
     Text[ chinese_traditional ] = "è½‰æ›å¤šé‚Šå½¢ç·šæ®µ";
     Text[ arabic ] = "ÊÍæíá ŞØÚÉ ãÖáÚ";
     Text[ turkish ] = "Çokgen parçasını dönüştür";
-    Text[ catalan ] = "Convertir el segmento de polígono";
+    Text[ catalan ] = "Convertir el segment de polígon";
 };
 String STR_UNDO_BEZSMOOTH
 {
@@ -2404,7 +2404,7 @@ String STR_UNDO_BEZSMOOTH
     Text[ chinese_traditional ] = "è®Šæ›´æ›²ç·šå¹³æ»‘";
     Text[ arabic ] = "ÊÚÏíá äÚæãÉ ÇáãäÍäì";
     Text[ turkish ] = "Eğri düzleştirmeyi değiştir";
-    Text[ catalan ] = "modificar suavizado de curva";
+    Text[ catalan ] = "Modifica el suavitzat de corba";
 };
 String STR_UNDO_BEZCLOSE
 {
@@ -2431,7 +2431,7 @@ String STR_UNDO_BEZCLOSE
     Text[ chinese_traditional ] = "çµæŸå¤šé‚Šå½¢";
     Text[ arabic ] = "ÅÛáÇŞ ÇáãÖáÚ";
     Text[ turkish ] = "Çokgeni kapat";
-    Text[ catalan ] = "Cerrar el polígono";
+    Text[ catalan ] = "Tanca el polígon";
 };
  //-------------------------------------
 /* ### ACHTUNG: Neuer Text in Resource! */
@@ -2460,7 +2460,7 @@ String STR_SLIDE_MODE
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáÔÑÇÆÍ";
     Text[ turkish ] = "Slayt görünümü";
-    Text[ catalan ] = "Modo diapositivas";
+    Text[ catalan ] = "Mode diapositives";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_DRAW_MODE
@@ -2488,7 +2488,7 @@ String STR_DRAW_MODE
     Text[ chinese_traditional ] = "ç¹ªåœ–é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáÑÓã";
     Text[ turkish ] = "Çizim görünümü";
-    Text[ catalan ] = "Modo Dibujo";
+    Text[ catalan ] = "Mode Dibuix";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_OUTLINE_MODE
@@ -2516,7 +2516,7 @@ String STR_OUTLINE_MODE
     Text[ chinese_traditional ] = "å¤§ç¶±é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáÊŞÓíã";
     Text[ turkish ] = "Anahat görünümü";
-    Text[ catalan ] = "Modo Esquema";
+    Text[ catalan ] = "Mode Esquema";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_NOTES_MODE
@@ -2544,7 +2544,7 @@ String STR_NOTES_MODE
     Text[ chinese_traditional ] = "é è¦½å‚™è¨»";
     Text[ arabic ] = "ÚÑÖ ÇáãáÇÍÙÇÊ";
     Text[ turkish ] = "Notlar görünümü";
-    Text[ catalan ] = "Modo Notas";
+    Text[ catalan ] = "Mode Notes";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_HANDOUT_MODE
@@ -2572,7 +2572,7 @@ String STR_HANDOUT_MODE
     Text[ chinese_traditional ] = "è¬›ç¾©é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáäÔÑÉ";
     Text[ turkish ] = "Slayt sıralayıcısı görünümü";
-    Text[ catalan ] = "Modo Volante";
+    Text[ catalan ] = "Mode Follet";
 };
 String STR_PRESENTATION_LAYOUT
 {
@@ -2599,7 +2599,7 @@ String STR_PRESENTATION_LAYOUT
     Text[ chinese_traditional ] = "ç°¡å ±ç‰ˆå¼";
     Text[ arabic ] = "ÊÎØíØ ÇáÚÑÖ ÇáÊŞÏíãí";
     Text[ turkish ] = "Sunu düzeni";
-    Text[ catalan ] = "Diseño de presentación";
+    Text[ catalan ] = "Disseny de presentació";
 };
 String STR_AUTOLAYOUT_NONE
 {
@@ -2625,7 +2625,7 @@ String STR_AUTOLAYOUT_NONE
     Text[ chinese_traditional ] = "ç©ºæŠ•å½±ç‰‡";
     Text[ arabic ] = "ÔÑíÍÉ İÇÑÛÉ";
     Text[ turkish ] = "Boş slayt";
-    Text[ catalan ] = "Diapositiva vacía";
+    Text[ catalan ] = "Diapositiva buida";
 };
 String STR_AUTOLAYOUT_ONLY_TITLE
 {
@@ -2651,7 +2651,7 @@ String STR_AUTOLAYOUT_ONLY_TITLE
     Text[ chinese_traditional ] = "åªæ˜¯æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä İŞØ";
     Text[ turkish ] = "Yalnızca başlık";
-    Text[ catalan ] = "Solo título";
+    Text[ catalan ] = "Només el títol";
 };
 String STR_AUTOLAYOUT_TITLE
 {
@@ -2677,7 +2677,7 @@ String STR_AUTOLAYOUT_TITLE
     Text[ chinese_traditional ] = "æ¨™é¡ŒæŠ•å½±ç‰‡";
     Text[ arabic ] = "ÔÑíÍÉ ÚäæÇä";
     Text[ turkish ] = "Başlık slaydı";
-    Text[ catalan ] = "Página de título";
+    Text[ catalan ] = "Pàgina de títol";
 };
 String STR_AUTOLAYOUT_OBJ
 {
@@ -2703,7 +2703,7 @@ String STR_AUTOLAYOUT_OBJ
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹ç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æßÇÆä";
     Text[ turkish ] = "Başlık ve nesne";
-    Text[ catalan ] = "Título, objeto";
+    Text[ catalan ] = "Títol, objecte";
 };
 String STR_AUTOLAYOUT_ENUM
 {
@@ -2729,7 +2729,7 @@ String STR_AUTOLAYOUT_ENUM
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æäÕ";
     Text[ turkish ] = "Başlık ve metin";
-    Text[ catalan ] = "Título, texto";
+    Text[ catalan ] = "Títol, text";
 };
 String STR_AUTOLAYOUT_CHART
 {
@@ -2755,7 +2755,7 @@ String STR_AUTOLAYOUT_CHART
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹åœ–è¡¨";
     Text[ arabic ] = "ÚäæÇä æÑÓã ÈíÇäí";
     Text[ turkish ] = "Başlık ve şema";
-    Text[ catalan ] = "Título, diagrama";
+    Text[ catalan ] = "Títol, diagrama";
 };
 String STR_AUTOLAYOUT_ORG
 {
@@ -2781,7 +2781,7 @@ String STR_AUTOLAYOUT_ORG
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹çµæ§‹åœ–è¡¨";
     Text[ arabic ] = "ÚäæÇä æÑÓã ÈíÇäí åíßáí";
     Text[ turkish ] = "Başlık ve organizasyon şeması";
-    Text[ catalan ] = "Título, organigrama";
+    Text[ catalan ] = "Títol, organigrama";
 };
 String STR_AUTOLAYOUT_TAB
 {
@@ -2807,7 +2807,7 @@ String STR_AUTOLAYOUT_TAB
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹å·¥ä½œè¡¨";
     Text[ arabic ] = "ÚäæÇä æÌÏæá";
     Text[ turkish ] = "Başlık ve tablo";
-    Text[ catalan ] = "Título, hoja de cálculo";
+    Text[ catalan ] = "Títol, fulla de càlcul";
 };
 String STR_AUTOLAYOUT_CLIPTEXT
 {
@@ -2833,7 +2833,7 @@ String STR_AUTOLAYOUT_CLIPTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹ç¾å·¥åœ–æ¡ˆï¹æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æ  Clipart æäÕ";
     Text[ turkish ] = "Başlık, clipart ve metin";
-    Text[ catalan ] = "Título, clipart, texto";
+    Text[ catalan ] = "Títol, clipart, text";
 };
 String STR_AUTOLAYOUT_2TEXT
 {
@@ -2859,7 +2859,7 @@ String STR_AUTOLAYOUT_2TEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹é›™æ¬„";
     Text[ arabic ] = "ÚäæÇä æäÕÇä";
     Text[ turkish ] = "Başlık ve 2 metin";
-    Text[ catalan ] = "Título, 2 textos";
+    Text[ catalan ] = "Títol, 2 textos";
 };
 String STR_AUTOLAYOUT_TEXTCHART
 {
@@ -2885,7 +2885,7 @@ String STR_AUTOLAYOUT_TEXTCHART
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ï¹åœ–è¡¨";
     Text[ arabic ] = "ÚäæÇä æäÕ æÑÓã ÈíÇäí";
     Text[ turkish ] = "Başlık, metin ve şema";
-    Text[ catalan ] = "Título, texto, diagrama";
+    Text[ catalan ] = "Títol, text, diagrama";
 };
 String STR_AUTOLAYOUT_TEXTCLIP
 {
@@ -2911,7 +2911,7 @@ String STR_AUTOLAYOUT_TEXTCLIP
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ï¹ç¾å·¥åœ–æ¡ˆ";
     Text[ arabic ] = "ÚäæÇä æäÕ æ  Clipart";
     Text[ turkish ] = "Başlık, metin ve clipart";
-    Text[ catalan ] = "Título, texto, clipart";
+    Text[ catalan ] = "Títol, text, clipart";
 };
 String STR_AUTOLAYOUT_CHARTTEXT
 {
@@ -2937,7 +2937,7 @@ String STR_AUTOLAYOUT_CHARTTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹åœ–è¡¨ï¹æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æÑÓã ÈíÇäí æäÕ";
     Text[ turkish ] = "Başlık, şema ve metin";
-    Text[ catalan ] = "Título, diagrama, texto";
+    Text[ catalan ] = "Títol, diagrama, text";
 };
 String STR_AUTOLAYOUT_TEXTOBJ
 {
@@ -2963,7 +2963,7 @@ String STR_AUTOLAYOUT_TEXTOBJ
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ï¹ç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æäÕ æßÇÆä";
     Text[ turkish ] = "Başlık, metin ve nesne";
-    Text[ catalan ] = "Título, texto, objeto";
+    Text[ catalan ] = "Títol, text, objecte";
 };
 String STR_AUTOLAYOUT_TEXT2OBJ
 {
@@ -2989,7 +2989,7 @@ String STR_AUTOLAYOUT_TEXT2OBJ
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ï¹2 å€‹ç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æäÕ æßÇÆäÇä";
     Text[ turkish ] = "Başlık, metin ve 2 nesne";
-    Text[ catalan ] = "Título, texto, 2 objetos";
+    Text[ catalan ] = "Títol, text, 2 objectes";
 };
 String STR_AUTOLAYOUT_OBJTEXT
 {
@@ -3015,7 +3015,7 @@ String STR_AUTOLAYOUT_OBJTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹ç‰©ä»¶ï¹æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æßÇÆä æäÕ";
     Text[ turkish ] = "Başlık, nesne ve metin";
-    Text[ catalan ] = "Título, objeto, texto";
+    Text[ catalan ] = "Títol, objecte, text";
 };
 String STR_AUTOLAYOUT_OBJOVERTEXT
 {
@@ -3042,7 +3042,7 @@ String STR_AUTOLAYOUT_OBJOVERTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ä¹‹ä¸Šç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æßÇÆä İæŞ äÕ";
     Text[ turkish ] = "Başlık ve metin üzerinde nesne";
-    Text[ catalan ] = "Título, objeto sobre texto";
+    Text[ catalan ] = "Títol, objecte sobre text";
 };
 String STR_AUTOLAYOUT_2OBJTEXT
 {
@@ -3068,7 +3068,7 @@ String STR_AUTOLAYOUT_2OBJTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹2 å€‹ç‰©ä»¶ï¹æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æßÇÆäÇä æäÕ";
     Text[ turkish ] = "Başlık, 2 nesne ve metin";
-    Text[ catalan ] = "Título, 2 objetos, texto";
+    Text[ catalan ] = "Títol, 2 objectes, text";
 };
 String STR_AUTOLAYOUT_2OBJOVERTEXT
 {
@@ -3095,7 +3095,7 @@ String STR_AUTOLAYOUT_2OBJOVERTEXT
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹æ–‡å­—ä¹‹ä¸Šçš„ 2 å€‹ç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æßÇÆäÇä İæŞ äÕ";
     Text[ turkish ] = "Başlık ve metin üzerinde iki nesne";
-    Text[ catalan ] = "Título, 2 objetos sobre texto";
+    Text[ catalan ] = "Títol, 2 objectes sobre text";
 };
 String STR_AUTOLAYOUT_TEXTOVEROBJ
 {
@@ -3122,7 +3122,7 @@ String STR_AUTOLAYOUT_TEXTOVEROBJ
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹ç‰©ä»¶ä¹‹ä¸Šçš„æ–‡å­—";
     Text[ arabic ] = "ÚäæÇä æäÕ İæŞ ßÇÆä";
     Text[ turkish ] = "Başlık ve nesne üzerinde metin";
-    Text[ catalan ] = "Título, texto sobre objeto";
+    Text[ catalan ] = "Títol, text sobre objecte";
 };
 String STR_AUTOLAYOUT_4OBJ
 {
@@ -3148,7 +3148,7 @@ String STR_AUTOLAYOUT_4OBJ
     Text[ chinese_traditional ] = "æ¨™é¡Œï¹ 4 å€‹ç‰©ä»¶";
     Text[ arabic ] = "ÚäæÇä æ4 ßÇÆäÇÊ";
     Text[ turkish ] = "Başlık ve 4 nesne";
-    Text[ catalan ] = "Título, 4 objetos";
+    Text[ catalan ] = "Títol, 4 objectes";
 };
 String STR_AL_TITLE_VERT_OUTLINE
 {
@@ -3172,7 +3172,7 @@ String STR_AL_TITLE_VERT_OUTLINE
     Text[ chinese_traditional ] = "æ¨™é¡Œï¼Œç›´å¼æ–‡å­—";
     Text[ turkish ] = "Title, vertical text";
     Text[ arabic ] = "ÚäæÇä¡ äÕ ÚãæÏí";
-    Text[ catalan ] = "Título, texto vertical";
+    Text[ catalan ] = "Títol, text vertical";
     Text[ finnish ] = "Otsikko, pystysuuntainen teksti";
 };
 String STR_AL_TITLE_VERT_OUTLINE_CLIPART
@@ -3197,7 +3197,7 @@ String STR_AL_TITLE_VERT_OUTLINE_CLIPART
     Text[ chinese_traditional ] = "æ¨™é¡Œï¼Œç›´å¼æ–‡å­—ï¼Œç¾è¡“åœ–å½¢";
     Text[ turkish ] = "Title, vertical text, clipart";
     Text[ arabic ] = "ÚäæÇä¡ äÕ ÚãæÏí¡ Clipart";
-    Text[ catalan ] = "Título, texto vertical, clipart";
+    Text[ catalan ] = "Títol, text vertical, clipart";
     Text[ finnish ] = "Otsikko, pystysuuntainen teksti, leikekuva";
 };
 String STR_AL_VERT_TITLE_TEXT_CHART
@@ -3222,7 +3222,7 @@ String STR_AL_VERT_TITLE_TEXT_CHART
     Text[ chinese_traditional ] = "ç›´å¼æ¨™é¡Œï¼Œæ–‡å­—ï¼Œåœ–è¡¨";
     Text[ turkish ] = "Vertical title, text, chart";
     Text[ arabic ] = "ÚäæÇä ÚãæÏí¡ äÕ¡ ÑÓã ÈíÇäí";
-    Text[ catalan ] = "Título vertical, texto, diagrama";
+    Text[ catalan ] = "Títol vertical, text, diagrama";
     Text[ finnish ] = "Pystysuuntainen otsikko, teksti, leikekuva";
 };
 String STR_AL_VERT_TITLE_VERT_OUTLINE
@@ -3247,7 +3247,7 @@ String STR_AL_VERT_TITLE_VERT_OUTLINE
     Text[ chinese_traditional ] = "ç›´å¼æ¨™é¡Œï¼Œç›´å¼æ–‡å­—";
     Text[ turkish ] = "Vertical title, vertical text";
     Text[ arabic ] = "ÚäæÇä ÚãæÏí¡ äÕ ÚãæÏí";
-    Text[ catalan ] = "Título vertical, texto vertical";
+    Text[ catalan ] = "Títol vertical, text vertical";
     Text[ finnish ] = "Pystysuuntainen otsikko, pystysuuntainen teksti";
 };
 
@@ -3275,7 +3275,7 @@ String STR_AUTOLAYOUT_HANDOUT1
     Text[ chinese_traditional ] = "ä¸€é ";
     Text[ arabic ] = "ÕİÍÉ æÇÍÏÉ";
     Text[ turkish ] = "Tek sayfa";
-    Text[ catalan ] = "Una página";
+    Text[ catalan ] = "Una pàgina";
 };
 String STR_AUTOLAYOUT_HANDOUT2
 {
@@ -3301,7 +3301,7 @@ String STR_AUTOLAYOUT_HANDOUT2
     Text[ chinese_traditional ] = "é›™é ";
     Text[ arabic ] = "ÕİÍÊÇä";
     Text[ turkish ] = "İki sayfa";
-    Text[ catalan ] = "Dos páginas";
+    Text[ catalan ] = "Dues pàgines";
 };
 String STR_AUTOLAYOUT_HANDOUT3
 {
@@ -3327,7 +3327,7 @@ String STR_AUTOLAYOUT_HANDOUT3
     Text[ chinese_traditional ] = "ä¸‰é ";
     Text[ arabic ] = "ËáÇË ÕİÍÇÊ";
     Text[ turkish ] = "Üç sayfa";
-    Text[ catalan ] = "Tres páginas";
+    Text[ catalan ] = "Tres pàgines";
 };
 String STR_AUTOLAYOUT_HANDOUT4
 {
@@ -3353,7 +3353,7 @@ String STR_AUTOLAYOUT_HANDOUT4
     Text[ chinese_traditional ] = "å››é ";
     Text[ arabic ] = "ÃÑÈÚ ÕİÍÇÊ";
     Text[ turkish ] = "Dört sayfa";
-    Text[ catalan ] = "Cuatro páginas";
+    Text[ catalan ] = "Quatre pàgines";
 };
 String STR_AUTOLAYOUT_HANDOUT6
 {
@@ -3379,7 +3379,7 @@ String STR_AUTOLAYOUT_HANDOUT6
     Text[ chinese_traditional ] = "å…­é ";
     Text[ arabic ] = "ÓÊ ÕİÍÇÊ";
     Text[ turkish ] = "Altı sayfa";
-    Text[ catalan ] = "Seis páginas";
+    Text[ catalan ] = "Sis pàgines";
 };
 String STR_AUTOLAYOUT_NOTES
 {
@@ -3405,7 +3405,7 @@ String STR_AUTOLAYOUT_NOTES
     Text[ chinese_traditional ] = "å‚™è¨»";
     Text[ arabic ] = "ãáÇÍÙÇÊ";
     Text[ turkish ] = "Notlar";
-    Text[ catalan ] = "Notas";
+    Text[ catalan ] = "Notes";
 };
 String STR_TRANSFORM
 {
@@ -3459,7 +3459,7 @@ String STR_PAGEMODE
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáÕİÍÇÊ";
     Text[ turkish ] = "Sayfa görünümü";
-    Text[ catalan ] = "Modo Página";
+    Text[ catalan ] = "Mode Pàgina";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_LAYERMODE
@@ -3487,7 +3487,7 @@ String STR_LAYERMODE
     Text[ chinese_traditional ] = "åˆ†å±¤é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáØÈŞÉ";
     Text[ turkish ] = "Düzey görünümü";
-    Text[ catalan ] = "Modo Capas";
+    Text[ catalan ] = "Mode Capes";
 };
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_MASTERPAGEMODE
@@ -3515,7 +3515,7 @@ String STR_MASTERPAGEMODE
     Text[ chinese_traditional ] = "èƒŒæ™¯é è¦½";
     Text[ arabic ] = "ÚÑÖ ÇáÎáİíÉ";
     Text[ turkish ] = "Artalan görünümü";
-    Text[ catalan ] = "Modo Fondo";
+    Text[ catalan ] = "Mode Fons";
 };
 String STR_OPEN_OBJECT
 {
@@ -3542,7 +3542,7 @@ String STR_OPEN_OBJECT
     Text[ chinese_traditional ] = "é–‹å•Ÿç‰©ä»¶(~O)";
     Text[ arabic ] = "İÊÍ ÇáßÇÆä";
     Text[ turkish ] = "Nesneyi aç";
-    Text[ catalan ] = "Abrir ~objeto";
+    Text[ catalan ] = "Obrir ~objecte";
 };
 String STR_CLOSE_OBJECT
 {
@@ -3569,7 +3569,7 @@ String STR_CLOSE_OBJECT
     Text[ chinese_traditional ] = "å°é–‰ç‰©ä»¶(~O)";
     Text[ arabic ] = "ÅÛáÇŞ ÇáßÇÆä";
     Text[ turkish ] = "Nesneyi kapat";
-    Text[ catalan ] = "Cerrar ~objeto";
+    Text[ catalan ] = "Tancar ~objecte";
 };
 String STR_LINEEND
 {
@@ -3595,7 +3595,7 @@ String STR_LINEEND
     Text[ chinese_traditional ] = "ç·šæ¢ç®­é ­";
     Text[ arabic ] = "äåÇíÉ ÇáÎØ";
     Text[ turkish ] = "Çizgi ucu";
-    Text[ catalan ] = "Fin de línea";
+    Text[ catalan ] = "Fi de línia";
 };
 String STR_DESC_LINEEND
 {
@@ -3622,7 +3622,7 @@ String STR_DESC_LINEEND
     Text[ chinese_traditional ] = "è«‹ç‚ºé€™å€‹æ–°ç·šæ¢ç®­é ­è¼¸å…¥ä¸€å€‹åç¨±ï¼š";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáäåÇíÉ ÇáÌÏíÏÉ ááÎØ åäÇ:";
     Text[ turkish ] = "Yeni çizgi ucu için bir ad girin:";
-    Text[ catalan ] = "Inserte aquí el nombre para el final de línea nuevo:";
+    Text[ catalan ] = "Introdueix aquí el nom per al final de línia nou:";
 };
 String STR_WARN_NAME_DUPLICATE
 {
@@ -3648,7 +3648,7 @@ String STR_WARN_NAME_DUPLICATE
     Text[ chinese_traditional ] = "æ‚¨è¼¸å…¥çš„åç¨±å·²ç¶“å­˜åœ¨ã€‚\nè«‹æ‚¨è¼¸å…¥ä¸€å€‹ä¸åŒçš„åç¨±ã€‚";
     Text[ arabic ] = "ÇáÇÓã ÇáĞí ÇÏÎáÊå¡ ãæÌæÏ ãÓÈŞÇğ. \nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÃÎÑ.";
     Text[ turkish ] = "Girdiğiniz ad mevcut durumda. \nLütfen başka bir ad girin.";
-    Text[ catalan ] = "El nombre que ha introducido ya existe. \nIntroduzca otro nombre por favor.";
+    Text[ catalan ] = "El nom que has introduït ja existeix. \nIntrodueix-ne un altre, si us plau.";
 };
 String STR_UNDO_ANIMATION
 {
@@ -3674,7 +3674,7 @@ String STR_UNDO_ANIMATION
     Text[ chinese_traditional ] = "å‹•ç•«åƒæ•¸";
     Text[ arabic ] = "ãÚáãÇÊ ÇáÍÑßÉ";
     Text[ turkish ] = "Canlandırma parametreleri";
-    Text[ catalan ] = "Parámetros de animación";
+    Text[ catalan ] = "Paràmetres d'animació";
 };
 String STR_UNDO_ANIMATION_ORDER
 {
@@ -3698,7 +3698,7 @@ String STR_UNDO_ANIMATION_ORDER
     Text[ chinese_traditional ] = "å‹•ç•«é †åº";
     Text[ arabic ] = "ÊÑÊíÈ ÇáÍÑßÉ";
     Text[ turkish ] = "Canlandırma sırası";
-    Text[ catalan ] = "Orden de animación";
+    Text[ catalan ] = "Ordre d'animació";
     Text[ finnish ] = "Animaatiojärjestys";
 };
 String STR_EXPORT_ALL
@@ -3725,7 +3725,7 @@ String STR_EXPORT_ALL
     Text[ chinese_traditional ] = "[å…¨éƒ¨æ ¼å¼]";
     Text[ arabic ] = "[ßá ÇáÊäÓíŞÇÊ]";
     Text[ turkish ] = "[Tüm formatlar]";
-    Text[ catalan ] = "[Todos los formatos]";
+    Text[ catalan ] = "[Tots els formats]";
 };
 String STR_EXPORT_UNKNOWN_FORMAT
 {
@@ -3751,7 +3751,7 @@ String STR_EXPORT_UNKNOWN_FORMAT
     Text[ chinese_traditional ] = "ä¸æ˜çš„æª”æ¡ˆæ ¼å¼ï¼";
     Text[ arabic ] = "ÊäÓíŞ ãáİ ÛíÑ ãÚÑæİ!";
     Text[ turkish ] = "Bilinmeyen dosya formatı!";
-    Text[ catalan ] = "¡Formato de archivo desconocido!";
+    Text[ catalan ] = "Format de fitxer desconegut!";
 };
 String STR_EXPORT_PATH_NOT_FOUND1
 {
@@ -3777,7 +3777,7 @@ String STR_EXPORT_PATH_NOT_FOUND1
     Text[ chinese_traditional ] = "é€™å€‹ç›®éŒ„<";
     Text[ arabic ] = "ÇáÏáíá '";
     Text[ turkish ] = "Dizin '";
-    Text[ catalan ] = "El directorio '";
+    Text[ catalan ] = "El directori '";
 };
 String STR_EXPORT_PATH_NOT_FOUND2
 {
@@ -3803,12 +3803,32 @@ String STR_EXPORT_PATH_NOT_FOUND2
     Text[ chinese_traditional ] = ">ä¸å­˜åœ¨ã€‚";
     Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     Text[ turkish ] = "' mevcut değil.";
-    Text[ catalan ] = "' no existe.";
+    Text[ catalan ] = "' no existeix.";
 };
 String STR_EXPORT_HTML_NAME
 {
     Text = "Webseite" ;
     Text [ English ] = "Web Page" ;
+    Text[ english_us ] = "Web Page";
+    Text[ portuguese ] = "Web Page";
+    Text[ russian ] = "Web Page";
+    Text[ greek ] = "Web Page";
+    Text[ dutch ] = "Web Page";
+    Text[ french ] = "Page Web";
+    Text[ spanish ] = "Página web";
+    Text[ finnish ] = "Web Page";
+    Text[ italian ] = "Web Page";
+    Text[ danish ] = "Web Page";
+    Text[ swedish ] = "Webbsida";
+    Text[ polish ] = "Web Page";
+    Text[ portuguese_brazilian ] = "Web Page";
+    Text[ japanese ] = "Webï¾ï¾Ÿï½°ï½¼ï¾";
+    Text[ korean ] = "Web Page";
+    Text[ chinese_simplified ] = "ç½‘é¡µ";
+    Text[ chinese_traditional ] = "ç¶²é ";
+    Text[ turkish ] = "Web Page";
+    Text[ arabic ] = "Web Page";
+    Text[ catalan ] = "Web Page";
 };
 String STR_EXPORT_HTML_FILTER
 {
@@ -3847,7 +3867,7 @@ String STR_EXPORT_GRFILTER_OPENERROR
     TEXT[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿé€™å€‹åœ–å½¢æª”æ¡ˆ";
     TEXT[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
     TEXT[ turkish ] = "Grafik dosyası açılamıyor";
-    TEXT[ catalan ] = "No es posible abrir el archivo gráfico";
+    TEXT[ catalan ] = "No es pot obrir el fitxer gràfic";
 };
 String STR_EXPORT_GRFILTER_IOERROR
 {
@@ -3873,7 +3893,7 @@ String STR_EXPORT_GRFILTER_IOERROR
     TEXT[ chinese_traditional ] = "ç„¡æ³•è®€å–é€™å€‹åœ–å½¢æª”æ¡ˆ";
     TEXT[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
     TEXT[ turkish ] = "Grafik dosyası okunamıyor";
-    TEXT[ catalan ] = "No es posible leer el archivo gráfico";
+    TEXT[ catalan ] = "No es pot llegir el fitxer gràfic";
 };
 String STR_EXPORT_GRFILTER_FORMATERROR
 {
@@ -3899,7 +3919,7 @@ String STR_EXPORT_GRFILTER_FORMATERROR
     TEXT[ chinese_traditional ] = "ä¸æ˜çš„åœ–å½¢æ ¼å¼";
     TEXT[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
     TEXT[ turkish ] = "Bilinmeyen grafik formatı";
-    TEXT[ catalan ] = "Formato de imagen desconocido";
+    TEXT[ catalan ] = "Format de la imatge desconegut";
 };
 String STR_EXPORT_GRFILTER_VERSIONERROR
 {
@@ -3926,7 +3946,7 @@ String STR_EXPORT_GRFILTER_VERSIONERROR
     TEXT[ chinese_traditional ] = "ä¸æ”¯æ´é€™å€‹åœ–å½¢æª”æ¡ˆçš„ç‰ˆæœ¬";
     TEXT[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæã";
     TEXT[ turkish ] = "Grafik dosyasının bu sürümü desteklenmiyor.";
-    TEXT[ catalan ] = "No se admite la versión del archivo gráfico";
+    TEXT[ catalan ] = "No s'admet aquesta versió del fitxer gràfic";
 };
 String STR_EXPORT_GRFILTER_FILTERERROR
 {
@@ -3952,7 +3972,7 @@ String STR_EXPORT_GRFILTER_FILTERERROR
     TEXT[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°åœ–å½¢éæ¿¾å™¨";
     TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
     TEXT[ turkish ] = "Grafik filtresi bulunamadı";
-    TEXT[ catalan ] = "No se encontró el filtro de imagen";
+    TEXT[ catalan ] = "No s'ha trobat el filtre d'imatge";
 };
 String STR_EXPORT_GRFILTER_TOOBIG
 {
@@ -3978,7 +3998,7 @@ String STR_EXPORT_GRFILTER_TOOBIG
     TEXT[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³ï¹ç„¡æ³•åŒ¯å‡ºé€™å€‹åœ–å½¢";
     TEXT[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÊÕÏíÑ ÇáÑÓãÉ";
     TEXT[ turkish ] = "Grafiği dışa aktarmak için yeterli bellek yok.";
-    TEXT[ catalan ] = "No hay suficiente memoria para exportar la imagen";
+    TEXT[ catalan ] = "No hi ha prou memòria per a exportar la imatge.";
 };
 String STR_EXPORT_PROPERTIES
 {
@@ -4004,7 +4024,7 @@ String STR_EXPORT_PROPERTIES
     Text[ chinese_traditional ] = "å±¬æ€§(~P)...";
     Text[ arabic ] = "ÎÕÇÆÕ...";
     Text[ turkish ] = "Özellikler...";
-    Text[ catalan ] = "~Propiedades...";
+    Text[ catalan ] = "~Propietats...";
 };
 String STR_EXPORT_STANDARD
 {
@@ -4030,7 +4050,7 @@ String STR_EXPORT_STANDARD
     Text[ chinese_traditional ] = "æ¨™æº–(~O)";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
-    Text[ catalan ] = "~Predeterminado";
+    Text[ catalan ] = "~Estàndard";
 };
 String STR_EXPORT_LINK
 {
@@ -4083,7 +4103,7 @@ String STR_EXPORT_PREVIEW
     Text[ chinese_traditional ] = "é è¦½(~E)";
     Text[ arabic ] = "ãÚÇíäÉ";
     Text[ turkish ] = "Önizleme";
-    Text[ catalan ] = "Pre~visualización";
+    Text[ catalan ] = "Pre~visualització";
 };
 String STR_EXPORT_IMPORTGRAPHIC_COUNT
 {
@@ -4109,7 +4129,7 @@ String STR_EXPORT_IMPORTGRAPHIC_COUNT
     Text[ chinese_traditional ] = "åœ–å½¢éæ¿¾å™¨";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik filtresi";
-    Text[ catalan ] = "Filtro de imagen";
+    Text[ catalan ] = "Filtre d'imatge";
 };
 String STR_EXPORT_DIALOG_TITLE
 {
@@ -4170,7 +4190,7 @@ String STR_UNDO_COPYOBJECTS
     Text[ chinese_traditional ] = "è¤‡è£½";
     Text[ arabic ] = "ÇÓÊäÓÇÎ";
     Text[ turkish ] = "Çoğalt";
-    Text[ catalan ] = "reproducir";
+    Text[ catalan ] = "Reproduir";
 };
 String STR_DESC_NAMEGROUP
 {
@@ -4194,7 +4214,7 @@ String STR_DESC_NAMEGROUP
     Text[ chinese_traditional ] = "è«‹æ‚¨ç‚ºé€™å€‹ç‰©ä»¶è¼¸å…¥ä¸€å€‹åç¨±";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáßÇÆä";
     Text[ turkish ] = "Nesne için bir ad girin";
-    Text[ catalan ] = "Inserte el nombre del objeto";
+    Text[ catalan ] = "Introdueix el nom de l'objecte";
     Text[ finnish ] = "Kirjoita objektin nimi:";
 };
 String STR_UNDEFINED_NAME
@@ -4221,7 +4241,7 @@ String STR_UNDEFINED_NAME
     Text[ chinese_traditional ] = "ä¸æ˜ç¢ºçš„åç¨±";
     Text[ arabic ] = "ÇÓã ÛíÑ ãõİÕÍ";
     Text[ turkish ] = "Ad benzersiz değil";
-    Text[ catalan ] = "nombre indefinido";
+    Text[ catalan ] = "Nom indefinit";
 };
 String STR_WARN_PAGE_EXISTS
 {
@@ -4246,7 +4266,7 @@ String STR_WARN_PAGE_EXISTS
     Text[ chinese_traditional ] = "é€™å€‹é é¢åç¨±å·²ç¶“å­˜åœ¨æˆ–æ˜¯ç„¡æ•ˆçš„ã€‚è«‹æ‚¨è¼¸å…¥ä¸€å€‹æœ‰æ•ˆçš„åç¨±ã€‚";
     Text[ arabic ] = "ıÇÓã ÇáÕİÍÉ ãæÌæÏ ÈÇáİÚá Ãæ ÛíÑ ÕÇáÍ. ãä İÖáß ÇßÊÈ ÇÓãÇğ ÌÏíÏÇğ";
     Text[ turkish ] = "Bu sayfa adı mevcut durumda. Lütfen başka bir ad girin.";
-    Text[ catalan ] = "Este nombre de página ya existe o no es válido. Por favor escriba otro nombre.";
+    Text[ catalan ] = "Aquest nom de pàgina ja existeix o bé no és vàlid. Si us plau, escriu un altre nom.";
     Text[ finnish ] = "Dian nimi on jo olemassa tai nimi on virheellinen. Anna toinen nimi.";
 };
 String STR_WARN_OBJECT_EXISTS
@@ -4271,7 +4291,7 @@ String STR_WARN_OBJECT_EXISTS
     Text[ chinese_traditional ] = "é€™å€‹ç‰©ä»¶åç¨±å·²ç¶“å­˜åœ¨ã€‚è«‹æ‚¨è¼¸å…¥ä¸€å€‹ä¸åŒçš„åç¨±ã€‚";
     Text[ arabic ] = "ÇÓã ÇáßÇÆä ãæÌæÏ ãÓÈŞÇğ. ãä İÖáß ÇßÊÈ ÇÓãÇğ ÌÏíÏÇğ";
     Text[ turkish ] = "Bu nesne adı mevcut durumda. Lütfen başka bir ad girin.";
-    Text[ catalan ] = "El nombre del objeto ya existe. Por favor escriba otro nombre.";
+    Text[ catalan ] = "El nom de l'objecte ja existeix. Escriu un altre nom.";
     Text[ finnish ] = "Objektin nimi on jo olemassa. Anna toinen nimi.";
 };
 String STR_FORMAT_STRING
@@ -4298,7 +4318,7 @@ String STR_FORMAT_STRING
     Text[ chinese_traditional ] = "æœªæ ¼å¼åŒ–çš„æ–‡å­—";
     Text[ arabic ] = "äÕ ÛíÑ ãäÓŞ";
     Text[ turkish ] = "Formatsız metin";
-    Text[ catalan ] = "Texto no formateado";
+    Text[ catalan ] = "Text no formatat";
 };
 String STR_FORMAT_RTF
 {
@@ -4324,7 +4344,7 @@ String STR_FORMAT_RTF
     Text[ chinese_traditional ] = "å«æœ‰æ ¼å¼çš„æ–‡æœ¬(RTF)";
     Text[ arabic ] = "äÕ ãäÓŞ (RTF)";
     Text[ turkish ] = "Formatlı metin (RTF)";
-    Text[ catalan ] = "Texto formateado (RTF)";
+    Text[ catalan ] = "Text formatat (RTF)";
 };
 String STR_SNAPDLG_SETLINE
 {
@@ -4350,7 +4370,7 @@ String STR_SNAPDLG_SETLINE
     Text[ chinese_traditional ] = "ç·¨è¼¯åº§æ¨™ç·š";
     Text[ arabic ] = "ÊÍÑíÑ ÎØ ÇáÍÈÓ";
     Text[ turkish ] = "Kavrama çizgisini düzenle";
-    Text[ catalan ] = "Modificar línea de captura";
+    Text[ catalan ] = "Modifica la línia de captura";
 };
 String STR_SNAPDLG_SETPOINT
 {
@@ -4376,7 +4396,7 @@ String STR_SNAPDLG_SETPOINT
     Text[ chinese_traditional ] = "ç·¨è¼¯åº§æ¨™é»";
     Text[ arabic ] = "ÊÍÑíÑ äŞØÉ ÇáÍÈÓ";
     Text[ turkish ] = "Kavrama noktasını düzenle";
-    Text[ catalan ] = "Editar punto de captura";
+    Text[ catalan ] = "Edita el punt de captura";
 };
 String STR_POPUP_EDIT_SNAPLINE
 {
@@ -4400,7 +4420,7 @@ String STR_POPUP_EDIT_SNAPLINE
     Text[ chinese_traditional ] = "ç·¨è¼¯åº§æ¨™ç·š...";
     Text[ arabic ] = "ÊÍÑíÑ ÎØ ÇáÍÈÓ...";
     Text[ turkish ] = "Kavrama çizgisini düzenle...";
-    Text[ catalan ] = "Modificar línea de captura...";
+    Text[ catalan ] = "Modifica la línia de captura...";
     Text[ finnish ] = "Muokkaa kohdistusviivaa";
 };
 String STR_POPUP_EDIT_SNAPPOINT
@@ -4425,7 +4445,7 @@ String STR_POPUP_EDIT_SNAPPOINT
     Text[ chinese_traditional ] = "ç·¨è¼¯åº§æ¨™é»...";
     Text[ arabic ] = "ÊÍÑíÑ äŞØÉ ÇáÍÈÓ...";
     Text[ turkish ] = "Kavrama noktasını düzenle...";
-    Text[ catalan ] = "Editar punto de captura...";
+    Text[ catalan ] = "Edita el punt de captura...";
     Text[ finnish ] = "Muokkaa kohdistuspistettä";
 };
 String STR_POPUP_DELETE_SNAPLINE
@@ -4451,7 +4471,7 @@ String STR_POPUP_DELETE_SNAPLINE
     Text[ chinese_traditional ] = "åˆªé™¤åº§æ¨™ç·š";
     Text[ arabic ] = "ÍĞİ ÎØ ÇáÍÈÓ";
     Text[ turkish ] = "Kavrama çizgisini sil";
-    Text[ catalan ] = "Eliminar línea de captura";
+    Text[ catalan ] = "Elimina la línia de captura";
     Text[ finnish ] = "Poista kohdistusviiva";
 };
 String STR_POPUP_DELETE_SNAPPOINT
@@ -4477,7 +4497,7 @@ String STR_POPUP_DELETE_SNAPPOINT
     Text[ chinese_traditional ] = "åˆªé™¤åº§æ¨™é»";
     Text[ arabic ] = "ÍĞİ äŞØÉ ÇáÍÈÓ";
     Text[ turkish ] = "Kavrama noktasını sil";
-    Text[ catalan ] = "Eliminar punto de captura";
+    Text[ catalan ] = "Elimina el punt de captura";
     Text[ finnish ] = "Poista kohdistuspiste";
 };
 String STR_UNDO_FORMTEXT
@@ -4504,7 +4524,7 @@ String STR_UNDO_FORMTEXT
     Text[ chinese_traditional ] = "æ–‡å­—å’Œç‰©ä»¶å°é½Š";
     Text[ arabic ] = "ãÍÇĞÇÉ ÇáäÕ ááßÇÆä";
     Text[ turkish ] = "Metni nesneye göre hizala";
-    Text[ catalan ] = "Alinear texto al objeto";
+    Text[ catalan ] = "Alinia el text a l'objecte";
 };
 String STR_GRAPHIC
 {
@@ -4567,7 +4587,7 @@ String STR_WINDOWS_BITMAP
     Text [ finnish ] = "Windows-bittikartta" ;
     Text [ danish ] = "Windows-bitmap" ;
     Text [ french ] = "Bitmap Windows" ;
-    Text [ swedish ] = "Windows-Bitmap" ;
+    Text [ swedish ] = "Windows-bitmap" ;
     Text [ dutch ] = "Windows-bitmap" ;
     Text [ spanish ] = "Windows-Bitmap" ;
     Text [ english_us ] = "Windows Bitmap" ;
@@ -4606,7 +4626,7 @@ String STR_WINDOWS_METAFILE
     Text[ chinese_traditional ] = "Windows-å…ƒæª”æ¡ˆ";
     Text[ arabic ] = "ãáİ Windows Úáæí";
     Text[ turkish ] = "Windows Metafile";
-    Text[ catalan ] = "Metaarchivo Windows";
+    Text[ catalan ] = "Windows Metafile";
 };
 String STR_OS2_METAFILE
 {
@@ -4632,7 +4652,7 @@ String STR_OS2_METAFILE
     Text[ chinese_traditional ] = "OS/2-å…ƒæª”æ¡ˆ";
     Text[ arabic ] = "ãáİ Úáæí OS/2";
     Text[ turkish ] = "OS/2 Metafile";
-    Text[ catalan ] = "Metaarchivo OS/2";
+    Text[ catalan ] = "OS/2 Metafile";
 };
 String STR_MAC_PICTURE
 {
@@ -4658,7 +4678,7 @@ String STR_MAC_PICTURE
     Text[ chinese_traditional ] = "Mac åœ–å½¢";
     Text[ arabic ] = "ÕæÑÉ Mac";
     Text[ turkish ] = "Mac-Picture";
-    Text[ catalan ] = "Imagen Mac";
+    Text[ catalan ] = "Mac-Picture";
 };
 String STR_OTHER_FORMAT
 {
@@ -4684,7 +4704,7 @@ String STR_OTHER_FORMAT
     Text[ chinese_traditional ] = "å…¶ä»–æ ¼å¼";
     Text[ arabic ] = "ÊäÓíŞ ÂÎÑ";
     Text[ turkish ] = "Yabancı format";
-    Text[ catalan ] = "Otro formato";
+    Text[ catalan ] = "Un altre format";
 };
 String STR_DELETED
 {
@@ -4712,7 +4732,7 @@ String STR_DELETED
     Text[ chinese_traditional ] = "å·²ç¶“åˆªé™¤";
     Text[ arabic ] = "ãÍĞæİ";
     Text[ turkish ] = "Silindi";
-    Text[ catalan ] = "eliminado";
+    Text[ catalan ] = "eliminat";
 };
 String STR_BREAK_ACTION
 {
@@ -4738,7 +4758,7 @@ String STR_BREAK_ACTION
     Text[ chinese_traditional ] = "ä¸­æ–·å‹•ä½œ";
     Text[ arabic ] = "Êã ŞØÚ ÇáÅÌÑÇÁ";
     Text[ turkish ] = "İşlem iptal edildi";
-    Text[ catalan ] = "Acción cancelada";
+    Text[ catalan ] = "Acció cancel·lada";
 };
 String STR_LAYER
 {
@@ -4791,7 +4811,7 @@ String STR_UNDO_DELETEPAGES
     Text[ chinese_traditional ] = "åˆªé™¤é é¢";
     Text[ arabic ] = "ÍĞİ ÕİÍÇÊ";
     Text[ turkish ] = "Sayfayı sil";
-    Text[ catalan ] = "Eliminar páginas";
+    Text[ catalan ] = "Elimina pàgines";
 };
 String STR_UNDO_INSERTPAGES
 {
@@ -4818,7 +4838,7 @@ String STR_UNDO_INSERTPAGES
     Text[ chinese_traditional ] = "æ’å…¥é é¢";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ";
     Text[ turkish ] = "Sayfa ekle";
-    Text[ catalan ] = "Insertar páginas";
+    Text[ catalan ] = "Inserta pàgines";
 };
 String STR_ASK_DELETE_PAGE
 {
@@ -4845,7 +4865,7 @@ String STR_ASK_DELETE_PAGE
     Text[ chinese_traditional ] = "çœŸè¦åˆªé™¤é <$>ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÕİÍÉ \"$\"¿";
     Text[ turkish ] = "Sayfa '$' gerçekten silinsin mi?";
-    Text[ catalan ] = "¿Desea realmente eliminar la página '$'?";
+    Text[ catalan ] = "Voleu realment eliminar la pàgina '$'?";
 };
 String STR_ASK_DELETE_LAYER
 {
@@ -4870,7 +4890,7 @@ String STR_ASK_DELETE_LAYER
     Text[ chinese_traditional ] = "çœŸè¦åˆªé™¤åˆ†å±¤<$>ï¼Ÿ\næç¤ºï¼šé€™ä¸€åˆ†å±¤æ‰€æœ‰çš„ç‰©ä»¶ä¹Ÿæœƒè¢«åˆªé™¤ï¼";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáØÈŞÉ '$'¿\nãáÇÍÙÉ: Óæİ íÊã ÍĞİ ßá ÇáßÇÆäÇÊ İí åĞå ÇáØÈŞÉ!";
     Text[ turkish ] = "'$' düzeyini gerçekten silmek istiyor musunuz?\nBu düzeydeki nesneler de silinecek!";
-    Text[ catalan ] = "¿Desea realmente eliminar la capa '$'?\nAdvertencia: Se eliminarán también todos los objetos incluidos en la misma.";
+    Text[ catalan ] = "Voleu eliminar la capa '$'?\nAtenció: s'eliminaran també tots els objectes que inclou.";
     Text[ finnish ] = "Haluatko varmasti poistaa tason $?\nHuomautus: Kaikki tason objektit poistetaan.";
 };
 String STR_ASK_DELETE_ALL_PICTURES
@@ -4896,7 +4916,7 @@ String STR_ASK_DELETE_ALL_PICTURES
     Text[ chinese_traditional ] = "æ‚¨çœŸè¦åˆªé™¤å…¨éƒ¨çš„å½±åƒï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ßá ÇáÕæÑ¿";
     Text[ turkish ] = "Tüm resimleri gerçekten silmek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea realmente eliminar todas las imágenes?";
+    Text[ catalan ] = "Voleu realment eliminar totes les imatges?";
     Text[ finnish ] = "Haluatko varmasti poistaa kaikki kuvat?";
 };
 String STR_UNDO_CHANGE_TITLE_AND_LAYOUT
@@ -4924,7 +4944,7 @@ String STR_UNDO_CHANGE_TITLE_AND_LAYOUT
     Text[ chinese_traditional ] = "è®Šæ›´æ¨™é¡Œå’Œå¤§ç¶±";
     Text[ arabic ] = "ÊÚÏíá ÇáÚäæÇä æÇáÊŞÓíã";
     Text[ turkish ] = "Başlık ve anahattı değiştir";
-    Text[ catalan ] = "Modificar título y esquema";
+    Text[ catalan ] = "Modifica el títol i l'esquema";
 };
 String STR_WAV_FILE
 {
@@ -4950,7 +4970,7 @@ String STR_WAV_FILE
     Text[ chinese_traditional ] = "è²éŸ³";
     Text[ arabic ] = "ÕæÊ";
     Text[ turkish ] = "Ses";
-    Text[ catalan ] = "Sonido";
+    Text[ catalan ] = "So";
 };
 String STR_MIDI_FILE
 {
@@ -5102,7 +5122,7 @@ String STR_SD_PAGE
     Text[ chinese_traditional ] = "é ";
     Text[ arabic ] = "ÔÑíÍÉ";
     Text[ turkish ] = "Sayfa";
-    Text[ catalan ] = "Página";
+    Text[ catalan ] = "Pàgina";
 };
 String STR_INSERT_AS_TEXTOBJECT
 {
@@ -5128,7 +5148,7 @@ String STR_INSERT_AS_TEXTOBJECT
     Text[ chinese_traditional ] = "ç•¶ä½œç‰©ä»¶";
     Text[ arabic ] = "ßßÇÆä";
     Text[ turkish ] = "Nesne olarak";
-    Text[ catalan ] = "como objeto";
+    Text[ catalan ] = "com a objecte";
 };
 String STR_ALL_FILES
 {
@@ -5152,7 +5172,7 @@ String STR_ALL_FILES
     Text[ chinese_traditional ] = "<å…¨éƒ¨æª”æ¡ˆ>";
     Text[ arabic ] = "<Çáßá>";
     Text[ turkish ] = "Tüm dosyalar";
-    Text[ catalan ] = "<Todos>";
+    Text[ catalan ] = "<Tots>";
     Text[ finnish ] = "<Kaikki>";
 };
 String STR_UNDO_INSERT_TEXTFRAME
@@ -5180,7 +5200,7 @@ String STR_UNDO_INSERT_TEXTFRAME
     Text[ chinese_traditional ] = "æ’å…¥æ–‡å­—æ–¹å¡Š";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ äÕ";
     Text[ turkish ] = "Metin çerçevesi ekle";
-    Text[ catalan ] = "Insertar marco de texto";
+    Text[ catalan ] = "Inserta marc de text";
 };
 String STR_OPEN_DOCUMENT
 {
@@ -5206,7 +5226,7 @@ String STR_OPEN_DOCUMENT
     Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶";
     Text[ arabic ] = "ÊÍãíá Çáãáİ";
     Text[ turkish ] = "Belgeyi yükle";
-    Text[ catalan ] = "Abrir documento";
+    Text[ catalan ] = "Obre un document";
 };
 String STR_SAVE_DOCUMENT
 {
@@ -5232,7 +5252,7 @@ String STR_SAVE_DOCUMENT
     Text[ chinese_traditional ] = "å„²å­˜æ–‡ä»¶";
     Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ";
     Text[ turkish ] = "Belgeyi kaydet";
-    Text[ catalan ] = "Guardar documento";
+    Text[ catalan ] = "Desa el document";
 };
 String STR_SAVE_PACKED_DOCUMENT
 {
@@ -5256,7 +5276,7 @@ String STR_SAVE_PACKED_DOCUMENT
     Text[ chinese_traditional ] = "å£“ç¸®æ–‡ä»¶";
     Text[ turkish ] = "Pack document";
     Text[ arabic ] = "ÖÛØ ÇáãÓÊäÏ";
-    Text[ catalan ] = "Comprimir documento";
+    Text[ catalan ] = "Compacta el document";
     Text[ finnish ] = "Pakkaa asiakirja";
 };
 String STR_ACTION_NOTPOSSIBLE
@@ -5284,7 +5304,7 @@ String STR_ACTION_NOTPOSSIBLE
     Text[ chinese_traditional ] = "é€™å€‹åŠŸèƒ½ç„¡æ³•ç”¨æ–¼é¸å–çš„ç‰©ä»¶ã€‚";
     Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ \nÈÇáßÇÆäÇÊ ÇáãÍÏÏÉ.";
     Text[ turkish ] = "Seçilen nesnelerle \nbu işlev yürütülemez.";
-    Text[ catalan ] = "No es posible ejecutar la función\ncon los objetos seleccionados";
+    Text[ catalan ] = "No es pot executar la funció\namb els objectes seleccionats";
 };
 String STR_DLG_INSERT_PAGES_FROM_FILE
 {
@@ -5309,7 +5329,7 @@ String STR_DLG_INSERT_PAGES_FROM_FILE
     Text[ chinese_traditional ] = "æ’å…¥æª”æ¡ˆ";
     Text[ arabic ] = "ÅÏÑÇÌ ãáİ";
     Text[ turkish ] = "Dosya ekle";
-    Text[ catalan ] = "Insertar archivo";
+    Text[ catalan ] = "Inserta un fitxer";
     Text[ finnish ] = "Lisää tiedosto";
 };
 String STR_DLG_INSERT_PAGES_FROM_OUTLINE
@@ -5337,7 +5357,7 @@ String STR_DLG_INSERT_PAGES_FROM_OUTLINE
     Text[ chinese_traditional ] = "å¾å¤§ç¶±æ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ ãä ÊŞÓíã";
     Text[ turkish ] = "Anahattan sayfa ekle";
-    Text[ catalan ] = "Insertar páginas desde el esquema";
+    Text[ catalan ] = "Inserta pàgines des de l'esquema";
 };
 String STR_WRITE_DATA_ERROR
 {
@@ -5363,7 +5383,7 @@ String STR_WRITE_DATA_ERROR
     Text[ chinese_traditional ] = "ç„¡æ³•ä¿å­˜é€™å€‹æª”æ¡ˆï¼";
     Text[ arabic ] = "ÊÚĞÑ ÍİÙ Çáãáİ!";
     Text[ turkish ] = "Dosya kaydedilemedi!";
-    Text[ catalan ] = "¡No se pudo guardar el archivo!";
+    Text[ catalan ] = "No s'ha pogut desar el fitxer!";
 };
 String STR_READ_DATA_ERROR
 {
@@ -5389,7 +5409,7 @@ String STR_READ_DATA_ERROR
     Text[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥é€™å€‹æª”æ¡ˆï¼";
     Text[ arabic ] = "ÊÚĞÑ ÊÍãíá Çáãáİ!";
     Text[ turkish ] = "Dosya yüklenemedi!";
-    Text[ catalan ] = "¡No se pudo cargar el archivo!";
+    Text[ catalan ] = "No s'ha pogut carregar el fitxer!";
 };
 String STR_SCALE_OBJECTS
 {
@@ -5414,7 +5434,7 @@ String STR_SCALE_OBJECTS
     Text[ chinese_traditional ] = "æ–°é çš„æ ¼å¼å·²ç¶“è®Šæ›´ã€‚\næ‚¨ä¹Ÿè¦èª¿æ•´é€™å€‹ç‰©ä»¶ï¼Ÿ";
     Text[ arabic ] = "Óæİ íÊã ãáÇÁãÉ ÊäÓíŞ ÇáÕİÍÇÊ ÇáÌÏíÏÉ.\nåá ÊÑíÏ ãáÇÁãÉ ÇáßÇÆäÇÊ ÃíÖÇğ¿";
     Text[ turkish ] = "Yeni sayfanın formatı ayarlanıyor.\nNesnelerin de ayarlanmasını istiyor musunuz?";
-    Text[ catalan ] = "El formato de las páginas nuevas se va a ajustar.\n¿Desea ajustar también los objetos?";
+    Text[ catalan ] = "S'ajustarà el format de les pàgines noves.\nVoleu també ajustar els objectes?";
     Text[ finnish ] = "Uusien sivujen muoto otetaan käyttöön.\nHaluatko mukauttaa myös objekteja?";
 };
 String STR_CREATE_PAGES
@@ -5439,7 +5459,7 @@ String STR_CREATE_PAGES
     Text[ chinese_traditional ] = "ç”¢ç”Ÿé ";
     Text[ arabic ] = "ÅäÔÇÁ ÕİÍÇÊ";
     Text[ turkish ] = "Sayfa oluştur";
-    Text[ catalan ] = "Crear páginas";
+    Text[ catalan ] = "Crea pàgines";
     Text[ finnish ] = "Luo diat";
 };
 String STR_UNDO_CHANGE_PAGEFORMAT
@@ -5465,7 +5485,7 @@ String STR_UNDO_CHANGE_PAGEFORMAT
     Text[ chinese_traditional ] = "è®Šæ›´é é¢æ ¼å¼";
     Text[ arabic ] = "ÊÚÏíá ÊäÓíŞ ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfa formatını değiştir";
-    Text[ catalan ] = "Modificar el formato de página";
+    Text[ catalan ] = "Modifica el format de la pàgina";
     Text[ finnish ] = "Muokkaa sivumuotoa";
 };
 String STR_UNDO_CHANGE_PAGEBORDER
@@ -5491,7 +5511,7 @@ String STR_UNDO_CHANGE_PAGEBORDER
     Text[ chinese_traditional ] = "è®Šæ›´é é¢é‚Šè·";
     Text[ arabic ] = "ÊÚÏíá åæÇãÔ ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfa kenarlarını değiştir";
-    Text[ catalan ] = "Modificar márgenes de página";
+    Text[ catalan ] = "Modifica els marges de la pàgina";
     Text[ finnish ] = "Muokkaa sivun reunoja";
 };
 String STR_EDIT_OBJ
@@ -5516,7 +5536,7 @@ String STR_EDIT_OBJ
     Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
     Text[ arabic ] = "ÊÍÑíÑ";
     Text[ turkish ] = "Düzenle";
-    Text[ catalan ] = "~Editar";
+    Text[ catalan ] = "~Edita";
     Text[ finnish ] = "~Muokkaa";
 };
 String STR_SOUNDFILE1
@@ -5541,7 +5561,7 @@ String STR_SOUNDFILE1
     Text[ chinese_traditional ] = "ç³»çµ±è²éŸ³";
     Text[ arabic ] = "ÕæÊ ÇáäÙÇã";
     Text[ turkish ] = "Sisitem sesi";
-    Text[ catalan ] = "Sonido del sistema";
+    Text[ catalan ] = "So del sistema";
     Text[ finnish ] = "Järjestelmä-ääni";
 };
 String STR_SOUNDFILE2
@@ -5591,7 +5611,7 @@ String STR_SOUNDFILE3
     Text[ chinese_traditional ] = "<è²éŸ³æ ¼å¼ 3>";
     Text[ arabic ] = "<ÊäÓíŞ ÕæÊ 3>";
     Text[ turkish ] = "<Ses formatı 3>";
-    Text[ catalan ] = "<Formato de sonido 3>";
+    Text[ catalan ] = "<Format de so 3>";
     Text[ finnish ] = "<Äänimuoto 3>";
 };
 String STR_SOUNDFILE4
@@ -5616,7 +5636,7 @@ String STR_SOUNDFILE4
     Text[ chinese_traditional ] = "<è²éŸ³æ ¼å¼ 4>";
     Text[ arabic ] = "<ÊäÓíŞ ÕæÊ 4>";
     Text[ turkish ] = "<Sistem formatı 4>";
-    Text[ catalan ] = "<Formato de sonido 4>";
+    Text[ catalan ] = "<Format de so 4>";
     Text[ finnish ] = "<Äänimuoto 4>";
 };
 String STR_SOUNDFILE5
@@ -5641,7 +5661,7 @@ String STR_SOUNDFILE5
     Text[ chinese_traditional ] = "<è²éŸ³æ ¼å¼ 5>";
     Text[ arabic ] = "<ÊäÓíŞ ÕæÊ 5>";
     Text[ turkish ] = "<Sistem formatı 5>";
-    Text[ catalan ] = "<Formato de sonido 5>";
+    Text[ catalan ] = "<Format de so 5>";
     Text[ finnish ] = "<Äänimuoto 5>";
 };
 String STR_WARN_DEL_PAGE
@@ -5667,7 +5687,7 @@ String STR_WARN_DEL_PAGE
     Text[ chinese_traditional ] = "é€™å€‹æ“ä½œæœƒåˆªé™¤é <$>ã€‚\né€™é å«æœ‰ç¹ªåœ–ç‰©ä»¶ï¼";
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÉ '$'. \nÊÍÊæí åĞå ÇáÕİÍÉ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem '$' sayfasını siler. \nSayfa çizim nesneleri içeriyor!";
-    Text[ catalan ] = "Esta acción eliminará la página $. \n¡La página contiene objetos de dibujo!";
+    Text[ catalan ] = "Aquest acció eliminarà la pàgina $. \nLa pàgina conté objectes de dibuix!";
     Text[ finnish ] = "Tämä toiminto poistaa sivun $. \nHuomautus: sivulla on piirrosobjekteja.";
 };
 String STR_WARN_DEL_SEL_PAGES
@@ -5692,7 +5712,7 @@ String STR_WARN_DEL_SEL_PAGES
     Text[ chinese_traditional ] = "é€™å€‹æ“ä½œåˆªé™¤è¢«é¸ä¸­çš„é ã€‚\né€™äº›é å«æœ‰ç¹ªåœ–ç‰©ä»¶ï¼";
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÇÊ ÇáãÍÏÏÉ. \nÊÍÊæí åĞå ÇáÕİÍÇÊ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem seçilen sayfaları siler. \nSayfalar çizim nesneleri içeriyor!";
-    Text[ catalan ] = "Esta acción elimina las páginas seleccionadas. \n¡Las páginas contienen objetos de dibujo!";
+    Text[ catalan ] = "Aquesta acció elimina totes les pàgines seleccionades. \nLes pàgines contenen objectes de dibuix!";
     Text[ finnish ] = "Tämä toiminto poistaa valitut sivut.\nHuomautus: sivuilla on piirrosobjekteja.";
 };
 
@@ -5718,7 +5738,7 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ chinese_traditional ] = "é€™å€‹å‹•ä½œæœƒåˆªé™¤é¸å–çš„é é¢ã€‚\nè¨»æ„ï¼šé€™å€‹é é¢å…§å«ç¹ªåœ–ç‰©ä»¶ï¼";
     Text[ arabic ] = "ÊÍĞİ åĞå ÇáÚãáíÉ ÇáÕİÍÉ ÇáãÍÏÏÉ. \nÊÍÊæí åĞå ÇáÕİÍÉ Úáì ßÇÆäÇÊ ÑÓæãíÉ!";
     Text[ turkish ] = "Bu işlem seçilen sayfayı siler. \nSayfa çizim nesneleri içeriyor!";
-    Text[ catalan ] = "Esta acción elimina la página seleccionada. \n¡La página contiene objetos de dibujo!";
+    Text[ catalan ] = "Aquesta acció elimina la pàgina seleccionada. \n¡La pàgina conté objectes de dibuix!";
     Text[ finnish ] = "Tämä toiminto poistaa valitun sivun.\nHuomautus: sivulla on piirrosobjekteja.";
 };
 
@@ -5810,7 +5830,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Text[ greek ] = "Hint";
     Text[ dutch ] = "%PRODUCTNAME 6.0";
     Text[ french ] = "%PRODUCTNAME 6.0";
-    Text[ spanish ] = "Indicación";
+    Text[ spanish ] = "%PRODUCTNAME 6.0";
     Text[ finnish ] = "Hint";
     Text[ italian ] = "Hint";
     Text[ danish ] = "Hint";
@@ -5849,7 +5869,7 @@ String STR_DEL_SHAPE
     Text[ chinese_traditional ] = "åˆªé™¤åœ–ç¤º";
     Text[ arabic ] = "ÍĞİ ÇáÑãÒ";
     Text[ turkish ] = "Simgeyi sil";
-    Text[ catalan ] = "Eliminar símbolo";
+    Text[ catalan ] = "Elimina el símbol";
     Text[ finnish ] = "Poista kuvake";
 };
 String STR_WARN_DEL_SHAPE
@@ -5875,7 +5895,7 @@ String STR_WARN_DEL_SHAPE
     Text[ chinese_traditional ] = "æ‚¨çœŸè¦åˆªé™¤é€™å€‹åœ–ç¤ºï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÑãÒ¿";
     Text[ turkish ] = "Bu simgeyi gerçekten silmek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea realmente eliminar el símbolo?";
+    Text[ catalan ] = "Vol eliminar el símbol?";
     Text[ finnish ] = "Haluatko varmasti poistaa tämän symbolin?";
 };
 String STR_MODIFY_SHAPE
@@ -5901,7 +5921,7 @@ String STR_MODIFY_SHAPE
     Text[ chinese_traditional ] = "è®Šæ›´åœ–ç¤º";
     Text[ arabic ] = "ÊÚÏíá ÇáÑãÒ";
     Text[ turkish ] = "Simgeyi değiştir";
-    Text[ catalan ] = "Modificar símbolo";
+    Text[ catalan ] = "Modifica el símbol";
     Text[ finnish ] = "Muokkaa symbolia";
 };
 String STR_WARN_MODIFY_SHAPE
@@ -5927,7 +5947,7 @@ String STR_WARN_MODIFY_SHAPE
     Text[ chinese_traditional ] = "æ‚¨çœŸè¦è®Šæ›´é€™å€‹åœ–ç¤ºï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÊÛííÑ ÇáÑãÒ¿";
     Text[ turkish ] = "Bu simgeyi gerçekten değiştirmek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea realmente modificar el símbolo?";
+    Text[ catalan ] = "Vol realment modificar el símbol?";
     Text[ finnish ] = "Haluatko varmasti muokata symbolia?";
 };
 String STR_DELETE_PAGES
@@ -5953,7 +5973,7 @@ String STR_DELETE_PAGES
     Text[ chinese_traditional ] = "åˆªé™¤é é¢";
     Text[ arabic ] = "ÍĞİ ÕİÍÇÊ";
     Text[ turkish ] = "Sayfaları sil";
-    Text[ catalan ] = "Eliminar páginas";
+    Text[ catalan ] = "Elimina pàgines";
     Text[ finnish ] = "Poista diat";
 };
 String STR_WARN_PRINTFORMAT_FAILURE
@@ -5978,7 +5998,7 @@ String STR_WARN_PRINTFORMAT_FAILURE
     Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶æ ¼å¼ä¸å—å°è¡¨æ©Ÿçš„æ”¯æ´ã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÅÚÏÇÏ ÊäÓíŞ ÇáãÓÊäÏ İí ÇáØÇÈÚÉ ÇáãÍÏÏÉ.";
     Text[ turkish ] = "Bu belge formatı yazıcıda ayarlanamadı.";
-    Text[ catalan ] = "No se pudo establecer el formato de documento en la impresora.";
+    Text[ catalan ] = "No s'ha pogut establir el format del document a la impresora.";
     Text[ finnish ] = "Asiakirjamuotoa ei voitu määrittää tulostimeen.";
 };
 String STR_REMOVE_LINK
@@ -6006,7 +6026,7 @@ String STR_REMOVE_LINK
     Text[ chinese_traditional ] = "é€™å€‹åœ–å½¢æ˜¯å’Œæ–‡ä»¶é€£çµçš„ã€‚ \næ‚¨è¦å–æ¶ˆé€™å€‹é€£çµï¼Œç·¨è¼¯é€™å€‹åœ–å½¢ï¼Ÿ";
     Text[ arabic ] = "åĞå ÇáÑÓãÉ ãÑÊÈØÉ ÈÇáãÓÊäÏ. \nåá ÊÑíÏ ÅÒÇáÉ ÇáÇÑÊÈÇØ¡ ÍÊì íãßäß ÊÍÑíÑ ÇáÑÓãÉ¿";
     Text[ turkish ] = "Bu grafik belgeye bağlı. \nGrafiği düzenlemek için bağlantıyı kaldrmak istiyor musunuz?";
-    Text[ catalan ] = "Esta imagen está vinculada al documento. \n¿Desea eliminar el vínculo para editar la imagen?";
+    Text[ catalan ] = "Aquesta imatge està vinculada al document. \nVol eliminar el vincle per a editar la imatge?";
 };
 String STR_IMPORT_GRFILTER_OPENERROR
 {
@@ -6031,7 +6051,7 @@ String STR_IMPORT_GRFILTER_OPENERROR
     Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿåœ–å½¢æª”æ¡ˆ";
     Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik dosyası açılamıyor";
-    Text[ catalan ] = "No es posible abrir el archivo gráfico";
+    Text[ catalan ] = "No es pot obrir el fitxer gràfic";
     Text[ finnish ] = "Kuvatiedoston avaaminen ei onnistu.";
 };
 String STR_IMPORT_GRFILTER_IOERROR
@@ -6056,7 +6076,7 @@ String STR_IMPORT_GRFILTER_IOERROR
     Text[ chinese_traditional ] = "ç„¡æ³•è®€å‡ºåœ–å½¢æª”æ¡ˆ";
     Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik dosyası okunamıyor";
-    Text[ catalan ] = "No es posible leer el archivo gráfico";
+    Text[ catalan ] = "No es pot llegir el fitxer gràfic";
     Text[ finnish ] = "Kuvatiedoston lukeminen ei onnistu.";
 };
 String STR_IMPORT_GRFILTER_FORMATERROR
@@ -6081,7 +6101,7 @@ String STR_IMPORT_GRFILTER_FORMATERROR
     Text[ chinese_traditional ] = "ä¸æ˜çš„åœ–å½¢æ ¼å¼";
     Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
     Text[ turkish ] = "Bilinmeyen grafik formatı";
-    Text[ catalan ] = "Formato de imagen desconocido";
+    Text[ catalan ] = "El format de la imatge és desconegut";
     Text[ finnish ] = "Tuntematon grafiikkamuoto";
 };
 String STR_IMPORT_GRFILTER_VERSIONERROR
@@ -6107,7 +6127,7 @@ String STR_IMPORT_GRFILTER_VERSIONERROR
     Text[ chinese_traditional ] = "ä¸æ”¯æ´é€™å€‹åœ–å½¢æª”æ¡ˆçš„ç‰ˆæœ¬";
     Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæã";
     Text[ turkish ] = "Grafik dosyasının bu sürümü desteklenmiyor.";
-    Text[ catalan ] = "No se apoya la versión del archivo gráfico";
+    Text[ catalan ] = "No se soporta aquesta versió del fitxer gràfic";
     Text[ finnish ] = "Tätä grafiikkatiedoston versiota ei tueta";
 };
 String STR_IMPORT_GRFILTER_FILTERERROR
@@ -6132,7 +6152,7 @@ String STR_IMPORT_GRFILTER_FILTERERROR
     Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°åœ–å½¢éæ¿¾å™¨";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik filtresi bulunamadı";
-    Text[ catalan ] = "No se encontró el filtro de imagen";
+    Text[ catalan ] = "No s'ha trobat el filtre de la imatge";
     Text[ finnish ] = "Grafiikkasuodatinta ei löytynyt";
 };
 String STR_IMPORT_GRFILTER_TOOBIG
@@ -6157,7 +6177,7 @@ String STR_IMPORT_GRFILTER_TOOBIG
     Text[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³ï¹ç„¡æ³•æ’å…¥åœ–å½¢";
     Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÊÕÏíÑ ÇáÑÓãÉ";
     Text[ turkish ] = "Grafiği içe aktarmak için yeterli bellek yok";
-    Text[ catalan ] = "No hay suficiente memoria para importar la imagen";
+    Text[ catalan ] = "No hi ha prou memòria per a importar la imatge";
     Text[ finnish ] = "Muisti ei riitä kuvien tuomiseen.";
 };
 String STR_OBJECTS
@@ -6182,7 +6202,7 @@ String STR_OBJECTS
     Text[ chinese_traditional ] = "ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆäÇÊ";
     Text[ turkish ] = "Nesneler";
-    Text[ catalan ] = "Objetos";
+    Text[ catalan ] = "Objectes";
     Text[ finnish ] = "Objektit";
 };
 String STR_END_SEARCHING
@@ -6208,7 +6228,7 @@ String STR_END_SEARCHING
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆæœå°‹é€™å€‹æª”æ¡ˆï¼";
     Text[ arabic ] = "Êã ÇáÇäÊåÇÁ ãä ÇáÈÍË İí åĞÇ ÇáãÓÊäÏ!";
     Text[ turkish ] = "Bu belgede arama tamamlandı!";
-    Text[ catalan ] = "¡Se ha finalizado la búsqueda para este documento!";
+    Text[ catalan ] = "Ha finalitzat la cerca en aquest document!";
     Text[ finnish ] = "Asiakirjan haku on päättynyt.";
 };
 String STR_END_SPELLING
@@ -6234,7 +6254,7 @@ String STR_END_SPELLING
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆé€™å€‹æ–‡ä»¶çš„æ‹¼å¯«æª¢æŸ¥ï¼";
     Text[ arabic ] = "Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí áåĞÇ ÇáãÓÊäÏ!";
     Text[ turkish ] = "Bu belge için yazım denetimi tamamlandı!";
-    Text[ catalan ] = "¡Se ha finalizado la revisión ortográfica para este documento!";
+    Text[ catalan ] = "Ha acabat la revisió ortogràfica d'aquest document!";
     Text[ finnish ] = "Asiakirjan oikoluku on valmis.";
 };
 String STR_END_SPELLING_OBJ
@@ -6260,7 +6280,7 @@ String STR_END_SPELLING_OBJ
     Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆé¸å–ç¯„åœçš„æ‹¼å¯«æª¢æŸ¥ï¼";
     Text[ arabic ] = "Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí ááßÇÆäÇÊ ÇáãÍÏÏÉ!";
     Text[ turkish ] = "Seçilen nesnelere ilişkin yazım denetimi tamamlandı!";
-    Text[ catalan ] = "¡Ha finalizado la revisión ortográfica de los objetos seleccionados!";
+    Text[ catalan ] = "Ha acabat la revisió ortogràfica dels objectes seleccionats!";
     Text[ finnish ] = "Valittujen objektien oikoluku on valmis.";
 };
 String STR_NOLANGUAGE
@@ -6286,7 +6306,7 @@ String STR_NOLANGUAGE
     Text[ chinese_traditional ] = "æ‚¨é¸æ“‡çš„èªè¨€ä¸å­˜åœ¨ã€‚";
     Text[ arabic ] = "ÇááÛÉ ÇáãÎÊÇÑÉ ÛíÑ ãÊæİÑÉ.";
     Text[ turkish ] = "Ayarlanan dil mevcut değil.";
-    Text[ catalan ] = "El idioma fijado no está disponible.";
+    Text[ catalan ] = "L'idioma seleccionat no està disponible.";
     Text[ finnish ] = "Valittu kieli ei ole käytettävissä.";
 };
 String STR_LAYER_LOCKED
@@ -6311,7 +6331,7 @@ String STR_LAYER_LOCKED
     Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­ä¸€ç´šå·²è¢«é–å®šã€‚";
     Text[ arabic ] = "ÇáØÈŞÉ ÇáäÔØÉ ãÄãäÉ.";
     Text[ turkish ] = "Etkin düzey kilitli.";
-    Text[ catalan ] = "La capa activa está bloqueada.";
+    Text[ catalan ] = "La capa activa està bloquejada.";
     Text[ finnish ] = "Aktiivinen kerros on lukittu.";
 };
 String STR_CLPBRD_CLEAR
@@ -6339,7 +6359,7 @@ String STR_CLPBRD_CLEAR
     Text[ chinese_traditional ] = "åœ¨å‰ªè²¼ç°¿å…§å­˜æœ‰ä¸€å€‹è¼ƒå¤§çš„è³‡æ–™ã€‚\næ‚¨è¦è®“é€™å€‹è³‡æ–™ä¹Ÿæä¾›çµ¦å…¶ä»–çš„æ‡‰ç”¨ç¨‹å¼ä½¿ç”¨ï¼Ÿ";
     Text[ arabic ] = "áŞÏ ŞãÊ ÈÍİÙ ßãíÇÊ ßÈíÑÉ ãä ÇáÈíÇäÇÊ İí ÇáÍÇİÙÉ.\nåá ÊÑíÏ æÖÚ ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊÍÊ ÊÕÑİ ÊØÈíŞÇÊ ÃÎÑì¿";
     Text[ turkish ] = "Panoya büyük miktarda veri aktardınız.\nPano içeriğini başka uygulamalarda kullanmak istiyor musunuz?";
-    Text[ catalan ] = "Ha copiado una gran cantidad de datos al portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?";
+    Text[ catalan ] = "Ha copiat una gran quantitat de dades al portafolis.\nVoleu que el contingut del portafolis estigui disponible per a altres aplicacions?";
 };
 String STR_ASK_FOR_CONVERT_TO_BEZIER
 {
@@ -6363,7 +6383,7 @@ String STR_ASK_FOR_CONVERT_TO_BEZIER
     Text[ chinese_traditional ] = "æ‚¨è¦å°‡é¸å–ç‰©ä»¶è½‰æ›æˆä¸€å€‹æ›²ç·šï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÊÍæíá ÇáßÇÆä ÇáãÍÏÏ Åáì ãäÍäì¿";
     Text[ turkish ] = "Seçilen nesneyi eğriye dönüştürmek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea transformar en curva el objeto seleccionado?";
+    Text[ catalan ] = "Voleu transformar en corba l'objecte seleccionat?";
     Text[ finnish ] = "Muunnetaanko valittu objekti käyräksi?";
 };
 String STR_TEMPLATE
@@ -6414,7 +6434,7 @@ String STR_UNDO_CHANGE_PRES_OBJECT
     Text[ chinese_traditional ] = "è®Šæ›´ç°¡å ±ç‰©ä»¶<$>";
     Text[ arabic ] = "ÊÚÏíá ßÇÆä ÇáÚÑÖ ÇáÊŞÏíãí '$'";
     Text[ turkish ] = "'$' sunu nesnesini değiştir";
-    Text[ catalan ] = "Modificar objeto de presentación '$'";
+    Text[ catalan ] = "Modifica l'objecte de presentació '$'";
     Text[ finnish ] = "Muokkaa esitysobjektia $";
 };
 String STR_UNDO_MODIFY_PAGE
@@ -6440,7 +6460,7 @@ String STR_UNDO_MODIFY_PAGE
     Text[ chinese_traditional ] = "è®Šæ›´é é¢";
     Text[ arabic ] = "ÊÚÏíá ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfayı değiştir";
-    Text[ catalan ] = "Modificar página";
+    Text[ catalan ] = "Modifica la pàgina";
     Text[ finnish ] = "Muokkaa diaa";
 };
 String STR_STATSTR_PRINT
@@ -6467,7 +6487,7 @@ String STR_STATSTR_PRINT
     Text[ chinese_traditional ] = "åˆ—å°...";
     Text[ arabic ] = "ØÈÇÚÉ...";
     Text[ turkish ] = "Yazdırılıyor...";
-    Text[ catalan ] = "Imprimiendo...";
+    Text[ catalan ] = "S'està imprimint...";
 };
 String STR_UNDO_INSERT_FILE
 {
@@ -6492,7 +6512,7 @@ String STR_UNDO_INSERT_FILE
     Text[ chinese_traditional ] = "æ’å…¥æª”æ¡ˆ";
     Text[ arabic ] = "ÅÏÑÇÌ ãáİ";
     Text[ turkish ] = "Dosya ekle";
-    Text[ catalan ] = "Insertar archivo";
+    Text[ catalan ] = "Inserta fitxer";
     Text[ finnish ] = "Lisää tiedosto";
 };
 String STR_SCALE_OBJS_TO_PAGE
@@ -6518,7 +6538,7 @@ String STR_SCALE_OBJS_TO_PAGE
     Text[ chinese_traditional ] = "é€™å€‹åœ–å½¢ç‰©ä»¶è¦å’Œé é¢æ ¼å¼ä½œç›¸æ‡‰èª¿æ•´ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ãáÇÁãÉ ßÇÆäÇÊ ÇáÑÓã ááÊäÓíŞ ÇáÌÏíÏ ááÕİÍÉ¿";
     Text[ turkish ] = "Grafik nesneleri yeni sayfa formatına göre ayarlansın mı?";
-    Text[ catalan ] = "¿Desea que los objetos gráficos sean adaptados al nuevo formato de página?";
+    Text[ catalan ] = "Voleu que els objectes gràfics s'adaptin al nou format de pàgina?";
     Text[ finnish ] = "Skaalataanko kuvat uutta diamuotoa vastaaviksi?";
 };
 String STR_UNDO_INSERT_SPECCHAR
@@ -6544,7 +6564,7 @@ String STR_UNDO_INSERT_SPECCHAR
     Text[ chinese_traditional ] = "æ’å…¥ç‰¹æ®Šå­—å…ƒ";
     Text[ arabic ] = "ÅÏÑÇÌ ÑãæÒ ÎÇÕÉ";
     Text[ turkish ] = "Özel karakter ekle";
-    Text[ catalan ] = "Insertar símbolo";
+    Text[ catalan ] = "Inserta símbol";
     Text[ finnish ] = "Lisää erikoismerkki";
 };
 String STR_UNDO_SET_PRESLAYOUT
@@ -6570,7 +6590,7 @@ String STR_UNDO_SET_PRESLAYOUT
     Text[ chinese_traditional ] = "æŒ‡å®šç°¡å ±ç‰ˆå¼";
     Text[ arabic ] = "ÊÚííä ÊÎØíØ ÇáÚÑÖ ÇáÊŞÏíãí";
     Text[ turkish ] = "Sunu biçimini uygula";
-    Text[ catalan ] = "Aplicar diseño de presentación";
+    Text[ catalan ] = "Aplica el disseny de presentació";
     Text[ finnish ] = "Käytä esitysasettelua";
 };
 String STR_DEMO_EXPORT_LIMIT
@@ -6596,7 +6616,7 @@ String STR_DEMO_EXPORT_LIMIT
     Text[ chinese_traditional ] = "æœ€å¤šåªèƒ½åŒ¯å‡º10å€‹ç‰©ä»¶ã€‚";
     Text[ arabic ] = "áÇ íãßä ÊÕÏíÑ ÃßËÑ ãä 10 ßÇÆäÇÊ";
     Text[ turkish ] = "En fazla 10 nesne dışa aktarılabilir.";
-    Text[ catalan ] = "Solo es posible exportar un máximo de 10 objetos";
+    Text[ catalan ] = "Només es pot exportar un màxim de 10 objectes";
     Text[ finnish ] = "Voit tuoda enintään 10 objektia";
 };
 String STR_STRING_NOTFOUND
@@ -6623,7 +6643,7 @@ String STR_STRING_NOTFOUND
     Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°æœå°‹é …ç›®ã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÈíÇäÇÊ ÇáÊí ÊÈÍË ÚäåÇ.";
     Text[ turkish ] = "Arama terimi bulunamadı.";
-    Text[ catalan ] = "No se encontró la expresión buscada.";
+    Text[ catalan ] = "No s'ha trobat l'expressió cercada.";
 };
 String STR_DRAW_FILTERPROGRESS
 {
@@ -6647,7 +6667,7 @@ String STR_DRAW_FILTERPROGRESS
     Text[ chinese_traditional ] = "åœ–å½¢éæ¿¾å™¨";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik filtresi";
-    Text[ catalan ] = "Filtro de imagen";
+    Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
 String STR_PLAY
@@ -6672,7 +6692,7 @@ String STR_PLAY
     Text[ chinese_traditional ] = "æ”¾æ˜ (~P)";
     Text[ arabic ] = "ÊÔÛíá";
     Text[ turkish ] = "Çalıştır";
-    Text[ catalan ] = "~Reproducir";
+    Text[ catalan ] = "~Reproduir";
     Text[ finnish ] = "~Toista";
 };
 String STR_STOP
@@ -6697,7 +6717,7 @@ String STR_STOP
     Text[ chinese_traditional ] = "æš«åœ(~P)";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ turkish ] = "Durdur";
-    Text[ catalan ] = "~Detener";
+    Text[ catalan ] = "~Atura";
     Text[ finnish ] = "Sei~s";
 };
 String STR_CANT_READ_OLD_FORMAT_ERROR
@@ -6722,7 +6742,7 @@ String STR_CANT_READ_OLD_FORMAT_ERROR
     Text[ chinese_traditional ] = "ç„¡æ³•è®€å‡ºé€™å€‹èˆŠçš„ StarDraw æ ¼å¼ã€‚";
     Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ÇáÊäÓíŞ ÇáŞÏíã áÜ StarDraw .";
     Text[ turkish ] = "Eski %PRODUCTNAME Draw formatı okunamıyor.";
-    Text[ catalan ] = "No es posible leer el antiguo formato de StarDraw.";
+    Text[ catalan ] = "No es pot llegir l'antic format d'StarDraw.";
     Text[ finnish ] = "Edellisen StarDraw-muodon lukeminen ei onnistu.";
 };
 String STR_UNDO_ORIGINALSIZE
@@ -6750,7 +6770,7 @@ String STR_UNDO_ORIGINALSIZE
     Text[ chinese_traditional ] = "åŸä»¶å¤§å°";
     Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
     Text[ turkish ] = "Asıl boyutu";
-    Text[ catalan ] = "Tamaño original";
+    Text[ catalan ] = "Mida original";
 };
 String STR_EXPORT_EMPTYGRAPHIC
 {
@@ -6775,7 +6795,7 @@ String STR_EXPORT_EMPTYGRAPHIC
     Text[ chinese_traditional ] = "ä¸æ”¯æ´ç©ºç™½çš„åœ–å½¢";
     Text[ arabic ] = "áÇ íÊã ÏÚã ÇáÑÓæãÇÊ ÇáİÇÑÛÉ";
     Text[ turkish ] = "Boş grafikler desteklenmiyor.";
-    Text[ catalan ] = "No se aceptan imágenes vacías";
+    Text[ catalan ] = "No s'accepten imatges buides";
     Text[ finnish ] = "Tyhjiä kuvia ei tueta.";
 };
 String STR_PRINT_DRAWING
@@ -6800,7 +6820,7 @@ String STR_PRINT_DRAWING
     Text[ chinese_traditional ] = "(ç¹ªåœ–)";
     Text[ arabic ] = "(ÑÓãÉ)";
     Text[ turkish ] = "(Çizim)";
-    Text[ catalan ] = "(dibujo)";
+    Text[ catalan ] = "(dibuix)";
     Text[ finnish ] = " (Piirros)";
 };
 String STR_PRINT_NOTES
@@ -6825,7 +6845,7 @@ String STR_PRINT_NOTES
     Text[ chinese_traditional ] = "(å‚™è¨»)";
     Text[ arabic ] = "(ãáÇÍÙÇÊ)";
     Text[ turkish ] = "(Notlar)";
-    Text[ catalan ] = "(Notas)";
+    Text[ catalan ] = "(Notes)";
     Text[ finnish ] = " (Huomautukset)";
 };
 String STR_PRINT_HANDOUT
@@ -6850,7 +6870,7 @@ String STR_PRINT_HANDOUT
     Text[ chinese_traditional ] = "(è¬›ç¾©)";
     Text[ arabic ] = "(äÔÑÉ)";
     Text[ turkish ] = "(Slayt sıralayıcısı)";
-    Text[ catalan ] = "(volante)";
+    Text[ catalan ] = "(fulletó)";
     Text[ finnish ] = " (Esite)";
 };
 String STR_PRINT_OUTLINE
@@ -6901,7 +6921,7 @@ String STR_WARN_SCALE_FAIL
     Text[ chinese_traditional ] = "æ‚¨æŒ‡å®šçš„é¡¯ç¤ºæ¯”ä¾‹ç„¡æ•ˆã€‚\næ‚¨è¦é‡æ–°è¼¸å…¥ä¸€å€‹é¡¯ç¤ºæ¯”ä¾‹ï¼Ÿ";
     Text[ arabic ] = "ÇáãŞíÇÓ ÇáãÏÎá ÛíÑ ÕÇáÍ.\nåá ÊÑ íÏ ÅÏÎÇá ãŞíÇÓ ÌÏíÏ¿";
     Text[ turkish ] = "Girilen ölçek geçerli değil.\nBaşka bir ölçek girmek istiyor musunuz?";
-    Text[ catalan ] = "La escala introducida no es válida.\n¿Desea introducir una nueva?";
+    Text[ catalan ] = "L'escala introduïda no és vàlida.\nVoleu introduir-ne una de nova?";
     Text[ finnish ] = "Määritetty skaalaus on virheellinen.\nHaluatko määrittää uuden?";
 };
 String STR_CLICK_ACTION_NONE
@@ -6926,7 +6946,7 @@ String STR_CLICK_ACTION_NONE
     Text[ chinese_traditional ] = "ç„¡å‹•ä½œ";
     Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
     Text[ turkish ] = "İşlem yok";
-    Text[ catalan ] = "Ninguna acción";
+    Text[ catalan ] = "Cap acció";
     Text[ finnish ] = "Ei toimintoa";
 };
 String STR_CLICK_ACTION_PREVPAGE
@@ -6951,7 +6971,7 @@ String STR_CLICK_ACTION_PREVPAGE
     Text[ chinese_traditional ] = "è½‰åˆ°ä¸Šä¸€é ";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáÕİÍÉ ÇáÓÇÈŞÉ";
     Text[ turkish ] = "Önceki sayfaya git";
-    Text[ catalan ] = "Ir a página anterior";
+    Text[ catalan ] = "Vés a la pàgina anterior";
     Text[ finnish ] = "Siirry edelliseen diaan";
 };
 String STR_CLICK_ACTION_NEXTPAGE
@@ -6977,7 +6997,7 @@ String STR_CLICK_ACTION_NEXTPAGE
     Text[ chinese_traditional ] = "è½‰åˆ°ä¸‹ä¸€é ";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇÇáÕİÍÉ ÇáÊÇáíÉ";
     Text[ turkish ] = "Sonraki sayfaya git";
-    Text[ catalan ] = "Ir a la página siguiente";
+    Text[ catalan ] = "Vés a la pàgina següent";
     Text[ finnish ] = "Siirry seuraavaan diaan";
 };
 String STR_CLICK_ACTION_FIRSTPAGE
@@ -7002,7 +7022,7 @@ String STR_CLICK_ACTION_FIRSTPAGE
     Text[ chinese_traditional ] = "è½‰åˆ°é¦–é ";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáÕİÍÉ ÇáÃæáì";
     Text[ turkish ] = "İlk sayfaya git";
-    Text[ catalan ] = "Ir a la primera página";
+    Text[ catalan ] = "Vés a la primera pàgina";
     Text[ finnish ] = "Siirry ensimmäiseen diaan";
 };
 String STR_CLICK_ACTION_LASTPAGE
@@ -7027,7 +7047,7 @@ String STR_CLICK_ACTION_LASTPAGE
     Text[ chinese_traditional ] = "è½‰åˆ°å°¾é ";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáÕİÍÉ ÇáÃÎíÑÉ";
     Text[ turkish ] = "Son sayfaya git";
-    Text[ catalan ] = "Ir a la última página";
+    Text[ catalan ] = "Vés a la última pàgina";
     Text[ finnish ] = "Siirry viimeiseen diaan";
 };
 String STR_CLICK_ACTION_BOOKMARK
@@ -7052,7 +7072,7 @@ String STR_CLICK_ACTION_BOOKMARK
     Text[ chinese_traditional ] = "è½‰åˆ°é é¢æˆ–ç‰©ä»¶";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÕİÍÉ Ãæ ßÇÆä";
     Text[ turkish ] = "Sayfaya/nesneye git";
-    Text[ catalan ] = "Ir a página u objeto";
+    Text[ catalan ] = "Vés a la pàgina o objecte";
     Text[ finnish ] = "Siirry sivulle tai objektiin";
 };
 String STR_CLICK_ACTION_DOCUMENT
@@ -7077,7 +7097,7 @@ String STR_CLICK_ACTION_DOCUMENT
     Text[ chinese_traditional ] = "è½‰åˆ°æ–‡ä»¶";
     Text[ arabic ] = "ÇáÇäÊŞÇá Åáì ÇáãÓÊäÏ";
     Text[ turkish ] = "Belgeye git";
-    Text[ catalan ] = "Ir al documento";
+    Text[ catalan ] = "Vés al document";
     Text[ finnish ] = "Siirry asiakirjaan";
 };
 String STR_CLICK_ACTION_VANISH
@@ -7102,7 +7122,7 @@ String STR_CLICK_ACTION_VANISH
     Text[ chinese_traditional ] = "ä¸é¡¯ç¤ºç‰©ä»¶";
     Text[ arabic ] = "ÅÎİÇÁ ÇáßÇÆä";
     Text[ turkish ] = "Nesneyi gizle";
-    Text[ catalan ] = "Ocultar objeto";
+    Text[ catalan ] = "Ocultar objecte";
     Text[ finnish ] = "Häivytä objekti";
 };
 String STR_CLICK_ACTION_INVISIBLE
@@ -7127,7 +7147,7 @@ String STR_CLICK_ACTION_INVISIBLE
     Text[ chinese_traditional ] = "éš±å…¥ç‰©ä»¶";
     Text[ arabic ] = "ÌÚá ÇáßÇÆä ÛíÑ ãÑÆí";
     Text[ turkish ] = "Nesneyi görünmez yap";
-    Text[ catalan ] = "Ocultar el objeto";
+    Text[ catalan ] = "Oculta l'objecte";
     Text[ finnish ] = "Piilota objekti";
 };
 String STR_CLICK_ACTION_SOUND
@@ -7152,7 +7172,7 @@ String STR_CLICK_ACTION_SOUND
     Text[ chinese_traditional ] = "æ’­æ”¾è²éŸ³";
     Text[ arabic ] = "ÊÔÛíá ÇáÕæÊ";
     Text[ turkish ] = "Ses çal";
-    Text[ catalan ] = "Reproducir sonido";
+    Text[ catalan ] = "Reproduir el so";
     Text[ finnish ] = "Toista ääni";
 };
 String STR_CLICK_ACTION_VERB
@@ -7178,7 +7198,7 @@ String STR_CLICK_ACTION_VERB
     Text[ chinese_traditional ] = "åŸ·è¡Œç‰©ä»¶å‹•ä½œ";
     Text[ arabic ] = "ÊäİíĞ ÅÌÑÇÁ ßÇÆä";
     Text[ turkish ] = "Nesne işlemini yürüt";
-    Text[ catalan ] = "Ejecutar la acción del objeto";
+    Text[ catalan ] = "Executa l'acció de l'objecte";
     Text[ finnish ] = "Aloita objektin toiminto";
 };
 String STR_CLICK_ACTION_PROGRAM
@@ -7204,7 +7224,7 @@ String STR_CLICK_ACTION_PROGRAM
     Text[ chinese_traditional ] = "åŸ·è¡Œç¨‹å¼";
     Text[ arabic ] = "ÊäİíĞ ÇáÈÑäÇãÌ";
     Text[ turkish ] = "Programı başlat";
-    Text[ catalan ] = "Ejecutar programa";
+    Text[ catalan ] = "Eexecuta el programa";
     Text[ finnish ] = "Suorita ohjelma";
 };
 String STR_CLICK_ACTION_MACRO
@@ -7230,7 +7250,7 @@ String STR_CLICK_ACTION_MACRO
     Text[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
     Text[ arabic ] = "ÊäİíĞ ãÇßÑæ";
     Text[ turkish ] = "Makro çalıştır";
-    Text[ catalan ] = "Ejecutar macro";
+    Text[ catalan ] = "Executa macro";
     Text[ finnish ] = "Suorita makro";
 };
 String STR_CLICK_ACTION_STOPPRESENTATION
@@ -7256,7 +7276,7 @@ String STR_CLICK_ACTION_STOPPRESENTATION
     Text[ chinese_traditional ] = "çµæŸç°¡å ±";
     Text[ arabic ] = "ÅäåÇÁ ÇáÚÑÖ ÇáÊŞÏíãí";
     Text[ turkish ] = "Sunudan çık";
-    Text[ catalan ] = "Terminar presentación";
+    Text[ catalan ] = "Acaba la presentació";
     Text[ finnish ] = "Lopeta esitys";
 };
 String STR_START_PRESENTATION
@@ -7281,7 +7301,7 @@ String STR_START_PRESENTATION
     Text[ chinese_traditional ] = "é–‹å§‹æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ Úáì ÇáÔÇÔÉ";
     Text[ turkish ] = "Ekran sunusunu başlat";
-    Text[ catalan ] = "Iniciar presentación";
+    Text[ catalan ] = "Inicia la presentació";
     Text[ finnish ] = "Aloita diaesitys";
 };
 String STR_EFFECTDLG_JUMP
@@ -7307,7 +7327,7 @@ String STR_EFFECTDLG_JUMP
     Text[ chinese_traditional ] = "è·³èºçš„ç›®æ¨™";
     Text[ turkish ] = "~Destination";
     Text[ arabic ] = "~Destination";
-    Text[ catalan ] = "~Destination";
+    Text[ catalan ] = "~Destí";
 };
 String STR_EFFECTDLG_ACTION
 {
@@ -7332,7 +7352,7 @@ String STR_EFFECTDLG_ACTION
     Text[ chinese_traditional ] = "å‹•ä½œ(~I)";
     Text[ turkish ] = "Act~ion";
     Text[ arabic ] = "Act~ion";
-    Text[ catalan ] = "Act~ion";
+    Text[ catalan ] = "Acc~ió";
 };
 String STR_EFFECTDLG_SOUND
 {
@@ -7356,7 +7376,7 @@ String STR_EFFECTDLG_SOUND
     Text[ chinese_traditional ] = "è²éŸ³";
     Text[ arabic ] = "ÕæÊ";
     Text[ turkish ] = "Ses";
-    Text[ catalan ] = "Sonido";
+    Text[ catalan ] = "So";
     Text[ finnish ] = "Ääni";
 };
 String STR_EFFECTDLG_OBJECT
@@ -7381,7 +7401,7 @@ String STR_EFFECTDLG_OBJECT
     Text[ chinese_traditional ] = "ç‰©ä»¶";
     Text[ arabic ] = "ßÇÆä";
     Text[ turkish ] = "Nesne";
-    Text[ catalan ] = "Objeto";
+    Text[ catalan ] = "Objecte";
     Text[ finnish ] = "Objekti";
 };
 String STR_EFFECTDLG_PAGE_OBJECT
@@ -7406,7 +7426,7 @@ String STR_EFFECTDLG_PAGE_OBJECT
     Text[ chinese_traditional ] = "é é¢/ç‰©ä»¶";
     Text[ arabic ] = "ÕİÍÉ / ßÇÆä";
     Text[ turkish ] = "Sayfa/nesne";
-    Text[ catalan ] = "Página / objeto";
+    Text[ catalan ] = "Pàgina / objecte";
     Text[ finnish ] = "Dia/objekti";
 };
 String STR_EFFECTDLG_DOCUMENT
@@ -7431,7 +7451,7 @@ String STR_EFFECTDLG_DOCUMENT
     Text[ chinese_traditional ] = "æ–‡ä»¶";
     Text[ arabic ] = "ÇáãÓÊäÏ";
     Text[ turkish ] = "Belge";
-    Text[ catalan ] = "Documento";
+    Text[ catalan ] = "Document";
     Text[ finnish ] = "Asiakirja";
 };
 String STR_EFFECTDLG_PROGRAM
@@ -7509,7 +7529,7 @@ String STR_EFFECT_NONE
     Text[ chinese_traditional ] = "ç„¡æ•ˆæœ";
     Text[ arabic ] = "ÈÏæä ÊÃËíÑ";
     Text[ turkish ] = "Efekt yok";
-    Text[ catalan ] = "Sin efecto";
+    Text[ catalan ] = "Sense cap efecte";
 };
 String STR_EFFECT_FADE_FROM_L
 {
@@ -7536,7 +7556,7 @@ String STR_EFFECT_FADE_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÇáíÓÇÑ";
     Text[ turkish ] = "Soldan ser";
-    Text[ catalan ] = "Cubrir desde la izquierda";
+    Text[ catalan ] = "Cobreix des de l'esquerra";
 };
 String STR_EFFECT_FADE_FROM_T
 {
@@ -7563,7 +7583,7 @@ String STR_EFFECT_FADE_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šæ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÚáì";
     Text[ turkish ] = "Yukarıdan ser";
-    Text[ catalan ] = "Cubrir desde arriba";
+    Text[ catalan ] = "Cobreix des de d'alt";
 };
 String STR_EFFECT_FADE_FROM_R
 {
@@ -7590,7 +7610,7 @@ String STR_EFFECT_FADE_FROM_R
     Text[ chinese_traditional ] = "å¾å³æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan ser";
-    Text[ catalan ] = "Cubrir desde la derecha";
+    Text[ catalan ] = "Cobreix des de la dreta";
 };
 String STR_EFFECT_FADE_FROM_B
 {
@@ -7617,7 +7637,7 @@ String STR_EFFECT_FADE_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸‹æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÓİá";
     Text[ turkish ] = "Aşağıdan ser";
-    Text[ catalan ] = "Cubrir desde abajo";
+    Text[ catalan ] = "Cobreix des d'avall";
 };
 String STR_EFFECT_FADE_TO_CENTER
 {
@@ -7643,7 +7663,7 @@ String STR_EFFECT_FADE_TO_CENTER
     Text[ chinese_traditional ] = "å¾å¤–å‘å…§æ¶ˆå¤±";
     Text[ arabic ] = "ÊÚáíÈ Åáì ÇáÏÇÎá";
     Text[ turkish ] = "İçe doğru perdele";
-    Text[ catalan ] = "Recuadro entrante";
+    Text[ catalan ] = "Requadre entrant";
 };
 String STR_EFFECT_FADE_FROM_CENTER
 {
@@ -7670,7 +7690,7 @@ String STR_EFFECT_FADE_FROM_CENTER
     Text[ chinese_traditional ] = "å¾ä¸­å¤®æ¶ˆå¤±";
     Text[ arabic ] = "ÊÚáíÈ Åáì ÇáÎÇÑÌ";
     Text[ turkish ] = "Dışa doğru perdele";
-    Text[ catalan ] = "Recuadro saliente";
+    Text[ catalan ] = "Requadre sortint";
 };
 
 String STR_EFFECT_DISCARD_FROM_L
@@ -7696,7 +7716,7 @@ String STR_EFFECT_DISCARD_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦é¡¯éœ²";
     Text[ turkish ] = "Soldan sür";
     Text[ arabic ] = "ßÔİ ãä ÇáíÓÇÑ";
-    Text[ catalan ] = "Entrar desde la izquierda";
+    Text[ catalan ] = "Fly In From Left";
 };
 String STR_EFFECT_DISCARD_FROM_UL
 {
@@ -7721,7 +7741,7 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text[ chinese_traditional ] = "å¾å·¦ä¸Šæ“´å±•";
     Text[ turkish ] = "Discard from Top Left";
     Text[ arabic ] = "ßÔİ ãä ÃÚáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Entrar desde arriba izquierda";
+    Text[ catalan ] = "Fly In From Top Left";
 };
 String STR_EFFECT_DISCARD_FROM_T
 {
@@ -7746,7 +7766,7 @@ String STR_EFFECT_DISCARD_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šæ“´å±•";
     Text[ turkish ] = "Discard from Top";
     Text[ arabic ] = "ßÔİ ãä ÃÚáì";
-    Text[ catalan ] = "Entrar desde arriba";
+    Text[ catalan ] = "Fly In From Top";
 };
 String STR_EFFECT_DISCARD_FROM_UR
 {
@@ -7771,7 +7791,7 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text[ chinese_traditional ] = "å¾å³ä¸Šæ“´å±•";
     Text[ turkish ] = "Discard from Upper Right";
     Text[ arabic ] = "ßÔİ ãä ÃÚáì Çáíãíä";
-    Text[ catalan ] = "Entrar desde arriba a la derecha";
+    Text[ catalan ] = "Fly In From Upper Right";
 };
 String STR_EFFECT_DISCARD_FROM_R
 {
@@ -7796,7 +7816,7 @@ String STR_EFFECT_DISCARD_FROM_R
     Text[ chinese_traditional ] = "å¾å³é¡¯éœ²";
     Text[ turkish ] = "Sağdan sür";
     Text[ arabic ] = "ßÔİ ãä Çáíãíä";
-    Text[ catalan ] = "Entrar desde la derecha";
+    Text[ catalan ] = "Fly In From Right";
 };
 String STR_EFFECT_DISCARD_FROM_LR
 {
@@ -7821,7 +7841,7 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text[ chinese_traditional ] = "å¾å³ä¸‹æ“´å±•";
     Text[ turkish ] = "Discard from Lower Right";
     Text[ arabic ] = "ßÔİ ãä ÃÏäì Çáíãíä";
-    Text[ catalan ] = "Entrar desde abajo a la derecha";
+    Text[ catalan ] = "Fly In From Lower Right";
 };
 String STR_EFFECT_DISCARD_FROM_B
 {
@@ -7846,7 +7866,7 @@ String STR_EFFECT_DISCARD_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸‹é¡¯éœ²";
     Text[ turkish ] = "Aşağıdan sür";
     Text[ arabic ] = "ßÔİ ãä ÃÓİá";
-    Text[ catalan ] = "Entrar desde abajo";
+    Text[ catalan ] = "Fly In From Bottom";
 };
 String STR_EFFECT_DISCARD_FROM_LL
 {
@@ -7871,7 +7891,7 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text[ chinese_traditional ] = "å¾å·¦ä¸‹æ“´å±•";
     Text[ turkish ] = "Discard from Lower Left";
     Text[ arabic ] = "ßÔİ ãä ÃÏäì ÇáíÓÇÑ";
-    Text[ catalan ] = "Entrar desde arriba a la izquierda";
+    Text[ catalan ] = "Fly In From Lower Left";
 };
 String STR_EFFECT_DISCARD_S_FROM_L
 {
@@ -7896,7 +7916,7 @@ String STR_EFFECT_DISCARD_S_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short from Left";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÇáíÓÇÑ";
-    Text[ catalan ] = "Entrar localmente desde la izquierda";
+    Text[ catalan ] = "Peek In From Left";
 };
 String STR_EFFECT_DISCARD_S_FROM_UL
 {
@@ -7921,7 +7941,7 @@ String STR_EFFECT_DISCARD_S_FROM_UL
     Text[ chinese_traditional ] = "å¾å·¦ä¸Šç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short from Upper Left";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Entrar localmente desde arriba a la izquierda";
+    Text[ catalan ] = "Peek In From Upper Left";
 };
 String STR_EFFECT_DISCARD_S_FROM_T
 {
@@ -7946,7 +7966,7 @@ String STR_EFFECT_DISCARD_S_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short from Top";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì";
-    Text[ catalan ] = "Entrar localmente desde arriba";
+    Text[ catalan ] = "Peek In From Top";
 };
 String STR_EFFECT_DISCARD_S_FROM_UR
 {
@@ -7971,7 +7991,7 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text[ chinese_traditional ] = "å¾å³ä¸Šç·©æ…¢åœ°æ“´å±•";
     Text[ turkish ] = "Discard short from Upper Right";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÚáì Çáíãíä";
-    Text[ catalan ] = "Mostrar localmente desde arriba a la derecha";
+    Text[ catalan ] = "Peek In From Upper Right";
 };
 String STR_EFFECT_DISCARD_S_FROM_R
 {
@@ -7996,7 +8016,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text[ chinese_traditional ] = "å¾å³ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short from Right";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä Çáíãíä";
-    Text[ catalan ] = "Entrar localmente desde la derecha";
+    Text[ catalan ] = "Peek In From Right";
 };
 String STR_EFFECT_DISCARD_S_FROM_LR
 {
@@ -8021,7 +8041,7 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text[ chinese_traditional ] = "å¾å³ä¸‹ç·©æ…¢åœ°æ“´å±•";
     Text[ turkish ] = "Discard short from Lower Right";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÏäì Çáíãíä";
-    Text[ catalan ] = "Mostrar localmente desde abajo a la derecha";
+    Text[ catalan ] = "Peek In From Lower Right";
 };
 String STR_EFFECT_DISCARD_S_FROM_B
 {
@@ -8046,7 +8066,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸‹ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short from Bottom";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÓİá";
-    Text[ catalan ] = "Entrar localmente desde abajo";
+    Text[ catalan ] = "Peek In From Bottom";
 };
 String STR_EFFECT_DISCARD_S_FROM_LL
 {
@@ -8071,7 +8091,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text[ chinese_traditional ] = "å¾å·¦ä¸‹ç·©æ…¢åœ°æ“´å±•";
     Text[ turkish ] = "Discard short from Lower Left";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ ãä ÃÏäì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mostrar localmente desde abajo a la izquierda";
+    Text[ catalan ] = "Peek In From Lower Left";
 };
 String STR_EFFECT_VERTICAL_STRIPES
 {
@@ -8097,7 +8117,7 @@ String STR_EFFECT_VERTICAL_STRIPES
     Text[ chinese_traditional ] = "ç¸±å‘æ¶ˆå¤±";
     Text[ arabic ] = "ÓÊÇÆÑ ÑÃÓíÉ";
     Text[ turkish ] = "Dikey perdele";
-    Text[ catalan ] = "Barras verticales";
+    Text[ catalan ] = "Barres verticals";
 };
 String STR_EFFECT_HORIZONTAL_STRIPES
 {
@@ -8123,7 +8143,7 @@ String STR_EFFECT_HORIZONTAL_STRIPES
     Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘æ¶ˆå¤±";
     Text[ arabic ] = "ÓÊÇÆÑ ÃİŞíÉ";
     Text[ turkish ] = "Yatay perdele";
-    Text[ catalan ] = "Mostrar horizontal";
+    Text[ catalan ] = "Mostra horitzontal";
 };
 String STR_EFFECT_VERTICAL_LINES
 {
@@ -8147,7 +8167,7 @@ String STR_EFFECT_VERTICAL_LINES
     Text[ chinese_traditional ] = "å‚ç›´ç·šæ¢";
     Text[ arabic ] = "ÎØæØ ÑÃÓíÉ";
     Text[ turkish ] = "Dikey çizgiler";
-    Text[ catalan ] = "Líneas verticales";
+    Text[ catalan ] = "Línies verticals";
     Text[ finnish ] = "Pystyviivat";
 };
 String STR_EFFECT_HORIZONTAL_LINES
@@ -8172,7 +8192,7 @@ String STR_EFFECT_HORIZONTAL_LINES
     Text[ chinese_traditional ] = "æ°´å¹³ç·š";
     Text[ arabic ] = "ÎØæØ ÃİŞíÉ";
     Text[ turkish ] = "Yatay çizgiler";
-    Text[ catalan ] = "Líneas horizontales";
+    Text[ catalan ] = "Línies horitzontals";
     Text[ finnish ] = "Vaakaviivat";
 };
 String STR_EFFECT_VERTICAL_CHECKERBOARD
@@ -8197,7 +8217,7 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
     Text[ chinese_traditional ] = "å‚ç›´å‘åœ‹éš›è±¡æ£‹ç›¤";
     Text[ turkish ] = "Vertical checkerboard";
     Text[ arabic ] = "áæÍ ÔØÑäÌ ÑÃÓí";
-    Text[ catalan ] = "Tablero de ajedrez vertical";
+    Text[ catalan ] = "Taula d'escacs vertical";
     Text[ finnish ] = "Vaakaruudukkotaso";
 };
 String STR_EFFECT_HORIZONTAL_CHECKERBOARD
@@ -8222,7 +8242,7 @@ String STR_EFFECT_HORIZONTAL_CHECKERBOARD
     Text[ chinese_traditional ] = "æ°´å¹³å‘åœ‹éš›è±¡æ£‹ç›¤";
     Text[ turkish ] = "Horizontal checkerboard";
     Text[ arabic ] = "áæÍ ÔØÑäÌ ÃİŞí";
-    Text[ catalan ] = "Tablero de ajedrez horizontal";
+    Text[ catalan ] = "Taula d'escacs horitzontal";
     Text[ finnish ] = "Pystyruudukkotaso";
 };
 String STR_EFFECT_ROLL_FROM_L
@@ -8249,7 +8269,7 @@ String STR_EFFECT_ROLL_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦æ»¾å‹•";
     Text[ arabic ] = "İÑÔ ãä ÇáíÓÇÑ";
     Text[ turkish ] = "Sağa kaydır";
-    Text[ catalan ] = "Rodar desde la izquierda";
+    Text[ catalan ] = "Rodar des de l'esquerra";
 };
 String STR_EFFECT_ROLL_FROM_T
 {
@@ -8275,7 +8295,7 @@ String STR_EFFECT_ROLL_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šæ»¾å‹•";
     Text[ arabic ] = "İÑÔ ãä ÃÚáì";
     Text[ turkish ] = "Aşağı kaydır";
-    Text[ catalan ] = "Rodar desde arriba";
+    Text[ catalan ] = "Rodar des de d'alt";
 };
 String STR_EFFECT_ROLL_FROM_R
 {
@@ -8301,7 +8321,7 @@ String STR_EFFECT_ROLL_FROM_R
     Text[ chinese_traditional ] = "å¾å³æ»¾å‹•";
     Text[ arabic ] = "İÑÔ ãä Çáíãíä";
     Text[ turkish ] = "Sola kaydır";
-    Text[ catalan ] = "Rodar desde la derecha";
+    Text[ catalan ] = "Rodar des de la dreta";
 };
 String STR_EFFECT_ROLL_FROM_B
 {
@@ -8327,7 +8347,7 @@ String STR_EFFECT_ROLL_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸‹æ»¾å‹•";
     Text[ arabic ] = "İÑÔ ãä ÃÓİá";
     Text[ turkish ] = "Yukarı kaydır";
-    Text[ catalan ] = "Rodar desde abajo";
+    Text[ catalan ] = "Rodar des d'avall";
 };
 String STR_EFFECT_WAVYLINE_FROM_L
 {
@@ -8351,7 +8371,7 @@ String STR_EFFECT_WAVYLINE_FROM_L
     Text[ chinese_traditional ] = "å·¦å‘å½æ›²ç·š";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä ÇáíÓÇÑ";
     Text[ turkish ] = "Soldan yılan hareketi";
-    Text[ catalan ] = "Serpentina desde la izquierda";
+    Text[ catalan ] = "Serpentina des de l'esquerra";
     Text[ finnish ] = "Aaltoviiva vasemmalta";
 };
 String STR_EFFECT_WAVYLINE_FROM_R
@@ -8376,7 +8396,7 @@ String STR_EFFECT_WAVYLINE_FROM_R
     Text[ chinese_traditional ] = "å³å‘å½æ›²ç·š";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan yılan hareketi";
-    Text[ catalan ] = "Serpentina desde la derecha";
+    Text[ catalan ] = "Serpentina des de la dreta";
     Text[ finnish ] = "Aaltoviiva oikealta";
 };
 String STR_EFFECT_WAVYLINE_FROM_T
@@ -8401,7 +8421,7 @@ String STR_EFFECT_WAVYLINE_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šæ–¹çš„å½æ›²ç·š";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä ÃÚáì";
     Text[ turkish ] = "Yukarıdan yılan hareketi";
-    Text[ catalan ] = "Serpentina desde arriba";
+    Text[ catalan ] = "Serpentina des de d'alt";
     Text[ finnish ] = "Aaltoviiva ylhäältä";
 };
 String STR_EFFECT_WAVYLINE_FROM_B
@@ -8426,7 +8446,7 @@ String STR_EFFECT_WAVYLINE_FROM_B
     Text[ chinese_traditional ] = "å‘ä¸‹çš„å½æ›²ç·š";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä ÃÓİá";
     Text[ turkish ] = "Aşağıdan yılan hareketi";
-    Text[ catalan ] = "Serpentina desde abajo";
+    Text[ catalan ] = "Serpentina des d'abaix";
     Text[ finnish ] = "Aaltoviiva alhaalta";
 };
 String STR_EFFECT_CLOCKWISE
@@ -8451,7 +8471,7 @@ String STR_EFFECT_CLOCKWISE
     Text[ chinese_traditional ] = "æŒ‰ç…§é †æ™‚æŒ‡é‡æ–¹å‘æ¶ˆå¤±";
     Text[ arabic ] = "ÏæÑÇä İí ÇÊÌÇå ÚŞÇÑÈ ÇáÓÇÚÉ";
     Text[ turkish ] = "Saat yönünde perdele";
-    Text[ catalan ] = "En sentido agujas de reloj";
+    Text[ catalan ] = "En el sentit de les agulles del rellotge";
     Text[ finnish ] = "Häivytä myötäpäivään";
 };
 String STR_EFFECT_COUNTERCLOCKWISE
@@ -8476,7 +8496,7 @@ String STR_EFFECT_COUNTERCLOCKWISE
     Text[ chinese_traditional ] = "æŒ‰ç…§é€†æ™‚æŒ‡é‡æ–¹å‘æ¶ˆå¤±";
     Text[ arabic ] = "ÏæÑÇä ÚßÓ ÇÊÌÇå ÚŞÇÑÈ ÇáÓÇÚÉ";
     Text[ turkish ] = "Saat yönünün tersine perdele";
-    Text[ catalan ] = "En sentido contrario a agujas de reloj";
+    Text[ catalan ] = "En el sentit contrari de les agulles del rellotge";
     Text[ finnish ] = "Häivytä vastapäivään";
 };
 String STR_EFFECT_FADE_FROM_UL
@@ -8504,7 +8524,7 @@ String STR_EFFECT_FADE_FROM_UL
     Text[ chinese_traditional ] = "å¾å·¦ä¸Šæ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÚáì ÇáíÓÇÑ";
     Text[ turkish ] = "Sol üstten ser";
-    Text[ catalan ] = "Cubrir desde la izquierda arriba";
+    Text[ catalan ] = "Cobreix des de d'alt a l'esquerra";
     Text[ finnish ] = "Häivytä ylävasemmalta";
 };
 String STR_EFFECT_FADE_FROM_UR
@@ -8532,7 +8552,7 @@ String STR_EFFECT_FADE_FROM_UR
     Text[ chinese_traditional ] = "å¾å³ä¸Šæ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÚáì Çáíãíä";
     Text[ turkish ] = "Sağ üstten ser";
-    Text[ catalan ] = "Cubrir desde la derecha arriba";
+    Text[ catalan ] = "Cobreix des de d'alt a la dreta";
     Text[ finnish ] = "Häivytä yläoikealta";
 };
 String STR_EFFECT_FADE_FROM_LL
@@ -8560,7 +8580,7 @@ String STR_EFFECT_FADE_FROM_LL
     Text[ chinese_traditional ] = "å¾å·¦ä¸‹æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÓİá ÇáíÓÇÑ";
     Text[ turkish ] = "Sol alttan ser";
-    Text[ catalan ] = "Cubrir desde la izquierda abajo";
+    Text[ catalan ] = "Cobrir des d'abaix a l'esquerra";
     Text[ finnish ] = "Häivytä alavasemmalta";
 };
 String STR_EFFECT_FADE_FROM_LR
@@ -8588,7 +8608,7 @@ String STR_EFFECT_FADE_FROM_LR
     Text[ chinese_traditional ] = "å¾å³æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ ãä ÃÏäì Çáíãíä";
     Text[ turkish ] = "Sağ alttan ser";
-    Text[ catalan ] = "Cubrir desde la derecha abajo";
+    Text[ catalan ] = "Cobrir des d'abaix a la dreta";
     Text[ finnish ] = "Häivytä alaoikealta";
 };
 String STR_EFFECT_CLOSE_VERTICAL
@@ -8614,7 +8634,7 @@ String STR_EFFECT_CLOSE_VERTICAL
     Text[ chinese_traditional ] = "å‚ç›´æ–¹å‘çµæŸ";
     Text[ arabic ] = "ÅÛáÇŞ ÑÃÓí";
     Text[ turkish ] = "Dikey kapat";
-    Text[ catalan ] = "Cerrar verticalmente";
+    Text[ catalan ] = "Tanca verticalment";
     Text[ finnish ] = "Sulje pystytasossa";
 };
 String STR_EFFECT_CLOSE_HORIZONTAL
@@ -8640,7 +8660,7 @@ String STR_EFFECT_CLOSE_HORIZONTAL
     Text[ chinese_traditional ] = "æŒ‰ç…§æ©«å‘çµæŸ";
     Text[ arabic ] = "ÅÛáÇŞ ÃİŞí";
     Text[ turkish ] = "Yatay kapat";
-    Text[ catalan ] = "Cerrar horizontalmente";
+    Text[ catalan ] = "Tanca horitzontalment";
     Text[ finnish ] = "Sulje vaakatasossa";
 };
 String STR_EFFECT_OPEN_VERTICAL
@@ -8666,7 +8686,7 @@ String STR_EFFECT_OPEN_VERTICAL
     Text[ chinese_traditional ] = "æ©«å‘é–‹å•Ÿ";
     Text[ arabic ] = "İÊÍ ÑÃÓí";
     Text[ turkish ] = "Dikey aç";
-    Text[ catalan ] = "Abrir verticalmente";
+    Text[ catalan ] = "Obre verticalment";
     Text[ finnish ] = "Avaa pystytasossa";
 };
 String STR_EFFECT_OPEN_HORIZONTAL
@@ -8692,7 +8712,7 @@ String STR_EFFECT_OPEN_HORIZONTAL
     Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘é–‹å•Ÿ";
     Text[ arabic ] = "İÊÍ ÃİŞí";
     Text[ turkish ] = "Yatay aç";
-    Text[ catalan ] = "Abrir horizontalmente";
+    Text[ catalan ] = "Obre horitzontalment";
     Text[ finnish ] = "Avaa vaakatasossa";
 };
 String STR_EFFECT_PATH
@@ -8717,7 +8737,7 @@ String STR_EFFECT_PATH
     Text[ chinese_traditional ] = "æ²¿è‘—æ›²ç·šç§»å‹•";
     Text[ arabic ] = "İí ãÍÇĞÇÉ ÇáãäÍäì";
     Text[ turkish ] = "Eğriyi izle";
-    Text[ catalan ] = "Siguiendo la curva";
+    Text[ catalan ] = "Seguint la corba";
     Text[ finnish ] = "Käyrää pitkin";
 };
 
@@ -8970,7 +8990,7 @@ String STR_EFFECT_MOVE_TO_L
     Text[ chinese_traditional ] = "å‘å·¦ç§»å‹•";
     Text[ turkish ] = "Sola hareket et";
     Text[ arabic ] = "ÊÍÑíß ááíÓÇÑ";
-    Text[ catalan ] = "Desplazar hacia la izquierda";
+    Text[ catalan ] = "Fly Out To Left";
 };
 String STR_EFFECT_MOVE_TO_UL
 {
@@ -8995,7 +9015,7 @@ String STR_EFFECT_MOVE_TO_UL
     Text[ chinese_traditional ] = "å‘å·¦ä¸Šç§»å‹•";
     Text[ turkish ] = "Move to upper left";
     Text[ arabic ] = "ÊÍÑíß Åáì ÃÚáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mover hacia arriba a la izquierda";
+    Text[ catalan ] = "Fly Out To Upper Left";
 };
 String STR_EFFECT_MOVE_TO_T
 {
@@ -9020,7 +9040,7 @@ String STR_EFFECT_MOVE_TO_T
     Text[ chinese_traditional ] = "å‘ä¸Šç§»å‹•";
     Text[ turkish ] = "Yukarı hareket et";
     Text[ arabic ] = "ÊÍÑíß áÃÚáì";
-    Text[ catalan ] = "Desplazar hacia arriba";
+    Text[ catalan ] = "Fly Out Upwards";
 };
 String STR_EFFECT_MOVE_TO_UR
 {
@@ -9045,7 +9065,7 @@ String STR_EFFECT_MOVE_TO_UR
     Text[ chinese_traditional ] = "å‘å³ä¸Šç§»å‹•";
     Text[ turkish ] = "Move to upper right";
     Text[ arabic ] = "ÊÍÑíß Åáì ÃÚáì Çáíãíä";
-    Text[ catalan ] = "Mover hacia arriba a la derecha";
+    Text[ catalan ] = "Fly Out To Upper Right";
 };
 String STR_EFFECT_MOVE_TO_R
 {
@@ -9070,7 +9090,7 @@ String STR_EFFECT_MOVE_TO_R
     Text[ chinese_traditional ] = "å‘å³ç§»å‹•";
     Text[ turkish ] = "Sağa hareket et";
     Text[ arabic ] = "ÊÍÑíß ááíãíä";
-    Text[ catalan ] = "Desplazar hacia la derecha";
+    Text[ catalan ] = "Fly Out To Right";
 };
 String STR_EFFECT_MOVE_TO_LR
 {
@@ -9095,7 +9115,7 @@ String STR_EFFECT_MOVE_TO_LR
     Text[ chinese_traditional ] = "å‘å³ä¸‹ç§»å‹•";
     Text[ turkish ] = "Move to lower right";
     Text[ arabic ] = "ÊÍÑíß Åáì ÃÏäì Çáíãíä";
-    Text[ catalan ] = "Mover hacia abajo a la derecha";
+    Text[ catalan ] = "Fly Out To Lower Right";
 };
 String STR_EFFECT_MOVE_TO_B
 {
@@ -9120,7 +9140,7 @@ String STR_EFFECT_MOVE_TO_B
     Text[ chinese_traditional ] = "å‘ä¸‹ç§»å‹•";
     Text[ turkish ] = "Aşağı hareket et";
     Text[ arabic ] = "ÊÍÑíß áÃÓİá";
-    Text[ catalan ] = "Desplazar hacia abajo";
+    Text[ catalan ] = "Fly Out Downwards";
 };
 String STR_EFFECT_MOVE_TO_LL
 {
@@ -9145,7 +9165,7 @@ String STR_EFFECT_MOVE_TO_LL
     Text[ chinese_traditional ] = "å‘å·¦ä¸‹ç§»å‹•";
     Text[ turkish ] = "Move to lower left";
     Text[ arabic ] = "ÊÍÑíß Åáì ÃÏäì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mover hacia abajo a la izquierda";
+    Text[ catalan ] = "Fly Out To Lower Left";
 };
 String STR_EFFECT_MOVE_S_TO_L
 {
@@ -9170,7 +9190,7 @@ String STR_EFFECT_MOVE_S_TO_L
     Text[ chinese_traditional ] = "å‘å·¦ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Move short to left";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mover localmente hacia la izquierda";
+    Text[ catalan ] = "Peek Out To Left";
 };
 String STR_EFFECT_MOVE_S_TO_UL
 {
@@ -9195,7 +9215,7 @@ String STR_EFFECT_MOVE_S_TO_UL
     Text[ chinese_traditional ] = "å‘å·¦ä¸Šç§»å‹•";
     Text[ turkish ] = "Move short to upper left";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mover localmente hacia arriba a la izquierda";
+    Text[ catalan ] = "Peek Out To Upper Left";
 };
 String STR_EFFECT_MOVE_S_TO_T
 {
@@ -9220,7 +9240,7 @@ String STR_EFFECT_MOVE_S_TO_T
     Text[ chinese_traditional ] = "å‘ä¸Šç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Move short to top";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì";
-    Text[ catalan ] = "Mover localmente hacia arriba";
+    Text[ catalan ] = "Peek Out Upwards";
 };
 String STR_EFFECT_MOVE_S_TO_UR
 {
@@ -9245,7 +9265,7 @@ String STR_EFFECT_MOVE_S_TO_UR
     Text[ chinese_traditional ] = "å‘å³ä¸Šç§»å‹•";
     Text[ turkish ] = "Move short to upper right";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÚáì Çáíãíä";
-    Text[ catalan ] = "Mostrar localmente hacia arriba a la derecha";
+    Text[ catalan ] = "Peek Out To Upper Right";
 };
 String STR_EFFECT_MOVE_S_TO_R
 {
@@ -9270,7 +9290,7 @@ String STR_EFFECT_MOVE_S_TO_R
     Text[ chinese_traditional ] = "å‘å³ç·©æ…¢ç§»å‹•";
     Text[ turkish ] = "Move short to right";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì Çáíãíä";
-    Text[ catalan ] = "Mover dismiuido hacia la derecha";
+    Text[ catalan ] = "Peek Out To Right";
 };
 String STR_EFFECT_MOVE_S_TO_LR
 {
@@ -9295,7 +9315,7 @@ String STR_EFFECT_MOVE_S_TO_LR
     Text[ chinese_traditional ] = "å‘å³ä¸‹ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Move short to lower right";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÏäì Çáíãíä";
-    Text[ catalan ] = "Mostrar localmente hacia abajo a la derecha";
+    Text[ catalan ] = "Peek Out To Lower Right";
 };
 String STR_EFFECT_MOVE_S_TO_B
 {
@@ -9320,7 +9340,7 @@ String STR_EFFECT_MOVE_S_TO_B
     Text[ chinese_traditional ] = "å‘ä¸‹ç·©æ…¢ç§»å‹•";
     Text[ turkish ] = "Move short to bottom";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÓİá";
-    Text[ catalan ] = "Mover localmente hacia abajo";
+    Text[ catalan ] = "Peek Out Downwards";
 };
 String STR_EFFECT_MOVE_S_TO_LL
 {
@@ -9345,7 +9365,7 @@ String STR_EFFECT_MOVE_S_TO_LL
     Text[ chinese_traditional ] = "å‘å·¦ä¸‹ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Move short to lower left";
     Text[ arabic ] = "ÊÍÑíß ãŞÊÖÈ Åáì ÃÏäì ÇáíÓÇÑ";
-    Text[ catalan ] = "Mover localmente hacia abajo a la izquierda";
+    Text[ catalan ] = "Peek Out To Lower Left";
 };
 String STR_EFFECT_SPIRALIN_L
 {
@@ -9369,7 +9389,7 @@ String STR_EFFECT_SPIRALIN_L
     Text[ chinese_traditional ] = "é †æ™‚é‡ç›¤æ—‹";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÏÇÎá íÓÇÑÇğ";
     Text[ turkish ] = "Sol içe doğru sarmal";
-    Text[ catalan ] = "Espiral hacia el centro e izquierda";
+    Text[ catalan ] = "Espiral cap al centre i a l'esquerra";
     Text[ finnish ] = "Spiraali sisään vasemmalle";
 };
 String STR_EFFECT_SPIRALIN_R
@@ -9394,7 +9414,7 @@ String STR_EFFECT_SPIRALIN_R
     Text[ chinese_traditional ] = "é€†æ™‚é‡ç›¤æ—‹";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÏÇÎá íãíäÇğ";
     Text[ turkish ] = "Sağ içe doğru sarmal";
-    Text[ catalan ] = "Espiral hacia el centro y derecha";
+    Text[ catalan ] = "Espiral cap al centre i dreta";
     Text[ finnish ] = "Spiraali sisään oikealle";
 };
 String STR_EFFECT_SPIRALOUT_L
@@ -9420,7 +9440,7 @@ String STR_EFFECT_SPIRALOUT_L
     Text[ chinese_traditional ] = "é †æ™‚é‡ç›¤æ—‹";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÎÇÑÌ íÓÇÑÇğ";
     Text[ turkish ] = "Sol dışa doğru sarmal";
-    Text[ catalan ] = "Espiral hacia fuera e izquierda";
+    Text[ catalan ] = "Espiral cap a fora a l'esquerra";
     Text[ finnish ] = "Spiraali ulos vasemmalle";
 };
 String STR_EFFECT_SPIRALOUT_R
@@ -9446,7 +9466,7 @@ String STR_EFFECT_SPIRALOUT_R
     Text[ chinese_traditional ] = "é€†æ™‚é‡ç›¤æ—‹";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÎÇÑÌ íãíäÇğ";
     Text[ turkish ] = "Sağ dışa doğru sarmal";
-    Text[ catalan ] = "Espiral hacia fuera y derecha";
+    Text[ catalan ] = "Espiral cap a fora i a la dreta";
     Text[ finnish ] = "Spiraali ulos oikealle";
 };
 String STR_EFFECT_DISSOLVE
@@ -9473,7 +9493,7 @@ String STR_EFFECT_DISSOLVE
     Text[ chinese_traditional ] = "èåŒ–æ•ˆæœ";
     Text[ arabic ] = "ÇäÍáÇá";
     Text[ turkish ] = "Dağıt";
-    Text[ catalan ] = "Disolver";
+    Text[ catalan ] = "Dissolt";
     Text[ finnish ] = "Sulata";
 };
 String STR_EFFECT_HIDE
@@ -9498,7 +9518,7 @@ String STR_EFFECT_HIDE
     Text[ chinese_traditional ] = "éš±å…¥";
     Text[ arabic ] = "ÅÎİÇÁ";
     Text[ turkish ] = "Kapat";
-    Text[ catalan ] = "Ocultar";
+    Text[ catalan ] = "Oculta";
     Text[ finnish ] = "Häivytä ulospäin";
 };
 String STR_EFFECT_STRTCH
@@ -9523,7 +9543,7 @@ String STR_EFFECT_STRTCH
     Text[ chinese_traditional ] = "æ“´å±•";
     Text[ turkish ] = "Stretch";
     Text[ arabic ] = "ÊãÏÏ";
-    Text[ catalan ] = "Expandir";
+    Text[ catalan ] = "Expandeix";
     Text[ finnish ] = "Venytä";
 };
 String STR_EFFECT_STRTCH_FROM_L
@@ -9548,7 +9568,7 @@ String STR_EFFECT_STRTCH_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦æ“´å±•";
     Text[ turkish ] = "Stretch from left";
     Text[ arabic ] = "ÊãÏÏ ãä ÇáíÓÇÑ";
-    Text[ catalan ] = "Expandir desde la izquierda";
+    Text[ catalan ] = "Expandeix cap a l'esquerra";
     Text[ finnish ] = "Venytä vasemmalta";
 };
 String STR_EFFECT_STRTCH_FROM_UL
@@ -9573,7 +9593,7 @@ String STR_EFFECT_STRTCH_FROM_UL
     Text[ chinese_traditional ] = "å¾å·¦ä¸Šæ“´å±•";
     Text[ turkish ] = "Stretch from upper left";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì ÇáíÓÇÑ";
-    Text[ catalan ] = "Expandir desde la izquierda superior";
+    Text[ catalan ] = "Expandeix des de l'esquerra superior";
     Text[ finnish ] = "Venytä ylävasemmalta";
 };
 String STR_EFFECT_STRTCH_FROM_T
@@ -9598,7 +9618,7 @@ String STR_EFFECT_STRTCH_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šæ“´å±•";
     Text[ turkish ] = "Stretch from top";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì";
-    Text[ catalan ] = "Expandir desde arriba";
+    Text[ catalan ] = "Expandeix des de d'alt";
     Text[ finnish ] = "Venytä ylhäältä";
 };
 String STR_EFFECT_STRTCH_FROM_UR
@@ -9623,7 +9643,7 @@ String STR_EFFECT_STRTCH_FROM_UR
     Text[ chinese_traditional ] = "å¾å³ä¸Šæ“´å±•";
     Text[ turkish ] = "Stretch from upper right";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÚáì Çáíãíä";
-    Text[ catalan ] = "Expandir desde la derecha superior";
+    Text[ catalan ] = "Expandeix des de la dreta superior";
     Text[ finnish ] = "Venytä yläoikealta";
 };
 String STR_EFFECT_STRTCH_FROM_R
@@ -9648,7 +9668,7 @@ String STR_EFFECT_STRTCH_FROM_R
     Text[ chinese_traditional ] = "å¾å³æ“´å±•";
     Text[ turkish ] = "Stretch from right";
     Text[ arabic ] = "ÊãÏÏ ãä Çáíãíä";
-    Text[ catalan ] = "Expandir desde la derecha";
+    Text[ catalan ] = "Expandeix des de la dreta";
     Text[ finnish ] = "Venytä oikealta";
 };
 String STR_EFFECT_STRTCH_FROM_LR
@@ -9673,7 +9693,7 @@ String STR_EFFECT_STRTCH_FROM_LR
     Text[ chinese_traditional ] = "å¾å³ä¸‹æ“´å±•";
     Text[ turkish ] = "Stretch from lower right";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÏäì Çáíãíä";
-    Text[ catalan ] = "Expandir desde la derecha inferior";
+    Text[ catalan ] = "Expandeix des de la dreta inferior";
     Text[ finnish ] = "Venytä alaoikealta";
 };
 String STR_EFFECT_STRTCH_FROM_B
@@ -9698,7 +9718,7 @@ String STR_EFFECT_STRTCH_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸Šæ“´å±•";
     Text[ turkish ] = "Stretch from bottom";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÓİá";
-    Text[ catalan ] = "Expandir desde abajo";
+    Text[ catalan ] = "Expandeix des d'avall";
     Text[ finnish ] = "Venytä alhaalta";
 };
 String STR_EFFECT_STRTCH_FROM_LL
@@ -9723,7 +9743,7 @@ String STR_EFFECT_STRTCH_FROM_LL
     Text[ chinese_traditional ] = "å¾å³ä¸‹æ“´å±•";
     Text[ turkish ] = "Stretch from lower left";
     Text[ arabic ] = "ÊãÏÏ ãä ÃÏäì ÇáíÓÇÑ";
-    Text[ catalan ] = "Expandir desde la izquierda inferior";
+    Text[ catalan ] = "Expandeix des de l'esquerra inferior";
     Text[ finnish ] = "Venytä alavasemmalta";
 };
 String STR_EFFECT_STRTCH_ROTATE
@@ -9748,7 +9768,7 @@ String STR_EFFECT_STRTCH_ROTATE
     Text[ chinese_traditional ] = "æ“´å±•å’Œæ—‹è½‰";
     Text[ turkish ] = "Stretch and rotate";
     Text[ arabic ] = "ÊãÏÏ æÏæÑÇä";
-    Text[ catalan ] = "Expandir y rodar";
+    Text[ catalan ] = "Expandeix i rota";
     Text[ finnish ] = "Venytä ja kierrä";
 };
 String STR_EFFECT_STRTCH_HORIZONTAL
@@ -9773,7 +9793,7 @@ String STR_EFFECT_STRTCH_HORIZONTAL
     Text[ chinese_traditional ] = "æ°´å¹³æ“´å±•";
     Text[ turkish ] = "Stretch horizontal";
     Text[ arabic ] = "ÊãÏÏ ÃİŞí";
-    Text[ catalan ] = "Expandir horizontalmente";
+    Text[ catalan ] = "Expandeix horitzonatalment";
     Text[ finnish ] = "Venytä vaakatasossa";
 };
 String STR_EFFECT_STRTCH_VERTICAL
@@ -9798,7 +9818,7 @@ String STR_EFFECT_STRTCH_VERTICAL
     Text[ chinese_traditional ] = "å‚ç›´æ“´å±•";
     Text[ turkish ] = "Stretch vertical";
     Text[ arabic ] = "ÊãÏÏ ÑÃÓí";
-    Text[ catalan ] = "Expandir verticalmente";
+    Text[ catalan ] = "Expandeix verticalment";
     Text[ finnish ] = "Venytä pystytasossa";
 };
 String STR_EFFECT_ROTATE_HORIZONTAL
@@ -9823,7 +9843,7 @@ String STR_EFFECT_ROTATE_HORIZONTAL
     Text[ chinese_traditional ] = "æ°´å¹³æ—‹è½‰";
     Text[ turkish ] = "Rotate horizontally";
     Text[ arabic ] = "ÏæÑÇä ÃİŞí";
-    Text[ catalan ] = "Girar horizontalmente";
+    Text[ catalan ] = "Gira horizontalment";
     Text[ finnish ] = "Kierto vaakatasossa";
 };
 String STR_EFFECT_ROTATE_VERTICAL
@@ -9848,7 +9868,7 @@ String STR_EFFECT_ROTATE_VERTICAL
     Text[ chinese_traditional ] = "å‚ç›´æ—‹è½‰";
     Text[ turkish ] = "Rotate vertically";
     Text[ arabic ] = "ÏæÑÇä ÑÃÓí";
-    Text[ catalan ] = "Girar verticalmente";
+    Text[ catalan ] = "Gira verticalment";
     Text[ finnish ] = "Kierto pystytasossa";
 };
 
@@ -9875,7 +9895,7 @@ String STR_GENERAL_PUBLISHING_ERROR
     Text[ chinese_traditional ] = "ä¿å­˜ç™¼è¡¨æª”æ¡ˆæ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãäÔæÑ.";
     Text[ turkish ] = "Yayımı kaydetme sırasında hata oluştu.";
-    Text[ catalan ] = "Al guardar la publicación se ha producido un error.";
+    Text[ catalan ] = "En desar la publicació s'ha produït un error.";
     Text[ finnish ] = "Julkaisua tallennettaessa on ilmennyt virhe.";
 };
 String STR_INSERT_TEXT
@@ -9901,7 +9921,7 @@ String STR_INSERT_TEXT
     Text[ chinese_traditional ] = "æ’å…¥æ–‡å­—";
     Text[ arabic ] = "ÅÏÑÇÌ äÕ";
     Text[ turkish ] = "Metin ekle";
-    Text[ catalan ] = "Insertar texto";
+    Text[ catalan ] = "Inserta text";
     Text[ finnish ] = "Lisää teksti";
 };
 String STR_SLIDE_SINGULAR
@@ -9951,7 +9971,7 @@ String STR_SLIDE_PLURAL
     Text[ chinese_traditional ] = "æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÔÑÇÆÍ";
     Text[ turkish ] = "Slayt";
-    Text[ catalan ] = "Diapositivas";
+    Text[ catalan ] = "Diapositives";
     Text[ finnish ] = " Diat";
 };
 String STR_CHART_MAINTITLE
@@ -9976,7 +9996,7 @@ String STR_CHART_MAINTITLE
     Text[ chinese_traditional ] = "ä¸»æ¨™é¡Œ";
     Text[ arabic ] = "ÇáÚäæÇä ÇáÑÆíÓí";
     Text[ turkish ] = "Ana başlık";
-    Text[ catalan ] = "Título principal";
+    Text[ catalan ] = "Títol principal";
     Text[ finnish ] = "Pääotsikko";
 };
 String STR_CHART_SUBTITLE
@@ -10001,7 +10021,7 @@ String STR_CHART_SUBTITLE
     Text[ chinese_traditional ] = "åˆ†æ¨™é¡Œ";
     Text[ arabic ] = "ÇáÚäæÇä ÇáİÑÚí";
     Text[ turkish ] = "Alt başlık";
-    Text[ catalan ] = "Subtítulo";
+    Text[ catalan ] = "Subtítol";
     Text[ finnish ] = "Alaotsikko";
 };
 String STR_CHART_TITLE_X
@@ -10026,7 +10046,7 @@ String STR_CHART_TITLE_X
     Text[ chinese_traditional ] = "X-è»¸æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä ÇáãÍæÑ Ó";
     Text[ turkish ] = "X ekseni başlığı";
-    Text[ catalan ] = "Título del eje X";
+    Text[ catalan ] = "Títol de l'eix X";
     Text[ finnish ] = "X-akselin otsikko";
 };
 String STR_CHART_TITLE_Y
@@ -10051,7 +10071,7 @@ String STR_CHART_TITLE_Y
     Text[ chinese_traditional ] = "Y-è»¸æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä ÇáãÍæÑ Õ";
     Text[ turkish ] = "Y ekseni başlığı";
-    Text[ catalan ] = "Título del eje Y";
+    Text[ catalan ] = "Títol de l'eix Y";
     Text[ finnish ] = "X-akselin otsikko";
 };
 String STR_CHART_TITLE_Z
@@ -10076,7 +10096,7 @@ String STR_CHART_TITLE_Z
     Text[ chinese_traditional ] = "Z-è»¸æ¨™é¡Œ";
     Text[ arabic ] = "ÚäæÇä ÇáãÍæÑ Ú";
     Text[ turkish ] = "Z ekseni başlığı";
-    Text[ catalan ] = "Título del eje Z";
+    Text[ catalan ] = "Títol de l'eix Z";
     Text[ finnish ] = "Z-akselin otsikko";
 };
 String STR_CHART_NAME_COLUMN
@@ -10152,7 +10172,7 @@ String STR_RESOLUTION
     Text[ chinese_traditional ] = "è§£æåº¦";
     Text[ arabic ] = "ÇáÇÓÊÈÇäÉ";
     Text[ turkish ] = "Çözünürlük";
-    Text[ catalan ] = "Resolución";
+    Text[ catalan ] = "Resolució";
     Text[ finnish ] = "Tarkkuus";
 };
 String STR_LOAD_PRESENTATION_LAYOUT
@@ -10177,7 +10197,7 @@ String STR_LOAD_PRESENTATION_LAYOUT
     Text[ chinese_traditional ] = "è¼‰å…¥é é¢æ¨£å¼";
     Text[ arabic ] = "ÊÍãíá ŞÇáÈ ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfa biçimini yükle";
-    Text[ catalan ] = "Cargar estilo de página";
+    Text[ catalan ] = "Carrega l'estil de la pàgina";
     Text[ finnish ] = "Lataa dian rakenne";
 };
 String STR_EFFECT_RANDOM
@@ -10202,7 +10222,7 @@ String STR_EFFECT_RANDOM
     Text[ chinese_traditional ] = "è‡ªå‹•(éš¨æ©Ÿ)";
     Text[ arabic ] = "ÊáŞÇÆí (ÚÔæÇÆí)";
     Text[ turkish ] = "Otomatik (rasgele)";
-    Text[ catalan ] = "Automático (aleatorio)";
+    Text[ catalan ] = "Automàtic (aleatòri)";
     Text[ finnish ] = "Automaattinen (satunnainen)";
 };
 String STR_EFFECT_STRETCH_FROM_L
@@ -10228,7 +10248,7 @@ String STR_EFFECT_STRETCH_FROM_L
     Text[ chinese_traditional ] = "å¾å·¦ä¼¸å±•";
     Text[ turkish ] = "Soldan damla";
     Text[ arabic ] = "ÊäŞíØ ãä ÇáíÓÇÑ";
-    Text[ catalan ] = "Gotear desde la izquierda";
+    Text[ catalan ] = "Build Up From Left";
 };
 String STR_EFFECT_STRETCH_FROM_T
 {
@@ -10253,7 +10273,7 @@ String STR_EFFECT_STRETCH_FROM_T
     Text[ chinese_traditional ] = "å¾ä¸Šä¼¸å±•";
     Text[ turkish ] = "Yukarıdan damla";
     Text[ arabic ] = "ÊäŞíØ ãä ÃÚáì";
-    Text[ catalan ] = "Gotear desde arriba";
+    Text[ catalan ] = "Build Up From Top";
 };
 String STR_EFFECT_STRETCH_FROM_R
 {
@@ -10278,7 +10298,7 @@ String STR_EFFECT_STRETCH_FROM_R
     Text[ chinese_traditional ] = "å¾å³ä¼¸å±•";
     Text[ turkish ] = "Sağdan damla";
     Text[ arabic ] = "ÊäŞíØ ãä Çáíãíä";
-    Text[ catalan ] = "Gotear desde la derecha";
+    Text[ catalan ] = "Build Up From Right";
 };
 String STR_EFFECT_STRETCH_FROM_B
 {
@@ -10303,7 +10323,7 @@ String STR_EFFECT_STRETCH_FROM_B
     Text[ chinese_traditional ] = "å¾ä¸‹ä¼¸å±•";
     Text[ turkish ] = "Aşağıdan damla";
     Text[ arabic ] = "ÊäŞíØ ãä ÃÓİá";
-    Text[ catalan ] = "Gotear desde abajo";
+    Text[ catalan ] = "Build Up From Bottom";
 };
 String STR_DRAGTYPE_URL
 {
@@ -10329,7 +10349,7 @@ String STR_DRAGTYPE_URL
     Text[ chinese_traditional ] = "ç•¶ä½œè¶…é€£çµæ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ ÊÔÚÈí";
     Text[ turkish ] = "Hyperlink olarak ekle";
-    Text[ catalan ] = "Insertar como hiperenlace";
+    Text[ catalan ] = "Inserta com a hiperenllaç";
     Text[ finnish ] = "Lisää hyperlinkkinä";
 };
 String STR_DRAGTYPE_EMBEDDED
@@ -10355,7 +10375,7 @@ String STR_DRAGTYPE_EMBEDDED
     Text[ chinese_traditional ] = "ç•¶ä½œè¤‡è£½ä»¶æ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ ßäÓÎÉ";
     Text[ turkish ] = "Kopya olarak ekle";
-    Text[ catalan ] = "Insertar como copia";
+    Text[ catalan ] = "Inserta com a còpia";
     Text[ finnish ] = "Lisää kopiona";
 };
 String STR_DRAGTYPE_LINK
@@ -10381,7 +10401,7 @@ String STR_DRAGTYPE_LINK
     Text[ chinese_traditional ] = "ç•¶ä½œæ·å¾‘æ’å…¥";
     Text[ arabic ] = "ÅÏÑÇÌ ßÇÑÊÈÇØ";
     Text[ turkish ] = "Bağlantı olarak ekle";
-    Text[ catalan ] = "Insertar como vínculo";
+    Text[ catalan ] = "Inserta com a vincle";
     Text[ finnish ] = "Lisää linkkinä";
 };
 String STR_EFFECT_LASER_FROM_L
@@ -10406,7 +10426,7 @@ String STR_EFFECT_LASER_FROM_L
     Text[ chinese_traditional ] = "å·¦æ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÇáíÓÇÑ";
     Text[ turkish ] = "Soldan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la izquierda";
+    Text[ catalan ] = "Efecte làser des de l'esquerra";
     Text[ finnish ] = "Laser-tehoste vasemmalta";
 };
 String STR_EFFECT_LASER_FROM_T
@@ -10431,7 +10451,7 @@ String STR_EFFECT_LASER_FROM_T
     Text[ chinese_traditional ] = "ä¸Šæ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÚáì";
     Text[ turkish ] = "Üstten lazer efekti";
-    Text[ catalan ] = "Efecto láser desde arriba";
+    Text[ catalan ] = "Efecte làser des de d'alt";
     Text[ finnish ] = "Laser-tehoste ylhäältä";
 };
 String STR_EFFECT_LASER_FROM_R
@@ -10456,7 +10476,7 @@ String STR_EFFECT_LASER_FROM_R
     Text[ chinese_traditional ] = "å³æ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la derecha";
+    Text[ catalan ] = "Efecte làser des de la dreta";
     Text[ finnish ] = "Laser-tehoste oikealta";
 };
 String STR_EFFECT_LASER_FROM_B
@@ -10481,7 +10501,7 @@ String STR_EFFECT_LASER_FROM_B
     Text[ chinese_traditional ] = "ä¸‹æ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÓİá";
     Text[ turkish ] = "Alttan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde abajo";
+    Text[ catalan ] = "Efecte làser des d'avall";
     Text[ finnish ] = "Laser-tehoste alhaalta";
 };
 String STR_EFFECT_LASER_FROM_UL
@@ -10506,7 +10526,7 @@ String STR_EFFECT_LASER_FROM_UL
     Text[ chinese_traditional ] = "å·¦ä¸Šæ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÚáì ÇáíÓÇÑ";
     Text[ turkish ] = "Üst soldan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la izquierda arriba";
+    Text[ catalan ] = "Efecte làser des de d'alt a la esquerra";
     Text[ finnish ] = "Laser-tehoste ylävasemmalta";
 };
 String STR_EFFECT_LASER_FROM_UR
@@ -10531,7 +10551,7 @@ String STR_EFFECT_LASER_FROM_UR
     Text[ chinese_traditional ] = "å³ä¸Šæ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÚáì Çáíãíä";
     Text[ turkish ] = "Sağ üstten lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la derecha arriba";
+    Text[ catalan ] = "Efecte làser des de dalt a la dreta";
     Text[ finnish ] = "Laser-tehoste yläoikealta";
 };
 String STR_EFFECT_LASER_FROM_LL
@@ -10556,7 +10576,7 @@ String STR_EFFECT_LASER_FROM_LL
     Text[ chinese_traditional ] = "å·¦æ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÏäì ÇáíÓÇÑ";
     Text[ turkish ] = "Sol alttan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la izquierda abajo";
+    Text[ catalan ] = "Efecte làser des d'abaix a l'esquerra";
     Text[ finnish ] = "Laser-tehoste alavasemmalta";
 };
 String STR_EFFECT_LASER_FROM_LR
@@ -10581,7 +10601,7 @@ String STR_EFFECT_LASER_FROM_LR
     Text[ chinese_traditional ] = "å³æ–¹çš„é›·å°„æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä ÃÏäì Çáíãíä";
     Text[ turkish ] = "Sağ alttan lazer efekti";
-    Text[ catalan ] = "Efecto láser desde la derecha abajo";
+    Text[ catalan ] = "Efecte làser des d'abaix a la dreta";
     Text[ finnish ] = "Laser-tehoste alaoikealta";
 };
 String STR_EFFECT_FAVOURITES
@@ -10606,7 +10626,7 @@ String STR_EFFECT_FAVOURITES
     Text[ chinese_traditional ] = "æˆ‘çš„æœ€æ„›";
     Text[ arabic ] = "ÇáãİÖáÉ";
     Text[ turkish ] = "Sık kullanılanlar";
-    Text[ catalan ] = "Favoritos";
+    Text[ catalan ] = "Predilectes";
     Text[ finnish ] = "Suosikit";
 };
 String STR_EFFECT_FADEFROM
@@ -10632,7 +10652,7 @@ String STR_EFFECT_FADEFROM
     Text[ chinese_traditional ] = "æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ";
     Text[ turkish ] = "Ser";
-    Text[ catalan ] = "Disolvencia";
+    Text[ catalan ] = "Dissolució";
     Text[ finnish ] = "Ristihäivytys";
 };
 String STR_EFFECT_DISCARD
@@ -10658,7 +10678,7 @@ String STR_EFFECT_DISCARD
     Text[ chinese_traditional ] = "é¡¯éœ²";
     Text[ turkish ] = "Sür";
     Text[ arabic ] = "ßÔİ";
-    Text[ catalan ] = "Entrar";
+    Text[ catalan ] = "Fly In";
 };
 String STR_EFFECT_DISCARD_SHORT
 {
@@ -10683,7 +10703,7 @@ String STR_EFFECT_DISCARD_SHORT
     Text[ chinese_traditional ] = "ç·©æ…¢æ“´å±•";
     Text[ turkish ] = "Discard short";
     Text[ arabic ] = "ßÔİ ãŞÊÖÈ";
-    Text[ catalan ] = "Entrar localmente";
+    Text[ catalan ] = "Peek In";
 };
 String STR_EFFECT_FADE
 {
@@ -10707,7 +10727,7 @@ String STR_EFFECT_FADE
     Text[ chinese_traditional ] = "æ¶ˆå¤±";
     Text[ arabic ] = "ÊÚáíÈ";
     Text[ turkish ] = "Perdele";
-    Text[ catalan ] = "Descubrir";
+    Text[ catalan ] = "Descobreix";
     Text[ finnish ] = "Häivytä";
 };
 String STR_EFFECT_OPEN_CLOSE
@@ -10720,7 +10740,7 @@ String STR_EFFECT_OPEN_CLOSE
     Text [ italian ] = "Apri / Chiudi" ;
     Text [ spanish ] = "Abrir / Cerrar" ;
     Text [ french ] = "Ouvrir / fermer" ;
-    Text [ swedish ] = "Öppna / Stäng" ;
+    Text [ swedish ] = "Öppna/stäng" ;
     Text [ danish ] = "Åbn / luk" ;
     Text [ portuguese ] = "Abrir / Fechar" ;
     Text [ portuguese_brazilian ] = "?ffnen / Schlie?en" ;
@@ -10733,7 +10753,7 @@ String STR_EFFECT_OPEN_CLOSE
     Text[ chinese_traditional ] = "é–‹å•Ÿ/é—œé–‰";
     Text[ arabic ] = "İÊÍ / ÅÛáÇŞ";
     Text[ turkish ] = "Aç / kapat";
-    Text[ catalan ] = "Abrir / Cerrar";
+    Text[ catalan ] = "Obre / Tanca";
     Text[ finnish ] = "Avaa/sulje";
 };
 String STR_EFFECT_WAVYLINE
@@ -10808,7 +10828,7 @@ String STR_EFFECT_LASER
     Text[ chinese_traditional ] = "é›·å°„";
     Text[ arabic ] = "áíÒÑ";
     Text[ turkish ] = "Lazer";
-    Text[ catalan ] = "Láser";
+    Text[ catalan ] = "Làser";
     Text[ finnish ] = "Laser";
 };
 String STR_EFFECT_EXTRA
@@ -10833,7 +10853,7 @@ String STR_EFFECT_EXTRA
     Text[ chinese_traditional ] = "å…¶ä»–";
     Text[ arabic ] = "ÛíÑ Ğáß";
     Text[ turkish ] = "Diğer";
-    Text[ catalan ] = "Otros";
+    Text[ catalan ] = "Altres";
     Text[ finnish ] = "Muu";
 };
 String STR_EFFECT_ROLL
@@ -10858,7 +10878,7 @@ String STR_EFFECT_ROLL
     Text[ chinese_traditional ] = "æ»¾å‹•";
     Text[ arabic ] = "İÑÔ";
     Text[ turkish ] = "Kaydır";
-    Text[ catalan ] = "Rodar";
+    Text[ catalan ] = "Roda";
     Text[ finnish ] = "Vieritä";
 };
 String STR_EFFECT_STRETCH
@@ -10884,7 +10904,7 @@ String STR_EFFECT_STRETCH
     Text[ chinese_traditional ] = "ä¼¸å±•";
     Text[ turkish ] = "Damlama efekti";
     Text[ arabic ] = "ÊäŞíØ";
-    Text[ catalan ] = "Gotear";
+    Text[ catalan ] = "Build Up";
 };
 String STR_EFFECT_APPEAR
 {
@@ -10908,7 +10928,7 @@ String STR_EFFECT_APPEAR
     Text[ chinese_traditional ] = "é¡¯ç¤º";
     Text[ arabic ] = "ÙåæÑ";
     Text[ turkish ] = "Görün";
-    Text[ catalan ] = "Descubrir";
+    Text[ catalan ] = "Descobreix";
     Text[ finnish ] = "Ulkoasu";
 };
 String STR_GLUE_ESCDIR_SMART
@@ -10958,7 +10978,7 @@ String STR_GLUE_ESCDIR_LEFT
     Text[ chinese_traditional ] = "å·¦";
     Text[ arabic ] = "íÓÇÑ";
     Text[ turkish ] = "Sol";
-    Text[ catalan ] = "Izquierda";
+    Text[ catalan ] = "Esquerra";
     Text[ finnish ] = "Vasen";
 };
 String STR_GLUE_ESCDIR_RIGHT
@@ -10983,7 +11003,7 @@ String STR_GLUE_ESCDIR_RIGHT
     Text[ chinese_traditional ] = "å³";
     Text[ arabic ] = "íãíä";
     Text[ turkish ] = "Sağ";
-    Text[ catalan ] = "Derecha";
+    Text[ catalan ] = "Dreta";
     Text[ finnish ] = "Oikea";
 };
 String STR_GLUE_ESCDIR_TOP
@@ -11008,7 +11028,7 @@ String STR_GLUE_ESCDIR_TOP
     Text[ chinese_traditional ] = "ä¸Š";
     Text[ arabic ] = "ÃÚáì";
     Text[ turkish ] = "Üst";
-    Text[ catalan ] = "Arriba";
+    Text[ catalan ] = "Amunt";
     Text[ finnish ] = "Yläosa";
 };
 String STR_GLUE_ESCDIR_BOTTOM
@@ -11033,7 +11053,7 @@ String STR_GLUE_ESCDIR_BOTTOM
     Text[ chinese_traditional ] = "ä¸‹";
     Text[ arabic ] = "ÃÓİá";
     Text[ turkish ] = "Alt";
-    Text[ catalan ] = "Abajo";
+    Text[ catalan ] = "Avall";
     Text[ finnish ] = "Alaosa";
 };
 String STR_GLUE_ESCDIR_LO
@@ -11058,7 +11078,7 @@ String STR_GLUE_ESCDIR_LO
     Text[ chinese_traditional ] = "å·¦ä¸Šï¹–";
     Text[ arabic ] = "ÃÚáì ÇáíÓÇÑ¿";
     Text[ turkish ] = "Sol üst?";
-    Text[ catalan ] = "¿Izquierda superior?";
+    Text[ catalan ] = "Esquerra superior?";
     Text[ finnish ] = "Ylävasen?";
 };
 String STR_GLUE_ESCDIR_LU
@@ -11083,7 +11103,7 @@ String STR_GLUE_ESCDIR_LU
     Text[ chinese_traditional ] = "å·¦ä¸‹ï¹–";
     Text[ arabic ] = "ÃÓİá ÇáíÓÇÑ¿";
     Text[ turkish ] = "Sol alt?";
-    Text[ catalan ] = "¿Izquierda inferior?";
+    Text[ catalan ] = "Esquerra inferior?";
     Text[ finnish ] = "Alavasen?";
 };
 String STR_GLUE_ESCDIR_RO
@@ -11108,7 +11128,7 @@ String STR_GLUE_ESCDIR_RO
     Text[ chinese_traditional ] = "å³ä¸Šï¹–";
     Text[ arabic ] = "ÃÚáì Çáíãíä¿";
     Text[ turkish ] = "Sağ üst?";
-    Text[ catalan ] = "¿Derecha superior?";
+    Text[ catalan ] = "Dreta superior?";
     Text[ finnish ] = "Yläoikea?";
 };
 String STR_GLUE_ESCDIR_RU
@@ -11133,7 +11153,7 @@ String STR_GLUE_ESCDIR_RU
     Text[ chinese_traditional ] = "å³ä¸‹ï¹–";
     Text[ arabic ] = "ÃÓİá Çáíãíä¿";
     Text[ turkish ] = "Sağ alt?";
-    Text[ catalan ] = "¿Derecha inferior?";
+    Text[ catalan ] = "Dreta inferior?";
     Text[ finnish ] = "Alaoikea?";
 };
 String STR_GLUE_ESCDIR_HORZ
@@ -11158,7 +11178,7 @@ String STR_GLUE_ESCDIR_HORZ
     Text[ chinese_traditional ] = "æ°´å¹³æ–¹å‘";
     Text[ arabic ] = "ÃİŞí";
     Text[ turkish ] = "Yatay";
-    Text[ catalan ] = "Horizontal";
+    Text[ catalan ] = "Horitzontal";
     Text[ finnish ] = "Vaakataso";
 };
 String STR_GLUE_ESCDIR_VERT
@@ -11208,7 +11228,7 @@ String STR_GLUE_ESCDIR_ALL
     Text[ chinese_traditional ] = "å…¨éƒ¨ï¼Ÿ";
     Text[ arabic ] = "Çáßá¿";
     Text[ turkish ] = "Tümü?";
-    Text[ catalan ] = "¿Todos?";
+    Text[ catalan ] = "Tots?";
     Text[ finnish ] = "Kaikki?";
 };
 String STR_CANT_PERFORM_IN_LIVEMODE
@@ -11234,7 +11254,7 @@ String STR_CANT_PERFORM_IN_LIVEMODE
     Text[ chinese_traditional ] = "ä¸èƒ½åœ¨å¯¦æ³æ¨¡å¼ä¸‹åŸ·è¡Œé€™å€‹æ“ä½œã€‚";
     Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ İí ÇáæÖÚ ÇáãÈÇÔÑ.";
     Text[ turkish ] = "Bu işlem \"canlı\" kipinde yürütülemez.";
-    Text[ catalan ] = "Esta acción no se puede realizar en modo en vivo.";
+    Text[ catalan ] = "Aquesta acció no es pot relitzar en viu.";
     Text[ finnish ] = "Tätä toimintoa ei voi suorittaa reaaliaikaisessa tilassa.";
 };
 String STR_PUBLISH_BACK
@@ -11260,7 +11280,7 @@ String STR_PUBLISH_BACK
     Text[ chinese_traditional ] = "è¿”å›";
     Text[ arabic ] = "ÇáÓÇÈŞ";
     Text[ turkish ] = "Geri";
-    Text[ catalan ] = "Regresar";
+    Text[ catalan ] = "Torna";
     Text[ finnish ] = "Edellinen";
 };
 String STR_PUBLISH_NEXT
@@ -11285,7 +11305,7 @@ String STR_PUBLISH_NEXT
     Text[ chinese_traditional ] = "ç¹¼çºŒ";
     Text[ arabic ] = "ãÊÇÈÚÉ";
     Text[ turkish ] = "İleri";
-    Text[ catalan ] = "Siguiente";
+    Text[ catalan ] = "Següent";
     Text[ finnish ] = "Jatka";
 };
 String STR_PUBLISH_OUTLINE
@@ -11311,7 +11331,7 @@ String STR_PUBLISH_OUTLINE
     Text[ chinese_traditional ] = "æ‘˜è¦";
     Text[ arabic ] = "ÇáÊáÎíÕ";
     Text[ turkish ] = "Özet";
-    Text[ catalan ] = "Resumen";
+    Text[ catalan ] = "Resum";
     Text[ finnish ] = "Tiivistelmä";
 };
 String STR_EYEDROPPER
@@ -11387,7 +11407,7 @@ String STR_VIEWTYPE_EFFECT
     Text[ chinese_traditional ] = "æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑÇÊ";
     Text[ turkish ] = "Efektler";
-    Text[ catalan ] = "Efectos";
+    Text[ catalan ] = "Efectes";
     Text[ finnish ] = "Tehosteet";
 };
 String STR_VIEWTYPE_EXTRAS
@@ -11412,7 +11432,7 @@ String STR_VIEWTYPE_EXTRAS
     Text[ chinese_traditional ] = "å…¶ä»–";
     Text[ arabic ] = "ÃÏæÇÊ ÅÖÇİíÉ";
     Text[ turkish ] = "Araçlar";
-    Text[ catalan ] = "Opciones";
+    Text[ catalan ] = "Opcions";
     Text[ finnish ] = "Lisät";
 };
 String STR_VIEWTYPE_TEXT
@@ -11437,7 +11457,7 @@ String STR_VIEWTYPE_TEXT
     Text[ chinese_traditional ] = "æ–‡å­—æ•ˆæœ";
     Text[ arabic ] = "ÊÃËíÑÇÊ ÇáäÕ";
     Text[ turkish ] = "Metin efektleri";
-    Text[ catalan ] = "Efectos de texto";
+    Text[ catalan ] = "Efectes de text";
     Text[ finnish ] = "Tekstitehoste";
 };
 String STR_VIEWTYPE_ORDER
@@ -11462,7 +11482,7 @@ String STR_VIEWTYPE_ORDER
     Text[ chinese_traditional ] = "é †åº";
     Text[ arabic ] = "ÇáÊÑÊíÈ";
     Text[ turkish ] = "Sıra";
-    Text[ catalan ] = "Orden";
+    Text[ catalan ] = "Ordre";
     Text[ finnish ] = "Järjestys";
 };
 String STR_SIMPRESS
@@ -11516,7 +11536,7 @@ String STR_UNDO_3D_DIALOG
     Text[ chinese_traditional ] = "3D ç‰©ä»¶å±¬æ€§";
     Text[ arabic ] = "ÎÕÇÆÕ ßÇÆä ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesne özellikleri";
-    Text[ catalan ] = "Propiedades de objetos 3D";
+    Text[ catalan ] = "Propietats dels objectes 3D";
     Text[ finnish ] = "Kolmiulotteisen objektin ominaisuudet";
 };
 String STR_UNDO_COLORRESOLUTION
@@ -11542,7 +11562,7 @@ String STR_UNDO_COLORRESOLUTION
     Text[ chinese_traditional ] = "é¡è‰²è§£æåº¦";
     Text[ arabic ] = "ÇÓÊÈÇäÉ ÇáÃáæÇä";
     Text[ turkish ] = "Renk çözünürlüğü";
-    Text[ catalan ] = "Resolución del color";
+    Text[ catalan ] = "Resolució del color";
     Text[ finnish ] = "Väritarkkuus";
 };
 String STR_UNDO_EXPAND_PAGE
@@ -11567,7 +11587,7 @@ String STR_UNDO_EXPAND_PAGE
     Text[ chinese_traditional ] = "æ“´å±•é é¢";
     Text[ arabic ] = "ÊæÓíÚ ÇáÕİÍÉ";
     Text[ turkish ] = "Ek sayfa oluştur";
-    Text[ catalan ] = "Ampliar página";
+    Text[ catalan ] = "Amplia la pàgina";
     Text[ finnish ] = "Laajenna dia";
 };
 String STR_UNDO_SUMMARY_PAGE
@@ -11592,7 +11612,7 @@ String STR_UNDO_SUMMARY_PAGE
     Text[ chinese_traditional ] = "å…§å®¹ç›®éŒ„-é é¢";
     Text[ arabic ] = "ÕÍİÉ İåÑÓ ãÍÊæíÇÊ";
     Text[ turkish ] = "İçindekiler sayfası";
-    Text[ catalan ] = "Página de contenido";
+    Text[ catalan ] = "Pàgina de contingut";
     Text[ finnish ] = "Sisällysluettelodia";
 };
 String STR_ASK_GALLERY_INSERT
@@ -11618,7 +11638,7 @@ String STR_ASK_GALLERY_INSERT
     Text[ chinese_traditional ] = "æ‚¨è¦å°‡é€™å€‹éŸ³é »åŠ å…¥ç•«å»Šä¸»é¡Œï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÅÖÇİÉ ÇáÕæÊ Åáì ãæÖæÚ ÇáÌÇáíÑí¿";
     Text[ turkish ] = "Sesi galeri konusuna eklemek istiyor musunuz?";
-    Text[ catalan ] = "¿Desea añadir el sonido al tema Gallery?";
+    Text[ catalan ] = "Vol afegir el so al tema Gallery";
     Text[ finnish ] = "Haluatko lisätä äänet galleriaan?";
 };
 
@@ -11645,7 +11665,7 @@ String STR_TWAIN_NO_SOURCE_UNX
     Text[ chinese_traditional ] = "ç•¶å‰ç„¡æ³•æä¾› SANE ä¾†æºã€‚";
     Text[ arabic ] = "ááÃÓİ áÇ íæÌÏ ÍÇáíÇğ ãÕÏÑ SANE.";
     Text[ turkish ] = "Henüz bir SANE kaynağı mevcut değil.";
-    Text[ catalan ] = "Por el momento no existe ninguna fuente SANE disponible.";
+    Text[ catalan ] = "De moment no hi ha cap SANE disponible";
     Text[ finnish ] = "SANE-lähde ei ole tällä hetkellä käytettävissä.";
 };
 
@@ -11672,7 +11692,7 @@ String STR_TWAIN_NO_SOURCE
     Text[ chinese_traditional ] = "ç•¶å‰ä¸å­˜åœ¨ä»»ä½• TWAIN ä¾†æºã€‚";
     Text[ arabic ] = "ááÃÓİ áÇ íæÌÏ ÍÇáíÇğ ãÕÏÑ TWAIN.";
     Text[ turkish ] = "Henüz bir TWAIN kaynağı mevcut değil.";
-    Text[ catalan ] = "Por el momento no existe ninguna fuente TWAIN disponible.";
+    Text[ catalan ] = "De moment no hi ha cap font TWAIN disponible.";
     Text[ finnish ] = "TWAIN-lähteitä ei ole nyt saatavilla.";
 };
 
@@ -11698,7 +11718,7 @@ String STR_FIX
     Text[ chinese_traditional ] = "å›ºå®š";
     Text[ arabic ] = "ËÇÈÊ";
     Text[ turkish ] = "Sabit";
-    Text[ catalan ] = "Fijo";
+    Text[ catalan ] = "Fix";
     Text[ finnish ] = "Kiinteä";
 };
 String STR_VAR
@@ -11748,7 +11768,7 @@ String STR_STANDARD_NORMAL
     Text[ chinese_traditional ] = "æ¨™æº–";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
-    Text[ catalan ] = "Predeterminado";
+    Text[ catalan ] = "Predeterminat";
     Text[ finnish ] = "Vakio";
 };
 String STR_STANDARD_SMALL
@@ -11773,7 +11793,7 @@ String STR_STANDARD_SMALL
     Text[ chinese_traditional ] = "æ¨™æº–(çŸ­)";
     Text[ arabic ] = "ŞíÇÓí (ŞÕíÑ)";
     Text[ turkish ] = "Standart (kısa)";
-    Text[ catalan ] = "Estándar (corto)";
+    Text[ catalan ] = "Estàndard (curt)";
     Text[ finnish ] = "Vakio (lyhyt)";
 };
 String STR_STANDARD_BIG
@@ -11798,7 +11818,7 @@ String STR_STANDARD_BIG
     Text[ chinese_traditional ] = "æ¨™æº– (é•·)";
     Text[ arabic ] = "ŞíÇÓí (Øæíá)";
     Text[ turkish ] = "Standart (uzun)";
-    Text[ catalan ] = "Estándar (largo)";
+    Text[ catalan ] = "Estàndard (llarg)";
     Text[ finnish ] = "Vakio (pitkä)";
 };
 String STR_FILEFORMAT_NAME_EXT
@@ -11823,7 +11843,7 @@ String STR_FILEFORMAT_NAME_EXT
     Text[ chinese_traditional ] = "æª”æ¡ˆå";
     Text[ arabic ] = "ÇÓã Çáãáİ";
     Text[ turkish ] = "Dosya adı";
-    Text[ catalan ] = "Nombre del archivo";
+    Text[ catalan ] = "Nom del fitxer";
     Text[ finnish ] = "Tiedoston nimi";
 };
 String STR_FILEFORMAT_FULLPATH
@@ -11848,7 +11868,7 @@ String STR_FILEFORMAT_FULLPATH
     Text[ chinese_traditional ] = "è·¯å¾‘/æª”æ¡ˆå";
     Text[ arabic ] = "ÇáãÓÇÑ/ÇÓã Çáãáİ";
     Text[ turkish ] = "Veri yolu/dosya adı";
-    Text[ catalan ] = "Ruta/Nombre de archivo";
+    Text[ catalan ] = "Ruta/Nom del fitxer";
     Text[ finnish ] = "Polku/tiedosto";
 };
 String STR_FILEFORMAT_PATH
@@ -11898,7 +11918,7 @@ String STR_FILEFORMAT_NAME
     Text[ chinese_traditional ] = "ä¸å«å‰¯æª”åçš„æª”æ¡ˆåç¨±";
     Text[ arabic ] = "ÇÓã Çáãáİ ÈÏæä ÇãÊÏÇÏ";
     Text[ turkish ] = "Uzantısız dosya adı";
-    Text[ catalan ] = "Nombre del archivo sin extensión";
+    Text[ catalan ] = "Nom del fitxcer sense extensió";
     Text[ finnish ] = "Tiedostonimi ilman tunnistetta";
 };
 String STR_RELEASE_GRAPHICLINK
@@ -11926,7 +11946,7 @@ String STR_RELEASE_GRAPHICLINK
     Text[ chinese_traditional ] = "é€™å€‹åœ–å½¢æ˜¯å’Œæ–‡ä»¶é€£çµçš„ã€‚æ‚¨è¦å–æ¶ˆé€™å€‹é€£çµï¼Œç·¨è¼¯é€™å€‹åœ–å½¢ï¼Ÿ";
     Text[ arabic ] = "åĞå ÇáÑÓãÉ ãÑÊÈØÉ ÈÇáãÓÊäÏ. åá ÊÑíÏ ÅÒÇáÉ ÇáÇÑÊÈÇØ áßí ÊÊãßä ãä ÊÍÑíÑ ÇáÑÓãÉ¿";
     Text[ turkish ] = "Bu grafik belgeye bağlı. Grafiği düzenlemek için bağlantıyı kaldrmak istiyor musunuz?";
-    Text[ catalan ] = "La imagen está vinculada al documento. ¿Desea usted deshacer el vínculo para editar la imagen?";
+    Text[ catalan ] = "La imatge està vinvulada al document. Voleu desfer el vincle per a editar la imatge?";
 };
 String STR_NEW_CUSTOMSHOW
 {
@@ -11950,7 +11970,7 @@ String STR_NEW_CUSTOMSHOW
     Text[ chinese_traditional ] = "æ–°å»ºä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãÎÕÕ ÌÏíÏ";
     Text[ turkish ] = "Yeni özel ekran sunusu";
-    Text[ catalan ] = "Nueva presentación personalizada";
+    Text[ catalan ] = "Nova presentació personalitzada";
     Text[ finnish ] = "Uusi mukautettu diaesitys";
 };
  // Das Leerzeichen ist beabsichtigt !!!
@@ -11976,7 +11996,7 @@ String STR_COPY_CUSTOMSHOW
     Text[ chinese_traditional ] = "è¤‡è£½ ";
     Text[ arabic ] = "äÓÎÉ ";
     Text[ turkish ] = "Kopya ";
-    Text[ catalan ] = "Copia  ";
+    Text[ catalan ] = "Còpia  ";
     Text[ finnish ] = "Kopioi";
 };
 String STR_IMPRESS_DOCUMENT
@@ -12002,7 +12022,7 @@ String STR_IMPRESS_DOCUMENT
     Text[ chinese_traditional ] = "ç°¡å ±";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "Sunu";
-    Text[ catalan ] = "Presentación";
+    Text[ catalan ] = "Presentació";
     Text[ finnish ] = "Esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_60
@@ -12027,7 +12047,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_60
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ç°¡å ±";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 6.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 6.0)";
-    Text[ catalan ] = "%PRODUCTNAME 6.0 Presentación";
+    Text[ catalan ] = "%PRODUCTNAME 6.0 Presentació";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_50
@@ -12052,7 +12072,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_50
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ç°¡å ±";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 5.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 5.0)";
-    Text[ catalan ] = "%PRODUCTNAME 5.0 Presentación";
+    Text[ catalan ] = "%PRODUCTNAME 5.0 Presentació";
     Text[ finnish ] = "%PRODUCTNAME 5.0 -esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_40
@@ -12078,7 +12098,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_40
     Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ç°¡å ±";
     Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 4.0";
     Text[ turkish ] = "Sunu (%PRODUCTNAME 4.0)";
-    Text[ catalan ] = "%PRODUCTNAME 4.0 Presentación";
+    Text[ catalan ] = "%PRODUCTNAME 4.0 Presentació";
     Text[ finnish ] = "%PRODUCTNAME 4,0 -esitys";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_31
@@ -12104,7 +12124,7 @@ String STR_IMPRESS_DOCUMENT_FULLTYPE_31
     Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 åœ–å½¢/ç°¡å ±";
     Text[ arabic ] = "ÑÓãÉ / ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 3.0";
     Text[ turkish ] = "Grafik/Sunu (%PRODUCTNAME 3.0)";
-    Text[ catalan ] = "%PRODUCTNAME 3.0 Imagen / Presentación";
+    Text[ catalan ] = "%PRODUCTNAME 3.0 Imatge / Presentació";
     Text[ finnish ] = "Kuva/esitys (%PRODUCTNAME 3.0)";
 };
 String STR_GRAPHIC_DOCUMENT
@@ -12129,7 +12149,7 @@ String STR_GRAPHIC_DOCUMENT
     Text[ chinese_traditional ] = "ç¹ªåœ–";
     Text[ arabic ] = "ÑÓã";
     Text[ turkish ] = "Çizim";
-    Text[ catalan ] = "Dibujo";
+    Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirros";
 };
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
@@ -12154,7 +12174,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
     Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ç¹ªåœ–";
     Text[ arabic ] = "ÑÓãÉ ãä %PRODUCTNAME 5.0";
     Text[ turkish ] = "%PRODUCTNAME 5.0 çizimi";
-    Text[ catalan ] = "PRODUCTNAME 5.0 Dibujo";
+    Text[ catalan ] = "PRODUCTNAME 5.0 Dibuix";
     Text[ finnish ] = "Piirros (%PRODUCTNAME 5.0)";
 };
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
@@ -12179,7 +12199,7 @@ String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
     Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ç¹ªåœ–";
     Text[ arabic ] = "ÑÓãÉ ãä %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME 6.0 çizimi";
-    Text[ catalan ] = "PRODUCTNAME 6.0 Dibujo";
+    Text[ catalan ] = "PRODUCTNAME 6.0 Dibuix";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -piirros";
 };
 String STR_VIEWTYPE_VIEW
@@ -12204,7 +12224,7 @@ String STR_VIEWTYPE_VIEW
     Text[ chinese_traditional ] = "é¡¯ç¤º";
     Text[ arabic ] = "ÇáÚÑÖ";
     Text[ turkish ] = "Görüntü";
-    Text[ catalan ] = "Representación";
+    Text[ catalan ] = "Representació";
     Text[ finnish ] = "Varjostus";
 };
 String STR_VIEWTYPE_GEO
@@ -12304,7 +12324,7 @@ String STR_BREAK_METAFILE
     Text[ chinese_traditional ] = "æ‹†é–‹å…ƒæª”æ¡ˆ...";
     Text[ arabic ] = "İß ÊÌãíÚ ãáİ (ãáİÇÊ) Úáæí (ÚáæíÉ)...";
     Text[ turkish ] = "Metafile'leri çöz...";
-    Text[ catalan ] = "Separar metaarchivo(s)...";
+    Text[ catalan ] = "Separa el(s) Metafile(s)...";
     Text[ finnish ] = "Pura metatiedostojen ryhmitys...";
 };
 String STR_BREAK_FAIL
@@ -12329,7 +12349,7 @@ String STR_BREAK_FAIL
     Text[ chinese_traditional ] = "ç„¡æ³•æ‹†é–‹æ‰€æœ‰çš„ç¹ªåœ–ç‰©ä»¶ï¼";
     Text[ arabic ] = "ÊÚĞÑ İß ÊÌãíÚ ßá ÇáßÇÆäÇÊ ÇáÑÓæãíÉ!";
     Text[ turkish ] = "Tüm çizim grupları çözülemedi!";
-    Text[ catalan ] = "¡No se pudieron separar todos los dibujos!";
+    Text[ catalan ] = "No s'han pogut separar tots els dibuixos!";
     Text[ finnish ] = "Kaikkien piirrosobjektiryhmien purkaminen ei onnistunut.";
 };
 
@@ -12357,7 +12377,7 @@ String STR_PUBDLG_SAMENAME
     Text[ chinese_traditional ] = "å·²ç¶“æœ‰ä¸€å€‹åŒåçš„æ¨£å¼ã€‚\næ‚¨è¦è¦†å¯«ï¼Ÿ";
     Text[ arabic ] = "íæÌÏ ãä ŞÈá ÊÕãíã ÈåĞÇ ÇáÇÓã\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bu adı taşıyan bir tasarım mevcut durumda.\nÜzerine yazmak istiyor musunuz?";
-    Text[ catalan ] = "Ya existe un diseño con este nombre.\n¿Desea sobrescribirlo?";
+    Text[ catalan ] = "Ja existeix un disseny amb aquest nom.\nVoleu sobrescriure'l?";
     Text[ finnish ] = "Tämänniminen suunnitelma on jo olemassa.\nHaluatko korvata sen?";
 };
 
@@ -12383,7 +12403,7 @@ String STR_HTMLATTR_TEXT
     Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ arabic ] = "ÇáäÕ";
     Text[ turkish ] = "Metin";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
 };
 
@@ -12409,7 +12429,7 @@ String STR_HTMLATTR_LINK
     Text[ chinese_traditional ] = "è¶…é€£çµ";
     Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
     Text[ turkish ] = "Hyperlink";
-    Text[ catalan ] = "Hiperenlace";
+    Text[ catalan ] = "Hiperenllaç";
     Text[ finnish ] = "Hyperlinkki";
 };
 
@@ -12435,7 +12455,7 @@ String STR_HTMLATTR_VLINK
     Text[ chinese_traditional ] = "è¨ªå•éçš„æ·å¾‘";
     Text[ arabic ] = "ÇÑÊÈÇØ ÓÈŞ ÒíÇÑÊå";
     Text[ turkish ] = "Kullanılmış bağlantı";
-    Text[ catalan ] = "Enlace visitado";
+    Text[ catalan ] = "Enllaç visitat";
     Text[ finnish ] = "Käyty linkki";
 };
 
@@ -12461,7 +12481,7 @@ String STR_HTMLATTR_ALINK
     Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­çš„æ·å¾‘";
     Text[ arabic ] = "ÇáÇÑÊÈÇØ ÇáäÔØ";
     Text[ turkish ] = "Etkin bağlantı";
-    Text[ catalan ] = "Enlace activo";
+    Text[ catalan ] = "Enllaç actiu";
     Text[ finnish ] = "Aktiivinen linkki";
 };
 
@@ -12487,7 +12507,7 @@ String STR_HTMLEXP_NOTES
     Text[ chinese_traditional ] = "å‚™è¨»";
     Text[ arabic ] = "ãáÇÍÙÇÊ";
     Text[ turkish ] = "Notlar";
-    Text[ catalan ] = "Notas";
+    Text[ catalan ] = "Notes";
     Text[ finnish ] = "Huomautukset";
 };
 
@@ -12513,7 +12533,7 @@ String STR_HTMLEXP_CONTENTS
     Text[ chinese_traditional ] = "å…§å®¹ç›®éŒ„";
     Text[ arabic ] = "İåÑÓ ÇáãÍÊæíÇÊ";
     Text[ turkish ] = "İçindekiler";
-    Text[ catalan ] = "Índice de contenido";
+    Text[ catalan ] = "Ínndex de contingut";
     Text[ finnish ] = "Sisällysluettelo";
 };
 
@@ -12539,7 +12559,7 @@ String STR_HTMLEXP_CLICKSTART
     Text[ chinese_traditional ] = "æŒ‰ä¸€ä¸‹é€™ï¿½å•Ÿå‹•";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊÈÏÃ";
     Text[ turkish ] = "Başlamak için burayı tıklayın";
-    Text[ catalan ] = "Pulse aquí para comenzar";
+    Text[ catalan ] = "Prem aquí per començar";
     Text[ finnish ] = "Aloita napsauttamalla tätä";
 };
 
@@ -12565,7 +12585,7 @@ String STR_HTMLEXP_AUTHOR
     Text[ chinese_traditional ] = "ä½œè€…";
     Text[ arabic ] = "ÇáãÄáİ";
     Text[ turkish ] = "Yazan";
-    Text[ catalan ] = "Remitent";
+    Text[ catalan ] = "Autor";
     Text[ finnish ] = "Laatija";
 };
 
@@ -12591,7 +12611,7 @@ String STR_HTMLEXP_EMAIL
     Text[ chinese_traditional ] = "é›»å­éƒµä»¶";
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
     Text[ turkish ] = "E-posta";
-    Text[ catalan ] = "correu electròic";
+    Text[ catalan ] = "Correu electrònic";
     Text[ finnish ] = "Sähköposti";
 };
 
@@ -12617,7 +12637,7 @@ String STR_HTMLEXP_HOMEPAGE
     Text[ chinese_traditional ] = "é¦–é ";
     Text[ arabic ] = "ÕİÍÉ ÇáÈÏÁ";
     Text[ turkish ] = "Web sayfası";
-    Text[ catalan ] = "Página principal";
+    Text[ catalan ] = "Pàgina principal";
     Text[ finnish ] = "Kotisivu";
 };
 
@@ -12643,7 +12663,7 @@ String STR_HTMLEXP_INFO
     Text[ chinese_traditional ] = "å…¶ä»–è³‡è¨Š";
     Text[ arabic ] = "ãÚáæãÇÊ ÂÎÑì";
     Text[ turkish ] = "Diğer bilgiler";
-    Text[ catalan ] = "Otras informaciones";
+    Text[ catalan ] = "Altres informacions";
     Text[ finnish ] = "Lisätietoja";
 };
 
@@ -12669,7 +12689,7 @@ String STR_HTMLEXP_CREATED
     Text[ chinese_traditional ] = "æœ€é©é¡¯ç¤º";
     Text[ arabic ] = "ÃİÖá ÚÑÖ ãÚ";
     Text[ turkish ] = "En iyi görüntü için:";
-    Text[ catalan ] = "Mejor representación con";
+    Text[ catalan ] = "Millor representació amb";
     Text[ finnish ] = "Yhteensopivin selain";
 };
 
@@ -12696,7 +12716,7 @@ String STR_HTMLEXP_DOWNLOAD
     Text[ chinese_traditional ] = "ä¸‹è¼‰ç°¡å ±ä¾†æº";
     Text[ arabic ] = "ÊäÒíá ãÕÏÑ ÇáÚÑÖ ÇáÊŞÏíãí";
     Text[ turkish ] = "Sunu kaynağını indir";
-    Text[ catalan ] = "Descargar fuente de presentación";
+    Text[ catalan ] = "Descarregar la persentació";
     Text[ finnish ] = "Lataa esitys";
 };
 
@@ -12722,7 +12742,7 @@ String STR_HTMLEXP_NOFRAMES
     Text[ chinese_traditional ] = "å¾ˆéºæ†¾ï¹æ‚¨çš„ç€è¦½å™¨ä¸æ”¯æ´è¨Šæ¡†æ¶ã€‚";
     Text[ arabic ] = "ÚĞÑÇğ¡ ÇáãÊÕİÍ ÇáÎÇÕ Èß áÇ íÏÚã ÇáÅØÇÑÇÊ";
     Text[ turkish ] = "Web tarayıcınız frame desteklemiyor";
-    Text[ catalan ] = "Lamentablemente su navegador no acepta Frames";
+    Text[ catalan ] = "El seu navegador no soporta frames";
     Text[ finnish ] = "Ikävä kyllä selain ei tue irrallisia kehyksiä.";
 };
 
@@ -12748,7 +12768,7 @@ String STR_HTMLEXP_FIRSTPAGE
     Text[ chinese_traditional ] = "é¦–é ";
     Text[ arabic ] = "ÇáÕİÍÉ ÇáÃæáì";
     Text[ turkish ] = "İlk sayfa";
-    Text[ catalan ] = "Primera página";
+    Text[ catalan ] = "Primera pàgina";
     Text[ finnish ] = "Ensimmäinen sivu";
 };
 
@@ -12774,7 +12794,7 @@ String STR_HTMLEXP_LASTPAGE
     Text[ chinese_traditional ] = "æœ€å¾Œä¸€é ";
     Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
     Text[ turkish ] = "Son sayfa";
-    Text[ catalan ] = "Última página";
+    Text[ catalan ] = "Última pàgina";
     Text[ finnish ] = "Viimeinen sivu";
 };
 
@@ -12800,7 +12820,7 @@ String STR_HTMLEXP_SETTEXT
     Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ arabic ] = "ÇáäÕ";
     Text[ turkish ] = "Metin";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
 };
 
@@ -12826,7 +12846,7 @@ String STR_HTMLEXP_SETGRAPHIC
     Text[ chinese_traditional ] = "åœ–å½¢";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ turkish ] = "Grafik";
-    Text[ catalan ] = "Imagen";
+    Text[ catalan ] = "Imatge";
     Text[ finnish ] = "Kuvat";
 };
 
@@ -12852,7 +12872,7 @@ String STR_HTMLEXP_OUTLINE
     Text[ chinese_traditional ] = "å«æœ‰å…§å®¹";
     Text[ arabic ] = "ÈãÍÊæíÇÊ";
     Text[ turkish ] = "İçerik ile";
-    Text[ catalan ] = "Con contenido";
+    Text[ catalan ] = "Amb contingut";
     Text[ finnish ] = "Sisällön kanssa";
 };
 
@@ -12878,7 +12898,7 @@ String STR_HTMLEXP_NOOUTLINE
     Text[ chinese_traditional ] = "æ²’æœ‰å…§å®¹";
     Text[ arabic ] = "ÈÏæä ãÍÊæíÇÊ";
     Text[ turkish ] = "İçeriksiz";
-    Text[ catalan ] = "Sin contenido";
+    Text[ catalan ] = "Sense contingut";
     Text[ finnish ] = "Ilman sisältöä";
 };
 
@@ -12904,7 +12924,7 @@ String STR_WEBVIEW_SAVE
     Text[ chinese_traditional ] = "è½‰åˆ°æŒ‡å®šçš„é é¢";
     Text[ arabic ] = "Åáì ÇáÕİÍÉ ÇáãÚØÇÉ";
     Text[ turkish ] = "Kaydet";
-    Text[ catalan ] = "A la página indicada";
+    Text[ catalan ] = "A la pàgina indicada";
     Text[ finnish ] = "Määritetylle sivulle";
 };
 
@@ -12930,7 +12950,7 @@ String STR_UNDO_VECTORIZE
     Text[ chinese_traditional ] = "é»é™£åœ–è½‰æ›æˆå¤šé‚Šå½¢";
     Text[ arabic ] = "ÊÍæíá ÇáÕæÑÉ ÇáäŞØíÉ Åáì ãÖáÚ";
     Text[ turkish ] = "Bit eşlemi çokgene dönüştür";
-    Text[ catalan ] = "Convertir bitmap en polígono";
+    Text[ catalan ] = "Converteix bitmap en polígon";
     Text[ finnish ] = "Muunna bittikartta monikulmioksi";
 };
 
@@ -12956,7 +12976,7 @@ String STR_PRES_SOFTEND
     Text[ chinese_traditional ] = "è«‹æŒ‰ä¸€ä¸‹æ»‘é¼ æŒ‰éˆ•ï¼ŒçµæŸæ”¾æ˜ ç°¡å ±...";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÅäåÇÁ ÇáÚÑÖ ÇáÊŞÏíãí...";
     Text[ turkish ] = "Sunudan çıkmak için tıklayın...";
-    Text[ catalan ] = "Pulse para terminar la presentación...";
+    Text[ catalan ] = "Premeu aquí per acabar la persentació...";
     Text[ finnish ] = "Napsauta, jos haluat lopettaa esityksen...";
 };
 
@@ -13034,7 +13054,7 @@ STRING STR_WIZARD_POSITION
     Text[ chinese_traditional ] = "<å…¶ä»–çš„ä½ç½®>";
     Text[ arabic ] = "<ãæÖÚ ÂÎÑ>";
     Text[ turkish ] = "<Diğer konum>";
-    Text[ catalan ] = "<Otra posición>";
+    Text[ catalan ] = "<Una altra posició>";
     Text[ finnish ] = "<Toinen sijainti>";
 };
 
@@ -13060,7 +13080,7 @@ STRING STR_ISLOADING
     Text[ chinese_traditional ] = "æ­£åœ¨è¼‰å…¥...";
     Text[ arabic ] = "ÓíÊã ÊÍãíá...";
     Text[ turkish ] = "Yükleniyor...";
-    Text[ catalan ] = "Cargando...";
+    Text[ catalan ] = "S'està carregant...";
     Text[ finnish ] = "Ladataan...";
 };
 
@@ -13086,7 +13106,7 @@ String STR_DRAW_GRAF_TOOLBOX
     Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶åˆ—";
     Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
     Text[ turkish ] = "Grafik nesne çubuğu";
-    Text[ catalan ] = "Barra de objetos gráficos";
+    Text[ catalan ] = "Graphics Object Bar";
     Text[ finnish ] = "Grafiikkaobjektipalkki";
 };
 
@@ -13112,7 +13132,7 @@ String STR_UNDO_APPLY_3D_FAVOURITE
     Text[ chinese_traditional ] = "æŒ‡å®š 3D æœ€æ„›";
     Text[ arabic ] = "ÊØÈíŞ ÇáÎÕÇÆÕ ËáÇËíÉ ÇáÃÈÚÇÏ ÇáãõİÖáÉ";
     Text[ turkish ] = "Sık kullanılan 3B efekt uygula";
-    Text[ catalan ] = "Asignar favorito 3D";
+    Text[ catalan ] = "Assignar el 3D predilecte";
     Text[ finnish ] = "Käytä 3D-suosikkia";
 };
 
@@ -13139,7 +13159,7 @@ String STR_ERROR_OBJNOCREATE_PLUGIN
     Text[ chinese_traditional ] = "ç„¡æ³•æ’å…¥æ–‡ä»¶ % å…§å«çš„ Plug-inã€‚";
     Text[ arabic ] = "áÇ íãßä ÅÏÑÇÌ Plug-in ãä ÇáãÓÊäÏ %.";
     Text[ turkish ] = "% belgesinden Plug-in eklenemiyor.";
-    Text[ catalan ] = "No se puede insertar plug-in del documento %.";
+    Text[ catalan ] = "No es pot insertar l'extensió en el document %.";
     Text[ finnish ] = "Lisäosaa ei voitu lisätä asiakirjasta %.";
 };
 
@@ -13165,7 +13185,7 @@ String STR_UNDO_GRAFFILTER
     Text[ chinese_traditional ] = "åœ–å½¢éæ¿¾å™¨";
     Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
     Text[ turkish ] = "Grafik filtresi";
-    Text[ catalan ] = "Filtro de imagen";
+    Text[ catalan ] = "Filtre d'imatge";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
 
@@ -13191,7 +13211,7 @@ String STR_WARNING_NOSOUNDFILE
     Text[ chinese_traditional ] = "æª”æ¡ˆ %\nä¸æ˜¯æœ‰æ•ˆçš„è²éŸ³æª”æ¡ˆï¼";
     Text[ arabic ] = "Çáãáİ %\náíÓ ãáİÇğ ÕæÊíÇğ !";
     Text[ turkish ] = "Dosya %\ngeçerli bir ses dosyası değil!";
-    Text[ catalan ] = "¡ El archivo %\nno es un archivo audio válido !";
+    Text[ catalan ] = "El fitxer %\nno és un fitxer d'àudio vàlid!";
     Text[ finnish ] = "Tiedosto %\nei ole kelvollinen äänitiedosto.";
 };
 
@@ -13217,7 +13237,7 @@ String STR_UNDO_CONVERT_TO_METAFILE
     Text[ chinese_traditional ] = "è½‰æ›æˆå…ƒæª”æ¡ˆ";
     Text[ arabic ] = "ÊÍæíá Åáì ãáİ Úáæí";
     Text[ turkish ] = "Metafile'e dönüştür";
-    Text[ catalan ] = "Convertir en Metafile";
+    Text[ catalan ] = "Convertir a Metafile";
     Text[ finnish ] = "Muunna metatiedostoksi";
 };
 
@@ -13243,7 +13263,7 @@ String STR_UNDO_CONVERT_TO_BITMAP
     Text[ chinese_traditional ] = "è½‰æ›æˆé»é™£åœ–";
     Text[ arabic ] = "ÊÍæíá Åáì ÕæÑÉ äŞØíÉ";
     Text[ turkish ] = "Bit eşleme dönüştür";
-    Text[ catalan ] = "Convertir en bitmap";
+    Text[ catalan ] = "Convertir a bitmap";
     Text[ finnish ] = "Muunna bittikartaksi";
 };
 String STR_PACKNGO_FILEDLG_TITLE
@@ -13269,7 +13289,7 @@ String STR_PACKNGO_FILEDLG_TITLE
     Text[ chinese_traditional ] = "å£“ç¸® - å¦å­˜æ–°æª”";
     Text[ arabic ] = "ÖÛØ - ÍİÙ ÈÇÓã";
     Text[ turkish ] = "Sıkıştır - Farklı kaydet";
-    Text[ catalan ] = "Comprimir - Guardar como";
+    Text[ catalan ] = "Compacta - Desa com";
     Text[ finnish ] = "Pakkaa - Tallenna nimellä";
 };
 
@@ -13295,7 +13315,7 @@ String STR_HTMLEXP_ERROR_CREATE_FILE
     Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹æª”æ¡ˆ $(URL1) ã€‚";
     Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ Çáãáİ$(URL1).";
     Text[ turkish ] = "Dosya $(URL1) oluşturulamadı.";
-    Text[ catalan ] = "No se pudo crear el archivo $(URL1).";
+    Text[ catalan ] = "No es pot crear el fitxer $(URL1).";
     Text[ finnish ] = "Tiedoston $(URL1) luominen ei onnistu.";
 };
 String STR_HTMLEXP_ERROR_OPEN_FILE
@@ -13320,7 +13340,7 @@ String STR_HTMLEXP_ERROR_OPEN_FILE
     Text[ chinese_traditional ] = "ç„¡æ³•æ‰“é–‹æª”æ¡ˆ $(URL1)ã€‚";
     Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ$(URL1).";
     Text[ turkish ] = "Dosya $(URL1) açılamadı.";
-    Text[ catalan ] = "No se pudo abrir el archivo $(URL1).";
+    Text[ catalan ] = "No es pot obrir el fitxer $(URL1).";
     Text[ finnish ] = "Tiedoston $(URL1) avaaminen ei onnistu.";
 };
 String STR_HTMLEXP_ERROR_COPY_FILE
@@ -13345,7 +13365,7 @@ String STR_HTMLEXP_ERROR_COPY_FILE
     Text[ chinese_traditional ] = "æª”æ¡ˆ $(URL1) ç„¡æ³•è¤‡è£½æˆ $(URL2)ã€‚";
     Text[ arabic ] = "ÊÚĞÑ äÓÎ Çáãáİ $(URL1) Åáì $(URL2).";
     Text[ turkish ] = "Dosya $(URL1) $(URL2) hedefine kopyalanamadı.";
-    Text[ catalan ] = "No se pudo copiar el archivo $(URL1) a $(URL2).";
+    Text[ catalan ] = "No es pot copiar el fitxer $(URL1) a $(URL2).";
     Text[ finnish ] = "Tiedostoa $(URL1) ei voitu kopioida kohteeseen $(URL2)";
 };
 String STR_HTMLEXP_ERROR_GALLERY
@@ -13370,7 +13390,7 @@ String STR_HTMLEXP_ERROR_GALLERY
     Text[ chinese_traditional ] = "å¾ç•«å»Šè¤‡è£½åœ–å½¢æª”æ™‚ç™¼ç”ŸéŒ¯èª¤ã€‚";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ äÓÎ ãáİÇÊ ÇáÑÓæãÇÊ ãä ÇáÌÇáíÑí.";
     Text[ turkish ] = "Grafik dosyaları galeriden kopyalanırken hata ortaya çıktı.";
-    Text[ catalan ] = "Ha ocurrido un error al copiar archivos gráficos de la Gallery.";
+    Text[ catalan ] = "S'ha produït un error en copiar els fitxer gràfics a la Gallery.";
     Text[ finnish ] = "On ilmennyt virhe kopioitaessa grafiikkatiedostoja galleriasta.";
 };
 
@@ -13396,7 +13416,7 @@ String STR_UNDO_CONVERT_TO_CONTOUR
     Text[ chinese_traditional ] = "è½‰æ›æˆè¼ªå»“";
     Text[ arabic ] = "ÊÍæíá Åáì ÎØ ßİÇİí";
     Text[ turkish ] = "Kontura dönüştür";
-    Text[ catalan ] = "Convertir a contorno";
+    Text[ catalan ] = "Converteix a contorn";
     Text[ finnish ] = "Muunna ääriviivaksi";
 };
 
@@ -13422,7 +13442,7 @@ String STR_PAGE_BACKGROUND_TITLE
     Text[ chinese_traditional ] = "è¨­å®šé é¢";
     Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáÕİÍÉ";
     Text[ turkish ] = "Sayfa yapısı";
-    Text[ catalan ] = "Configuración de página";
+    Text[ catalan ] = "Configuració de pàgina";
     Text[ finnish ] = "Sivun asetukset";
 };
 String STR_PAGE_BACKGROUND_TXT
@@ -13448,7 +13468,7 @@ String STR_PAGE_BACKGROUND_TXT
     Text[ chinese_traditional ] = "è¨­å®šé©ç”¨æ–¼æ‰€æœ‰é é¢ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÊØÈíŞ ÅÚÏÇÏÇÊ ÇáÎáİíÉ åĞå Úáì ßá ÇáÕİÍÇÊ¿";
     Text[ turkish ] = "Artalan ayarları tüm sayfalar için mi geçerli?";
-    Text[ catalan ] = "¿Configuración para todas las páginas?";
+    Text[ catalan ] = "Configuració per a totes les pàgines?";
     Text[ finnish ] = "Kaikkien sivujen tausta-asetukset?";
 };
 String STR_GRAFCROP
@@ -13473,7 +13493,7 @@ String STR_GRAFCROP
     Text[ chinese_traditional ] = "è£å‰ª";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇŞÊÕÇÕ";
-    Text[ catalan ] = "Recortar";
+    Text[ catalan ] = "Retalla";
     Text[ finnish ] = "Rajaa";
 };
 String STR_UNDO_GRAFMODE
@@ -13498,7 +13518,7 @@ String STR_UNDO_GRAFMODE
     Text[ chinese_traditional ] = "åœ–å½¢æ¨¡å¼";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
-    Text[ catalan ] = "Modo gráfico";
+    Text[ catalan ] = "Mode gràfic";
     Text[ finnish ] = "Grafiikkatila";
 };
 String STR_UNDO_GRAFRED
@@ -13523,7 +13543,7 @@ String STR_UNDO_GRAFRED
     Text[ chinese_traditional ] = "ç´…è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÍãÑ";
     Text[ turkish ] = "Kırmızı oranı";
-    Text[ catalan ] = "Proporción de rojo";
+    Text[ catalan ] = "Proporció de vermell";
     Text[ finnish ] = "Punainen";
 };
 String STR_UNDO_GRAFGREEN
@@ -13548,7 +13568,7 @@ String STR_UNDO_GRAFGREEN
     Text[ chinese_traditional ] = "ç¶ è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÎÖÑ";
     Text[ turkish ] = "Yeşil oranı";
-    Text[ catalan ] = "Proporción de verde";
+    Text[ catalan ] = "Proporció de verd";
     Text[ finnish ] = "Vihreä";
 };
 String STR_UNDO_GRAFBLUE
@@ -13573,7 +13593,7 @@ String STR_UNDO_GRAFBLUE
     Text[ chinese_traditional ] = "è—è‰²æ¯”ä¾‹";
     Text[ arabic ] = "äÓÈÉ ÇáÃÒÑŞ";
     Text[ turkish ] = "Mavi oranı";
-    Text[ catalan ] = "Proporción de azul";
+    Text[ catalan ] = "Proporció de blau";
     Text[ finnish ] = "Sininen";
 };
 String STR_UNDO_GRAFLUMINANCE
@@ -13598,7 +13618,7 @@ String STR_UNDO_GRAFLUMINANCE
     Text[ chinese_traditional ] = "äº®åº¦";
     Text[ arabic ] = "ÇáÅÖÇÁÉ";
     Text[ turkish ] = "Parlaklık";
-    Text[ catalan ] = "Brillo";
+    Text[ catalan ] = "Lluminositat";
     Text[ finnish ] = "Kirkkaus";
 };
 String STR_UNDO_GRAFCONTRAST
@@ -13623,7 +13643,7 @@ String STR_UNDO_GRAFCONTRAST
     Text[ chinese_traditional ] = "å°æ¯”åº¦";
     Text[ arabic ] = "ÇáÊÈÇíä";
     Text[ turkish ] = "Kontrastı azalt";
-    Text[ catalan ] = "Contraste";
+    Text[ catalan ] = "Contrast";
     Text[ finnish ] = "Kontrasti";
 };
 String STR_UNDO_GRAFGAMMA
@@ -13673,9 +13693,10 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ chinese_traditional ] = "é€æ˜";
     Text[ arabic ] = "ÔİÇİíÉ";
     Text[ turkish ] = "Saydamlık";
-    Text[ catalan ] = "Transparencia";
+    Text[ catalan ] = "Transparència";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
