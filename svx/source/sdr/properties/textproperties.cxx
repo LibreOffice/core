@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-16 13:11:19 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,11 @@
 #include <flditem.hxx>
 #endif
 
+// #i25616#
+#ifndef _SVX_XLNWTIT_HXX //autogen
+#include <xlnwtit.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -233,6 +238,14 @@ namespace sdr
             SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
             OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
+            // #i25616#
+            sal_Int32 nOldLineWidth;
+
+            if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
+            {
+                nOldLineWidth = ((const XLineWidthItem&)GetItem(XATTR_LINEWIDTH)).GetValue();
+            }
+
             if(pNewItem && (SDRATTR_TEXTDIRECTION == nWhich))
             {
                 sal_Bool bVertical(com::sun::star::text::WritingMode_TB_RL == ((SvxWritingModeItem*)pNewItem)->GetValue());
@@ -264,6 +277,31 @@ namespace sdr
 
             // call parent
             AttributeProperties::ItemChange( nWhich, pNewItem );
+
+            // #i25616#
+            if(XATTR_LINEWIDTH == nWhich && rObj.DoesSupportTextIndentingOnLineWidthChange())
+            {
+                const sal_Int32 nNewLineWidth(((const XLineWidthItem&)GetItem(XATTR_LINEWIDTH)).GetValue());
+                const sal_Int32 nDifference((nNewLineWidth - nOldLineWidth) / 2);
+
+                if(nDifference)
+                {
+                    const sal_Bool bLineVisible(XLINE_NONE != ((const XLineStyleItem&)(GetItem(XATTR_LINESTYLE))).GetValue());
+
+                    if(bLineVisible)
+                    {
+                        const sal_Int32 nLeftDist(((const SdrTextLeftDistItem&)GetItem(SDRATTR_TEXT_LEFTDIST)).GetValue());
+                        const sal_Int32 nRightDist(((const SdrTextRightDistItem&)GetItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
+                        const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)GetItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
+                        const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)GetItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
+
+                        SetObjectItemDirect(SdrTextLeftDistItem(nLeftDist + nDifference));
+                        SetObjectItemDirect(SdrTextRightDistItem(nRightDist + nDifference));
+                        SetObjectItemDirect(SdrTextUpperDistItem(nUpperDist + nDifference));
+                        SetObjectItemDirect(SdrTextLowerDistItem(nLowerDist + nDifference));
+                    }
+                }
+            }
         }
 
         void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
