@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-18 14:47:52 $
+ *  last change: $Author: dvo $ $Date: 2002-10-25 16:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,36 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
+
+
+void lcl_EnsureValidPam( SwPaM& rPam )
+{
+    if( rPam.GetCntntNode() != NULL )
+    {
+        // set proper point content
+        if( rPam.GetCntntNode() != rPam.GetPoint()->nContent.GetIdxReg() )
+        {
+            rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );
+        }
+        // else: point was already valid
+
+        // if mark is invalid, we delete it
+        if( ( rPam.GetCntntNode( FALSE ) == NULL ) ||
+            ( rPam.GetCntntNode( FALSE ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+        {
+            rPam.DeleteMark();
+        }
+    }
+    else
+    {
+        // point is not valid, so move it into the first content
+        rPam.DeleteMark();
+        rPam.GetPoint()->nNode =
+            *rPam.GetDoc()->GetNodes().GetEndOfContent().StartOfSectionNode();
+        ++ rPam.GetPoint()->nNode;
+        rPam.Move( fnMoveForward, fnGoCntnt ); // go into content
+    }
+}
 
 XMLReader::XMLReader()
 {
@@ -662,6 +692,8 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     rDoc.SetRedlineMode_intern( ~nRedlineMode );
     rDoc.SetRedlineMode( nRedlineMode );
 
+    // #103728# move Pam into valid content
+    lcl_EnsureValidPam( rPaM );
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
