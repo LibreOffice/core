@@ -37,9 +37,7 @@ CALLMACROS:=$(MAKEMACROS)
 CALLTARGETS=$(MAKETARGETS)
 .ENDIF			# "$(TNR)" == ""
 
-.INCLUDEDIRS : $(DMAKE_INC) $(OS2_SOLENV_INC) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) $(SOLARENV)/inc $(SRC_ROOT)
-# .INCLUDEDIRS : h:\sinc.neu s:\solenv\dmake\startup d:\work\dmake\solenv\inc  r:\ause\work\mk s:\solenv\inc /nw386/dev/s/solenv/inc
-# .INCLUDEDIRS : s:\solenv\dmake\startup s:\solenv\inc $(SOLARVER)$/$(UPD)$/$(INPATH)$/inc$(UPDMINOREXT) $(SOLARENV)/inc
+.INCLUDEDIRS : $(DMAKE_INC) $(OS2_SOLENV_INC) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) $(SOLARENV)/inc
 
 # startup.mk configuration parameters, for each, set it to non-null if you wish
 # to enable the named facility.
