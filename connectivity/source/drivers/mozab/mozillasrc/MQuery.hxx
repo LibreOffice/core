@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #ifndef _CONNECTIVITY_MAB_QUERY_HXX_
 #define _CONNECTIVITY_MAB_QUERY_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
-#include <com/sun/star/sdbc/SQLException.hpp>
-#endif
 #ifndef _CONNECTIVITY_MAB_COLUMNALIAS_HXX_
 #include "MColumnAlias.hxx"
 #endif
@@ -234,7 +231,7 @@ namespace connectivity
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
-        MNameMapper            *m_aNameMapper;
+            MNameMapper                    *m_aNameMapper;
             ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
             sal_Int32                       m_nMaxNrOfReturns;
@@ -242,6 +239,9 @@ namespace connectivity
             MQueryExpression                m_aExpr;
             ::std::map< ::rtl::OUString,
                         ::rtl::OUString>    m_aColumnAliasMap;
+            ::rtl::OUString                 m_aErrorString;
+            sal_Bool                        m_aErrorOccurred;
+
             void construct();
         protected:
             ::osl::Mutex                    m_aMutex;
@@ -276,14 +276,13 @@ namespace connectivity
 
             sal_Bool                        queryComplete( void );
 
-            void                            waitForQueryComplete( void ) throw( ::com::sun::star::sdbc::SQLException );
+            sal_Bool                        waitForQueryComplete( void );
 
-            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow ) throw( ::com::sun::star::sdbc::SQLException );
+            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
 
-            void                            getRowValue( connectivity::ORowSetValue& rValue,
+            sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow, rtl::OUString& aDBColumnName,
-                                                         sal_Int32 nType )
-                                                       throw( ::com::sun::star::sdbc::SQLException );
+                                                         sal_Int32 nType );
 
         public:
             MQuery();

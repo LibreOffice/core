@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,8 @@ MQueryHelper::notifyResultOrComplete()
     m_aCondition.set();
 }
 
-void
-MQueryHelper::waitForResultOrComplete()
-    throw( ::com::sun::star::sdbc::SQLException )
+sal_Bool
+MQueryHelper::waitForResultOrComplete( ::rtl::OUString& _rError )
 {
     TimeValue               timeValue = { 20, 0 };  // 20 Seconds 0 NanoSecond timeout
     osl::Condition::Result  rv = ::osl::Condition::result_ok;
@@ -196,23 +195,23 @@ MQueryHelper::waitForResultOrComplete()
         rv = m_aCondition.wait( &timeValue );
         if ( rv == ::osl::Condition::result_timeout ) {
             OSL_TRACE("waitForResultOrComplete() : Timeout!");
-            ::dbtools::throwGenericSQLException(
-                        ::rtl::OUString::createFromAscii("Timeout waiting from result"),NULL);
+            _rError = ::rtl::OUString::createFromAscii("Timeout waiting from result");
+            return sal_False;
         }
     }
 
     if ( isError() ) {
         OSL_TRACE("waitForResultOrComplete() : Error returned!");
-        ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("Error found when executing query"),NULL);
+        _rError = ::rtl::OUString::createFromAscii("Error found when executing query");
+        return sal_False;
     }
     OSL_TRACE("  Out : waitForResultOrComplete()");
+    return sal_True;
 }
 
 
 MQueryHelperResultEntry*
-MQueryHelper::next()
-    throw( ::com::sun::star::sdbc::SQLException )
+MQueryHelper::next( ::rtl::OUString& _rError )
 {
     MQueryHelperResultEntry* result;
     sal_Int32                     index;
@@ -221,7 +220,7 @@ MQueryHelper::next()
     index = m_nIndex;
     m_aMutex.release();
 
-    result = getByIndex( m_nIndex + 1 ) ; // Add 1 as Row is numbered from 1 to N
+    result = getByIndex( m_nIndex + 1, _rError ) ; // Add 1 as Row is numbered from 1 to N
 
     if ( result ) {
         m_aMutex.acquire();
@@ -233,8 +232,7 @@ MQueryHelper::next()
 }
 
 MQueryHelperResultEntry*
-MQueryHelper::getByIndex( sal_Int32 nRow )
-    throw( ::com::sun::star::sdbc::SQLException )
+MQueryHelper::getByIndex( sal_Int32 nRow, ::rtl::OUString& _rError )
 {
     // Row numbers are from 1 to N, need to ensure this, and then
     // substract 1
@@ -254,7 +252,8 @@ MQueryHelper::getByIndex( sal_Int32 nRow )
             } else {
                 clearResultOrComplete();
                 m_aMutex.release();
-                waitForResultOrComplete();
+                if ( !waitForResultOrComplete( _rError ) )
+                    return( NULL );
             }
         } else {
             m_aMutex.release();
@@ -292,9 +291,8 @@ MQueryHelper::queryComplete() const
     return m_bQueryComplete;
 }
 
-void
-MQueryHelper::waitForQueryComplete()
-    throw( ::com::sun::star::sdbc::SQLException )
+sal_Bool
+MQueryHelper::waitForQueryComplete( ::rtl::OUString& _rError )
 {
     m_aMutex.acquire();
 
@@ -304,7 +302,8 @@ MQueryHelper::waitForQueryComplete()
         {
             m_aMutex.release();
             clearResultOrComplete();
-            waitForResultOrComplete();
+            if ( !waitForResultOrComplete( _rError ) )
+                return( sal_False );
             m_aMutex.acquire();
         }
         while ( !m_bQueryComplete );
@@ -312,23 +311,25 @@ MQueryHelper::waitForQueryComplete()
 
     m_aMutex.release();
     OSL_TRACE("Out : waitForQueryComplete()");
+    return( sal_True );
 }
 
-void
-MQueryHelper::waitForRow( sal_Int32 rowNum )
-    throw( ::com::sun::star::sdbc::SQLException )
+sal_Bool
+MQueryHelper::waitForRow( sal_Int32 rowNum, ::rtl::OUString& _rError  )
 {
     m_aMutex.acquire();
     do
     {
         m_aMutex.release();
         clearResultOrComplete();
-        waitForResultOrComplete();
+        if ( !waitForResultOrComplete( _rError ) )
+            return( sal_False );
         m_aMutex.acquire();
     }
     while ( !m_bQueryComplete && m_aResults.size() < rowNum );
 
     m_aMutex.release();
+    return( sal_True );
 }
 
 // -------------------------------------------------------------------------

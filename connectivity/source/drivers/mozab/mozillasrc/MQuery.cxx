@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-11-07 10:49:58 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,41 +519,46 @@ MQuery::queryComplete( void )
     return( m_aQueryHelper->queryComplete() );
 }
 
-void
+sal_Bool
 MQuery::waitForQueryComplete( void )
-  throw( ::com::sun::star::sdbc::SQLException )
 {
-    m_aQueryHelper->waitForQueryComplete();
+    if( m_aQueryHelper->waitForQueryComplete( m_aErrorString ) )
+        return sal_True;
+
+    m_aErrorOccurred = sal_True;
+    return( sal_False );
 }
 
 // -------------------------------------------------------------------------
 
 sal_Bool
 MQuery::checkRowAvailable( sal_Int32 nDBRow )
-  throw( ::com::sun::star::sdbc::SQLException )
 {
     while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
-        m_aQueryHelper->waitForRow( nDBRow );
+        if ( !m_aQueryHelper->waitForRow( nDBRow, m_aErrorString ) ) {
+            m_aErrorOccurred = sal_True;
+            return( sal_False );
+        }
 
     return( getRowCount() > nDBRow );
 }
 
 // -------------------------------------------------------------------------
-void
+sal_Bool
 MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBColumnName, sal_Int32 nType )
-  throw( ::com::sun::star::sdbc::SQLException )
 {
     rtl::OUString   sValue;
 
     OSL_TRACE( "IN MQuery::getRowValue()\n");
 
-    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
+    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow, m_aErrorString );
 
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
+        m_aErrorOccurred = sal_True;
         rValue.setNull();
-        return;
+        return sal_False;
     }
     ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
     switch ( nType ) {
@@ -573,6 +578,7 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow, rtl::OUString& aDBC
     }
 
     OSL_TRACE( "\tOUT MQuery::getRowValue()\n");
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 

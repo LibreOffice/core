@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
-#include <com/sun/star/sdbc/SQLException.hpp>
-#endif
 
 
 namespace connectivity
@@ -125,9 +122,7 @@ namespace connectivity
 
             void            clearResultOrComplete();
             void            notifyResultOrComplete();
-            void            waitForResultOrComplete()
-                                throw( ::com::sun::star::sdbc::SQLException );
-
+            sal_Bool        waitForResultOrComplete( ::rtl::OUString& _rError );
 
         public:
 
@@ -142,9 +137,9 @@ namespace connectivity
 
             void                            rewind();
 
-            MQueryHelperResultEntry*   next() throw( ::com::sun::star::sdbc::SQLException );
+            MQueryHelperResultEntry*   next( ::rtl::OUString& _rError );
 
-            MQueryHelperResultEntry*   getByIndex( sal_Int32 nRow ) throw( ::com::sun::star::sdbc::SQLException );
+            MQueryHelperResultEntry*   getByIndex( sal_Int32 nRow, ::rtl::OUString& _rError );
 
             sal_Bool                   isError() const;
 
@@ -154,16 +149,15 @@ namespace connectivity
 
             sal_Bool                   queryComplete() const;
 
-            void                       waitForQueryComplete() throw( ::com::sun::star::sdbc::SQLException );
+            sal_Bool                   waitForQueryComplete( rtl::OUString& _rError );
 
-            void                       waitForRow( sal_Int32 rowNum ) throw( ::com::sun::star::sdbc::SQLException );
+            sal_Bool                   waitForRow( sal_Int32 rowNum, rtl::OUString& _rError );
 
             sal_Int32                  getResultCount() const;
 
             sal_uInt32                 getRealCount() const;
 
             void                       notifyQueryError() ;
-
         };
     }
 }

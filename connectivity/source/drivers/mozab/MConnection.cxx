@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:22 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,9 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // Test connection by getting to get the Table Names
     MDatabaseMetaDataHelper     _aDbHelper;
 
-    _aDbHelper.getTableStrings( this, sal_True ); // Will throw an exception on failure
+    ::std::vector< ::rtl::OUString > tables;
+    if ( !_aDbHelper.getTableStrings( this, tables, sal_True ) )
+        ::dbtools::throwGenericSQLException( _aDbHelper.getErrorString(), NULL);
 
 }
 // XServiceInfo

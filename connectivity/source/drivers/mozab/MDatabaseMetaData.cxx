@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,10 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     const ::std::vector< ::rtl::OUString >& colNames = m_pConnection->getColumnAlias().getAlias();
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::std::vector< ::rtl::OUString >& tables = m_pDbMetaDataHelper->getTableStrings( m_pConnection );
+    ::std::vector< ::rtl::OUString > tables;
+    if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables ) ) {
+        ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
+    }
 
     // ****************************************************
     // Some entries in a row never change, so set them now
@@ -1044,7 +1047,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // ODatabaseMetaDataResultSet::ORows aRows;
     // aRows = m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern );
     // pResultSet->setRows( aRows );
-    pResultSet->setRows( m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern ) );
+    ODatabaseMetaDataResultSet::ORows _rRows;
+    if ( !m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern, _rRows ) ) {
+        ::dbtools::throwGenericSQLException( m_pDbMetaDataHelper->getErrorString(), NULL );
+    }
+    pResultSet->setRows( _rRows );
 
     return xResultSet;
 }

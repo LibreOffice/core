@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:55 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,19 +128,22 @@ namespace connectivity
             MDatabaseMetaDataHelper( );
             ~MDatabaseMetaDataHelper();
 
-            ::std::vector< ::rtl::OUString >&  getTableStrings(
-                                                            OConnection*           _pCon,
-                                                            sal_Bool forceLoad = sal_False )
-                                                            throw( ::com::sun::star::sdbc::SQLException );
+            sal_Bool getTableStrings( OConnection*                        _pCon,
+                                      ::std::vector< ::rtl::OUString >&   _rStrings,
+                                      sal_Bool                            forceLoad = sal_False );
 
+            sal_Bool getTables( OConnection* _pCon,
+                                const ::rtl::OUString& tableNamePattern,
+                                ODatabaseMetaDataResultSet::ORows& _rRows);
 
-            ODatabaseMetaDataResultSet::ORows& getTables( OConnection* _pCon,
-                                                          const ::rtl::OUString& tableNamePattern)
-                                                          throw( ::com::sun::star::sdbc::SQLException );
+            const ::rtl::OUString& getErrorString() { return m_aErrorString; }
+
         private:
             sal_Bool                            m_bProfileExists ;
             ::std::vector< ::rtl::OUString >    m_aTableNames;
+            ::rtl::OUString                     m_aErrorString;
 
+            void setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI );
         };
     }
 

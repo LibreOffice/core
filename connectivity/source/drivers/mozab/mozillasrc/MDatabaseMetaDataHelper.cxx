@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-31 17:24:23 $
+ *  last change: $Author: dkenny $ $Date: 2001-11-15 10:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,40 +247,34 @@ static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
     return retCode ;
 }
 
-static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) throw (SQLException)
+void MDatabaseMetaDataHelper::setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI )
 {
     if ( ! bGivenURI ) {
-        ::dbtools::throwGenericSQLException(
-            ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist"),NULL);
+        m_aErrorString = ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist");
     }
     else {
         if (_pCon->usesFactory()) {
             if ( _pCon->isOutlookExpress() ) {
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("No Outlook Express Addressbook Exists"),NULL);
+                m_aErrorString = ::rtl::OUString::createFromAscii("No Outlook Express Addressbook Exists");
             }
             else {
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("No Outlook (MAPI) Addressbook Exists"),NULL);
+                m_aErrorString = ::rtl::OUString::createFromAscii("No Outlook (MAPI) Addressbook Exists");
             }
         }
         else {
             if (_pCon->isLDAP()) {
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("Unable to connect to LDAP Server"),NULL);
+                m_aErrorString = ::rtl::OUString::createFromAscii("Unable to connect to LDAP Server");
             }
             else {
-                ::dbtools::throwGenericSQLException(
-                    ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist"),NULL);
+                m_aErrorString = ::rtl::OUString::createFromAscii("No Mozilla Addressbook Directories Exist");
             }
         }
     }
 }
 
-::std::vector< ::rtl::OUString >& MDatabaseMetaDataHelper::getTableStrings(
-                                                            OConnection*           _pCon,
-                                                            sal_Bool forceLoad )
-                                                            throw ( SQLException )
+sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                        _pCon,
+                                                   ::std::vector< ::rtl::OUString >&   _rStrings,
+                                                   sal_Bool                            forceLoad )
 {
     sal_Bool                                    bGivenURI;
     sal_Bool                                    bIsRootDir;
@@ -291,7 +285,8 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
 
     // Only do the query if we have to - performance degrades otherwise
     if ( ! forceLoad && m_aTableNames.size() > 0 ) {
-        return( m_aTableNames );
+        _rStrings = m_aTableNames;
+        return( sal_True );
     }
 
     m_aTableNames.clear();
@@ -319,27 +314,31 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
     if (!bGivenURI) {
         rv = getSubsFromParent(s_pADDRESSBOOKROOTDIR, getter_AddRefs(subDirectories), m_bProfileExists) ;
         if ( NS_FAILED( rv ) ) {
-            throwABSpecificException( _pCon, bGivenURI );
+            setAbSpecificError( _pCon, bGivenURI );
+            return( sal_False );
         }
     }
     else {
         if (_pCon->usesFactory()) {
             rv = getSubsFromFactory(sAbURIString, getter_AddRefs(subDirectories)) ;
             if ( NS_FAILED( rv ) ) {
-                throwABSpecificException( _pCon, bGivenURI );
+                setAbSpecificError( _pCon, bGivenURI );
+                return sal_False;
             }
         }
         else {
             if (_pCon->isLDAP()) {
                 rv = getSubsFromURI(sAbURIString, getter_AddRefs(subDirectories)) ;
                 if ( NS_FAILED( rv ) ) {
-                    throwABSpecificException( _pCon, bGivenURI );
+                    setAbSpecificError( _pCon, bGivenURI );
+                    return sal_False;
                 }
             }
             else {
                 rv = getSubsFromParent(sAbURIString, getter_AddRefs(subDirectories), m_bProfileExists);
                 if ( NS_FAILED( rv ) ) {
-                    throwABSpecificException( _pCon, bGivenURI );
+                    setAbSpecificError( _pCon, bGivenURI );
+                    return sal_False;
                 }
             }
         }
@@ -347,12 +346,14 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
     // Catch all (just in case), should be caught before this
     if ( NS_FAILED( rv ) ) {
         OSL_ASSERT( "Shouldn't have reached this line with a failure");
-        throwABSpecificException( _pCon, bGivenURI );
+        setAbSpecificError( _pCon, bGivenURI );
+        return sal_False;
     }
     // At this point we have a list containing the nsIAbDirectory we need to map as tables
     rv = subDirectories -> First();
     if ( NS_FAILED( rv ) ) {
-        throwABSpecificException( _pCon, bGivenURI );
+        setAbSpecificError( _pCon, bGivenURI );
+        return sal_False;
     }
     else {
         bIsRootDir = sal_True;
@@ -372,7 +373,8 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
             nsCOMPtr<nsISupports> item;
             rv = subDirectories -> CurrentItem(getter_AddRefs(item));
             if ( NS_FAILED( rv ) ) {
-                ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Problem Getting Addressbook Entry"),NULL);
+                m_aErrorString = ::rtl::OUString::createFromAscii("Problem Getting Addressbook Entry");
+                return sal_False;
             }
 
             subDirectory = do_QueryInterface(item, &rv);
@@ -381,7 +383,8 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
         // For now we're not interested in mailing lists.
         rv = subDirectory -> GetDirName(&name);
         if ( NS_FAILED( rv ) ) {
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Problem Getting Addressbook Directory Name"),NULL);
+            m_aErrorString = ::rtl::OUString::createFromAscii("Problem Getting Addressbook Directory Name");
+            return sal_False;
         }
         MTypeConverter::prUnicharToOUString(name, aTableName);
         OSL_TRACE("TableName = >%s<\n", OUtoCStr( aTableName ) );
@@ -407,13 +410,13 @@ static void throwABSpecificException( OConnection* _pCon, sal_Bool bGivenURI ) t
     //  delete pTc;
 
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTableStrings()\n" );
-    return( m_aTableNames );
+    _rStrings = m_aTableNames;
+    return( sal_True );
 }
 
-ODatabaseMetaDataResultSet::ORows& MDatabaseMetaDataHelper::getTables(
-                                                            OConnection*           _pCon,
-                                                            const ::rtl::OUString& tableNamePattern)
-                                                            throw ( SQLException )
+sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
+                                             const ::rtl::OUString& tableNamePattern,
+                                             ODatabaseMetaDataResultSet::ORows& _rRows)
 {
     static ODatabaseMetaDataResultSet::ORows    aRows;
 
@@ -424,7 +427,9 @@ ODatabaseMetaDataResultSet::ORows& MDatabaseMetaDataHelper::getTables(
 
     // will not be detected (for now).
     ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
-    ::std::vector< ::rtl::OUString >& tables = getTableStrings( _pCon );
+    ::std::vector< ::rtl::OUString > tables;
+    if ( !getTableStrings( _pCon, tables ) )
+        return sal_False;
 
     for ( sal_Int32 i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);
@@ -449,5 +454,6 @@ ODatabaseMetaDataResultSet::ORows& MDatabaseMetaDataHelper::getTables(
     }
 
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTables()\n" );
-    return( aRows );
+    _rRows = aRows;
+    return(sal_True);
 }
