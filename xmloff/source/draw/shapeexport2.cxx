@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:51:50 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,11 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             {
                 SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
 
-                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, OUString( RTL_CONSTASCII_USTRINGPARAM( "starbasic" ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
+                            rExport.GetNamespaceMap().GetQNameByKey(
+                                 XML_NAMESPACE_OOO,
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "starbasic" ) ) ) );
                 OUString aEventQName(
                     rExport.GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
@@ -628,13 +632,17 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         {
             if( nFound & FOUND_MACRO )
             {
-                SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, XML_EVENTS, sal_True, sal_True);
+                SvXMLElementExport aEventsElemt(rExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
 
-                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, XML_SCRIPT );
-                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, OUString( RTL_CONSTASCII_USTRINGPARAM( "on-click" ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, rExport.GetNamespaceMap().GetQNameByKey(
+                             XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
+                OUString aEventQName(
+                    rExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
+                rExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
 
-                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT, sal_True, sal_True);
+                SvXMLElementExport aEventElemt(rExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
             }
         }
     }
