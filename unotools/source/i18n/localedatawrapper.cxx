@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2002-06-06 18:14:50 $
+ *  last change: $Author: er $ $Date: 2002-07-18 12:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,6 +499,7 @@ void LocaleDataWrapper::invalidateData()
                 if ( TRUE
                         && !aDebugLocale.EqualsAscii( "ar_SD" ) // Sudan/ar
                         && !aDebugLocale.EqualsAscii( "ca_ES" ) // Spain/Andorra
+                        && !aDebugLocale.EqualsAscii( "en_CB" ) // Carribean is not a country
 //                      && !aDebugLocale.EqualsAscii( "en_BG" ) // ?!? Bulgaria/en
 //                      && !aDebugLocale.EqualsAscii( "es_BR" ) // ?!? Brazil/es
                     )
