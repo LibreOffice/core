@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: tpf $ $Date: 2002-10-25 17:24:41 $
+#   last change: $Author: tpf $ $Date: 2002-12-02 10:44:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ $(MISC)$/registry$/schema$/%.xcs : %.xcs
     -$(MKDIR) -p $(@:d)
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_val.xsl $(@:d)$(<:b).val file=$(<:d)$(<:b) pathSeparator=$/	
+    $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/sanity.xsl $(@:d)$(<:b).san file=$(<:d)$(<:b) pathSeparator=$/
     $(JAVA) -classpath $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(@:d)$(<:b).tmp
     $(JAVA) -classpath $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcs
     +$(RM) $(@:d)$(<:b).tmp > $(NULLDEV)
