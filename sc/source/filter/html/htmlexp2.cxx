@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:49:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,11 @@
 #ifndef _SVDXCGV_HXX
 #include <svx/svdxcgv.hxx>
 #endif
-#include <so3/ipobj.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/embedtransfer.hxx>
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
@@ -101,6 +101,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 
+using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
@@ -221,11 +222,11 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         break;
         case OBJ_OLE2:
         {
-            const SvInPlaceObjectRef& rRef = ((SdrOle2Obj*)pObject)->GetObjRef();
-            DBG_ASSERT( rRef.Is(), "WriteGraphEntry: no OLE ObjRef" );
-            if ( rRef.Is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
+            DBG_ASSERT( xObj.is(), "WriteGraphEntry: no OLE ObjRef" );
+            if ( xObj.is() )
             {
-                TransferableDataHelper aOleData( rRef->CreateTransferableSnapshot() );
+                TransferableDataHelper aOleData( new SvEmbedTransferHelper( xObj ) );
                 GDIMetaFile aMtf;
                 if( aOleData.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
                 {
