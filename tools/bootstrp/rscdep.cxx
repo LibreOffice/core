@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 14:23:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ main( int argc, char **argv )
  * it's too sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
  */
-simple_getopt(int argc, char *argv[], const char *optstring)
+int simple_getopt(int argc, char *argv[], const char *optstring)
 {
     char *arg = argv[optind];
 
