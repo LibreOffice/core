@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:26:47 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:17:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,13 +86,13 @@ UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 #INCPRE+= -I$(SOLARINCDIR)$/external$/atl
 
-UNOTYPES= oletest.XTestSequence oletest.XTestStruct	\
+UNOTYPES= oletest.XTestSequence \
+    oletest.XTestStruct	\
     oletest.XTestOther 				\
     oletest.XTestInterfaces			\
     oletest.XSimple					\
     oletest.XSimple2				\
     oletest.XSimple3				\
-    oletest.XTestOutParameters	\
     oletest.XTestInParameters	\
     oletest.XIdentity		\
     com.sun.star.beans.PropertyAttribute	\
