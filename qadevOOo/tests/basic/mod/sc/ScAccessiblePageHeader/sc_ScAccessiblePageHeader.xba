@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScAccessiblePageHeader.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:58:54 $ 
+'*  last change:$Date: 2003-03-10 10:35:46 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -122,10 +122,6 @@ On Error Goto ErrHndl
 Exit Sub
 ErrHndl:
     Test.Exception()
-End Sub
-
-Sub DisposeObj()
-    oDoc.dispose()
 End Sub
 
 Sub fireEvent()
