@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:31:39 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 15:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "IF";
         Text[ turkish ] = "IF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SI";
+        Text[ catalan ] = "IF";
+        Text[ thai ] = "IF";
     };
     String SC_OPCODE_CHOSE
     {
@@ -119,7 +120,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CHOOSE";
         Text[ turkish ] = "CHOOSE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ELEGIR";
+        Text[ catalan ] = "CHOOSE";
+        Text[ thai ] = "CHOOSE";
     };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
@@ -164,7 +166,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "AND";
         Text[ turkish ] = "AND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Y";
+        Text[ catalan ] = "AND";
+        Text[ thai ] = "AND";
     };
     String SC_OPCODE_OR
     {
@@ -193,7 +196,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "OR";
         Text[ turkish ] = "OR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "O";
+        Text[ catalan ] = "OR";
+        Text[ thai ] = "OR";
     };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = ";" ; };
@@ -225,9 +229,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NOT";
         Text[ turkish ] = "NOT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "NO";
+        Text[ catalan ] = "NOT";
+        Text[ thai ] = "NOT";
     };
-    String SC_OPCODE_NEG { Text = "NEG" ; };
+    String SC_OPCODE_NEG
+    {
+        Text = "NEG";
+        Text[ english ] = "NEG";
+        Text[ english_us ] = "NEG";
+    };
     String SC_OPCODE_NEG_SUB { Text = "-" ; };
     String SC_OPCODE_PI
     {
@@ -258,6 +268,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "PI";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PI";
+        Text[ thai ] = "‡πÑ‡∏û";
     };
     String SC_OPCODE_RANDOM
     {
@@ -286,7 +297,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RAND";
         Text[ turkish ] = "RAND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ALEATORIO";
+        Text[ catalan ] = "RAND";
+        Text[ thai ] = "RAND";
     };
     String SC_OPCODE_TRUE
     {
@@ -315,7 +327,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TRUE";
         Text[ turkish ] = "TRUE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VERDADERO";
+        Text[ catalan ] = "TRUE";
+        Text[ thai ] = "TRUE";
     };
     String SC_OPCODE_FALSE
     {
@@ -344,7 +357,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FALSE";
         Text[ turkish ] = "FALSE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FALSO";
+        Text[ catalan ] = "FALSE";
+        Text[ thai ] = "FALSE";
     };
     String SC_OPCODE_GET_ACT_DATE
     {
@@ -373,7 +387,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TODAY";
         Text[ turkish ] = "TODAY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HOY";
+        Text[ catalan ] = "TODAY";
+        Text[ thai ] = "TODAY";
     };
     String SC_OPCODE_GET_ACT_TIME
     {
@@ -402,7 +417,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NOW";
         Text[ turkish ] = "NOW";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "AHORA";
+        Text[ catalan ] = "NOW";
+        Text[ thai ] = "NOW";
     };
     String SC_OPCODE_NO_VALUE
     {
@@ -431,14 +447,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NA";
         Text[ turkish ] = "NA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "NOD";
+        Text[ catalan ] = "NA";
+        Text[ thai ] = "NA";
     };
     String SC_OPCODE_CURRENT
     {
         Text = "AKTUELL" ;
         Text [ english ] = "CURRENT" ;
         Text [ norwegian ] = "CURRENT" ;
-        Text [ italian ] = "CURRENT" ;
+        Text [ italian ] = "ATTUALE" ;
         Text [ portuguese_brazilian ] = "CURRENT" ;
         Text [ portuguese ] = "ACTUAL" ;
         Text [ finnish ] = "CURRENT" ;
@@ -460,7 +477,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CURRENT";
         Text[ turkish ] = "CURRENT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ACTUAL";
+        Text[ catalan ] = "CURRENT";
+        Text[ thai ] = "CURRENT";
     };
     String SC_OPCODE_DEG
     {
@@ -489,7 +507,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DEGREES";
         Text[ turkish ] = "DEGREES";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "GRADOS";
+        Text[ catalan ] = "DEGREES";
+        Text[ thai ] = "DEGREES";
     };
     String SC_OPCODE_RAD
     {
@@ -518,7 +537,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RADIANS";
         Text[ turkish ] = "RADIANS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "RADIANES";
+        Text[ catalan ] = "RADIANS";
+        Text[ thai ] = "RADIANS";
     };
     String SC_OPCODE_SIN
     {
@@ -547,11 +567,27 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SIN";
         Text[ turkish ] = "SIN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SENO";
+        Text[ catalan ] = "SIN";
+        Text[ thai ] = "SIN";
     };
-    String SC_OPCODE_COS { Text = "COS" ; };
-    String SC_OPCODE_TAN { Text = "TAN" ; };
-    String SC_OPCODE_COT { Text = "COT" ; };
+    String SC_OPCODE_COS
+    {
+        Text = "COS";
+        Text[ english ] = "COS";
+        Text[ english_us ] = "COS";
+    };
+    String SC_OPCODE_TAN
+    {
+        Text = "TAN";
+        Text[ english ] = "TAN";
+        Text[ english_us ] = "TAN";
+    };
+    String SC_OPCODE_COT
+    {
+        Text = "COT";
+        Text[ english ] = "COT";
+        Text[ english_us ] = "COT";
+    };
     String SC_OPCODE_ARC_SIN
     {
         Text = "ARCSIN" ;
@@ -579,7 +615,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ASIN";
         Text[ turkish ] = "ASIN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ASENO";
+        Text[ catalan ] = "ASIN";
+        Text[ thai ] = "ASIN";
     };
     String SC_OPCODE_ARC_COS
     {
@@ -609,6 +646,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ACOS";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ACOS";
+        Text[ thai ] = "ACOS";
     };
     String SC_OPCODE_ARC_TAN
     {
@@ -638,6 +676,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ATAN";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ATAN";
+        Text[ thai ] = "ATAN";
     };
     String SC_OPCODE_ARC_COT
     {
@@ -667,6 +706,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ACOT";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ACOT";
+        Text[ thai ] = "ACOT";
     };
     String SC_OPCODE_SIN_HYP
     {
@@ -695,7 +735,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SINH";
         Text[ turkish ] = "SINH";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SENOH";
+        Text[ catalan ] = "SINH";
+        Text[ thai ] = "SINH";
     };
     String SC_OPCODE_COS_HYP
     {
@@ -725,6 +766,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "COSH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "COSH";
+        Text[ thai ] = "COSH";
     };
     String SC_OPCODE_TAN_HYP
     {
@@ -754,6 +796,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "TANH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "TANH";
+        Text[ thai ] = "TANH";
     };
     String SC_OPCODE_COT_HYP
     {
@@ -783,6 +826,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "COTH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "COTH";
+        Text[ thai ] = "COTH";
     };
     String SC_OPCODE_ARC_SIN_HYP
     {
@@ -811,7 +855,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ASINH";
         Text[ turkish ] = "ASINH";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ASENOH";
+        Text[ catalan ] = "ASINH";
+        Text[ thai ] = "ASINH";
     };
     String SC_OPCODE_ARC_COS_HYP
     {
@@ -841,6 +886,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ACOSH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ACOSH";
+        Text[ thai ] = "ACOSH";
     };
     String SC_OPCODE_ARC_TAN_HYP
     {
@@ -870,6 +916,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ATANH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ATANH";
+        Text[ thai ] = "ATANH";
     };
     String SC_OPCODE_ARC_COT_HYP
     {
@@ -899,9 +946,20 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ACOTH";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ACOTH";
+        Text[ thai ] = "ACOTH";
     };
-    String SC_OPCODE_EXP { Text = "EXP" ; };
-    String SC_OPCODE_LN { Text = "LN" ; };
+    String SC_OPCODE_EXP
+    {
+        Text = "EXP";
+        Text[ english ] = "EXP";
+        Text[ english_us ] = "EXP";
+    };
+    String SC_OPCODE_LN
+    {
+        Text = "LN";
+        Text[ english ] = "LN";
+        Text[ english_us ] = "LN";
+    };
     String SC_OPCODE_SQRT
     {
         Text = "WURZEL" ;
@@ -929,11 +987,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SQRT";
         Text[ turkish ] = "SQRT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "RAÕZ";
+        Text[ catalan ] = "SQRT";
+        Text[ thai ] = "SQRT";
     };
     String SC_OPCODE_FACT
     {
-        /* ### ACHTUNG: Neuer Text in Resource? FAKULTƒT : FAKULTéT */
         Text = "FAKULTƒT" ;
         Text [ english ] = "FACT" ;
         Text [ norwegian ] = "FACT" ;
@@ -960,6 +1018,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "FACT";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "FACT";
+        Text[ thai ] = "FACT";
     };
     String SC_OPCODE_GET_YEAR
     {
@@ -988,7 +1047,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "YEAR";
         Text[ turkish ] = "YEAR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A—O";
+        Text[ catalan ] = "YEAR";
+        Text[ thai ] = "YEAR";
     };
     String SC_OPCODE_GET_MONTH
     {
@@ -1017,7 +1077,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MONTH";
         Text[ turkish ] = "AY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MES";
+        Text[ catalan ] = "MONTH";
+        Text[ thai ] = "MONTH";
     };
     String SC_OPCODE_GET_DAY
     {
@@ -1046,7 +1107,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DAY";
         Text[ turkish ] = "DAY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DÕA";
+        Text[ catalan ] = "DAY";
+        Text[ thai ] = "DAY";
     };
     String SC_OPCODE_GET_HOUR
     {
@@ -1075,7 +1137,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "HOUR";
         Text[ turkish ] = "HOUR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HORA";
+        Text[ catalan ] = "HOUR";
+        Text[ thai ] = "HOUR";
     };
     String SC_OPCODE_GET_MIN
     {
@@ -1085,7 +1148,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MINUTO" ;
         Text [ portuguese_brazilian ] = "MINUTO" ;
         Text [ portuguese ] = "MINUTO" ;
-        Text [ finnish ] = "minuutti" ;
+        Text [ finnish ] = "MINUTE" ;
         Text [ danish ] = "MINUT" ;
         Text [ french ] = "MINUTE" ;
         Text [ swedish ] = "MINUT" ;
@@ -1104,7 +1167,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MINUTE";
         Text[ turkish ] = "MINUTE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MINUTO";
+        Text[ catalan ] = "MINUTE";
+        Text[ thai ] = "‡∏ô‡∏≤‡∏ó‡∏µ";
     };
     String SC_OPCODE_GET_SEC
     {
@@ -1133,7 +1197,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SECOND";
         Text[ turkish ] = "SECOND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SEGUNDO";
+        Text[ catalan ] = "SECOND";
+        Text[ thai ] = "SECOND";
     };
     String SC_OPCODE_PLUS_MINUS
     {
@@ -1162,7 +1227,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SIGN";
         Text[ turkish ] = "SIGN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SIGNO";
+        Text[ catalan ] = "SIGN";
+        Text[ thai ] = "SIGN";
     };
     String SC_OPCODE_ABS
     {
@@ -1192,6 +1258,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ABS";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ABS";
+        Text[ thai ] = "ABS";
     };
     String SC_OPCODE_INT
     {
@@ -1220,10 +1287,21 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "INT";
         Text[ turkish ] = "INT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ENTERO";
+        Text[ catalan ] = "INT";
+        Text[ thai ] = "INT";
     };
-    String SC_OPCODE_PHI { Text = "PHI" ; };
-    String SC_OPCODE_GAUSS { Text = "GAUSS" ; };
+    String SC_OPCODE_PHI
+    {
+        Text = "PHI";
+        Text[ english ] = "PHI";
+        Text[ english_us ] = "PHI";
+    };
+    String SC_OPCODE_GAUSS
+    {
+        Text = "GAUSS";
+        Text[ english ] = "GAUSS";
+        Text[ english_us ] = "GAUSS";
+    };
     String SC_OPCODE_IS_EMPTY
     {
         Text = "ISTLEER" ;
@@ -1251,7 +1329,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISBLANK";
         Text[ turkish ] = "ISTBLANK";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESBLANCO";
+        Text[ catalan ] = "ISBLANK";
+        Text[ thai ] = "ISBLANK";
     };
     String SC_OPCODE_IS_STRING
     {
@@ -1280,7 +1359,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISTEXT";
         Text[ turkish ] = "ISTEXT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESTEXTO";
+        Text[ catalan ] = "ISTEXT";
+        Text[ thai ] = "ISTEXT";
     };
     String SC_OPCODE_IS_NON_STRING
     {
@@ -1309,7 +1389,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISNONTEXT";
         Text[ turkish ] = "ISNONTEXT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESNOTEXTO";
+        Text[ catalan ] = "ISNONTEXT";
+        Text[ thai ] = "ISNONTEXT";
     };
     String SC_OPCODE_IS_LOGICAL
     {
@@ -1338,7 +1419,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISLOGICAL";
         Text[ turkish ] = "ISTLOGICAL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESLOGICO";
+        Text[ catalan ] = "ISLOGICAL";
+        Text[ thai ] = "ISLOGICAL";
     };
     String SC_OPCODE_TYPE
     {
@@ -1367,7 +1449,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TYPE";
         Text[ turkish ] = "TYPE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TIPO";
+        Text[ catalan ] = "TYPE";
+        Text[ thai ] = "TYPE";
     };
     String SC_OPCODE_CELL
     {
@@ -1386,13 +1469,14 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "KOM”RKA";
         Text[ portuguese_brazilian ] = "CELL";
         Text[ japanese ] = "CELL";
-        Text[ korean ] = "ºø";
+        Text[ korean ] = "CELL";
         Text[ chinese_simplified ] = "CELL";
         Text[ chinese_traditional ] = "CELL";
         Text[ turkish ] = "CELL";
         Text[ arabic ] = "CELL";
-        Text[ catalan ] = "CELDA";
-        Text[ finnish ] = "Solu";
+        Text[ catalan ] = "CELL";
+        Text[ finnish ] = "CELL";
+        Text[ thai ] = "CELL";
     };
     String SC_OPCODE_IS_REF
     {
@@ -1421,7 +1505,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISREF";
         Text[ turkish ] = "ISREF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESREF";
+        Text[ catalan ] = "ISREF";
+        Text[ thai ] = "ISREF";
     };
     String SC_OPCODE_IS_VALUE
     {
@@ -1450,7 +1535,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISNUMBER";
         Text[ turkish ] = "ISNUMBER";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESN⁄MERO";
+        Text[ catalan ] = "ISNUMBER";
+        Text[ thai ] = "ISNUMBER";
     };
     String SC_OPCODE_IS_FORMULA
     {
@@ -1479,7 +1565,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISFORMULA";
         Text[ turkish ] = "ISTFORMULA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESF”RMULA";
+        Text[ catalan ] = "ISFORMULA";
+        Text[ thai ] = "ISFORMULA";
     };
     String SC_OPCODE_IS_NV
     {
@@ -1508,7 +1595,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISNA";
         Text[ turkish ] = "ISNA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESNOD";
+        Text[ catalan ] = "ISNA";
+        Text[ thai ] = "ISNA";
     };
     String SC_OPCODE_IS_ERR
     {
@@ -1537,7 +1625,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISERR";
         Text[ turkish ] = "ISTERR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESERR";
+        Text[ catalan ] = "ISERR";
+        Text[ thai ] = "ISERR";
     };
     String SC_OPCODE_IS_ERROR
     {
@@ -1566,7 +1655,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISERROR";
         Text[ turkish ] = "ISTERROR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESERROR";
+        Text[ catalan ] = "ISERROR";
+        Text[ thai ] = "ISERROR";
     };
     String SC_OPCODE_IS_EVEN
     {
@@ -1575,7 +1665,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "ERPAR" ;
         Text [ italian ] = "VAL.PARI" ;
         Text [ portuguese_brazilian ] = "ISPAR" ;
-        Text [ portuguese ] = "….PAR" ;
+        Text [ portuguese ] = "…PAR" ;
         Text [ finnish ] = "ISEVEN" ;
         Text [ danish ] = "ER.LIGE" ;
         Text [ french ] = "EST.PAIR" ;
@@ -1595,7 +1685,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISEVEN";
         Text[ turkish ] = "ISTEVEN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESPAR";
+        Text[ catalan ] = "ISEVEN";
+        Text[ thai ] = "ISEVEN";
     };
     String SC_OPCODE_IS_ODD
     {
@@ -1604,7 +1695,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "ERODDE" ;
         Text [ italian ] = "VAL.DISPARI" ;
         Text [ portuguese_brazilian ] = "ISIMPAR" ;
-        Text [ portuguese ] = "….ÕMPAR" ;
+        Text [ portuguese ] = "…ÕMPAR" ;
         Text [ finnish ] = "ISODD" ;
         Text [ danish ] = "ER.ULIGE" ;
         Text [ french ] = "EST.IMPAIR" ;
@@ -1624,7 +1715,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ISODD";
         Text[ turkish ] = "ISODD";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESIMPAR";
+        Text[ catalan ] = "ISODD";
+        Text[ thai ] = "ISODD";
     };
     String SC_OPCODE_N
     {
@@ -1653,7 +1745,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "N";
         Text[ turkish ] = "N";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N";
+        Text[ catalan ] = "avaluacions";
+        Text[ thai ] = "‡∏ó‡∏î‡∏•‡∏≠‡∏á";
     };
     String SC_OPCODE_GET_DATE_VALUE
     {
@@ -1682,7 +1775,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DATEVALUE";
         Text[ turkish ] = "DATEVALUE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FECHAN⁄MERO";
+        Text[ catalan ] = "DATEVALUE";
+        Text[ thai ] = "DATEVALUE";
     };
     String SC_OPCODE_GET_TIME_VALUE
     {
@@ -1711,7 +1805,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TIMEVALUE";
         Text[ turkish ] = "TIMEVALUE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HORAN⁄MERO";
+        Text[ catalan ] = "TIMEVALUE";
+        Text[ thai ] = "TIMEVALUE";
     };
     String SC_OPCODE_CODE
     {
@@ -1740,11 +1835,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CODE";
         Text[ turkish ] = "CODE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "C”DIGO";
+        Text[ catalan ] = "CODE";
+        Text[ thai ] = "CODE";
     };
     String SC_OPCODE_TRIM
     {
-        /* ### ACHTUNG: Neuer Text in Resource? GLƒTTEN : GLéTTEN */
         Text = "GLƒTTEN" ;
         Text [ english ] = "TRIM" ;
         Text [ norwegian ] = "TRIM" ;
@@ -1770,7 +1865,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TRIM";
         Text[ turkish ] = "TRIM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COMPACTAR";
+        Text[ catalan ] = "TRIM";
+        Text[ thai ] = "TRIM";
     };
     String SC_OPCODE_UPPER
     {
@@ -1799,7 +1895,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "UPPER";
         Text[ turkish ] = "UPPER";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MAY⁄SC";
+        Text[ catalan ] = "UPPER";
+        Text[ thai ] = "UPPER";
     };
     String SC_OPCODE_PROPPER
     {
@@ -1828,7 +1925,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PROPER";
         Text[ turkish ] = "PROPER";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "NOMPROPIO";
+        Text[ catalan ] = "PROPER";
+        Text[ thai ] = "PROPER";
     };
     String SC_OPCODE_LOWER
     {
@@ -1857,11 +1955,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LOWER";
         Text[ turkish ] = "LOWER";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MINUSC";
+        Text[ catalan ] = "LOWER";
+        Text[ thai ] = "LOWER";
     };
     String SC_OPCODE_LEN
     {
-        /* ### ACHTUNG: Neuer Text in Resource? LƒNGE : LéNGE */
         Text = "LƒNGE" ;
         Text [ english ] = "LEN" ;
         Text [ norwegian ] = "LEN" ;
@@ -1887,9 +1985,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LEN";
         Text[ turkish ] = "LEN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LARGO";
+        Text[ catalan ] = "LEN";
+        Text[ thai ] = "LEN";
     };
-    String SC_OPCODE_T { Text = "T" ; };
+    String SC_OPCODE_T
+    {
+        Text = "T";
+        Text[ english ] = "T";
+        Text[ english_us ] = "T";
+    };
     String SC_OPCODE_VALUE
     {
         Text = "WERT" ;
@@ -1901,7 +2005,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "VALUE" ;
         Text [ danish ] = "V∆RDI" ;
         Text [ french ] = "CNUM" ;
-        Text [ swedish ] = "VƒRDE" ;
+        Text [ swedish ] = "TEXTNUM" ;
         Text [ dutch ] = "WAARDE" ;
         Text [ spanish ] = "VALOR" ;
         Text [ english_us ] = "VALUE" ;
@@ -1917,11 +2021,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "VALUE";
         Text[ turkish ] = "VALUE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VALOR";
+        Text[ catalan ] = "VALUE";
+        Text[ thai ] = "VALUE";
     };
     String SC_OPCODE_CLEAN
     {
-        /* ### ACHTUNG: Neuer Text in Resource? SƒUBERN : SéUBERN */
         Text = "SƒUBERN" ;
         Text [ english ] = "CLEAN" ;
         Text [ norwegian ] = "CLEAN" ;
@@ -1947,7 +2051,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CLEAN";
         Text[ turkish ] = "CLEAN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "LIMPIAR";
+        Text[ catalan ] = "CLEAN";
+        Text[ thai ] = "CLEAN";
     };
     String SC_OPCODE_CHAR
     {
@@ -1976,9 +2081,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CHAR";
         Text[ turkish ] = "CHAR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CAR¡CTER";
+        Text[ catalan ] = "CHAR";
+        Text[ thai ] = "CHAR";
     };
-    String SC_OPCODE_LOG10 { Text = "LOG10" ; };
+    String SC_OPCODE_LOG10
+    {
+        Text = "LOG10";
+        Text[ english ] = "LOG10";
+        Text[ english_us ] = "LOG10";
+    };
     String SC_OPCODE_EVEN
     {
         Text = "GERADE" ;
@@ -2006,7 +2117,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "EVEN";
         Text[ turkish ] = "EVEN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REDONDEA.PAR";
+        Text[ catalan ] = "EVEN";
+        Text[ thai ] = "EVEN";
     };
     String SC_OPCODE_ODD
     {
@@ -2035,7 +2147,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ODD";
         Text[ turkish ] = "ODD";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REDONDEA.IMPAR";
+        Text[ catalan ] = "ODD";
+        Text[ thai ] = "ODD";
     };
     String SC_OPCODE_STD_NORM_DIST
     {
@@ -2064,9 +2177,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NORMSDIST";
         Text[ turkish ] = "STANDNORMDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.NORM.ESTAND";
+        Text[ catalan ] = "NORMSDIST";
+        Text[ thai ] = "NORMSDIST";
     };
-    String SC_OPCODE_FISHER { Text = "FISHER" ; };
+    String SC_OPCODE_FISHER
+    {
+        Text = "FISHER";
+        Text[ english ] = "FISHER";
+        Text[ english_us ] = "FISHER";
+    };
     String SC_OPCODE_FISHER_INV
     {
         Text = "FISHERINV" ;
@@ -2094,7 +2213,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FISHERINV";
         Text[ turkish ] = "FISHERINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.FISHER.INV";
+        Text[ catalan ] = "FISHERINV";
+        Text[ thai ] = "FISHERINV";
     };
     String SC_OPCODE_S_NORM_INV
     {
@@ -2123,7 +2243,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NORMSINV";
         Text[ turkish ] = "NORMSINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.NORM.ESTAND.INV";
+        Text[ catalan ] = "NORMSINV";
+        Text[ thai ] = "NORMSINV";
     };
     String SC_OPCODE_GAMMA_LN
     {
@@ -2152,7 +2273,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GAMMALN";
         Text[ turkish ] = "GAMMALN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "GAMMA.LN";
+        Text[ catalan ] = "GAMMALN";
+        Text[ thai ] = "GAMMALN";
     };
     String SC_OPCODE_ERROR_TYPE
     {
@@ -2172,7 +2294,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ chinese_simplified ] = "ERRORTYPE";
         Text[ russian ] = "“»œ.Œÿ»¡ »";
         Text[ polish ] = "TYP.B£ DU";
-        Text[ japanese ] = "ERROR.TYPE";
+        Text[ japanese ] = "ERRORTYPE";
         Text[ chinese_traditional ] = "ERRORTYPE";
         Text[ arabic ] = "ERRORTYPE";
         Text[ dutch ] = "TYPE.FOUT";
@@ -2181,7 +2303,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ERRORTYPE";
         Text[ turkish ] = "ERRORTYPE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TIPO.DE.ERROR";
+        Text[ catalan ] = "ERRORTYPE";
+        Text[ thai ] = "ERRORTYPE";
     };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // ?? Text klein, dt. & engl. gemischt ??
     String SC_OPCODE_FORMULA
@@ -2209,6 +2332,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "FORMULA";
         Text[ finnish ] = "FORMULA";
+        Text[ thai ] = "FORMULA";
     };
     String SC_OPCODE_ARABIC
     {
@@ -2227,13 +2351,14 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "ARABSKIE";
         Text[ portuguese_brazilian ] = "ARABIC";
         Text[ japanese ] = "ARABIC";
-        Text[ korean ] = "æ∆∂Û∫Òæ∆";
+        Text[ korean ] = "ARABIC";
         Text[ chinese_simplified ] = "ARABIC";
         Text[ chinese_traditional ] = "ARABIC";
         Text[ turkish ] = "ARABIC";
         Text[ arabic ] = "ARABIC";
-        Text[ catalan ] = "¡RABE";
-        Text[ finnish ] = "arabia";
+        Text[ catalan ] = "ARABIC";
+        Text[ finnish ] = "ARABIC";
+        Text[ thai ] = "ARABIC";
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -2263,6 +2388,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "ATAN2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "ATAN2";
+        Text[ thai ] = "ATAN2";
     };
     String SC_OPCODE_CEIL
     {
@@ -2291,7 +2417,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CEILING";
         Text[ turkish ] = "CEILING";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M⁄LTIPLO.SUPERIOR";
+        Text[ catalan ] = "CEILING";
+        Text[ thai ] = "CEILING";
     };
     String SC_OPCODE_FLOOR
     {
@@ -2320,7 +2447,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FLOOR";
         Text[ turkish ] = "FLOOR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M⁄LTIPLO.INFERIOR";
+        Text[ catalan ] = "FLOOR";
+        Text[ thai ] = "FLOOR";
     };
     String SC_OPCODE_ROUND
     {
@@ -2349,7 +2477,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ROUND";
         Text[ turkish ] = "ROUND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REDONDEAR";
+        Text[ catalan ] = "ROUND";
+        Text[ thai ] = "ROUND";
     };
     String SC_OPCODE_ROUND_UP
     {
@@ -2378,7 +2507,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ROUNDUP";
         Text[ turkish ] = "ROUNDUP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REDONDEAR.MAS";
+        Text[ catalan ] = "ROUNDUP";
+        Text[ thai ] = "ROUNDUP";
     };
     String SC_OPCODE_ROUND_DOWN
     {
@@ -2407,11 +2537,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ROUNDDOWN";
         Text[ turkish ] = "ROUNDDOWN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REDONDEAR.MENOS";
+        Text[ catalan ] = "ROUNDDOWN";
+        Text[ thai ] = "ROUNDDOWN";
     };
     String SC_OPCODE_TRUNC
     {
-        /* ### ACHTUNG: Neuer Text in Resource? K‹RZEN : KöRZEN */
         Text = "K‹RZEN" ;
         Text [ english ] = "TRUNC" ;
         Text [ norwegian ] = "TRUNC" ;
@@ -2437,9 +2567,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TRUNC";
         Text[ turkish ] = "TRUNC";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TRUNCAR";
+        Text[ catalan ] = "TRUNC";
+        Text[ thai ] = "TRUNC";
     };
-    String SC_OPCODE_LOG { Text = "LOG" ; };
+    String SC_OPCODE_LOG
+    {
+        Text = "LOG";
+        Text[ english ] = "LOG";
+        Text[ english_us ] = "LOG";
+    };
     String SC_OPCODE_POWER
     {
         Text = "POTENZ" ;
@@ -2447,7 +2583,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "POWER" ;
         Text [ italian ] = "POTENZA" ;
         Text [ portuguese_brazilian ] = "POTENCIA" ;
-        Text [ portuguese ] = "POT…NCIA" ;
+        Text [ portuguese ] = "POT NCIA" ;
         Text [ finnish ] = "POWER" ;
         Text [ danish ] = "POTENS" ;
         Text [ french ] = "PUISSANCE" ;
@@ -2467,7 +2603,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "POWER";
         Text[ turkish ] = "POWER";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "POTENCIA";
+        Text[ catalan ] = "POWER";
+        Text[ thai ] = "POWER";
     };
     String SC_OPCODE_GGT
     {
@@ -2496,7 +2633,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GCD";
         Text[ turkish ] = "GCD";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M.C.D";
+        Text[ catalan ] = "GCD";
+        Text[ thai ] = "GCD";
     };
     String SC_OPCODE_KGV
     {
@@ -2505,7 +2643,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "LCD" ;
         Text [ italian ] = "MCM" ;
         Text [ portuguese_brazilian ] = "LCD" ;
-        Text [ portuguese ] = "MIN.M⁄LT.COMUM" ;
+        Text [ portuguese ] = "MMC" ;
         Text [ finnish ] = "LCM" ;
         Text [ danish ] = "MINDSTE.F∆LLES.MULTIPLUM" ;
         Text [ french ] = "PPCM" ;
@@ -2525,7 +2663,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LCM";
         Text[ turkish ] = "LCM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M.C.M";
+        Text[ catalan ] = "LCM";
+        Text[ thai ] = "LCM";
     };
     String SC_OPCODE_MOD
     {
@@ -2554,7 +2693,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MOD";
         Text[ turkish ] = "MOD";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "RESIDUO";
+        Text[ catalan ] = "MOD";
+        Text[ thai ] = "MOD";
     };
     String SC_OPCODE_SUM_PRODUCT
     {
@@ -2583,7 +2723,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMPRODUCT";
         Text[ turkish ] = "SUMPRODUCT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMA.PRODUCTO";
+        Text[ catalan ] = "SUMPRODUCT";
+        Text[ thai ] = "SUMPRODUCT";
     };
     String SC_OPCODE_SUM_SQ
     {
@@ -2612,7 +2753,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMSQ";
         Text[ turkish ] = "SUMSQ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMA.CUADRADOS";
+        Text[ catalan ] = "SUMSQ";
+        Text[ thai ] = "SUMSQ";
     };
     String SC_OPCODE_SUM_X2MY2
     {
@@ -2641,7 +2783,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMX2MY2";
         Text[ turkish ] = "SUMX2MY2";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMAX2MENOSY2";
+        Text[ catalan ] = "SUMX2MY2";
+        Text[ thai ] = "SUMX2MY2";
     };
     String SC_OPCODE_SUM_X2DY2
     {
@@ -2670,7 +2813,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMX2PY2";
         Text[ turkish ] = "SUMX2PY2";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMAX2MASY2";
+        Text[ catalan ] = "SUMX2PY2";
+        Text[ thai ] = "SUMX2PY2";
     };
     String SC_OPCODE_SUM_XMY2
     {
@@ -2699,7 +2843,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMXMY2";
         Text[ turkish ] = "SUMXMY2";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMAXMENOSY2";
+        Text[ catalan ] = "SUMXMY2";
+        Text[ thai ] = "SUMXMY2";
     };
     String SC_OPCODE_GET_DATE
     {
@@ -2728,7 +2873,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DATE";
         Text[ turkish ] = "DATE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FECHA";
+        Text[ catalan ] = "DATE";
+        Text[ thai ] = "DATE";
     };
     String SC_OPCODE_GET_TIME
     {
@@ -2757,7 +2903,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TIME";
         Text[ turkish ] = "TIME";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "NSHORA";
+        Text[ catalan ] = "TIME";
+        Text[ thai ] = "TIME";
     };
     String SC_OPCODE_GET_DIFF_DATE
     {
@@ -2786,7 +2933,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DAYS";
         Text[ turkish ] = "DAYS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DÕAS";
+        Text[ catalan ] = "DAYS";
+        Text[ thai ] = "DAYS";
     };
     String SC_OPCODE_GET_DIFF_DATE_360
     {
@@ -2815,7 +2963,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DAYS360";
         Text[ turkish ] = "DAYS360";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DÕAS360";
+        Text[ catalan ] = "DAYS360";
+        Text[ thai ] = "DAYS360";
     };
     String SC_OPCODE_MIN
     {
@@ -2825,7 +2974,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MIN" ;
         Text [ portuguese_brazilian ] = "MIN" ;
         Text [ portuguese ] = "MÕNIMO" ;
-        Text [ finnish ] = "V‰h" ;
+        Text [ finnish ] = "MIN" ;
         Text [ danish ] = "MIN" ;
         Text [ french ] = "MIN" ;
         Text [ swedish ] = "MIN" ;
@@ -2844,7 +2993,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MIN";
         Text[ turkish ] = "MIN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MÕN";
+        Text[ catalan ] = "MIN";
+        Text[ thai ] = "‡∏ô‡πâ‡∏≠‡∏¢‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
     };
     String SC_OPCODE_MIN_A
     {
@@ -2873,7 +3023,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MINA";
         Text[ turkish ] = "MINA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MÕNA";
+        Text[ catalan ] = "MINA";
+        Text[ thai ] = "MINA";
     };
     String SC_OPCODE_MAX
     {
@@ -2883,7 +3034,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "MAX" ;
         Text [ portuguese_brazilian ] = "MAX" ;
         Text [ portuguese ] = "M¡XIMO" ;
-        Text [ finnish ] = "Enint" ;
+        Text [ finnish ] = "MAX" ;
         Text [ danish ] = "MAKS" ;
         Text [ french ] = "MAX" ;
         Text [ swedish ] = "MAX" ;
@@ -2902,7 +3053,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MAX";
         Text[ turkish ] = "MAX";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M¡X";
+        Text[ catalan ] = "MAX";
+        Text[ thai ] = "‡∏°‡∏≤‡∏Å‡∏ó‡∏µ‡πà‡∏™‡∏∏‡∏î";
     };
     String SC_OPCODE_MAX_A
     {
@@ -2931,7 +3083,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MAXA";
         Text[ turkish ] = "MAXA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "M¡XA";
+        Text[ catalan ] = "MAXA";
+        Text[ thai ] = "MAXA";
     };
     String SC_OPCODE_SUM
     {
@@ -2960,7 +3113,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUM";
         Text[ turkish ] = "SUM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMA";
+        Text[ catalan ] = "SUM";
+        Text[ thai ] = "SUM";
     };
     String SC_OPCODE_PRODUCT
     {
@@ -2989,7 +3143,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PRODUCT";
         Text[ turkish ] = "PRODUCT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRODUCTO";
+        Text[ catalan ] = "PRODUCT";
+        Text[ thai ] = "PRODUCT";
     };
     String SC_OPCODE_AVERAGE
     {
@@ -3018,7 +3173,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "AVERAGE";
         Text[ turkish ] = "AVERAGE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PROMEDIO";
+        Text[ catalan ] = "AVERAGE";
+        Text[ thai ] = "AVERAGE";
     };
     String SC_OPCODE_AVERAGE_A
     {
@@ -3047,7 +3203,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "AVERAGEA";
         Text[ turkish ] = "AVERAGEA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PROMEDIOA";
+        Text[ catalan ] = "AVERAGEA";
+        Text[ thai ] = "AVERAGEA";
     };
     String SC_OPCODE_COUNT
     {
@@ -3076,7 +3233,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COUNT";
         Text[ turkish ] = "COUNT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONTAR";
+        Text[ catalan ] = "COUNT";
+        Text[ thai ] = "COUNT";
     };
     String SC_OPCODE_COUNT_2
     {
@@ -3105,7 +3263,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COUNTA";
         Text[ turkish ] = "COUNTA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONTARA";
+        Text[ catalan ] = "COUNTA";
+        Text[ thai ] = "COUNTA";
     };
     String SC_OPCODE_NBW
     {
@@ -3118,7 +3277,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NPV" ;
         Text [ danish ] = "NUTIDSV∆RDI" ;
         Text [ french ] = "VAN" ;
-        Text [ swedish ] = "NNV" ;
+        Text [ swedish ] = "NETNUVƒRDE" ;
         Text [ dutch ] = "NHW" ;
         Text [ spanish ] = "VNA" ;
         Text [ english_us ] = "NPV" ;
@@ -3134,7 +3293,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NPV";
         Text[ turkish ] = "NPV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VNA";
+        Text[ catalan ] = "NPV";
+        Text[ thai ] = "NPV";
     };
     String SC_OPCODE_IKV
     {
@@ -3163,7 +3323,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "IRR";
         Text[ turkish ] = "IRR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TIR";
+        Text[ catalan ] = "IRR";
+        Text[ thai ] = "IRR";
     };
     String SC_OPCODE_MIRR
     {
@@ -3188,7 +3349,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "MIRR";
         Text[ arabic ] = "MIRR";
         Text[ catalan ] = "MIRR";
-        Text[ finnish ] = "QIKV";
+        Text[ finnish ] = "MIRR";
+        Text[ thai ] = "MIRR";
     };
     String SC_OPCODE_ISPMT
     {
@@ -3200,10 +3362,10 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ greek ] = "ISPMT";
         Text[ dutch ] = "ISPMT";
         Text[ french ] = "ISPMT";
-        Text[ spanish ] = "ISPMT";
-        Text[ italian ] = "ISPMT";
+        Text[ spanish ] = "INT.PAGO.DIR";
+        Text[ italian ] = "INTERESSE.RATA";
         Text[ danish ] = "ISPMT";
-        Text[ swedish ] = "ISPMT";
+        Text[ swedish ] = "RAL≈N";
         Text[ polish ] = "ISPMT";
         Text[ portuguese_brazilian ] = "ISPMT";
         Text[ japanese ] = "ISPMT";
@@ -3214,6 +3376,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ arabic ] = "ISPMT";
         Text[ catalan ] = "ISPMT";
         Text[ finnish ] = "ISPMT";
+        Text[ thai ] = "ISPMT";
     };
     String SC_OPCODE_VAR
     {
@@ -3243,6 +3406,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "VAR";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VAR";
+        Text[ thai ] = "VAR";
     };
     String SC_OPCODE_VAR_A
     {
@@ -3272,6 +3436,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "VARA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VARA";
+        Text[ thai ] = "VARA";
     };
     String SC_OPCODE_VAR_P
     {
@@ -3301,6 +3466,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "VARP";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VARP";
+        Text[ thai ] = "VARP";
     };
     String SC_OPCODE_VAR_P_A
     {
@@ -3330,6 +3496,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "VARPA";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VARPA";
+        Text[ thai ] = "VARPA";
     };
     String SC_OPCODE_ST_DEV
     {
@@ -3358,7 +3525,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STDEV";
         Text[ turkish ] = "STDEV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVEST";
+        Text[ catalan ] = "STDEV";
+        Text[ thai ] = "STDEV";
     };
     String SC_OPCODE_ST_DEV_A
     {
@@ -3387,7 +3555,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STDEVA";
         Text[ turkish ] = "STDEVA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVESTA";
+        Text[ catalan ] = "STDEVA";
+        Text[ thai ] = "STDEVA";
     };
     String SC_OPCODE_ST_DEV_P
     {
@@ -3416,7 +3585,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STDEVP";
         Text[ turkish ] = "STDEVP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVESTP";
+        Text[ catalan ] = "STDEVP";
+        Text[ thai ] = "STDEVP";
     };
     String SC_OPCODE_ST_DEV_P_A
     {
@@ -3445,9 +3615,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STDEVPA";
         Text[ turkish ] = "STDEVPA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVESTPA";
+        Text[ catalan ] = "STDEVPA";
+        Text[ thai ] = "STDEVPA";
     };
-    String SC_OPCODE_B { Text = "B" ; };
+    String SC_OPCODE_B
+    {
+        Text = "B";
+        Text[ english ] = "B";
+        Text[ english_us ] = "B";
+    };
     String SC_OPCODE_NORM_DIST
     {
         Text = "NORMVERT" ;
@@ -3475,7 +3651,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NORMDIST";
         Text[ turkish ] = "NORMDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.NORM";
+        Text[ catalan ] = "NORMDIST";
+        Text[ thai ] = "NORMDIST";
     };
     String SC_OPCODE_EXP_DIST
     {
@@ -3504,7 +3681,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "EXPONDIST";
         Text[ turkish ] = "EXPONDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.EXP";
+        Text[ catalan ] = "EXPONDIST";
+        Text[ thai ] = "EXPONDIST";
     };
     String SC_OPCODE_BINOM_DIST
     {
@@ -3533,7 +3711,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "BINOMDIST";
         Text[ turkish ] = "BINOMDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.BINOM";
+        Text[ catalan ] = "BINOMDIST";
+        Text[ thai ] = "BINOMDIST";
     };
     String SC_OPCODE_POISSON_DIST
     {
@@ -3563,6 +3742,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "POISSON";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "POISSON";
+        Text[ thai ] = "POISSON";
     };
     String SC_OPCODE_KOMBIN
     {
@@ -3591,7 +3771,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COMBIN";
         Text[ turkish ] = "COMBIN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COMBINAR";
+        Text[ catalan ] = "COMBIN";
+        Text[ thai ] = "COMBIN";
     };
     String SC_OPCODE_KOMBIN_2
     {
@@ -3620,7 +3801,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COMBINA";
         Text[ turkish ] = "COMBINA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COMBINAR2";
+        Text[ catalan ] = "COMBINA";
+        Text[ thai ] = "COMBINA";
     };
     String SC_OPCODE_VARIATIONEN
     {
@@ -3649,14 +3831,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PERMUT";
         Text[ turkish ] = "PERMUT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PERMUTACIONES";
+        Text[ catalan ] = "PERMUT";
+        Text[ thai ] = "PERMUT";
     };
     String SC_OPCODE_VARIATIONEN_2
     {
         Text = "VARIATIONEN2" ;
         Text [ english ] = "PERMUTATIONA" ;
         Text [ norwegian ] = "PERMUTA" ;
-        Text [ italian ] = "PERMUTATIONA" ;
+        Text [ italian ] = "PERMUTAZIONA" ;
         Text [ portuguese_brazilian ] = "PERMUTA" ;
         Text [ portuguese ] = "COMBIN" ;
         Text [ finnish ] = "PERMUTATIONA" ;
@@ -3678,7 +3861,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PERMUTATIONA";
         Text[ turkish ] = "PERMUTATIONA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PERMUTACIONESA";
+        Text[ catalan ] = "PERMUTATIONA";
+        Text[ thai ] = "PERMUTATIONA";
     };
     String SC_OPCODE_BW
     {
@@ -3707,7 +3891,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PV";
         Text[ turkish ] = "PV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VA";
+        Text[ catalan ] = "PV";
+        Text[ thai ] = "PV";
     };
     String SC_OPCODE_DIA
     {
@@ -3737,6 +3922,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SYD";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SYD";
+        Text[ thai ] = "SYD";
     };
     String SC_OPCODE_GDA
     {
@@ -3766,6 +3952,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "DDB";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DDB";
+        Text[ thai ] = "DDB";
     };
     String SC_OPCODE_GDA_2
     {
@@ -3795,6 +3982,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "DB";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DB";
+        Text[ thai ] = "DB";
     };
     String SC_OPCODE_VBD
     {
@@ -3807,7 +3995,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "VDB" ;
         Text [ danish ] = "VSA" ;
         Text [ french ] = "VDB" ;
-        Text [ swedish ] = "VDB" ;
+        Text [ swedish ] = "VDEGRAVSKR" ;
         Text [ dutch ] = "VDB" ;
         Text [ spanish ] = "DVS" ;
         Text [ english_us ] = "VDB" ;
@@ -3823,7 +4011,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "VDB";
         Text[ turkish ] = "VDB";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DVS";
+        Text[ catalan ] = "VDB";
+        Text[ thai ] = "VDB";
     };
     String SC_OPCODE_LAUFZ
     {
@@ -3852,7 +4041,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DURATION";
         Text[ turkish ] = "DURATION";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PLAZO";
+        Text[ catalan ] = "DURATION";
+        Text[ thai ] = "DURATION";
     };
     String SC_OPCODE_LIA
     {
@@ -3865,7 +4055,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "SLN" ;
         Text [ danish ] = "LA" ;
         Text [ french ] = "AMORLIN" ;
-        Text [ swedish ] = "LA" ;
+        Text [ swedish ] = "LINAVSKR" ;
         Text [ dutch ] = "LIN.AFSCHR" ;
         Text [ spanish ] = "SLN" ;
         Text [ english_us ] = "SLN" ;
@@ -3882,6 +4072,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "SLN";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "SLN";
+        Text[ thai ] = "SLN";
     };
     String SC_OPCODE_RMZ
     {
@@ -3894,7 +4085,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "PMT" ;
         Text [ danish ] = "YDELSE" ;
         Text [ french ] = "VPM" ;
-        Text [ swedish ] = "RBB" ;
+        Text [ swedish ] = "BETALNING" ;
         Text [ dutch ] = "RMB" ;
         Text [ spanish ] = "PAGO" ;
         Text [ english_us ] = "PMT" ;
@@ -3910,7 +4101,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PMT";
         Text[ turkish ] = "PMT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PAGO";
+        Text[ catalan ] = "PMT";
+        Text[ thai ] = "PMT";
     };
     String SC_OPCODE_COLUMNS
     {
@@ -3939,7 +4131,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COLUMNS";
         Text[ turkish ] = "COLUMNS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COLUMNAS";
+        Text[ catalan ] = "COLUMNS";
+        Text[ thai ] = "COLUMNS";
     };
     String SC_OPCODE_ROWS
     {
@@ -3968,7 +4161,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ROWS";
         Text[ turkish ] = "ROWS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FILAS";
+        Text[ catalan ] = "ROWS";
+        Text[ thai ] = "ROWS";
     };
     String SC_OPCODE_TABLES
     {
@@ -3995,8 +4189,9 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SHEETS";
         Text[ turkish ] = "SHEETS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HOJAS";
+        Text[ catalan ] = "SHEETS";
         Text[ finnish ] = "SHEETS";
+        Text[ thai ] = "SHEETS";
     };
     String SC_OPCODE_COLUMN
     {
@@ -4025,7 +4220,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COLUMN";
         Text[ turkish ] = "COLUMN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COLUMNA";
+        Text[ catalan ] = "COLUMN";
+        Text[ thai ] = "COLUMN";
     };
     String SC_OPCODE_ROW
     {
@@ -4054,7 +4250,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ROW";
         Text[ turkish ] = "ROW";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FILA";
+        Text[ catalan ] = "ROW";
+        Text[ thai ] = "ROW";
     };
     String SC_OPCODE_TABLE
     {
@@ -4081,8 +4278,9 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SHEET";
         Text[ turkish ] = "SHEET";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HOJA";
+        Text[ catalan ] = "SHEET";
         Text[ finnish ] = "SHEET";
+        Text[ thai ] = "SHEET";
     };
     String SC_OPCODE_ZGZ
     {
@@ -4093,7 +4291,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese_brazilian ] = "ZGZ" ;
         Text [ swedish ] = "RRI" ;
         Text [ danish ] = "RRI" ;
-        Text [ italian ] = "ZGZ" ;
+        Text [ italian ] = "INT.RENDIMENTO" ;
         Text [ spanish ] = "INT.RENDIMIENTO" ;
         Text [ french ] = "RENTINVEST" ;
         Text [ dutch ] = "ZGZ" ;
@@ -4109,8 +4307,9 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ZGZ";
         Text[ turkish ] = "ZGZ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INT.RENDIMIENTO";
+        Text[ catalan ] = "RRI";
         Text[ finnish ] = "RRI";
+        Text[ thai ] = "RRI";
     };
     String SC_OPCODE_ZW
     {
@@ -4123,7 +4322,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "FV" ;
         Text [ danish ] = "FV" ;
         Text [ french ] = "VC" ;
-        Text [ swedish ] = "FV" ;
+        Text [ swedish ] = "SLUTVƒRDE" ;
         Text [ dutch ] = "TW" ;
         Text [ spanish ] = "VF" ;
         Text [ english_us ] = "FV" ;
@@ -4139,7 +4338,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FV";
         Text[ turkish ] = "FV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VF";
+        Text[ catalan ] = "FV";
+        Text[ thai ] = "FV";
     };
     String SC_OPCODE_ZZR
     {
@@ -4152,7 +4352,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NPER" ;
         Text [ danish ] = "NPER" ;
         Text [ french ] = "NPM" ;
-        Text [ swedish ] = "BETALNING" ;
+        Text [ swedish ] = "PERIODER" ;
         Text [ dutch ] = "NPER" ;
         Text [ spanish ] = "NPER" ;
         Text [ english_us ] = "NPER" ;
@@ -4169,6 +4369,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "NPER";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "NPER";
+        Text[ thai ] = "NPER";
     };
     String SC_OPCODE_ZINS
     {
@@ -4197,7 +4398,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RATE";
         Text[ turkish ] = "RATE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TASA";
+        Text[ catalan ] = "RATE";
+        Text[ thai ] = "RATE";
     };
     String SC_OPCODE_ZINS_Z
     {
@@ -4226,7 +4428,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "IPMT";
         Text[ turkish ] = "IPMT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PAGOINT";
+        Text[ catalan ] = "IPMT";
+        Text[ thai ] = "IPMT";
     };
     String SC_OPCODE_KAPZ
     {
@@ -4255,7 +4458,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PPMT";
         Text[ turkish ] = "PPMT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "AMORTIZACION";
+        Text[ catalan ] = "PPMT";
+        Text[ thai ] = "PPMT";
     };
     String SC_OPCODE_KUM_ZINS_Z
     {
@@ -4264,7 +4468,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "CUMPPMT" ;
         Text [ italian ] = "INT.CUMUL" ;
         Text [ portuguese_brazilian ] = "CUMPPMT" ;
-        Text [ portuguese ] = "PGTO.JUR.ACUM" ;
+        Text [ portuguese ] = "PGTOJURACUM" ;
         Text [ finnish ] = "CUMIPMT" ;
         Text [ danish ] = "AKKUM.RENTE" ;
         Text [ french ] = "CUMUL.INTER" ;
@@ -4284,7 +4488,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CUMIPMT";
         Text[ turkish ] = "CUMIPMT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PAGO.INT.ENTRE";
+        Text[ catalan ] = "CUMIPMT";
+        Text[ thai ] = "CUMIPMT";
     };
     String SC_OPCODE_KUM_KAP_Z
     {
@@ -4293,11 +4498,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "CUMIPMT" ;
         Text [ italian ] = "CAP.CUM" ;
         Text [ portuguese_brazilian ] = "CUMIPMT" ;
-        Text [ portuguese ] = "PGTO.CAP.ACUM" ;
+        Text [ portuguese ] = "PGTOCAPACUM" ;
         Text [ finnish ] = "CUMPRINC" ;
         Text [ danish ] = "AKKUM.HOVEDSTOL" ;
         Text [ french ] = "CUMUL.PRINCPER" ;
-        Text [ swedish ] = "KUMKAPITAL" ;
+        Text [ swedish ] = "KUMPRIS" ;
         Text [ dutch ] = "CUM.HOOFDSOM" ;
         Text [ spanish ] = "PAGO.PRINC.ENTRE" ;
         Text [ english_us ] = "CUMPRINC" ;
@@ -4313,7 +4518,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CUMPRINC";
         Text[ turkish ] = "CUMPRINC";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PAGO.PRINC.ENTRE";
+        Text[ catalan ] = "CUMPRINC";
+        Text[ thai ] = "CUMPRINC";
     };
     String SC_OPCODE_EFFEKTIV
     {
@@ -4326,7 +4532,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "EFFECTIVE" ;
         Text [ danish ] = "EFFEKTIV" ;
         Text [ french ] = "TAUX.EFFECTIF" ;
-        Text [ swedish ] = "EFFEKTIV" ;
+        Text [ swedish ] = "EFFRƒNTA" ;
         Text [ dutch ] = "EFFECT.RENTE" ;
         Text [ spanish ] = "INT.EFECTIVO" ;
         Text [ english_us ] = "EFFECTIVE" ;
@@ -4342,7 +4548,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "EFFECTIVE";
         Text[ turkish ] = "EFFECTIVE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INT.EFECTIVO";
+        Text[ catalan ] = "EFFECTIVE";
+        Text[ thai ] = "EFFECTIVE";
     };
     String SC_OPCODE_NOMINAL
     {
@@ -4355,7 +4562,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "NOMINAL" ;
         Text [ danish ] = "NOMINEL" ;
         Text [ french ] = "TAUX.NOMINAL" ;
-        Text [ swedish ] = "NOMINAL" ;
+        Text [ swedish ] = "NOMRƒNTA" ;
         Text [ dutch ] = "NOMINALE.RENTE" ;
         Text [ spanish ] = "TASA.NOMINAL" ;
         Text [ english_us ] = "NOMINAL" ;
@@ -4371,7 +4578,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NOMINAL";
         Text[ turkish ] = "NOMINAL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TASA.NOMINAL";
+        Text[ catalan ] = "NOMINAL";
+        Text[ thai ] = "NOMINAL";
     };
     String SC_OPCODE_SUB_TOTAL
     {
@@ -4384,12 +4592,12 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ finnish ] = "SUBTOTAL" ;
         Text [ danish ] = "SUBTOTAL" ;
         Text [ french ] = "SOUS.TOTAL" ;
-        Text [ swedish ] = "DELRESULTAT" ;
+        Text [ swedish ] = "DELSUMMA" ;
         Text [ dutch ] = "SUBTOTAAL" ;
         Text [ spanish ] = "SUBTOTALES" ;
         Text [ english_us ] = "SUBTOTAL" ;
         Text[ chinese_simplified ] = "SUBTOTAL";
-        Text[ russian ] = "»“Œ√";
+        Text[ russian ] = "œ–ŒÃ≈∆”“Œ◊Õ€≈_»“Œ√»";
         Text[ polish ] = "SUMY.POåREDNIE";
         Text[ japanese ] = "SUBTOTAL";
         Text[ chinese_traditional ] = "SUBTOTAL";
@@ -4400,7 +4608,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUBTOTAL";
         Text[ turkish ] = "SUBTOTAL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUBTOTALES";
+        Text[ catalan ] = "SUBTOTAL";
+        Text[ thai ] = "SUBTOTAL";
     };
     String SC_OPCODE_DB_SUM
     {
@@ -4429,7 +4638,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DSUM";
         Text[ turkish ] = "DSUM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDSUMA";
+        Text[ catalan ] = "DSUM";
+        Text[ thai ] = "DSUM";
     };
     String SC_OPCODE_DB_COUNT
     {
@@ -4458,7 +4668,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DCOUNT";
         Text[ turkish ] = "DBCOUNT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDCONTAR";
+        Text[ catalan ] = "DCOUNT";
+        Text[ thai ] = "DCOUNT";
     };
     String SC_OPCODE_DB_COUNT_2
     {
@@ -4487,7 +4698,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DCOUNTA";
         Text[ turkish ] = "DCOUNTA";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDCONTARA";
+        Text[ catalan ] = "DCOUNTA";
+        Text[ thai ] = "DCOUNTA";
     };
     String SC_OPCODE_DB_AVERAGE
     {
@@ -4516,7 +4728,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DAVERAGE";
         Text[ turkish ] = "DAVERAGE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDPROMEDIO";
+        Text[ catalan ] = "DAVERAGE";
+        Text[ thai ] = "DAVERAGE";
     };
     String SC_OPCODE_DB_GET
     {
@@ -4545,7 +4758,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DGET";
         Text[ turkish ] = "DGET";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDEXTRAER";
+        Text[ catalan ] = "DGET";
+        Text[ thai ] = "DGET";
     };
     String SC_OPCODE_DB_MAX
     {
@@ -4574,7 +4788,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DMAX";
         Text[ turkish ] = "DMAX";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDMAX";
+        Text[ catalan ] = "DMAX";
+        Text[ thai ] = "DMAX";
     };
     String SC_OPCODE_DB_MIN
     {
@@ -4603,7 +4818,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DMIN";
         Text[ turkish ] = "DMIN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDMIN";
+        Text[ catalan ] = "DMIN";
+        Text[ thai ] = "DMIN";
     };
     String SC_OPCODE_DB_PRODUCT
     {
@@ -4632,7 +4848,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DPRODUCT";
         Text[ turkish ] = "DPRODUCT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDPRODUCTO";
+        Text[ catalan ] = "DPRODUCT";
+        Text[ thai ] = "DPRODUCT";
     };
     String SC_OPCODE_DB_STD_DEV
     {
@@ -4661,7 +4878,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DSTDEV";
         Text[ turkish ] = "DSTDEV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDDESVEST";
+        Text[ catalan ] = "DSTDEV";
+        Text[ thai ] = "DSTDEV";
     };
     String SC_OPCODE_DB_STD_DEV_P
     {
@@ -4690,7 +4908,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DSTDEVP";
         Text[ turkish ] = "DSTDEVP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDDESVESTP";
+        Text[ catalan ] = "DSTDEVP";
+        Text[ thai ] = "DSTDEVP";
     };
     String SC_OPCODE_DB_VAR
     {
@@ -4719,7 +4938,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DVAR";
         Text[ turkish ] = "DVAR";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDVAR";
+        Text[ catalan ] = "DVAR";
+        Text[ thai ] = "DVAR";
     };
     String SC_OPCODE_DB_VAR_P
     {
@@ -4748,7 +4968,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DVARP";
         Text[ turkish ] = "DVARP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BDVARP";
+        Text[ catalan ] = "DVARP";
+        Text[ thai ] = "DVARP";
     };
     String SC_OPCODE_INDIRECT
     {
@@ -4777,7 +4998,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "INDIRECT";
         Text[ turkish ] = "INDIRECT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INDIRECTO";
+        Text[ catalan ] = "INDIRECT";
+        Text[ thai ] = "INDIRECT";
     };
     String SC_OPCODE_ADRESS
     {
@@ -4806,7 +5028,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ADDRESS";
         Text[ turkish ] = "ADDRESS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DIRECCI”N";
+        Text[ catalan ] = "ADDRESS";
+        Text[ thai ] = "ADDRESS";
     };
     String SC_OPCODE_MATCH
     {
@@ -4835,7 +5058,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MATCH";
         Text[ turkish ] = "MATCH";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COINCIDIR";
+        Text[ catalan ] = "MATCH";
+        Text[ thai ] = "MATCH";
     };
     String SC_OPCODE_COUNT_EMPTY_CELLS
     {
@@ -4864,11 +5088,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COUNTBLANK";
         Text[ turkish ] = "COUNTBLANK";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONTAR.BLANCO";
+        Text[ catalan ] = "COUNTBLANK";
+        Text[ thai ] = "COUNTBLANK";
     };
     String SC_OPCODE_COUNT_IF
     {
-        /* ### ACHTUNG: Neuer Text in Resource? ZƒHLENWENN : ZéHLENWENN */
         Text = "ZƒHLENWENN" ;
         Text [ english ] = "COUNTIF" ;
         Text [ norwegian ] = "COUNTIF" ;
@@ -4894,7 +5118,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "COUNTIF";
         Text[ turkish ] = "COUNTIF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONTAR.SI";
+        Text[ catalan ] = "COUNTIF";
+        Text[ thai ] = "COUNTIF";
     };
     String SC_OPCODE_SUM_IF
     {
@@ -4923,7 +5148,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUMIF";
         Text[ turkish ] = "SUMIF";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUMAR.SI";
+        Text[ catalan ] = "SUMIF";
+        Text[ thai ] = "SUMIF";
     };
     String SC_OPCODE_LOOKUP
     {
@@ -4952,7 +5178,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LOOKUP";
         Text[ turkish ] = "LOOKUP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BUSCAR";
+        Text[ catalan ] = "LOOKUP";
+        Text[ thai ] = "LOOKUP";
     };
     String SC_OPCODE_V_LOOKUP
     {
@@ -4981,7 +5208,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "VLOOKUP";
         Text[ turkish ] = "VLOOKUP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BUSCARV";
+        Text[ catalan ] = "VLOOKUP";
+        Text[ thai ] = "VLOOKUP";
     };
     String SC_OPCODE_H_LOOKUP
     {
@@ -5010,7 +5238,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "HLOOKUP";
         Text[ turkish ] = "HLOOKUP";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BUSCARH";
+        Text[ catalan ] = "HLOOKUP";
+        Text[ thai ] = "HLOOKUP";
     };
     String SC_OPCODE_MULTI_AREA
     {
@@ -5039,7 +5268,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MULTIRANGE";
         Text[ turkish ] = "MULTIRANGE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MULTIRANGO";
+        Text[ catalan ] = "MULTIRANGE";
+        Text[ thai ] = "MULTIRANGE";
     };
     String SC_OPCODE_OFFSET
     {
@@ -5068,7 +5298,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "OFFSET";
         Text[ turkish ] = "OFFSET";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESREF";
+        Text[ catalan ] = "OFFSET";
+        Text[ thai ] = "OFFSET";
     };
     String SC_OPCODE_INDEX
     {
@@ -5079,7 +5310,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese_brazilian ] = "NDICE" ;
          // ?? erstes Zeichen = I ??
         Text [ portuguese ] = "ÕNDICE" ;
-        Text [ finnish ] = "Hakemisto" ;
+        Text [ finnish ] = "INDEX" ;
         Text [ danish ] = "INDEKS" ;
         Text [ french ] = "INDEX" ;
         Text [ swedish ] = "INDEX" ;
@@ -5098,7 +5329,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "INDEX";
         Text[ turkish ] = "INDEX";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ÕNDICE";
+        Text[ catalan ] = "INDEX";
+        Text[ thai ] = "‡∏î‡∏±‡∏ä‡∏ô‡∏µ";
     };
     String SC_OPCODE_AREAS
     {
@@ -5127,7 +5359,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "AREAS";
         Text[ turkish ] = "AREAS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "¡REAS";
+        Text[ catalan ] = "AREAS";
+        Text[ thai ] = "AREAS";
     };
     String SC_OPCODE_CURRENCY
     {
@@ -5156,7 +5389,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DOLLAR";
         Text[ turkish ] = "TL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MONEDA";
+        Text[ catalan ] = "DOLLAR";
+        Text[ thai ] = "DOLLAR";
     };
     String SC_OPCODE_REPLACE
     {
@@ -5185,7 +5419,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "REPLACE";
         Text[ turkish ] = "REPLACE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REEMPLAZAR";
+        Text[ catalan ] = "REPLACE";
+        Text[ thai ] = "REPLACE";
     };
     String SC_OPCODE_FIXED
     {
@@ -5211,17 +5446,18 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "VAST";
         Text[ chinese_simplified ] = "FIXED";
         Text[ greek ] = "FIXED";
-        Text[ korean ] = "FIXED";
+        Text[ korean ] = "Í≥†Ï†ï";
         Text[ turkish ] = "FIXED";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FIJO";
+        Text[ catalan ] = "FIXED";
+        Text[ thai ] = "FIXED";
     };
     String SC_OPCODE_FIND
     {
         Text = "FINDEN" ;
         Text [ english ] = "FIND" ;
         Text [ norwegian ] = "FINN" ;
-        Text [ italian ] = "CERCA1" ;
+        Text [ italian ] = "TROVA" ;
         Text [ portuguese_brazilian ] = "ENCONTRAR" ;
         Text [ portuguese ] = "LOCALIZAR" ;
         Text [ finnish ] = "FIND" ;
@@ -5243,7 +5479,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FIND";
         Text[ turkish ] = "FIND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ENCONTRAR";
+        Text[ catalan ] = "FIND";
+        Text[ thai ] = "FIND";
     };
     String SC_OPCODE_EXACT
     {
@@ -5272,7 +5509,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "EXACT";
         Text[ turkish ] = "EXACT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "IGUAL";
+        Text[ catalan ] = "EXACT";
+        Text[ thai ] = "EXACT";
     };
     String SC_OPCODE_LEFT
     {
@@ -5301,7 +5539,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LEFT";
         Text[ turkish ] = "LEFT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "IZQUIERDA";
+        Text[ catalan ] = "LEFT";
+        Text[ thai ] = "LEFT";
     };
     String SC_OPCODE_RIGHT
     {
@@ -5330,14 +5569,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RIGHT";
         Text[ turkish ] = "RIGHT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DERECHA";
+        Text[ catalan ] = "RIGHT";
+        Text[ thai ] = "RIGHT";
     };
     String SC_OPCODE_SEARCH
     {
         Text = "SUCHEN" ;
         Text [ english ] = "SEARCH" ;
         Text [ norwegian ] = "LET" ;
-        Text [ italian ] = "CERCA2" ;
+        Text [ italian ] = "RICERCA" ;
         Text [ portuguese_brazilian ] = "PROCURAR" ;
         Text [ portuguese ] = "PROCURAR" ;
         Text [ finnish ] = "SEARCH" ;
@@ -5359,7 +5599,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SEARCH";
         Text[ turkish ] = "SEARCH";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "HALLAR";
+        Text[ catalan ] = "SEARCH";
+        Text[ thai ] = "SEARCH";
     };
     String SC_OPCODE_MID
     {
@@ -5388,7 +5629,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MID";
         Text[ turkish ] = "MID";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "EXTRAE";
+        Text[ catalan ] = "MID";
+        Text[ thai ] = "MID";
     };
     String SC_OPCODE_TEXT
     {
@@ -5398,7 +5640,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "TESTO" ;
         Text [ portuguese_brazilian ] = "TEXTO" ;
         Text [ portuguese ] = "TEXTO" ;
-        Text [ finnish ] = "Teksti" ;
+        Text [ finnish ] = "TEXT" ;
         Text [ danish ] = "TEKST" ;
         Text [ french ] = "TEXTE" ;
         Text [ swedish ] = "TEXT" ;
@@ -5417,7 +5659,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TEXT";
         Text[ turkish ] = "TEXT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TEXTO";
+        Text[ catalan ] = "TEXT";
+        Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
     };
     String SC_OPCODE_SUBSTITUTE
     {
@@ -5446,7 +5689,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SUBSTITUTE";
         Text[ turkish ] = "SUBSTITUTE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SUSTITUIR";
+        Text[ catalan ] = "SUBSTITUTE";
+        Text[ thai ] = "SUBSTITUTE";
     };
     String SC_OPCODE_REPT
     {
@@ -5475,7 +5719,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "REPT";
         Text[ turkish ] = "REPT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "REPETIR";
+        Text[ catalan ] = "REPT";
+        Text[ thai ] = "REPT";
     };
     String SC_OPCODE_CONCAT
     {
@@ -5504,7 +5749,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CONCATENATE";
         Text[ turkish ] = "CONCATENATE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONCATENAR";
+        Text[ catalan ] = "CONCATENATE";
+        Text[ thai ] = "CONCATENATE";
     };
     String SC_OPCODE_MAT_VALUE
     {
@@ -5533,7 +5779,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MVALUE";
         Text[ turkish ] = "MVALUE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MVALOR";
+        Text[ catalan ] = "MVALUE";
+        Text[ thai ] = "MVALUE";
     };
     String SC_OPCODE_MAT_DET
     {
@@ -5563,6 +5810,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "MDETERM";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "MDETERM";
+        Text[ thai ] = "MDETERM";
     };
     String SC_OPCODE_MAT_INV
     {
@@ -5591,7 +5839,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MINVERSE";
         Text[ turkish ] = "MINVERSE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MINVERSA";
+        Text[ catalan ] = "MINVERSE";
+        Text[ thai ] = "MINVERSE";
     };
     String SC_OPCODE_MAT_MULT
     {
@@ -5621,6 +5870,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "MMULT";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "MMULT";
+        Text[ thai ] = "MMULT";
     };
     String SC_OPCODE_MAT_TRANS
     {
@@ -5649,7 +5899,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TRANSPOSE";
         Text[ turkish ] = "TRANSPOSE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TRANSPONER";
+        Text[ catalan ] = "TRANSPOSE";
+        Text[ thai ] = "TRANSPOSE";
     };
     String SC_OPCODE_MATRIX_UNIT
     {
@@ -5678,7 +5929,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MUNIT";
         Text[ turkish ] = "MUNIT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MUNITARIA";
+        Text[ catalan ] = "MUNIT";
+        Text[ thai ] = "MUNIT";
     };
     String SC_OPCODE_BACK_SOLVER
     {
@@ -5707,7 +5959,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GOALSEEK";
         Text[ turkish ] = "GOALSEEK";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "VALORPRETENDIDO";
+        Text[ catalan ] = "GOALSEEK";
+        Text[ thai ] = "GOALSEEK";
     };
     String SC_OPCODE_HYP_GEOM_DIST
     {
@@ -5736,7 +5989,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "HYPGEOMDIST";
         Text[ turkish ] = "HYPGEOMDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.HIPERGEOM";
+        Text[ catalan ] = "HYPGEOMDIST";
+        Text[ thai ] = "HYPGEOMDIST";
     };
     String SC_OPCODE_LOG_NORM_DIST
     {
@@ -5765,7 +6019,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LOGNORMDIST";
         Text[ turkish ] = "LOGNORMDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.LOG.NORM";
+        Text[ catalan ] = "LOGNORMDIST";
+        Text[ thai ] = "LOGNORMDIST";
     };
     String SC_OPCODE_T_DIST
     {
@@ -5794,7 +6049,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TDIST";
         Text[ turkish ] = "TDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.T";
+        Text[ catalan ] = "TDIST";
+        Text[ thai ] = "TDIST";
     };
     String SC_OPCODE_F_DIST
     {
@@ -5823,7 +6079,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FDIST";
         Text[ turkish ] = "FDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.F";
+        Text[ catalan ] = "FDIST";
+        Text[ thai ] = "FDIST";
     };
     String SC_OPCODE_CHI_DIST
     {
@@ -5852,7 +6109,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CHIDIST";
         Text[ turkish ] = "CHIDIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.JI";
+        Text[ catalan ] = "CHIDIST";
+        Text[ thai ] = "CHIDIST";
     };
     String SC_OPCODE_WEIBULL
     {
@@ -5881,7 +6139,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "WEIBULL";
         Text[ turkish ] = "WEIBULL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DIST.WEIBULL";
+        Text[ catalan ] = "WEIBULL";
+        Text[ thai ] = "WEIBULL";
     };
     String SC_OPCODE_NEG_BINOM_VERT
     {
@@ -5911,6 +6170,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "NEGBINOMDIST";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "NEGBINOMDIST";
+        Text[ thai ] = "NEGBINOMDIST";
     };
     String SC_OPCODE_KRIT_BINOM
     {
@@ -5939,7 +6199,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CRITBINOM";
         Text[ turkish ] = "CRITBINOM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "BINOM.CRIT";
+        Text[ catalan ] = "CRITBINOM";
+        Text[ thai ] = "CRITBINOM";
     };
     String SC_OPCODE_KURT
     {
@@ -5968,7 +6229,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "KURT";
         Text[ turkish ] = "KURT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CURTOSIS";
+        Text[ catalan ] = "KURT";
+        Text[ thai ] = "KURT";
     };
     String SC_OPCODE_HAR_MEAN
     {
@@ -5997,7 +6259,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "HARMEAN";
         Text[ turkish ] = "HARMEAN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MEDIA.ARMO";
+        Text[ catalan ] = "HARMEAN";
+        Text[ thai ] = "HARMEAN";
     };
     String SC_OPCODE_GEO_MEAN
     {
@@ -6026,7 +6289,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GEOMEAN";
         Text[ turkish ] = "GEOMEAN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MEDIA.GEOM";
+        Text[ catalan ] = "GEOMEAN";
+        Text[ thai ] = "GEOMEAN";
     };
     String SC_OPCODE_STANDARD
     {
@@ -6055,7 +6319,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STANDARDIZE";
         Text[ turkish ] = "STANDARDIZE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "NORMALIZACI”N";
+        Text[ catalan ] = "STANDARDIZE";
+        Text[ thai ] = "STANDARDIZE";
     };
     String SC_OPCODE_AVE_DEV
     {
@@ -6084,7 +6349,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "AVEDEV";
         Text[ turkish ] = "AVEDEV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVPROM";
+        Text[ catalan ] = "AVEDEV";
+        Text[ thai ] = "AVEDEV";
     };
     String SC_OPCODE_SCHIEFE
     {
@@ -6113,7 +6379,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SKEW";
         Text[ turkish ] = "SKEW";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COEFICIENTE.ASIMETRIA";
+        Text[ catalan ] = "SKEW";
+        Text[ thai ] = "SKEW";
     };
     String SC_OPCODE_DEV_SQ
     {
@@ -6142,7 +6409,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "DEVSQ";
         Text[ turkish ] = "DEVSQ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DESVIA2";
+        Text[ catalan ] = "DEVSQ";
+        Text[ thai ] = "DEVSQ";
     };
     String SC_OPCODE_MEDIAN
     {
@@ -6171,7 +6439,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MEDIAN";
         Text[ turkish ] = "MEDIAN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MEDIANA";
+        Text[ catalan ] = "MEDIAN";
+        Text[ thai ] = "MEDIAN";
     };
     String SC_OPCODE_MODAL_VALUE
     {
@@ -6200,7 +6469,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MODE";
         Text[ turkish ] = "MODE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MODA";
+        Text[ catalan ] = "MODE";
+        Text[ thai ] = "MODE";
     };
     String SC_OPCODE_Z_TEST
     {
@@ -6229,7 +6499,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "ZTEST";
         Text[ turkish ] = "ZTEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.Z";
+        Text[ catalan ] = "ZTEST";
+        Text[ thai ] = "ZTEST";
     };
     String SC_OPCODE_T_TEST
     {
@@ -6258,7 +6529,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TTEST";
         Text[ turkish ] = "TTEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.T";
+        Text[ catalan ] = "TTEST";
+        Text[ thai ] = "TTEST";
     };
     String SC_OPCODE_RANK
     {
@@ -6287,7 +6559,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RANK";
         Text[ turkish ] = "RANK";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "JERARQUÕA";
+        Text[ catalan ] = "RANK";
+        Text[ thai ] = "RANK";
     };
     String SC_OPCODE_PERCENTILE
     {
@@ -6316,7 +6589,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PERCENTILE";
         Text[ turkish ] = "PERCENTILE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PERCENTIL";
+        Text[ catalan ] = "PERCENTILE";
+        Text[ thai ] = "PERCENTILE";
     };
     String SC_OPCODE_PERCENT_RANK
     {
@@ -6345,11 +6619,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PERCENTRANK";
         Text[ turkish ] = "PERCENTRANK";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "RANGO.PERCENTIL";
+        Text[ catalan ] = "PERCENTRANK";
+        Text[ thai ] = "PERCENTRANK";
     };
     String SC_OPCODE_LARGE
     {
-        /* ### ACHTUNG: Neuer Text in Resource? KGR÷SSTE : KGRÕSSTE */
         Text = "KGR÷SSTE" ;
         Text [ english ] = "LARGE" ;
         Text [ norwegian ] = "STOR" ;
@@ -6375,7 +6649,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LARGE";
         Text[ turkish ] = "LARGE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "K.ESIMO.MAYOR";
+        Text[ catalan ] = "LARGE";
+        Text[ thai ] = "LARGE";
     };
     String SC_OPCODE_SMALL
     {
@@ -6404,11 +6679,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SMALL";
         Text[ turkish ] = "SMALL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "K.ESIMO.MENOR";
+        Text[ catalan ] = "SMALL";
+        Text[ thai ] = "SMALL";
     };
     String SC_OPCODE_FREQUENCY
     {
-        /* ### ACHTUNG: Neuer Text in Resource? HƒUFIGKEIT : HéUFIGKEIT */
         Text = "HƒUFIGKEIT" ;
         Text [ english ] = "FREQUENCY" ;
         Text [ norwegian ] = "FREKVENS" ;
@@ -6434,7 +6709,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FREQUENCY";
         Text[ turkish ] = "FREQUENCY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "FRECUENCIA";
+        Text[ catalan ] = "FREQUENCY";
+        Text[ thai ] = "FREQUENCY";
     };
     String SC_OPCODE_QUARTILE
     {
@@ -6463,7 +6739,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "QUARTILE";
         Text[ turkish ] = "QUARTILE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CUARTIL";
+        Text[ catalan ] = "QUARTILE";
+        Text[ thai ] = "QUARTILE";
     };
     String SC_OPCODE_NORM_INV
     {
@@ -6492,7 +6769,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "NORMINV";
         Text[ turkish ] = "NORMINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.NORM.INV";
+        Text[ catalan ] = "NORMINV";
+        Text[ thai ] = "NORMINV";
     };
     String SC_OPCODE_CONFIDENCE
     {
@@ -6521,7 +6799,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CONFIDENCE";
         Text[ turkish ] = "CONFIDENCE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INTERVALO.CONFIANZA";
+        Text[ catalan ] = "CONFIDENCE";
+        Text[ thai ] = "CONFIDENCE";
     };
     String SC_OPCODE_F_TEST
     {
@@ -6550,7 +6829,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FTEST";
         Text[ turkish ] = "FTEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.F";
+        Text[ catalan ] = "FTEST";
+        Text[ thai ] = "FTEST";
     };
     String SC_OPCODE_TRIM_MEAN
     {
@@ -6579,7 +6859,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TRIMMEAN";
         Text[ turkish ] = "TRIMMEAN";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "MEDIA.ACOTADA";
+        Text[ catalan ] = "TRIMMEAN";
+        Text[ thai ] = "TRIMMEAN";
     };
     String SC_OPCODE_PROB
     {
@@ -6608,7 +6889,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "PROB";
         Text[ turkish ] = "PROB";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PROBABILIDAD";
+        Text[ catalan ] = "PROB";
+        Text[ thai ] = "PROB";
     };
     String SC_OPCODE_CORREL
     {
@@ -6637,7 +6919,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CORREL";
         Text[ turkish ] = "CORREL";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COEF.DE.CORREL";
+        Text[ catalan ] = "CORREL";
+        Text[ thai ] = "CORREL";
     };
     String SC_OPCODE_COVAR
     {
@@ -6667,6 +6950,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "COVAR";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "COVAR";
+        Text[ thai ] = "COVAR";
     };
     String SC_OPCODE_PEARSON
     {
@@ -6696,6 +6980,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ turkish ] = "PEARSON";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "PEARSON";
+        Text[ thai ] = "PEARSON";
     };
     String SC_OPCODE_RSQ
     {
@@ -6724,7 +7009,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "RSQ";
         Text[ turkish ] = "RSQ";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "COEFICIENTE.R2";
+        Text[ catalan ] = "RSQ";
+        Text[ thai ] = "RSQ";
     };
     String SC_OPCODE_STEYX
     {
@@ -6753,7 +7039,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STEYX";
         Text[ turkish ] = "STEYX";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ERROR.TÕPICO.XY";
+        Text[ catalan ] = "STEYX";
+        Text[ thai ] = "STEYX";
     };
     String SC_OPCODE_SLOPE
     {
@@ -6782,7 +7069,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "SLOPE";
         Text[ turkish ] = "SLOPE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PENDIENTE";
+        Text[ catalan ] = "SLOPE";
+        Text[ thai ] = "SLOPE";
     };
     String SC_OPCODE_INTERCEPT
     {
@@ -6811,7 +7099,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "INTERCEPT";
         Text[ turkish ] = "INTERCEPT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INTERSECCI”N.EJE";
+        Text[ catalan ] = "INTERCEPT";
+        Text[ thai ] = "INTERCEPT";
     };
     String SC_OPCODE_TREND
     {
@@ -6840,7 +7129,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TREND";
         Text[ turkish ] = "TREND";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TENDENCIA";
+        Text[ catalan ] = "TREND";
+        Text[ thai ] = "TREND";
     };
     String SC_OPCODE_GROWTH
     {
@@ -6869,7 +7159,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GROWTH";
         Text[ turkish ] = "GROWTH";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CRECIMIENTO";
+        Text[ catalan ] = "GROWTH";
+        Text[ thai ] = "GROWTH";
     };
     String SC_OPCODE_RGP
     {
@@ -6898,7 +7189,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LINEST";
         Text[ turkish ] = "LINEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESTIMACI”N.LINEAL";
+        Text[ catalan ] = "LINEST";
+        Text[ thai ] = "LINEST";
     };
     String SC_OPCODE_RKP
     {
@@ -6927,11 +7219,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LOGEST";
         Text[ turkish ] = "LOGEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESTIMACI”N.LOGARÕTMICA";
+        Text[ catalan ] = "LOGEST";
+        Text[ thai ] = "LOGEST";
     };
     String SC_OPCODE_FORECAST
     {
-        /* ### ACHTUNG: Neuer Text in Resource? SCHƒTZER : SCHéTZER */
         Text = "SCHƒTZER" ;
         Text [ english ] = "FORECAST" ;
         Text [ norwegian ] = "FORECAST" ;
@@ -6957,7 +7249,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FORECAST";
         Text[ turkish ] = "FORECAST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRON”STICO";
+        Text[ catalan ] = "FORECAST";
+        Text[ thai ] = "FORECAST";
     };
     String SC_OPCODE_CHI_INV
     {
@@ -6986,7 +7279,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CHIINV";
         Text[ turkish ] = "CHIINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.JI.INV";
+        Text[ catalan ] = "CHIINV";
+        Text[ thai ] = "CHIINV";
     };
     String SC_OPCODE_GAMMA_DIST
     {
@@ -7015,7 +7309,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GAMMADIST";
         Text[ turkish ] = "GAMMADIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.GAMMA";
+        Text[ catalan ] = "GAMMADIST";
+        Text[ thai ] = "GAMMADIST";
     };
     String SC_OPCODE_GAMMA_INV
     {
@@ -7044,7 +7339,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "GAMMAINV";
         Text[ turkish ] = "GAMMAINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.GAMMA.INV";
+        Text[ catalan ] = "GAMMAINV";
+        Text[ thai ] = "GAMMAINV";
     };
     String SC_OPCODE_T_INV
     {
@@ -7073,7 +7369,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "TINV";
         Text[ turkish ] = "TINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.T.INV";
+        Text[ catalan ] = "TINV";
+        Text[ thai ] = "TINV";
     };
     String SC_OPCODE_F_INV
     {
@@ -7102,7 +7399,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "FINV";
         Text[ turkish ] = "FINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.F.INV";
+        Text[ catalan ] = "FINV";
+        Text[ thai ] = "FINV";
     };
     String SC_OPCODE_CHI_TEST
     {
@@ -7131,7 +7429,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CHITEST";
         Text[ turkish ] = "CHITEST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "PRUEBA.JI";
+        Text[ catalan ] = "CHITEST";
+        Text[ thai ] = "CHITEST";
     };
     String SC_OPCODE_LOG_INV
     {
@@ -7160,7 +7459,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "LOGINV";
         Text[ turkish ] = "LOGINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "INV.LOG";
+        Text[ catalan ] = "LOGINV";
+        Text[ thai ] = "LOGINV";
     };
     String SC_OPCODE_TABLE_OP
     {
@@ -7189,7 +7489,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "MULTIPLE.OPERATIONS";
         Text[ turkish ] = "MULTIPLE OPERATIONS";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "OPERACI”N.M⁄LTIPLE";
+        Text[ catalan ] = "MULTIPLE.OPERATIONS";
+        Text[ thai ] = "MULTIPLE.OPERATIONS";
     };
     String SC_OPCODE_BETA_DIST
     {
@@ -7218,7 +7519,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "BETADIST";
         Text[ turkish ] = "BETADIST";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.BETA";
+        Text[ catalan ] = "BETADIST";
+        Text[ thai ] = "BETADIST";
     };
     String SC_OPCODE_BETA_INV
     {
@@ -7247,7 +7549,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "BETAINV";
         Text[ turkish ] = "BETAINV";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DISTR.BETA.INV";
+        Text[ catalan ] = "BETAINV";
+        Text[ thai ] = "BETAINV";
     };
     String SC_OPCODE_WEEK
     {
@@ -7256,11 +7559,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "WEEKOFYEAR" ;
         Text [ italian ] = "NUM.SETTIMANA" ;
         Text [ portuguese_brazilian ] = "WEEKOFYEAR" ;
-        Text [ portuguese ] = "SEMANACALEND¡RIO" ;
+        Text [ portuguese ] = "N⁄MSEMANA" ;
         Text [ finnish ] = "WEEKNUM" ;
         Text [ danish ] = "KALENDERUGE" ;
         Text [ french ] = "NO.SEMAINE" ;
-        Text [ swedish ] = "KALENDERVECKA" ;
+        Text [ swedish ] = "VECKONR" ;
         Text [ dutch ] = "KALENDERWEEK" ;
         Text [ spanish ] = "SEM.DEL.A—O" ;
         Text [ english_us ] = "WEEKNUM" ;
@@ -7276,7 +7579,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "WEEKNUM";
         Text[ turkish ] = "WEEKNUM";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SEM.DEL.A—O";
+        Text[ catalan ] = "WEEKNUM";
+        Text[ thai ] = "WEEKNUM";
     };
     String SC_OPCODE_EASTERSUNDAY
     {
@@ -7288,7 +7592,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "EERSTEPAASDAG";
         Text[ french ] = "DIMANCHEDEPAQUES";
         Text[ spanish ] = "DOMINGOPASCUA";
-        Text[ italian ] = "DOMENICADIPASQUA";
+        Text[ italian ] = "DOMENICA.DI.PASQUA";
         Text[ danish ] = "P≈SKESÿNDAG";
         Text[ swedish ] = "P≈SKDAGEN";
         Text[ polish ] = "NIEDZIELAWIELKANOCNA";
@@ -7303,8 +7607,9 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "EASTERSUNDAY";
         Text[ turkish ] = "EASTERSUNDAY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DOMINGOPASCUA";
+        Text[ catalan ] = "EASTERSUNDAY";
         Text[ finnish ] = "EASTERSUNDAY";
+        Text[ thai ] = "EASTERSUNDAY";
     };
     String SC_OPCODE_GET_DAY_OF_WEEK
     {
@@ -7333,7 +7638,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "WEEKDAY";
         Text[ turkish ] = "WEEKDAY";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "DÕASEM";
+        Text[ catalan ] = "WEEKDAY";
+        Text[ thai ] = "WEEKDAY";
     };
     String SC_OPCODE_NO_NAME
     {
@@ -7343,7 +7649,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ italian ] = "#NOME!" ;
         Text [ portuguese_brazilian ] = "#NOME!" ;
         Text [ portuguese ] = "#NOME!" ;
-        Text [ finnish ] = "NAME!" ;
+        Text [ finnish ] = "#NAME!" ;
         Text [ danish ] = "#NAVN!" ;
         Text [ french ] = "#NOM!" ;
         Text [ swedish ] = "#NAMN!" ;
@@ -7362,7 +7668,8 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "#NAME!";
         Text[ turkish ] = "#NAME!";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "#NOMBRE!";
+        Text[ catalan ] = "#NAME!";
+        Text[ thai ] = "#NAME!";
     };
     String SC_OPCODE_STYLE
     {
@@ -7391,9 +7698,15 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "STYLE";
         Text[ turkish ] = "STYLE";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "ESTILO";
+        Text[ catalan ] = "STYLE";
+        Text[ thai ] = "STYLE";
     };
-    String SC_OPCODE_DDE { Text = "DDE" ; };
+    String SC_OPCODE_DDE
+    {
+        Text = "DDE";
+        Text[ english ] = "DDE";
+        Text[ english_us ] = "DDE";
+    };
     String SC_OPCODE_BASE
     {
         Text = "BASIS" ;
@@ -7421,6 +7734,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "BASE";
         Text[ finnish ] = "BASE";
+        Text[ thai ] = "BASE";
     };
     String SC_OPCODE_DECIMAL
     {
@@ -7449,6 +7763,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "DECIMAL";
         Text[ finnish ] = "DECIMAL";
+        Text[ thai ] = "DECIMAL";
     };
     String SC_OPCODE_CONVERT
     {
@@ -7475,8 +7790,9 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ korean ] = "CONVERT";
         Text[ turkish ] = "CONVERT";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "CONVERTIR";
+        Text[ catalan ] = "CONVERT";
         Text[ finnish ] = "CONVERT";
+        Text[ thai ] = "CONVERT";
     };
     String SC_OPCODE_ROMAN
     {
@@ -7495,13 +7811,14 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ polish ] = "RZYMSKIE";
         Text[ portuguese_brazilian ] = "ROMAN";
         Text[ japanese ] = "ROMAN";
-        Text[ korean ] = "∑Œ∏∂";
+        Text[ korean ] = "ROMAN";
         Text[ chinese_simplified ] = "ROMAN";
         Text[ chinese_traditional ] = "ROMAN";
         Text[ turkish ] = "ROMAN";
         Text[ arabic ] = "ROMAN";
-        Text[ catalan ] = "ROMANO";
-        Text[ finnish ] = "R÷MISCH";
+        Text[ catalan ] = "ROMAN";
+        Text[ finnish ] = "ROMAN";
+        Text[ thai ] = "ROMAN";
     };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
@@ -7798,6 +8115,17 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
 
