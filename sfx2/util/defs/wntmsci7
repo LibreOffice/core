@@ -8772,3 +8772,4 @@ threadFunc
 ?s_cd@?$WeakImplHelper3@VXSynchronousFrameLoader@frame@star@sun@com@@VXExtendedFilterDetection@document@345@VXServiceInfo@lang@345@@cppu@@0Uclass_data3@2@A
 ?Execute@FileDialogHelper@sfx2@@QAEKAAPAVSfxItemSet@@AAVString@@E@Z
 ?Execute@FileDialogHelper@sfx2@@QAEKABVString@@AAPAVSvStringsDtor@@AAPAVSfxItemSet@@AAV3@E@Z
+?lcl_translateBasic2Uno@?%O:\SRX643\src\sfx2\source\doc\objmisc.cxx2430421195@@YAXABVSbxVariableRef@@PAX@Z
