@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-12 09:57:11 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:30:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2331,7 +2331,7 @@ String RID_ERR_REMOVEDRIVERFAILED
     Text[ russian ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ greek ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ dutch ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
-    Text[ french ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
+    Text[ french ] = "Impossible de supprimer le pilote \"%s1\" : la suppression du fichier\n\n%s2\n\na échoué.";
     Text[ spanish ] = "El controlador \"%s1\" no se pudo eliminar. La eliminación del archivo \n\n%s2\n\n no ha sido posible.";
     Text[ finnish ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
     Text[ italian ] = "Impossibile eliminare il driver \"%s1\". La rimozione del file\n\n%s2\n\nnon è stata possibile.";
