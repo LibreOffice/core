@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-10 09:34:03 $
+ *  last change: $Author: od $ $Date: 2002-12-10 14:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2105,9 +2105,10 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             if ( pSh->Imp()->HasDrawView() )
             {
                 pLines->LockLines( TRUE );
-                /// OD 29.08.2002 #102450# - add 3rd parameter
+                // OD 29.08.2002 #102450# - add 3rd parameter
+                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(), aPaintRect,
-                                        &aPageBackgrdColor );
+                                        &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
                 pLines->PaintLines( pSh->GetOut() );
                 pLines->LockLines( FALSE );
             }
@@ -2129,8 +2130,10 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
             if ( pSh->Imp()->HasDrawView() )
             {
                 /// OD 29.08.2002 #102450# - add 3rd parameter
+                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
-                                        &aPageBackgrdColor );
+                                        &aPageBackgrdColor,
+                                        (pPage->IsRightToLeft() ? true : false) );
                 if( pVout->IsFlushable() )
                     bControlExtra = TRUE;
                 else
@@ -4425,16 +4428,19 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
             {
-                /// OD 30.08.2002 #102450#
-                /// determine background color of page for <PaintLayer> method
-                /// calls, painting <hell> or <heaven>
+                // OD 30.08.2002 #102450#
+                // determine background color of page for <PaintLayer> method
+                // calls, painting <hell> or <heaven>
                 const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
-                /// OD 29.08.2002 #102450#
-                /// add 3rd parameter to <PaintLayer> method calls
+                // OD 29.08.2002 #102450#
+                // add 3rd parameter to <PaintLayer> method calls
+                // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHellId(),
-                                        aRetouchePart, &aPageBackgrdColor );
+                                        aRetouchePart, &aPageBackgrdColor,
+                                        (pPage->IsRightToLeft() ? true : false) );
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
-                                        aRetouchePart, &aPageBackgrdColor );
+                                        aRetouchePart, &aPageBackgrdColor,
+                                        (pPage->IsRightToLeft() ? true : false) );
                 pSh->Imp()->PaintLayer( pSh->GetDoc()->GetControlsId(),
                                         aRetouchePart );
             }
@@ -4666,18 +4672,23 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         if ( rAttrs.CalcBottomLine() )
             aOut.SSize().Height()+= 2*nPixelSzH;
 
-        /// OD 30.08.2002 #102450#
-        /// determine color of page, the fly frame is on, for <PaintLayer> method
-        /// calls, painting <hell> or <heaven>
-        const Color aPageBackgrdColor = pFly->FindPageFrm()->GetDrawBackgrdColor();
-        /// OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( pSh->GetDoc()->GetHellId(), aOut, &aPageBackgrdColor );
+        // OD 09.12.2002 #103045# - determine page, fly frame is on
+        const SwPageFrm* pFlyPage = pFly->FindPageFrm();
+        // OD 30.08.2002 #102450#
+        // determine color of page, the fly frame is on, for <PaintLayer> method
+        // calls, painting <hell> or <heaven>
+        const Color aPageBackgrdColor = pFlyPage->GetDrawBackgrdColor();
+        // OD 30.08.2002 #102450# - add 3rd parameter
+        // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
+        pImp->PaintLayer( pSh->GetDoc()->GetHellId(), aOut, &aPageBackgrdColor,
+                          (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
         /// OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( pSh->GetDoc()->GetHeavenId(), aOut, &aPageBackgrdColor );
+        pImp->PaintLayer( pSh->GetDoc()->GetHeavenId(), aOut, &aPageBackgrdColor,
+                          (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         if( pSh->GetViewOptions()->IsControl() )
         {
