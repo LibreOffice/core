@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-05 10:20:42 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
 #endif
 
 using namespace rtl;
