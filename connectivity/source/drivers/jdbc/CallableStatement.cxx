@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-13 14:58:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_BLOB_HXX_
 #include "java/sql/Blob.hxx"
 #endif
+#include "java/sql/Connection.hxx"
 #ifndef _CONNECTIVITY_JAVA_SQL_REF_HXX_
 #include "java/sql/Ref.hxx"
 #endif
@@ -100,6 +101,16 @@ IMPLEMENT_SERVICE_INFO(java_sql_CallableStatement,"com.sun.star.sdbcx.ACallableS
 //**************************************************************
 //************ Class: java.sql.CallableStatement
 //**************************************************************
+java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql )
+    : java_sql_PreparedStatement( pEnv, _pCon,sql )
+{
+}
+// -----------------------------------------------------------------------------
+java_sql_CallableStatement::~java_sql_CallableStatement()
+{
+}
+// -----------------------------------------------------------------------------
+
 Any SAL_CALL java_sql_CallableStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = java_sql_PreparedStatement::queryInterface(rType);
@@ -121,6 +132,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLExc
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "()Z";
         char * cMethodName = "wasNull";
@@ -141,6 +153,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex 
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Z";
         char * cMethodName = "getBoolean";
@@ -161,6 +174,7 @@ sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex ) t
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)B";
         char * cMethodName = "getByte";
@@ -181,6 +195,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
+        createStatement();
         char * cSignature = "(I)[B";
         char * cMethodName = "getBytes";
         // Java-Call absetzen
@@ -208,6 +223,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Date;";
         char * cMethodName = "getDate";
@@ -228,6 +244,7 @@ double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) t
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)D";
         char * cMethodName = "getDouble";
@@ -249,6 +266,7 @@ float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) thr
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)F";
         char * cMethodName = "getFloat";
@@ -270,6 +288,7 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) t
     if( t.pEnv )
 
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)I";
         char * cMethodName = "getInt";
@@ -289,6 +308,7 @@ sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) 
     jlong out;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)J";
         char * cMethodName = "getLong";
@@ -308,6 +328,7 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/lang/Object;";
         char * cMethodName = "getObject";
@@ -328,6 +349,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
     jshort out;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)S";
         char * cMethodName = "getShort";
@@ -348,6 +370,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/lang/String;";
         char * cMethodName = "getString";
@@ -392,6 +415,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Timestamp;";
         char * cMethodName = "getTimestamp";
@@ -412,6 +436,7 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(IILjava/lang/String;)V";
@@ -435,6 +460,7 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(III)V";
         char * cMethodName = "registerOutParameter";
@@ -466,7 +492,7 @@ jclass java_sql_CallableStatement::getMyClass()
 
 void java_sql_CallableStatement::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
@@ -488,6 +514,7 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
         char * cMethodName = "getArray";
@@ -508,6 +535,7 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
         char * cMethodName = "getClob";
@@ -527,6 +555,7 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
         char * cMethodName = "getBlob";
@@ -547,6 +576,7 @@ Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
         char * cMethodName = "getRef";
@@ -570,6 +600,43 @@ void SAL_CALL java_sql_CallableStatement::acquire() throw()
 void SAL_CALL java_sql_CallableStatement::release() throw()
 {
     java_sql_PreparedStatement::release();
+}
+// -----------------------------------------------------------------------------
+void java_sql_CallableStatement::createStatement()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
+
+
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    if( t.pEnv && !object ){
+        // temporaere Variable initialisieren
+        char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
+        char * cMethodName = "prepareCall";
+        // Java-Call absetzen
+        jobject out = NULL;
+        jvalue args[1];
+            // Parameter konvertieren
+        args[0].l = convertwchar_tToJavaString(t.pEnv,m_sSqlStatement);
+
+        jmethodID mID = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        if( mID ){
+            out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
+        } //mID
+        else
+        {
+            cSignature = "(Ljava/lang/String;)Ljava/sql/CallableStatement;";
+            mID = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+            if( mID ){
+                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l );
+            } //mID
+        }
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        ThrowSQLException(t.pEnv,*this);
+
+        if ( out )
+            object = t.pEnv->NewGlobalRef( out );
+    } //t.pEnv
 }
 // -----------------------------------------------------------------------------
 
