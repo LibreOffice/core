@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:19:06 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,7 @@
 #ifndef _SV_CURSOR_HXX
 #include <cursor.hxx>
 #endif
-#ifdef REMOTE_APPSERVER
-#ifndef _SV_WINDATA_HXX
-#include <windata.hxx>
-#endif
-#endif
-#pragma hdrstop
+
 
 // =======================================================================
 
@@ -208,10 +203,6 @@ void Cursor::ImplDraw()
         // Ausgabeflaeche berechnen und ausgeben
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = TRUE;
-#ifdef REMOTE_APPSERVER
-        // update remote cursor pos
-        ImplUpdateCursorRect( pWindow );
-#endif
     }
 }
 
