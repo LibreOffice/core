@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-22 19:06:20 $
+ *  last change: $Author: khong $ $Date: 2002-09-15 22:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,20 @@ typedef struct {
 
 
 #define NUMBER_OMIT_ZERO (1 << 0)
-#define NUMBER_OMIT_ONE  (1 << 1)
-#define NUMBER_OMIT_ONLY_ZERO  (1 << 2)
+#define NUMBER_OMIT_ONLY_ZERO  (1 << 1)
+#define NUMBER_OMIT_ONE_1  (1 << 2)
+#define NUMBER_OMIT_ONE_2  (1 << 3)
+#define NUMBER_OMIT_ONE_3  (1 << 4)
+#define NUMBER_OMIT_ONE_4  (1 << 5)
+#define NUMBER_OMIT_ONE_5  (1 << 6)
+#define NUMBER_OMIT_ONE_6  (1 << 7)
+#define NUMBER_OMIT_ONE_7  (1 << 8)
+#define NUMBER_OMIT_ONE  (NUMBER_OMIT_ONE_1|NUMBER_OMIT_ONE_2|NUMBER_OMIT_ONE_3|NUMBER_OMIT_ONE_4|NUMBER_OMIT_ONE_5|NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
+#define NUMBER_OMIT_ONE_CHECK(bit)  (1 << (2 + bit))
 #define NUMBER_OMIT_ALL ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE|NUMBER_OMIT_ONLY_ZERO )
+#define NUMBER_OMIT_ZERO_ONE ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE )
+#define NUMBER_OMIT_ONE_67 (NUMBER_OMIT_ONE_6|NUMBER_OMIT_ONE_7)
+#define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
 
 #define NUMBER_COMMA    0x002C
@@ -112,9 +123,10 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
-        sal_Unicode *dst, sal_Int32& count, sal_Unicode multiChar, Sequence< sal_Int32 >& offset, sal_Int32 startPos,
+        sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, sal_Int32 startPos,
  Number *number, sal_Unicode* numberChar)
 {
+    sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
         if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
             if (number->multiplierExponent[number->exponentCount-1] > 1) {
                 sal_Int16 i;
@@ -132,7 +144,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                 }
                 return notZero;
             } else if (str[begin] != NUMBER_ZERO) {
-                if (!(number->numberFlag & NUMBER_OMIT_ONE) || multiChar == 0 || str[begin] != NUMBER_ONE) {
+                if (!(number->numberFlag & NUMBER_OMIT_ONE_CHECK(multiChar_index)) || str[begin] != NUMBER_ONE) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     offset[count++] = begin + startPos;
                 }
@@ -152,7 +164,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
                 sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
                 if (tmp > 0) {
                     printPower |= AsciiToNative_numberMaker(str, begin, tmp, dst, count,
-                            (i == number->exponentCount ? 0 : number->multiplierChar[i]), offset, startPos, number, numberChar);
+            (i == number->exponentCount ? -1 : i), offset, startPos, number, numberChar);
                     begin += tmp;
                     len -= tmp;
                 }
@@ -202,9 +214,10 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
             sal_Bool notZero = sal_False;
             for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
                 end <= len; begin = end, end += number->multiplierExponent[0]) {
+                if (end == 0) continue;
                 sal_Int32 _count = count;
                 notZero |= AsciiToNative_numberMaker(srcStr->buffer, begin, end - begin, newStr->buffer, count,
-                    end == len ? 0 : number->multiplierChar[0], offset, i - len + startPos, number, numberChar);
+                    end == len ? -1 : 0, offset, i - len + startPos, number, numberChar);
                 if (count > 0 && newStr->buffer[count-1] == numberChar[0])
                 count--;
                 if (notZero && _count == count) {
@@ -248,7 +261,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
             break;
         num = curr % 10;
         } else if ((curr = multiplierChar.indexOf(str[i])) >= 0) {
-        curr = MultiplierExponent_CJK[curr % ExponentCount_CJK];
+        curr = MultiplierExponent_7_CJK[curr % ExponentCount_7_CJK];
         if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
         shift = end = 0;
         if (curr >= max)
@@ -291,13 +304,13 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
     if (nCount > 0) {
         const sal_Unicode *str = inStr.getStr() + startPos;
-        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_CJK[0] + 1);
-        offset.realloc( nCount * MultiplierExponent_CJK[0] + 1 );
+        rtl_uString *newStr = x_rtl_uString_new_WithLength(nCount * MultiplierExponent_7_CJK[0] + 1);
+        offset.realloc( nCount * MultiplierExponent_7_CJK[0] + 1 );
         sal_Int32 i = 0, count = 0, index;
 
         OUString numberChar, multiplierChar, decimalChar, minusChar;
         numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
-        multiplierChar = OUString((sal_Unicode*) MultiplierChar_CJK, ExponentCount_CJK*Multiplier_Count);
+        multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
         decimalChar = OUString(DecimalChar);
         minusChar = OUString(MinusChar);
 
@@ -307,7 +320,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             newStr->buffer[count] = NUMBER_ONE;
             offset[count++] = i;
             }
-            index = MultiplierExponent_CJK[index % ExponentCount_CJK];
+            index = MultiplierExponent_7_CJK[index % ExponentCount_7_CJK];
             NativeToAscii_numberMaker(index, index, str, i, nCount, newStr->buffer, count, offset,
                 numberChar, multiplierChar);
         } else {
@@ -340,64 +353,64 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 }
 
 static Number natnum4[4] = {
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh_TW], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Modern_ja, MultiplierChar_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ZERO,
-                ExponentCount_CJK, MultiplierExponent_CJK },
+        { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Modern_ja, MultiplierChar_7_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ZERO_ONE_67,
+                ExponentCount_7_CJK, MultiplierExponent_7_CJK },
+        { NumberChar_Lower_ko, MultiplierChar_6_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ZERO,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
 static Number natnum5[4] = {
-        { NumberChar_Upper_zh, MultiplierChar_CJK[Multiplier_Upper_zh], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Upper_zh_TW, MultiplierChar_CJK[Multiplier_Upper_zh_TW], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Traditional_ja, MultiplierChar_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Upper_ko, MultiplierChar_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ZERO,
-                ExponentCount_CJK, MultiplierExponent_CJK },
+        { NumberChar_Upper_zh, MultiplierChar_6_CJK[Multiplier_Upper_zh], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Upper_zh_TW, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Traditional_ja, MultiplierChar_7_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ZERO_ONE_67,
+                ExponentCount_7_CJK, MultiplierExponent_7_CJK },
+        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ZERO,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
 static Number natnum6[4] = {
-        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Lower_zh], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Lower_zh_TW], 0,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_FullWidth, MultiplierChar_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
-                ExponentCount_CJK, MultiplierExponent_CJK },
+        { NumberChar_FullWidth, MultiplierChar_6_CJK[Multiplier_Lower_zh], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_FullWidth, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], 0,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_FullWidth, MultiplierChar_7_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ZERO_ONE_67,
+                ExponentCount_7_CJK, MultiplierExponent_7_CJK },
+        { NumberChar_FullWidth, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
 static Number natnum7[4] = {
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Lower_zh, MultiplierChar_CJK[Multiplier_Lower_zh_TW], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Modern_ja, MultiplierChar_short_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ALL,
-                ExponentCount_short_CJK, MultiplierExponent_short_CJK },
-        { NumberChar_Lower_ko, MultiplierChar_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
+        { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Lower_zh, MultiplierChar_6_CJK[Multiplier_Lower_zh_TW], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Modern_ja, MultiplierChar_2_CJK[Multiplier_Modern_ja], NUMBER_OMIT_ZERO_ONE,
+                ExponentCount_2_CJK, MultiplierExponent_2_CJK },
+        { NumberChar_Lower_ko, MultiplierChar_6_CJK[Multiplier_Lower_ko], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
 static Number natnum8[4] = {
-        { NumberChar_Upper_zh, MultiplierChar_CJK[Multiplier_Upper_zh], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Upper_zh_TW, MultiplierChar_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
-        { NumberChar_Traditional_ja, MultiplierChar_short_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ALL,
-                ExponentCount_short_CJK, MultiplierExponent_short_CJK },
-        { NumberChar_Upper_ko, MultiplierChar_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
-                ExponentCount_CJK, MultiplierExponent_CJK },
+        { NumberChar_Upper_zh, MultiplierChar_6_CJK[Multiplier_Upper_zh], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Upper_zh_TW, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
+        { NumberChar_Traditional_ja, MultiplierChar_2_CJK[Multiplier_Traditional_ja], NUMBER_OMIT_ZERO_ONE,
+                ExponentCount_2_CJK, MultiplierExponent_2_CJK },
+        { NumberChar_Upper_ko, MultiplierChar_6_CJK[Multiplier_Upper_zh_TW], NUMBER_OMIT_ALL,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK },
 };
 
-static Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
-                ExponentCount_CJK, MultiplierExponent_CJK };
-static Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
-        ExponentCount_CJK, MultiplierExponent_CJK };
+static Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ZERO,
+                ExponentCount_6_CJK, MultiplierExponent_6_CJK };
+static Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
+        ExponentCount_6_CJK, MultiplierExponent_6_CJK };
 
 static sal_Char *natnum1Locales[] = { "zh_CN", "zh_TW", "ja", "ko", "ar", "th", "hi", "or", "mr", "bn", "pa", "gu", "ta", "te", "kn", "ml", "lo", "bo", "my", "km", "mn" };
 static sal_Int16 nbOfLocale = sizeof(natnum1Locales)/sizeof(natnum1Locales[0]);
