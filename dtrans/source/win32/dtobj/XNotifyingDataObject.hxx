@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNotifyingDataObject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:41:19 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@
 
 #include <objidl.h>
 #include <windows.h>
-#include <comdef.h>
+
+#include <systools/win32/comtools.hxx>
 
 /*--------------------------------------------------------------------------
     To implement the lostOwnership mechanism cleanly we need this wrapper
