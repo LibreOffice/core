@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:06 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include "AccessiblePageHeader.hxx"
 #ifndef _SC_ACCESSIBLEPAGEHEADERAREA_HXX
 #include "AccessiblePageHeaderArea.hxx"
+#endif
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
 #endif
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
@@ -226,6 +229,13 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
             std::for_each(aOldAreas.begin(), aOldAreas.end(), Release());
+        }
+        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            CommitChange(aEvent);
         }
     }
 
@@ -435,7 +445,17 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
             rData.GetHeaderPosition( aRect );
         else
             rData.GetFooterPosition( aRect );
+
+        // the Rectangle could contain negative coordinates so it should be cliped
+        Rectangle aClipRect(Point(0, 0), aRect.GetSize());
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+            aClipRect = pWindow->GetWindowExtentsRelative(pWindow->GetAccessibleParentWindow());
+        aRect = aClipRect.GetIntersection(aRect);
     }
+    if (aRect.IsEmpty())
+        aRect.SetSize(Size(-1, -1));
+
     return aRect;
 }
 

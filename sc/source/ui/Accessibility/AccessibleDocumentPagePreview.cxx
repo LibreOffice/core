@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,6 +681,7 @@ public:
     uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
 
     void DataChanged();
+    void VisAreaChanged() const;
 
     void SetDrawBroadcaster();
 private:
@@ -845,6 +846,33 @@ void ScShapeChilds::DataChanged()
     for (sal_Int32 i = 0; i < SC_PREVIEW_MAXRANGES; ++i)
     {
         FindChanged(aOldShapeRanges[i], maShapeRanges[i]);
+    }
+}
+
+struct ScVisAreaChanged
+{
+    const ScShapeChilds* mpAccDoc;
+    ScVisAreaChanged(const ScShapeChilds* pAccDoc) : mpAccDoc(pAccDoc) {}
+    void operator() (const ScShapeChild& rAccShapeData) const
+    {
+        if (rAccShapeData.mpAccShape)
+        {
+            rAccShapeData.mpAccShape->ViewForwarderChanged(accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpAccDoc);
+        }
+    }
+};
+
+void ScShapeChilds::VisAreaChanged() const
+{
+    ScShapeRangeVec::const_iterator aEndItr = maShapeRanges.end();
+    ScShapeRangeVec::const_iterator aItr = maShapeRanges.begin();
+    ScVisAreaChanged aVisAreaChanged(this);
+    while (aItr != aEndItr)
+    {
+        std::for_each(aItr->maBackShapes.begin(), aItr->maBackShapes.end(), aVisAreaChanged);
+        std::for_each(aItr->maControls.begin(), aItr->maControls.end(), aVisAreaChanged);
+        std::for_each(aItr->maForeShapes.begin(), aItr->maForeShapes.end(), aVisAreaChanged);
+        ++aItr;
     }
 }
 
@@ -1477,6 +1505,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                     uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+                    aEvent.Source = uno::Reference< XAccessible >(this);
                     aEvent.OldValue <<= xAcc;
                     CommitChange(aEvent);
                 }
@@ -1512,6 +1541,7 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                     uno::Reference<XAccessible> xAcc = mpTable;
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+                    aEvent.Source = uno::Reference< XAccessible >(this);
                     aEvent.NewValue <<= xAcc;
                     CommitChange(aEvent);
                 }
@@ -1521,6 +1551,31 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
         {
             GetShapeChilds()->SetDrawBroadcaster();
         }
+        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            Size aOutputSize;
+            Window* pSizeWindow = mpViewShell->GetWindow();
+            if ( pSizeWindow )
+                aOutputSize = pSizeWindow->GetOutputSizePixel();
+            Point aPoint;
+            Rectangle aVisRect( aPoint, aOutputSize );
+            GetNotesChilds()->DataChanged(aVisRect);
+
+            GetShapeChilds()->VisAreaChanged();
+
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            CommitChange(aEvent);
+        }
+    }
+    else if ( rHint.ISA(ScAccWinFocusLostHint) )
+    {
+        CommitFocusLost();
+    }
+    else if ( rHint.ISA(ScAccWinFocusGotHint) )
+    {
+        CommitFocusGained();
     }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 14:56:11 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
 #endif
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
@@ -89,6 +92,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _EDITOBJ_HXX
@@ -148,6 +154,27 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
     ScAccessibleContextBase::disposing();
 }
 
+//=====  SfxListener  =====================================================
+
+void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if (rHint.ISA( SfxSimpleHint ) )
+    {
+        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        // only notify if child exist, otherwise it is not necessary
+        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            if (mpTextHelper)
+                mpTextHelper->UpdateChildren();
+
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            CommitChange(aEvent);
+        }
+    }
+    ScAccessibleContextBase::Notify(rBC, rHint);
+}
     //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessibleAt(
@@ -311,12 +338,6 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        if ( mbHeader )
-            rData.GetHeaderPosition( aCellRect );
-        else
-            rData.GetFooterPosition( aCellRect );
-
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
@@ -340,8 +361,13 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
         else
             rData.GetFooterPosition( aRect );
 
-        aRect.SetPos(Point()); // has the same size and position on screen like the parent and so the pos is (0, 0)
+        // the Rectangle could contain negative coordinates so it should be cliped
+        Rectangle aClipRect(Point(0, 0), aRect.GetSize()); // has the same size and position on screen like the parent and so the pos is (0, 0)
+        aRect = aClipRect.GetIntersection(aRect);
     }
+    if (aRect.IsEmpty())
+        aRect.SetSize(Size(-1, -1));
+
     return aRect;
 }
 

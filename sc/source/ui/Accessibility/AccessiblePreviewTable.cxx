@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include "AccessiblePreviewTable.hxx"
 #include "AccessiblePreviewCell.hxx"
 #include "AccessiblePreviewHeaderCell.hxx"
+#ifndef SC_ACCESSIBILITYHINTS_HXX
+#include "AccessibilityHints.hxx"
+#endif
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
 #include "miscuno.hxx"
@@ -78,6 +81,9 @@
 
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #include <vcl/window.hxx>
 #include <svtools/smplhint.hxx>
@@ -141,6 +147,13 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
             //  column / row layout may change with any document change,
             //  so it must be invalidated
             DELETEZ( mpTableInfo );
+        }
+        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+            CommitChange(aEvent);
         }
     }
 
