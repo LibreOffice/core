@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:35:28 $
+#   last change: $Author: vg $ $Date: 2003-07-09 10:14:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJNAME=filter
 TARGET=flash
 
 ENABLE_EXCEPTIONS=TRUE
-GEN_HID=TRUE
+#GEN_HID=TRUE
 
 # --- Settings ----------------------------------
 
