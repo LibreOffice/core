@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-01-05 18:42:45 $
+ *  last change:$Date: 2005-02-02 13:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,20 @@
 package util;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.UnoRuntime;
 
 // access the implementations via names
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XModifiable;
+import java.util.Vector;
 
 
 /**
@@ -110,6 +114,58 @@ public class DesktopTools {
 
         return oInterface;
     } //finish createDesktop
+
+    /**
+     * returns a XEnumeration containing all components containing on the desktop
+     */
+    public static XEnumeration getAllComponents(XMultiServiceFactory xMSF) {
+        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+                                    XDesktop.class, createDesktop(xMSF));
+        return xDesktop.getComponents().createEnumeration();
+    }
+
+    /*
+     * returns an object arrary of all open documents
+     */
+    public static Object[] getAllOpenDocuments(XMultiServiceFactory xMSF) {
+        Vector components = new Vector();
+        XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(
+                                    XDesktop.class, createDesktop(xMSF));
+
+        XEnumeration allComp = getAllComponents(xMSF);
+
+        while (allComp.hasMoreElements()){
+            try{
+                XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+                                       XComponent.class, allComp.nextElement());
+
+                if (getDocumentType(xComponent) != null) components.add(xComponent);
+
+            } catch (com.sun.star.container.NoSuchElementException e) {
+            } catch ( com.sun.star.lang.WrappedTargetException e) {}
+        }
+        return components.toArray();
+    }
+
+    public static String getDocumentType(XComponent xComponent) {
+        XServiceInfo sInfo = (XServiceInfo)UnoRuntime.queryInterface(
+                XServiceInfo.class, xComponent);
+
+        if (sInfo == null) {
+            return "";
+        } else if (sInfo.supportsService("com.sun.star.sheet.SpreadsheetDocument")) {
+            return "scalc";
+        } else if (sInfo.supportsService("com.sun.star.text.TextDocument")) {
+            return "swriter";
+        } else if (sInfo.supportsService("com.sun.star.drawing.DrawingDocument")) {
+            return "sdraw";
+        } else if (sInfo.supportsService("com.sun.star.formula.FormulaProperties")) {
+            return "smath";
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Opens a new document of a given kind
