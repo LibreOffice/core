@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:35:29 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <svx/impgrf.hxx>
 #include <svx/opengrf.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
@@ -77,6 +78,7 @@
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
+#include <avmedia/mediawindow.hxx>
 
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -235,6 +237,40 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
     pView->InsertObject( pObj, *pPV, nInsOptions );
 }
 
+//------------------------------------------------------------------------
+
+void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
+                      ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
+                      const Size& rPrefSize )
+{
+    SdrPageView*    pPV  = pView->GetPageViewPvNum(0);
+    SdrPage*        pPage = pPV->GetPage();
+    ScViewData*     pData = pViewSh->GetViewData();
+    Point           aInsertPos( pViewSh->GetInsertPos() );
+    Size            aSize;
+
+    if( rPrefSize.Width() && rPrefSize.Height() )
+    {
+        if( pWindow )
+            aSize = pWindow->PixelToLogic( rPrefSize, MAP_100TH_MM );
+        else
+            aSize = Application::GetDefaultDevice()->PixelToLogic( rPrefSize, MAP_100TH_MM );
+    }
+    else
+        aSize = Size( 5000, 5000 );
+
+    LimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
+
+    if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+        aInsertPos.X() -= aSize.Width();
+
+    SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
+
+    pObj->setURL( rMediaURL );
+    ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
+    pView->InsertObject( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
+}
+
 /*************************************************************************
 |*
 |* FuInsertGraphic::Konstruktor
@@ -360,5 +396,87 @@ void FuInsertGraphic::Deactivate()
     FuPoor::Deactivate();
 }
 
+/*************************************************************************
+|*
+|* FuInsertMedia::Konstruktor
+|*
+\************************************************************************/
 
+FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
+                              Window*           pWin,
+                              SdrView*          pView,
+                              SdrModel*         pDoc,
+                              SfxRequest&       rReq ) :
+    FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+    ::rtl::OUString     aURL;
+    const SfxItemSet*   pReqArgs = rReq.GetArgs();
+    bool                bAPI = false;
 
+    if( pReqArgs )
+    {
+        const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, &pReqArgs->Get( rReq.GetSlot() ) );
+
+        if( pStringItem )
+        {
+            aURL = pStringItem->GetValue();
+            bAPI = aURL.getLength();
+        }
+    }
+
+    if( bAPI || ::avmedia::MediaWindow::executeMediaURLDialog( pWindow, aURL ) )
+    {
+        Size aPrefSize;
+
+        if( pWin )
+            pWin->EnterWait();
+
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
+        {
+            if( pWin )
+                pWin->LeaveWait();
+
+            if( !bAPI )
+                ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
+        }
+        else
+        {
+            lcl_InsertMedia( aURL, bAPI, pViewSh, pWindow, pView, aPrefSize );
+
+            if( pWin )
+                pWin->LeaveWait();
+        }
+    }
+}
+
+/*************************************************************************
+|*
+|* FuInsertMedia::Destruktor
+|*
+\************************************************************************/
+
+FuInsertMedia::~FuInsertMedia()
+{
+}
+
+/*************************************************************************
+|*
+|* FuInsertMedia::Function aktivieren
+|*
+\************************************************************************/
+
+void FuInsertMedia::Activate()
+{
+    FuPoor::Activate();
+}
+
+/*************************************************************************
+|*
+|* FuInsertMedia::Function deaktivieren
+|*
+\************************************************************************/
+
+void FuInsertMedia::Deactivate()
+{
+    FuPoor::Deactivate();
+}
