@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:54:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,7 @@ void ORowSet::freeResources()
         // dispose the composer to avoid that everbody knows that the querycomposer is eol
         try
         {
+            m_xAnalyzer = NULL;
             ::comphelper::disposeComponent(m_xComposer);
         }
         catch(Exception&)
@@ -1590,6 +1591,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
     {
         m_xStatement    = NULL;
         m_xComposer     = NULL;
+        m_xAnalyzer     = NULL;
 
         // Build the statement
         sal_Bool bUseEscapeProcessing;
@@ -2161,7 +2163,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
     return aQuery;
 }
 //------------------------------------------------------------------------------
-rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRetTables) throw( SQLException, RuntimeException )
+rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,Reference< XNameAccess >& _rxRetTables) throw( SQLException, RuntimeException )
 {
     // use query composer to make a useful query with filter and/or order by part
     rtl::OUString aFilterStatement = rQuery;
@@ -2172,8 +2174,8 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
         {
             try
             {
-                m_xComposer.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-                m_xAnalyzer.set(m_xComposer,UNO_QUERY);
+                m_xAnalyzer.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+                m_xComposer.set(m_xAnalyzer,UNO_QUERY);
             }
             catch (Exception&)
             {
@@ -2183,9 +2185,8 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
         }
         if(!m_xComposer.is()) // no composer so we create one
         {
-            OSingleSelectQueryComposer* pComposer = new OSingleSelectQueryComposer(_rxRetTables,m_xActiveConnection,m_xServiceManager);
-            m_xComposer = pComposer;
-            m_xAnalyzer.set(m_xComposer,UNO_QUERY);
+            m_xAnalyzer = new OSingleSelectQueryComposer(_rxRetTables,m_xActiveConnection,m_xServiceManager);
+            m_xComposer.set(m_xAnalyzer,UNO_QUERY);
         }
         if ( m_xComposer.is() )
         {
@@ -2206,8 +2207,15 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
                 // don't simply overwrite an existent filter, this would lead to problems if this existent
                 // filter contains paramters (since a keyset may add parameters itself)
                 // 2003-12-12 - #23418# - fs@openoffice.org
-                m_xAnalyzer->setQuery( m_xAnalyzer->getQuery( ) );
-                m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
+                ::rtl::OUString sFilter = m_xAnalyzer->getFilter();
+                if ( sFilter.getLength() )
+                {
+                    sFilter = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + sFilter;
+                    sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ) AND "));
+                }
+                sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0 = 1"));
+                sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
+                m_xComposer->setFilter( sFilter );
             }
 
             if (m_aOrder.getLength())
