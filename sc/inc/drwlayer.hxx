@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:08:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,16 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+//REMOVE    #ifndef _SVSTOR_HXX
+//REMOVE    #include <so3/svstor.hxx>
+//REMOVE    #endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
 
 class ScDocument;
 class SfxViewShell;
+class SfxObjectShell;
 class ScDrawObjData;
 class ScIMapInfo;
 class IMapObject;
@@ -117,7 +118,7 @@ public:
 class ScDrawLayer: public FmFormModel
 {
 private:
-    SvStorageRef    xPictureStorage;
+//REMOVE        SotStorageRef   xPictureStorage;
     String          aName;
     ScDocument*     pDoc;
     SdrUndoGroup*   pUndoGroup;
@@ -145,7 +146,7 @@ public:
 
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
-    void            ReleasePictureStorage();
+//REMOVE        void            ReleasePictureStorage();
 
     BOOL            HasObjects() const;
 
@@ -224,9 +225,9 @@ public:
                             const Point& rWinPoint, const Window& rCmpWnd );
 
 private:
-    static SvPersist* pGlobalDrawPersist;           // fuer AllocModel
+    static SfxObjectShell* pGlobalDrawPersist;          // fuer AllocModel
 public:
-    static void     SetGlobalDrawPersist(SvPersist* pPersist);
+    static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 };
 
 
