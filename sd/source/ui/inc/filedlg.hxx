@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-02 16:19:56 $
+ *  last change: $Author: cl $ $Date: 2002-10-10 12:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ private:
     const std::auto_ptr< SdFileDialog_Imp > mpImpl;
 
 public:
-                            SdExportFileDialog( BOOL haveCheckbox, bool ispresentation = TRUE );
+                            SdExportFileDialog( BOOL haveCheckbox );
                             ~SdExportFileDialog();
 
     ErrCode                 Execute();
