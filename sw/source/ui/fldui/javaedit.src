@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:55:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ japanese ] = "γ‚Ήγ‚―γƒªγƒ—γƒγ‚Ώγ‚¤γƒ—";
         Text[ chinese_traditional ] = "η¨‹εΌζª”ι΅ε‹";
         Text[ arabic ] = "δζΪ ΗαδΥ ΗαΘΡγΜν";
-        Text[ greek ] = "Τύπος του Script";
+        Text[ greek ] = "Τύπος δέσμης ενεργειών";
         Text[ korean ] = "μ¤ν¬λ¦½νΈ μ ν•";
         Text[ turkish ] = "Betik tipi";
         Text[ language_user1 ] = " ";
@@ -292,7 +292,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ japanese ] = "γ‚Ήγ‚―γƒªγƒ—γƒγ®η·¨ι›†";
         Text[ chinese_traditional ] = "η·¨θΌ―η¨‹εΌζª”";
         Text[ arabic ] = "ΚΝΡνΡ ΗαδΥ ΗαΘΡγΜν";
-        Text[ greek ] = "Επεξεργασία Script";
+        Text[ greek ] = "Επεξεργασία δέσμης ενεργειών";
         Text[ korean ] = "μ¤ν¬λ¦½νΈ νΈμ§‘";
         Text[ turkish ] = "Betiπi Dόzenle";
         Text[ language_user1 ] = " ";
@@ -324,7 +324,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ japanese ] = "γ‚Ήγ‚―γƒªγƒ—γƒγ®ζΏε…¥";
         Text[ chinese_traditional ] = "ζ’ε…¥η¨‹εΌζª”";
         Text[ arabic ] = "ΕΟΡΗΜ δΥ ΘΡγΜν";
-        Text[ greek ] = "Προσθήκη Script";
+        Text[ greek ] = "Εισαγωγή δέσμης ενεργειών";
         Text[ korean ] = "μ¤ν¬λ¦½νΈ μ‚½μ…";
         Text[ turkish ] = "Betiπi έηe Aktar";
         Text[ language_user1 ] = " ";
@@ -351,7 +351,7 @@ ModalDialog DLG_JAVAEDIT
     Text[ japanese ] = "γ‚Ήγ‚―γƒªγƒ—γƒγ®η·¨ι›†";
     Text[ chinese_traditional ] = "η·¨θΌ―η¨‹εΌζª”";
     Text[ arabic ] = "ΚΝΡνΡ ΗαδΥ ΗαΘΡγΜν";
-    Text[ greek ] = "Επεξεργασία Script";
+    Text[ greek ] = "Επεξεργασία δέσμης ενεργειών";
     Text[ korean ] = "μ¤ν¬λ¦½νΈ νΈμ§‘";
     Text[ turkish ] = "Betiπi dόzenle";
     Text[ language_user1 ] = " ";
@@ -364,6 +364,7 @@ ModalDialog DLG_JAVAEDIT
     Text[ slovak ] = "UpraviΕ¥ skript";
 };
  // ********************************************************************** EOF
+
 
 
 
