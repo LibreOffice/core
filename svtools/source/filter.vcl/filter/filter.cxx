@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-30 13:39:04 $
+ *  last change: $Author: sj $ $Date: 2001-07-30 15:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,7 @@
 // - statics -
 // -----------
 
-ULONG   GraphicFilter::nFilterCount = 0UL;
-Link    GraphicFilter::aLastFilterHdl = Link();
+static List* pFilterHdlList = NULL;
 
 // -------------------------
 // - ImpFilterOutputStream -
@@ -1069,32 +1068,38 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 
 GraphicFilter::~GraphicFilter()
 {
-    // no graphic filter, no handler => restore old handler
-    if( !--nFilterCount )
-        Application::SetFilterHdl( aLastFilterHdl );
-
+    pFilterHdlList->Remove( (void*)this );
+    if ( pFilterHdlList->Count() )
+        Application::SetFilterHdl( LINK( pFilterHdlList->First(), GraphicFilter, FilterCallback ) );
+    else
+    {
+        Application::SetFilterHdl( Link() );
+        delete pFilterHdlList, pFilterHdlList = NULL;
+        delete pConfig;
+    }
     delete pErrorEx;
-    delete pConfig;
 }
 
 // ------------------------------------------------------------------------
 
 void GraphicFilter::ImplInit()
 {
+    if ( !pFilterHdlList )
+    {
+        pFilterHdlList = new List;
+        pConfig = new FilterConfigCache( bUseConfig );
+    }
+    else
+        pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
+
+    pFilterHdlList->Insert( (void*)this );
+    Application::SetFilterHdl( LINK( this, GraphicFilter, FilterCallback ) );
+
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
     pErrorEx = new FilterErrorEx;
-    pConfig = new FilterConfigCache( bUseConfig );
     nPercent = 0;
     bAbort = sal_False;
-
-    // first instance of GraphicFilter sets link
-    if( !nFilterCount++ )
-    {
-        // save old link
-        aLastFilterHdl = Application::GetFilterHdl();
-        Application::SetFilterHdl( LINK( this, GraphicFilter, FilterCallback ) );
-    }
 }
 
 // ------------------------------------------------------------------------
