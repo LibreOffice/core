@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-09 15:24:59 $
+ *  last change: $Author: rt $ $Date: 2002-08-05 20:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,8 @@
           <value xml:lang="zh-TW">名字</value>
           <value xml:lang="tr">FirstName</value>
           <value xml:lang="ar">FirstName</value>
-          <value xml:lang="ca">FirstName</value>
+          <value xml:lang="ca">Nom</value>
+            <value xml:lang="th">ชื่อ</value>
         </prop>
         <prop oor:name="LastName">
           <value xml:lang="de">Nachname</value>
@@ -522,7 +523,8 @@
           <value xml:lang="zh-TW">姓氏</value>
           <value xml:lang="tr">LastName</value>
           <value xml:lang="ar">LastName</value>
-          <value xml:lang="ca">LastName</value>
+          <value xml:lang="ca">Cognom</value>
+            <value xml:lang="th">นามสกุล</value>
         </prop>
         <prop oor:name="DisplayName">
           <value xml:lang="de">Anzeigename</value>
@@ -533,7 +535,7 @@
           <value xml:lang="el">DisplayName</value>
           <value xml:lang="nl">Naam display</value>
           <value xml:lang="fr">Nom Affichage</value>
-          <value xml:lang="es">NombreVisualización</value>
+          <value xml:lang="es">Visual. nombre</value>
           <value xml:lang="fi">DisplayName</value>
           <value xml:lang="it">Nome visual.</value>
           <value xml:lang="da">DisplayName</value>
@@ -541,12 +543,13 @@
           <value xml:lang="pl">Wyświetl nazwę</value>
           <value xml:lang="pt-BR">DisplayName</value>
           <value xml:lang="ja">表示する名前</value>
-          <value xml:lang="ko">표시 이름</value>
+          <value xml:lang="ko">표시 명칭</value>
           <value xml:lang="zh-CN">显示名称</value>
           <value xml:lang="zh-TW">顯示名稱</value>
           <value xml:lang="tr">DisplayName</value>
           <value xml:lang="ar">DisplayName</value>
           <value xml:lang="ca">DisplayName</value>
+            <value xml:lang="th">ชื่อที่ปรากฏ</value>
         </prop>
         <prop oor:name="NickName">
           <value xml:lang="de">Spitzname</value>
@@ -571,6 +574,7 @@
           <value xml:lang="tr">NickName</value>
           <value xml:lang="ar">NickName</value>
           <value xml:lang="ca">NickName</value>
+            <value xml:lang="th">ชื่อเล่น</value>
         </prop>
         <prop oor:name="PrimaryEmail">
           <value xml:lang="de">E-Mail</value>
@@ -586,15 +590,16 @@
           <value xml:lang="it">eMail</value>
           <value xml:lang="da">PrimaryEmail</value>
           <value xml:lang="sv">E-post</value>
-          <value xml:lang="pl">e-mail</value>
+          <value xml:lang="pl">Adres e-mail</value>
           <value xml:lang="pt-BR">PrimaryEmail</value>
-          <value xml:lang="ja">E-mail</value>
-          <value xml:lang="ko">E-Mail</value>
+          <value xml:lang="ja">Eｰmail</value>
+          <value xml:lang="ko">전자 우편</value>
           <value xml:lang="zh-CN">电子邮件</value>
           <value xml:lang="zh-TW">電子郵件</value>
           <value xml:lang="tr">PrimaryEmail</value>
           <value xml:lang="ar">PrimaryEmail</value>
-          <value xml:lang="ca">PrimaryEmail</value>
+          <value xml:lang="ca">correu electròic</value>
+            <value xml:lang="th">อีเมล์</value>
         </prop>
         <prop oor:name="SecondEmail">
           <value xml:lang="de">E-Mail (2)</value>
@@ -612,13 +617,14 @@
           <value xml:lang="sv">E-post (2)</value>
           <value xml:lang="pl">e-mail (2)</value>
           <value xml:lang="pt-BR">SecondEmail</value>
-          <value xml:lang="ja">E-mail (2)</value>
-          <value xml:lang="ko">E-Mail (2)</value>
+          <value xml:lang="ja">Eｰmail (2)</value>
+          <value xml:lang="ko">전자 우편 (2)</value>
           <value xml:lang="zh-CN">电子邮件 2</value>
           <value xml:lang="zh-TW">電子郵件 2</value>
           <value xml:lang="tr">SecondEmail</value>
           <value xml:lang="ar">SecondEmail</value>
           <value xml:lang="ca">SecondEmail</value>
+            <value xml:lang="th">อีเมล์ (2)</value>
         </prop>
         <prop oor:name="PreferMailFormat">
           <value xml:lang="de">Mail-Format</value>
@@ -629,7 +635,7 @@
           <value xml:lang="el">PreferedMailFormat</value>
           <value xml:lang="nl">Mail-formaat</value>
           <value xml:lang="fr">Format Courrier</value>
-          <value xml:lang="es">Formato de correo</value>
+          <value xml:lang="es">Formato correo</value>
           <value xml:lang="fi">PreferedMailFormat</value>
           <value xml:lang="it">Formato mail</value>
           <value xml:lang="da">PreferedMailFormat</value>
@@ -637,12 +643,13 @@
           <value xml:lang="pl">Format poczty elektr.</value>
           <value xml:lang="pt-BR">PreferedMailFormat</value>
           <value xml:lang="ja">電子メール書式</value>
-          <value xml:lang="ko">메일 서식</value>
+          <value xml:lang="ko">전자우편 형식</value>
           <value xml:lang="zh-CN">电子邮件格式</value>
           <value xml:lang="zh-TW">電子郵件格式</value>
           <value xml:lang="tr">PreferedMailFormat</value>
           <value xml:lang="ar">PreferedMailFormat</value>
-          <value xml:lang="ca">PreferedMailFormat</value>
+          <value xml:lang="ca">Format de correu</value>
+            <value xml:lang="th">รูปแบบเมล์</value>
         </prop>
         <prop oor:name="WorkPhone">
           <value xml:lang="de">Telefon (gesch.)</value>
@@ -661,12 +668,13 @@
           <value xml:lang="pl">Telefon (służb.)</value>
           <value xml:lang="pt-BR">WorkPhone</value>
           <value xml:lang="ja">会社電話</value>
-          <value xml:lang="ko">전화 번호 (직장)</value>
+          <value xml:lang="ko">직장 번호</value>
           <value xml:lang="zh-CN">电话（公司）</value>
           <value xml:lang="zh-TW">公務電話</value>
           <value xml:lang="tr">WorkPhone</value>
           <value xml:lang="ar">WorkPhone</value>
           <value xml:lang="ca">WorkPhone</value>
+            <value xml:lang="th">เบอร์โทรศัพท์ (ที่ทำงาน)</value>
         </prop>
         <prop oor:name="HomePhone">
           <value xml:lang="de">Telefon</value>
@@ -685,12 +693,13 @@
           <value xml:lang="pl">Telefon (pryw.)</value>
           <value xml:lang="pt-BR">HomePhone</value>
           <value xml:lang="ja">自宅電話</value>
-          <value xml:lang="ko">전화 번호</value>
+          <value xml:lang="ko">자택 전화</value>
           <value xml:lang="zh-CN">电话</value>
           <value xml:lang="zh-TW">電話</value>
           <value xml:lang="tr">HomePhone</value>
           <value xml:lang="ar">HomePhone</value>
           <value xml:lang="ca">HomePhone</value>
+            <value xml:lang="th">เบอร์โทรศัพท์ (ที่บ้าน)</value>
         </prop>
         <prop oor:name="FaxNumber">
           <value xml:lang="de">Fax</value>
@@ -709,12 +718,13 @@
           <value xml:lang="pl">Faks</value>
           <value xml:lang="pt-BR">FaxNumber</value>
           <value xml:lang="ja">Fax 番号</value>
-          <value xml:lang="ko">팩스</value>
+          <value xml:lang="ko">팩스 번호</value>
           <value xml:lang="zh-CN">传真</value>
           <value xml:lang="zh-TW">傳真</value>
           <value xml:lang="tr">FaxNumber</value>
           <value xml:lang="ar">FaxNumber</value>
           <value xml:lang="ca">FaxNumber</value>
+            <value xml:lang="th">โทรสาร</value>
         </prop>
         <prop oor:name="PagerNumber">
           <value xml:lang="de">Pager</value>
@@ -725,7 +735,7 @@
           <value xml:lang="el">PagerNumber</value>
           <value xml:lang="nl">Pager</value>
           <value xml:lang="fr">Pager</value>
-          <value xml:lang="es">Pager</value>
+          <value xml:lang="es">Busca</value>
           <value xml:lang="fi">PagerNumber</value>
           <value xml:lang="it">Teledrin</value>
           <value xml:lang="da">PagerNumber</value>
@@ -739,6 +749,7 @@
           <value xml:lang="tr">PagerNumber</value>
           <value xml:lang="ar">PagerNumber</value>
           <value xml:lang="ca">PagerNumber</value>
+            <value xml:lang="th">เพจเจอร์</value>
         </prop>
         <prop oor:name="CellularNumber">
           <value xml:lang="de">Handy</value>
@@ -762,7 +773,8 @@
           <value xml:lang="zh-TW">手機</value>
           <value xml:lang="tr">CellularNumber</value>
           <value xml:lang="ar">CellularNumber</value>
-          <value xml:lang="ca">CellularNumber</value>
+          <value xml:lang="ca">Telf. mòbil</value>
+            <value xml:lang="th">มือถือ</value>
         </prop>
         <prop oor:name="HomeAddress">
           <value xml:lang="de">Adresse 1</value>
@@ -787,6 +799,7 @@
           <value xml:lang="tr">HomeAddress</value>
           <value xml:lang="ar">HomeAddress</value>
           <value xml:lang="ca">HomeAddress</value>
+            <value xml:lang="th">ที่อยู่ 1</value>
         </prop>
         <prop oor:name="HomeAddress2">
           <value xml:lang="de">Adresse 2</value>
@@ -805,12 +818,13 @@
           <value xml:lang="pl">Adres 2</value>
           <value xml:lang="pt-BR">HomeAddress2</value>
           <value xml:lang="ja">自宅住所 2</value>
-          <value xml:lang="ko">주소2</value>
+          <value xml:lang="ko">주소 2</value>
           <value xml:lang="zh-CN">地址 2</value>
           <value xml:lang="zh-TW">住家地址 2</value>
           <value xml:lang="tr">HomeAddress2</value>
           <value xml:lang="ar">HomeAddress2</value>
           <value xml:lang="ca">HomeAddress2</value>
+            <value xml:lang="th">ที่อยู่ 2</value>
         </prop>
         <prop oor:name="HomeCity">
           <value xml:lang="de">Stadt</value>
@@ -829,12 +843,13 @@
           <value xml:lang="pl">Miejscowość</value>
           <value xml:lang="pt-BR">HomeCity</value>
           <value xml:lang="ja">市町村名</value>
-          <value xml:lang="ko">도시</value>
+          <value xml:lang="ko">시</value>
           <value xml:lang="zh-CN">城市</value>
           <value xml:lang="zh-TW">城市</value>
           <value xml:lang="tr">HomeCity</value>
           <value xml:lang="ar">HomeCity</value>
           <value xml:lang="ca">HomeCity</value>
+            <value xml:lang="th">เมือง</value>
         </prop>
         <prop oor:name="HomeState">
           <value xml:lang="de">Bundesland</value>
@@ -853,12 +868,13 @@
           <value xml:lang="pl">Województwo</value>
           <value xml:lang="pt-BR">HomeState</value>
           <value xml:lang="ja">都道府県名</value>
-          <value xml:lang="ko">주</value>
+          <value xml:lang="ko">도/주</value>
           <value xml:lang="zh-CN">省/直辖市</value>
           <value xml:lang="zh-TW">省市</value>
           <value xml:lang="tr">HomeState</value>
           <value xml:lang="ar">HomeState</value>
-          <value xml:lang="ca">HomeState</value>
+          <value xml:lang="ca">Provincia</value>
+            <value xml:lang="th">รัฐ</value>
         </prop>
         <prop oor:name="HomeZipCode">
           <value xml:lang="de">PLZ</value>
@@ -869,7 +885,7 @@
           <value xml:lang="el">HomeZipCode</value>
           <value xml:lang="nl">Postcode</value>
           <value xml:lang="fr">C.P.</value>
-          <value xml:lang="es">CP</value>
+          <value xml:lang="es">C.P.</value>
           <value xml:lang="fi">HomeZipCode</value>
           <value xml:lang="it">C.A.P.</value>
           <value xml:lang="da">HomeZipCode</value>
@@ -882,7 +898,8 @@
           <value xml:lang="zh-TW">郵遞區號</value>
           <value xml:lang="tr">HomeZipCode</value>
           <value xml:lang="ar">HomeZipCode</value>
-          <value xml:lang="ca">HomeZipCode</value>
+          <value xml:lang="ca">Codi postal</value>
+            <value xml:lang="th">รหัสไปรษณีย์</value>
         </prop>
         <prop oor:name="HomeCountry">
           <value xml:lang="de">Land</value>
@@ -906,7 +923,8 @@
           <value xml:lang="zh-TW">國家</value>
           <value xml:lang="tr">HomeCountry</value>
           <value xml:lang="ar">HomeCountry</value>
-          <value xml:lang="ca">HomeCountry</value>
+          <value xml:lang="ca">País</value>
+            <value xml:lang="th">ประเทศ</value>
         </prop>
         <prop oor:name="WorkAddress">
           <value xml:lang="de">Geschäftsadresse</value>
@@ -917,7 +935,7 @@
           <value xml:lang="el">WorkAddress</value>
           <value xml:lang="nl">Adres firma</value>
           <value xml:lang="fr">Adresse Bureau</value>
-          <value xml:lang="es">DirecciónTrabajo</value>
+          <value xml:lang="es">Direc. trabajo</value>
           <value xml:lang="fi">WorkAddress</value>
           <value xml:lang="it">Indirizzo lav.</value>
           <value xml:lang="da">WorkAddress</value>
@@ -931,6 +949,7 @@
           <value xml:lang="tr">WorkAddress</value>
           <value xml:lang="ar">WorkAddress</value>
           <value xml:lang="ca">WorkAddress</value>
+            <value xml:lang="th">ที่อยู่ที่ทำงาน</value>
         </prop>
         <prop oor:name="WorkAddress2">
           <value xml:lang="de">Geschäftsadresse 2</value>
@@ -941,20 +960,21 @@
           <value xml:lang="el">WorkAddress2</value>
           <value xml:lang="nl">Adres firma 2</value>
           <value xml:lang="fr">Adresse Bureau 2</value>
-          <value xml:lang="es">DirecciónTrabajo 2</value>
+          <value xml:lang="es">Direc. trabajo 2</value>
           <value xml:lang="fi">WorkAddress2</value>
           <value xml:lang="it">Indirizzo lav.2</value>
           <value xml:lang="da">WorkAddress2</value>
-          <value xml:lang="sv">Adress (arb.) 2</value>
+          <value xml:lang="sv">Adress (arb.)2</value>
           <value xml:lang="pl">Adres służbowy 2</value>
           <value xml:lang="pt-BR">WorkAddress2</value>
           <value xml:lang="ja">会社住所 2</value>
-          <value xml:lang="ko">직장 주소2</value>
+          <value xml:lang="ko">직장 주소 2</value>
           <value xml:lang="zh-CN">公司地址 2</value>
           <value xml:lang="zh-TW">公司地址 2</value>
           <value xml:lang="tr">WorkAddress2</value>
           <value xml:lang="ar">WorkAddress2</value>
           <value xml:lang="ca">WorkAddress2</value>
+            <value xml:lang="th">ที่อยู่ที่ทำงาน 2</value>
         </prop>
         <prop oor:name="WorkCity">
           <value xml:lang="de">Stadt (gesch.)</value>
@@ -973,12 +993,13 @@
           <value xml:lang="pl">Miejscowość (służb.)</value>
           <value xml:lang="pt-BR">WorkCity</value>
           <value xml:lang="ja">会社所在地市町村名</value>
-          <value xml:lang="ko">직장 도시</value>
+          <value xml:lang="ko">직장소재시</value>
           <value xml:lang="zh-CN">城市(公司所在地)</value>
           <value xml:lang="zh-TW">城市(公司所在地)</value>
           <value xml:lang="tr">WorkCity</value>
           <value xml:lang="ar">WorkCity</value>
           <value xml:lang="ca">WorkCity</value>
+            <value xml:lang="th">เมือง (ที่ทำงาน)</value>
         </prop>
         <prop oor:name="WorkState">
           <value xml:lang="de">Bundesland (gesch.)</value>
@@ -997,12 +1018,13 @@
           <value xml:lang="pl">Województwo (służb.)</value>
           <value xml:lang="pt-BR">WorkState</value>
           <value xml:lang="ja">会社所在地都道府県名</value>
-          <value xml:lang="ko">직장 주</value>
+          <value xml:lang="ko">직장소재 도/주</value>
           <value xml:lang="zh-CN">省市(公司所在地)</value>
           <value xml:lang="zh-TW">省市(公司所在地)</value>
           <value xml:lang="tr">WorkState</value>
           <value xml:lang="ar">WorkState</value>
           <value xml:lang="ca">WorkState</value>
+            <value xml:lang="th">รัฐ (ที่ทำงาน</value>
         </prop>
         <prop oor:name="WorkZipCode">
           <value xml:lang="de">PLZ (gesch.)</value>
@@ -1021,12 +1043,13 @@
           <value xml:lang="pl">Kod pocztowy (służb.)</value>
           <value xml:lang="pt-BR">WorkZipCode</value>
           <value xml:lang="ja">郵便番号(会社)</value>
-          <value xml:lang="ko">직장 우편 번호</value>
+          <value xml:lang="ko">우편 번호 (직장)</value>
           <value xml:lang="zh-CN">邮政编码(公司所在地)</value>
           <value xml:lang="zh-TW">郵遞區號(公司)</value>
           <value xml:lang="tr">WorkZipCode</value>
           <value xml:lang="ar">WorkZipCode</value>
           <value xml:lang="ca">WorkZipCode</value>
+            <value xml:lang="th">รหัสไปรษณีย์ (ที่ทำงาน)</value>
         </prop>
         <prop oor:name="WorkCountry">
           <value xml:lang="de">Land (gesch.)</value>
@@ -1045,12 +1068,13 @@
           <value xml:lang="pl">Kraj (służb.)</value>
           <value xml:lang="pt-BR">WorkCountry</value>
           <value xml:lang="ja">会社所在国</value>
-          <value xml:lang="ko">국가(회사소재)</value>
+          <value xml:lang="ko">직장소재국</value>
           <value xml:lang="zh-CN">国家(公司所在地)</value>
           <value xml:lang="zh-TW">公司所在國</value>
           <value xml:lang="tr">WorkCountry</value>
           <value xml:lang="ar">WorkCountry</value>
           <value xml:lang="ca">WorkCountry</value>
+            <value xml:lang="th">ประเทศ (ที่ทำงาน)</value>
         </prop>
         <prop oor:name="JobTitle">
           <value xml:lang="de">Titel</value>
@@ -1069,12 +1093,13 @@
           <value xml:lang="pl">Stanowisko</value>
           <value xml:lang="pt-BR">JobTitle</value>
           <value xml:lang="ja">肩書き</value>
-          <value xml:lang="ko">직위</value>
+          <value xml:lang="ko">직함</value>
           <value xml:lang="zh-CN">职称</value>
           <value xml:lang="zh-TW">職稱</value>
           <value xml:lang="tr">JobTitle</value>
           <value xml:lang="ar">JobTitle</value>
-          <value xml:lang="ca">JobTitle</value>
+          <value xml:lang="ca">Etiqueta</value>
+            <value xml:lang="th">ชื่อ</value>
         </prop>
         <prop oor:name="Department">
           <value xml:lang="de">Abteilung</value>
@@ -1085,7 +1110,7 @@
           <value xml:lang="el">Department</value>
           <value xml:lang="nl">Afdeling</value>
           <value xml:lang="fr">Service</value>
-          <value xml:lang="es">Departamento</value>
+          <value xml:lang="es">Depart.</value>
           <value xml:lang="fi">Department</value>
           <value xml:lang="it">Reparto</value>
           <value xml:lang="da">Department</value>
@@ -1098,7 +1123,8 @@
           <value xml:lang="zh-TW">部門</value>
           <value xml:lang="tr">Department</value>
           <value xml:lang="ar">Department</value>
-          <value xml:lang="ca">Department</value>
+          <value xml:lang="ca">Departament</value>
+            <value xml:lang="th">แผน�</value>
         </prop>
         <prop oor:name="Company">
           <value xml:lang="de">Firma</value>
@@ -1117,12 +1143,13 @@
           <value xml:lang="pl">Firma</value>
           <value xml:lang="pt-BR">Company</value>
           <value xml:lang="ja">会社名</value>
-          <value xml:lang="ko">회사</value>
+          <value xml:lang="ko">회사명</value>
           <value xml:lang="zh-CN">公司</value>
           <value xml:lang="zh-TW">公司</value>
           <value xml:lang="tr">Company</value>
           <value xml:lang="ar">Company</value>
-          <value xml:lang="ca">Company</value>
+          <value xml:lang="ca">Empresa</value>
+            <value xml:lang="th">บริษัท</value>
         </prop>
         <prop oor:name="WebPage1">
           <value xml:lang="de">Web-Seite 1</value>
@@ -1133,7 +1160,7 @@
           <value xml:lang="el">WebPage1</value>
           <value xml:lang="nl">Web-pagina 1</value>
           <value xml:lang="fr">Site Web 1</value>
-          <value xml:lang="es">PáginaWeb1</value>
+          <value xml:lang="es">Página web 1</value>
           <value xml:lang="fi">WebPage1</value>
           <value xml:lang="it">Pagina Web 1</value>
           <value xml:lang="da">WebPage1</value>
@@ -1141,12 +1168,13 @@
           <value xml:lang="pl">Strona WWW 1</value>
           <value xml:lang="pt-BR">WebPage1</value>
           <value xml:lang="ja">Webページ 1</value>
-          <value xml:lang="ko">웹 페이지1</value>
+          <value xml:lang="ko">웹 페이지 1</value>
           <value xml:lang="zh-CN">网页 1</value>
           <value xml:lang="zh-TW">網頁 1</value>
           <value xml:lang="tr">WebPage1</value>
           <value xml:lang="ar">WebPage1</value>
           <value xml:lang="ca">WebPage1</value>
+            <value xml:lang="th">เว็บเพจ 1</value>
         </prop>
         <prop oor:name="WebPage2">
           <value xml:lang="de">Web-Seite 2</value>
@@ -1157,7 +1185,7 @@
           <value xml:lang="el">WebPage2</value>
           <value xml:lang="nl">Web-pagina 2</value>
           <value xml:lang="fr">Site Web 2</value>
-          <value xml:lang="es">PáginaWeb2</value>
+          <value xml:lang="es">Página web 2</value>
           <value xml:lang="fi">WebPage2</value>
           <value xml:lang="it">Pagina Web 2</value>
           <value xml:lang="da">WebPage2</value>
@@ -1165,12 +1193,13 @@
           <value xml:lang="pl">Strona WWW 2</value>
           <value xml:lang="pt-BR">WebPage2</value>
           <value xml:lang="ja">Webページ 2</value>
-          <value xml:lang="ko">웹 페이지2</value>
+          <value xml:lang="ko">웹 페이지 2</value>
           <value xml:lang="zh-CN">网页 2</value>
           <value xml:lang="zh-TW">網頁 2</value>
           <value xml:lang="tr">WebPage2</value>
           <value xml:lang="ar">WebPage2</value>
           <value xml:lang="ca">WebPage2</value>
+            <value xml:lang="th">เว็บเพจ 2</value>
         </prop>
         <prop oor:name="BirthYear">
           <value xml:lang="de">Geburtsjahr</value>
@@ -1181,7 +1210,7 @@
           <value xml:lang="el">BirthYear</value>
           <value xml:lang="nl">Geboortejaar</value>
           <value xml:lang="fr">Année Naissance</value>
-          <value xml:lang="es">AñoNacimiento</value>
+          <value xml:lang="es">Año nacimiento</value>
           <value xml:lang="fi">BirthYear</value>
           <value xml:lang="it">Anno nascita</value>
           <value xml:lang="da">BirthYear</value>
@@ -1189,12 +1218,13 @@
           <value xml:lang="pl">Data urodz. (rok)</value>
           <value xml:lang="pt-BR">BirthYear</value>
           <value xml:lang="ja">誕生年</value>
-          <value xml:lang="ko">생일(년도)</value>
+          <value xml:lang="ko">생일(연도)</value>
           <value xml:lang="zh-CN">出生年份</value>
           <value xml:lang="zh-TW">出生年份</value>
           <value xml:lang="tr">BirthYear</value>
           <value xml:lang="ar">BirthYear</value>
           <value xml:lang="ca">BirthYear</value>
+            <value xml:lang="th">ปีเกิด</value>
         </prop>
         <prop oor:name="BirthMonth">
           <value xml:lang="de">Geburtsmonat</value>
@@ -1205,7 +1235,7 @@
           <value xml:lang="el">BirthMonth</value>
           <value xml:lang="nl">Geboortemaand</value>
           <value xml:lang="fr">Mois Naissance</value>
-          <value xml:lang="es">MesNacimiento</value>
+          <value xml:lang="es">Mes nacimiento</value>
           <value xml:lang="fi">BirthMonth</value>
           <value xml:lang="it">Mese nascita</value>
           <value xml:lang="da">BirthMonth</value>
@@ -1219,6 +1249,7 @@
           <value xml:lang="tr">BirthMonth</value>
           <value xml:lang="ar">BirthMonth</value>
           <value xml:lang="ca">BirthMonth</value>
+            <value xml:lang="th">เดือนเกิด</value>
         </prop>
         <prop oor:name="BirthDay">
           <value xml:lang="de">Geburtstag</value>
@@ -1229,7 +1260,7 @@
           <value xml:lang="el">BirthDay</value>
           <value xml:lang="nl">Geboortedag</value>
           <value xml:lang="fr">Jour Naissance</value>
-          <value xml:lang="es">DíaNacimiento</value>
+          <value xml:lang="es">Día nacimiento</value>
           <value xml:lang="fi">BirthDay</value>
           <value xml:lang="it">Giorno nascita</value>
           <value xml:lang="da">BirthDay</value>
@@ -1243,6 +1274,7 @@
           <value xml:lang="tr">BirthDay</value>
           <value xml:lang="ar">BirthDay</value>
           <value xml:lang="ca">BirthDay</value>
+            <value xml:lang="th">วันเกิด</value>
         </prop>
         <prop oor:name="Custom1">
           <value xml:lang="de">benutzerdef. 1</value>
@@ -1261,12 +1293,13 @@
           <value xml:lang="pl">Indywidualne 1</value>
           <value xml:lang="pt-BR">Custom1</value>
           <value xml:lang="ja">ユーザー定義 1</value>
-          <value xml:lang="ko">사용자 정의1</value>
+          <value xml:lang="ko">사용자 정의 1</value>
           <value xml:lang="zh-CN">使用者自定 1</value>
           <value xml:lang="zh-TW">自訂 1</value>
           <value xml:lang="tr">Custom1</value>
           <value xml:lang="ar">Custom1</value>
           <value xml:lang="ca">Custom1</value>
+            <value xml:lang="th">กำหนดเอง 1</value>
         </prop>
         <prop oor:name="Custom2">
           <value xml:lang="de">benutzerdef. 2</value>
@@ -1285,12 +1318,13 @@
           <value xml:lang="pl">Indywidualne 2</value>
           <value xml:lang="pt-BR">Custom2</value>
           <value xml:lang="ja">ユーザー定義 2</value>
-          <value xml:lang="ko">사용자 정의2</value>
+          <value xml:lang="ko">사용자 정의 2</value>
           <value xml:lang="zh-CN">使用者自定 2</value>
           <value xml:lang="zh-TW">自訂 2</value>
           <value xml:lang="tr">Custom2</value>
           <value xml:lang="ar">Custom2</value>
           <value xml:lang="ca">Custom2</value>
+            <value xml:lang="th">กำหนดเอง 2</value>
         </prop>
         <prop oor:name="Custom3">
           <value xml:lang="de">benutzerdef. 3</value>
@@ -1309,12 +1343,13 @@
           <value xml:lang="pl">Indywidualne 3</value>
           <value xml:lang="pt-BR">Custom3</value>
           <value xml:lang="ja">ユーザー定義 3</value>
-          <value xml:lang="ko">사용자 정의3</value>
+          <value xml:lang="ko">사용자 정의 3</value>
           <value xml:lang="zh-CN">使用者自定 3</value>
           <value xml:lang="zh-TW">自訂 3</value>
           <value xml:lang="tr">Custom3</value>
           <value xml:lang="ar">Custom3</value>
           <value xml:lang="ca">Custom3</value>
+            <value xml:lang="th">กำหนดเอง 3</value>
         </prop>
         <prop oor:name="Custom4">
           <value xml:lang="de">benutzerdef. 4</value>
@@ -1333,12 +1368,13 @@
           <value xml:lang="pl">Indywidualne 4</value>
           <value xml:lang="pt-BR">Custom4</value>
           <value xml:lang="ja">ユーザー定義 4</value>
-          <value xml:lang="ko">사용자 정의4</value>
+          <value xml:lang="ko">사용자 정의 4</value>
           <value xml:lang="zh-CN">使用者自定 4</value>
           <value xml:lang="zh-TW">自訂 4</value>
           <value xml:lang="tr">Custom4</value>
           <value xml:lang="ar">Custom4</value>
           <value xml:lang="ca">Custom4</value>
+            <value xml:lang="th">กำหนดเอง 4</value>
         </prop>
         <prop oor:name="Notes">
           <value xml:lang="de">Bemerkungen</value>
@@ -1357,12 +1393,13 @@
           <value xml:lang="pl">Uwagi</value>
           <value xml:lang="pt-BR">Notes</value>
           <value xml:lang="ja">コメント</value>
-          <value xml:lang="ko">주석</value>
+          <value xml:lang="ko">주</value>
           <value xml:lang="zh-CN">备注</value>
           <value xml:lang="zh-TW">評語</value>
           <value xml:lang="tr">Notes</value>
           <value xml:lang="ar">Notes</value>
-          <value xml:lang="ca">Notes</value>
+          <value xml:lang="ca">Comentaris</value>
+            <value xml:lang="th">ข้อคิดเห็น</value>
         </prop>
       </node>
     </node>
