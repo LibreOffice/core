@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:51:36 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: rt $
- //     $Date: 2001-06-16 21:51:36 $
- // $Revision: 1.16 $
+ //   $Author: kz $
+ //     $Date: 2001-07-13 21:44:10 $
+ // $Revision: 1.17 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -264,17 +264,17 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     MoreButton BTN_MORE
     {
@@ -335,7 +335,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ russian ] = "Îáëàñòü ïå÷àòè";
         Text[ polish ] = "Obszar wydruku";
         Text[ japanese ] = "ˆóü”ÍˆÍ(~P)";
-        Text[ chinese_traditional ] = "¦C¦L­S³ò(~P)";
+        Text[ chinese_traditional ] = "¦C¦L½d³ò(~P)";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
         Text[ korean ] = "ÀÎ¼â ¹üÀ§(~P)";
@@ -392,8 +392,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ english_us ] = "Repeat ~row" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÖØ¸´µÄĞĞ(~R)";
-        Text[ russian ] = "Ñòğîêà ïîâòîğà";
-        Text[ polish ] = "Powtarzaj wiersz";
+        Text[ russian ] = "Ïîâòîğ ñòğîêè";
+        Text[ polish ] = "Wiersz powtórzony";
         Text[ japanese ] = "ŒJ‚è•Ô‚·s(~R)";
         Text[ chinese_traditional ] = "­«½Æ¦C(~R)";
         Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
@@ -422,8 +422,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ english_us ] = "Repeat ~column" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÖØ¸´µÄÁĞ(~C)";
-        Text[ russian ] = "Êîëîíêà ïîâòîğà";
-        Text[ polish ] = "Powtarzaj kolumnê";
+        Text[ russian ] = "Ïîâòîğ ñòîëáöà";
+        Text[ polish ] = "Kolumna powtórzona";
         Text[ japanese ] = "ŒJ‚è•Ô‚·—ñ(~C)";
         Text[ chinese_traditional ] = "­«½ÆªºÄæ(~C)";
         Text[ arabic ] = "ÇáÚãæÏ ÇáãßÑÑ";
@@ -477,14 +477,14 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "~Modificar" ;
         Text [ english_us ] = "Mod~ify" ;
-        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ chinese_simplified ] = "¸ü¸Ä(~I)";
         Text[ russian ] = "Èçìåíèòü";
         Text[ polish ] = "Modyfikuj";
-        Text[ japanese ] = "•ÏX(~M)";
-        Text[ chinese_traditional ] = "ÅÜ§ó(~M)";
+        Text[ japanese ] = "•ÏX(~I)";
+        Text[ chinese_traditional ] = "ÅÜ§ó(~I)";
         Text[ arabic ] = "ÊÚÏíá";
         Text[ greek ] = "Ôñïğïğïßçóç";
-        Text[ korean ] = "¼öÁ¤(~M)";
+        Text[ korean ] = "¼öÁ¤(~I)";
         Text[ turkish ] = "~Değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar";
@@ -519,7 +519,7 @@ ModelessDialog RID_SCDLG_NAMES
     };
     Text[ chinese_simplified ] = "¶¨ÒåÃû³Æ";
     Text[ russian ] = "Ïğèñâîèòü èìÿ";
-    Text[ polish ] = "Zdefiniuj nazwy";
+    Text[ polish ] = "Definiowanie nazw";
     Text[ japanese ] = "–¼‘O‚Ìw’è";
     Text[ chinese_traditional ] = "©w¸q¦WºÙ";
     Text[ arabic ] = "ÊÍÏíÏ ÇáÃÓãÇÁ";
@@ -529,6 +529,7 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir nombres";
 };
+
 
 
 
