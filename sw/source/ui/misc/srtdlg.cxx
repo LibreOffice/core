@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:47:13 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,11 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
-#pragma hdrstop
+#include "srtdlg.hxx"
 
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -83,6 +86,12 @@
 #ifndef _SVX_CHARMAP_HXX
 #include <svx/charmap.hxx>
 #endif
+#ifndef _SVX_DIALOG_HXX
+#include <svx/svxdlg.hxx> //CHINA001
+#endif
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc> //CHINA001
+#endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
 #endif
@@ -102,9 +111,6 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
-#ifndef _SRTDLG_HXX
-#include <srtdlg.hxx>
-#endif
 #ifndef _SORTOPT_HXX
 #include <sortopt.hxx>
 #endif
@@ -123,8 +129,10 @@
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+
+// sw/inc/tblsel.hxx
+SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
+SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
 static BOOL bCheck1 = TRUE;
 static BOOL bCheck2 = FALSE;
