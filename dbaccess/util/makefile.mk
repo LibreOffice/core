@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: oj $ $Date: 2001-02-28 10:23:09 $
+#   last change: $Author: oj $ $Date: 2001-07-16 07:57:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,22 +93,18 @@ SHL1STDLIBS= \
         $(SALLIB) \
         $(OSLLIB) \
         $(ONELIB) \
-        $(STORELIB) \
         $(TOOLSLIB) \
         $(VOSLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(UNOTOOLSLIB) \
         $(VCLLIB) \
+        $(UNOTOOLSLIB) \
         $(SVLLIB) \
         $(COMPHELPERLIB) \
         $(SVTOOLLIB) \
         $(DBTOOLSLIB) \
         $(COMPHELPERLIB)
 
-.IF "$(DBTOOLSLIB)" == ""
-SHL1STDLIBS+=idbt$(UPD)$(DLLPOSTFIX).lib
-.ENDIF
 
 .IF "$(COMPHELPERLIB)" == ""
 SHL1STDLIBS+= icomphelp2.lib
