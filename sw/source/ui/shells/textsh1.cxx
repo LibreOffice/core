@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:43:37 $
+ *  last change: $Author: tl $ $Date: 2001-03-06 08:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                  RES_BACKGROUND,        RES_BACKGROUND,
                                  FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
                                  SID_HTML_MODE,         SID_HTML_MODE,
+                                 SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
                                  0 );
                 rWrtSh.GetAttr( aCoreSet );
                 BOOL bSel = rWrtSh.HasSelection();
@@ -516,6 +517,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.EndAction();
                     }
                 }
+
+                aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                              rWrtSh.GetScalingOfSelectedText() ) );
 
                 // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
                 // ein RES_BACKGROUND verwandelt und wieder zurueck ...
@@ -1025,6 +1029,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/02/02 17:43:37  jp
+    use new clipboard
+
     Revision 1.3  2001/01/10 16:07:03  os
     Ruby dialog
 
