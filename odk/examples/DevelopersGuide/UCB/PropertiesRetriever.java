@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertiesRetriever.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:48:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -205,7 +205,7 @@ public class PropertiesRetriever {
         }
 
         if ( m_connectString == null || m_connectString.equals( "" )) {
-            m_connectString = "socket,host=localhost,port=8100";
+            m_connectString = "socket,host=localhost,port=2083";
         }
 
         if ( m_contenturl == null || m_contenturl.equals( "" )) {
@@ -225,7 +225,7 @@ public class PropertiesRetriever {
         System.out.println(
             "Usage   : PropertiesRetriever -connect=socket,host=...,port=... -url=... -propNames=..." );
         System.out.println(
-            "Defaults: -connect=socket,host=localhost,port=8100 -url=<workdir>/data/data.txt -propNames=Title;IsDocument" );
+            "Defaults: -connect=socket,host=localhost,port=2083 -url=<workdir>/data/data.txt -propNames=Title;IsDocument" );
         System.out.println(
             "\nExample : -propNames=Title;IsFolder" );
     }

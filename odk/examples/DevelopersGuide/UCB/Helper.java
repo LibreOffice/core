@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:47:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -75,7 +75,7 @@ public class Helper {
      *  Constructor, create a new connection (ucb) with the specific arguments
      *  to a running office.
      *
-     *@param  String   Connect string. Example : -connect=socket,host=localhost,port=8100
+     *@param  String   Connect string. Example : -connect=socket,host=localhost,port=2083
      *@param  String   Connect URL.    Example : -url=file:///
      *@exception  java.lang.Exception
      */
@@ -133,7 +133,7 @@ public class Helper {
      * Connect to a running office that is accepting a connection
      * then return the ServiceManager to instantiate office components
      *
-     *@param      String    Connect string. Example : -connect=socket,host=localhost,port=8100
+     *@param      String    Connect string. Example : -connect=socket,host=localhost,port=2083
      *@return     XMultiServiceFactory
      *@exception  com.sun.star.uno.Exception
      *@exception  java.lang.Exception
