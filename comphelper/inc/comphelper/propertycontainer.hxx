@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #define _COMPHELPER_PROPERTYCONTAINER_HXX_
 
+#ifndef COMPHELPER_PROPERTYCONTAINERHELPER_HXX
+#include <comphelper/propertycontainerhelper.hxx>
+#endif
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
-#endif
-#ifndef __SGI_STL_VECTOR
-#include <vector>
 #endif
 
 //.........................................................................
@@ -88,125 +88,19 @@ typedef ::cppu::OPropertySetHelper OPropertyContainer_Base;
     the base class supports this with the convertFastPropertyValue method, the OPropertyContainer accepts only
     values which already have the correct type, it's unable to convert, for instance, a long to a short.
 */
-class OPropertyContainer : public OPropertyContainer_Base
+class OPropertyContainer
+            :public OPropertyContainer_Base
+            ,public OPropertyContainerHelper
 {
-    typedef ::std::vector< ::com::sun::star::uno::Any > PropertyContainer;
-    typedef PropertyContainer::iterator                 PropertyContainerIterator;
-    typedef PropertyContainer::const_iterator           ConstPropertyContainerIterator;
-    PropertyContainer   m_aHoldProperties;
-        // the properties which are hold by this class' instance, not the derived one's
-
 public:
     // this dtor is needed otherwise we can get a wrong delete operator
     virtual ~OPropertyContainer();
-        // (the following struct needs to be public because of the SUNPRO5 compiler. Else it does not
-        // acceppt the typedef below, which is using this struct).
-
-    // infos about one single property
-    struct PropertyDescription
-    {
-        // the possibilities where a property holding object may be located
-        enum LocationType
-        {
-            ltDerivedClassRealType,     // within the derived class, it's a "real" (non-Any) type
-            ltDerivedClassAnyType,      // within the derived class, it's a <type scope="com.sun.star.uno">Any</type>
-            ltHoldMyself                // within m_aHoldProperties
-        };
-        // the location of an object holding a property value :
-        union LocationAccess
-        {
-            void*       pDerivedClassMember;        // a pointer to a member of an object of a derived class
-            sal_Int32   nOwnClassVectorIndex;       // an index within m_aHoldProperties
-        };
-
-        ::rtl::OUString     sName;          // the name
-        sal_Int32           nHandle;        // the handle
-        sal_Int32           nAttributes;    // the attributes
-        LocationType        eLocated;       // where is the object containing the value located ?
-        LocationAccess      aLocation;      // access to the property value
-        ::com::sun::star::uno::Type
-                            aType;          // the type
-
-        PropertyDescription() : nHandle(-1), nAttributes(0), eLocated(ltHoldMyself)
-            { aLocation.nOwnClassVectorIndex = -1; }
-    };
-
-private:
-    // comparing two property descriptions
-    struct PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
-    {
-        bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
-        {
-            return x.nHandle < y.nHandle;
-        }
-    };
-    // comparing two property descriptions
-    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
-    {
-        bool operator() (const PropertyDescription& x, const sal_Int32& y) const
-        {
-            return x.nHandle < y;
-        }
-        bool operator() (const sal_Int32& x, const PropertyDescription& y) const
-        {
-            return x < y.nHandle;
-        }
-    };
-
-private:
-    typedef ::std::vector< PropertyDescription >    Properties;
-    typedef Properties::iterator                    PropertiesIterator;
-    typedef Properties::const_iterator              ConstPropertiesIterator;
-    Properties      m_aProperties;
-
-    sal_Bool        m_bAlreadyAccessed;     // no addition of properties allowed anymore if this is sal_True
 
 protected:
     OPropertyContainer(::cppu::OBroadcastHelper& _rBHelper);
 
     /// for scripting : the types of the interfaces supported by this class
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-
-    /** register a property. The property is represented through a member of the derived class which calls
-        this methdod.
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _pPointerToMember   the pointer to the member representing the property
-                                        within the derived class.
-        @param      _rMemberType        the cppu type of the property represented by the object
-                                        to which _pPointerToMember points.
-    */
-    void    registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType);
-
-
-    /** register a property. The property is represented through a ::com::sun::star::uno::Any member of the
-        derived class which calls this methdod.
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _pPointerToMember   the pointer to the member representing the property
-                                        within the derived class, which has to be a ::com::sun::star::uno::Any.
-        @param      _rExpectedType      the expected type of the property. NOT the type of the object to which
-                                        _pPointerToMember points (this is always an Any).
-    */
-    void    registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType);
-
-    /** register a property. The repository will create an own object holding this property, so there is no
-        need to declare an extra member in your derived class
-        @param      _rName              the name of the property
-        @param      _nHandle            the handle of the property
-        @param      _nAttributes        the attributes of the property
-        @param      _rType              the type of the property
-        @param      _pInitialValue      the initial value of the property. May be null if _nAttributes includes
-                                        the ::com::sun::star::beans::PropertyAttribute::MAYBEVOID flag.
-                                        Else it must be a pointer to an object of the type described by _rType.
-    */
-    void    registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
-        const ::com::sun::star::uno::Type& _rType, void* _pInitialValue);
-
 
 // OPropertySetHelper overridables
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
@@ -216,40 +110,23 @@ protected:
                             const ::com::sun::star::uno::Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException);
 
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+    virtual void SAL_CALL   setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const ::com::sun::star::uno::Any& rValue
-                                                 )
-                                                 throw (::com::sun::star::uno::Exception);
+                            )
+                            throw (::com::sun::star::uno::Exception);
 
     virtual void SAL_CALL getFastPropertyValue(
                                 ::com::sun::star::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const;
 
-    // disambiguate a base class' member
+    // disambiguate a base class method (XFastPropertySet)
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // still waiting to be overridden
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
-
-// helper
-    /** appends the descriptions of all properties which were registered 'til that moment to the given sequence,
-        keeping the array sorted (by name)
-        @precond the given sequence is already sorted by name
-        @param      _rProps     initial property sequence which is to be extended
-    */
-    void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
-
-    /** modify the attributes of an already registered property.<BR>
-        You may want to use this if you're a derived from OPropertyContainer indirect and want to override
-        some settings your base class did.<BR>
-    */
-    void    modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib);
-
-private:
-    /// insertion of _rProp into m_aProperties, keeping the sort order
-    void    implPushBackProperty(const PropertyDescription& _rProp);
-
-    /// search the PropertyDescription for the given handle (within m_aProperties)
-    PropertiesIterator  searchHandle(sal_Int32 _nHandle);
 };
 
 //.........................................................................
