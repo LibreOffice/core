@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmdstrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:53:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,23 @@ SCmdStream::~SCmdStream()
     delete pCommStream;
 }
 
+void SCmdStream::Read (String* &pString)
+{
+    if ( !pString )
+        pString = new String();
+    comm_UniChar* pStr;
+    USHORT nLenInChars;
+    CmdBaseStream::Read( pStr, nLenInChars );
+
+    *pString = String( pStr, nLenInChars );
+    delete [] pStr;
+}
+
 void SCmdStream::Read (String &aString)
 {
     comm_UniChar* pStr;
     USHORT nLenInChars;
-    Read( pStr, nLenInChars );
+    CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
     delete [] pStr;
