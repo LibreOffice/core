@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.13 $
+#  $Revision: 1.14 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 17:13:31 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:17:39 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -127,7 +127,7 @@ JavaPropertySetExample : $(COMP_REGISTERFLAG)
 	@echo Load the "$(QM)PropertySet.odt$(QM)" document to see how this component works. You can
 	@echo use this component inside your office installation, see the example description.
 	@echo -
-	@echo make PropertySet.odt.load
+	@echo $(MAKE) PropertySet.odt.load
 	@echo --------------------------------------------------------------------------------
 
 PropertySet.odt.load : $(COMP_REGISTERFLAG)
