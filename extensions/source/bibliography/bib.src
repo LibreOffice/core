@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:26:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,8 @@ String RID_MAP_QUESTION
     Text[ hindi ] = "आप स्तंभ विन्यास को संपादन करना चाहते है?";
     Text[ slovak ] = "Chcete zmeniť usporiadanie polí?";
 };
+
+
 
 
 
