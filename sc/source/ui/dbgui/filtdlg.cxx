@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:53:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
-    nSrcTab     = pViewData ? pViewData->GetTabNo() : NULL;
+    nSrcTab     = pViewData ? pViewData->GetTabNo() : 0;
 
     // fuer leichteren Zugriff:
     aFieldLbArr  [0] = &aLbField1;
