@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:27:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,23 +657,23 @@ FloatingWindow RID_SVXDLG_CONTOUR
         CustomUnitText[ japanese ] = "%";
         CustomUnitText[ chinese_traditional ] = "%";
         CustomUnitText[ arabic ] = "%";
-        QuickHelpText[ russian ] = "Öâåòîâîé äîïóñê!";
-        QuickHelpText[ polish ] = "Tolerancja koloru!";
-        QuickHelpText[ japanese ] = "F‚Ì‹–—e!";
+        QuickHelpText[ russian ] = "Öâåòîâîé äîïóñê";
+        QuickHelpText[ polish ] = "Tolerancja koloru";
+        QuickHelpText[ japanese ] = "F‚Ì‹–—e";
         QuickHelpText[ chinese_simplified ] = "ÑÕÉ«Æ«²î";
         QuickHelpText[ chinese_traditional ] = "ÃC¦â°¾®t";
         QuickHelpText[ arabic ] = "Color Tolerance";
         CustomUnitText[ greek ] = "%";
         CustomUnitText[ korean ] = "%";
         QuickHelpText[ greek ] = "Color Tolerance";
-        QuickHelpText[ korean ] = "»ö»ó¡¡¿ÀÂ÷!";
+        QuickHelpText[ korean ] = "»ö»ó¡¡¿ÀÂ÷";
         CustomUnitText[ turkish ] = "%";
         CustomUnitText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Farbtoleranz";
         CustomUnitText[ catalan ] = "%";
         QuickHelpText[ catalan ] = "Tolerancia del color";
         CustomUnitText[ finnish ] = "%";
-        QuickHelpText[ finnish ] = "Väritoleranssi!";
+        QuickHelpText[ finnish ] = "Väritoleranssi";
     };
     Control CTL_CONTOUR
     {
@@ -818,5 +818,6 @@ String STR_CONTOURDLG_LINKED
     Text[ catalan ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?";
 };
 /******************************************************************************/
+
 
 
