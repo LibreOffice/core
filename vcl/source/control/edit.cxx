@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-12 15:36:59 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _SV_VIRDEV_HXX
 #include <virdev.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_CLIP_HXX
 #include <clip.hxx>
 #endif
@@ -87,6 +88,7 @@
 #endif
 #ifndef _SV_TRANSFER_HXX
 #include <transfer.hxx>
+#endif
 #endif
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
@@ -135,6 +137,7 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <rtl/memory.h>
 
 #include <comphelper/processfactory.hxx>
 
@@ -318,7 +321,7 @@ void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
     nLen = nL;
     delete pAttribs;
     pAttribs = new USHORT[ nL ];
-    memcpy( pAttribs, pA, nL*sizeof(USHORT) );
+    rtl_copyMemory( pAttribs, pA, nL*sizeof(USHORT) );
 }
 
 // -----------------------------------------------------------------------
@@ -1412,6 +1415,7 @@ void Edit::LoseFocus()
 
 void Edit::Command( const CommandEvent& rCEvt )
 {
+#ifndef TF_SVDATA
     if ( (rCEvt.GetCommand() == COMMAND_STARTDRAG) &&
          !IsTracking() && maSelection.Len() &&
          !(GetStyle() & WB_PASSWORD) &&
@@ -1459,7 +1463,9 @@ void Edit::Command( const CommandEvent& rCEvt )
             mpDDInfo = 0;
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+    else
+#endif
+    if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
         PopupMenu* pPopup = Edit::CreatePopupMenu();
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -1782,6 +1788,8 @@ void Edit::ImplHideDDCursor()
 
 // -----------------------------------------------------------------------
 
+#ifndef TF_SVDATA
+
 BOOL Edit::QueryDrop( DropEvent& rDEvt )
 {
     if ( rDEvt.IsLeaveWindow() )
@@ -1880,6 +1888,8 @@ BOOL Edit::Drop( const DropEvent& rDEvt )
 
     return bDone;
 }
+
+#endif
 
 // -----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,10 @@
 
 #define _SV_GRAPH_CXX
 
+#ifndef TF_SVDATA
 #ifndef _SV_CLIP_HXX
 #include <clip.hxx>
+#endif
 #endif
 #ifndef _SV_IMPGRAPH_HXX
 #include <impgraph.hxx>
@@ -70,11 +72,13 @@
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_CLIP_HXX
 #include <clip.hxx>
 #endif
 #ifndef _SV_DRAG_HXX
 #include <drag.hxx>
+#endif
 #endif
 #include <graph.hxx>
 
@@ -762,6 +766,8 @@ SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
 
 // ------------------------------------------------------------------------
 
+#ifndef TF_SVDATA
+
 ULONG Graphic::RegisterClipboardFormatName()
 {
      static ULONG nFormat = 0;
@@ -830,3 +836,6 @@ BOOL Graphic::Paste()
 
     return bRet;
 }
+
+#endif
+

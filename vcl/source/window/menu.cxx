@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:21:28 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ DBG_NAME( Menu );
 #define EXTRASPACEY         2
 #define EXTRAITEMHEIGHT     4
 
+#ifndef TF_SVDATA
 DropEvent ImplTranslateDropEvent( const DropEvent& rE, Window* pSource, Window* pDest )
 {
     Point aPos = pSource->OutputToScreenPixel( rE.GetPosPixel() );
@@ -155,6 +156,7 @@ DropEvent ImplTranslateDropEvent( const DropEvent& rE, Window* pSource, Window* 
     return DropEvent( aPos, rE.GetData(), rE.GetAction(), rE.GetSourceOptions(),
                 rE.GetWindowType(), rE.IsDefaultAction() );
 }
+#endif
 
 inline BOOL ImplIsMouseFollow()
 {
@@ -432,8 +434,10 @@ public:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    Resize();
     virtual void    RequestHelp( const HelpEvent& rHEvt );
+#ifndef TF_SVDATA
     virtual BOOL    QueryDrop( DropEvent& rDEvt );
     virtual BOOL    Drop( const DropEvent& rDEvt );
+#endif
 
     void            SetFocusId( ULONG nId ) { nSaveFocusId = nId; }
     ULONG           GetFocusId() const { return nSaveFocusId; }
@@ -3390,6 +3394,7 @@ void MenuBarWindow::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
+#ifndef TF_SVDATA
 BOOL MenuBarWindow::QueryDrop( DropEvent& rDEvt )
 {
     Window* pW = GetParent()->ImplGetWindow();
@@ -3404,7 +3409,7 @@ BOOL MenuBarWindow::Drop( const DropEvent& rDEvt )
     Window* pW = GetParent()->ImplGetWindow();
     return pW->Drop( ImplTranslateDropEvent( rDEvt, this, pW ) );
 }
-
+#endif
 
 void MenuBarWindow::StateChanged( StateChangedType nType )
 {

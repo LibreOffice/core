@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,6 +941,8 @@ void ScrollBar::Resize()
     Invalidate();
 }
 
+#ifndef TF_SVDATA
+
 // -----------------------------------------------------------------------
 
 BOOL ScrollBar::QueryDrop( DropEvent& rDEvt )
@@ -949,6 +951,8 @@ BOOL ScrollBar::QueryDrop( DropEvent& rDEvt )
         DDScroll( rDEvt );
     return Control::QueryDrop( rDEvt );
 }
+
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -1047,6 +1051,8 @@ long ScrollBar::DoScrollAction( ScrollType eScrollType )
 
 // -----------------------------------------------------------------------
 
+#ifndef TF_SVDATA
+
 void ScrollBar::DDScroll( const DropEvent& rDEvt )
 {
     if ( rDEvt.IsLeaveWindow() )
@@ -1095,6 +1101,8 @@ void ScrollBar::DDScroll( const DropEvent& rDEvt )
         }
     }
 }
+
+#endif
 
 // -----------------------------------------------------------------------
 

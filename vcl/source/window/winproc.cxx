@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 15:59:18 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,13 @@
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
 #include <drag.hxx>
 #endif
 #ifndef _SV_GETSYS_HXX
 #include <getsys.hxx>
+#endif
 #endif
 #ifndef _SV_HELP_HXX
 #include <help.hxx>
@@ -204,12 +206,14 @@ long ImplCallEvent( NotifyEvent& rEvt )
             case EVENT_COMMAND:
                 pWindow->Command( *rEvt.GetCommandEvent() );
                 break;
+#ifndef TF_SVDATA
             case EVENT_QUERYDROP:
                 nRet = pWindow->QueryDrop( *rEvt.GetDropEvent() );
                 break;
             case EVENT_DROP:
                 nRet = pWindow->QueryDrop( *rEvt.GetDropEvent() );
                 break;
+#endif
         }
     }
 
@@ -229,6 +233,8 @@ public:
 };
 
 static BOOL mbImplDragTimeoutHdl = FALSE;
+
+#ifndef TF_SVDATA
 
 // -----------------------------------------------------------------------
 
@@ -255,6 +261,8 @@ void ImplDragTimer::Timeout()
         delete this;
     }
 }
+
+#endif
 
 // =======================================================================
 
@@ -363,7 +371,11 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
 static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
 {
     ImplSVData* pSVData = ImplGetSVData();
+#ifndef TF_SVDATA
     if ( ( pChild != pSVData->maHelpData.mpHelpWin ) && !DragManager::GetDragManager() )
+#else
+    if ( pChild != pSVData->maHelpData.mpHelpWin )
+#endif
     {
         USHORT nHelpMode = 0;
         if ( pSVData->maHelpData.mbQuickHelp )
@@ -391,13 +403,18 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
 
 static void ImplSetMousePointer( Window* pChild )
 {
+#ifndef TF_SVDATA
     // Drag&Drop active?
     DragManager*    pDragManager = DragManager::GetDragManager();
+#endif
     ImplSVData*     pSVData = ImplGetSVData();
 
+#ifndef TF_SVDATA
     if( pDragManager && pDragManager->isModifyPointer() )
         pChild->mpFrame->SetPointer( pDragManager->GetDragPointer().GetStyle() );
-    else if ( pSVData->maHelpData.mbExtHelpMode )
+    else
+#endif
+    if ( pSVData->maHelpData.mbExtHelpMode )
         pChild->mpFrame->SetPointer( POINTER_HELP );
     else
         pChild->mpFrame->SetPointer( pChild->ImplGetMousePointer() );
@@ -478,6 +495,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         if ( pSVData->maHelpData.mpHelpWin )
             ImplDestroyHelpWindow();
 
+#ifndef TF_SVDATA
         // If Drag&Drop is active try to start System-Drag&Drop
         DragManager* pDragManager = DragManager::GetDragManager();
         if ( pDragManager )
@@ -489,9 +507,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
             }
             pDragManager->AppWindowLeaved();
         }
+#endif
     }
     else
     {
+#ifndef TF_SVDATA
         // Handle Drag&Drop if window is (re)entered
         if ( !pWindow->mpFrameData->mbMouseIn )
         {
@@ -506,7 +526,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     pDragManager->Escape( pWindow );
             }
         }
-
+#endif
         pWindow->mpFrameData->mbMouseIn = TRUE;
     }
 
@@ -728,10 +748,12 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                     pChild->ImplAddDel( &aDelData2 );
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
                 {
+#ifndef TF_SVDATA
                     DragManager* pDragManager = DragManager::GetDragManager();
                     if ( pDragManager )
                         pDragManager->MouseMove( aMLeaveEvt, pMouseMoveWin );
                     else
+#endif
                         pMouseMoveWin->MouseMove( aMLeaveEvt );
                 }
 
@@ -840,6 +862,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     pChild->ImplAddDel( &aDelData );
     if ( nSVEvent == EVENT_MOUSEMOVE )
         pChild->mpFrameData->mbInMouseMove = TRUE;
+#ifndef TF_SVDATA
     // D&D im Gange?
     DragManager* pDragManager = DragManager::GetDragManager();
     if ( pDragManager )
@@ -860,6 +883,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     }
     else
     {
+#endif
         // Fenster bei Klick nach vorne bringen
         if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
         {
@@ -930,7 +954,9 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                 }
             }
         }
+#ifndef TF_SVDATA
     }
+#endif
 
     if ( aDelData.IsDelete() )
         return 1;
@@ -1065,6 +1091,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                 return 1;
         }
 
+#ifndef TF_SVDATA
         // D&D im Gange und Escape?
         if ( nCode == KEY_ESCAPE )
         {
@@ -1078,6 +1105,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                 return 1;
             }
         }
+#endif
 
         if ( pSVData->maWinData.mpTrackWin )
         {
@@ -1611,7 +1639,9 @@ static void ImplHandleGetFocus( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+#ifndef TF_SVDATA
     InvalidateSystemClipboard();
+#endif
 
     pWindow->mpFrameData->mbHasFocus = TRUE;
 
@@ -1630,9 +1660,11 @@ static void ImplHandleLoseFocus( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+#ifndef TF_SVDATA
     // Wenn wir den Focus verlieren gehen wir erst mal davon aus, dass sich das
     // Systemclipboard aendert.
     UpdateSystemClipboard();
+#endif
 
     // Wenn Frame den Focus verliert, brechen wir auch ein AutoScroll ab
     if ( pSVData->maWinData.mpAutoScrollWin )
@@ -1686,12 +1718,14 @@ void ImplHandleClose( Window* pWindow )
     // AutoScrollMode
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
+#ifndef TF_SVDATA
     DragManager* pDragManager = DragManager::GetDragManager();
     if ( pDragManager )
     {
         pWindow->ImplGenerateMouseMove();
         pDragManager->Escape( pWindow );
     }
+#endif
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:08:05 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,10 @@
 #ifndef _SV_IDLEMGR_HXX
 #include <idlemgr.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
 #include <drag.hxx>
+#endif
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
@@ -846,9 +848,15 @@ BOOL Application::IsUICaptured()
     // Wenn Mouse gecaptured, oder im TrackingModus oder im Auswahlmodus
     // eines FloatingWindows (wie Menus, Aufklapp-ToolBoxen) soll kein
     // weiteres Fenster aufgezogen werden
+#ifdef TF_SVDATA
+    if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
+         pSVData->maWinData.mpFirstFloat || nImplSysDialog )
+#else
+
     if ( pSVData->maWinData.mpCaptureWin || pSVData->maWinData.mpTrackWin ||
          pSVData->maWinData.mpFirstFloat || DragManager::GetDragManager() ||
          nImplSysDialog )
+#endif
         return TRUE;
     else
         return FALSE;

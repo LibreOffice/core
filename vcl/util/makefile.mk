@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: oisin $ $Date: 2001-01-31 15:02:44 $
+#   last change: $Author: obr $ $Date: 2001-02-14 08:32:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -183,8 +183,11 @@ LIB1FILES=	$(SLB)$/app.lib 	\
             $(SLB)$/gdi.lib 	\
             $(SLB)$/win.lib 	\
             $(SLB)$/ctrl.lib	\
-            $(SLB)$/ex.lib		\
             $(SLB)$/helper.lib
+
+.IF "$(TF_SVDATA)"==""
+LIB1FILES+= $(SLB)$/ex.lib
+.ENDIF
 
 .IF "$(remote)" != ""
 LIB1FILES+= \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-13 13:12:53 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,8 +139,10 @@
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
 #include <drag.hxx>
+#endif
 #endif
 
 #define SYSDATA_ONLY_BASETYPE
@@ -475,8 +477,10 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         pFrame->SetCallback( this, ImplWindowFrameProc );
 
+#ifndef TF_SVDATA
         // initialize system-Drag&Drop-interface
         DragManager::SystemEnableDrop( pFrame, TRUE );
+#endif
 #else
         RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
         RmFrameWindow* pFrame = new RmFrameWindow( this );
@@ -4065,7 +4069,9 @@ Window::~Window()
     if ( mbFrame )
     {
 #ifndef REMOTE_APPSERVER
+#ifndef TF_SVDATA
         DragManager::SystemEnableDrop( mpFrame, FALSE);
+#endif
 #endif
         if ( mpFrameData->mnFocusId )
             Application::RemoveUserEvent( mpFrameData->mnFocusId );
@@ -4384,6 +4390,8 @@ void Window::Tracking( const TrackingEvent& )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 }
 
+#ifndef TF_SVDATA
+
 // -----------------------------------------------------------------------
 
 BOOL Window::QueryDrop( DropEvent& rDEvt )
@@ -4407,6 +4415,8 @@ BOOL Window::Drop( const DropEvent& rDEvt )
     Notify( aNEvt );
     return (BOOL)aNEvt.GetReturnValue();
 }
+
+#endif
 
 // -----------------------------------------------------------------------
 

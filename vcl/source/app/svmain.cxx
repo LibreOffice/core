@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-24 15:32:08 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 08:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,11 @@
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
 #endif
+#ifndef TF_SVDATA
 // HACK: Only for Exception-Hack
 #ifndef _SV_SYSEXCHG_HXX
 #include <sysexchg.hxx>
+#endif
 #endif
 
 #include <vos/process.hxx>
@@ -362,8 +364,10 @@ BOOL SVMain()
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
+#ifndef TF_SVDATA
     // HACK: Hier SystemExchange initialisieren, damit Exception-Handler unter Windows funktioniert
     CreateSystemExchange();
+#endif
     ImplVCLExceptionHandler aExceptionHandler;
 
     // Debug-Daten initialisieren
