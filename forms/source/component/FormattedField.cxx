@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:37:51 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:41:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,6 +867,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     switch (nType)
                     {
                         case DataType::BIT:
+                        case DataType::BOOLEAN:
                         case DataType::TINYINT:
                         case DataType::SMALLINT:
                         case DataType::INTEGER:
