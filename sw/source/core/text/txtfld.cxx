@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 12:44:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     SwLinePortion *pRet = 0;
     if( !pHint )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //        aDbstream << "NewExtraPortion: hint not found?" << endl;
 #endif
         pRet = new SwTxtPortion;
@@ -360,7 +360,7 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     }
     if( !pRet )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //        aDbstream << "NewExtraPortion: unknown hint" << endl;
 #endif
         const XubString aNothing;
