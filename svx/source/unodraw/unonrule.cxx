@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-01 08:20:20 $
+ *  last change: $Author: cl $ $Date: 2001-08-06 15:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,16 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         throw lang::IllegalArgumentException();
     }
 
+    // check that we always have a brush item for bitmap numbering
+    if( aFmt.GetNumberingType() == SVX_NUM_BITMAP )
+    {
+        if( NULL == aFmt.GetBrush() )
+        {
+            GraphicObject aGrafObj;
+            SvxBrushItem aBrushItem( aGrafObj, GPOS_AREA );
+            aFmt.SetGraphicBrush( &aBrushItem );
+        }
+    }
     maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
 }
 
