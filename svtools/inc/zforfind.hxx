@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: er $ $Date: 2000-10-16 18:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,186 +71,187 @@ class Date;
 class SvNumberformat;
 class SvNumberFormatter;
 
-//  passiert in "string.hxx":
-//
-//  #ifdef ENABLEUNICODE            /* bei Unicode */
-//  #define XubString UniString     /* Wide-Strings */
-//  #define xub_Unicode sal_Unicode         /* Wide-Character */
-//  #else                           /* sonst */
-//  #define XubString String            /* normale Strings */
-//  #define xub_Unicode char                /* normaler char */
-//  #endif
-
-#define SV_MAX_ANZ_INPUT_STRINGS  20            // max. Anzahl der Sub-Strings
+#define SV_MAX_ANZ_INPUT_STRINGS  20    // max count of substrings in input scanner
 
 class ImpSvNumberInputScan
 {
-public:                             // ---- oeffentlicher Teil
+public:
     ImpSvNumberInputScan( SvNumberFormatter* pFormatter );
     ~ImpSvNumberInputScan();
 
 /*!*/   void ChangeIntl();                      // MUST be called if language changes
 
-    void ChangeNullDate(                        // Referenzdatum setzen
+    /// set reference date for offset calculation
+    void ChangeNullDate(
             const USHORT nDay,
             const USHORT nMonth,
             const USHORT nYear );
 
-    BOOL IsNumberFormat(                        // Eingabe in Zahl umwandeln
-            const XubString& rString,           // Eingabestring
-            short& F_Type,                      // Typus, Format (in + out)
-            double& fOutNumber,                 // ermittelter Wert
-            const SvNumberformat* pFormat = NULL ); // evtl. gesetztes Zahlenformat
+    /// convert input string to number
+    BOOL IsNumberFormat(
+            const String& rString,              /// input string
+            short& F_Type,                      /// format type (in + out)
+            double& fOutNumber,                 /// value determined (out)
+            const SvNumberformat* pFormat = NULL    /// optional a number format to which compare against
+            );
 
-                                                // nach IsNumberFormat:
+    /// after IsNumberFormat: get decimal position
     short   GetDecPos() const { return nDecPos; }
+    /// after IsNumberFormat: get count of numeric substrings in input string
     USHORT  GetAnzNums() const { return nAnzNums; }
+
+    /// set threshold of two-digit year input
     void    SetYear2000( USHORT nVal ) { nYear2000 = nVal; }
+    /// get threshold of two-digit year input
     USHORT  GetYear2000() const { return nYear2000; }
 
-private:                            // ---- privater Teil
+private:
     SvNumberFormatter*  pFormatter;
-    XubString aUpperMonthText[12];              // Die 12 Monate
-    XubString aUpperAbbrevMonthText[12];            // Die 12 Monate, abgekuerzt
-    XubString aUpperDayText[7];                 // Die 7 Wochentage
-    XubString aUpperAbbrevDayText[7];           // Die 7 Wochentage, abgekuerzt
-    XubString aUpperCurrSymbol;                 // Das Waehrungssymbol
-    BOOL    bTextInitialized;                   // Sind Monate und Wochentage initialisert?
+    String aUpperMonthText[12];                 // The 12 months
+    String aUpperAbbrevMonthText[12];           // The 12 monaths, abbreviated
+    String aUpperDayText[7];                    // The 7 days of week
+    String aUpperAbbrevDayText[7];              // The 7 days of week, abbreviated
+    String aUpperCurrSymbol;                    // Currency symbol
+    BOOL    bTextInitialized;                   // Whether days and months are initialized
     Date* pNullDate;                            // "1.1.1900"
-                                                // Variablen für Zwischenergebnisse:
-    XubString sStrArray[SV_MAX_ANZ_INPUT_STRINGS];  // Array der Zahl- oder Str.-Symbole
-    BOOL   IsNum[SV_MAX_ANZ_INPUT_STRINGS];     // Markiert die Zahl-Symb.
-    USHORT nNums[SV_MAX_ANZ_INPUT_STRINGS];     // Die Zahlen in Reihenfolge
-    USHORT nAnzStrings;                         // Gesamtzahl der Symbole
-    USHORT nAnzNums;                            // Anzahl der Zahlensymbole
+                                                // Variables for provisional results:
+    String sStrArray[SV_MAX_ANZ_INPUT_STRINGS]; // Array of scanned substrings
+    BOOL   IsNum[SV_MAX_ANZ_INPUT_STRINGS];     // Whether a substring is numeric
+    USHORT nNums[SV_MAX_ANZ_INPUT_STRINGS];     // Sequence of offsets to numeric strings
+    USHORT nAnzStrings;                         // Total count of scanned substrings
+    USHORT nAnzNums;                            // Count of numeric substrings
     BOOL   bDecSepInDateSeps;                   // True <=> DecSep in {.,-,/,DateSep}
 
-    short  nSign;                               // Vorzeichen der Zahl
-    short  nMonth;                              // Monat(1..12), falls Datum
-                                                // negativ => Kurzformat
-    short  nMonthPos;                           // 1 = vorn, 2 = Mitte
-                                                // 3 = hinten
+    short  nSign;                               // Sign of number
+    short  nMonth;                              // Month (1..12) if date
+                                                // negative => short format
+    short  nMonthPos;                           // 1 = front, 2 = middle
+                                                // 3 = end
     USHORT nTimePos;                            // Index of first time separator (+1)
-    short  nDecPos;                             // Index des Strings mit ", " (+1)
-    short  nNegCheck;                           // '( )' fuer negativ
-    short  nESign;                              // Vorzeichen Exp
-    short  nAmPm;                               // +1 AM, -1 PM, sonst 0
+    short  nDecPos;                             // Index of substring containing "," (+1)
+    short  nNegCheck;                           // '( )' for negative
+    short  nESign;                              // Sign of exponent
+    short  nAmPm;                               // +1 AM, -1 PM, 0 if none
     short  nLogical;                            // -1 => False, 1 => True
-    USHORT nThousand;                           // Anz. der Tausenderpkte.
-    USHORT nPosThousandString;                  // Position des zusammenge-
-                                                // fassten 000.000.000-Strings
-    short  eScannedType;                        // Typ gemaess Scan
-    short  eSetType;                            // Typ gemaess Zelle
+    USHORT nThousand;                           // Count of group (AKA thousand) separators
+    USHORT nPosThousandString;                  // Position of concatenaded 000,000,000 string
+    short  eScannedType;                        // Scanned type
+    short  eSetType;                            // Preset Type
 
-    USHORT nStringScanNumFor;                   // fixe Strings erkannt in
+    USHORT nStringScanNumFor;                   // Fixed strings recognized in
                                                 // pFormat->NumFor[nNumForStringScan]
-    short  nStringScanSign;                     // Vorzeichen durch FixString
-    USHORT nYear2000;                           // Bis zu welcher Zahl zweistellige
-                                                // Jahresangaben als 20xx erkannt
-                                                // werden, default 18
-                                                // Zahl <= nYear2000 => 20xx
-                                                // Zahl >  nYear2000 => 19xx
+    short  nStringScanSign;                     // Sign resulting of FixString
+    USHORT nYear2000;                           // Two-digit threshold
+                                                // Year as 20xx
+                                                // default 18
+                                                // number <= nYear2000 => 20xx
+                                                // number >  nYear2000 => 19xx
 
-#ifdef _ZFORFIND_CXX                // ----- private Methoden -----
-    void Reset();                               // Reset aller Variablen vor Analysestart
+#ifdef _ZFORFIND_CXX        // methods private to implementation
+    void Reset();                               // Reset all variables before start of analysis
 
-    void InitText();                            // Monate und Wochentage initialisieren
+    void InitText();                            // Init of months and days of week
 
-    double StringToDouble(                      // String in double umwandlen
-            const XubString& rStr );
+    double StringToDouble(                      // Convert string to double
+            const String& rStr );
 
-    BOOL NextNumberStringSymbol(                // Naechstes Zahl/String Symbol
-            const xub_Unicode*& pStr,
-            XubString& rSymbol );
+    BOOL NextNumberStringSymbol(                // Next number/string symbol
+            const sal_Unicode*& pStr,
+            String& rSymbol );
 
-    BOOL SkipThousands(                         // Fasst .000.123 Bloecke in
-            const xub_Unicode*& pStr,                   // der Eingabe zusammen 000123
-            XubString& rSymbol );
-    void NumberStringDivision(                  // Zerlegen in Zahlen/Strings in obige Arrays und Var.
-            const XubString& rString );         // Leerzeichen am Anfang und hinter Zahlen fallen weg!
+    BOOL SkipThousands(                         // Concatenate ,000,23 blocks
+            const sal_Unicode*& pStr,           // in input to 000123
+            String& rSymbol );
 
-    static BOOL StringContains(                 // if rString contains rWhat at nPos
-            const XubString& rWhat,
-            const XubString& rString,
+    void NumberStringDivision(                  // Divide numbers/strings into
+            const String& rString );            // arrays and variables above.
+                                                // Leading blanks and blanks
+                                                // after numbers are thrown away
+
+    static BOOL StringContains(                 // Whether rString contains rWhat at nPos
+            const String& rWhat,
+            const String& rString,
             xub_StrLen nPos );
-    static inline BOOL SkipChar(                // spezielles Zeichen ueberspringen
-            xub_Unicode c,
-            const XubString& rString,
+    static inline BOOL SkipChar(                // Skip a special character
+            sal_Unicode c,
+            const String& rString,
             xub_StrLen& nPos );
-    static inline void SkipBlanks(              // ueberspringe Leerzeichen
-            const XubString& rString,
+    static inline void SkipBlanks(              // Skip blank
+            const String& rString,
             xub_StrLen& nPos );
-    static inline BOOL SkipString(              // jump over rWhat in rString at nPos
-            const XubString& rWhat,
-            const XubString& rString,
+    static inline BOOL SkipString(              // Jump over rWhat in rString at nPos
+            const String& rWhat,
+            const String& rString,
             xub_StrLen& nPos );
 
-    inline BOOL GetThousandSep(                 // erkennt genau .111 als Tausenderpunkt
-            const XubString& rString,
+    inline BOOL GetThousandSep(                 // Recognizes exactly ,111 as group separator
+            const String& rString,
             xub_StrLen& nPos,
             USHORT nStringPos );
-    short GetLogical(                           // logischen Wert holen
-            const XubString& rString );
-    short GetMonth(                             // Monat holen
-            const XubString& rString,
+    short GetLogical(                           // Get boolean value
+            const String& rString );
+    short GetMonth(                             // Get month and advance string position
+            const String& rString,
             xub_StrLen& nPos );
-    short GetDayOfWeek(                         // Wochentag holen
-            const XubString& rString,
+    short GetDayOfWeek(                         // Get day of week and advance string position
+            const String& rString,
             xub_StrLen& nPos );
-    BOOL GetCurrency(                           // Waehrungssysmbol holen
-            const XubString& rString,
+    BOOL GetCurrency(                           // Get currency symbol and advance string position
+            const String& rString,
             xub_StrLen& nPos,
-            const SvNumberformat* pFormat = NULL ); // evtl. gesetztes Zahlenformat
-    BOOL GetTimeAmPm(                           // Symbol Am od. Pm holen
-            const XubString& rString,
+            const SvNumberformat* pFormat = NULL ); // optional number format to match against
+    BOOL GetTimeAmPm(                           // Get symbol AM or PM and advance string position
+            const String& rString,
             xub_StrLen& nPos );
-    inline BOOL GetDecSep(                      // Dezimaltrenner holen
-            const XubString& rString,
+    inline BOOL GetDecSep(                      // Get decimal separator and advance string position
+            const String& rString,
             xub_StrLen& nPos );
-    short GetSign(                              // Vorzeichen holen
-            const XubString& rString,           // mit Sonderfall '('
+    short GetSign(                              // Get sign  and advance string position
+            const String& rString,              // Including special case '('
             xub_StrLen& nPos );
-    short GetESign(                             // Vorzeichen holen
-            const XubString& rString,           // f. Exponent
+    short GetESign(                             // Get sign of exponent and advance string position
+            const String& rString,
             xub_StrLen& nPos );
 
-    inline BOOL GetNextNumber(                  // Naechste Zahl holen
+    inline BOOL GetNextNumber(                  // Get next number as array offset
             USHORT& i,
             USHORT& j );
-    void GetTimeRef(                            // Umwandlung Zeit -> double (nur Nachkomma)
-            double& fOutNumber,                 // Ergebniss als double
-            USHORT nIndex,                      // Index der Stunde in der Eingabe,
-            USHORT nAnz );                      // Anz der Zeitstrings in der Eingabe
-    USHORT ImplGetDay  ( USHORT nIndex );       // Tag: Eingabe od. aktuell
-    USHORT ImplGetMonth( USHORT nIndex );       // Monat: Eingabe od. aktuell
-    USHORT ImplGetYear ( USHORT nIndex );       // Jahr: nix: aktuell, xx=19xx
-    BOOL GetDateRef(                            // Umwandlung Datum -> Date
+
+    void GetTimeRef(                            // Converts time -> double (only decimals)
+            double& fOutNumber,                 // result as double
+            USHORT nIndex,                      // Index of hour in input
+            USHORT nAnz );                      // Count of time substrings in input
+    USHORT ImplGetDay  ( USHORT nIndex );       // Day: input or current
+    USHORT ImplGetMonth( USHORT nIndex );       // Month: input or current
+    USHORT ImplGetYear ( USHORT nIndex );       // Year: input or current
+    BOOL GetDateRef(                            // Conversion of date to class Date
             Date& aDt,
-            USHORT& nCounter,                   // zaehlt Datumsstrings
-            const SvNumberformat* pFormat = NULL ); // evtl. gesetztes Zahlenformat
+            USHORT& nCounter,                   // Count of date substrings
+            const SvNumberformat* pFormat = NULL ); // optional number format to match against
 
-    BOOL ScanStartString(                       // Analyse des Anfangs
-            const XubString& rString,
+    BOOL ScanStartString(                       // Analyze start of string
+            const String& rString,
             const SvNumberformat* pFormat = NULL );
-    BOOL ScanMidString(                         // Analyse der Mitte
-            const XubString& rString,
+    BOOL ScanMidString(                         // Analyze middle substring
+            const String& rString,
             USHORT nStringPos );
-    BOOL ScanEndString(                         // Analyse des Endes
-            const XubString& rString,
+    BOOL ScanEndString(                         // Analyze end of string
+            const String& rString,
             const SvNumberformat* pFormat = NULL );
 
+    // Compare rString to substring of array indexed by nString
+    // nString == 0xFFFF => last substring
     BOOL ScanStringNumFor(
-            const XubString& rString,
+            const String& rString,
             xub_StrLen nPos,
             const SvNumberformat* pFormat,
             USHORT nString );
-        // String mit TeilString nString aus Format vergleichen,
-        // nString == 0xFFFF => letzter
 
-    BOOL IsNumberFormatMain(                    // Verteilfunktion zur Analyse
-            const XubString& rString,
-            double& fOutNumber,                 // Rueckgabewert, falls als Zahl darstellbar
-            const SvNumberformat* pFormat = NULL ); // evtl. gesetztes Zahlenformat
+    BOOL IsNumberFormatMain(                    // Main anlyzing function
+            const String& rString,
+            double& fOutNumber,                 // return value if string is numeric
+            const SvNumberformat* pFormat = NULL    // optional number format to match against
+            );
 
 
 #endif  // _ZFORFIND_CXX
