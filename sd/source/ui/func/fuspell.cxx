@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:53:06 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #ifndef _SFX_BINDINGS_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
