@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 07:54:55 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,11 @@ namespace xmloff
     #define DA_DATA_FIELD               0x00000004
     #define DA_LIST_SOURCE              0x00000008
     #define DA_LIST_SOURCE_TYPE         0x00000010
+
+    // flags for binding related control attributes
+    #define BA_LINKED_CELL              0x00000001
+    #define BA_LIST_LINKING_TYPE        0x00000002
+    #define BA_LIST_CELL_RANGE          0x00000004
 
     // flags for event attributes
     #define EA_CONTROL_EVENTS           0x00000001
@@ -227,6 +232,18 @@ namespace xmloff
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
         static const sal_Char* getSpecialAttributeName(sal_Int32 _nId);
+
+        /** calculates the xml attribute representation of a binding attribute.
+            @param _nId
+                the id of the attribute. Has to be one of the BA_* constants.
+        */
+        static const sal_Char* getBindingAttributeName(sal_Int32 _nId);
+
+        /** calculates the xml namespace key to use for a binding attribute.
+            @param _nId
+                the id of the attribute. Has to be one of the BA_* constants.
+        */
+        static sal_uInt16 getBindingAttributeNamespace(sal_Int32 _nId);
 
         /** calculates the xml namespace key to use for a special attribute.
             @param _nId
@@ -369,6 +386,21 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6.160.1  2003/10/01 09:55:19  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.6.156.1  2003/09/25 14:28:38  fs
+ *  #18994# merging the changes from cws_srx645_fs002 branch
+ *
+ *  Revision 1.6.152.2  2003/09/18 14:00:37  fs
+ *  #18995# changes for binding list boxes to cells, while exchanging selection indexes instead of strings
+ *
+ *  Revision 1.6.152.1  2003/09/17 12:26:53  fs
+ *  #18999# #19367# persistence for cell value and cell range bindings
+ *
+ *  Revision 1.6  2002/10/25 07:54:55  fs
+ *  #104402# +SCA_COLUMN_STYLE_NAME
+ *
  *  Revision 1.5  2001/03/20 13:33:39  fs
  *  #83970# +getOfficeFormsAttributeName(/-space)
  *
