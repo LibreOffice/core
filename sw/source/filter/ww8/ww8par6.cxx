@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-18 14:41:59 $
+ *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3003,17 +3003,6 @@ const SfxPoolItem* SwWW8ImplReader::GetFmtAttr( USHORT nWhich )
         return pCtrlStck->GetFmtAttr( *pPaM->GetPoint(), nWhich );
 }
 
-#if 0
-// holt Attribut aus der FmtColl / Stack, return 0 wenn nicht gefunden
-const SfxPoolItem* SwWW8ImplReader::GetFmtStkAttr( USHORT nWhich )
-{
-    if( pAktColl )
-        return &pAktColl->GetAttr( nWhich );
-    else
-        return pCtrlStck->GetFmtStkAttr( *pPaM->GetPoint(), nWhich );
-}
-#endif
-
 /***************************************************************************
 #       eigentliche Attribute
 #
@@ -3855,49 +3844,58 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT nId, const BYTE* pData, short nLen)
     NewAttr( aLN );
 }
 
-void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen ) // Sprm 16, 17
+
+void SwWW8ImplReader::NeedAdjustTabStops(short nLeft, short nFirstLineOfst)
+{
+    /*
+    adjust tabs that were set at this paragraph/style resp. before we
+    encountered the LR Space Attribute. Tabstops in winword are relative to
+    page, tabstops in OOo are relative to para edge, so adjust them, and
+    remove negative ones.
+    */
+
+    /*
+    ##573##
+    Leave adjustment to end of left processing so as to collect any potential
+    negative first line adjustment and take that into consideration before
+    removing an otherwise negative tab setting
+    */
+    SvxTabStopItem* pTStop;
+    pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
+    if( pTStop )
+    {
+        BOOL bChanged=FALSE;
+        for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
+        {
+            SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
+            if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
+            {
+                bChanged=TRUE;
+                if (rTab.GetTabPos() >= nLeft+nFirstLineOfst)
+                    rTab.GetTabPos() -= nLeft;
+                else
+                {
+                    pTStop->Remove( nCnt );
+                    --nCnt;
+                }
+            }
+        }
+        if (bChanged)
+            NewAttr( *pTStop );
+    }
+}
+
+// Sprm 16, 17
+void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 {
     if( nIniFlags & WW8FL_NO_LRUL )
         return;
 
     if( nLen < 0 )  // Ende des Attributes
     {
-        //end of a sprmPDxaLeft
+        //if end of a sprmPDxaLeft
         if ( (nId == 17) || (nId == 0x840F) )
-        {
-            // adjust tabs that were set at this paragraph/style resp. before
-            // we encountered the LR Space Attribute. Tabstops in winword
-            // are relative to page, tabstops in OOo are relative to para
-            // edge, so adjust them, and remove negative ones.
-
-            /*
-            ##573##
-            Leave adjustment to end of left processing so as to collect any
-            potential negative first line adjustment and take that into
-            consideration before removing an otherwise negative tab setting
-            */
-            SvxTabStopItem* pTStop;
-            pTStop = (SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP );
-            if( pTStop )
-            {
-                for( USHORT nCnt = 0; nCnt < pTStop->Count(); ++nCnt )
-                {
-                    SvxTabStop& rTab = (SvxTabStop&)((*pTStop)[ nCnt ]);
-                    if(SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
-                    {
-                        if (rTab.GetTabPos() >= nLeftParaMgn+nTxtFirstLineOfst)
-                            rTab.GetTabPos() -= nLeftParaMgn;
-                        else
-                        {
-                            pTStop->Remove( nCnt );
-                            --nCnt;
-                        }
-                    }
-                }
-                if (pTStop->Count())
-                    NewAttr( *pTStop );
-            }
-        }
+            NeedAdjustTabStops(nLeftParaMgn,nTxtFirstLineOfst);
 
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_LR_SPACE );
         return;
@@ -3951,9 +3949,16 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen ) // Sp
     default: return;
     }
     NewAttr( aLR );
+
+    if ( pAktColl && ((nId == 17) || (nId == 0x840F)) )
+    {
+        NeedAdjustTabStops(pCollA[nAktColl].nLeftParaMgn,
+            pCollA[nAktColl].nTxtFirstLineOfst);
+    }
 }
 
-void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen ) // Sprm 20
+// Sprm 20
+void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
 {
 // Kommentear siehe Read_UL()
     if( bStyNormal && ( bWWBugNormal || ( nIniFlags & WW8FL_NO_STD_STY_DYA ) ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,15 +584,6 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEnt
 //            Tabs
 //-----------------------------------------
 #define DEF_TAB_ANZ 13          // So viele Default-Tabs
-
-#if 0           // Nach MA 5.8.96 nicht mehr noetig
-void SwWW8ImplReader::SetImplicitTab()
-{
-    SvxTabStopItem aTabs( *(SvxTabStopItem*)GetFmtAttr( RES_PARATR_TABSTOP ));
-    aTabs.Insert( SvxTabStop( 0, SVX_TAB_ADJUST_DEFAULT ) );
-    NewAttr( aTabs );
-}
-#endif
 
 void SwWW8ImplReader::Read_Tab( USHORT nId, const BYTE* pData, short nLen )
 {

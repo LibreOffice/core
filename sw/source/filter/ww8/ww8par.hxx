@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-11-01 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,6 +1047,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
     void Read_LR(               USHORT nId, const BYTE*, short nLen );
+    void NeedAdjustTabStops( short nLeft, short nFirstLineOfst );
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(          USHORT, const BYTE*, short nLen );
