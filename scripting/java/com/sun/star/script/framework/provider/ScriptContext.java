@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptContext.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-19 08:23:17 $
+*  last change: $Author: hr $ $Date: 2004-07-23 14:01:48 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -114,39 +114,18 @@ public class ScriptContext extends PropertySet implements XScriptContext
     public XComponentContext m_xComponentContext = null;
 
     public ScriptContext( XComponentContext xmComponentContext,
-        XDesktop xDesktop, XPropertySet invocationCtxPropSet)
+        XDesktop xDesktop, XModel xModel)
     {
         this.m_xDeskTop = xDesktop;
         this.m_xComponentContext = xmComponentContext;
-        if ( invocationCtxPropSet != null )
+        this.m_xModel = xModel;
+
+        if ( m_xModel != null )
         {
-            try
-            {
-                m_xModel = ( XModel ) UnoRuntime.queryInterface(
-                    XModel.class,
-                    invocationCtxPropSet.getPropertyValue( DOC_REF ) );
-                m_sDocURI = ( String )
-                    invocationCtxPropSet.getPropertyValue( DOC_URI );
-
-                LogUtils.DEBUG( "DOC_REF query for URL = " + m_xModel.getURL() );
-                LogUtils.DEBUG( "DOC_URI query for URL = " + m_sDocURI );
-
-                registerProperty( DOC_URI, new Type(String.class),
+            registerProperty( DOC_URI, new Type(String.class),
                 (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_sDocURI");
-            }
-            catch ( UnknownPropertyException upe )
-            {
-                LogUtils.DEBUG( LogUtils.getTrace( upe ) );
-            }
-            catch ( WrappedTargetException wte )
-            {
-                LogUtils.DEBUG( LogUtils.getTrace( wte ) );
-            }
-    /*        catch ( IllegalArgumentException iae )
-            {
-                LogUtils.DEBUG( LogUtils.getTrace( iae ) );
-            } */
         }
+
         registerProperty( HM_DOC_REF, new Type(XModel.class),
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xModel");
         registerProperty( HM_DESKTOP, new Type(XDesktop.class),
@@ -155,21 +134,12 @@ public class ScriptContext extends PropertySet implements XScriptContext
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xComponentContext");
     }
 
-    public static XScriptContext createContext(Object invocationCtx,
+    public static XScriptContext createContext( XModel xModel,
         XComponentContext xCtxt, XMultiComponentFactory xMCF)
     {
         XScriptContext sc = null;
-        XModel xModel = null;
 
         try {
-            XPropertySet invocationCtxPropSet = null;
-            if ( invocationCtx != null )
-            {
-                invocationCtxPropSet = (XPropertySet)
-                    UnoRuntime.queryInterface( XPropertySet.class, invocationCtx);
-                 xModel = ( XModel ) UnoRuntime.queryInterface(
-                    XModel.class, invocationCtxPropSet.getPropertyValue( DOC_REF ) );
-            }
 
             Object xInterface = null;
             XDesktop xDesktop = null;
@@ -178,18 +148,18 @@ public class ScriptContext extends PropertySet implements XScriptContext
                 "com.sun.star.frame.Desktop", xCtxt);
             xDesktop = (XDesktop)
                 UnoRuntime.queryInterface(XDesktop.class, xInterface);
-
             if ( xModel != null )
             {
-                sc = new ScriptContext(xCtxt, xDesktop, invocationCtxPropSet);
+                sc = new ScriptContext(xCtxt, xDesktop, xModel);
             }
             else
             {
-                sc = new EditorScriptContext( xCtxt, xDesktop );
+                sc = new EditorScriptContext(xCtxt, xDesktop );
             }
+
         }
         catch ( Exception e ) {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
         }
         return sc;
     }
