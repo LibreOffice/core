@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:58:30 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,11 +559,12 @@ sal_Bool LocalSingleBackend::isMoreRecent(const rtl::OUString& aFileUrl,
     rtl::OUString layerUrl ;
     rtl::OUString subLayerUrl ;
 
-    if (!getLayerDirectories(aLayerIndex, layerUrl, subLayerUrl))
-        return false;
+    // if we don't find a layer, but have a non-empty timestamp -> modified
+    if (!getLayerDirectories(aLayerIndex,layerUrl, subLayerUrl))
+        return aTimestamp.getLength() != 0;
 
-    return (BasicLocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo(
-                                                            aTimestamp) > 0) ;
+    return layerUrl.getLength() == 0 ||
+        BasicLocalFileLayer::getTimestamp(layerUrl + aFileUrl).compareTo( aTimestamp) != 0;
 }
 //------------------------------------------------------------------------------
 
@@ -807,7 +808,7 @@ uno::Reference<backend::XUpdatableLayer> LocalSingleBackend::getFileLayer(
         throw lang::IllegalArgumentException(sMsg.makeStringAndClear(),*this,1);
     }
 
-    return createLocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
+    return createUpdatableLocalFileLayer(mFactory, layerPath, aComponent, subLayerPath) ;
 }
 //------------------------------------------------------------------------------
 
