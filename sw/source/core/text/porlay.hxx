@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:57:52 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _FRACT_HXX
 #include <tools/fract.hxx>
 #endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
 #endif
 
 #include "swrect.hxx"   // SwRepaint
