@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EmbedMisc.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:59:44 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,17 @@ constants EmbedMisc
     /**
      */
     const hyper MS_EMBED_SUPPORTSMULTILEVELUNDO = 2097152;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper EMBED_ACTIVATEIMMEDIATELY = 4294967296;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper EMBED_NEVERRESIZE = 8589934592;
+
 };
 
 //=============================================================================
