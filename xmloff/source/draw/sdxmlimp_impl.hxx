@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 16:40:19 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,9 +356,6 @@ public:
     // import pool defaults. Parameter contains pool defaults read
     // from input data. These data needs to be set at the model.
     void ImportPoolDefaults(const XMLPropStyleContext* pPool);
-
-    void setDrawPageId( sal_Int32 nId, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > );
-    com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > getDrawPageForId( sal_Int32 nId );
 
     // #80365#
     virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
