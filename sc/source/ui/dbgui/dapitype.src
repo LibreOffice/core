@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:53:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 19:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text = "Quelle auswählen" ;
-    Text [ ENGLISH ] = "Select source" ;
+    Text [ de ] = "Quelle auswählen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -96,173 +95,39 @@ ModalDialog RID_SCDLG_DAPITYPE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text = "~Aktuelle Selektion" ;
-        Text [ ENGLISH ] = "Current selection" ;
+        Text [ de ] = "~Aktuelle Selektion" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Current selection";
-        Text[ portuguese ] = "Selecção ~activa";
-        Text[ russian ] = "~Òåêóùåå âûäåëåíèå";
-        Text[ greek ] = "Ôñİ÷ïõóá åğéëïãŞ";
-        Text[ dutch ] = "~Huidige selectie";
-        Text[ french ] = "Sélection ~active";
-        Text[ spanish ] = "Selección a~ctual";
-        Text[ italian ] = "Selezione ~attuale";
-        Text[ danish ] = "~Aktuel markering";
-        Text[ swedish ] = "Aktuell markering";
-        Text[ polish ] = "~Bie¿¹ce zaznaczenie";
-        Text[ portuguese_brazilian ] = "~Seleção atual";
-        Text[ japanese ] = "ç¾åœ¨ã®é¸æŠç¯„å›²(~C)";
-        Text[ korean ] = "í˜„ì¬ ì„ íƒ(~C)";
-        Text[ chinese_simplified ] = "å½“å‰çš„é€‰ä¸­(~C)";
-        Text[ chinese_traditional ] = "ç›®å‰çš„é¸å–(~C)";
-        Text[ arabic ] = "ÇáÊÍÏíÏ ÇáÍÇáí";
-        Text[ turkish ] = "~Mevcut seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Sele~cció actual";
-        Text[ finnish ] = "~Nykyinen valinta";
-        Text[ thai ] = "à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸~à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
-        Text[ czech ] = "SouÄasnÃ½ vÃ½bÄ›r";
-        Text[ hebrew ] = "~Aktuelle Selektion";
-        Text[ hindi ] = "~à¤ªà¥à¤°à¤šà¤²à¤¿à¤¤ à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "~AktuÃ¡lny vÃ½ber";
-        Text[ hungarian ] = "~AktuÃ¡lis kijelÃ¶lÃ©s";
-        Text[ slovenian ] = "~Trenutni izbor";
+        Text [ en-US ] = "~Current selection";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DATABASE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text = "~In %PRODUCTNAME angemeldete Datenquelle" ;
-        Text [ ENGLISH ] = "Database source" ;
+        Text [ de ] = "~In %PRODUCTNAME angemeldete Datenquelle" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~Data source registered in %PRODUCTNAME";
-        Text[ portuguese ] = "~Fonte de dados ligada ao %PRODUCTNAME";
-        Text[ russian ] = "~Èñõîäíûå äàííûå, çàğåãèñòğèğîâàííûå â %PRODUCTNAME";
-        Text[ greek ] = "Óôï %PRODUCTNAME äçëùìİíï áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
-        Text[ dutch ] = "~In %PRODUCTNAME aangemelde gegevensbron";
-        Text[ french ] = "Source de données sous %PRODUCTNAME";
-        Text[ spanish ] = "F~uente de datos registrada en %PRODUCTNAME";
-        Text[ italian ] = "Sorgente dati registrata ~in %PRODUCTNAME";
-        Text[ danish ] = "~Datakilde registreret i %PRODUCTNAME";
-        Text[ swedish ] = "Datakälla som är registrerad i %PRODUCTNAME";
-        Text[ polish ] = "ród³o ~danych zarejestrowane w %PRODUCTNAME";
-        Text[ portuguese_brazilian ] = "Fonte de ~dados registrada em %PRODUCTNAME";
-        Text[ japanese ] = "%PRODUCTNAME ã«ç™»éŒ²ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~D)";
-        Text[ korean ] = "%PRODUCTNAMEì— ë“±ë¡ëœ ë°ì´í„° ì›ë³¸(~D)";
-        Text[ chinese_simplified ] = "åœ¨ %PRODUCTNAME ä¸­ç™»è®°çš„æ•°æ®æº(~D)";
-        Text[ chinese_traditional ] = "%PRODUCTNAME å·²ç¶“ç™»è¨˜çš„è³‡æ–™æº(~D)";
-        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ ÇáãÓÌá İí %PRODUCTNAME";
-        Text[ turkish ] = "%PRODUCTNAME'de kayıtlı veri kaynağı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ont de dades registrada a %PRODUCTNAME";
-        Text[ finnish ] = "~Tietolähde rekisteröity %PRODUCTNAMEeen";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡~à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸¥à¸‡à¸—à¸°à¹€à¸šà¸µà¸¢à¸™à¹ƒà¸™ %PRODUCTNAME";
-        Text[ czech ] = "Zdroj dat registrovÃ¡n v %PRODUCTNAME";
-        Text[ hebrew ] = "~In %PRODUCTNAME angemeldete Datenquelle";
-        Text[ hindi ] = "%PRODUCTNAME à¤®à¥‡à¤‚ ~à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤•à¥‹ à¤°à¤œà¤¿à¤¸à¥à¤Ÿà¤° à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
-        Text[ slovak ] = "Zdroj ~dÃ¡t registrovanÃ½ v %PRODUCTNAME";
-        Text[ hungarian ] = "Az %PRODUCTNAME ~bejegyzett adatforrÃ¡sa";
-        Text[ slovenian ] = "Vir po~datkov registriran v %PRODUCTNAME";
+        Text [ en-US ] = "~Data source registered in %PRODUCTNAME";
+        Text [ x-comment ] = " ";
     };
     RadioButton BTN_EXTERNAL
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text = "~Externe Quelle/Schnittstelle" ;
-        Text [ ENGLISH ] = "External source/interface" ;
+        Text [ de ] = "~Externe Quelle/Schnittstelle" ;
         TabStop = TRUE ;
-        Text[ english_us ] = "~External source/interface";
-        Text[ portuguese ] = "F~onte/interface externa";
-        Text[ russian ] = "~Âíåøíèé èñòî÷íèê/èíòåğôåéñ";
-        Text[ greek ] = "Åîùôåñéêü áñ÷åßï ğñïİëåõóçò/Äéáóıíäåóç";
-        Text[ dutch ] = "~Externe bron/interface";
-        Text[ french ] = "Source/interface ~externe";
-        Text[ spanish ] = "~Fuente externa/interfaz";
-        Text[ italian ] = "Sorgente ~esterna/interfaccia";
-        Text[ danish ] = "~Ekstern kilde/grænseflade";
-        Text[ swedish ] = "Extern källa/gränssnitt";
-        Text[ polish ] = "~Zewnêtrzne Ÿród³o lub zewnêtrzny interfejs";
-        Text[ portuguese_brazilian ] = "Fonte / Interface ~externa";
-        Text[ japanese ] = "å¤–éƒ¨ã‚½ãƒ¼ã‚¹/ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹(~E)";
-        Text[ korean ] = "ì™¸ë¶€ ì›ë³¸/ì¸í„°í˜ì´ìŠ¤(~E)";
-        Text[ chinese_simplified ] = "å¤–éƒ¨æº/ç•Œé¢(~E)";
-        Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æº/ç•Œé¢(~E)";
-        Text[ arabic ] = "ãÕÏÑ ÎÇÑÌí/æÇÌåÉ ÎÇÑÌíÉ";
-        Text[ turkish ] = "~Dış kaynak/arayüz";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Font/interfície ~externa";
-        Text[ finnish ] = "~Ulkoinen lähde tai liittymä";
-        Text[ thai ] = "à¸—à¸µà¹ˆà¸¡à¸²~à¸ à¸²à¸¢à¸™à¸­à¸/à¸ªà¹ˆà¸§à¸™à¸•à¹ˆà¸­à¸›à¸£à¸°à¸ªà¸²à¸™";
-        Text[ czech ] = "ExternÃ­ zdroj/rozhranÃ­";
-        Text[ hebrew ] = "~Externe Quelle/Schnittstelle";
-        Text[ hindi ] = "~à¤¬à¤¾à¤¹à¤°à¥€ à¤®à¥‚à¤²/à¤‡à¤¨à¥à¤Ÿà¤°à¤«à¥‡à¤¸ ";
-        Text[ slovak ] = "~ExternÃ½ zdroj/rozhranie";
-        Text[ hungarian ] = "~KÃ¼lsÅ‘ forrÃ¡s vagy illesztÅ‘";
-        Text[ slovenian ] = "~Zunanji vir/vmesnik";
+        Text [ en-US ] = "~External source/interface";
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ ENGLISH ] = "Select" ;
-        Text[ english_us ] = "Selection";
-        Text[ portuguese ] = "Selecção";
-        Text[ russian ] = "Âûáîğ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ dutch ] = "Selectie";
-        Text[ french ] = "Sélection";
-        Text[ spanish ] = "Selección";
-        Text[ italian ] = "Selezione";
-        Text[ danish ] = "Vælg";
-        Text[ swedish ] = "Urval";
-        Text[ polish ] = "Wybór";
-        Text[ portuguese_brazilian ] = "Seleção";
-        Text[ japanese ] = "é¸æŠ";
-        Text[ korean ] = "ì„ íƒ";
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ chinese_traditional ] = "é¸å–";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selecció";
-        Text[ finnish ] = "Valinta";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬l";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½ber";
-        Text[ hungarian ] = "KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izbor";
+        Text [ de ] = "Auswahl" ;
+        Text [ en-US ] = "Selection";
+        Text [ x-comment ] = " ";
     };
-    Text[ english_us ] = "Select Source";
-    Text[ portuguese ] = "Seleccionar fonte";
-    Text[ russian ] = "Âûáîğ èñòî÷íèêà";
-    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò";
-    Text[ dutch ] = "Bron selecteren";
-    Text[ french ] = "Sélection de la source";
-    Text[ spanish ] = "Seleccionar fuente";
-    Text[ italian ] = "Seleziona sorgente";
-    Text[ danish ] = "Vælg kilde";
-    Text[ swedish ] = "Välj ut källa";
-    Text[ polish ] = "Wybierz Ÿród³o";
-    Text[ portuguese_brazilian ] = "Selecionar Origem";
-    Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ korean ] = "ì›ë³¸ ì„ íƒ";
-    Text[ chinese_simplified ] = "é€‰æ‹©æº";
-    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
-    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ";
-    Text[ turkish ] = "Kaynak seç";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccioneu la font";
-    Text[ finnish ] = "Valitse lähde";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸—à¸µà¹ˆà¸¡à¸²";
-    Text[ czech ] = "Vyberte zdroj";
-    Text[ hebrew ] = "Quelle auswÃ¤hlen";
-    Text[ hindi ] = "à¤®à¥‚à¤² à¤•à¥‹ à¤šà¥à¤¨à¥‹";
-    Text[ slovak ] = "Vyberte zdroj";
-    Text[ hungarian ] = "ForrÃ¡s kijelÃ¶lÃ©se";
-    Text[ slovenian ] = "Izberi vir";
+    Text [ en-US ] = "Select Source";
+    Text [ x-comment ] = " ";
 };
 
 
@@ -275,8 +140,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     HelpId = HID_DATAPILOT_SERVICE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 94 ) ;
-    Text = "Externe Datenquelle" ;
-    Text [ ENGLISH ] = "External source" ;
+    Text [ de ] = "Externe Datenquelle" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -302,36 +166,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Service" ;
-        Text [ ENGLISH ] = "Service" ;
-        Text[ english_us ] = "~Service";
-        Text[ portuguese ] = "~Serviço";
-        Text[ russian ] = "Ñåğâèñ";
-        Text[ greek ] = "Õğçñåóßá";
-        Text[ dutch ] = "~Service";
-        Text[ french ] = "~Service";
-        Text[ spanish ] = "~Servicio";
-        Text[ italian ] = "~Servizio";
-        Text[ danish ] = "~Service";
-        Text[ swedish ] = "Service";
-        Text[ polish ] = "~Us³uga";
-        Text[ portuguese_brazilian ] = "~Serviço";
-        Text[ japanese ] = "ã‚µãƒ¼ãƒ“ã‚¹(~S)";
-        Text[ korean ] = "ì„œë¹„ìŠ¤(~S)";
-        Text[ chinese_simplified ] = "æœåŠ¡(~S)";
-        Text[ chinese_traditional ] = "ä¼ºæœ(~S)";
-        Text[ arabic ] = "ÎÏãÉ";
-        Text[ turkish ] = "~Hizmet";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Servei";
-        Text[ finnish ] = "~Palvelu";
-        Text[ thai ] = "~à¸šà¸£à¸´à¸à¸²à¸£";
-        Text[ czech ] = "SluÅ¾ba";
-        Text[ hebrew ] = "~Service";
-        Text[ hindi ] = "~à¤¸à¥‡à¤µà¤¾";
-        Text[ slovak ] = "~SluÅ¾ba";
-        Text[ hungarian ] = "~SzolgÃ¡ltatÃ¡s";
-        Text[ slovenian ] = "~Storitev";
+        Text [ de ] = "~Service" ;
+        Text [ en-US ] = "~Service";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_SERVICE
     {
@@ -345,36 +182,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Quelle" ;
-        Text [ ENGLISH ] = "Source" ;
-        Text[ english_us ] = "So~urce";
-        Text[ portuguese ] = "~Fonte";
-        Text[ russian ] = "Èñòî÷íèê";
-        Text[ greek ] = "Ğñïİëåõóç";
-        Text[ dutch ] = "~Bron";
-        Text[ french ] = "~Source";
-        Text[ spanish ] = "~Fuente";
-        Text[ italian ] = "Sorgente";
-        Text[ danish ] = "~Kilde";
-        Text[ swedish ] = "Källa";
-        Text[ polish ] = "ród³o";
-        Text[ portuguese_brazilian ] = "~Origem";
-        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹(~U)";
-        Text[ korean ] = "ì›ë³¸(~U)";
-        Text[ chinese_simplified ] = "æº(~U)";
-        Text[ chinese_traditional ] = "è³‡æ–™æº(~U)";
-        Text[ arabic ] = "ÇáãÕÏÑ";
-        Text[ turkish ] = "Kay~nak";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ont";
-        Text[ finnish ] = "Läh~de";
-        Text[ thai ] = "à¸—à¸µà¹ˆ~à¸¡à¸²";
-        Text[ czech ] = "Zdroj";
-        Text[ hebrew ] = "~Quelle";
-        Text[ hindi ] = "à¤®à¥‚~à¤²";
-        Text[ slovak ] = "Zd~roj";
-        Text[ hungarian ] = "F~orrÃ¡s";
-        Text[ slovenian ] = "~Vir";
+        Text [ de ] = "~Quelle" ;
+        Text [ en-US ] = "So~urce";
+        Text [ x-comment ] = " ";
     };
     Edit ED_SOURCE
     {
@@ -387,36 +197,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Name" ;
-        Text [ ENGLISH ] = "Name" ;
-        Text[ english_us ] = "~Name";
-        Text[ portuguese ] = "~Nome";
-        Text[ russian ] = "Èìÿ";
-        Text[ greek ] = "¼íïìá";
-        Text[ dutch ] = "~Naam";
-        Text[ french ] = "Nom";
-        Text[ spanish ] = "~Nombre";
-        Text[ italian ] = "~Nome";
-        Text[ danish ] = "~Navn";
-        Text[ swedish ] = "Namn";
-        Text[ polish ] = "~Nazwa";
-        Text[ portuguese_brazilian ] = "~Nome";
-        Text[ japanese ] = "åå‰(~N)";
-        Text[ korean ] = "ì´ë¦„(~N)";
-        Text[ chinese_simplified ] = "åç§°(~N)";
-        Text[ chinese_traditional ] = "åç¨±(~N)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nom";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "JmÃ©no";
-        Text[ hebrew ] = "~Name";
-        Text[ hindi ] = "~à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~NÃ¡zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "~Ime";
+        Text [ de ] = "~Name" ;
+        Text [ en-US ] = "~Name";
+        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -429,36 +212,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Benutzer" ;
-        Text [ ENGLISH ] = "User" ;
-        Text[ english_us ] = "Us~er";
-        Text[ portuguese ] = "~Utilizador";
-        Text[ russian ] = "Ïîëüçîâàòåëü";
-        Text[ greek ] = "×ñŞóôçò";
-        Text[ dutch ] = "~Gebruiker";
-        Text[ french ] = "~Utilisateur";
-        Text[ spanish ] = "Usuar~io";
-        Text[ italian ] = "Utente";
-        Text[ danish ] = "Brug~er";
-        Text[ swedish ] = "Användare";
-        Text[ polish ] = "~U¿ytkownik";
-        Text[ portuguese_brazilian ] = "~Usuário";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼(~E)";
-        Text[ korean ] = "ì‚¬ìš©ì(~E)";
-        Text[ chinese_simplified ] = "ä½¿ç”¨è€…(~E)";
-        Text[ chinese_traditional ] = "ä½¿ç”¨è€…(~E)";
-        Text[ arabic ] = "ÇáãÓÊÎÏã";
-        Text[ turkish ] = "Kul~lanıcı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "U~suari";
-        Text[ finnish ] = "Käyt~täjä";
-        Text[ thai ] = "à¸œà¸¹à¹‰à¹ƒ~à¸Šà¹‰";
-        Text[ czech ] = "UÅ¾ivatel";
-        Text[ hebrew ] = "~Benutzer";
-        Text[ hindi ] = "à¤‰à¤ª~à¤­à¥‹à¤•à¥à¤¤à¤¾";
-        Text[ slovak ] = "UÅ¾Ã­vat~eÄ¾";
-        Text[ hungarian ] = "~FelhasznÃ¡lÃ³";
-        Text[ slovenian ] = "Up~orabnik";
+        Text [ de ] = "~Benutzer" ;
+        Text [ en-US ] = "Us~er";
+        Text [ x-comment ] = " ";
     };
     Edit ED_USER
     {
@@ -471,36 +227,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Kennwort" ;
-        Text [ ENGLISH ] = "Password" ;
-        Text[ english_us ] = "~Password";
-        Text[ portuguese ] = "~Senha";
-        Text[ russian ] = "Ïàğîëü";
-        Text[ greek ] = "Êùäéêüò ğñüóâáóçò";
-        Text[ dutch ] = "~Wachtwoord";
-        Text[ french ] = "~Mot de passe";
-        Text[ spanish ] = "~Contraseña";
-        Text[ italian ] = "Password";
-        Text[ danish ] = "~Adgangskode";
-        Text[ swedish ] = "Lösenord";
-        Text[ polish ] = "~Has³o";
-        Text[ portuguese_brazilian ] = "~Senha";
-        Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰(~P)";
-        Text[ korean ] = "ì•”í˜¸(~P)";
-        Text[ chinese_simplified ] = "å¯†ç (~P)";
-        Text[ chinese_traditional ] = "å¯†ç¢¼(~P)";
-        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
-        Text[ turkish ] = "~Şifre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Con~trasenya";
-        Text[ finnish ] = "~Salasana";
-        Text[ thai ] = "~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-        Text[ czech ] = "Heslo";
-        Text[ hebrew ] = "â€®×¡×™×¡××”â€¬";
-        Text[ hindi ] = "~à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "~Heslo";
-        Text[ hungarian ] = "~JelszÃ³";
-        Text[ slovenian ] = "~Geslo";
+        Text [ de ] = "~Kennwort" ;
+        Text [ en-US ] = "~Password";
+        Text [ x-comment ] = " ";
     };
     Edit ED_PASSWD
     {
@@ -514,65 +243,12 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ ENGLISH ] = "Select" ;
-        Text[ english_us ] = "Selection";
-        Text[ portuguese ] = "Selecção";
-        Text[ russian ] = "Âûáîğ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ dutch ] = "Selectie";
-        Text[ french ] = "Sélection";
-        Text[ spanish ] = "Selección";
-        Text[ italian ] = "Selezione";
-        Text[ danish ] = "Vælg";
-        Text[ swedish ] = "Urval";
-        Text[ polish ] = "Wybór";
-        Text[ portuguese_brazilian ] = "Seleção";
-        Text[ japanese ] = "é¸æŠ";
-        Text[ korean ] = "ì„ íƒ";
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ chinese_traditional ] = "é¸å–";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selecció";
-        Text[ finnish ] = "Valinta";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½ber";
-        Text[ hungarian ] = "KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izbor";
+        Text [ de ] = "Auswahl" ;
+        Text [ en-US ] = "Selection";
+        Text [ x-comment ] = " ";
     };
-    Text[ english_us ] = "External Source";
-    Text[ portuguese ] = "Fonte de dados externa";
-    Text[ russian ] = "Âíåøíèé èñòî÷íèê äàííûõ";
-    Text[ greek ] = "Åîùôåñéêü áñ÷åßï ğñïİëåõóçò äåäïìİíùí";
-    Text[ dutch ] = "Externe bron";
-    Text[ french ] = "Source de données externe";
-    Text[ spanish ] = "Fuente de datos externa";
-    Text[ italian ] = "Sorgente dati esterna";
-    Text[ danish ] = "Ekstern kilde";
-    Text[ swedish ] = "Extern datakälla";
-    Text[ polish ] = "Zewnêtrzne Ÿród³o";
-    Text[ portuguese_brazilian ] = "Origem Externa";
-    Text[ japanese ] = "å¤–éƒ¨ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-    Text[ korean ] = "ì™¸ë¶€ ë°ì´í„° ì›ë³¸";
-    Text[ chinese_simplified ] = "å¤–éƒ¨æ•°æ®æº";
-    Text[ chinese_traditional ] = "å¤–éƒ¨è³‡æ–™æº";
-    Text[ arabic ] = "ãÕÏÑ ÈíÇäÇÊ ÎÇÑÌí";
-    Text[ turkish ] = "Dış kaynak";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Font externa";
-    Text[ finnish ] = "Ulkoinen lähde";
-    Text[ thai ] = "à¸—à¸µà¹ˆà¸¡à¸²à¸ à¸²à¸¢à¸™à¸­à¸";
-    Text[ czech ] = "ExternÃ­ zdroj";
-    Text[ hebrew ] = "Externe Datenquelle";
-    Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤®à¥‚à¤²";
-    Text[ slovak ] = "ExternÃ½ zdroj";
-    Text[ hungarian ] = "KÃ¼lsÅ‘ forrÃ¡s";
-    Text[ slovenian ] = "Zunanji vir";
+    Text [ en-US ] = "External Source";
+    Text [ x-comment ] = " ";
 };
 
 
@@ -585,8 +261,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     HelpId = HID_DATAPILOT_DATABASE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text = "Datenquelle auswählen" ;
-    Text [ ENGLISH ] = "Select data source" ;
+    Text [ de ] = "Datenquelle auswählen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -613,36 +288,9 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text = "~Datenbank" ;
-        Text [ ENGLISH ] = "Database" ;
-        Text[ english_us ] = "~Database";
-        Text[ portuguese ] = "~Base de dados";
-        Text[ russian ] = "Áàçà äàííûõ";
-        Text[ greek ] = "ÂÜóç äåäïìİíùí";
-        Text[ dutch ] = "~Database";
-        Text[ french ] = "~Base de données";
-        Text[ spanish ] = "~Base de datos";
-        Text[ italian ] = "~Database";
-        Text[ danish ] = "~Database";
-        Text[ swedish ] = "Databas";
-        Text[ polish ] = "~Baza danych";
-        Text[ portuguese_brazilian ] = "~Banco de Dados";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹(~D)";
-        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤(~D)";
-        Text[ chinese_simplified ] = "æ•°æ®åº“(~D)";
-        Text[ chinese_traditional ] = "è³‡æ–™åº«(~D)";
-        Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ";
-        Text[ turkish ] = "~Veritabanı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Base de dades";
-        Text[ finnish ] = "~Tietokanta";
-        Text[ thai ] = "~à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "DatabÃ¡ze";
-        Text[ hebrew ] = "~Datenbank";
-        Text[ hindi ] = "~à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯";
-        Text[ slovak ] = "~DatabÃ¡za";
-        Text[ hungarian ] = "~AdatbÃ¡zis";
-        Text[ slovenian ] = "Zbirka pod~atkov";
+        Text [ de ] = "~Datenbank" ;
+        Text [ en-US ] = "~Database";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DATABASE
     {
@@ -657,36 +305,9 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text = "Daten~quelle" ;
-        Text [ ENGLISH ] = "Data source" ;
-        Text[ english_us ] = "Data so~urce";
-        Text[ portuguese ] = "Fonte de ~dados";
-        Text[ russian ] = "Èñòî÷íèê äàííûõ";
-        Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-        Text[ dutch ] = "~Gegevensbron";
-        Text[ french ] = "~Source de données";
-        Text[ spanish ] = "Fuente de d~atos";
-        Text[ italian ] = "Sorgente dati";
-        Text[ danish ] = "~Datakilde";
-        Text[ swedish ] = "Datakälla";
-        Text[ polish ] = "ród³o ~danych";
-        Text[ portuguese_brazilian ] = "~Fonte de dados";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹(~U)";
-        Text[ korean ] = "ë°ì´í„° ì›ë³¸(~U)";
-        Text[ chinese_simplified ] = "æ•°æ®æº(~U)";
-        Text[ chinese_traditional ] = "è³‡æ–™æº(~U)";
-        Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
-        Text[ turkish ] = "Veri ka~ynağı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Font de dades";
-        Text[ finnish ] = "Tieto~lähde";
-        Text[ thai ] = "à¹à¸«~à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Zdroj dat";
-        Text[ hebrew ] = "Daten~quelle";
-        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚~à¤²";
-        Text[ slovak ] = "Zdr~oj dÃ¡t";
-        Text[ hungarian ] = "~AdatforrÃ¡s";
-        Text[ slovenian ] = "~Vir podatkov";
+        Text [ de ] = "Daten~quelle" ;
+        Text [ en-US ] = "Data so~urce";
+        Text [ x-comment ] = " ";
     };
     ComboBox CB_OBJECT
     {
@@ -701,36 +322,9 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text = "~Art" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text[ english_us ] = "~Type";
-        Text[ portuguese ] = "~Tipo";
-        Text[ russian ] = "Òèï";
-        Text[ greek ] = "Ôığïò";
-        Text[ dutch ] = "~Type";
-        Text[ french ] = "Type";
-        Text[ spanish ] = "~Tipo";
-        Text[ italian ] = "Tipo";
-        Text[ danish ] = "~Type";
-        Text[ swedish ] = "Typ";
-        Text[ polish ] = "~Typ";
-        Text[ portuguese_brazilian ] = "~Tipo";
-        Text[ japanese ] = "ç¨®é¡(~T)";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ chinese_simplified ] = "ç±»å‹(~T)";
-        Text[ chinese_traditional ] = "é¡å‹(~T)";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ turkish ] = "~Tip";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Tipus";
-        Text[ finnish ] = "~Tyyppi";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ de ] = "~Art" ;
+        Text [ en-US ] = "~Type";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_OBJTYPE
     {
@@ -739,215 +333,26 @@ ModalDialog RID_SCDLG_DAPIDATA
         Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Tabelle" ; Default ; > ;
             < "Abfrage" ; Default ; > ;
             < "Sql" ; Default ; > ;
             < "Sql [Native]" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Table" ; Default ; > ;
-            < "Query" ; Default ; > ;
-            < "Sql" ; Default ; > ;
-            < "Sql [Native]" ; Default ; > ;
-        };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
             < "Sheet" ; Default ; > ;
         < "Query" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "Tabela" ; Default ; > ;
-        < "Consulta" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Ëèñò" ; Default ; > ;
-        < "Çàïğîñ" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "Öıëëï" ; Default ; > ;
-        < "Åñşôçìá" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "Werkblad" ; Default ; > ;
-        < "Query" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
-            < "Table" ; Default ; > ;
-        < "Requête" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [natif]" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "Tabla" ; Default ; > ;
-        < "Consulta" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "Tabella" ; Default ; > ;
-        < "Ricerca" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [native]" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "Ark" ; Default ; > ;
-        < "Forespørgsel" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [native]" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "Tabell" ; Default ; > ;
-        < "Sökning" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Arkusz" ; Default ; > ;
-        < "Kwerenda" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [macierzyste]" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Tabela" ; Default ; > ;
-        < "Consulta" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "SQL [Native]" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ãƒ†ãƒ¼ãƒ–ãƒ«" ; Default ; > ;
-        < "ã‚¯ã‚¨ãƒªãƒ¼" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ì‹œíŠ¸" ; Default ; > ;
-        < "ì¿¼ë¦¬" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "å·¥ä½œè¡¨" ; Default ; > ;
-        < "æŸ¥è¯¢" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "è¡¨æ ¼" ; Default ; > ;
-        < "æŸ¥è©¢" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ÇáÌÏæá" ; Default ; > ;
-        < "ÇÓÊİÓÇÑ" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Tablo" ; Default ; > ;
-        < "Sorgu" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Yerli]" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Full" ; Default ; > ;
-        < "Consulta" ; Default ; > ;
-        < "SQL" ; Default ; > ;
-        < "SQL [natiu]" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Taulukko" ; Default ; > ;
-        < "Kysely" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [suora]" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™" ; Default ; > ;
-        < "à¹à¸šà¸šà¸ªà¸­à¸šà¸–à¸²à¸¡" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [à¹‚à¸”à¸¢à¸à¸³à¹€à¸™à¸´à¸”]" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "List" ; Default ; > ;
-        < "Dotaz" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [nativnÃ­]" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Tabelle" ; Default ; > ;
-        < "Abfrage" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤¶à¥€à¤Ÿà¥" ; Default ; > ;
-        < "à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Native]" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "List" ; Default ; > ;
-        < "Dotaz" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [natÃ­vny]" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Munkalap" ; Default ; > ;
-        < "LekÃ©rdezÃ©s" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [natÃ­v]" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Delovni list" ; Default ; > ;
-        < "Poizvedba" ; Default ; > ;
-        < "Sql" ; Default ; > ;
-        < "Sql [Izvirni]" ; Default ; > ;
     };
     };
 
@@ -955,65 +360,12 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ ENGLISH ] = "Select" ;
-        Text[ english_us ] = "Selection";
-        Text[ portuguese ] = "Selecção";
-        Text[ russian ] = "Âûáîğ";
-        Text[ greek ] = "ÅğéëïãŞ";
-        Text[ dutch ] = "Selectie";
-        Text[ french ] = "Sélection";
-        Text[ spanish ] = "Selección";
-        Text[ italian ] = "Selezione";
-        Text[ danish ] = "Vælg";
-        Text[ swedish ] = "Urval";
-        Text[ polish ] = "Wybór";
-        Text[ portuguese_brazilian ] = "Seleção";
-        Text[ japanese ] = "é¸æŠ";
-        Text[ korean ] = "ì„ íƒ";
-        Text[ chinese_simplified ] = "é€‰æ‹©";
-        Text[ chinese_traditional ] = "é¸å–";
-        Text[ arabic ] = "ÊÍÏíÏ";
-        Text[ turkish ] = "Seçim";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Selecció";
-        Text[ finnish ] = "Valinta";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "VÃ½bÄ›r";
-        Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-        Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½ber";
-        Text[ hungarian ] = "KijelÃ¶lÃ©s";
-        Text[ slovenian ] = "Izbor";
+        Text [ de ] = "Auswahl" ;
+        Text [ en-US ] = "Selection";
+        Text [ x-comment ] = " ";
     };
-    Text[ english_us ] = "Select Data Source";
-    Text[ portuguese ] = "Seleccionar fonte de dados";
-    Text[ russian ] = "Âûáğàòü èñõîäíûå äàííûå";
-    Text[ greek ] = "ÅğéëïãŞ ğñïİëåõóçò äåäïìİíùí";
-    Text[ dutch ] = "Gegevensbron selecteren";
-    Text[ french ] = "Sélection de la source de données";
-    Text[ spanish ] = "Seleccionar fuente de datos";
-    Text[ italian ] = "Seleziona sorgente dati";
-    Text[ danish ] = "Vælg datakilde";
-    Text[ swedish ] = "Välj ut datakälla";
-    Text[ polish ] = "Wybierz Ÿród³o danych";
-    Text[ portuguese_brazilian ] = "Selecionar a Fonte de Dados";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®é¸æŠ";
-    Text[ korean ] = "ë°ì´í„° ì›ë³¸ ì„ íƒ";
-    Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº";
-    Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº";
-    Text[ arabic ] = "ÊÍÏíÏ ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ turkish ] = "Veri kaynağı seç";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccioneu la font de dades";
-    Text[ finnish ] = "Valitse tietolähde";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Vyberte zdroj dat";
-    Text[ hebrew ] = "Datenquelle auswÃ¤hlen";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤šà¥à¤¨à¥‹";
-    Text[ slovak ] = "Vyber zdroj dÃ¡t";
-    Text[ hungarian ] = "AdatforrÃ¡s kivÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izberi vir podatkov";
+    Text [ en-US ] = "Select Data Source";
+    Text [ x-comment ] = " ";
 };
 
 
