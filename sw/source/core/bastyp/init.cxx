@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:08:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,11 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+// OD 09.10.2003 #i18732#
+#ifndef _FMTFOLLOWTEXTFLOW_HXX
+#include <fmtfollowtextflow.hxx>
+#endif
+
 
 extern void _FrmFinit();
 extern void ClearFEShellTabCols();
@@ -593,14 +598,17 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_END_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_COLUMNBALANCE
 
-#ifdef VERTICAL_LAYOUT
     { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },     // RES_FRAMEDIR
-#else
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRAMEDIR
-#endif
 
     { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
     { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
+    // DVO, OD 18.09.2003 #i18732# - use slot-id define in svx
+    { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY1
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY2
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY3
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY4
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY5
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
@@ -632,6 +640,8 @@ USHORT* SwAttrPool::pVersionMap1 = 0;
 USHORT* SwAttrPool::pVersionMap2 = 0;
 USHORT* SwAttrPool::pVersionMap3 = 0;
 USHORT* SwAttrPool::pVersionMap4 = 0;
+// OD 2004-01-21 #i18732#
+USHORT* SwAttrPool::pVersionMap5 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
 const sal_Char* __FAR_DATA pMarkToTable     = "table";
@@ -855,6 +865,15 @@ void _InitCore()
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT);
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
+    // OD 18.09.2003 #i18732#
+    aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( TRUE );
+// FrmAttr-Dummies
+    aAttrTab[ RES_FRMATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY1 );
+    aAttrTab[ RES_FRMATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY2 );
+    aAttrTab[ RES_FRMATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY3 );
+    aAttrTab[ RES_FRMATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY4 );
+    aAttrTab[ RES_FRMATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY5 );
+// FrmAttr-Dummies
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] = new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] = new SwCropGrf;
@@ -935,6 +954,14 @@ void _InitCore()
         SwAttrPool::pVersionMap4[ i-1 ] = i;
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
+
+    // OD 2004-01-21 #i18732# - setup new version map due to extension of
+    // the frame attributes (RES_FRMATR_*) for binary filters.
+    SwAttrPool::pVersionMap5 = new USHORT[ 130 ];
+    for( i = 1; i <= 109; i++ )
+        SwAttrPool::pVersionMap4[ i-1 ] = i;
+    for ( i = 110; i <= 130; ++i )
+        SwAttrPool::pVersionMap4[ i-1 ] = i + 6;
 
     pBreakIt = new SwBreakIt;
     const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
@@ -1047,6 +1074,8 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap2;
     delete[] SwAttrPool::pVersionMap3;
     delete[] SwAttrPool::pVersionMap4;
+    // OD 2004-01-21 #i18732#
+    delete[] SwAttrPool::pVersionMap5;
 
     for ( USHORT i = 0; i < pGlobalOLEExcludeList->Count(); ++i )
         delete (SvGlobalName*)(*pGlobalOLEExcludeList)[i];
