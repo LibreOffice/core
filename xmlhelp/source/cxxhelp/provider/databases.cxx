@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: abi $ $Date: 2001-08-24 14:44:19 $
+ *  last change: $Author: abi $ $Date: 2001-09-04 11:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <berkeleydb/db_cxx.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
 #endif
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
@@ -174,6 +177,14 @@ rtl::OUString Databases::getInstallPathAsURL()
     osl::MutexGuard aGuard( m_aMutex );
 
       return m_aInstallDirectory;
+}
+
+
+rtl::OUString Databases::getInstallPathAsURLWithOutEncoding()
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    return m_aInstallDirectoryWithoutEncoding;
 }
 
 
@@ -898,4 +909,8 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 
     if( m_aInstallDirectory.lastIndexOf( sal_Unicode( '/' ) ) != m_aInstallDirectory.getLength() - 1 )
         m_aInstallDirectory += rtl::OUString::createFromAscii( "/" );
+
+    m_aInstallDirectoryWithoutEncoding = rtl::Uri::decode( m_aInstallDirectory,
+                                                           rtl_UriDecodeWithCharset,
+                                                           RTL_TEXTENCODING_UTF8 );
 }
