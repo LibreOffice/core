@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XReplaceDescriptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:54 $
+ *  last change:$Date: 2003-09-08 11:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.util;
 
-import com.sun.star.util.XReplaceDescriptor;
 import lib.MultiMethodTest;
+
+import com.sun.star.util.XReplaceDescriptor;
 
 /**
  * Testing <code>com.sun.star.util.XReplaceDescriptor</code>
@@ -95,7 +96,6 @@ public class _XReplaceDescriptor extends MultiMethodTest {
      * from string after setting. <p>
      */
     public void _setReplaceString(){
-        boolean bResult = false;
         log.println("test for setReplaceString() ");
         String oldReplaceStr = oObj.getReplaceString();
         oObj.setReplaceString("XReplaceDescriptor");
