@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-16 09:57:51 $
+ *  last change: $Author: cmc $ $Date: 2002-01-21 16:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2617,6 +2617,7 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
 //      case SVX_BREAK_COLUMN_BEFORE:
 //      case SVX_BREAK_COLUMN_BOTH:
 
+        case SVX_BREAK_NONE:
         case SVX_BREAK_PAGE_BEFORE:
         case SVX_BREAK_PAGE_BOTH:
             // sprmPPageBreakBefore/sprmPFPageBreakBefore
@@ -2624,7 +2625,7 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
                 rWW8Wrt.InsUInt16( 0x2407 );
             else
                 rWW8Wrt.pO->Insert( 9, rWW8Wrt.pO->Count() );
-            rWW8Wrt.pO->Insert( rBreak.GetValue() ? 1 : 0, rWW8Wrt.pO->Count() );
+            rWW8Wrt.pO->Insert(rBreak.GetValue() ? 1 : 0, rWW8Wrt.pO->Count());
             break;
         }
     }
