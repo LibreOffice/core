@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:53:25 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,12 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
     // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
     pExpr->Gen( eRecMode );
     if( bBased )
-        pParser->aGen.Gen( _BASED, pParser->nBase ),
+    {
+        USHORT uBase = pParser->nBase;
+        if( pParser->IsCompatible() )
+            uBase |= 0x8000;        // #109275 Flag compatiblity
+        pParser->aGen.Gen( _BASED, uBase );
         pParser->aGen.Gen( _ARGV );
+    }
 }
 
