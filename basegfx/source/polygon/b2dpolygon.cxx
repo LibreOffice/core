@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:38:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,7 +1232,7 @@ namespace basegfx
             }
             else
             {
-                OSL_ENSURE(nIndex2 + nCount > rPoly.mpPolygon->count(), "B2DPolygon Insert outside range (!)");
+                OSL_ENSURE(nIndex2 + nCount <= rPoly.mpPolygon->count(), "B2DPolygon Insert outside range (!)");
                 ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex2, nCount);
                 mpPolygon->insert(nIndex, aTempPoly);
             }
@@ -1256,7 +1256,7 @@ namespace basegfx
             }
             else
             {
-                OSL_ENSURE(nIndex + nCount > rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
+                OSL_ENSURE(nIndex + nCount <= rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
                 ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex, nCount);
                 mpPolygon->insert(mpPolygon->count(), aTempPoly);
             }
@@ -1314,12 +1314,12 @@ namespace basegfx
 
     bool B2DPolygon::hasDoublePoints() const
     {
-        return mpPolygon->hasDoublePoints();
+        return (mpPolygon->count() > 1L && mpPolygon->hasDoublePoints());
     }
 
     void B2DPolygon::removeDoublePoints()
     {
-        if(mpPolygon->count() > 1)
+        if(hasDoublePoints())
         {
             implForceUniqueCopy();
             mpPolygon->removeDoublePointsAtBeginEnd();
