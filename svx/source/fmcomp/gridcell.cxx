@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-14 16:13:07 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 13:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,11 +1154,14 @@ void DbCheckBox::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     m_bTransparent = sal_True;
     Reference< ::com::sun::star::beans::XPropertySet >  xModel(m_rColumn.getModel());
     sal_Bool bEnable  = ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_ENABLED));
+    //  sal_Bool bTriState = ::comphelper::getBOOL(xModel->getPropertyValue(FM_PROP_TRISTATE));
 
     m_pWindow  = new CheckBoxControl(pParent);
     m_pPainter = new CheckBoxControl(pParent);
     m_pWindow->Enable(bEnable);
     m_pWindow->SetPaintTransparent( sal_True );
+
+    //  static_cast< CheckBoxControl*>(m_pWindow)->GetBox().EnableTriState(bTriState);
 
     m_pPainter->SetPaintTransparent( sal_True );
     m_pPainter->SetBackground();
@@ -1171,19 +1174,26 @@ CellControllerRef DbCheckBox::CreateController() const
 {
     return new CheckBoxCellController((CheckBoxControl*)m_pWindow);
 }
-
+//------------------------------------------------------------------------------
+namespace
+{
+    void setCheckBoxState(  const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
+                            CheckBoxControl* _pCheckBoxControl )
+    {
+        TriState eState = STATE_DONTKNOW;
+        if (_xVariant.is())
+        {
+            sal_Bool bValue = _xVariant->getBoolean();
+            if (!_xVariant->wasNull())
+                eState = bValue ? STATE_CHECK : STATE_NOCHECK;
+        }
+        _pCheckBoxControl->GetBox().SetState(eState);
+    }
+}
 //------------------------------------------------------------------------------
 void DbCheckBox::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    TriState eState = STATE_DONTKNOW;
-    if (_xVariant.is())
-    {
-        if (_xVariant->getBoolean())
-            eState = STATE_CHECK;
-        else if (!_xVariant->wasNull())
-            eState = STATE_NOCHECK;
-    }
-    ((CheckBoxControl*)m_pWindow)->GetBox().SetState(eState);
+    setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pWindow) );
 }
 
 //------------------------------------------------------------------------------
@@ -1191,23 +1201,18 @@ void DbCheckBox::Paint(OutputDevice& rDev, const Rectangle& rRect,
                           const Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
                           const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    TriState eState = STATE_DONTKNOW;
-    if (_xVariant.is())
-    {
-        if (_xVariant->getBoolean())
-            eState = STATE_CHECK;
-        else if (!_xVariant->wasNull())
-            eState = STATE_NOCHECK;
-    }
-    ((CheckBoxControl*)m_pPainter)->GetBox().SetState(eState);
+    setCheckBoxState( _xVariant, static_cast<CheckBoxControl*>(m_pPainter) );
     DbCellControl::Paint(rDev, rRect);
 }
 
 //------------------------------------------------------------------------------
 sal_Bool DbCheckBox::Commit()
 {
+#ifdef _DEBUG
     Any aVal = makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) );
-    m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE, aVal );
+#endif
+    m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
+                    makeAny( (sal_Int16)( static_cast< CheckBoxControl* >( m_pWindow )->GetBox().GetState() ) ) );
     return sal_True;
 }
 
