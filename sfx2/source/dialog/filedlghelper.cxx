@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-21 11:12:24 $
+ *  last change: $Author: dv $ $Date: 2001-06-21 12:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,8 +190,8 @@ using namespace ::cppu;
 
 //-----------------------------------------------------------------------------
 
-#define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FileDialog"))
-#define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
+#define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
+#define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
 
 //-----------------------------------------------------------------------------
 
@@ -679,9 +679,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
     // show the dialog
     sal_Int16 nRet = mxFileDlg->execute();
 
+    saveConfig();
+
     if ( nRet != ExecutableDialogResults::CANCEL )
     {
-        saveConfig();
 
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -1052,8 +1053,7 @@ void FileDialogHelper_Impl::saveConfig()
             if ( aValue >>= bAutoExt )
             {
                 SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-                if ( aDlgOpt.Exists() )
-                    aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
+                aDlgOpt.SetUserData( String::CreateFromInt32( (sal_Int32) bAutoExt ) );
             }
         }
         catch( IllegalArgumentException ){}
