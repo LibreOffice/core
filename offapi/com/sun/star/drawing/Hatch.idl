@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Hatch.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <com/sun/star/drawing/HatchStyle.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_color_idl__
-#include <com/sun/star/drawing/color.idl>
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 
@@ -94,7 +94,7 @@ struct Hatch
     // DocMerge from xml: field com::sun::star::drawing::Hatch::Color
     /** This is the color of the hatch lines.
      */
-    com::sun::star::drawing::color Color;
+    com::sun::star::util::Color Color;
 
     //-------------------------------------------------------------------------
 
