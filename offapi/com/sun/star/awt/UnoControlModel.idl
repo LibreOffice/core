@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:56:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
     and the model can specify additional interfaces to exchange data or
     export more functionality from the model.</p>
  */
-service UnoControlModel
+published service UnoControlModel
 {
     /** This service is present when the control model is embedded in an
         <type>UnoControlDialogModel</type>.
