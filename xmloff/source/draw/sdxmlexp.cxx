@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-05 11:22:40 $
+ *  last change: $Author: aw $ $Date: 2000-12-05 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3800,11 +3800,11 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
     // write draw:style-name for object graphic-styles
     ImpWriteObjGraphicStyleInfos();
 
-    // prepare page-master infos
-    ImpPrepPageMasterInfos();
-
-    // write page-master infos
-    ImpWritePageMasterInfos();
+// #80012# PageMaster export moved to _ExportAutoStyles
+//  // prepare page-master infos
+//  ImpPrepPageMasterInfos();
+//  // write page-master infos
+//  ImpWritePageMasterInfos();
 
     // write presentation styles
     ImpWritePresentationStyles();
@@ -3824,6 +3824,13 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
 void SdXMLExport::_ExportAutoStyles()
 {
     GetPropertySetMapper()->SetAutoStyles( sal_True );
+
+    // #80012# PageMaster export moved from _ExportStyles
+    // prepare page-master infos
+    ImpPrepPageMasterInfos();
+
+    // write page-master infos
+    ImpWritePageMasterInfos();
 
     // create auto style infos for objects on master pages
     for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 19:19:53 $
+ *  last change: $Author: aw $ $Date: 2000-12-05 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,8 +608,10 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     if(msPageMasterName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
     {
         // look for PageMaster with this name
+
+        // #80012# GetStylesContext() replaced with GetAutoStylesContext()
         const SvXMLStyleContext* pStyle =
-            GetSdImport().GetShapeImport()->GetStylesContext()->FindStyleChildContext(
+            GetSdImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
             XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, msPageMasterName);
 
         if(pStyle && pStyle->ISA(SdXMLPageMasterContext))
