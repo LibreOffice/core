@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 20:04:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #include "fcontnr.hxx"
 #include "docfac.hxx"
 #include "statcach.hxx"
+#include "event.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -262,6 +263,7 @@ long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( pView && pView != pContainer )*/
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetIPClient() )
             pView->MakeActive_Impl( FALSE );
+
         Window* pWindow = rNEvt.GetWindow();
         ULONG nHelpId  = 0;
         while ( !nHelpId && pWindow )
@@ -348,12 +350,14 @@ void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
             // the resize event never is sent to the component
             SetSizePixel( GetParent()->GetOutputSizePixel() );
+
         DoResize();
-        if ( pFrame->GetCurrentViewFrame() )
-            pFrame->GetCurrentViewFrame()->GetBindings().GetWorkWindow_Impl()->ShowChilds_Impl();
+        SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
+        if ( pView )
+            pView->GetBindings().GetWorkWindow_Impl()->ShowChilds_Impl();
     }
-    else
-        Window::StateChanged( nStateChange );
+
+    Window::StateChanged( nStateChange );
 }
 
 void SfxTopWindow_Impl::DoResize()
@@ -904,7 +908,11 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         }
 
         if ( pFrame->GetObjectShell() )
+        {
+            SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, pFrame->GetObjectShell() ) );
             pFrame->ReleaseObjectShell_Impl( sal_False );
+        }
+
         if ( pViewIdItem )
             pFrame->SetViewData_Impl( pViewIdItem->GetValue(), String() );
         if ( pDoc )
@@ -1028,6 +1036,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
             GetCurrentViewFrame()->Resize(TRUE);
     }
 
+    SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_VIEWCREATED, pDoc ) );
     return sal_True;
 }
 
