@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:59:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <swrect.hxx>
+#include <ndarr.hxx>
 #include <dbgoutsw.hxx>
 
 using namespace std;
@@ -761,6 +762,26 @@ static String lcl_dbg_out(const SwUndo & rUndo)
 const char * dbg_out(const SwUndo & rUndo)
 {
     return dbg_out(lcl_dbg_out(rUndo));
+}
+
+static String lcl_dbg_out(SwOutlineNodes & rNodes)
+{
+    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
+
+    for (ULONG i = 0; i < rNodes.Count(); i++)
+    {
+        aStr += lcl_dbg_out(*rNodes[i]);
+        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
+    }
+
+    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
+
+    return aStr;
+}
+
+const char * dbg_out(SwOutlineNodes & rNodes)
+{
+    return dbg_out(lcl_dbg_out(rNodes));
 }
 
 static String lcl_dbg_out(const SwUndos & rUndos)
