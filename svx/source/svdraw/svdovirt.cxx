@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:07:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ void SdrVirtObj::SetChanged()
     SdrObject::SetChanged();
 }
 
-sal_Bool SdrVirtObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrVirtObj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     Point aOfs(rOut.GetOffset());
     rOut.SetOffset(aOfs+aAnchor);
@@ -627,7 +627,7 @@ Pointer SdrVirtObj::GetMacroPointer(const SdrObjMacroHitRec& rRec) const
     return rRefObj.GetMacroPointer(rRec); // Todo: Positionsversatz
 }
 
-void SdrVirtObj::PaintMacro(ExtOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
+void SdrVirtObj::PaintMacro(XOutputDevice& rXOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const
 {
     rRefObj.PaintMacro(rXOut,rDirtyRect,rRec); // Todo: Positionsversatz
 }
@@ -644,37 +644,39 @@ XubString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrVirtObj::WriteData(SvStream& rOut) const
-{
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrVirtObj");
-#endif
-    // fehlende Implementation
-    rOut<<aAnchor;
-}
+//BFS01void SdrVirtObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrVirtObj");
+//BFS01#endif
+//BFS01 // fehlende Implementation
+//BFS01 rOut<<aAnchor;
+//BFS01}
 
-void SdrVirtObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    if (rHead.GetVersion()>=4) {
-        SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-        aCompat.SetID("SdrVirtObj");
-#endif
-        // fehlende Implementation
-        rIn>>aAnchor;
-    } else {
-        rIn>>aAnchor;
-    }
-}
+//BFS01void SdrVirtObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 if (rHead.GetVersion()>=4) {
+//BFS01     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01     aCompat.SetID("SdrVirtObj");
+//BFS01#endif
+//BFS01     // fehlende Implementation
+//BFS01     rIn>>aAnchor;
+//BFS01 } else {
+//BFS01     rIn>>aAnchor;
+//BFS01 }
+//BFS01}
 
-void SdrVirtObj::AfterRead()
-{
-    // fehlende Implementation
-}
+//BFS01void SdrVirtObj::AfterRead()
+//BFS01{
+//BFS01 // fehlende Implementation
+//BFS01}
 
 const Point SdrVirtObj::GetOffset() const
 {
     return Point(0,0);
 }
+
+// eof
