@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:59:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,13 +297,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_ADD
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 210 , 147 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 208 , 146 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_ADD ;
         QuickHelpText [ de ] = "Hinzufügen" ;
         QuickHelpText [ en-US ] = "Add" ;
-         // ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen
-         // ### ACHTUNG: Neuer Text in Resource? Neues Zahlenformat hinzufügen : Neues Zahlenformat hinzuf³gen
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
@@ -311,12 +309,11 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_REMOVE
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 242 , 147 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 240 , 146 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_REMOVE ;
         QuickHelpText [ de ] = "Entfernen" ;
         QuickHelpText [ en-US ] = "Remove" ;
-         // ### ACHTUNG: Neuer Text in Resource? Zahlenformat löschen : Zahlenformat l÷schen
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
@@ -324,8 +321,8 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     ImageButton IB_INFO
     {
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 226 , 147 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 224 , 146 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_INFO ;
         QuickHelpText [ de ] = "Kommentar ändern" ;
         QuickHelpText [ en-US ] = "Edit Comment" ;
