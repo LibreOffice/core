@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
