@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2001-02-06 12:32:04 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:34:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ JAVACLASSFILES= 									\
     $(CLASSDIR)$/$(PACKAGE)$/IInvokable.class		\
     $(CLASSDIR)$/$(PACKAGE)$/IStableListener.class	\
     $(CLASSDIR)$/$(PACKAGE)$/IStableObject.class	\
+    $(CLASSDIR)$/$(PACKAGE)$/NativeLibraryLoader.class \
     $(CLASSDIR)$/$(PACKAGE)$/RefObject.class		\
     $(CLASSDIR)$/$(PACKAGE)$/RefererObject.class	\
     $(CLASSDIR)$/$(PACKAGE)$/WeakTable.class
