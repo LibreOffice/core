@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:04:24 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:56:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,17 @@ STDSHL=
 .ELSE
 SHL$(TNR)ARCHIVES=
 .ENDIF
+
+# decide how to link
+.IF "$(SHL$(TNR)CODETYPE)"=="C"
+SHL$(TNR)LINKER=$(LINKC)
+SHL$(TNR)STDSHL=$(subst,CPPRUNTIME, $(STDSHL))
+SHL$(TNR)LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(SHL$(TNR)CODETYPE)"=="C"
+SHL$(TNR)LINKER=$(LINK)
+SHL$(TNR)STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
+SHL$(TNR)LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(SHL$(TNR)CODETYPE)"=="C"
 
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
@@ -360,14 +371,14 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
 .IF "$(COM)"=="GCC"
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
     @+$(TYPE) $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
-    @+echo  $(SHL$(TNR)STDLIBS) $(STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
+    @+echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(SHL$(TNR)LINKER) @$(mktmp \
+        $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
         $(SHL$(TNR)STACK) $(SHL$(TNR)BASEX)	\
         -out:$@ \
@@ -378,13 +389,13 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)LIBS) \
         $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -out:$(SHL$(TNR)TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -393,13 +404,13 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ)   \
         $(SHL$(TNR)LIBS)                         \
         $(SHL$(TNR)STDLIBS)                      \
-        $(STDSHL) $(STDSHL$(TNR))                           \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     ) $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
-    $(LINK) @$(mktmp	$(LINKFLAGS)			\
+    $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -out:$(SHL$(TNR)TARGETN)	\
         -map:$(MISC)$/$(@:B).map				\
@@ -408,7 +419,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)OBJS) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ))   \
         @$(MISC)$/$(SHL$(TNR)TARGET)_link.lst \
         @$(mktmp $(SHL$(TNR)STDLIBS)                      \
-        $(STDSHL) $(STDSHL$(TNR))                           \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
     )
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
@@ -416,7 +427,7 @@ $(SHL$(TNR)TARGETN) : \
         +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).lst
         +$(TYPE) $(mktmp \
-        $(LINKFLAGS) \
+        $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX) \
         $(SHL$(TNR)STACK) $(MAPFILE) \
         -out:$@ \
@@ -424,11 +435,11 @@ $(SHL$(TNR)TARGETN) : \
         $(STDOBJ) \
         $(SHL$(TNR)OBJS) \
         $(SHL$(TNR)STDLIBS) \
-        $(STDSHL) $(STDSHL$(TNR)) \
+        $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         +$(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
-        $(LINK) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
+        $(SHL$(TNR)LINKER) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
@@ -438,9 +449,9 @@ $(SHL$(TNR)TARGETN) : \
     @+echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
     `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
     `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(SHL$(TNR)STDLIBS)` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
@@ -457,10 +468,10 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    @+echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(SHL$(TNR)SONAME) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(UPDATER)"=="YES"
