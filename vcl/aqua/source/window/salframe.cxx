@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 09:07:49 $
+ *  last change: $Author: pluby $ $Date: 2000-11-13 03:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,12 @@ void SalFrame::Sync()
 // -----------------------------------------------------------------------
 
 void SalFrame::SetInputContext( SalInputContext* pContext )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SalFrame::UpdateExtTextInputArea()
 {
 }
 
