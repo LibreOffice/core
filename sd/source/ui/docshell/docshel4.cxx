@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:17:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,12 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
+#endif
+#ifndef _SD_UNODRAWVIEW_HXX
+#include "SdUnoDrawView.hxx"
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 
 #pragma hdrstop
@@ -686,7 +692,11 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
             // #86834# Call UpdateDocInfoForSave() before export
             UpdateDocInfoForSave();
 
-            bRet = pFilter->Export();
+            const ULONG nOldSwapMode = pDoc->GetSwapGraphicsMode();
+            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+            if( !( bRet = pFilter->Export() ) )
+                pDoc->SetSwapGraphicsMode( nOldSwapMode );
+
         }
 
         delete pFilter;
@@ -850,6 +860,8 @@ SfxStyleSheetBasePool* SdDrawDocShell::GetStyleSheetPool()
 
 BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
 {
+    OSL_TRACE("GotoBookmark %s",
+        ::rtl::OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     BOOL bFound = FALSE;
 
     if (pViewShell && pViewShell->ISA(SdDrawViewShell))
@@ -912,9 +924,26 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
                 pDrViewSh->ChangeEditMode(eNewEditMode, FALSE);
             }
 
-            // Zur Seite springen
+            // Jump to the page.  This is done by using the API because this
+            // takes care of all the little things to be done.  Especially
+            // writing the view data to the frame view (see bug #107803#).
             USHORT nSdPgNum = (nPgNum - 1) / 2;
-            pDrViewSh->SwitchPage(nSdPgNum);
+            SdUnoDrawView* pUnoDrawView = pDrViewSh->GetController();
+            if (pUnoDrawView != NULL)
+            {
+                ::com::sun::star::uno::Reference<
+                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
+                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
+                pUnoDrawView->setCurrentPage (xDrawPage);
+            }
+            else
+            {
+                // As a fall back switch to the page via the core.
+                DBG_ASSERT (pUnoDrawView!=NULL,
+                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
+                pDrViewSh->SwitchPage(nSdPgNum);
+            }
+
 
             if (pObj)
             {
