@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-04-28 11:21:01 $
+ *  last change: $Date: 2003-05-22 13:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,8 @@ public class AccessibleButton extends lib.TestCase {
 
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this component");
+
+        tEnv.addObjRelation("LimitedBounds", "yes");
 
         return tEnv;
 
