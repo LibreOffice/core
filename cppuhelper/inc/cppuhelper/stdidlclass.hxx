@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdidlclass.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:39:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,7 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(1);
-    seqInterface.getArray()[0] =
-        ::getCppuType( ( ::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -127,12 +125,8 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(2);
-    seqInterface.getArray()[0] =
-        ::getCppuType( ( ::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( ( ::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -158,15 +152,9 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(3);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -193,18 +181,10 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(4);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -234,21 +214,11 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(5);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -277,24 +247,12 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(6);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[5] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface6 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
+    seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -325,27 +283,13 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(7);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[5] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface6 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[6] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface7 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
+    seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
+    seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -378,30 +322,14 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(8);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[5] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface6 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[6] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface7 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[7] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface8 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
+    seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
+    seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
+    seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -433,33 +361,15 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(9);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[5] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface6 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[6] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface7 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[7] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface8 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[8] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface9 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
+    seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
+    seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
+    seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
+    seqInterface.getArray()[8] = Interface9::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
@@ -490,36 +400,16 @@ createStandardClass(    const ::com::sun::star::uno::Reference < ::com::sun::sta
     SAL_THROW( () )
 {
     ::com::sun::star::uno::Sequence < ::rtl::OUString > seqInterface(10);
-    seqInterface.getArray()[0] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface1 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[1] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface2 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[2] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface3 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[3] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface4 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[4] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface5 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[5] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface6 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[6] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface7 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[7] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface8 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[8] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface9 > *) 0 ).getTypeName();
-
-    seqInterface.getArray()[9] =
-        ::getCppuType( (::com::sun::star::uno::Reference< Interface10 > *) 0 ).getTypeName();
-
+    seqInterface.getArray()[0] = Interface1::static_type().getTypeName();
+    seqInterface.getArray()[1] = Interface2::static_type().getTypeName();
+    seqInterface.getArray()[2] = Interface3::static_type().getTypeName();
+    seqInterface.getArray()[3] = Interface4::static_type().getTypeName();
+    seqInterface.getArray()[4] = Interface5::static_type().getTypeName();
+    seqInterface.getArray()[5] = Interface6::static_type().getTypeName();
+    seqInterface.getArray()[6] = Interface7::static_type().getTypeName();
+    seqInterface.getArray()[7] = Interface8::static_type().getTypeName();
+    seqInterface.getArray()[8] = Interface9::static_type().getTypeName();
+    seqInterface.getArray()[9] = Interface10::static_type().getTypeName();
     return createStandardClassWithSequence(
                                             rSMgr,
                                             sImplementationName,
