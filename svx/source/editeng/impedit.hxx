@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 15:11:36 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 17:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,10 @@ DBG_NAMEEX( EditEngine );
 #define ATTRSPECIAL_WHOLEWORD   1
 #define ATTRSPECIAL_EDGE        2
 
-#define GETCRSR_TXTONLY         0x0001
-#define GETCRSR_STARTOFLINE     0x0002
-#define GETCRSR_ENDOFLINE       0x0004
+#define GETCRSR_TXTONLY             0x0001
+#define GETCRSR_STARTOFLINE         0x0002
+#define GETCRSR_ENDOFLINE           0x0004
+#define GETCRSR_PREFERPORTIONSTART  0x0008
 
 #define LINE_SEP    0x0A
 

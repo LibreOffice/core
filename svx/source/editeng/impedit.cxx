@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 15:11:36 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 17:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,18 +730,25 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
     Rectangle aEditCursor = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|nShowCursorFlags );
     if ( !IsInsertMode() && !aEditSelection.HasRange() )
     {
-        // Bei Overwrite die Breite korrigieren
-        // Umstellen auf TextArray !!!
-        // MT 12.12.98: Einfach mal aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM+1, sal_False ), aber nur wenn nicht Zeilenende
         if ( aPaM.GetNode()->Len() && ( aPaM.GetIndex() < aPaM.GetNode()->Len() ) )
         {
-            SvxFont aFont;
-            pEditEngine->pImpEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
-            Font aOldFont( pOutWin->GetFont() );
-            aFont.SetPhysFont( pOutWin );
-            aEditCursor.Right() += aFont.GetPhysTxtSize( pOutWin, *aPaM.GetNode(), aPaM.GetIndex(), 1 ).Width();
-            if ( pEditEngine->pImpEditEngine->GetStatus().DoRestoreFont() )
-                pOutWin->SetFont( aOldFont );
+            // If we are behind a portion, and the next portion has other direction, we must change position...
+            aEditCursor.Left() = aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GETCRSR_TXTONLY|GETCRSR_PREFERPORTIONSTART ).Left();
+
+            USHORT nTextPortionStart = 0;
+            USHORT nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+            ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+            USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, TRUE );
+            TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
+            if ( pTextPortion->GetKind() == PORTIONKIND_TAB )
+            {
+                aEditCursor.Right() += pTextPortion->GetSize().Width();
+            }
+            else
+            {
+                EditPaM aNext = pEditEngine->pImpEditEngine->CursorRight( aPaM, (USHORT)i18n::CharacterIteratorMode::SKIPCELL );
+                aEditCursor.Right() = pEditEngine->pImpEditEngine->PaMtoEditCursor( aNext, GETCRSR_TXTONLY ).Left();
+            }
         }
     }
     long nMaxHeight = !IsVertical() ? aOutArea.GetHeight() : aOutArea.GetWidth();

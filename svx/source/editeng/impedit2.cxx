@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 15:11:37 $
+ *  last change: $Author: mt $ $Date: 2002-08-26 17:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3309,57 +3309,59 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
     BOOL bR2LPara = IsRightToLeft( nPara );
 
     TextPortion* pDestPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-    if ( !bR2LPara && pDestPortion->GetRightToLeft() )
+    if ( pDestPortion->GetKind() != PORTIONKIND_TAB )
     {
-        // Portions behind must be added, visual before this portion
-        sal_uInt16 nTmpPortion = nTextPortion+1;
-        while ( nTmpPortion <= pLine->GetEndPortion() )
+        if ( !bR2LPara && pDestPortion->GetRightToLeft() )
         {
-            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
-                nX += pNextTextPortion->GetSize().Width();
-            else
-                break;
-            nTmpPortion++;
+            // Portions behind must be added, visual before this portion
+            sal_uInt16 nTmpPortion = nTextPortion+1;
+            while ( nTmpPortion <= pLine->GetEndPortion() )
+            {
+                TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                    nX += pNextTextPortion->GetSize().Width();
+                else
+                    break;
+                nTmpPortion++;
+            }
+            // Portions before must be removed, visual behind this portion
+            nTmpPortion = nTextPortion;
+            while ( nTmpPortion > pLine->GetStartPortion() )
+            {
+                --nTmpPortion;
+                TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                    nX -= pPrevTextPortion->GetSize().Width();
+                else
+                    break;
+            }
         }
-        // Portions before must be removed, visual behind this portion
-        nTmpPortion = nTextPortion;
-        while ( nTmpPortion > pLine->GetStartPortion() )
+        else if ( bR2LPara && !pDestPortion->IsRightToLeft() )
         {
-            --nTmpPortion;
-            TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
-                nX -= pPrevTextPortion->GetSize().Width();
-            else
-                break;
+            // Portions behind must be ermoved, visual behind this portion
+            sal_uInt16 nTmpPortion = nTextPortion+1;
+            while ( nTmpPortion <= pLine->GetEndPortion() )
+            {
+                TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                    nX += pNextTextPortion->GetSize().Width();
+                else
+                    break;
+                nTmpPortion++;
+            }
+            // Portions before must be added, visual before this portion
+            nTmpPortion = nTextPortion;
+            while ( nTmpPortion > pLine->GetStartPortion() )
+            {
+                --nTmpPortion;
+                TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
+                if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
+                    nX -= pPrevTextPortion->GetSize().Width();
+                else
+                    break;
+            }
         }
     }
-    else if ( bR2LPara && !pDestPortion->IsRightToLeft() )
-    {
-        // Portions behind must be ermoved, visual behind this portion
-        sal_uInt16 nTmpPortion = nTextPortion+1;
-        while ( nTmpPortion <= pLine->GetEndPortion() )
-        {
-            TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
-                nX += pNextTextPortion->GetSize().Width();
-            else
-                break;
-            nTmpPortion++;
-        }
-        // Portions before must be added, visual before this portion
-        nTmpPortion = nTextPortion;
-        while ( nTmpPortion > pLine->GetStartPortion() )
-        {
-            --nTmpPortion;
-            TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
-                nX -= pPrevTextPortion->GetSize().Width();
-            else
-                break;
-        }
-    }
-
     if ( bR2LPara )
     {
         // Switch X postions...
@@ -3405,8 +3407,26 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
         if ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) )
         {
             // End of Portion
-            if ( !pPortion->IsRightToLeft() )
+            if ( pPortion->GetKind() == PORTIONKIND_TAB )
+            {
+                if ( (nTextPortion+1) < pParaPortion->GetTextPortions().Count() )
+                {
+                    TextPortion* pNextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion+1 );
+                    if ( pNextPortion->GetKind() != PORTIONKIND_TAB )
+                    {
+                        DBG_ASSERT( !bPreferPortionStart, "GetXPos - How can we this tab portion here???" );
+                        nX = GetXPos( pParaPortion, pLine, nIndex, TRUE );
+                    }
+                }
+                else if ( !IsRightToLeft( GetEditDoc().GetPos( pParaPortion->GetNode() ) ) )
+                {
+                    nX += nPortionTextWidth;
+                }
+            }
+            else if ( !pPortion->IsRightToLeft() )
+            {
                 nX += nPortionTextWidth;
+            }
         }
         else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
         {
@@ -3469,25 +3489,6 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
 
     return nX;
 }
-
-/*
-TextPortion* ImpEditEngine::FindRightPortion( ParaPortion* pParaPortion, USHORT nTextPortion )
-{
-    TextPortion* pRightPortion = NULL;
-
-    USHORT nTextPortions = pParaPortion->GetTextPortions().Count();
-    TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
-    if ( pTextPortion->GetRightToLeft() )
-    {
-    }
-    else
-    {
-
-    }
-
-    return pRightPortion;
-}
-*/
 
 void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
 {
@@ -3656,7 +3657,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, USHORT nIndex, US
     }
     else
     {
-        nX = GetXPos( pPortion, pLine, nIndex );
+        nX = GetXPos( pPortion, pLine, nIndex, ( nFlags & GETCRSR_PREFERPORTIONSTART ) ? TRUE : FALSE );
     }
 
     aEditCursor.Left() = aEditCursor.Right() = nX;
