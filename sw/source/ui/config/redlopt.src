@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:21:38 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,7 @@ TabPage TP_REDLINE_OPT
     {
         Pos = MAP_APPFONT ( 18 , 69 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "A~ttribute" ;
+        Text = "Attrib~ute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "A~tributos";
@@ -578,7 +578,7 @@ TabPage TP_REDLINE_OPT
     {
         Pos = MAP_APPFONT ( 18 , 84 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "~Farbe" ;
+        Text = "F~arbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
         Text[ portuguese ] = "~Cor";
@@ -647,7 +647,7 @@ TabPage TP_REDLINE_OPT
     {
         Pos = MAP_APPFONT ( 18 , 113 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "A~ttribute" ;
+        Text = "Attribut~e" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "A~tributos";
@@ -681,7 +681,7 @@ TabPage TP_REDLINE_OPT
     {
         Pos = MAP_APPFONT ( 18 , 128 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "~Farbe" ;
+        Text = "Fa~rbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
         Text[ portuguese ] = "~Cor";
@@ -771,7 +771,7 @@ TabPage TP_REDLINE_OPT
     {
         Pos = MAP_APPFONT ( 12 , 157 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "Ma~rkierung" ;
+        Text = "Markieru~ng" ;
         Text [ English ] = "Mark" ;
         Text [ portuguese ] = "Ma~rca" ;
         Text [ english_us ] = "Mar~k" ;

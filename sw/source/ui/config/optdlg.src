@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:17:52 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "H~ilfslinien beim Verschieben" ;
+        Text = "Hilf~slinien beim Verschieben" ;
         Text [ ENGLISH ] = "Guides while moving" ;
         Text[ english_us ] = "Guides ~while moving";
         Text[ portuguese ] = "G~uias ao mover";
@@ -228,7 +228,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Einfache Griffe" ;
+        Text = "Einfa~che Griffe" ;
         Text [ ENGLISH ] = "Simple control points" ;
         Text[ english_us ] = "Sim~ple handles";
         Text[ portuguese ] = "Guias ~simples";
@@ -255,7 +255,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Große Griffe" ;
+        Text = "G~roße Griffe" ;
         Text [ ENGLISH ] = "Large control points" ;
         Text[ english_us ] = "Large handles";
         Text[ portuguese ] = "~Guias grandes";
@@ -401,7 +401,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 53 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text = "Verti~kales Lineal" ;
+        Text = "Vertik~ales Lineal" ;
         Text [ ENGLISH ] = "~Vert. ruler" ;
         Text [ norwegian ] = "~Vert. ruler" ;
         Text [ italian ] = "Ri~ghello verticale" ;
@@ -810,7 +810,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 135 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Maßeinheit";
+        Text = "~Maßeinheit";
         Text [ ENGLISH ] = "Measurement units" ;
         Text [ italian ] = "Unità di misura";
         Text [ portuguese_brazilian ] = "Unidades m?tricas";
@@ -2064,7 +2064,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 142 , 27 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text = "Zahlen~formaterkennung" ;
+        Text = "Zahlenformater~kennung" ;
         Text [ ENGLISH ] = "Numberformat recognition" ;
         TabStop = TRUE ;
         Text[ english_us ] = "Number format recognition";
@@ -2220,7 +2220,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 18 , 108 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text = "~Spalte" ;
+        Text = "Sp~alte" ;
         Text [ English ] = "~Column" ;
         Text [ english_us ] = "~Column" ;
         Text [ portuguese_brazilian ] = "~Spalte" ;
@@ -2291,7 +2291,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 142 , 93 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text = "Z~eile" ;
+        Text = "Zei~le" ;
         Text [ English ] = "Ro~w" ;
         Text [ english_us ] = "Ro~w" ;
         Text [ portuguese_brazilian ] = "Z~eile" ;
@@ -2798,7 +2798,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Absatzende" ;
+        Text = "Absatz~ende" ;
         Text [ ENGLISH ] = "Paragraph ends" ;
         Text [ norwegian ] = "Paragraph ends" ;
         Text [ italian ] = "Fine paragrafo" ;
@@ -3153,7 +3153,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 142 , 52 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "linker Absatz~rand" ;
+        Text = "li~nker Absatzrand" ;
         Text [ ENGLISH ] = "Left ~margin" ;
         Text [ english_us ] = "~Left paragraph margin" ;
         Text [ portuguese_brazilian ] = "linker Absatz~rand" ;
@@ -3272,7 +3272,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text = "~Cursor in geschützten Zonen" ;
+        Text = "Cursor in geschützten Zonen" ;
         Text [ ENGLISH ] = "Cursor in protected areas" ;
         Text[ english_us ] = "Cursor in protected areas";
         Text[ portuguese ] = "~Permitir cursor em zonas protegidas";
@@ -3301,7 +3301,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text = "Zulassen" ;
+        Text = "Z~ulassen" ;
         Text [ ENGLISH ] = "Enable" ;
         Text[ english_us ] = "Enable";
         Text[ portuguese ] = "Permitir";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:19:18 $
+ *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Maßeinheit";
+        Text = "~Maßeinheit";
         Text [ ENGLISH ] = "Measurement units" ;
         Text [ italian ] = "Unità di misura";
         Text [ portuguese_brazilian ] = "Unidades m?tricas";
@@ -456,7 +456,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Tabulatorenabstand";
+        Text = "Tabulatorenab~stand";
         Text [ ENGLISH ] = "Default Tab distance" ;
         Text [ italian ] = "Intervallo di tabulazione";
         Text [ portuguese_brazilian ] = "Default Tab distance";
@@ -530,7 +530,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 137) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "Im aktuellen Dokument alle Absatz- und Tabellen~abstände addieren";
+        Text = "Im aktuellen ~Dokument alle Absatz- und Tabellenabstände addieren";
         Text [ English ] = "Add ~distances between paragraphs and tables" ;
         Text[ english_us ] = "Add spacing between paragraphs and tables in the current document";
         Text[ portuguese ] = "Somar ~espaçamento entre parágrafos e tabelas no documento activo";
@@ -586,7 +586,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 163) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "Tabulatorposition ausrichten";
+        Text = "~Tabulatorposition ausrichten";
         Text [ English ] = "Align tab stop position" ;
         Text[ english_us ] = "Align tab stop position";
         Text[ portuguese ] = "Alinhar posição de tabulação";
