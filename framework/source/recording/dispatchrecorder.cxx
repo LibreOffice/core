@@ -402,7 +402,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     if(bAsComment)
         aScriptBuffer.appendAscii("rem ");
     if(nValidArgs<1)
-        aScriptBuffer.appendAscii("disp.dispatch(url,noargs())\n");
+        aScriptBuffer.appendAscii("disp.dispatch(url,Array())\n");
     else
     {
         aScriptBuffer.appendAscii("disp.dispatch(url,");
