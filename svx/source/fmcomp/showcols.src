@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:49:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
         Text[ japanese ] = "Ÿ‚Ì—ñ‚ÍŒ»İ‰B‚³‚ê‚Ä‚¢‚Ü‚·B•\\¦‚·‚×‚«—ñ‚ğ‘I‘ğ‚µ‚ÄOK‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¸¶Å·ÇÑ´ÙÀ½¡¡£Ï£Ë¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
-        Text[ chinese_simplified ] = "ÒÔÏÂµÄÁĞÄ¿Ç°±»ÒşÈë¡£ÇëÄú±ê¼ÇÒªÏÔÊ¾µÄÁĞÇøÓò²¢°´»÷È·¶¨(OK)°´Å¥";
+        Text[ chinese_simplified ] = "ÒÑ¾­ÒşÈëÒÔÏÂµÄÁĞ¡£ÇëÑ¡ÖĞÒªÏÔÊ¾µÄÁĞÇøÓò,È»ºóµã»÷È·¶¨¡£";
         Text[ chinese_traditional ] = "¥H¤UªºÄæ¬OÁô¤Jªº¡C½Ğ±z¿ï¨ú­nÅã¥ÜªºÄæ¡AµM¦Z«ö¤@¤U½T©w¡C";
         Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
         Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
