@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:17:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,6 @@ class GtkXLib : public SalXLib
     std::list<GSource *> m_aSources;
     GSource             *m_pTimeout;
     GSource             *m_pUserEvent;
-    ULONG                m_nTimeoutMs;
 
     static gboolean      timeoutFn(gpointer data);
     static gboolean      userEventFn(gpointer data);
@@ -430,7 +429,7 @@ GtkXLib::GtkXLib()
 #endif
     m_pGtkSalDisplay = NULL;
     m_pTimeout = NULL;
-    m_nTimeoutMs = 0;
+    m_nTimeoutMS = 0;
     m_pUserEvent = NULL;
 }
 
@@ -575,7 +574,7 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     }
 
     // Auto-restart immediately
-    pThis->StartTimer( pThis->m_nTimeoutMs );
+    pThis->StartTimer( pThis->m_nTimeoutMS );
 
     GetSalData()->Timeout();
 
@@ -586,20 +585,27 @@ gboolean GtkXLib::timeoutFn(gpointer data)
 
 void GtkXLib::StartTimer( ULONG nMS )
 {
-    StopTimer();
-    m_nTimeoutMs = nMS; // for restarting
+    m_nTimeoutMS = nMS; // for restarting
 
-//  fprintf (stderr, "Add timeout of '%d'ms\n", m_nTimeoutMs);
+    if (m_pTimeout)
+    {
+        g_source_destroy (m_pTimeout);
+        g_source_unref (m_pTimeout);
+    }
 
-    m_pTimeout = g_timeout_source_new (m_nTimeoutMs);
+    m_pTimeout = g_timeout_source_new (m_nTimeoutMS);
     g_source_set_can_recurse (m_pTimeout, TRUE);
     g_source_set_callback (m_pTimeout, timeoutFn,
                            (gpointer) this, NULL);
     g_source_attach (m_pTimeout, g_main_context_default ());
+
+    SalXLib::StartTimer( nMS );
 }
 
 void GtkXLib::StopTimer()
 {
+    SalXLib::StopTimer();
+
     if (m_pTimeout)
     {
         g_source_destroy (m_pTimeout);
