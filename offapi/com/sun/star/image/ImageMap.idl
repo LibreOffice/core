@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageMap.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 15:43:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 /** This service specifies a html image map.
  */
-service ImageMap
+published service ImageMap
 {
     /** a ImageMap can, optionally, have a name. */
     interface ::com::sun::star::container::XNamed;
