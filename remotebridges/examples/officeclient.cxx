@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-26 14:21:20 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 
 
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
 
 namespace remotebridges_officeclient {
 

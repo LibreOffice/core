@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-08 13:27:40 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,6 @@ void testConnection( const OUString &sConnectionDescription  ,
 #define DLL_POSTFIX     ".dll"
 #endif
 
-#ifdef SOLARIS
-    extern "C" ChangeGlobalInit();
-#endif
 
 #if (defined UNX) || (defined OS2)
 int main( int argc, char * argv[] )
@@ -226,9 +223,6 @@ int main( int argc, char * argv[] )
 int __cdecl main( int argc, char * argv[] )
 #endif
 {
-#ifdef SOLARIS
-    ChangeGlobalInit();
-#endif
     Reference< XMultiServiceFactory > xMgr(
         createRegistryServiceFactory( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")) ) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 23:17:29 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,16 +669,9 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 
 
 //##################################################################################################
-#ifdef SOLARIS
-    extern "C" void ChangeGlobalInit();
-#endif
 
 extern "C" int SAL_CALL main( int argc, const char * argv[] )
 {
-#ifdef SOLARIS
-    ChangeGlobalInit();
-#endif
-
     if (argc <= 1)
     {
         out( arUsingText );

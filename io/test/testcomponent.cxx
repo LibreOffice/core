@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 11:07:30 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 // Needed to switch on solaris threads
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
 
 int main (int argc, char **argv)
 {
@@ -100,10 +97,6 @@ int main (int argc, char **argv)
         printf( "usage : testcomponent service dll [additional dlls]\n" );
         exit( 0 );
     }
-#ifdef SOLARIS
-    // switch on threads in solaris
-    ChangeGlobalInit();
-#endif
 
     // create service manager
     Reference< XMultiServiceFactory > xSMgr = createRegistryServiceFactory(
