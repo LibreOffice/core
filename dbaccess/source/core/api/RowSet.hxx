@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-01-26 15:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ namespace dbaccess
         sal_Bool                    m_bIsBookmarable ;
         sal_Bool                    m_bNew ;
         sal_Bool                    m_bCanUpdateInsertedRows;
+        sal_Bool                    m_bOwnConnection;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
@@ -458,6 +459,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.15  2001/01/24 09:50:49  oj
+    #82628# rowset modifications
+
     Revision 1.14  2001/01/22 07:38:23  oj
     #82632# change member
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-01-26 15:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_bIsBookmarable(sal_True)
     ,m_bCanUpdateInsertedRows(sal_True)
     ,m_pTables(NULL)
+    ,m_bOwnConnection(sal_False)
 {
     m_pMySelf = this;
     m_aActiveConnection <<= m_xActiveConnection;
@@ -357,6 +358,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     switch(nHandle)
     {
         case PROPERTY_ID_ACTIVECONNECTION:
+            m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
             try
@@ -415,6 +417,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             else
                 m_bRebuildConnOnExecute = sal_True;
             m_bCreateStatement = sal_True;
+            m_bOwnConnection   = sal_True;
             break;
         case PROPERTY_ID_FETCHSIZE:
             if(m_pCache)
@@ -446,6 +449,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 }
             }
             m_bCreateStatement = sal_True;
+            m_bOwnConnection = sal_True;
             break;
         case PROPERTY_ID_USER:
             m_bCreateStatement = sal_True;
@@ -626,8 +630,11 @@ void SAL_CALL ORowSet::disposing(void)
         xComponent->removeEventListener(xEvt);
     }
 
-    m_xActiveConnection = NULL;
     m_aActiveConnection = Any(); // the any conatains a reference too
+    if(m_bOwnConnection)
+        ::comphelper::disposeComponent(m_xActiveConnection);
+    m_xActiveConnection = NULL;
+
 
     ORowSetBase::disposing();
 }
@@ -1612,6 +1619,9 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     // create and fill a composer
     Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
+
+    // we have to set this here again because getCurrentSettingsComposer can force a setpropertyvalue
+    m_bOwnConnection        = sal_True;
     Reference<XParametersSupplier>  xParameters = Reference<XParametersSupplier> (xComposer, UNO_QUERY);
 
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
@@ -2122,6 +2132,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                         if (xDataSource.is())
                             m_xActiveConnection = xDataSource->getConnection(m_aUser, m_aPassword);
                     }
+                    m_bOwnConnection = sal_True;
                 }
                 catch (SQLException &e)
                 {
