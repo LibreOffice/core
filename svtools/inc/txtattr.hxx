@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:17:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _TXTATTR_HXX
 #define _TXTATTR_HXX
 
-#ifndef _SV_COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #ifndef _VCL_VCLENUM_HXX
