@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 22:38:10 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 10:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,7 +1577,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         uno::Any aAny( xFamilies->getByName( getName() ) );
 
         uno::Reference< container::XNameAccess >  xFamily;
-        if( !::cppu::extractInterface( xSet, rValue ) )
+        if( !::cppu::extractInterface( xFamily, rValue ) )
             throw uno::RuntimeException();
 
         OUString aStyleName( OUString::createFromAscii(sUNO_PseudoSheet_Background) );
