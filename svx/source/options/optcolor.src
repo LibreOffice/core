@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 15:16:44 $
+ *  last change: $Author: kz $ $Date: 2002-05-02 23:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Farbschema" ;
         Text [ ENGLISH ] = "Color scheme" ;
+        Text[ english_us ] = "Color scheme";
+        Text[ portuguese ] = "Color scheme";
+        Text[ russian ] = "Color scheme";
+        Text[ greek ] = "Color scheme";
+        Text[ dutch ] = "Color scheme";
+        Text[ french ] = "Color scheme";
+        Text[ spanish ] = "Color scheme";
+        Text[ finnish ] = "Color scheme";
+        Text[ italian ] = "Color scheme";
+        Text[ danish ] = "Color scheme";
+        Text[ swedish ] = "Color scheme";
+        Text[ polish ] = "Color scheme";
+        Text[ portuguese_brazilian ] = "Color scheme";
+        Text[ japanese ] = "Color scheme";
+        Text[ korean ] = "Color scheme";
+        Text[ chinese_simplified ] = "Color scheme";
+        Text[ chinese_traditional ] = "Color scheme";
+        Text[ turkish ] = "Color scheme";
+        Text[ arabic ] = "Color scheme";
+        Text[ catalan ] = "Color scheme";
+        Text[ thai ] = "Color scheme";
     };
     FixedText FT_COLORSCHEME
     {
@@ -85,6 +106,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text = "Schema" ;
         Text [ ENGLISH ] = "Scheme" ;
+        Text[ english_us ] = "Scheme";
+        Text[ portuguese ] = "Scheme";
+        Text[ russian ] = "Scheme";
+        Text[ greek ] = "Scheme";
+        Text[ dutch ] = "Scheme";
+        Text[ french ] = "Scheme";
+        Text[ spanish ] = "Scheme";
+        Text[ finnish ] = "Scheme";
+        Text[ italian ] = "Scheme";
+        Text[ danish ] = "Scheme";
+        Text[ swedish ] = "Scheme";
+        Text[ polish ] = "Scheme";
+        Text[ portuguese_brazilian ] = "Scheme";
+        Text[ japanese ] = "Scheme";
+        Text[ korean ] = "Scheme";
+        Text[ chinese_simplified ] = "Scheme";
+        Text[ chinese_traditional ] = "Scheme";
+        Text[ turkish ] = "Scheme";
+        Text[ arabic ] = "Scheme";
+        Text[ catalan ] = "Scheme";
+        Text[ thai ] = "Scheme";
     };
     ListBox LB_COLORSCHEME
     {
@@ -100,6 +142,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Speichern..." ;
         Text [ ENGLISH ] = "Save..." ;
+        Text[ english_us ] = "Save...";
+        Text[ portuguese ] = "Save...";
+        Text[ russian ] = "Save...";
+        Text[ greek ] = "Save...";
+        Text[ dutch ] = "Save...";
+        Text[ french ] = "Save...";
+        Text[ spanish ] = "Save...";
+        Text[ finnish ] = "Save...";
+        Text[ italian ] = "Save...";
+        Text[ danish ] = "Save...";
+        Text[ swedish ] = "Save...";
+        Text[ polish ] = "Save...";
+        Text[ portuguese_brazilian ] = "Save...";
+        Text[ japanese ] = "Save...";
+        Text[ korean ] = "Save...";
+        Text[ chinese_simplified ] = "Save...";
+        Text[ chinese_traditional ] = "Save...";
+        Text[ turkish ] = "Save...";
+        Text[ arabic ] = "Save...";
+        Text[ catalan ] = "Save...";
+        Text[ thai ] = "Save...";
     };
     PushButton PB_DELETESCHEME
     {
@@ -107,6 +170,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Löschen" ;
         Text [ ENGLISH ] = "Delete" ;
+        Text[ english_us ] = "Delete";
+        Text[ portuguese ] = "Delete";
+        Text[ russian ] = "Delete";
+        Text[ greek ] = "Delete";
+        Text[ dutch ] = "Delete";
+        Text[ french ] = "Delete";
+        Text[ spanish ] = "Delete";
+        Text[ finnish ] = "Delete";
+        Text[ italian ] = "Delete";
+        Text[ danish ] = "Delete";
+        Text[ swedish ] = "Delete";
+        Text[ polish ] = "Delete";
+        Text[ portuguese_brazilian ] = "Delete";
+        Text[ japanese ] = "Delete";
+        Text[ korean ] = "Delete";
+        Text[ chinese_simplified ] = "Delete";
+        Text[ chinese_traditional ] = "Delete";
+        Text[ turkish ] = "Delete";
+        Text[ arabic ] = "Delete";
+        Text[ catalan ] = "Delete";
+        Text[ thai ] = "Delete";
     };
     FixedLine FL_CUSTOMCOLORS
     {
@@ -115,6 +199,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
         Text = "Schema" ;
         Text [ ENGLISH ] = "Scheme" ;
+        Text[ english_us ] = "Scheme";
+        Text[ portuguese ] = "Scheme";
+        Text[ russian ] = "Scheme";
+        Text[ greek ] = "Scheme";
+        Text[ dutch ] = "Scheme";
+        Text[ french ] = "Scheme";
+        Text[ spanish ] = "Scheme";
+        Text[ finnish ] = "Scheme";
+        Text[ italian ] = "Scheme";
+        Text[ danish ] = "Scheme";
+        Text[ swedish ] = "Scheme";
+        Text[ polish ] = "Scheme";
+        Text[ portuguese_brazilian ] = "Scheme";
+        Text[ japanese ] = "Scheme";
+        Text[ korean ] = "Scheme";
+        Text[ chinese_simplified ] = "Scheme";
+        Text[ chinese_traditional ] = "Scheme";
+        Text[ turkish ] = "Scheme";
+        Text[ arabic ] = "Scheme";
+        Text[ catalan ] = "Scheme";
+        Text[ thai ] = "Scheme";
     };
     Control CT_COLORCONFIG
     {
@@ -133,21 +238,105 @@ TabPage RID_SVXPAGE_COLORCONFIG
         {
             Text = "Ein" ;
             Text [ ENGLISH ] = "On" ;
+            Text[ english_us ] = "On";
+            Text[ portuguese ] = "On";
+            Text[ russian ] = "On";
+            Text[ greek ] = "On";
+            Text[ dutch ] = "On";
+            Text[ french ] = "On";
+            Text[ spanish ] = "On";
+            Text[ finnish ] = "On";
+            Text[ italian ] = "On";
+            Text[ danish ] = "On";
+            Text[ swedish ] = "On";
+            Text[ polish ] = "On";
+            Text[ portuguese_brazilian ] = "On";
+            Text[ japanese ] = "On";
+            Text[ korean ] = "On";
+            Text[ chinese_simplified ] = "On";
+            Text[ chinese_traditional ] = "On";
+            Text[ turkish ] = "On";
+            Text[ arabic ] = "On";
+            Text[ catalan ] = "On";
+            Text[ thai ] = "On";
         };
         String ST_UIELEM
         {
             Text = "??Elemente" ;
             Text [ ENGLISH ] = "User interface elements" ;
+            Text[ english_us ] = "User interface elements";
+            Text[ portuguese ] = "User interface elements";
+            Text[ russian ] = "User interface elements";
+            Text[ greek ] = "User interface elements";
+            Text[ dutch ] = "User interface elements";
+            Text[ french ] = "User interface elements";
+            Text[ spanish ] = "User interface elements";
+            Text[ finnish ] = "User interface elements";
+            Text[ italian ] = "User interface elements";
+            Text[ danish ] = "User interface elements";
+            Text[ swedish ] = "User interface elements";
+            Text[ polish ] = "User interface elements";
+            Text[ portuguese_brazilian ] = "User interface elements";
+            Text[ japanese ] = "User interface elements";
+            Text[ korean ] = "User interface elements";
+            Text[ chinese_simplified ] = "User interface elements";
+            Text[ chinese_traditional ] = "User interface elements";
+            Text[ turkish ] = "User interface elements";
+            Text[ arabic ] = "User interface elements";
+            Text[ catalan ] = "User interface elements";
+            Text[ thai ] = "User interface elements";
         };
         String ST_COLSET
         {
             Text = "Farbeinstellung" ;
             Text [ ENGLISH ] = "Color setting" ;
+            Text[ english_us ] = "Color setting";
+            Text[ portuguese ] = "Color setting";
+            Text[ russian ] = "Color setting";
+            Text[ greek ] = "Color setting";
+            Text[ dutch ] = "Color setting";
+            Text[ french ] = "Color setting";
+            Text[ spanish ] = "Color setting";
+            Text[ finnish ] = "Color setting";
+            Text[ italian ] = "Color setting";
+            Text[ danish ] = "Color setting";
+            Text[ swedish ] = "Color setting";
+            Text[ polish ] = "Color setting";
+            Text[ portuguese_brazilian ] = "Color setting";
+            Text[ japanese ] = "Color setting";
+            Text[ korean ] = "Color setting";
+            Text[ chinese_simplified ] = "Color setting";
+            Text[ chinese_traditional ] = "Color setting";
+            Text[ turkish ] = "Color setting";
+            Text[ arabic ] = "Color setting";
+            Text[ catalan ] = "Color setting";
+            Text[ thai ] = "Color setting";
         };
         String ST_PREVIEW
         {
             Text = "Vorschau" ;
             Text [ ENGLISH ] = "Preview" ;
+            Text[ english_us ] = "Preview";
+            Text[ portuguese ] = "Preview";
+            Text[ russian ] = "Preview";
+            Text[ greek ] = "Preview";
+            Text[ dutch ] = "Preview";
+            Text[ french ] = "Preview";
+            Text[ spanish ] = "Preview";
+            Text[ finnish ] = "Preview";
+            Text[ italian ] = "Preview";
+            Text[ danish ] = "Preview";
+            Text[ swedish ] = "Preview";
+            Text[ polish ] = "Preview";
+            Text[ portuguese_brazilian ] = "Preview";
+            Text[ japanese ] = "Preview";
+            Text[ korean ] = "Preview";
+            Text[ chinese_simplified ] = "Preview";
+            Text[ chinese_traditional ] = "Preview";
+            Text[ turkish ] = "Preview";
+            Text[ arabic ] = "Preview";
+            Text[ catalan ] = "Preview";
+            Text[ thai ] = "Preview";
         };
         Window WN_SCROLL
         {
@@ -308,20 +497,100 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     DefButton = WB_DEF_NO ;
     Message = "Soll das Farbschema wirklich gelöscht werden?" ;
     Message [ english_us ] = "Do you really want to delete the color scheme?" ;
+    Message[ portuguese ] = "Do you really want to delete the color scheme?";
+    Message[ russian ] = "Do you really want to delete the color scheme?";
+    Message[ greek ] = "Do you really want to delete the color scheme?";
+    Message[ dutch ] = "Do you really want to delete the color scheme?";
+    Message[ french ] = "Do you really want to delete the color scheme?";
+    Message[ spanish ] = "Do you really want to delete the color scheme?";
+    Message[ finnish ] = "Do you really want to delete the color scheme?";
+    Message[ italian ] = "Do you really want to delete the color scheme?";
+    Message[ danish ] = "Do you really want to delete the color scheme?";
+    Message[ swedish ] = "Do you really want to delete the color scheme?";
+    Message[ polish ] = "Do you really want to delete the color scheme?";
+    Message[ portuguese_brazilian ] = "Do you really want to delete the color scheme?";
+    Message[ japanese ] = "Do you really want to delete the color scheme?";
+    Message[ korean ] = "Do you really want to delete the color scheme?";
+    Message[ chinese_simplified ] = "Do you really want to delete the color scheme?";
+    Message[ chinese_traditional ] = "Do you really want to delete the color scheme?";
+    Message[ turkish ] = "Do you really want to delete the color scheme?";
+    Message[ arabic ] = "Do you really want to delete the color scheme?";
+    Message[ catalan ] = "Do you really want to delete the color scheme?";
+    Message[ thai ] = "Do you really want to delete the color scheme?";
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
     Text = "Löschen des Schemas bestätigen" ;
-    Text [ english_us ] = "Confirm Scheme Deletion" ;
+    Text [ english_us ] = "Color Scheme Deletion" ;
+    Text[ portuguese ] = "Color Scheme Deletion";
+    Text[ russian ] = "Color Scheme Deletion";
+    Text[ greek ] = "Color Scheme Deletion";
+    Text[ dutch ] = "Color Scheme Deletion";
+    Text[ french ] = "Color Scheme Deletion";
+    Text[ spanish ] = "Color Scheme Deletion";
+    Text[ finnish ] = "Color Scheme Deletion";
+    Text[ italian ] = "Color Scheme Deletion";
+    Text[ danish ] = "Color Scheme Deletion";
+    Text[ swedish ] = "Color Scheme Deletion";
+    Text[ polish ] = "Color Scheme Deletion";
+    Text[ portuguese_brazilian ] = "Color Scheme Deletion";
+    Text[ japanese ] = "Color Scheme Deletion";
+    Text[ korean ] = "Color Scheme Deletion";
+    Text[ chinese_simplified ] = "Color Scheme Deletion";
+    Text[ chinese_traditional ] = "Color Scheme Deletion";
+    Text[ turkish ] = "Color Scheme Deletion";
+    Text[ arabic ] = "Color Scheme Deletion";
+    Text[ catalan ] = "Color Scheme Deletion";
+    Text[ thai ] = "Color Scheme Deletion";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
 {
     Text = "Schema speichern" ;
     Text [ english_us ] = "Save scheme" ;
+    Text[ portuguese ] = "Save scheme";
+    Text[ russian ] = "Save scheme";
+    Text[ greek ] = "Save scheme";
+    Text[ dutch ] = "Save scheme";
+    Text[ french ] = "Save scheme";
+    Text[ spanish ] = "Save scheme";
+    Text[ finnish ] = "Save scheme";
+    Text[ italian ] = "Save scheme";
+    Text[ danish ] = "Save scheme";
+    Text[ swedish ] = "Save scheme";
+    Text[ polish ] = "Save scheme";
+    Text[ portuguese_brazilian ] = "Save scheme";
+    Text[ japanese ] = "Save scheme";
+    Text[ korean ] = "Save scheme";
+    Text[ chinese_simplified ] = "Save scheme";
+    Text[ chinese_traditional ] = "Save scheme";
+    Text[ turkish ] = "Save scheme";
+    Text[ arabic ] = "Save scheme";
+    Text[ catalan ] = "Save scheme";
+    Text[ thai ] = "Save scheme";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE2
 {
     Text = "Name des Farbschemas" ;
     Text [ english_us ] = "Name of color scheme" ;
+    Text[ portuguese ] = "Name of color scheme";
+    Text[ russian ] = "Name of color scheme";
+    Text[ greek ] = "Name of color scheme";
+    Text[ dutch ] = "Name of color scheme";
+    Text[ french ] = "Name of color scheme";
+    Text[ spanish ] = "Name of color scheme";
+    Text[ finnish ] = "Name of color scheme";
+    Text[ italian ] = "Name of color scheme";
+    Text[ danish ] = "Name of color scheme";
+    Text[ swedish ] = "Name of color scheme";
+    Text[ polish ] = "Name of color scheme";
+    Text[ portuguese_brazilian ] = "Name of color scheme";
+    Text[ japanese ] = "Name of color scheme";
+    Text[ korean ] = "Name of color scheme";
+    Text[ chinese_simplified ] = "Name of color scheme";
+    Text[ chinese_traditional ] = "Name of color scheme";
+    Text[ turkish ] = "Name of color scheme";
+    Text[ arabic ] = "Name of color scheme";
+    Text[ catalan ] = "Name of color scheme";
+    Text[ thai ] = "Name of color scheme";
 };
 
