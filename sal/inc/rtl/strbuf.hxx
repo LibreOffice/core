@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strbuf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:14 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 11:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,8 @@
 
 #ifdef __cplusplus
 
-#ifdef _USE_NAMESPACE
 namespace rtl
 {
-#endif
 
 /**
  * A string buffer implements a mutable sequence of characters.
@@ -672,9 +670,7 @@ private:
     sal_Int32       nCapacity;
 };
 
-#ifdef _USE_NAMESPACE
 }
-#endif
 
 #endif  /* __cplusplus */
 #endif  /* _RTL_STRBUF_HXX_ */
