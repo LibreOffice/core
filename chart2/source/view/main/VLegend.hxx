@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:43 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,6 @@ private:
                     ::drafts::com::sun::star::chart2::XLegend >     m_xLegend;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
-
-    ::com::sun::star::awt::Rectangle                                m_aBoundRect;
 };
 
 //.............................................................................

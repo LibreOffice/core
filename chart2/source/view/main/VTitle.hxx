@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-14 15:25:55 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 15:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ public:
     void SAL_CALL init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xTargetPage
              , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory);
-
-    //void    setSceneMatrix( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
     void    createShapes( const ::com::sun::star::awt::Point& rPos
                           , const ::com::sun::star::awt::Size& rReferenceSize );
