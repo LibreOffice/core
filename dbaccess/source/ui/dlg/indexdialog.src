@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:54:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ english_us ] = "~Unique";
         Text[ portuguese ] = "Ϊ~nico";
         Text[ russian ] = "Σνθκΰλόνϋι";
-        Text[ greek ] = "Μοναδικό";
+        Text[ greek ] = "~Μοναδικό";
         Text[ dutch ] = "~Duidelijk";
         Text[ french ] = "~Unique";
         Text[ spanish ] = "Ϊ~nico";
@@ -716,7 +716,7 @@ String STR_CONFIRM_DROP_INDEX
 String STR_LOGICAL_INDEX_NAME
 {
     Text = "index";
-    Text[ language_user1 ] = "This is a logical name only. It should be the word for 'Index' (in a database sense), but written in lower case (if appliable to your language :).";
+    Text[ language_user1 ] = "; This is a logical name only. It should be the word for 'Index' (in a database sense), but written in lower case (if appliable to your language :).";
     Text[ english_us ] = "index";
     Text[ portuguese ] = "νndice";
     Text[ russian ] = "θνδεκρ";
@@ -885,7 +885,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text [ english_us ] = "There is already another index named \"$name$\".";
     Text[ portuguese ] = "Jα existe um νndice com o nome \"$name$\".";
     Text[ russian ] = "Θνδεκρ ρ θμενεμ \"$name$\" σζε ρσωερςβσες.";
-    Text[ greek ] = "There's already another index named \"$name$\".";
+    Text[ greek ] = "Υπάρχει ήδη ένα άλλο ευρετήριο με το όνομα \"$name$\".";
     Text[ dutch ] = "Er bestaat reeds een andere index met de naam \"$name$\".";
     Text[ french ] = "Un autre index nommι \"$name$\" existe dιjΰ.";
     Text[ spanish ] = "Ya existe otro νndice con el nombre \"$name$\".";
@@ -944,6 +944,13 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35.8.1  2003/07/03 14:44:14  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.35  2003/06/13 12:54:04  hr
+ *  INTEGRATION: CWS rcmerge (1.34.24); FILE MERGED
+ *  2003/06/12 10:57:54 gh 1.34.24.1: final Merge RC
+ *
  *  Revision 1.34.24.1  2003/06/12 10:57:54  gh
  *  final Merge RC
  *
@@ -1089,6 +1096,7 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
  *
  *  Revision 1.0 07.03.01 12:17:10  fs
  ************************************************************************/
+
 
 
 
