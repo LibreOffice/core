@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:30:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2422,14 +2422,29 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         }
         pNewUpper->Calc();
         rThis.Cut();
+        // --> OD 2005-02-23 #b6229852#
+        // optimization: format section, if its size is invalidated and if it's
+        // the new parent of moved backward frame.
+        bool bFormatSect( false );
+        // <--
         if( bUnlock )
         {
-            if( pSect->HasFollow() != bFollow )
-                pSect->InvalidateSize();
             pSect->ColUnlock();
+            if( pSect->HasFollow() != bFollow )
+            {
+                pSect->InvalidateSize();
+                // --> OD 2005-02-23 #b6229852# - optimization
+                if ( pSect == pNewUpper )
+                    bFormatSect = true;
+                // <--
+            }
         }
 
         rThis.Paste( pNewUpper );
+        // --> OD 2005-02-23 #b6229852# - optimization
+        if ( bFormatSect )
+            pSect->Calc();
+        // <--
 
         SwPageFrm *pNewPage = rThis.FindPageFrm();
         if( pNewPage != pOldPage )
