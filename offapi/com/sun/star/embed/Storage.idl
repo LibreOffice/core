@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Storage.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:23:23 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,155 +95,112 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
-/**  The <type>Storage</type> is a service that allows to get access to
-a storage hierarchy. A root storage should be retrieved by <type>ServiceFactory</type>
-service. Substorages are created by <type>XStorage</type> interface of a parent storage.
+//============================================================================
+/** This is a service that allows to get access to a storage hierarchy.
+
+    <p>
+    A root storage should be retrieved by using <type>StorageFactory</type>
+    service. Substorages are created through <type>XStorage</type> interface
+    of a parent storage.
+    </p>
  */
 service Storage
 {
-    //================================================================
+    // -----------------------------------------------------------------------
     /** This is a general interface representing storage functionality.
-    It allows to copy storages, get access to child elements and etc.
+        It allows to copy storages, get access to child elements and to
+        control lifetime.
      */
     interface ::com::sun::star::embed::XStorage;
 
-    //================================================================
-    /** Allow to get list of child elements and to check if an element with a
-    specified name exists in a storage.
-    <p>
-    It is also possible to use this interface to get read access to a child
-    element by <type>XNameAccess</type>::getByName() call. But the recommended way is to
-    use <type>XStorage</type> interface for this purpose.
-    </p>
-     */
-    interface ::com::sun::star::container::XNameAccess;
-
-    //================================================================
-    /** Allows to controll and track lifetime of a storage.
-    <p>
-        A root storage is created by <type>StorageFactory</type> and is controlled by
-    refcounting. In case refcounting is decreased to zero the storage will be disposed
-    automatically. It is still strongly recommended that a root storage is disposed explicitly
-    since in garbage collector based languages the refcounting can be decreased too late
-    and resources locked by the storage will not be freed until then.
-    </p>
-
-    <p>
-        A substorage is created by <type>XStorage</type> interface of storage. Only one
-    instance in a time can be created. It means that in case such a substorage is open
-    it is not possible to open it another time untill existing instance is disposed. The
-    lifetime of substorage is also controlled by refcounting but because of mentioned
-    garbage collection specific it is strongly recommended to dispose substorages explicitly.
-    </p>
-
-    <p>
-        In case a storage is disposed the whole it's subtree will be disposed.
-    All noncommited changes will be lost. Of course in case storage implements autocommit
-    mode the changes will be commited automatically.
-    </p>
-
-    <p>
-        In case a storage is disposed any call to it's methods should result in <type>DisposedException</type>.
-    </p>
-     */
-    interface ::com::sun::star::lang::XComponent;
-
-    //================================================================
-    /** Allows to get access to storage properties.
+    // -----------------------------------------------------------------------
+    /** allows to get access to storage properties.
      */
     interface ::com::sun::star::beans::XPropertySet;
 
-    //================================================================
-    /** Supporting of this interface means that the storage must be used in transacted mode.
-    <p>
-        If a storage is commited all changes made to it will be integrated to it's parent
-    storage. This is recursive process, so the last commited storage should be the root one.
-    For the package based storages commit of a root storage also means flashing to the related medium.
-    If a storage is not commited, no changes for it or it's child elements will be stored.
-    </p>
-    <p>
-        In case storage does not support this interface an autocommit mode is used.
-    That means that all the changes are immediatelly integrated to the parent storage.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to commit or revert changes that were done for the storage.
+
+        <p>
+        If a storage is commited all changes made to it will be integrated to
+        it's parent storage. This is recursive process, so the last commited
+        storage should be the root one. For the package based storages commit
+        of a root storage also means flashing to the related medium. If
+        a storage is not commited, no changes for it or it's child elements
+        will be stored.
+        </p>
      */
-    [optional]
     interface ::com::sun::star::embed::XTransactedObject;
 
-    //================================================================
-    /** Transacted storage can support this interface to allow to track it's transaction state.
+    // -----------------------------------------------------------------------
+    /** allows to track storage's transaction state.
      */
-    [optional]
     interface ::com::sun::star::embed::XTransactionBroadcaster;
 
-    //================================================================
-    /** Allows to set encryption key to a root storage.
+    // -----------------------------------------------------------------------
+    /** allows to set password to a root storage.
 
-    <p>
+        <p>
         This interface can be supported by a storage to allow to set
-    a common storage encryption key. This key is used as default key
-    to decrypt all encrypted streams and encrypt all the streams that
-    must be encrypted on storing.
-        Specifying of the key for a storage allows to use it for the
-    whole subtree. Of course substorage can allow to overwrite the common
-    storage key for own subtree.
-    </p>
+        a common storage password. This password is used as default password
+        to decrypt all encrypted streams and to encrypt streams that are
+        marked to use common storage password on storing.
+        Specifying of the password for a storage allows to use it for the
+        whole subtree. Of course substorage can allow to overwrite the common
+        storage password for own subtree.
+        </p>
      */
     [optional]
     interface ::com::sun::star::embed::XEncryptionProtectedSource;
 
-    //================================================================
-    /** Allows to get and set the media type of the storage.
+    // -----------------------------------------------------------------------
+    /** allows to get and set the media type of the storage.
      */
     [property] string MediaType;
 
-    //================================================================
-    /** Allows to detect if the storage is a root one.
+    // -----------------------------------------------------------------------
+    /** allows to detect whether the storage is a root one.
      */
     [property, readonly] boolean IsRoot;
 
-    //================================================================
-    /** Allows to get the mode the storage is open in.
-    <p>
+    // -----------------------------------------------------------------------
+    /** allows to get the mode the storage is opened in.
+
+        <p>
         Can be a combination of values from <type>ElementModes</type>.
-    </p>
+        </p>
      */
     [property, readonly] long OpenMode;
 
-    //================================================================
-    /** Optional readonly property that can be supported by storage.
-    <p>
-        This property allows to retrieve URL the storage is based on.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to retrieve URL the storage is based on.
      */
     [property, optional, readonly] string URL;
 
-    //================================================================
-    /** Optional readonly property that can be supported by storage.
-    <p>
-        Allows to detect whether storage is open in "repair package" mode or not.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to detect whether storage is open in "repair package" mode or
+        not.
      */
     [property, optional, readonly] boolean RepairPackage;
 
-    //================================================================
-    /** Optional readonly property that can be supported by storage.
-    <p>
-        In case it is set to <TRUE/> the storage itself and/or a tree of substorages
-    contain encrypted streams.
-        Usually in case this property is supported the implementation supports
-    <type>XEncryptionProtectedSource</type> interface.
-    </p>
+    // -----------------------------------------------------------------------
+    /** allows to detect if the storage contains encrypted entries
+
+        <p>
+        In case it is set to <TRUE/> the storage itself and/or a tree of
+        substorages contain encrypted streams. Usually in case this property
+        is supported the implementation supports
+        <type>XEncryptionProtectedSource</type> interface.
+        </p>
      */
     [property, optional, readonly] boolean HasEncryptedEntries;
-
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
