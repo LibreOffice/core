@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:30:47 $
+ *  last change: $Author: tl $ $Date: 2002-10-09 09:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ protected:
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
     USHORT      nActiveCategory;
+    BOOL        bAdjustPosition;
 
     virtual BOOL    Close();
     virtual void    GetFocus();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-30 12:51:30 $
+ *  last change: $Author: tl $ $Date: 2002-10-09 09:50:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
                                  SfxChildWindow *pChildWindow,
                                  Window *pParent) :
     SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
-    aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1))
+    aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
+    bAdjustPosition(TRUE)
 {
     // allow for cursor travelling between toolbox and sub-categories
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -171,8 +172,13 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    if (STATE_CHANGE_INITSHOW == nStateChange)
+    if (bAdjustPosition && STATE_CHANGE_INITSHOW == nStateChange)
+    {
+        // calculate initial position to be used after creation of the window...
         AdjustPosition( Point() );
+        bAdjustPosition = FALSE;
+    }
+    //... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
