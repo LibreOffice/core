@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 11:24:49 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 09:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,9 @@ DECLARE_CONSTASCII_USTRING(SERVICE_SDBC_DRIVERMANAGER);
 DECLARE_CONSTASCII_USTRING(SERVICE_SDBC_CONNECTIONPOOL);
 DECLARE_CONSTASCII_USTRING(SERVICE_SDB_INTERACTION_HANDLER);
 DECLARE_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP);
+DECLARE_CONSTASCII_USTRING(SERVICE_SDB_ADABASCREATIONDIALOG);
+DECLARE_CONSTASCII_USTRING(SERVICE_UI_FOLDERPICKER);
+DECLARE_CONSTASCII_USTRING(SERVICE_I18N_COLLATOR);
 
 //============================================================
 //= URLs

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 11:24:58 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 09:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_INDEXCOLUMN, "com.sun.star.sdbcx.Inde
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_KEYCOLUMN, "com.sun.star.sdbcx.KeyColumn");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_INTERACTION_HANDLER, "com.sun.star.sdb.InteractionHandler");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP, "com.sun.star.frame.Desktop");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_ADABASCREATIONDIALOG, "com.sun.star.sdb.AdabasCreationDialog");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_UI_FOLDERPICKER, "com.sun.star.ui.FolderPicker");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_I18N_COLLATOR, "com.sun.star.i18n.Collator");
 
 //============================================================
 //= URLs
