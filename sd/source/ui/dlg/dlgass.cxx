@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2002-11-22 12:05:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
@@ -748,11 +752,14 @@ void AssistentDlgImpl::CloseDocShell()
 {
     if(xDocShell.Is())
     {
-        uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
-        if( xModel.is() )
+        //uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
+        uno::Reference< util::XCloseable > xCloseable( xDocShell->GetModel(), uno::UNO_QUERY );
+        //if( xModel.is() )
+        if( xCloseable.is() )
         {
+            xCloseable->close( sal_True );
             xDocShell = NULL;
-            xModel->dispose();
+            //xModel->dispose();
         }
         else
         {
