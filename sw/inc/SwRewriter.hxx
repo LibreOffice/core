@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwRewriter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:58:53 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,7 @@ public:
 
     String Apply(const String & rStr) const;
 
-    friend std::ostream & operator << (std::ostream & o,
-                                       const SwRewriter & rRewriter);
+    String ToString() const;
 };
 
 #endif // _SW_REWRITER_HXX
