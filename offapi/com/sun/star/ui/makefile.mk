@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 09:56:11 $
+#   last change: $Author: obo $ $Date: 2004-11-16 14:24:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ IDLFILES=\
     GlobalAcceleratorConfiguration.idl \
     XAcceleratorConfiguration.idl   \
     XContextMenuInterception.idl    \
-    XContextMenuInterceptor.idl
+    XContextMenuInterceptor.idl     \
+    XUIFunctionListener.idl
 
 # ------------------------------------------------------------------
 
