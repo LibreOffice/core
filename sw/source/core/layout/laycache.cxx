@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:20:17 $
+ *  last change: $Author: ama $ $Date: 2001-11-29 16:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,8 +780,10 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
         nParagraphCnt += nRows;
         if( !pImpl && nParagraphCnt > nMaxParaPerPage + 10 )
         {
-            SwFrm *pTmp = ((SwRowFrm*)((SwTabFrm*)rpFrm)->Lower()->GetNext())
-                          ->Lower();
+            SwFrm *pTmp = ((SwTabFrm*)rpFrm)->Lower();
+            if( pTmp->GetNext() )
+                pTmp = pTmp->GetNext();
+            pTmp = ((SwRowFrm*)pTmp)->Lower();
             USHORT nCnt = 0;
             do
             {
