@@ -842,6 +842,12 @@ Sub PopulateLanguageCombo()
 End Sub
 
 Sub PopulateLocationCombo()
+	dim FuncProvider as Object
+	dim args(0)
+	args(0) = ThisComponent
+	FuncProvider = createUnoService(&quot;drafts.com.sun.star.script.framework.provider.FunctionProvider&quot;)
+	FuncProvider.initialize( args() )
+
 	locCombo =  bindingDialog.getControl( &quot;LocationCombo&quot; )
 	locCombo.removeItems( 0, locCombo.getItemCount() )
 	for n = LBOUND( locations() ) to UBOUND ( locations() )
