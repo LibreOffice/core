@@ -312,6 +312,18 @@
      <value xml:lang="de">Zoom</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Gluepoints</value>
+     <value xml:lang="de">Klebepunkte</value>
+    </prop>
+   </node>
+   <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Path</value>
+     <value xml:lang="de">Pfad</value>
+    </prop>
+   </node>
   </node>
  </node>
 </oor:component-data>
