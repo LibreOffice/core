@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 12:03:26 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 16:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,13 +166,15 @@ public:
         createSymbol2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol );
+                    , sal_Int32 nStandardSymbol
+                    , sal_Int32 nFillColor=0 );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createSymbol3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                     , const ::com::sun::star::drawing::Position3D& rPos
                     , const ::com::sun::star::drawing::Direction3D& rSize
-                    , sal_Int32 nStandardSymbol );
+                    , sal_Int32 nStandardSymbol
+                    , sal_Int32 nFillColor=0 );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createLine2D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
