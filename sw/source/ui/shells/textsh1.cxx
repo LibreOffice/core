@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:11:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,9 +1445,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsRubyEnabled())
                 {
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
                     rSet.DisableItem(nWhich);
-                    break;
                 }
+                else
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
+                break;
             }
             //no break!
             case SID_HYPERLINK_DIALOG:
@@ -1478,7 +1481,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 SvtCJKOptions aCJKOptions;
                 if(!aCJKOptions.IsChangeCaseMapEnabled())
+                {
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
                     rSet.DisableItem(nWhich);
+                }
+                else
+                    GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
             }
             break;
             case FN_READONLY_SELECTION_MODE :
