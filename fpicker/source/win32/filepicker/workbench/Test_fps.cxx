@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test_fps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-09-05 13:32:17 $
+ *  last change: $Author: tra $ $Date: 2002-11-26 10:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ using namespace std                     ;
 void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 
-#define RDB_SYSPATH "D:\\Projects\\src638\\fpicker\\wntmsci7\\bin\\applicat.rdb"
+#define RDB_SYSPATH "D:\\Projects\\SRX644\\fpicker\\wntmsci9\\bin\\applicat.rdb"
 
 //_________________________________________________________________________________________________________________________
 //  global variables
@@ -414,7 +414,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
     //-------------------------------------------------
 
     Sequence< Any > arguments(1);
-        //arguments[0] = makeAny( FILEOPEN_SIMPLE );
+        arguments[0] = makeAny( FILEOPEN_SIMPLE );
         //arguments[0] = makeAny( FILESAVE_SIMPLE );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
@@ -423,7 +423,7 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
         //arguments[0] = makeAny( FILEOPEN_PLAY );
         //arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
-        arguments[0] = makeAny( FILESAVE_AUTOEXTENSION );
+        //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION );
 
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
@@ -455,9 +455,10 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
             xFilterMgr->appendFilter( L"SDW", L"*.sdw;*.sdc;*.sdi" );
             xFilterMgr->appendFilter( L"SXW", L"*.sxw;*.sxi" );
         }
-
+*/
         Reference< XFilePickerControlAccess > xFPControlAccess( xFilePicker, UNO_QUERY );
 
+ /*
         Any aAny;
         sal_Bool bChkState = sal_False;
 
@@ -469,9 +470,11 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
         xFPControlAccess->setValue( LISTBOX_VERSION, ADD_ITEM, aAny );
-
-        xFPControlAccess->setLabel( LISTBOX_VERSION, OUString::createFromAscii( "" ) );
 */
+
+        xFPControlAccess->setLabel( 6, OUString::createFromAscii( "Welt" ) ); // filter label
+        xFPControlAccess->setLabel( 7, OUString::createFromAscii( "Hallo" ) );  // file name label
+
         xFilePicker->execute( );
 /*
         sal_Bool bCheckState;
