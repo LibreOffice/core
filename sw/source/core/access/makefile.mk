@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+#   last change: $Author: mib $ $Date: 2002-03-06 08:14:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 SLOFILES =	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
+        $(SLO)$/accfootnote.obj \
         $(SLO)$/accframe.obj \
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
@@ -98,6 +99,7 @@ SLOFILES =	\
 EXCEPTIONSFILES=	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
+        $(SLO)$/accfootnote.obj \
         $(SLO)$/accframe.obj \
         $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \

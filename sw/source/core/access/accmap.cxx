@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _ACCHEADERFOOTER_HXX
 #include <accheaderfooter.hxx>
 #endif
+#ifndef _ACCFOOTNOTE_HXX
+#include <accfootnote.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -104,6 +107,9 @@
 #endif
 #ifndef _HFFRM_HXX
 #include <hffrm.hxx>
+#endif
+#ifndef _FTNFRM_HXX
+#include <ftnfrm.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -128,7 +134,9 @@ class SwAccessibleMap_Impl: public _SwAccessibleMap_Impl
 SwAccessibleMap::SwAccessibleMap( ViewShell *pSh ) :
     pMap( 0  ),
     pVSh( pSh ),
-    nPara( 1 )
+    nPara( 1 ),
+    nFootnote( 1 ),
+    nEndnote( 1 )
 {
 }
 
@@ -144,7 +152,8 @@ SwAccessibleMap::~SwAccessibleMap()
             xAcc = (*aIter).second;
         if( !xAcc.is() )
             xAcc = new SwAccessibleDocument( this );
-        SwAccessibleDocument *pAcc = (SwAccessibleDocument *)xAcc.get();
+        SwAccessibleDocument *pAcc =
+            static_cast< SwAccessibleDocument * >( xAcc.get() );
         pAcc->Dispose( sal_True );
     }
 
@@ -165,7 +174,8 @@ Reference< XAccessible > SwAccessibleMap::GetDocumentView()
         xAcc = (*aIter).second;
     if( xAcc.is() )
     {
-        SwAccessibleDocument *pAcc = (SwAccessibleDocument *)xAcc.get();
+        SwAccessibleDocument *pAcc =
+            static_cast< SwAccessibleDocument * >( xAcc.get() );
         pAcc->SetVisArea( GetShell()->VisArea().SVRect() );
     }
     else
@@ -206,15 +216,26 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
             {
             case FRM_TXT:
                 xAcc = new SwAccessibleParagraph( this, nPara++,
-                                                  (const SwTxtFrm *)pFrm );
+                                static_cast< const SwTxtFrm * >( pFrm ) );
                 break;
             case FRM_HEADER:
                 xAcc = new SwAccessibleHeaderFooter( this,
-                                                  (const SwHeaderFrm *)pFrm );
+                                static_cast< const SwHeaderFrm *>( pFrm ) );
                 break;
             case FRM_FOOTER:
                 xAcc = new SwAccessibleHeaderFooter( this,
-                                                  (const SwFooterFrm *)pFrm );
+                                static_cast< const SwFooterFrm *>( pFrm ) );
+                break;
+            case FRM_FTN:
+                {
+                    const SwFtnFrm *pFtnFrm =
+                        static_cast < const SwFtnFrm * >( pFrm );
+                    sal_Bool bIsEndnote =
+                        SwAccessibleFootnote::IsEndnote( pFtnFrm );
+                    xAcc = new SwAccessibleFootnote( this, bIsEndnote,
+                                (bIsEndnote ? nEndnote++ : nFootnote++),
+                                  pFtnFrm );
+                }
                 break;
             }
 
@@ -244,7 +265,7 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
     Reference < XAccessible > xAcc( GetContext( pFrm, bCreate ) );
 
     ::vos::ORef < SwAccessibleContext > xAccImpl(
-         (SwAccessibleContext *)xAcc.get() );
+         static_cast< SwAccessibleContext * >( xAcc.get() ) );
 
     return xAccImpl;
 }
@@ -281,7 +302,7 @@ void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
             {
                 Reference < XAccessible > xAcc = (*aIter).second;
                 if( xAcc.is() )
-                    ((SwAccessibleContext *)xAcc.get())->Dispose();
+                    static_cast< SwAccessibleContext *>( xAcc.get())->Dispose();
             }
         }
     }
@@ -301,7 +322,7 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                 // If there is an accesible object already it is
                 // notified directly.
                 Reference < XAccessible > xAcc = (*aIter).second;
-                ((SwAccessibleContext *)xAcc.get())->PosChanged();
+                static_cast< SwAccessibleContext * >(xAcc.get())->PosChanged();
             }
             else
             {
@@ -317,7 +338,7 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                     if( aIter != pMap->end() )
                     {
                         Reference < XAccessible > xAcc = (*aIter).second;
-                        ((SwAccessibleContext *)xAcc.get())
+                        static_cast<SwAccessibleContext *>(xAcc.get())
                             ->ChildPosChanged( pFrm, rOldFrm );
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 08:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@
 #ifndef _FRAME_HXX
 #include <frame.hxx>
 #endif
-
-#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_TXT|FRM_ROOT)
 
 class SwAccessibleFrame
 {

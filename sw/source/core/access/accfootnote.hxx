@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: access.src,v $
+ *  $RCSfile: accfootnote.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 08:15:41 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,82 +58,68 @@
  *
  *
  ************************************************************************/
+#ifndef _ACCFOOTNOTE_HXX
+#define _ACCFOOTNOTE_HXX
 
-#include "access.hrc"
+#ifndef _ACCCONTEXT_HXX
+#include "acccontext.hxx"
+#endif
 
-String STR_ACCESS_DOC_NAME
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+
+class SwFtnContFrm;
+
+class SwAccessibleFootnote : public SwAccessibleContext
 {
-    Text = "Dokument-Ansicht" ;
-    Text [ English ] = "Document View";
+
+protected:
+
+    // Set states for getAccessibleStateSet.
+    // This drived class additinaly sets MULTISELECTABLE(1)
+    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+public:
+
+    SwAccessibleFootnote( SwAccessibleMap *pMap,
+                          sal_Bool bIsEndnote,
+                          sal_Int32 nFootEndNote,
+                          const SwFtnFrm *pFtnFrm );
+    virtual ~SwAccessibleFootnote();
+
+
+    //=====  XAccessibleContext  ==============================================
+
+    /// Return this object's description.
+    virtual ::rtl::OUString SAL_CALL
+        getAccessibleDescription (void)
+        throw (com::sun::star::uno::RuntimeException);
+
+    //=====  XServiceInfo  ====================================================
+
+    /** Returns an identifier for the implementation of this object.
+    */
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Return whether the specified service is supported by this class.
+    */
+    virtual sal_Bool SAL_CALL
+        supportsService (const ::rtl::OUString& sServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a list of all supported services.  In this case that is just
+        the AccessibleContext service.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    static sal_Bool IsEndnote( const SwFtnFrm *pFrm );
 };
-String STR_ACCESS_DOC_DESC
-{
-    Text = "Dokument-Ansicht" ;
-    Text [ English ] = "Document View";
-};
-String STR_ACCESS_PARAGRAPH_NAME
-{
-    Text = "Absatz $(ARG1)" ;
-    Text [ english ] = "Paragraph $(ARG1)" ;
-};
-String STR_ACCESS_PARAGRAPH_DESC
-{
-    Text = "Absatz: $(ARG1) " ;
-    Text [ english ] = "Paragraph: $(ARG1)" ;
-};
-String STR_ACCESS_HEADING_NAME
-{
-    Text = "‹berschrift $(ARG1)" ;
-    Text [ english ] = "Heading $(ARG1)" ;
-};
-String STR_ACCESS_HEADING_DESC
-{
-    Text = "‹berschrift: $(ARG1)" ;
-    Text [ english ] = "Heading: $(ARG1)" ;
-};
-String STR_ACCESS_HEADING_WITH_NUM_DESC
-{
-    Text = "‹berschrift Nummer $(ARG2): $(ARG1)" ;
-    Text [ english ] = "Heading number $(ARG2): $(ARG1)" ;
-};
-String STR_ACCESS_HEADER_NAME
-{
-    Text = "Kopfzeile $(ARG1)" ;
-    Text [ english ] = "Header $(ARG1)" ;
-};
-String STR_ACCESS_HEADER_DESC
-{
-    Text = "Kopfzeile Seite $(ARG1)" ;
-    Text [ english ] = "Header page $(ARG1)" ;
-};
-String STR_ACCESS_FOOTER_NAME
-{
-    Text = "Fuﬂzeile $(ARG1)" ;
-    Text [ english ] = "Footer $(ARG1)" ;
-};
-String STR_ACCESS_FOOTER_DESC
-{
-    Text = "Fuﬂzeile Seite $(ARG1)" ;
-    Text [ english ] = "Footer page $(ARG1)" ;
-};
-String STR_ACCESS_FOOTNOTE_NAME
-{
-    Text = "Fuﬂnote $(ARG1)" ;
-    Text [ english ] = "Footnote $(ARG1)" ;
-};
-String STR_ACCESS_FOOTNOTE_DESC
-{
-    Text = "Fuﬂnote $(ARG1)" ;
-    Text [ english ] = "Footnote $(ARG1)" ;
-};
-String STR_ACCESS_ENDNOTE_NAME
-{
-    Text = "Endnote $(ARG1)" ;
-    Text [ english ] = "Endnote $(ARG1)" ;
-};
-String STR_ACCESS_ENDNOTE_DESC
-{
-    Text = "Endnote $(ARG1)" ;
-    Text [ english ] = "Endnote $(ARG1)" ;
-};
+
+
+#endif
 

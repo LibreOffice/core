@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:39:38 $
+ *  last change: $Author: mib $ $Date: 2002-03-06 08:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,9 +158,6 @@
 #endif
 #ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
-#endif
-#ifndef _ACCMAP_HXX
-#include <accmap.hxx>
 #endif
 
 #include "mdiexp.hxx"
