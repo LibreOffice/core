@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:31 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,16 +1007,9 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM,
 // Seiten-Attribute zu stark verflochten ist.
 
 void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
-{/*static BYTE __READONLY_DATA nHdFtType[] =
-        { WW8_HEADER_EVEN,  WW8_HEADER_ODD,
-            WW8_FOOTER_EVEN,  WW8_FOOTER_ODD,
-            WW8_HEADER_FIRST, WW8_FOOTER_FIRST };*/
-
+{
     if( bTxbxFlySection || bDontCreateSep )
-    {
         return;
-    }
-
 
     BYTE nLastSectionCorrIhdt      = nCorrIhdt;
     BOOL bLastSectionHadATitlePage = bSectionHasATitlePage;
@@ -1076,12 +1069,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             aInfo.SetPos( LINENUMBER_POS_LEFT );
             SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
             aInfo.SetNumType( aNumType );
-
-
-            // to be ingnored features ( NOT existing in MS Word 6,7,8,9 )
-    //      aInfo.SetDividerCountBy( nDividerCountBy );
-    //      aInfo.SetDivider( sDivider );
-    //      aInfo.SetCharFmt( pChrFmt );
 
             rDoc.SetLineNumberInfo( aInfo );
             bNoLnNumYet = FALSE;
@@ -1479,19 +1466,12 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         GetPageULData( pSep, nLIdx, FALSE, aULData );
 
         // dann Header / Footer lesen, falls noch noetig
-        //
         if( nIPara )
-        {
             SetHdFt( pPageDesc, 0, pSep, nIPara );
-        }
-        // und uebrige Einstellungen updaten
-        //
 
-        SetPage1( pPageDesc, // Orientierung, Hoehe, Breite, Vertikale Formatierung
-                  rFmt0,
-                  pSep,
-                  nLIdx,
-                  TRUE );
+        // und uebrige Einstellungen updaten
+        // Orientierung, Hoehe, Breite, Vertikale Formatierung
+        SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
 
         SetPageULSpaceItems( rFmt0, aULData );
         SetPageBorder( 0, pPageDesc, pSep, nLIdx );
@@ -1508,13 +1488,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
 
         // erst folgende PageDesc-Werte einstellen:
         //
-        //    Orientierung, Hoehe, Breite
-        //
-        SetPage1( pPageDesc, // Orientierung, Hoehe, Breite, Vertikale Formatierung
-                    rFmt0,
-                    pSep,
-                    nLIdx,
-                    TRUE );
+        // Orientierung, Hoehe, Breite, Vertikale Formatierung
+        SetPage1( pPageDesc, rFmt0, pSep, nLIdx, TRUE );
 
         // dann den PageDesc1 anlegen fuer Folge-Seiten
         //
@@ -1529,35 +1504,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
             //
             if( nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST) )
             {
-
-/*
-                // suchen
-                const SwPageDesc* pOld1stPageDesc = 0;
-
-                USHORT nSize = rDoc.GetPageDescCnt();
-                if( nSize )
-                {
-                    for( USHORT n = 0; n < nSize; ++n )
-                    {
-                        const SwPageDesc& rPageDesc = rDoc.GetPageDesc( n );
-                        if(    (&rPageDesc            != pOldPageDesc)
-                            && (rPageDesc.GetFollow() == pOldPageDesc) )
-                        {
-                            pOld1stPageDesc = &rPageDesc;
-                            break;
-                        }
-                    }
-                }
-                // uebernehmen
-                if( pOld1stPageDesc )
-                {
-                    CopyPageDescHdFt( pOld1stPageDesc, pPageDesc,
-                        nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST) );
-                }
-                else
-                {
-*/
-
                 if( pOldPageDesc == pOldPageDesc->GetFollow() )
                 {
                     // hoppla, die vorige Section hatte keine 1st Page?
@@ -1579,8 +1525,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                         nActSectionNo =   aOldSectionNo[ 4 ]
                                         ? aOldSectionNo[ 4 ]    // Hd 1st
                                         : aOldSectionNo[ 5 ];   // Ft 1st
-                    SetHdFt( pPageDesc, pPageDesc1, pSep,
-                             nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST) );
+                    SetHdFt(pPageDesc, pPageDesc1, pSep,
+                             nSameHdFt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST));
                     nActSectionNo = nSaveSectionNo;
                 }
                 else
@@ -1610,26 +1556,24 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
         SwFrmFmt &rFmt1 = pPageDesc1->GetMaster();
 
         WW8ULSpaceData aULData0, aULData1;
-        GetPageULData( pSep, nLIdx, TRUE,  aULData0 ); // Vertikale Formatierung
-        GetPageULData( pSep, nLIdx, FALSE, aULData1 ); // einzeln, da KF evtl. verschieden
+        // Vertikale Formatierung
+        GetPageULData( pSep, nLIdx, TRUE,  aULData0 );
+        // einzeln, da KF evtl. verschieden
+        GetPageULData( pSep, nLIdx, FALSE, aULData1 );
 
         // dann Header / Footer lesen, falls noch noetig
-        //
         if( nIPara )
-        {
             SetHdFt( pPageDesc, pPageDesc1, pSep, nIPara );
-        }
 
         // und uebrige Einstellungen updaten
-        //
-        SetPageULSpaceItems( rFmt0, aULData0 ); // Vertikale Formatierung
-        SetPageULSpaceItems( rFmt1, aULData1 ); // einzeln, da KF evtl. verschieden
+        // Vertikale Formatierung
+        SetPageULSpaceItems( rFmt0, aULData0 );
+        // einzeln, da KF evtl. verschieden
+        SetPageULSpaceItems( rFmt1, aULData1 );
         SetPageBorder( pPageDesc, pPageDesc1, pSep, nLIdx );
     }
 
-
     SetUseOn( pPageDesc, pPageDesc1, pSep, nCorrIhdt );
-
 
     static BYTE __READONLY_DATA aPaperBinIds[ 17 ] =
         {5,2,4,0,3,0,0,0,0,0,0,0,0,0,0,0,1};
@@ -1646,19 +1590,21 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
     const BYTE* pSprmSDmBinOther = pSep->HasSprm( bVer67 ? 141 : 0x5008  );
     if( pSprmSDmBinFirst && (17 > *pSprmSDmBinFirst) )
     {
-        SvxPaperBinItem aItem( ITEMID_PAPERBIN, aPaperBinIds[ *pSprmSDmBinFirst ] );
+        SvxPaperBinItem aItem(ITEMID_PAPERBIN, aPaperBinIds[*pSprmSDmBinFirst]);
         pPageDesc->GetMaster().SetAttr( aItem );
     }
     if( pSprmSDmBinOther && (17 > *pSprmSDmBinOther) )
     {
-        SvxPaperBinItem aItem( ITEMID_PAPERBIN, aPaperBinIds[ *pSprmSDmBinOther ] );
-        SwFrmFmt &rFmtOther = pPageDesc1 ? pPageDesc1->GetMaster() : pPageDesc->GetLeft();
+        SvxPaperBinItem aItem(ITEMID_PAPERBIN, aPaperBinIds[*pSprmSDmBinOther]);
+        SwFrmFmt &rFmtOther = pPageDesc1 ? pPageDesc1->GetMaster() :
+            pPageDesc->GetLeft();
         rFmtOther.SetAttr( aItem );
     }
 
     // Kopf / Fuss - Index Updaten
+    // Damit der Index auch spaeter noch stimmt
     if( pHdFt )
-        pHdFt->UpdateIndex( nCorrIhdt );    // Damit der Index auch spaeter noch stimmt
+        pHdFt->UpdateIndex( nCorrIhdt );
 
     // Die Attribute OLST
     // werden weiterhin ueber die WWSprmTab abgehandelt
@@ -1670,16 +1616,12 @@ void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
 {
     // copy first header content section
     if( nCode & WW8_HEADER_FIRST )
-    {
-        rDoc.CopyHeader(pOrgPageDesc->GetMaster(),
-                        pNewPageDesc->GetMaster());
-    }
+        rDoc.CopyHeader(pOrgPageDesc->GetMaster(), pNewPageDesc->GetMaster());
+
     // copy first footer content section
     if( nCode & WW8_FOOTER_FIRST )
-    {
-        rDoc.CopyFooter(pOrgPageDesc->GetMaster(),
-                        pNewPageDesc->GetMaster());
-    }
+        rDoc.CopyFooter(pOrgPageDesc->GetMaster(), pNewPageDesc->GetMaster());
+
     if( nCode & (   WW8_HEADER_ODD  | WW8_FOOTER_ODD
                   | WW8_HEADER_EVEN | WW8_FOOTER_EVEN ) )
     {
@@ -1711,7 +1653,6 @@ void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
         }
     }
 }
-
 
 //------------------------------------------------------
 //   Hilfsroutinen fuer Grafiken und Apos und Tabellen

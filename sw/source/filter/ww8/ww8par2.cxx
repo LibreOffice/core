@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-16 12:42:32 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,20 +830,15 @@ static BOOL IsEqual( WW8TabBandDesc* p1, WW8TabBandDesc* p2 )
 {
     if( !p1 || !p2 )
         return FALSE;
-#if 0   // dieses waere der schnellste Vergleich, aber ich bin mir nicht sicher,
-        // ob gewisse Systeme die struct-Elemente nicht umsortieren oder
-        // Luecken lassen
-    if( !memcmp( &p1->nGapHalf, &p2->nGapHalf,
-        (BYTE*)&p1->pTCs - (BYTE*)&p1->nGapHalf ) )
-        return FALSE;
-#endif
+
     if( p1->nWwCols != p2->nWwCols )
         return FALSE;
 
     if( p1->nLineHeight != p2->nLineHeight )
         return FALSE;
 
-    if( p1->nGapHalf != p2->nGapHalf )  // koennte auch mit Toleranz arbeiten ( noetig ? )
+    // koennte auch mit Toleranz arbeiten ( noetig ? )
+    if( p1->nGapHalf != p2->nGapHalf )
         return FALSE;
 
     for( int i = 0; i <= p1->nWwCols; i++ )     // nCols+1 Angaben
@@ -1183,14 +1178,6 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
     if( !nLen )
         return;
 
-#if 0
-    if( !pS || *( pS - 1 ) < nWwCols * sizeof( WW8_SHD )  )
-    {
-        DELETEAZ( pSHDs );              // nicht vollstaendig -> ignorieren
-        return;
-    }
-#endif
-
     if( !pSHDs )
     {
         pSHDs = new WW8_SHD[nWwCols];
@@ -1204,8 +1191,6 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
     SVBT16* pShd;
     for( i=0, pShd = pS; i<nAnz; i++, pShd++ )
         pSHDs[i].SetWWValue( *pShd );
-
-    //pSHDs[i]  = *pShd;
 }
 
 
@@ -1763,8 +1748,10 @@ void WW8TabDesc::CreateSwTable()
             {
                 pSetAttr = new SwFmtPageDesc( *(SwFmtPageDesc*)pItem );
                 pNd->ResetAttr( RES_PAGEDESC );
+                pSet = pNd->GetpSwAttrSet();
             }
-            if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, FALSE, &pItem))
+            if (pSet &&
+                SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, FALSE, &pItem))
             {
                 pSetAttr = new SvxFmtBreakItem( *(SvxFmtBreakItem*)pItem );
                 pNd->ResetAttr( RES_BREAK );
@@ -2831,14 +2818,10 @@ short WW8RStyle::ImportUPX( short nLen, BOOL bPAP, BOOL bOdd )
 
     if( 0 < nLen ) // Empty ?
     {
-#if 0
-        nLen -= WW8SkipOdd( pStStrm );
-#else
         if (bOdd)
             nLen -= WW8SkipEven( pStStrm );
         else
             nLen -= WW8SkipOdd( pStStrm );
-#endif
 
         *pStStrm >> cbUPX;
 
@@ -2878,16 +2861,13 @@ void WW8RStyle::ImportGrupx( short nLen, BOOL bPara , BOOL bOdd)
 {
     if( nLen <= 0 )
         return;
-#if 0
-    nLen -= WW8SkipOdd( pStStrm );
-#else
     if (bOdd)
         nLen -= WW8SkipEven( pStStrm );
     else
         nLen -= WW8SkipOdd( pStStrm );
-#endif
 
-    if( bPara ) nLen = ImportUPX( nLen, TRUE, bOdd );   // Grupx.Papx
+    if( bPara ) // Grupx.Papx
+        nLen = ImportUPX( nLen, TRUE, bOdd );
     ImportUPX( nLen, FALSE, bOdd );                 // Grupx.Chpx
 }
 

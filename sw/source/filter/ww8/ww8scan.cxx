@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-21 15:40:50 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3500,48 +3500,34 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     {
         if ( pPap->nEndPos != LONG_MAX )    // Para adjust
         {
-            nLineEnd = pPap->nEndPos;       // nLineEnd zeigt *hinter* das <CR>
-            pPap->nEndPos--;                // Absatzende um 1 Zeichen verkuerzen
-            if( pChp->nEndPos == nLineEnd ) // gibt es bereits ein CharAttr-Ende,
-                                            // das auf das jetzige Absatzende zeigt ?
-                pChp->nEndPos--;            // ... dann auch um 1 Zeichen verkuerzen
+            nLineEnd = pPap->nEndPos;// nLineEnd zeigt *hinter* das <CR>
+            pPap->nEndPos--;        // Absatzende um 1 Zeichen verkuerzen
 
-            if( pSep->nEndPos == nLineEnd ) // gibt es bereits ein Sep-Ende,
-                                            // das auf das jetzige Absatzende zeigt ?
-                pSep->nEndPos--;            // ... dann auch um 1 Zeichen verkuerzen
+            // gibt es bereits ein CharAttr-Ende das auf das jetzige
+            // Absatzende zeigt ?  ... dann auch um 1 Zeichen verkuerzen
+            if (pChp->nEndPos == nLineEnd)
+                pChp->nEndPos--;
+
+            // gibt es bereits ein Sep-Ende, das auf das jetzige Absatzende
+            // zeigt ?  ... dann auch um 1 Zeichen verkuerzen
+            if( pSep->nEndPos == nLineEnd )
+                pSep->nEndPos--;
         }
     }
-    else if(       (&rDesc == pChp)
-        || (&rDesc == pSep) )
-    {                                       // Char Adjust oder Sep Adjust
-        if(     (rDesc.nEndPos == nLineEnd) // Wenn Ende Char-Attr == Absatzende ...
-             && (rDesc.nEndPos > rDesc.nStartPos) )
-            rDesc.nEndPos--;                    // ... dann um 1 Zeichen verkuerzen
-    }
-#ifdef CRUEL_CUT
-    /*
-    So what, I don't think there's anything wrong with that, its fastsaved so
-    the fc could be anywhere, all we care about is where the next *CP*
-    location of a property change occurs.
-    */
-    if( rDesc.nStartPos > rDesc.nEndPos )   // allgemeiner Plausibilitaetstest
+    else if ( (&rDesc == pChp) || (&rDesc == pSep) )
     {
-        ASSERT( !this,
-            "+Anfang und Ende des WW86-Attributes stehen ueber Kreuz" );
-        rDesc.nEndPos = rDesc.nStartPos;
+        // Char Adjust oder Sep Adjust Wenn Ende Char-Attr == Absatzende ...
+        if( (rDesc.nEndPos == nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
+            rDesc.nEndPos--;            // ... dann um 1 Zeichen verkuerzen
     }
-#endif
 }
 
-void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
+void WW8PLCFxDesc::ReduceByOffset(void)
 {
-    rDesc.pPLCFx->GetSprms( &rDesc );
-
-
-    ASSERT((LONG_MAX == rDesc.nStartPos) || (rDesc.nStartPos <= rDesc.nEndPos),
+    ASSERT((LONG_MAX == nStartPos) || (nStartPos <= nEndPos),
             "Attr-Anfang und -Ende ueber Kreuz" );
 
-    if( rDesc.nStartPos != LONG_MAX )
+    if( nStartPos != LONG_MAX )
     {
         /*
         ##516##,##517##
@@ -3549,17 +3535,24 @@ void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
         subdocument, same as in GetNewSoSprms, except that the target type is
         attributes attached to a piece that might span subdocument boundaries
         */
-        if (rDesc.nCpOfs > rDesc.nStartPos)
-            rDesc.nStartPos = 0;
+        if (nCpOfs > nStartPos)
+            nStartPos = 0;
         else
-            rDesc.nStartPos -= rDesc.nCpOfs;
+            nStartPos -= nCpOfs;
     }
-    if( rDesc.nEndPos   != LONG_MAX )
+    if( nEndPos   != LONG_MAX )
     {
-        ASSERT(rDesc.nCpOfs <= rDesc.nEndPos,
+        ASSERT(nCpOfs <= nEndPos,
             "oh oh, so much for the subdocument piece theory");
-        rDesc.nEndPos   -= rDesc.nCpOfs;
+        nEndPos   -= nCpOfs;
     }
+}
+
+void WW8PLCFMan::GetNewSprms( WW8PLCFxDesc& rDesc )
+{
+    rDesc.pPLCFx->GetSprms( &rDesc );
+    rDesc.ReduceByOffset();
+
     rDesc.bFirstSprm = TRUE;
     AdjustEnds( rDesc );
 }
@@ -3863,36 +3856,6 @@ void WW8PLCFMan::SeekPos( long nNewCp )
         pBkm->pPLCFx->SeekPos( nNewCp + nCpO );
 }
 
-
-/*
-void WW8PLCFMan::Save1PLCFx( WW8PLCFxDesc* p, WW8PLCFxSave1* pSave ) const
-{
-    if( !p->pPLCFx )
-        return;
-    pSave->nPLCFxPos = p->pPLCFx->GetIdx();
-    pSave->nPLCFxPos2 = p->pPLCFx->GetIdx2();
-    if( p->pPLCFx->IsSprm() )
-    {
-        WW8PLCFxDesc aD;
-        p->pPLCFx->GetSprms( &aD );
-        pSave->nPLCFxMemOfs = p->pMemPos - aD.pMemPos;
-    }
-}
-
-void WW8PLCFMan::Restore1PLCFx( WW8PLCFxDesc* p, WW8PLCFxSave1* pSave )
-{
-    if( !p->pPLCFx )
-        return;
-    p->pPLCFx->SetIdx( pSave->nPLCFxPos );          // restore PLCF-Pos
-    p->pPLCFx->SetIdx2( pSave->nPLCFxPos2 );
-    if( p->pPLCFx->IsSprm() )
-    {
-        WW8PLCFxDesc aD;
-        p->pPLCFx->GetSprms( &aD );
-        p->pMemPos = aD.pMemPos + pSave->nPLCFxMemOfs;
-    }
-}
-*/
 void WW8PLCFMan::SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const
 {
     USHORT i, n=0;
@@ -4265,8 +4228,10 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
-            aD.nStartPos = nOrigStartPos;
+            aD.nStartPos = nOrigStartPos+nCpOfs;
+            aD.nCpOfs = rSave.nCpOfs = nCpOfs;
             pPLCFx->GetSprms( &aD );
+            aD.ReduceByOffset();
             rSave.nStartCp = aD.nStartPos;
             rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
         }
@@ -4281,9 +4246,11 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
-            aD.nStartPos = rSave.nStartCp;
+            aD.nStartPos = rSave.nStartCp+rSave.nCpOfs;
+            nCpOfs = aD.nCpOfs = rSave.nCpOfs;
             pPLCFx->SeekPos(aD.nStartPos);
             pPLCFx->GetSprms( &aD );
+            aD.ReduceByOffset();
             pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
         }
     }

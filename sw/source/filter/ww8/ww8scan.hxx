@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:51 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ struct WW8PLCFxSave1
     ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
     WW8_CP nStartCp;        // for cp based iterator like PAP and CHP
+    long nCpOfs;
     WW8_FC nStartFC;
     WW8_CP nAttrStart;
     WW8_CP nAttrEnd;
@@ -350,7 +351,6 @@ public:
     virtual void SetIdx2( ULONG nIdx );
     virtual BOOL SeekPos( WW8_CP nCpPos ) = 0;
     virtual long Where() = 0;
-//  virtual BYTE* GetSprms( long& rStart, long& rEnd, long& rLen );
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int ) = 0;
@@ -723,6 +723,7 @@ struct WW8PLCFxDesc
     //GetSprms will not search for the sprms, but instead take the
     //existing ones.
     WW8PLCFxDesc() : nStartPos(LONG_MAX) {}
+    void ReduceByOffset();
 };
 
 

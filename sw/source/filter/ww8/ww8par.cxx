@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 10:46:03 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 15:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,30 +1795,26 @@ SFX612MI! SfxObjectShell::DoLoad(class SfxMedium *) + 3576 bytes
 
 long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
 {
-#if 0
-    long nOld = pStrm->Tell();
-#endif
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
     BOOL bStartAttr = pPlcxMan->Get( &aRes ); // hole Attribut-Pos
     aRes.nAktCp = rTxtPos;              // Akt. Cp-Pos
 
-    if( aRes.nFlags & MAN_MASK_NEW_SEP ){   // neue Section
+    if (aRes.nFlags & MAN_MASK_NEW_SEP) // neue Section
+    {
         CreateSep( rTxtPos, bPgSecBreak );  // PageDesc erzeugen und fuellen
                                             // -> 0xc war ein Sectionbreak, aber
                                             // kein Pagebreak;
         bPgSecBreak = FALSE;                // PageDesc erzeugen und fuellen
     }
 
-    if(    ( aRes.nFlags & MAN_MASK_NEW_PAP )   // neuer Absatz ueber Plcx.Fkp.papx
-            || rbStartLine )
-    {                   // oder ueber 0x0d o.ae. im Text
-        ProcessAktCollChange(
-                        aRes,
-                        &bStartAttr,
-                            MAN_MASK_NEW_PAP == (aRes.nFlags & MAN_MASK_NEW_PAP)
-                        &&  !bIgnoreText );
+    // neuer Absatz ueber Plcx.Fkp.papx
+    if ( (aRes.nFlags & MAN_MASK_NEW_PAP)|| rbStartLine )
+    {
+        ProcessAktCollChange( aRes, &bStartAttr,
+            MAN_MASK_NEW_PAP == (aRes.nFlags & MAN_MASK_NEW_PAP) &&
+            !bIgnoreText );
         rbStartLine = FALSE;
     }
 
@@ -1833,9 +1829,7 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
             if( bStartAttr )                            // WW-Attribute
             {
                 if( aRes.nMemLen >= 0 )
-                {   // Attr anschalten
-                    ImportSprm( aRes.pMemPos, (short)aRes.nMemLen, aRes.nSprmId );
-                }
+                    ImportSprm(aRes.pMemPos, (short)aRes.nMemLen, aRes.nSprmId);
             }
             else
                 EndSprm( aRes.nSprmId );        // Attr ausschalten
@@ -1845,25 +1839,14 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
             nSkipChars = ImportExtSprm( &aRes, bStartAttr );
             if( 256 <= aRes.nSprmId && 258 >= aRes.nSprmId )
             {
-                rTxtPos += nSkipChars;          // Felder/Ftn-/End-Note hier ueberlesen
+                // Felder/Ftn-/End-Note hier ueberlesen
+                rTxtPos += nSkipChars;
                 nSkipPos = rTxtPos-1;
             }
         }
     }
 
-#if 0
-    if( bVer8 || nSkipChars || aRes.nSprmId == 260 )
-        // Feld oder Piece
-        // um nSkipChars bewegen bei Feldern und Pieces
-        pStrm->Seek( pSBase->WW8Cp2Fc( pPlcxMan->GetCpOfs() + rTxtPos, &bIsUnicode));
-    else
-    {
-        // sonst alte Pos wiederherstellen und Unicode-Flag ermitteln
-        pStrm->Seek( nOld );
-    }
-#else
     pStrm->Seek(pSBase->WW8Cp2Fc( pPlcxMan->GetCpOfs() + rTxtPos, &bIsUnicode));
-#endif
 
     // Find next Attr position (and Skip attributes of field contents if needed)
     if( nSkipChars && !bIgnoreText )
