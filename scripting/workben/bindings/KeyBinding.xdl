@@ -15,7 +15,7 @@
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
   </dlg:checkbox>
   <dlg:menulist dlg:id="ScriptList" dlg:tab-index="3" dlg:left="63" dlg:top="49" dlg:width="108" dlg:height="44"/>
-  <dlg:button dlg:id="Browse" dlg:tab-index="4" dlg:disabled="true" dlg:left="17" dlg:top="71" dlg:width="36" dlg:height="14" dlg:value="Browse">
+  <dlg:button dlg:id="Browse" dlg:tab-index="4" dlg:disabled="true" dlg:left="17" dlg:top="71" dlg:width="36" dlg:height="14" dlg:value="Browse...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.BrowseButton" script:language="StarBasic"/>
   </dlg:button>
   <dlg:combobox dlg:id="KeyCombo" dlg:tab-index="5" dlg:left="63" dlg:top="110" dlg:width="108" dlg:height="12" dlg:spin="true">

@@ -6,6 +6,7 @@ REM ----- Global Variables -----
 
 &apos;bindingDialog can refer to either KeyBinding or MenuBinding dialog
 private languages() as String 
+private extensions() as Object 
 private locations() as String  
 private filesysScripts() as String
 private filesysCount as integer
@@ -212,12 +213,30 @@ Sub updateMapWithDisabledKeys()
 
 End Sub
 
+Sub initialiseFileExtensions()
+	ReDim extensions(ubound(languages())+1) as Object
+	oConfigProvider = CreateUnoService( &quot;com.sun.star.configuration.ConfigurationProvider&quot; )
+    Dim configArgs(1) as new com.sun.star.beans.PropertyValue
+    configargs(0).Name = &quot;nodepath&quot;
+    configArgs(0).Value = &quot;org.openoffice.Office.Scripting/ScriptRuntimes&quot;
+    configargs(1).Name = &quot;lazywrite&quot;
+    configArgs(1).Value = false
+    oConfigAccess = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, configArgs())
+    for index = 0 to ubound(languages())
+    		if(languages(index) &lt;&gt; &quot;Java&quot;) then
+            	xPropSet = oConfigAccess.getByName(languages(index))
+            	extns() = xPropSet.getPropertyValue(&quot;SupportedFileExtensions&quot;)
+            	extensions(index) = extns()  
+            endif
+    next index
+end sub
+
 Sub ExecuteEditDebug()
         
 	locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
 	languages = Array ( &quot;BeanShell&quot;, &quot;Rhino&quot; )
 	dialogName = &quot;EditDebug&quot;
-
+	initialiseFileExtensions()  
 	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EditDebug&quot; )
 
 	PopulateLanguageCombo()
@@ -251,12 +270,14 @@ end Sub
 Sub initialiseNavigationComboArrays()
     locations = Array ( &quot;User&quot;, &quot;Share&quot;, &quot;Document&quot;, &quot;Filesystem&quot; )
     ReDim languages(0) as String
+    ReDim extensions(0) as Object
 	languages(0) = &quot;Java&quot;
+	REM extensions(0) = &quot;&quot;
 	
     &apos; Setup languages array for all supported languages
     oServiceManager = GetProcessServiceManager()
     svrArray = oServiceManager.getAvailableServiceNames
-
+    
     langCount = 1
     for index = 0 to ubound(svrArray)
     	iPos = inStr(svrArray(index), &quot;ScriptRuntimeFor&quot;)
@@ -271,6 +292,7 @@ Sub initialiseNavigationComboArrays()
             langCount = langCount +1
         endif  
     next index
+    initialiseFileExtensions()
 End Sub
 
 
@@ -387,6 +409,13 @@ function GetDocumentType( bindingType as string ) as string
 end function
 
 function lastIndexOf( targetStr as String, substr as String ) as Integer
+	copyStr = targetStr
+	while instr(copyStr, substr) &gt; 0
+		pos = instr(copyStr, substr)
+		tpos = tpos + pos
+		copyStr = mid(copyStr, pos+1, len(copyStr)-pos )
+	wend
+	lastIndexOf() = tpos
 end function
 
 function getScriptURI( selectedScript as String ) as String
@@ -410,6 +439,7 @@ function getScriptURI( selectedScript as String ) as String
 		language = combo.text
 		url = selectedscript
 		pos = lastIndexOf( url, &quot;/&quot; )
+		locationPath =  mid( url, 1, pos)
         url = mid( url, pos+1, len( url ) - pos )
 		functionName = url
 		pos = lastIndexOf( url, &quot;.&quot; )
@@ -1031,26 +1061,28 @@ sub PopulateScriptList( lang as String, loc as String )
 		if(length = -1) then
 			exit sub
 		endif
-		if ( lang = &quot;BeanShell&quot; ) then
-			extn = &quot;bsh&quot;
-		elseif ( lang = &quot;Rhino&quot; ) then
-			extn = &quot;js&quot;
-		else
-			extn = &quot;&quot;
-		endif
+        for langIndex = lbound(languages()) to ubound(languages())
+            if ( lang = languages(langIndex)) then
+                extns = extensions(langIndex)
+                exit for
+            endif
+        next langIndex
 		dim locnDisplayList( length ) as new com.sun.star.beans.PropertyValue
 		for index = lbound(filesysScripts()) to ubound(filesysScripts())
 			scriptextn = filesysScripts(n)
 			pos = lastIndexOf( scriptextn, &quot;.&quot; )
             scriptextn = mid( scriptextn, pos + 1, len( scriptextn ) - pos )
-			if ( detailedView ) and ( scriptextn = extn ) then
-				locnDisplayList( index ).Name = filesysScripts( index )
-				locnDisplayList( index ).Value = filesysScripts( index )
-			elseif ( scriptextn = extn ) then
-				REM replace name with simplified view
-				locnDisplayList( index ).Name = filesysScripts( index )
-				locnDisplayList( index ).Value = filesysScripts( index )
-			end if
+            for extnsIndex = lbound(extns) to ubound(extns)
+                extn = extns(extnsIndex)
+                if ( detailedView ) and ( scriptextn = extn ) then
+                    locnDisplayList( index ).Name = filesysScripts( index )
+                    locnDisplayList( index ).Value = filesysScripts( index )
+                elseif ( scriptextn = extn ) then
+                    REM replace name with simplified view
+                    locnDisplayList( index ).Name = filesysScripts( index )
+                    locnDisplayList( index ).Value = filesysScripts( index )
+                end if
+            next extnsIndex
 			scriptList.addItem( locnDisplayList( index ).Name, index )
 		next index
 		ScriptDisplayList(0) = locnDisplayList()
@@ -1572,7 +1604,7 @@ sub LangLocComboListener()
         end if
     end if
     
-    if ( location = &quot;Filesystem&quot; ) then
+    if ( location = &quot;Filesystem&quot; ) and ( language &lt;&gt; &quot;Java&quot; ) then
     	bindingDialog.Model.Browse.enabled = true
     else
     	bindingDialog.Model.Browse.enabled = false
@@ -1671,19 +1703,29 @@ function getFilePicker() as Object
     REM file dialog
     oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
 
-    REM These need to be pulled from the registry in future
-    bshfilter = &quot;BeanShell (*.bsh)&quot;
-    rhinofilter = &quot;Rhino (*.js)&quot;
-    oFilePicker.AppendFilter( bshfilter, &quot;*.bsh&quot; )
-    oFilePicker.AppendFilter( rhinofilter, &quot;*.js&quot; )
-
     combo = bindingDialog.getControl( &quot;LanguageCombo&quot; ) 
     language = combo.text
+    currentFilter = &quot;&quot;
 
-    if language = &quot;BeanShell&quot; then
-        oFilePicker.SetCurrentFilter( bshfilter )
-    elseif language = &quot;Rhino&quot; then
-        oFilePicker.SetCurrentFilter( rhinofilter )
+    for langIndex = 0 to ubound(languages())
+        if( languages(langIndex) &lt;&gt; &quot;Java&quot; ) then
+        	filterName = languages(langIndex) + &quot; (&quot;
+        	filterVal=&quot;&quot;
+        	extns = extensions(langIndex)
+        	for extnIndex = lbound(extns()) to ubound(extns())
+            	filterName = filterName + &quot;*.&quot; + extns(extnIndex) + &quot;,&quot;
+           	 	filterVal = filterVal + &quot;*.&quot; + extns(extnIndex) + &quot;,&quot;
+        	next extnIndex
+        	filterName = left(filterName, len(filterName) -1) + &quot;)&quot;
+        	filterVal = left(filterVal, len(filterVal) -1)
+        	if(instr(filterName,language) = 1 ) then
+            	currentFilter = filterName
+        	end if
+        	oFilePicker.AppendFilter(filterName, filterVal)
+        end if
+    next langIndex
+    if(len(currentFilter) &gt; 0 ) then
+        oFilePicker.SetCurrentFilter( currentFilter )
     end if
 
     If sFileURL = &quot;&quot; Then
@@ -1707,22 +1749,19 @@ Sub DoBrowseAndEdit()
     Dim sFileURL As String
     Dim sFiles As Variant
 
-    bshfilter = &quot;BeanShell (*.bsh)&quot;
-    rhinofilter = &quot;Rhino (*.js)&quot;
-
     oFilePicker = getFilePicker()
     REM execute file dialog
     If oFilePicker.execute() Then
         sFiles = oFilePicker.getFiles()
 
         sFileURL = sFiles(0)
-
+    	oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
         If oSimpleFileAccess.exists( sFileURL ) Then
-            If (oFilePicker.GetCurrentFilter = bshfilter) then
-                RunDebugger(&quot;BeanShell&quot;, sFileURL, &quot;&quot;)
-            ElseIf (oFilePicker.GetCurrentFilter = rhinofilter) then
-                RunDebugger(&quot;Rhino&quot;, sFileURL, &quot;&quot;)
-            End If
+            for langIndex = 0 to ubound(languages())
+                If (instr(oFilePicker.GetCurrentFilter, languages(langIndex)) = 1 ) then
+                	RunDebugger(languages(langIndex), sFileURL, &quot;&quot;)
+            	End If
+            next langIndex
         End If
         bindingDialog.endExecute()
     End If
@@ -1850,9 +1889,10 @@ sub BrowseButton()
 	If oFilePicker.execute() Then
 		sFiles = oFilePicker.getFiles()
 		sFileURL = sFiles(0)
+		oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
 		If oSimpleFileAccess.exists( sFileURL ) Then
 			REM add sFileURL to the list
-			reDIm preserve filesysScripts(filesysCount) as String
+			ReDim preserve filesysScripts(filesysCount) as String
 			filesysScripts( filesysCount ) = sFileURL
 			filesysCount=filesysCount+1
 			sFilter = oFilePicker.getCurrentFilter()
