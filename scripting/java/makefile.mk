@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-20 14:37:46 $
+#   last change: $Author: dfoster $ $Date: 2002-09-23 15:02:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,38 +64,7 @@ PRJ=..
 PRJNAME=scripting
 TARGET=scriptruntimeforjava
 
-.INCLUDE : $(PRJ)/util/makefile.pmk
+.INCLUDE : ant.mk
 
-ANT_BUILDFILE=build.xml
+ALLTAR : ANTBUILD
 
-.IF "$(debug)$(DEBUG)"!=""
-ANTFLAGS=-Ddebug=on -Doptimize=off 
-.ENDIF
-
-JARFILES=ant.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jut.jar
-
-.INCLUDE :  $(PRJ)/util/ant.pmk
-
-prepare .PHONY:
-        $(ANT) $(ANTFLAGS) $@
-
-compile .PHONY:
-        $(ANT) $(ANTFLAGS) $@
-
-jar .PHONY:
-        $(ANT) $(ANTFLAGS) $@
-
-javadoc .PHONY:
-        $(ANT) $(ANTFLAGS) $@
-
-clean .PHONY:
-        $(ANT) $(ANTFLAGS) $@
-
-all .PHONY:
-        $(ANT) $(ANTFLAGS) all
-
-testcp:
-    @echo $(CLASSPATH)
-
-xxxx:
-    @echo $(PATH)

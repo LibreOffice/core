@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-09-20 14:37:46 $
+#   last change: $Author: dfoster $ $Date: 2002-09-23 15:02:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,13 +71,21 @@
   <property name="debug"   value="on"/>
   <property name="scriptingclasses" value="${out}/class/scriptingtemp"/>
   <property name="storageclasses" value="${out}/class/storagetemp"/>
+  <property name="jardir" value="${out}/class"/>
   <property name="bindir" value="${out}/bin"/>
   <property name="scriptingjarname" value="ScriptRuntimeForJava.jar"/>
   <property name="storagejarname" value="StorageProxy.jar"/>
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
+    <!-- <pathelement location="${solar.jar}/unoil.jar"/> -->
+    <pathelement location="${prj}/../unoil/unxsols3/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/jut.jar"/>
+    <pathelement location="${solar.jar}/juh.jar"/>
+    <pathelement location="${solar.jar}/java_uno.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+    <pathelement location="${solar.jar}/sandbox.jar"/>
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
