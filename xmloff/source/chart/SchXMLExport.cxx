@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-09 14:02:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ SchXMLExportHelper::SchXMLExportHelper(
 
     }
 
-    mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper );
+    mxExpPropMapper = new XMLChartExportPropertyMapper( mxPropertySetMapper, rExport );
     // chain draw properties
     mxExpPropMapper->ChainExportMapper( XMLShapeExport::CreateShapePropMapper( rExport ));
 
@@ -1133,15 +1133,15 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     else
                         aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
 
-                    if( aASName.equals( aLastASName ))
+                    if( nElement )  // The first element is skipped because it can not be compared to a previous one.
                     {
-                        nRepeated++;
-                    }
-                    else
-                    {
-                        // write last style
-                        if( nElement )          // don't write when first getting here
+                        if( aASName.equals( aLastASName ))
                         {
+                            nRepeated++;
+                        }
+                        else
+                        {
+                            // write last style
                             if( nRepeated > 1 )
                             {
                                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
@@ -1154,11 +1154,11 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
                             }
                             SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
-                        }
 
-                        // reset repeat counter for new style
-                        nRepeated = 1;
-                        aLastASName = aASName;
+                            // reset repeat counter for new style
+                            nRepeated = 1;
+                            aLastASName = aASName;
+                        }
                     }
                 }
                 else

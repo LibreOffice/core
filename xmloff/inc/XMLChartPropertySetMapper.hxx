@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:02 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,15 @@
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include "xmlimppr.hxx"
 #endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
 
 namespace rtl { class OUString; }
 
 extern const XMLPropertyMapEntry aXMLChartPropMap[];
 
+class SvXMLExport;
 
 // ----------------------------------------
 
@@ -109,6 +113,8 @@ private:
     const rtl::OUString msTrue;
     const rtl::OUString msFalse;
 
+    SvXMLExport& mrExport;
+
 protected:
     virtual void ContextFilter(
         ::std::vector< XMLPropertyState >& rProperties,
@@ -132,7 +138,8 @@ private:
         sal_uInt32 nIdx = 0  ) const;
 
 public:
-    XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper );
+    XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+                                  SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper();
 };
 
@@ -141,8 +148,11 @@ public:
 class XMLChartImportPropertyMapper : public SvXMLImportPropertyMapper
 {
 private:
+    SvXMLImport& mrImport;
+
 public:
-    XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper );
+    XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+                                  const SvXMLImport& rImport );
     virtual ~XMLChartImportPropertyMapper();
 
     virtual sal_Bool handleSpecialItem(

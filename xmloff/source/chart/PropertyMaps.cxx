@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-10 12:41:11 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
 #include "NamedBoolPropertyHdl.hxx"
+#endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
 #endif
 
 #ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
@@ -177,7 +180,11 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 // here we have a constant rather than an enum
                 pHdl = new XMLConstantsPropertyHandler( aXMLChartSolidTypeEnumMap, sXML_cuboid );
                 break;
-        }
+            case XML_SCH_TYPE_DATAROWSOURCE:
+                pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
+                                               ::getCppuType((const chart::ChartDataRowSource*)0) );
+                break;
+    }
         if( pHdl )
             PutHdlCache( nType, pHdl );
     }
@@ -198,11 +205,13 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 
 // ----------------------------------------
 
-XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper ) :
+XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+                                                            SvXMLExport& rExport) :
         SvXMLExportPropertyMapper( rMapper ),
         msCDATA( rtl::OUString::createFromAscii( sXML_CDATA )),
         msTrue( rtl::OUString::createFromAscii( sXML_true )),
-        msFalse( rtl::OUString::createFromAscii( sXML_false ))
+        msFalse( rtl::OUString::createFromAscii( sXML_false )),
+        mrExport( rExport )
 {
 }
 
@@ -228,9 +237,9 @@ void XMLChartExportPropertyMapper::ContextFilter(
         {
             case XML_SCH_CONTEXT_USER_SYMBOL:
                 {
-                    sal_Int32 nIndex = chart::ChartSymbolType::AUTO;
+                    sal_Int32 nIndex = chart::ChartSymbolType::NONE;
                     property->maValue >>= nIndex;
-                    if( nIndex == chart::ChartSymbolType::AUTO )
+                    if( nIndex == chart::ChartSymbolType::NONE )
                         property->mnIndex = -1;
                 }
                 break;
@@ -255,6 +264,13 @@ void XMLChartExportPropertyMapper::ContextFilter(
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = sal_True;
                 aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
+                {
+                    ::rtl::OUString aURLStr;
+                    property->maValue >>= aURLStr;
+                    property->maValue <<= mrExport.AddEmbeddedGraphicObject( aURLStr );
+                }
                 break;
         }
 
@@ -393,8 +409,10 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
 
 // ----------------------------------------
 
-XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper ) :
-        SvXMLImportPropertyMapper( rMapper )
+XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper,
+                                                            const SvXMLImport& rImport ) :
+        SvXMLImportPropertyMapper( rMapper ),
+        mrImport( SAL_CONST_CAST( SvXMLImport&, rImport ))
 {
     // chain shape mapper for drawing properties
 
@@ -414,6 +432,7 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {
+    static const ::rtl::OUString sPackageProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
     sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
     sal_Bool bRet = (nContextId != 0);
 
@@ -507,6 +526,9 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                                                    rValue );
                     rProperty.maValue <<= aSize;
                 }
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
+                rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, sal_False );
                 break;
             default:
                 bRet = sal_False;

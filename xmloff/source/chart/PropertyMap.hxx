@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-10 12:33:42 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTSOLIDTYPE_HPP_
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
 
 // custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
@@ -103,6 +106,7 @@
 #define XML_SCH_TYPE_SOLID_TYPE             ( XML_SCH_TYPES_START + 3 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_UPPER  ( XML_SCH_TYPES_START + 4 )
 #define XML_SCH_TYPE_ERROR_INDICATOR_LOWER  ( XML_SCH_TYPES_START + 5 )
+#define XML_SCH_TYPE_DATAROWSOURCE          ( XML_SCH_TYPES_START + 6 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -124,6 +128,7 @@
 #define XML_SCH_CONTEXT_SPECIAL_DATA_ROW_SOURCE     ( XML_SCH_CTF_START + 19 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH        ( XML_SCH_CTF_START + 20 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT       ( XML_SCH_CTF_START + 21 )
+#define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME   ( XML_SCH_CTF_START + 22 )
 
 #define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
 #define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
@@ -156,12 +161,13 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_CONTEXT( "SymbolType", CHART, symbol, XML_TYPE_NUMBER, USER_SYMBOL ),
     MAP_SPECIAL( "SymbolSize", CHART, symbol_width, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
     MAP_SPECIAL( "SymbolSize", CHART, symbol_height, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
+    MAP_SPECIAL( "SymbolBitmapURL", CHART, symbol_image_name, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
     MAP_ENTRY( "Vertical", CHART, vertical, XML_TYPE_BOOL ),
     MAP_ENTRY( "NumberOfLines", CHART, lines_used, XML_TYPE_NUMBER ),
     MAP_ENTRY( "StackedBarsConnected", CHART, connect_bars, XML_TYPE_BOOL ),
 
     // plot-area properties
-    MAP_SPECIAL( "DataRowSource", CHART, reinterpret_data_in_rows, XML_TYPE_BOOL, DATA_ROW_SOURCE ),
+    MAP_SPECIAL( "DataRowSource", CHART, series_source, XML_SCH_TYPE_DATAROWSOURCE, DATA_ROW_SOURCE ),
 
     // axis properties
     MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),
@@ -243,6 +249,12 @@ SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
     { sXML_cylinder,    ::com::sun::star::chart::ChartSolidType::CYLINDER },
     { sXML_cone,        ::com::sun::star::chart::ChartSolidType::CONE },
     { sXML_pyramid,     ::com::sun::star::chart::ChartSolidType::PYRAMID },
+};
+
+SvXMLEnumMapEntry aXMLChartDataRowSourceTypeEnumMap[] =
+{
+    { sXML_columns,     ::com::sun::star::chart::ChartDataRowSource_COLUMNS },
+    { sXML_rows,        ::com::sun::star::chart::ChartDataRowSource_ROWS }
 };
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS

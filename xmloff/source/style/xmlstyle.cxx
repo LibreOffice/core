@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-21 10:51:03 $
+ *  last change: $Author: bm $ $Date: 2001-05-11 18:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -810,7 +810,7 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         if( ! xChartImpPropMapper.is() )
         {
             XMLPropertySetMapper *pPropMapper = new XMLChartPropertySetMapper();
-            xChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper );
+            xChartImpPropMapper = new XMLChartImportPropertyMapper( pPropMapper, GetImport() );
         }
         xMapper = xChartImpPropMapper;
         break;
