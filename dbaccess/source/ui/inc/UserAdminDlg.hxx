@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdminDlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:17:44 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,15 @@ namespace dbaui
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet* m_pItemSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
+        sal_Bool    m_bOwnConnection;
     protected:
         virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     public:
         OUserAdminDlg( Window* _pParent
                             ,SfxItemSet* _pItems
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-                            ,const ::com::sun::star::uno::Any& _aDataSourceName);
+                            ,const ::com::sun::star::uno::Any& _aDataSourceName
+                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
         virtual ~OUserAdminDlg();
 
