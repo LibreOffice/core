@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:36:08 $
+ *  last change: $Author: gt $ $Date: 2002-07-17 14:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -81,6 +84,8 @@
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
+
+#include <stl/memory>
 
 #pragma hdrstop
 
@@ -791,46 +796,175 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFORELOAD ), rItemSet ),
 
-    aReloadEnabled  ( this, ResId( CB_AUTORELOAD ) ),
-    aFTSeconds      ( this, ResId( FT_SECONDS ) ),
-    aReloadDelay    ( this, ResId( ED_SECONDS ) ),
-    aFTURL          ( this, ResId( FT_URL ) ),
-    aReloadURL      ( this, ResId( ED_URL ) ),
-    aFTTarget       ( this, ResId( FT_DEFAULT ) ),
-    aTargets        ( this, ResId( LB_DEFAULT ) ),
+    aRBNoAutoUpdate     ( this, ResId( RB_NOAUTOUPDATE      ) ),
 
+    aRBReloadUpdate     ( this, ResId( RB_RELOADUPDATE      ) ),
+    aFTEvery            ( this, ResId( FT_EVERY             ) ),
+    aNFReload           ( this, ResId( ED_RELOAD            ) ),
+    aFTReloadSeconds    ( this, ResId( FT_RELOADSECS        ) ),
+
+    aRBForwardUpdate    ( this, ResId( RB_FORWARDUPDATE     ) ),
+    aFTAfter            ( this, ResId( FT_AFTER             ) ),
+    aNFAfter            ( this, ResId( ED_FORWARD           ) ),
+    aFTAfterSeconds     ( this, ResId( FT_FORWARDSECS       ) ),
+    aFTURL              ( this, ResId( FT_URL               ) ),
+    aEDForwardURL       ( this, ResId( ED_URL               ) ),
+    aPBBrowseURL        ( this, ResId( PB_BROWSEURL         ) ),
+    aFTFrame            ( this, ResId( FT_FRAME             ) ),
+    aCBFrame            ( this, ResId( CB_FRAME             ) ),
+
+    aForwardErrorMessg  (       ResId( STR_FORWARD_ERRMSSG  ) ),
+    eState( S_Init ),
     pInfoItem( NULL )
 
 {
     FreeResource();
-    pInfoItem = &(SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
-    SfxDocumentInfo& rInfo = (*pInfoItem)();
-    TargetList aList;
-    SfxViewFrame* pFrame = SfxViewFrame::Current();
-    if( pFrame && ( pFrame = pFrame->GetTopViewFrame() ))
+    pInfoItem = &( SfxDocumentInfoItem& ) rItemSet.Get( SID_DOCINFO );
+//  SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
+    TargetList          aList;
+    SfxViewFrame*       pFrame = SfxViewFrame::Current();
+    if( pFrame && ( pFrame = pFrame->GetTopViewFrame() ) )
     {
         pFrame->GetTargetList( aList );
 
-        for( USHORT nPos = (USHORT)aList.Count(); nPos; )
+        String*         pObj;
+        for( USHORT nPos = ( USHORT ) aList.Count() ; nPos ; )
         {
-            String* pObj = aList.GetObject( --nPos );
-            aTargets.InsertEntry( *pObj );
+            pObj = aList.GetObject( --nPos );
+            aCBFrame.InsertEntry( *pObj );
             delete pObj;
         }
     }
-    aTargets.SetText( rInfo.GetDefaultTarget() );
-    aReloadEnabled.SetClickHdl(LINK(this, SfxInternetPage, ClickHdl));
+
+    aRBNoAutoUpdate.SetClickHdl( LINK( this, SfxInternetPage, ClickHdlNoUpdate ) );
+    aRBReloadUpdate.SetClickHdl( LINK( this, SfxInternetPage, ClickHdlReload ) );
+    aRBForwardUpdate.SetClickHdl( LINK( this, SfxInternetPage, ClickHdlForward ) );
+    aPBBrowseURL.SetClickHdl( LINK( this, SfxInternetPage, ClickHdlBrowseURL ) );
+
+    aForwardErrorMessg.SearchAndReplaceAscii( "%PLACEHOLDER%", aRBForwardUpdate.GetText() );
+
+    ChangeState( S_NoUpdate );
+
+//  SetExchangeSupport( TRUE ); // not used for this tabpage BUT necessary if DeactivatePage() should be called in SfxTabDialog::PrepareLeaveCurrentPage()!
+}
+
+
+//------------------------------------------------------------------------
+
+void SfxInternetPage::ChangeState( STATE eNewState )
+{
+    DBG_ASSERT( eNewState != S_Init, "*SfxInternetPage::ChangeState(): new state init is supposed to not work here!" );
+
+    if( eState == eNewState  )
+        return;
+
+    switch( eState )
+    {
+        case S_Init:
+            EnableNoUpdate( TRUE );
+            EnableReload( FALSE );
+            EnableForward( FALSE );
+            break;
+        case S_NoUpdate:
+            EnableNoUpdate( FALSE );
+            if( eNewState == S_Reload )
+                EnableReload( TRUE );
+            else
+                EnableForward( TRUE );
+            break;
+        case S_Reload:
+            EnableReload( FALSE );
+            if( eNewState == S_NoUpdate )
+                EnableNoUpdate( TRUE );
+            else
+                EnableForward( TRUE );
+            break;
+        case S_Forward:
+            EnableForward( FALSE );
+            if( eNewState == S_NoUpdate )
+                EnableNoUpdate( TRUE );
+            else
+                EnableReload( TRUE );
+            break;
+        default:
+            DBG_ERROR( "*SfxInternetPage::SetState(): unhandled state!" );
+    }
+
+    eState = eNewState;
 }
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxInternetPage, ClickHdl, Control*, pCtrl )
+void SfxInternetPage::EnableNoUpdate( BOOL bEnable )
 {
-    if ( pCtrl == &aReloadEnabled )
-    {
-        aFTSeconds.Enable( aReloadEnabled.IsChecked() );
-        aReloadDelay.Enable( aReloadEnabled.IsChecked() );
-    }
+    if( bEnable )
+        aRBNoAutoUpdate.Check();
+}
+
+
+//------------------------------------------------------------------------
+
+void SfxInternetPage::EnableReload( BOOL bEnable )
+{
+    aFTEvery.Enable( bEnable );
+    aNFReload.Enable( bEnable );
+    aFTReloadSeconds.Enable( bEnable );
+
+    if( bEnable )
+        aRBReloadUpdate.Check();
+}
+
+//------------------------------------------------------------------------
+
+void SfxInternetPage::EnableForward( BOOL bEnable )
+{
+    aFTAfter.Enable( bEnable );
+    aNFAfter.Enable( bEnable );
+    aFTAfterSeconds.Enable( bEnable );
+    aFTURL.Enable( bEnable );
+    aEDForwardURL.Enable( bEnable );
+    aPBBrowseURL.Enable( bEnable );
+    aFTFrame.Enable( bEnable );
+    aCBFrame.Enable( bEnable );
+
+    if( bEnable )
+        aRBForwardUpdate.Check();
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SfxInternetPage, ClickHdlNoUpdate, Control*, pCtrl )
+{
+    ChangeState( S_NoUpdate );
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SfxInternetPage, ClickHdlReload, Control*, pCtrl )
+{
+    ChangeState( S_Reload );
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
+{
+    ChangeState( S_Forward );
+    return 0;
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, pButton )
+{
+    sfx2::FileDialogHelper aHelper( FILEOPEN_SIMPLE, WB_OPEN );
+    aHelper.SetDisplayDirectory( aEDForwardURL.GetText() );
+
+    if( ERRCODE_NONE == aHelper.Execute() )
+        aEDForwardURL.SetText( aHelper.GetPath() );
+
     return 0;
 }
 
@@ -838,57 +972,57 @@ IMPL_LINK( SfxInternetPage, ClickHdl, Control*, pCtrl )
 
 BOOL SfxInternetPage::FillItemSet( SfxItemSet& rSet )
 {
-    // Pruefung, ob sich etwas geaendert hat
-    const BOOL bReloadEnabled = aReloadEnabled.IsChecked();
-    const BOOL bReloadModified = aReloadEnabled.GetSavedValue() !=
-        bReloadEnabled;
-    const BOOL bReloadURLModified = aReloadURL.IsModified();
-    String aTargetFrame( aTargets.GetText() );
-    const BOOL bTargetModified = aOldTarget != aTargetFrame;
-    const BOOL bReloadDelayModified = aReloadDelay.IsModified();
-    if( !( bReloadDelayModified || bTargetModified || bReloadURLModified ||
-           bReloadModified ) )
-    {
-        return FALSE;
-    }
+    const SfxPoolItem*          pItem = NULL;
+    SfxDocumentInfoItem*        pInfo = NULL;
+    SfxTabDialog*               pDlg = GetTabDialog();
+    const SfxItemSet*           pExSet = NULL;
 
-    // Speicherung der Aenderungen
-    const SfxPoolItem *pItem;
-    SfxDocumentInfoItem *pInfo;
-    SfxTabDialog* pDlg = GetTabDialog();
-    const SfxItemSet* pExSet = NULL;
-
-    if ( pDlg )
+    if( pDlg )
         pExSet = pDlg->GetExampleSet();
 
-    if ( pExSet &&
-         SFX_ITEM_SET != pExSet->GetItemState(SID_DOCINFO, TRUE, &pItem) )
+    if( pExSet && SFX_ITEM_SET != pExSet->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
         pInfo = pInfoItem;
     else
-        pInfo = new SfxDocumentInfoItem(*(const SfxDocumentInfoItem *)pItem);
+        pInfo = new SfxDocumentInfoItem( *( const SfxDocumentInfoItem* ) pItem );
 
-    SfxDocumentInfo& rInfo = (*pInfo)();
-    if( bReloadModified )
+    SfxDocumentInfo&            rInfo = pInfo->GetDocInfo();
+
+    DBG_ASSERT( eState != S_Init, "*SfxInternetPage::FillItemSet(): state init is not acceptable at this point!" );
+
+    BOOL                        bEnableReload = FALSE;
+    ::std::auto_ptr< String >   aURL( NULL );
+    ::std::auto_ptr< String >   aFrame( NULL );
+    ULONG                       nDelay = 0;
+
+    switch( eState )
     {
-        rInfo.EnableReload( bReloadEnabled );
+        case S_NoUpdate:
+            break;
+        case S_Reload:
+            bEnableReload = TRUE;
+            aURL = ::std::auto_ptr< String >( new String() );
+            aFrame = ::std::auto_ptr< String >( new String() );
+            nDelay = aNFReload.GetValue();
+            break;
+        case S_Forward:
+            DBG_ASSERT( aEDForwardURL.GetText().Len(), "+SfxInternetPage::FillItemSet(): empty URL should be not possible for forward option!" );
+
+            bEnableReload = TRUE;
+            aURL = ::std::auto_ptr< String >( new String( URIHelper::SmartRelToAbs( aEDForwardURL.GetText() ) ) );
+            aFrame = ::std::auto_ptr< String >( new String( aCBFrame.GetText() ) );
+            nDelay = aNFAfter.GetValue();
+            break;
     }
-    if( bReloadDelayModified )
+
+    rInfo.EnableReload( bEnableReload );
+
+    if( bEnableReload )
     {
-        rInfo.SetReloadDelay( aReloadDelay.GetValue() );
+        rInfo.SetReloadURL( *aURL.get() );
+        rInfo.SetDefaultTarget( *aFrame.get() );
+        rInfo.SetReloadDelay( nDelay );
     }
-    if( bReloadURLModified )
-    {
-        String a2ReloadURL( aReloadURL.GetText() );
-        if ( a2ReloadURL.Len() )
-        {
-            a2ReloadURL = URIHelper::SmartRelToAbs( a2ReloadURL );
-        }
-        rInfo.SetReloadURL( a2ReloadURL );
-    }
-    if( bTargetModified )
-    {
-        rInfo.SetDefaultTarget( aTargetFrame );
-    }
+
     rSet.Put( *pInfo );
     if( pInfo != pInfoItem )
         delete pInfo;
@@ -906,23 +1040,46 @@ SfxTabPage *SfxInternetPage::Create( Window* pParent, const SfxItemSet& rItemSet
 
 void SfxInternetPage::Reset( const SfxItemSet& rSet )
 {
-    pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
-    SfxDocumentInfo& rInfo = (*pInfoItem)();
+    pInfoItem = &( SfxDocumentInfoItem& ) rSet.Get( SID_DOCINFO );
+    SfxDocumentInfo&    rInfo = pInfoItem->GetDocInfo();
+    STATE               eNewState = S_NoUpdate;
 
-    aReloadEnabled.Check( rInfo.IsReloadEnabled() );
-    aReloadEnabled.SaveValue();
-    aReloadDelay.SetValue( rInfo.GetReloadDelay() );
-    aReloadURL.SetText( rInfo.GetReloadURL() );
-    aTargets.SetText( rInfo.GetDefaultTarget() );
-    ClickHdl( &aReloadEnabled );
-
-    if ( rInfo.IsReadOnly() )
+    if( rInfo.IsReloadEnabled() )
     {
-        aReloadEnabled.Disable();
-        aReloadDelay.Disable();
-        aReloadURL.SetReadOnly( TRUE );
-        aTargets.SetReadOnly( TRUE );
+        const String&   rURL = rInfo.GetReloadURL();
+
+        if( rURL.Len() )
+        {
+            aNFAfter.SetValue( rInfo.GetReloadDelay() );
+            aEDForwardURL.SetText( rInfo.GetReloadURL() );
+            aCBFrame.SetText( rInfo.GetDefaultTarget() );
+            eNewState = S_Forward;
+        }
+        else
+        {
+            aNFReload.SetValue( rInfo.GetReloadDelay() );
+            eNewState = S_Reload;
+        }
     }
+
+    ChangeState( eNewState );
+}
+
+//------------------------------------------------------------------------
+
+int SfxInternetPage::DeactivatePage( SfxItemSet* pSet )
+{
+    int             nRet = LEAVE_PAGE;
+
+    if( eState == S_Forward && !aEDForwardURL.GetText().Len() )
+    {
+        ErrorBox    aErrBox( this, WB_OK, aForwardErrorMessg );
+        aErrBox.Execute();
+
+        nRet = KEEP_PAGE;
+    }
+
+    return nRet;
 }
 
 //------------------------------------------------------------------------

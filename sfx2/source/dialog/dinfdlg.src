@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-08 21:11:24 $
+ *  last change: $Author: gt $ $Date: 2002-07-17 14:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "sfx.hrc"
 #include "helpid.hrc"
 #include "dinfdlg.hrc"
+#include "dinfdlg_measures.hrc"
 
  // TP_DOCINFODESC --------------------------------------------------------
 
@@ -101,6 +102,7 @@ TabPage TP_DOCINFODESC
         Text[ turkish ] = "~Ba˛l˝k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~TÌtulo";
+        Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠";
     };
     Edit ED_TITLE
     {
@@ -139,6 +141,7 @@ TabPage TP_DOCINFODESC
         Text[ turkish ] = "K~onu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tema";
+        Text[ thai ] = "~‡∏ä‡∏∑‡πà‡∏≠‡πÄ‡∏£‡∏∑‡πà‡∏≠‡∏á";
     };
     Edit ED_THEMA
     {
@@ -177,6 +180,7 @@ TabPage TP_DOCINFODESC
         Text[ turkish ] = "~Anahtar sˆzc¸kler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Palabras clave";
+        Text[ thai ] = "~‡∏Ñ‡∏≥‡∏™‡∏≥‡∏Ñ‡∏±‡∏ç";
     };
     Edit ED_KEYWORDS
     {
@@ -215,6 +219,7 @@ TabPage TP_DOCINFODESC
         Text[ turkish ] = "~Tan˝m";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~DescripciÛn";
+        Text[ thai ] = "~‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏¥‡∏î‡πÄ‡∏´‡πá‡∏ô";
     };
     MultiLineEdit ED_COMMENT
     {
@@ -277,6 +282,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo:";
         Text[ finnish ] = "Tyyppi";
+        Text[ thai ] = "‡∏ä‡∏ô‡∏¥‡∏î:";
     };
     FixedText FT_FILE_SHOW_TYP
     {
@@ -310,6 +316,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Solo lectura";
         Text[ finnish ] = "~Vain luku";
+        Text[ thai ] = "~‡∏≠‡πà‡∏≤‡∏ô‡∏≠‡∏¢‡πà‡∏≤‡∏á‡πÄ‡∏î‡∏µ‡∏¢‡∏ß";
     };
     FixedText FT_FILE
     {
@@ -338,6 +345,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "UbicaciÛn:";
         Text[ finnish ] = "Sijainti:";
+        Text[ thai ] = "‡∏ó‡∏µ‡πà‡∏ï‡∏±‡πâ‡∏á:";
     };
     FixedText FT_FILE_VAL
     {
@@ -371,6 +379,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "TamaÒo:";
         Text[ finnish ] = "Koko:";
+        Text[ thai ] = "‡∏Ç‡∏ô‡∏≤‡∏î:";
     };
     FixedText FT_FILE_SHOW_SIZE
     {
@@ -409,6 +418,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Creado el:";
         Text[ finnish ] = "Luotu:";
+        Text[ thai ] = "‡∏™‡∏£‡πâ‡∏≤‡∏á:";
     };
     FixedText FT_CREATE_VAL
     {
@@ -443,6 +453,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "D¸zenleme:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Abierto desde :";
+        Text[ thai ] = "‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç:";
     };
     FixedText FT_TIMELOG_VAL
     {
@@ -476,6 +487,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Modificado el:";
         Text[ finnish ] = "Muokattu:";
+        Text[ thai ] = "‡∏î‡∏±‡∏î‡πÅ‡∏õ‡∏•‡∏á‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç:";
     };
     FixedText FT_CHANGE_VAL
     {
@@ -509,6 +521,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VersiÛn:";
         Text[ finnish ] = "Versio:";
+        Text[ thai ] = "‡πÄ‡∏ß‡∏≠‡∏£‡πå‡∏ä‡∏±‡πà‡∏ô:";
     };
     FixedText FT_DOCNO_VAL
     {
@@ -542,6 +555,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Impreso el:";
         Text[ finnish ] = "Tulostettu";
+        Text[ thai ] = "‡∏û‡∏¥‡∏°‡∏û‡πå:";
     };
     FixedText FT_PRINT_VAL
     {
@@ -575,6 +589,7 @@ TabPage TP_DOCINFODOC
         Text[ turkish ] = "~Sil";
         Text[ catalan ] = "~Eliminar";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~‡∏•‡∏ö";
     };
     CheckBox CB_USE_USERDATA
     {
@@ -604,6 +619,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Utilice los ~datos del usuario";
         Text[ finnish ] = "~K‰yt‰ k‰ytt‰j‰tietoja";
+        Text[ thai ] = "‡πÉ~‡∏ä‡πâ‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
     };
     FixedLine FL_FILE_3
     {
@@ -638,6 +654,7 @@ TabPage TP_DOCINFODOC
         Text[ arabic ] = "«·ﬁ«·»:";
         Text[ turkish ] = "ﬁablon:";
         Text[ catalan ] = "Plantilla:";
+        Text[ thai ] = "‡πÅ‡∏°‡πà‡πÅ‡∏ö‡∏ö:";
     };
     FixedText FT_TEMPL_VAL
     {
@@ -669,6 +686,7 @@ TabPage TP_DOCINFODOC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "desconocido";
         Text[ finnish ] = "tuntematon";
+        Text[ thai ] = "‡πÑ‡∏°‡πà‡∏£‡∏π‡πâ‡∏à‡∏±‡∏Å";
     };
 };
 
@@ -759,6 +777,7 @@ TabPage TP_DOCINFOUSER
         Text[ turkish ] = "~Bilgi alanlar˝...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ca~mpo informaciÛn...";
+        Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏Ç‡∏≠‡∏á~‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•...";
     };
 };
 
@@ -769,143 +788,134 @@ TabPage TP_DOCINFORELOAD
     HelpId = HID_DOCINFORELOAD ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    CheckBox CB_AUTORELOAD
+    RadioButton RB_NOAUTOUPDATE
     {
-        Pos = MAP_APPFONT ( 72 , 7 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text = "~Autoreload alle" ;
-        Text [ English ] = "~Autoreload every" ;
-        Text [ english_us ] = "~Auto reload every" ;
-        Text [ italian ] = "~Autoricarica" ;
-        Text [ spanish ] = "~Autorecargar cada" ;
-        Text [ french ] = "~Page suivante au bout de" ;
-        Text [ dutch ] = "~Autoreload alle" ;
-        Text [ swedish ] = "~Ladda automatiskt efter" ;
-        Text [ danish ] = "AutogenindlÊs efter" ;
-        Text [ portuguese_brazilian ] = "~Autoreload alle" ;
-        Text [ portuguese ] = "~Autocarregar cada" ;
-        Text[ chinese_simplified ] = "ÂÖ®ÈÉ®ÈáçÊñ∞Ëá™Âä®Ë£ÖÂÖ•(~A)";
-        Text[ russian ] = "~¿‚ÚÓÁ‡„ÛÁÍ‡ Í‡Ê‰˚Â";
-        Text[ polish ] = "Prze≥a~duj automatycznie co";
-        Text[ japanese ] = "Ëá™ÂãïÁöÑ„Å´Êõ¥Êñ∞(~A)";
-        Text[ chinese_traditional ] = "ÂÖ®ÈÉ®Ëá™ÂãïÈáçÊñ∞ËºâÂÖ•(~A)";
-        Text[ greek ] = "~¡ıÙ¸Ï·ÙÁ ˆ¸ÒÙ˘ÛÁ Í‹ËÂ";
-        Text[ korean ] = "Î™®Îëê ÏûêÎèôÏúºÎ°ú Îã§Ïãú Î°úÎìú(~A)";
-        Text[ arabic ] = "≈⁄«œ…  Õ„Ì·  ·ﬁ«∆Ì ··ﬂ·";
-        Text[ turkish ] = "~Otm. yeniden y¸kleme";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autorecargar cada";
-        Text[ finnish ] = "~Automaattinen uudelleenlatausv‰li";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL_0 , ROW_0 ) ;
+        Size = MAP_APPFONT( COL_7 - COL_1 , HIGHT_FT ) ;
+        Text = "Keine automatische Aktualisierung" ;
+        Text [ english ] = "Do not refresh automatically" ;
+        Text [ english_us ] = "Do not refresh automatically" ;
     };
-    NumericField ED_SECONDS
+
+    RadioButton RB_RELOADUPDATE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL_0, ROW_1 ) ;
+        Size = MAP_APPFONT( COL_7 - COL_1, HIGHT_FT ) ;
+        Text = "Dieses Dokument aktualisieren" ;
+        Text [ english ] = "Refresh this document" ;
+        Text [ english_us ] = "Refresh this document" ;
+    };
+    FixedText FT_EVERY
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_2 ) ;
+        Size = MAP_APPFONT ( WIDTH_FT1 , HIGHT_FT ) ;
+        Text = "alle" ;
+        Text [ english ] = "every" ;
+        Text [ english_us ] = "every" ;
+    };
+    NumericField ED_RELOAD
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 155 , 6 ) ;
-        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_2 - ROWDIFF_FT_EDTFLD ) ;
+        Size = MAP_APPFONT ( WIDTH_2 , HIGHT_EDTFLD ) ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
-/*        Maximum = 300 ; */
         First = 1 ;
         Last = 60 ;
         SpinSize = 1 ;
+        Value = 60 ;
     };
-    FixedText FT_SECONDS
+    FixedText FT_RELOADSECS
     {
-        Pos = MAP_APPFONT ( 188 , 7 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text = "~Sekunden" ;
-        Text [ English ] = "~Seconds" ;
-        Text [ english_us ] = "~seconds" ;
-        Text [ italian ] = "~Secondi" ;
-        Text [ spanish ] = "~Segundos" ;
-        Text [ french ] = "~secondes" ;
-        Text [ dutch ] = "~seconden" ;
-        Text [ swedish ] = "~sekund(er)" ;
-        Text [ danish ] = "Sekunder" ;
-        Text [ portuguese_brazilian ] = "~Sekunden" ;
-        Text [ portuguese ] = "~segundos" ;
-        Text[ chinese_simplified ] = "Áßí(~S)";
-        Text[ russian ] = "ÒÂÍÛÌ‰(˚)";
-        Text[ polish ] = "Sekundy";
-        Text[ japanese ] = "ÁßíÊØé(~S)";
-        Text[ chinese_traditional ] = "Áßí(~S)";
-        Text[ greek ] = "ƒÂıÙÂÒ¸ÎÂÙ·";
-        Text[ korean ] = "Ï¥à(~S)";
-        Text[ arabic ] = "«·ÀÊ«‰Ì";
-        Text[ turkish ] = "~saniyede bir";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Segundos";
-        Text[ finnish ] = "~sekuntia";
+        Pos = MAP_APPFONT ( COL_4 , ROW_2 ) ;
+        Size = MAP_APPFONT ( COL_7 - COL_4 , HIGHT_FT ) ;
+        Text = "Sekunden" ;
+        Text [ english ] = "seconds" ;
+        Text [ english_us ] = "seconds" ;
+    };
+
+    RadioButton RB_FORWARDUPDATE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL_0, ROW_3 ) ;
+        Size = MAP_APPFONT( COL_7 - COL_1, HIGHT_FT ) ;
+        Text = "Von diesem Dokument weiterleiten" ;
+        Text [ english ] = "Redirect from this document" ;
+        Text [ english_us ] = "Redirect from this document" ;
+    };
+    FixedText FT_AFTER
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_4 ) ;
+        Size = MAP_APPFONT ( WIDTH_FT1 , HIGHT_FT ) ;
+        Text = "nach" ;
+        Text [ english ] = "after" ;
+        Text [ english_us ] = "after" ;
+    };
+    NumericField ED_FORWARD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_4 - ROWDIFF_FT_EDTFLD ) ;
+        Size = MAP_APPFONT ( WIDTH_2 , HIGHT_EDTFLD ) ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+        Last = 60 ;
+        SpinSize = 1 ;
+        Value = 5 ;
+    };
+    FixedText FT_FORWARDSECS
+    {
+        Pos = MAP_APPFONT ( COL_4 , ROW_4 ) ;
+        Size = MAP_APPFONT ( COL_7 - COL_4 , HIGHT_FT ) ;
+        Text = "Sekunden" ;
+        Text [ english ] = "seconds" ;
+        Text [ english_us ] = "seconds" ;
     };
     FixedText FT_URL
     {
-        Pos = MAP_APPFONT ( 6 , 22 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~URL" ;
-        Text [ English ] = "~URL" ;
-        Text [ english_us ] = "~URL" ;
-        Text [ italian ] = "URL" ;
-        Text [ spanish ] = "~URL" ;
-        Text [ french ] = "URL" ;
-        Text [ dutch ] = "~URL" ;
-        Text [ swedish ] = "~URL" ;
-        Text [ danish ] = "URL" ;
-        Text [ portuguese_brazilian ] = "~URL" ;
-        Text [ portuguese ] = "~URL" ;
-        Text[ chinese_simplified ] = "~URL";
-        Text[ russian ] = "~URL";
-        Text[ polish ] = "URL";
-        Text[ japanese ] = "~URL";
-        Text[ chinese_traditional ] = "~URL";
-        Text[ greek ] = "~URL";
-        Text[ korean ] = "~URL";
-        Text[ arabic ] = "URL~";
-        Text[ turkish ] = "~URL";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~URL";
-        Text[ finnish ] = "~URL-osoite";
+        Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
+        Size = MAP_APPFONT ( WIDTH_FT1 , HIGHT_FT ) ;
+        Text = "an URL" ;
+        Text [ english ] = "to URL" ;
+        Text [ english_us ] = "to URL" ;
     };
     Edit ED_URL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 21 ) ;
-        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Pos = MAP_APPFONT ( COL_2 , ROW_5 - ROWDIFF_FT_EDTFLD ) ;
+        Size = MAP_APPFONT ( COL_5 - COL_2 , HIGHT_EDTFLD ) ;
     };
-    FixedText FT_DEFAULT
+    PushButton PB_BROWSEURL
     {
-        Pos = MAP_APPFONT ( 6 , 37 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text = "~Frame" ;
-        Text [ English ] = "~Frame" ;
-        Text [ english_us ] = "Frame" ;
-        Text [ italian ] = "~Frame" ;
-        Text [ spanish ] = "Frame" ;
-        Text [ french ] = "~Frame" ;
-        Text [ dutch ] = "~Frame" ;
-        Text [ swedish ] = "~Ram" ;
-        Text [ danish ] = "Frame" ;
-        Text [ portuguese_brazilian ] = "~Frame" ;
-        Text [ portuguese ] = "~Frame" ;
-        Text[ chinese_simplified ] = "Ê°ÜÂØπË±°";
-        Text[ russian ] = "~ ‡‰";
-        Text[ polish ] = "Frame";
-        Text[ japanese ] = "„Éï„É¨„Éº„É†";
-        Text[ chinese_traditional ] = "Ë®äÊ°Ü";
-        Text[ greek ] = "–Î·ﬂÛÈÔ";
-        Text[ korean ] = "ÌîÑÎ†àÏûÑ";
-        Text[ arabic ] = "≈ÿ«—";
-        Text[ turkish ] = "~Frame";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Frame";
-        Text[ finnish ] = "Kehys";
+        Pos = MAP_APPFONT ( COL_6 , ROW_5 - ROWDIFF_FT_EDTFLD ) ;
+        Size = MAP_APPFONT ( COL_7 - COL_6 , HIGHT_EDTFLD ) ;
+        Text = "..." ;
     };
-    ComboBox LB_DEFAULT
+    FixedText FT_FRAME
     {
-        Pos = MAP_APPFONT ( 72 , 36 ) ;
-        Size = MAP_APPFONT ( 182 , 60 ) ;
+        Pos = MAP_APPFONT ( COL_1 , ROW_6 ) ;
+        Size = MAP_APPFONT ( WIDTH_FT1 , HIGHT_FT ) ;
+        Text = "an Frame" ;
+        Text [ english ] = "to frame" ;
+        Text [ english_us ] = "to frame" ;
+    };
+    ComboBox CB_FRAME
+    {
+        Pos = MAP_APPFONT ( COL_2 , ROW_6 - ROWDIFF_FT_EDTFLD ) ;
+        Size = MAP_APPFONT ( COL_7 - COL_2 , HIGHT_EDTFLD * 10 ) ;
         DropDown = TRUE ;
     };
+    String STR_FORWARD_ERRMSSG
+    {
+        Text = "Wenn Sie die Option \"%PLACEHOLDER%\" w‰hlen, m¸ssen Sie eine URL angeben." ;
+        Text [ english ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
+        Text [ english_us ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
+    };
+
 };
 
  // SID_DOCINFO -----------------------------------------------------------
@@ -969,6 +979,7 @@ TabDialog SID_DOCINFO
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "General";
                 Text[ finnish ] = "Yleist‰";
+                Text[ thai ] = "‡∏ó‡∏±‡πà‡∏ß‡πÑ‡∏õ";
             };
             PageItem
             {
@@ -996,6 +1007,7 @@ TabDialog SID_DOCINFO
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "DescripciÛn";
                 Text[ finnish ] = "Kuvaus";
+                Text[ thai ] = "‡∏Ñ‡∏≥‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢";
             };
             PageItem
             {
@@ -1024,6 +1036,7 @@ TabDialog SID_DOCINFO
                 Text[ turkish ] = "Kullan˝c˝";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Usuario";
+                Text[ thai ] = "‡∏Å‡∏≥‡∏´‡∏ô‡∏î‡∏ú‡∏π‡πâ‡πÉ‡∏ä‡πâ";
             };
             PageItem
             {
@@ -1051,7 +1064,9 @@ TabDialog SID_DOCINFO
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Internet";
                 Text[ finnish ] = "Internet";
+                Text[ thai ] = "‡∏≠‡∏¥‡∏ô‡πÄ‡∏ï‡∏≠‡∏£‡πå‡πÄ‡∏ô‡πá‡∏ï";
             };
         };
     };
+    Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°‡∏ö‡∏±‡∏ï‡∏¥‡∏Ç‡∏≠‡∏á ";
 };
