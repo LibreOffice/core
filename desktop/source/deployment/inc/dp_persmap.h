@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_persmap.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:05:47 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
-#include "com/sun/star/uno/XComponentContext.hpp"
+#if ! defined INCLUDED_DP_PERSMAP_H
+#define INCLUDED_DP_PERSMAP_H
+
 #include "berkeleydb/db_cxx.h"
 #include <hash_map>
 
@@ -81,9 +83,7 @@ class PersistentMap
 
 public:
     ~PersistentMap();
-    PersistentMap(
-        ::rtl::OUString const & url,
-        css::uno::Reference< css::uno::XComponentContext > const & xContext );
+    PersistentMap( ::rtl::OUString const & url, bool readOnly );
     /** in mem db */
     PersistentMap();
 
@@ -99,3 +99,4 @@ public:
 
 }
 
+#endif
