@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSearchableDictionaryList.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:47:22 $
+ *  last change:$Date: 2003-11-18 16:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,10 @@
 
 package ifc.linguistic2;
 
-import lib.MultiMethodTest;
-
 import com.sun.star.lang.Locale;
 import com.sun.star.linguistic2.XDictionaryEntry;
 import com.sun.star.linguistic2.XSearchableDictionaryList;
+import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XSearchableDictionaryList</code>
@@ -86,7 +85,7 @@ public class _XSearchableDictionaryList extends MultiMethodTest {
     */
     public void _queryDictionaryEntry() {
         XDictionaryEntry aNegativEntry = oObj.queryDictionaryEntry("Negativ",
-                                    new Locale("en","US","WIN"),false,false);
+                                    new Locale("en","US","WIN"),false,true);
         if (aNegativEntry == null) {
             log.println("'queryDictionary' didn't work for negative dictionaries");
         } else {
