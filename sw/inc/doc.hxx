@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:41:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -738,10 +738,20 @@ public:
         //              werden. pAnchorPos muss gesetzt sein, wenn keine
         //              Seitenbindung vorliegt UND der ::com::sun::star::chaos::Anchor nicht schon
         //              im FlySet/FrmFmt mit gueltiger CntntPos gesetzt ist
+    /* #109161# new parameter bCalledFromShell
+
+       TRUE: An existing adjust item at pAnchorPos is propagated to
+       the content node of the new fly section. That propagation only
+       takes place if there is no adjust item in the paragraph style
+       for the new fly section.
+
+       FALSE: no propagation
+    */
     SwFlyFrmFmt* MakeFlySection( RndStdIds eAnchorType,
-                                const SwPosition* pAnchorPos,
-                                const SfxItemSet* pSet = 0,
-                                SwFrmFmt *pParent = 0 );
+                                 const SwPosition* pAnchorPos,
+                                 const SfxItemSet* pSet = 0,
+                                 SwFrmFmt *pParent = 0,
+                                 BOOL bCalledFromShell = FALSE );
     SwFlyFrmFmt* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
@@ -1422,11 +1432,21 @@ public:
         //  fuer AutoFormat bei der Eingabe: dann muessen die Spalten
         //  auf die vordefinierten Breite gesetzt werden. Im Array stehen die
         //  Positionen der Spalten!! (nicht deren Breite!)
+    /* #109161# new parameter bCalledFromShell:
+
+       TRUE: called from shell -> propagate existing adjust item at
+       rPos to every new cell. A existing adjust item in the table
+       heading or table contents paragraph style prevent that
+       propagation.
+
+       FALSE: do not propagate
+    */
     const SwTable* InsertTable( const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, SwHoriOrient eAdjust,
                                 sal_uInt16 nInsert = HEADLINE_NO_BORDER,
                                 const SwTableAutoFmt* pTAFmt = 0,
-                                const SvUShorts* pColArr = 0 );
+                                const SvUShorts* pColArr = 0,
+                                BOOL bCalledFromShell = FALSE );
 
         // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
