@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:57:45 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "¼ýÀÚ";
                 Text[ turkish ] = "Sayý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Números";
             };
             PageItem
             {
@@ -147,6 +148,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -172,6 +174,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -200,6 +203,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             PageItem
             {
@@ -225,6 +229,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -253,6 +258,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -281,6 +287,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ greek ] = "Öüíôï";
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -309,6 +316,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "¼¿ º¸È£";
                 Text[ turkish ] = "Hücre korumasý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Protección de celda";
             };
         };
     };
@@ -322,6 +330,7 @@ TabDialog RID_SCDLG_ATTR
     Text[ korean ] = "¼¿ ¼Ó¼º";
     Text[ turkish ] = "Hücre öznitelikleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Atributos de celda";
 };
 
  //================================================
@@ -362,6 +371,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ÀåÆò(~P)";
         Text[ turkish ] = "~Koruma altýnda";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Protegido";
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
@@ -391,6 +401,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "¼ö½Ä ¼û±â±â(~F)";
         Text[ turkish ] = "~Formulü gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar ~fórmulas";
     };
     TriStateBox BTN_HIDE_ALL
     {
@@ -420,6 +431,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "¸ðµÎ ¼û±â±â(~A)";
         Text[ turkish ] = "~Tümünü gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ocultar ~todo";
     };
     FixedText FT_HINT
     {
@@ -456,6 +468,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "¼¿ º¸È£´Â ÇöÀçÀÇ ½ÃÆ®°¡ º¸È£µÇ¾úÀ»¶§¸¸ À¯È¿ÇÕ´Ï´Ù.  \n\n'µµ±¸'¸Þ´º¿¡¼­ '¹®¼­º¸È£'¸¦ ¼±ÅÃÇÑ ´ÙÀ½, '½ÃÆ®'¸¦ ÁöÁ¤ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Hücre korumasý, yalnýzca aktif tablo da korunmuþsa etkindir.\n\nBunun için 'Araçlar' mönüsünden önce 'belgeyi koru' sonra 'Tablo' komutunu seçin.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'.";
     };
     GroupBox GB_PROTECTION
     {
@@ -484,6 +497,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "º¸È£";
         Text[ turkish ] = "Koruma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Protección";
     };
     TriStateBox BTN_HIDE_PRINT
     {
@@ -513,6 +527,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ÀÎ¼â½Ã¿¡ ¼û±â±â(~W)";
         Text[ turkish ] = "~Yazdýrýrken gizle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ocultar para la impresión";
     };
     FixedText FT_HINT2
     {
@@ -542,6 +557,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "¼±ÅÃµÈ ¼¿Àº ÀÎ¼â¿¡¼­ Á¦¿ÜµÉ °ÍÀÔ´Ï´Ù.";
         Text[ turkish ] = "Yürürlükteki seçimin hücreleri yazdýrmaya dahil olmayacak.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No se imprimen las celdas de la selección actual.";
     };
     GroupBox GB_PRINT
     {
@@ -570,5 +586,6 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ÀÎ¼â";
         Text[ turkish ] = "Yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Impresión";
     };
 };
