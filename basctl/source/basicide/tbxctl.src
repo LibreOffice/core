@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-22 06:01:49 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ ToolBox RID_TOOLBOX
             Text [ english ] = "FormattedField" ;
             Text[ english_us ] = "Formatted Field";
             Text[ portuguese ] = "Campo formatado";
-            Text[ russian ] = "Отформатитрованное поле";
+            Text[ russian ] = "Отформатированное поле";
             Text[ greek ] = "FormattedField";
             Text[ dutch ] = "Opgemaakt veld";
             Text[ french ] = "Champ formatй";
@@ -827,6 +827,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
