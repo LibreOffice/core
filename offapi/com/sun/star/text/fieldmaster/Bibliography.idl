@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ *  $RCSfile: Bibliography.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: os $ $Date: 2000-11-16 10:53:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_fieldmaster_ConditionalText_idl_
+#define __com_sun_star_text_fieldmaster_ConditionalText_idl_
+
+#include <com/sun/star/text/TextFieldMaster.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module text { module FieldMaster {
+
+//=============================================================================
+/** specifies service of a hidden text field.
+    @see com::sun::star::text::TextField
+*/
+service Bibliography
+{
+    service  com::sun::star::text::TextFieldMaster;
+    //------------------------------------------------------------------------
+    /** determins whether the bibiliography text fields are numbered. If </FALSE> the
+     short name of the bibliography entry is displayed instead.
+     */
+    [property] boolean IsNumberEntries;
+    //------------------------------------------------------------------------
+    /** determins whether the bibliography entries in a bibliography index are sorted
+     by the document position. If </FALSE> the SortKey property determins the
+     sorting of the entries.
+     */
+    [property] boolean IsSortByPosition;
+    //------------------------------------------------------------------------
+    /** determins the opening bracket used to display the bibliography text fields.
+     */
+    [property] string BracketBefore;
+    //------------------------------------------------------------------------
+    /** determins the closing bracket used to display the bibliography text fields.
+     */
+    [property] string BracketAfter;
+    //------------------------------------------------------------------------
+    /** determins the sorting of the bibliography entries in a bibliography index.
+        This property is used if the property IsSortByPosition is not set.
+        Each contained element of the sequence is a sequence of the following
+        two properties:
+        <UL>
+            <LI><P>[property] short SortKey;</P>
+            <UL>
+                <LI><P>Determins the bibliography field that is used to sort by.</P>
+            </UL>
+            <LI><P>[property] boolean IsSortAscending;</P>
+            <UL>
+                <LI><P>Determins wheter the sorting is ascending or descending.
+                 It uses the type <type scope="com::sun::star::text">BibliographyDataField</type></P>
+            </UL>
+        </UL>
+     */
+    [property] sequence< com::sun::star::beans::PropertyValues >  SortKeys;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
+
