@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:37:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,10 +484,13 @@ void OEditModel::fillProperties(
         Sequence< Property >& _rAggregateProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
+        // our aggregate is a rich text model, which also derives from OControlModel, as
+        // do we, so we need to remove some duplicate properties
         RemoveProperty( _rAggregateProps, PROPERTY_TABINDEX );
         RemoveProperty( _rAggregateProps, PROPERTY_CLASSID );
         RemoveProperty( _rAggregateProps, PROPERTY_NAME );
         RemoveProperty( _rAggregateProps, PROPERTY_TAG );
+        RemoveProperty( _rAggregateProps, PROPERTY_NATIVE_LOOK );
 
         DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
