@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:22:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@
 
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/fileidentifierconverter.hxx>
+#include <comphelper/seekableinput.hxx>
 
 using namespace rtl;
 using namespace ucb;
@@ -577,10 +578,14 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         {
             if (xContentStream.is())
             {
+                // the stream must be seekable, if it is not it will be wrapped
+                xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xContentStream, xFactory );
                 xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY );
                 if ( ! xContentSeek.is() )
-                    throw com::sun::star::uno::Exception ( OUString( RTL_CONSTASCII_USTRINGPARAM ( "The package component _requires_ an XSeekable interface!" ) ),
-                        static_cast < ::cppu::OWeakObject * > ( this ) );
+                    throw com::sun::star::uno::Exception (
+                            OUString( RTL_CONSTASCII_USTRINGPARAM (
+                                    "The package component _requires_ an XSeekable interface!" ) ),
+                            static_cast < ::cppu::OWeakObject * > ( this ) );
 
                 if ( !xContentSeek->getLength() )
                     bHaveZipFile = sal_False;
