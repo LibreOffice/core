@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-09-27 10:30:57 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 15:35:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,10 +409,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineWidthItem(150));
 
     XPolygon aArrow(4);                          //      []
-    aArrow[0]=Point(100,0);                        // 0,4__[]__2,4
-    aArrow[1]=Point(200,400);                      //    \    /
-    aArrow[2]=Point(0,400);                        //     \  /
-    aArrow[3]=Point(100,0);                        //      \/1,0
+    aArrow[0]=Point(10,0);                        // 0,4__[]__2,4
+    aArrow[1]=Point(0,30);                      //    \    /
+    aArrow[2]=Point(20,30);                        //     \  /
+    aArrow[3]=Point(10,0);                        //      \/1,0
 #ifdef SVX_LIGHT
     pISet->Put(XLineStartItem(SdResId(STR_POOLSHEET_ARROW),aArrow));
 #else
@@ -420,7 +420,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 #endif
 
     pISet->Put(XLineStartWidthItem(700));
-    pISet->Put(XLineEndWidthItem(300));         // wollte Kohse das wirklich?
+    pISet->Put(XLineEndWidthItem(300));
     pISet->Put(XLineStartCenterItem(TRUE));
 
     // ---- Objekt mit Schatten -------------------------------------------
