@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,29 @@ ContentProperties::ContentProperties(
 : aTitle( rTitle ),
   pIsDocument( new sal_Bool( !bFolder ) ),
   pIsFolder( new sal_Bool( bFolder ) ),
+  pSize( 0 ),
+  pDateCreated( 0 ),
+  pDateModified( 0 ),
+  pgetcontenttype( 0 ),
+  pcreationdate( 0 ),
+  pdisplayname( 0 ),
+  pgetcontentlanguage( 0 ),
+  pgetcontentlength( 0 ),
+  pgetetag( 0 ),
+  pgetlastmodified( 0 ),
+  plockdiscovery( 0 ),
+  presourcetype( 0 ),
+  psource( 0 ),
+  psupportedlock( 0 ),
+  pOtherProps( 0 )
+{
+}
+
+//=========================================================================
+ContentProperties::ContentProperties( const rtl::OUString & rTitle )
+: aTitle( rTitle ),
+  pIsDocument( 0 ),
+  pIsFolder( 0 ),
   pSize( 0 ),
   pDateCreated( 0 ),
   pDateModified( 0 ),

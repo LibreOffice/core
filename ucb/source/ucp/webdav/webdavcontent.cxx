@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-16 14:08:27 $
+ *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,6 +1161,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
               // Process Core properties.
 
+#if 0
               if ( rProp.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
                {
@@ -1192,6 +1193,41 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 else
                       xRow->appendBoolean( rProp, sal_False );
             }
+#else
+              if ( rProp.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+               {
+                if ( rData.pIsFolder && *rData.pIsFolder )
+                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
+                                                      WEBDAV_COLLECTION_TYPE ) );
+                else if ( rData.pIsDocument && *rData.pIsDocument )
+                    xRow->appendString( rProp, rtl::OUString::createFromAscii(
+                                                      WEBDAV_CONTENT_TYPE ) );
+                else
+                    xRow->appendVoid( rProp );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+            {
+                  xRow->appendString ( rProp, rData.aTitle );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+            {
+                if ( rData.pIsDocument )
+                      xRow->appendBoolean( rProp, *rData.pIsDocument );
+                else
+                    xRow->appendVoid( rProp );
+            }
+              else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+            {
+                if ( rData.pIsFolder )
+                      xRow->appendBoolean( rProp, *rData.pIsFolder );
+                else
+                    xRow->appendVoid( rProp );
+            }
+#endif
               else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
               {
@@ -1358,6 +1394,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             = static_cast< ContentProvider * >( rProvider.get() );
         beans::Property aProp;
 
+#if 0
         pProvider->getProperty(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
@@ -1385,7 +1422,44 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
               xRow->appendBoolean( aProp,   *rData.pIsFolder );
         else
               xRow->appendBoolean( aProp, sal_False );
+#else
+        pProvider->getProperty(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
+          xRow->appendString( aProp, rData.aTitle );
 
+        if ( rData.pIsFolder && *rData.pIsFolder )
+        {
+            pProvider->getProperty(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
+            xRow->appendString( aProp, rtl::OUString::createFromAscii(
+                                                    WEBDAV_COLLECTION_TYPE ) );
+        }
+        else if ( rData.pIsDocument && *rData.pIsDocument )
+        {
+            pProvider->getProperty(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
+            xRow->appendString( aProp, rtl::OUString::createFromAscii(
+                                                    WEBDAV_CONTENT_TYPE ) );
+        }
+
+        if ( rData.pIsDocument )
+        {
+            pProvider->getProperty(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
+              xRow->appendBoolean( aProp, *rData.pIsDocument );
+        }
+
+        if ( rData.pIsFolder )
+        {
+            pProvider->getProperty(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
+              xRow->appendBoolean( aProp,   *rData.pIsFolder );
+        }
+#endif
         if ( rData.pSize )
         {
             pProvider->getProperty(
@@ -1557,8 +1631,25 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             m_xResAccess->PROPFIND( ZERO, aPropNames, resources, xEnv );
         }
-        catch ( DAVException const & )
+        catch ( DAVException const & e )
         {
+#if 1
+            if ( ( e.getStatus() == 404 /* not found */ ) ||
+                 ( e.getError() == DAVException::DAV_HTTP_LOOKUP ) )
+            {
+                // PROPFIND failed, only Title prop available.
+                return getPropertyValues( m_xSMgr,
+                                          rProperties,
+                                          ContentProperties(
+                                            NeonUri::unescape(
+                                                m_aEscapedTitle ) ),
+                                          rtl::Reference<
+                                            ::ucb::ContentProviderImplHelper >(
+                                                m_xProvider.getBodyPtr() ),
+                                        m_xIdentifier->getContentIdentifier() );
+            }
+#endif
+
               bSuccess = false;
         }
     }

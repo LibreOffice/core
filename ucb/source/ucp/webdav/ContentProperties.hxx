@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentProperties.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 14:58:06 $
+ *  last change: $Author: kso $ $Date: 2001-09-06 10:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@ public:
 
     // Mini props for transient contents.
       ContentProperties( const rtl::OUString & rTitle, sal_Bool bFolder );
+
+    // Micro props for non-existing contents.
+    ContentProperties( const rtl::OUString & rTitle );
 
     inline ~ContentProperties();
 
