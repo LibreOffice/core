@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:36 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 16:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ namespace configmgr
 
         virtual void SAL_CALL dispose() throw();
     public:
+        void setDefaultLocale( RequestOptions::Locale const & aLocale );
+
         RequestOptions const& getDefaultOptions() const {return m_aDefaultOptions;}
         TypeConverterRef getTypeConverter() const {return m_xTypeConverter;}
         configapi::Factory& getWriterFactory();
