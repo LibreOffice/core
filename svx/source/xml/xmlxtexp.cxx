@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 16:43:01 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ public:
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
-    XMLMarkerStyle maMarkerStyle;
+    XMLMarkerStyleExport maMarkerStyle;
 };
 
 class SvxXMLDashEntryExporter : public SvxXMLTableEntryExporter
@@ -206,7 +206,7 @@ public:
     virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 
 private:
-    XMLDashStyle maDashStyle;
+    XMLDashStyleExport maDashStyle;
 };
 
 class SvxXMLHatchEntryExporter : public SvxXMLTableEntryExporter
@@ -217,7 +217,7 @@ public:
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
-    XMLHatchStyle maHatchStyle;
+    XMLHatchStyleExport maHatchStyle;
 };
 
 class SvxXMLGradientEntryExporter : public SvxXMLTableEntryExporter
@@ -228,7 +228,7 @@ public:
 
     virtual void exportEntry( const OUString& rStrName, const Any& rValue );
 private:
-    XMLGradientStyle maGradientStyle;
+    XMLGradientStyleExport maGradientStyle;
 };
 
 class SvxXMLBitmapEntryExporter : public SvxXMLTableEntryExporter
@@ -491,7 +491,7 @@ void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any&
 ///////////////////////////////////////////////////////////////////////
 
 SvxXMLLineEndEntryExporter::SvxXMLLineEndEntryExporter( SvXMLExport& rExport )
-: SvxXMLTableEntryExporter( rExport ), maMarkerStyle( rExport.GetDocHandler(), rExport.GetNamespaceMap(), rExport.GetMM100UnitConverter() )
+: SvxXMLTableEntryExporter( rExport ), maMarkerStyle( rExport )
 {
 }
 
@@ -507,7 +507,7 @@ void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const An
 ///////////////////////////////////////////////////////////////////////
 
 SvxXMLDashEntryExporter::SvxXMLDashEntryExporter( SvXMLExport& rExport )
-: SvxXMLTableEntryExporter( rExport ), maDashStyle( &rExport.GetDocHandler(), rExport.GetNamespaceMap(), rExport.GetMM100UnitConverter() )
+: SvxXMLTableEntryExporter( rExport ), maDashStyle( rExport )
 {
 }
 
@@ -523,7 +523,7 @@ void SvxXMLDashEntryExporter::exportEntry( const OUString& rStrName, const Any& 
 ///////////////////////////////////////////////////////////////////////
 
 SvxXMLHatchEntryExporter::SvxXMLHatchEntryExporter( SvXMLExport& rExport )
-: SvxXMLTableEntryExporter( rExport ), maHatchStyle( rExport.GetDocHandler(), rExport.GetNamespaceMap(), rExport.GetMM100UnitConverter() )
+: SvxXMLTableEntryExporter( rExport ), maHatchStyle( rExport )
 {
 }
 
@@ -539,7 +539,7 @@ void SvxXMLHatchEntryExporter::exportEntry( const OUString& rStrName, const Any&
 ///////////////////////////////////////////////////////////////////////
 
 SvxXMLGradientEntryExporter::SvxXMLGradientEntryExporter( SvXMLExport& rExport )
-: SvxXMLTableEntryExporter( rExport ), maGradientStyle( &rExport.GetDocHandler(), rExport.GetNamespaceMap(), rExport.GetMM100UnitConverter() )
+: SvxXMLTableEntryExporter( rExport ), maGradientStyle( rExport )
 {
 }
 

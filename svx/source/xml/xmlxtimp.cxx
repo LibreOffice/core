@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 13:04:53 $
+ *  last change: $Author: dvo $ $Date: 2001-10-19 18:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,29 +300,25 @@ void SvxXMLTableImportContext::importColor( USHORT nPrfx, const OUString& rLocal
 
 void SvxXMLTableImportContext::importMarker( USHORT nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
-    Reference< XDocumentHandler > xHandler( (XDocumentHandler*)&GetImport() );
-    XMLMarkerStyle aMarkerStyle( xHandler, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLMarkerStyleImport aMarkerStyle( GetImport() );
     aMarkerStyle.importXML( xAttrList, rAny, rName );
 }
 
 void SvxXMLTableImportContext::importDash( USHORT nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
-    Reference< XDocumentHandler > xHandler( (XDocumentHandler*)&GetImport() );
-    XMLDashStyle aDashStyle( &xHandler, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLDashStyleImport aDashStyle( GetImport() );
     aDashStyle.importXML( xAttrList, rAny, rName );
 }
 
 void SvxXMLTableImportContext::importHatch( USHORT nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
-    Reference< XDocumentHandler > xHandler( (XDocumentHandler*)&GetImport() );
-    XMLHatchStyle aHatchStyle( xHandler, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLHatchStyleImport aHatchStyle( GetImport() );
     aHatchStyle.importXML( xAttrList, rAny, rName );
 }
 
 void SvxXMLTableImportContext::importGradient( USHORT nPrfx, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, Any& rAny, OUString& rName )
 {
-    Reference< XDocumentHandler > xHandler( (XDocumentHandler*)&GetImport() );
-    XMLGradientStyle aGradientStyle( &xHandler, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
+    XMLGradientStyleImport aGradientStyle( GetImport() );
     aGradientStyle.importXML( xAttrList, rAny, rName );
 }
 
