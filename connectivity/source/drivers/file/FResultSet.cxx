@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:25:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,8 +754,8 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
+    columnIndex = mapColumn(columnIndex);
 
     (*m_aInsertRow)[columnIndex]->setBound(sal_True);
     *(*m_aInsertRow)[columnIndex] = x;
@@ -767,14 +767,12 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
-
+    columnIndex = mapColumn(columnIndex);
 
 
     (*m_aInsertRow)[columnIndex]->setBound(sal_True);
     (*m_aInsertRow)[columnIndex]->setNull();
-
 }
 // -------------------------------------------------------------------------
 
