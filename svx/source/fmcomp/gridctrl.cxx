@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-10 16:07:23 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 16:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,8 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 #ifndef _TRACE_HXX_
 #include "trace.hxx"
 #endif
+
+#include <algorithm>
 
 using namespace ::dbtools;
 using namespace ::svxform;
@@ -2455,7 +2457,7 @@ void DbGridControl::MoveToLast()
 //------------------------------------------------------------------------------
 void DbGridControl::MoveToPrev()
 {
-    long nNewRow = max(GetCurRow() - 1L, 0L);
+    long nNewRow = std::max(GetCurRow() - 1L, 0L);
     if (GetCurRow() != nNewRow)
         MoveToPosition(nNewRow);
 }
@@ -2469,7 +2471,7 @@ void DbGridControl::MoveToNext()
     if (m_nTotalCount > 0)
     {
         // move the data cursor to the right position
-        long nNewRow = min(GetRowCount() - 1, GetCurRow() + 1);
+        long nNewRow = std::min(GetRowCount() - 1, GetCurRow() + 1);
         if (GetCurRow() != nNewRow)
             MoveToPosition(nNewRow);
     }
