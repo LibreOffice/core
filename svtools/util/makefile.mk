@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.37 $
+#*  $Revision: 1.38 $
 #*
-#*  last change: $Author: fs $ $Date: 2002-05-23 14:17:03 $
+#*  last change: $Author: mt $ $Date: 2002-08-14 14:06:13 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -196,7 +196,8 @@ SHL1STDLIBS=$(TOOLSLIB)			\
             $(SALLIB)			\
             $(UNOTOOLSLIB)		\
             $(COMPHELPERLIB)		\
-            $(UCBHELPERLIB)
+            $(UCBHELPERLIB)			\
+            $(ICUI18NLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
