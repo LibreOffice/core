@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
 #include "svdview.hxx"
+#include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -204,9 +205,31 @@ void AccessibleShape::Init (void)
         const Window* pWindow = maShapeTreeInfo.GetWindow ();
         if (pView != NULL && pWindow != NULL && mxShape.is())
         {
-            SvxEditSource* pEditSource = new SvxTextEditSource (
-                *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
-            mpText = new AccessibleTextHelper( ::std::auto_ptr<SvxEditSource>(pEditSource) );
+            // #107948# Determine whether shape text is empty
+            SdrObject* pObj = GetSdrObjectFromXShape(mxShape);
+            SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, pObj );
+            OutlinerParaObject* pOutlinerParaObject = NULL;
+
+            if( pTextObj )
+                pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
+
+            if( !pOutlinerParaObject && pObj )
+                pOutlinerParaObject = pObj->GetOutlinerParaObject();
+
+            // create AccessibleTextHelper to handle this shape's text
+            if( !pOutlinerParaObject )
+            {
+                // empty text -> use proxy edit source to delay creation of EditEngine
+                ::std::auto_ptr<SvxEditSource> pEditSource( new AccessibleEmptyEditSource ( *pObj, *pView, *pWindow) );
+                mpText = new AccessibleTextHelper( pEditSource );
+            }
+            else
+            {
+                // non-empty text -> use full-fledged edit source right away
+                ::std::auto_ptr<SvxEditSource> pEditSource( new SvxTextEditSource ( *pObj, *pView, *pWindow) );
+                mpText = new AccessibleTextHelper( pEditSource );
+            }
+
             mpText->SetEventSource(this);
         }
     }
