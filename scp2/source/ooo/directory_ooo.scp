@@ -2,9 +2,9 @@
 *
 *  $RCSfile: directory_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:49:03 $
+*  last change: $Author: hr $ $Date: 2004-08-03 14:34:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -668,6 +668,11 @@ End
 Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection
     ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     HostName = "TypeDetection";
+End
+
+Directory gid_Dir_Share_Registry_Ldap
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "ldap";
 End
 
 Directory gid_Dir_Share_Registry_Data
