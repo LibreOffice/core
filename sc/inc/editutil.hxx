@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-23 14:12:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #define SC_EDITUTIL_HXX
 
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _MyEDITENG_HXX //autogen
 #include <svx/editeng.hxx>
 #endif
@@ -95,9 +99,9 @@ class ScPatternAttr;
 class ScEditUtil
 {
     ScDocument*     pDoc;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
     Point           aScrPos;
     OutputDevice*   pDev;           // MapMode muss eingestellt sein
     double          nPPTX;
@@ -112,7 +116,7 @@ public:
     static String GetSpaceDelimitedString( const EditEngine& rEngine );
 
 public:
-                ScEditUtil( ScDocument* pDocument, USHORT nX, USHORT nY, USHORT nZ,
+                ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,
                             const Point& rScrPosPixel,
                             OutputDevice* pDevice, double nScaleX, double nScaleY,
                             const Fraction& rX, const Fraction& rY ) :
