@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:04:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,27 @@ public:
         whatever the busy shape looks like on the system.)
     */
     void SetBusyState (bool bBusy);
+
+    /** Call this method when the controls of this view shell or the
+        embedded sub shell need to be rearranged.  This is necessary
+        e.g. when the border has been modified (UpdateBorder() calls this
+        method).
+
+        This method is like ResizePixel() with no arguments.
+    */
+    void Rearrange (void);
+
+    /** Update the border that is set with SfxViewShell::SetBorderPixel().
+        This is done by adding the border used by the ViewShellBase itself
+        with the border used by the main view shell.
+    */
+    void UpdateBorder (void);
+
+    /** With this method the UI controls can be turned on or off.  It is
+        used by the FuSlideShow to hide the UI controls while showing a
+        non-full-screen or in-window presentation in the center pane.
+    */
+    void ShowUIControls (bool bVisible);
 
 protected:
     osl::Mutex maMutex;
