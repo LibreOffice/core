@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-19 18:00:38 $
+ *  last change: $Author: cmc $ $Date: 2001-02-27 12:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2274,17 +2274,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     if( bVer67 )
     {
-        if(  bHdFtFtnEdn )          // kann der Writer z.Zt. leider nicht
-            return pRetFrmFmt;
-    //  if( pFlyPara )              // sicherheitshalber
-    //      return;
-    //  if( bTable )                // sicherheitshalber
-    //      return;
-
-    //  if( bTable )
-    //      return;                         // geht z.Zt. nicht
-
-
         if( !pDrawModel )           // 1. GrafikObjekt des Docs
             GrafikCtor();
 
@@ -3024,11 +3013,14 @@ void SwWW8ImplReader::GrafikDtor()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.11 2001-02-19 18:00:38 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.12 2001-02-27 12:38:09 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/02/19 18:00:38  cmc
+      #74188# Documented FSPA anchor values should override escher attributes when different
+
       Revision 1.10  2001/02/16 15:26:50  cmc
       ##444## Background graphics/objects always infront of text
 
