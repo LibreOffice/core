@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MutableAttrList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:36:59 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ XMLMutableAttributeList::XMLMutableAttributeList() :
 
 XMLMutableAttributeList::XMLMutableAttributeList( const Reference<
         XAttributeList> & rAttrList, sal_Bool bClone ) :
-    m_xAttrList( rAttrList ),
+    m_xAttrList( rAttrList.is() ? rAttrList : new SvXMLAttributeList ),
     m_pMutableAttrList( 0 )
 {
     if( bClone )
