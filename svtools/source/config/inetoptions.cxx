@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 13:13:15 $
+ *  last change: $Author: sb $ $Date: 2001-02-12 15:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@ public:
     uno::Any getProperty(Index nIndex);
 
     void setProperty(Index nIndex, uno::Any const & rValue, bool bFlush);
+
+    inline void flush() { Commit(); }
 
     void
     addPropertiesChangeListener(
@@ -388,6 +390,7 @@ void SvtInetOptions::Impl::setProperty(Index nIndex, uno::Any const & rValue,
         m_aEntries[nIndex].m_eState = bFlush ? Entry::KNOWN : Entry::MODIFIED;
     }
 
+    //SB: Remove the following hack once #83237# is fixed.
     /* KSO: Interim fix for #83237#. Otherwise changes will be written */
     /*      and notified to listeners listening directly at the config */
     /*      server only at application end.                            */
@@ -621,6 +624,12 @@ void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
     m_pImpl->setProperty(Impl::INDEX_PROXY_SOCKS_PORT,
                          uno::makeAny(nValue),
                          bFlush);
+}
+
+//============================================================================
+void SvtInetOptions::flush()
+{
+    m_pImpl->flush();
 }
 
 //============================================================================
