@@ -2,9 +2,9 @@
  *
  *  $RCSfile: encryptorimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:53:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-29 17:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _COM_SUN_STAR_XML_WRAPPER_XXMLELEMENTWRAPPER_HPP_
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_CRYPTO_SAX_ENCRYPTIONRESULT_HPP_
-#include <com/sun/star/xml/crypto/sax/EncryptionResult.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
