@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-06 12:37:27 $
+ *  last change: $Author: tl $ $Date: 2002-08-01 09:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,14 +482,15 @@ void SmParser::NextToken()
         //?? does parseAnyToken handles Japanese (CJK) spaces correct ??
         // seems not to be so...
         while (UnicodeType::SPACE_SEPARATOR ==
-                         rCC.getType( BufferString, BufferIndex ))
-            ++BufferIndex;
+                        rCC.getType( BufferString, BufferIndex ))
+           ++BufferIndex;
 
         aRes = rCC.parseAnyToken( BufferString, BufferIndex,
                                             coStartFlags, aEmptyStr,
                                             coContFlags, aEmptyStr );
 
         nRealStart = BufferIndex + (xub_StrLen) aRes.LeadingWhiteSpace;
+        BufferIndex = nRealStart;
 
         bCont = FALSE;
         if ( aRes.TokenType == 0  &&
