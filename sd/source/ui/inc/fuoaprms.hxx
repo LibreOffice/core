@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class FuObjectAnimationParameters : public FuPoor
 
 };
 
-#endif _SD_FUOAPRMS_HXX
+#endif // _SD_FUOAPRMS_HXX
 
 
 
