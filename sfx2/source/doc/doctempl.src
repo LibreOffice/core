@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:05:01 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 21:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Business Correspondence" ; > ;
         < "Other Business documents" ; > ;
         < "Personal Correspondence And Documents" ; > ;
-        < "Forms And Contracts" ; > ;
+        < "Forms and Contracts" ; > ;
         < "Finances" ; > ;
         < "Education" ; > ;
         < "Presentation Backgrounds" ; > ;
@@ -240,7 +240,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ polish ] =
     {
-        < "Domy?lnie" ; > ;
+        < "Domyœlnie" ; > ;
         < "Korespondencja s³u¿bowa" ; > ;
         < "Pozosta³e dokumenty s³u¿bowe" ; > ;
         < "Korespondecja i dokumenty prywatne" ; > ;
@@ -410,4 +410,5 @@ String RID_CNT_STR_WAITING
     Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
     Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimmäistä kertaa asennuksen jälkeen.";
 };
+
 
