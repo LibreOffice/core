@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:36:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,12 @@ public:
     virtual long Notify( NotifyEvent& rNEvt );
     virtual void StateChanged( StateChangedType nType );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
+    /** Initializing the title tool box either creates a new title tool box
+        or clears all items from an existing one.  A closer is added as only
+        item.
+    */
+    void InitializeTitleToolBox (void);
 
     /** Add a top down menu to the title bar or rather the top-level menu
         entry.  The given callback is called when the menu is clicked and it
