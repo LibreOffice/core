@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: jp $ $Date: 2000-10-16 09:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #*    Beschreibung      DOKUNAME.DOC
 #*
 #*    Ersterstellung    JP 20.02.96
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 16:59:05 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: jp $ $Date: 2000-10-16 09:13:46 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/svtools/source/svrtf/rtfout.cxv  $
 #*
@@ -128,10 +128,16 @@ SvStream& RTFOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
             if( !c )
             {
                 // then write as unicode - character
-        //      rWrt.Strm() << "\\u";
-        //      rWrt.OutULong( eCh ) << " ?";
-                rStream << "\\'";
-                Out_Hex( rStream, cCh, 2 );
+                if( 0xFF < cCh )
+                {
+                    ByteString sNo( ByteString::CreateFromInt32( cCh ));
+                     rStream << "\\u" << sNo.GetBuffer() << " ?";
+                }
+                else
+                {
+                    rStream << "\\'";
+                     Out_Hex( rStream, cCh, 2 );
+                }
                 break;
             }
 
