@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,18 +554,17 @@ static USHORT nTitleNo = 0;
         // Rahmen einfuegen
         SwFlyFrmAttrMgr aMgr(FALSE, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
+        aMgr.SetSizeType(ATT_VAR_SIZE);
+
+        //Defaults ueberschreiben!
+        aMgr.GetAttrSet().Put( SvxBoxItem() );
+        aMgr.SetULSpace( 0L, 0L );
+        aMgr.SetLRSpace( 0L, 0L );
 
         // Absender
         if (rItem.bSend)
         {
             pSh->SwCrsrShell::SttDoc();
-            aMgr.SetSizeType(ATT_VAR_SIZE);
-
-            //Defaults ueberschreiben!
-            aMgr.GetAttrSet().Put( SvxBoxItem() );
-            aMgr.SetULSpace( 0L, 0L );
-            aMgr.SetLRSpace( 0L, 0L );
-
             aMgr.InsertFlyFrm(FLY_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
@@ -582,7 +581,6 @@ static USHORT nTitleNo = 0;
         // Empfaenger
         pSh->SwCrsrShell::SttDoc();
 
-        aMgr.SetSizeType(ATT_VAR_SIZE);
         aMgr.InsertFlyFrm(FLY_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
             Size (nPageW - rItem.lAddrFromLeft - 566, 0));
